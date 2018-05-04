@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config>
+	<tabs>
+        <anowave translate="label" module="sort">
+            <label>Anowave Extensions</label>
+            <sort_order>150</sort_order>
+        </anowave>
+    </tabs> 
+    <sections>
+        <sort translate="label" module="sort">
+            <label>Drag and Drop Sorting</label>
+            <tab>anowave</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>980</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <settings>
+                    <label>Settings</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                    	<license translate="label comment">
+							<label>License key</label>
+							<comment>
+								<model>Anowave_Package_Model_License</model>
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</license>
+                    </fields>
+                </settings>
+            </groups>
+        </sort>
+    </sections>
+</config>

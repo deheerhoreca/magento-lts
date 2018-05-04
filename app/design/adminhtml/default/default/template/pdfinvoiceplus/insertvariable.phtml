@@ -1,0 +1,12 @@
+<!--use for popup fancybox-->
+<div id="select-variable">
+    <?php foreach ($this->_variable as $var): ?>
+    <div class="variable-group">
+        <div class="variable-label"><?php echo $var['label'] ?></div>
+        <div class="variable-name-group">
+            <?php foreach ($var['value'] as $val): ?>
+            <div class="variable-name" onclick="selectVariable('<?php echo $val['value'] ?>');"><?php echo $val['label'] ?></div>
+            <?php endforeach; ?>
+    </div>
+    <?php endforeach; ?>
+</div>

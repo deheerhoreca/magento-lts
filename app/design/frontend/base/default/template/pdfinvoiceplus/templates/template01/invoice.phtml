@@ -1,0 +1,518 @@
+<?php
+$templateCode = Mage::helper('pdfinvoiceplus/pdf')->getTemplateCode();
+$invoice = $this->getInvoice();
+$payment_method = $invoice->getOrder()->getPayment()->getMethodInstance();
+$shipping_method = $invoice->getOrder()->getShippingDescription();
+$template = Mage::helper('pdfinvoiceplus/pdf')->getUsingTemplate();
+$logo = $template->getCompanyLogo();
+$address = $template->getCompanyAddress();
+$name = $template->getCompanyName();
+$email = $template->getCompanyEmail();
+$phone = $template->getCompanyTelephone();
+$fax = $template->getCompanyFax();
+$note = $template->getNote();
+$footer = $template->getFooter();
+$color = $template->getColor();
+$color = $color ? $color : '78C145';
+$vatnumber = $template->getVatNumber();
+$bussinessId = $template->getBusinessId();
+$pageFormat = $template->getFormat();
+if ($pageFormat == 'A5') {
+    $title_width = '70%';
+} else {
+    $title_width = '50%';
+}
+$display_images = $template->getDisplayImages();
+$barcode = $template->getBarcode();
+$barcode_type = $template->getBarcodeType();
+$barcode_value = Mage::helper('pdfinvoiceplus/pdf')->getBarcodeValue();
+$vatoffice = $template->getVatOffice();
+$term = $template->getTermsConditions();
+$status = $invoice->getState();
+if($status == 1){
+    $status = 'Pending';
+}elseif($status ==2){
+    $status = 'Paid';
+}else{
+    $status = 'Canceled';
+}
+?>
+<html>
+    <head>
+        <style>
+            *{margin: 0; padding: 0;}
+            @font-face
+            {
+                font-family: "Ubuntu";
+                src: url('fonts/Ubuntu-Bold.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Light";
+                src: url('fonts/Ubuntu-Light.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Medium";
+                src: url('fonts/Ubuntu-Medium.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Regular";
+                src: url('fonts/Ubuntu-Regular.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Italic";
+                src: url('fonts/Ubuntu-Italic.ttf')		 
+            } 
+
+
+            body {
+                font-size: 14px;
+                max-width:100%;
+                margin: 0 auto;
+                font-family: "Ubuntu Regular", "Ubuntu Light", arial;		
+                font-size-adjust: none;
+                width: 100%;
+            }
+            td { vertical-align: top; }
+
+            .items td.blanktotal {
+                background-color: #FFFFFF;
+                border: 0mm none #fff;
+                border-top: 0.1mm solid #fff;
+                border-right: 0.1mm solid #fff;
+            }
+
+            .top-title span {
+                display: block;
+                font-size: 15px;
+                color: #000;
+            }
+            /*
+            .arrow-right{
+                border-bottom: 12px solid #FFFFFF;
+                border-left: 11px solid #78C145;
+                border-top: 12px solid #FFFFFF;
+                height: 3px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 0;
+            }
+            */
+
+
+            .table-data tbody td.label{
+                color: #2f2f2f;
+                font-family: 'Ubuntu';
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .table-data tfoot .grand_total td.label strong{                
+                font-family: 'Ubuntu';
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 40px;
+            }
+
+            /* New Style for invoice 05 */
+            /* Header style*/
+            .myheader-iv{
+                clear: both;
+                float: left;
+                margin: 0 3.6% 25px;
+                position: relative;
+                width: 92.8%;
+            }
+            .top-header-iv{
+                clear: both;
+                width: 100%;
+                float: left;
+                height: 90px;
+                border-bottom: 5px solid <?php echo '#' . $color; ?>;
+            }
+            .bottom-header-iv{
+                clear: both;
+                width: 100%;
+                /*margin-bottom: 20px;*/
+                float: left;
+            }
+
+            .title-page-iv{
+
+                float: left;
+                width: 40%;
+                padding: 25px 3.6% 25px 2%;
+                /* background: <?php echo '#' . $color; ?>; */
+            }
+
+            .logo-iv{
+                width:30%;							
+                text-align: right; 
+                float: right;
+            }
+
+            .id-invoice-iv{
+                text-align: left;
+                width:40%;
+                float:left;
+                margin-left: 2%;
+                margin-top: 15px;
+            }
+            .info-iv{
+                width:40%; 
+                color:#000;
+                font-size: 15px;
+                text-align: right; 
+                float: right;
+                margin-top: 0px;
+            }
+
+            /*  Main style */
+            .main-content{				
+                /* clear: both;
+                margin: 0 3.6% 0 3.6%;
+                max-width: 92.8%; */
+                clear: both;
+                margin: 0;
+                max-width: 100%;
+
+            }
+
+
+            .info-cus{
+                padding: 0 3.6%;
+                width: 92.8%;				
+                float: left;
+            }
+
+            .payment-box,
+            .billing-box{
+                width: 47%;
+                float: left;					
+                padding-left: 16px;
+            }
+
+            .shipping-box,
+            .shipping-add-box{
+                float: right;
+                width: 47%;						
+                padding-left: 16px;
+            }
+
+            .payment-box .title,
+            .billing-box .title,
+            .shipping-box .title,
+            .shipping-add-box .title{			
+                background: <?php echo '#' . $color; ?>;
+                height: 20px;
+                width: <?php echo $title_width ?>;
+                margin-bottom: 13px;
+                padding: 10px 10px;
+            }
+            .title-color{
+                color: #FFFFFF;
+                font-family: 'Ubuntu';
+                font-size: 16px;
+                font-weight: bold;
+                line-height: 40px;
+                padding: 0 10px;
+                text-transform: uppercase;
+            }
+            .shipping-box .content,
+            .shipping-add-box .content,
+            .payment-box .content,
+            .billing-box .content{
+                /* border-top: 6px solid <?php echo '#' . $color; ?>; */
+                border-left: 1px solid <?php echo '#' . $color; ?>;
+                border-right: 1px solid <?php echo '#' . $color; ?>;
+                border-bottom: 1px solid <?php echo '#' . $color; ?>;
+                padding: 10px 10px;
+                margin-top: 5px;
+            }
+            /*viet*/
+            .shipping-box ,
+            .shipping-add-box,
+            .payment-box,
+            .billing-box {
+                width:46%;
+            }
+            .top-main-if{
+                float: left;
+                width: 100%;
+                clear: both;
+            }
+            .bottom-main-info{
+                float: left;
+                width: 100%;
+                clear: both;
+                margin-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .invoice-totals{
+                float: right;
+                margin-top: 20px;
+                margin-right: 3.6%;
+                width: 45%;
+                background:url(<?php echo $paid ?>)no-repeat;
+            }
+
+            .invoice-note{
+                background: none repeat scroll 0 0 #FFFFFF;
+                float: left;
+                font-size: 14px;
+                padding: 10px 0 20px 50px;
+            }
+            .wrap-table-order{
+
+                float: left;
+                margin: 0 3.6%;
+                padding-left: 21px;
+                width: 90.3%;
+                margin-top: -28px;
+            }
+            .grandtotal tbody td{
+                padding: 12px 20px; 
+                /*color: #2f2f2f;*/
+                /*background:  url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/bg-template6.png') ?>) repeat scroll 0 20px;*/
+            }
+
+            .grandtotal{
+                background: none repeat scroll 0 0;
+                float: right;
+
+            }
+            .grandtotal tfoot td{
+                text-align:right;
+                padding:5px 20px;
+                /*border-top: 5px solid #fff;*/
+            }
+            .grandtotal tbody td{
+                border: 0 none; 
+                text-align: right;
+            }
+            table thead td{
+                font-size: 18px;
+                color: #fff;
+                text-align: center;				 
+                font-weight: bold;
+                padding: 12px 10px;
+                text-transform: uppercase;
+                vertical-align: middle;
+            }
+            .items td {                
+                /*border-bottom: 1px solid #d6d6d6;*/
+
+            }
+            .tbody-2{
+                border-bottom: 2px solid <?php echo '#' . $color; ?>;
+            }
+            .tbody-2 td{
+                background: #e9e9e9;				
+            }
+            .table-data tbody {
+                text-align: left;
+            }
+            .wrap-table-order .table-data tbody td{                
+                padding: 12px 10px;
+                color: #2f2f2f;
+                background: #ffffff;
+
+            }
+            .table-data tbody td.a-right{                
+                text-align: right;
+            }
+            .table-data tbody td.last{                
+                text-align: right;
+            }
+            .items td.totals {                
+                border: 0 none;
+                text-align: right;
+                padding: 5px 20px;
+            }
+            .footer-invoice {
+                background:  url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/bg-template6.png') ?>) repeat scroll 0 20px;
+                color: #2f2f2f;
+                font-size: 16px;				
+                margin-top: 10px;
+                padding: 10px 5%;
+                text-align: left;
+                width: 90%;
+                float: left;
+                position: absolute;
+                bottom: 0;
+            }
+            .row-grandtotal{
+                background-color:<?php echo '#' . $color; ?>;
+                float:left;
+                width:100%;
+            }
+            .grand-label{             
+                color: #fff;
+                font-size:20px;
+                font-family: 'Ubuntu';
+            }
+            .grand_total{
+                color: #fff;
+                font-size:20px;
+                font-family: 'Ubuntu';
+            }
+            .totals-label{
+                padding:5px;
+                width:45%;
+                float:left;
+                text-align:right;
+            }
+            .totals-value{
+                padding:5px;
+                width:45%;
+                float:left;
+                text-align:right;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="myheader-iv">
+            <div class="top-header-iv" style="padding-top: 20px">
+                <div class="title-page-iv">
+                    <div style="color: <?php echo '#' . $color; ?>; font-family: 'Ubuntu Regular';text-align:left; font-size: 50px;line-height: 60px;font-weight: normal; text-transform: uppercase;"><?php echo $this->__('Invoice'); ?> </div>
+                </div>
+                <div class="logo-iv"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $logo ?>" /></div>
+            </div>
+            <div class="bottom-header-iv">
+                <div class="id-invoice-iv">                    
+                    <span style="color: #010101;font-size: 15px;"><strong>Date: </strong><?php echo $this->formatDate($invoice->getCreatedAt(), 'medium', true); ?></span><br/>
+                    <span style="font-family: 'Ubuntu Medium';font-size: 15px;"><strong><?php echo $this->__('Invoice Number'); ?> : </strong><?php echo $invoice->getIncrementId() ?></span><br/>
+                    <?php if ($vatnumber): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('VAT Number'); ?> : </strong><?php echo $vatnumber ?></span><br/><?php endif; ?>
+                    <?php if ($vatoffice): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('VAT Office'); ?> : </strong> <?php echo $vatoffice ?></span><br/><?php endif; ?>
+                    <?php if ($bussinessId): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Bussiness Id'); ?> : </strong><?php echo $bussinessId ?></span><?php endif; ?>
+                </div>
+                <div class="info-iv">
+                    <?php if ($name): ?><span style="font-weight: bold; font-size: 18px; color: <?php echo '#' . $color; ?>; display: block;width:100%; float: left;font-family: 'Ubuntu';text-transform: uppercase;"><?php echo $name ?></span><br/><?php endif; ?>
+                    <?php if ($address): ?><span style="font-family: 'Ubuntu Light';display: block; font-size: 15px;width:100%;float: left;"><strong><?php echo $this->__('Add'); ?> : </strong><?php echo $address ?></span><br/><?php endif; ?>				 
+                    <?php if ($phone): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Tel'); ?> : </strong><?php echo $phone ?></span><br/> <?php endif; ?>
+                    <?php if ($fax): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Fax'); ?> : </strong><?php echo $fax ?> </span><br/><?php endif; ?>
+                    <?php if ($email): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Email'); ?> : </strong> <?php echo $email ?></span><br/><?php endif; ?> 
+                    <?php if ($status): ?><span style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Status'); ?> : </strong> <?php echo $status ?></span><br/><?php endif; ?>
+                </div>
+            </div>												
+        </div>
+
+
+        <div class="main-content">
+            <div class="top-main-if">
+                <div class="info-cus info-cus1" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/bg-template6.png') ?>) repeat-x scroll 0 20px;">				
+                    <div class="billing-box" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/coner-title.png') ?>) no-repeat scroll 0 0;">
+                        <div class="title">
+                            <span class="title-color"><?php echo $this->__('Billing Address'); ?> </span>
+                        </div>
+                        <div class="content">
+                            <address><?php echo $invoice->getBillingAddress()->getFormated(true) ?></address>
+                        </div>
+                    </div>
+                    
+                    <div class="shipping-add-box" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/coner-title.png') ?>) no-repeat scroll 0 0;">
+                        <div class="title">
+                            <span class="title-color"><?php echo $this->__('Shipping Address'); ?> </span>
+                        </div>
+                        <?php if($invoice->getShippingAddress()) :?>
+                        <div class="content">
+                            <address><?php echo $invoice->getShippingAddress()->getFormated(true) ?></address>
+                        </div>
+                        <?php else: ?>
+                        <div class="content">
+                            <address><?php echo $this->__('No Shipping Address'); ?></address>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="info-cus" style="margin-top: 25px; margin-bottom: 25px;background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/bg-template6.png') ?>) repeat-x scroll 0 20px;">		
+                    <div class="payment-box" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/coner-title.png') ?>) no-repeat scroll 0 0;">
+                        <div class="title">
+                            <span class="title-color"><?php echo $this->__('Payment Method'); ?> </span>
+                        </div>				
+                        <div class="content">
+                            <?php echo $payment_method->getTitle(); ?>
+                        </div>
+                    </div>
+
+                    <div class="shipping-box" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/coner-title.png') ?>) no-repeat scroll 0 0;">
+                        <div class="title">
+                            <span class="title-color"><?php echo $this->__('Shipping Method'); ?> </span>
+                        </div>
+                        <?php if($shipping_method): ?>
+                        <div class="content">
+                            <?php echo $shipping_method; ?>
+                        </div>
+                        <?php else: ?>
+                        <div class="content">
+                            <?php echo $this->__('No Shipping Method'); ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>		
+                </div>
+            </div>
+
+            <div class="bottom-main-info" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/bg-template6.png') ?>) repeat scroll 0 20px;">
+                <div class="wrap-table-order" style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/coner-title-table.png') ?>) no-repeat scroll 0 0;">
+                    <table class="items table-data" width="100%" style="font-size: 14px; border-collapse: collapse;" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <td width="auto" style="background: <?php echo '#' . $color; ?>;	font-family:'Ubuntu';"><?php echo $this->__('Product') ?></td>
+                                <td width="12%" style="background: <?php echo '#' . $color; ?>;	font-family:'Ubuntu';"><?php echo $this->__('SKU') ?></td>
+                                <?php if ($display_images == 1): ?>
+                                    <td width="12%" style="background: <?php echo '#' . $color; ?>;	font-family:'Ubuntu';"><?php echo $this->__('Image') ?></td>
+                                <?php endif; ?>
+                                <td width="15%" style="background: <?php echo '#' . $color; ?>;	font-family:'Ubuntu';"><?php echo $this->__('Price') ?></td>
+                                <td width="12%" style="background: <?php echo '#' . $color; ?>;	font-family:'Ubuntu';"><?php echo $this->__('Qty Invoiced') ?></td>
+                                <td width="10%" style="background: <?php echo '#' . $color; ?>;	font-family:'Ubuntu';"><?php echo $this->__('Subtotal') ?></td>
+                            </tr>
+                        </thead>
+
+                        <!-- ITEMS HERE -->
+                        <?php $_items = $invoice->getAllItems(); ?>
+                        <?php $countbd = 0;foreach ($_items as $item):?>
+                                <?php if ($item->getOrderItem()->getParentItem()) continue; ?>
+                            <tbody class="<?php if ($countbd % 2 == 0) echo 'tbody-2'; ?>">								
+                            <?php echo $this->getItemHtml($item) ?>
+                            </tbody>
+                            <?php $countbd++;endforeach; ?>
+                    </table>
+                </div>
+            </div>
+            <?php
+            $totalBlock = $this->getLayout()->createBlock('pdfinvoiceplus/totals_invoice')
+                    ->setTemplate('pdfinvoiceplus/sales/order/totals.phtml');
+            ?>
+            <div class="invoice-totals">						
+			<div  style="width:100%;  float: right;">
+                                        <?php echo $totalBlock->toHtml(); ?>
+                        </div>
+					</div>
+            <div class="invoice-note" style="background: #ffffff;float: left;text-align: justify;width: 40%">
+                <?php if ($note): ?>
+    <?php echo $note; ?>
+                <?php endif; ?>
+            </div>
+            <div style="float:left;width: 100%;padding: 50px 3.6% 50px 50px">
+                <?php if ($barcode == 1): ?>
+                    <p style="text-align: center;"><barcode code='<?php echo $barcode_value; ?>' type='<?php echo $barcode_type; ?>' /></p>
+                <?php endif; ?>
+                <?php if ($term): ?>
+                    <p><?php echo $term; ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+        <br/>
+
+        <footer class="footer-invoice" name="myfooter">
+            <div class="footer-text" style="padding-top: 10px;width: 90%; margin: 0 5%;">
+<?php if ($footer) echo $footer; ?>
+            </div>
+        </footer>
+    </body>
+</html>

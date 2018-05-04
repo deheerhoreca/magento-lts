@@ -1,0 +1,21 @@
+<?php
+$template_id = $this->getRequest()->getParams();
+$system_template = Mage::getModel('pdfinvoiceplus/systemtemplate')->getCollection()
+    ->addFieldToFilter('id', $template_id)
+    ->getFirstItem();
+?>
+
+<div>
+    <div id="slideshow-form" class="fieldset">
+        <div class="input-box">
+            <form method="POST" id="slideshow-form" action="">
+                <table cellspacing="0"> 
+                    <tr>
+                        <td><img name="image1" id="image1" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage(); ?>" alt="" width="800" height="900"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

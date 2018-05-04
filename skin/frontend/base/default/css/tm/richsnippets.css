@@ -1,0 +1,10 @@
+.rich-snippets 						{ border:1px solid #eee; overflow: hidden; margin:5px 0; }
+.rich-snippets p 					{ margin-bottom:0 }
+.rich-snippets .product-name 		{font-weight:bold }
+.rich-snippets .prod-img 			{ float:left; 	padding:10px }
+.rich-snippets img 					{ display:block;	margin-right:5px; margin-left:5px }
+.rich-snippets .content 			{ margin-left:85px; padding:5px }
+.rich-snippets .rating-box 			{ float:left;  margin-top:3px; margin-right:5px }
+.rich-snippets-options 				{ font-size: 0.8em; }
+.rich-snippets-options ul 			{ display:inline }
+.rich-snippets-options li 			{ display:inline; color:#000;	background:none!important;	padding-left:0!important;	font-size:11px }

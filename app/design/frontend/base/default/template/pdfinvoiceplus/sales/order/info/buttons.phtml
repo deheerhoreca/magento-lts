@@ -1,0 +1,30 @@
+<!--Zeus edit template 16/01-->
+<?php  $_order = $this->getOrder() ?>
+<br/>
+<?php if($this->helper('rss/order')->isStatusNotificationAllow()): ?>
+    <a href="<?php echo $this->helper('rss/order')->getStatusHistoryRssUrl($_order) ?>" class="link-rss f-none"><?php echo $this->__('Subscribe to Order Status') ?></a>
+    
+    <span class="separator">|</span>
+<?php endif; ?>
+    <!--End 16/01-->
+<?php if ($this->helper('sales/reorder')->canReorder($_order)) : ?>
+    <a href="<?php echo $this->getReorderUrl($_order) ?>" class="link-reorder"><?php echo $this->__('Reorder') ?></a>
+    <span class="separator">|</span>
+<?php endif ?>
+<?php 
+    $enable = Mage::helper('pdfinvoiceplus')->checkEnable();
+    $active = Mage::helper('pdfinvoiceplus')->checkStoreTemplate();
+    $isRemove = false;
+    if($enable && $active && Mage::helper('pdfinvoiceplus')->isRemovePrintDefault())
+        $isRemove = true;
+?>
+<?php if(!$isRemove): ?>    
+<a href="<?php echo $this->getPrintUrl($_order) ?>" class="link-print" onclick="this.target='_blank';"><?php echo $this->__('Print Order') ?></a>
+<?php if($enable == 1 && $active == 1):?>    
+    <span class="separator">|</span>
+<?php endif; ?>    
+<?php endif; ?>
+<?php if($enable == 1 && $active == 1):?>
+    <a href="<?php echo $this->getCustomPrintUrl($_order) ?>" class="link-print" onclick="this.target='_blank';"><?php echo $this->__('Print Custom PDF Order')?></a>
+<?php endif?>
+<?php echo $this->getChildHtml(); ?>

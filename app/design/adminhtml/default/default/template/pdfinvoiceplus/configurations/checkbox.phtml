@@ -1,0 +1,65 @@
+<style>
+    .checkbox-field{
+        width: 270px;
+        min-height: 17px;
+        max-height: 200px;
+        overflow: auto;
+        padding: 4px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #aaa #c8c8c8 #c8c8c8 #aaa;
+        background: #fff;
+        font: 12px arial, helvetica, sans-serif;
+        vertical-align: middle;
+        border-image-source: initial;
+        border-image-slice: initial;
+        border-image-width: initial;
+        border-image-outset: initial;
+        border-image-repeat: initial;
+    }
+</style>
+
+<?php $ele_id = $this->getElement()->getHtmlId() ?>
+<?php $ele_name = $this->getElement()->getName() ?>
+<?php $value = $this->getElement()->getValue() ?>
+<script type="text/javascript">
+    function checkboxSelectAll(htmlId) {
+        var input_cb = document.getElementById(htmlId).childNodes;
+        for (var i = 0; i < input_cb.length; i++) {
+            input_cb[i].checked = true;
+        }
+    }
+    function checkboxDeselectAll(htmlId) {
+        var input_cb = document.getElementById(htmlId).childNodes;
+        for (var i = 0; i < input_cb.length; i++) {
+            input_cb[i].checked = false;
+        }
+    }
+</script>
+
+<div id="check-all-<?php echo $ele_id ?>" class="selected-all" style="padding-left: 5px;">
+    <input type="radio" name="<?php echo $ele_name ?>[selected_all]" value="1" onclick="checkboxSelectAll('<?php echo $ele_id ?>')"/> <?php echo Mage::helper('adminhtml')->__('Select All') ?> / 
+    <input type="radio" name="<?php echo $ele_name ?>[selected_all]" value="2" onclick="checkboxDeselectAll('<?php echo $ele_id ?>')"/> <?php echo Mage::helper('adminhtml')->__('Unselect All ') ?>
+</div>
+<div id="<?php echo $ele_id ?>" class="checkbox-field">
+    <?php foreach ($this->toOptionArray() as $option): ?>
+        <?php if($value): ?>
+            <?php if(!isset($value['options'])): $value['options'] = array(); endif; ?>
+            <input id="cb_<?php echo $option['value'] ?>" type="checkbox" name="<?php echo $ele_name ?>[options][]" value="<?php echo $option['value'] ?>" <?php echo (in_array($option['value'], $value['options'])) ? 'checked' : '' ?> class="var-checkbox <?php echo $ele_id ?>" size="10"> <label for="cb_<?php echo $option['value'] ?>"><?php echo $option['label'] ?></label><br/>
+        <?php else: ?>
+            <input id="cb_<?php echo $option['value'] ?>" type="checkbox" name="<?php echo $ele_name ?>[options][]" value="<?php echo $option['value'] ?>" <?php echo (isset($option['checked']) && $option['checked']) ? 'checked' : '' ?> class="var-checkbox <?php echo $ele_id ?>" size="10"> <label for="cb_<?php echo $option['value'] ?>"><?php echo $option['label'] ?></label><br/>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+
+<script type="text/javascript">
+    var <?php echo $ele_id ?>_checkboxs = document.getElementsByClassName('<?php echo $ele_id ?>');
+    for (var ci = 0; ci < <?php echo $ele_id ?>_checkboxs.length; ci++) {
+        <?php echo $ele_id ?>_checkboxs[ci].onclick = function() {
+            var childs = document.getElementById('check-all-<?php echo $ele_id ?>').childNodes;
+                    for (var i = 0; i < childs.length; i++) {
+                        childs[i].checked = false;
+                    }
+                };
+            }
+</script>

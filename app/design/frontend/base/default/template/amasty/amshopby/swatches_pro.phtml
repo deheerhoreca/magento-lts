@@ -1,0 +1,54 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @package Amasty_Shopby
+ */
+?>
+<?php
+    /** @var Amasty_Shopby_Helper_Data $helper */
+    $helper = Mage::helper('amshopby');
+    $multiSelect = !($this->getSingleChoice());
+    $imageSize = $helper->getColorSwatchesImageSize($this->getAttributeModel()->getAttributeId());
+?>
+
+<ol class="configurable-swatch-list">
+    <?php foreach ($this->getItems() as $item):
+        $itemsCount= $item->getCount();
+        $label = $item->getLabel();
+
+        $imageUrl = $helper->getColorSwatchesImageUrl($item->getOptionId(), $imageSize);
+        $imageColor = $helper->getColorSwatchesBackgroundColor($item->getOptionId());
+
+        $linkClass = 'swatch-link has-image';
+        $linkClass .= $multiSelect ? ' amshopby-swatch ' : '';
+        $linkClass .= $multiSelect && $item->getIsSelected() ? ' amshopby-attr-selected ' : '';
+        $linkCss = 'height:' . $imageSize['width'] . 'px; width:' . $imageSize['height'] . 'px;';
+    ?>
+    <li>
+        <a style="display: flex;"
+           <?php if ($itemsCount > 0): ?>
+               href="<?php echo $this->urlEscape($item->getUrl()) ?>"
+           <?php endif;?>
+           class="<?php echo $linkClass ?>"
+        >
+            <span class="swatch-label">
+                <?php if ($imageUrl): ?>
+                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $label; ?>" title="<?php echo $label ?>"
+                         width="<?php echo $imageSize['width'] ?>" height="<?php echo $imageSize['height'] ?>"
+                         style="position: relative;<?php echo $linkCss?>"
+                    />
+                <?php elseif($imageColor): ?>
+                    <div style="background-color: #<?php echo $imageColor ?>; <?php echo $linkCss?>"></div>
+                <?php else: ?>
+                    <label><?php echo $label ?></label>
+                <?php endif; ?>
+            </span>
+
+            <?php if (!$this->getHideCounts()): ?>
+                <span class="count">(<?php echo $item->getCount() ?>)</span>
+            <?php endif; ?>
+        </a>
+    </li>
+    <?php endforeach ?>
+</ol>

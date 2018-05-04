@@ -1,0 +1,78 @@
+
+<script>
+
+(function( $ ) {
+  $(function() {
+    // More code using $ as alias to jQuery
+    PreviewDesign = function(type){
+        var url;
+        switch(type){
+            case "order":
+        /* Change by Zeus 02/12 change link pdfinvoiceplusadmin*/
+                TINY.box.show({
+                    iframe:'<?php echo Mage::getSingleton("adminhtml/url")->getUrl("adminhtml/pdfinvoiceplus_design/previewOrderDesign",array("id"=>$this->_id));?>',
+                    boxid:'frameless',
+                    animate: false,
+                    width:850,
+                    height:650,
+                    fixed:false,
+                    maskid:'bluemask',
+                    maskopacity:40,
+                    openjs:function(){},
+                    closejs:function(){}
+                });
+                
+                break;
+            case "invoice":
+                TINY.box.show({
+                    iframe:'<?php echo Mage::getSingleton("adminhtml/url")->getUrl("adminhtml/pdfinvoiceplus_design/previewInvoiceDesign",array("id"=>$this->_id));?>',
+                    boxid:'frameless',
+                    animate: false,
+                    width:850,
+                    height:650,
+                    fixed:false,
+                    maskid:'bluemask',
+                    maskopacity:40,
+                    openjs:function(){},
+                    closejs:function(){}
+                });
+                break;
+            case "creditmemo":
+                TINY.box.show({
+                    iframe:'<?php echo Mage::getSingleton("adminhtml/url")->getUrl("adminhtml/pdfinvoiceplus_design/previewCreditmemoDesign",array("id"=>$this->_id));?>',
+                    boxid:'frameless',
+                    animate: false,
+                    width:850,
+                    height:650,
+                    fixed:false,
+                    maskid:'bluemask',
+                    maskopacity:40,
+                    openjs:function(){},
+                    closejs:function(){}
+                });
+                break;
+			case "shipment":
+                TINY.box.show({
+                    iframe:'<?php echo Mage::getSingleton("adminhtml/url")->getUrl("adminhtml/pdfinvoiceplus_design/previewShipmentDesign",array("id"=>$this->_id));?>',
+                    boxid:'frameless',
+                    animate: false,
+                    width:850,
+                    height:650,
+                    fixed:false,
+                    maskid:'bluemask',
+                    maskopacity:40,
+                    openjs:function(){},
+                    closejs:function(){}
+                });
+                break;
+            default:
+                url = '';
+                break;
+        }
+        /* End change */
+    };
+  });
+})(jQuery);
+    
+</script>
+

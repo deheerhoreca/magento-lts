@@ -1,0 +1,480 @@
+<?php
+$templateObject = $this->getDataObject();
+$logo = $templateObject->getData('company_logo');
+$logoUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/logo/' . $logo ;
+$logoUrlConverter = Mage::helper('pdfinvoiceplus/product')->convertImage($logoUrl);
+$name = $templateObject->getData('company_name');
+$address = $templateObject->getData('company_address');
+$phone = $templateObject->getData('company_telephone');
+$email = $templateObject->getData('company_email');
+$fax = $templateObject->getData('company_fax');
+$businessId = $templateObject->getData('business_id');
+$vatnumber = $templateObject->getData('vat_number');
+$vatoffice = $templateObject->getData('vat_office');
+$note = $templateObject->getData('note');
+$footer = $templateObject->getData('footer');
+$footerHeight = $templateObject->getFooterHeight();
+$color = 'ff6c00';
+$pageFormat = $templateObject->getFormat();
+$display_images = $templateObject->getDisplayImages();
+$orientation = $templateObject->getOrientation();
+if ($orientation == 0) {
+    if ($pageFormat == 'A5') {
+        $title_width = '83%';
+    } else {
+        $title_width = '90%';
+    }
+} elseif ($orientation == 1) {
+    if ($pageFormat == 'A5') {
+        $title_width = '88.5%';
+    } else {
+        $title_width = '93%';
+    }
+}
+$barcode = $templateObject->getBarcode();
+$barcode_type = $templateObject->getBarcodeType();
+$barcode_order = $templateObject->getBarcodeOrder();
+$term = $templateObject->getTermsConditions();
+?>
+<style>
+    *{margin: 0; padding: 0;}
+
+    body {
+        font-size: 12px;
+        max-width:100%;
+        margin: 0 auto;
+        font-family: "Ubuntu Regular", "Ubuntu Light", arial;		
+        font-size-adjust: none;
+        width: 100%;
+    }
+    #container-inner{
+        position: relative;
+        width: 90%;
+        height: auto;
+        padding: 0px;
+        margin: 0 auto;
+        border: 0px;
+        word-wrap: normal;
+        padding-bottom:<?php echo $footerHeight+10;?>px;
+    }
+   .template03  .main-content {
+        width:100%;
+    }
+   .template03  .header-content div span{
+        display: block;
+        clear:left;
+    }
+    .template03 p { margin: 0px; }
+    table{
+        border-spacing: 0 !important;
+    }
+    .template03 table thead th { 
+        background-color: <?php echo '#' . $color; ?>;
+        color: #fff;
+        text-align: center;
+        /*border: 0.1mm solid #fff;*/
+        font-weight: bold;
+        padding: 12px 20px;
+        text-transform: uppercase;
+        border-right:1px solid #fff;
+    }
+    .template03 th:last-child
+    {
+        border-right:none !important;
+    }
+    .template03 .table-data tbody td{
+        background: #ffe9d9;
+        padding: 12px 10px;
+        color: #2f2f2f;
+        border-right:1px solid #fff;
+        border-bottom: 1px solid #fff;
+    }
+    .template03 .items td.blanktotal {
+        background-color: #FFFFFF;
+        border: 0mm none #fff;
+        border-top: 0.1mm solid #fff;
+        border-right: 0.1mm solid #fff;
+    }
+    .template03 .items td.totals {
+        background: none repeat scroll 0 0 #ffe9d9;
+        border: 0 none;
+        text-align: right;
+        padding: 5px 20px;
+    }
+    .template03 .top-title span {
+        display: block;
+        font-size: 15px;
+        color: #000;
+    }
+    .template03 .title-color{
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding-left:20px;
+        /*float:left;*/
+    }
+    .template03 div.title{
+        background: <?php echo '#' . $color; ?>;
+        border-radius: 0 0 0 0;    
+        margin-bottom: 0;
+        height: 16px;
+        padding: 5px 0;
+        position: relative;
+        width: 100%;
+        word-wrap: break-word;
+        font-size: 14px;
+    }
+    .template03  .info-cus{
+        width: 100%;
+        display:inline-block;
+        padding-bottom: 5px;
+    }
+    .template03 .content{
+        float: left;
+        font-size: 14px;
+        padding: 12px 20px;
+        width: 92%;
+    }
+
+     .template03 .shipping-box, .shipping-add-box{
+        float:right;
+    }
+
+     .template03 .table-data tbody td.label{
+        color: #2f2f2f;
+        font-family: 'Ubuntu';
+        font-weight: bold;
+        font-size: 16px;
+        padding-right: 30%;
+    }
+     .template03 td:last-child
+    {
+        border-right:none !important;
+    }
+    .template03  .note{
+        width:40%;
+        float: left;
+    }
+     .template03 .order-grandtotals{
+        width:55%; 
+        float: right;
+        background: #ffe9d9; 
+    }
+ <?php 
+    
+    if($barcode_type == 'QR' && $barcode == 1){
+        ?>
+   
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/QR.jpg'; ?>") no-repeat;
+    }
+     <?php
+    }
+   ?>
+    <?php
+    if($barcode_type == 'IMB' || $barcode_type == 'RM4SCC' || $barcode_type == 'KIX' && $barcode == 1){
+        ?>
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/IMB.jpg'; ?>") no-repeat;
+    }
+    <?php
+    }
+    ?>
+    <?php
+    if($barcode_type == 'UPCA' && $barcode == 1){
+        ?>
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/UPCA.jpg'; ?>") no-repeat;
+    }
+    <?php
+    }
+    ?>
+    
+    <?php
+    if($barcode_type == 'EAN8' && $barcode == 1){
+        ?>
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/EAN8.jpg'; ?>") no-repeat;
+    }
+    <?php
+    }
+    ?>
+    
+    <?php
+    if($barcode_type == 'EAN128A' || $barcode_type == 'C93' || $barcode_type == 'MSI' || $barcode_type == 'CODABAR' || $barcode_type == 'CODE11' || $barcode_type == 'C39' || $barcode_type == 'S25' || $barcode_type == 'C128A'  && $barcode == 1){
+        ?>
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/EAN128A.jpg'; ?>") no-repeat;
+    }
+    <?php
+    }
+    ?>
+    
+    <?php
+    if($barcode_type == 'EAN13' && $barcode == 1){
+        ?>
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/EAN13.jpg'; ?>") no-repeat;
+    }
+    <?php
+    }
+    ?>
+    
+    <?php
+    if($barcode_type == 'POSTNET' || $barcode_type == 'PLANET' && $barcode == 1){
+        ?>
+    .barcode:before {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 100px;
+    background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/barcode/POSTNET.jpg'; ?>") no-repeat;
+    }
+    <?php
+    }
+    ?>
+    .template03  .totals{
+        float: right;
+        width: 44%;
+    }
+    .template03  .body-total{
+        width: 100%;
+        height: auto;
+        float: right;
+    }
+    .template03  .total-row{
+        width: 100%;
+        text-align: right;
+        float: right;
+        border-bottom: 1px solid #fff;
+        padding: 5pt 10pt 5pt 0pt;
+        background: #ffe9d9;
+    }
+     .template03 .total-label{
+        font-family: 'Ubuntu';
+        font-size: 11pt;
+        color: #2F2F2F;
+        width: 45%;
+        float: left;
+        height: 22pt;
+    }
+    .template03  .total-value{
+        font-size: 11pt;
+        width: 45%;
+        height: 22pt;
+        float: right;
+    }
+     .template03 .grand-total, .template03 .grand-total-value, .template03 .grand-total-label {
+        font-family: 'Ubuntu';
+        font-weight: bold;
+        font-size: 12pt;
+    }
+    .template03  .grand-total-value{
+        color: #bf2323;
+    }
+
+    .template03 .term-conditions{
+        margin-top:20px;
+        margin-bottom:124px;
+    }
+    .footer{
+        background: #fff;
+        padding-bottom: 10px;
+        color: #2f2f2f;
+        font-size: 14px;
+        text-align: left;
+        position:absolute;
+        bottom:0;
+        width:90%;
+        left: 5%;
+        overflow: hidden;
+    }
+    .theme-color{
+        background-color: <?php echo '#' . $color ?>;
+    }
+
+    /*infomations*/
+    .general-info{ display: block; width:100%; float: left; font-family: 'Ubuntu Light';font-size: 15px; }
+    .general-info .info-label{ font-weight: bold; display: inline-block; }
+    .general-info .info-value{ display: inline-block; }
+
+</style>
+<div id="container-inner" class="template03">
+    <header name="myheader">
+        <div class="header-content" style="display:inline-block;width:100%;border-bottom: 8px solid <?php echo '#' . $color; ?>;padding-bottom: 25px; padding-top: 10px;">
+            <div class='box-logo ajaxupload' style="width:160px; margin-top: 20px;text-align: left; float: left" info-img="company_logo">
+                <?php echo ($logo) ? '<img width="160" src="' .$logoUrlConverter. '" />' : ''; ?>
+
+            </div>
+
+            <div class="box-infomations autogrow color-text contenteditable" title="Click to edit <br/> Right-click to insert variable" contextmenu-type="main" contenteditable="true" style="width:50%; color:#000;font-size: 14px;text-align: left; float: left;padding-left:22px">
+                <?php if ($name): ?><span title="Click to edit, right-click to insert variable" style="display: <?php echo ($name) ? 'block' : 'none'; ?>; font-weight: bold; font-size: 16px; color: <?php echo '#' . $color; ?>; width:100%; float: left;font-family: 'Ubuntu';text-transform: uppercase;" info-text="company_name"><?php echo $name ?></span><br/><?php endif; ?>
+                <?php if ($address): ?><span title="Click to edit, right-click to insert variable" style="display: <?php echo ($address) ? 'block' : 'none' ?>; font-family: 'Ubuntu Light'; font-size: 14px;width:100%;float: left;"><strong><?php echo $this->__('Address:') ?> </strong><info info-text="company_address"><?php echo $address ?></info></span><br/><?php endif; ?>
+                <?php if ($email): ?><strong title="Click to edit, right-click to insert variable" ><?php echo $this->helper('pdfinvoiceplus')->__('Email:') ?> </strong> <info info-text="company_email"> <?php echo $email ?></info></span><br/><?php endif; ?>
+                <?php if ($phone): ?><span title="Click to edit, right-click to insert variable" style="display: block; width:100%;float: left; "><strong><?php echo $this->__('Tel:') ?> </strong><info info-text="company_telephone"><?php echo $phone ?></info></span><br/><?php endif; ?>
+                <?php if ($fax): ?><span title="Click to edit, right-click to insert variable" style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Fax:') ?> </strong><info info-text="company_fax"><?php echo $fax ?></info></span><br/><?php endif; ?>
+                <?php if ($businessId): ?><span title="Click to edit, right-click to insert variable" style="display: block;width:100%;float: left; "><strong><?php echo $this->__('Business Id:') ?> </strong><info info-text="business_id"><?php echo $businessId ?></info></span><br/><?php endif; ?>
+                <?php if ($vatnumber): ?><span title="Click to edit, right-click to insert variable" style="display: block;width:100%;float: left; "><strong><?php echo $this->__('VAT Number:') ?> </strong><info info-text="vat_number"><?php echo $vatnumber ?></info></span><br/><?php endif; ?>
+                <?php if ($vatoffice): ?><span title="Click to edit, right-click to insert variable" style="display: block;width:100%;float: left; "><strong><?php echo $this->__('VAT Office:') ?> </strong><info info-text="vat_office"><?php echo $vatoffice ?></info></span><br/><?php endif; ?>
+            </div>
+            <div class="barcode" style="float:right;text-align: right;">
+                <?php if ($barcode =='1' && $barcode_order): ?>
+                    <!-- --><barcode code='<?php echo $barcode_order; ?>' type='<?php echo $barcode_type; ?>' />
+                <?php endif; ?>
+            </div>
+        </div>
+    </header>
+    <div id="main-content" class="main-content">
+        <div contextmenu-type="main" class="top-title" style="width: 100%;clear: both;">
+            <div style="float:left;width:49%">
+                <div class="color-theme-text contenteditable" title="Click to edit, right-click to insert variable" contenteditable="true" style="color: <?php echo '#' . $color; ?>; font-family: 'Ubuntu Regular';text-align:left; font-size: 40px;font-weight: normal; text-transform: uppercase;"><?php echo $this->_locale->translate('Order'); ?></div>
+                <span contenteditable="true" title="Click to edit, right-click to insert variable" class="color-text contenteditable" style="color: #010101;font-size: 18px;"><strong><?php echo $this->__('Status:') ?> </strong>{{var order_status}}</span><br/>
+            </div>
+            <div style="text-align: right;width:49%;float:right;">
+                <span contenteditable="true" title="Click to edit, right-click to insert variable" class="color-text contenteditable" style="font-family: 'Ubuntu Medium';font-size: 26px;">#{{var order_increment_id}}</span><br/>
+                <span contenteditable="true" title="Click to edit, right-click to insert variable" class="color-text contenteditable" style="color: #010101;font-size: 18px;">{{var order_created_at}}</span>
+            </div>
+        </div>
+        <div class="info-cus">				
+            <div style="width:49%;float:left" class="billing-box">
+                <div class="title">
+                    <div contenteditable="true" title="Click to edit, right-click to insert variable" class="title-color contenteditable" style="padding:0 20px">
+                        <?php echo $this->_locale->translate('Billing Address') ?></div>
+                </div>
+                <div contextmenu-type="main" class="content contenteditable">
+                    <address contenteditable="true" title="Click to edit, right-click to insert variable">{{var order_billing_address}}</address>
+                </div>
+            </div>
+
+            <div style="width:49%;float:right;margin-left: 0" class="shipping-add-box">
+                <div class="title">
+                    <div contenteditable="true" title="Click to edit, right-click to insert variable" class="title-color contenteditable" style="padding:0 20px">
+                        <?php echo $this->_locale->translate('Shipping Address') ?>
+                    </div>
+                </div>
+                <div contextmenu-type="main" class="content contenteditable">
+                    <address contenteditable="true" title="Click to edit, right-click to insert variable">{{var order_shipping_address}}</address>
+                </div>
+            </div>
+        </div>
+
+        <div class="" style="padding-bottom: 5px;">		
+            <div style="width:49%;float:left;" class="payment-box">
+                <div class="title">
+                    <div contenteditable="true" title="Click to edit, right-click to insert variable" class="title-color contenteditable" style="padding:0 20px"><?php echo $this->_locale->translate('Payment Method') ?></div>
+                </div>				
+                <div contextmenu-type="main" class="content contenteditable" title="Click to edit, right-click to insert variable" contextmenu-type="order" contenteditable="true">
+                    {{var order_payment_method}}
+                </div>
+            </div>
+
+            <div style="width:49%;float:right;" class="shipping-box">
+                <div class="title">
+                    <div contenteditable="true" title="Click to edit, right-click to insert variable" class="title-color contenteditable" style="padding:0 20px"><?php echo $this->_locale->translate('Shipping Method') ?></div>
+                </div>
+                <div contextmenu-type="main" title="Click to edit, right-click to insert variable" contenteditable="true" class="content contenteditable">
+                    {{var order_shipping_method}}
+                </div>
+            </div>		
+        </div>
+        <table id="table-item" class="items table-data" width="100%" style="border-collapse: collapse;" cellpadding="6">
+                        <thead>
+                            <tr>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="10%" style="font-family:'Ubuntu';text-align:left;"><?php echo $this->_locale->translate('No.'); ?></th>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="35%" style="font-family:'Ubuntu';text-align:left;"><?php echo $this->_locale->translate('PRODUCT'); ?></th>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="13%" style="font-family:'Ubuntu';text-align:left;"><?php echo $this->_locale->translate('SKU'); ?></th>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="13%" style="font-family:'Ubuntu';text-align:right;"><?php echo $this->_locale->translate('PRICE'); ?></th>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="13%" style="font-family:'Ubuntu';text-align:right;"><?php echo $this->_locale->translate('QTY'); ?></th>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="10%" style="font-family:'Ubuntu';text-align:right;"><?php echo $this->_locale->translate('Tax'); ?></th>
+                                <th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="10%" style="font-family:'Ubuntu';text-align:right;"><?php echo $this->_locale->translate('SUBTOTAL'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ITEMS HERE -->
+                            <!--            ##productlist_start##-->
+                            <tr class="style-border-color">
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="center">{{var items_no_number}}</td>
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="left">{{var items_name}}<br/>{{var items_product_options}}</td>
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="left">{{var items_sku}}</td>
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="right">{{var items_price}}</td>
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="right">
+                                    {{var items_qty_ordered}}<br/>
+                                    {{var items_qty_invoiced}}<br>
+                                    {{var items_qty_refunded}}
+                                </td>
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="right">{{var items_tax_amount}}</td>
+                                <td class="color-text contenteditable background-items" title="Click to edit, right-click to insert variable" contextmenu-type="item" contenteditable="true" align="right">{{var items_row_total}}</td>
+                            </tr>
+                            <!--            ##productlist_end##-->
+                        </tbody>
+                    </table>
+					<table width="100%">
+						<tr>
+							<th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="71%" style="font-family:'Ubuntu';text-align:right;"><?php echo $this->_locale->translate('Total Qty'); ?></th>
+							<th title="Click to edit, right-click to insert variable" class="color-theme label contenteditable" contenteditable="true" width="29%" style="font-family:'Ubuntu';text-align:left;">{{var order_total_qty}}</th>                    
+						</tr>				           
+					</table>
+        <div class="after-item" style="width:100%;display:inline-block;padding-top: 10px">
+            <div class="totals autogrow contenteditable" title="Click to edit, right-click to insert variable" contextmenu-type="main" contenteditable="true">
+                <div class="body-total" contextmenu-type="main" title="Click to edit, right-click to insert variable">
+                    <!-- <div class="total-row background-items">
+                        <div class="total-label color-text"><?php //echo $this->_locale->translate('Subtotal'); ?></div>
+                        <div class="total-value color-text">{{var order_subtotal}}</div>
+                    </div> -->
+                    <div class="total-row background-items">
+                        <div class="total-label color-text"><?php echo $this->_locale->translate('Tax'); ?></div>
+                        <div class="total-value color-text">{{var order_tax_amount}}</div>
+                    </div>
+                    <div class="total-row background-items">
+                        <div class="total-label color-text"><?php echo $this->_locale->translate('Shipping'); ?></div>
+                        <div class="total-value color-text">{{var order_shipping_amount}}</div>
+                    </div>
+                    <div class="total-row background-items">
+                        <div class="total-label color-text grand-total"><?php echo $this->_locale->translate('Grand Total'); ?></div>
+                        <div class="total-value color-text grand-total grand-total-value">{{var order_grand_total}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div contextmenu-type="main" class="note color-text contenteditable" title="Click to edit, right-click to insert variable" contenteditable="true" style="float:left;width:47%;padding:10px" info-text="note">
+                <?php echo ($note) ? $note : ''; ?>
+            </div>
+
+        </div>
+        <div contextmenu-type="main" class="term term-conditions term-conditions-box">
+            <p title="Click to edit, right-click to insert variable" class="barcode-order color-text contenteditable" contenteditable="true" info-text="terms_conditions"><?php echo $term; ?></p>
+        </div>
+    </div>
+
+</div>
+    <div id="footer" class="footer color-text" style="height: <?php echo $footerHeight;?>px;">
+        <div class="theme-color color-theme" style="width:100%; height: 8px;"></div>
+        <div contextmenu-type="main" title="Click to edit, right-click to insert variable" contenteditable="true" class="color-text contenteditable" style="padding-top: 10px;width: 100%; " info-text="footer">
+            <?php if ($footer) echo $footer; ?>
+        </div>
+    </div>

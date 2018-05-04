@@ -1,0 +1,293 @@
+<?php
+$templateCode = Mage::helper('pdfinvoiceplus/pdf')->getTemplateCode();
+$order = $this->getOrder();
+$payment_method = $invoice->getOrder()->getPayment()->getMethodInstance();
+$shipping_method = $invoice->getOrder()->getShippingDescription();
+$template = Mage::helper('pdfinvoiceplus/pdf')->getUsingTemplate();
+$logo = $template->getCompanyLogo();
+$address = $template->getCompanyAddress();
+$name = $template->getCompanyName();
+$email = $template->getCompanyEmail();
+$phone = $template->getCompanyTelephone();
+$fax = $template->getCompanyFax();
+$note = $template->getNote();
+$footer = $template->getFooter();
+$color = $template->getColor();
+$color = $color ? $color: 'ff6c00';
+$vatnumber = $template->getVatNumber();
+?>
+<html>
+    <head>
+        <style>
+            *{margin: 0; padding: 0;}
+            @font-face
+            {
+                font-family: "Ubuntu";
+                src: url('fonts/Ubuntu-Bold.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Light";
+                src: url('fonts/Ubuntu-Light.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Medium";
+                src: url('fonts/Ubuntu-Medium.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Regular";
+                src: url('fonts/Ubuntu-Regular.ttf')		 
+            } 
+            @font-face
+            {
+                font-family: "Ubuntu Italic";
+                src: url('fonts/Ubuntu-Italic.ttf')		 
+            } 
+
+
+            body {
+                font-size: 12px;
+                max-width:100%;
+                margin: 0 auto;
+                font-family: "Ubuntu Regular", "Ubuntu Light", arial;		
+                font-size-adjust: none;
+                width: 100%;
+            }
+            .main-content {
+                max-width:90%;
+                margin: 0 5% 0;
+            }
+            .header-content div span{
+                display: block;
+                clear:left;
+            }
+            p {    margin: 0px;
+            }
+            td { vertical-align: top; }
+            .items td {
+                border-left: 0.1mm solid #fff;
+                border-bottom: 4px solid #FFFFFF;
+                border-right: 0.1mm solid #fff;
+            }
+            table thead td { background-color: <?php echo '#' . $color; ?>;
+                             color: #fff;
+                             text-align: center;
+                             border: 0.1mm solid #fff;
+                             font-weight: bold;
+                             padding: 12px 20px;
+                             text-transform: uppercase;
+            }
+            .table-data tbody td{
+                background: #ffe9d9;
+                padding: 12px 20px;
+                color: #2f2f2f;
+            }
+            .items td.blanktotal {
+                background-color: #FFFFFF;
+                border: 0mm none #fff;
+                border-top: 0.1mm solid #fff;
+                border-right: 0.1mm solid #fff;
+            }
+            .items td.totals {
+                background: none repeat scroll 0 0 #ffe9d9;
+                border: 0 none;
+                text-align: right;
+                padding: 5px 20px;
+            }
+            .top-title span {
+                display: block;
+                font-size: 15px;
+                color: #000;
+            }
+            /*
+            .arrow-right{
+                border-bottom: 12px solid #FFFFFF;
+                border-left: 11px solid #78C145;
+                border-top: 12px solid #FFFFFF;
+                height: 3px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 0;
+            }
+            */
+            .title-color{
+                color: #fff;
+                font-family: 'Ubuntu';
+                font-size: 14px;
+                font-weight: bold;
+                text-transform: uppercase;
+                padding: 0 20px;
+            }
+            div.title{
+                background: <?php echo '#' . $color; ?>;
+                border-radius: 0 0 0 0;    
+                margin-bottom: 0;
+                height: 16px;
+                padding: 5px 20px;
+                position: relative;
+                width: 100%;
+                word-wrap: break-word;
+                font-size: 14px;
+                float: left;
+            }
+            .info-cus{
+                float: left;
+                width: 100%;
+            }
+            .content{
+                float: left;
+                font-size: 14px;
+                padding: 12px 20px;
+                width: auto;
+            }
+
+            .shipping-box, .shipping-add-box{
+                /*margin-left: 2%;*/
+                float:right;
+            }
+            .footer-invoice{
+                border-top: 8px solid <?php echo '#' . $color; ?>;
+                background: #fff;
+                margin-top: 50px;
+                padding-bottom: 10px;
+                color: #2f2f2f;
+                font-size: 14px;
+                text-align: left;
+                position:absolute;
+                bottom:0;
+                width:100%;
+            }
+            .grand_total .price{             
+                color: #ff6c00;
+                font-size: 40px;
+                font-family: 'Ubuntu';
+            }
+            .table-data tbody td.label{
+                color: #2f2f2f;
+                font-family: 'Ubuntu';
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .table-data tfoot .grand_total td.label strong{                
+                font-family: 'Ubuntu';
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 40px;
+            }
+            table.grandtotal td {border:0 none!important; text-align: right!important;}
+        </style>
+    </head>
+    <body>
+
+
+        <header name="myheader">
+            <div class="header-content" style="width:90%;margin: 0 5%; border-bottom: 8px solid <?php echo '#' . $color; ?>;padding-bottom: 25px;">		
+                <div style=" width:20%;margin-top: 20px;margin-right: 50px; text-align: left; float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $logo ?>" /></div>
+                <div style=" width:75%; color:#000;font-size: 14px;text-align: left; float: left;">
+                    <?php if($name):?><span style="font-weight: bold; font-size: 16px; color: <?php echo '#' . $color; ?>; display: block;width:100%; float: left;font-family: 'Ubuntu';text-transform: uppercase;"><?php echo $name ?></span><br/><?php endif;?>
+                    <?php if($address):?><span style="font-family: 'Ubuntu Light';display: block; font-size: 14px;width:100%;float: left;"><strong>Add: </strong><?php echo $address ?></span><br/><?php endif;?>				 
+                    <?php if($phone):?><span style="display: block;width:100%;float: left; "><strong>Tel: </strong>0433 825413 | <?php endif;?><?php if($email):?><strong>Email: </strong> <?php echo $email ?></span><br/><?php endif;?>
+                    <?php if($vatnumber):?><span style="display: block;width:100%;float: left; "><strong>VAT Number: </strong><?php echo $vatnumber ?></span><?php endif;?>
+                </div>
+
+            </div>
+        </header>
+        <div class="main-content">
+            <div class="top-title" style="width: 100%;clear: both;margin-bottom: 15px;">
+                <div style="float:left;width:49%">
+                    <h1 style="color: <?php echo '#' . $color; ?>; font-family: 'Ubuntu Regular';text-align:left; font-size: 65px;font-weight: normal; text-transform: uppercase;">Invoice</h1>
+
+                </div>
+                <div style="text-align: right;width:49%;float:right;">
+                    <span style="font-family: 'Ubuntu Medium';font-size: 26px;">#<?php echo $invoice->getIncrementId()?></span><br/>
+                    <span style="color: #010101;font-size: 18px;"><?php echo $this->formatDate($invoice->getCreatedAt(), 'medium', true);?></span>
+                </div>
+            </div>
+            <div class="info-cus">				
+                <div style="width:49%;float:left" class="billing-box">
+                    <div class="title">
+                        <span class="title-color">Billing Address</span>
+                    </div>
+                    <div class="content">
+                        <address><?php echo $invoice->getBillingAddress()->getFormated(true) ?></address>
+                    </div>
+                </div>
+
+                <div style="width:49%;float:right;margin-left: 0" class="shipping-add-box">
+                    <div class="title">
+                        <span class="title-color">Shipping Address</span>
+                    </div>
+                    <div class="content">
+                        <address><?php echo $invoice->getShippingAddress()->getFormated(true) ?></address>
+                    </div>
+                </div>		
+            </div>
+
+            <div style="margin-bottom: 5px;" class="">		
+                <div style="width:49%;float:left;" class="payment-box">
+                    <div class="title">
+                        <span class="title-color">Payment Method</span>
+                    </div>				
+                    <div class="content">
+                        <?php echo $payment_method->getTitle(); ?>
+                    </div>
+                </div>
+
+                <div style="width:49%;float:right;" class="shipping-box">
+                    <div class="title">
+                        <span class="title-color">Shipping Method</span>
+                    </div>
+                    <div class="content">
+                        <?php echo $shipping_method; ?>
+                    </div>
+                </div>		
+            </div>
+
+            <!--<h3 style="font-size: 12pt; color: rgb(47, 79, 78);  text-transform: uppercase;font-weight:bold">Ordered Items</h3>-->
+            <table class="items table-data" width="100%" style="font-size: 14px; border-collapse: collapse;" cellpadding="6">
+                <thead>
+                    <tr>
+                         <td width="28%" style="font-family:'Ubuntu';">PRODUCT</td>
+                        <!--td width="13%" style="font-family:'Ubuntu';">SKU</td-->
+                        <td width="15%" style="font-family:'Ubuntu';">PRICE</td>
+                        <td width="auto" style="font-family:'Ubuntu';">QTY</td>
+                        <td width="auto" style="font-family:'Ubuntu';">SUBTOTAL</td>
+                        <td width="auto" style="font-family:'Ubuntu';">TAX AMOUNT</td>
+                        <td width="auto" style="font-family:'Ubuntu';">DISCOUNT AMOUNT</td>
+                        <td width="21%" style="font-family:'Ubuntu';">ROW TOTAL</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- ITEMS HERE -->
+                    <?php $_items = $invoice->getAllItems(); ?>
+                    <?php foreach ($_items as $item): ?>
+                        <?php if ($item->getOrderItem()->getParentItem()) continue;?>
+                        <?php echo $this->getItemHtml($item) ?>
+                        <?php echo $this->getItemExtraInfoHtml($item->getOrderItem()) ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php 
+                $totalBlock = $this->getLayout()->createBlock('pdfinvoiceplus/adminhtml_totals_invoice')
+                        ->setTemplate('pdfinvoiceplus/sales/order/totals.phtml');
+            ?>
+            <div class="invoice-totals" style="width:100%;">
+                <div class="invoice-note" style="width:50%;margin-top: 20px; float: left;">
+                    <?php if($note):?>
+                        <?php echo $note;?>
+                    <?php endif;?>
+                </div>
+                <div  style="width:40%; float: right; background: #ffe9d9;"><div style="padding:20px"><?php  echo $totalBlock->toHtml(); ?></div></div>
+            </div>
+        </div>
+        <footer class="footer-invoice" name="myfooter" >
+            <div class="footer-text" style="padding-top: 10px;width: 90%; margin: 0 5%;">
+                <?php if($footer) echo $footer;?>
+            </div>
+        </footer>
+    </body>
+    
+</html>

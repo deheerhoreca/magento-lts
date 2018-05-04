@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<HM_Faq>
+			<active>true</active>
+			<codePool>community</codePool>
+		</HM_Faq>
+	</modules>
+</config>

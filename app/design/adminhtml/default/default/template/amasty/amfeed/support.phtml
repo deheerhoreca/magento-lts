@@ -1,0 +1,13 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @package Amasty_Feed
+ */
+?>
+<?php $links = $this->getSupportLink();
+$text = $this->getSupportText();
+?>
+<div class="am_support_notice">
+    <a id="support_link" href="<?php echo $links[$this->getRequest()->getActionName()];?>" target="_blank"> <?php echo $text[$this->getRequest()->getActionName()];?></a>
+</div>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @package Amasty_Shopby
+ */
+-->
+<layout>
+    <adminhtml_system_config_edit>
+        <reference name="head">
+            <action method="addJs"><script>amasty/amshopby/amshopby-admin.js</script></action>
+            <action method="addCss"><stylesheet>amasty/amshopby/main.css</stylesheet></action>
+        </reference>
+    </adminhtml_system_config_edit>
+    <adminhtml_amshopby_filter_edit>
+        <reference name="head">
+            <action method="addJs"><script>amasty/amshopby/chosen.proto.js</script></action>
+            <action method="addCss"><stylesheet>css/amasty/amshopby/chosen.css</stylesheet></action>
+        </reference>
+    </adminhtml_amshopby_filter_edit>
+    <adminhtml_amshopby_page_edit>
+        <reference name="head">
+            <action method="setCanLoadExtJs"><flag>1</flag></action>
+            <action method="addJs"><script>mage/adminhtml/variables.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/wysiwyg/widget.js</script></action>
+            <action method="addJs"><name>lib/uploader/flow.min.js</name></action>
+            <action method="addJs"><name>lib/uploader/fusty-flow.js</name></action>
+            <action method="addJs"><name>lib/uploader/fusty-flow-factory.js</name></action>
+            <action method="addJs"><name>mage/adminhtml/uploader/instance.js</name></action>
+            <action method="addJs"><script>mage/adminhtml/browser.js</script></action>
+            <action method="addJs"><script>prototype/window.js</script></action>
+            <action method="addItem"><type>js_css</type><name>prototype/windows/themes/default.css</name></action>
+            <action method="addCss"><name>lib/prototype/windows/themes/magento.css</name></action>
+        </reference>
+    </adminhtml_amshopby_page_edit>
+</layout>

@@ -1,0 +1,229 @@
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: z("header");
+	width: 100%;
+	height: 0;
+
+	.is-fixfixed & {
+		position: absolute;
+	}
+	&__inner {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		transition: transform .5s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+		transform: translate3d(0, 0, 0);
+
+		&.is-hidden {
+			transform: translate3d(0, -100%, 0);
+		}
+	}
+}
+.site-header {
+	position: relative;
+	height: $height-site-header;
+	color: $color-site-header;
+	background: $color-site-header-background;
+
+	&__action {
+		position: relative;
+		padding: 0;
+		width: $width-site-header-action;
+		height: 100%;
+		border: none;
+		background-color: transparent;
+		background-position: 50% 50%;
+		background-size: 60%;
+		background-repeat: no-repeat;
+		color: currentColor;
+
+		&--left {
+			float: left;
+		}
+		&--right {
+			float: right;
+		}
+		&--cart {
+		}
+	}
+	&__action-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		fill: currentColor;
+
+		&--catalog {
+			@include icon(28px, 20px, true);
+		}
+		&--search {
+			@include icon(23px, 23px, true);
+		}
+		&--user {
+			@include icon(23px, 23px, true);
+		}
+		&--cart {
+			@include icon(30px, 23px, true);
+		}
+	}
+	&__cart-items {
+		position: relative;
+		top: -5px;
+		left: 3px;
+		display: inline-block;
+		color: $color-site-header-cart-items;
+		text-shadow: -1px 0 0 $color-site-header-background, 0 0 0 $color-site-header-background, 1px 0 0 $color-site-header-background, -1px 1px 0 $color-site-header-background, 0 1px 0 $color-site-header-background, 1px 1px 0 $color-site-header-background; // add white outline for numbers
+		font-size: 13px;
+	}
+}
+.logo {
+	$buttons-width: $width-site-header-action * 2 + 5px; // 2 buttons + margin
+
+	position: absolute;
+	top: 0;
+	right: $buttons-width;
+	left: $buttons-width;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+
+	&__link {
+	}
+	&__image {
+		display: block;
+		max-width: 100%;
+		max-height: $height-site-header - 2*4px;
+	}
+}
+.page-header {
+	$button-content-size: 16px;
+
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	height: $height-page-header;
+	background: $color-page-header-background;
+	color: $color-page-header;
+
+	&__action-wrapper {
+		flex: 0 0 auto;
+		height: 100%;
+
+		&:last-child {
+			padding-right: $default-padding - ($button-content-size/2);
+		}
+	}
+	&__action {
+		position: relative;
+		display: block;
+		height: 100%;
+		color: currentColor;
+		line-height: $height-page-header;
+
+		&--back {
+			@include ellipsis;
+
+			flex: 0 1 auto;
+			padding-left: 12px + $default-padding;
+			min-width: 50px;
+			color: $color-page-header-link;
+			text-transform: uppercase;
+		}
+		&--sort,
+		&--filter {
+			padding: 0;
+			width: $button-content-size*2;
+			border: none;
+			background: none;
+		}
+		&.is-hidden {
+			display: none;
+		}
+	}
+	&__action-icon {
+		fill: currentColor;
+	}
+	&__action--back &__action-icon {
+		@include icon(6px, 12px, true);
+
+		position: absolute;
+		top: 50%;
+		left: $default-padding;
+		margin-left: 0;
+	}
+	&__action--sort &__action-icon,
+	&__action--filter &__action-icon {
+		@include icon($button-content-size, $button-content-size, true);
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+	&__title {
+		@include ellipsis;
+
+		flex: 1 1 auto;
+		padding: 0 5px;
+		text-align: center;
+		font-weight: normal;
+	}
+}
+.wrapper {
+	@include scroll;
+
+	padding-top: $height-header;
+	height: 100%;
+
+	&.is-fixed-for-configure-on-ios {
+		-webkit-overflow-scrolling: initial;
+	}
+}
+.container {
+	> .messages {
+		margin: $default-padding;
+	}
+}
+.global-messages {
+}
+.cookie-notice {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: z("cookie-notice");
+	padding: $default-padding;
+	width: 100%;
+	border-top: 1px solid $color-cookie-notice-border;
+	background: $color-cookie-notice-background;
+
+	&__content {
+		@include last;
+
+		margin-bottom: 15px;
+	}
+	&__action {
+	}
+}
+.footer {
+	padding: $default-padding;
+	text-align: center;
+
+	p,
+	ul {
+		margin-bottom: 5px;
+	}
+	li {
+		display: inline-block;
+		padding: 0 6px;
+	}
+	&__store-switcher,
+	&__language,
+	&__currency {
+		display: inline-block;
+		margin: 0 5px 5px;
+	}
+}

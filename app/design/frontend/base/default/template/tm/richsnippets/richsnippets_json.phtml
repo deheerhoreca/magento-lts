@@ -1,0 +1,8 @@
+<?php if (Mage::helper('richsnippets')->snippetsEnabled()):
+    $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType'); ?>
+     <?php if ($snippetsType == '0'): //if JSON enabled  ?>
+		<script type="application/ld+json">
+			<?php echo $this->getJsonSnippetsProduct();  ?>
+		</script>
+	<?php endif; ?>
+<?php endif; ?>

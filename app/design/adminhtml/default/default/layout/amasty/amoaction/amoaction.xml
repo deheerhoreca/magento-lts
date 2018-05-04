@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2017 Amasty (https://www.amasty.com)
+ * @package Amasty_Oaction
+ */
+-->
+<layout>
+
+    <adminhtml_sales_order_index>
+        <reference name="head">
+            <action method="addJs"><script>amasty/amoaction/grid.js</script></action>
+        </reference>
+    </adminhtml_sales_order_index>
+
+    <adminhtml_sales_order_grid>
+        <reference name="head">
+            <action method="addJs"><script>amasty/amoaction/grid.js</script></action>
+        </reference>
+    </adminhtml_sales_order_grid>
+
+    
+</layout>

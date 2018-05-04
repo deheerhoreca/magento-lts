@@ -1,0 +1,91 @@
+<!--@subject Ergebnisse USt.-ID Validierung@-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"var store.getFrontendName()":"Store Name",
+"var customer":"Customer Data (Only for registered customers)",
+"var result":"VAT validation result"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+ul li{list-style:none;}
+@-->
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+	<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+		<tr>
+			<td align="center" valign="top" style="padding:20px 0 20px 0">
+				<!-- [ header starts here] -->
+				<table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+					<tr>
+						<td valign="top">
+							<a href="{{store url=""}}" style="color:#1E7EC8;"><img src="{{var logo_url}}" alt="{{var logo_alt}}" border="0"/></a>
+						</td>
+					</tr>
+					<!-- [ middle starts here] -->
+					<tr>
+						<td valign="top">
+							<h4>Ergebnisse USt.-ID Validierung {{var store.getFrontendName()}}</h4>
+							<h5>Kundendaten:</h5>
+							<table>
+								<tr>
+									<td><strong>Website ID:</strong></td><td>{{var customer.website_id}}</td>
+								</tr>
+								{{depend customer.store_id}}
+								<tr>
+									<td><strong>Store ID:</strong></td><td>{{var customer.store_id}}</td>
+								</tr>
+								{{/depend}}
+								{{depend customer.entity_id}}
+								<tr>
+									<td><strong>Customer ID:</strong></td><td>{{var customer.entity_id}}</td>
+								</tr>
+								{{/depend}}
+								{{depend customer.firstname}}
+								<tr>
+									<td><strong>Kundenname:</strong></td><td>{{var customer.firstname}} {{var customer.lastname}}</td>
+								</tr>
+								{{/depend}}
+								{{depend customer.email}}
+								<tr>
+									<td><strong>Kunde E-Mail:</strong></td><td>{{var customer.email}}</td>
+								</tr>
+								{{/depend}}
+								{{depend customer.group_id}}
+								<tr>
+									<td><strong>Kundengruppe:</strong></td><td>{{var customer.group_id}}</td>
+								</tr>
+								{{/depend}}
+							</table>
+
+							<h5>Validierungsergebnis:</h5>
+							<table>
+								<tr>
+									<td><strong>Abfrage-Land:</strong></td><td>{{var customer.vies_country_id}}</td>
+								</tr>
+								<tr>
+									<td><strong>USt.-ID:</strong></td> <td>{{var customer.vies_vat_id}}</td>
+								</tr>
+								<tr>
+									<td><strong>Abfragedatum:</strong></td> <td>{{var customer.getData('vies_vat_request_date')}}</td>
+								</tr>
+								<tr>
+									<td><strong>USt.-ID gültig:</strong></td><td>{{var customer.getData('vies_vat_is_valid')}}</td>
+								</tr>
+								<tr>
+									<td><strong>Abfragenummer:</strong></td><td>{{var customer.getData('vies_vat_request_id')}}</td>
+								</tr>
+								<tr>
+									<td><strong>Eingetragener Firmenname:</strong></td><td>{{var customer.vies_vat_trader_name}}</td>
+								</tr>
+								<tr>
+									<td><strong>Eingetragene Adressdaten:</strong></td><td>{{var customer.vies_vat_trader_address}}</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+</body>

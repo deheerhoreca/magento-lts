@@ -1,0 +1,7 @@
+<?php if (Mage::helper('richsnippets')->snippetsEnabled()):
+        if($metatags = $this->getProductMeta()):
+            foreach($metatags as $key => $value):
+                echo "<meta property=\"{$key}\" content=\"{$value}\" />\n";
+            endforeach;
+        endif;
+endif; ?>

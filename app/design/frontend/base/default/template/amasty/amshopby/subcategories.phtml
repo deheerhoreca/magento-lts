@@ -1,0 +1,37 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @package Amasty_Shopby
+ */
+?>
+<?php
+/** @var Amasty_Shopby_Block_Subcategories $this */
+/** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
+$subcategories = $this->getSubcategories(); ?>
+<?php if ($subcategories->getSize()): ?>
+    <div class="amshopby-subcategories-wrapper">
+        <?php foreach ($subcategories as $cat): ?>
+            <div class="amshopby-subcategory" style="width: <?php echo $this->getDivWidth(); ?>%;">
+                <a href="<?php echo $this->escapeUrl($cat->getFilteredUrl()? $cat->getFilteredUrl(): $cat->getUrl()); ?>"
+                   title="<?php echo $this->escapeHtml($cat->getName()); ?>" class="am-item">
+                    <?php if ($cat->getThumbnailUrl()): ?>
+                        <img class="amshopby-subcategories-img am-img"
+                             title="<?php echo $this->escapeHtml($cat->getName()); ?>"
+                             alt="<?php echo $this->escapeHtml($cat->getName()); ?>"
+                             src="<?php echo $cat->getThumbnailUrl(); ?>"
+                        <?php if ($this->getHeight()) { echo 'height="' . $this->getHeight() . '"'; };
+                              if ($this->getWidth()) { echo 'width="' . $this->getWidth() . '"'; } ?>
+                        />
+                    <?php endif; ?>
+                    <?php if ($this->getShownames() || !$cat->getThumbnailUrl()): ?>
+                        <span class="am-title"><?php echo  $this->escapeHtml($cat->getName()); ?></span>
+                    <?php endif; ?>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <div style="clear: both;"></div>
+<?php endif; ?>
+
+

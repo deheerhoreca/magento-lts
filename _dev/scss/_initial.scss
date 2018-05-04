@@ -1,0 +1,96 @@
+// думал, что это нужно будет для панелей, но видимо не нужно
+// необходимо проверить на разных девайсах
+html,
+body {
+	height: 100%;
+}
+html {
+	box-sizing: border-box;
+	-webkit-text-size-adjust: 100%;
+	    -ms-text-size-adjust: 100%;
+}
+body {
+	background: $color-background;
+	color: $color-default;
+	font: 400 #{$default-font-size}/#{$default-line-height} $default-font-family;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+}
+a {
+	color: $color-link;
+	text-decoration: none;
+	-webkit-text-decoration-skip: none;
+
+	&:hover,
+	&:active {
+		outline: 0;
+	}
+}
+input, select, textarea, button {
+	margin: 0;
+	color: $color-default;
+	font-size: 100%;
+	font-family: $default-font-family;
+}
+input, select {
+	vertical-align: middle;
+}
+input, button {
+	line-height: normal;
+}
+input[type="radio"] {
+	vertical-align: text-bottom;
+}
+input[type="checkbox"] {
+	vertical-align: bottom;
+}
+// input[type="search"]::-webkit-search-cancel-button,
+// input[type="search"]::-webkit-search-decoration {
+// 	-webkit-appearance: none;
+// }
+input[type="search"]::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+button,
+input[type="submit"] {
+	outline: none;
+	cursor: pointer;
+	-webkit-appearance: button;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+	margin-top: -2px;
+	margin-bottom: -2px;
+	padding: 0;
+	border: 0;
+}
+textarea {
+	overflow: auto;
+	vertical-align: top;
+	resize: vertical;
+}
+select {
+	// can't reach all selectors in code, so style by tag
+	// 100% is for good looking forms. Ex., edit address
+	width: 100%;
+}
+img {
+	vertical-align: top;
+}
+strong, b {
+	font-weight: bold;
+}
+em, i {
+	font-style: italic;
+}
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+th {
+	font-weight: bold;
+}
+td {
+	vertical-align: top;
+}

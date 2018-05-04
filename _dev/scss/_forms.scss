@@ -1,0 +1,266 @@
+.form {
+	&__field {
+		@include last;
+
+		margin-bottom: 18px;
+	}
+	&__label {
+		@include last;
+
+		display: block;
+		margin-bottom: 9px;
+		text-transform: uppercase;
+		font-weight: 600;
+		line-height: 16px;
+
+		&--required {
+			&:after {
+				color: $color-form-required;
+				content: " *";
+			}
+		}
+	}
+	&__field-hint {
+		margin-left: 8px;
+		color: $color-form-field-hint;
+		text-transform: none;
+		font-weight: normal;
+	}
+	&__textfield {
+	}
+	&__submit {
+	}
+	&__required-hint {
+		text-transform: uppercase;
+
+		&:before {
+			color: $color-form-required;
+			content: "* ";
+		}
+	}
+	&__values-list {
+	}
+	&__values-list-item {
+		@include last;
+
+		margin-bottom: 9px;
+	}
+}
+.textfield {
+	padding: 8px 10px;
+	width: 100%;
+	height: 38px;
+	border: 1px solid $color-textfield-border;
+	border-radius: 0;
+	background: $color-textfield-background;
+	font-size: 14px;
+	appearance: none;
+
+	&--textarea {
+		height: auto;
+	}
+	&--dark {
+		background: $color-textfield-dark-background;
+	}
+}
+.validation-advice {
+	margin-top: 5px;
+	color: $color-form-required;
+}
+
+/*
+
+<span class="checkbox">
+    <input class="checkbox__self" type="checkbox" name="change_password" id="change_password">
+    <label class="form__label checkbox__label" for="change_password">
+        <span class="checkbox__icon-wrapper">
+            <svg class="checkbox__icon checkbox__icon--unchecked svg-icon"><use xlink:href="#icon-checkbox" /></svg>
+            <svg class="checkbox__icon checkbox__icon--checked svg-icon"><use xlink:href="#icon-checkbox--checked" /></svg>
+        </span>
+        <span class="checkbox__text">Checkbox text</span>
+    </label>
+</span>
+
+*/
+
+.checkbox {
+	$icon-size: 20px;
+
+	display: block;
+
+	&__self {
+		display: none;
+	}
+	&__label {
+		display: block;
+		padding-left: $icon-size + 10px;
+		min-height: $icon-size;
+	}
+	&__icon-wrapper {
+		float: left;
+		margin-left: -($icon-size + 10px);
+	}
+	&__icon {
+		@include icon($icon-size);
+
+		display: block;
+
+		&--checked {
+			display: none;
+		}
+	}
+	&--disabled &__icon {
+		opacity: .6;
+	}
+	&__self:checked + &__label &__icon {
+		&--unchecked {
+			display: none;
+		}
+		&--checked {
+			display: block;
+		}
+	}
+	&__text {
+		display: block;
+		padding-top: 2px;
+	}
+}
+
+/*
+
+<span class="radio">
+    <input class="radio__self" type="radio" name="name" id="radio-id" value="value">
+    <label class="radio__label" for="radio-id">
+        <span class="radio__icon-wrapper">
+            <svg class="radio__icon radio__icon--unchecked svg-icon"><use xlink:href="#icon-radio" /></svg>
+            <svg class="radio__icon radio__icon--checked svg-icon"><use xlink:href="#icon-radio--checked" /></svg>
+        </span>
+        <span class="radio__text">Radio text</span>
+    </label>
+</span>
+
+*/
+
+.radio {
+	display: block;
+
+	&__self {
+		display: none;
+	}
+	&__label {
+		display: block;
+	}
+	&__icon-wrapper {
+		display: inline-block;
+		margin-right: 10px;
+		vertical-align: middle;
+	}
+	&__icon {
+		@include icon(20px);
+
+		display: block;
+
+		&--checked {
+			display: none;
+		}
+	}
+	&--disabled &__icon {
+		opacity: .6;
+	}
+	&__self:checked + &__label &__icon-wrapper {
+		&--sort-asc,
+		&--sort-desc {
+			display: inline-block;
+		}
+	}
+	&__self:checked + &__label &__icon {
+		&--unchecked {
+			display: none;
+		}
+		&--checked {
+			display: block;
+		}
+	}
+	&--sort &__icon-wrapper {
+		display: none;
+		margin-right: 5px;
+	}
+	&--sort &__icon {
+		@include icon(10px, 16px);
+
+		fill: currentColor;
+	}
+	&--sort &__self:checked + &__label {
+		color: $color-sort-direction-current;
+	}
+	&__text {
+		vertical-align: middle;
+	}
+}
+.button {
+	$height: 42px;
+
+	display: inline-block;
+	padding: 0 $default-padding;
+	width: 100%;
+	height: $height;
+	border: none;
+	background: $color-button-default-background;
+	color: $color-button-default;
+	vertical-align: middle;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 12px;
+	line-height: $height;
+
+	&--invert {
+		background: $color-button-default;
+		box-shadow: inset 0 0 0 1px $color-button-default-background;
+		color: $color-button-default-background;
+	}
+	&--alternative,
+	&--alternative-invert {
+		$height: 54px;
+
+		height: $height;
+		font-weight: 600;
+		line-height: $height;
+	}
+	&--alternative {
+		background: $color-button-alternative-background;
+		color: $color-button-alternative;
+	}
+	&--alternative-invert {
+		background: $color-button-alternative;
+		box-shadow: inset 0 0 0 2px $color-button-alternative-background;
+		color: $color-button-alternative-background;
+		text-align: left;
+	}
+	&--alternative-color {
+		background: $color-button-alternative-background;
+		color: $color-button-alternative;
+	}
+	&--alternative-color-invert {
+		background: $color-button-alternative;
+		box-shadow: inset 0 0 0 1px $color-button-alternative-background;
+		color: $color-button-alternative-background;
+	}
+	&[disabled] {
+		background: $color-button-disabled-background;
+		box-shadow: none;
+		color: $color-button-disabled;
+		pointer-events: none;
+	}
+	&--grey {
+		background: #f3f3f3;
+		color: #000;
+	}
+}
+.select {
+	width: 100%;
+
+	&--fluid {
+		width: auto;
+	}
+}

@@ -1,0 +1,88 @@
+
+<div class="header-menu">
+    <div class="header">
+        <!--div class="header-item-logo">
+            <a id="logo" style="text-decoration: none; margin-left:5px; "><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>magestore/pdfinvoiceplus/logo/logo1.png"/></a> 
+        </div>
+        
+        <ul style="margin: 0 auto; height: 50px; width: 1200px; ">
+
+        </div-->
+        <ul style="margin: 0 5%; height: 50px; width: 90%; ">
+            <li  class="header-item">
+                <span class="back" onclick="goToBack()"><?php echo $this->__('Back'); ?></span>
+            </li>
+            <?php if (!Mage::helper('pdfinvoiceplus')->isSizeA6OrA7()): ?>
+                <li class="header-item">
+                    <a class="changebackground" id="changebackground" style="text-decoration: none; " ><?php echo $this->__('Background Image') ?></a>
+                </li>
+                <li id='docs' class="header-item">
+                    <div class="container demo-1">	
+                        <div class="column">
+                            <div id="dl-menu" class="dl-menuwrapper">
+                                <button class="dl-trigger">Open Menu</button><?php echo $this->__('  Body Background') ?>
+                                <ul class="dl-menu">
+                                    <li id='docs' class="header-item">
+                                        <?php echo $this->__('Heading Block  ') ?><input id="full" />
+                                    </li>
+                                    <li id='docs' class="header-item">
+                                        <?php echo $this->__('Body Block  ') ?><input id="backgrounditems" />
+                                    </li>
+                                    <!--							<li id='docs' class="header-item">
+                                                                                               
+                                                                                            </li>-->
+                                </ul>
+                            </div><!-- /dl-menuwrapper -->
+                        </div>
+
+                    </div><!-- /container -->
+                    <script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>magestore/pdfinvoiceplus/listmenucolor/jquery.dlmenu.js"></script>
+                    <script>
+                        $(function() {
+                            $('#dl-menu').dlmenu();
+                        });
+                    </script>
+                </li>
+                <!--Edit by Zeus 16/01-->
+                <li id='docs' class="header-item">
+                    &nbsp;&nbsp;&nbsp;<?php echo $this->__('Heading Text  ') ?>&nbsp;&nbsp;&nbsp;<input id="change-title" />
+                </li>
+                <!--End edit-->
+                <li id='docs' class="header-item">
+                    <?php echo $this->__('Body Text  ') ?><input id="change-text" />
+                </li>
+            <?php endif; ?>
+
+            <li class="header-item" style="float:right;">
+                <span class="save" onclick="MyHtml.save()"><?php echo $this->__('Save'); ?></span>
+            </li>
+            <li class="header-item" style="float:right;">
+                <span class="edit" title="Click to edit with HTML"  onclick="MyHtml.save('<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_design/edithtml', array('type' => $this->_print_type, 'id' => $this->getRequest()->getParam('id'))); ?>');"><?php echo $this->__('Edit Manually'); ?></span>
+            </li>
+            <li class="header-item" style="float:right;">
+                <!--edit by Zeus 23/12-->
+                <span class="load" title="Click to reload default template" onclick="if (confirm('If you reset this template, it will get back to the default setting. Are you sure?')) {MyHtml.resetDefault();} return false;"><?php echo $this->__('Reset'); ?></span>
+                <!--end edit-->
+            </li>
+        </ul>
+    </div>
+
+
+    <script type="text/javascript">
+        goToBack = function() {
+            window.location.href = '<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_pdfinvoiceplus/edit/', array('id' => $this->getTemplateId())) ?>';
+        };
+
+        $(document).ready(function() {
+
+            $(".color").keyup(function()
+            {
+                var background = $("#color-select").css("background-color");
+                alert(background);
+
+                $("#title-backgroundcolor").css("color", background);
+            });
+
+        });
+    </script>
+</div>

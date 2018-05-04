@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <faq_index_index>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/hm/style.css</stylesheet></action>
+		</reference>
+        <reference name="content">
+            <block type="hm_faq/frontend_list" name="faq_list" template="faq/list.phtml"/>
+        </reference>
+    </faq_index_index>
+
+    <faq_index_show>
+        <reference name="content">
+            <block type="hm_faq/frontend_detail" name="faq_detail" template="faq/detail.phtml"/>
+        </reference>
+    </faq_index_show>
+</layout>

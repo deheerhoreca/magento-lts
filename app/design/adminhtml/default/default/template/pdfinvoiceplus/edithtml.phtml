@@ -1,0 +1,277 @@
+<!--will merge template for editer here-->
+<html>
+    <head>
+        <link rel="icon" href="http://www.magestore.com/skin/frontend/default/magestore61/favicon.ico" type="image/x-icon">
+        <title><?php echo $this->__('Advanced Edit | Template %s', $this->getRequest()->getParam('id')) ?></title>
+        <script src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>magestore/pdfinvoiceplus/jquery-1.10.2.js" type="text/javascript" ></script>
+        <script src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>magestore/pdfinvoiceplus/jquery-migrate-1.2.1.js" type="text/javascript" ></script>
+        <script type="text/javascript" src="<?php echo $this->getJsUrl('magestore/pdfinvoiceplus/jquery_tiny_mce/jquery.tinymce.js'); ?>"></script>
+        <script language="javascript" type="text/javascript">
+            $().ready(function() {
+                $('#edit_html').tinymce({
+                    // Location of TinyMCE script
+                    script_url: '<?php echo $this->getJsUrl('magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js'); ?>',
+                    // General options
+                    theme: "advanced",
+                    width: "100%",
+                    height: 1000,
+                    relative_urls: false,
+                    valid_children: "+body[style]",
+                    valid_elements: "*[*]",
+                    plugins: "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
+                    // Theme options
+                    theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+                    theme_advanced_buttons2: "bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor,fullscreen",
+                    theme_advanced_buttons3: "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak",
+                    theme_advanced_toolbar_location: "top",
+                    theme_advanced_toolbar_align: "left",
+                    theme_advanced_statusbar_location: "bottom",
+                    theme_advanced_resizing: true,
+                    // Example content CSS (should be your site CSS)
+                    content_css: "css/content.css",
+                    // Drop lists for link/image/media/template dialogs
+                    template_external_list_url: "lists/template_list.js",
+                    external_link_list_url: "lists/link_list.js",
+                    external_image_list_url: "lists/image_list.js",
+                    media_external_list_url: "lists/media_list.js",
+                    // Replace values for the template plugin
+                    template_replace_values: {
+                        username: "Some User",
+                        staffid: "991234"
+                    }
+                });
+            });
+            var MyHtml = {
+                save: function() {
+                    this.loading();
+                    jQuery.ajax("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_design/savehtml', array('isAjax' => true)) ?>", {
+                        data: {
+                            id: "<?php echo $this->getRequest()->getParam('id') ?>",
+                            type: "<?php echo $this->getRequest()->getParam('type') ?>",
+                            html: encodeURI(tinyMCE.get('edit_html').getContent()),
+                            form_key: "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"},
+                        crossDomain: true,
+                        success: function() {
+                            MyHtml.loadingoff();
+                        },
+                        type: "POST"
+                    });
+                },
+                loading: function() {
+                    $('#loading-mask').show();
+                },
+                loadingoff: function() {
+                    $('#loading-mask').hide();
+                }
+            };
+            function saveHtml() {
+                $('#html_edit_form').submit();
+            }
+
+
+        </script>
+        <style>
+            *{margin: 0; padding: 0;}
+            #tinymce{
+                position: relative;
+            }
+            .menu-list{
+                float: left;
+                margin: 0 auto;
+                max-width: 100%;
+                padding: 0px 5px 0px 0px;
+                position: relative;
+                text-align: left;
+            }
+            .header-item{
+                list-style: none;
+                float: left;
+                padding:0px 20px 0px 10px;
+                font-family: "Ubuntu Regular","Ubuntu Light",arial;
+            }
+            .header-menu{
+                position:fixed;
+                top:0px;
+                left:0px;
+                width:100%;
+                background:url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/design/images/bg-menu1.png' ?>") repeat;;
+                opacity:1 ;
+                z-index:999 ;
+                padding:0px;
+            }
+            .header-menu ul{
+                display: inline-block;
+                width: 90%;
+                margin: 0 5%;
+            }
+            #reset{
+                background-color: #007db4;
+                border: 0 none;
+                color: #fff;
+                float: left;
+                font-weight: bold;
+                padding: 16px 20px;
+                text-decoration:none;
+            }
+            #reset:hover{
+                background-color: #F0F0EE;
+                color: #007db4;
+                cursor: pointer;
+            }
+            #back{
+                background-color: #007db4;
+                border: 0 none;
+                color: #fff;
+                float: left;
+                font-weight: bold;
+                padding: 16px 20px;
+                text-decoration:none;
+                /*                 padding:6px 10px 6px 10px;
+                                border-radius: 17px;
+                                background-color: #545454;
+                                color:#EEE;
+                                float:left;
+                                 margin-left:60px;
+                                margin-top:7px;
+                                font-size: 15px;
+                                font-weight: bold;
+                                text-decoration:none;*/
+            }
+            #back:hover{
+                background-color: #F0F0EE;
+                color: #007db4;
+                cursor: pointer;
+            }
+            #save{
+                font-weight: bold;
+                border:0px;
+                padding:16px 20px;
+                /*padding:17px;*/
+                background-color: #ffc000;
+                color:#F0F0EE;
+                position:realtive;
+                top:0px;
+                font-weight: bold;
+                float:left;
+
+            }
+            #save:hover{
+                color: #FFC000 ;
+                background-color: #F0F0EE;
+                cursor:pointer;
+            }
+            .header-item-logo{
+                float:left;
+                padding-left:10px;
+                padding-top:7px;
+                list-style: none outside none;
+
+            }
+            #container-html{
+                /*margin-top:49px;*/ 
+                padding:50px 0 0;
+            }
+
+            /*loading*/
+            #loading-mask {
+                position: absolute;
+                color: #d85909;
+                font-size: 1.1em;
+                font-weight: bold;
+                text-align: center;
+                opacity: 0.80;
+                -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+                z-index: 500;
+            }
+            #loading-mask .loader {
+                position: fixed;
+                top: 45%;
+                left: 50%;
+                width: 150px;
+                margin-left: -105px;
+                padding: 15px 30px;
+                background: #fff4e9;
+                border: 2px solid #f1af73;
+                color: #d85909;
+                font-weight: bold;
+                text-align: center;
+                z-index: 1000;
+            }
+
+            .note-msg, .notice-msg {
+                background-color: #FAFAEC;
+                border:1px solid #FCD344;
+                color: #3D6611;
+            }
+            <?php $template = Mage::getModel('pdfinvoiceplus/template')->load($this->getRequest()->getParam('id'));?>
+           /* 
+            <?php //if($template && $template->getBarcode() == 1):?>
+                <?php //if(Mage::helper('pdfinvoiceplus')->isSizeA6OrA7()){ ?>
+                .barcode:before{
+                    content: "";
+                    display: block;
+                    height: 100px;
+                    background-image: url("<?php //echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'/magestore/pdfinvoiceplus/barcode/barcode.jpg'?>");
+                    background-repeat:no-repeat;
+                    background-position:center;
+                }
+                <?php //}else{ ?>
+                     .barcode:before{
+                        content: "";
+                        display: block;
+                        width: 160px;
+                        height: 100px;
+                        background: url("<?php //echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'/magestore/pdfinvoiceplus/barcode/barcode.jpg'?>") no-repeat;
+                        }
+                 <?php //} ?>
+            <?php //endif;?>
+                            */
+        </style>
+    </head>
+    <body>
+        <!--header menu-->
+        <div class="header-menu">
+            <!--div class="menu-list"-->
+                <ul>
+                    <!--li class="header-item-logo">
+                        <a id="logo" style="text-decoration: none; margin-left:5px; "><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>magestore/pdfinvoiceplus/logo/logo1.png"/></a> 
+                    </li-->
+                    <li class="header-item"><a id="back" href="<?php echo $this->getBackUrl(); ?>">Back</a></li>
+                    <li class="header-item" style="float:right"><a id="save" type="button" onclick="MyHtml.save()"><?php echo $this->__('Save');?></a></li>
+                    <!--edit by zeus 23/12-->
+                    <li class="header-item" style="float:right"><a id="reset" onclick="if (confirm('If you reset, the template will get back default setting. Are you sure?')) { document.location = this.href; } return false;"><?php echo $this->__('Reset');?></a></li>
+                    <!--end edit-->
+                </ul>
+            <!--/div-->
+        </div>
+        
+        <?php //$template = Mage::getModel('pdfinvoiceplus/template')->load($this->getRequest()->getParam('id')); ?>
+        <div id="container-html">
+            <div style="padding:5px;color:#ff0000;font-size: 15px;text-align: center">
+                <p class="note-msg">
+                    <?php echo $this->__('Warning: Inappropriate changes on this page can lead to losing the drop and drag function on the Edit Design page. If you are not skilled with HTML, you should not edit HTML tags on this page to avoid damaging the template.'); ?>
+                </p>
+            </div>
+            <div class="content">
+                <form method="POST" name="html_edit_form" id="html_edit_form" action="<?php echo Mage::getSingleton('adminhtml/url')->getUrl('pdfinvoiceplusadmin/adminhtml_design/savehtml'); ?>">
+                    <input type="hidden" name="data_type" value="<?php echo $this->getRequest()->getParam('type'); ?>" />
+                    <input type="hidden" name="template_id" value="<?php echo $this->getRequest()->getParam('id'); ?>" />
+                    <textarea name="edit_html" id="edit_html" class="textarea" >
+                        <?php echo $this->getHtmlEdit(); ?>
+                    </textarea>
+                </form>
+            </div>
+        </div><!--end container-html-->
+        <div id="loading-mask" style="display:none">
+            <p class="loader" id="loading_mask_loader"><img src="<?php echo Mage::getBaseUrl('media') . 'magestore/pdfinvoiceplus/design/images/ajax-loader-tr.gif' ?>" alt="Loading..."><br>Please wait...</p>
+        </div>
+        <script language="javascript" type="text/javascript">
+//            $().ready(function() {
+//               
+//                $("#edit_html_ifr").contents().find('img').each(function(e){$(e).attr('data-mce-src', $(e).attr('src'))})
+//            });
+            
+        </script>
+    </body>
+
+</html>

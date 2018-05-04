@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2017 Amasty (https://www.amasty.com)
+ * @package Amasty_Oaction
+ */
+-->
+<config>
+    <modules>
+        <Amasty_Oaction>
+            <version>2.1.3</version>
+        </Amasty_Oaction>
+    </modules>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Amasty_Oaction after="Mage_Adminhtml">Amasty_Oaction_Adminhtml</Amasty_Oaction>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <menu>
+            <system>
+                <children>
+                    <convert>
+                        <children>
+                            <amoaction_import translate="title" module="amoaction">
+                                <title>Import Tracking Numbers</title>
+                                <action>adminhtml/amoactionimport</action>
+                                <sort_order>41</sort_order>
+                            </amoaction_import>
+                        </children>
+                    </convert>
+                </children>
+            </system>
+        </menu>
+
+        <events>
+            <am_grid_massaction_actions>
+                <observers>
+                    <amoaction>
+                        <type>singleton</type>
+                        <class>Amasty_Oaction_Model_Observer</class>
+                        <method>addNewActions</method>
+                    </amoaction>
+                </observers>
+            </am_grid_massaction_actions>
+            <am_grid_massaction_js>
+                <observers>
+                    <amoaction>
+                        <type>singleton</type>
+                        <class>Amasty_Oaction_Model_Observer</class>
+                        <method>modifyJs</method>
+                    </amoaction>
+                </observers>
+            </am_grid_massaction_js>            
+            <core_block_abstract_prepare_layout_after>
+                <observers>
+                    <amogrid>
+                        <type>singleton</type>
+                        <class>Amasty_Oaction_Model_Observer</class>
+                        <method>modifyOrderGridAfterBlockGenerate</method>
+                    </amogrid>
+                </observers>
+            </core_block_abstract_prepare_layout_after>       
+        </events>
+
+        <translate>
+            <modules>
+                <Amasty_Oaction>
+                    <files>
+                        <default>Amasty_Oaction.csv</default>
+                    </files>
+                </Amasty_Oaction>
+            </modules>
+        </translate>
+
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <sales>
+                            <children>
+                                <order>
+                                    <children>
+                                        <mass_order_actions translate="title">
+                                            <title>Mass Order Actions</title>
+                                            <children>
+                                                <invoice translate="title">
+                                                    <title>Invoice</title>
+                                                </invoice>
+                                                <invoicecapture translate="title">
+                                                    <title>Invoice > Capture</title>
+                                                </invoicecapture>
+                                                <invoiceship translate="title">
+                                                    <title>Invoice > Ship</title>
+                                                </invoiceship>
+                                                <invoicecaptureship translate="title">
+                                                    <title>Invoice > Capture > Ship</title>
+                                                </invoicecaptureship>
+                                                <captureship translate="title">
+                                                    <title>Capture > Ship</title>
+                                                </captureship>
+                                                <capture translate="title">
+                                                    <title>Capture</title>
+                                                </capture>
+                                                <ship translate="title">
+                                                    <title>Ship</title>
+                                                </ship>
+                                                <status translate="title">
+                                                    <title>Change Status</title>
+                                                </status>
+                                                <comment translate="title">
+                                                    <title>Add Comment</title>
+                                                </comment>
+                                            </children>
+                                        </mass_order_actions>
+                                    </children>
+                                </order>
+                            </children>
+                        </sales>
+                        <system>
+                            <children>
+                                <convert>
+                                    <children>
+                                        <amoaction_import translate="title" module="amoaction">
+                                            <title>Import Tracking Numbers</title>
+                                        </amoaction_import>
+                                    </children>
+                                </convert>
+                                <config>
+                                    <children>
+                                        <amoaction translate="title" module="amoaction">
+                                            <title>Mass Order Actions</title>
+                                        </amoaction>
+                                    </children>
+                                </config>
+                            </children>
+                        </system> 
+                     </children>
+                </admin> 
+            </resources>
+        </acl>
+
+        <layout>
+            <updates>
+                <amoaction module="Amasty_Oaction">
+                    <file>amasty/amoaction/amoaction.xml</file>
+                </amoaction>
+            </updates>
+        </layout>        
+    </adminhtml>
+
+    <global>
+        <models>
+            <amoaction>
+                <class>Amasty_Oaction_Model</class>
+                <resourceModel>amoaction_mysql4</resourceModel>
+            </amoaction>
+            <amoaction_mysql4>
+                <class>Amasty_Oaction_Model_Mysql4</class>
+            </amoaction_mysql4>
+        </models>
+
+		<resources>
+             <amoaction_setup>
+                <setup>
+                    <module>Amasty_Oaction</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </amoaction_setup>
+		    <amoaction_write>
+		        <connection><use>core_write</use></connection>
+		    </amoaction_write>
+		    <amoaction_read>
+		        <connection><use>core_read</use></connection>
+		    </amoaction_read>
+		</resources>
+
+        <blocks>
+            <amoaction>
+                <class>Amasty_Oaction_Block</class>
+            </amoaction>
+            <adminhtml>
+                <rewrite>
+                    <widget_grid_massaction>Amasty_Oaction_Block_Adminhtml_Widget_Grid_Massaction</widget_grid_massaction>
+                </rewrite>
+            </adminhtml>
+            <enterprise_salesarchive>
+                <rewrite>
+                    <adminhtml_sales_order_grid_massaction>Amasty_Oaction_Block_Adminhtml_Widget_Grid_Massaction</adminhtml_sales_order_grid_massaction>
+        	    </rewrite>
+            </enterprise_salesarchive> 
+        </blocks>
+
+        <helpers>
+            <amoaction>
+                <class>Amasty_Oaction_Helper</class>
+            </amoaction>
+        </helpers>
+    </global>
+
+    <default>
+        <amoaction>
+            <general>
+            <commands>invoice,invoicecapture,invoiceship,invoicecaptureship,captureship,capture,ship,status,comment</commands>
+        </general>
+            <invoice>
+                <notify>0</notify>
+                <status>0</status>
+                <print>0</print>
+            </invoice>
+            <capture>
+                <notify>0</notify>
+                <status>0</status>
+            </capture>
+            <ship>
+                <addcolumn>1</addcolumn>
+                <notify>0</notify>
+                <status>0</status>
+                <carrier>custom</carrier>
+                <title></title>
+                <comment>0</comment>
+                <force_title>0</force_title>
+            </ship>
+            <status>
+                <check_state>0</check_state>
+                <notify>0</notify>
+            </status>
+            <comment>
+                <notify>0</notify>
+            </comment>
+        </amoaction>
+    </default>
+</config>

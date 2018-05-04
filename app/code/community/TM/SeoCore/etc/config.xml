@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<config>
+
+    <modules>
+        <TM_SeoCore>
+            <version>1.0.0</version>
+        </TM_SeoCore>
+    </modules>
+
+    <global>
+        <helpers>
+            <tm_seocore>
+                <class>TM_SeoCore_Helper</class>
+            </tm_seocore>
+        </helpers>
+    </global>
+
+</config>

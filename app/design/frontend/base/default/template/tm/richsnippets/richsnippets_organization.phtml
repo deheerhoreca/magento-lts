@@ -1,0 +1,102 @@
+<?php
+if (Mage::helper('richsnippets')->snippetsEnabled()) {
+    $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
+
+    $organizatonParameters = array(
+        'name'        => Mage::getStoreConfig('richsnippets/organization/name'),
+        'street'      => Mage::getStoreConfig('richsnippets/organization/street'),
+        'locality'    => Mage::getStoreConfig('richsnippets/organization/locality'),
+        'region'      => Mage::getStoreConfig('richsnippets/organization/region'),          //deprecated
+        'phone'       => Mage::getStoreConfig('richsnippets/organization/phone'),
+        'url'         => Mage::getStoreConfig('richsnippets/organization/url'),
+        'postalcode'  => Mage::getStoreConfig('richsnippets/organization/postal-code'),
+        'countryname' => Mage::getStoreConfig('richsnippets/organization/country-name'),    //deprecated
+        'email'       => Mage::getStoreConfig('richsnippets/organization/email'),
+
+        //Social Links
+        'facebook'    => Mage::getStoreConfig('richsnippets/social/facebook'),
+        'twitter'     => Mage::getStoreConfig('richsnippets/social/twitter'),
+        'instagram'   => Mage::getStoreConfig('richsnippets/social/instagram'),
+        'pinterest'   => Mage::getStoreConfig('richsnippets/social/pinterest'),          //deprecated
+        'linkedin'    => Mage::getStoreConfig('richsnippets/social/linkedin'),
+        'googleplus'  => Mage::getStoreConfig('richsnippets/social/googleplus')
+    );
+    if ( array_filter($organizatonParameters) ) {
+    ?>
+
+        <?php  if ($snippetsType == '0') { ?>
+        <!-- JSON Format -->
+        <?php
+          $logo_src =   Mage::getStoreConfig('design/header/logo_src');
+          $siteLogoUrl = $this->getSkinUrl($logo_src);
+        ?>
+            <script type="application/ld+json">
+                {
+                  "@context": "http://schema.org",
+                  "@type": "Organization",
+                  "url" : "<?php echo $organizatonParameters['url']; ?>",
+                  "logo": "<?php echo $siteLogoUrl ?>",
+                  "contactPoint" : [{
+                    "@type" : "ContactPoint",
+                    "telephone" : "<?php echo $organizatonParameters['phone']; ?>",
+                    "contactType" : "customer service"
+                  }],
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "<?php echo $organizatonParameters['locality']; ?>",
+                    "postalCode": "<?php echo $organizatonParameters['postalcode']; ?>",
+                    "streetAddress": "<?php echo $organizatonParameters['street']; ?>"
+                  },
+                  "name": "<?php echo $organizatonParameters['name']; ?>",
+                  "telephone": "<?php echo $organizatonParameters['phone']; ?>",
+                  "email": "<?php echo $organizatonParameters['email']; ?>",
+                  "sameAs": [
+                           [
+                               "https://twitter.com/<?php echo $organizatonParameters['twitter']; ?>",
+                               "https://www.facebook.com/<?php echo $organizatonParameters['facebook']; ?>",
+                               "https://www.linkedin.com/company/<?php echo $organizatonParameters['linkedin']; ?>",
+                               "https://plus.google.com/<?php echo $organizatonParameters['googleplus']; ?>",
+                               "https://www.pinterest.com/<?php echo $organizatonParameters['pinterest']; ?>",
+                               "https://instagram.com/<?php echo $organizatonParameters['instagram']; ?>"
+                           ]
+                   ]
+                }
+            </script>
+        <?php } ?>
+
+
+        <?php if ($snippetsType == '1') { ?>
+        <!-- Microdata -->
+            <div itemid="seller_info" itemscope itemtype="http://schema.org/Organization">
+                <?php if ($organizatonParameters['name']) : ?>
+                    <meta itemprop="name" content="<?php echo $organizatonParameters['name']; ?>" />
+                <?php endif; ?>
+                <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                    <?php if ($organizatonParameters['street']) : ?>
+                        <meta itemprop="streetAddress" content="<?php echo $organizatonParameters['street']; ?>" />
+                    <?php endif; ?>
+                    <?php if ( $organizatonParameters['locality']) : ?>
+                        <meta itemprop="addressLocality" content="<?php echo $organizatonParameters['locality']; ?>" />
+                    <?php endif; ?>
+                    <?php if ($organizatonParameters['region']) : ?>
+                        <meta itemprop="addressRegion" content="<?php echo $organizatonParameters['region']; ?>" />
+                    <?php endif; ?>
+                    <?php if ($organizatonParameters['postalcode']) : ?>
+                        <meta itemprop="postalCode" content="<?php echo $organizatonParameters['postalcode']; ?>" />
+                    <?php endif; ?>
+                    <?php if ($organizatonParameters['countryname']) : ?>
+                        <meta itemprop="addressCountry" content="<?php echo $organizatonParameters['countryname']; ?>" />
+                    <?php endif; ?>
+                </span>
+
+                <?php if ($organizatonParameters['phone']) : ?>
+                    <meta itemprop="telephone" content="<?php echo $organizatonParameters['phone']; ?>" />
+                <?php endif; ?>
+
+                <?php if ($organizatonParameters['url']) : ?>
+                    <link itemprop="url" href="<?php echo $organizatonParameters['url'] ?>"/>
+                <?php endif; ?>
+            </div>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>

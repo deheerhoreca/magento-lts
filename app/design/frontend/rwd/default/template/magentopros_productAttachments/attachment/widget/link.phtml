@@ -1,0 +1,14 @@
+<?php
+
+
+/** @see Magentopros_ProductAttachments_Block_Attachment_Widget_Link */
+?>
+<?php $_attachment = $this->getCurrentAttachment();?>
+<?php if ($_attachment) :?>
+    <div class="attachment-widget-link">
+        <h2><?php echo $this->__('Attachments'); ?></h2>
+        <?php echo $_attachment->getIcon(); ?>
+        <?php $test =  $_attachment->getAttachmentUrl()?>
+        <a href="<?php echo $_attachment->getAttachmentUrl()?>"><?php echo $_attachment->getTitle()?></a>
+    </div>
+<?php endif;?>

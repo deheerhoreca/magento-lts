@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 Magmodules.eu. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <magmodules_googleshopping>
+            <general>
+                <enable>0</enable>
+            </general>
+            <data>
+                <id_attribute>entity_id</id_attribute>
+                <name_attribute>name</name_attribute>
+                <description_attribute>description</description_attribute>
+                <gtin_attribute>sku</gtin_attribute>
+                <brand_attribute>manufacturer</brand_attribute>
+                <condition_type>static</condition_type>
+                <condition_default>new</condition_default>
+                <color_attribute>color</color_attribute>
+                <size_attribute>size</size_attribute>
+                <gender_attribute>gender</gender_attribute>
+            </data>
+            <advanced>
+                <heading_utm></heading_utm>
+            </advanced>
+            <generate>
+                <enable>1</enable>
+                <filename>googleshopping.xml</filename>
+            </generate>
+        </magmodules_googleshopping>
+    </default>
+</config>

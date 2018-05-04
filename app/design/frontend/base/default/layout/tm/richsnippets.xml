@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+    <default>
+        <reference name="breadcrumbs">
+            <action method="setTemplate" ifconfig="richsnippets/general/breadcrumbs">
+                <template>tm/richsnippets/richsnippets_breadcrumbs.phtml</template>
+            </action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="core/template" name="richsnippets.organization" template="tm/richsnippets/richsnippets_organization.phtml" after="-"/>
+            <block type="core/template" name="richsnippets.website" template="tm/richsnippets/richsnippets_website.phtml" after="-"/>
+        </reference>
+    </default>
+
+    <catalog_product_view>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>css/tm/richsnippets.css</name></action>
+            <block type="richsnippets/product" name="richsnippets.meta" template="tm/richsnippets/richsnippets_head.phtml" after="-"/>
+            <block type="richsnippets/product" name="richsnippets.json" template="tm/richsnippets/richsnippets_json.phtml" after="-"/>
+        </reference>
+    </catalog_product_view>
+
+    <quickshop_index_view>
+        <remove name="richsnippets"/>
+    </quickshop_index_view>
+
+    <quickshopping_product_catalog>
+        <remove name="richsnippets"/>
+    </quickshopping_product_catalog>
+</layout>

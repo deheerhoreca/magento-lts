@@ -1,0 +1,15 @@
+<?php
+
+
+/** @see Magentopros_ProductAttachments_Block_Attachment_Widget_View */
+
+?>
+<?php $_attachment = $this->getCurrentAttachment();?>
+<?php if ($_attachment) :?>
+    <div class="attachment-widget-view">
+        <h3><?php echo $_attachment->getTitle()?></h3>
+        <div>
+
+        </div>
+    </div>
+<?php endif;?>

@@ -1,0 +1,33 @@
+<?php
+$cmsblockid = Mage::getStoreConfig('easy_tabs/customcms/tabidcms');
+if(!empty($cmsblockid)){
+	//$this->getLayout()->createBlock('cms/block')->setBlockId($cmsblockid)->toHtml()
+	
+	
+		echo '<div class="product-specs">'; ?>
+			<?php
+			$productx = Mage::registry('current_product');
+$idp = $productx->getId();
+if (($files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($idp, Mage::app()->getStore()->getStoreId(), false, true)->getData()) && count($files) > 0):
+    $helper = $this->helper('staempfli_productattachment');
+    $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
+    ?>
+<br/>	
+<ul>
+<li class="tab_list_element">
+    <!-- <a id="mediathek" class="headline active"><?php echo $this->__('Mediathek') ?></a> -->
+    <div id="tab-mediathek" class="tabs_content">
+        <?php foreach ($files as $file): ?>
+            <div class="mediathek" style="margin-bottom: 10px;margin-left: 20px;">
+                <i class="fa fa-file-<?=$file['type']; ?>-o fa-2x"></i> <a href="<?= $dir.DS.$file['path']; ?>" target="_blank"><?= $file['description'];?></a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</li>
+</ul>
+
+<?php endif; ?>
+		<?php
+		echo '</div>';
+}
+?>

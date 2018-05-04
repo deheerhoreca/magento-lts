@@ -1,0 +1,33 @@
+<!--will merge template for editer here-->
+<html>
+    <head>
+        <?php echo $this->setTemplate('pdfinvoiceplus/editor/header.phtml')->toHtml() ?>
+        <?php echo $this->setTemplate('pdfinvoiceplus/editor/headerCss.phtml')->toHtml() ?>
+        <?php echo $this->setTemplate('pdfinvoiceplus/editor/headerJs.phtml')->toHtml() ?>
+        <?php echo $this->setTemplate('pdfinvoiceplus/editor/headerJs_thin.phtml')->toHtml() ?>
+
+    </head>
+    <body>
+        <!--header menu-->
+        <?php echo $this->setTemplate('pdfinvoiceplus/editor/headermenu.phtml')->toHtml(); ?>
+
+        <div id="container-html" style="margin-top: 50px;position: relative;">
+            <?php echo $this->getTemplateHtml(); ?>
+        </div><!--end container-html-->
+
+        <div id="loading-mask" style="display:none">
+            <p class="loader" id="loading_mask_loader"><img src="<?php echo Mage::getBaseUrl('media').'magestore/pdfinvoiceplus/design/images/ajax-loader-tr.gif' ?>" alt="Loading..."><br>Please wait...</p>
+        </div>
+        <script type="text/javascript">
+//        $(document).ready(function(){
+//            $('.contenteditable').attr('contenteditable', 'true');
+//        });
+        $().ready(function() {
+            $("contenteditable").attr("contenteditable","true");
+        });
+        </script>
+    </body>
+
+</html>
+
+

@@ -1,0 +1,681 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     rwd_default
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"></script>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+
+
+
+<div class="profixedbartop">
+        <div class="container">
+            <img src="<?php echo Mage::helper('catalog/image')->init($_product, 'thumbnail')->resize(75, 75); ?>" alt=""><div class="title">
+                <h2><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h2>
+                <span class="productCode">Artikelnummer: <?php echo $_product->getSku(); ?> </span>
+            </div>			
+			<?php
+			if($_product->getStockItem()->getBackorders()!=0){
+$buttonTitle=$this->__('+ Reserveren');
+}
+else{
+	$buttonTitle=$this->__('+ In de winkelwagen');
+}
+			?>
+			<?php
+						
+							if ($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->getQty() < 1 && $_product->getStockItem()->getBackorders()!=0){ 
+								?>								
+								<span class="clzstockmessage clzstmsg2"><strong>Verwacht:</strong> <?php 
+								$attribute=$_product->getResource()->getAttribute('txtstockdate');
+								echo $attribute->getFrontend()->getValue($_product);
+								?><?php ?></span>
+								<?php
+							
+							}
+							?>
+                        <button class="btntrigadt"><?php echo $buttonTitle; ?></button>
+        </div>
+    </div>
+
+<div class="product-view">
+    <div class="product-essential">
+	  <div class="product-name">
+                    <span class="h1"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></span>
+					 <?php echo $this->getReviewsSummaryHtml($_product, 'short', false)?>
+                </div>
+	
+        <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+            <?php echo $this->getBlockHtml('formkey') ?>
+            <div class="no-display">
+                <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                <input type="hidden" name="related_product" id="related-products-field" value="" />
+            </div>
+
+            <div class="product-img-box">
+			<?php 
+					$attribute = $_product->getResource()->getAttribute('product_label');
+					$attribute_value = $attribute ->getFrontend()->getValue($_product);
+    if ($attribute_value !='')
+    {
+        echo '<span class="lblprolistviewpg">'.$attribute_value.'</span>';
+    }
+	
+	
+	
+				$attribute = $_product->getResource()->getAttribute('energieklasse');
+				$attribute_value = $attribute ->getFrontend()->getValue($_product);
+				$enclz='';
+    if ($attribute_value !='')
+    {
+		//set class
+		switch ($attribute_value){
+		case 'A++++':
+			$enclz='enrgclz1';
+			break;
+		case 'A+++':
+			$enclz='enrgclz2';
+			break;
+		case 'A++':
+			$enclz='enrgclz3';
+			break;
+		case 'A+':
+			$enclz='enrgclz4';
+			break;
+		case 'A':
+			$enclz='enrgclz5';
+			break;
+		case 'B':
+			$enclz='enrgclz6';
+			break;
+		case 'C':
+			$enclz='enrgclz7';
+			break;
+		case 'D':
+			$enclz='enrgclz8';
+			break;
+		case 'E':
+			$enclz='enrgclz9';
+			break;
+		case 'F':
+			$enclz='enrgclz10';
+			break;	
+		case 'G':
+			$enclz='enrgclz11';
+			break;			
+		}
+		
+		
+		
+		
+        echo '<span class="lblenergylabel '.$enclz.'">'.$attribute_value.'</span>';
+    }	
+					?>
+              <!--  <div class="product-name">
+                    <h1><?php //echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                </div>
+				-->
+                <?php echo $this->getChildHtml('media') ?>
+            </div>
+
+            <div class="product-shop">
+              <div class="products-content-top-center" style="width: 389px;">
+      <div class="top_description">
+	  <?php
+		if($_product->getId()==4932){
+	  ?>
+	  
+        <div class="product-controls">
+		<?php
+$attributeSetModel = Mage::getModel("eav/entity_attribute_set");
+$attributeSetModel->load($_product->getAttributeSetId()); // $product is your product object
+echo 'Attribute Set Name: '.$attributeSetName = $attributeSetModel->getAttributeSetName();
+		
+?>
+		<br/><br/>		
+		</div>
+		<?php } ?>       <ul class="list-unstyled">
+                    <li class="limerkd"> <span><?php
+	$brandx=$_product->getAttributeText('manufacturer');
+	$brand=str_replace(' ','',strtolower($brandx));
+	$htbrand=$this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
+	if($htbrand !=''){
+		preg_match_all('/<img[^>]+>/i',$htbrand, $imgrs); 
+		echo $imgrs[0][0];	
+	}					
+
+					//echo $this->__('Merk:'); ?></span> <?php 					
+					/* $attribute = $_product->getResource()->getAttribute('manufacturer');
+					$attribute_value = $attribute ->getFrontend()->getValue($_product);
+    if ($attribute_value !='')
+    {
+        echo $attribute_value;
+    }
+	*/
+					?></li>            
+                  </ul>
+
+			  
+
+ <ul class="list-unstyled">
+<li><?php echo $this->__('Beschikbaarheid:'); ?> <strong>
+<?php
+$stmsg='';
+$stclz='';
+$txtcltcz='';
+       if ($_product->getStockItem()->getIsInStock() ) {
+		   
+		   if ($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->getQty() < 1 && $_product->getStockItem()->getBackorders()!=0){
+			   $stmsg="Tijdelijk uitverkocht";
+			   $stclz="clzpreorderdots";
+			   $txtcltcz='clzinstocktemp';
+		   }
+		   else if($_product->getStockItem()->getIsInStock() == 1){
+			    $stmsg="Voorraad";
+				$stclz="clzinstockdots";
+				$txtcltcz='clzinstock';
+		   }        
+        }else{ 
+				$stmsg="Niet op voorraad";
+				$stclz="clznostockdots";
+				$txtcltcz='clzsoldout';
+         } 
+?>
+<span class="<?php echo $txtcltcz; ?>"> 
+  <?php 
+    echo $stmsg;
+    ?> 
+ </span>			   	  
+	
+   	</strong><div style="float:right; display:inline-block; margin-right:7px;"><strong>
+    <span class="<?php echo $stclz; ?>"></span>
+   	<span class="<?php echo $stclz; ?>"></span>
+   	<span class="<?php echo $stclz; ?>"></span> 
+   	<span class="<?php echo $stclz; ?>"></span>	
+	</strong></div></li>
+                    <li><?php echo $this->__('Levertijd:'); ?> <strong><?php 
+					$attribute = $_product->getResource()->getAttribute('levertijd');
+    if ($attribute)
+    {
+        echo ''.$attribute_value = $attribute ->getFrontend()->getValue($_product);
+    }
+					
+					?></strong></li>
+                  </ul>
+                
+        
+                      </div>
+         <!--   <div class="brand-row">              
+                        <div class="short-description-block"> </div>
+              </div>
+			  -->
+            
+      <!--BEGIN for action block center -->
+      
+<div class="product-list-block">
+        <h6><?php echo $this->__('Enkele kenmerken:'); ?></h6>
+		<div class="short-description">
+		<ul>
+		<?php		
+		$attribute = $_product->getResource()->getAttribute('type_koeling');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>Type koeling: '.$attribute_value.'</li>';
+		}
+				
+		$attribute = $_product->getResource()->getAttribute('aantal_roosters');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>Aantal roosters: '.$attribute_value.'</li>';
+		}
+				
+		$attribute = $_product->getResource()->getAttribute('garantie');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>Garantie: '.$attribute_value.'</li>';
+		}
+				
+		$attribute = $_product->getResource()->getAttribute('inhoud_liters');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>Inhoud (Liter): '.(round($attribute_value,2)).'</li>';
+		}
+		?>
+		</ul>
+		
+		
+						<p>
+ <!--<?php //if ($_product->getShortDescription()): ?>
+                        <?php //echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+                <?php //endif; ?>	-->					
+						</p></div>
+		
+		<?php 
+	//$attribute = $_product->getResource()->getAttribute('product_list_info');
+   // if ($attribute)
+    //{
+      //  echo $attribute ->getFrontend()->getValue($_product);
+   // }
+					
+					?>
+		</div>
+            <div class="divider divider-sm"></div>
+      
+      <!--END for action block center --> 
+      
+    </div>
+
+	<div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
+       <!--         <div class="price-info">
+                    <?php //echo $this->getPriceHtml($_product); ?>
+                    <?php //echo $this->getChildHtml('bundle_prices') ?>
+                    <?php //echo $this->getTierPriceHtml() ?>
+                </div>
+				
+
+                <div class="extra-info">
+                 
+					<span class="adelservice">Levering als pakket</span>
+                    <?php //echo $this->getChildHtml('product_type_availability'); ?>
+                </div> -->
+
+                <?php echo $this->getChildHtml('alert_urls') ?>
+
+               
+
+
+
+
+                <?php echo $this->getChildHtml('other');?>
+
+                <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                    <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                <?php endif;?>
+
+				<div class="add-to-cart-wrapper">
+                <?php echo $this->getChildHtml('product_type_data') ?>
+                <?php echo $this->getChildHtml('extrahint') ?>
+
+                <?php if (!$this->hasOptions()):?>
+                    <div class="add-to-box">
+                        <?php if($_product->isSaleable()): ?>
+						
+						
+						
+                            <?php echo $this->getChildHtml('addtocart') ?>
+                            <?php if(false &&  $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                                <span class="or"><?php echo $this->__('OR') ?></span>
+                            <?php endif; ?>
+							
+							
+							
+                        <?php endif; ?>
+                        <?php echo $this->getChildHtml('addto') ?>
+                        <?php //echo $this->getChildHtml('sharing') ?>
+                    </div>
+					
+
+                    <?php echo $this->getChildHtml('extra_buttons') ?>
+                <?php elseif (!$_product->isSaleable()): ?>
+                    <div class="add-to-box">
+                        <?php echo $this->getChildHtml('addto') ?>
+                        <?php //echo $this->getChildHtml('sharing') ?>
+                    </div>
+                <?php endif; ?>
+				
+				
+				<div class="clearer"></div>
+<?php
+ //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml(); 
+?>
+            </div>
+
+
+            
+
+            <div class="clearer"></div>
+            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+            <?php endif;?>
+			</div>
+			
+		
+		
+		<!-- new block here-->
+			
+<div class="dvwrapdv">
+<h3>Dit product wordt <strong class="clzhiliblk">gratis</strong> bij u bezorgd</h3>
+<ul class="clzulres">
+<li>Altijd de beste prijs</li>
+<li>Wij vergelijken de prijzen</li>
+<li>Alleen professionele apparatuur</li>
+<li>Advies door professionals</li>
+<li>Gratis verzending</li>
+<li>Snelle levering</li>
+
+</ul>
+<?php  $skn=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN); ?>
+<ul class="ulattrprobo">
+<?php
+$attribute_value='';
+$attribute = $_product->getResource()->getAttribute('inhoud_liters');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+		
+?>
+<li><img src="<?php echo $skn; ?>frontend/rwd/default/images/liters.jpg" alt="" /><span><?php echo round($attribute_value,2); ?> liter</span></li>
+<?php } ?>
+<?php
+$attribute_value='';
+$attribute = $_product->getResource()->getAttribute('ontdooisysteem');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){		
+?>
+
+<li><img src="<?php echo $skn; ?>frontend/rwd/default/images/nofrost.jpg" alt=""/><span><?php echo $attribute_value; ?></span></li>
+		<?php } ?>
+<?php
+$attribute_value='';
+$attribute = $_product->getResource()->getAttribute('energieklasse');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+?>
+<li><img src="<?php echo $skn; ?>frontend/rwd/default/images/energylabel.jpg" alt="" /><span><?php echo $attribute_value;?></span></li>
+<?php } ?>
+<?php
+$attribute_value='';
+$attribute = $_product->getResource()->getAttribute('aantal_roosters');
+		$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+?>
+<li><img src="<?php echo $skn; ?>frontend/rwd/default/images/roosters.jpg" alt="" /><span><?php echo $attribute_value; ?> roosters</span></li>
+		<?php } ?>
+
+</ul>
+
+
+</div>
+
+
+			
+            </div>
+
+            
+        </form>
+		
+		
+        <script type="text/javascript">
+        //<![CDATA[
+            var productAddToCartForm = new VarienForm('product_addtocart_form');
+            productAddToCartForm.submit = function(button, url) {
+                if (this.validator.validate()) {
+                    var form = this.form;
+                    var oldUrl = form.action;
+
+                    if (url) {
+                       form.action = url;
+                    }
+                    var e = null;
+                    try {
+                        this.form.submit();
+                    } catch (e) {
+                    }
+                    this.form.action = oldUrl;
+                    if (e) {
+                        throw e;
+                    }
+
+                    if (button && button != 'undefined') {
+                        button.disabled = true;
+                    }
+                }
+            }.bind(productAddToCartForm);
+
+            productAddToCartForm.submitLight = function(button, url){
+                if(this.validator) {
+                    var nv = Validation.methods;
+                    delete Validation.methods['required-entry'];
+                    delete Validation.methods['validate-one-required'];
+                    delete Validation.methods['validate-one-required-by-name'];
+                    // Remove custom datetime validators
+                    for (var methodName in Validation.methods) {
+                        if (methodName.match(/^validate-datetime-.*/i)) {
+                            delete Validation.methods[methodName];
+                        }
+                    }
+
+                    if (this.validator.validate()) {
+                        if (url) {
+                            this.form.action = url;
+                        }
+                        this.form.submit();
+                    }
+                    Object.extend(Validation.methods, nv);
+                }
+            }.bind(productAddToCartForm);
+        //]]>
+        </script>
+    </div>
+<div class="proleftdv">
+<!--	<div class="product-boxleft">
+    <div class="content">    
+	  <?php
+ //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_detail_services')->toHtml(); 
+?><hr>
+     <?php
+ //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_detail_review_left')->toHtml(); 
+?> 
+	  
+    </div>
+	</div>
+	-->
+	<?php
+ //
+
+if($htbrand !=''){
+?> 
+<div class="leftbranddv">
+<div class="header"><?php echo ucfirst($brandx); ?></div>
+<div class="content">
+<div class="brand">
+<div class="brand_description">
+
+<?php echo $htbrand; ?>
+
+</div>
+</div>
+
+</div>
+</div>	
+	
+	<?php
+}
+if (false && ($files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)->getData()) && count($files) > 0):
+    $helper = $this->helper('staempfli_productattachment');
+    $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
+    ?>
+	<div class="leftbranddv">
+	<div class="header">Files</div>
+<div class="content">
+<ul>
+<li class="tab_list_element">
+    <!-- <a id="mediathek" class="headline active"><?php echo $this->__('Mediathek') ?></a> -->
+    <div id="tab-mediathek" class="tabs_content">
+        <?php foreach ($files as $file): ?>
+            <div class="mediathek" style="margin-bottom: 10px">
+                <i class="fa fa-file-<?=$file['type']; ?>-o fa-2x"></i> <a href="<?= $dir.DS.$file['path']; ?>" target="_blank"><?= $file['description'];?></a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</li>
+</ul>
+</div>
+</div>
+<?php endif; ?>
+	
+	</div>
+	
+  
+	
+	
+	
+	<div class="product-boxbottom">
+	
+	
+	
+	
+	
+	
+	
+	<div class="probottomdv">
+      <div class="header"><?php echo $this->__('Description'); ?></div>
+      <div class="content"> <div class="description-page">
+	  <?php echo $this->getChildHtml('description') ?>
+	</div>
+
+
+ </div>
+ </div>
+ 
+ 
+ 
+ 	 <?php
+	 $attributev = $_product->getResource()->getAttribute('product_video');
+	 $pvideo=$attributev->getFrontend()->getValue($_product);
+	 
+    if ($pvideo!='')
+    {
+        
+		?>
+			<div class="clearer" style="clear: both;"></div>
+				<div class="probottomdv">
+      <div class="header headervdx"><?php echo $this->__('Product Video'); ?></div>
+      <div class="content" style="padding: 15px;"> <div class="description-page">
+	  <?php //echo $this->getChildHtml('description') ?>
+	 
+	
+		<iframe width="727" height="409" src="<?php echo $pvideo;?>" frameborder="0" allowfullscreen></iframe>
+<style>
+/*
+.proleftdv {
+	position: relative !important;
+	bottom: 440px !important;
+}
+*/
+.headervdx {
+	border-bottom: 1px solid #d0d0d0;
+	color: #111111;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 15px;
+	text-transform: uppercase;
+	background-color: #ffffff;
+	background-image: linear-gradient(to bottom, #eeeeee, #dddddd);
+	background-repeat: repeat-x;
+	border-color: #d0d0d0;
+	font-weight: 600;
+	border-bottom: 1.2px solid #adadad;
+	padding: 12px 15px;
+}
+</style>
+	
+
+	 
+	
+	
+	</div>
+
+
+ </div>
+ </div>	<?php
+    }
+		?>
+ 
+ 
+ 
+ <div class="probottomdv">
+ <div class="product-collateral">
+        <?php if (!Mage::getStoreConfig('easy_tabs/general/descriptiontabbed')):?>
+	        <?php //echo $this->getChildHtml('description') ?>
+        <?php endif;?>
+		
+		
+		
+		
+		
+        <?php echo $this->getChildHtml('additional') ?>
+        <?php //echo $this->getChildHtml('upsell_products') ?>
+        <?php echo $this->getChildHtml('product_additional_data') ?>
+    </div>
+
+	
+	<?php echo $this->getChildHtml('upsell_products') ?>
+<?php echo $this->getChildHtml('related_products') ?>
+    
+    <?php //echo $this->getChildHtml('product_additional_data') ?>
+
+</div> 
+</div>
+
+
+<script>
+jQuery(function(){
+	jQuery('.btntrigadt').click(function(){
+		jQuery('.button.btn-cart').trigger('click');
+	});
+	
+jQuery(window).scroll(function() {
+if (jQuery(this).scrollTop() > 550){  
+	jQuery('.profixedbartop').show();
+  }
+else{
+	jQuery('.profixedbartop').hide();	  
+  }
+});
+	
+	
+	
+	
+});
+</script>
+
+
+
+
+
+

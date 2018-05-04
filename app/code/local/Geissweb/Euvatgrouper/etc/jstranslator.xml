@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<jstranslator>
+    <valid_vat translate="message" module="euvatgrouper">
+        <message>Your VAT-ID is valid.</message>
+    </valid_vat>
+    <vat_eu_business translate="message" module="euvatgrouper">
+        <message>We have identified you as EU business customer, you can order VAT-exempt in our shop now.</message>
+    </vat_eu_business>
+    <vat_oc_business translate="message" module="euvatgrouper">
+        <message>We have identified you as business customer.</message>
+    </vat_oc_business>
+    <invalid_vat translate="message" module="euvatgrouper">
+        <message>Your VAT-ID is invalid, please check the syntax.</message>
+    </invalid_vat>
+    <vat_syntax_error translate="message" module="euvatgrouper">
+        <message>The given VAT-ID is invalid, please check the syntax. If this error remains please contact us directly to register a customer account with exempt from taxation with us.</message>
+    </vat_syntax_error>
+    <vat_vies_unavailable translate="message" module="euvatgrouper">
+        <message>Currently the European VIES service is unavailable, but you can proceed with your registration and validate later from your customer account management.</message>
+    </vat_vies_unavailable>
+    <vat_memberstate_unavailable translate="message" module="euvatgrouper">
+        <message>Currently the member state service is unavailable, we could not validate your VAT-ID to issue an VAT exempt order. Anyhow you can proceed with your registration and validate later in your customer account.</message>
+    </vat_memberstate_unavailable>
+    <vat_general_error translate="message" module="euvatgrouper">
+        <message>There was an error processing your request. If this error remains please contact us directly to register a customer account with exempt from taxation with us.</message>
+    </vat_general_error>
+    <vat_validation_waiting translate="message" module="euvatgrouper">
+        <message>Please wait while we validate your VAT-ID</message>
+    </vat_validation_waiting>
+    <vat_syntax_error_cc translate="message" module="euvatgrouper">
+        <message>Please enter your VAT-ID including the ISO-3166 two letter country code.</message>
+    </vat_syntax_error_cc>
+    <vat_number_is_required translate="message" module="euvatgrouper">
+        <message>A valid VAT number is required.</message>
+    </vat_number_is_required>
+
+    <adminhtml_valid_vat translate="message" module="euvatgrouper">
+        <message>The VAT-ID is valid.</message>
+    </adminhtml_valid_vat>
+    <adminhtml_invalid_vat translate="message" module="euvatgrouper">
+        <message>The VAT-ID is invalid, please check the syntax.</message>
+    </adminhtml_invalid_vat>
+    <adminhtml_invalid_vat_validated translate="message" module="euvatgrouper">
+        <message>The VAT-ID is invalid.</message>
+    </adminhtml_invalid_vat_validated>
+    <adminhtml_vies_unavailable translate="message" module="euvatgrouper">
+        <message>Currently the European VIES service is unavailable.</message>
+    </adminhtml_vies_unavailable>
+    <adminhtml_ms_unavailable translate="message" module="euvatgrouper">
+        <message>Currently the member state service is unavailable.</message>
+    </adminhtml_ms_unavailable>
+    <adminhtml_please_declare translate="message" module="euvatgrouper">
+        <message>Please declare a VAT number before validating.</message>
+    </adminhtml_please_declare>
+</jstranslator>

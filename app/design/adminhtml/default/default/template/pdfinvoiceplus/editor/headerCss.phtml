@@ -1,0 +1,476 @@
+<?php 
+    $template = Mage::registry('pdfinvoiceplus_template');
+    $style_A6 =Mage::helper('pdfinvoiceplus')->isSizeA6OrA7();
+    if($style_A6){
+        $margin_left = '600px';
+    }else{
+        $margin_left = '30px';
+    }
+?>
+<style>
+    *{margin: 0; padding: 0;}
+    body{
+        margin: 54px auto 0;
+    }
+    /*plugin editable*/
+    .position-releative{
+        position: relative;
+    }
+    .text-area-edit{
+        position: absolute;
+        height: 99%;
+        width: 99%;
+        top: 0px;
+        left: 0px;
+        border: 1px solid #d3d3d3;
+        resize: none;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    /*end plugin*/
+
+    /*style for table item*/
+
+    .mytable-remove-col {
+        position: absolute;
+        width: 27px;
+        height: 24px;
+        background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/design/images/remove-col.png' ?>") no-repeat;
+        top: -22px;
+        right: 0px;
+        cursor: pointer;
+        z-index: 9999;
+    }
+    .mytable-move-column {
+        position: absolute;
+        width: 27px;
+        height: 24px;
+        background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/design/images/move.png' ?>") no-repeat;
+        top: -10px;
+        right: 20px;
+        cursor: pointer;
+    }
+    .mytable-resizer-col-right{
+        position: absolute;
+        right: -3px;
+        top: 0px;
+        height: 100%;
+        width: 6px;
+        cursor: col-resize;
+    }
+    .mytable-add-col {
+        position: absolute;
+        top: 0px;
+        right: -26px;
+        width: 29px;
+        height: 31px;
+        background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/design/images/add-col.png' ?>") no-repeat;
+        cursor: pointer;
+    }
+    /*style for all*/
+    #select-variable {
+        width: 200px;
+    }
+    .variable-label {
+        color: coral;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .variable-name-group {
+        margin-left: 20px;
+    }
+    .variable-name:hover {
+        color: blueviolet;
+    }
+    .variable-name {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    /*menu-bar*/
+    .header{
+        margin: 0 auto;
+        max-width: 100%;
+        padding: 0px 5px 0px 0px;
+        position: relative;
+        text-align: left;
+
+        /*width: 1024px;*/
+        z-index: 11;
+    }
+    .header .header-function{
+        padding: 0;
+        width: 100%;
+    }
+    .header-item{
+        float:left;
+        padding:0px 10px 0px 0px;
+        list-style: none outside none;
+        font-size: 15px;
+        font-weight: bold;
+        color:#F0F0EE;
+
+    }
+    .header-item-logo{
+        float:left;
+        padding:4px 20px 2px 0px;
+        list-style: none outside none;
+    }
+    .changebackground{
+        padding:4px 8px 4px 8px;
+        border-radius: 15px;
+        background-color: #545454;
+        margin-top:10px;
+        float:left;
+        height: 18px;
+        width: 138px;
+    }
+    .changebackground:hover{
+        cursor: pointer;
+        background-color: #F0F0EE;
+        color: #545454;
+    }
+    .changebackground form{
+        padding: 4px 8px 4px 8px;
+        border-radius: 15px;
+        background-color: #545454;
+        color: #fff;
+        float: left;
+        position: absolute;
+        z-index: 99;
+        width: 435px;
+        margin-top: -4px;
+        margin-left: -12px;
+    }
+    .changebackground form button{
+        margin-left: 10px;
+    }
+    /*
+    style for upload logo control-ui
+    */
+    .logo-ui{
+        height: 90px;
+        width: 160px;
+        background: url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/logo/logo.png'; ?>") no-repeat;;
+        width: 160px;
+        background-size: 160px;
+        line-height: 160px;
+        font-weight: bold;
+        font-size: 15px;
+        text-align: center;
+    }
+    .insert-logo{
+        padding: 4px 8px 4px 8px;
+        border-radius: 15px;
+        background-color: #545454;
+        color: #fff;
+        float: left;
+        position: absolute;
+        z-index: 99;
+        width: 399px;
+        margin-top: -4px;
+        margin-left: -12px;
+    }
+    .insert-logo button{
+        margin-left: 10px;
+        width: 56px;
+    }
+
+    /*style for block add*/
+    .block-add{
+        /*        width: 300px;
+                height: 65px;*/
+    }
+    .new-block:hover{
+        border: 1px dashed #BBB;
+    }
+    .new-block .ui-resizable-s{
+        width: 100%;
+        height: 10px;
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        cursor: s-resize;
+    }
+    .new-block .ui-resizable-e{
+        width: 10px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: -5px;
+        cursor: e-resize;
+    }
+    .new-block .ui-resizable-se{
+        width: 11px;
+        height: 11px;
+        right: -1px;
+        bottom: -1px;
+        position: absolute;
+        background: transparent;
+        cursor: se-resize;
+    }
+    .new-block:hover .ui-resizable-se{
+        background: url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/ui-icons_256x240.png'); ?>);
+        background-position: -64px -224px;
+    }
+    .new-block[contenteditable]:focus { outline: 0px solid transparent; }
+    /***************/
+
+    #insertblock{
+        padding:4px 8px 4px 8px;
+        border-radius: 15px;
+        background-color: #545454;
+        color:#F0F0EE;
+        margin-top:10px;
+        float:left;
+    }
+    #insertblock:hover{
+        background-color: #F0F0EE;
+        color:#545454;
+    }
+    .insertblock-active {
+        background-color: #ff6c00!important;
+    }
+    #docs{
+        padding: 10px 5px;
+    }
+    .edit {
+        border:0px;
+        padding:15px 15px 17px 15px;
+        background-color: #007db4;
+        color:#F0F0EE;
+        position:relative;
+        font-weight: bold;
+        float:left;
+/*        margin-left:<?php echo $margin_left; ?>;*/
+    }
+    .edit:hover{
+        color: #007db4;
+        background-color: #F0F0EE;
+        cursor:pointer;
+    }
+    .load {
+        border:0px;
+        padding:15px 15px 17px 15px;
+        background-color: #007db4;
+        color:#F0F0EE;
+        position:relative;
+        font-weight: bold;
+        float:left;
+        margin-left:<?php echo $margin_left; ?>;
+    }
+    .load:hover{
+        color: #007db4;
+        background-color: #F0F0EE;
+        cursor:pointer;
+    }
+    .save{
+        border:0px;
+        padding:15px 15px 17px 15px;
+        background-color: #ffc000;
+        color:#F0F0EE;
+        position:relative;
+        margin-top:0px;
+        font-weight: bold;
+        float:left;
+    }
+    .save:hover{
+        color:#ffc000;
+        background-color:#F0F0EE;
+        cursor:pointer;
+    }
+    .back{
+        border:0px;
+        padding:15px 15px 17px 15px;
+        background-color: #007db4;
+        color:#fff;
+        position:realtive;
+        font-weight: bold;
+        float:left;
+    }
+    .back:hover{
+        background-color: #F0F0EE;
+        color: #007db4;
+        cursor: pointer;
+    }
+
+    #container-html {
+        margin-top: 50px;
+    }
+    div.header-menu{
+        position:fixed;
+        top:0px;
+        left:0px;
+        width:100%;
+        background:url("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/design/images/bg-menu1.png' ?>") repeat;;
+        opacity:1 ;
+        z-index: 99999999999;
+        padding:0px;
+    }
+    /*
+    <?php //if($template && $template->getBarcode() == 1):?>
+    
+        <?php //if(Mage::helper('pdfinvoiceplus')->isSizeA6OrA7()){ ?>
+        .barcode:before{
+            content: "";
+            display: block;
+            height: 100px;
+            background-image: url("<?php //echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'/magestore/pdfinvoiceplus/barcode/barcode.jpg'?>");
+            background-repeat:no-repeat;
+            background-position:center;
+        }
+        <?php //}else{ ?>
+             .barcode:before{
+                content: "";
+                display: block;
+                width: 160px;
+                height: 100px;
+                background: url("<?php //echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'/magestore/pdfinvoiceplus/barcode/barcode.jpg'?>") no-repeat;
+                }
+         <?php //} ?>
+    <?php //endif;?>
+                
+    /*.sp-replacer.sp-light.full-spectrum.edithtml {
+     }*/
+
+
+
+
+
+
+    /*loading*/
+    #loading-mask {
+        position: absolute;
+        color: #d85909;
+        font-size: 1.1em;
+        font-weight: bold;
+        text-align: center;
+        opacity: 0.80;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+        z-index: 500;
+    }
+    #loading-mask .loader {
+        position: fixed;
+        top: 45%;
+        left: 50%;
+        width: 150px;
+        margin-left: -105px;
+        padding: 15px 30px;
+        background: #fff4e9;
+        border: 2px solid #f1af73;
+        color: #d85909;
+        font-weight: bold;
+        text-align: center;
+        z-index: 1000;
+    }
+    /***********/
+
+    /*memu right click var*/
+    .context-menu {
+        background-color: #fff;
+        padding: 4px 0;
+        border: 1px solid #919a80;
+        cursor: context-menu;
+    }
+    .context-menu-item {
+        padding: 0 4px;
+    }
+    .menu-item-hover {
+        background: #4e56ee;
+        color: #fff;
+    }
+    .context-menu-add-more {
+        padding: 0 4px;
+        margin-top: 5px;
+        text-decoration: underline;
+        font-size: 13px;
+        font-style: italic;
+    }
+    .context-menu-add-more-hover {
+        background: #4e56ee;
+        color: #fff;
+    }
+    .context-menu-name-group {
+        border-bottom: 1px solid #bbb;
+        margin-top: 5px;
+        background-color: #ececec;
+    }
+    /*************/
+
+
+    /*border resize*/
+    .relative{position:relative}
+    .border-table{
+/*        border: 1px dashed #BBB; */
+        border-collapse: initial;}
+    .border-table th,.border-table td{
+/*        border: 1px dashed #BBB;*/
+    }
+    /***************/
+
+    /*dragtable plugin*/
+    .column-hover{
+        background: #bbb!important;
+        color: #fff!important;
+        cursor: move;
+    }
+    /**************/
+    /**autogrow style**/
+    .autogrow form button{
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 0px 0px 5px 5px;
+        width: 65px;
+        float:right;
+        color: #fff;
+    }
+    .autogrow form .autogrow-submit{
+        background: #007db4;
+    }
+    .autogrow form .autogrow-cancel{
+        background: #c2c2c2;
+    }
+    .inline-block{display: inline-block;}
+    .autogrow textarea{ min-height: 100px; } /*fix autogrow height*/
+    
+    
+    /*my fixed placeholder contenteditable*/
+    [contenteditable=true]:empty:not(:focus):before,
+    .contenteditable:empty:not(:focus):before{
+        content: attr(placeholder)
+    }
+    /*tooltip holder to move*/
+    #tooltip{
+        position: absolute;
+        width: 100px;
+        height: 20px;
+        z-index: 99999999999;
+        background-color: #fff;
+        opacity: 1;
+        filter: alpha(opacity=70);
+        border: 1px solid #666666;
+        border-radius:5px;
+    }
+    #tooltip .tooltip-content{
+        font-size: 10pt;
+        color: #2a2525;
+        text-transform: none;
+        font-weight: normal;
+        font-style: initial;
+        text-align: center;
+        /*text-shadow: 1px 1px #919a80;*/
+    }
+    .editContentTable, table th, table td {
+        word-break: break-all;
+    }
+    .editContentTable{
+        padding: 0px 8px;
+        /* Firefox */
+        width: -moz-calc(100% - 16px);
+        /* WebKit */
+        width: -webkit-calc(100% - 16px);
+        /* Opera */
+        width: -o-calc(100% - 16px);
+        /* Standard */
+        width: calc(100% - 16px);
+    }
+</style>

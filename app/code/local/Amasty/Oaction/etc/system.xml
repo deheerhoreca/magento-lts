@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2017 Amasty (https://www.amasty.com)
+ * @package Amasty_Oaction
+ */
+-->
+<config>
+    <sections>
+        <amoaction translate="label" module="amoaction">
+            <label>Mass Order Actions</label>
+            <tab>amasty</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>130115</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <commands translate="label comment">
+                            <label>Enabled Actions</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>amoaction/source_commands</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Press CTRL+mouse to select multiple values.]]></comment>
+                        </commands>                          
+                    </fields>                    
+                </general>    
+                <invoice translate="label">
+                    <label>Invoice</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <notify translate="label comment">
+                            <label>Default `Notify Customer`</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>  
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Will be pre-selected at the orders grid.]]></comment>
+                        </notify>                    
+                        <status translate="label">
+                            <label>Assign Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amoaction/source_statuses</source_model> 
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </status>
+                        <print translate="label">
+                            <label>Print Invoices</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>  
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </print>
+                    </fields>
+                </invoice>  
+                <capture translate="label">
+                    <label>Capture</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <notify translate="label comment">
+                            <label>Default `Notify Customer`</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>  
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Will be pre-selected at the orders grid.]]></comment>
+                        </notify>                    
+                        <status translate="label">
+                            <label>Assign Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amoaction/source_statuses</source_model> 
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </status>
+                    </fields>
+                </capture>
+                <ship translate="label">
+                    <label>Ship</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <addcolumn translate="label comment">
+                            <label>Add `Shipping` Column to Order Grid</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </addcolumn>
+                        <notify translate="label comment">
+                            <label>Default `Notify Customer`</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>  
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Will be pre-selected at the orders grid.]]></comment>
+                        </notify>                    
+                        <status translate="label">
+                            <label>Assign Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amoaction/source_statuses</source_model> 
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </status>
+                        <carrier translate="label comment">
+                            <label>Default Carrier</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amoaction/source_carriers</source_model> 
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Will be pre-selected at the orders grid.]]></comment>                             
+                        </carrier>
+                        <title translate="label comment">
+                            <label>Default Title for Custom Carrier</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Will be shown in the carrires dropdown for the `custom` option, if the setting below is set to `No`.]]></comment>                             
+                        </title>                        
+                        <comment translate="label">
+                            <label>Show Custom Carrier Title at the Order Grid</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>  
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </comment>
+			            <force_title translate="label comment">
+                            <label>Set Carrier Title</label>
+                            <comment><![CDATA[If Custom Carrier Title is not filled at the Order Grid.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>51</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <comment>1</comment>
+                            </depends>
+                        </force_title>
+                    </fields>
+                </ship>
+                <status translate="label">
+                    <label>Status</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <check_state translate="label comment">
+                            <label>Check State</label>
+                            <comment><![CDATA[Disallow to set status, which assigned to other state.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </check_state>
+                        <notify translate="label">
+                            <label>Notify Customer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>  
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notify>
+                    </fields>
+                </status>
+                <comment translate="label">
+                    <label>Add Comment</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <notify translate="label">
+                            <label>Notify Customer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notify>
+                    </fields>
+                </comment>
+            </groups>
+        </amoaction>
+    </sections>
+</config>

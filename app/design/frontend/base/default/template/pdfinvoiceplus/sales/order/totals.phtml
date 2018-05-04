@@ -1,0 +1,88 @@
+<div class="totals">
+	<!--body-->
+    <?php $_totals = $this->getTotals('')?>
+    <?php if ($_totals):?>
+    <div class="body-total">
+    <?php foreach ($_totals as $_code => $_total):?>
+        <?php 
+        if($_total->getCode()=='grand_total'){
+            $class = 'row-grandtotal';
+            $valueClass = 'grand_total';
+        }else{
+            $class = $_code;
+            $valueClass = '';
+        }
+        ?>
+        <?php if ($_total->getBlockName()): ?>
+            <?php if($_total->getCode() == 'tax'):?>
+            <?php echo $this->getChildHtml('tax');?>
+            <?php else:?>
+            <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
+            <?php endif;?>
+        <?php else:?>
+         <?php 
+            $label_class = '';
+            if($_total->getCode() == 'grand_total') {
+                $label_class = 'grand-label';
+            }
+        ?>
+        <div class="<?php echo $class?> totals-li">
+            <div <?php echo $this->getLabelProperties()?> class="<?php echo $label_class; ?> totals-label">
+                <strong><?php echo $this->escapeHtml($_total->getLabel()); ?></strong>
+            </div>
+
+            
+            <div <?php echo $this->getValueProperties()?> class="totals-value <?php echo $valueClass;?>">
+                <?php if($_total->getCode() == 'base_grandtotal'):?>
+                    <?php echo $_total->getValue();?>
+                <?php else:?>
+                <?php echo Mage::helper('core')->formatPrice($_total->getValue(), false) ?>
+                <?php endif;?>
+            </div>
+        </div>
+        <?php endif?>
+    <?php endforeach?>
+    </div>
+    <?php endif?>
+	
+	<!--footer-->
+    <?php $_totals = $this->getTotals('footer')?>
+    <?php if ($_totals):?>
+    
+    <div class="footer-total">
+    <?php foreach ($this->getTotals('footer') as $_code => $_total):?>
+        <?php if($_total->getValue()>0):?>
+        <div class="<?php 
+            if($_total->getCode()=='grand_total'){
+                echo 'row-grandtotal';
+            }else{
+                echo $_code;
+            } 
+            ?> totals-li">
+            <?php 
+            if($_total->getCode() == 'grand_total') {
+                $label_class = 'grand-label';
+            }else{
+                $label_class = 'totals-label';
+            }
+            ?>
+            <div class="<?php echo $label_class; ?> totals-label" <?php echo $this->getLabelProperties()?>>
+                <strong><?php echo $this->escapeHtml($_total->getLabel()); ?></strong>
+            </div>
+            <?php 
+            $value_class = 'totals-emph';
+            if($_total->getCode() == 'grand_total') {
+                $value_class = 'grand-emph';
+            }
+            ?>
+            <div <?php echo $this->getValueProperties()?> class="<?php echo $value_class; ?> totals-value">
+                <strong class="<?php if($_total->getCode() == 'grand_total') echo 'grand_total';?>">
+					<?php echo Mage::helper('core')->formatPrice($_total->getValue(), false) ?>
+				</strong>
+            </div>
+        </div>
+        <?php endif?>
+    <?php endforeach?>
+    </div>
+    <?php endif?>  
+</div>

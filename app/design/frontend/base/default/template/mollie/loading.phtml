@@ -1,0 +1,12 @@
+<div class="mollie-loading">
+    <div class="redirect-block">
+        <h1>Redirecting to Mollie</h1>
+        <div class="loader"></div>
+        <p><a href="<?php echo $this->getRedirectUrl(); ?>"><?php echo $this->__('Please Wait.<br>If you are not redirected shortly, click here.'); ?></a></p>
+    </div>
+</div>
+<script>
+    window.setTimeout(function() {
+        window.location.href = '<?php echo $this->getRedirectUrl(); ?>';
+    }, 3000);
+</script>

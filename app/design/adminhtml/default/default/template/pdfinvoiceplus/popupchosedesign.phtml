@@ -1,0 +1,409 @@
+<?php
+/* Change by Zeus 03/12 (bo di 1 dau cham phay sau ASC va cho vao trong '')*/
+$id = $this->getRequest()->getParam('id');
+$system_templates = Mage::getModel('pdfinvoiceplus/systemtemplate')
+        ->getCollection()
+        ->addFieldToFilter('type_format', '')
+        ->setOrder('sort_order', 'ASC');
+$system_templates_a7 = Mage::getModel('pdfinvoiceplus/systemtemplate')
+        ->getCollection()
+        ->addFieldToFilter('type_format', array('eq' => 'A7'))
+        ->setOrder('sort_order', 'ASC');
+$system_templates_a6 = Mage::getModel('pdfinvoiceplus/systemtemplate')
+        ->getCollection()
+        ->addFieldToFilter('type_format', array('eq' => 'A6'))
+        ->setOrder('sort_order', 'ASC');
+/* End change */
+?>
+
+<div id="pdf-invoice-popup-load-template-1" style="display: none;">
+    <div class="pdf-invoice-popup-load-template-background"></div>
+    <div id="pdf-invoice-popup-load-template-content-1">
+        <div id="pdf-invoice-popup-load-template-ds-1">
+            <ul>
+                <?php foreach ($system_templates as $system_template): ?>
+                    <li class="pdf-invoice-popup-load-template" onclick="PdfInvoiceTemplate.chosen(<?php echo $system_template->getId() ?>, '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage() ?>')">
+                        <div class="box-image-view">
+                            <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage() ?>">
+                        </div>
+                        <div class="pdf-invoice-template-description"><?php echo $system_template->getTemplateName(); ?></div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="pdf-invoice-popup-load-template-2" style="display: none;">
+    <div class="pdf-invoice-popup-load-template-background"></div>
+    <div id="pdf-invoice-popup-load-template-content-2">
+        <div id="pdf-invoice-popup-load-template-ds-2">
+            <ul>
+                <?php foreach ($system_templates_a7 as $system_template): ?>
+                    <li class="pdf-invoice-popup-load-template" onclick="PdfInvoiceTemplate.chosen(<?php echo $system_template->getId() ?>, '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage() ?>')">
+                        <div class="box-image-view">
+                            <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage() ?>">
+                        </div>
+                        <div class="pdf-invoice-template-description"><?php echo $system_template->getTemplateName(); ?></div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="pdf-invoice-popup-load-template-3" style="display: none;">
+    <div class="pdf-invoice-popup-load-template-background"></div>
+    <div id="pdf-invoice-popup-load-template-content-2">
+        <div id="pdf-invoice-popup-load-template-ds-2">
+            <ul>
+                <?php foreach ($system_templates_a6 as $system_template): ?>
+                    <li class="pdf-invoice-popup-load-template" onclick="PdfInvoiceTemplate.chosen(<?php echo $system_template->getId() ?>, '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage() ?>')">
+                        <div class="box-image-view">
+                            <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $system_template->getImage() ?>">
+                        </div>
+                        <div class="pdf-invoice-template-description"><?php echo $system_template->getTemplateName(); ?></div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    //var j = jQuery.noConflict();
+    var PdfInvoiceTemplate = {
+        isSelect: false,
+        oldSysTemId: '',
+        load: function() {
+            var width = 0, height = 0;
+            if (['A4', 'A5', 'Letter'].indexOf($('format').value) > -1) {
+                var showPopup = <?php if($system_templates->getSize() <= 1) echo 'false'; else echo 'true'; ?>;
+                if(showPopup){
+                    var html = $('pdf-invoice-popup-load-template-1').innerHTML;
+                    //TINY.box.show(url, 0, 920, 310, 1);
+                    TINY.box.show({
+                        html: html,
+                        boxid: 'frameless',
+                        width: 920,
+                        height: 310,
+                        fixed: false,
+                        maskid: 'bluemask',
+                        maskopacity: 40,
+                        closejs: function() {
+                        }
+                    });
+                    //disable button load
+                    $('preview').select('button')[0].removeClassName('disabled');
+                }else{
+                    <?php $first_item = $system_templates->getFirstItem(); ?>
+                    var sysId = <?php echo $first_item->getId() ?>;
+                    var imageUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $first_item->getImage() ?>';
+                    PdfInvoiceTemplate.chosen(sysId, imageUrl);
+                    //disable button load
+                    $('preview').select('button')[0].addClassName('disabled');
+                }
+//            }else if(/^(A6!A7)$/.exec($('format').value)){
+            } else if (/^(A7)$/.exec($('format').value)) {
+                var showPopup = <?php if($system_templates_a7->getSize() <= 1) echo 'false'; else echo 'true'; ?>;
+                if(showPopup){
+                    var html = $('pdf-invoice-popup-load-template-2').innerHTML;
+                    //TINY.box.show(url, 0, 234, 310, 1);
+                    TINY.box.show({
+                        html: html,
+                        boxid: 'frameless',
+                        width: 234,
+                        height: 310,
+                        fixed: false,
+                        maskid: 'bluemask',
+                        maskopacity: 40,
+                        closejs: function() {
+                        }
+                    });
+                    //disable button load
+                    $('preview').select('button')[0].removeClassName('disabled');
+                }else{
+                    <?php $first_item = $system_templates_a7->getFirstItem(); ?>
+                    var sysId = <?php echo $first_item->getId() ?>;
+                    var imageUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $first_item->getImage() ?>';
+                    PdfInvoiceTemplate.chosen(sysId, imageUrl);
+                    //disable button load
+                    $('preview').select('button')[0].addClassName('disabled');
+                }
+            } else if (/^(A6)$/.exec($('format').value)) {
+                var showPopup = <?php if($system_templates_a6->getSize() <= 1) echo 'false'; else echo 'true'; ?>;
+                if(showPopup){
+                    var html = $('pdf-invoice-popup-load-template-3').innerHTML;
+                    //TINY.box.show(url, 0, 234, 310, 1);
+                    TINY.box.show({
+                        html: html,
+                        boxid: 'frameless',
+                        width: 234,
+                        height: 310,
+                        fixed: false,
+                        maskid: 'bluemask',
+                        maskopacity: 40,
+                        closejs: function() {
+                        }
+                    });
+                    //disable button load
+                    $('preview').select('button')[0].removeClassName('disabled');
+                }else{
+                    <?php $first_item = $system_templates_a6->getFirstItem(); ?>
+                    var sysId = <?php echo $first_item->getId() ?>;
+                    var imageUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'magestore/pdfinvoiceplus/' . $first_item->getImage() ?>';
+                    PdfInvoiceTemplate.chosen(sysId, imageUrl);
+                    //disable button load
+                    $('preview').select('button')[0].addClassName('disabled');
+                }
+            }
+
+        },
+        cancelSelect: function(){
+            if(this.oldSysTemId != ''){
+                $('system_template_id').value = this.oldSysTemId;
+            }
+            $('is_select_design').value = '0';
+            this.isSelect = false;
+        },
+        chosen: function(id, imageUrl) {
+            //$('loading-mask').show();
+            if($$('.tbox').length){
+                TINY.box.hide();
+            }
+            this.oldSysTemId = $('system_template_id').value;
+            $('system_template_id').value = id;
+            $('localization').disabled = false; //enable localization select
+            $('image-template-view').innerHTML = '<img style="max-width: 415px;max-height: 365px;border: 5px solid #bbb;" src="' + imageUrl + '" alt="template '+ id +'"/>';
+            var isSelect = document.createElement('input');
+            isSelect.id = 'is_select_design';
+            isSelect.type = 'hidden';
+            isSelect.name = 'is_select_design';
+            isSelect.value = '1';
+            $('edit_form').appendChild(isSelect);
+            this.isSelect = true;
+            // Change By Jack
+            $('company_address').disabled = false;
+            $('company_name').disabled = false;
+            $('vat_number').disabled = false;
+            $('vat_office').disabled = false;
+            $('business_id').disabled = false;
+            $('company_email').disabled = false;
+            $('company_telephone').disabled = false;
+            $('company_fax').disabled = false;
+            $('note').disabled = false;
+            $('terms_conditions').disabled = false;
+            $('footer').disabled = false;
+            $('footer_height').disabled = false;
+            $('company_logo').disabled = false;
+            $('company_logo_delete').disabled = false;
+            // End Change
+
+        },
+        editDesign: function(type) {
+            if ((type == 'invoice' && $('is_click_able_invoice').value == 0) ||
+                    (type == 'order' && $('is_click_able_order').value == 0) ||
+                    (type == 'creditmemo' && $('is_click_able_creditmemo').value == 0)) {
+                this.load();
+            } else {
+                $('edit_design').value = type;
+                saveAndContinueEdit();
+            }
+        }
+    };
+
+    function formAjax(action_url, options) {
+        var settings = {
+            parameters: {},
+            form_id: '',
+            success: function() {
+            },
+            isJson: true
+        };
+
+        Object.extend(settings, options);
+
+        // Create the iframe...
+        var iframe = document.createElement("iframe");
+        iframe.setAttribute("id", "upload_iframe");
+        iframe.setAttribute("name", "upload_iframe");
+        iframe.setAttribute("width", "0");
+        iframe.setAttribute("height", "0");
+        iframe.setAttribute("border", "0");
+        iframe.setAttribute("style", "width: 0; height: 0; border: none; display: none;");
+
+        var form;
+        var old_action_url, old_target, old_method, old_enctype, old_encoding;
+
+        // Create form...
+        if (settings.form_id != '') {
+            form = document.getElementById(settings.form_id);//.cloneNode(true);
+            //store attr form
+            old_action_url = form.action;
+            old_target = form.target;
+            old_method = form.method;
+            old_enctype = form.enctype;
+            old_encoding = form.encoding;
+
+            if (action_url == undefined) {
+                action_url = form.action;
+            }
+        } else {
+            form = document.createElement("form");
+        }
+        //add parameters
+        if (!isEmpty(settings.parameters)) {
+            for (var i in settings.parameters) {
+                var input = document.createElement('input');
+                input.type = "hidden";
+                input.name = i;
+                input.value = settings.parameters[i];
+                form.appendChild(input);
+            }
+        }
+        //form.setAttribute('id','upload_form');
+        //form.setAttribute('name','upload_form');
+        // Add to document...
+        //window.document.body.appendChild(form);
+        window.document.body.appendChild(iframe);
+
+        window.frames['upload_iframe'].name = "upload_iframe";
+
+        iframeId = document.getElementById("upload_iframe");
+
+        // Add event...
+        var eventHandler = function() {
+
+            if (iframeId.detachEvent)
+                iframeId.detachEvent("onload", eventHandler);
+            else
+                iframeId.removeEventListener("load", eventHandler, false);
+
+            // Message from server...
+            if (iframeId.contentDocument) {
+                content = iframeId.contentDocument.body.innerHTML;
+            } else if (iframeId.contentWindow) {
+                content = iframeId.contentWindow.document.body.innerHTML;
+            } else if (iframeId.document) {
+                content = iframeId.document.body.innerHTML;
+            }
+            var status = 'success';
+            var response;
+            if (settings.isJson) {
+                response = JSON.parse(content);
+            } else {
+                response = content;
+            }
+            //restore attr form
+            form.setAttribute("action", old_action_url); //restore action form
+            form.setAttribute("target", old_target);
+            form.setAttribute("method", old_method);
+            form.setAttribute("enctype", old_enctype);
+            form.setAttribute("encoding", old_encoding);
+
+            settings.success(response, status); //callback
+            // Del the iframe...
+            setTimeout('document.body.removeChild(iframeId)', 250);
+        };
+
+        if (iframeId.addEventListener)
+            iframeId.addEventListener("load", eventHandler, true);
+        if (iframeId.attachEvent)
+            iframeId.attachEvent("onload", eventHandler);
+
+        // Set properties of form...
+        form.setAttribute("target", "upload_iframe");
+        form.setAttribute("action", action_url);
+        form.setAttribute("method", "post");
+        form.setAttribute("enctype", "multipart/form-data");
+        form.setAttribute("encoding", "multipart/form-data");
+
+        // Submit the form...
+        form.submit();
+
+        Object.extend = function(destination, source) {
+            for (var property in source) {
+                if (source[property] && source[property].constructor &&
+                        source[property].constructor === Object) {
+                    destination[property] = destination[property] || {};
+                    arguments.callee(destination[property], source[property]);
+                } else {
+                    destination[property] = source[property];
+                }
+            }
+            return destination;
+        };
+
+        function isEmpty(obj) {
+            // null and undefined are "empty"
+            if (obj == null)
+                return true;
+            // Assume if it has a length property with a non-zero value
+            // that that property is correct.
+            if (obj.length > 0)
+                return false;
+            if (obj.length === 0)
+                return true;
+            // Otherwise, does it have any properties of its own?
+            // Note that this doesn't handle
+            // toString and valueOf enumeration bugs in IE < 9
+            if (JSON.stringify(obj) == '{}') {
+                return true;
+            }
+            return false;
+        }
+    }
+
+
+
+    function updateInfomation(id) {
+        if (confirm('<?php echo Mage::helper('pdfinvoiceplus')->__('This action will reset all information in Order, Invoice and Credit Memo template. Are you sure you want to update these changes ?') ?>')) {
+            $('loading-mask').show();
+            var form = {
+                'form_key': '<?php echo Mage::getSingleton('core/session')->getFormKey() ?>',
+                //'company_logo': $('company_logo').files[0],
+
+                'company_name': $('company_name').value,
+                'vat_number': $('vat_number').value,
+                'vat_office': $('vat_office').value,
+                'business_id': $('business_id').value,
+                'company_address': $('company_address').value,
+                'company_email': $('company_email').value,
+                'company_telephone': $('company_telephone').value,
+                'company_fax': $('company_fax').value,
+                'note': $('note').value,
+                'terms_conditions': $('terms_conditions').value,
+                'footer': $('footer').value
+            };
+            //serialize form
+            
+            new Ajax.Request("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_syncInfo/update', array('id' => $id)) ?>", {
+                method: 'post',
+                parameters: form,
+                onSuccess: function(transport) {
+                    var obj = JSON.parse(transport.responseText);
+                    if (res.success == 1) {
+                    }
+                    $('loading-mask').hide();
+                },
+                onFailure: function() {
+                    
+                }
+            });
+        } else {
+        }
+    }
+    // add by Jack 21/01
+    document.observe("dom:loaded", function() {
+        if($('format').value == 'A7' || $('format').value == 'A6'){
+            $('preview').select('button')[0].addClassName('disabled');
+            $('preview').select('button')[0].disabled = true;    
+        }
+        else{
+            $('preview').select('button')[0].removeClassName('disabled');
+            $('preview').select('button')[0].disabled = false; 
+        }
+    });
+    //
+</script>
+

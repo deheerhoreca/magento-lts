@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/searchautocomplete.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/searchautocomplete_custom.css</stylesheet></action>
+            <action method="addJs"><script>aw_searchautocomplete/main.js</script></action>
+            <action method="addItem"><type>skin_js</type><name>js/searchautocomplete_custom.js</name></action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="searchautocomplete/init" name="top.searchautocomplete"
+                   as="topSearchautocomplete" template="searchautocomplete/init.phtml" />
+        </reference>
+    </default>
+    <aw_searchautocomplete_ajax_suggest>
+        <reference name="content">
+            <block type="searchautocomplete/suggest" name="aw.saas.suggest.list"
+                   template="searchautocomplete/suggest.phtml" />
+            <block type="searchautocomplete/view" name="aw.saas.product.list"
+                   template="searchautocomplete/view.phtml" />
+        </reference>
+    </aw_searchautocomplete_ajax_suggest>
+</layout>

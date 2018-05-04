@@ -1,0 +1,275 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>" />
+<title><?php echo $this->getTitle() ?></title>
+<meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
+<meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
+<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
+<link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
+<link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
+<!--[if lt IE 7]>
+<script type="text/javascript">
+//<![CDATA[
+    var BLANK_URL = '<?php echo $this->helper('core/js')->getJsUrl('blank.html') ?>';
+    var BLANK_IMG = '<?php echo $this->helper('core/js')->getJsUrl('spacer.gif') ?>';
+//]]>
+</script>
+<![endif]-->
+<?php echo $this->getCssJsHtml() ?>
+<?php echo $this->getChildHtml() ?>
+<?php echo $this->helper('core/js')->getTranslatorScript() ?>
+<?php echo $this->getIncludes() ?>
+
+<link rel="stylesheet" href="//www.prokoeling.nl/skin/frontend/rwd/default/css/lightslider.css"/>
+<!--
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+-->
+
+<script> jQuery.noConflict(); </script>
+<!-- <script src="//www.prokoeling.nl/skin/frontend/rwd/default/js/lightslider.js"></script> -->
+<style>
+.scrlng{
+/*left: 100%;*/
+position: fixed;
+top: 0;
+/*
+transform: translate(-50%, 0px);
+*/
+z-index: 9999;
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+width: 100% !important;
+transition: opacity 0.4s ease;
+}
+.scrlng .header__inside{
+background-color: #ffffff;
+box-sizing: border-box;
+margin-left: auto;
+margin-right: auto;
+padding-left: 20px;
+padding-right: 20px;
+width: 1170px;
+transition: opacity 0.4s ease;
+}
+#header.page-header.header.grid-inside {
+  min-height: 122px;
+}
+
+.headmv{
+  display: block;
+  position: relative;
+  top: 78px;
+}
+</style>
+<script>
+
+//	 jQuery.noConflict();
+    	 jQuery(document).ready(function() {
+			jQuery("#content-slider").lightSlider({
+                loop:true,
+				auto:true,
+				speed: 1000,
+				item:1,
+                keyPress:true,
+				mode: 'fade',
+				pause: 4000
+				
+            });
+		
+		
+		
+jQuery(".nav-primary").hover(function(){	
+   jQuery('#darkness').delay(300).fadeTo(0, 1);	
+	
+}, function(){
+    jQuery('#darkness').fadeTo(0, 0, function(){
+       jQuery('#darkness').hide();
+	});
+});
+
+
+jQuery(".skip-link.skip-cart").click(function(){	
+   jQuery('#darknessx').delay(0).fadeTo(0, 1);	
+	
+});
+
+
+
+
+/*
+
+    // This button will increment the value
+    jQuery('.qtyplus').on('click',function(){  
+        // Get its current value
+        var currentVal = parseInt(jQuery(this).prev().val());
+        // If is not undefined
+        if (!isNaN(currentVal)) {
+            // Increment
+            jQuery(this).prev().val(currentVal + 1);
+			
+			jQuery(this).next().trigger('click');
+        } else {
+            // Otherwise put a 0 there
+            jQuery(this).prev().val(0);
+			jQuery(this).next().trigger('click');
+        }
+    });
+	
+	
+    // This button will decrement the value till 0
+    jQuery(".qtyminus").on('click',function() {
+        // Get its current value
+        var currentVal = parseInt(jQuery(this).next().val());
+        // If it isn't undefined or its greater than 0
+        if (!isNaN(currentVal) && currentVal > 0) {
+            // Decrement one
+            jQuery(this).next().val(currentVal - 1);
+			jQuery(this).next().next().trigger('click');
+        } else {
+            // Otherwise put a 0 there
+           jQuery(this).next().val(0);
+		   jQuery(this).next().next().next().trigger('click');
+        }
+    });
+	
+	*/
+/*
+jQuery(".minicart-wrapper .qty.cart-item-quantity.input-text").on('blur',function(){
+	jQuery(this).next().next().trigger('click');
+});
+*/
+
+
+});
+
+function hidedark(){
+    jQuery('#darknessx').fadeTo(0, 0, function(){
+       jQuery('#darknessx').hide();
+	});	
+	
+}
+
+function discresm(gb){
+	 // Get its current value
+        var currentVal = parseInt(jQuery(gb).next().val());
+		
+		nb=jQuery(gb).next().attr('data-item-id');
+		
+		
+        // If it isn't undefined or its greater than 0
+        if (!isNaN(currentVal) && currentVal > 0) {
+            // Decrement one
+            jQuery(gb).next().val(currentVal - 1);
+			 setTimeout(function(){ 
+			jQuery('#qbutton-'+nb+'').trigger('click');
+			 }, 400);
+        } else {
+            // Otherwise put a 0 there
+           jQuery(gb).next().val(0);
+		   setTimeout(function(){ 
+		   jQuery('#qbutton-'+nb+'').trigger('click');
+		   }, 400);
+        }
+}
+
+
+
+function increasem(gb){
+	  // Get its current value
+        var currentVal = parseInt(jQuery(gb).prev().val());
+		nb=jQuery(gb).prev().attr('data-item-id');
+        // If is not undefined
+        if (!isNaN(currentVal)) {
+            // Increment
+            jQuery(gb).prev().val(currentVal + 1);
+			setTimeout(function(){ 
+				jQuery('#qbutton-'+nb+'').trigger('click');			
+			}, 400);
+			
+        } else {
+            // Otherwise put a 0 there
+            jQuery(gb).prev().val(0);
+			setTimeout(function(){ 
+				jQuery('#qbutton-'+nb+'').trigger('click');
+			}, 400);
+        }
+}
+
+function discresm2(gb){
+	 // Get its current value
+        var currentVal = parseInt(jQuery(gb).next().val());		
+        // If it isn't undefined or its greater than 0
+        if (!isNaN(currentVal) && currentVal > 0) {
+            // Decrement one
+            jQuery(gb).next().val(currentVal - 1);
+			setTimeout(function(){ 
+				jQuery(gb).next().next().next().trigger('click');
+			  }, 400);
+        } else {
+            // Otherwise put a 0 there
+           jQuery(gb).next().val(0);
+		   setTimeout(function(){ 
+				jQuery(gb).next().next().next().trigger('click');
+		   }, 400);
+        }
+}
+
+
+
+function increasem2(gb){
+	  // Get its current value
+        var currentVal = parseInt(jQuery(gb).prev().val());
+        // If is not undefined
+        if (!isNaN(currentVal)) {
+            // Increment
+            jQuery(gb).prev().val(currentVal + 1);
+			setTimeout(function(){ 
+			jQuery(gb).next().trigger('click');	
+			}, 400);
+			
+        } else {
+            // Otherwise put a 0 there
+            jQuery(gb).prev().val(0);
+			jQuery(gb).next().trigger('click');
+        }
+}
+
+/*
+jQuery( ".nav-primary" ).mouseenter(function() {
+	setTimeout(function(){ 
+   jQuery('#darkness').fadeTo(200, 1);
+   }, 200);
+	
+  }).mouseleave(function() {
+	  
+      jQuery('#darkness').fadeTo(0, 0, function(){
+       jQuery('#darkness').hide();
+    });
+	
+  });
+  */
+</script>
+

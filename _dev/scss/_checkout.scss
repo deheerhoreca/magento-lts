@@ -1,0 +1,236 @@
+.checkout-step {
+	$ster-header-padding: 30px;
+
+	padding: $default-padding;
+	border-bottom: 1px solid $color-checkout-step-border;
+
+	&.active {
+		background: $color-checkout-step-active-background;
+	}
+	&__edit {
+		float: right;
+
+		&,
+		.allow.active & {
+			display: none;
+		}
+		.allow & {
+			display: block;
+		}
+	}
+	&__edit-button {
+		padding: 0;
+		border: none;
+		background: none;
+		color: $color-checkout-step-edit;
+		text-transform: uppercase;
+	}
+	&__header {
+		padding-left: $ster-header-padding;
+	}
+	&__title {
+		text-transform: uppercase;
+		font-weight: 600;
+	}
+	&__number {
+		$size: 18px;
+
+		float: left;
+		margin-left: -$ster-header-padding;
+		width: $size;
+		height: $size;
+		border-radius: 50%;
+		color: $color-checkout-step-number;
+		text-align: center;
+		font-weight: normal;
+		line-height: $size;
+
+		&,
+		.allow.active & {
+			background: $color-checkout-step-number-background;
+		}
+		.allow & {
+			background: $color-checkout-step-number-allow-background;
+		}
+	}
+	&__description {
+		padding-left: $ster-header-padding;
+		.active & {
+			display: none;
+		}
+	}
+	&__content {
+		margin-top: 15px;
+	}
+	&__island {
+		padding: $default-padding;
+		background: $color-checkout-step-island-background;
+	}
+	&__giftmessages {
+		margin-bottom: 20px;
+	}
+}
+.checkout-method {
+	&__section {
+		@include last;
+
+		margin-bottom: 30px;
+	}
+	&__title {
+		margin-bottom: 10px;
+		text-transform: uppercase;
+		font-size: 13px;
+	}
+	&__sign-in,
+	&__create {
+		padding-right: 30px;
+		padding-left: 30px;
+		width: auto;
+	}
+	&__create {
+		float: right;
+	}
+}
+.shipping-methods {
+	&__service {
+		margin-bottom: 20px;
+	}
+	&__service-name {
+		margin-bottom: 8px;
+		text-transform: uppercase;
+		font-weight: 600;
+	}
+	&__methods {
+	}
+	&__method {
+		@include last;
+
+		margin-bottom: 10px;
+	}
+	&__price {
+	}
+}
+.checkout-payment {
+	&__methods {
+	}
+	&__method {
+		margin-bottom: 10px;
+	}
+	&__method-parameters {
+		margin-top: 20px;
+	}
+}
+.checkout-review {
+	&__info {
+	}
+}
+.order-review {
+	tbody td {
+		padding: $default-padding;
+		border-bottom: 1px solid $color-order-review-border;
+		background: $color-order-review-background;
+	}
+	tfoot {
+		td {
+			padding: 0 $default-padding;
+			background: $color-order-review-background;
+		}
+		tr:first-child td {
+			padding-top: 20px;
+		}
+		tr:last-child td {
+			padding-bottom: 20px;
+		}
+	}
+	&__title {
+	}
+	&__product-name {
+		font-weight: 600;
+		font-size: 15px;
+	}
+	&__product-option .price {
+		color: $color-order-review-option-price;
+	}
+	&__product-name + &__product-option {
+		margin-top: 5px;
+	}
+	&__price {
+		text-align: right;
+		white-space: nowrap;
+	}
+	&__price-sum .price {
+		color: $color-order-review-price;
+		font-weight: normal;
+	}
+    &__price-sum .price-excluding-tax .price {
+        color: #018dd3;
+    }
+    &__price-sum .price-including-tax .price {
+        color: #e85349;
+    }
+	&__items-count {
+		font-size: 10px;
+		line-height: 1;
+	}
+}
+.checkout-agreements {
+	margin-bottom: $default-padding;
+
+	&__aggreement {
+		margin-bottom: 10px;
+	}
+	&__read {
+		float: right;
+		margin-left: 10px;
+	}
+	&__checkbox {
+		overflow: hidden;
+	}
+}
+.agreement-container {
+	padding: $default-padding;
+}
+.checkout-success {
+	padding: $default-padding;
+
+	&__title {
+		margin-bottom: 1em;
+		font-weight: normal;
+		font-size: 18px;
+	}
+	p {
+		@include last;
+
+		margin-bottom: 1em;
+	}
+}
+.gift-messages-form {
+	&__section {
+		@include last;
+
+		margin-bottom: 40px;
+	}
+	&__section-title {
+		font-size: 14px;
+	}
+	&__section-description {
+		margin-bottom: 15px;
+	}
+	&__product {
+		&:not(:last-child) {
+			margin-bottom: 20px;
+			padding-bottom: 20px;
+			border-bottom: 1px solid $color-checkout-step-border;
+		}
+	}
+	&__image-wrapper {
+	}
+	&__item-number {
+	}
+	&__product-name {
+		margin-bottom: 15px;
+	}
+}
+.paypal-express-review{
+    padding: 15px;
+}

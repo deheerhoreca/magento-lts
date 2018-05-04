@@ -1,0 +1,26 @@
+User-agent: *
+Disallow: /catalogsearch/
+Disallow: /*?limit=*
+Disallow: /*?dir=*
+Disallow: /*?aantal_deuren=*
+Disallow: /*?aansluitspanning=*
+Disallow: /*?price=*
+Disallow: /*?manufacturer=*
+Disallow: /*?color=*
+Disallow: /*?aantal_deuren=*
+Disallow: /*?energieklasse=*
+Disallow: /*?aansluitspanning=*
+Disallow: /*?afsluitbaar=*
+Disallow: /*?verlichting=*
+Disallow: /*?type_koeling=*
+Disallow: /*?ontdooisysteem=*
+Disallow: /*?temperatuur_control=*
+Disallow: /*?deur_omkeerbaar=*
+Disallow: /*?bodemschap=*
+Disallow: /*?laden=*
+Disallow: /*?schuifdeur=*
+Disallow: /*?type_deur=*
+
+Sitemap: http://www.prokoeling.nl/sitemap.xml
+
+

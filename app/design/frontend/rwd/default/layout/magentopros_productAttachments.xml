@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<layout>
+    
+    <catalog_product_view>
+        <reference name="product.info">
+            <block type="magentopros_productAttachments/catalog_product_list_attachment" name="product.info.attachments" as="product_attachments" template="magentopros_productAttachments/catalog/product/list/attachment.phtml">
+                <action method="addToParentGroup"><group>detailed_info</group></action>
+                <action method="setTitle" translate="value" module="magentopros_productAttachments"><value>Attachments</value></action>
+            </block>
+        </reference>
+    </catalog_product_view>
+</layout>

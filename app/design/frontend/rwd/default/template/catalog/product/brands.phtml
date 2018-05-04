@@ -1,0 +1,76 @@
+<?php
+/**
+ * Brand Listing
+ *
+ *
+ */
+?>
+
+<?php
+	
+	$name='manufacturer';
+    $attributeInfo = Mage::getResourceModel('eav/entity_attribute_collection')->setCodeFilter($name)->getFirstItem();
+    $attributeId = $attributeInfo->getAttributeId();
+    $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+    $manufacturers = $attribute ->getSource()->getAllOptions(false); 	
+	shuffle($manufacturers);
+	
+		//var_dump($manufacturers);
+//exit(0);
+$m2='';
+?>
+<style>
+#manufacturer_list2 li{
+	width: 22%;
+	float: left;
+}
+</style>
+<ul id="manufacturer_list">
+    <?php foreach ($manufacturers as $manufacturer): 
+	
+	$imgme='/media/wysiwyg/brands/'.str_replace(' ', '',strtolower($manufacturer['label'])).'.png';
+	$fil=str_replace(array(' ','-'),'_',strtolower($manufacturer['label']));		
+	$fil=str_replace('___','_',($fil));
+	$mnurl= $fil=str_replace('__','_',($fil));
+	
+	
+	
+	if(file_exists('/home/prokoeling/domains/prokoeling.nl/public_html'.$imgme)){
+	?>
+        <li class="clzmanf<?php echo $manufacturer['value'] ?>"><a href="/<?php echo $mnurl; ?>.html">
+        <img src="<?php echo $imgme;?>" alt="<?php echo $manufacturer['label'] ?>" title="<?php echo 'View products from &nbsp;' . $manufacturer['label'] ?>" /></a>
+		</li>
+    <?php 
+	}
+	else{
+		$m2.='<li><a href="/'.$mnurl.'.html">'.$manufacturer['label'].'</a></li>';
+	}
+	
+	
+	endforeach; ?>
+</ul>
+<ul id="manufacturer_list2" style="clear: both;">
+<?php echo $m2; ?>
+</ul>
+<script>
+/*
+var lst='';
+jQuery("img").error(function(){
+	
+	var hjt=jQuery(this).attr('alt');
+	var lnk=jQuery(this).parent().attr('href');
+	jQuery(this).parent().parent().remove();
+	sdf='<li><a href="'+lnk+'">'+hjt+'</a></li>';
+	jQuery('#manufacturer_list2').append(sdf);
+   
+	
+});
+
+jQuery(window).load(function(){
+	
+	jQuery('#manufacturer_list').show();
+});
+
+*/
+
+</script>

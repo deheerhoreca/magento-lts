@@ -1,0 +1,9 @@
+<div class="tax totals-li">
+    <div <?php echo $this->getParentBlock()->getLabelProperties() ?> class="totals-label">
+        <strong><?php echo $this->__('Tax'); ?></strong>
+    </div>
+
+    <div <?php echo $this->getParentBlock()->getValueProperties() ?> class="totals-value">
+        <?php echo Mage::helper('core')->currency($this->getSource()->getBaseTaxAmount()) ?>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+
+/* Styles for the demo page only.  See spectrum.css for the actual colorpicker styles */
+
+#docs {  }
+/*#docs ul { margin-left: 25px; padding-left:10px; }*/
+/*#docs ul { padding-left:10px; }*/
+/*#docs li { list-style: square; margin-left: 6px; }*/
+#docs li {margin-left: 0px; }
+#docs p { margin: 0; padding:0; padding-top:4px; }
+#docs pre { position:relative; }
+#docs h2 { margin: 30px -25px; border-bottom: solid 1px; }
+#docs h3 { padding: 10px 15px; margin: 10px auto; margin-top: 40px; border: solid 3px #aaa;
+box-shadow: 0 3px 5px #333; }
+#docs h3.point { box-shadow: none;  margin-left: -30px; margin-right: -30px; border: solid 1px #999; border-left: none; border-right:none;}
+#code-heading { font-size: 24px; text-align: center; margin: 6px 0; }
+#docs-content { color: #222; }
+#docs-content.dark { color: #ddd; }
+.full-spectrum  {
+    margin: 0 auto;
+}
+.full-spectrum .sp-palette {
+
+max-width: 200px;
+}

@@ -1,0 +1,149 @@
+	<?php
+		// some helpers
+		$_helper = $this->helper('catalog/output');
+		$storeId = Mage::app()->getStore()->getId();
+		$catalog = $this->getLayout()->createBlock('catalog/product_list')->setStoreId($storeId);
+ 
+		// get all products that are marked as featured
+		$collection = Mage::getModel('catalog/product')->getCollection();
+		$collection->addAttributeToSelect('featured');
+		$collection->addFieldToFilter(array(
+			array('attribute' => 'featured', 'eq' => true),
+		))->addOrder('name', 'ASC');
+ 
+ 
+ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
+	
+?>
+<div class="category-products" style="clear: both;">
+    <ul class="products-grid products-grid--max-5-col" id="featured-products-list">
+    <?php foreach ($collection as $_product): 
+	$_product = Mage::getModel('catalog/product')->setStoreId($storeId)->load($_product->getId());
+	
+	?>
+        <li class="item">
+		<a href="<?php echo $_product->getProductUrl() ?>" class="product-image">
+		<img src="<?php echo $this->helper('catalog/image')->init($_product, 'image'); ?>" />
+		</a>
+		<div class="product-info">
+		<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>"><?php echo $_product->getName() ?></a></h2>
+		
+			<div class="info">
+					<?php 
+	//$attribute = $_product->getResource()->getAttribute('short_description');
+   // if ($attribute)
+   // {
+    //    echo $attribute ->getFrontend()->getValue($_product);
+ //   }
+ ?>
+ <ul class="miniflist">
+		<?php	
+		
+		
+$cats = $_product->getCategoryIds();
+$catid='';
+foreach ($cats as $category_id) {
+     $catid=$category_id;
+	 break;
+} 
+
+		$garentiim = $_product->getAttributeText('garantie');
+		if($catid!=72){
+		$attribute_value = $_product->getAttributeText('type_koeling');
+		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>'.$attribute_value.'</li>';
+		}
+				
+		$attribute_value = $_product->getAttributeText('aantal_deuren');
+		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>'.$attribute_value.'-deurs</li>';
+		}
+				
+		$attribute_value = $garentiim = $_product->getAttributeText('garantie');
+		//$attribute_value = $garentiim = $attribute ->getFrontend()->getValue($_product);
+		//if($attribute_value!=''){
+		//	echo '<li>Garantie: '.$attribute_value.'</li>';
+		//}
+				
+		$attribute_value = $_product->getInhoudLiters();
+		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li>';
+		}
+		
+		$attribute_value = $_product->getBreedte();
+		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		if($attribute_value!=''){
+			echo '<li>'.($attribute_value/10).'cm breed</li>';
+		}
+		
+		
+		 
+		
+		
+		
+		
+		}
+	
+		if($catid==72){
+			$attribute_value = $_product->getBreedte();
+		if($attribute_value!=''){
+			echo '<li>'.($attribute_value/10).'cm breed</li>';
+		}
+		
+		$attribute_value = $_product->getInhoudAantalGn();
+		if($attribute_value!=''){
+			echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li>';
+		}
+		
+		$attribute_value = $_product->getAttributeText('manufacturer');
+		if($attribute_value!=''){
+			echo '<li>'.$attribute_value.'</li>';
+		}
+		
+			
+		}
+		?>
+		</ul>
+ 
+ <?php
+ if( $garentiim=='24 maanden'){
+	 ?>
+	 <img src="//www.prokoeling.nl/skin/frontend/rwd/default/images/icongarantie.png" alt="" class="lbl24gran"/>
+	 <?php
+ }
+ ?>
+					
+					
+					
+					</div>
+		
+		
+		
+		<?php echo $productBlock->getPriceHtml($_product, true); ?>
+		
+		<div class="actions">
+                        <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
+                            <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo Mage::helper('checkout/cart')->getAddUrl($_product) ?>')"><span><span>+ <?php echo $this->__('In winkelwagen') ?></span></span></button>
+                        <?php elseif($_product->getStockItem() && $_product->getStockItem()->getIsInStock()): ?>
+                            <a title="<?php echo $this->quoteEscape($this->__('View Details')) ?>" class="button" href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->__('View Details') ?></a>
+                        <?php else: ?>
+                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                        <?php endif; ?>
+                        <ul class="add-to-links">
+                            <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                            <?php endif; ?>
+                            <?php if(false && $_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                                <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+		
+		</div>
+		</li>
+    <?php endforeach; ?>
+    </ul>
+</div>

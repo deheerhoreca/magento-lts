@@ -1,0 +1,27 @@
+<?php if ($_item = $this->getItem()): ?>
+<?php if ((float) $_item->getQtyOrdered()): ?>
+<?php echo Mage::helper('sales')->__('Ordered').': '; ?><strong><?php echo $_item->getQtyOrdered()*1 ?></strong>
+<br/>
+<?php endif;?>
+
+<?php if ((float) $_item->getQtyInvoiced()): ?>
+<?php echo Mage::helper('sales')->__('Invoiced').': '; ?><strong><?php echo $_item->getQtyInvoiced()*1 ?></strong>
+<br/>
+<?php endif; ?>
+
+<?php if ((float) $_item->getQtyShipped()): ?>
+<?php echo Mage::helper('sales')->__('Shipped').': ' ?><strong><?php echo $_item->getQtyShipped()*1 ?></strong>
+<br/>
+<?php endif; ?>
+
+<?php if ((float) $_item->getQtyRefunded()): ?>
+<?php echo Mage::helper('sales')->__('Refunded').': ' ?><strong><?php echo $_item->getQtyRefunded()*1 ?></strong>
+<br/>
+<?php endif; ?>
+
+<?php if ((float) $_item->getQtyCanceled()): ?>
+<?php echo Mage::helper('sales')->__('Canceled').': ' ?><strong><?php echo $_item->getQtyCanceled()*1 ?></strong>
+<br/>
+<?php endif; ?>
+
+<?php endif; ?>

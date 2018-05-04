@@ -1,0 +1,38 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This software is designed to work with Magento community edition and
+ * its use on an edition other than specified is prohibited. aheadWorks does not
+ * provide extension support in case of incorrect edition use.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Searchautocomplete
+ * @version    3.4.8
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?><?php if ($this->isCanShowSuggestedKeywords()):?>
+    <div class="aw-sas-suggest">
+        <h5>
+            <?php echo $this->__('Suggested keywords: ');?>
+            <?php $index = 0; $count = count($this->getSuggests());?>
+            <?php foreach ($this->getSuggests() as $suggestItem): ?>
+                <a href="<?php echo $this->getResultUrl($suggestItem->getQueryText());?>">
+                    <?php echo $this->__('%s(%s)', $suggestItem->getQueryText(), $suggestItem->getNumResults());?>
+                </a><?php echo ((++$index)<$count)?',':''; ?>
+            <?php endforeach; ?>
+        </h5>
+    </div>
+<?php endif;?>

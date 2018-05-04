@@ -1,0 +1,1324 @@
+<?php 
+    /* Change By Jack 02/12 */
+    if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "")
+    {
+        $ajaxUploadUrl = $this->getUrl('pdfinvoiceplus/index/uploadlogo', array('id' => $this->getRequest()->getParam('id')));
+        $changeBackgroundUrl = $this->getUrl('pdfinvoiceplus/index/changebackground', array('id' => $this->getRequest()->getParam('id')));
+    }
+    else{
+        $changeBackgroundUrl = str_replace('http://','https://',$this->getUrl('pdfinvoiceplus/index/changebackground', array('id' => $this->getRequest()->getParam('id'))));
+        $ajaxUploadUrl = str_replace('http://','https://',$this->getUrl('pdfinvoiceplus/index/uploadlogo', array('id' => $this->getRequest()->getParam('id')))); 
+    }
+    /* end change */
+?>
+<script type="text/javascript" charset="utf-8">
+
+//plug to copy style element to another element
+    $.fn.extend({
+        copyStyle: function(e) {
+            var $el = $(this);
+            var style_var = jQuery(e).attr("style");
+            var class_var = jQuery(e).attr("class");
+            $el.attr("style", style_var);
+            $el.attr("class", class_var);
+        }
+    });
+//plug to copy attributes element to another element
+    $.fn.extend({
+        copyAttr: function(e) {
+            var $el = $(this);
+            var attributes = $(e).prop("attributes");
+            $.each(attributes, function() {
+                $el.attr(this.name, this.value);
+            });
+        }
+    });
+//plugin to make any element text editable
+    $.fn.extend({
+        editContent: function() {
+            $(this).each(function() {
+                var self = this;
+                //$(self).attr('contenteditable', false);//remove contenteditable off table-cell
+                $(self).attr('placeholder', '<?php echo $this->__("Click to edit!") ?>'); //add place holder
+                if (!$(self).hasClass('contenteditable')) {
+                    $(self).addClass('contenteditable');
+                }
+                $(self).on('click', function(target) {
+                    if ($(this).find('.editContentTable').length <= 0) {
+                        var $editbox = $('<div class="editContentTable" contenteditable="true" style=""></div>');
+                        var oldText = $(self).html();
+                        $editbox.css('min-height', $(self).height()).html(oldText);
+                        $(self).html('');
+                        $(self).attr('contenteditable', false).append($editbox);
+                        $($editbox).trigger('focus');
+                        var caretRange = getMouseEventCaretRange(target);
+                        window.setTimeout(function() {
+                            selectRange(caretRange);
+                        }, 10);
+                        $(document).click(editContentSubmit);
+                        $($editbox).focusout(function() {
+                            console.log(Variable.isInserting);
+                            if (!Variable.isInserting) {
+                                editContentSubmit();
+                            }
+                        });
+                        //enable selection for edit
+                        $(this).enableSelection();
+                        $($editbox).focus(function() {
+                            $('#tooltip').remove(); //remove tooltip
+                        });
+                        
+                        //send to insert variable
+                        Variable.insertTo($editbox.get(0)); //can insert variable
+                        //Variable.insertTo($(':focus').get(0)); //get focus element
+                        target.stopPropagation();
+                    }else{
+                        //send to insert variable
+                        Variable.insertTo($(this).find('.editContentTable').get(0)); //can insert variable
+                    }
+                    
+                    $(this).find('.editContentTable').click(function(event) {
+                        event.stopPropagation();
+                    }).bind('keypress', function(e) {
+                        var code = (e.keyCode ? e.keyCode : e.which);
+                        if (code == 13) {
+                            //editContentSubmit();
+                        }
+                    });
+                    //hide menu
+                    $('.context-menu').closest('table').hide();
+                    //hide contextmenu shadow
+                    $('div.context-menu-shadow').hide();
+
+                    //target.stopPropagation();
+                });
+
+                var editContentSubmit = function() {
+//                    var newText = $(self).find('div.editContentTable').html();
+//                    if(!$(self).find('div.editContentTable').text()){
+//                        $(self).html('');
+//                    }else{
+//                        $(self).html(newText);
+//                    }
+                    $('.contenteditable').attr('contenteditable', true)
+                    var editing = $('.editContentTable');
+                    editing.each(function() {
+                        if (!$(this).text()) {
+                            $(this).parent().html('');
+                        } else {
+                            $(this).parent().html($(this).html());
+                        }
+                        $(this).unbind('click');
+                    });
+
+                    $(document).unbind('click', editContentSubmit);
+                };
+
+            });
+        },
+        editableWrapInput: function() {
+            $(this).each(function() {
+                var $el = $(this),
+                        $edittextbox = $('<input type="text">').css('min-width', $el.width()),
+                        submitChanges = function() {
+                            if ($edittextbox.val() !== '') {
+                                $el.html($edittextbox.val());
+                                $el.show();
+                                $el.trigger('editsubmit', [$el.html()]);
+                                $(document).unbind('click', submitChanges);
+                                $edittextbox.detach();
+                            }
+                        },
+                        tempVal;
+                $edittextbox.click(function(event) {
+                    event.stopPropagation();
+                });
+
+                $el.on('dblclick', function(e) {
+                    tempVal = $el.html();
+                    $edittextbox.copyAttr(this);
+                    $edittextbox.css({'border': 'none'});
+                    $edittextbox.val(tempVal).insertBefore(this)
+                            .bind('keypress', function(e) {
+                                var code = (e.keyCode ? e.keyCode : e.which);
+                                if (code == 13) {
+                                    submitChanges();
+                                }
+                            }).select();
+                    $el.hide();
+                    $(document).click(submitChanges);
+                });
+            });
+            return this;
+        }
+    });
+
+    //plugin copy attr $('element').changeTag('<tag_name/>');
+    (function($) {
+        $.fn.changeTag = function(tag, callback) {
+            var attr = $(this).get(0).attributes;
+            var wrap = $(tag).clone();
+            Array.prototype.slice.call(attr).forEach(function(item) {
+                wrap.attr(item.name, item.value);
+            });
+            $(this).contents().unwrap().wrap(function(i) {
+                if (typeof callback != 'undefined') {
+                    callback(i);
+                }
+                return wrap;
+            });
+
+        };
+    })(jQuery);
+
+
+    //var insert = false;
+    function deleteBlock(id) {
+        $('#' + id).remove();
+    }
+
+    function dragDrop(id) {
+        $("#" + id).draggable({'cursor': "move", 'handle': "span", stop: px2percent});
+    }
+
+    function px2percent(event, ui) {
+        el = $(this);
+        var parent = el.parent();
+        el.css({
+            left: parseInt(el.css('left')) / parent.width() * 100 + "%",
+            top: parseInt(el.css('top')) / parent.height() * 100 + "%",
+            width: el.width() / parent.width() * 100 + "%",
+            height: el.height() / parent.height() * 100 + "%"
+        });
+    }
+
+    function insertBlock(e) {
+        console.log(e.target);
+
+        var x = e.pageX - $(e.target).offset().left;
+        var y = e.pageY - $(e.target).offset().top;
+        var timeNow = new Date().getTime();
+        //var $newElement = $('<div/>', {class: 'autogrow',contenteditable:true, id:'block_'+ timeNow, style: "position:absolute;top:" + y + ";left:" + x}).html('<p id="p_'+ timeNow+'" class="block-add" style="">New block content. Click to edit!</p><div id="div_'+timeNow+'" style="display:none;text-align:right" class="block-control"><span style="float:right" class="control-ui"><img src="<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/move.png'); ?>"/></span><a style="float:right" class="control-ui" href="javascript:void(0)" onclick="deleteBlock(this)"><img src="<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/dele.png'); ?>"/></a></div>');
+        var elementHtml = '<div class="autogrow" contenteditable="true" id="block_' + timeNow + '" style="position:absolute; top:' + y + '; left:' + x + '; z-index: 90">';
+        elementHtml += '<p id="p_' + timeNow + '" class="block-add" style="">New block content. Click to edit!</p>';
+        elementHtml += '<div id="div_' + timeNow + '" style="display:none; text-align:right" class="block-control control-ui">';
+        elementHtml += '<span style="position: absolute; bottom: -20px; right: 6px; width: 22px; height: 21px; cursor: move; background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/move.png'); ?>)" class="control-ui">';
+        //elementHtml +=          '<img style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/move.png'); ?>)"/>';
+        elementHtml += '</span>';
+        elementHtml += '<a style="position: absolute; bottom: -20px; right: 28px; width: 23px; height: 21px; cursor: pointer; background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/dele.png'); ?>)" class="control-ui" href="javascript:void(0)" onclick="deleteBlock(\'block_' + timeNow + '\')">';
+        //elementHtml +=          '<img style="background:url(<?php echo $this->getSkinUrl('css/magestore/pdfinvoiceplus/images/dele.png'); ?>)"/>';
+        elementHtml += '</a>';
+        elementHtml += '</div></div>';
+        var $newElement = $(elementHtml);
+        $newElement.keydown(function(event) {
+
+        });
+        //settup handle resizeable
+        if (!$('#s_handle_block_' + timeNow).length) {
+            $('<div id="s_handle_block_' + timeNow + '" class="ui-resizable-handle ui-resizable-s" style="position: absolute; z-index: 90; width: 10px; height: 10px; background-color: black;"></div>').appendTo('body');
+        }
+        if (!$('#e_handle_block_' + timeNow).length) {
+            $('<div id="e_handle_block_' + timeNow + '" class="ui-resizable-handle ui-resizable-e" style="position: absolute; z-index: 90; width: 10px; height: 10px; background-color: black;"></div>').appendTo('body');
+        }
+        if (!$('#se_handle_block_' + timeNow).length) {
+            $('<div id="se_handle_block_' + timeNow + '" class="ui-resizable-handle ui-resizable-se" style="position: absolute; z-index: 90; width: 10px; height: 10px; background-color: black;"></div>').appendTo('body');
+        }
+        $(e.target).append($newElement).trigger('add_block_after', [$newElement, timeNow]);
+        //settup position handle resizeable
+        $('#s_handle_block_' + timeNow).css('top', $newElement.offset().top + parseInt($newElement.height()) + 'px');
+        $('#s_handle_block_' + timeNow).css('left', $newElement.offset().left + 'px');
+        $('#e_handle_block_' + timeNow).css('top', $newElement.offset().top + 'px');
+        $('#s_handle_block_' + timeNow).css('left', $newElement.offset().left + parseInt($newElement.width()) + 'px');
+        $('#se_handle_block_' + timeNow).css('top', $newElement.offset().top + parseInt($newElement.height()) + 'px');
+        $('#se_handle_block_' + timeNow).css('left', $newElement.offset().left + parseInt($newElement.width()) + 'px');
+
+        $(e.target).css('position', 'relative');
+        dragDrop('block_' + timeNow);
+        //insert = false;
+        $($newElement).click(function(e) {
+            $('#div_' + timeNow).show();
+            e.stopPropagation();
+            $(window).bind('click', hideHandle);
+        });
+        $($newElement).focusout(function() {
+
+        });
+        var hideHandle = function() {
+            $('#div_' + timeNow).hide();
+            $(window).unbind('click', hideHandle);
+        };
+        //submit insert finish
+        insertBlockSubmit();
+    }
+
+    function insertBlockSubmit() {
+        $("#insertblock").trigger('click');
+        $('#container-html').unbind('click', insertBlock);
+
+    }
+
+
+
+    function clone(src) {
+        function mixin(dest, source, copyFunc) {
+            var name, s, i, empty = {};
+            for (name in source) {
+                // the (!(name in empty) || empty[name] !== s) condition avoids copying properties in "source"
+                // inherited from Object.prototype.	 For example, if dest has a custom toString() method,
+                // don't overwrite it with the toString() method that source inherited from Object.prototype
+                s = source[name];
+                if (!(name in dest) || (dest[name] !== s && (!(name in empty) || empty[name] !== s))) {
+                    dest[name] = copyFunc ? copyFunc(s) : s;
+                }
+            }
+            return dest;
+        }
+
+        if (!src || typeof src != "object" || Object.prototype.toString.call(src) === "[object Function]") {
+            // null, undefined, any non-object, or function
+            return src;	// anything
+        }
+        if (src.nodeType && "cloneNode" in src) {
+            // DOM Node
+            return src.cloneNode(true); // Node
+        }
+        if (src instanceof Date) {
+            // Date
+            return new Date(src.getTime());	// Date
+        }
+        if (src instanceof RegExp) {
+            // RegExp
+            return new RegExp(src);   // RegExp
+        }
+        var r, i, l;
+        if (src instanceof Array) {
+            // array
+            r = [];
+            for (i = 0, l = src.length; i < l; ++i) {
+                if (i in src) {
+                    r.push(clone(src[i]));
+                }
+            }
+            // we don't clone functions for performance reasons
+            //		}else if(d.isFunction(src)){
+            //			// function
+            //			r = function(){ return src.apply(this, arguments); };
+        } else {
+            // generic objects
+            r = src.constructor ? new src.constructor() : {};
+        }
+        return mixin(r, src, clone);
+
+    }
+
+
+
+    var MyTable = {
+        'table': [],
+        'columns': [],
+        'totalWidthItem': 0,
+        'canResize': true,
+        //addControl: $("<div/>", {class: 'mytable-add-col control-ui'}),
+        //remover: $("<div/>", {class: 'mytable-remove-col control-ui'}),
+        //resizer_left: $("<div/>", {class: 'mytable-resizer-col-left control-ui'}),
+        //resizer_right: $("<div/>", {class: 'mytable-resizer-col-right control-ui'}),
+        'init': function(e) {
+            var that = this;
+            if (typeof e == 'object') {
+                this.table = e;
+            } else {
+                this.table = $('.' + e);
+                if (this.table.length == 0) {
+                    this.table = $('#' + e);
+                }
+            }
+            if (this.table.length == 0) {
+                return 0;
+            }
+
+            var is_swap_column = false; //check for column has swapped
+
+            var reInit = function() {
+                //init plugin
+                $('#' + e).addClass('relative');
+                $('#' + e).hover(function() {
+                    $(this).addClass('border-table');
+                }, function() {
+                    $(this).removeClass('border-table');
+                });
+
+                dragtable.makeDraggable($('#' + e).get(0));
+                //init colResize
+                MyTable.initColResize(e);
+                //init resize table
+                MyTable.initResizable(e);
+                //disable colResizeable
+                $('#' + e).on('dragg_moving', function(event, dx, dy) {
+                });
+
+                is_swap_column = false;
+                $('#' + e).on('column_swapped', function(event, from_index, to_index) {
+                    is_swap_column = true;
+                });
+
+                $('#' + e).on('dragg_end_before', function(event, x, y) {
+                    $('#' + e).colResizable({disable: true}); //disable resizeable columns
+                });
+
+                $('#' + e).on('dragg_end_after', function(event, x, y) {
+                    if (is_swap_column) {
+                        is_swap_column = false; //reset state to is not swap columns
+                    }
+                    MyTable.initColResize(e);
+                    reCalcPercentTable('#' + e); //reset width table to percent
+                    removeColHandle(); //replay remove col handle
+                    addColHandle(); //re init
+                });
+
+                //reset width table to percent
+                reCalcPercentTable('#' + e);
+            };
+            //add control ui
+            var removeColHandle = function() {
+                $('#' + e + '-CRC').addClass('control-ui');
+                $('#' + e + '-CRC').children().append('<div class="' + e + '-remove-col-ui mytable-remove-col control-ui"></div>');//add remove icon handle
+                $('#' + e + '-CRC').find('.' + e + '-remove-col-ui').click(function() {
+                    $('#' + e).colResizable({disable: true});
+                    var index = $(this).parent().index(); //get index
+                    if ($('#' + e + ' tr').first().children().length > 1) {
+                        $('#' + e).find('tr').each(function() {
+                            $(this).children().eq(index).remove();
+                        });
+                    } else {
+                        alert("<?php echo Mage::helper('pdfinvoiceplus')->__("Cannot remove this column.") ?>");
+                    }
+                    $(this).parent().remove();//remove the handle item
+                    MyTable.columns = MyTable.table.children().not('.control-ui');
+                    dragtable.makeDraggable($('#' + e).get(0));
+                    MyTable.initColResize(e);
+
+                    reCalcPercentTable('#' + e); //reset width table to percent
+
+                    removeColHandle(); //replay this
+                    addColHandle();
+
+                    $('#' + e).trigger('removeColumn', [index + 1]); //send index of column removed
+                });
+                //add move handle swap column
+//                $('#'+e+'-CRC').children().append($('<div class="'+e+'-move-column-ui mytable-move-column control-ui"></div>').click(function(){
+//                    console.log('move column handle click');
+//                }));//add remove icon handle
+
+            };
+            //add control add new column
+            var addColHandle = function() {
+                var $handle = $('<div class="' + e + '-add-col-ui mytable-add-col control-ui" style="z-index: 1999"></div>');
+                //$('#' + e).append($handle);//add icon add handle
+                $('#' + e + '-CRC').append($handle);
+                $handle.click(function() {
+                    $('#' + e).colResizable({disable: true}); //disable col resizable
+                    var length_before = $('#' + e + ' thead > tr').children().length || $('#' + e + ' tbody > tr').children().length;
+                    //add cell row
+                    var default_width = 10; //%
+                    var newWidth = default_width;
+                    //calc new cell width
+                    newWidth = 100 / (length_before + 1);
+//                    if(newWidth > default_width){
+//                        newWidth = default_width;
+//                    }
+                    //add new column to table
+                    if (newWidth > 0) {
+                        $('#' + e + ' tr').each(function() {
+                            var $new_cell = $(this).children().last().clone();
+                            $new_cell.text('');//reset text clone
+                            $new_cell.attr('placeholder', '<?php echo $this->__("Click to edit!") ?>');
+                            $(this).append($new_cell);
+                            $new_cell.editContent(); //edit content cell
+                        });
+                    } else {
+                        alert("<?php echo Mage::helper('pdfinvoiceplus')->__("Cannot add another column.") ?>");
+                    }
+                    //add new width for new cell
+                    $('#' + e + ' tr:first').children().last().width(newWidth + '%');
+                    //$new_cell.width(newWidth + '%');
+                    //if (($('#' + e).width() + newWidth) >= $('#' + e).parent().width()) {
+                    //$('#'+e).css("width",$('#'+e).parent().width()+"px");
+                    //}
+
+                    MyTable.columns = MyTable.table.children().not('.control-ui');
+                    var length_after = $('#' + e + ' thead > tr').children().length || $('#' + e + ' tbody > tr').children().length;
+                    //reload plugin run
+                    dragtable.makeDraggable($('#' + e).get(0));
+                    MyTable.initColResize(e);
+
+                    reCalcPercentTable('#' + e); //reset width table to percent
+
+                    //if (($('#' + e).width() + newWidth) >= $('#' + e).parent().width()) {
+                    //$('#'+e).css("width",$('#'+e).parent().width()+"px");
+                    //} else {
+                    //$('#'+e).width($('#'+e).width()+newWidth);
+                    //}
+                    //MyTable.initResizable(e);
+                    removeColHandle();
+                    addColHandle();
+                    $('#' + e).trigger('column_added', [length_after, length_before]); //send to new columns index
+                    Variable.init();
+                });
+            };
+
+            reInit();
+            removeColHandle();
+            addColHandle();
+        },
+        'initColResize': function(e) {
+            $('#' + e).colResizable({
+                liveDrag: true,
+                minWidth: 50,
+                gripInnerHtml: '',
+                onResize: function() {
+                    reCalcPercentTable('#' + e); //reset width table to percent
+                }
+            });
+        },
+        'initResizable': function(e) { //init resize table
+            $('#' + e).resizable({
+                //containment: "#main-content",
+                containment: "parent",
+                handles: 'e',
+                minWidth: 100,
+                maxWidth: $('#' + e).parent().width(),
+                create: function(event, ui) {
+                    var hei = $(this).height();
+                    //handle for resizeable
+                    $(this).find('.ui-resizable-e').addClass('control-ui').css({height: hei, position: 'absolute', top: 0, right: 0, zIndex: 999, width: '10px', cursor: 'e-resize'});
+                },
+                resize: function(event, ui) {
+                    $('#' + e + '-CRC').width($(this).width()); //fix sync control width
+                },
+                stop: function(event, ui) {
+                    $(this).find('.ui-resizable-e').css("height", $(this).height());
+                }
+            });
+        },
+        'initRemove': function(target) {
+            var that = this;
+            $(target).click(function(e) {
+                $(this).parent().remove();
+                that.columns = that.table.children().not('.control-ui');
+            });
+        }
+//        ,'initResize': function(target) {
+//            var that = this, submitResize, onresize;
+//            var startX, startY, startWidth, startHeight;
+//            var $nextTarget = $(target).parent().next();
+//            var startNextWidth, startNextHeight;
+//            target.mousedown(function(e) {
+//                startX = e.clientX;
+//                startY = e.clientY;
+//                startWidth = $(target).parent().width();
+//                startNextWidth = $nextTarget.width();
+//                console.log(startWidth);
+//                $("#sortable").sortable("disable");
+//                $(document).disableSelection();
+//                $(document).mouseup(submitResize);
+//                $(document).mousemove(onresize);
+//            });
+//            //totalWidth = that.table.width();
+//            that.totalWidthItem += $(target).parent().outerWidth();
+//
+//            //var new_width = startWidth;
+//            onresize = function(event) {
+//                event = event || window.event; // IE-ism
+//                //new_width = $(target).parent().width();
+//                if (startWidth + event.clientX - startX >= 30) {
+//                    if (startNextWidth - event.clientX + startX >= 30 && $nextTarget.context !== 'undefined') {
+//                        $(target).parent().width(startWidth + event.clientX - startX + 'px');
+//                        //$(target).parent().width(startHeight + event.clientY - startY + 'px');
+//                        if (that.totalWidthItem >= that.table.width()) {
+//                            $nextTarget.width(startNextWidth - event.clientX + startX + 'px');
+//                        }
+//                    } else if (that.totalWidthItem <= that.table.width()) {
+//                        $(target).parent().width(startWidth + event.clientX - startX + 'px');
+//                    }
+//                    that.totalWidthItem = 0;
+//                    that.columns.each(function() {
+//                        that.totalWidthItem += $(this).outerWidth();
+//                    });
+//                }
+//                console.log('that.totalWidthItem: ' + that.totalWidthItem);
+//                //console.log($(target).parent().width() + 'px');
+//            };
+//            submitResize = function() {
+//                console.log("mouseup: " + $(this).parent().find('.label').text());
+//                $("#sortable").sortable("enable");
+//                $(document).enableSelection();
+//                $(document).unbind('mouseup', submitResize);
+//                $(document).unbind('mousemove');
+//            };
+//        },
+//        'initControlUi': function() {
+//            var that = this;
+//            for (var i = 0; i < this.columns.length; i++) {
+//                var remove_control_ui = this.remover.clone();
+//                var resizer_control_ui_left = this.resizer_left.clone();
+//                var resizer_control_ui_right = this.resizer_right.clone();
+//                $(this.columns[i]).append(remove_control_ui); //append remover
+//                $(this.columns[i]).append(resizer_control_ui_left); //append resizer
+//                $(this.columns[i]).append(resizer_control_ui_right); //append resizer
+//                $(this.columns[i]).css("position", "relative");
+//                //init control-ui
+//                that.initRemove(remove_control_ui);
+//                that.initResize(resizer_control_ui_right);
+//            }
+//            //init control-add-ui
+//            this.table.append(this.addControl);//add contol-ui add columns
+//            this.table.css("position", "relative");
+//            this.table.css("padding", 0);
+//        }
+    };
+
+//object save html
+    var MyHtml = {
+        'saving': false,
+        'save': function(url) {
+            this.loading();
+            this.saving = true;
+            jQuery.ajax("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_design/savehtml', array('isAjax' => true)) ?>", {
+                data: {
+                    'id': "<?php if (is_object($this->_template_object)) echo $this->_template_object->getId(); ?>",
+                    'type': "<?php echo $this->_print_type ?>",
+                    'html': encodeURI(this.toHtml()),
+                    'form_key': "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"},
+                'crossDomain': true,
+                'success': function() {
+                    MyHtml.loadingoff();
+                    if (url)
+                        window.location = url;
+                    MyHtml.saving = false;
+                },
+                'error': function() {
+                    MyHtml.saving = false;
+                },
+                'complete': function() {
+                    MyHtml.saving = false;
+                },
+                'type': "POST"
+            });
+
+        },
+        'toHtml': function() {
+            //check editing autogrow or uploading image
+            if ($('.autogrow form button[type=submit]').length || $('.insert-logo').length) {
+                if (confirm('<?php echo Mage::helper('pdfinvoiceplus')->__('Do you want to discard unsaved changes?') ?>')) {
+                    $('.autogrow form button[type=submit]').trigger('click');
+                    $('.insert-logo button[type=submit]').trigger('click'); //upload
+                } else {
+                    $('.autogrow form button[type=cancel]').trigger('click');
+                    $('.insert-logo button[type=cancel]').trigger('click'); //cancel
+                }
+            }
+
+            //convert px width table to percent
+            //reCalcPercentTable();
+            //get content html
+            $html = $('#container-html').clone(true);
+            $html.find('.control-ui').remove();
+            $html.find('.ui-resizable-handle').remove();
+            $html.find('.new-block').removeClass('new-block');
+            $html.find('.ajaxupload > form').remove();
+
+            //var html = table2percent($html, '#table-item');
+            //convert all rgb color to hex color
+            function convert2hex(str) {
+                function rgb2hex(rgb) {
+                    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                    return "#" +
+                            ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+                            ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+                            ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2);
+                }
+                return str.replace(/rgb\(\d+,\s*\d+,\s*\d+\)/g, function(matched) {
+                    return rgb2hex(matched);
+                });
+            }
+            return convert2hex($html.html());
+            //return $html.html();
+            //var background = $html.css("background-image");
+            //var container = $('<div id="container-inner">').css('background-image', background ).append($html.html());
+            //var output = $('<div>').append(container);
+            //return output.html();
+
+        },
+        'loading': function() {
+            $('#loading-mask').show();
+        },
+        'loadingoff': function() {
+            $('#loading-mask').hide();
+        },
+        loadDefault: function() {
+            MyHtml.save();
+            //wait for saving
+            var check = setInterval(function(){
+                if (!MyHtml.saving) {
+                    clearInterval(check);
+                    clearTimeout(wait);
+                    window.location.href = '<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_syncInfo/update', array('id' => $this->getTemplateId(), 'type' => $this->_print_type)) ?>';
+                }
+            },10);
+            
+            var wait = setTimeout(function() {
+                clearInterval(check);
+            }, 10000);
+        },
+        resetDefault: function() {
+            var check = setInterval(function(){
+                if (!MyHtml.saving) {
+                    clearInterval(check);
+                    clearTimeout(wait);
+                    window.location.href = '<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_syncInfo/reset', array('id' => $this->getTemplateId(), 'type' => $this->_print_type)) ?>';
+                }
+            },10);
+            
+            var wait = setTimeout(function() {
+                clearInterval(check);
+            }, 10000);
+        }
+    };
+
+
+    /*manage insert variables*/
+    var Variable = {
+        'jsfocusEl': '',
+        'focusEl': '',
+        'selection': '',
+        'contextType': '',
+        'isLoadingVar': false,
+        'isInserting': false,
+        'print_type': '<?php echo $this->_print_type ?>',
+        'print_name': '',
+        'menu_main_data': [],
+        'menu_item_data': [],
+        'variables': {},
+        'menu_main_var': {},
+        'menu_item_var': {},
+        'type': {'order': '', 'invoice': '','shipment': '', 'creditmemo': ''},
+        'init': function() {
+            $(document).on('focus', 'textarea', function(e) {
+                Variable.focusEl = $(this);
+                Variable.jsfocusEl = $(this).get(0);
+            });
+            //stop right click on edit area
+            $(document).on('contextmenu', '#container-html', function(e) {
+                //e.preventDefault();
+                e.stopPropagation();
+                return false;
+            });
+            //stop right click on upload form
+            $('.ajaxupload').on('contextmenu', 'form', function(e) {
+                //e.preventDefault();
+                e.stopPropagation();
+                return false;
+            });
+            //load allvariable
+            this.loadVariable(this.print_type); //load all variable
+            //listen click/focus element
+            $(document).click(function(eIv) {
+                if ($(eIv.target).closest('[contenteditable=true], .contenteditable').length) {
+                    Variable.insertTo($(eIv.target).get(0)); //get focus element
+                } else {
+                    Variable.insertTo($());
+                }
+                //Variable.insertTo($(':focus').get(0)); //get focus element
+            });
+
+//            $("*:focus").each(function(e) {
+//                console.log('kjflsjkadfa');
+//                if($(e.target).is('[contenteditable=true], .contenteditable')){
+//                    Variable.insertTo($(e.target).get(0));
+//                    console.log($(e.target).get(0));
+//                }else{
+//                    Variable.insertTo($());
+//                    console.log('e');
+//                }
+//                
+//            });
+        },
+        'loadVariable': function(type) {
+            var that = this;
+            Variable.isLoadingVar = true;
+            switch (type) {
+                case 'order':
+                    $.post("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_variable/order', array('isAjax' => 'true')); ?>",
+                            {form_key: "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"},
+                    function(data) {
+                        Variable.variables = data.order;
+                        Variable.menu_customer = data.order.customer;
+                        Variable.menu_printype = data.order.order;
+                        Variable.menu_item = data.order.item;
+                        Variable.isLoadingVar = false;
+                        Variable.print_name = 'Order';
+                        that.initMenu();
+                    }, 'json');
+                    break;
+                case 'invoice':
+                    $.post("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_variable/invoice', array('isAjax' => 'true')); ?>",
+                            {form_key: "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"},
+                    function(data) {
+                        Variable.variables = data.invoice;
+                        Variable.menu_customer = data.invoice.customer;
+                        Variable.menu_printype = data.invoice.invoice;
+                        Variable.menu_item = data.invoice.item;
+                        Variable.isLoadingVar = false;
+                        Variable.print_name = 'Invoice';
+                        that.initMenu();
+                    }, 'json');
+                    break;
+                case 'creditmemo':
+                    $.post("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_variable/creditmemo', array('isAjax' => 'true')); ?>",
+                            {form_key: "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"},
+                    function(data) {
+                        Variable.menu_customer = data.creditmemo.customer;
+                        Variable.menu_printype = data.creditmemo.creditmemo;
+                        Variable.menu_item = data.creditmemo.item;
+                        Variable.isLoadingVar = false;
+                        Variable.print_name = 'Creditmemo';
+                        that.initMenu();
+                    }, 'json');
+                    break;
+				case 'shipment':
+                    $.post("<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/pdfinvoiceplus_variable/shipment', array('isAjax' => 'true')); ?>",
+                            {form_key: "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"},
+                    function(data) {
+                        Variable.menu_customer = data.shipment.customer;
+                        Variable.menu_printype = data.shipment.shipment;
+                        Variable.menu_item = data.shipment.item;
+                        Variable.isLoadingVar = false;
+                        Variable.print_name = 'Shipment';
+                        that.initMenu();
+                    }, 'json');
+                    break;
+            }
+        },
+        'insertVariable': function(value, target) {
+            var textareaElm;// = this.jsfocusEl;
+            if (target) {
+                textareaElm = target;
+            } else {
+                textareaElm = this.jsfocusEl;
+            }
+            if (textareaElm) {
+                var scrollPos = textareaElm.scrollTop;
+                restoreSelection(Variable.selection);
+                updateElementAtCursor(textareaElm, value);
+                textareaElm.focus();
+                textareaElm.scrollTop = scrollPos;
+                textareaElm = null;
+            }
+            this.jsfocusEl = null;
+            return;
+        },
+        'insertTo': function(e) {
+            this.jsfocusEl = e;
+            //this.range = window.getSelection().getRangeAt(0);
+        },
+        'initMenu': function() {
+            var item = {};
+            Variable.menu_main_data = []; //reset vars data
+            Variable.menu_item_data = []; //reset vars data
+            if (Variable.menu_customer.main === undefined)
+                return;
+            if (Variable.menu_item.main === undefined)
+                return;
+            //menu var main
+            //customer group label
+            var cus_group = {
+                "Customer Variables:": {//label group
+                    'onclick': function(menuItem, menu) {
+                    },
+                    'disabled': true,
+                    'className': 'cus-name-group context-menu-name-group',
+                    'hoverClassName': 'cus-name-group-hover context-menu-name-group-hover',
+                    'title': 'Customer'
+                }
+            };
+            Variable.menu_main_data.push(cus_group);
+            //add items customer vars
+            for (var i = 0; i < Variable.menu_customer.main.length; i++) {
+                var label = Variable.menu_customer.main[i].label;
+                var value = Variable.menu_customer.main[i].value;
+                item = {};
+                item[label] = {
+                    'onclick': function(menuItem, menu, evt) {
+                        Variable.insertVariable(menuItem.title);
+                    },
+                    'className': 'menu-item',
+                    'hoverClassName': 'menu-item-hover',
+                    'title': value
+                };
+                Variable.menu_main_data.push(item);
+            }
+            //add more btn customer vars
+            Variable.menu_main_data.push({
+                'more variables ...': {
+                    'onclick': function(menuItem, menu, e) {
+                        var items = pushMore(Variable.menu_customer.more);
+                        for (var i = 0; i < items.length; i++) {
+                            $(menuItem).before(items[i]);
+                        }
+                        $(menuItem).hide();
+                        e.stopPropagation();
+                    },
+                    //disabled: true,
+                    'className': 'context-menu-add-more',
+                    'hoverClassName': 'context-menu-add-more-hover',
+                    'title': 'insert more'
+                }
+            });
+            //main var group label
+            var main_group = {};
+            main_group[Variable.print_name + ' Variables:'] = {//label group
+                'onclick': function(menuItem, menu, e) {
+                    e.stopPropagation();
+                },
+                'className': 'main-name-group context-menu-name-group',
+                'hoverClassName': 'main-name-group-hover context-menu-name-group-hover',
+                'title': 'Customer'
+            };
+            Variable.menu_main_data.push(main_group);
+            //add items menu of printype vars
+            for (var i = 0; i < Variable.menu_printype.main.length; i++) {
+                var label = Variable.menu_printype.main[i].label;
+                var value = Variable.menu_printype.main[i].value;
+                item = {};
+                item[label] = {
+                    'onclick': function(menuItem, menu) {
+                        Variable.insertVariable(menuItem.title);
+                    },
+                    'className': 'menu-item',
+                    'hoverClassName': 'menu-item-hover',
+                    'title': value
+                };
+                Variable.menu_main_data.push(item);
+            }
+            //add more btn of menu printype vars
+            Variable.menu_main_data.push({
+                'more variables ...': {
+                    'onclick': function(menuItem, menu, e) {
+                        var items = pushMore(Variable.menu_printype.more);
+                        for (var i = 0; i < items.length; i++) {
+                            $(menuItem).before(items[i]);
+                        }
+                        $(menuItem).hide();
+                        e.stopPropagation();
+                    },
+                    'className': 'context-menu-add-more',
+                    'hoverClassName': 'context-menu-add-more-hover',
+                    'title': 'insert more'
+                }
+            });
+            //build main menu
+            $("[contextmenu-type=main]").contextMenu(Variable.menu_main_data,
+                    {
+                        'showSpeed': 0, 'hideSpeed': 0,
+                        showCallback: function() {
+                            Variable.selection = saveSelection();
+                            Variable.isInserting = true;
+                        },
+                        hideCallback: function() {
+                            $('.context-menu-item-more').remove();
+                            //$('.context-menu-add-more').remove();
+                            Variable.isInserting = false;
+                        },
+                        beforeShow: function() {
+                            //check has focus
+                            if (!Variable.jsfocusEl) {
+                                return false;
+                            }
+                            //hide menu
+                            $('.context-menu').closest('table').hide();
+                            //hide contextmenu shadow
+                            $('div.context-menu-shadow').hide();
+                            //Variable.insertTo($(this.target).get(0));
+                            $('.context-menu-add-more').show();
+//                            if ($('.context-menu-add-more').length <= 0) {
+//                                var $morebtn = getMoreButton(Variable.menu_main_var.more);
+//                                $('.' + this.className).append($morebtn);
+//                            }
+                            $('.' + this.className).disableSelection();
+                        }
+                    }
+            );
+            //######################################
+            //menu var item group label
+            var item_group = {};
+            item_group[Variable.print_name + ' Items Variables:'] = {//label group
+                'onclick': function(menuItem, menu, e) {
+                    e.stopPropagation();
+                },
+                'disabled': true,
+                'className': 'item-name-group context-menu-name-group',
+                'hoverClassName': 'item-name-group-hover context-menu-name-group-hover',
+                'title': 'Items variables'
+            };
+            Variable.menu_item_data.push(item_group);
+            //menu var item
+            for (var i = 0; i < Variable.menu_item.main.length; i++) {
+                var label = Variable.menu_item.main[i].label;
+                var value = Variable.menu_item.main[i].value;
+                item = {};
+                item[label] = {onclick: function(menuItem, menu) {
+                        Variable.insertVariable(menuItem.title);
+                    },
+                    'className': 'menu-item',
+                    'hoverClassName': 'menu-item-hover',
+                    'title': value
+                };
+                Variable.menu_item_data.push(item);
+            }
+            //add more btn of menu items vars
+            Variable.menu_item_data.push({
+                'more variables ...': {
+                    'onclick': function(menuItem, menu, e) {
+                        var items = pushMore(Variable.menu_item.more);
+                        for (var i = 0; i < items.length; i++) {
+                            $(menuItem).before(items[i]);
+                        }
+                        $(menuItem).hide();
+                        e.stopPropagation();
+                    },
+                    'className': 'context-menu-add-more',
+                    'hoverClassName': 'context-menu-add-more-hover',
+                    'title': 'insert more'
+                }
+            });
+            $("[contextmenu-type=item]").contextMenu(Variable.menu_item_data,
+                    {
+                        'showSpeed': 0, 'hideSpeed': 0,
+                        showCallback: function() {
+                            Variable.selection = saveSelection();
+                            Variable.isInserting = true;
+                        },
+                        hideCallback: function() {
+                            $('.context-menu-item-more').remove();
+                            $('.context-menu-add-more').hide();
+                            Variable.isInserting = false;
+                        },
+                        beforeShow: function() {
+                            //check has focus
+                            if (!Variable.jsfocusEl) {
+                                return false;
+                            }
+                            //hide menu
+                            $('.context-menu').closest('table').hide();
+                            //hide contextmenu shadow
+                            $('div.context-menu-shadow').hide();
+                            //Variable.insertTo($(this.target).get(0));
+                            $('.context-menu-add-more').show();
+//                            if ($('.context-menu-add-more').length <= 0) {
+//                                var $morebtn = getMoreButton(Variable.menu_item_var.more);
+//                                $('.' + this.className).append($morebtn);
+//                            }
+                            $('.' + this.className).disableSelection();
+                        }
+                    }
+            );
+
+            //function helper
+            var getMoreButton = function(more) {
+                var $more_item = $('<div>', {
+                    'title': "insert more",
+                    'class': "context-menu-add-more"
+                }).text('more variable ...')
+                        .click(function(event) {
+                            var items = pushMore(more);
+                            for (var i = 0; i < items.length; i++) {
+                                $(this).before(items[i]);
+                            }
+                            $(this).remove();
+                            event.stopPropagation();
+                        }).hover(function() {
+                    $(this).addClass('context-menu-add-more-hover');
+                }, function() {
+                    $(this).removeClass('context-menu-add-more-hover');
+                });
+                return $more_item;
+            };
+
+            var pushMore = function(more) {
+                var item = [];
+                for (var i = 0; i < more.length; i++) {
+                    var value = more[i].value;
+                    var $jItem = $('<div>', {'title': value, 'class': 'context-menu-item context-menu-item-more menu-item'});
+                    $jItem.append($('<div>', {'class': 'context-menu-item-inner'}).text(more[i].label));
+                    $jItem.hover(function() {
+                        $(this).addClass('menu-item-hover');
+                    }, function() {
+                        $(this).removeClass('menu-item-hover');
+                    });
+                    $jItem.click(function() {
+                        Variable.insertVariable(this.title);
+                    });
+                    item.push($jItem);
+                }
+                return item;
+            };
+
+        }
+    };
+    //funtions
+    function getMouseEventCaretRange(evt) {
+        var range, x = evt.clientX, y = evt.clientY;
+        // Try the simple IE way first
+        if (document.body.createTextRange) {
+            range = document.body.createTextRange();
+            if (range.moveToPoint) {
+                range.moveToPoint(x, y);
+            }
+        }
+        else if (typeof document.createRange != "undefined") {
+            // Try Mozilla's rangeOffset and rangeParent properties, which are exactly what we want
+            if (typeof evt.rangeParent != "undefined") {
+                range = document.createRange();
+                range.setStart(evt.rangeParent, evt.rangeOffset);
+                range.collapse(true);
+            }
+            // Try the standards-based way next
+            else if (document.caretPositionFromPoint) {
+                var pos = document.caretPositionFromPoint(x, y);
+                range = document.createRange();
+                range.setStart(pos.offsetNode, pos.offset);
+                range.collapse(true);
+            }
+            // Next, the WebKit way
+            else if (document.caretRangeFromPoint) {
+                range = document.caretRangeFromPoint(x, y);
+            }
+        }
+
+        return range;
+    }
+
+    function selectRange(range) {
+        if (range) {
+            if (typeof range.select != "undefined") {
+                range.select();
+            } else if (typeof window.getSelection != "undefined") {
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+    }
+    // Insert some content to the cursor position of input element
+    function updateElementAtCursor(el, value) {
+        if (
+                $(el).prop("tagName") != 'INPUT' //not input
+                && $(el).prop("tagName") != 'TEXTAREA' //not textarea
+                && $(el).closest('[contenteditable=true]').length //must is contenteditable true
+                ) {
+            var sel = window.getSelection();
+            var text = value;
+            if (sel.rangeCount > 0) {
+                var range = sel.getRangeAt(0);
+                var startNode = range.startContainer, startOffset = range.startOffset;
+                var boundaryRange = range.cloneRange();
+                var textNode = document.createTextNode(text);
+                boundaryRange.deleteContents();
+                boundaryRange.setStart(startNode, startOffset);
+                boundaryRange.collapse(true);
+                boundaryRange.insertNode(textNode);
+                // Reselect the original text
+                range.setStartBefore(textNode);
+                range.setEndAfter(textNode);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        } else if (el.selectionStart || el.selectionStart == '0') {
+            var startPos = el.selectionStart;
+            var endPos = el.selectionEnd;
+            el.value = el.value.substring(0, startPos) + value + el.value.substring(endPos, el.value.length);
+        } else {
+            el.value += value;
+        }
+        el.selectionStart = el.selectionEnd += value.length;
+    }
+
+    function saveSelection() {
+        if (window.getSelection) {
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                return sel.getRangeAt(0);
+            }
+        } else if (document.selection && document.selection.createRange) {
+            return document.selection.createRange();
+        }
+        return null;
+    }
+
+    function restoreSelection(range) {
+        if (range) {
+            if (window.getSelection) {
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else if (document.selection && range.select) {
+                range.select();
+            }
+        }
+    }
+
+    function reCalcPercentTable(select) {
+        var $table = $(select);
+        var wid = 0;// = parseInt($table.width());
+        var $headCell;
+        if ($table.find('tr:first th').length) {
+            $headCell = $table.find('tr:first th');
+        } else {
+            $headCell = $table.find('tr:first td');
+        }
+        //calc total width
+        $headCell.each(function() {
+            var _this = $(this);
+            wid += parseInt(_this.outerWidth());
+        });
+        //reset cell width
+        $headCell.each(function() {
+            var _this = $(this);
+            _this.width(parseInt(_this.outerWidth()) / wid * 100 + "%");
+        });
+        //reset cell controll width
+        synGripTable(select);
+        //reset table width
+        //$table.css('width', '100%');
+    }
+
+    function synGripTable(e) {
+        var b = parseInt($(e).css('border-spacing')) || 2;
+        var gc = $(e + '-CRC');
+        var t = $(e), headerOnly = false;
+        gc.width(t.width());
+        for (var i = 0; i < t.find('tr:first').children().length; i++) {
+            var c = t.find('tr:first').children().eq(i);
+            gc.children().eq(i).css({
+                left: c.offset().left - t.offset().left + c.outerWidth() + b / 2 + 'px',
+                height: headerOnly ? t.find('tr:first').children().eq(0).outerHeight() : t.outerHeight()
+            });
+        }
+    }
+
+
+    /******************/
+
+
+    $(document).ready(function() {
+
+        $(".autogrow").editable(function(value, settings) {
+            return value;
+        }, {
+            'indicator': "<img src='<?php echo $this->getSkinUrl(); ?>css/magestore/pdfinvoiceplus/images/indicator.gif'>",
+            'type': "autogrow",
+            'event': "dblclick",
+            'submit': 'Ok',
+            'cancel': 'Cancel',
+            'tooltip': "Click to edit...",
+            'placeholder': '',
+            'onblur': "ignore"
+        });
+        $(document).on('autogrow_before', function() {
+
+        });
+
+        $(".ajaxupload").editable("<?php echo $ajaxUploadUrl; ?>", {
+            'indicator': '<img src="<?php echo $this->getSkinUrl(); ?>css/magestore/pdfinvoiceplus/images/indicator.gif"/>',
+            'type': 'ajaxupload',
+            'submit': 'Upload',
+            'cancel': 'Cancel',
+            'tooltip': "Click to upload...",
+            'id': "insert-logo",
+            'name': "insert-logo",
+            'cssclass': "insert-logo",
+            'placeholder': '<div class="logo-ui control-ui">Insert your logo here<div>',
+            'oncreated': function(e, opt) {
+                //check view port
+                var form = $(e).find('form');
+                var offsetXLeft = form.offset().left + form.width();
+                if (offsetXLeft > $(window).width()) {
+                    var left = parseInt(form.css('margin-left'));
+                    form.css('margin-left', left - offsetXLeft + $(window).width() - 20);
+                } else if (form.offset().left < 0) {
+                    form.css('margin-left', 10);
+                }
+            }
+        });
+
+        $(".changebackground").editable("<?php echo $changeBackgroundUrl; ?>", {
+            'indicator': '<?php echo $this->getSkinUrl(); ?>css/magestore/pdfinvoiceplus/images/indicator.gif',
+            'type': 'ajaxupload',
+            'submit': 'Upload',
+            'cancel': 'Cancel',
+            'tooltip': "Click to upload...",
+            'name': "change-background",
+            'id': 'change-background',
+            'placeholder': ''
+        });
+
+
+        //insert block
+        $("#insertblock").toggle(function() {
+            $(this).addClass('insertblock-active');
+            $('#container-html').click(insertBlock).css('cursor', 'text');
+        }, function() {
+            $(this).removeClass('insertblock-active');
+            $('#container-html').unbind('click', insertBlock).css('cursor', 'initial');
+        });
+
+        //click editable div
+        //$('.editable').ieditable(); //make editable every tag have class name editable
+
+        MyTable.init('table-item');
+
+        Variable.init();
+
+        $('#container-html').on('add_block_after', function(event, $newBlock, timeNow) {
+            $newBlock.attr('contextmenu-type', "main");
+            $newBlock.resizable({
+                //'containment': "parent",
+                'handles': {
+                    's': $('#s_handle_block_' + timeNow).get(0),
+                    'e': $('#e_handle_block_' + timeNow).get(0),
+                    'se': $('#se_handle_block_' + timeNow).get(0)
+                },
+                'minWidth': 100,
+                'minHeight': 16,
+                create: function() {
+                    $(this).addClass('new-block').width(200).height("auto");
+                    $($(this)[0]).children('.ui-resizable-handle').mouseover(function(el) {
+                        var parent = $(el.target).parent().parent();
+                        parent.css('height', parent.height() + "px");
+                    });
+                },
+                stop: px2percent
+            });
+            Variable.initMenu();
+        });
+
+        //convert px width table to percent
+        //table2percent('#table-item');
+
+        //make editable for table
+        $('th[contenteditable=true], td[contenteditable=true], th.contenteditable, td.contenteditable').editContent();
+        //fix conflic contenteditable
+        $('.contenteditable').not('th,td').attr('contenteditable', 'true');
+        //for new dom add
+//        $(document).bind("DOMNodeInserted", function(e) {
+//            var newEle = e.target;
+//            if (($(newEle).prop('tagName') == 'TH' || $(newEle).prop('tagName') == 'TD') && $(newEle).hasClass('contenteditable')) {
+//                //console.log(newEle);        
+//                $(newEle).editContent();
+//            }
+//        });
+        //var tooltip text
+        tooltipText = '<?php echo $this->__('Hold to move!') ?>';
+    });
+
+</script>

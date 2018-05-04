@@ -1,0 +1,468 @@
+<?xml version="1.0"?>
+<config>
+    <!--tabs>
+        <geissweb translate="label" module="euvatgrouper">
+            <label>Geissweb</label>
+            <sort_order>350</sort_order>
+        </geissweb>
+    </tabs-->
+    <sections>
+        <euvatgrouper translate="label" module="euvatgrouper">
+            <tab>sales</tab>
+            <label>EU VAT Enhanced</label>
+            <sort_order>304</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <extension_info translate="label">
+                    <label>Extension Info</label>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <fields>
+                        <notice translate="label">
+                            <label>Informations</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>euvatgrouper/system_info</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notice>
+                        <license_key translate="label,comment">
+                            <label>License Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>You can find your license keys <![CDATA[<a href="https://www.geissweb.de/customer/account/" target="_blank">here</a>]]>.</comment>
+                        </license_key>
+                        <debug_mode translate="label,comment">
+                            <label>Debug mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Logs all module relevant information to /var/log/euvatenhanced.log - Note: This could produce a large log file in a short time.</comment>
+                        </debug_mode>
+                        <ipv6_mode>
+                            <label>IPv6 compatibility mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>This binds your server IPv4 address to the request made to VIES instead of using your IPv6 address. You might need to enable this depending on your hosting environment. Enable it if you have problems with VIES connectivity.</comment>
+                        </ipv6_mode>
+                        <ipv4_addr>
+                            <label>Server IPv4 address</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <depends><ipv6_mode>1</ipv6_mode></depends>
+                            <comment>Your IPv4 server address (example: 192.168.100.10)</comment>
+                        </ipv4_addr>
+                        <osc_integration>
+                            <label>Onestep Checkout Integration</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_oscintegration</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>40</sort_order>
+                            <comment>If you use a OSC extension, please select it here. Totals will then reload after a VAT number was validated.</comment>
+                        </osc_integration>
+                        <show_address_on_regpage>
+                            <label>Enable address fields on registration page</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Show the customer address fields on the registration page.</comment>
+                        </show_address_on_regpage>
+                    </fields>
+                </extension_info>
+                <vat_settings translate="label" module="euvatgrouper">
+                    <label>EU VAT Settings</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <validate_vatid translate="label,comment">
+                            <label>Enable EU VAT Enhanced</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Enables VAT validaton and calculation and customer group assignment based on validation results</comment>
+                        </validate_vatid>
+                        <own_vatid translate="label,comment">
+                            <label>Own VAT-ID *</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-alphanum validate-one-required</validate>
+                            <comment>Please enter your own VAT-ID including the 2-letter country code.</comment>
+                        </own_vatid>
+
+                        <tax_class_including_business>
+                            <label>Businesses tax class including tax</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_customertaxclass</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select the business consumer tax class which is used in the tax rule where you have assigned your full tax rates to.</comment>
+                        </tax_class_including_business>
+                        <tax_class_including>
+                            <label>Consumer tax class including tax</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_customertaxclass</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select the consumer tax class which is used in the tax rule where you have assigned your full tax rates to.</comment>
+                        </tax_class_including>
+                        <tax_class_excluding>
+                            <label>Customer tax class tax exempt</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_customertaxclass</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select the customer tax class which is used in the tax rule where you have assigned your 0% tax rates to.</comment>
+                        </tax_class_excluding>
+
+                        <offline_validation translate="label,comment">
+                            <label>Offline Validation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>If EU-VIES is offline, do you want to allow your customers to purchase VAT exempt, when they declare a VAT Number? The Numbers will only be validated wether the syntax is correct (see <![CDATA[<a href="http://ec.europa.eu/taxation_customs/vies/faq.html#item_11" target="_blank">link</a>]]>) NOT if the number is really valid.</comment>
+                        </offline_validation>
+                        <require_valid_number_to_checkout>
+                            <label>Require valid VAT number to checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_requirevalid</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Customers can only checkout with a valid VAT number if this option is enabled. Frontend only: Javascript check, Server only: PHP check.</comment>
+                        </require_valid_number_to_checkout>
+                        <autovalidate_on_each_login>
+                            <label>Validate VAT number on each customer login</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </autovalidate_on_each_login>
+                        <autovalidate_period>
+                            <label>Validation period on customer login</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_validationperiod</source_model>
+                            <depends>
+                                <autovalidate_on_each_login>1</autovalidate_on_each_login>
+                            </depends>
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </autovalidate_period>
+                        <takeover_vat_to_account>
+                            <label>Takeover used VAT number at checkout to customers account</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>18</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Will take the VAT number from the checkout address and saves it as customer account VAT number (field taxvat).</comment>
+                        </takeover_vat_to_account>
+                        <threshold_countries>
+                            <label>Threshold Countires</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_eucountries</source_model>
+                            <sort_order>19</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select the countries, where you have exceeded the threshold. These will be considered as the base country of the shop, for taxation.</comment>
+                        </threshold_countries>
+                        <disable_cbt_eub2b>
+                            <label>Disable Cross-Border price consistency for EU customers with valid VAT number</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Order totals will be net (without VAT) instead gross for these customers. Works only when CBT is enabled (from Magento 1.9).</comment>
+                        </disable_cbt_eub2b>
+                        <disable_cbt_noneu>
+                            <label>Disable Cross-Border price consistency for customers outside europe</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Order totals will be net (without VAT) instead gross for these customers. Works only when CBT is enabled (from Magento 1.9).</comment>
+                        </disable_cbt_noneu>
+                        <excluded_groups_taxcalc>
+                            <label>Excluded groups for tax calculation</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The selected groups will be excluded from tax calculation. No tax will be applied to these groups, even if there is no VAT number or the shipping country is domestic.</comment>
+                        </excluded_groups_taxcalc>
+                        <regular_tax_groups>
+                            <label>Groups which follow regular Magento tax calculation</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>For example if you need to apply further tax rules for customers, like equivalence tax in Spain.</comment>
+                        </regular_tax_groups>
+                    </fields>
+                </vat_settings>
+                <moss_settings>
+                    <label>MOSS Settings</label>
+                    <sort_order>15</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <use_moss_based_on_vat_number translate="label,comment">
+                            <label>Use VAT number country prefix for tax calculation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Uses the VAT number country prefix instead of the address country</comment>
+                        </use_moss_based_on_vat_number>
+                        <digital_products_class_id translate="label,comment">
+                            <label>Tax Class Id for Digital Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>euvatgrouper/system_config_source_producttaxclass</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>For telecommunication services; television and radio broadcasting services; electronically supplied services</comment>
+                            <depends><use_moss_based_on_vat_number>1</use_moss_based_on_vat_number></depends>
+                        </digital_products_class_id>
+                    </fields>
+                </moss_settings>
+                <group_assignment translate="label" module="euvatgrouper">
+                    <label>Group Assignment Settings</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <info>
+                            <label>Group assignment info</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>euvatgrouper/system_help_group</frontend_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </info>
+                        <target_group translate="label,comment">
+                            <label>Customer group for business customers inside EU with valid VAT-ID</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Set the desired customer group of EU business customers with valid VAT-ID.</comment>
+                        </target_group>
+                        <target_group_same_cc translate="label,comment">
+                            <label>Customer group for business customers (with valid VAT-ID) from own country</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Set the desired B2B customer group of customers from your own country.</comment>
+                        </target_group_same_cc>
+                        <target_group_outside translate="label,comment">
+                            <label>Customer Group for customers outside EU</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Set the desired customer group of foreign customers outside the EU.</comment>
+                        </target_group_outside>
+                        <target_group_invalid translate="label,comment">
+                            <label>Customer Group for invalid VAT numbers</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Set the desired group for customers who used an invalid VAT number (validated through the interface).</comment>
+                        </target_group_invalid>
+                        <target_group_errors translate="label,comment">
+                            <label>Customer group for customers with technical validation errors</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Customers will be assigned to this group, if the interface did not respond due to maintenance or connection errors.</comment>
+                        </target_group_errors>
+                        <sync_customer_group_with_order_group>
+                            <label>Set the customer group of the customer account according the checkout situation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>This will update the customers account group according the order address and validation data</comment>
+                        </sync_customer_group_with_order_group>
+                        <modify_order_group>
+                            <label>Set the customer group on orders according the checkout situation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>If enabled, customer group on orders will be set to the checkout situation. If disabled, customer group on orders will be the same as the customer account. Note that guest customers do not have a customer group.</comment>
+                        </modify_order_group>
+                        <force_general_on_vat>
+                            <label>Force default customer group when VAT was applied</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>This can be useful if your external accounting software is using the customer group to determine if VAT is applied instead of taking the actual totals of the order.</comment>
+                            <depends><modify_order_group>1</modify_order_group></depends>
+                        </force_general_on_vat>
+                        <excluded_groups>
+                            <label>Excluded Groups</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The selected groups will be excluded from the automatic group assignment after each VAT number validation. Use this for special discount groups for EU business customers or to lock customers in these groups.</comment>
+                        </excluded_groups>
+                    </fields>
+                </group_assignment>
+
+                <!--
+                <integration>
+                    <label>Further integration settings</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <price_product translate="label,comment">
+                            <label>Display only single price (product pages)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>When both prices (excl. and incl.) are shown for product pages, only show a single price (excl.) when customers tax class is without tax.</comment>
+                        </price_product>
+                        <price_cart translate="label,comment">
+                            <label>Display only single price (cart)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>When both prices (excl. and incl.) are shown at cart, only show a single price (excl.) when customers tax class is without tax.</comment>
+                        </price_cart>
+                    </fields>
+                </integration>
+                -->
+                <email_settings>
+                    <label>Email Settings</label>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <send_mail translate="label,comment">
+                            <label>Send validation Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Whether to send an email with details after successful VAT-ID validation (Frontend or Backend)</comment>
+                        </send_mail>
+                        <mail_sender translate="label,comment">
+                            <label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mail_sender>
+                        <mail_recipient translate="label,comment">
+                            <label>Email Recipient</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <!--<validate>validate-one-required</validate>-->
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mail_recipient>
+                        <mail_template translate="label,comment">
+                            <label>Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mail_template>
+                    </fields>
+                </email_settings>
+            </groups>
+        </euvatgrouper>
+    </sections>
+</config>

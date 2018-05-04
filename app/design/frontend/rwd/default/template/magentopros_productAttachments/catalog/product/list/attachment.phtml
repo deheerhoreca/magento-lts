@@ -1,0 +1,22 @@
+<?php
+
+
+/** @see Magentopros_ProductAttachments_Block_Catalog_Product_List_Attachment */
+?>
+<?php
+$attachments = $this->getAttachmentCollection();
+$helper = Mage::helper('magentopros_productAttachments/attachment');
+?>
+<?php if ($attachments && $attachments->count() > 0) :?>
+<div class="box-collateral box-attachments box-up-sell">
+    <?php foreach ($attachments as $_attachment) : ?>
+        <div class="item">
+            <?php $_fileSize = $helper->getFileSize($_attachment->getAttachmentPath()); ?>
+            <?php echo $_attachment->getIcon(); ?>
+            <a href="<?php echo $_attachment->getAttachmentUrl(); ?>"><?php echo $_attachment->getTitle()?></a>
+            <?php echo $this->__('Size: (' .$_fileSize  . ')'); ?>
+            <br />
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php endif;?>

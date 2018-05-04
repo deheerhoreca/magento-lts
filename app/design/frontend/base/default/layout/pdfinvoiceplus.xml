@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_Pdfinvoiceplus
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <default>
+        <!-- update layout for all frontend page -->
+        <reference name="head">
+            <action method="addJs">
+                <script>prototype/prototype.js</script>
+            </action>
+        </reference>
+    </default>
+    <pdfinvoiceplus_index_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>prototype/prototype.js</script>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="pdfinvoiceplus/pdfinvoiceplus" name="pdfinvoiceplus" template="pdfinvoiceplus/pdfinvoiceplus.phtml" />
+        </reference>
+    </pdfinvoiceplus_index_index>
+        <sales_order_invoice translate="label">
+        <reference name="head">
+            <action method="addJs">
+                <script>prototype/prototype.js</script>
+            </action>
+        </reference>
+        <label>Customer My Account Order Invoice View</label>
+        <reference name="my.account.wrapper">
+            <block type="sales/order_invoice" name="sales.order.invoice">
+                <block type="sales/order_invoice_items" name="invoice_items" template="pdfinvoiceplus/sales/order/invoice/items.phtml">
+                    <action method="addItemRender"><type>default</type><block>sales/order_item_renderer_default</block><template>sales/order/invoice/items/renderer/default.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>sales/order_item_renderer_grouped</block><template>sales/order/invoice/items/renderer/default.phtml</template></action>
+                    <block type="sales/order_invoice_totals" name="invoice_totals" template="sales/order/totals.phtml">
+                        <action method="setLabelProperties"><value>colspan="4" class="a-right"</value></action>
+                        <action method="setValueProperties"><value>class="last a-right"</value></action>
+                        <block type="tax/sales_order_tax" name="tax" template="tax/order/tax.phtml" />
+                    </block>
+                    <block type="sales/order_comments" name="invoice_comments" template="sales/order/comments.phtml" />
+                </block>
+            </block>
+        </reference>
+    </sales_order_invoice>
+    
+    
+    <sales_order_creditmemo translate="label">
+        <label>Customer My Account Order Creditmemo View</label>
+        <reference name="my.account.wrapper">
+            <block type="sales/order_info" as="info" name="sales.order.info">
+                <block type="sales/order_info_buttons" as="buttons" name="sales.order.info.buttons" />
+            </block>
+            <block type="sales/order_creditmemo" name="sales.order.creditmemo">
+                <block type="sales/order_creditmemo_items" name="creditmemo_items" template="pdfinvoiceplus/sales/order/creditmemo/items.phtml">
+                    <action method="addItemRender"><type>default</type><block>sales/order_item_renderer_default</block><template>sales/order/creditmemo/items/renderer/default.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>sales/order_item_renderer_grouped</block><template>sales/order/creditmemo/items/renderer/default.phtml</template></action>
+                    <block type="sales/order_creditmemo_totals" name="creditmemo_totals" template="sales/order/totals.phtml">
+                        <action method="setLabelProperties"><value>colspan="6" class="a-right"</value></action>
+                        <action method="setValueProperties"><value>class="a-right"</value></action>
+                        <block type="tax/sales_order_tax" name="tax" template="tax/order/tax.phtml"/>
+                    </block>
+                    <block type="sales/order_comments" name="creditmemo_comments" template="sales/order/comments.phtml" />
+                </block>
+            </block>
+        </reference>
+        <reference name="sales.order.info">
+            <action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
+            <action method="addLink" translate="label" module="sales"><name>invoice</name><path>*/*/invoice</path><label>Invoices</label></action>
+            <action method="addLink" translate="label" module="sales"><name>shipment</name><path>*/*/shipment</path><label>Shipments</label></action>
+            <action method="addLink" translate="label" module="sales"><name>creditmemo</name><path></path><label>Refunds</label></action>
+        </reference>
+        <block type="core/text_list" name="additional.product.info" />
+    </sales_order_creditmemo>
+	
+	<sales_order_shipment>
+        <update handle="customer_account"/>
+        <reference name="content">
+             <block type="sales/order_info" as="info" name="sales.order.info">
+                <block type="sales/order_info_buttons" as="buttons" name="sales.order.info.buttons" />
+            </block>
+            <block type="sales/order_shipment" name="sales.order.shipment">
+                <block type="sales/order_shipment_items" name="shipment_items" template="pdfinvoiceplus/sales/order/shipment/items.phtml">
+                    <action method="addItemRender"><type>default</type><block>sales/order_item_renderer_default</block><template>sales/order/shipment/items/renderer/default.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>sales/order_item_renderer_grouped</block><template>sales/order/shipment/items/renderer/default.phtml</template></action>
+                    <block type="sales/order_shipment_totals" name="shipment_totals" template="sales/order/totals.phtml">
+                        <action method="setLabelProperties"><value>colspan="6" class="a-right"</value></action>
+                        <action method="setValueProperties"><value>class="a-right"</value></action>
+                        <block type="tax/sales_order_tax" name="tax" template="tax/order/tax.phtml"/>
+                    </block>
+                    <block type="sales/order_comments" name="shipment_comments" template="sales/order/comments.phtml" />
+                </block>
+            </block>
+        </reference>
+
+        <reference name="sales.order.info">
+            <action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
+            <action method="addLink" translate="label" module="sales"><name>invoice</name><path>*/*/invoice</path><label>Invoices</label></action>
+            <action method="addLink" translate="label" module="sales"><name>shipment</name><path></path><label>Shipments</label></action>
+            <action method="addLink" translate="label" module="sales"><name>creditmemo</name><path>*/*/creditmemo</path><label>Refunds</label></action>
+        </reference>
+    </sales_order_shipment>
+</layout>

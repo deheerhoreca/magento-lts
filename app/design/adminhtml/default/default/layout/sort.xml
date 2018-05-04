@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+        	<action method="addItem">
+	        	<type>skin_css</type>
+	            <name>css/sort.css</name>
+	        </action>    	
+			<action method="addItem">
+	        	<type>skin_js</type>
+	            <name>js/jquery-1.11.0.min.js</name>
+	        </action>
+        	<action method="addItem">
+	        	<type>skin_js</type>
+	            <name>js/jquery-ui-1.10.4.custom.min.js</name>
+	        </action>
+	        <action method="addItem">
+	        	<type>skin_js</type>
+	            <name>js/sort.js</name>
+	        </action>
+        </reference>
+    </default>
+</layout>

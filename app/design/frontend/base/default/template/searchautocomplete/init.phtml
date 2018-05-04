@@ -1,0 +1,63 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This software is designed to work with Magento community edition and
+ * its use on an edition other than specified is prohibited. aheadWorks does not
+ * provide extension support in case of incorrect edition use.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Searchautocomplete
+ * @version    3.4.8
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?><div class="yui-ac">
+    <div id="myContainer" class="search-autocomplete yui-ac-container" style="display: none;">
+        <div class="yui-ac-content">
+            <div class="yui-ac-hd" >
+                <?php echo $this->getUpdateChoicesElementHeader() ?>
+            </div>
+            <div class="yui-ac-bd" id="sac-suggest"></div>
+            <div class="yui-ac-bd" id="sac-results"></div>
+            <div class="yui-ac-ft">
+                <?php echo $this->getUpdateChoicesElementFooter() ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    var awSacInstance = new AWSearchautocomplete({
+        targetElementSelector: "#search",
+        updateChoicesContainerSelector: "#myContainer",
+        updateChoicesElementSelector: "#sac-results",
+        updateSuggestListSelector: "#sac-suggest",
+        nativeSearchUpdateChoicesElementSelector: "#search_autocomplete",
+
+        queryParam: <?php echo $this->getQueryParamKey() ?>,
+        newHTMLIdForTargetElement: 'myInput',
+
+        url: <?php echo $this->getSearchUrl(); ?>,
+        queryDelay: <?php echo $this->getQueryDelay() ?>,
+        openInNewWindow: <?php echo $this->getIsOpenInNewWindow()?>,
+        indicatorImage: <?php echo $this->getIndicatorImage() ?>
+    });
+
+    Event.observe(window, "resize", function(){
+        awSacInstance.updateAutocompletePosition();
+    });
+//]]>
+</script>

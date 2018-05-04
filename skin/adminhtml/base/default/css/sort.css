@@ -1,0 +1,8 @@
+/**
+* Sort styles
+*/
+
+tbody.ui-sortable tr td img.handle { cursor:move; }
+tbody.ui-sortable tr td.highlight { background:#fff7e3; border-top:1px solid #dadfe0; }
+tbody.ui-sortable tr td.highlight:first-child,
+tbody.ui-sortable tr td.highlight:last-child { border-left:1px solid #dadfe0; }
