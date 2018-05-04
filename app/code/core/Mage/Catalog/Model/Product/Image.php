@@ -31,7 +31,6 @@
  * @package    Mage_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-error_reporting(0);
 class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
 {
     protected $_width;
