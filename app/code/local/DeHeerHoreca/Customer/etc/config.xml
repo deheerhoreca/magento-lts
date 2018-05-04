@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <DeHeerHoreca_Customer>
+            <version>0.1</version>
+        </DeHeerHoreca_Customer>
+    </modules>
+    <global>
+       <models>
+          <customer>
+              <rewrite>
+                  <customer>DeHeerHoreca_Customer_Model_Customer</customer>
+              </rewrite>
+          </customer>
+       </models>
+    </global>
+</config>
