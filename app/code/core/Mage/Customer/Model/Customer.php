@@ -876,26 +876,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
             $errors[] = Mage::helper('customer')
                 ->__('The minimum password length is %s', self::MINIMUM_PASSWORD_LENGTH);
         }
-		
-		//To match passwords in both Create account and Checkout register pages start
-    if ( Mage::app()->getRequest()->getServer('HTTP_REFERER') == Mage::getUrl('customer/account/create') ){
-      $confirmation = $this->getPasswordConfirmation();
-	}
-    else{
-      $confirmation = $this->getConfirmation();
-	}
-    //To match passwords in both Create account and Checkout register pages end
-		
-		
-        //$confirmation = $this->getConfirmation();
-		/*
-				if (isset($_POST['confirmation'])){
-    $confirmation = $_POST['confirmation'];
-		}else{
-    $confirmation = $this->getPasswordConfirmation();
-		}
-	
-		*/
+        $confirmation = $this->getPasswordConfirmation();
         if ($password != $confirmation) {
             $errors[] = Mage::helper('customer')->__('Please make sure your passwords match.');
         }
@@ -941,7 +922,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
 		}else{
     $confirmation = $this->getPasswordConfirmation();
 		}
-	
+
         if ($password != $confirmation) {
             $errors[] = Mage::helper('customer')->__('Please make sure your passwords match.');
         }
