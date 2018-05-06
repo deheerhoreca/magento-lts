@@ -123,12 +123,12 @@ Minicart.prototype = {
 
     displayQuantityButton: function(el) {
         var buttonId = this.selectors.quantityButtonPrefix + $j(el).data('item-id');
-      //  $j(buttonId).addClass('visible').attr('disabled',null);
+        $j(buttonId).addClass('visible').attr('disabled',null);
     },
 
     hideQuantityButton: function(el) {
         var buttonId = this.selectors.quantityButtonPrefix + $j(el).data('item-id');
-      //  $j(buttonId).removeClass('visible').attr('disabled','disabled');
+        $j(buttonId).removeClass('visible').attr('disabled','disabled');
     },
 
     processUpdateQuantity: function(el) {
