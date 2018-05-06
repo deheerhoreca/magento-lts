@@ -1225,8 +1225,14 @@
                         <class>sales/quote_address_total_grand</class>
                         <after>subtotal</after>
                     </grand_total>
-                    <msrp>
+                   <!--
+                   <msrp>
                         <class>sales/quote_address_total_msrp</class>
+                    </msrp>
+                    -->
+          					<msrp>
+                       <class>sales/quote_address_total_msrp</class>
+                       <before>grand_total</before>
                     </msrp>
                 </totals>
                 <nominal_totals>
