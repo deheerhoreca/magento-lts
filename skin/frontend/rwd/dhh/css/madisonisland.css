@@ -29,7 +29,7 @@
  * Primary Banner
  */
 body.cms-home .main-container {
-  padding-top: 20px;
+  padding-top: 10px; /* DHH change */
 }
 body.cms-home .slideshow-container {
   margin-top: 0;
