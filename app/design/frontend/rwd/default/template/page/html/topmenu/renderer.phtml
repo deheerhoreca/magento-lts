@@ -41,7 +41,6 @@ $parentPositionClass = $menuTree->getPositionClass();
 $itemPositionClassPrefix = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
 
 foreach ($children as $child) {
-	
     $child->setLevel($childLevel);
     $child->setIsFirst($counter == 1);
     $child->setIsLast($counter == $childrenCount);
@@ -52,25 +51,8 @@ foreach ($children as $child) {
 
     $html .= '<li '. $this->_getRenderedMenuItemAttributes($child) .'>';
 
-	
-	
-    $html .= '<a href="'. $child->getUrl() .'" class="'. $outermostClassCode .' '. $_hasChildren .'">';
-	if( $childLevel==1){
-	$ctis=str_replace('category-node-','',$child->getId());
-	$categoryxim=Mage::getModel('catalog/category')->load($ctis);
-	$pctimg=$categoryxim->getCategoryIcon();
-	$html .="<img src='//www.prokoeling.nl/media/catalog/category/".$pctimg."' alt=''><span class='mheadttl'>";
-}
-	$html .=$this->escapeHtml($this->__($child->getName()));
+    $html .= '<a href="'. $child->getUrl() .'" class="'. $outermostClassCode .' '. $_hasChildren .'">'. $this->escapeHtml($this->__($child->getName())) .'</a>';
 
-	
-	if($childLevel==1){
-		$html .=' </span></a>';
-	}
-	else{
-		$html .='</a>';
-	}
-	
     if (!empty($childrenWrapClass)) {
         $html .= '<div class="'. $childrenWrapClass .'">';
     }
@@ -78,13 +60,13 @@ foreach ($children as $child) {
     $nextChildLevel = $childLevel + 1;
 
     if (!empty($_hasChildren)) {
-        $html .= '<ul class="level'. $childLevel .'">'; 
-        $html .=     $this->render($child, $childrenWrapClass);
-		   /*    $html .=     '<li class="level'. $nextChildLevel .' view-all">';
+        $html .= '<ul class="level'. $childLevel .'">';
+        $html .=     '<li class="level'. $nextChildLevel .' view-all">';
         $html .=         '<a class="level'. $nextChildLevel .'" href="'. $child->getUrl() .'">';
-        $html .=             '... '.$this->__('alle categorieën') . ' ' ; //$this->escapeHtml($this->__($child->getName()))
+        $html .=             $this->__('View All') . ' ' . $this->escapeHtml($this->__($child->getName()));
         $html .=         '</a>';
-        $html .=     '</li>';*/
+        $html .=     '</li>';
+        $html .=     $this->render($child, $childrenWrapClass);
         $html .= '</ul>';
     }
 

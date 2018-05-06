@@ -31,21 +31,10 @@
  * @var $this Mage_Checkout_Block_Cart
  */
 ?>
-<?php
-// echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_banner')->toHtml(); 
-?>	
-
-<?php 
-$pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionName();
-if($pageIdentifier=='checkout_cart_index'){
-	
-}
-
-$_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both-prices' : 'display-single-price'; ?>
+<?php $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both-prices' : 'display-single-price'; ?>
 <div class="cart <?php echo $_priceDisplay; ?>">
-
- <div class="page-title title-buttons">
-        <h1 class="shpcarttitles"><?php echo $this->__('Shopping Cart') ?></h1>
+    <div class="page-title title-buttons">
+        <h1><?php echo $this->__('Shopping Cart') ?></h1>
         <?php if(!$this->hasError()): ?>
         <ul class="checkout-types top">
         <?php foreach ($this->getMethods('top_methods') as $method): ?>
@@ -56,11 +45,7 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
         </ul>
         <?php endif; ?>
     </div>
-
-  <?php echo $this->getMessagesBlock()->toHtml() ?>
-<div class="pgcrtleft">
-   
-  
+    <?php echo $this->getMessagesBlock()->toHtml() ?>
     <?php echo $this->getChildHtml('form_before') ?>
     <form action="<?php echo $this->getFormActionUrl() ?>" method="post">
         <?php echo $this->getBlockHtml('formkey'); ?>
@@ -78,8 +63,8 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
 
         <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
             <thead>
-                <tr >
-                    <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php //echo $this->__('Product') ?></span></th>
+                <tr>
+                    <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Product') ?></span></th>
 
                     <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
 
@@ -104,7 +89,7 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
 <!--                            </div>-->
                     </th>
 
-               <!--      <th class="a-center" rowspan="<?php echo $mergedCells; ?>">&nbsp;</th> -->
+                    <th class="a-center" rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
 
                 </tr>
                 <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
@@ -116,7 +101,7 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
                 </tr>
                 <?php endif; ?>
             </thead>
-            <tfoot style="display: none;">
+            <tfoot>
                 <tr>
                     <td colspan="50" class="a-right cart-footer-actions">
 
@@ -166,15 +151,6 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
         <script type="text/javascript">decorateTable('shopping-cart-table')</script>
     </form>
 
-
-	<?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_left_bottom')->toHtml(); 
-?>
-	</div>
-</div>
-<div class="pgcrtright">
-<div class="pgcrtrightinner">
-<h1 class="shopcrtrsidehd">Besteloverzicht</h1>
     <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
     <div class="cart-forms">
         <?php /* Extensions placeholder */ ?>
@@ -197,22 +173,5 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
             <?php endif; ?>
         </div>
     </div>
-	
-	<?php
- //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_1')->toHtml(); 
-?>
-	</div>
-		
-		<?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_2')->toHtml(); 
-?>
-	</div>
-	<div style="clear: both; height: 9px;">&nbsp;</div>
-		<?php
- //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_bottom')->toHtml(); 
-?>
-	
-	
-	
     <?php echo $this->getChildHtml('crosssell') ?>
 </div>

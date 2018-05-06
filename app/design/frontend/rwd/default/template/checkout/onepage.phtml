@@ -24,86 +24,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<style>
-#checkout-header, .checkout-area-box{
-	display: block;
-}
-#checkoutSteps{
-	position: relative;
-}
-.step-title{
-	display: none !important;
-}
-.clzloginshow{
-	display: block !important;
-}
-
-
-
-.checkout-steps a {
-  text-decoration: none;
-}
-
-.stpactive .checkout-number {
-  background-color: #3399cc !important;
-}
-
-.stpactive em{
-  color: #3399cc !important;;
-}
-</style>
-
-<ul class="checkout-steps">
- <li>
-        <a id="checkout-step-1" href="">
-            <span class="checkout-number">1</span>
-            <em><div>Login</div></em>
-        </a>
-    </li>
-	 <li>
-        <a id="checkout-step-2" href="#">
-            <span class="checkout-number">2</span>
-            <em><div>Billing</div></em>
-        </a>
-    </li>
-    <li>
-        <a id="checkout-step-3" href="#">
-            <span class="checkout-number">3</span>
-            <em><div>Shipping</div></em>
-        </a>
-    </li>
-    <li>
-        <a id="checkout-step-4" href="#">
-            <span class="checkout-number">4</span>
-            <em><div>Shipping Method</div></em>
-        </a>
-    </li>
-    <li>
-        <a id="checkout-step-5" href="#">
-            <span class="checkout-number">5</span>
-            <em><div>Billing Method</div></em>
-        </a>
-    </li>
-	 <li>
-        <a class="acte-checkout-step-3-lnk" id="checkout-step-6" href="#">
-            <span class="checkout-number">6</span>
-            <em><div>Review</div></em>
-        </a>
-    </li>
-</ul>
 <div class="page-title">
     <h1><?php echo $this->__('Checkout') ?></h1>
 </div>
 <script type="text/javascript" src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout_rwd.js') ?>"></script>
-<ol class="opc opc-firststep-<?php echo $this->getActiveStep() ?> <?php 
-$logged=Mage::getSingleton('customer/session')->isLoggedIn();
-    if(! $logged){
-       echo 'clznotloggedchecko';
-    }else{
-         echo  'clzloggedchecko';
-    } ?>" id="checkoutSteps">
+<ol class="opc opc-firststep-<?php echo $this->getActiveStep() ?>" id="checkoutSteps">
 <?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
 <?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++ ?>
     <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
@@ -119,7 +46,7 @@ $logged=Mage::getSingleton('customer/session')->isLoggedIn();
 <?php endforeach ?>
 </ol>
 <script type="text/javascript">
-
+//<![CDATA[
     var accordion = new Accordion('checkoutSteps', '.step-title', true);
     <?php if($this->getActiveStep()): ?>
     accordion.openSection('opc-<?php echo $this->getActiveStep() ?>');
@@ -130,100 +57,5 @@ $logged=Mage::getSingleton('customer/session')->isLoggedIn();
         saveMethod: '<?php echo $this->getUrl('checkout/onepage/saveMethod') ?>',
         failure: '<?php echo $this->getUrl('checkout/cart') ?>'}
     );
-	
-	
-	
-	Accordion.prototype.openSection = Accordion.prototype.openSection.wrap(
-    function(parentMethod, section) {
-        // Call parent method
-        parentMethod(section);
-		sect=accordion.currentSection;
-      //  alert(sect);
-		
-		if(sect=='opc-billing'){
-			jQuery('#checkout-step-login').addClass('clzloginshow');
-			jQuery('#opc-billing').addClass('clzbillactive');
-			
-			jQuery('.checkout-number').removeClass('cheknoactive');
-			jQuery('#checkout-step-1 .checkout-number').addClass('cheknoactive');
-						
-		}
-		else{
-			jQuery('#checkout-step-login').removeClass('clzloginshow');
-			jQuery('#opc-billing').removeClass('clzbillactive');
-		}
-		
-		
-		
-		if(sect=='opc-login'){
-			jQuery('.stpactive').removeClass('stpactive');
-			jQuery('#checkout-step-1').addClass('stpactive');
-		}		
-		if(sect=='opc-billing'){
-			jQuery('.stpactive').removeClass('stpactive');
-			jQuery('#checkout-step-2').addClass('stpactive');
-		}
-		if(sect=='opc-shipping'){
-			jQuery('.stpactive').removeClass('stpactive');
-			jQuery('#checkout-step-3').addClass('stpactive');
-			
-		}
-		if(sect=='opc-shipping_method'){
-			jQuery('.stpactive').removeClass('stpactive');
-			jQuery('#checkout-step-4').addClass('stpactive');
-			
-		}
-		if(sect=='opc-payment'){
-			jQuery('.stpactive').removeClass('stpactive');
-			jQuery('#checkout-step-5').addClass('stpactive');
-			
-		}
-		
-		if(sect=='opc-review'){
-			jQuery('.stpactive').removeClass('stpactive');
-			jQuery('#checkout-step-6').addClass('stpactive');
-		}
-		
-		
-		
-    });
-	
-jQuery(function(){		
-		<?php
-		if($logged==true){
-			?>
-			jQuery('#checkout-step-2').addClass('stpactive');
-			<?php
-		}
-		else{
-			?>
-			jQuery('#checkout-step-1').addClass('stpactive');
-			<?php
-		}
-		?>		
-		
-		jQuery('#btncaguest').click(function(){
-			jQuery('#co-billing-form > h1').hide();
-			jQuery('input[value="guest"]').prop('checked',true);
-			jQuery('#onepage-guest-register-button').trigger('click');
-			jQuery('.col-2.logindvchecko').hide();
-			jQuery('#checkout-step-login .col-1').css('width','100%');
-			
-			jQuery('.clzregcheckout .buttons-set').hide();
-		});		
-		
-		jQuery('#btncareg').click(function(){
-			jQuery('#co-billing-form > h1').hide();
-			jQuery('input[value="register"]').prop('checked',true);
-			jQuery('#onepage-guest-register-button').trigger('click');
-			jQuery('.col-2.logindvchecko').hide();
-			jQuery('#checkout-step-login .col-1').css('width','100%');
-			
-			jQuery('.clzregcheckout .buttons-set').hide();
-		});		
-		
-	});
-//<![CDATA[	
-	
 //]]>
 </script>

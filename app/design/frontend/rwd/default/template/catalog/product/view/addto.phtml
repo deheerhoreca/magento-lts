@@ -26,10 +26,7 @@
 ?>
 
 <?php $_product = $this->getProduct(); ?>
-<?php 
-if(false){
-
-$_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
+<?php $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
 
 <ul class="add-to-links">
 <?php if ($this->helper('wishlist')->isAllow()) : ?>
@@ -43,6 +40,4 @@ $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
 <?php endif; ?>
 
 </ul>
-
-<?php } ?>
 

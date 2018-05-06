@@ -27,14 +27,11 @@
 <?php if($this->getItems()->getSize()): ?>
 <div class="block block-related">
     <div class="block-title">
-        <h2><?php echo $this->__('Related Productss') ?></h2>
+        <h2><?php echo $this->__('Related Products') ?></h2>
     </div>
     <div class="block-content">
-     <!--  
-	   <p class="block-subtitle"><?php echo $this->__('Check items to add to the cart or') ?>&nbsp;<a href="#" onclick="selectAllRelated(this); return false;"><?php echo $this->__('select all') ?></a></p>
-      -->  
-		
-		<ol class="mini-products-list" id="block-related">
+        <p class="block-subtitle"><?php echo $this->__('Check items to add to the cart or') ?>&nbsp;<a href="#" onclick="selectAllRelated(this); return false;"><?php echo $this->__('select all') ?></a></p>
+        <ol class="mini-products-list" id="block-related">
         <?php foreach($this->getItems() as $_item): ?>
             <li class="item">
                 <?php if(!$_item->isComposite() && $_item->isSaleable()): ?>
@@ -43,7 +40,7 @@
                     <?php endif; ?>
                 <?php endif; ?>
                 <div class="product">
-                    <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(245) ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
+                    <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(75) ?>" width="75" height="75" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
                     <div class="product-details">
                         <p class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></p>
                         <?php echo $this->getPriceHtml($_item, true, '-related') ?>
@@ -54,7 +51,6 @@
                 </div>
             </li>
         <?php endforeach ?>
-		
         </ol>
         <script type="text/javascript">decorateList('block-related', 'none-recursive')</script>
     </div>

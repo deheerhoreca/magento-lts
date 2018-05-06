@@ -43,42 +43,34 @@
         <col />
         <tbody>
         <?php if ($_hasAssociatedProducts): ?>
-        <?php 
-		$i=0;
-		foreach ($_associatedProducts as $_item):
-$i++;
-$clz='';
-if($i==1){
-	$clz='firstcolsm';
-}
-		?>
+        <?php foreach ($_associatedProducts as $_item): ?>
             <?php $_finalPriceInclTax = $this->helper('tax')->getPrice($_item, $_item->getFinalPrice(), true) ?>
-			<tr class="clznoboer <?php echo $clz; ?>"><td colspan="3" class="clztopbdp"><p class="name-wrapper">
-                        <?php echo $this->escapeHtml($_item->getName()) ?>
-                    </p></td></tr>
-            <tr class="<?php echo $clz; ?>">
-                <td class='image clztopbdpl'>
+            <tr>
+                <td class='image'>
                     <img class="thumbnail"
                          src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->constrainOnly(true)->resize(105, 80); ?>"
                          alt="<?php echo $this->escapeHtml($this->getImageLabel()) ?>"
                          title="<?php echo $this->escapeHtml($this->getImageLabel()); ?>" />
                 </td>
-                <td class="name clztopbdpm">                   
+                <td class="name">
+                    <p class="name-wrapper">
+                        <?php echo $this->escapeHtml($_item->getName()) ?>
+                    </p>
                     <?php if ($_product->isSaleable()): ?>
                     <div class="qty-wrapper">
                         <?php if ($_item->isSaleable()) : ?>
-						 <label for="super_group_<?php echo $_item->getId() ?>" class="qty-label">
+                            <input id="super_group_<?php echo $_item->getId() ?>" type="text" pattern="\d*(\.\d+)?" name="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty() * 1 ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
+                            <label for="super_group_<?php echo $_item->getId() ?>" class="qty-label">
                                 <?php echo $this->__('Quantity'); ?>
                             </label>
-                            <input id="super_group_<?php echo $_item->getId() ?>" type="text" pattern="\d*(\.\d+)?" name="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty() * 1 ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
-                                                  <?php else: ?>
+                        <?php else: ?>
                             <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
                 </td>
                 <?php if ($this->getCanShowProductPrice($_product)): ?>
-                <td class="a-right clztopbdpr">
+                <td class="a-right">
                     <?php if ($this->getCanShowProductPrice($_item)): ?>
                     <?php echo $this->getPriceHtml($_item, true) ?>
                     <?php echo $this->getTierPriceHtml($_item) ?>
@@ -86,14 +78,6 @@ if($i==1){
                 </td>
                 <?php endif; ?>
             </tr>
-			<?php
-			if($i==1){
-				?>
-				<tr><td colspan="3" style="background: #fff; height: 25px;">&nbsp;</td></tr>
-				<?php
-			}
-			?>
-			
         <?php endforeach; ?>
         <?php else: ?>
            <tr>

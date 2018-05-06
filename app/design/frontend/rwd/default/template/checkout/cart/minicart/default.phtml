@@ -40,12 +40,8 @@
 
         <table class="info-wrapper">
             <tbody>
-			<tr><th width="85"><?php echo $this->__('Price'); ?></th>
-			 <th><?php echo $this->__('Qty'); ?></th>
-			 <th><?php echo $this->__('Sub Total'); ?></th>
-			</tr>
                 <tr>
-                    
+                    <th><?php echo $this->__('Price'); ?></th>
                     <td>
                         <?php if ($canApplyMsrp): ?>
 
@@ -126,11 +122,10 @@
 
                         <?php endif; //Can apply MSRP ?>
                     </td>
-            <!--    </tr>
-                <tr class="qty-wrapper"> -->
-                   
+                </tr>
+                <tr class="qty-wrapper">
+                    <th><?php echo $this->__('Qty'); ?></th>
                     <td>
-					<input type='button' value='-' class='qtyminus' field='quantity' onclick="discresm(this)" />
                         <input
                             id="qinput-<?php echo $_item->getId(); ?>"
                             data-link="<?php echo $this->getAjaxUpdateUrl() ?>"
@@ -140,33 +135,33 @@
                             value="<?php echo $this->getQty()?>"
                             <?php if ($this->isOnCheckoutPage()) echo 'disabled'; ?>
                             />
-<input type='button' value='+' class='qtyplus' onclick="increasem(this)" field='quantity' />
+
                         <button id="qbutton-<?php echo $_item->getId(); ?>"
-                                data-item-id="<?php echo $_item->getId(); ?>"                               
+                                data-item-id="<?php echo $_item->getId(); ?>"
+                                disabled="disabled"
                                 data-update
                                 data-cart-item-update
                                 class="button quantity-button">
                             <?php echo $this->__('ok'); ?>
                         </button>
                     </td>
-					<td><?php echo Mage::helper('checkout')->formatPrice($_item->getRowTotal());?></td>
                 </tr>
             </tbody>
         </table>
 
         <?php if ($isVisibleProduct): ?>
-       <!--  disabled="disabled" <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Edit item')) ?>" class="btn-edit">
+        <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Edit item')) ?>" class="btn-edit">
             <?php echo $this->__('Edit item')?>
         </a>
-            | -->
+            |
             <?php if (!$this->isOnCheckoutPage()): ?>
-             <!--     <a href="<?php echo $this->getAjaxDeleteUrl() ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Remove This Item')) ?>"
+                <a href="<?php echo $this->getAjaxDeleteUrl() ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Remove This Item')) ?>"
                    data-confirm="<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>"
                    class="remove">
                     <?php echo $this->__('Remove Item') ?>
-                </a> -->
+                </a>
             <?php else: ?>
-               <!--   <span><?php echo $this->__('Remove Item') ?></span> -->
+                <span><?php echo $this->__('Remove Item') ?></span>
             <?php endif; ?>
         <?php endif ?>
 

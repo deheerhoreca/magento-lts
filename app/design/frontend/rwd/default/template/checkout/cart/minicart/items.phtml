@@ -44,7 +44,7 @@ if(empty($_cartQty)) {
 
     <p class="block-subtitle">
         <?php echo $this->__('Recently added item(s)') ?>
-        <a class="close skip-link-close" onClick="hidedark()" href="#" title="<?php echo $this->quoteEscape($this->__('Close')); ?>">&times;</a>
+        <a class="close skip-link-close" href="#" title="<?php echo $this->quoteEscape($this->__('Close')); ?>">&times;</a>
     </p>
 
     <?php $_items = $this->getRecentItems() ?>
@@ -87,24 +87,19 @@ if(empty($_cartQty)) {
 
 
         <div class="minicart-actions">
-		<a class="cartlt" href="//www.prokoeling.nl/customer/account/login/">
-                <?php echo $this->__('Aanmelden'); ?>
-            </a><br/>
-		<a class="cart-link" style="margin-top: 3px;" href="<?php echo $this->getUrl('checkout/cart'); ?>">
-                <?php echo $this->__('Winkelwagen'); ?>
-            </a><br/>
             <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
-                <ul class="checkout-types minicart" style="margin-top: 5px;">
+                <ul class="checkout-types minicart">
                     <?php echo $this->getChildHtml('extra_actions') ?>
                     <li>
-                        <a title="<?php echo $this->quoteEscape($this->__('Direct afrekenen')) ?>" class="button checkout-button" href="<?php echo $this->getCheckoutUrl() ?>">
-                            <?php echo $this->__('Direct afrekenen') ?>
+                        <a title="<?php echo $this->quoteEscape($this->__('Checkout')) ?>" class="button checkout-button" href="<?php echo $this->getCheckoutUrl() ?>">
+                            <?php echo $this->__('Checkout') ?>
                         </a>
                     </li>
                 </ul>
             <?php endif ?>
-			
-            
+            <a class="cart-link" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+                <?php echo $this->__('View Shopping Cart'); ?>
+            </a>
         </div>
 
     <?php else: ?>

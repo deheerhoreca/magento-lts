@@ -36,11 +36,11 @@
     <?php endif ?>
         <li id="shipping-new-address-form"<?php if ($this->customerHasAddresses()): ?> style="display:none;"<?php endif ?> class="scaffold-form">
             <div class="fieldset">
-               <!-- <p class="required"><?php echo $this->__('* Required Fields') ?></p> -->
+                <p class="required"><?php echo $this->__('* Required Fields') ?></p>
                 <input type="hidden" name="shipping[address_id]" value="<?php echo $this->getAddress()->getId() ?>" id="shipping:address_id" />
                 <ul>
                     <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress())->setFieldIdFormat('shipping:%s')->setFieldNameFormat('shipping[%s]')->setFieldParams('onchange="shipping.setSameAsBilling(false)"')->toHtml() ?></li>
-                    <li class="fields" style="clear: both;display: none;">
+                    <li class="fields">
                         <div class="fields">
                             <label for="shipping:company"><?php echo $this->__('Company') ?></label>
                             <div class="input-box">
@@ -49,7 +49,7 @@
                         </div>
                     </li>
             <?php $_streetValidationClass = $this->helper('customer/address')->getAttributeValidationClass('street'); ?>
-                    <li class="wide" style="float: left; width: 48% !important; padding-top: 10px;">
+                    <li class="wide">
                         <label for="shipping:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
                         <div class="input-box">
                             <input type="text" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Street Address')) ?>" name="shipping[street][]" id="shipping:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" onchange="shipping.setSameAsBilling(false);" />
@@ -57,7 +57,7 @@
                     </li>
             <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
             <?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
-                    <li class="wide" style=" padding-top: 10px;">
+                    <li class="wide">
                         <label for="billing:street<?php echo $_i ?>"><?php echo $this->__('Address') ?> <?php echo $_i ?></label>
                         <div class="input-box">
                             <input type="text" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Street Address %s', $_i)) ?>" name="shipping[street][]" id="shipping:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" onchange="shipping.setSameAsBilling(false);" />
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="fields" style="clear: both;">
+                    <li class="fields">
                         <div class="field">
                             <label for="shipping:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
                             <div class="input-box">

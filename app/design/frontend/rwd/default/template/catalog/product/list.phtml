@@ -35,110 +35,12 @@
 <?php
     $_productCollection=$this->getLoadedProductCollection();
     $_helper = $this->helper('catalog/output');
-	$contname=$category=$this->getRequest()->getControllerName();
-	$catid='';
-	$carct=Mage::registry('current_category');	
-	/**
-	* get Router name
-	*/
-	$amschk=$this->getRequest()->getRouteName();
-	$haschild=false;
 ?>
-<?php
-if($carct && ($category == 'category')){
-$catid=$carct->getId();
-?>
-<div class="ctbannerpg">
-<img src="//www.prokoeling.nl/media/catalog/category/<?php echo $carct->getCategoryBanner(); ?>" alt="" style="width: 100%" />
-<h1 class="headcatinside">
-<?php
-echo $carct->getName();
-?>
-</h1>	
-</div>
-<?php } ?>
-<style>
-.products-grid-anchor .item {
-  float: left;
-  margin-right: 23px;
-  width: 264px;
-  padding-bottom: 1em;
-}
-
-.products-grid-anchor .item:nth-child(3n) {
-  margin-right: 0;
-}
-
-.category-products {
-  clear: both;
-}
-
-
-.products-grid-anchor {
-  padding-top: 30px;
-}
-#sidebar-nav{
-	display: none;
-}
-</style>
-
-
-<?php if(Mage::registry('current_category') && $amschk !='amshopby'): ?>
-<?php $layer = Mage::getSingleton('catalog/layer');
-$_category = $layer->getCurrentCategory();
-$currentCategoryId= $_category->getId();
-?>
-<ul class="products-grid-anchor">
-<?php
-$children = Mage::getModel('catalog/category')->getCategories($currentCategoryId); // put your main root category id here
-
-foreach ($children as $category):
-$haschild=true;
-$category=Mage::getModel('catalog/category')->load($category->getId());
-?><li class="item">
-<span class="inner">
-<div class="imwrapcat">
-<?php $category=Mage::getModel('catalog/category')->load($category->getId()); ?>
-<?php if ($category->getImage()) : ?>
-<a href="<?php echo $category->getUrl() ?>">
-<img src="<?php echo Mage::getBaseUrl('media')?>catalog/category/<?php echo $category->getImage() ?>" alt="" />
-</a>
-<?php endif; ?>
-</div>
-<a class="actionsx" href="<?php echo $category->getUrl() ?>">
-<h4><?php echo $category->getName() ?></h4>
-</a>
-
-</span>
-</li><?php endforeach; ?>
-</ul>
-<?php endif; ?>
-
-
-<?php
-if($haschild){
-	?>
-	<style>
-	#sidebar-nav{
-	display: block;
-}
-	</style>
-	<?php
-}
-
-?>
-
-
-
-
-<?php
-if($amschk=='amshopby' || !$haschild){
-
- if(!$_productCollection->count()): ?>
-<!-- <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p> -->
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
 <?php else: ?>
 <div class="category-products">
-    <div class="top_toolbar"><?php echo $this->getToolbarHtml() ?></div>
+    <?php echo $this->getToolbarHtml() ?>
     <?php // List mode ?>
     <?php if($this->getMode()!='grid'): ?>
     <?php $_iterator = 0; ?>
@@ -215,91 +117,15 @@ if($amschk=='amshopby' || !$haschild){
 
     <?php // Grid Mode ?>
 
-	
     <?php $_collectionSize = $_productCollection->count() ?>
-    <?php $_columnCount = 3; // $this->getColumnCount(); ?>
+    <?php $_columnCount = $this->getColumnCount(); ?>
     <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
         <?php $i=0; foreach ($_productCollection as $_product): ?>
-            <?php $i++; /*if ($i++%$_columnCount==0): ?>
+            <?php /*if ($i++%$_columnCount==0): ?>
             <?php endif*/ ?>
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
-			
-			<?php 
-					//$attribute = $_product->getResource()->getAttribute('product_label');
-					//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-					
-   $productdeal=$_product->getProductLabel();
-    if ($productdeal !='')
-    {
-        echo '<span class="lblprolist">'.$productdeal.'</span>';
-    }
-	
-	 $gnvalue=$_product->getAttributeText('gn');
-		if($gnvalue !='' && $gnvalue=='1/3'){
-			echo '<span class="lblgnlst lblgnblue">'.$gnvalue.' GN</span>';
-		}
-	if($gnvalue !='' && $gnvalue=='1/4'){
-			echo '<span class="lblgnlst lblgngreen">'.$gnvalue.' GN</span>';
-		}
-	
-	
-		$energieklasse=$_product->getAttributeText('energieklasse');
-	
-	
-		//$attribute = $_product->getResource()->getAttribute('energieklasse');
-				//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-				$enclz='';
-    if ($energieklasse !='')
-    {
-		//set class
-		switch ($energieklasse){
-		case 'A++++':
-			$enclz='enrgclz1';
-			break;
-		case 'A+++':
-			$enclz='enrgclz2';
-			break;
-		case 'A++':
-			$enclz='enrgclz3';
-			break;
-		case 'A+':
-			$enclz='enrgclz4';
-			break;
-		case 'A':
-			$enclz='enrgclz5';
-			break;
-		case 'B':
-			$enclz='enrgclz6';
-			break;
-		case 'C':
-			$enclz='enrgclz7';
-			break;
-		case 'D':
-			$enclz='enrgclz8';
-			break;
-		case 'E':
-			$enclz='enrgclz9';
-			break;
-		case 'F':
-			$enclz='enrgclz10';
-			break;	
-		case 'G':
-			$enclz='enrgclz11';
-			break;			
-		}
-		
-		
-		
-		
-        echo '<span class="lblenergylabel '.$enclz.'">'.$energieklasse.'</span>';
-    }
-	
-	
-					
-					?>
-			
                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
-                    <?php $_imgSize = 245; ?>
+                    <?php $_imgSize = 210; ?>
                     <img id="product-collection-image-<?php echo $_product->getId(); ?>"
                          src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize); ?>"
                          alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
@@ -318,111 +144,13 @@ if($amschk=='amshopby' || !$haschild){
                         }
                     }
                     ?>
-					
-					<div class="info">
-					<?php 
-	//$attribute = $_product->getResource()->getAttribute('short_description');
-   // if ($attribute)
-   // {
-    //    echo $attribute ->getFrontend()->getValue($_product);
- //   }
- ?>
- <ul>
-		<?php	
-
-		$garentiim = $_product->getAttributeText('garantie');
-		if($catid!=72){
-		$attribute_value = $_product->getAttributeText('type_koeling');
-		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-		if($attribute_value!=''){
-			echo '<li>'.$attribute_value.'</li>';
-		}
-				
-		$attribute_value = $_product->getAttributeText('aantal_deuren');
-		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-		if($attribute_value!=''){
-			echo '<li>'.$attribute_value.'-deurs</li>';
-		}
-				
-		$attribute_value = $garentiim = $_product->getAttributeText('garantie');
-		//$attribute_value = $garentiim = $attribute ->getFrontend()->getValue($_product);
-		//if($attribute_value!=''){
-		//	echo '<li>Garantie: '.$attribute_value.'</li>';
-		//}
-				
-		$attribute_value = $_product->getInhoudLiters();
-		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-		if($attribute_value!=''){
-			echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li>';
-		}
-		
-		$attribute_value = $_product->getBreedte();
-		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-		if($attribute_value!=''){
-			echo '<li>'.($attribute_value/10).'cm breed</li>';
-		}
-		
-		
-		 
-		
-		
-		
-		
-		}
-	
-		if($catid==72){
-			$attribute_value = $_product->getBreedte();
-		if($attribute_value!=''){
-			echo '<li>'.($attribute_value/10).'cm breed</li>';
-		}
-		
-		$attribute_value = $_product->getInhoudAantalGn();
-		if($attribute_value!=''){
-			echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li>';
-		}
-		
-		$attribute_value = $_product->getAttributeText('manufacturer');
-		if($attribute_value!=''){
-			echo '<li>'.$attribute_value.'</li>';
-		}
-		
-			
-		}
-		?>
-		</ul>
- 
- <?php
- if( $garentiim=='24 maanden'){
-	 ?>
-	 <img src="//www.prokoeling.nl/skin/frontend/rwd/default/images/icongarantie.png" alt="" class="lbl24gran"/>
-	 <?php
- }
- ?>
-					
-					
-					
-					</div>
-					
-                    <?php 
-					
-					
-					echo str_replace(',00',',-',$this->getPriceHtml($_product, true));
-					//echo preg_replace("/€\D*(\d+)[^<]*/","$1,-",$this->getPriceHtml($_product, true));
-								?>
-					<span class="clzlevertijd"><?php 
-					$attribute = $_product->getResource()->getAttribute('levertijd');
-    if (false && $attribute)
-    {
-        echo 'Levertijd: '.$attribute_value = $attribute ->getFrontend()->getValue($_product);
-    }
-					
-					?></span>
-                    <?php if(false && $_product->getRatingSummary()): ?>
+                    <?php echo $this->getPriceHtml($_product, true) ?>
+                    <?php if($_product->getRatingSummary()): ?>
                     <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
                     <?php endif; ?>
                     <div class="actions">
                         <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
-                            <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span>+ <?php echo $this->__('In winkelwagen') ?></span></span></button>
+                            <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
                         <?php elseif($_product->getStockItem() && $_product->getStockItem()->getIsInStock()): ?>
                             <a title="<?php echo $this->quoteEscape($this->__('View Details')) ?>" class="button" href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->__('View Details') ?></a>
                         <?php else: ?>
@@ -432,7 +160,7 @@ if($amschk=='amshopby' || !$haschild){
                             <?php if ($this->helper('wishlist')->isAllow()) : ?>
                                 <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
                             <?php endif; ?>
-                            <?php if(false && $_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                            <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
                                 <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
                             <?php endif; ?>
                         </ul>
@@ -443,7 +171,7 @@ if($amschk=='amshopby' || !$haschild){
             <?php endif*/ ?>
         <?php endforeach ?>
     </ul>
-    <script type="text/javascript"> /*decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])*/</script>
+    <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
     <?php endif; ?>
 
     <div class="toolbar-bottom">
@@ -462,7 +190,4 @@ if ($this->getChild('after')) {
         echo $_afterChild->toHtml();
     }
 }
-
-}
 ?>
-

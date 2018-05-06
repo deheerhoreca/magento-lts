@@ -39,11 +39,6 @@
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
     <div class="product-essential">
-	  <div class="product-name">
-                    <span class="h1"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></span>
-					 <?php echo $this->getReviewsSummaryHtml($_product, 'short', false)?>
-                </div>
-	
         <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
             <?php echo $this->getBlockHtml('formkey') ?>
             <div class="no-display">
@@ -59,7 +54,9 @@
             </div>
 
             <div class="product-shop">
-              
+                <div class="product-name">
+                    <span class="h1"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></span>
+                </div>
 
                 <div class="price-info">
                     <?php echo $this->getPriceHtml($_product); ?>
@@ -68,21 +65,13 @@
                 </div>
 
                 <div class="extra-info">
-                   <span class="clzlevertijdprodetail"><?php 
-					$attribute = $_product->getResource()->getAttribute('levertijd');
-    if ($attribute)
-    {
-        echo 'Levertijd: '.$attribute_value = $attribute ->getFrontend()->getValue($_product);
-    }
-					
-					?></span>
-					<span class="adelservice">Levering als pakket</span>
-                    <?php //echo $this->getChildHtml('product_type_availability'); ?>
+                    <?php echo $this->getReviewsSummaryHtml($_product, 'default', false)?>
+                    <?php echo $this->getChildHtml('product_type_availability'); ?>
                 </div>
 
                 <?php echo $this->getChildHtml('alert_urls') ?>
 
-                <?php if (false && $_product->getShortDescription()):?>
+                <?php if ($_product->getShortDescription()):?>
                     <div class="short-description">
                         <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
                     </div>
@@ -107,26 +96,21 @@
                     <div class="add-to-box">
                         <?php if($_product->isSaleable()): ?>
                             <?php echo $this->getChildHtml('addtocart') ?>
-                            <?php if(false &&  $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                            <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
                                 <span class="or"><?php echo $this->__('OR') ?></span>
                             <?php endif; ?>
                         <?php endif; ?>
                         <?php echo $this->getChildHtml('addto') ?>
-                        <?php //echo $this->getChildHtml('sharing') ?>
+                        <?php echo $this->getChildHtml('sharing') ?>
                     </div>
                     <?php echo $this->getChildHtml('extra_buttons') ?>
                 <?php elseif (!$_product->isSaleable()): ?>
                     <div class="add-to-box">
                         <?php echo $this->getChildHtml('addto') ?>
-                        <?php //echo $this->getChildHtml('sharing') ?>
+                        <?php echo $this->getChildHtml('sharing') ?>
                     </div>
                 <?php endif; ?>
-				<div class="clearer"></div>
-<?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml(); 
-?>
             </div>
-
 
             <?php echo $this->getChildHtml('related_products') ?>
 
