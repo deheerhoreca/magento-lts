@@ -42,3 +42,4 @@
 !/var/package/*.xml
 
 /tmp/*
+/downloader/connect.cfg
