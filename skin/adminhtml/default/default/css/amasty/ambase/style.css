@@ -83,3 +83,49 @@
 .comment .ambase-notice {
     color: #ea7601;
 }
+
+/* additional tab in config section*/
+.amasty-info-block {
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.amasty-info-block .upgrade-error, .amasty-disable-extensions p, .amasty-conflicts {
+    padding: 5px 17px 5px 47px;
+    background: #fff9e9 url('../../../images/error_msg_icon.gif') 17px 5px no-repeat;
+    border: 1px solid #eee2be;
+    margin: 5px 0;
+    display: inline-block;
+}
+
+.module-version {
+    color: #ea7601;
+}
+
+.amasty-info-block .module-version.last-version {
+    color: green;
+}
+
+.amasty-info-block > div {
+    margin-bottom: 10px;
+}
+
+.amasty-conflicts-title, .version-title, .module-version {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.amasty-conflicts-title {
+    margin-top: 20px;
+
+}
+
+.amasty-user-guide, .amasty-additional-content {
+    border: 1px solid #95a486 !important;
+    color: #3d6611 !important;
+    background: #eff5ea url('../../../images/success_msg_icon.gif') no-repeat 10px 10px !important;
+    min-height: 23px !important;
+    margin-bottom: 11px !important;
+    padding: 8px 8px 2px 32px !important;
+}

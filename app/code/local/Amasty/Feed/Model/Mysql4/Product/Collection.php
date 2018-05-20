@@ -371,6 +371,12 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
     public function joinTaxPercents($store)
     {
         $countryId = Mage::getStoreConfig('general/country/default', $store->getStoreId());
+
+        $cond = new Zend_Db_Expr(
+            'rate_table.tax_calculation_rate_id = tax_table.tax_calculation_rate_id 
+            AND rate_table.tax_country_id = \'' . $countryId . '\''
+        );
+
         $this->joinPrice();
             
         if (!$this->_checkJoin('tax_table')){
@@ -380,9 +386,8 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
                            'tax_table.product_tax_class_id = price_index.tax_class_id',
                            array())
                 ->joinLeft(array('rate_table' => $this->getTable('tax/tax_calculation_rate')),
-                           'rate_table.tax_calculation_rate_id = tax_table.tax_calculation_rate_id',
+                           $cond,
                            array('tax_percents' => 'rate_table.rate'));
-            $this->getSelect()->where('rate_table.tax_country_id = ?', $countryId);
         }
     }
 

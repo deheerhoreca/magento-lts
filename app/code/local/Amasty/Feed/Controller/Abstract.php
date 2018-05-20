@@ -81,7 +81,7 @@ class Amasty_Feed_Controller_Abstract extends Mage_Adminhtml_Controller_Action
         $model = Mage::getModel('amfeed/' . $this->_modelName);
         $data  = $this->getRequest()->getPost();
         $feed = $id ? $model->load($id) : false;
-        $typeFeed = $feed ? $model->getType() : null;
+        $typeFeed = $feed ? $model->getType() : $this->getRequest()->getParam('type');
 
         if ($data) {
             $model->setData($data)->setId($id)->setType($typeFeed);

@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Amasty_Base>
-            <version>2.1.15</version>
+            <version>2.2.1</version>
         </Amasty_Base>
     </modules>
 
@@ -120,6 +120,15 @@
                     </amsupport>
                 </observers>
             </controller_action_layout_render_before_adminhtml_system_config_edit>
+            <amasty_base_add_information_content>
+                <observers>
+                    <ambase_amasty_base_add_information_content>
+                        <type>singleton</type>
+                        <class>ambase/informationObserver</class>
+                        <method>addInformationContent</method>
+                    </ambase_amasty_base_add_information_content>
+                </observers>
+            </amasty_base_add_information_content>
         </events>
         <translate>
             <modules>

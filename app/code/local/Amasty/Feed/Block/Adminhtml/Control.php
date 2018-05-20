@@ -68,8 +68,18 @@ class Amasty_Feed_Block_Adminhtml_Control extends Mage_Core_Block_Template
     }
     
     public function getProductAttributes(){
-        
-        return Mage::helper('amfeed/attribute')->getProductAttributes();
+
+        $attributes = Mage::helper('amfeed/attribute')->getProductAttributes();
+
+        if (isset($attributes['tier_price'])) {
+            unset($attributes['tier_price']);
+        }
+
+        if (isset($attributes['group_price'])) {
+            unset($attributes['group_price']);
+        }
+
+        return $attributes;
     }
     
     public function getCompoundAttributes($checkHasCondition = FALSE, $checkHasFilterCondition = FALSE){
