@@ -414,3 +414,11 @@ AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css a
 
 # non-production:
 SetEnv MAGE_IS_DEVELOPER_MODE "true"
+
+<IfModule php5_module>
+   php_flag display_errors On
+   php_value display_errors On
+   php_value error_reporting 32767
+   php_value display_startup_errors = On
+   php_value error_log = /var/www/vhosts/dev.prokoeling.nl//logs/php_log
+</IfModule>
