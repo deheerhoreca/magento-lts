@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright  Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,12 +43,12 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
     {
         /* Add table head */
         $this->_setFontRegular($page, 10);
-        $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));
+        /* DHH */ $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
         $page->drawRectangle(25, $this->y, 570, $this->y -15);
         $this->y -= 10;
-        $page->setFillColor(new Zend_Pdf_Color_RGB(255, 255, 255));
+        /* DHH */ $page->setFillColor(new Zend_Pdf_Color_RGB(255, 255, 255));
 
         //columns headers
         $lines[0][] = array(
@@ -118,19 +118,20 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             /* Add address */
             $this->insertAddress($page, $invoice->getStore());
 
-			$invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
-			$createdDate = $invoice->getCreatedAt();
-			$invoiceDate = date('d M Y', strtotime($createdDate));
+            /* DHH */
+      			$invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
+      			$createdDate = $invoice->getCreatedAt();
+      			$invoiceDate = date('d M Y', strtotime($createdDate));
 
-
-      $this->y = $this->y ? $this->y : 815;
-      $top = $this->y;
-			$page->setFillColor(new Zend_Pdf_Color_Html('#000000'));
-			$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
-			$page->setFont($font, 10);
-			$page->drawText(Mage::helper('sales')->__('Factuurdatum: ') . $invoiceDate, 35, $top, 'UTF-8');
-			//$page->drawText(Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId(), 25, 740, 'UTF-8');
-			//$page->drawText(Mage::helper('sales')->__('Order # ') . $order->getRealOrderId(), 25, 725, 'UTF-8');
+            $this->y = $this->y ? $this->y : 815;
+            $top = $this->y;
+      			$page->setFillColor(new Zend_Pdf_Color_Html('#000000'));
+      			$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+      			$page->setFont($font, 10);
+      			$page->drawText(Mage::helper('sales')->__('Factuurdatum: ') . $invoiceDate, 35, $top, 'UTF-8');
+      			//$page->drawText(Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId(), 25, 740, 'UTF-8');
+      			//$page->drawText(Mage::helper('sales')->__('Order # ') . $order->getRealOrderId(), 25, 725, 'UTF-8');
+            /* DHH */
 
             /* Add head */
             $this->insertOrder(
@@ -160,7 +161,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
                 Mage::app()->getLocale()->revert();
             }
         }
-		$this->insertFooter($page);
+		    /* DHH */ $this->insertFooter($page);
         $this->_afterGetPdf();
         return $pdf;
     }
@@ -183,47 +184,46 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         return $page;
     }
 
-	 public function insertFooter($page)
+    /* DHH */
+	  public function insertFooter($page)
     {
-		$this->_setFontRegular($page, 10);
+		    $this->_setFontRegular($page, 10);
         $page->setFillColor(new Zend_Pdf_Color_Html('#4F81BD'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-		$width = 842; $height = 60;
+		    $width = 842; $height = 60;
         $y  =   $height /2.5;
         $page->drawRectangle(1, 20, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
- 		$page->setFont($font, 8);
-		$page->drawText('DE LEVERANCIER VAN PROFESSIONELE KOELINGEN | GRATIS GELEVERD VANAF EUR 150.- | LEVERING IN NEDERLAND EN BELGIE', 92, 40, 'UTF-8');
-
+  	    $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+   	  	$page->setFont($font, 8);
+  	  	$page->drawText('DE LEVERANCIER VAN PROFESSIONELE KOELINGEN | GRATIS GELEVERD VANAF EUR 150.- | LEVERING IN NEDERLAND EN BELGIE', 92, 40, 'UTF-8');
         $page->setFillColor(new Zend_Pdf_Color_Html('#1F497D'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-		$width = 842; $height = 30;
+		    $width = 842; $height = 30;
         $y  =   $height /2.5;
         $page->drawRectangle(1, 1, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
- 		$page->setFont($font, 10);
-		$page->drawText('De Heer Horeca B.V.  | Mattenbies 10 | 3824WC | ', 42, 10, 'UTF-8');
-
+  	  	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+   	  	$page->setFont($font, 10);
+  	  	$page->drawText('De Heer Horeca B.V.  | Mattenbies 10 | 3824WC | ', 42, 10, 'UTF-8');
         $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));
-		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
- 		$page->setFont($font, 10);
-		$page->drawText('PROKOELING.NL', 272, 10, 'UTF-8');
-
-		$page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
- 		$page->setFont($font, 10);
-		$page->drawText(' | INFO@PROKOELING.NL | 085-0441003', 362, 10, 'UTF-8');
+	    	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+ 		    $page->setFont($font, 10);
+		    $page->drawText('PROKOELING.NL', 272, 10, 'UTF-8');
+		    $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
+	      $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+ 		    $page->setFont($font, 10);
+		    $page->drawText(' | INFO@PROKOELING.NL | 085-0441003', 362, 10, 'UTF-8');
     }
 
-	public function getInvoiceDate()
+    public function getInvoiceDate()
     {
-		$invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
-		$createdDate = $invoice->getCreatedAt();
+		    $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
+		    $createdDate = $invoice->getCreatedAt();
         $invoiceDate = date('d M Y', strtotime($createdDate));
         return $invoiceDate;
     }
+    /* DHH */
 }

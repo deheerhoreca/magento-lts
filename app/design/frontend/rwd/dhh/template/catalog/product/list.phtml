@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     rwd_default
- * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -215,7 +215,6 @@ if($amschk=='amshopby' || !$haschild){
 
     <?php // Grid Mode ?>
 
-	
     <?php $_collectionSize = $_productCollection->count() ?>
     <?php $_columnCount = 3; // $this->getColumnCount(); ?>
     <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
@@ -247,8 +246,8 @@ if($amschk=='amshopby' || !$haschild){
 	
 	
 		//$attribute = $_product->getResource()->getAttribute('energieklasse');
-				//$attribute_value = $attribute ->getFrontend()->getValue($_product);
-				$enclz='';
+		//$attribute_value = $attribute ->getFrontend()->getValue($_product);
+		$enclz='';
     if ($energieklasse !='')
     {
 		//set class
@@ -288,18 +287,11 @@ if($amschk=='amshopby' || !$haschild){
 			break;			
 		}
 		
-		
-		
-		
         echo '<span class="lblenergylabel '.$enclz.'">'.$energieklasse.'</span>';
-    }
-	
-	
-					
-					?>
-			
+    }				
+    ?>		
                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
-                    <?php $_imgSize = 245; ?>
+                    <!-- DHH --><?php $_imgSize = 245; ?>
                     <img id="product-collection-image-<?php echo $_product->getId(); ?>"
                          src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize); ?>"
                          alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
@@ -398,14 +390,9 @@ if($amschk=='amshopby' || !$haschild){
 	 <?php
  }
  ?>
-					
-					
-					
 					</div>
 					
                     <?php 
-					
-					
 					echo str_replace(',00',',-',$this->getPriceHtml($_product, true));
 					//echo preg_replace("/€\D*(\d+)[^<]*/","$1,-",$this->getPriceHtml($_product, true));
 								?>
@@ -462,7 +449,5 @@ if ($this->getChild('after')) {
         echo $_afterChild->toHtml();
     }
 }
-
 }
 ?>
-

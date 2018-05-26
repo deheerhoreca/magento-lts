@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     rwd_default
- * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -53,7 +53,7 @@
 
             <div class="sort-by">
                 <label><?php echo $this->__('Sort By') ?></label>
-				<div class="selwrapper">
+		<!-- DHH --><div class="selwrapper">
                 <select onchange="setLocation(this.value)" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Sort By')) ?>">
                     <?php foreach($this->getAvailableOrders() as $_key=>$_order): ?>
                         <option value="<?php echo $this->getOrderUrl($_key, 'asc') ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
@@ -61,7 +61,7 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
-				</div>
+		<!-- DHH --></div>
                 <?php if($this->getCurrentDirection() == 'desc'): ?>
                     <a href="<?php echo $this->getOrderUrl(null, 'asc') ?>" class="sort-by-switcher sort-by-switcher--desc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Ascending Direction')) ?>"><?php echo $this->__('Set Ascending Direction') ?></a>
                 <?php else: ?>

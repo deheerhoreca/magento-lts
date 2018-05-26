@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     rwd_default
- * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -49,16 +49,15 @@
                 <action method="addJs"><script>varien/form.js</script></action>
                 <action method="addJs"><script>mage/translate.js</script></action>
                 <action method="addJs"><script>mage/cookies.js</script></action>
-			<!--	<action method="addJs"><script>lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js</script></action>     -->
+		<!-- DHH	<action method="addJs"><script>lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js</script></action>     -->
 
-
-				<block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
+                <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
 
                 <!-- Remove items which the RWD package is not dependent upon -->
                 <action method="removeItem"><type>skin_js</type><name>js/ie6.js</name></action>
 
                 <!-- Add vendor dependencies -->
-				<action method="addItem"><type>skin_js</type><name>js/lightslider.js</name></action>
+		<!-- DHH --><action method="addItem"><type>skin_js</type><name>js/lightslider.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/modernizr.custom.min.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/selectivizr.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/matchMedia.js</name></action>
@@ -78,13 +77,15 @@
 
                 <!-- Add stylesheets with media queries for use by modern browsers -->
                 <action method="addItem"><type>skin_css</type><name>css/styles.css</name><params/><if><![CDATA[<!--[if (gte IE 9) | (IEMobile)]><!-->]]></if></action>
-                <action method="addItem"><type>skin_css</type><name>css/responsive.css</name><params/><if><![CDATA[<!--[if (gte IE 9) | (IEMobile)]><!-->]]></if></action>
+                <!-- DHH --><action method="addItem"><type>skin_css</type><name>css/responsive.css</name><params/><if><![CDATA[<!--[if (gte IE 9) | (IEMobile)]><!-->]]></if></action>
                 <action method="addItem"><type>skin_css</type><name>css/madisonisland.css</name><params/><if><![CDATA[<!--[if (gte IE 9) | (IEMobile)]><!-->]]></if></action>
 
-                <!-- Sets viewport meta tag using text block
+                <!-- Sets viewport meta tag using text block -->
+                <!-- DHH
                 <block type="core/text" name="head.viewport">
                     <action method="setText"><text><![CDATA[<meta name="viewport" content="initial-scale=1.0, width=device-width" />]]>&#10;</text></action>
-                </block>-->
+                </block>
+                -->
             </block>
 
             <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
