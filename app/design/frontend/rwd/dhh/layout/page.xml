@@ -49,7 +49,6 @@
                 <action method="addJs"><script>varien/form.js</script></action>
                 <action method="addJs"><script>mage/translate.js</script></action>
                 <action method="addJs"><script>mage/cookies.js</script></action>
-		<!-- DHH	<action method="addJs"><script>lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js</script></action>     -->
 
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
 

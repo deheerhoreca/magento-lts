@@ -1,10 +1,3 @@
-/**
-* Grid Sort
-* 
-* @copyright Anowave
-* @author Angel Kostadinov
-*/
-
 jQuery.noConflict(); 
 
 varienGrid = Class.create(varienGrid, 
@@ -67,8 +60,16 @@ varienGrid = Class.create(varienGrid,
 								catalog_category_productsJsObject.setCheckboxChecked(element.checkboxElement, true);
 							});
 							
-							/* Set current checkbox as not checked */
-							ui.item.find('input:checkbox').prop('checked', true);
+							if (navigator.userAgent.indexOf("Firefox") > 0) 
+							{
+								/* Set current checkbox as not checked */
+								ui.item.find('input:checkbox').prop('checked', false);
+				            }
+							else 	
+							{
+								/* Set current checkbox as not checked */
+								ui.item.find('input:checkbox').prop('checked', true);
+							}
 							
 							/* Serialize */
 							$(':hidden[name=in_category_products]').val(categoryProducts.toQueryString());
