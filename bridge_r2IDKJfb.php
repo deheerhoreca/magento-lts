@@ -18,14 +18,16 @@
 |                                                                              |
 | Developed by eMagicOne,                                                      |
 | Copyright (C) 2012-2018                                                      |
++------------------------------------------------------------------------------+
+| Bridge Version: 7.63                                                         |
 +-----------------------------------------------------------------------------*/
 
-$version = '$Revision: 7.63 $';
+//define('BRIDGE_VERSION', '$Revision: 7.63 $');
+define('BRIDGE_VERSION', '7.65');
 
 
 
-// Please change immediately
-// it is security threat to leave these values as is!
+// PLEASE CHANGE IMMEDIATELY ! It is security threat to leave these values as is!
 $username = 'User';
 $password = '03iJz8XMY6Gl';
 
@@ -117,6 +119,16 @@ define('POST_ERROR_CHUNK_CHECKSUM_DIF', 21);    // chunk checksum from the store
 define('POST_ERROR_SQL_INDEX', 22);    // chunk checksums are correct, but some sql code was not executed; has one parameter - an index of sql code which was not executed
 define('ERROR_GENERATE_STORE_FILE_ARCHIVE', 27);
 
+// Used in json response
+define('KEY_RESPONSE_CODE', 'response_code');
+define('KEY_MESSAGE', 'message');
+define('KEY_IS_COMPRESSED', 'is_compressed');
+define('KEY_PARTS_COUNT', 'parts_count');
+define('KEY_FILE_SIZE', 'file_size');
+define('KEY_FILE_NAME', 'file_name');
+define('KEY_CHECKSUM', 'checksum');
+define('ERROR_CODE_COMMON', 19);
+
 define('GET_SQL_CANCEL_MESSAGE', 'Generating database dump is canceled');
 define('GET_SQL_CANCEL_PARAM', 'get_sql_cancel');
 define('GET_SQL_TABLE', 'get_sql_table');
@@ -125,6 +137,7 @@ define('GET_SQL_FILE_PART', 'get_sql_file_part');
 //define('GET_SQL_FILE_PART_NAME', 'part_name');
 //define('GET_SQL_FILE_PART_NAME_LAST', 'part_name_last');
 define('GET_SQL_FILE_DUMP_PARTS', 'dump_parts');
+define('KEY_PROCESS_ID', 'process_id');
 
 // Current file name in which dump is generated
 define('GET_SQL_FILE_NAME_GENERATING', 'get_sql_file_name_generating');
@@ -135,11 +148,16 @@ $file_name_put_sql_tmp = 'sm_tmp_put_sql.txt';
 // It is used to get sql, contains table name, percentage, get_sql_cancel
 define('FILE_NAME_GET_SQL_TMP', 'sm_tmp_get_sql.txt');
 
+define('FILE_NAME_GET_FILE_LIST_TMP', 'sm_tmp_get_file_list.txt');
+
 // Dump is generated into this file
 define('FILE_NAME_GET_SQL_MAIN', 'em1_bridge_db_dump');
 
 // It is used to continue generating dump after fail, contains table name, count records which have been processed
 define('FILE_NAME_GET_SQL_FOR_CONTINUE', 'dump_data_tmp.txt');
+
+// It is used to get ftp file list in file
+define('FILE_NAME_FILE_LIST', 'bridge_file_list');
 
 // Defines how much digits will be added to the end of file
 define('FILE_NAME_PART_NUMBER_COUNT_DIGITS', 3);
@@ -160,7 +178,7 @@ define('MAGENTO_2', 10);
 // It is used to put sql to find out if chunk is encoded in base64
 $put_sql_encoded = 'base_64_encoded_';
 
-if(!ini_get('date.timezone') || ini_get('date.timezone' == "")) {
+if (!ini_get('date.timezone') || ini_get('date.timezone' == "")) {
     @date_default_timezone_set(@date_default_timezone_get());
 }
 
@@ -171,37 +189,37 @@ if(!ini_get('date.timezone') || ini_get('date.timezone' == "")) {
     die();
 }*/
 
-if($_REQUEST['task'] == 'self_test') {
+if ($_REQUEST['task'] == 'self_test') {
     run_self_test();
     die;
 }
 
-if($_REQUEST['task'] == 'test_post') {
+if ($_REQUEST['task'] == 'test_post') {
     echo TEST_POST_STRING;
     die;
 }
 
-if(!(function_exists("gzopen") && function_exists("gzread") && function_exists("gzwrite") && function_exists("gzclose"))) {
+if (!(function_exists("gzopen") && function_exists("gzread") && function_exists("gzwrite") && function_exists("gzclose"))) {
     $allow_compression = false;
 }
 
-$br_ver = explode(' ', $version);
-$br_ver = $br_ver[1];
+//$br_ver = explode(' ', BRIDGE_VERSION);
+//$br_ver = $br_ver[1];
 $errors = array(
-    "authentification" => "PHP MySQL Bridge (v.$br_ver): Authentication Error",
-    "cart_type" => "PHP MySQL Bridge (v.$br_ver): Unknown Cart Type",
-    "create_tmp_file" => "PHP MySQL Bridge (v.$br_ver): Can't Create Temporary File",
-    "open_tmp_file" => "PHP MySQL Bridge (v.$br_ver): Can't Open Temporary File",
-    "put_tmp_file" => "PHP MySQL Bridge (v.$br_ver): Can't Write Temporary File",
-    "not_writeable_dir" => "PHP MySQL Bridge (v.$br_ver): Your Temporary Directory specified in bridge.php doesn't exist or is not writeable",
-    "temporary_file_exist_not" => "PHP MySQL Bridge (v.$br_ver): Temporary File doesn't exist",
-    "temporary_file_readable_not" => "PHP MySQL Bridge (v.$br_ver): Temporary File isn't readable",
-    "file_uid_mismatch" => "PHP MySQL Bridge (v.$br_ver): SAFE MODE Restriction in effect. The script uid is not allowed to access tmp folder owned by other uid. If you don't understand this error, please contact your hosting provider for help",
-    "open_basedir" => "PHP MySQL Bridge (v.$br_ver): Please create local Temporary Directory, see \$temporary_dir variable in bridge.php",
+    "authentification" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . '): Authentication Error',
+    "cart_type" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . '): Unknown Cart Type',
+    "create_tmp_file" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Can't Create Temporary File",
+    "open_tmp_file" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Can't Open Temporary File",
+    "put_tmp_file" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Can't Write Temporary File",
+    "not_writeable_dir" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Your Temporary Directory specified in bridge.php doesn't exist or is not writeable",
+    "temporary_file_exist_not" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Temporary File doesn't exist",
+    "temporary_file_readable_not" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Temporary File isn't readable",
+    "file_uid_mismatch" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): SAFE MODE Restriction in effect. The script uid is not allowed to access tmp folder owned by other uid. If you don't understand this error, please contact your hosting provider for help",
+    "open_basedir" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . "): Please create local Temporary Directory, see \$temporary_dir variable in bridge.php",
     "checksum_dif" => "Checksums are different",
-    "ip_check" => "PHP MySQL Bridge (v.$br_ver): Add your IP to allowed list to run bridge, please",
-    "invalid_parameters" => "PHP MySQL Bridge (v.$br_ver): Parameters are invalid",
-    "cannot_archive_files" => "PHP MySQL Bridge (v.$br_ver): Cannot archive files"
+    "ip_check" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . '): Add your IP to allowed list to run bridge, please',
+    "invalid_parameters" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . '): Parameters are invalid',
+    "cannot_archive_files" => 'PHP MySQL Bridge (v.' . BRIDGE_VERSION . '): Cannot archive files'
 );
 
 if (!check_allowed_ip($allowed_ips)) {
@@ -366,7 +384,8 @@ if (!defined('USER_DB_SERVER') || !defined('USER_DB_SERVER_USERNAME') || !define
     }
 }
 
-function defineConfigData($host, $database, $username, $password, $prefix) {
+function defineConfigData($host, $database, $username, $password, $prefix)
+{
     define('DB_SERVER', $host);
     define('DB_DATABASE', $database);
     define('DB_SERVER_USERNAME', $username);
@@ -376,7 +395,8 @@ function defineConfigData($host, $database, $username, $password, $prefix) {
 
 //ob_end_clean();
 
-function parseMagentoDbConfig() {
+function parseMagentoDbConfig()
+{
     $config_file = simplexml_load_file(dirname(__FILE__) . '/app/etc/local.xml');
 
     $table_prefix = $config_file->xpath("//global/resources/db/table_prefix");
@@ -492,24 +512,26 @@ if ($g_iCartType == XCART) {
     define('XCART_START', true );
 }
 
-$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
-$filename = isset($_REQUEST['filename']) ? $_REQUEST['filename'] : '';
-$position = isset($_REQUEST['position']) ? $_REQUEST['position'] : '';
-$vars_main_dir = isset($_REQUEST['vars_main_dir']) ? $_REQUEST['vars_main_dir'] : '';
-$xml_path = isset($_REQUEST['xml_path']) ? $_REQUEST['xml_path'] : '';
-$xml_fields = isset($_REQUEST['xml_fields']) ? $_REQUEST['xml_fields'] : '';
-$xml_items_node = isset($_REQUEST['xml_items_node']) ? $_REQUEST['xml_items_node'] : '';
-$xml_items_info_node = isset($_REQUEST['xml_items_info_node']) ? $_REQUEST['xml_items_info_node'] : '';
-$xml_filters = isset($_REQUEST['xml_filters']) ? $_REQUEST['xml_filters'] : '';
-$table_name = isset($_REQUEST['table_name']) ? $_REQUEST['table_name'] : '';
-$order_id = isset($_REQUEST['order_id']) ? $_REQUEST['order_id'] : 0;
-$cache_type = isset($_REQUEST['cache_type']) ? $_REQUEST['cache_type'] : '';
-$search_path = isset($_REQUEST['search_path']) ? $_REQUEST['search_path'] : '';
-$mask = isset($_REQUEST['mask']) ? $_REQUEST['mask'] : '*';
-$ignore_dir = isset($_REQUEST['ignore_dir']) ? $_REQUEST['ignore_dir'] : '';
-$vars_names = isset($_REQUEST['vars_names']) && !empty($_REQUEST['vars_names'])
-        ? explode(',', $_REQUEST['vars_names'])
-        : array();
+/*
+ * Bridge additional parameters.
+ * */
+$task                  = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
+$filename              = isset($_REQUEST['filename']) ? $_REQUEST['filename'] : '';
+$position              = isset($_REQUEST['position']) ? $_REQUEST['position'] : '';
+$vars_main_dir         = isset($_REQUEST['vars_main_dir']) ? $_REQUEST['vars_main_dir'] : '';
+$xml_path              = isset($_REQUEST['xml_path']) ? $_REQUEST['xml_path'] : '';
+$xml_fields            = isset($_REQUEST['xml_fields']) ? $_REQUEST['xml_fields'] : '';
+$xml_items_node        = isset($_REQUEST['xml_items_node']) ? $_REQUEST['xml_items_node'] : '';
+$xml_items_info_node   = isset($_REQUEST['xml_items_info_node']) ? $_REQUEST['xml_items_info_node'] : '';
+$xml_filters           = isset($_REQUEST['xml_filters']) ? $_REQUEST['xml_filters'] : '';
+$table_name            = isset($_REQUEST['table_name']) ? $_REQUEST['table_name'] : '';
+$order_id              = isset($_REQUEST['order_id']) ? $_REQUEST['order_id'] : 0;
+$cache_type            = isset($_REQUEST['cache_type']) ? $_REQUEST['cache_type'] : '';
+$search_path           = isset($_REQUEST['search_path']) ? $_REQUEST['search_path'] : '';
+$mask                  = isset($_REQUEST['mask']) ? $_REQUEST['mask'] : '*';
+$ignore_dir            = isset($_REQUEST['ignore_dir']) ? $_REQUEST['ignore_dir'] : '';
+$vars_names            = isset($_REQUEST['vars_names']) && !empty($_REQUEST['vars_names']) ? explode(',', $_REQUEST['vars_names']) : array();
+$searchPath            = isset($_REQUEST['search_path']) ? $_REQUEST['search_path'] : '';
 
 // for put_sql
 if (isset($_REQUEST['checksum'])) $checksum_sm = $_REQUEST['checksum'];
@@ -535,7 +557,7 @@ switch ($task) {
         put_sql($import_handle);
         break;
     case 'get_version':
-        get_version($version);
+        get_version();
         break;
     case 'get_config':
         get_config();
@@ -557,6 +579,9 @@ switch ($task) {
         break;
     case 'get_ftp_files':
         echo get_ftp_files($search_path, $mask, $ignore_dir);
+        break;
+    case 'get_file_list':
+        get_file_list($searchPath);
         break;
     case 'get_cart_version':
         echo get_cart_version();
@@ -1474,9 +1499,8 @@ function generate_file_data($file, $allow_compression) {
 /************************************************************************
 * Returns version etc
 ************************************************************************/
-function get_version($version) {
-    echo "0\r\n";
-    echo $version;
+function get_version() {
+    echo "0\r\n\$Revision: " . BRIDGE_VERSION . '$';
 }
 
 function generate_error($err_text = '1', $class = null) {
@@ -1594,6 +1618,26 @@ function _get_part_number($number) {
     return str_pad($number, FILE_NAME_PART_NUMBER_COUNT_DIGITS, '0', STR_PAD_LEFT);
 }
 
+function setValueByKeyToFile($file, $key, $value) {
+    $content = file_get_contents($file);
+    $content = !empty($content) ? unserialize($content) : array();
+    $content[$key] = $value;
+
+    file_put_contents($file, serialize($content));
+}
+
+function getValueByKeyFromFile($file, $key) {
+    $content = file_get_contents($file);
+
+    if (empty($content)) {
+        return false;
+    }
+
+    $content = unserialize($content);
+
+    return array_key_exists($key, $content) ? $content[$key] : false;
+}
+
 class XmlConfig {
     private $file;
     private $xml;
@@ -1661,6 +1705,7 @@ class XmlConfig {
         return "1|".json_encode($this->items_list)."\r\n";
     }
 }
+
 class cMySQLBackUp {
     var $sBackUpDir = '/tmp';     // directory to put back up
     var $iCurrTime;
@@ -3434,6 +3479,224 @@ function get_ftp_files($path, $mask, $ignore_dir) {
     }
 
     return is_array($all_files) ? '1|' . json_encode($all_files, JSON_FORCE_OBJECT) : '0|';
+}
+
+function get_file_list($searchPath) {
+    global $allow_compression, $temporary_dir;
+
+    if (empty($searchPath)) {
+        generateJsonResponse(array(KEY_MESSAGE => 'Parameter search_path is incorrect'), true);
+    }
+
+    $filePathTxt = $temporary_dir . '/' . FILE_NAME_FILE_LIST . '.txt';
+    $filePathGz = $temporary_dir . '/' . FILE_NAME_FILE_LIST . '.gz';
+    $filePathFinal = $filePathTxt;
+
+    $includeMask            = isset($_REQUEST['include_mask']) ? $_REQUEST['include_mask'] : '';
+    $excludeMask            = isset($_REQUEST['exclude_mask']) ? $_REQUEST['exclude_mask'] : '';
+//    $includeRegexp          = !empty($_REQUEST['include_regexp']) ? '\\' . $_REQUEST['include_regexp'] . '\\' : '';
+    $includeRegexp          = !empty($_REQUEST['include_regexp']) ? $_REQUEST['include_regexp'] : '';
+//    $excludeRegexp          = !empty($_REQUEST['exclude_regexp']) ? '\\' . $_REQUEST['exclude_regexp'] . '\\' : '';
+    $excludeRegexp          = !empty($_REQUEST['exclude_regexp']) ? $_REQUEST['exclude_regexp'] : '';
+    $excludeDirectoryList   = isset($_REQUEST['exclude_dirs'])
+        ? str_replace('\\', '/', $_REQUEST['exclude_dirs'])
+        : '';
+    $excludeDirectories     = !empty($excludeDirectoryList) ? explode(';', $excludeDirectoryList) : array();
+    $excludeIsAbsolute      = strpos($excludeDirectoryList, '/') !== false;
+
+    if (!empty($includeMask)) {
+        $includeMask = '{' . str_replace(';', ',', $includeMask) . '}';
+    }
+
+    if (!empty($excludeMask)) {
+        $excludeMask = '{' . str_replace(';', ',', $excludeMask) . '}';
+    }
+
+    if (file_exists($filePathGz)) {
+        unlink($filePathGz);
+    }
+
+    $fileTmp = $temporary_dir . '/' . FILE_NAME_GET_FILE_LIST_TMP;
+    $processId = md5(rand());
+    setValueByKeyToFile($fileTmp, KEY_PROCESS_ID, $processId);
+
+    // Init file
+    file_put_contents($filePathTxt, '');
+
+    recursiveScanFolder($fileTmp,
+                        $processId,
+                        $filePathTxt,
+                        $searchPath,
+                        $includeMask,
+                        $excludeMask,
+                        $includeRegexp,
+                        $excludeRegexp,
+                        isset($_REQUEST['include_subdir']) ? $_REQUEST['include_subdir'] == 1 : true,
+                        $excludeDirectories,
+                        $excludeIsAbsolute
+    );
+
+    if ($allow_compression) {
+        $filePathFinal = $filePathGz;
+        generateArchive($filePathTxt, $filePathFinal);
+    }
+
+//    generateJsonResponse(getDownloadableFileInfoJson($filePathFinal, $allow_compression));
+    die(getDownloadableFileInfo($filePathFinal, $allow_compression));
+}
+
+function recursiveScanFolder (
+    $fileTmp,
+    $processId,
+    $temporaryFileLocation,
+    $searchPath,
+    $includeMask,
+    $excludeMask,
+    $includeRegexp,
+    $excludeRegexp,
+    $includeSubDirectories,
+    $excludeDirs = array(),
+    $excludeIsAbsolute = true,
+    $skipArray = array('.', '..')
+) {
+    if (getValueByKeyFromFile($fileTmp, KEY_PROCESS_ID) != $processId) {
+        generateJsonResponse(array(KEY_MESSAGE => 'Another process has been run'), true);
+    }
+
+    if (!($objectPath = opendir($searchPath))) {
+        return;
+    }
+
+    $files_processed = false;
+
+    if (!empty($includeMask) || !empty($excludeMask)) {
+        if (!empty($includeMask)) {
+            $files = array_filter(glob("$searchPath/$includeMask", GLOB_BRACE), 'is_file');
+        } else {
+            $files = globNot($searchPath, $excludeMask, GLOB_BRACE);
+        }
+
+        for ($i = 0, $count = count($files); $i < $count; $i++) {
+            file_put_contents($temporaryFileLocation, $files[$i] . "\r\n", FILE_APPEND);
+        }
+
+        $files_processed = true;
+
+        if (!$includeSubDirectories) {
+            return;
+        }
+    }
+
+    while (($objectName = readdir($objectPath)) !== false) {
+        $searchObjectPath = str_replace('\\', '/', "$searchPath/$objectName");
+
+        if (is_file($searchObjectPath)) {
+            if ($files_processed) {
+                continue;
+            }
+
+            if (!empty($includeRegexp)) {
+                if (preg_match($includeRegexp, $objectName)) {
+                    file_put_contents($temporaryFileLocation, $searchObjectPath . "\r\n", FILE_APPEND);
+                }
+
+                continue;
+            } elseif (!empty($excludeRegexp)) {
+                if (!preg_match($excludeRegexp, $objectName)) {
+                    file_put_contents($temporaryFileLocation, $searchObjectPath . "\r\n", FILE_APPEND);
+                }
+
+                continue;
+            }
+
+            file_put_contents($temporaryFileLocation, $searchObjectPath . "\r\n", FILE_APPEND);
+        } elseif (is_dir($searchObjectPath)
+                  && $includeSubDirectories
+                  && ($excludeIsAbsolute ? !in_array($searchObjectPath, $excludeDirs) : !in_array($objectName, $excludeDirs))
+                  && !in_array($objectName, $skipArray)) {
+
+            recursiveScanFolder(
+                $fileTmp,
+                $processId,
+                $temporaryFileLocation,
+                $searchObjectPath,
+                $includeMask,
+                $excludeMask,
+                $includeRegexp,
+                $excludeRegexp,
+                $includeSubDirectories,
+                $excludeDirs,
+                $excludeIsAbsolute,
+                $skipArray
+            );
+        }
+    }
+}
+
+function globNot($searchPath, $excludePattern, $globFlag = null)
+{
+    $allResults = array_filter(glob("$searchPath/*"), 'is_file');
+
+    $differentResult = !empty($globFlag)
+        ? array_filter(glob("$searchPath/$excludePattern", $globFlag), 'is_file')
+        : array_filter(glob("$searchPath/$excludePattern"), 'is_file');
+
+    return array_values(array_diff($allResults, $differentResult));
+}
+
+function generateJsonResponse($data, $isError = false) {
+    if (!is_array($data)) {
+        $data = array($data);
+    }
+
+    $data[KEY_RESPONSE_CODE] = $isError ? ERROR_CODE_COMMON : SUCCESSFUL;
+
+    die(json_encode($data));
+}
+
+function generateArchive($fromFile, $toFile) {
+    global $package_size, $compress_level;
+
+    $fp_gz = gzopen($toFile, "wb{$compress_level}");
+    $fp = fopen($fromFile, 'r');
+
+    if ($fp_gz && $fp) {
+        while (!feof($fp)) {
+            $content = fread($fp, $package_size);
+            gzwrite($fp_gz, $content);
+        }
+
+        fclose($fp);
+        @unlink($fromFile);
+
+        fclose($fp_gz);
+    }
+}
+
+function getDownloadableFileInfo($file, $isCompressed) {
+    global $package_size;
+
+    $fileSize = filesize($file);
+    $divLastPart = $fileSize % $package_size;
+
+    return "0\r\n" . ($isCompressed ? '1' : '0') . '|'
+        . floor($divLastPart > 0 ? $fileSize / $package_size + 1 : $fileSize / $package_size)
+        . "|$fileSize\r\n" . basename($file) . "\r\n" . md5_file($file);
+}
+
+function getDownloadableFileInfoJson($file, $isCompressed) {
+    global $package_size;
+
+    $fileSize = filesize($file);
+    $divLastPart = $fileSize % $package_size;
+
+    return array(
+        KEY_IS_COMPRESSED => $isCompressed ? 1 : 0,
+        KEY_FILE_SIZE => $fileSize,
+        KEY_PARTS_COUNT => floor($divLastPart > 0 ? $fileSize / $package_size + 1 : $fileSize / $package_size),
+        KEY_CHECKSUM => md5_file($file),
+        KEY_FILE_NAME => basename($file)
+    );
 }
 
 function get_cart_version() {
