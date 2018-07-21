@@ -36,7 +36,13 @@ class Amasty_Shopby_Model_Filter extends Mage_Core_Model_Abstract
     public function getDisplayTypeString()
     {
         $hash = $this->getDisplayTypeOptionsSource()->getHash();
-        return $hash[$this->getDisplayType()];
+        if (isset($hash[$this->getDisplayType()])) {
+            $value = $hash[$this->getDisplayType()];
+        } else {
+            $value = Mage::helper('amshopby')->__('Something went wrong. Please re-save the filter');
+        }
+
+        return $value;
     }
 
     public function getDisplayTypeOptionsSource()

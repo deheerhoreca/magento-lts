@@ -20,7 +20,7 @@ class Amasty_Shopby_Helper_Image extends Mage_Catalog_Helper_Image
      */
     public function setProduct($product)
     {
-        if ($product->isConfigurable() && $product->isSaleable() && $this->getRequestConfigurableMap()) {
+        if ($product->isConfigurable() && $this->getRequestConfigurableMap() && $product->isSaleable()) {
             $child = $this->getMatchingSimpleProduct($this->getChildrenCollection($product));
             if (!$child) {
                 // If simple options haven't an image, try to receive it from mapped.

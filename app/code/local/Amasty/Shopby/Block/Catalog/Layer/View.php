@@ -555,8 +555,15 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
      */
     protected function _prepareLayout()
     {
-        if($productsBlock = Mage::app()->getLayout()->getBlock('category.products')) {
-            $productsBlock->getCmsBlockHtml();
+        if ($productsBlock = Mage::app()->getLayout()->getBlock('category.products')) {
+            $currentCategory = $productsBlock->getCurrentCategory();
+            $id = $currentCategory ? $currentCategory->getLandingPage() : null;
+            if ($id) {
+                $cms = Mage::getModel('cms/block')->load($id);
+                if (strpos($cms->getContent(), 'amfinder') !== false) {
+                    $productsBlock->getCmsBlockHtml();
+                }
+            }
         }
 
         $pos = Mage::getStoreConfig('amshopby/category_filter/block_pos');
@@ -626,9 +633,6 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
         parent::_prepareLayout();
 
         $this->appendChildFilters();
-
-
-        //$this->assertRequiredFilters($this->getFilters());
 
         return $this;
     }

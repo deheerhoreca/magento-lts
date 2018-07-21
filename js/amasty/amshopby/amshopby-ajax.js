@@ -420,8 +420,8 @@ function amshopby_external(){
     if ((typeof amshopby_apply_builder != 'undefined') && (typeof amshopby_apply_builder.init === 'function')) {
         amshopby_apply_builder.init();
     }
-
-    if (amconfAddButtonEvent) {
+    
+    if (typeof amconfAddButtonEvent != 'undefined') {
         amconfAddButtonEvent();
     }
 }

@@ -17,6 +17,8 @@ class Amasty_Base_Model_InformationObserver
 
     protected $_moduleLink;
 
+    protected $_moduleData = array();
+
     public function addInformationContent($observer)
     {
         $block = $observer->getBlock();
@@ -53,9 +55,19 @@ class Amasty_Base_Model_InformationObserver
     {
         $html = '';
         if ($content = $this->getBlock()->getAdditionalModuleContent()) {
-            $html = '<div class="amasty-additional-content">'
-                . $content
-            .'</div>';
+            if (is_array($content)) {
+                foreach ($content as $type => $message) {
+                    $html .= '<div class="amasty-additional-content amasty-'
+                        . $type
+                        . '">'
+                        . $message
+                        . '</div>';
+                }
+            } else {
+                $html = '<div class="amasty-additional-content">'
+                    . $content
+                    .'</div>';
+            }
         }
 
         return $html;
@@ -146,13 +158,28 @@ class Amasty_Base_Model_InformationObserver
     }
 
     /**
-     * @param $currentVer
-     * @return bool
+     * @return string
      */
     protected function _getModuleLink()
     {
         if (!$this->_moduleLink) {
             $this->_moduleLink = '';
+            $module = $this->_getModuleData();
+            if ($module && isset($module['url']) && $module['url']) {
+                $this->_moduleLink = $module['url'];
+            }
+        }
+
+        return $this->_moduleLink;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getModuleData()
+    {
+        if (!$this->_moduleData) {
+            $this->_moduleData = array();
             $allExtensions = Amasty_Base_Helper_Module::getAllExtensions();
             if ($allExtensions && isset($allExtensions[$this->getBlock()->getModuleCode()])) {
                 $module = $allExtensions[$this->getBlock()->getModuleCode()];
@@ -160,14 +187,11 @@ class Amasty_Base_Model_InformationObserver
                     $module = array_shift($module);
                 }
 
-                if (isset($module['url']) && $module['url']) {
-                    $this->_moduleLink = $module['url'];
-                }
+                $this->_moduleData = $module;
             }
         }
 
-
-        return $this->_moduleLink;
+        return $this->_moduleData;
     }
 
     /**
@@ -211,8 +235,8 @@ class Amasty_Base_Model_InformationObserver
     {
         $html = '<div class="amasty-user-guide">'
             . $this->getBaseHelper()->__(
-                'Confused with configuration?'
-                . ' No worries, please consult the <a target="_blank" href="%s">user guide</a> to properly configure the extension.',
+                'Need help with the settings?'
+                . ' Please consult the <a target="_blank" href="%s">user guide</a> to configure the extension properly.',
                 $this->_getUserGuideLink()
             )
             . '</div>';
@@ -304,7 +328,7 @@ class Amasty_Base_Model_InformationObserver
     protected function _showModuleExistingConflicts()
     {
         $messages = array();
-        foreach ($this->getBlock()->getKnownConflictExtensions() as $moduleName) {
+        foreach ($this->getKnownConflictExtensions() as $moduleName) {
             if (Mage::helper('core')->isModuleEnabled($moduleName)) {
                 $messages[] = $this->getBaseHelper()->__(
                     'Our extension is not compatible with the %s. '
@@ -326,6 +350,25 @@ class Amasty_Base_Model_InformationObserver
         }
 
         return $html;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getKnownConflictExtensions()
+    {
+        $conflicts = $this->getBlock()->getKnownConflictExtensions();
+
+        $module = $this->_getModuleData();
+        if ($module && isset($module['conflictExtensions']) && $module['conflictExtensions']) {
+            $fromSite = $module['conflictExtensions'];
+            $conflictsFromSite = str_replace(' ', '', $fromSite);
+            $conflictsFromSite = explode(',', $conflictsFromSite);
+            $conflicts = array_merge($conflicts, $conflictsFromSite);
+            $conflicts = array_unique($conflicts);
+        }
+
+        return $conflicts;
     }
 
     /**

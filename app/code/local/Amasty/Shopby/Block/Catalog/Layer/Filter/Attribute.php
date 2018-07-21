@@ -24,14 +24,9 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
 
     public function getItemsAsArray()
     {
-        $cacheKey = 'items_as_array';
-        $cached = $this->getData($cacheKey);
-        if (isset($cached)) {
-            return $cached;
-        }
         $params = Mage::app()->getRequest()->getParams();
         $isMultipleNoindexMode = $this->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_MULTIPLE_MODE;
-        $isApplyByButton = Mage::app()->getStore()->getConfig('amshopby/general/submit_filters');
+        $isApplyByButton = Mage::helper('amshopby')->getIsApplyButtonEnabled();
         $applyConfigDumb = json_encode(array());
         $displayType = $this->getDisplayType();
 
@@ -43,7 +38,7 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         $urlBuilder->reset();
         $urlBuilder->clearPagination();
 
-        foreach ($this->getItems() as $itemObject){
+        foreach ($this->getItems() as $itemObject) {
             /** @var Amasty_Shopby_Model_Catalog_Layer_Filter_Item  $itemObject */
             $item = array();
             $item['id'] = $itemObject->getOptionId();
@@ -58,7 +53,7 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             }
 
             $item['image'] = '';
-            if ($itemObject->getImage()){
+            if ($itemObject->getImage()) {
                 $item['image'] = Mage::getBaseUrl('media') . 'amshopby/' . $itemObject->getImage();
             }
 
@@ -71,27 +66,29 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
                 $displayType == Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN;
             $item['css'] = ($skipAttributeClass) ? '' : 'amshopby-attr';
 
-            if ($itemObject->getIsSelected()){
+            if ($itemObject->getIsSelected()) {
                 $selected = true;
                 $item['css'] .= '-selected';
-                if (3 == $displayType){ //dropdown
+                if (Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN == $displayType) { //dropdown
                     $item['css'] = 'selected';
                 }
             }
 
-            if ($itemObject->getCount() === 0)
-            {
+            if ($itemObject->getCount() === 0) {
                 $item['css'] .= ' amshopby-attr-inactive';
             }
 
-            if($isMultipleNoindexMode) {
-                if ($this->getSeoRel() && isset($params[$this->getRequestValue()]) && ($params[$this->getRequestValue()] != $item['id']))
+            if ($isMultipleNoindexMode) {
+                if ($this->getSeoRel() && isset($params[$this->getRequestValue()])
+                    && ($params[$this->getRequestValue()] != $item['id'])
+                ) {
                     $item['rel'] =  ' rel="nofollow" ';
-                else
+                } else {
                     $item['rel'] = '';
-            }
-            else
+                }
+            } else {
                 $item['rel'] =  $this->getSeoRel() ? ' rel="nofollow" ' : '';
+            }
 
             $item['is_featured'] = $itemObject->getIsFeatured();
 
@@ -106,7 +103,7 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             Amasty_Shopby_Model_Filter::SORT_BY_NAME => 'sortOptionsByName',
             Amasty_Shopby_Model_Filter::SORT_BY_QTY => 'sortOptionsByCounts'
         );
-        if (isset($functions[$sortBy])){
+        if (isset($functions[$sortBy])) {
             usort($items, array(Mage::helper('amshopby/attributes'), $functions[$sortBy]));
         }
 
@@ -115,39 +112,38 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         if ($selected) {
             $max = 0;
         }
-		$featuredItems = array();
-		$standartItems = array();
-        $i   = 0;
-        foreach ($items as $k => $item){
+        $featuredItems = array();
+        $standartItems = array();
+        $i = 0;
+        foreach ($items as $k => $item) {
             $style = '';
-            if ($max && (++$i > $max)){
+            if ($max && (++$i > $max)) {
                 $style = 'style="display:none" class="amshopby-attr-' . $this->getRequestValue() . '"';
             }
             $items[$k]['style'] = $style;
-			$items[$k]['default_sort'] = $i;
-			$items[$k]['featured_sort'] = $i;
-			if($item['is_featured']) {
-				$featuredItems[] = $items[$k];
-			} else {
-				$standartItems[] = $items[$k];
-			}
+            $items[$k]['default_sort'] = $i;
+            $items[$k]['featured_sort'] = $i;
+            if (isset($item['is_featured']) && $item['is_featured']) {
+                $featuredItems[] = $items[$k];
+            } else {
+                $standartItems[] = $items[$k];
+            }
         }
-		if($this->getSortFeaturedFirst() && count($featuredItems) > 0) {
-			usort($featuredItems, array(Mage::helper('amshopby/attributes'), 'sortOptionsByName'));
-			$items = array_merge($featuredItems, $standartItems);
-			$i = 0;
-			foreach($items as $k=>$item) {
-				$style = '';
-				if ($max && (++$i > $max)){
-					$style = 'style="display:none" class="amshopby-attr-' . $this->getRequestValue() . '"';
-				}
-				$items[$k]['style'] = $style;
-				$items[$k]['featured_sort'] = $i;
-			}
-		}
+        if ($this->getSortFeaturedFirst() && count($featuredItems) > 0) {
+            usort($featuredItems, array(Mage::helper('amshopby/attributes'), 'sortOptionsByName'));
+            $items = array_merge($featuredItems, $standartItems);
+            $i = 0;
+            foreach ($items as $k => $item) {
+                $style = '';
+                if ($max && (++$i > $max)) {
+                    $style = 'style="display:none" class="amshopby-attr-' . $this->getRequestValue() . '"';
+                }
+                $items[$k]['style'] = $style;
+                $items[$k]['featured_sort'] = $i;
+            }
+        }
         $this->setShowLessMore($max && ($i > $max));
 
-        $this->setData($cacheKey, $items);
         return $items;
     }
 

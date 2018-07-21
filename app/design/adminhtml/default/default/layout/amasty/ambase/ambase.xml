@@ -33,7 +33,11 @@
             <reference name="content">
                 <block type="ambase/adminhtml_update" name="amupdate" as="amupdate" template="amasty/ambase/update.phtml"></block>
             </reference>
-                
+
+            <reference name="before_body_end">
+                <block type="ambase/adminhtml_logo" name="amlogo" as="amlogo" template="amasty/ambase/logo.phtml"></block>
+            </reference>
+
         </reference>
     </default>
 </layout>

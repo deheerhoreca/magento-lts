@@ -210,11 +210,15 @@ function amshopby_slider(from, to, max_value, prefix, min_value, step, item) {
 }
 
 function amshopby_round(value, step) {
-
-    value /= step;
-    value = parseInt(value);
-    value *= step;
-    value = parseFloat(value.toFixed(4));
+    if (step > 0 && step < 1) {
+        value /= step;
+        value = parseInt(value + parseFloat(step));
+        value *= step;            
+        value = parseFloat(value.toFixed(4));
+    } else {
+        value = parseInt(value);
+    }
+    
     return value;
 }
 
@@ -398,11 +402,20 @@ function amshopby_attr_search(searchBox){
     var all = searchBox.up(1).childElements();
 
     var moreButton = searchBox.up(1).select('.amshopby-more');
+    var lessButton = searchBox.up(1).select('.amshopby-less');
+
     if(moreButton.length > 0) {
         moreButton = moreButton[0];
-        if(moreButton.style.display ==''){
-            moreButton.click();
-        };
+        lessButton = lessButton[0];
+        if(str !== '') {
+            moreButton.hide();
+            lessButton.hide();
+        }
+
+        if(str == ''  && lessButton.style.display == 'none') {
+            moreButton.hide();
+            lessButton.show();
+        }
     }
 
     all.each(function(li) {

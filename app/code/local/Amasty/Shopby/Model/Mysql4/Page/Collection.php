@@ -16,12 +16,23 @@ class Amasty_Shopby_Model_Mysql4_Page_Collection extends Mage_Core_Model_Mysql4_
         $this->setOrder('num', 'desc');
     }
 
-    public function addStoreFilter()
+    /**
+     * @param null $storeId
+     * @return $this
+     */
+    public function addStoreFilter($storeId = null)
     {
-        $storeId = Mage::app()->getStore()->getId();
+        if ($storeId === null) {
+            $storeId = Mage::app()->getStore()->getId();
+        }
         $this->getSelect()->where('stores = "" OR stores REGEXP "(^|,)' . $storeId . '($|,)"');
+
+        return $this;
     }
 
+    /**
+     * @param $categoryId
+     */
     public function addCategoryFilter($categoryId)
     {
         if (isset($categoryId)) {

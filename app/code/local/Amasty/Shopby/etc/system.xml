@@ -17,13 +17,15 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
-                <hint>
-                    <frontend_model>amshopby/adminhtml_system_config_fieldset_hint</frontend_model>
+                <amasty_information translate="label">
+                    <label>Information</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>amshopby/adminhtml_system_config_fieldset_info</frontend_model>
                     <sort_order>0</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                </hint>
+                </amasty_information>
                 <general translate="label">
                     <label>General</label>
                     <frontend_type>text</frontend_type>
@@ -51,15 +53,24 @@
                             <show_in_store>1</show_in_store>
                             <depends><ajax>1</ajax></depends>
                         </scroll_to_products>
-                        <submit_filters translate="label">
-                            <label>Submit Filters</label>
+                        <submit_filters_desktop translate="label">
+                            <label>Submit Filters on Desktop</label>
                             <frontend_type>select</frontend_type>
                             <source_model>amshopby/source_submit</source_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </submit_filters>
+                        </submit_filters_desktop>
+                        <submit_filters_mobile translate="label">
+                            <label>Submit Filters on Mobile</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amshopby/source_submit</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </submit_filters_mobile>
                         <submit_position>
                             <label>Apply button position</label>
                             <frontend_type>select</frontend_type>
@@ -68,7 +79,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <depends><submit_filters>1</submit_filters></depends>
                         </submit_position>
                         <enable_collapsing translate="label">
                             <label>Allow Filter Collapsing</label>
@@ -1021,6 +1031,15 @@ Amasty SEO Toolkit</a> extension]]></label>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[For the category pages]]></comment>
                         </canonical_cat>
+                        <canonical_brand translate="label comment">
+                            <label>Canonical URL on the Brand Pages</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amshopby/source_canonical</source_model>
+                            <sort_order>325</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </canonical_brand>
                         <prev_next translate="label comment">
                             <label>Render Prev/Next tags on improved navigation pages</label>
                             <frontend_type>select</frontend_type>
@@ -1029,8 +1048,7 @@ Amasty SEO Toolkit</a> extension]]></label>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[When enabled, it helps Google to index paginated content. See more details here:
-https://support.google.com/webmasters/answer/1663744]]></comment>
+                            <comment><![CDATA[When enabled, it helps Google to index paginated content. See more details <a target="_blank" href="here:https://support.google.com/webmasters/answer/1663744">here</a>.]]></comment>
                         </prev_next>
                         <page_match_strict translate="label comment">
                             <label>Use strict Pages matching</label>
@@ -1040,7 +1058,7 @@ https://support.google.com/webmasters/answer/1663744]]></comment>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[In strict mode page not match when extra attribute filters or values present]]></comment>
+                            <comment><![CDATA['Pages' feature modifies filtered results meta tags and in-page content in accordance with the selected filters. If a strict mode is enabled any additional filter, like price or weight will cancel these changes.]]></comment>
                         </page_match_strict>
                         <query_param translate="label comment">
                             <label>Query param for URLs with multiple attributes</label>
