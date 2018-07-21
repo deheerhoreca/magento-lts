@@ -42,11 +42,11 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
     const XPATH_SHOW_GIFTCARD_ISSUERS = 'payment/mollie/show_giftcard_list';
     const XPATH_BANKTRANSFER_DUE_DAYS = 'payment/mollie/banktransfer_due_date_days';
     const XPATH_LOCALE = 'payment/mollie/locale';
+    const XPATH_FORCE_BASE_CURRENCY = 'payment/mollie/force_base_currency';
     const XPATH_LOADING_SCREEN = 'payment/mollie/loading_screen';
     const XPATH_IMPORT_PAYMENT_INFO = 'payment/mollie/import_payment_info';
     const XPATH_ORDER_STATUS_PENDING = 'payment/mollie/order_status_pending';
     const XPATH_ORDER_STATUS_PROCESSING = 'payment/mollie/order_status_processing';
-    const XPATH_SKIP_INVOICE = 'payment/mollie/skip_invoice';
     const XPATH_SKIP_ORDER_EMAIL = 'payment/mollie/skip_order_mails';
     const XPATH_SKIP_INVOICE_EMAIL = 'payment/mollie/skip_invoice_mails';
     const XPATH_DEBUG = 'payment/mollie/debug';
@@ -94,15 +94,15 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getStoreConfig($path, $storeId = null, $websiteId = null)
     {
-        if ($websiteId > 0) {
+        if ($storeId > 0) {
+            $value = Mage::getStoreConfig($path, $storeId);
+        } elseif ($websiteId > 0) {
             try {
                 $value = Mage::app()->getWebsite($websiteId)->getConfig($path);
             } catch (\Exception $e) {
                 $this->addLog('getStoreConfig [ERR]', $e->getMessage());
                 $value = null;
             }
-        } elseif ($storeId > 0) {
-            $value = Mage::getStoreConfig($path, $storeId);
         } else {
             $value = Mage::getStoreConfig($path);
         }
@@ -172,59 +172,93 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return mixed
      */
-    public function getMethodSortOrder($method, $storeId = null)
+    public function getMethodSortOrder($method, $storeId = null, $websiteId = null)
     {
         if (strpos($method, 'mpm_void_') === false) {
             $method = 'mpm_void_' . str_pad($method, 2, "0", STR_PAD_LEFT);
         }
 
-        return $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_SORT_ORDER), $storeId);
+        return $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_SORT_ORDER), $storeId, $websiteId);
     }
 
     /**
      * @param      $method
      * @param null $storeId
+     * @param null $websiteId
      *
      * @return mixed
      */
-    public function getMethodTitle($method, $storeId = null)
+    public function getMethodTitle($method, $storeId = null, $websiteId = null)
     {
         if (strpos($method, 'mpm_void_') === false) {
             $method = 'mpm_void_' . str_pad($method, 2, "0", STR_PAD_LEFT);
         }
 
-        return $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_TITLE), $storeId);
+        return $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_TITLE), $storeId, $websiteId);
     }
 
     /**
      * @param      $method
      * @param null $storeId
+     * @param null $websiteId
+     *
+     * @return bool
+     */
+    public function getUseDefaultTitle($method, $storeId = null, $websiteId = null)
+    {
+        if ($storeId == null && $websiteId == null) {
+            return empty($this->getMethodTitle($method));
+        }
+
+        if (strpos($method, 'mpm_void_') === false) {
+            $method = 'mpm_void_' . str_pad($method, 2, "0", STR_PAD_LEFT);
+        }
+
+        $path = str_replace('{method}', $method, self::XPATH_METHOD_TITLE);
+        $collection = Mage::getModel('core/config_data')->getCollection()->addFieldToFilter('path', $path);
+
+        if ($storeId) {
+            $collection = $collection->addFieldToFilter('scope_id', $storeId)->addFieldToFilter('scope', 'stores');
+            $configId = $collection->getFirstItem()->getConfigId();
+            return empty($configId);
+        }
+
+        if ($websiteId) {
+            $collection = $collection->addFieldToFilter('scope_id', $websiteId)->addFieldToFilter('scope', 'websites');
+            $configId = $collection->getFirstItem()->getConfigId();
+            return empty($configId);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param      $method
      *
      * @return mixed
      */
-    public function getMethodSpecificCountry($method, $storeId = null)
+    public function getMethodSpecificCountry($method)
     {
         if (strpos($method, 'mpm_void_') === false) {
             $method = 'mpm_void_' . str_pad($method, 2, "0", STR_PAD_LEFT);
         }
 
-        $config = $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_SPECIFICCOUNTRY), $storeId);
+        $config = $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_SPECIFICCOUNTRY));
         return explode(',', $config);
     }
 
     /**
      * @param      $method
-     * @param null $storeId
      *
      * @return mixed
      */
-    public function getMethodAllowSpecific($method, $storeId = null)
+    public function getMethodAllowSpecific($method)
     {
         if (strpos($method, 'mpm_void_') === false) {
             $method = 'mpm_void_' . str_pad($method, 2, "0", STR_PAD_LEFT);
         }
 
-        return $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_ALLOWSPECIFIC), $storeId);
+        return $this->getStoreConfig(str_replace('{method}', $method, self::XPATH_METHOD_ALLOWSPECIFIC));
     }
 
     /**
@@ -242,7 +276,12 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getConfigStoreId()
     {
-        $storeId = (int)Mage::app()->getRequest()->getParam('store', 0);
+        $storeId = 0;
+        $code = Mage::getSingleton('adminhtml/config_data')->getStore();
+        if (!empty($code)) {
+            $storeId = Mage::getModel('core/store')->load($code)->getId();
+        }
+
         return $storeId;
     }
 
@@ -253,7 +292,12 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getConfigWebsiteId()
     {
-        $websiteId = (int)Mage::app()->getRequest()->getParam('website', 0);
+        $websiteId = 0;
+        $code = Mage::getSingleton('adminhtml/config_data')->getWebsite();
+        if (!empty($code)) {
+            $websiteId = Mage::getModel('core/website')->load($code)->getId();
+        }
+
         return $websiteId;
     }
 
@@ -389,20 +433,6 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param null $storeId
-     *
-     * @return bool
-     */
-    public function invoiceOrder($storeId = null)
-    {
-        if ($this->getStoreConfig(self::XPATH_SKIP_INVOICE, $storeId)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Build url for Redirect.
      *
      * @return string
@@ -422,12 +452,24 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * @param $orderId
+     * @param $paymentToken
      *
      * @return string
      */
-    public function getReturnUrl($orderId)
+    public function getReturnUrl($orderId, $paymentToken)
     {
-        return Mage::getUrl('mpm/api/return', array('_query' => 'order_id=' . $orderId . '&utm_nooverride=1'));
+        return Mage::getUrl(
+            'mpm/api/return',
+            array('_query' => 'order_id=' . $orderId . '&payment_token=' . $paymentToken . '&utm_nooverride=1')
+        );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentToken()
+    {
+        return Mage::helper('core')->uniqHash();
     }
 
     /**
@@ -446,7 +488,7 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
         $locale = $this->getStoreConfig(self::XPATH_LOCALE);
 
         if (!$locale) {
-            return '';
+            return null;
         }
 
         if ($locale == 'store') {
@@ -454,7 +496,7 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
             if (in_array($localeCode, $this->getSupportedLocal())) {
                 return $localeCode;
             } else {
-                return '';
+                return null;
             }
         }
 
@@ -474,34 +516,87 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @param Mage_Sales_Model_Order $order
      *
-     * @return string
-     * @throws Mage_Core_Exception
+     * @return array
      */
-    public function getOrderAmount($order)
+    public function getOrderAmountByOrder($order)
     {
-        $grandTotal = '';
+        $baseCurrency = $this->useBaseCurrency($order->getStoreId());
 
-        if ($order->getBaseCurrencyCode() === 'EUR') {
-            $grandTotal = $order->getBaseGrandTotal();
-        } elseif ($order->getOrderCurrencyCode() === 'EUR') {
-            $grandTotal = $order->getGrandTotal();
+        if ($baseCurrency) {
+            $orderAmount = array(
+                "currency" => $order->getBaseCurrencyCode(),
+                "value"    => $this->formatCurrencyValue($order->getBaseGrandTotal(), $order->getBaseCurrencyCode())
+            );
         } else {
-            $this->addLog('getOrderAmount [ERR]', 'Neither Base nor Order currency is in Euros.');
-            Mage::throwException('Neither Base nor Order currency is in Euros.');
+            $orderAmount = array(
+                "currency" => $order->getOrderCurrencyCode(),
+                "value"    => $this->formatCurrencyValue($order->getGrandTotal(), $order->getOrderCurrencyCode())
+            );
         }
 
-        return $grandTotal;
+        return $orderAmount;
     }
 
     /**
-     * @param Mage_Sales_Model_Order $order
+     * @param Mage_Sales_Model_Quote $quote
+     *
+     * @return array
+     */
+    public function getOrderAmountByQuote($quote)
+    {
+        $baseCurrency = $this->useBaseCurrency($quote->getStoreId());
+
+        if ($baseCurrency) {
+            $orderAmount = array(
+                "currency" => $quote->getBaseCurrencyCode(),
+                "value"    => $this->formatCurrencyValue($quote->getBaseGrandTotal(), $quote->getBaseCurrencyCode())
+
+            );
+        } else {
+            $orderAmount = array(
+                "currency" => $quote->getQuoteCurrencyCode(),
+                "value"    => $this->formatCurrencyValue($quote->getGrandTotal(), $quote->getQuoteCurrencyCode())
+            );
+        }
+
+        return $orderAmount;
+    }
+
+    /**
+     * @param $storeId
+     *
+     * @return bool
+     */
+    public function useBaseCurrency($storeId)
+    {
+        return $this->getStoreConfig(self::XPATH_FORCE_BASE_CURRENCY, $storeId);
+    }
+
+    /**
+     * @param $value
+     * @param $currency
      *
      * @return string
-     * @throws Zend_Currency_Exception
      */
-    public function formatGrandTotal($order)
+    public function formatCurrencyValue($value, $currency)
     {
-        return Mage::app()->getLocale()->currency($order->getOrderCurrencyCode())->toCurrency($order->getGrandTotal());
+        $decimalPrecision = 2;
+        $currenciesWithoutDecimal = $this->getCurrenciesWithoutDecimal();
+        if (in_array($currency, $currenciesWithoutDecimal)) {
+            $decimalPrecision = 0;
+        }
+
+        return number_format($value, $decimalPrecision, '.', '');
+    }
+
+    /**
+     * List of currencies that have no decimals
+     *
+     * @return array
+     */
+    public function getCurrenciesWithoutDecimal()
+    {
+        return array('JPY');
     }
 
     /**
@@ -559,6 +654,7 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
             "ideal_SNSBNL2A" => "SNS Bank",
             "ideal_TRIONL2U" => "Triodos Bank",
             "ideal_FVLBNL22" => "van Lanschot",
+            "ideal_MOYONL21" => "Moneyou",
             "ideal_TESTNL99" => "Test Bank"
         );
 
@@ -567,4 +663,28 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+    /**
+     * @param array $request
+     *
+     * @return mixed
+     */
+    public function validateRequestData($request)
+    {
+        if (isset($request['billingAddress'])) {
+            foreach ($request['billingAddress'] as $k => $v) {
+                if ((empty($v)) && ($k != 'region')) {
+                    unset($request['billingAddress']);
+                }
+            }
+        }
+        if (isset($request['shippingAddress'])) {
+            foreach ($request['shippingAddress'] as $k => $v) {
+                if ((empty($v)) && ($k != 'region')) {
+                    unset($request['shippingAddress']);
+                }
+            }
+        }
+
+        return $request;
+    }
 }
