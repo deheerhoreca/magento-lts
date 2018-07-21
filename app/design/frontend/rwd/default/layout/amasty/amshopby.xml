@@ -17,6 +17,7 @@
     <amshopby_index_index>
         <!-- feel free remove that if you need to use default page layout -->
         <reference name="root">
+            <action method="addBodyClass"><class>catalog-category-view</class></action>
             <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
         </reference>
 
@@ -69,6 +70,7 @@
             <block type="amshopby/search_layer" name="amshopby.navleft" before="-" template="catalog/layer/view.phtml"/>
         </reference>
         <reference name="content">
+            <block type="amshopby/top" name="amshopby.top" before="category.products" template="amasty/amshopby/top.phtml"/>
             <block type="amshopby/search_layer_top" name="amshopby.navtop" before="search.result" template="amasty/amshopby/view_top.phtml"/>
         </reference>
     </catalogsearch_result_index>

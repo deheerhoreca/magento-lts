@@ -145,6 +145,8 @@ class Amasty_Shopby_Block_Top extends Mage_Core_Block_Template
         if ($page->getDescription()) {
             $category->setData('description', $page->getDescription());
         }
+
+        Mage::register(self::METADATA_PROCESSED, true, true);
     }
 
     /**
@@ -523,6 +525,11 @@ class Amasty_Shopby_Block_Top extends Mage_Core_Block_Template
             if (!$mode || $mode == Mage_Catalog_Model_Category::DM_PRODUCT) {
                 $category->setData('display_mode', Mage_Catalog_Model_Category::DM_MIXED);
             }
+
+            $categoryView = Mage::app()->getLayout()->getBlock('category.products');
+            if ($categoryView) {
+                $categoryView->setData('cms_block_html', null);
+            }
         }
     }
 
@@ -605,28 +612,38 @@ class Amasty_Shopby_Block_Top extends Mage_Core_Block_Template
         /** @var Amasty_Shopby_Helper_Data $helper */
         $helper = Mage::helper('amshopby');
 
+        $matchedPageAttributesOrigin = $matchedPageAttributes;
         $params = Mage::app()->getRequest()->getParams();
         $currentBrand = $this->getCurrentBrandPageBrand();
         $appliedFiltersCount = 0;
-        foreach ($filters as $f) {
-            /** @var Amasty_Shopby_Model_Filter $f */
-            $code = $f->getAttributeCode();
-            $vals = $helper->getRequestValues($code, $f->getBackendType());
+        foreach ($filters as $filter) {
+            if (!$robots['follow'] && !$robots['index']) {
+                break;
+            }
+            /** @var Amasty_Shopby_Model_Filter $filter */
+            $code = $filter->getAttributeCode();
+            if (!isset($matchedPageAttributes[$code])) {
+                $matchedPageAttributes[$code] = array();
+            }
 
-            if ($vals || (isset($params[$code]) && ($f->getBackendType() == 'decimal'))) {
-
-                if (!$currentBrand || $currentBrand->getFilterId() != $f->getId()) {
+            $requestValues = $helper->getRequestValues($code, $filter->getBackendType());
+            if ($requestValues || isset($params[$code]) && $filter->getBackendType() == 'decimal') {
+                if (!$currentBrand || $currentBrand->getFilterId() != $filter->getId()) {
                     $appliedFiltersCount++;
-
-                    if ($f->getSeoNofollow()) {
+                    if ($filter->getSeoNofollow()) {
                         $robots['follow'] = false;
                     }
 
-                    if(!$matchedPageAttributes || !$vals || !isset($matchedPageAttributes[$code]) || array_diff($vals, $matchedPageAttributes[$code])){
-                        if ($f->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_MULTIPLE_MODE) {
-                            if (count($vals) > 1)
-                                $robots['index'] = false;
-                        } elseif ($f->getSeoNoindex()) {
+                    $nonPageValues = array_diff($requestValues, $matchedPageAttributes[$code]);
+                    if ($nonPageValues) {
+                        if($this->isChildFilterOptionApplied($nonPageValues)) {
+                            $robots['follow'] = $robots['index'] = false;
+                            break;
+                        }
+
+                        if (($filter->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_MULTIPLE_MODE && count($requestValues) > 1)
+                            || $filter->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_YES_MODE
+                        ) {
                             $robots['index'] = false;
                         }
                     }
@@ -634,14 +651,25 @@ class Amasty_Shopby_Block_Top extends Mage_Core_Block_Template
             }
         }
 
-        if (!$matchedPageAttributes && ($appliedFiltersCount > 1)) {
-            if (Mage::getStoreConfig('amshopby/seo/noindex_multiple'))
-                $robots['index'] = false;
+        if (empty($matchedPageAttributesOrigin)
+            && ($appliedFiltersCount > 1)
+            && Mage::getStoreConfig('amshopby/seo/noindex_multiple')
+        ) {
+            $robots['index'] = false;
         }
 
         return $robots;
     }
 
+    /**
+     * @param array $requestedValues
+     * @return bool
+     */
+    protected function isChildFilterOptionApplied($requestedValues)
+    {
+        $mappedOptions = array_keys(Mage::helper('amshopby/url')->getMappedOptionsWithParents());
+        return (bool) array_intersect($mappedOptions, $requestedValues);
+    }
 
     /**
      * @param Mage_Catalog_Model_Category $category

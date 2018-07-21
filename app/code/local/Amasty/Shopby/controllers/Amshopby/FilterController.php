@@ -13,6 +13,7 @@ class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_
         $this->_checkRootCategories();
         $this->_checkOldTemplates();
         $this->_checkConflicts();
+        $this->_checkEnemyNavigation();
         //$this->_checkMigrations();
 
         $this->loadLayout();
@@ -25,12 +26,12 @@ class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_
 
     protected function _checkRootCategories()
     {
-        foreach (Mage::app()->getStores() as $store){
+        foreach (Mage::app()->getStores() as $store) {
             $category = Mage::getModel('catalog/category')
                 ->setStoreId($store->getId())
                 ->load($store->getRootCategoryId());
 
-            if (!$category->getIsAnchor()){
+            if (!$category->getIsAnchor()) {
                 $msg = $this->__('Please open Catalog > Manage Categories and set property "Is Anchor" to "Yes" for the store root category.');
                 $this->_getSession()->addNotice($msg);
                 break;
@@ -42,7 +43,7 @@ class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_
     {
         $frontendPath = rtrim(Mage::getBaseDir('design') . '/frontend', ' /');
 
-        foreach (Mage::app()->getStores() as $store){
+        foreach (Mage::app()->getStores() as $store) {
             $package = Mage::getStoreConfig('design/package/name', $store);
             if (!$package)
                 $package = 'default';
@@ -54,10 +55,31 @@ class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_
             $themePath = $frontendPath . '/' . trim($package, ' /') . '/' . trim($theme, ' /');
             $excessPath = $themePath . '/template/amshopby';
 
-            if (is_dir($excessPath)){
+            if (is_dir($excessPath)) {
                 $msg = $this->__('In case you need to modify the module templates please copy files from app/design/frontend/base/default/template/amasty/amshopby/  to your custom theme  app/design/frontend/PACKAGE/THEME/template/amasty/amshopby/');
                 $this->_getSession()->addNotice($msg);
                 break;
+            }
+        }
+    }
+
+    protected function _checkEnemyNavigation()
+    {
+        $modules = array(
+            'Smartwave_Ajaxcatalog',
+            'Vt_Ajaxfilter',
+        );
+
+        foreach ($modules as $moduleName) {
+            if (Mage::helper('core')->isModuleEnabled($moduleName)) {
+                $msg =
+                    $this->__(
+                        'There is a conflict(s) with %s extension.'
+                        . ' We recommend turning off this extension via app/etc/modules/%s.xml file.',
+                        $moduleName,
+                        $moduleName
+                    );
+                $this->_getSession()->addNotice($msg);
             }
         }
     }
@@ -81,10 +103,10 @@ class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_
             ),
         );
 
-        foreach ($classes as $type => $names){
-            foreach ($names as $name){
+        foreach ($classes as $type => $names) {
+            foreach ($names as $name) {
                 $name = Mage::getConfig()->getGroupedClassName($type, $name);
-                if (substr($name, 0, 6) != 'Amasty'){
+                if (substr($name, 0, 6) != 'Amasty') {
                     $msg = $this->__('There is a conflict(s) with some other extension: class %s. If the module works incorrect, consider our <a href="http://amasty.com/installation-service.html">Installation Service</a>.', $name);
                     $this->_getSession()->addNotice($msg);
                     break(2);

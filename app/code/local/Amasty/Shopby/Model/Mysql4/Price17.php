@@ -129,11 +129,16 @@ class Amasty_Shopby_Model_Mysql4_Price17 extends Mage_Catalog_Model_Resource_Lay
      */
     protected function _computeMinMaxPriceFromDb($filter)
     {
+        $collection = $filter->getLayer()->getProductCollection();
         if (method_exists($filter->getLayer()->getProductCollection(), '_applySearchFilters')) {
             //trigger applying search filter in catalogsearch fulltext collection on magento 1.9.x
-            $filter->getLayer()->getProductCollection()->getSize();
+            $collection->getSize();
         }
-        $select = clone $filter->getLayer()->getProductCollection()->getSelect();
+        if (!is_null($collection->getCatalogPreparedSelect())) {
+            $select = clone $collection->getCatalogPreparedSelect();
+        } else {
+            $select = clone $collection->getSelect();
+        }
 
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
         $select->reset(Zend_Db_Select::COLUMNS);
@@ -141,8 +146,7 @@ class Amasty_Shopby_Model_Mysql4_Price17 extends Mage_Catalog_Model_Resource_Lay
         $select->reset(Zend_Db_Select::ORDER);
 
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-        $collection = Mage::getResourceModel('catalog/product_collection');
-
+        //$collection = Mage::getResourceModel('catalog/product_collection'); // weee module fatal: same fields multiply joins in an observer.
         $priceExpression = $collection->getPriceExpression($select) . ' ' . $collection->getAdditionalPriceExpression($select);
 
         $select = $this->_removePriceFromSelect($select, $priceExpression);

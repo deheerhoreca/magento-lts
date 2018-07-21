@@ -575,7 +575,11 @@ class Amasty_Shopby_Helper_Data extends Amasty_Shopby_Helper_Cached
      * @return bool
      */
     public function getIsApplyButtonEnabled() {
-        return Mage::getStoreConfig('amshopby/general/submit_filters') == Amasty_Shopby_Model_Source_Submit::BY_BUTTON;
+        $isMobile = Zend_Http_UserAgent_Mobile::match(Mage::helper('core/http')->getHttpUserAgent(), $_SERVER );
+        $result = $isMobile ? 'mobile' : 'desktop';
+
+        return Mage::getStoreConfig('amshopby/general/submit_filters_' . $result)
+            == Amasty_Shopby_Model_Source_Submit::BY_BUTTON;
     }
 
     /**

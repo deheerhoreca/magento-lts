@@ -49,6 +49,7 @@ class Amasty_Base_Helper_Module extends Mage_Core_Helper_Abstract
                     'name'    => (string)$item->title,
                     'url'     => (string)$item->link,
                     'version' => (string)$item->version,
+                    'conflictExtensions' => (string)$item->conflictExtensions,
                 );
             }
 

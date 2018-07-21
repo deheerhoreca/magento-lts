@@ -122,7 +122,7 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_M
         return $alias;
     }
 
-    private function applyFilterToCollection($value, $notUsingFieldForCompatibilityWithEnterprise = null)
+    public function applyFilterToCollection($value, $notUsingFieldForCompatibilityWithEnterprise = null)
     {
         $value = $this->processMappedValue($value);
         $attribute  = $this->getAttributeModel();
@@ -130,8 +130,18 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_M
         if (Mage::helper('amshopby')->useSolr()) {
             $fieldName = Mage::getResourceSingleton('enterprise_search/engine')
                 ->getSearchEngineFieldName($attribute, 'nav');
-            $prefix = '{!tag=' . $attribute->getAttributeCode() . '}';
-            $collection->addFqFilter(array($prefix . $fieldName => $value));
+            if (!$this->getSingleChoice() && $this->getUseAndLogic()) {
+                $applyValue = $value;
+                while (!empty($applyValue)) {
+                    //create uniqueness, insignificant in query string
+                    $spaces  = str_repeat(' ', count($applyValue) - 1);
+                    $collection->addFqFilter(array($spaces . $fieldName => array_shift($applyValue)));
+                }
+            } else {
+                //{!tag} - ignore applied value in facets data
+                $prefix = '{!tag=' . $attribute->getAttributeCode() . '}';
+                $collection->addFqFilter(array($prefix . $fieldName => $value));
+            }
         } else {
             $alias      = $this->_getAttributeTableAlias();
             $connection = $this->_getResource()->getReadConnection();

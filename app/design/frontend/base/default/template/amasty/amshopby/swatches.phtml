@@ -22,7 +22,9 @@ $_multiSelect = !($this->getSingleChoice());
         <?php
         $_hasItems = ($_item->getCount() > 0);
         $_label = $_item->getLabel();
-        $_swatchUrl = Mage::helper('configurableswatches/productimg')->getGlobalSwatchUrl($_item, $_label, $_swatchInnerWidth, $_swatchInnerHeight);
+        $itemClone = clone $_item;
+        $itemClone->setValue($itemClone->getOptionId());
+        $_swatchUrl = Mage::helper('configurableswatches/productimg')->getGlobalSwatchUrl($itemClone, $_label, $_swatchInnerWidth, $_swatchInnerHeight);
         $_hasImage = (!empty($_swatchUrl));
         $_linkClass = 'swatch-link' . (($_hasImage) ? ' has-image' : '');
         $_linkClass .= $_multiSelect ? ' amshopby-swatch ': '';

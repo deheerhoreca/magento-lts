@@ -29,7 +29,7 @@ var amshopby_apply_builder = {
         if (((typeof pageData === 'string') || (pageData instanceof String)) && pageData.isJSON()) {
             pageData = pageData.evalJSON();
         } else {
-            throw new Error('Cannot convert page properties from JSON');
+            this.throwFilterError('Cannot convert page properties from JSON');
         }
 
         this.pageProperties = pageData;
@@ -41,7 +41,7 @@ var amshopby_apply_builder = {
         if (((typeof filters === 'string') || (filters instanceof String)) && filters.isJSON()) {
             filters = filters.evalJSON();
         } else {
-            throw new Error('Cannot convert applied filters properties');
+            this.throwFilterError('Cannot convert applied filters properties');
         }
 
         if(Array.isArray(filters)) {
@@ -56,7 +56,7 @@ var amshopby_apply_builder = {
         if ((typeof params === 'string' || params instanceof String) && params.isJSON()) {
             params = params.evalJSON();
         } else {
-            throw new Error('Cannot convert not filter params');
+            this.throwFilterError('Cannot convert not filter params');
         }
 
         if(Array.isArray(params)) {
@@ -69,6 +69,12 @@ var amshopby_apply_builder = {
                     });
                 }
             });
+        }
+    },
+
+    throwFilterError: function(message) {
+        if ($$('.block-layered-nav').length) {
+            throw new Error(message);
         }
     },
 

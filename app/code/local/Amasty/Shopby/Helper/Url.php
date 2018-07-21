@@ -60,8 +60,8 @@ class Amasty_Shopby_Helper_Url extends Mage_Core_Helper_Abstract
     {
         $key = Mage::getStoreConfig('amshopby/seo/key');
         $category = $this->_getCurrentCategory();
-        $canonicalType = Mage::getStoreConfig('amshopby/seo/canonical' . (is_object($category) ? '_cat' : ''));
 
+        $canonicalType = $this->getCanonicalType($category);
         switch ($canonicalType) {
             case Amasty_Shopby_Model_Source_Canonical::CANONICAL_KEY:
                 return $category ? $category->getUrl() : (Mage::getBaseUrl() . $key);
@@ -74,6 +74,20 @@ class Amasty_Shopby_Helper_Url extends Mage_Core_Helper_Abstract
         }
 
         return null;
+    }
+
+    protected function getCanonicalType($category)
+    {
+        $cat = Mage::registry('current_category');
+        $params = Mage::app()->getRequest()->getQuery();
+
+        if ($this->isBrandPage($cat, $params)) {
+            $canonicalType = '_brand';
+        } else {
+            $canonicalType = is_object($category) ? '_cat' : '';
+        }
+
+        return Mage::getStoreConfig('amshopby/seo/canonical' . $canonicalType);
     }
 
     protected function _getCurrentCategory()

@@ -122,10 +122,34 @@
 }
 
 .amasty-user-guide, .amasty-additional-content {
-    border: 1px solid #95a486 !important;
-    color: #3d6611 !important;
-    background: #eff5ea url('../../../images/success_msg_icon.gif') no-repeat 10px 10px !important;
-    min-height: 23px !important;
-    margin-bottom: 11px !important;
-    padding: 8px 8px 2px 32px !important;
+    border: 1px solid #95a486;
+    color: #3d6611;
+    background: #eff5ea url('../../../images/success_msg_icon.gif') no-repeat 10px 10px;
+    min-height: 23px;
+    margin-bottom: 11px;
+    padding: 8px 8px 2px 32px;
+}
+
+.amasty-info-block .amasty-success {
+    border: 1px solid #95a486;
+    color: #3d6611;
+    background: #eff5ea url('../../../images/success_msg_icon.gif') no-repeat 10px 10px;
+}
+
+.amasty-info-block .amasty-notice {
+    border: 1px solid #ffd967;
+    color: #3d6611;
+    background: #fffbf0 url('../../../images/note_msg_icon.gif') no-repeat 10px 10px;
+}
+
+.amasty-info-block .amasty-warning {
+    border: 1px solid #666e73;
+    color: #000000;
+    background: #e6e6e6 url('../../../images/warning_msg_icon.gif') no-repeat 10px 10px;
+}
+
+.amasty-info-block  .amasty-error {
+    border: 1px solid #f16048;
+    color: #df280a;
+    background: #faebe7 url('../../../images/error_msg_icon.gif') no-repeat 10px 10px;
 }

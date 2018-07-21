@@ -221,11 +221,16 @@ class Amasty_Shopby_Helper_Attributes extends Amasty_Shopby_Helper_Cached
         } else {
             $key = strtolower($key);
         }
-        $key = trim($key, Mage::getStoreConfig('amshopby/seo/special_char') . Mage::getStoreConfig('amshopby/seo/option_char'));
+        $key = trim(
+            $key,
+            Mage::getStoreConfig('amshopby/seo/special_char') . Mage::getStoreConfig('amshopby/seo/option_char')
+        );
 
         if ($key == '') {
             $key = Mage::getStoreConfig('amshopby/seo/special_char');
         }
+
+        $key = str_replace(' ', Mage::getStoreConfig('amshopby/seo/special_char'), $key);
 
         return $key;
     }

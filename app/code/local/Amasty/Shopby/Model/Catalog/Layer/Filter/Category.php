@@ -72,10 +72,17 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Category extends Amasty_Shopby_Mo
                     $category = Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
             }
             $excludeIds = preg_replace('/[^\d,]+/', '', Mage::getStoreConfig('amshopby/category_filter/exclude_cat'));
-            $excludeIds = $excludeIds ? explode(',',  $excludeIds) : array();
+            $excludeIds = $excludeIds ? explode(',', $excludeIds) : array();
+            $includeIds = preg_replace('/[^\d,]+/', '', Mage::getStoreConfig('amshopby/category_filter/include_cat'));
+            $includeIds = $includeIds ? explode(',', $includeIds) : array();
+
             $cats = $this->_getCategoryCollection()->addIdFilter($category->getChildren());
-            if(count($excludeIds) > 0) {
+            if (count($excludeIds) > 0) {
                 $cats->addFieldToFilter('entity_id', array('nin' => $excludeIds));
+            }
+
+            if (count($includeIds) > 0) {
+                $cats->addFieldToFilter('entity_id', array('in' => $includeIds));
             }
             $this->addCounts($cats);
 
@@ -158,7 +165,7 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Category extends Amasty_Shopby_Mo
     {
         if ($this->displayType == self::DT_ADVANCED) {
             // Will process in amshopby/advanced block
-            return array(0 => 1);
+            return $this->getAdvancedCollection()->getSize() ? array(0 => 1) : array();
         }
 
         /** @var Amasty_Shopby_Helper_Layer_Cache $cache */
@@ -167,7 +174,7 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Category extends Amasty_Shopby_Mo
         $key = 'CATEGORY';
         $items = $cache->getFilterItems($key);
 
-        if (is_null($items)) {
+        if ($items === null) {
             $startCategory = $this->getStartCategory();
             $recursive = $this->displayType == self::DT_WSUBCAT || $this->displayType == self::DT_STATIC2LVL;
 
@@ -240,13 +247,12 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Category extends Amasty_Shopby_Mo
             /** @var Mage_Catalog_Model_Category $category $id */
 
             $id = $category->getId();
-            if ($this->isExcluded($id))
-            {
+            if ($this->isExcluded($id)) {
                 continue;
             }
 
             $itemData = $this->_prepareItemData($category, $level + 1);
-            if (is_null($itemData)) {
+            if ($itemData === null) {
                 continue;
             }
 

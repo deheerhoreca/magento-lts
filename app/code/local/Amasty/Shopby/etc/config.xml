@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Amasty_Shopby>
-            <version>3.5.2</version>
+            <version>3.6.6</version>
         </Amasty_Shopby>
     </modules>
     <global>
@@ -155,6 +155,15 @@
                     </amshopby>
                 </observers>
             </controller_front_init_routers>
+            <sitemap_categories_generating_before>
+                <observers>
+                    <amshopby>
+                        <type>singleton</type>
+                        <class>Amasty_Shopby_Model_Sitemap_Observer</class>
+                        <method>generateSitemap</method>
+                    </amshopby>
+                </observers>
+            </sitemap_categories_generating_before>
         </events> 
                 
     </global>
@@ -341,7 +350,8 @@
             <general>
                 <ajax>0</ajax>
                 <scroll_to_products>1</scroll_to_products>
-                <submit_filters>0</submit_filters>
+                <submit_filters_desktop>0</submit_filters_desktop>
+                <submit_filters_mobile>0</submit_filters_mobile>
                 <submit_position>0</submit_position>
                 <enable_collapsing>0</enable_collapsing>
                 <slider_use_ui>1</slider_use_ui>
@@ -433,6 +443,7 @@
                 <price_rel_nofollow>1</price_rel_nofollow>
 
                 <canonical_cat>0</canonical_cat>
+                <canonical_brand>0</canonical_brand>
                 <prev_next>0</prev_next>
                 <page_match_strict>0</page_match_strict>
             </seo>

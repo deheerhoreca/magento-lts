@@ -13,23 +13,19 @@ class Amasty_Shopby_Block_Product_View_Attributes extends Mage_Catalog_Block_Pro
     {
         $data = parent::getAdditionalData($excludeAttr);
         $attributes = $this->getProduct()->getAttributes();
+        $product = $this->getProduct();
 
+        $data = array_intersect_key($data, $attributes);
         foreach ($data as $code => &$attribute) {
             if ($attributes[$code]->getBackendType() == 'decimal') {
                 $filter = Mage::getResourceModel('amshopby/filter')
                     ->getFilterByAttributeId($attributes[$code]->getAttributeId());
-                $attribute['value'] = $this->convertDecimal(
-                    preg_replace('/[^\d.]/', '', $attribute['value']), $filter['value_label']
-                );
+                $attribute['value'] = $attributes[$code]->getFrontend()->getValue($product);
+                $attribute['value'] = round($attribute['value'], 4) . $filter['value_label'];
             }
         }
         unset($attribute);
 
         return $data;
-    }
-
-    public function convertDecimal($value, $label)
-    {
-        return '<span class="decimal">' . round($value, 4) . $label .'</span>';
     }
 }
