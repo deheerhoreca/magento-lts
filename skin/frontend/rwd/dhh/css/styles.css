@@ -2691,6 +2691,15 @@ div.category-products .products-grid .price-box{
   .toolbar .view-mode > label {
     display: none;
   }
+  .products-content-top-center  {
+    width: 40% !important;
+  }
+  .profixedbartop .title {
+    max-width: 600px !important;
+  }
+  .profixedbartop h2 {
+    font-size: 22px !important;
+  }
 }
 /* ============================================ *
  * Tax - Full Tax Summary
@@ -2875,6 +2884,7 @@ li#billing-new-address-form.scaffold-form div.fieldset ul li.fields .field{
 }
 .profixedbartop h2{
   font-size: 28px;
+  text-transform: none;
 }
 
 .profixedbartop .title {
@@ -5240,7 +5250,7 @@ div.category-products .lblenergylabel::after {
   position: relative;
   border-top: 1px solid #cacaca;
   margin-top: 20px;
-  width: 335px;
+  width: auto;
   padding-top: 20px;
 }
 
@@ -19268,7 +19278,7 @@ body.catalog-product-view  input#newsletter{
   font-weight: 700;
   line-height: 30px;
   margin-right: 16px;
-
+  text-transform: none;
 }
 
 div.product-view div.product-essential div.product-name{
@@ -21250,7 +21260,7 @@ div.category-products ul.products-grid li.item:hover{
 }
 
 .clzautomw{
-	line-height: 2.3;
+	line-height: 1.7;
 }
 .imgxauto{
 	display: inline;
@@ -21902,6 +21912,7 @@ dl.faq-items dt.active{
   }
   .profixedbartop h2 {
     font-size: 20px;
+    text-transform: none;
   }
   .profixedbartop .title {
     width: 60%;
