@@ -69,7 +69,7 @@ class Mollie_Mpm_Model_Api extends Mage_Payment_Model_Method_Abstract
     protected $_isGateway = true;
     protected $_canAuthorize = true;
     protected $_canUseCheckout = true;
-    protected $_canUseInternal = false;
+ /* DHH */    protected $_canUseInternal = true;
     protected $_canUseForMultishipping = false;
     protected $_canRefund = true;
     protected $_canRefundInvoicePartial = true;
