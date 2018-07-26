@@ -43,3 +43,6 @@
 
 /tmp/*
 /downloader/connect.cfg
+
+# DHH
+sitemap.xml
