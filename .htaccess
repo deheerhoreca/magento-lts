@@ -143,24 +143,18 @@
 ############################################
 ## rewrite API2 calls to api.php (by now it is REST only)
 
-RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
-RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule ^api/rest api.php?type=rest [QSA,L]
 
 ############################################
 ## workaround for HTTP authorization
 ## in CGI environment
 
-RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
-RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 ############################################
 ## TRACE and TRACK HTTP methods disabled to prevent XSS attacks
 
     RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
-RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
-RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule .* - [L,R=405]
 
 <IfModule mod_setenvif.c>
@@ -175,15 +169,9 @@ RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ 
         BrowserMatch \bMSIE\s8 ie8
         Header set X-XSS-Protection: "1; mode=block" env=!ie8
 
-
-        Header set Connection keep-alive
-
     </IfModule>
 </IfModule>
 
-<ifModule mod_headers.c>
-Header set Connection keep-alive
-</ifModule>
 ############################################
 ## redirect for mobile user agents
 
@@ -206,11 +194,10 @@ Header set Connection keep-alive
 ############################################
 ## rewrite everything else to index.php
 
-RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
-RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
     RewriteRule .* index.php [L]
 
 </IfModule>
+
 
 ############################################
 ## Prevent character encoding issues from server overrides
@@ -243,79 +230,6 @@ RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ 
         deny from all
     </Files>
 
-
-<IfModule mod_php5.c>
-    ## enable resulting html compression
-   php_flag zlib.output_compression on
-</IfModule>
-
-<IfModule mod_deflate.c>
-
-    ## Force compression for mangled `Accept-Encoding` request headers
-    <IfModule mod_setenvif.c>
-        <IfModule mod_headers.c>
-            SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
-            RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
-        </IfModule>
-    </IfModule>
-
-    ## Compress all output labeled with one of the following media types.
-    <IfModule mod_filter.c>
-        AddOutputFilterByType DEFLATE "application/atom+xml" \
-                                      "application/javascript" \
-                                      "application/json" \
-                                      "application/ld+json" \
-                                      "application/manifest+json" \
-                                      "application/rdf+xml" \
-                                      "application/rss+xml" \
-                                      "application/schema+json" \
-                                      "application/vnd.geo+json" \
-                                      "application/vnd.ms-fontobject" \
-                                      "application/x-font-ttf" \
-                                      "application/x-javascript" \
-                                      "application/x-web-app-manifest+json" \
-                                      "application/xhtml+xml" \
-                                      "application/xml" \
-                                      "font/eot" \
-                                      "font/opentype" \
-                                      "image/bmp" \
-                                      "image/svg+xml" \
-                                      "image/vnd.microsoft.icon" \
-                                      "image/x-icon" \
-                                      "text/cache-manifest" \
-                                      "text/css" \
-                                      "text/html" \
-                                      "text/javascript" \
-                                      "text/plain" \
-                                      "text/vcard" \
-                                      "text/vnd.rim.location.xloc" \
-                                      "text/vtt" \
-                                      "text/x-component" \
-                                      "text/x-cross-domain-policy" \
-                                      "text/xml"
-
-    </IfModule>
-
-    ## Map the following filename extensions to the specified
-    ## encoding type in order to make Apache serve the file types
-    ## with the appropriate `Content-Encoding` response header
-    ## (do note that this will NOT make Apache compress them!).
-    <IfModule mod_mime.c>
-        AddEncoding gzip              svgz
-    </IfModule>
-
-</IfModule>
-
-# Cache Files 90 Days
-<filesMatch ".(html|css|js|swf|pdf|xml|mp3|gif|jpg|png|svg)$">
-ExpiresActive On
-ExpiresDefault "access plus 90 days"
-Header append Cache-Control "public"
-</filesMatch>
-
-
-
-
 ############################################
 ## If running in cluster environment, uncomment this
 ## http://developer.yahoo.com/performance/rules.html#etags
@@ -346,16 +260,72 @@ Header append Cache-Control "public"
         Deny from all
 
     </Files>
-AddType image/svg+xml svg svgz
-AddEncoding gzip svgz
 
+# DHH ADDITIONS
 
+# non-production:
+SetEnv MAGE_IS_DEVELOPER_MODE "true"
 
-# BEGIN GZIP
-<ifmodule mod_deflate.c>
-AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
-</ifmodule>
-# END GZIP
+<IfModule mod_deflate.c>
+
+  ## Force compression for mangled `Accept-Encoding` request headers
+  <IfModule mod_setenvif.c>
+      <IfModule mod_headers.c>
+          SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+          RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+      </IfModule>
+  </IfModule>
+
+  ## Compress all output labeled with one of the following media types.
+  <IfModule mod_filter.c>
+      AddOutputFilterByType DEFLATE "application/atom+xml" \
+                                    "application/javascript" \
+                                    "application/json" \
+                                    "application/ld+json" \
+                                    "application/manifest+json" \
+                                    "application/rdf+xml" \
+                                    "application/rss+xml" \
+                                    "application/schema+json" \
+                                    "application/vnd.geo+json" \
+                                    "application/vnd.ms-fontobject" \
+                                    "application/x-font-ttf" \
+                                    "application/x-javascript" \
+                                    "application/x-web-app-manifest+json" \
+                                    "application/xhtml+xml" \
+                                    "application/xml" \
+                                    "font/eot" \
+                                    "font/opentype" \
+                                    "image/bmp" \
+                                    "image/svg+xml" \
+                                    "image/vnd.microsoft.icon" \
+                                    "image/x-icon" \
+                                    "text/cache-manifest" \
+                                    "text/css" \
+                                    "text/html" \
+                                    "text/javascript" \
+                                    "text/plain" \
+                                    "text/vcard" \
+                                    "text/vnd.rim.location.xloc" \
+                                    "text/vtt" \
+                                    "text/x-component" \
+                                    "text/x-cross-domain-policy" \
+                                    "text/xml"
+
+  </IfModule>
+
+  ## Map the following filename extensions to the specified
+  ## encoding type in order to make Apache serve the file types
+  ## with the appropriate `Content-Encoding` response header
+  ## (do note that this will NOT make Apache compress them!).
+  <IfModule mod_mime.c>
+      AddEncoding gzip              svgz
+  </IfModule>
+
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Connection keep-alive
+</IfModule>
 
 <IfModule mod_filter.c>
     AddOutputFilterByType DEFLATE "application/atom+xml" \
@@ -390,40 +360,4 @@ AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css a
                                   "text/x-component" \
                                   "text/x-cross-domain-policy" \
                                   "text/xml"
-
-</IfModule>
-
-# BEGIN cPanel-generated php ini directives, do not edit
-# Manual editing of this file may result in unexpected behavior.
-# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
-# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
-<IfModule php5_module>
-   php_flag asp_tags Off
-   php_flag display_errors On
-   php_value max_execution_time 30
-   php_value max_input_time 60
-   php_value max_input_vars 20000
-   php_value memory_limit 512M
-   php_value post_max_size 600M
-   php_value session.gc_maxlifetime 1440
-   php_value session.save_path "/tmp"
-   php_value upload_max_filesize 600M
-   php_flag zlib.output_compression On
-</IfModule>
-# END cPanel-generated php ini directives, do not edit
-
-# non-production:
-SetEnv MAGE_IS_DEVELOPER_MODE "true"
-
-<IfModule php5_module>
-   php_flag display_errors On
-   php_value display_errors On
-   php_value error_reporting 32767
-   php_value display_startup_errors = On
-   php_value error_log = /var/www/vhosts/dev.prokoeling.nl/logs/php_log
-   php_flag display_startup_errors on
-   php_flag display_errors on
-   php_flag html_errors on
-   php_flag log_errors on
-   php_value max_execution_time 300
 </IfModule>
