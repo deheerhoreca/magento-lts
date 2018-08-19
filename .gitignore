@@ -46,4 +46,7 @@
 
 # DHH
 sitemap.xml
-downloader/cache.cfg
+
+/downloader/.cache/
+/downloader/cache.cfg
+/downloader/connect.cfg
