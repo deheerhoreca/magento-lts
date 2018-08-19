@@ -56,6 +56,11 @@ echo $carct->getName();
 ?>
 </h1>	
 </div>
+<div class="ctdesc">
+<?php
+echo $carct->getDescription();
+?>
+</div>
 <?php } ?>
 <style>
 .products-grid-anchor .item {
@@ -80,6 +85,8 @@ echo $carct->getName();
 #sidebar-nav{
 	display: none;
 }
+.ctdesc { padding-top:20px;}
+.ctdesc p{ text-align: justify; margin-bottom:15px;}
 </style>
 
 
