@@ -51,3 +51,5 @@
 /downloader/.cache/
 /downloader/cache.cfg
 /downloader/connect.cfg
+
+bridge_*.php
