@@ -56,7 +56,10 @@ foreach ($children as $child) {
 	    $ctis=str_replace('category-node-','',$child->getId());
 	    $categoryxim=Mage::getModel('catalog/category')->load($ctis);
 	    $pctimg=$categoryxim->getCategoryIcon();
-	    $html .="<img src='//www.prokoeling.nl/media/catalog/category/".$pctimg."' alt=''><span class='mheadttl'>";
+      /* DHH */
+      if(strlen($pctimg) > 0)
+	      $html .= "<img src='//www.prokoeling.nl/media/catalog/category/".$pctimg."' alt=''>";
+      $html .= "<span class='mheadttl'>";
     }
 	$html .=$this->escapeHtml($this->__($child->getName()));
 
@@ -65,7 +68,7 @@ foreach ($children as $child) {
 	} else {
 	  $html .='</a>';
 	}
-	
+
     if (!empty($childrenWrapClass)) {
         $html .= '<div class="'. $childrenWrapClass .'">';
     }
@@ -73,7 +76,7 @@ foreach ($children as $child) {
     $nextChildLevel = $childLevel + 1;
 
     if (!empty($_hasChildren)) {
-        $html .= '<ul class="level'. $childLevel .'">'; 
+        $html .= '<ul class="level'. $childLevel .'">';
         $html .=     $this->render($child, $childrenWrapClass);
 		   /*    $html .=     '<li class="level'. $nextChildLevel .' view-all">';
         $html .=         '<a class="level'. $nextChildLevel .'" href="'. $child->getUrl() .'">';
