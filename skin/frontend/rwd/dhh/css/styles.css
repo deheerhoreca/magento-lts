@@ -3979,11 +3979,12 @@ div#header-nav ol.nav-primary li.level0.nav-2.parent ul.level0{
 
 .mheadttl {
   bottom: 5px;
-  font-size: 15px;
+  font-size: 14px;
   padding-left: 6px;
   position: relative;
   font-weight: bold;
   color: #00364e;
+  letter-spacing: 1px;
 }
 
 .mheadttl:hover {
@@ -4207,7 +4208,7 @@ a.level4:before {
   width: 100%;
   z-index: 10;
   padding-bottom: 10px;
-  min-height: 320px;
+  min-height: 200px;
   width: 1130px !important;
 }
 .dkmenus {
@@ -20711,12 +20712,12 @@ div#header-nav ol.nav-primary li.level0.nav-2.parent ul.level0{
   height: auto !important;
 }
 
-#header-nav .level0 > .level1 {
+#header-nav .level0>.level1 {
   float: left;
-  margin-right: 20px;
+  margin-right: 10px;
   margin-top: 15px;
   min-height: 91px;
-  max-width: 255px;
+  max-width: 200px;
   width: 100%;
 }
 
