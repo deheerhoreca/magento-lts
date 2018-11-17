@@ -778,7 +778,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               //echo "<pre>";print_r($files);echo "</pre>";
               foreach($files as $file) {
                 echo '<div class="mediathek" style="margin-bottom: 10px">';
-                echo "<a title='{$file['filename']}' class='document-link' href=\"{$dir}.DS.{$file['path']}\" target=\"_blank\">
+                echo "<a title='{$file['filename']}' class='document-link' href=\"{$dir}/{$file['path']}\" target=\"_blank\">
                         <i class=\"fa fa-file-{$file['type']}-o fa-2x\"></i><span>{$file['description']}</span>
                       </a>";
                 echo "</div>";
