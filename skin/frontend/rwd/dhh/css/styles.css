@@ -5314,13 +5314,13 @@ div.category-products ul.products-grid  li.item .product-name a {
 }
 
 div.category-products ul.products-grid  li.item .product-info {
-  min-height: 180px !important;
+  min-height: 195px !important;
   padding-bottom: 0px !important;
 }
 
 div.category-products ul.products-grid  li.item .info {
   margin-bottom: 3px;
-  min-height: 90px;
+  min-height: 110px;
   display: inline-block;
   text-align: left;
   vertical-align: middle;
@@ -23953,7 +23953,7 @@ div.product-view div.product-essential form#product_addtocart_form div.product-i
 #featured-products-list li.item {
 	width: 24% !important;
 	list-style: none;
-	min-height: 520px;
+	min-height: 555px;
 	margin-left: 0;
 }
 
@@ -23999,7 +23999,7 @@ div.product-view div.product-essential form#product_addtocart_form div.product-i
 #featured-products-list .actions {
 	display: block;
 	min-height: 45px;
-  bottom: -15px;
+  bottom: -36px;
 }
 
 .homerighttwo img {
