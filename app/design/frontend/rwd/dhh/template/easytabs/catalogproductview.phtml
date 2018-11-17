@@ -404,7 +404,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $image = "{$skn}frontend/rwd/dhh/images/light.svg";
             $title = "Verlichting";
             $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($value !== "Nee") {
+            if(empty($value) === FALSE && $value !== "Nee") {
               $value = (strstr($value, "LED")) ? "LED verlichting" : "Verlichting";
               $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
               $i++;
