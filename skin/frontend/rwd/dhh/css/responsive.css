@@ -27,6 +27,7 @@
       top: 137px;
     }
 }
+
 @media screen and (max-width: 990px) {
     .logo .small {
     margin: auto;
@@ -127,6 +128,7 @@
     }
     .prodetailtopright {
         width: 100%;
+        margin-bottom: 0em;
     }
     .profixedbartop h2 {
         font-size: 20px;
@@ -172,12 +174,14 @@
         background: #fff;
     }
 }
+
 @media screen and (min-width: 990px) {
 
   .skip-nav {
       display: none;
   }
 }
+
 @media screen and (max-width: 990px) {
        .selling-points {
     display: none;

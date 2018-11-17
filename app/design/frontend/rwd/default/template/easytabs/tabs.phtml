@@ -46,8 +46,8 @@
 					$tab_is_tmp_id =  substr($_tab['alias'], 3);
         			$tab_is_custom_id = (!empty($tab_is_tmp_id)) ? $tab_is_tmp_id : '';
 					$tab_title = Mage::getStoreConfig('easy_tabs/customcms/tabnamecms'.$tab_is_custom_id);
-        		} 
-        		
+        		}
+
         	?>
             <li id="product_tabs_<?php echo $_tab['alias'] ?>" <?php echo !$_index ? 'class="active first"' : '' ?>><a href="#"><i class="fa fa-check-square-o">&nbsp;</i><?php echo $tab_title; ?></a></li>
         <?php endif; ?>
@@ -92,9 +92,8 @@ Varien.Tabs.prototype = {
 }
 new Varien.Tabs('.tabs');
 </script>
- </div> 
+ </div>
  </div>
  <!-- <div class="probottomdvxv">
 <?php // echo $this->getChildHtml('review_tabbed');  ?>
 </div> -->
-

@@ -47,196 +47,147 @@
 
 <link rel="stylesheet" href="/skin/frontend/rwd/default/css/lightslider.css"/>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-
 <!--
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/skin/frontend/rwd/default/js/lightslider.js"></script>
 -->
-
-<script> jQuery.noConflict(); </script>
-<!-- <script src="/skin/frontend/rwd/default/js/lightslider.js"></script> -->
-<style>
-.scrlng{
-/*left: 100%;*/
-position: fixed;
-top: 0;
-/*
-transform: translate(-50%, 0px);
-*/
-z-index: 9999;
-box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
-width: 100% !important;
-transition: opacity 0.4s ease;
-}
-.scrlng .header__inside{
-background-color: #ffffff;
-box-sizing: border-box;
-margin-left: auto;
-margin-right: auto;
-padding-left: 20px;
-padding-right: 20px;
-width: 1170px;
-transition: opacity 0.4s ease;
-}
-#header.page-header.header.grid-inside {
-  min-height: 122px;
-}
-
-.headmv{
-  display: block;
-  position: relative;
-  top: 78px;
-}
-</style>
 <script>
-
-//	 jQuery.noConflict();
-    	 jQuery(document).ready(function() {
-			jQuery("#content-slider").lightSlider({
-                loop:true,
-				auto:true,
-				speed: 1000,
-				item:1,
-                keyPress:true,
-				mode: 'fade',
-				pause: 4000
-
-            });
-
-
-
-jQuery(".nav-primary").hover(function(){
-   jQuery('#darkness').delay(300).fadeTo(0, 1);
-
-}, function(){
-    jQuery('#darkness').fadeTo(0, 0, function(){
-       jQuery('#darkness').hide();
-	});
-});
-
-
-jQuery(".skip-link.skip-cart").click(function(){
-   jQuery('#darknessx').delay(0).fadeTo(0, 1);
-
-});
-
-jQuery('#billing\\:firstname, #billing\\:lastname, #billing\\:city').keydown(function(event) {
-        if (this.selectionStart == 0 && event.keyCode >= 65 && event.keyCode <= 90 && !(event.shiftKey) && !(event.ctrlKey) && !(event.metaKey) && !(event.altKey)) {
-           var $t = jQuery(this);
-           event.preventDefault();
-           var char = String.fromCharCode(event.keyCode);
-           $t.val(char + $t.val().slice(this.selectionEnd));
-           this.setSelectionRange(1,1);
-        }
+  jQuery.noConflict();
+  jQuery(document).ready(function() {
+    jQuery("#content-slider").lightSlider( {
+      loop:true,
+      auto:true,
+      speed: 1000,
+      item:1,
+      keyPress:true,
+      mode: 'fade',
+      pause: 4000
     });
 
-
-
-});
-
-function hidedark(){
-    jQuery('#darknessx').fadeTo(0, 0, function(){
-       jQuery('#darknessx').hide();
-	});
-
-}
-
-function discresm(gb){
-	 // Get its current value
-        var currentVal = parseInt(jQuery(gb).next().val());
-
-		nb=jQuery(gb).next().attr('data-item-id');
-
-
-        // If it isn't undefined or its greater than 0
-        if (!isNaN(currentVal) && currentVal > 0) {
-            // Decrement one
-            jQuery(gb).next().val(currentVal - 1);
-			 setTimeout(function(){
-			jQuery('#qbutton-'+nb+'').trigger('click');
-			 }, 400);
-        } else {
-            // Otherwise put a 0 there
-           jQuery(gb).next().val(0);
-		   setTimeout(function(){
-		   jQuery('#qbutton-'+nb+'').trigger('click');
-		   }, 400);
-        }
-}
-
-
-
-function increasem(gb){
-	  // Get its current value
-        var currentVal = parseInt(jQuery(gb).prev().val());
-		nb=jQuery(gb).prev().attr('data-item-id');
-        // If is not undefined
-        if (!isNaN(currentVal)) {
-            // Increment
-            jQuery(gb).prev().val(currentVal + 1);
-			setTimeout(function(){
-				jQuery('#qbutton-'+nb+'').trigger('click');
-			}, 400);
-
-        } else {
-            // Otherwise put a 0 there
-            jQuery(gb).prev().val(0);
-			setTimeout(function(){
-				jQuery('#qbutton-'+nb+'').trigger('click');
-			}, 400);
-        }
-}
-
-function discresm2(gb){
-	 // Get its current value
-        var currentVal = parseInt(jQuery(gb).next().val());
-        // If it isn't undefined or its greater than 0
-        if (!isNaN(currentVal) && currentVal > 0) {
-            // Decrement one
-            jQuery(gb).next().val(currentVal - 1);
-			setTimeout(function(){
-				jQuery(gb).next().next().next().trigger('click');
-			  }, 400);
-        } else {
-            // Otherwise put a 0 there
-           jQuery(gb).next().val(0);
-		   setTimeout(function(){
-				jQuery(gb).next().next().next().trigger('click');
-		   }, 400);
-        }
-}
-
-
-
-function increasem2(gb){
-	  // Get its current value
-        var currentVal = parseInt(jQuery(gb).prev().val());
-        // If is not undefined
-        if (!isNaN(currentVal)) {
-            // Increment
-            jQuery(gb).prev().val(currentVal + 1);
-			setTimeout(function(){
-			jQuery(gb).next().trigger('click');
-			}, 400);
-
-        } else {
-            // Otherwise put a 0 there
-            jQuery(gb).prev().val(0);
-			jQuery(gb).next().trigger('click');
-        }
-}
-
-/*
-jQuery( ".nav-primary" ).mouseenter(function() {
-	setTimeout(function(){
-   jQuery('#darkness').fadeTo(200, 1);
-   }, 200);
-
-  }).mouseleave(function() {
-
-      jQuery('#darkness').fadeTo(0, 0, function(){
-       jQuery('#darkness').hide();
+    jQuery(".nav-primary").hover(function() {
+       jQuery('#darkness').delay(300).fadeTo(0, 1);
+    }, function(){
+      jQuery('#darkness').fadeTo(0, 0, function() {
+           jQuery('#darkness').hide();
+    	});
     });
 
+    jQuery(".skip-link.skip-cart").click(function() {
+      jQuery('#darknessx').delay(0).fadeTo(0, 1);
+    });
+
+    jQuery('#billing\\:firstname, #billing\\:lastname, #billing\\:city').keydown(function(event) {
+      if (this.selectionStart == 0 && event.keyCode >= 65 && event.keyCode <= 90 && !(event.shiftKey) && !(event.ctrlKey) && !(event.metaKey) && !(event.altKey)) {
+         var $t = jQuery(this);
+         event.preventDefault();
+         var char = String.fromCharCode(event.keyCode);
+         $t.val(char + $t.val().slice(this.selectionEnd));
+         this.setSelectionRange(1,1);
+      }
+    });
   });
+
+  function hidedark() {
+    jQuery('#darknessx').fadeTo(0, 0, function(){
+      jQuery('#darknessx').hide();
+    });
+  }
+
+  function discresm(gb) {
+  	 // Get its current value
+          var currentVal = parseInt(jQuery(gb).next().val());
+
+  		nb=jQuery(gb).next().attr('data-item-id');
+
+
+          // If it isn't undefined or its greater than 0
+          if (!isNaN(currentVal) && currentVal > 0) {
+              // Decrement one
+              jQuery(gb).next().val(currentVal - 1);
+  			 setTimeout(function(){
+  			jQuery('#qbutton-'+nb+'').trigger('click');
+  			 }, 400);
+          } else {
+              // Otherwise put a 0 there
+             jQuery(gb).next().val(0);
+  		   setTimeout(function(){
+  		   jQuery('#qbutton-'+nb+'').trigger('click');
+  		   }, 400);
+          }
+  }
+
+  function increasem(gb){
+  	  // Get its current value
+          var currentVal = parseInt(jQuery(gb).prev().val());
+  		nb=jQuery(gb).prev().attr('data-item-id');
+          // If is not undefined
+          if (!isNaN(currentVal)) {
+              // Increment
+              jQuery(gb).prev().val(currentVal + 1);
+  			setTimeout(function(){
+  				jQuery('#qbutton-'+nb+'').trigger('click');
+  			}, 400);
+
+          } else {
+              // Otherwise put a 0 there
+              jQuery(gb).prev().val(0);
+  			setTimeout(function(){
+  				jQuery('#qbutton-'+nb+'').trigger('click');
+  			}, 400);
+          }
+  }
+
+  function discresm2(gb){
+  	 // Get its current value
+          var currentVal = parseInt(jQuery(gb).next().val());
+          // If it isn't undefined or its greater than 0
+          if (!isNaN(currentVal) && currentVal > 0) {
+              // Decrement one
+              jQuery(gb).next().val(currentVal - 1);
+  			setTimeout(function(){
+  				jQuery(gb).next().next().next().trigger('click');
+  			  }, 400);
+          } else {
+              // Otherwise put a 0 there
+             jQuery(gb).next().val(0);
+  		   setTimeout(function(){
+  				jQuery(gb).next().next().next().trigger('click');
+  		   }, 400);
+          }
+  }
+
+
+
+  function increasem2(gb){
+  	  // Get its current value
+          var currentVal = parseInt(jQuery(gb).prev().val());
+          // If is not undefined
+          if (!isNaN(currentVal)) {
+              // Increment
+              jQuery(gb).prev().val(currentVal + 1);
+  			setTimeout(function(){
+  			jQuery(gb).next().trigger('click');
+  			}, 400);
+
+          } else {
+              // Otherwise put a 0 there
+              jQuery(gb).prev().val(0);
+  			jQuery(gb).next().trigger('click');
+          }
+  }
+
+  /*
+  jQuery( ".nav-primary" ).mouseenter(function() {
+  	setTimeout(function(){
+     jQuery('#darkness').fadeTo(200, 1);
+     }, 200);
+
+    }).mouseleave(function() {
+
+        jQuery('#darkness').fadeTo(0, 0, function(){
+         jQuery('#darkness').hide();
+      });
+
+    });
   */
 </script>

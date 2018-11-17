@@ -45,29 +45,29 @@
         <col width="25%" />
         <col />
         <tbody>
-        <?php foreach ($_additional as $_data): 
-		
+        <?php foreach ($_additional as $_data):
+
 		 $attributex = $_product->getResource()->getAttribute($_data['code']);
 		 $valuex = $attributex->getFrontend()->getValue($_product);
-		 
+
 	//	var_dump( $attribute);
 		if($valuex==''){
 		  continue;
-		}	
-		//$attributex->getFrontendInput() =='select' && 
+		}
+		//$attributex->getFrontendInput() =='select' &&
 		//if($_data['value']=='Nee'){
 		//  continue;
-		//}	
-		
+		//}
+
 	//	?>
-	
+
 		  <?php// if(!in_array($_data['value'], $emptyValues)): ?>
             <tr>
                 <th class="label"><?php echo $this->htmlEscape($this->__($_data['label'])) ?></th>
-                <td class="data"><?php if(is_numeric($valuex)){ echo round($valuex,2); }else{ echo $valuex; } //echo $_helper->productAttribute($_product, $_data['value'], $_data['code']); 
+                <td class="data"><?php if(is_numeric($valuex)){ echo round($valuex,2); }else{ echo $valuex; } //echo $_helper->productAttribute($_product, $_data['value'], $_data['code']);
 				//var_dump($attributex);
 			//	echo $attributex->getFrontendInput();
-			               
+
 //
 				?></td>
             </tr>
@@ -78,5 +78,3 @@
     <script type="text/javascript">decorateTable('product-attribute-specs-table')</script>
 </div>
 <?php endif;?>
-
-

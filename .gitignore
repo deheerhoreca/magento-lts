@@ -53,3 +53,6 @@
 /downloader/connect.cfg
 
 bridge_*.php
+
+.DS_Store
+._.DS_Store

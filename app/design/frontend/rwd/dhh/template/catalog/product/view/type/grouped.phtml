@@ -37,20 +37,20 @@
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
 <?php echo $this->getChildHtml('product_type_data_extra') ?>
 <div class="grouped-items-table-wrapper">
-    <table class="data-table grouped-items-table" id="super-product-table">
-        <col />
-        <col />
-        <col />
-        <tbody>
-        <?php if ($_hasAssociatedProducts): ?>
-        <?php 
-		$i=0;
-		foreach ($_associatedProducts as $_item):
-$i++;
-$clz='';
-if($i==1){
-	$clz='firstcolsm';
-}
+  <table class="data-table grouped-items-table" id="super-product-table">
+    <col />
+    <col />
+    <col />
+    <tbody>
+    <?php if ($_hasAssociatedProducts): ?>
+    <?php
+  $i=0;
+  foreach ($_associatedProducts as $_item):
+    $i++;
+    $clz='';
+    if($i==1){
+      $clz='firstcolsm';
+    }
 		?>
             <?php $_finalPriceInclTax = $this->helper('tax')->getPrice($_item, $_item->getFinalPrice(), true) ?>
 			<tr class="clznoboer <?php echo $clz; ?>"><td colspan="3" class="clztopbdp"><p class="name-wrapper">
@@ -63,7 +63,7 @@ if($i==1){
                          alt="<?php echo $this->escapeHtml($this->getImageLabel()) ?>"
                          title="<?php echo $this->escapeHtml($this->getImageLabel()); ?>" />
                 </td>
-                <td class="name clztopbdpm">                   
+                <td class="name clztopbdpm">
                     <?php if ($_product->isSaleable()): ?>
                     <div class="qty-wrapper">
                         <?php if ($_item->isSaleable()) : ?>
@@ -93,7 +93,7 @@ if($i==1){
 			<?php
 		}
 		?>
-			
+
         <?php endforeach; ?>
         <?php else: ?>
            <tr>
