@@ -4463,7 +4463,7 @@ nav#nav.grid-old div.navhdwrap ol.nav-primary li.level0.nav-7 ul.level0 li {
 */
 
 .cms-block__cell.cms-block__cell--slider.bullet-teaser, .main-container.col1-layout {
-  z-index: 4;
+  z-index: 3;
 }
 
 .clzhomenavit {
