@@ -361,3 +361,14 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
                                   "text/x-cross-domain-policy" \
                                   "text/xml"
 </IfModule>
+
+<IfModule mod_rewrite.c>
+
+############################################
+## rewrite files for magento cachebuster
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
+
+</IfModule>
