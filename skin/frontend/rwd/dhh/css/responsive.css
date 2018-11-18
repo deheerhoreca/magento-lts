@@ -415,8 +415,10 @@
     .product-collateral .tabs li {
         width: 100%;
     }
-    .block-content.aw-arp-block-content ul li {
-        width: 100%;
+    .block-content.aw-arp-block-content ul li,
+    ul#upsell-product-table li
+    {
+        width: 100% !important;
     }
     .imgwrp {
         display: block;
