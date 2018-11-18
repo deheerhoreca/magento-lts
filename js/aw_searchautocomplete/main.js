@@ -72,8 +72,9 @@ AWSearchautocomplete.prototype = {
     updateAutocompletePosition: function(){
         var posSC = this.targetElement.cumulativeOffset();
         /* START DHH */
-        posSC.top = posSC.top + parseInt(this.targetElement.getHeight()) - 141;
-        posSC.left = Math.max(0, posSC.left - 127);
+        posSC.top = posSC.top + parseInt(this.targetElement.getHeight()) + 3;
+        //posSC.top = posSC.top + parseInt(this.targetElement.getHeight()) - 141;
+        //posSC.left = Math.max(0, posSC.left - 127);
         /* END DHH */
         // !important - compatibility with rwd theme of Magento 1.9/1.14
         var oldStyle = this.updateChoicesContainer.getAttribute("style");
