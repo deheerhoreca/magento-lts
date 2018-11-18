@@ -23862,7 +23862,7 @@ div.product-view div.product-essential form#product_addtocart_form div.product-i
 	right: -298px;
 	top: 45%;
 	transition: right 240ms;
-	z-index: 5;
+	z-index: 15;
 	width: 348px;
 	background: #009de0 url(../images/ico_phone.svg) no-repeat;
 	background-size: 32px 32px;
