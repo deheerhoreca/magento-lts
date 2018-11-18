@@ -276,6 +276,7 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicS
 }
 .magic-slide.mt-active {
     display: block;
+    min-height: 500px; /* DHH */
 }
 
 /* NOTE: to highlight thumbnails (magiczoom(plus) + magic360 + videos) */
