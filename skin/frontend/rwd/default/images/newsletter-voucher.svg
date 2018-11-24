@@ -1,33 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="370" height="370" viewBox="0 0 370 370">
-  <defs>
-    <style>
-      .cls-1 {
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="370" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 370" height="370">
+ <defs>
+  <style>.cls-1 {
         fill: none;
         stroke: #6eb2dd;
         stroke-width: 10px;
       }
-
       .cls-2 {
         fill: #32abdb;
       }
-
       .cls-3, .cls-4 {
         font-size: 62.5px;
         fill: #fff;
-        font-family: "Century Gothic";
+        font-family: &quot;Century Gothic&quot;;
       }
-
       .cls-3 {
         font-weight: 700;
       }
-
       .cls-4 {
         text-transform: uppercase;
-      }
-    </style>
-  </defs>
-  <circle class="cls-1" cx="185.5" cy="184.5" r="179.5"/>
-  <circle class="cls-2" cx="186" cy="184" r="156"/>
-  <text id="_10_" data-name="10 €" class="cls-3" transform="translate(88.671 167.239) scale(1.581)">10 €</text>
-  <text id="Kortings-_code" data-name="Kortings- code" class="cls-4" transform="translate(67.957 222.235) scale(0.76)">Kortings-<tspan x="0" dy="75">code</tspan></text>
+      }</style>
+ </defs>
+ <circle cy="184.5" cx="185.5" r="179.5" class="cls-1"/>
+ <circle cy="184" cx="186" r="156" class="cls-2"/>
+ <text id="_10_" class="cls-3" transform="translate(88.671 167.24) scale(1.581)" data-name="10 €">10 €</text>
+ <text id="Kortings-_code" class="cls-4" transform="translate(67.957 222.24) scale(.76)" data-name="Kortings- code">Kortings-
+  <tspan x="0" dy="75">code</tspan>
+ </text>
 </svg>
