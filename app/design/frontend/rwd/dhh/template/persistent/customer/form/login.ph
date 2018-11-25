@@ -56,7 +56,7 @@
                         <li><?php echo $this->__('Save multiple shipping addresses') ?></li>
                         <li><?php echo $this->__('View and track orders and more') ?></li>
                     </ul>
-               
+
                 <div class="buttons-set">
                     <a title="<?php echo $this->quoteEscape($this->__('Create an Account')) ?>" class="button btnreglnk" href="<?php echo Mage::helper('persistent')->getCreateAccountUrl($this->getCreateAccountUrl()) ?>"><?php echo $this->__('Create an Account') ?></a>
                 </div>
@@ -67,7 +67,7 @@
             <?php endif; ?>
             <?php // This column should be col-1 if the registration column is not displayed ?>
             <div class="<?php if ($this->helper('customer')->isRegistrationAllowed()): ?>col-2<?php else: ?>col-1<?php endif; ?> registered-users blockac">
-			
+
 			<div class="ineracb">
                 <div class="content fieldset">
                     <h3  class="acheadtexts"><?php echo $this->__('Already registered?') ?></h3>
@@ -78,13 +78,13 @@
                         <li>
                             <label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
                             <div class="input-box">
-                                <input type="email" autocapitalize="off" autocorrect="off" spellcheck="false" name="login[username]" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" id="email" class="input-text required-entry validate-email" title="<?php echo $this->quoteEscape($this->__('Email Address')) ?>" />
+                                <input type="email" autocapitalize="off" autocorrect="off" spellcheck="false" name="login[username]" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" id="email" class="input-text required-entry validate-email" title="<?php echo $this->quoteEscape($this->__('Email Address')) ?>" autocomplete="email" />
                             </div>
                         </li>
                         <li>
                             <label for="pass" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
                             <div class="input-box">
-                                <input type="password" name="login[password]" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->quoteEscape($this->__('Password')) ?>" />
+                                <input type="password" name="login[password]" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->quoteEscape($this->__('Password')) ?>" autocomplete="current-password"/>
                             </div>
                         </li>
                         <?php echo $this->getChildHtml('form.additional.info'); ?>
@@ -94,7 +94,7 @@
                         <?php echo $this->getChildHtml('persistent.remember.me'); ?>
                     </ul>
                     <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
-               
+
                 <div class="buttons-set">
                     <button type="submit" class="button" title="<?php echo $this->quoteEscape($this->__('Login')) ?>" name="send" id="send2"><span><span><?php echo $this->__('Login') ?></span></span></button>
                 </div>
