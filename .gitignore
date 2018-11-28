@@ -36,6 +36,7 @@
 
 /var/*
 !/var/.htaccess
+!/var/aoe_profiler.*
 
 !/var/package
 /var/package/*
