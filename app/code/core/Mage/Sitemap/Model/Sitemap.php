@@ -182,14 +182,56 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
             'collection' => $products,
             'store_id' => $storeId
         ));
+        /* DHH CORE HACK */
+        ini_set('memory_limit','8G'); // yup
+        set_time_limit(0); // yup
+        /* DHH CORE HACK */
         foreach ($products->getItems() as $item) {
-            $xml = sprintf(
-                '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
-                htmlspecialchars($baseUrl . $item->getUrl()),
-                $date,
-                $changefreq,
-                $priority
-            );
+          /* DHH CORE HACK */
+
+          $product = Mage::getModel('catalog/product')->load($item->getId());
+          $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($product);
+          if(strstr($path, "index.php/")) {
+            $path = substr($path, strpos($path, "index.php/") + 10);
+          }
+          //echo $baseUrl.$path;exit;
+
+          //$product = Mage::getModel("catalog/product")->setId($item->getId());
+          //$categories = $product->getCategoryCollection();
+          //$categories_ids = [];
+          // foreach($categories as $category) {
+          //  $categories_ids[] = $category->getId();
+          //}
+
+          /*
+          $catid = NULL;
+          if(empty($categories_ids) === FALSE) {
+            foreach($categories_ids as $category_id) {
+              $catid = $category_id;
+              break;
+            }
+            $category = Mage::getModel('catalog/category')->load($catid);
+            $path = $item->getUrlPath($category);
+          } else {
+            $path = $item->getUrl();
+          }
+          */
+
+          $xml = sprintf(
+            '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
+            htmlspecialchars($baseUrl . $path),
+            $date,
+            $changefreq,
+            $priority
+          );
+          //$xml = sprintf(
+          //  '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
+          //  htmlspecialchars($baseUrl . $item->getUrl()),
+          //  $date,
+          //  $changefreq,
+          //  $priority
+          //);
+          /* DHH CORE HACK */
             $io->streamWrite($xml);
         }
         unset($collection);

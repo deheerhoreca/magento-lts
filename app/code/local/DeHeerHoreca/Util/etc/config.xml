@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <DeHeerHoreca_Util>
+            <version>0.1.0</version>
+        </DeHeerHoreca_Util>
+    </modules>
+    <global>
+        <helpers>
+            <deheerhoreca_util>
+                <class>DeHeerHoreca_Util_Helper</class>
+            </deheerhoreca_util>
+        </helpers>
+    </global>
+</config>

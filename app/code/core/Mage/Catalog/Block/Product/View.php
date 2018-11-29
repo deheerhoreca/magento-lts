@@ -71,8 +71,12 @@ class Mage_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_Abstrac
                 $headBlock->setDescription(Mage::helper('core/string')->substr($product->getDescription(), 0, 255));
             }
             if ($this->helper('catalog/product')->canUseCanonicalTag()) {
-                $params = array('_ignore_category' => true);
-                $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
+                /* DHH CORE HACK */
+                $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($product);
+                $headBlock->addLinkRel('canonical', $path);
+                //$params = array('_ignore_category' => true);
+                //$headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
+                /* DHH CORE HACK */
             }
         }
 
