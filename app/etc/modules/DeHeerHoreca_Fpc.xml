@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <DeHeerHoreca_Fpc>
+            <active>true</active>
+            <codePool>local</codePool>
+        </DeHeerHoreca_Fpc>
+    </modules>
+</config>

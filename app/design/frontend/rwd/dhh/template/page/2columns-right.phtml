@@ -1,0 +1,71 @@
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+
+$formKeyPlaceholder = '<!-- fpc form_key_placeholder -->';
+
+// Outqualification
+$nope = $_html = $force_refresh = false;
+$totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
+if($totalItemsInCart > 0) {
+  $nope = true;
+}
+if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+  $nope = true;
+}
+if(isset($_GET['nofpc'])) {
+  $force_refresh = true;
+  $nope = true;
+}
+
+//$nope = true; // the disable switch
+
+if($nope === FALSE || $force_refresh === TRUE) {
+  $_cacheKey = 'QUICKNDIRTYFPC' . md5(
+    get_class($this) . '-' .
+    serialize($this->getRequest()->getParams()) . '-' .
+    (Mage::getSingleton('customer/session')->isLoggedIn() ? '1' : '0') . "-" .
+     Mage::helper('core/url')->getCurrentUrl()
+  );
+}
+
+if($nope === FALSE) {
+  // Check if there is a cached version:
+  $_html = Mage::app()->getCache()->load($_cacheKey);
+
+  // Handle form_key (CSRF protection)
+  if($_html) {
+    $formKey = Mage::getSingleton('core/session')->getFormKey();
+    if($formKey) {
+      $_html = str_replace($formKeyPlaceholder, $formKey, $_html);
+    }
+  }
+}
+
+if($_html) {
+  if(headers_sent() === FALSE) {
+    header("quickndirtyfpc: {$_cacheKey}");
+    header("koop: dan");
+  }
+  echo $_html;
+} else {
+  ob_start();
+
+  // Just include the parent file
+  require_once __DIR__."/../../../default/template/page/".basename(__FILE__);
+
+  $_html = ob_get_clean();
+  echo $_html;
+
+  if($nope === FALSE || $force_refresh === TRUE) {
+
+    // Handle form_key (CSRF protection)
+    $formKey = Mage::getSingleton('core/session')->getFormKey();
+    if ($formKey) {
+      $_html = str_replace($formKey, $formKeyPlaceholder, $_html);
+    }
+
+    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"]);
+  }
+}

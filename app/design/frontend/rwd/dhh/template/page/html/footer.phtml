@@ -31,12 +31,12 @@
 
     <div class="footer grid">
         <div class="row footer-subscribe">
-            <div class="col-7-12">              
-	<?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_subscribe')->toHtml(); 
-?>	
+            <div class="col-7-12">
+	<?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_subscribe')->toHtml();
+?>
             </div>
-			
-			
+
+
 <div class="col-5-12">
 
 <div class="footer-subscribe__form">
@@ -44,21 +44,21 @@
 </div>            </div>
 </div>
    </div>
-</div>   
-   
-   
+</div>
+
+
    <div class="footermidwrap">
    <div class="footer grid">
 <div class="row footer__links-row">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml(); 
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml();
 
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_right')->toHtml(); 
-?>		
+ echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_right')->toHtml();
+?>
 
 </div>
 </div>
 </div>
-<div class="footer grid">		
+<div class="footer grid">
 <div class="row footer-last-row">
 <div class="col-1-2">
 <div class="footer-last-row__item footer__menu-item footer__menu-item--gray">
@@ -70,7 +70,7 @@ Alle prijzen in euro's  euro's (€), inclusief BTW, gratis verzending vanaf €
 </div>
 
 
-      
+
     </div>
 	<!--
 </div>
@@ -122,7 +122,7 @@ if(jQuery('#billing-address select[title=Land]').val()=='NL'){
 		//add mask
 		jQuery('#billing-address input[title=BTW-nummer]').val('');
 		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
-		jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');	
+		jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
 }
 
 jQuery('.clztoggleulx li > a').click(function(ev){
@@ -149,14 +149,38 @@ jQuery('#billing-address select[title=Land]').change(function(){
 
 jQuery('body.firecheckout-index-index  li#shipping-new-address-form fieldset ul li.wide div.input-box input[title=BTW-nummer]').parent().parent().hide();
 
-	
+
 });
 
 </script>
 
 
 <div class="callbtnfelx">
-    <strong>Bel ons met al uw vragen!</strong>
-    <a href="tel:0850441003" class="scndbldh">085 044 1003</a>
+  <strong>Bel ons met al uw vragen!</strong>
+  <a href="tel:0850441003" class="scndbldh">085 044 1003</a>
 	<a href="tel:+31850441003" class="scndbl">+31 85 044 1003</a>
 </div>
+
+<!-- https://www.giftofspeed.com/defer-loading-css/ -->
+<script type="text/javascript">
+  var giftofspeed = document.createElement('link');
+  giftofspeed.rel = 'stylesheet';
+  giftofspeed.href = '/skin/frontend/rwd/default/css/lightslider.css';
+  giftofspeed.type = 'text/css';
+  var godefer = document.getElementsByTagName('link')[0];
+  godefer.parentNode.insertBefore(giftofspeed, godefer);
+
+  var giftofspeed2 = document.createElement('link');
+  giftofspeed2.rel = 'stylesheet';
+  giftofspeed2.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
+  giftofspeed2.type = 'text/css';
+  var godefer2 = document.getElementsByTagName('link')[0];
+  godefer2.parentNode.insertBefore(giftofspeed2, godefer2);
+
+  var giftofspeed3 = document.createElement('link');
+  giftofspeed3.rel = 'stylesheet';
+  giftofspeed3.href = '/skin/frontend/rwd/external/opensans/open-sans.css';
+  giftofspeed3.type = 'text/css';
+  var godefer3 = document.getElementsByTagName('link')[0];
+  godefer3.parentNode.insertBefore(giftofspeed3, godefer3);
+</script>

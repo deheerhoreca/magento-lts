@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <DeHeerHoreca_Fpc>
+            <version>0.1.0</version>
+        </DeHeerHoreca_Fpc>
+    </modules>
+    <global>
+        <helpers>
+            <deheerhoreca_fpc>
+                <class>DeHeerHoreca_Fpc_Helper</class>
+            </deheerhoreca_fpc>
+        </helpers>
+    </global>
+    <frontend>
+        <routers>
+            <deheerhoreca_fpc>
+                <use>standard</use>
+                <args>
+                    <module>DeHeerHoreca_Fpc</module>
+                    <frontName>deheerhorecafpc</frontName>
+                </args>
+            </deheerhoreca_fpc>
+        </routers>
+    </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <deheerhoreca_fpc>
+                    <file>deheerhoreca_fpc/deheerhoreca_fpc.xml</file>
+                </deheerhoreca_fpc>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>
