@@ -78,24 +78,24 @@
 ## http://developer.yahoo.com/performance/rules.html#gzip
 
     # Insert filter on all content
-    SetOutputFilter DEFLATE
+    ###SetOutputFilter DEFLATE
     # Insert filter on selected content types only
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
 
     # Netscape 4.x has some problems...
-    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    #BrowserMatch ^Mozilla/4 gzip-only-text/html
 
     # Netscape 4.06-4.08 have some more problems
-    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    #BrowserMatch ^Mozilla/4\.0[678] no-gzip
 
     # MSIE masquerades as Netscape, but it is fine
-    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    #BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 
     # Don't compress images
-    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    #SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
 
     # Make sure proxies don't deliver the wrong content
-    Header append Vary User-Agent env=!dont-vary
+    #Header append Vary User-Agent env=!dont-vary
 
 </IfModule>
 
@@ -115,19 +115,6 @@
 
     Options +FollowSymLinks
     RewriteEngine on
-        RewriteCond %{THE_REQUEST} ^.*/index.html
-        RewriteRule ^(.*)index.html$ https://www.prokoeling.nl/$1 [R=301,L]
-        RewriteRule ^test$ https://www.prokoeling.nl/ [R=301,L]
-        RewriteRule ^home$ https://www.prokoeling.nl/ [R=301,L]
-        RewriteRule ^home/$ https://www.prokoeling.nl/ [R=301,L]
-
-        RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.php\ HTTP/
-        RewriteRule ^(.*)index\.php$ https://www.prokoeling.nl/$1 [R=301,L]
-
-        RewriteCond %{SERVER_PORT} !^443$
-        RewriteRule ^(.*)$ https://www.prokoeling.nl/$1 [L,R=301]
-
-
 
 ############################################
 ## you can put here your magento root folder
@@ -270,47 +257,10 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
 
   ## Force compression for mangled `Accept-Encoding` request headers
   <IfModule mod_setenvif.c>
-      <IfModule mod_headers.c>
-          SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
-          RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
-      </IfModule>
-  </IfModule>
-
-  ## Compress all output labeled with one of the following media types.
-  <IfModule mod_filter.c>
-      AddOutputFilterByType DEFLATE "application/atom+xml" \
-                                    "application/javascript" \
-                                    "application/json" \
-                                    "application/ld+json" \
-                                    "application/manifest+json" \
-                                    "application/rdf+xml" \
-                                    "application/rss+xml" \
-                                    "application/schema+json" \
-                                    "application/vnd.geo+json" \
-                                    "application/vnd.ms-fontobject" \
-                                    "application/x-font-ttf" \
-                                    "application/x-javascript" \
-                                    "application/x-web-app-manifest+json" \
-                                    "application/xhtml+xml" \
-                                    "application/xml" \
-                                    "font/eot" \
-                                    "font/opentype" \
-                                    "image/bmp" \
-                                    "image/svg+xml" \
-                                    "image/vnd.microsoft.icon" \
-                                    "image/x-icon" \
-                                    "text/cache-manifest" \
-                                    "text/css" \
-                                    "text/html" \
-                                    "text/javascript" \
-                                    "text/plain" \
-                                    "text/vcard" \
-                                    "text/vnd.rim.location.xloc" \
-                                    "text/vtt" \
-                                    "text/x-component" \
-                                    "text/x-cross-domain-policy" \
-                                    "text/xml"
-
+    <IfModule mod_headers.c>
+      SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+      RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+    </IfModule>
   </IfModule>
 
   ## Map the following filename extensions to the specified
@@ -318,57 +268,18 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
   ## with the appropriate `Content-Encoding` response header
   ## (do note that this will NOT make Apache compress them!).
   <IfModule mod_mime.c>
-      AddEncoding gzip              svgz
+    AddEncoding gzip              svgz
   </IfModule>
-
 </IfModule>
 
 <IfModule mod_headers.c>
-    Header set Connection keep-alive
-</IfModule>
-
-<IfModule mod_filter.c>
-    AddOutputFilterByType DEFLATE "application/atom+xml" \
-                                  "application/javascript" \
-                                  "application/json" \
-                                  "application/ld+json" \
-                                  "application/manifest+json" \
-                                  "application/rdf+xml" \
-                                  "application/rss+xml" \
-                                  "application/schema+json" \
-                                  "application/vnd.geo+json" \
-                                  "application/vnd.ms-fontobject" \
-                                  "application/x-font-ttf" \
-                                  "application/x-javascript" \
-                                  "application/x-web-app-manifest+json" \
-                                  "application/xhtml+xml" \
-                                  "application/xml" \
-                                  "font/eot" \
-                                  "font/opentype" \
-                                  "image/bmp" \
-                                  "image/svg+xml" \
-                                  "image/vnd.microsoft.icon" \
-                                  "image/x-icon" \
-                                  "text/cache-manifest" \
-                                  "text/css" \
-                                  "text/html" \
-                                  "text/javascript" \
-                                  "text/plain" \
-                                  "text/vcard" \
-                                  "text/vnd.rim.location.xloc" \
-                                  "text/vtt" \
-                                  "text/x-component" \
-                                  "text/x-cross-domain-policy" \
-                                  "text/xml"
+  Header set Connection keep-alive
 </IfModule>
 
 <IfModule mod_rewrite.c>
-
-############################################
-## rewrite files for magento cachebuster
-
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
-
+  ############################################
+  ## rewrite files for magento cachebuster
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
 </IfModule>

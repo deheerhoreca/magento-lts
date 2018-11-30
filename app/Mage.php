@@ -53,15 +53,8 @@ if (defined('COMPILER_INCLUDE_PATH')) {
 
 Varien_Autoload::register();
 
-/* DHH CORE HACK */
-/** AUTOLOADER PATCH **/
-if (file_exists($autoloaderPath = BP . DS . 'vendor/autoload.php') ||
-    file_exists($autoloaderPath = BP . DS . '../vendor/autoload.php')
-) {
-    require $autoloaderPath;
-}
-/** AUTOLOADER PATCH **/
-/* DHH CORE HACK */
+include_once "phpseclib/bootstrap.php";
+include_once "mcryptcompat/mcrypt.php";
 
 /**
  * Main Mage hub class
@@ -180,8 +173,8 @@ final class Mage
         return array(
             'major'     => '1',
             'minor'     => '9',
-            'revision'  => '3',
-            'patch'     => '9',
+            'revision'  => '4',
+            'patch'     => '0',
             'stability' => '',
             'number'    => '',
         );
