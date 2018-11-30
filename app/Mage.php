@@ -53,6 +53,7 @@ if (defined('COMPILER_INCLUDE_PATH')) {
 
 Varien_Autoload::register();
 
+/* DHH CORE HACK */
 /** AUTOLOADER PATCH **/
 if (file_exists($autoloaderPath = BP . DS . 'vendor/autoload.php') ||
     file_exists($autoloaderPath = BP . DS . '../vendor/autoload.php')
@@ -60,6 +61,7 @@ if (file_exists($autoloaderPath = BP . DS . 'vendor/autoload.php') ||
     require $autoloaderPath;
 }
 /** AUTOLOADER PATCH **/
+/* DHH CORE HACK */
 
 /**
  * Main Mage hub class

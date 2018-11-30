@@ -1,6 +1,7 @@
 <config>
   <modules>
     <Cm_RedisSession>
+      <!-- DHH CORE HACK--><active>true</active>
       <active>true</active>
       <codePool>community</codePool>
     </Cm_RedisSession>
