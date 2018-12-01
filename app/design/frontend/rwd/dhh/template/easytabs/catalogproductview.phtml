@@ -200,7 +200,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           }
 
           /* Small Brand Logo */
-          echo "<a href='#a_brand'><img alt='Merk logo' title='Over {$brand}' id='brand_logo_small' src='{$brand_logo}' width=125 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" /></a>";
+          echo "<a href='#a_brand'><img alt='Merk logo' title='Over {$brand}' id='brand_logo_small' src='{$brand_logo}' width=125 height=44 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" /></a>";
 
           /* Energy Label */
           if(strlen($energy_rating) > 0) {
