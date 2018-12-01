@@ -39,10 +39,10 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         parent::_construct();
         $this->_config = Mage::getModel('sidenav/config');
     }
-    
+
     /**
      * Retrieves extension's configuration settings
-     * 
+     *
      * @return Codnitive_Sidenav_Model_Config
      */
     public function getConfig()
@@ -50,7 +50,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         if ($this->_config === null) {
             $this->_config = Mage::getModel('sidenav/config');
         }
-        
+
         return $this->_config;
     }
 
@@ -64,24 +64,24 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         $navigationMenu = $this->renderCategoriesMenuHtml(0);
         return $navigationMenu ? $navigationMenu : false;
     }
-    
+
     /**
      * We set cache to null when product direct access option is enabled and customer
      * is in product page to avoid wrong category tree showing with enabled caches
-     * 
+     *
      * Adds 1 extra second to page load
      * Ultra version has caching and best performance
-     * 
+     *
      * @return null
      */
     public function getCacheLifetime()
     {
-        $condition = (Mage::registry('current_product') !== null) 
+        $condition = (Mage::registry('current_product') !== null)
                 && ($this->getConfig()->activeProductCategoriesInDirectAccess());
         if ($condition) {
             return null;
         }
-        
+
         return parent::getCacheLifetime();
     }
 
@@ -94,20 +94,20 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
     {
         return Mage::helper('sidenav/category')->getStoreCategories();
     }
-    
+
     /**
      * Returns category model
-     * 
+     *
      * @return Codnitive_Sidenav_Model_Category
      */
     protected function _getCategoryModel()
     {
         return Mage::getModel('sidenav/catalog_category');
     }
-    
+
     /**
      * Retruns data helper
-     * 
+     *
      * @return Codnitive_Sidenav_Helper_Data
      */
     protected function _getHelper()
@@ -129,14 +129,14 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
      * @return string
      */
     protected function _renderCategoryMenuItemHtml(
-            $category, $level = 0, $isLast = false, 
-            $isFirst = false, $isOutermost = false, $outermostItemClass = '', 
+            $category, $level = 0, $isLast = false,
+            $isFirst = false, $isOutermost = false, $outermostItemClass = '',
             $childrenWrapClass = '', $noEventAttributes = false
     ) {
         if (!$category->getIsActive()) {
             return '';
         }
-        
+
         $config = $this->getConfig();
         $html = array();
         $expanded = null;
@@ -159,10 +159,12 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
                 if (is_string($children)) {
                     $children = explode(',', $children);
                 }
-                $childrenCount = count($children);
+                /* DHH CORE HACK */
+                //$childrenCount = count($children);
+                /* DHH CORE HACK */
             }
         }
-        
+
         // select active children
         $activeChildren = array();
         foreach ($children as $child) {
@@ -183,7 +185,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         else if ((Mage::registry('current_product') !== null) && ($config->activeProductCategoriesInDirectAccess())) {
             $classes = $this->_getCategoryModel()->getProductCategoriesInDirectAccess($category, $classes);
         }
-        
+
         $linkClass = '';
         if ($isOutermost && $outermostItemClass) {
             $classes[] = $outermostItemClass;
@@ -228,7 +230,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
             if (!empty($thumbnail)) {
                 $image = '<img class="thumb-img-' . $thumbPosition . '" src="' . $thumbnail . '" style= "width:' . $thumbWidth . 'px; height:' . $thumbHeight . 'px; float: ' . $thumbPosition . ';" />';
                 $thumb = ' thumb';
-        
+
                 if ($thumbPosition === 'left') {
                     if ($config->isCollapsible() && $config->isThumbImageActive()) {
                         $liMarginLeft = $thumbWidth + 3;
@@ -250,7 +252,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
                 }
             }
         }
-        
+
         $collapsibleClass = '';
         if ($config->isCollapsible()) {
             $collapsibleClass = ' collapsible';
@@ -282,15 +284,15 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
             $spanClass   = $config->getCollapsibleIconType() . '-' . $collapsibleIconPosition;
             $arrow = '<span class="' . $spanClass . ' " ' . $spanOnclick . '" style="width: ' . $width . 'px; height: ' . $height . 'px;' . $extraStyle . '"></span>';
         }
-            
+
         $htmlLi .= '<li';
         foreach ($attributes as $attrName => $attrValue) {
             $htmlLi .= ' ' . $attrName . '="' . str_replace('"', '\"', $attrValue) . $thumb . $collapsibleClass . '"';
         }
-        
+
         $htmlLi .= ' style="margin-left: ' . $liMarginLeft . 'px;' . '">';
         $html[] = $htmlLi;
-        
+
         $html[] = $arrow;
 
         // add wrapper
@@ -311,14 +313,14 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
             $aClass = 'class="collapsible-wrapper' . $collapseName . '"';
             $aStyle = ' style="margin-left: ' . $collWrapper . 'px;"';
         }
-        
+
         $html[] = '<a ' . $aClass . $onclick . ' href="' . $this->getCategoryUrl($category) . '"'
                 . $linkClass .'>' . '<span class="category_name">'
                 . $this->escapeHtml($category->getName()) . '</span></a>';
 
         // add thumbnail image
         $html[] = $image;
-        
+
         // add product count
         if ($config->showProductCount()) {
             $count = Mage::getModel('catalog/layer')
@@ -329,7 +331,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
                 $html[] = '<span class="product-count">(' . $count . ')</span>';
             }
         }
-        
+
         // render children
         $htmlChildren = '';
         $j = 0;
@@ -375,16 +377,16 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
             $currentId    = $registerdCategory->getId();
             $currentLevel = $registerdCategory->getLevel();
         }
-        
+
         $config     = $this->getConfig();
         $paretnType = $config->getParent();
         $categories = $this->getStoreCategories();
-        
+
         $activeCategories = array();
         foreach ($categories as $child) {
             // this condition use for "Current Category and Children" option
-            $condition = ($paretnType == 'current') 
-                    && ($child->getLevel() == $currentLevel) 
+            $condition = ($paretnType == 'current')
+                    && ($child->getLevel() == $currentLevel)
                     && ($child->getId() != $currentId);
             if ($child->getIsActive() && !$condition) {
                 $activeCategories[] = $child;
@@ -401,7 +403,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         $j = 0;
         foreach ($activeCategories as $category) {
             $html .= $this->_renderCategoryMenuItemHtml(
-                    $category, $level, ($j == $activeCategoriesCount - 1), 
+                    $category, $level, ($j == $activeCategoriesCount - 1),
                     ($j == 0), true, $outermostItemClass, $childrenWrapClass, true
             );
             $j++;
@@ -419,14 +421,14 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
     {
         $title = '';
         $currentCategory = Mage::registry('current_category');
-        
+
         switch ($this->getConfig()->getTitleType()) {
             case 'current':
                 if ($currentCategory) {
                     $title = $currentCategory->getName();
                 }
                 break;
-                
+
             case 'parent':
                 if ($currentCategory) {
                     $parent = $currentCategory->getParentCategory();
@@ -436,21 +438,21 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
                     }
                 }
                 break;
-                
+
             case 'static':
                 $title = $this->getConfig()->getStaticTitle();
         }
-        
+
         if (!$title) {
             $title = $this->getConfig()->getStaticTitle();
         }
-        
+
         return $title;
     }
 
     /**
      * Retrieves home page link must show
-     * 
+     *
      * @return boolean
      */
     public function showHome()
@@ -460,40 +462,40 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         }
         return $this->getConfig()->showHome();
     }
-    
+
     /**
      * Returns all classes for home link
-     * 
+     *
      * @return string
      */
     public function getHomeClasses()
     {
         $classes = 'level0 nav-0 parent home';
-        
+
         if ($this->getConfig()->isCollapsible()) {
             $classes .= ' collapsible';
         }
-        
+
         if ($this->_getHelper()->isHome()) {
             $classes .= ' active';
         }
-        
+
         return $classes;
     }
-    
+
     /**
      * Retrieves which CODNITIVE logo must show or not
-     * 
+     *
      * @return boolean
      */
     public function showSupportLogo()
     {
         return $this->getConfig()->showSupportLogo();
     }
-    
+
     /**
      * Retrieves which CODNITIVE logo must show as image or text
-     * 
+     *
      * @return boolean
      */
     public function showAsImage()
@@ -507,7 +509,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
      * @deprecated after 1.7.20
      *     We don't need to check for module activation option
      *     in template, we check it in layout.
-     * 
+     *
      * @return boolean
      */
     public function isActive()
@@ -521,7 +523,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
      * @deprecated after 1.7.20
      *     We don't need to check for selected column option
      *     in template, we check it in layout.
-     * 
+     *
      * @return string
      */
     public function getColumn()
