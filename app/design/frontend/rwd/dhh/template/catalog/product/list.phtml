@@ -121,7 +121,7 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
           <li class="item<?php if( ++$_iterator == sizeof($_productCollection) ): ?> last<?php endif; ?>">
 
             <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
-              <?php $_imgSize = 300; ?>
+              <?php $_imgSize = 264; ?>
               <img id="product-collection-image-<?php echo $_product->getId(); ?>"
                  src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->keepFrame(false)->resize($_imgSize); ?>"
                  alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
@@ -189,7 +189,7 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
         $_collectionSize = $_productCollection->count();
         $_columnCount = 3; // $this->getColumnCount();
         $displaySize = 264;
-        $_imgSize = 3 * $displaySize;
+        $_imgSize = 2 * $displaySize;
         ?>
         <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
           <?php
