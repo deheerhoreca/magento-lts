@@ -1,25 +1,26 @@
 <?php
-/**
- * Template for Mage_Page_Block_Html
- */
+
+require_once __DIR__."/dhhfpc_conf.php";
 
 $formKeyPlaceholder = '<!-- fpc form_key_placeholder -->';
 
 // Outqualification
-$nope = $_html = $force_refresh = false;
+$nope = $_html = $force_refresh = FALSE;
 $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
 if($totalItemsInCart > 0) {
-  $nope = true;
+  $nope = TRUE;
 }
 if(Mage::getSingleton('customer/session')->isLoggedIn()) {
-  $nope = true;
+  $nope = TRUE;
 }
 if(isset($_GET['nofpc'])) {
-  $force_refresh = true;
-  $nope = true;
+  $force_refresh = TRUE;
+  $nope = TRUE;
 }
-
-//$nope = true; // the disable switch
+if(DHH_FPC_ENABLED === FALSE) {
+  $force_refresh = FALSE;
+  $nope = TRUE;
+}
 
 if($nope === FALSE || $force_refresh === TRUE) {
   $_cacheKey = 'QUICKNDIRTYFPC' . md5(
