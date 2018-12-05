@@ -57,6 +57,7 @@
 
                 <!-- Add vendor dependencies -->
 		<!-- DHH --><action method="addItem"><type>skin_js</type><name>js/lightslider.js</name></action>
+		<!-- DHH --><action method="addItem"><type>skin_css</type><name>css/lightslider.css</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/modernizr.custom.min.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/selectivizr.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/matchMedia.js</name></action>
@@ -67,8 +68,6 @@
                 <action method="addItem"><type>skin_js</type><name>js/lib/jquery.cycle2.swipe.min.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/slideshow.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/lib/imagesloaded.js</name></action>
-    <!-- DHH    <action method="addLinkRel"><rel>stylesheet</rel><href>//fonts.googleapis.com/css?family=Raleway:300,400,500,700,600</href></action> -->
-    <!-- DHH    <action method="addLinkRel"><rel>stylesheet</rel><href>//fonts.googleapis.com/css?family=Open+Sans:300,400,500,700,600</href></action> -->
                 <action method="addItem"><type>skin_js</type><name>js/minicart.js</name></action>
 
                 <!-- Add stylesheets with no media queries for use in IE 8 and below -->

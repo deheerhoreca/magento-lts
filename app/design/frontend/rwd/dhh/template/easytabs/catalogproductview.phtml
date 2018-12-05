@@ -126,9 +126,8 @@ $productTitle = $_helper->productAttribute($_product, $_product->getName(), 'nam
 $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)->getData();
 ?>
 
-<!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.2/jquery.fancybox.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
 <script type="text/javascript">var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 
@@ -170,7 +169,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       <?php if(empty($categoryUrl) === FALSE) echo "<a title=\"\" class=\"button btn-cart\" href=\"{$categoryUrl}\">< Terug naar {$categoryName}</a>"; ?>
     </div>
     <div class="product-name">
-      <span class="h1"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></span>
+      <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
       <?php echo $this->getReviewsSummaryHtml($_product, 'short', FALSE)?>
     </div>
     <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>

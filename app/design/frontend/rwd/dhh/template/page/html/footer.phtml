@@ -102,85 +102,48 @@ Alle prijzen in euro's  euro's (€), inclusief BTW, gratis verzending vanaf €
 </div>
 
 <script>
-jQuery(function(){
-jQuery('.nav-1 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu1ri').html()+'</div></li>');
+  jQuery(function(){
+  jQuery('.nav-1 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu1ri').html()+'</div></li>');
+  jQuery('.nav-2 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu2ri').html()+'</div></li>');
+  jQuery('.nav-3 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu3ri').html()+'</div></li>');
+  jQuery('.nav-4 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu4ri').html()+'</div></li>');
+  jQuery('.nav-5 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu5ri').html()+'</div></li>');
+  jQuery('.nav-6 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu6ri').html()+'</div></li>');
+  jQuery('.nav-7 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu7ri').html()+'</div></li>');
 
-jQuery('.nav-2 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu2ri').html()+'</div></li>');
+  if(jQuery('#billing-address select[title=Land]').val()=='NL'){
+  	//add mask
+  	jQuery('#billing-address input[title=BTW-nummer]').val('');
+  	jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
+  	jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
+  }
 
-jQuery('.nav-3 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu3ri').html()+'</div></li>');
+  jQuery('.clztoggleulx li > a').click(function(ev){
+  	ev.preventDefault();
+  	jQuery('.clztoggleulx span').hide();
+  	jQuery(this).next('span').fadeIn().css('display','block');
+  });
 
-jQuery('.nav-4 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu4ri').html()+'</div></li>');
-
-jQuery('.nav-5 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu5ri').html()+'</div></li>');
-
-jQuery('.nav-6 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu6ri').html()+'</div></li>');
-
-jQuery('.nav-7 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu7ri').html()+'</div></li>');
-
-
-if(jQuery('#billing-address select[title=Land]').val()=='NL'){
-		//add mask
-		jQuery('#billing-address input[title=BTW-nummer]').val('');
-		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
-		jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
-}
-
-jQuery('.clztoggleulx li > a').click(function(ev){
-	ev.preventDefault();
-	jQuery('.clztoggleulx span').hide();
-	jQuery(this).next('span').fadeIn().css('display','block');
-});
-
-jQuery('#billing-address select[title=Land]').change(function(){
-	var ct=jQuery(this).val();
-	if(ct=='NL'){
-		//add mask
-		jQuery('#billing-address input[title=BTW-nummer]').val('');
-		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
-		jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
-	}
-	else{
-		//remove mask
-		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#FFFFFF');
-		jQuery('#billing-address input[title=BTW-nummer]').removeAttr("readonly");
-	}
-});
-
-
-jQuery('body.firecheckout-index-index  li#shipping-new-address-form fieldset ul li.wide div.input-box input[title=BTW-nummer]').parent().parent().hide();
-
-
-});
-
+  jQuery('#billing-address select[title=Land]').change(function(){
+  	var ct=jQuery(this).val();
+  	if(ct=='NL'){
+  		//add mask
+  		jQuery('#billing-address input[title=BTW-nummer]').val('');
+  		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
+  		jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
+  	}
+  	else{
+  		//remove mask
+  		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#FFFFFF');
+  		jQuery('#billing-address input[title=BTW-nummer]').removeAttr("readonly");
+  	}
+  });
+  jQuery('body.firecheckout-index-index  li#shipping-new-address-form fieldset ul li.wide div.input-box input[title=BTW-nummer]').parent().parent().hide();
+  });
 </script>
-
 
 <div class="callbtnfelx">
   <strong>Bel ons met al uw vragen!</strong>
   <a href="tel:0850441003" class="scndbldh">085 044 1003</a>
 	<a href="tel:+31850441003" class="scndbl">+31 85 044 1003</a>
 </div>
-
-<!-- https://www.giftofspeed.com/defer-loading-css/ -->
-<script type="text/javascript">
-  var giftofspeed = document.createElement('link');
-  giftofspeed.rel = 'stylesheet';
-  giftofspeed.href = '/skin/frontend/rwd/default/css/lightslider.css';
-  giftofspeed.type = 'text/css';
-  var godefer = document.getElementsByTagName('link')[0];
-  godefer.parentNode.insertBefore(giftofspeed, godefer);
-
-  var giftofspeed2 = document.createElement('link');
-  giftofspeed2.rel = 'stylesheet';
-  giftofspeed2.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
-  giftofspeed2.type = 'text/css';
-  var godefer2 = document.getElementsByTagName('link')[0];
-  godefer2.parentNode.insertBefore(giftofspeed2, godefer2);
-
-  var giftofspeed3 = document.createElement('link');
-  giftofspeed3.rel = 'stylesheet';
-  giftofspeed3.href = '/skin/frontend/rwd/external/opensans/open-sans.css';
-  giftofspeed3.type = 'text/css';
-  var godefer3 = document.getElementsByTagName('link')[0];
-  godefer3.parentNode.insertBefore(giftofspeed3, godefer3);
-</script>
