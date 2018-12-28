@@ -1,0 +1,141 @@
+<?php
+
+$store = Mage::app()->getStore();
+$store_name = $store->getFrontendName();
+
+if($_product = Mage::registry('current_product')) {
+  $product_image = $_product->getImageUrl();
+  $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
+}
+
+$currentUrl = Mage::helper('core/url')->getCurrentUrl();
+
+/* Pre-processing */
+if(is_array($crumbs) && sizeof($crumbs) > 0) {
+  foreach($crumbs as $_crumbName => $_crumbInfo) {
+    if(strlen($_crumbInfo['title']) < 1) {
+      $crumbs[$_crumbName]['title'] = $crumbs[$_crumbName]['label'];
+    }
+    if($crumbs[$_crumbName]['first']) {
+      $crumbs[$_crumbName]['label'] = $store_name;
+    }
+    if($crumbs[$_crumbName]['last'] && $crumbs[$_crumbName]['link'] < 1) {
+      $crumbs[$_crumbName]['link'] = $currentUrl;
+    }
+  }
+}
+
+/*
+echo "<pre>";
+print_r($crumbs);
+echo "</pre>";
+*/
+
+if (Mage::helper('richsnippets')->snippetsEnabled()) {
+  $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
+  if ($snippetsType == '0') { //if JSON enabled
+    $position = 1;
+
+    $dataBreadcrumbs = array();
+    $dataBreadcrumbs['@context']    = "http://schema.org";
+    $dataBreadcrumbs['@type']       = "BreadcrumbList";
+    $dataBreadcrumbs['itemListElement'] = array();
+    if($crumbs && is_array($crumbs)) {
+      foreach($crumbs as $_crumbName => $_crumbInfo) {
+        $dataBreadcrumbs['itemListElement'][$position - 1]['@type']         = 'ListItem';
+        $dataBreadcrumbs['itemListElement'][$position - 1]['position']      = $position;
+        $dataBreadcrumbs['itemListElement'][$position - 1]['item']['name']  = $_crumbInfo['label'];
+        if($_crumbName === "product" && isset($product_image)) {
+          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['@id']   = $product_url;
+          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['image'] = $product_image;
+        } else {
+          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['@id']   = $_crumbInfo['link'];
+        }
+        $position++;
+      }
+    }
+/*
+    if($crumbs && is_array($crumbs)) {
+      echo '<div class="breadcrumbs">';
+        echo '<ul>';
+        foreach($crumbs as $_crumbName=>$_crumbInfo) {
+          $title = $this->escapeHtml($_crumbInfo['title']);
+          $label = $this->escapeHtml($_crumbInfo['label']);
+          echo "<li class='{$_crumbName}'>";
+            if($_crumbInfo['link']) {
+              echo "<a href='{$_crumbInfo['link']}' title='{$title}'>{$label}</a>";
+            } elseif($_crumbInfo['last']) {
+              echo "<strong>{$label}</strong>";
+            } else {
+              echo $label;
+            }
+            if(!$_crumbInfo['last']) {
+              echo "<span>/ </span>";
+            }
+          echo "</li>";
+        }
+        echo '</ul>';
+      echo '</div>';
+    }
+*/
+    if($crumbs && is_array($crumbs)) {
+      echo '<div class="breadcrumbs">';
+        echo '<ul>';
+        foreach($crumbs as $_crumbName => $_crumbInfo) {
+          $label = $this->escapeHtml($_crumbInfo['label']);
+          $title = $this->escapeHtml($_crumbInfo['title']);
+          echo "<li class='{$_crumbName}'>";
+            if($_crumbInfo['link'] && !$_crumbInfo['last']) {
+              echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'>{$label}</a>";
+            } else {
+              echo "<strong>{$label}</strong>";
+            }
+            if($_crumbName !== "product" && !$_crumbInfo['last']) {
+              echo '<i class="fa fa-angle-right" aria-hidden="true" style="padding: 0 0.5em; font-size: 1.5em; line-height: 20px"></i>';
+            }
+          echo "</li>";
+        }
+        echo '</ul>';
+      echo '</div>';
+    }
+    ?>
+
+    <script type="application/ld+json">
+      <?php echo Mage::helper('core')->jsonEncode($dataBreadcrumbs); ?>
+    </script>
+
+    <?php
+  } elseif ($snippetsType == '1') {
+    if($crumbs && is_array($crumbs)) { ?>
+      <div class="breadcrumbs">
+        <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+          <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
+            <li class="<?php echo $_crumbName ?>"
+              <?php if($_crumbInfo['link']): ?>
+                itemprop="itemListElement"
+                itemscope
+                itemtype="http://schema.org/ListItem"
+              <?php endif; ?>
+            >
+            <?php if($_crumbInfo['link']): ?>
+              <a itemprop="item"
+                href="<?php echo $_crumbInfo['link'] ?>"
+                title="<?php echo $this->htmlEscape($_crumbInfo['title']) ?>"
+              ><span itemprop="name"><?php echo $this->htmlEscape($_crumbInfo['label']) ?></span
+              ></a>
+            <?php elseif($_crumbInfo['last']): ?>
+              <strong><?php echo $this->htmlEscape($_crumbInfo['label']) ?></strong>
+            <?php else: ?>
+              <?php echo $this->htmlEscape($_crumbInfo['label']) ?>
+            <?php endif; ?>
+            <?php if(!$_crumbInfo['last']): ?>
+              <span>/ </span>
+            <?php endif; ?>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    <?php
+    }
+  }
+}
