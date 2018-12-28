@@ -35,8 +35,8 @@ div.block-layered-nav dd a {
 
 .block-layered-nav .amshopby-attr,
 .block-layered-nav .amshopby-attr:hover {
-    padding-left: 15px;
-    background: url(../images/amshopby-cb1.gif) left center no-repeat;
+    /*padding-left: 15px;*/
+    /*background: url(../images/amshopby-cb1.gif) left center no-repeat;*/
 }
 
 .block-layered-nav .amshopby-attr::before,

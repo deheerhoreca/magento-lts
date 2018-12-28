@@ -31,153 +31,76 @@
 <div id="darkness2" class="dkmenus"></div>
 <div id="darknessx" class="dkmenus"></div>
 <?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
+//echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
 ?>
+<!--
 <div class="header-language-background" style="display:none">
     <div class="header-language-container">
         <div class="store-language-container">
             <?php echo $this->getChildHtml('store_language') ?>
         </div>
-
         <?php echo $this->getChildHtml('currency_switcher') ?>
-
         <p class="welcome-msg"><?php echo $this->getChildHtml('welcome') ?> <?php echo $this->getChildHtml('accountLinks') ?></p>
     </div>
 </div>
-<script>
-jQuery(function(){
-	jQuery(window).scroll(function() {
-    if (jQuery(window).width() > 680) {
-if (jQuery(this).scrollTop() > 22){
-	jQuery('#header-nav').addClass('headmv');
-
-	jQuery('.page-header-container.grid-old').addClass('scrlng');
-  }
-else{
-	jQuery('#header-nav').removeClass('headmv');
-	  jQuery('.page-header-container.grid-old').removeClass('scrlng');
-
-  }
-}
-});
-});
-</script>
-<header id="header" class="page-header header grid-inside">
-    <div class="page-header-container grid-old">
-	<div class="header__inside">
-        <a class="logo" href="<?php echo $this->getUrl('') ?>">
-            <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height=40 width=208 />
-        </a>
-
-        <?php // In order for the language switcher to display next to logo on smaller viewports, it will be moved here.
-              // See app.js for details ?>
-   <!--     <div class="store-language-container"></div> -->
-
-        <!-- Skip Links -->
-
-        <div class="skip-links headerrightcontents">
-
-          <!--      <a href="#header-search" class="skip-link skip-search">
-                <span class="icon"></span>
-                <span class="label"><?php //echo $this->__('Search'); ?></span>
-            </a>-->
-<div id="header-search" class="skip-content" style="float: left;position: relative;">
-            <?php echo $this->getChildHtml('topSearch') ?>
-        </div>
-            <div class="account-cart-wrapper" style="position: relative;text-align: right;">
-			 <!-- Cart -->
-               <div class="header-minicart" style="width: 103px;padding-lrft: 12px; float: right;">
-                    <?php echo $this->getChildHtml('minicart_head'); ?>
-                </div>
-
-					<div class="hetnavsep"></div>
-					<!--	  <a class="sprite-with-caption hdcontact" href="#">
-                            <div class="sprite-with-caption__icon icons icons__customer-service"></div>
-                            <div class="sprite-with-caption__caption ">
-                                <?php //echo $this->__('Contact'); ?></div>
-                        </a>
-						-->
-
-                    <a href="<?php echo $this->helper('customer')->getAccountUrl(); ?>" style="float: right;width: 93px;line-height: normal;" data-target-element="#header-account" class="skip-link skip-account" title="Klantenservice">
-                   <div class="sprite-with-caption__icon icons icons__user"></div>
-				   <div class="sprite-with-caption__caption ">
-                                <?php echo $this->__('Account'); ?></div>
-
-                </a>
-               <a class="sprite-with-caption kservice" href="/klantenservice" title="Klantenservice" style="text-decoration: none;">
-                            <div class="sprite-with-caption__icon icons icons__kservice"></div>
-                            <div class="sprite-with-caption__caption ">
-                                <?php echo $this->__('Klantenservice'); ?></div>
-                        </a>
-            </div>
-        </div>
-
-        <!-- Navigation -->
- <!--
-
 -->
-        <!-- Search -->
+<header id="header" class="page-header header grid-inside">
 
-        <a href="#header-nav" class="skip-link skip-nav">
-                <span class="icon"></span>
-                <span class="label"><?php echo $this->__('Menu'); ?></span>
-            </a>
+  <!-- Logo, Search, Top Right Link -->
+  <div class="page-header-container grid-old">
+    <div class="header__inside">
+      <a class="logo" href="<?php echo $this->getUrl('') ?>">
+         <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height=40 width=208 />
+      </a>
+      <div class="skip-links headerrightcontents">
+        <div id="header-search" class="skip-content" style="float: left;position: relative;">
+          <?php echo $this->getChildHtml('topSearch') ?>
+        </div>
+        <div class="account-cart-wrapper" style="position: relative;text-align: right;">
 
-        <!-- Account -->
+          <a class="sprite-with-caption kservice" href="/klantenservice" title="Klantenservice">
+            <i class="fa fa-info-circle fa-2x fa-fw"></i>
+            <div class="sprite-with-caption__caption ">
+              <?php echo $this->__('Klantenservice'); ?>
+            </div>
+          </a>
 
-        <div id="header-account" class="skip-content">
-		<?php
-if(! Mage::getSingleton('customer/session')->isLoggedIn()){
-		echo $this->getLayout()->createBlock('customer/form_login')->setTemplate('customer/form/mini.login.phtml')->toHtml();
-}
-else{		?>
+          <a href="<?php echo $this->helper('customer')->getAccountUrl(); ?>" data-target-element="#header-account" class="skip-link skip-account" title="Account">
+            <i class="fa fa-user-circle fa-2x fa-fw"></i>
+            <div class="sprite-with-caption__caption ">
+              <?php echo $this->__('Account'); ?>
+            </div>
+          </a>
 
-		   <?php echo $this->getChildHtml('topLinks');
-}		   ?>
-
+          <?php echo $this->getChildHtml('minicart_head'); ?>
 
         </div>
-		</div>
+      </div>
 
+      <!-- Collapsed Menu for Mobile -->
+      <a href="#header-nav" class="skip-link skip-nav no-decoration">
+        <i class="fa fa-bars fa-2x"></i>
+        <span class="label">Menu</span>
+      </a>
+
+       <!-- Account Popup -->
+      <div id="header-account" class="skip-content">
+        <?php
+        if(! Mage::getSingleton('customer/session')->isLoggedIn()){
+          echo $this->getLayout()->createBlock('customer/form_login')->setTemplate('customer/form/mini.login.phtml')->toHtml();
+        } else {
+          echo $this->getChildHtml('topLinks');
+        }
+        ?>
+      </div>
     </div>
-	<div id="header-nav" class="skip-content">
-            <?php echo $this->getChildHtml('topMenu') ?>
-        </div>
+  </div>
+  <div id="header-nav" class="skip-content">
+    <?php echo $this->getChildHtml('topMenu') ?>
+  </div>
+  <?php
+  //echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
+  ?>
 </header>
-
-
-<header id="checkout-header">
-    <a href="/"><strong class="cchklogolft"></strong></a>
-
-    <ul class="checkout-info-list">
-    <li class="chkrtn">
-        <div class="icon-return"></div>
-        <div class="label-for-icon"><strong>30 dagen</strong> retourrecht</div>
-    </li>
-    <li class="chkmiddle">
-        <div class="icon-delivery"></div>
-        <div class="label-for-icon"><strong>Gratis</strong> Verzending &amp; retourneren</div>
-    </li>
-    <li class="chkright">
-        <div class="icon-discount"></div>
-        <div class="label-for-icon"><strong>Veel producten</strong> 40% korting</div>
-    </li>
-</ul>   </header>
-<div class="checkout-area-box">
-    <div class="checkout-area-holder">
-        <table>
-            <tbody><tr>
-                <td class="checkout-alignleft"><a href="#">Terug naar winkelwagen</a></td>
-                <td class="checkout-topmiddle"><span>Beveiligde verbinding</span></td>
-                <td class="checkout-help">
-                    <a class="acte-checkout-helparea-lnk" target="_blank" href="#">
-                        <span class="icon info-tooltip"></span>Help                    </a>
-                </td>
-            </tr>
-        </tbody></table>
-    </div>
-</div>
-
-
 
 <?php echo $this->getChildHtml('topContainer'); ?>

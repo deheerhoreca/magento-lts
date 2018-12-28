@@ -30,26 +30,24 @@
  * @see Mage_Checkout_Block_Cart_Sidebar
  */
 
+$_cartQty = $this->getSummaryCount();
+if(empty($_cartQty)) {
+  $_cartQty = 0;
+}
 ?>
 
-<?php
-    $_cartQty = $this->getSummaryCount();
-    if(empty($_cartQty)) {
-        $_cartQty = 0;
-    }
-?>
-
-<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" style="float: left;width: 93px;line-height: normal;" data-target-element="#header-cart" class="skip-link skip-cart <?php if($_cartQty <= 0): ?> no-count<?php endif; ?>">
-  <!--  <span class="icon"></span>
-    <span class="label"></span>
-    <span class="count"><?php echo $_cartQty; ?></span> -->
-	<div class="sprite-with-caption__icon icons icons__cart">
-                                <div class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0">   <span class="count"><?php echo $_cartQty; ?></span></div>
-                            </div>
-	<div class="sprite-with-caption__caption ">
-                                <?php echo $this->__('Cart'); ?>                            </div>
+<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-link skip-cart title="Winkelwagen" <?php if($_cartQty <= 0): ?> no-count <?php endif; ?>">
+  <i class="fa fa-shopping-cart fa-2x fa-fw"></i>
+  <div class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0">
+    <?php echo $_cartQty; ?>
+  </div>
+  <div class="sprite-with-caption__caption ">
+    <?php echo $this->__('Cart'); ?>
+  </div>
 </a>
 
-<div id="header-cart" class="block block-cart skip-content">
+<div class="header-minicart">
+  <div id="header-cart" class="block block-cart skip-content">
     <?php echo $this->getChildHtml('minicart_content');?>
+  </div>
 </div>

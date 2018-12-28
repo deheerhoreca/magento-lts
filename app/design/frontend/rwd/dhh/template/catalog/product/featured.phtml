@@ -1,6 +1,6 @@
 <?php
 
-$_imgSize = 2*243;
+$_imgSize = 244;
 
 // some helpers
 $_helper = $this->helper('catalog/output');
@@ -42,7 +42,9 @@ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
       <a href="<?php echo $path; ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
       <img id="product-collection-image-<?php echo $_product->getId(); ?>"
          src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize); ?>"
-         alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+         alt="<?php echo $this->stripTags($_product->getName(), null, true) ?>"
+         title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"
+         width="<?php echo $_imgSize; ?>" height="<?php echo $_imgSize; ?> "/>
       </a>
       <?php
       $garentiim = $_product->getAttributeText('garantie');

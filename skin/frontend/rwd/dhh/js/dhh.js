@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
 jQuery(function() {
   jQuery(window).scroll(function() {
     if (jQuery(window).width() > 680) {
-      if (jQuery(this).scrollTop() > 22) {
+      if (jQuery(this).scrollTop() > 0) {
         jQuery('#header-nav').addClass('headmv');
         jQuery('.page-header-container.grid-old').addClass('scrlng');
       } else {

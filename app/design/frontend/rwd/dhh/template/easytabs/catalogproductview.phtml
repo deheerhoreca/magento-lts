@@ -48,13 +48,14 @@ if(function_exists("sanitizeForFilename") === FALSE) {
 $htbrand = $brand = null;
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
-$brandx = $_product->getAttributeText('manufacturer');
+$brand_name = $_product->getAttributeText('manufacturer');
 $brand_logo = "/skin/frontend/rwd/dhh/images/logo.png";
+$brand_link = "/".strtolower($brand_name);
 
-//$brandx = "combisteel";
+//$brand_name = "combisteel";
 
-if(empty($brandx) === FALSE) {
-  $brand = sanitizeForFilename($brandx);
+if(empty($brand_name) === FALSE) {
+  $brand = sanitizeForFilename($brand_name);
   $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
   $brand_logo = "/media/wysiwyg/brands/{$brand}.png";
 }
@@ -165,9 +166,11 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
 <div class="product-view">
   <div class="product-essential">
+    <!--
     <div class="product-category-linkback">
       <?php if(empty($categoryUrl) === FALSE) echo "<a title=\"\" class=\"button btn-cart\" href=\"{$categoryUrl}\">< Terug naar {$categoryName}</a>"; ?>
     </div>
+  -->
     <div class="product-name">
       <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
       <?php echo $this->getReviewsSummaryHtml($_product, 'short', FALSE)?>
@@ -587,8 +590,27 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               if($lbllevertijdvl === '4-5 weken') {
                 $nmwek = trim(str_replace('4-5 weken', '5', $lbllevertijdvl));
               }
-              $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
-              echo "<small class=\"clzdelvlb\"><span class=delivery-logo>&nbsp;</span><span class=\"{$txtcltcz}\">{$stmsg}</span>. Uiterlijk <strong style=\"font-weight: bold;\">{$calwekdate}</strong> bezorgd ({$expected_delivery})</small>";
+              if(empty($nmwek) === FALSE) {
+                $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
+
+                // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
+                $holidays = [
+                  "01-01-2019",
+                  "19-04-2019",
+                  "22-04-2019",
+                  "30-05-2019",
+                  "10-06-2019",
+                  "25-12-2019",
+                  "26-12-2019",
+                ];
+                $i = 0;
+                while(in_array($calwekdate, $holidays)) {
+                  $i++;
+                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' Weekday'));
+                }
+
+                echo "<small class=\"clzdelvlb\"><span class=delivery-logo>&nbsp;</span><span class=\"{$txtcltcz}\">{$stmsg}</span>. Uiterlijk <strong style=\"font-weight: bold;\">{$calwekdate}</strong> bezorgd <br>({$expected_delivery})</small>";
+              }
             }
             ?>
 
@@ -843,6 +865,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             <?php
               //echo "<img alt='Merk logo' title='{$brand}' id='brand_logo_big' src='{$brand_logo}' width=125 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" />";
               echo $htbrand;
+              echo "<a href='{$brand_link}'>Alle producten van {$brand_name}</a>";
             ?>
           </div>
         </div>
