@@ -75,7 +75,11 @@ div.block-layered-nav dd a {
 }
 
 .block-layered-nav .amshopby-cat-level-2 {
-    padding-left: 10px;
+    padding-left: 0;
+}
+
+.block-layered-nav .amshopby-cat-level-2.static-2-level {
+    padding-left: 30px;
 }
 
 .block-layered-nav .amshopby-cat-level-3 {
@@ -103,6 +107,8 @@ div.block-layered-nav dd a {
 .block-layered-nav span.amshopby-plusminus {
     float: left;
     display: block;
+    margin: 5px 0 0;
+    padding: 0;
     width: 15px;
     height: 15px;
     cursor: pointer;
@@ -524,4 +530,7 @@ input[name^="amshopby"][id$="to"].input-text {
 }
 div.amshopby-overflow-scroll-enabled div.block-content dl dd > ol:first-of-type {
     overflow-y: auto;
+}
+.amshopby-cat-level-1.without-icon {
+    padding-left: 15px;
 }

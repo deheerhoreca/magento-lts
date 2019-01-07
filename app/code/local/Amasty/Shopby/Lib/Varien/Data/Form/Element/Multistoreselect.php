@@ -12,7 +12,7 @@ class Amasty_Shopby_Lib_Varien_Data_Form_Element_Multistoreselect extends Varien
     {
         $this->addClass('select');
         $html = "<section>";
-        $valuesByStore = @unserialize($this->getValue() );
+        $valuesByStore = Mage::helper('amshopby')->unserialize($this->getValue());
         if( !$valuesByStore) $valuesByStore[0] = $this->getValue();
 
         foreach (Mage::helper('amshopby')->getStores() as $_store) {

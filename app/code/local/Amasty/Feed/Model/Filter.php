@@ -17,23 +17,27 @@ class Amasty_Feed_Model_Filter extends Mage_Core_Model_Abstract
         if ($this->hasAdvancedCondition()){
             
             if ($this->_condition === NULL){
-                $condition = unserialize($this->condition_serialized);
-                foreach ($condition as &$value) {
-            
-                    if (array_key_exists('condition', $value) && 
-                        array_key_exists('attribute', $value['condition'])){
-                        
-                        
-                        if (!isset($value['condition']['type']) &&
-                            isset($value['condition']['attribute'])){
-                            $value['condition']['type'] = array_fill(
-                                0, 
-                                count($value['condition']['attribute']),
-                                Amasty_Feed_Model_Filter::$_TYPE_ATTRIBUTE);
+                $condition = Mage::helper('amfeed')->unserialize($this->condition_serialized);
+                if($condition) {
+                    foreach ($condition as &$value) {
+
+                        if (array_key_exists('condition', $value)
+                            && array_key_exists('attribute', $value['condition'])
+                        ) {
+
+
+                            if (!isset($value['condition']['type'])
+                                && isset($value['condition']['attribute'])
+                            ) {
+                                $value['condition']['type'] = array_fill(
+                                    0,
+                                    count($value['condition']['attribute']),
+                                    Amasty_Feed_Model_Filter::$_TYPE_ATTRIBUTE
+                                );
+                            }
                         }
                     }
                 }
-                
                 $this->_condition = $condition;
             }
             

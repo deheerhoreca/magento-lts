@@ -93,7 +93,7 @@ class Amasty_Shopby_Model_Page extends Mage_Core_Model_Abstract
 
     protected function _getConditions()
     {
-        $conditions = unserialize($this->getCond());
+        $conditions = Mage::helper('amshopby')->unserialize($this->getCond());
         if (!is_array($conditions)) {
             return array();
         }

@@ -2,37 +2,30 @@
 /**
  * @author Amasty Team
  * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
+ * @package Amasty_Feed
  */
 
 
-class Amasty_Shopby_Block_Adminhtml_System_Config_Fieldset_Info
+class Amasty_Feed_Block_Adminhtml_System_Config_Fieldset_Info
     extends Mage_Adminhtml_Block_System_Config_Form_Fieldset
 {
     protected $_contentHtml = '';
 
-    protected $_moduleCode = 'Amasty_Shopby';
+    protected $_moduleCode = 'Amasty_Feed';
 
-    protected $_userGuideLink = 'https://amasty.com/docs/doku.php?id=magento_1:improved_layered_navigation';
+    protected $_userGuideLink = 'https://amasty.com/docs/doku.php?id=magento_1:product-feed';
 
-    protected $_knownConflictExtensions = array(
-        'Smartwave_Ajaxcatalog',
-        'Vt_Ajaxfilter'
-    );
+    protected $_knownConflictExtensions = array();
 
     /**
-     * @return string
+     * @return array
      */
     public function getAdditionalModuleContent()
     {
         $messages = array();
 
         if (!@class_exists('Amasty_Base_Helper_String')) {
-            $messages['error'] = Mage::helper('amshopby')->getUnserializeError();
-        }
-
-        if (version_compare(Mage::getConfig()->getModuleConfig('Amasty_Base')->version, '2.2.1', '<=')) {
-            $messages = implode($messages, '');
+            $messages['error'] = \Amasty_Feed_Helper_Data::ERROR_MESSAGE;
         }
 
         return $messages;
@@ -92,5 +85,4 @@ class Amasty_Shopby_Block_Adminhtml_System_Config_Fieldset_Info
     {
         return $this->_contentHtml;
     }
-
 }

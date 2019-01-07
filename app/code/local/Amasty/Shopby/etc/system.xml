@@ -796,7 +796,8 @@
                     <fields>
                         <seotoolkit_text_label>
                             <label><![CDATA[To get more advanced SEO instruments please check out
-<a href="https://amasty.com/magento-seo-toolkit.html" target="_blank" rel="nofollow" title="Follow link">
+<a href="https://amasty.com/magento-seo-toolkit.html?utm_source=extension&utm_medium=backend&utm_campaign=link_to_Seo_Toolkit_m1"
+target="_blank" rel="nofollow" title="Follow link">
 Amasty SEO Toolkit</a> extension]]></label>
                             <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
                             <sort_order>1</sort_order>

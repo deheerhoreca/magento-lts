@@ -28,6 +28,7 @@ class Amasty_Shopby_Helper_Cached extends Mage_Core_Helper_Abstract
                 return false;
             }
 
+            /*safe unserialize. data is loaded from magento cache*/
             $data = unserialize($data);
 
             $this->lightCache[$key] = $data;

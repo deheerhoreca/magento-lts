@@ -34,7 +34,9 @@ $_multiSelect = !($this->getSingleChoice());
         ?>
         <li<?php if ($_hasImage){ echo ' style="line-height: ' . $_lineHeight . 'px;"'; } ?>>
             <?php if ($_hasItems): ?>
-            <a href="<?php echo $this->urlEscape($_item->getUrl()) ?>" class="<?php echo $_linkClass ?>">
+            <a href="<?php echo $this->urlEscape($_item->getUrl()) ?>"
+               data-config='<?php echo $this->getDataConfig($_item) ?>'
+               class="<?php echo $_linkClass ?>">
                 <?php else: ?>
                 <span class="<?php echo $_linkClass ?>">
             <?php endif; ?>

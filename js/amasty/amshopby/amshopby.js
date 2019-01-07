@@ -19,7 +19,7 @@ function amshopby_start(){
     });
 
     $$('.block-layered-nav .amshopby_attr_search').each(function (e) {
-        e.observe('keyup', function() {
+        e.observe('change', function() {
             amshopby_attr_search(e);
         });
     });
@@ -310,7 +310,17 @@ function amshopby_filter_show(evt){
     if (isRwdOrUltimo && 770 > jQuery(window).width()) { // bp.medium = 770 - for mobile devices 
         return;
     }
-    var ol = dt.next('dd').select('ol').first();
+    var ol = dt.next('dd').select('ol').first(),
+        event = document.createEvent('CustomEvent'),
+        searchBox = ol.select('.amshopby_attr_search');
+
+    event.initEvent('change', false, false);
+        
+    if (searchBox.length) {
+        searchBox.first().value = '';
+        searchBox.first().dispatchEvent(event);
+    }
+    
     if(!ol.hasClassName('amsopby-flag-clickfirst')){
         ol.addClassName('amsopby-flag-clickfirst');
         if(!ol.hasClassName('no-display-current')){

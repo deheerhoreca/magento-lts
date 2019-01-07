@@ -111,7 +111,7 @@ class Amasty_Shopby_Model_Filter extends Mage_Core_Model_Abstract
     {
         $storeId = Mage::app()->getStore()->getId();
         $value = $this->getData($field);
-        $unserialized = @unserialize($value);
+        $unserialized = Mage::helper('amshopby')->unserialize($value);
         if (!$unserialized) return $value;
         !empty($unserialized[$storeId]) ? $return = $unserialized[$storeId] : $return = $unserialized[0];
         return $return;

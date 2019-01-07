@@ -10,7 +10,11 @@ class Amasty_Shopby_Model_Url_Builder
 {
     const REWRITE_REQUEST_PATH = 'rewrite_request_path';
     const AMFINDER = 'amfinder';
-    /** @var  string */
+    const SPLASHPRO = 'splashpro';
+
+    /**
+     * @var  string
+     */
     public $moduleName;
 
     /** @var  array */
@@ -142,8 +146,17 @@ class Amasty_Shopby_Model_Url_Builder
         $this->allowAjaxFlag = $allow;
     }
 
-    public function getUrl()
+    public function getUrl($changeStore = false)
     {
+        if ($changeStore) {
+            foreach ($this->query as $key => $param) {
+                if ($key !== '___store') {
+                    unset($this->query[$key]);
+                }
+            }
+            $this->query['cat'] = Mage::app()->getRequest()->getParam('id');
+        }
+
         $this->updateEffectiveQuery();
 
         $paramPart = $this->getParamPart();
@@ -449,7 +462,7 @@ class Amasty_Shopby_Model_Url_Builder
             }
             $aliase = Mage::app()->getRequest()->getAliases();
             if ($needUrlKey) {
-                if ($aliase && $this->moduleName == self::AMFINDER) {
+                if ($aliase && in_array($this->moduleName, array(self::AMFINDER, self::SPLASHPRO), true)) {
                     $url.= $aliase[self::REWRITE_REQUEST_PATH];
                 } else {
                     $url.= self::$reservedKey;
@@ -513,9 +526,32 @@ class Amasty_Shopby_Model_Url_Builder
                 $storeId = Mage::app()->getStore()->getStoreId();
                 $this->category = Mage::getModel('catalog/category')->setStoreId($storeId)->load($this->category);
             }
-            self::$categoryUrlHash[$catId] = $this->category->getUrl();
+            self::$categoryUrlHash[$catId] = $this->getUrlSecure($this->category);
+
         }
         return self::$categoryUrlHash[$catId];
+    }
+
+    /**
+     * @param $category
+     * @return string
+     */
+    private function getUrlSecure($category)
+    {
+        $categoryUrl = $category->getUrl();
+
+        if (!Mage::app()->getStore()->isCurrentlySecure()) {
+            return $categoryUrl;
+        }
+
+        $unsecureBaseUrl = $category->getUrlInstance()->getBaseUrl(array('_secure' => false));
+        $secureBaseUrl = $category->getUrlInstance()->getBaseUrl(array('_secure' => true));
+
+        if (strpos($categoryUrl, $unsecureBaseUrl) === 0) {
+            $categoryUrl = substr_replace($categoryUrl, $secureBaseUrl, 0, mb_strlen($unsecureBaseUrl));
+        }
+
+        return $categoryUrl;
     }
 
     protected function isNewOrSale()

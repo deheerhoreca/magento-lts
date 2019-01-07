@@ -11,6 +11,7 @@
         <Amasty_Base>
             <active>true</active>
             <codePool>local</codePool>
+            <edition>community</edition>
         </Amasty_Base>
     </modules>
 </config>

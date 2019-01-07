@@ -75,6 +75,14 @@
         </reference>
     </catalogsearch_result_index>
 
+    <splash_page_view>
+        <remove name="catalog.leftnav" />
+        <remove name="enterprisecatalog.leftnav"/>
+        <reference name="left">
+            <block type="amshopby/catalog_layer_view" name="amshopby.navleft" before="-" template="catalog/layer/view.phtml"/>
+        </reference>
+    </splash_page_view>
+
 <!-- comment out to show navigation on the product pages
      <catalog_product_view>
         <reference name="right">

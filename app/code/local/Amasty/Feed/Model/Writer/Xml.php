@@ -57,8 +57,14 @@ class Amasty_Feed_Model_Writer_Xml extends Amasty_Feed_Model_Writer_Abstract
         fwrite($this->fp, $out);
     }
     
-    public function header(){
-        fwrite($this->fp, $this->_getFeed()->getXmlHeader());
+    public function header()
+    {
+        $header = str_replace(
+            '<created_at>{{DATE}}</created_at>',
+            '<created_at>' . date('Y-m-d H:i') . '</created_at>',
+            $this->_getFeed()->getXmlHeader()
+        );
+        fwrite($this->fp, $header);
     }
     
     public function footer(){

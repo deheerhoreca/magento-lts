@@ -59,7 +59,7 @@ class Amasty_Feed_Block_Adminhtml_Profile_Edit_Tab_Conditionex
         $model = Mage::getModel('amfeed/rule');
         
         $conds = $model->getConditions();
-        $arr = unserialize($profile->getConditionsSerialized());
+        $arr = Mage::helper('amfeed')->unserialize($profile->getConditionsSerialized());
         if (is_array($arr))
             $conds->loadArray($arr);
         

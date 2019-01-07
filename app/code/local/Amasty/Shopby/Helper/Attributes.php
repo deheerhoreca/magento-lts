@@ -82,7 +82,7 @@ class Amasty_Shopby_Helper_Attributes extends Amasty_Shopby_Helper_Cached
     {
         if ($urlAlias) {
             $storeId = $storeId ?: Mage::app()->getStore()->getId();
-            $unserialized = @unserialize($urlAlias);
+            $unserialized = Mage::helper('amshopby')->unserialize($urlAlias);
             if ($unserialized) {
                 $urlAlias = !empty($unserialized[$storeId]) ? $unserialized[$storeId] : $unserialized[0];
             }
@@ -479,8 +479,8 @@ class Amasty_Shopby_Helper_Attributes extends Amasty_Shopby_Helper_Cached
 
     public function sortOptionsByName($a, $b)
     {
-        $x = trim($a['label']);
-        $y = trim($b['label']);
+        $x = is_array($a) ? trim($a['label']) : trim($a->getLabel());
+        $y = is_array($b) ? trim($b['label']) : trim($b->getLabel());
 
         if ($x == '') return 1;
         if ($y == '') return -1;
@@ -497,11 +497,14 @@ class Amasty_Shopby_Helper_Attributes extends Amasty_Shopby_Helper_Cached
 
     public function sortOptionsByCounts($a, $b)
     {
-        if ($a['countValue'] == $b['countValue']) {
+        $x = is_array($a) ? trim($a['countValue']) : trim($a->getCount());
+        $y = is_array($b) ? trim($b['countValue']) : trim($b->getCount());
+
+        if ($x == $y) {
             return 0;
         }
 
-        return ($a['countValue'] < $b['countValue'] ? 1 : -1);
+        return ($x < $y ? 1 : -1);
     }
 
     /**

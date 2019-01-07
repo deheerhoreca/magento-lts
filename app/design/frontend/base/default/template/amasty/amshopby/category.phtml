@@ -75,9 +75,10 @@
             }
 
             $showIcon = (1 == $level && $_item->getHasChildren());
+            $withoutIcon = (1 == $level && !$_item->getHasChildren());
             $icon = ($_item->getIsChildSelected()) ? 'minus': 'plus';
         ?>
-        <li class="<?php echo $class?>" <?php echo $additional?>>
+        <li class="<?php echo $class?> static-2-level <?php echo ($withoutIcon) ? 'without-icon': '';?>" <?php echo $additional?>>
             <?php if ($showIcon): ?><span id="amshopby-cat-id-<?php echo $_item->getId()?>" class="amshopby-plusminus <?php echo $icon?>"></span><?php endif ?>
             <a <?php if ($_item->getIsSelected()):?>class="amshopby-cat-selected"<?php endif?> href="<?php echo $this->urlEscape($_item->getUrl()) ?>"><?php echo $_item->getLabel() ?></a>
             <?php if ($_showCount && $_item->getCount()):?>

@@ -15,7 +15,13 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     
     const TYPE_ATTRIBUTE_PRODUCT = 'product';
     const TYPE_ATTRIBUTE_OTHER = 'other';
-    
+
+    const ERROR_MESSAGE = 'If there is the following text it means that Amasty_Base is not updated to the latest 
+                             version.<p>In order to fix the error, please, download and install the latest version of 
+                             the Amasty_Base, which is included in all our extensions.
+                        <p>If some assistance is needed, please submit a support ticket with us at: 
+                        <a href="https://amasty.com/contacts/" target="_blank">https://amasty.com/contacts/</a>';
+
     public function getNoYes($no='No', $yes='Yes')
     {
         $res = array(
@@ -393,5 +399,25 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     function getCustomFieldFormat($placeholder){
         $ret = $this->getCustomFieldData($placeholder);
         return $ret['format'];
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return array|null
+     */
+    public function unserialize($string)
+    {
+        if (!@class_exists('Amasty_Base_Helper_String')) {
+            Mage::logException(new Exception(self::ERROR_MESSAGE));
+
+            if (Mage::app()->getStore()->isAdmin()) {
+                Mage::helper('ambase/utils')->_exit(self::ERROR_MESSAGE);
+            } else {
+                Mage::throwException($this->__('Sorry, something went wrong. Please contact us or try again later.'));
+            }
+        }
+
+        return \Amasty_Base_Helper_String::unserialize($string);
     }
 }

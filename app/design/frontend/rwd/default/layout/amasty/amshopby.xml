@@ -34,7 +34,7 @@
                         <block type="page/html_pager" name="product_list_toolbar_pager"/>
                     </block>
                     <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
-                    <action method="setColumnCount"><coulumn>4</coulumn></action>
+                    <action method="setColumnCount"><column>4</column></action>
                 </block>
             </block>
             <block type="amshopby/top" name="amshopby.top" before="category.products" template="amasty/amshopby/top.phtml"/>
@@ -74,6 +74,15 @@
             <block type="amshopby/search_layer_top" name="amshopby.navtop" before="search.result" template="amasty/amshopby/view_top.phtml"/>
         </reference>
     </catalogsearch_result_index>
+
+    <splash_page_view>
+        <remove name="catalog.leftnav" />
+        <remove name="enterprisecatalog.leftnav"/>
+        <reference name="left">
+            <block type="amshopby/catalog_layer_view" name="amshopby.navleft" before="-" template="catalog/layer/view.phtml"/>
+        </reference>
+    </splash_page_view>
+
 
     <!-- comment out to show navigation on the product pages
          <catalog_product_view>

@@ -22,7 +22,7 @@ class Amasty_Shopby_Lib_Varien_Data_Form_Element_Multistoretext extends Varien_D
     {
         $this->addClass('textarea');
         $html = "<section>";
-        $valuesByStore = @unserialize($this->getValue() );
+        $valuesByStore = Mage::helper('amshopby')->unserialize($this->getValue() );
         if (!$valuesByStore) $valuesByStore[0] = $this->getValue();
         foreach (Mage::helper('amshopby')->getStores() as $_store) {
             isset($valuesByStore[$_store->getId()]) ? $value = $valuesByStore[$_store->getId()] : $value = '';

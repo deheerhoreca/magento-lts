@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Amasty_Shopby>
-            <version>3.6.6</version>
+            <version>3.6.11</version>
         </Amasty_Shopby>
     </modules>
     <global>
@@ -326,6 +326,16 @@
            <controller_action_postdispatch_adminhtml_catalog_product_attribute_delete>
                <observers><amshopby><type>singleton</type><class>amshopby/observer</class><method>attributeChanged</method></amshopby></observers>
            </controller_action_postdispatch_adminhtml_catalog_product_attribute_delete>
+
+           <catalog_entity_attribute_delete_after>
+               <observers>
+                   <amshopby>
+                       <type>singleton</type>
+                       <class>amshopby/observer</class>
+                       <method>deleteFilter</method>
+                   </amshopby>
+               </observers>
+           </catalog_entity_attribute_delete_after>
        </events>
        <translate>
            <modules>

@@ -86,8 +86,8 @@ class Amasty_Shopby_Model_Value extends Mage_Core_Model_Abstract
     {
         $storeId = Mage::app()->getStore()->getId();
         $value = $this->{'get' . $field}();
-        $unserialized = @unserialize($value);
-        if (!$unserialized) {
+        $unserialized = Mage::helper('amshopby')->unserialize($value);
+        if (false === $unserialized) {
             return $value;
         }
         $result = empty($unserialized[$storeId]) ? $unserialized[0] : $unserialized[$storeId];

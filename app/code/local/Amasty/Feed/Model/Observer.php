@@ -107,7 +107,7 @@ class Amasty_Feed_Model_Observer
             $fileContent = @file_get_contents($configData->getFilePath());
             if ($fileContent){
                 
-                $importObjects = unserialize($fileContent);
+                $importObjects = Mage::helper('amfeed')->unserialize($fileContent);
                 
                 if (is_array($importObjects) && count($importObjects) > 0){
                     $message = 'Following templates has been installed:';

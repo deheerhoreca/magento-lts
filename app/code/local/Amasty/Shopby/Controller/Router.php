@@ -68,12 +68,6 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
             return false;
         }
 
-        if (Mage::app()->getRequest()->getQuery('___from_store')) {
-            $this->request->setQuery($query);
-            unset(${'_GET'}['___from_store']);
-            $this->redirectToCorrectUrl();
-        }
-
         foreach ($this->request->getQuery() as $key => $value) {
             if (!isset($query[$key])) {
                 $query[$key] = $value;
@@ -102,6 +96,12 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
 
             $this->setSeoQuery($query);
             $this->forwardShopby();
+        }
+
+        if (Mage::app()->getRequest()->getQuery('___from_store')) {
+            $this->request->setQuery($query);
+            unset(${'_GET'}['___from_store']);
+            $this->redirectToCorrectUrl(true);
         }
 
         return true;
@@ -374,13 +374,13 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
     /**
      * @return void
      */
-    private function redirectToCorrectUrl()
+    private function redirectToCorrectUrl($changeStore = false)
     {
         /** @var Amasty_Shopby_Model_Url_Builder $urlBuilder */
         $urlBuilder = Mage::getModel('amshopby/url_builder');
         $urlBuilder->reset();
         $urlBuilder::$mode = $this->urlMode;
-        $url = $urlBuilder->getUrl();
+        $url = $urlBuilder->getUrl($changeStore);
         Mage::app()->getResponse()->setRedirect($url, 301);
     }
 }

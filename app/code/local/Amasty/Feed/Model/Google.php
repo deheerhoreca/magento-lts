@@ -232,7 +232,7 @@ class Amasty_Feed_Model_Google extends Varien_Object
                 'cond_stock' => '1',
                 'cond_disabled' => '1',
                 'cond_type' => 'simple,configurable,virtual,downloadable',
-                'xml_header' => '<?xml version="1.0"?> <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"> <channel>',
+                'xml_header' => '<?xml version="1.0"?> <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"> <channel> <created_at>{{DATE}}</created_at>',
                 'xml_footer' => '</channel> </rss>',
                 'xml_item' => 'item',
                 'frm_date' => 'y.m.d',
@@ -313,7 +313,7 @@ class Amasty_Feed_Model_Google extends Varien_Object
 
     protected function _getSessionData()
     {
-        return @unserialize(Mage::getSingleton('admin/session')->getAmastyFeedGoogleRequestData());
+        return @Mage::helper('amfeed')->unserialize(Mage::getSingleton('admin/session')->getAmastyFeedGoogleRequestData());
     }
 
     public function setup($requestData)

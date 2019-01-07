@@ -23,7 +23,7 @@ class Amasty_Feed_Model_Field extends Amasty_Feed_Model_Filter
     }
     
     public function getMappingConfig(){
-        return unserialize($this->getMapping());
+        return Mage::helper('amfeed')->unserialize($this->getMapping());
     }
     
     public function getAdvencedAttributes(){

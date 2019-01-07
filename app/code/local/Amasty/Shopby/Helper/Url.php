@@ -520,25 +520,31 @@ class Amasty_Shopby_Helper_Url extends Mage_Core_Helper_Abstract
         return $this->urlSuffix;
     }
 
+    /**
+     * @param $origUrl
+     * @return string
+     */
     public function checkRemoveBrandUrlKey($origUrl)
     {
         if ((Amasty_Shopby_Model_Source_Url_Mode::MODE_DISABLED == Mage::getStoreConfig('amshopby/seo/urls')) || !Mage::getStoreConfig('amshopby/brands/attr'))
             return $origUrl;
 
         $brandUrlKey = trim(Mage::getStoreConfig('amshopby/brands/url_key'));
-        if(!$brandUrlKey)
+        if (!$brandUrlKey) {
             return $origUrl;
+        }
 
         $brandUrlKey .= '/';
         $len = strlen($brandUrlKey);
 
-        $url = $origUrl;
-        $url = ltrim($url, '/');
+        $url = ltrim($origUrl, '/');
+        if (substr($url, 0, $len) == $brandUrlKey) {
+            $url = substr($url, $len - 1);
+        } else {
+            $url = '';
+        }
 
-        if(substr($url,0,$len) == $brandUrlKey)
-            $origUrl = substr($url, $len - 1);
-
-        return $origUrl;
+        return $url;
     }
 
     public function formatAttributePartForApply($attrCode, $ids)

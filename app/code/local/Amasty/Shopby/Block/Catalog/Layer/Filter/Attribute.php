@@ -22,6 +22,26 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         return $this->_alias . '_child';
     }
 
+    /**
+     * Retrieve sorted items
+     *
+     * @return array
+     */
+    public function getItems()
+    {
+        $items = parent::getItems();
+        $sortBy = $this->getSortBy();
+        $functions = array(
+            Amasty_Shopby_Model_Filter::SORT_BY_NAME => 'sortOptionsByName',
+            Amasty_Shopby_Model_Filter::SORT_BY_QTY => 'sortOptionsByCounts'
+        );
+        if (isset($functions[$sortBy])) {
+            usort($items, array(Mage::helper('amshopby/attributes'), $functions[$sortBy]));
+        }
+
+        return $items;
+    }
+
     public function getItemsAsArray()
     {
         $params = Mage::app()->getRequest()->getParams();
@@ -29,8 +49,6 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         $isApplyByButton = Mage::helper('amshopby')->getIsApplyButtonEnabled();
         $applyConfigDumb = json_encode(array());
         $displayType = $this->getDisplayType();
-
-        $selected = false;
         $items = array();
 
         /** @var Amasty_Shopby_Model_Url_Builder $urlBuilder */
@@ -66,9 +84,10 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
                 $displayType == Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN;
             $item['css'] = ($skipAttributeClass) ? '' : 'amshopby-attr';
 
+            $item['is_selected'] = false;
             if ($itemObject->getIsSelected()) {
-                $selected = true;
                 $item['css'] .= '-selected';
+                $item['is_selected'] = true;
                 if (Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN == $displayType) { //dropdown
                     $item['css'] = 'selected';
                 }
@@ -98,53 +117,101 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             $items[] = $item;
         }
 
-        $sortBy = $this->getSortBy();
-        $functions = array(
-            Amasty_Shopby_Model_Filter::SORT_BY_NAME => 'sortOptionsByName',
-            Amasty_Shopby_Model_Filter::SORT_BY_QTY => 'sortOptionsByCounts'
-        );
-        if (isset($functions[$sortBy])) {
-            usort($items, array(Mage::helper('amshopby/attributes'), $functions[$sortBy]));
-        }
+        $items = $this->sortFeaturedOptions($items);
 
         // add less/more
         $max = $this->getMaxOptions();
-        if ($selected) {
-            $max = 0;
+        if ($max && count($items) > $max) {
+            $items = $this->moveSelectedToTop($items);
         }
-        $featuredItems = array();
-        $standartItems = array();
+
         $i = 0;
         foreach ($items as $k => $item) {
             $style = '';
-            if ($max && (++$i > $max)) {
+            if ($max && (++$i > $max) && !$item['is_selected']) {
                 $style = 'style="display:none" class="amshopby-attr-' . $this->getRequestValue() . '"';
             }
+
             $items[$k]['style'] = $style;
             $items[$k]['default_sort'] = $i;
             $items[$k]['featured_sort'] = $i;
-            if (isset($item['is_featured']) && $item['is_featured']) {
-                $featuredItems[] = $items[$k];
-            } else {
-                $standartItems[] = $items[$k];
-            }
         }
-        if ($this->getSortFeaturedFirst() && count($featuredItems) > 0) {
-            usort($featuredItems, array(Mage::helper('amshopby/attributes'), 'sortOptionsByName'));
-            $items = array_merge($featuredItems, $standartItems);
-            $i = 0;
-            foreach ($items as $k => $item) {
-                $style = '';
-                if ($max && (++$i > $max)) {
-                    $style = 'style="display:none" class="amshopby-attr-' . $this->getRequestValue() . '"';
-                }
-                $items[$k]['style'] = $style;
-                $items[$k]['featured_sort'] = $i;
-            }
-        }
+
         $this->setShowLessMore($max && ($i > $max));
 
         return $items;
+    }
+
+    /**
+     * @param $items
+     * @return array
+     */
+    private function moveSelectedToTop($items)
+    {
+        foreach ($items as $key => $item) {
+            if ($item['is_selected']) {
+                $temp = array($key => $items[$key]);
+                unset($items[$key]);
+                $items = $temp + $items;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountSelectedOptions()
+    {
+        $selectedItems = 0;
+
+        foreach ($this->getItemsAsArray() as $item) {
+            if (isset($item['is_selected']) && $item['is_selected']) {
+                $selectedItems++;
+            }
+        }
+
+        return $selectedItems;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * @throws Varien_Exception
+     */
+    private function sortFeaturedOptions($options)
+    {
+        $featuredOptions = array();
+        $standardOptions = array();
+        if ($this->getSortFeaturedFirst()) {
+            foreach ($options as $k => $item) {
+                if (isset($item['is_featured']) && $item['is_featured']) {
+                    $featuredOptions[] = $options[$k];
+                } else {
+                    $standardOptions[] = $options[$k];
+                }
+            }
+
+            if (count($featuredOptions)) {
+                usort($featuredOptions, array(Mage::helper('amshopby/attributes'), 'sortOptionsByName'));
+                $options = array_merge($featuredOptions, $standardOptions);
+            }
+        }
+
+        return $options;
+    }
+
+    public function getDataConfig($item)
+    {
+        $isApplyByButton = Mage::helper('amshopby')->getIsApplyButtonEnabled();
+        $urlBuilder = Mage::getModel('amshopby/url_builder');
+        $urlBuilder->reset();
+        $urlBuilder->clearPagination();
+
+        return $isApplyByButton
+            ? $item->getUrlAttributeOptionConfigAsJson($urlBuilder)
+            : json_encode(array());
     }
 
     public function getRequestValue()

@@ -68,8 +68,9 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
             $exclude = array();
         }
 
-        $this->computeAttributeOptionsData($filters);
+        $filters = $this->excludeSplashProPageFilters($filters);
 
+        $this->computeAttributeOptionsData($filters);
 
         $filtersPositions = Mage::helper('amshopby/attributes')->getPositionsAttributes();
 
@@ -144,6 +145,46 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
 
         $this->_filterBlocks = $filters;
         return $filters;
+    }
+
+    /**
+     * @return Mage_Catalog_Model_Layer|Mage_Core_Model_Abstract
+     */
+    public function getLayer()
+    {
+        if (Mage::app()->getRequest()->getModuleName() === Amasty_Shopby_Model_Url_Builder::SPLASHPRO) {
+            return Mage::getSingleton('splash/layer');
+        }
+
+        return parent::getLayer();
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    protected function excludeSplashProPageFilters(array $filters)
+    {
+        $splashPage = Mage::registry('splash_page');
+        $result = $splashPage ? array() : $filters;
+        if ($splashPage !== null) {
+            $excludeCodes = array_keys($splashPage->getOptionFilters());
+            foreach ($filters as $filter) {
+                $attribute = $filter->getAttributeModel();
+                if ($attribute) {
+                    if ($attribute->getAttributeCode() === 'price'
+                        || $attribute->getBackendType() === 'decimal'
+                        || in_array($attribute->getAttributeCode(), $excludeCodes, true)
+                    ) {
+                        continue;
+                    }
+                }
+
+                $result[] = $filter;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -523,7 +564,7 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
         if ($comment = $filter->getComment()) {
             if (preg_match('^([adObis]:|N;)^', $comment)) {
                 try {
-                    $comment = unserialize($comment);
+                    $comment = Mage::helper('amshopby')->unserialize($comment);
                 } catch (Exception $e) {
                     Mage::log($e->getMessage());
                 }

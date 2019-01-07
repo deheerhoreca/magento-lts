@@ -69,7 +69,7 @@ class Amasty_Feed_Controller_Abstract extends Mage_Adminhtml_Controller_Action
     protected function prepareForEdit($model)
     {
         foreach ($this->_dynamic as $field) {
-            $model->setData($field, unserialize($model->getData($field)));
+            $model->setData($field, Mage::helper('amfeed')->unserialize($model->getData($field)));
         }
 
         return true;
@@ -84,6 +84,10 @@ class Amasty_Feed_Controller_Abstract extends Mage_Adminhtml_Controller_Action
         $typeFeed = $feed ? $model->getType() : $this->getRequest()->getParam('type');
 
         if ($data) {
+            if($typeFeed == Amasty_Feed_Model_Profile::TYPE_XML) {
+                $data['xml_header'] = $this->editXMLHeader($data['xml_header']);
+            }
+
             $model->setData($data)->setId($id)->setType($typeFeed);
             try {
                 $this->prepareForSave($model);
@@ -122,6 +126,16 @@ class Amasty_Feed_Controller_Abstract extends Mage_Adminhtml_Controller_Action
                 ->__('Unable to find a record to save')
         );
         $this->_redirect('*/*');
+    }
+
+    /**
+     * @param string $header
+     *
+     * @return string
+     */
+    protected function editXMLHeader($header)
+    {
+        return $header . '<created_at>{{DATE}}</created_at>';
     }
 
     protected function prepareForSave($model)

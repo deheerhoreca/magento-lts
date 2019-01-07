@@ -67,7 +67,7 @@
         file_put_contents($pathXML, $xml);
         
         
-        $csv = unserialize($csv);
+        $csv = Mage::helper('amfeed')->unserialize($csv);
         
 
         if ($csv){

@@ -16,12 +16,14 @@ class Amasty_Shopby_Model_Sitemap_Observer
     {
         $storeId = $observer->getEvent()->getStoreId();
 
-        $collectionBrands = $this->_getBrands($storeId);
-        $customPages = $this->_getCustomPages($storeId);
+        if ($storeId) {
+            $collectionBrands = $this->_getBrands($storeId);
+            $customPages = $this->_getCustomPages($storeId);
 
-        if ($customPages || $collectionBrands) {
-            $resultItems = array_merge($customPages, $collectionBrands, $observer->getCollection()->getItems());
-            $observer->getCollection()->setItems($resultItems);
+            if ($customPages || $collectionBrands) {
+                $resultItems = array_merge($customPages, $collectionBrands, $observer->getCollection()->getItems());
+                $observer->getCollection()->setItems($resultItems);
+            }
         }
 
         return $this;

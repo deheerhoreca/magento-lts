@@ -26,7 +26,7 @@ class Amasty_Shopby_Amshopby_PageController extends Mage_Adminhtml_Controller_Ac
 
         $cond = $model->getCond();
         if ($cond){
-            $cond = unserialize($cond);
+            $cond = Mage::helper('amshopby')->unserialize($cond);
             $i=0;
             foreach ($cond as $k=>$v){
                 /*

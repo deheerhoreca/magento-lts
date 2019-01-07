@@ -48,8 +48,12 @@ class Amasty_Shopby_Block_Catalog_Product_List_Toolbar extends Mage_Catalog_Bloc
     private function skip()
     {
         $r = Mage::app()->getRequest();
-        if (in_array($r->getModuleName(), array('supermenu', 'supermenuadmin', 'tag', 'catalogsale','catalognew', 'highlight')))
+        if (in_array(
+            $r->getModuleName(),
+            array('supermenu', 'supermenuadmin', 'tag', 'catalogsale','catalognew', 'highlight', 'splashpro')
+        )) {
             return true;
+        }
             
         return false;
     }

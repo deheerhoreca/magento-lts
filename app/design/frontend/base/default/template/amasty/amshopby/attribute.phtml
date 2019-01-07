@@ -113,10 +113,11 @@ if ($this->getShowLessMore() && in_array($this->getDisplayType(), array(
         Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_ONLY,
         Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS,
     ))) {
-
     $total = count($this->getItemsAsArray());
     $short = $this->getMaxOptions();
-    $add = $total - $short;
+    $countSelectedOptions = $this->getCountSelectedOptions();
+
+    $add = $countSelectedOptions > $short ? $total - $countSelectedOptions : $total - $short;
     if ($add > 0) {
         $text = sprintf($this->__('View %d More'), $add);
         echo '<li class="amshopby-clearer"><a id="amshopby-more-'.$this->getRequestValue().'" class="amshopby-more" href="#">' . $text . '</a></li>';

@@ -138,6 +138,9 @@ class Amasty_Shopby_Model_Observer
                 $blocks[$b->getBlockId()] = $this->_removeAjaxParam($html);
             }
         }
+        if ($scrollPager = $layout->getBlock('amscroll_pager')) {
+            $blocks['amscroll_pager'] = $scrollPager->toHtml();
+        }
 
         if (!$blocks)
             return;
@@ -327,6 +330,23 @@ class Amasty_Shopby_Model_Observer
             $blockModel = Mage::getModel('cms/block')->load($observer->getBlock()->getBlockId());
             if (strpos($blockModel->getContent(), 'amshopby/subcategories') !== false) {
                 $observer->getBlock()->setCacheLifetime(null);
+            }
+        }
+    }
+
+    /**
+     * @param $observer
+     */
+    public function deleteFilter($observer)
+    {
+        $attributeId = $observer->getAttribute()->getId();
+        if ($attributeId) {
+            $filter = Mage::getResourceModel('amshopby/filter')->getFilterByAttributeId($attributeId);
+            if ($filter && isset($filter['filter_id'])) {
+                $model = Mage::getModel('amshopby/filter')->load($filter['filter_id']);
+                if ($model) {
+                    $model->delete();
+                }
             }
         }
     }

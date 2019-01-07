@@ -102,13 +102,17 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         
         return $this->_productChildCollection;
     }
-    
-    function getSuperAttributesCollection(){
-        
-        if (!$this->_productSuperAttributesCollection){
-            $this->_productSuperAttributesCollection = Mage::getResourceModel('catalog/product_type_configurable_attribute_collection');
+
+    function getSuperAttributesCollection()
+    {
+        if (!$this->_productSuperAttributesCollection) {
+            $attribute_ids = $this->_attributesCollection->getAllIds();
+
+            $this->_productSuperAttributesCollection =
+                Mage::getResourceModel('catalog/product_type_configurable_attribute_collection')
+                    ->addFieldToFilter('main_table.attribute_id', array('in' => $attribute_ids));
         }
-        
+
         return $this->_productSuperAttributesCollection;
     }
     
@@ -271,7 +275,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         if (!$this->_fields) {
             if (($this->getType() == self::TYPE_CSV) || ($this->getType() == self::TYPE_TXT)) 
             {
-                $this->_fields = unserialize($this->getCsv());
+                $this->_fields = Mage::helper('amfeed')->unserialize($this->getCsv());
             } else if ($this->getType() == self::TYPE_XML) {
                 $feedXML = Mage::helper('amfeed')->parseXml($this->getXmlBody());
                 $this->_fields = $feedXML["fields"];
@@ -545,9 +549,9 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
                         }
                     }
 
-		    if (!empty($value)) {
-                    	$this->_modifyValue($value, $fields, $idx);
-		    }
+                    if (!empty($value)) {
+                        $this->_modifyValue($value, $fields, $idx);
+                    }
 
                     $record[] = $value;
                 }
@@ -627,13 +631,20 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         
         return $ret;
     }
-    
+
     function loadAttributesCollection(){
         if (!$this->_attributesCollection) {
+            $fields = $this->_getFields();
+
             $this->_attributesCollection = Mage::getResourceModel('catalog/product_attribute_collection')
                     ->addVisibleFilter()
                     ->addStoreLabel($this->getStoreId());
+
+            if (isset($fields['attr'])) {
+                $this->_attributesCollection->addFieldToFilter('main_table.attribute_code', array('in' => $fields['attr']));
+            }
         }
+
         return $this->_attributesCollection;
     }
     
@@ -1211,7 +1222,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
             }
         }
         $this->_isUniqueFileName();
-        
+
         return parent::_afterSave();
     }
 
@@ -1230,7 +1241,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
 
         return true;
     }
-    
+
     protected function _beforeDelete()
     {
         if ($this->getDefaultImage()) { // delete default image

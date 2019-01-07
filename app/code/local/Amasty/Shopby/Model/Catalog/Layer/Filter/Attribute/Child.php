@@ -109,7 +109,7 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Attribute_Child
         $result = '';
         if ($serialized) {
             $storeId = Mage::app()->getStore()->getId();
-            $unserialized = @unserialize($serialized);
+            $unserialized = Mage::helper('amshopby')->unserialize($serialized);
             if ($unserialized) {
                 $result = !empty($unserialized[$storeId]) ? $unserialized[$storeId] : $unserialized[0];
             }
