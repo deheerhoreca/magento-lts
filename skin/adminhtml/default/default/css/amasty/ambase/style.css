@@ -111,7 +111,9 @@
     margin-bottom: 10px;
 }
 
-.amasty-conflicts-title, .version-title, .module-version {
+.amasty-conflicts-title,
+.version-title,
+.module-version {
     font-size: 16px;
     font-weight: bold;
 }
@@ -121,7 +123,8 @@
 
 }
 
-.amasty-user-guide, .amasty-additional-content {
+.amasty-user-guide,
+.amasty-additional-content {
     border: 1px solid #95a486;
     color: #3d6611;
     background: #eff5ea url('../../../images/success_msg_icon.gif') no-repeat 10px 10px;
@@ -152,4 +155,34 @@
     border: 1px solid #f16048;
     color: #df280a;
     background: #faebe7 url('../../../images/error_msg_icon.gif') no-repeat 10px 10px;
+}
+
+.ambase-unsubscribe {
+    max-width: 1px;
+    position: absolute;
+}
+
+.ambase-icon {
+    margin-right: 5px;
+}
+
+.ambase-module-name {
+    line-height: 14px;
+    vertical-align: top;
+}
+
+#ambase_extensions .form-list tr .value {
+    color: #e60303;
+}
+
+#ambase_extensions .form-list tr[id$="is_latest"] .value {
+    color: #038603;
+}
+
+.amasty_not_instaled {
+    color: #f70606;
+}
+
+.amasty_is_instaled {
+    color: #00f702;
 }

@@ -41,7 +41,9 @@ class Amasty_Base_Block_Adminhtml_Debug_Conflict extends Amasty_Base_Block_Admin
     {
         $ret = false;
         foreach ($rewrites as $rewrite) {
-            if (strpos($rewrite, "Amasty") === false) {
+            if (strpos($rewrite, "Amasty") === false
+                && strpos($rewrite, "Mageplace_") === false
+            ) {
                 $ret = true;
                 break;
             }

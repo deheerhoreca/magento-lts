@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Amasty_Base>
-            <version>2.2.3</version>
+            <version>2.3.12</version>
         </Amasty_Base>
     </modules>
 
@@ -18,6 +18,13 @@
             <ambase>
                 <class>Amasty_Base_Block</class>
             </ambase>
+
+            <adminhtml>
+                <rewrite>
+                    <notification_grid_renderer_notice>Amasty_Base_Block_Adminhtml_Notification_Grid_Renderer_Notice</notification_grid_renderer_notice>
+                    <notification_grid_renderer_actions>Amasty_Base_Block_Adminhtml_Notification_Grid_Renderer_Actions</notification_grid_renderer_actions>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <resources>
             <ambase_setup>
@@ -144,9 +151,8 @@
     <default>
         <ambase>
             <feed>
-                <check_frequency>86400</check_frequency>
-                <update>1</update>
-                <promo>1</promo>
+                <type>INFO,PROMO,INSTALLED_UPDATE,TIPS_TRICKS</type>
+                <frequency>5</frequency>
             </feed>
         </ambase>
     </default>

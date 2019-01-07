@@ -89,11 +89,11 @@ class Amasty_Base_Helper_Module extends Mage_Core_Helper_Abstract
 
     static public function getAllExtensions()
     {
-        $ret = @unserialize(Mage::app()->loadCache(self::EXTENSIONS_PATH));
+        $ret = @Mage::helper('ambase')->unserialize(Mage::app()->loadCache(self::EXTENSIONS_PATH));
 
         if (!$ret) {
             self::reload();
-            $ret = @unserialize(Mage::app()->loadCache(self::EXTENSIONS_PATH));
+            $ret = @Mage::helper('ambase')->unserialize(Mage::app()->loadCache(self::EXTENSIONS_PATH));
         }
 
         return $ret;
@@ -204,6 +204,10 @@ class Amasty_Base_Helper_Module extends Mage_Core_Helper_Abstract
 
     public function isSubscribed()
     {
-        return Mage::getStoreConfig('ambase/feed/update') == 1;
+        $setting = Mage::getStoreConfig('ambase/feed/type');
+        $setting = explode(',', $setting);
+
+        return in_array(Amasty_Base_Model_Source_Type::AVAILABLE_UPDATE, $setting)
+            && !in_array(Amasty_Base_Model_Source_Type::UNSUBSCRIBE_ALL, $setting);
     }
 }

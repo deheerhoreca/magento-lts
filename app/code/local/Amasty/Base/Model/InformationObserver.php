@@ -149,7 +149,7 @@ class Amasty_Base_Model_InformationObserver
                 $module = array_shift($module);
             }
 
-            if (isset($module['version']) && $module['version'] > (string)$currentVer) {
+            if (isset($module['version']) && version_compare($currentVer, $module['version'], '<')) {
                 $result = false;
             }
         }
@@ -302,7 +302,9 @@ class Amasty_Base_Model_InformationObserver
 
         if ($isConflict) {
             foreach ($conflict as $class) {
-                if (strpos($class, 'Amasty') === false) {
+                if (strpos($class, 'Amasty') === false
+                    && strpos($class, "Mageplace") === false
+                ) {
                     $array = explode('_', $class);
                     if (count($array) >= 2) {
                         $conflictModules[] = implode('_', array($array[0], $array[1]));

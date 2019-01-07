@@ -37,6 +37,8 @@ class Amasty_Base_Block_Extensions extends Mage_Adminhtml_Block_System_Config_Fo
 
             $html .= $this->_getFieldHtml($element, $moduleName);
         }
+
+        $html .= '<span class="amasty-info-block"></span>';//added for showing amasty logo in the top
         $html .= $this->_getFooterHtml($element);
 
         return $html;
@@ -68,15 +70,16 @@ class Amasty_Base_Block_Extensions extends Mage_Adminhtml_Block_System_Config_Fo
         }
 
         $baseKey = (string)Mage::getConfig()->getNode('modules/' . $moduleCode . '/baseKey');
-
         $allExtensions = Amasty_Base_Helper_Module::getAllExtensions();
 
-        $status = '<a  target="_blank"><img src="'.$this->getSkinUrl('images/ambase/ok.gif').'" title="'.$this->__("Installed").'"/></a>';
+        $status = '<a class="ambase-icon" target="_blank"><img src="' . $this->getSkinUrl('images/ambase/ok.gif') . '" title="'
+            . $this->__("Installed") . '"/></a>';
 
+        $isLatest = '_is_latest';
         if ($allExtensions && isset($allExtensions[$moduleCode])) {
-
-            if (is_array($allExtensions[$moduleCode]) && !array_key_exists('name', $allExtensions[$moduleCode])) {
-
+            if (is_array($allExtensions[$moduleCode])
+                && !array_key_exists('name', $allExtensions[$moduleCode])
+            ) {
                 if (!empty($baseKey) && isset($allExtensions[$moduleCode][$baseKey])) {
                     $ext = $allExtensions[$moduleCode][$baseKey];
                 } else {
@@ -90,25 +93,40 @@ class Amasty_Base_Block_Extensions extends Mage_Adminhtml_Block_System_Config_Fo
             $name    = $ext['name'];
             $lastVer = $ext['version'];
 
-            $moduleName = '<a href="'.$url.'" target="_blank" title="'.$name.'">'.$name."</a>";
-            
+            $moduleName = '<a class="ambase-module-name" href="' . $url . '" target="_blank" title="' . $name . '">'
+                . $name . "</a>";
             if (version_compare($currentVer, $lastVer, '<')) {
-                $status = '<a href="'.$url.'" target="_blank"><img src="'.$this->getSkinUrl('images/ambase/update.gif').'" alt="'.$this->__("Update available").'" title="'.$this->__("Update available").'"/></a>';
+                $isLatest = '';
+                $status = sprintf(
+                    '<a class="ambase-icon" href="%s" target="_blank"><img src="%s" alt="%s" title="%s"/></a>',
+                    $url . '#changelog',
+                    $this->getSkinUrl('images/ambase/update.gif'),
+                    $this->__("Update available"),
+                    $this->__("Update available")
+                );
             }
         }
 
         // in case if module output disabled
         if (Mage::getStoreConfig('advanced/modules_disable_output/' . $moduleCode)) {
-            $status = '<a  target="_blank"><img src="' . $this->getSkinUrl('images/ambase/bad.gif') . '" alt="' . $this->__('Output disabled') . '" title="' . $this->__('Output disabled') . '"/></a>';
+            $status = sprintf(
+                '<a class="ambase-icon" target="_blank"><img src="%s" alt="%s" title="%s"/></a>',
+                $this->getSkinUrl('images/ambase/bad.gif'),
+                $this->__("Output disabled"),
+                $this->__("Output disabled")
+            );
         }
 
         $moduleName = $status . ' ' . $moduleName;
-
-        $field = $fieldset->addField($moduleCode, 'label', array(
-            'name'  => 'dummy',
-            'label' => $moduleName,
-            'value' => $currentVer,
-        ))->setRenderer($this->_getFieldRenderer());
+        $field = $fieldset->addField(
+            $moduleCode . $isLatest,
+            'label',
+            array(
+                'name'  => 'dummy',
+                'label' => $moduleName,
+                'value' => $currentVer
+            )
+        )->setRenderer($this->_getFieldRenderer());
 
         return $field->toHtml();
     }
