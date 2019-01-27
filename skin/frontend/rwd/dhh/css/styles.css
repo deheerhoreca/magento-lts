@@ -9885,7 +9885,6 @@ section,
 small,
 span,
 strike,
-strong,
 sub,
 summary,
 sup,
@@ -19936,12 +19935,10 @@ div.product-view div.product-essential form#product_addtocart_form div.product-i
 .clzdelvlb {
 	clear: both;
 	display: block;
-	font-size: 12px;
+	font-size: 0.9em;
 	line-height: 2em;
 	color: #636363;
 	padding-bottom: 9px;
-	text-align: center;
-	font-style: italic;
 }
 
 .clzdelvlb span.delivery-logo {
@@ -20353,6 +20350,43 @@ div.cross-sell-text-container {
   margin-bottom: 15px;
 }
 
+.tooltip .tooltiptext {
+  display: none;
+  width: 200px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 11;
+  border: 1px solid #595959;
+  padding: 10px;
+  left: -80px;
+  bottom: auto;
+  top: 25px;
+  text-align: left;
+  font-style: normal;
+  line-height: 1.5em;
+}
+
+.tooltip-icon {
+  margin: 5px;
+}
+
+.clztoptoolc {
+  bottom: 8px;
+  top: auto;
+}
+
+.tooltip:hover .tooltiptext {
+  display: block;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
 /* Generic Stuff */
 
 .big-tile {
@@ -20372,4 +20406,8 @@ div.cross-sell-text-container {
 
 .highlight-hover:hover {
   opacity: 0.7;
+}
+
+.small-text {
+  font-size: 0.9em;
 }

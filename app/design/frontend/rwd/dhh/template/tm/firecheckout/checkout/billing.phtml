@@ -178,7 +178,20 @@
                                                     title="<?php echo (empty($fields[$field]['title']) ? $this->__($fields[$field]['label']) : $this->__($fields[$field]['title'])) ?>"
                                                     class="input-text<?php echo $required ? ' required-entry' : '' ?>" style="display:none;"
                                                 />
-                                            <?php else: ?>
+                                            <?php elseif ('vat_id' === $field):
+                                              $placeholder = "Niet verplicht in Nederland";
+                                              ?>
+                                              <input type="text"
+                                                  name="<?php echo (empty($fields[$field]['name']) ? $_prefix . '[' . $field . ']' : $fields[$field]['name']) ?>"
+                                                  id="<?php echo $_prefix ?>:<?php echo $field ?>"
+                                                  value="<?php echo $this->escapeHtml($value) ?>"
+                                                  title="<?php echo (empty($fields[$field]['title']) ? $this->__($fields[$field]['label']) : $this->__($fields[$field]['title'])) ?>"
+                                                  class="<?php echo $fields[$field]['class'] ?><?php echo $required ? ' required-entry' : '' ?>"
+                                                  placeholder="<?php echo $placeholder; ?>"
+                                              />
+                                              <?php
+
+                                            else: ?>
                                                 <?php
                                                     if (isset($fields[$field]['value'])):
                                                         $value = $fields[$field]['value'];
