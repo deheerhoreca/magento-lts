@@ -59,6 +59,6 @@ class Geissweb_Euvatgrouper_Adminhtml_Vatreport_RateController extends Mage_Admi
      */
     public function _isAllowed()
     {
-        return true;
+	    return Mage::getSingleton('admin/session')->isAllowed('report/euvatreport_rate');
     }
 }

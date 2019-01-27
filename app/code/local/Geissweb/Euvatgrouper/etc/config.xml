@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Geissweb_Euvatgrouper>
-            <version>1.7.7</version>
+            <version>1.8.1</version>
         </Geissweb_Euvatgrouper>
     </modules>
     <global>
@@ -215,6 +215,36 @@
                 </vat_trader_address>
             </customer_address>
         </fieldsets>
+        <!-- PHP7 TOTALS START
+        <sales>
+            <quote>
+                <totals>
+                    <nominal>
+                        <class>sales/quote_address_total_nominal</class>
+                        <before>subtotal</before>
+                    </nominal>
+                    <subtotal>
+                        <class>sales/quote_address_total_subtotal</class>
+                        <after>nominal</after>
+                        <before>grand_total</before>
+                    </subtotal>
+                    <shipping>
+                        <class>sales/quote_address_total_shipping</class>
+                        <after>subtotal,freeshipping,tax_subtotal,msrp</after>
+                        <before>grand_total</before>
+                    </shipping>
+                    <grand_total>
+                        <class>sales/quote_address_total_grand</class>
+                        <after>subtotal</after>
+                    </grand_total>
+                    <msrp>
+                        <class>sales/quote_address_total_msrp</class>
+                        <before>grand_total</before>
+                    </msrp>
+                </totals>
+            </quote>
+        </sales>
+        PHP7 TOTALS END -->
     </global>
     <frontend>
         <routers>
@@ -246,12 +276,15 @@
     <default>
         <euvatgrouper>
             <extension_info>
+                <license_key><![CDATA[25QH-M41V-I1IH-KA84-6D2A]]></license_key>
                 <debug_mode>0</debug_mode>
                 <osc_integration/>
             </extension_info>
             <vat_settings>
                 <validate_vatid>0</validate_vatid>
                 <require_valid_number_to_checkout>0</require_valid_number_to_checkout>
+                <excluded_groups_taxcalc/>
+                <regular_tax_groups/>
             </vat_settings>
             <group_assignment>
                 <target_group>1</target_group>
@@ -261,6 +294,10 @@
                 <target_group_errors>1</target_group_errors>
                 <force_general_on_vat>0</force_general_on_vat>
             </group_assignment>
+            <integration>
+                <auto_set_country>0</auto_set_country>
+                <auto_set_country_customer_confirm>0</auto_set_country_customer_confirm>
+            </integration>
         </euvatgrouper>
     </default>
     <admin>
@@ -295,26 +332,6 @@
                 </observers>
             </adminhtml_block_html_before>
         </events>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <config>
-                                    <children>
-                                        <euvatgrouper translate="title" module="euvatgrouper">
-                                            <title>euvatgrouper</title>
-                                            <sort_order>110</sort_order>
-                                        </euvatgrouper>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
         <translate>
             <modules>
                 <euvatgrouper>

@@ -31,7 +31,5 @@ $data2 = array('type'=>Varien_Db_Ddl_Table::TYPE_TEXT,'length'=>255,'nullable'=>
 
 $installer->getConnection()->addColumn($table_sales_quote_address, 'vat_trader_name', $data);
 $installer->getConnection()->addColumn($table_sales_quote_address, 'vat_trader_address', $data2);
-$installer->getConnection()->addColumn($table_sales_order_address, 'vat_trader_name', $data);
-$installer->getConnection()->addColumn($table_sales_order_address, 'vat_trader_address', $data2);
 
 $installer->endSetup();

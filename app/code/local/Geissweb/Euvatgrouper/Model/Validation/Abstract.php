@@ -19,10 +19,24 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
+/**
+ * Class Geissweb_Euvatgrouper_Model_Validation_Abstract
+ */
 class Geissweb_Euvatgrouper_Model_Validation_Abstract extends Varien_Object
 {
+	/**
+	 * @var string
+	 */
     var $service_url = '';
+
+	/**
+	 * @var bool
+	 */
 	var $is_cron_validation = false;
+
+	/**
+	 * @var mixed
+	 */
 	var $_response;
 
 	/**
@@ -30,8 +44,15 @@ class Geissweb_Euvatgrouper_Model_Validation_Abstract extends Varien_Object
 	 */
 	public function __construct()
 	{
-		$this->setShopCc(Mage::helper('euvatgrouper')->getShopVatCc());
-		$this->setShopNr(substr(trim(str_replace(' ', '', Mage::helper('euvatgrouper')->getShopVatId())), 2));
+		parent::__construct();
+
+		try {
+			$this->setShopCc( Mage::helper( 'euvatgrouper' )->getShopVatCc() );
+			$this->setShopNr(substr(trim(str_replace(' ', '', Mage::helper('euvatgrouper')->getShopVatId())), 2));
+		} catch( Varien_Exception $e ) {
+			Mage::logException($e);
+		}
+
 	}
 
     /**

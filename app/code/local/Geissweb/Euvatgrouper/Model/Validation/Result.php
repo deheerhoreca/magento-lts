@@ -19,16 +19,18 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
+/**
+ * Class Geissweb_Euvatgrouper_Model_Validation_Result
+ */
 class Geissweb_Euvatgrouper_Model_Validation_Result extends Varien_Object
 {
 
 	/**
-	 * Sets data from VAT service
-	 *
 	 * @param      $response
 	 * @param null $vat_id
 	 *
-	 * @return $this|bool
+	 * @return $this
+	 * @throws Varien_Exception
 	 */
 	public function setViesData($response, $vat_id=null)
 	{
@@ -81,7 +83,10 @@ class Geissweb_Euvatgrouper_Model_Validation_Result extends Varien_Object
 				$this->setIsVatFree(false);
 			}
 
-			$this->setGroup( Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount((array)$this->getData(), $response->user_cc) );
+			$this->setGroup(
+				Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount((array)$this->getData(), $response->user_cc)
+			);
+
 			return $this;
 		}
 

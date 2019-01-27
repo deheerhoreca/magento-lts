@@ -61,7 +61,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
             'label'     => $this->_helper->__('Your Country'),
             'name'      => 'country',
             'required'  => true,
-            'values'    => Mage::helper('euvatgrouper')->getEuCountriesOptionArray()
+            'values'    => $this->_helper->getEuCountriesOptionArray()
         ));
 
         $fieldset->addField('vat_id', 'text', array(
@@ -72,7 +72,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
         ));
 
         $fieldset->addField('execute_vat_settings', 'checkbox', array(
-            'label'     => Mage::helper('euvatgrouper')->__('VAT Configuration Setup'),
+            'label'     => $this->_helper->__('VAT Configuration Setup'),
             'name'      => 'execute_vat_settings',
             'checked' => true,
             'value'  => '1',
@@ -82,7 +82,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
         ));
 
         $fieldset->addField('execute_tax_rules', 'checkbox', array(
-            'label'     => Mage::helper('euvatgrouper')->__('Tax Rules Setup'),
+            'label'     => $this->_helper->__('Tax Rules Setup'),
             'name'      => 'execute_tax_rules',
             'checked' => true,
             'onchange' => "toggleMaps()",
@@ -103,7 +103,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
         ));
 
         $fieldset->addField('add_digital', 'checkbox', array(
-            'label'     => Mage::helper('euvatgrouper')->__(''),
+            'label'     => $this->_helper->__(''),
             'name'      => 'add_digital',
             'checked' => false,
             'value'  => '1',
@@ -112,7 +112,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
         ));
 
         $fieldset->addField('add_zero', 'checkbox', array(
-            'label'     => Mage::helper('euvatgrouper')->__(''),
+            'label'     => $this->_helper->__(''),
             'name'      => 'add_zero',
             'checked' => false,
             'value'  => '1',
@@ -121,7 +121,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
         ));
 
         $fieldset->addField('add_reduced', 'checkbox', array(
-            'label'     => Mage::helper('euvatgrouper')->__(''),
+            'label'     => $this->_helper->__(''),
             'name'      => 'add_reduced',
             'checked' => false,
             'onchange' => "toggleRate()",
@@ -136,12 +136,12 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Setup_Form extends Mage_Adminhtml_Bl
                 </script>'
         ));
         $fieldset->addField('reduced_rate', 'text', array(
-            'label'     => $this->_helper->__('Reduced rate'), //Mage::helper('euvatgrouper')->__('Products with a reduced VAT rate')
+            'label'     => $this->_helper->__('Reduced rate'), //$this->_helper->__('Products with a reduced VAT rate')
             'name'      => 'reduced_rate',
             'value'  => '',
             'style' => 'display:none',
             'disabled' => false,
-            'title' => Mage::helper('euvatgrouper')->__('Please specify the reduced rate.')
+            'title' => $this->_helper->__('Please specify the reduced rate.')
         ));
 
 

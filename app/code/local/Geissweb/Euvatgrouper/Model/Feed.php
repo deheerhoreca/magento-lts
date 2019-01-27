@@ -22,18 +22,6 @@
 class Geissweb_Euvatgrouper_Model_Feed extends Mage_AdminNotification_Model_Feed
 {
     /**
-     * Retrieve feed url
-     * @return string
-     */
-    public function getUpdateFeedUrl()
-    {
-        if (is_null($this->_feedUrl)) {
-            $this->_feedUrl = (Mage::getStoreConfigFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://') . 'www.geissweb.de/feeds/extensionupdates.php'.$this->getExtraParams();
-        }
-        return $this->_feedUrl;
-    }
-
-    /**
      * Check feed for modification
      *
      * @return Mage_AdminNotification_Model_Feed
@@ -70,15 +58,14 @@ class Geissweb_Euvatgrouper_Model_Feed extends Mage_AdminNotification_Model_Feed
     /**
      * Retrieve feed data as XML element
      *
-     * @return SimpleXMLElement
+     * @return SimpleXMLElement|bool
      */
     public function getUpdateFeedData()
     {
         try {
-
             $curl = new Varien_Http_Adapter_Curl();
             $curl->setConfig(array(
-                'timeout'   => 2
+                'timeout'   => 8
             ));
             $curl->write(Zend_Http_Client::GET, $this->getUpdateFeedUrl(), '1.0');
             $data = $curl->read();
@@ -88,13 +75,35 @@ class Geissweb_Euvatgrouper_Model_Feed extends Mage_AdminNotification_Model_Feed
             $data = preg_split('/^\r?$/m', $data, 2);
             $data = trim($data[1]);
             $curl->close();
-            $xml  = new SimpleXMLElement($data);
+
+	        libxml_use_internal_errors(true);
+	        $doc = simplexml_load_string($data);
+	        if ($doc != false) {
+		        $xml  = new SimpleXMLElement($data);
+		        return $xml;
+
+	        } else {
+		        $errors = libxml_get_errors();
+		        libxml_clear_errors();
+	        }
 
         } catch (Exception $e) {
             return false;
         }
-        return $xml;
+
     }
+
+	/**
+	 * Retrieve feed url
+	 * @return string
+	 */
+	public function getUpdateFeedUrl()
+	{
+		if (is_null($this->_feedUrl)) {
+			$this->_feedUrl = 'https://www.geissweb.de/feeds/extensionupdates.php'.($this->getExtraParams());
+		}
+		return $this->_feedUrl;
+	}
 
 	/**
 	 * Used for support and licensing

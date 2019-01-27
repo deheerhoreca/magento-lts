@@ -68,9 +68,10 @@ class Geissweb_Euvatgrouper_Model_Validation_Vies extends Geissweb_Euvatgrouper_
 
     }
 
-    /**
-     * Validate
-     */
+	/**
+	 * Validate
+	 * @throws Varien_Exception
+	 */
     public function validate()
     {
         try {
@@ -160,7 +161,12 @@ class Geissweb_Euvatgrouper_Model_Validation_Vies extends Geissweb_Euvatgrouper_
                 break;
             }
 
-            $this->setResult( Mage::getSingleton('euvatgrouper/validation_result')->setViesData($this->_response, $this->getUserCc().$this->getUserNr()) );
+            $this->setResult(
+            	Mage::getSingleton('euvatgrouper/validation_result')->setViesData(
+            		$this->_response, $this->getUserCc().$this->getUserNr()
+	            )
+            );
+
             Mage::dispatchEvent('vat_check_after', array(
                 'result' 	 => $this->getResult(),
                 'address_id' => $this->getAddressId()

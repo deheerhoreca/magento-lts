@@ -35,3 +35,5 @@
 "The selected groups will be excluded from the automatic (re-)grouping after each validation.","De geselecteerde klantgroepen worden uitgesloten van de automatische klantgroep (her)indeling na elke validatie."
 
 "A valid VAT number is required.","Dit is geen geldig BTW nummer."
+
+"The country prefix of the VAT number is different from the selected address country. Should we set the address country automatically?","Uw BTW-nummer komt niet overeen met het gekozen land. Wilt u dat wij het land automatisch aanpassen naar die van het BTW-nummer?"

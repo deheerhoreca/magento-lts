@@ -20,14 +20,38 @@
         <resources>
             <admin>
                 <children>
+                    <sales>
+                        <children>
+                            <validate_vat_number translate="title" module="euvatgrouper">
+                                <title>Validate VAT numbers</title>
+                                <sort_order>120</sort_order>
+                            </validate_vat_number>
+                        </children>
+                    </sales>
+                    <report>
+                        <children>
+                            <euvatreport_rate translate="title" module="euvatgrouper">
+                                <title>VAT Orders Report</title>
+                                <sort_order>100</sort_order>
+                            </euvatreport_rate>
+                            <euvatreport_orders translate="title" module="euvatgrouper">
+                                <title>VAT Rate Report</title>
+                                <sort_order>100</sort_order>
+                            </euvatreport_orders>
+                        </children>
+                    </report>
                     <system>
                         <children>
                             <config>
                                 <children>
                                     <euvatgrouper translate="title" module="euvatgrouper">
-                                        <title>EU VAT Enhanced</title>
-                                        <sort_order>110</sort_order>
+                                        <title>EU VAT Enhanced Section</title>
+                                        <sort_order>60</sort_order>
                                     </euvatgrouper>
+                                    <run_vat_setup translate="title" module="euvatgrouper">
+                                        <title>Run automated VAT Setup</title>
+                                        <sort_order>61</sort_order>
+                                    </run_vat_setup>
                                 </children>
                             </config>
                         </children>

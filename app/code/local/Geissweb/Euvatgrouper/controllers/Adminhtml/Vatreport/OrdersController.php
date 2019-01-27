@@ -61,6 +61,6 @@ class Geissweb_Euvatgrouper_Adminhtml_Vatreport_OrdersController extends Mage_Ad
      */
     public function _isAllowed()
     {
-        return true;
+	    return Mage::getSingleton('admin/session')->isAllowed('report/euvatreport_orders');
     }
 }

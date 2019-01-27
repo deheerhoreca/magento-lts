@@ -26,6 +26,8 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Orders_Grid extends Mage_Admi
 
     protected $_callbackCount = 1;
 
+    protected $resource;
+
     public function __construct()
     {
         parent::__construct();
@@ -37,6 +39,8 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Orders_Grid extends Mage_Admi
 
 	    $this->setCollection(new Varien_Data_Collection());
         $this->setTemplate('euvatgrouper/euvat_report.phtml');
+
+	    $this->resource = Mage::getSingleton('core/resource');
     }
 
 	protected function _prepareLayout()
@@ -91,7 +95,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Orders_Grid extends Mage_Admi
     protected function _prepareCollection()
     {
     	/** @var Mage_Sales_Model_Entity_Order_Collection $ordersCollection */
-        $ordersCollection = Mage::getModel('sales/order')->getCollection()
+        $ordersCollection = Mage::getSingleton('sales/order')->getCollection()
             ->addFieldToSelect(array('entity_id', 'status', 'created_at', 'billing_address_id', 'shipping_address_id',
 	            'tax_amount', 'increment_id', 'base_grand_total'))
             ->addFieldToFilter(array('status', 'status'),
@@ -167,7 +171,9 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Orders_Grid extends Mage_Admi
 
 	    Mage::getSingleton('euvatgrouper/resource_iterator_batched')->walk(
 		    $ordersCollection,
-		    array($this, 'prepareDataCallback')
+		    array($this, 'prepareDataCallback'),
+		    array($this, 'afterItems'),
+		    7
 	    );
 	    //$ordersCollection->load();
 	    //$this->setCollection($ordersCollection);
@@ -176,16 +182,25 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Orders_Grid extends Mage_Admi
         return parent::_prepareCollection();
     }
 
+	public function afterItems() {}
+
     public function prepareDataCallback($order)
     {
-	    $invoice = $order->getInvoiceCollection()->getFirstItem();
+    	/** @var Mage_Sales_Model_Order $order */
+	    //$invoice = $order->getInvoiceCollection()->getFirstItem();
+	    $query = 'SELECT created_at, increment_id 
+					FROM '.$this->resource->getTableName('sales_flat_invoice').'
+					WHERE order_id = '.$order->getId();
+	    $invoiceData = $this->resource->getConnection('core_read')->fetchAll($query);
+	    $invoiceData = $invoiceData[0];
+
 	    $data = array(
 	    	'id' => $this->_callbackCount,
 		    'order_date' => $order->getCreatedAt(),
 		    'order_increment_id' => $order->getIncrementId(),
 		    //'order_address' => $order->getCompany().", ".$order->getFirstname()." ".$order->getLastname().", ".$order->getStreet().", ".$order->getPostcode().", ".$order->getCity(),
-		    'invoice_date' => $invoice->getCreatedAt(),
-		    'invoice_increment_id' => $invoice->getIncrementId(),
+		    'invoice_date' => $invoiceData['created_at'],
+		    'invoice_increment_id' => $invoiceData['increment_id'],
 		    'vat_id' => strtoupper(str_replace(array(" ", "."), "", $order->getVatId())),
 		    'net_sum' => (float)$order->getBaseGrandTotal(),
 		    //'gross_sum' => (float)$order->getBaseGrandTotal(),
@@ -197,7 +212,11 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Orders_Grid extends Mage_Admi
 
 	    $item = new Varien_Object();
 	    $item->setData($data);
-	    $this->getCollection()->addItem($item);
+	    try {
+		    $this->getCollection()->addItem( $item );
+	    } catch( Exception $e ) {
+	    	Mage::logException($e);
+	    }
 	    unset($order, $item, $data, $invoice);
 	    $this->_callbackCount++;
     }

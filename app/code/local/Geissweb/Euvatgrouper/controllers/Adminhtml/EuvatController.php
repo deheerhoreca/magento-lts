@@ -192,7 +192,7 @@ class Geissweb_Euvatgrouper_Adminhtml_EuvatController extends Mage_Adminhtml_Con
      */
     public function _isAllowed()
     {
-        return true;
+	    return Mage::getSingleton('admin/session')->isAllowed('sales/validate_vat_number');
     }
 
 }

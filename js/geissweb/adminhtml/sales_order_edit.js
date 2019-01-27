@@ -27,24 +27,23 @@ AdminOrder.prototype.validateVat = AdminOrder.prototype.validateVat.wrap(functio
     };
     params.country_prefix = params.vat.substr(0, 2);
 
-    if(params.vat == "")
-    {
+    if(params.vat === "") {
         alert(Translator.translate('Please declare a VAT number before validating.'));
         return;
     }
 
-    if( !params.vat.match(new RegExp('^[A-Z][A-Z]'))) {
+    if(!params.vat.match(new RegExp('^[A-Z][A-Z]'))) {
         alert(Translator.translate('Please put the VAT number including the country prefix.'));
         return;
     }
 
-    if( $(parameters.vatElementId).id == 'order-billing_address_vat_id' ) {
+    if( $(parameters.vatElementId).id === 'order-billing_address_vat_id' ) {
         params.address_type = 'billing';
     } else {
         params.address_type = 'shipping';
     }
 
-    if(params.country != params.country_prefix) {
+    if(params.country !== params.country_prefix) {
         var countrySelect = $$('#order-'+params.address_type+'_address_country_id');
         alert(Translator.translate('The selected address country ('+countrySelect[0].value+') does not match the VAT number country prefix ('+params.country_prefix+'). Please set the correct address country.'));
         return;
@@ -70,58 +69,51 @@ AdminOrder.prototype.validateVat = AdminOrder.prototype.validateVat.wrap(functio
             $(response_field).show();
         },
         onSuccess: function(transport) {
-//            try {
-                var response = transport.responseText.evalJSON();
-                var output = '<div class="vat_response">';
-                var groupChangeRequired = false;
-                var message;
+            var response = transport.responseText.evalJSON();
+            var output = '<div class="vat_response">';
+            var groupChangeRequired = false;
+            var message;
 
-                if (response.vat_is_valid == true ) {
-                    output += (Translator.translate('The VAT-ID is valid.'));
-                    output += '</div>';
-                    message = parameters.vatValidMessage;
+            if (response.vat_is_valid === true ) {
+                output += (Translator.translate('The VAT-ID is valid.'));
+                output += '</div>';
+                message = parameters.vatValidMessage;
 
-                } else if (response.vat_is_valid == false ) {
-                    output += (Translator.translate('The VAT-ID is invalid.'));
-                    output += '</div>';
-                    message = parameters.vatInvalidMessage;
+            } else if (response.vat_is_valid === false ) {
+                output += (Translator.translate('The VAT-ID is invalid.'));
+                output += '</div>';
+                message = parameters.vatInvalidMessage;
+            }
+
+            if(typeof(response.faultstring) != "undefined") {
+                switch (response.faultstring) {
+                    case "INVALID_INPUT":
+                        output += (Translator.translate('The VAT-ID is invalid, please check the syntax.'));
+                        break;
+                    case "SERVICE_UNAVAILABLE":
+                    case "SERVER_BUSY":
+                        output += (Translator.translate('Currently the European VIES service is unavailable.'));
+                        break;
+                    case "MS_UNAVAILABLE":
+                    case "TIMEOUT":
+                        output += (Translator.translate('Currently the member state service is unavailable.'));
+                        break;
+                    default:
+                        output += (Translator.translate('There was an error processing your request.'));
+                        break;
                 }
+                output += '</div>';
+                message = parameters.vatValidationFailedMessage;
+            }
+            $(response_field).update(output);
 
-                if(typeof(response.faultstring) != "undefined") {
-                    switch (response.faultstring) {
-                        case "INVALID_INPUT":
-                            output += (Translator.translate('The VAT-ID is invalid, please check the syntax.'));
-                            break;
-                        case "SERVICE_UNAVAILABLE":
-                        case "SERVER_BUSY":
-                            output += (Translator.translate('Currently the European VIES service is unavailable.'));
-                            break;
-                        case "MS_UNAVAILABLE":
-                        case "TIMEOUT":
-                            output += (Translator.translate('Currently the member state service is unavailable.'));
-                            break;
-                        default:
-                            output += (Translator.translate('There was an error processing your request.'));
-                            break;
-                    }
-                    output += '</div>';
-                    message = parameters.vatValidationFailedMessage;
-                }
-                $(response_field).update(output);
-
-                if (currentCustomerGroupId != response.group) {
-                    message = parameters.vatValidAndGroupChangeMessage;
-                    groupChangeRequired = true;
-                }
-                if(groupChangeRequired) {
-                    this.processCustomerGroupChange(parameters.groupIdHtmlId, message, response.group);
-                }
-
-                //this.loadArea(['totals'], true);
-
-//            } catch (e) {
-//                alert(e);
-//            }
+            if (currentCustomerGroupId !== response.group) {
+                message = parameters.vatValidAndGroupChangeMessage;
+                groupChangeRequired = true;
+            }
+            if(groupChangeRequired) {
+                this.processCustomerGroupChange(parameters.groupIdHtmlId, message, response.group);
+            }
 
         }.bind(this)
     });

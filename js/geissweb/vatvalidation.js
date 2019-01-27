@@ -18,24 +18,75 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
-//if(typeof(jQuery) != 'undefined')
-//    jQuery.noConflict();
 var euvatResult;
-var validateVat = function(vat, op_mode, address_type, address_id, doUpdateCountry)
+
+
+/**
+ * Validates the Number and takes care of other actions
+ *
+ * @param vatNumber AB123456789
+ * @param op_mode SINGLE or MULTI
+ * @param address_type billing or shipping
+ * @param address_id int
+ * @param doUpdateCountry bool
+ * @param field_id string
+ */
+var validateVat = function(vatNumber, op_mode, address_type, address_id, doUpdateCountry, field_id)
 {
-    if(typeof(address_id) === 'undefined' || address_id === 'undefined') { address_id = 0; }
-    if(typeof(doUpdateCountry) === 'undefined') { doUpdateCountry = false; }
+    if(typeof(address_id) === 'undefined' || address_id === 'undefined') {
+        address_id = 0;
+    }
+    if(typeof(doUpdateCountry) === 'undefined') {
+        doUpdateCountry = false;
+    }
+    if(typeof(gw_auto_set_country) === 'number' && gw_auto_set_country === 1) {
+        doUpdateCountry = true;
+    }
+    var updateNumberWithCountry = false;
+    if(typeof(field_id) !== 'undefined') {
+        updateNumberWithCountry = true;
+    }
 
     try
     {
-        if( typeof(vat) === "string" )
+        if( typeof(vatNumber) === "string" )
         {
-            vat = vat.replace(/[\W_]/g, "").toUpperCase().trim();
-            if( vat.match(new RegExp('^[A-Z][A-Z]')))
+            vatNumber = vatNumber.replace(/[\W_]/g, "").toUpperCase().trim();
+
+            // Try to get country from select if VAT number does not contain country
+            if( vatNumber.length > 0 && !vatNumber.match(new RegExp('^[A-Z][A-Z]')))
+            {
+                var elementIds = ['country', 'country_id'];
+                if(address_type === 'billing') {
+                    elementIds.push('billing:country_id');
+                } else if(address_type === 'shipping') {
+                    elementIds.push('shipping:country_id');
+                }
+                var selectCountry;
+                elementIds.forEach(function(id) {
+                    if(document.body.contains(document.getElementById(id))) {
+                        selectCountry = $(id).getValue();
+                    }
+                });
+                if(typeof(selectCountry) === 'string') {
+                    vatNumber = selectCountry+vatNumber.trim();
+                    if(updateNumberWithCountry) {
+                        $(field_id).setValue(vatNumber);
+                        if(address_type === 'billing'
+                            && document.body.contains(document.getElementById('shipping:vat_id'))
+                        ) {
+                            $('shipping:vat_id').setValue(vatNumber);
+                        }
+                    }
+                }
+            }
+
+            // Do validation of the value on online service
+            if( vatNumber.match(new RegExp('^[A-Z][A-Z]')))
             {
                 new Ajax.Request(gw_vat_check_url, {
                     method: 'post',
-                    parameters: 'taxvat=' + vat + '&op_mode=' + op_mode + '&address_type=' + address_type + '&address_id=' + address_id,
+                    parameters: 'taxvat='+vatNumber+ '&op_mode='+op_mode+ '&address_type='+address_type+ '&address_id='+address_id,
                     onLoading: function () {
                         switch (op_mode) {
                             case 'SINGLE':
@@ -126,20 +177,36 @@ var validateVat = function(vat, op_mode, address_type, address_id, doUpdateCount
                                 break;
                         }
 
-                        // Update country on customer address edit (frontend)
-                        if(doUpdateCountry)
+                        if(doUpdateCountry) // Update country when different from VAT country
                         {
-                            if( document.body.contains(document.getElementById('country')))
-                            {
-                                $$('select[id="country"] option').each(function (o) {
-                                    if (o.readAttribute('value') === euvatResult.country_id ) {
-                                        o.selected = true;
-                                        fireEvent($('country'), 'change');
-                                    }
-                                });
+                            var elementIds = ['country', 'country_id'];
+                            if(address_type === 'billing') {
+                                elementIds.push('billing:country_id');
+                            } else if(address_type === 'shipping') {
+                                elementIds.push('shipping:country_id');
                             }
-                        }
 
+                            elementIds.forEach(function(id) {
+                                if(document.body.contains(document.getElementById(id))
+                                    && $F(id) !== euvatResult.country_id
+                                ) {
+                                    $$('select[id="'+id+'"] option').each(function (o) {
+                                        if (o.readAttribute('value') === euvatResult.country_id ) {
+                                            if(gw_auto_set_country_customer_confirm === 1
+                                                && confirm(Translator.translate('The country prefix of the VAT number is different from the selected address country. Should we set the address country automatically?'))
+                                            ) {
+                                                o.selected = true;
+                                                fireEvent($(id), 'change');
+                                            } else if(gw_auto_set_country_customer_confirm === 0) {
+                                                o.selected = true;
+                                                fireEvent($(id), 'change');
+                                            }
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     },
                     onFailure: function () {
                         switch (op_mode) {
@@ -153,13 +220,11 @@ var validateVat = function(vat, op_mode, address_type, address_id, doUpdateCount
                     }
                 });//endajax
 
-
-
-            } else if( vat === "") {
+            } else if( vatNumber === "") {
 
                 new Ajax.Request(gw_vat_check_url, {
                     method:'post',
-                    parameters:'vatid=removed'+'&address_type=' + address_type + '&address_id=' + address_id,
+                    parameters:'vatid=removed'+'&address_type='+address_type+'&address_id='+address_id,
                     onComplete: function () {
                         switch (op_mode) {
                             case 'SINGLE':
@@ -180,10 +245,14 @@ var validateVat = function(vat, op_mode, address_type, address_id, doUpdateCount
             } else {
                 switch(op_mode) {
                     case 'SINGLE':
-                        $('checkrsp').update('<ul><li class="notice-msg">'+Translator.translate('Please enter your VAT-ID including the ISO-3166 two letter country code.')+'</li></ul>');
+                        $('checkrsp').update('<ul>' +
+                            '<li class="notice-msg">'+Translator.translate('Please enter your VAT-ID including the ISO-3166 two letter country code.')+'</li>' +
+                            '</ul>');
                         break;
                     case 'MULTI':
-                        $(address_type+':checkrsp').update('<ul><li class="notice-msg">'+Translator.translate('Please enter your VAT-ID including the ISO-3166 two letter country code.')+'</li></ul>');
+                        $(address_type+':checkrsp').update('<ul>' +
+                            '<li class="notice-msg">'+Translator.translate('Please enter your VAT-ID including the ISO-3166 two letter country code.')+'</li>' +
+                            '</ul>');
                         break;
                 }
             }
@@ -217,47 +286,79 @@ var vatValidation = function() {
 
     this.setListener = function()
     {
+        var field_id;
+        var shipping_field_id;
         var address_id = this.address_id;
         var doUpdateCountry = this.doUpdateCountry;
 
         // Add listener for default/billing VAT ID
         if( document.body.contains(document.getElementById('billing:'+this.field_id)) ) {
-            $('billing:'+this.field_id).observe('blur', function(e) {
-                this.value = this.value.replace(/[\W_]/g, "").toUpperCase().trim();
-                validateVat(this.value, op_mode, 'billing', address_id, doUpdateCountry);
-            });
-            if(gw_require_valid_vat === 1 || gw_require_valid_vat === 3) {
-                $('billing:'+this.field_id).addClassName('validate-vatnumber');
-            }
+            field_id = 'billing:'+this.field_id;
         } else if( document.body.contains(document.getElementById(this.field_id)) ) {
-            $(this.field_id).observe('blur', function(e) {
+            field_id = this.field_id;
+        }
+        if($(field_id)) {
+            $(field_id).observe('blur', function(e) {
                 this.value = this.value.replace(/[\W_]/g, "").toUpperCase().trim();
-                validateVat(this.value, op_mode, 'billing', address_id, doUpdateCountry);
+                validateVat(this.value, op_mode, 'billing', address_id, doUpdateCountry, field_id);
             });
         }
+
 
         // Add listener for shipping VAT ID
         if( op_mode === 'MULTI' && document.body.contains(document.getElementById('shipping:'+this.field_id)) ){
-            $('shipping:'+this.field_id).observe('blur', function(e) {
-                this.value = this.value.replace(/[\W_]/g, "").toUpperCase().trim();
-                validateVat(this.value, op_mode, 'shipping', address_id, doUpdateCountry);
-            });
-            if(gw_require_valid_vat === 1 || gw_require_valid_vat === 3) {
-                $('shipping:'+this.field_id).addClassName('validate-vatnumber');
+            shipping_field_id = 'shipping:'+this.field_id;
+            if($(shipping_field_id)) {
+                $(shipping_field_id).observe('blur', function(e) {
+                    this.value = this.value.replace(/[\W_]/g, "").toUpperCase().trim();
+                    validateVat(this.value, op_mode, 'shipping', address_id, doUpdateCountry, shipping_field_id);
+                });
             }
         }
 
-        if((gw_require_valid_vat === 1 || gw_require_valid_vat === 3) && typeof(Validation) === 'function') {
+        if(typeof(Validation) === 'function')
+        {
+            if(gw_require_valid_vat === 1 || gw_require_valid_vat === 3)
+            {
+                if($(field_id)) $(field_id).addClassName('require-valid-vat');
+                if($(shipping_field_id)) $(shipping_field_id).addClassName('require-valid-vat');
 
-            Validation.add('validate-vatnumber', Translator.translate('A valid VAT number is required.'), function(fieldValue){
-                if(typeof(euvatResult) === 'object') {
-                    if(euvatResult.vat_is_valid === true) {
-                        return true;
+                Validation.add('require-valid-vat', Translator.translate('A valid VAT number is required.'), function(fieldValue){
+                    if(typeof(euvatResult) === 'object') {
+                        if(euvatResult.vat_is_valid === true) {
+                            return true;
+                        }
                     }
-                }
-                return false;
-            });
+                    return false;
+                });
+
+            } else if(gw_require_valid_vat === 4) {
+
+                if($(field_id)) $(field_id).addClassName('require-valid-vat-if-filled');
+                if($(shipping_field_id)) $(shipping_field_id).addClassName('require-valid-vat-if-filled');
+
+                Validation.add('require-valid-vat-if-filled',
+                    Translator.translate('Please provide a valid VAT number or leave the field empty.'),
+                    function(fieldValue) {
+                        if(fieldValue.length <= 0) {
+                            return true;
+                        }
+                        if(typeof(euvatResult) === 'object') {
+                            if(euvatResult.vat_is_valid === true) {
+                                return true;
+                            }
+                        } else {
+                            return false;
+                        }
+                });
+            }
+
         }
+
+    };
+
+    this.addFormValidation = function()
+    {
 
     };
 
@@ -586,13 +687,12 @@ var handleOSC = function(result)
         case 'LOTUSBREATH_OSC':
             if(typeof(jQuery) === 'function' && typeof(jQuery.lotusbreath) === 'object')
             {
-                //jQuery.lotusbreath.onestepcheckout.prototype._updateLocation(null, 'billing_shipping');
-                var yesRadio = gwIdSel('billing:use_for_shipping_yes');
-                var noRadio = gwIdSel('billing:use_for_shipping_no');
-                if(jQuery(yesRadio).is(':checked')) {
-                    jQuery(yesRadio).click();
+                var yesRadio = $('billing:use_for_shipping_yes');
+                var noRadio = $('billing:use_for_shipping_no');
+                if(yesRadio.checked === true) {
+                    yesRadio.click();
                 } else {
-                    jQuery(noRadio).click();
+                    noRadio.click();
                 }
             }
             break;

@@ -66,7 +66,7 @@ class Geissweb_Euvatgrouper_Adminhtml_Vat_SetupController extends Mage_Adminhtml
      */
     public function _isAllowed()
     {
-        return true;
+	    return Mage::getSingleton('admin/session')->isAllowed('system/config/run_vat_setup');
     }
 
 }

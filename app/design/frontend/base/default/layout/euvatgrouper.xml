@@ -31,7 +31,7 @@
     <customer_account_create>
         <update handle="euvatgrouper_handle"/>
         <reference name="customer_form_register">
-            <action method="setShowAddressFields" ifconfig="euvatgrouper/extension_info/show_address_on_regpage">
+            <action method="setShowAddressFields" ifconfig="euvatgrouper/integration/show_address_on_regpage">
                 <value>true</value>
             </action>
         </reference>

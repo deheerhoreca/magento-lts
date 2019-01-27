@@ -33,6 +33,12 @@
     <vat_number_is_required translate="message" module="euvatgrouper">
         <message>A valid VAT number is required.</message>
     </vat_number_is_required>
+    <country_change_confirmation_question translate="message" module="euvatgrouper">
+        <message>The country prefix of the VAT number is different from the selected address country. Should we set the address country automatically?</message>
+    </country_change_confirmation_question>
+    <vat_number_is_required_whem_filled translate="message" module="euvatgrouper">
+        <message>Please provide a valid VAT number or leave the field empty.</message>
+    </vat_number_is_required_whem_filled>
 
     <adminhtml_valid_vat translate="message" module="euvatgrouper">
         <message>The VAT-ID is valid.</message>

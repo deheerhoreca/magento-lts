@@ -179,8 +179,21 @@
 "Every year","Jedes Jahr"
 
 "Excluded groups for tax calculation","Von der Steuerberechnung ausgenommene Gruppen"
-"The selected groups will be excluded from tax calculation. No tax will be applied to these groups, even if there is no VAT number or the shipping country is domestic.","Die ausgewählten Gruppen werden von der Steuerberechnung ausgenommen. Kunden dieser Gruppe werden keine Steuern berechnet, selbst wenn keine gültige USt.-ID Nummer vorliegt."
+"The selected groups will be excluded from tax calculation. No tax will be applied to these groups, even if there is no VAT number or the shipping country is domestic.","Die ausgewählten Gruppen werden von der Steuerberechnung ausgenommen. Kunden dieser Gruppe werden keine Steuern berechnet, selbst wenn KEINE gültige USt.-ID Nummer vorliegt."
 "For example if you need to apply further tax rules for customers, like equivalence tax in Spain.","Die ausgewählten Gruppen erhalten immer die Steuerberechnung anhand ihrer festgelegten Kundensteuerklassen. Dieses Modul wird keine Änderungen für die Steuerberechnung für diese Gruppen vornehmen."
 "Groups which follow regular Magento tax calculation","Reguläre Magento Steuerberechnung"
 
 "A valid VAT number is required.","Eine gültige USt.-ID wird benötigt."
+"The country prefix of the VAT number is different from the selected address country. Should we set the address country automatically?","Das Länderprefix der USt.-ID Nummer stimmt nicht mit dem ausgewählten Adressland überein. Soll das Land automatisch gesetzt werden?"
+
+"Require valid VAT number to checkout","Checkout und Adresse speichern nur mit gültiger USt.-ID"
+"Customers can only checkout with a valid VAT number if this option is enabled.","Kunden dürften nur mit gültiger USt.-ID den Checkout durchlaufen oder die Adresse speichern."
+"Please provide a valid VAT number or leave the field empty.","Bitte geben Sie eine gültige USt.-ID an oder lassen Sie das Feld leer."
+"Require valid VAT number when field has a value (Frontend only)","Gültige USt.-ID voraussetzen, wenn Feldwert vorhanden"
+
+"ONLY select the countries, where you have exceeded the threshold. These will be considered as the base country of the shop, for taxation, when CBT is enabled.","NUR wenn Sie den Schwellenwert überschritten haben und den landesspezifischen Umsatzsteuersatz berechnen müssen, wählen Sie das Land hier aus."
+
+"Set address country according to VAT number country prefix","Adressland gemäß dem Länderprefix der USt.-ID setzen"
+"Ask customer before setting address country","Kunden müssen Änderung des Adresslandes bestätigen"
+"If the country prefix of the VAT number is different from the country of the customer address, set the country accordingly.","Wenn sich das Länderpräfix der USt.-ID und das Adressland (Magento-Adresse) unterscheiden, setze das Adressland gleich dem Länderpräfix."
+"A confirmation question will appear, if the country should be changed.","Kunden um Bestätigung für obige Funktion bitten. (Kunde muss Ja/Nein wählen)."

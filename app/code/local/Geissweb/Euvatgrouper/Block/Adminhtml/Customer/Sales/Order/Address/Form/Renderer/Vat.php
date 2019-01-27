@@ -19,7 +19,8 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
-class Geissweb_Euvatgrouper_Block_Adminhtml_Customer_Sales_Order_Address_Form_Renderer_Vat extends Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat
+class Geissweb_Euvatgrouper_Block_Adminhtml_Customer_Sales_Order_Address_Form_Renderer_Vat
+	extends Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat
 {
 	/**
 	 * Retrieve validate button block

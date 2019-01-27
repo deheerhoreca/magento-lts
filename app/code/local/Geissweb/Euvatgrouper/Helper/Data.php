@@ -21,20 +21,12 @@
 
 class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abstract
 {
-    /**
-     * Gets the groups which should follow regular Magento tax calculation
-     * @return array
-     */
-    public function getRegularTaxCalculationGroups()
-    {
-        return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/regular_tax_groups', Mage::app()->getStore()->getId()));
-    }
-
-    /**
-     * @param null $lastVatRequestDate
-     *
-     * @return bool
-     */
+	/**
+	 * @param null $lastVatRequestDate
+	 *
+	 * @return bool
+	 * @throws Exception
+	 */
     public function isValidationOnEachLogin($lastVatRequestDate=null)
     {
         $doValidation = false;
@@ -104,27 +96,32 @@ class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abs
 
     }
 
-
-    /**
-     * @param $billingAddress
-     * @param $shippingAddress
-     *
-     * @return object basedOnAddress
-     */
-    public function getVatBasedOnAddress($billingAddress, $shippingAddress)
+	/**
+	 * @param      $billingAddress
+	 * @param      $shippingAddress
+	 *
+	 * @param bool $forAdminArea
+	 *
+	 * @return bool|object
+	 */
+    public function getVatBasedOnAddress($billingAddress, $shippingAddress, $forAdminArea=false)
     {
-        $vatBasedOn = Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, Mage::app()->getStore()->getId());
-        $basedOnAddress = ($vatBasedOn == 'shipping') ? $shippingAddress : $billingAddress;
-        if(is_object($basedOnAddress)) {
-            $quoteId = $basedOnAddress->getQuoteId();
-            if($quoteId) {
-            	$quote = Mage::getModel('sales/quote')->load($quoteId);
-                if($quote->isVirtual() || ($quote->getItemVirtualQty() == $quote->getItemsCount()) ) {
-	                $basedOnAddress = $billingAddress;
-                }
-            }
-        }
-        return $basedOnAddress;
+	    try {
+		    $vatBasedOn = Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, Mage::app()->getStore()->getId());
+		    $basedOnAddress = ($vatBasedOn == 'shipping') ? $shippingAddress : $billingAddress;
+		    if(!$forAdminArea) {
+			    $quote = Mage::getSingleton('checkout/session')->getQuote();
+			    if(is_object($quote)) {
+				    if($quote->isVirtual() || ($quote->getItemVirtualQty() == $quote->getItemsCount()) ) {
+					    $basedOnAddress = $billingAddress;
+				    }
+			    }
+		    }
+		    return $basedOnAddress;
+	    } catch(Mage_Core_Model_Store_Exception $e) {
+	    	Mage::logException($e);
+	    }
+	    return false;
     }
 
 	/**
@@ -378,4 +375,23 @@ class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abs
 		return false;
 	}
 
+	/**
+	 * To show only relevant data in debug messages
+	 * @param $data
+	 *
+	 * @return array
+	 */
+	public function debugAddress($data) {
+		return array(
+			'address_id' => isset($data['address_id']) ? $data['address_id'] : '(not set)',
+			'address_type' => isset($data['address_type']) ? $data['address_type'] : '(not set)',
+			'country_id' => isset($data['country_id']) ? $data['country_id'] : '(not set)',
+			'vat_id' => isset($data['vat_id']) ? $data['vat_id'] : '(not set)',
+			'vat_is_valid' => isset($data['vat_is_valid']) ? $data['vat_is_valid'] : '(not set)',
+			'vat_request_id' => isset($data['vat_request_id']) ? $data['vat_request_id'] : '(not set)',
+			'vat_request_date' => isset($data['vat_request_date']) ? $data['vat_request_date'] : '(not set)',
+			'vat_trader_name' => isset($data['vat_trader_name']) ? $data['vat_trader_name'] : '(not set)',
+			'vat_trader_address' => isset($data['vat_trader_address']) ? $data['vat_trader_address'] : '(not set)',
+		);
+	}
 }
