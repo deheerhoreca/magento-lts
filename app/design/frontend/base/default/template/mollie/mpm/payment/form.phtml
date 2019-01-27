@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2012-2018, Mollie B.V.
+ * Copyright (c) 2012-2019, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,28 +27,41 @@
  * @category    Mollie
  * @package     Mollie_Mpm
  * @author      Mollie B.V. (info@mollie.nl)
- * @copyright   Copyright (c) 2012-2018 Mollie B.V. (https://www.mollie.nl)
+ * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
  */
 $code = $this->getMethodCode();
 $method = $this->getMethodByCode($code);
 ?>
-<ul class="form-list" id="payment_form_<?php echo $this->escapeHtml($code) ?>" style="display:none">
-    <?php if (!empty($method['issuers']) && !empty($method['issuers_title'])) { ?>
+<?php if (!empty($method->issuers) && ($listType = $this->getIssuerListType($code))): ?>
+    <ul class="form-list" id="payment_form_<?php echo $this->escapeHtml($code) ?>" style="display:none">
         <li>
-            <label for="<?php echo $code ?>_issuer" class="required">
-                <em>*</em><?php echo $method['issuers_title']; ?>
+            <label for="<?php echo $code ?>_issuer">
+                <?php echo $this->getIssuerTitle($code); ?>
             </label>
             <span class="input-box">
-             <select name="<?php echo $code; ?>_issuer" id="<?php echo $code; ?>_issuer" class="required-entry input-text">
-                <option value=""><?php echo $this->__('Please select'); ?></option>
-                 <?php
-                 foreach ($method['issuers'] as $issuer) {
-                     echo '<option value="' . htmlspecialchars($issuer->id) . '">' . htmlspecialchars($issuer->name) . '</option>';
-                 }
-                 ?>
-                </select>
-            </span>
+                <?php if ($listType == 'dropdown'): ?>
+                    <select name="<?php echo $code; ?>_issuer" id="<?php echo $code; ?>_issuer" class="input-text">
+                        <option value=""><?php echo $this->__('Please select'); ?></option>
+                        <?php foreach ($method->issuers() as $issuer): ?>
+                            <option value="<?php echo htmlspecialchars($issuer->id); ?>">
+                                <?php echo htmlspecialchars($issuer->name); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+                <?php if ($listType == 'radio'): ?>
+                    <ul>
+                    <?php foreach ($method->issuers() as $issuer): ?>
+                        <li>
+                            <input type="radio" name="<?php echo $code; ?>_issuer" value="<?php echo htmlspecialchars($issuer->id); ?>" id="issuer_<?php echo htmlspecialchars($issuer->id); ?>" class="radio">
+                            <img src="<?php echo $issuer->image->size2x; ?>" class="payment-issuer-icon"/>
+                            <?php echo htmlspecialchars($issuer->name); ?>
+                        </li>
+                    <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+             </span>
         </li>
-    <?php } ?>
-</ul>
+    </ul>
+<?php endif; ?>

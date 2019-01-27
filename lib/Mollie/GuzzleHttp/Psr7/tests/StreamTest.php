@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Stream;
 /**
  * @covers GuzzleHttp\Psr7\Stream
  */
-class StreamTest extends \PHPUnit_Framework_TestCase
+class StreamTest extends BaseTest
 {
     public static $isFReadError = false;
 
@@ -22,6 +22,21 @@ class StreamTest extends \PHPUnit_Framework_TestCase
     public function testConstructorInitializesProperties()
     {
         $handle = fopen('php://temp', 'r+');
+        fwrite($handle, 'data');
+        $stream = new Stream($handle);
+        $this->assertTrue($stream->isReadable());
+        $this->assertTrue($stream->isWritable());
+        $this->assertTrue($stream->isSeekable());
+        $this->assertEquals('php://temp', $stream->getMetadata('uri'));
+        $this->assertInternalType('array', $stream->getMetadata());
+        $this->assertEquals(4, $stream->getSize());
+        $this->assertFalse($stream->eof());
+        $stream->close();
+    }
+
+    public function testConstructorInitializesPropertiesWithRbPlus()
+    {
+        $handle = fopen('php://temp', 'rb+');
         fwrite($handle, 'data');
         $stream = new Stream($handle);
         $this->assertTrue($stream->isReadable());

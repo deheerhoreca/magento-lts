@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2012-2018, Mollie B.V.
+ * Copyright (c) 2012-2019, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,16 +27,17 @@
  * @category    Mollie
  * @package     Mollie_Mpm
  * @author      Mollie B.V. (info@mollie.nl)
- * @copyright   Copyright (c) 2012-2018 Mollie B.V. (https://www.mollie.nl)
+ * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
  */
 ?>
     <script type="text/javascript">
         //<![CDATA[
         function checkApikey() {
-            var apiKey = $F('payment_mollie_apikey');
+            var apiKeyTest = $F('payment_mollie_apikey_test');
+            var apiKeyLive = $F('payment_mollie_apikey_live');
             new Ajax.Request('<?php echo $this->getAjaxCheckUrl() ?>', {
-                parameters: {apikey: apiKey, isAjax: 1},
+                parameters: {'test_key': apiKeyTest, 'live_key': apiKeyLive, isAjax: 1},
                 method: 'get',
                 onCreate: function () {
                     $('payment_mollie_apitest_result').hide();

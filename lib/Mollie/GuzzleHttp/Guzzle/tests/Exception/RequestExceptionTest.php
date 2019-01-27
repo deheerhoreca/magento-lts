@@ -1,13 +1,14 @@
 <?php
-namespace GuzzleHttp\Tests\Event;
+namespace GuzzleHttp\Tests\Exception;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers GuzzleHttp\Exception\RequestException
+ * @covers \GuzzleHttp\Exception\RequestException
  */
 class RequestExceptionTest extends TestCase
 {
@@ -19,13 +20,13 @@ class RequestExceptionTest extends TestCase
         $this->assertSame($req, $e->getRequest());
         $this->assertSame($res, $e->getResponse());
         $this->assertTrue($e->hasResponse());
-        $this->assertEquals('foo', $e->getMessage());
+        $this->assertSame('foo', $e->getMessage());
     }
 
     public function testCreatesGenerateException()
     {
         $e = RequestException::create(new Request('GET', '/'));
-        $this->assertEquals('Error completing request', $e->getMessage());
+        $this->assertSame('Error completing request', $e->getMessage());
         $this->assertInstanceOf('GuzzleHttp\Exception\RequestException', $e);
     }
 
@@ -134,7 +135,7 @@ class RequestExceptionTest extends TestCase
     public function testHasStatusCodeAsExceptionCode()
     {
         $e = RequestException::create(new Request('GET', '/'), new Response(442));
-        $this->assertEquals(442, $e->getCode());
+        $this->assertSame(442, $e->getCode());
     }
 
     public function testWrapsRequestExceptions()
@@ -158,7 +159,7 @@ class RequestExceptionTest extends TestCase
     {
         $r = new Request('GET', 'http://www.oo.com');
         $e = new RequestException('foo', $r, null, null, ['bar' => 'baz']);
-        $this->assertEquals(['bar' => 'baz'], $e->getHandlerContext());
+        $this->assertSame(['bar' => 'baz'], $e->getHandlerContext());
     }
 
     public function testObfuscateUrlWithUsername()
@@ -173,5 +174,28 @@ class RequestExceptionTest extends TestCase
         $r = new Request('GET', 'http://user:password@www.oo.com');
         $e = RequestException::create($r, new Response(500));
         $this->assertContains('http://user:***@www.oo.com', $e->getMessage());
+    }
+
+    public function testGetResponseBodySummaryOfNonReadableStream()
+    {
+        $this->assertNull(RequestException::getResponseBodySummary(new Response(500, [], new ReadSeekOnlyStream())));
+    }
+}
+
+final class ReadSeekOnlyStream extends Stream
+{
+    public function __construct()
+    {
+        parent::__construct(fopen('php://memory', 'wb'));
+    }
+
+    public function isSeekable()
+    {
+        return true;
+    }
+
+    public function isReadable()
+    {
+        return false;
     }
 }

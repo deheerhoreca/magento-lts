@@ -3,7 +3,6 @@
 namespace Mollie\Api\Endpoints;
 
 use Mollie\Api\Exceptions\ApiException;
-use Mollie\Api\Resources\BaseCollection;
 use Mollie\Api\Resources\Payment;
 use Mollie\Api\Resources\PaymentCollection;
 use Mollie\Api\Resources\Refund;
@@ -23,7 +22,7 @@ class PaymentEndpoint extends EndpointAbstract
      */
     protected function getResourceObject()
     {
-        return new Payment($this->api);
+        return new Payment($this->client);
     }
 
     /**
@@ -36,7 +35,7 @@ class PaymentEndpoint extends EndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new PaymentCollection($this->api, $count, $_links);
+        return new PaymentCollection($this->client, $count, $_links);
     }
 
     /**
@@ -80,12 +79,13 @@ class PaymentEndpoint extends EndpointAbstract
      *
      * @param string $paymentId
      *
-     * @return null
+     * @param array $data
+     * @return Payment
      * @throws ApiException
      */
-    public function delete($paymentId)
+    public function delete($paymentId, array $data = [])
     {
-        return $this->rest_delete($paymentId);
+        return $this->rest_delete($paymentId, $data);
     }
 
     /**
@@ -96,12 +96,13 @@ class PaymentEndpoint extends EndpointAbstract
      *
      * @param string $paymentId
      *
-     * @return null
+     * @param array $data
+     * @return Payment
      * @throws ApiException
      */
-    public function cancel($paymentId)
+    public function cancel($paymentId, array $data = [])
     {
-        return $this->rest_delete($paymentId);
+        return $this->rest_delete($paymentId, $data);
     }
 
     /**
@@ -122,7 +123,7 @@ class PaymentEndpoint extends EndpointAbstract
     /**
      * Issue a refund for the given payment.
      *
-     * The $filters parameter may either be an array of endpoint parameters, a float value to
+     * The $data parameter may either be an array of endpoint parameters, a float value to
      * initiate a partial refund, or empty to do a full refund.
      *
      * @param Payment $payment
@@ -140,8 +141,8 @@ class PaymentEndpoint extends EndpointAbstract
             $body = json_encode($data);
         }
 
-        $result = $this->api->performHttpCall(self::REST_CREATE, $resource, $body);
+        $result = $this->client->performHttpCall(self::REST_CREATE, $resource, $body);
 
-        return ResourceFactory::createFromApiResult($result, new Refund($this->api));
+        return ResourceFactory::createFromApiResult($result, new Refund($this->client));
     }
 }

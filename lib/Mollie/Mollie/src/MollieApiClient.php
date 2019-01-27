@@ -6,15 +6,25 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
+use Mollie\Api\Endpoints\ChargebackEndpoint;
 use Mollie\Api\Endpoints\CustomerEndpoint;
 use Mollie\Api\Endpoints\CustomerPaymentsEndpoint;
 use Mollie\Api\Endpoints\InvoiceEndpoint;
 use Mollie\Api\Endpoints\MandateEndpoint;
 use Mollie\Api\Endpoints\MethodEndpoint;
+use Mollie\Api\Endpoints\OrderEndpoint;
+use Mollie\Api\Endpoints\OrderLineEndpoint;
+use Mollie\Api\Endpoints\OrderRefundEndpoint;
+use Mollie\Api\Endpoints\PaymentCaptureEndpoint;
+use Mollie\Api\Endpoints\OrganizationEndpoint;
+use Mollie\Api\Endpoints\PaymentChargebackEndpoint;
 use Mollie\Api\Endpoints\PaymentEndpoint;
+use Mollie\Api\Endpoints\PaymentRefundEndpoint;
+use Mollie\Api\Endpoints\PermissionEndpoint;
 use Mollie\Api\Endpoints\ProfileEndpoint;
 use Mollie\Api\Endpoints\RefundEndpoint;
 use Mollie\Api\Endpoints\SettlementsEndpoint;
+use Mollie\Api\Endpoints\ShipmentEndpoint;
 use Mollie\Api\Endpoints\SubscriptionEndpoint;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\IncompatiblePlatform;
@@ -26,7 +36,7 @@ class MollieApiClient
     /**
      * Version of our client.
      */
-    const CLIENT_VERSION = "2.0.5";
+    const CLIENT_VERSION = "2.1.5";
 
     /**
      * Endpoint of the remote API.
@@ -44,11 +54,17 @@ class MollieApiClient
     const HTTP_GET = "GET";
     const HTTP_POST = "POST";
     const HTTP_DELETE = "DELETE";
+    const HTTP_PATCH = "PATCH";
 
     /**
      * HTTP status codes
      */
     const HTTP_NO_CONTENT = 204;
+
+    /**
+     * Default response timeout (in seconds).
+     */
+    const TIMEOUT = 10;
 
     /**
      * @var ClientInterface
@@ -113,6 +129,20 @@ class MollieApiClient
     public $profiles;
 
     /**
+     * RESTful Organization resource.
+     *
+     * @var OrganizationEndpoint
+     */
+    public $organizations;
+
+    /**
+     * RESTful Permission resource.
+     *
+     * @var PermissionEndpoint
+     */
+    public $permissions;
+
+    /**
      * RESTful Invoice resource.
      *
      * @var InvoiceEndpoint
@@ -120,11 +150,67 @@ class MollieApiClient
     public $invoices;
 
     /**
+     * RESTful Order resource.
+     *
+     * @var OrderEndpoint
+     */
+    public $orders;
+
+    /**
+     * RESTful OrderLine resource.
+     *
+     * @var OrderLineEndpoint
+     */
+    public $orderLines;
+
+    /**
+     * RESTful Shipment resource.
+     *
+     * @var ShipmentEndpoint
+     */
+    public $shipments;
+
+    /**
      * RESTful Refunds resource.
      *
      * @var RefundEndpoint
      */
     public $refunds;
+
+    /**
+     * RESTful Payment Refunds resource.
+     *
+     * @var PaymentRefundEndpoint
+     */
+    public $paymentRefunds;
+
+    /**
+     * RESTful Payment Captures resource.
+     *
+     * @var PaymentCaptureEndpoint
+     */
+    public $paymentCaptures;
+
+    /**
+     * RESTful Chargebacks resource.
+     *
+     * @var ChargebacksEndpoint
+     */
+    public $chargebacks;
+
+    /**
+     * RESTful Payment Chargebacks resource.
+     *
+     * @var PaymentChargebacksEndpoint
+     */
+    public $paymentChargebacks;
+
+    /**
+     * RESTful Order Refunds resource.
+     *
+     * @var OrderRefundEndpoint
+     */
+    public $orderRefunds;
 
     /**
      * @var string
@@ -155,7 +241,12 @@ class MollieApiClient
      */
     public function __construct(ClientInterface $httpClient = null)
     {
-        $this->httpClient = $httpClient ? $httpClient : new Client();
+        $this->httpClient = $httpClient ?
+            $httpClient :
+            new Client([
+                \GuzzleHttp\RequestOptions::VERIFY => \Composer\CaBundle\CaBundle::getBundledCaBundlePath(),
+                \GuzzleHttp\RequestOptions::TIMEOUT => self::TIMEOUT,
+            ]);
 
         $compatibilityChecker = new CompatibilityChecker();
         $compatibilityChecker->checkCompatibility();
@@ -177,16 +268,29 @@ class MollieApiClient
         $this->customerPayments = new CustomerPaymentsEndpoint($this);
         $this->mandates = new MandateEndpoint($this);
         $this->invoices = new InvoiceEndpoint($this);
+        $this->permissions = new PermissionEndpoint($this);
         $this->profiles = new ProfileEndpoint($this);
+        $this->organizations = new OrganizationEndpoint($this);
+        $this->orders = new OrderEndpoint($this);
+        $this->orderLines = new OrderLineEndpoint($this);
+        $this->orderRefunds = new OrderRefundEndpoint($this);
+        $this->shipments = new ShipmentEndpoint($this);
         $this->refunds = new RefundEndpoint($this);
+        $this->paymentRefunds = new PaymentRefundEndpoint($this);
+        $this->paymentCaptures = new PaymentCaptureEndpoint($this);
+        $this->chargebacks = new ChargebackEndpoint($this);
+        $this->paymentChargebacks = new PaymentChargebackEndpoint($this);
     }
 
     /**
      * @param string $url
+     *
+     * @return MollieApiClient
      */
     public function setApiEndpoint($url)
     {
         $this->apiEndpoint = rtrim(trim($url), '/');
+        return $this;
     }
 
     /**
@@ -199,6 +303,8 @@ class MollieApiClient
 
     /**
      * @param string $apiKey The Mollie API key, starting with 'test_' or 'live_'
+     *
+     * @return MollieApiClient
      * @throws ApiException
      */
     public function setApiKey($apiKey)
@@ -211,10 +317,13 @@ class MollieApiClient
 
         $this->apiKey = $apiKey;
         $this->oauthAccess = false;
+        return $this;
     }
 
     /**
      * @param string $accessToken OAuth access token, starting with 'access_'
+     *
+     * @return MollieApiClient
      * @throws ApiException
      */
     public function setAccessToken($accessToken)
@@ -227,6 +336,7 @@ class MollieApiClient
 
         $this->apiKey = $accessToken;
         $this->oauthAccess = true;
+        return $this;
     }
 
     /**
@@ -241,10 +351,13 @@ class MollieApiClient
 
     /**
      * @param string $versionString
+     *
+     * @return MollieApiClient
      */
     public function addVersionString($versionString)
     {
         $this->versionStrings[] = str_replace([" ", "\t", "\n", "\r"], '-', $versionString);
+        return $this;
     }
 
     /**
@@ -265,9 +378,9 @@ class MollieApiClient
      */
     public function performHttpCall($httpMethod, $apiMethod, $httpBody = null)
     {
-       $url = $this->apiEndpoint . "/" . self::API_VERSION . "/" . $apiMethod;
+        $url = $this->apiEndpoint . "/" . self::API_VERSION . "/" . $apiMethod;
 
-       return $this->performHttpCallToFullUrl($httpMethod, $url, $httpBody);
+        return $this->performHttpCallToFullUrl($httpMethod, $url, $httpBody);
     }
 
     /**
@@ -303,7 +416,7 @@ class MollieApiClient
             'User-Agent' => $userAgent,
         ];
 
-        if(function_exists("php_uname")) {
+        if (function_exists("php_uname")) {
             $headers['X-Mollie-Client-Info'] = php_uname();
         }
 
@@ -331,10 +444,9 @@ class MollieApiClient
      */
     private function parseResponseBody(ResponseInterface $response)
     {
-        $body = $response->getBody()->getContents();
+        $body = (string) $response->getBody();
         if (empty($body)) {
-
-            if($response->getStatusCode() === self::HTTP_NO_CONTENT) {
+            if ($response->getStatusCode() === self::HTTP_NO_CONTENT) {
                 return null;
             }
 
@@ -368,7 +480,7 @@ class MollieApiClient
 
         return $object;
     }
-    
+
     /**
      * Serialization can be used for caching. Of course doing so can be dangerous but some like to live dangerously.
      *

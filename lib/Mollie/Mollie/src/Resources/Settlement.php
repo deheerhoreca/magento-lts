@@ -36,6 +36,14 @@ class Settlement extends BaseResource
     public $createdAt;
 
     /**
+     * The date on which the settlement was settled, in ISO 8601 format. When requesting the open settlement or next settlement the return value is null.
+     *
+     * @example "2013-12-25T10:30:54+00:00"
+     * @var string|null
+     */
+    public $settledAt;
+
+    /**
      * Status of the settlement.
      *
      * @var string
@@ -55,6 +63,13 @@ class Settlement extends BaseResource
      * @var object
      */
     public $periods;
+
+    /**
+     * The ID of the invoice on which this settlement is invoiced, if it has been invoiced.
+     *
+     * @var string|null
+     */
+    public $invoiceId;
 
     /**
      * @var object[]
@@ -166,4 +181,26 @@ class Settlement extends BaseResource
 
         return $resourceCollection;
     }
+
+	/**
+	 * Retrieves all captures associated with this settlement
+	 *
+	 * @return CaptureCollection
+	 * @throws ApiException
+	 */
+	public function captures()
+	{
+		if (!isset($this->_links->captures->href)) {
+			return new CaptureCollection($this->client, 0, null);
+		}
+
+		$result = $this->client->performHttpCallToFullUrl(MollieApiClient::HTTP_GET, $this->_links->captures->href);
+
+		$resourceCollection = new CaptureCollection($this->client, $result->count, $result->_links);
+		foreach ($result->_embedded->captures as $dataResult) {
+			$resourceCollection[] = ResourceFactory::createFromApiResult($dataResult, new Capture($this->client));
+		}
+
+		return $resourceCollection;
+	}
 }

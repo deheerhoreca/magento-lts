@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2012-2018, Mollie B.V.
+ * Copyright (c) 2012-2019, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
  * @category    Mollie
  * @package     Mollie_Mpm
  * @author      Mollie B.V. (info@mollie.nl)
- * @copyright   Copyright (c) 2012-2018 Mollie B.V. (https://www.mollie.nl)
+ * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
  */
 
@@ -57,6 +57,6 @@ class Mollie_Mpm_Block_Adminhtml_Render_Version extends Mage_Adminhtml_Block_Sys
      */
     public function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
-        return $this->mollieHelper->getModuleVersion();
+        return $this->mollieHelper->getExtensionVersion();
     }
 }

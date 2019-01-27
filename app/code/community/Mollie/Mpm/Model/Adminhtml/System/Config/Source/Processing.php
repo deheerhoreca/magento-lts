@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2012-2018, Mollie B.V.
+ * Copyright (c) 2012-2019, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,35 +27,32 @@
  * @category    Mollie
  * @package     Mollie_Mpm
  * @author      Mollie B.V. (info@mollie.nl)
- * @copyright   Copyright (c) 2012-2018 Mollie B.V. (https://www.mollie.nl)
+ * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
  */
 
-class Mollie_Mpm_Model_Adminhtml_System_Config_Source_Processing
+class Mollie_Mpm_Model_Adminhtml_System_Config_Source_Processing  extends Mollie_Mpm_Model_Adminhtml_System_Config_Source_SourceAbstract
 {
-
-    /**
-     * @var string
-     */
-    protected $_stateStatuses = Mage_Sales_Model_Order::STATE_PROCESSING;
 
     /**
      * @return array
      */
     public function toOptionArray()
     {
-        $statuses = Mage::getSingleton('sales/order_config')->getStateStatuses($this->_stateStatuses);
-        $options = array();
-        $options[] = array(
-            'value' => '',
-            'label' => Mage::helper('adminhtml')->__('-- Use Default --')
-        );
-        foreach ($statuses as $code=>$label) {
-            $options[] = array(
-                'value' => $code,
-                'label' => $label
+        if (!$this->options) {
+            $this->options[] = array(
+                'value' => '',
+                'label' => Mage::helper('adminhtml')->__('-- Use Default --')
             );
+            $statuses = $this->getStateStatuses(Mage_Sales_Model_Order::STATE_PROCESSING);
+            foreach ($statuses as $code => $label) {
+                $this->options[] = array(
+                    'value' => $code,
+                    'label' => $label
+                );
+            }
         }
-        return $options;
+
+        return $this->options;
     }
 }

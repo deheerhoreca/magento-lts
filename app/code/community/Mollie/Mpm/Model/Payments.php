@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2012-2018, Mollie B.V.
+ * Copyright (c) 2012-2019, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
  * @category    Mollie
  * @package     Mollie_Mpm
  * @author      Mollie B.V. (info@mollie.nl)
- * @copyright   Copyright (c) 2012-2018 Mollie B.V. (https://www.mollie.nl)
+ * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
  */
 
@@ -60,95 +60,7 @@ class Mollie_Mpm_Model_Payments extends Mage_Core_Model_Abstract
     }
 
     /**
-     * @param $request
-     * @param $payment
-     */
-    public function setPayment($request, $payment)
-    {
-        $data = array(
-            'order_id'       => $request['metadata']['order_id'],
-            'transaction_id' => $payment->id,
-            'bank_status'    => 'open',
-            'method'         => $request['method'],
-            'issuer'         => $request['issuer'],
-            'created_at'     => $this->mollieHelper->getCurrentMysqlDate()
-        );
-
-        $this->mollieHelper->addLog('setPayment', $data);
-        $this->setData($data)->save();
-    }
-
-    /**
-     * @param      $orderId
-     * @param      $status
-     * @param      $paymentData
-     */
-    public function updatePayment($orderId, $status, $paymentData)
-    {
-        if (!$orderId) {
-            return;
-        }
-
-        $data = array(
-            'order_id'    => $orderId,
-            'bank_status' => $status,
-            'updated_at'  => $this->mollieHelper->getCurrentMysqlDate()
-        );
-
-        if (!empty($paymentData->details->consumerAccount)) {
-            $data['bank_account'] = $paymentData->details->consumerAccount;
-        }
-
-        if (!empty($paymentData->details->consumerName)) {
-            $data['consumer_name'] = $paymentData->details->consumerName;
-        }
-
-        if (!empty($paymentData->details->cardHolder)) {
-            $data['consumer_name'] = $paymentData->details->cardHolder;
-        }
-
-        if (!empty($paymentData->details->consumerBic)) {
-            $data['consumer_bic'] = $paymentData->details->consumerBic;
-        }
-
-        if (!empty($paymentData->details->cardLabel)) {
-            $data['issuer'] = $paymentData->details->cardLabel;
-        }
-
-        if (!empty($paymentData->issuer)) {
-            $data['issuer'] = $paymentData->issuer;
-        }
-
-        $this->mollieHelper->addLog('updatePayment', $data);
-        $this->setData($data)->save();
-    }
-
-    /**
-     * Get OrderId from TransactionID from Payment Table.
-     *
-     * @param $transactionId
-     *
-     * @return mixed
-     */
-    public function getOrderIdByTransactionId($transactionId)
-    {
-        return $this->load($transactionId, 'transaction_id')->getOrderId();
-    }
-
-    /**
-     * Get TransactionID from OrderId from Payment Table.
-     *
-     * @param $orderId
-     *
-     * @return mixed
-     */
-    public function getTransactionIdByOrderId($orderId)
-    {
-        return $this->load($orderId, 'order_id')->getTransactionId();
-    }
-
-    /**
-     * Load Payment data by TransactionId.
+     * Load Old Payment data by TransactionId.
      *
      * @param $transactionId
      *
@@ -156,7 +68,66 @@ class Mollie_Mpm_Model_Payments extends Mage_Core_Model_Abstract
      */
     public function loadByTransactionId($transactionId)
     {
-        $payment = $this->load($transactionId, 'transaction_id');
-        return $payment;
+        if (!$this->checkTable()) {
+            return false;
+        }
+
+        if ($transaction = $this->load($transactionId, 'transaction_id')) {
+            return $transaction->getOrderId();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkTable()
+    {
+        /** @var Mage_Core_Model_Resource $resource */
+        $resource = Mage::getSingleton('core/resource');
+        $paymentsTable = $resource->getTableName('mollie_payments');
+        return (boolean)$resource->getConnection('core_read')->showTableStatus($paymentsTable);
+    }
+
+    /**
+     * Load Old Payment Title by TransactionId.
+     *
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return bool|string
+     * @throws Mage_Core_Exception
+     */
+    public function getTitleByOrder(Mage_Sales_Model_Order $order)
+    {
+        $method = null;
+        if (!$this->checkTable()) {
+            return $method;
+        }
+
+        $orderId = $order->getId();
+        if ($transaction = $this->load($orderId, 'order_id')) {
+            $method = $transaction->getMethod();
+        }
+
+        if ($method != 'api') {
+            return ucfirst($method);
+        }
+
+        $paymentCode = $order->getPayment()->getMethodInstance()->getCode();
+        $index = str_replace('mpm_void_', '', $paymentCode);
+
+        if (!is_numeric($index)) {
+            return $method;
+        }
+
+        /** @var Mage_Core_Model_Resource $resource */
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $query = sprintf(
+            'SELECT description FROM %s LIMIT %s,1',
+            $resource->getTableName('mollie_methods'),
+            $index);
+        $method = $readConnection->fetchOne($query);
+
+        return $method;
     }
 }

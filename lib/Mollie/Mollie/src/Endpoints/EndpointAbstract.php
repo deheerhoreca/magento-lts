@@ -6,14 +6,12 @@ use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Resources\BaseCollection;
 use Mollie\Api\Resources\BaseResource;
-use Mollie\Api\Resources\Payment;
 use Mollie\Api\Resources\ResourceFactory;
-use Psr\Http\Message\StreamInterface;
 
 abstract class EndpointAbstract
 {
     const REST_CREATE = MollieApiClient::HTTP_POST;
-    const REST_UPDATE = MollieApiClient::HTTP_POST;
+    const REST_UPDATE = MollieApiClient::HTTP_PATCH;
     const REST_READ = MollieApiClient::HTTP_GET;
     const REST_LIST = MollieApiClient::HTTP_GET;
     const REST_DELETE = MollieApiClient::HTTP_DELETE;
@@ -21,7 +19,7 @@ abstract class EndpointAbstract
     /**
      * @var MollieApiClient
      */
-    protected $api;
+    protected $client;
 
     /**
      * @var string
@@ -38,7 +36,7 @@ abstract class EndpointAbstract
      */
     public function __construct(MollieApiClient $api)
     {
-        $this->api = $api;
+        $this->client = $api;
     }
 
     /**
@@ -51,27 +49,31 @@ abstract class EndpointAbstract
             return "";
         }
 
-        return "?" . http_build_query($filters, "");
+        foreach ($filters as $key => $value) {
+            if ($value === true) {
+                $filters[$key] = "true";
+            }
+
+            if ($value === false) {
+                $filters[$key] = "false";
+            }
+        }
+
+        return "?" . http_build_query($filters, "", "&");
     }
 
     /**
-     * @param string|null|resource|StreamInterface $body
+     * @param array $body
      * @param array $filters
      * @return BaseResource
      * @throws ApiException
      */
-    protected function rest_create($body, array $filters)
+    protected function rest_create(array $body, array $filters)
     {
-        try {
-            $encoded = \GuzzleHttp\json_encode($body);
-        } catch (\InvalidArgumentException $e) {
-            throw new ApiException("Error encoding parameters into JSON: '" . $e->getMessage() . "'.");
-        }
-
-        $result = $this->api->performHttpCall(
+        $result = $this->client->performHttpCall(
             self::REST_CREATE,
             $this->getResourcePath() . $this->buildQueryString($filters),
-            $encoded
+            $this->parseRequestBody($body)
         );
 
         return ResourceFactory::createFromApiResult($result, $this->getResourceObject());
@@ -92,7 +94,7 @@ abstract class EndpointAbstract
         }
 
         $id = urlencode($id);
-        $result = $this->api->performHttpCall(
+        $result = $this->client->performHttpCall(
             self::REST_READ,
             "{$this->getResourcePath()}/{$id}" . $this->buildQueryString($filters)
         );
@@ -104,50 +106,27 @@ abstract class EndpointAbstract
      * Sends a DELETE request to a single Molle API object.
      *
      * @param string $id
+     * @param array $body
      *
      * @return BaseResource
      * @throws ApiException
      */
-    protected function rest_delete($id)
+    protected function rest_delete($id, array $body = [])
     {
         if (empty($id)) {
             throw new ApiException("Invalid resource id.");
         }
 
         $id = urlencode($id);
-        $result = $this->api->performHttpCall(
+        $result = $this->client->performHttpCall(
             self::REST_DELETE,
-            "{$this->getResourcePath()}/{$id}"
+            "{$this->getResourcePath()}/{$id}",
+            $this->parseRequestBody($body)
         );
 
         if ($result === null) {
             return null;
         }
-
-        return ResourceFactory::createFromApiResult($result, $this->getResourceObject());
-    }
-
-    /**
-     * Sends a POST request to a single Molle API object to update it.
-     *
-     * @param string $id
-     * @param string|null|resource|StreamInterface $body
-     *
-     * @return BaseResource
-     * @throws ApiException
-     */
-    protected function rest_update($id, $body)
-    {
-        if (empty($id)) {
-            throw new ApiException("Invalid resource id.");
-        }
-
-        $id = urlencode($id);
-        $result = $this->api->performHttpCall(
-            self::REST_UPDATE,
-            "{$this->getResourcePath()}/{$id}",
-            $body
-        );
 
         return ResourceFactory::createFromApiResult($result, $this->getResourceObject());
     }
@@ -168,7 +147,7 @@ abstract class EndpointAbstract
 
         $apiPath = $this->getResourcePath() . $this->buildQueryString($filters);
 
-        $result = $this->api->performHttpCall(self::REST_LIST, $apiPath);
+        $result = $this->client->performHttpCall(self::REST_LIST, $apiPath);
 
         /** @var BaseCollection $collection */
         $collection = $this->getResourceCollectionObject($result->count, $result->_links);
@@ -222,5 +201,25 @@ abstract class EndpointAbstract
         }
 
         return $this->resourcePath;
+    }
+
+    /**
+     * @param array $body
+     * @return null|string
+     * @throws ApiException
+     */
+    protected function parseRequestBody(array $body)
+    {
+        if (empty($body)) {
+            return null;
+        }
+
+        try {
+            $encoded = \GuzzleHttp\json_encode($body);
+        } catch (\InvalidArgumentException $e) {
+            throw new ApiException("Error encoding parameters into JSON: '" . $e->getMessage() . "'.");
+        }
+
+        return $encoded;
     }
 }

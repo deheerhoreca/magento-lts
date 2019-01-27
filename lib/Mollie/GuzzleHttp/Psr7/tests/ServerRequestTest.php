@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Uri;
 /**
  * @covers GuzzleHttp\Psr7\ServerRequest
  */
-class ServerRequestTest extends \PHPUnit_Framework_TestCase
+class ServerRequestTest extends BaseTest
 {
     public function dataNormalizeFiles()
     {
@@ -266,8 +266,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testNormalizeFilesRaisesException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid value in files specification');
-
+        $this->expectException('InvalidArgumentException', 'Invalid value in files specification');
         ServerRequest::normalizeFiles(['test' => 'something']);
     }
 
@@ -323,6 +322,14 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
             'Host header with port' => [
                 'https://www.example.org:8324/blog/article.php?id=10&user=foo',
                 array_merge($server, ['HTTP_HOST' => 'www.example.org:8324']),
+            ],
+            'IPv6 local loopback address' => [
+                'https://[::1]:8000/blog/article.php?id=10&user=foo',
+                array_merge($server, ['HTTP_HOST' => '[::1]:8000']),
+            ],
+            'Invalid host' => [
+                'https://localhost/blog/article.php?id=10&user=foo',
+                array_merge($server, ['HTTP_HOST' => 'a:b']),
             ],
             'Different port with SERVER_PORT' => [
                 'https://www.example.org:8324/blog/article.php?id=10&user=foo',
