@@ -57,5 +57,6 @@ bridge_*.php
 
 .DS_Store
 ._.DS_Store
+._*
 
 /skin/frontend/rwd/external/
