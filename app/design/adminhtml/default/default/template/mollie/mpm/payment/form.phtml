@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright (c) 2012-2019, Mollie B.V.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * - Redistributions of source code must retain the above copyright notice,
+ *   this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
+ *
+ * @category    Mollie
+ * @package     Mollie_Mpm
+ * @author      Mollie B.V. (info@mollie.nl)
+ * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
+ */
+?>
+<?php $_code = $this->getMethodCode() ?>
+<ul id="payment_form_<?= $_code ?>" style="display:none">
+    <?= $this->__('Create a Mollie Payment link and add this to the order email.'); ?>
+    <ul class="inner-form">
+        <li>
+            <label for="<?= $_code ?>_methods"><?= $this->__('Limit to the following method(s)') ?>:</label>
+            <div class="input-box">
+                <select id="<?= $_code ?>_methods" name="limited_methods[]" multiple>
+                    <option value="bancontact">Bancontact</option>
+                    <option value="banktransfer">Banktransfer</option>
+                    <option value="belfius">Belfius</option>
+                    <option value="bitcoin">Bitcoin</option>
+                    <option value="creditcard">Creditcard</option>
+                    <option value="eps">EPS</option>
+                    <option value="giftcard">Giftcard</option>
+                    <option value="giropay">Giropay</option>
+                    <option value="ideal">iDEAL</option>
+                    <option value="inghomepay">ING Homepay</option>
+                    <option value="kbc">KBC/CBC</option>
+                    <option value="klarnapaylater">Klarna Pay Later</option>
+                    <option value="klarnasliceit">Klarna Slice It</option>
+                    <option value="paypal">Paypal</option>
+                    <option value="paysafecard">Paysafecard</option>
+                    <option value="sofort">Sofort</option>
+                </select>
+            </div>
+            <p><?= $this->__('If one method is chosen, it will skip the selection screen and the customer is sent directly to the payment method.'); ?></p>
+        </li>
+    </ul>
+</ul>
