@@ -856,16 +856,21 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 					$orderInstance->addStatusHistoryComment($comment, false);
 
 				// Takeover the VAT number of the address to the customers account
-				if(!empty($vatId)
-				   && Mage::helper('euvatgrouper')->getIsTakeoverVatToAccount()
-					&& intval($orderInstance->getCustomerId()) > 0
-				) {
+				if(!empty($vatId) && Mage::helper('euvatgrouper')->getIsTakeoverVatToAccount()) {
 					if($this->_debug) Mage::log("Setting account based VAT field: ".$vatId, null, 'euvatenhanced.log');
-					$customer = Mage::getModel('customer/customer')->load($orderInstance->getCustomerId());
-					$customer->setTaxvat($vatId)->save();
+
+					if(intval($orderInstance->getCustomerId()) > 0) {
+						if($this->_debug) Mage::log("Saving to customer.", null, 'euvatenhanced.log');
+						$customer = Mage::getModel('customer/customer')->load($orderInstance->getCustomerId());
+						$customer->setTaxvat($vatId)->save();
+					}
+
+					if($this->_debug) Mage::log("Saving to order.", null, 'euvatenhanced.log');
+					$orderInstance->setCustomerTaxvat($vatId);
 				}
 
 			} catch(Exception $e) {
+				if($this->_debug) Mage::log($e->getMessage(), null, 'euvatenhanced.log');
 				Mage::logException($e);
 			}
 

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Geissweb_Euvatgrouper>
-            <version>1.8.1</version>
+            <version>1.8.2</version>
         </Geissweb_Euvatgrouper>
     </modules>
     <global>
@@ -25,6 +25,7 @@
                     <customer_edit_tab_addresses>Geissweb_Euvatgrouper_Block_Adminhtml_Customer_Edit_Tab_Addresses</customer_edit_tab_addresses>
                     <customer_sales_order_address_form_renderer_vat>Geissweb_Euvatgrouper_Block_Adminhtml_Customer_Sales_Order_Address_Form_Renderer_Vat</customer_sales_order_address_form_renderer_vat>
                     <sales_order_create_form_account>Geissweb_Euvatgrouper_Block_Adminhtml_Customer_Sales_Order_Create_Form_Account</sales_order_create_form_account>
+                    <sales_order_view_info>Geissweb_Euvatgrouper_Block_Adminhtml_Sales_Order_View_Additional</sales_order_view_info>
                 </rewrite>
             </adminhtml>
             <euvatgrouper>
