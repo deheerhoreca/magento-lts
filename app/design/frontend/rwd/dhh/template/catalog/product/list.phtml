@@ -206,18 +206,21 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
 
             $energy_rating = $_product->getAttributeText('energieklasse');
             $productlabel = $_product->getProductLabel();
-            $gnvalue = $_product->getAttributeText("gn");
+            $gnvalue = $_product->getAttributeText("gn"); // can be an array if multiselect
 
             /* Automatic Labels */
+
+            /*
             if(empty($productlabel) === TRUE && empty($energy_rating) === FALSE) {
               switch($energy_rating) {
             		case 'A++++':
             		case 'A+++':
             		case 'A++':
             		case 'A+':
-                  $productlabel = "Zuinig!";
+                  $productlabel = $energy_rating;
               }
             }
+            */
 
             /* Product label */
             if (empty($productlabel) === FALSE) {
@@ -228,7 +231,10 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
             if(empty($gnvalue) === FALSE
               && empty($category_name) === FALSE
               && strstr($category_name, "GN") === FALSE) {
-              echo "<span class=\"lblgnlst\">{$gnvalue} GN</span>";;
+                if(is_array($gnvalue)) {
+                  $gnvalue = implode(" ", $gnvalue);
+                }
+                echo "<span class=\"lblgnlst\">{$gnvalue} GN</span>";
             }
 
             /* Energy Label */
@@ -304,7 +310,7 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
 
                     $attribute_value = $_product->getBreedte();
                     //$attribute_value = $attribute ->getFrontend()->getValue($_product);
-                    if($attribute_value!=''){
+                    if($attribute_value != '' && $attribute_value > 0) {
                       echo '<li>'.($attribute_value/10).'cm breed</li><br />';
                     }
                   }
