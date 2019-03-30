@@ -263,9 +263,9 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           // General highlights
 
           if($i < 6) {
-            $attribute_names = ["hoogte", "breedte", "diepte"];
+            $attribute_names = ["breedte", "hoogte", "diepte"];
             $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-            $title = "Afmetingen";
+            $title = "Afmetingen (b x h x d)";
             foreach($attribute_names as $attribute_name) {
               $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
               if(empty($values[$attribute_name]) === FALSE) {
