@@ -1,0 +1,24 @@
+<?php
+/**
+ *
+ * @var Shopworks_Billink_Block_PageHeader $this
+ */
+?>
+<script type="text/javascript">
+
+    //Set vars
+    billink.isReadyToUse = <?php echo $this->isBillinkReadyToUse() ? 'true' : 'false' ?>;
+    billink.isAlternateDeliveryAddressAllowed = <?php echo $this->isAlternateDeliveryAddressAllowed() ? 'true' : 'false' ?>;
+    /**
+     * The dom loaded event is sometimes called multiple times. This var prevents multiple executions of the page header script.
+     * @type {boolean}
+     */
+    var billinkPageHeaderInitialized = false;
+    document.observe("dom:loaded", function() {
+        if(!billinkPageHeaderInitialized)
+        {
+            billink.checkoutPageController.init();
+            billinkPageHeaderInitialized = true;
+        }
+    });
+</script>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Shopworks_Billink>
+            <version>1.0.23</version>
+        </Shopworks_Billink>
+    </modules>
+    <global>
+        <!-- models -->
+        <models>
+            <billink>
+                <class>Shopworks_Billink_Model</class>
+            </billink>
+        </models>
+        <!-- helpers -->
+        <helpers>
+            <billink>
+                <class>Shopworks_Billink_Helper</class>
+            </billink>
+        </helpers>
+        <!-- blocks -->
+        <blocks>
+            <billink>
+                <class>Shopworks_Billink_Block</class>
+            </billink>
+        </blocks>
+
+        <!-- Resources -->
+        <resources>
+            <billink_setup>
+                <setup>
+                    <module>Shopworks_Billink</module>
+                </setup>
+            </billink_setup>
+        </resources>
+
+        <!-- add fee total models -->
+        <sales>
+            <quote>
+                <totals>
+                    <billink_total>
+                        <class>billink/fee_quote_address_total_billink</class>
+                        <after>tax</after>
+                        <renderer>billink/fee_checkout_total_fee</renderer>
+                    </billink_total>
+                </totals>
+            </quote>
+            <order_invoice>
+                <totals>
+                    <billink_total>
+                        <class>billink/fee_order_invoice_total_billink</class>
+                        <after>tax</after>
+                    </billink_total>
+                </totals>
+            </order_invoice>
+        </sales>
+
+        <fieldsets>
+
+            <sales_convert_quote>
+                <billink_workflow_number><to_order>*</to_order></billink_workflow_number>
+            </sales_convert_quote>
+
+            <sales_convert_quote_address>
+                <billink_fee><to_order>*</to_order></billink_fee>
+                <base_billink_fee><to_order>*</to_order></base_billink_fee>
+                
+                <billink_fee_tax><to_order>*</to_order></billink_fee_tax>
+                <base_billink_fee_tax><to_order>*</to_order></base_billink_fee_tax>
+                
+                <billink_fee_incl_tax><to_order>*</to_order></billink_fee_incl_tax>
+                <base_billink_fee_incl_tax><to_order>*</to_order></base_billink_fee_incl_tax>
+            </sales_convert_quote_address>
+
+        </fieldsets>
+        <!-- event hooks -->
+        <events>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <Shopworks_Billink>
+                        <type>singleton</type>
+                        <class>billink/Event_Observer_Shipment</class>
+                        <method>startBillinkWorkflow</method>
+                    </Shopworks_Billink>
+                </observers>
+            </sales_order_shipment_save_after>
+
+            <sales_order_save_after>
+                <observers>
+                    <Shopworks_Billink>
+                        <type>singleton</type>
+                        <class>billink/Event_Observer_Invoice</class>
+                        <method>createInvoice</method>
+                    </Shopworks_Billink>
+                </observers>
+            </sales_order_save_after>
+
+            <!-- \Mage_Payment_Model_Method_Abstract::isAvailable -->
+            <payment_method_is_active>
+                <observers>
+                    <Shopworks_Billink>
+                        <type>singleton</type>
+                        <class>billink/Event_Observer_PaymentMethod</class>
+                        <method>setPaymentMethod</method>
+                    </Shopworks_Billink>
+                </observers>
+            </payment_method_is_active>
+        </events>
+    </global>
+    <!-- frontend -->
+    <frontend>
+        <layout>
+            <updates>
+                <billink>
+                    <file>billink.xml</file>
+                </billink>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Shopworks_Billink>
+                    <files>
+                        <default>Shopworks_Billink.csv</default>
+                    </files>
+                </Shopworks_Billink>
+            </modules>
+        </translate>
+        <routers>
+            <billink>
+                <use>standard</use>
+                <args>
+                    <module>Shopworks_Billink</module>
+                    <frontName>billink</frontName>
+                </args>
+            </billink>
+        </routers>
+    </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <billink>
+                    <file>billink.xml</file>
+                </billink>
+            </updates>
+        </layout>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <Shopworks_Billink>
+                        <type>model</type>
+                        <class>billink/Event_Observer_Admin</class>
+                        <method>showBillinkPluginNotifications</method>
+                    </Shopworks_Billink>
+                </observers>
+            </controller_action_layout_load_before>
+            <checkout_submit_all_after>
+                <observers>
+                    <Shopworks_Billink>
+                        <type>Model</type>
+                        <class>billink/Event_Observer_AdminCheckout</class>
+                        <method>submitAllAfter</method>
+                    </Shopworks_Billink>
+                </observers>
+            </checkout_submit_all_after>
+        </events>
+    </adminhtml>
+    <!-- default settings -->
+    <default>
+        <sales>
+            <totals_sort>
+                <billink_total>29</billink_total>
+            </totals_sort>
+        </sales>
+        <payment>
+            <billink>
+                <active>1</active>
+                <model>billink/payment_method</model>
+                <create_invoice>0</create_invoice>
+                <order_status>processing</order_status>
+                <title>Billink Payment Method</title>
+                <billink_workflow_number>2</billink_workflow_number>
+                <sort_order>0</sort_order>
+                <fee_includes_tax>1</fee_includes_tax>
+                <fee_label>Billink service kosten</fee_label>
+                <is_alternate_delivery_address_allowed>0</is_alternate_delivery_address_allowed>
+                <cart_display>2</cart_display>
+                <enable_total_check>1</enable_total_check>
+            </billink>
+        </payment>
+    </default>
+</config>

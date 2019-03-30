@@ -1,0 +1,21 @@
+label[for=p_method_billink].disabled
+{
+    opacity:0.6;
+}
+
+#billink-birthdate-fields select
+{
+    width:auto;
+    display:block;
+}
+
+.form-list .customer-dob .dob-day,
+.form-list .customer-dob .dob-month,
+.form-list .customer-dob .dob-year {
+    display: inline-block;
+}
+
+.form-list .customer-dob .dob-year
+{
+    width:60px;
+}

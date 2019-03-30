@@ -1,0 +1,223 @@
+<?php
+/**
+ * @var Shopworks_Billink_Block_Form $this
+ */
+$_code = $this->getMethodCode();
+?>
+<?php if($this->disableBillinkPaymentOption()) { ?>
+
+    <script>
+            var checkbox = $('p_method_billink');
+            var label = $(checkbox.next());
+
+            checkbox.disabled  = true;
+            label.addClassName('disabled');
+    </script>
+
+<?php } ?>
+
+
+    <?php if($this->disableBillinkPaymentOption()) { ?>
+        <p class="notice-msg">
+            De Billink betaal optie kan niet worden gekozen omdat het verzendadres afwijkt van het factuuradres.
+        </p>
+    <?php } ?>
+
+    <ul id="payment_form_<?php echo $_code ?>" class="form-list" style='display:none'>
+
+        <li>
+            <input type='radio' id="billink_checkout_type_customer" name='payment[billink_checkout_type]' class='radio billink-customer-type validate-one-required-by-name' value='p'  <?php echo $this->getFormFieldsFormSession('billink_checkout_type') == 'p' ? 'checked="checked"' : ''; ?>/>
+            <label for="billink_checkout_type_customer" class='f-none'><?php echo $this->__("Particulier"); ?></label><br/>
+            <input type='radio' id="billink_checkout_type_company" name='payment[billink_checkout_type]' class='radio billink-customer-type validate-one-required-by-name' value='b'  <?php echo $this->getFormFieldsFormSession('billink_checkout_type') == 'b' ? 'checked="checked"' : ''; ?>/>
+            <label for="billink_checkout_type_company" class='f-none'><?php echo $this->__("Zakelijk"); ?></label>
+        </li>
+
+        <li id="billink-sex-radio">
+            <input type='radio' id="billink_checkout_type_male" name='payment[billink_sex]' class='radio validate-one-required-by-name' value='m'  <?php echo $this->getFormFieldsFormSession('billink_sex') == 'm' ? 'checked="checked"' : ''; ?>/>
+            <label for="billink_checkout_type_male" class='f-none'><?php echo $this->__("Man"); ?></label><br/>
+            <input type='radio' id="billink_checkout_type_female" name='payment[billink_sex]' class='radio validate-one-required-by-name' value='f' <?php echo $this->getFormFieldsFormSession('billink_sex') == 'f' ? 'checked="checked"' : ''; ?>/>
+            <label for="billink_checkout_type_female" class='f-none'><?php echo $this->__("Vrouw"); ?></label>
+        </li>
+
+
+        <li id="billink-birthdate-fields" class="fields">
+            <?php
+            //Birthday fields
+            ?>
+            <label for="billink_dob:day" class="required"><?php echo Mage::helper('billink')->__('Geboortedatum'); ?>
+                <em>*</em></label>
+
+            <div class="input-box customer-dob">
+                <div class="dob-day">
+                    <label for="billink_dob:day" class="required"><?php echo Mage::helper('billink')->__('Dag'); ?>
+                        <em>*</em></label>
+                    <select id="billink_dob:day" name="payment[billink_dob_day]" class="input-text required-entry">
+                    </select>
+                </div>
+                <div class="dob-month">
+                    <label for="billink_dob:month" class="required"><?php echo Mage::helper('billink')->__('Maand'); ?><em>*</em></label>
+                    <select id="billink_dob:month" name="payment[billink_dob_month]" class="input-text required-entry">
+                        <option value="1"><?php echo Mage::helper('billink')->__('jan'); ?></option>
+                        <option value="2"><?php echo Mage::helper('billink')->__('feb'); ?></option>
+                        <option value="3"><?php echo Mage::helper('billink')->__('mrt'); ?></option>
+                        <option value="4"><?php echo Mage::helper('billink')->__('apr'); ?></option>
+                        <option value="5"><?php echo Mage::helper('billink')->__('mei'); ?></option>
+                        <option value="6"><?php echo Mage::helper('billink')->__('jun'); ?></option>
+                        <option value="7"><?php echo Mage::helper('billink')->__('jul'); ?></option>
+                        <option value="8"><?php echo Mage::helper('billink')->__('aug'); ?></option>
+                        <option value="9"><?php echo Mage::helper('billink')->__('sep'); ?></option>
+                        <option value="10"><?php echo Mage::helper('billink')->__('okt'); ?></option>
+                        <option value="11"><?php echo Mage::helper('billink')->__('nov'); ?></option>
+                        <option value="12"><?php echo Mage::helper('billink')->__('dec'); ?></option>
+                    </select>
+                </div>
+                <div class="dob-year">
+                    <label for="billink_dob:year" class="required"><?php echo Mage::helper('billink')->__('Jaar'); ?>
+                        <em>*</em></label>
+                    <select id="billink_dob:year" name="payment[billink_dob_year]" class="input-text required-entry">
+                        <?php for($i = ((int)date('Y') - 10); $i > 1900; $i--){ ?>
+                            <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        </li>
+
+        <li id="billink-chamberofcommerce-field" class="fields">
+            <div class="chamberofcommerce">
+                <label for="billink_chamberofcommerce" class="required"><?php echo $this->__("KVK"); ?><em class="required">*</em></label>
+
+                <div class="input-box">
+                    <input type="text" maxlength="50" class="required-entry" id="billink_chamberofcommerce_input" name="payment[billink_chamberofcommerce]" value="<?php echo $this->getFormFieldsFormSession('billink_chamberofcommerce'); ?>" />
+                </div>
+            </div>
+        </li>
+
+        <?php if($this->showPhoneNumberField()){ ?>
+
+        <li id="billink_phone" class="fields">
+            <div class="street">
+                <label for="billink_phone_input" class="required"><?php echo $this->__("Telefoonnummer"); ?><em class="required">*</em></label>
+
+                <div class="input-box">
+                    <input type="text" maxlength="100" id="billink_phone_input" class='required-entry' name="payment[billink_phone]" value="<?php echo $this->getCustomerPhoneNumber() ?>"/>
+                </div>
+            </div>
+        </li>
+
+        <?php } ?>
+
+        <?php /** Invoice address fields */ ?>
+
+        <li id="billink_street" class="fields">
+            <div class="street">
+                <label for="billink_street" class="required"><?php echo $this->__("Straatnaam"); ?><em class="required">*</em></label>
+
+                <div class="input-box">
+                    <input type="text" maxlength="100" id="billink_street_input" class='required-entry' name="payment[billink_street]" value="<?php echo $this->getFormFieldsFormSession('billink_street'); ?>" />
+                </div>
+            </div>
+        </li>
+
+        <li id="billink_housenumber" class="fields">
+            <div class="housenumber">
+                <label for="billink_housenumber" class="required"><?php echo $this->__("Huisnummer"); ?><em
+                        class="required">*</em></label>
+
+                <div class="input-box">
+                    <input type="text" maxlength="20" id="billink_housenumber_input" class='required-entry' name="payment[billink_housenumber]" value="<?php echo $this->getFormFieldsFormSession('billink_housenumber'); ?>" />
+                </div>
+            </div>
+        </li>
+
+        <li id="billink_housenumber_extension" class="fields">
+            <div class="chamberofcommerce">
+                <label for="billink_housenumber_extension"><?php echo $this->__("Huisnummer toevoeging"); ?></label>
+
+                <div class="input-box">
+                    <input type="text" maxlength="20" id="billink_housenumber_extension_input" name="payment[billink_housenumber_extension]" value="<?php echo $this->getFormFieldsFormSession('billink_housenumber_extension'); ?>"/>
+                </div>
+            </div>
+        </li>
+
+        <?php /** Delivery address fields */ ?>
+
+        <?php if($this->showDeliveryAddressFields()){ ?>
+
+            <li id="billink-delivery-address-fields">
+
+                <p>
+                    <b>Afleveradres</b>
+                </p>
+
+                <ul>
+
+                    <li id="billink_delivery_street" class="fields">
+                        <div class="street">
+                            <label for="billink_delivery_street" class="required"><?php echo $this->__("Straatnaam"); ?><em class="required">*</em></label>
+
+                            <div class="input-box">
+                                <input type="text" maxlength="100" id="billink_delivery_street_input" class='required-entry' name="payment[billink_delivery_street]" value="<?php echo $this->getFormFieldsFormSession('billink_delivery_street'); ?>" />
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="billink_delivery_housenumber" class="fields">
+                        <div class="housenumber">
+                            <label for="billink_delivery_housenumber" class="required"><?php echo $this->__("Huisnummer"); ?><em
+                                    class="required">*</em></label>
+
+                            <div class="input-box">
+                                <input type="text" maxlength="20" id="billink_delivery_housenumber_input" class='required-entry' name="payment[billink_delivery_housenumber]" value="<?php echo $this->getFormFieldsFormSession('billink_delivery_housenumber'); ?>" />
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="billink_delivery_housenumber_extension" class="fields">
+                        <div class="chamberofcommerce">
+                            <label for="billink_delivery_housenumber_extension"><?php echo $this->__("Huisnummer toevoeging"); ?></label>
+
+                            <div class="input-box">
+                                <input type="text" maxlength="20" id="billink_delivery_housenumber_extension_input" name="payment[billink_delivery_housenumber_extension]" value="<?php echo $this->getFormFieldsFormSession('billink_delivery_housenumber_extension'); ?>" />
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </li>
+
+        <?php } ?>
+
+    </ul>
+
+<script>
+
+
+    billink.validationError     = '<?php echo str_replace("'", "\\'",$this->getValidationErrorMessage()); ?>';
+
+    var addressParserUrl    =  '<?php echo $this->getUrl('billink/AddressParser/getAddress/', array('_secure'=>true)); ?>';
+
+    //Session persistence
+    var setPaymentFormFieldsUrl = '<?php echo $this->getUrl('billink/PaymentForm/setFormFields/', array('_secure'=>true)); ?>';
+    var getPaymentFormFieldsUrl = '<?php echo $this->getUrl('billink/PaymentForm/getFormFields/', array('_secure'=>true)); ?>';
+
+
+
+
+    //If the dom is loaded, initialize immediately
+    if(document.loaded)
+    {
+        billink.paymentFormController.init(billink.paymentFormSession, addressParserUrl, <?php echo $this->getBirthDateYear() ?>, <?php echo $this->getBirthDateMonth() ?>, <?php echo $this->getBirthDateDay() ?>);
+        billink.paymentFormSession.init(setPaymentFormFieldsUrl, getPaymentFormFieldsUrl, billink.paymentFormController);
+    }
+    //Else listen to the dom loaded event
+    else
+    {
+        document.observe("dom:loaded", function() {
+            billink.paymentFormController.init(billink.paymentFormSession, addressParserUrl, <?php echo $this->getBirthDateYear() ?>, <?php echo $this->getBirthDateMonth() ?>, <?php echo $this->getBirthDateDay() ?>);
+            billink.paymentFormSession.init(setPaymentFormFieldsUrl, getPaymentFormFieldsUrl, billink.paymentFormController);
+        });
+    }
+
+</script>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <sections>
+        <payment>
+            <groups>
+                <billink translate="label" module="billink">
+                    <label>Billink Payment Module</label>
+                    <sort_order>670</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>
+                        <![CDATA[
+                            <img id="billink_img" src="" alt="" border="0" /><br />
+                            <script>
+                                var n = SKIN_URL.indexOf("adminhtml");
+                                $('billink_img').src = SKIN_URL.substring(0, n) + "adminhtml/default/default/billink/logo.png";
+                            </script>
+                        ]]>
+                    </comment>
+                    <fields>
+                        <label_auth translate="label">
+                            <label>Versie</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>billink/adminhtml_system_config_form_field_version</frontend_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </label_auth>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <billink_name translate="label">
+                            <label>Billink Naam</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </billink_name>
+                        <billink_id translate="label">
+                            <label>Billink ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </billink_id>
+                        <enable_testmode translate="label comment">
+                            <label>Testmodus inschakelen</label>
+                            <tooltip>Indien 'Ja' is geselecteerd, worden bestellingen naar de Billink test-omgeving gestuurd. Selecteer 'Nee' op een normale productie-site.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_testmode>
+                        <check_backdoor_value translate="Check resultaat">
+                            <label>Krediet check uitkomst</label>
+                            <tooltip>Hiermee kunt u bepalen wat het resultaat van de Billink kredietcheck moet zijn als het systeem in Test mode staat.</tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>billink/System_Config_Source_BackdoorValueType</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><enable_testmode>1</enable_testmode></depends>
+                        </check_backdoor_value>
+                        <billink_workflow_number_personal translate="label">
+                            <label>Workflow nummer (particulier)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </billink_workflow_number_personal>
+                        <billink_workflow_number_business translate="label">
+                            <label>Workflow nummer (zakelijk)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </billink_workflow_number_business>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </sort_order>
+                        <maximum_amount_limit_enabled translate="label">
+                            <label>Billink uitschakelen voor hoge orderbedragen</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </maximum_amount_limit_enabled>
+                        <maximum_amount_limit translate="label">
+                            <label>Maximum orderbedrag</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>170</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><maximum_amount_limit_enabled>1</maximum_amount_limit_enabled></depends>
+                        </maximum_amount_limit>
+                        <order_status translate="label">
+                            <label>Order status na betaling via Billink</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <sort_order>180</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+                        <create_invoice translate="label">
+                            <label>Factuur aanmaken na bestelling</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>185</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </create_invoice>
+                        <is_alternate_delivery_address_allowed translate="label">
+                            <label>Klanten mogen een afwijkend verzendadres opgeven</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>190</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </is_alternate_delivery_address_allowed>
+                        <allowspecific translate="label">
+                            <label>Betaling toestaan voor</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>200</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Betaling toestaan vanuit specifieke landen</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>210</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+
+                        <enable_total_check translate="label">
+                            <label>Order totalen checken</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <tooltip>
+                                Als deze optie aanstaat worden de ordertotalen van Billink en Magento vergeleken. Wanneer de totalen niet overeenkomen krijgt de consument een melding dat Billink optie niet gebruikt kan worden.
+                                Als de Magento prijzen excl BTW zijn ingevoerd, kan het zijn dat er afrondingsverschillen optreden tussen Magento en Billink en er dus een afwijking in de totalen voorkomt. Mocht dit het geval is dan kan deze optie uitgeschakelt worden.
+                            </tooltip>
+                        </enable_total_check>
+
+                        <disable_customer_group translate="label">
+                            <label>Schakel Billink uit voor de volgende klantgroepen</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>billink/System_Config_Source_Customer_Group_Multiselect</source_model>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <tooltip>
+                                Deselecteren: houd ctrl/control ingedrukt en klik op de opties
+                            </tooltip>
+                        </disable_customer_group>
+
+                        <!-- Fee -->
+                        <label_fee translate="label">
+                            <label>
+                                <![CDATA[
+                                    <b>Billink kosten</b>
+                                ]]>
+                                </label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </label_fee>
+                        <fee_enabled translate="label">
+                            <label>Kosten inschakelen</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>510</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </fee_enabled>
+                        <fee_label translate="label">
+                            <label>Kosten label</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>520</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><fee_enabled>1</fee_enabled></depends>
+                        </fee_label>
+                        <fee_includes_tax translate="label comment">
+                            <label>Kosten BTW</label>
+                            <frontend_type>select</frontend_type>
+                            <backend_model>tax/config_price_include</backend_model>
+                            <source_model>tax/system_config_source_priceType</source_model>
+                            <sort_order>530</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><fee_enabled>1</fee_enabled></depends>
+                        </fee_includes_tax>
+                        <fee_tax_class translate="label">
+                            <label>Kosten BTW code</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>550</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><fee_enabled>1</fee_enabled></depends>
+                        </fee_tax_class>
+                        <fee_ranges translate="label">
+                            <label>Kosten staffels</label>
+                            <comment>Kosten worden gebasseerd op het totaal bedrag (incl. BTW) van de order</comment>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>billink/adminhtml_system_config_form_field_feeRanges</frontend_model>
+                            <backend_model>billink/system_config_backend_feeRanges</backend_model>
+                            <sort_order>570</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><fee_enabled>1</fee_enabled></depends>
+                        </fee_ranges>
+                        <cart_display translate="label">
+                            <label>Weergave</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tax/system_config_source_tax_display_type</source_model>
+                            <sort_order>560</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><fee_enabled>1</fee_enabled></depends>
+                        </cart_display>
+                    </fields>
+                </billink>
+            </groups>
+        </payment>
+    </sections>
+</config>

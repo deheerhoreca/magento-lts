@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+
+    <!-- Add js and css files -->
+    <default>
+        <reference name="head">
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_base.js</script>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_mage_validationfix.js</script>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_checkout_page_controller.js</script>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_payment_form_controller.js</script>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_payment_form_session.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <script>css/billink.css</script>
+            </action>
+            <block type="billink/PageHeader" name="billink-page-header" template="shopworks_billink/pageheader.phtml" />
+        </reference>
+    </default>
+
+    <checkout_onepage_index>
+        <reference name="head">
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_onepage_checkout_controller.js</script>
+            </action>
+        </reference>
+    </checkout_onepage_index>
+
+    <!-- Add order totals block -->
+    <sales_order_view>
+        <reference name="order_totals">
+            <block name="billink_fee" type="billink/fee_order_totals" before="tax"/>
+        </reference>
+    </sales_order_view>
+    <sales_order_print>
+        <reference name="order_totals">
+            <block name="billink_fee" type="billink/fee_order_totals" before="tax"/>
+        </reference>
+    </sales_order_print>
+    <sales_email_order_items>
+        <reference name="order_totals">
+            <block name="billink_fee" type="billink/fee_order_totals" before="tax"/>
+        </reference>
+    </sales_email_order_items>
+
+    <!-- Add invoice totals block -->
+    <sales_order_invoice>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </sales_order_invoice>
+    <sales_order_printinvoice>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </sales_order_printinvoice>
+    <sales_email_order_invoice_items>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </sales_email_order_invoice_items>
+
+</layout>

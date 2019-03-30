@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./framework/bootstrap.php" verbose="true" strict="false">
+    <testsuites>
+        <testsuite name="Billink Test suite">
+            <directory suffix="Tests.php">Shopworks/Billink/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <!-- <directory suffix=".php">../../../app/code/community/Shopworks/Saleschecker/</directory>-->
+            <exclude>
+                <!-- Excluding installation and upgrade scripts -->
+                <directory>../../../app/code/community/*/*/sql</directory>
+                <!-- Excluding data installation and upgrade scripts -->
+                <directory>../../../app/code/community/*/*/data</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-html" target="../reports/unit/html"/>
+    </logging>
+    <php>
+        <ini name="date.timezone" value="Europe/Berlin"/>
+    </php>
+</phpunit>
+

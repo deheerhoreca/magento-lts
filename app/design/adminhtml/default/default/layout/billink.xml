@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+
+    <!-- Add js and css files -->
+    <default>
+        <reference name="head">
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_base.js</script>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_mage_validationfix.js</script>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <script>billink/billink_payment_form_controller.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <script>billink/billink.css</script>
+            </action>
+        </reference>
+    </default>
+    
+    <!-- Add order totals block -->
+    <adminhtml_sales_order_view>
+        <reference name="order_totals">
+            <block name="billink_fee" type="billink/fee_order_totals" before="tax"/>
+        </reference>
+    </adminhtml_sales_order_view>
+    <adminhtml_sales_order_invoice_view>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+    <adminhtml_sales_order_invoice_new>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+
+    <!-- Add invoice totals block -->
+    <adminhtml_sales_order_invoice_updateqty>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </adminhtml_sales_order_invoice_updateqty>
+    <adminhtml_sales_order_invoice_print>
+        <reference name="invoice_totals">
+            <block name="billink_fee" type="billink/fee_invoice_totals" before="tax"/>
+        </reference>
+    </adminhtml_sales_order_invoice_print>
+    
+</layout>

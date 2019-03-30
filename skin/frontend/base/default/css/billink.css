@@ -1,0 +1,24 @@
+.billink-billing-form-message
+{
+    margin:10px 0px;
+}
+label[for=p_method_billink].disabled
+{
+    opacity:0.6;
+}
+
+#container_payment_method_billink
+{
+    padding-top:0px;
+}
+
+#billink-birthdate-fields select
+{
+    width:auto;
+    display:block;
+}
+
+.form-list .customer-dob .dob-year
+{
+    width:60px;
+}
