@@ -60,3 +60,7 @@ bridge_*.php
 ._*
 
 /skin/frontend/rwd/external/
+
+# Ignore downloader cache and configuration files
+/downloader/.cache/
+/downloader/cache.cfg
