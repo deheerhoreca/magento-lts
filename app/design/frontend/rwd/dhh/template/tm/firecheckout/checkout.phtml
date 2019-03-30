@@ -9,13 +9,19 @@
     <?php endif; ?>
 </div>
 <style>
-#checkout-additional{
+#checkout-additional {
 	display: none;
+}
+#billink-notice {
+  display: none;
+  margin: 5px;
+  padding: 5px;
+  background: #eee;
 }
 </style>
 <?php
-    echo $this->getMessagesBlock()->getGroupedHtml();
-    $this->getMessagesBlock()->getMessageCollection()->clear();
+  echo $this->getMessagesBlock()->getGroupedHtml();
+  $this->getMessagesBlock()->getMessageCollection()->clear();
 ?>
 
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/tm/firecheckout.js') ?>"></script>
@@ -63,7 +69,13 @@ endif;
                 </div>
                 <div class="col-2">
         <?php endif; ?>
-
+        <div id=billink-notice>
+          <span class=bold>Wilt u zakelijk betalen met Billink?</span> Zorg er dan
+          voor dat u alle verplichte velden correct invult, omdat Billink daar een
+          controle op doet. Ziet u toch foutmeldingen?
+          <a href="/klantenservice">Neem dan contact op met Prokoeling</a>, we
+          helpen u graag met achteraf betalen met Billink.
+        </div>
         <?php echo $this->getChildHtml('payment.method') ?>
         <?php if ($j2tRewardPoints = $this->getLayout()->getBlock('checkout_cart_coupon_normal')): // rewardpoints extension override standard discount block too ?>
             <div id="checkout-coupon-discount-load">
@@ -202,4 +214,30 @@ jQuery(function(){
 	jQuery('#shipping-method').after(addc);
 	jQuery('#checkout-additional').show();
 });
+
+/* Handle Billink Zakelijk actions */
+  $j('document').ready(function() {
+
+    $j("#billink_checkout_type_company").prop('checked', false);
+    $j("#billink_checkout_type_customer").prop('checked', false);
+
+    $j("#billink_checkout_type_company").change(function() {
+      console.log("triggered");
+      if ($j("#billink_checkout_type_company:checked").is(':checked')) {
+        $j('label[for=billing\\:company]').html("<em>*</em>Bedrijfsnaam (verplicht)");
+        $j('label[for=billing\\:company]').addClass('required');
+        $j("#billing\\:company").addClass('required-entry');
+        $j("#billink-notice").show();
+      }
+    });
+    $j("#billink_checkout_type_customer").change(function() {
+      if ($j("#billink_checkout_type_customer:checked").is(':checked')) {
+        $j('label[for=billing\\:company]').html("Bedrijfsnaam (niet verplicht)");
+        $j('label[for=billing\\:company]').removeClass('required');
+        $j("#billing\\:company").removeClass('required-entry');
+        $j("#billink-notice").hide();
+      }
+     });
+    $j("input:radio:first").prop("checked", true).trigger("click");
+  });
 </script>
