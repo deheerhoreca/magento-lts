@@ -235,13 +235,22 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             '@type'                 => 'Product',
             'name'                  => $this->getProduct()->getName(),
             'image'                 => (string)Mage::helper('catalog/image')->init($this->getProduct(), 'image'),
-            'description'           => $this->getProduct()->getShortDescription(),
+            'description'           => strip_tags($this->getProduct()->getDescription()),
             'sku'                   => $this->getProduct()->getSku(),
+            'brand'                 => $this->getProduct()->getAttributeText('manufacturer'), /* DHH CORE HACK */
+            'url'                   => $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($this->getProduct()), /* DHH CORE HACK */
+            'gtin13'                => $this->getProduct()->getResource()->getAttribute('ean')->getFrontend()->getValue($this->getProduct()),
             'offers'                => array(
                 '@type'             => 'Offer',
                 'availability'      => $this->getStockStatusUrl(),
                 'priceCurrency'     => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
-                'itemCondition'     => $this->getItemCondition()
+                'itemCondition'     => "http://schema.org/NewCondition", /* DHH CORE HACK */
+                "priceValidUntil"   => date('Y-m-d',strtotime(date("Y-m-d", mktime()) . " + 365 day")), /* DHH CORE HACK */
+                'url'               => $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($this->getProduct()), /* DHH CORE HACK */
+                "seller"            => [ /* DHH CORE HACK */
+                  "@type"           => "Organization", /* DHH CORE HACK */
+                  "name"            => Mage::getStoreConfig('richsnippets/organization/name'), /* DHH CORE HACK */
+                ] /* DHH CORE HACK */
             )
         );
 
