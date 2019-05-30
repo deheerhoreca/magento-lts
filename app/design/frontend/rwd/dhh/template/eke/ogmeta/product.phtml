@@ -1,0 +1,36 @@
+<?php
+$helper = Mage::helper("eke_ogmeta");
+
+if (!$helper->isOgMetaEnabled()) {
+    return;
+}
+
+$siteName = $helper->getSiteName();
+$product = Mage::registry('current_product');
+$imageAttr = getimagesize($product->getImageUrl());
+$productVideo = $product->getResource()->getAttribute('product_video')->getFrontend()->getValue($product);
+?>
+
+<!-- OG META Product Data -->
+<meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
+<meta property="og:site_name" content="<?php echo $siteName; ?>" />
+<meta property="og:type" content="product" />
+<meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" />
+<meta property="og:image" content="<?php echo $product->getImageUrl(); ?>" />
+<meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>" />
+<meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>" />
+<meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>" />
+<?php if ($helper->isProductShortEnabled()) { ?>
+<meta property="og:description" content="<?php echo strip_tags($product->getShortDescription()); ?>" />
+<?php } else { ?>
+<meta property="og:description" content="<?php echo strip_tags($product->getDescription()); ?>" />
+<?php } ?>
+<?php if ($helper->getFacebookAppId()) { ?>
+<meta property="fb:app_id" content="<?php echo $helper->getFacebookAppId(); ?>"/>
+<?php } ?>
+<meta property="og:price:amount" content="<?php echo Mage::registry('product')->getFinalPrice() ?>" />
+<meta property="og:price:currency" content="<?php echo Mage::app()->getStore()->getCurrentCurrencyCode(); ?>" />
+<?php
+if(empty($productVideo) === false) {
+  echo "<meta property='og:video' content='{$productVideo}' />";
+}
