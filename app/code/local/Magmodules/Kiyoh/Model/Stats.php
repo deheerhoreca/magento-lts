@@ -107,15 +107,16 @@ class Magmodules_Kiyoh_Model_Stats extends Mage_Core_Model_Abstract
         $stats = Mage::getModel('kiyoh/stats')->getCollection();
         $stats->addFieldToFilter('shop_id', array('neq' => '0'));
 
-        $score = '';
-        $scoremax = '';
-        $votes = '';
+	/* DHH CORE HACKS */
+        $score = null;
+        $scoremax = null;
+        $votes = null;
         $i = 0;
 
         foreach ($stats as $stat) {
-            $score += $stat->getScore();
-            $scoremax += $stat->getScoremax();
-            $votes += $stat->getVotes();
+            $score += (int) $stat->getScore();
+            $scoremax += (int) $stat->getScoremax();
+            $votes += (int) $stat->getVotes();
             $i++;
         }
 
