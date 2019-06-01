@@ -207,7 +207,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
   	  	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
    	  	$page->setFont($font, 10);
-  	  	$page->drawText('De Heer Horeca B.V.  | Mattenbies 10 | 3824WC | ', 42, 10, 'UTF-8');
+  	  	$page->drawText('De Heer Horeca B.V. | Trasmolenlaan 12 | 3447GZ Woerden | Nederland', 42, 10, 'UTF-8');
         $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));
 	    	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
  		    $page->setFont($font, 10);
