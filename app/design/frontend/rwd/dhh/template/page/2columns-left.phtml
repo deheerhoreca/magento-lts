@@ -5,33 +5,53 @@ require_once __DIR__."/dhhfpc_conf.php";
 $formKeyPlaceholder = '<!-- fpc form_key_placeholder -->';
 
 // Outqualification
-$nope = $_html = $force_refresh = FALSE;
+$write_cache = true;
+$read_cache = true;
+
 $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
 if($totalItemsInCart > 0) {
-  $nope = TRUE;
+  $write_cache = false;
+  $read_cache = false;
 }
 if(Mage::getSingleton('customer/session')->isLoggedIn()) {
-  $nope = TRUE;
+  $write_cache = false;
+  $read_cache = false;
 }
 if(isset($_GET['nofpc'])) {
-  $force_refresh = TRUE;
-  $nope = TRUE;
+  $write_cache = false;
+  $read_cache = false;
 }
-if(DHH_FPC_ENABLED === FALSE) {
-  $force_refresh = FALSE;
-  $nope = TRUE;
+if(isset($_GET['refreshfpc'])) {
+  $write_cache = true;
+  $read_cache = false;
+}
+if(DHH_FPC_ENABLED === false) {
+  $write_cache = false;
+  $read_cache = false;
+}
+if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+  $write_cache = false;
+  $read_cache = false;
 }
 
-if($nope === FALSE || $force_refresh === TRUE) {
-  $_cacheKey = 'QUICKNDIRTYFPC' . md5(
-    get_class($this) . '-' .
-    serialize($this->getRequest()->getParams()) . '-' .
-    (Mage::getSingleton('customer/session')->isLoggedIn() ? '1' : '0') . "-" .
-     Mage::helper('core/url')->getCurrentUrl()
-  );
+$_cacheKey = null;
+if($read_cache === true || $write_cache === true) {
+  $cache_key_input = Mage::helper('core/url')->getCurrentUrl();
+  $cache_key_input = str_replace("?refreshfpc", null, $cache_key_input);
+  $_cacheKey = 'QUICKNDIRTYFPC' . md5($cache_key_input);
 }
 
-if($nope === FALSE) {
+if(headers_sent() === FALSE) {
+  $r = "-r";
+  $w = "-w";
+  if($write_cache === true) $w = "+w";
+  if($read_cache === true) $r = "+r";
+  header("qnd-fpc-settings: {$r} {$w}");
+}
+
+$_html = null;
+
+if($read_cache === true) {
   // Check if there is a cached version:
   $_html = Mage::app()->getCache()->load($_cacheKey);
 
@@ -44,10 +64,10 @@ if($nope === FALSE) {
   }
 }
 
-if($_html) {
+if(strlen($_html) > 0) {
   if(headers_sent() === FALSE) {
-    header("quickndirtyfpc: {$_cacheKey}");
-    header("koop: dan");
+    $bytes = strlen($_html);
+    header("retrieved-quickndirtyfpc: {$_cacheKey}, {$bytes} bytes");
   }
   echo $_html;
 } else {
@@ -57,16 +77,22 @@ if($_html) {
   require_once __DIR__."/../../../default/template/page/".basename(__FILE__);
 
   $_html = ob_get_clean();
-  echo $_html;
 
-  if($nope === FALSE || $force_refresh === TRUE) {
+  if($write_cache === true) {
 
     // Handle form_key (CSRF protection)
     $formKey = Mage::getSingleton('core/session')->getFormKey();
     if ($formKey) {
-      $_html = str_replace($formKey, $formKeyPlaceholder, $_html);
+      $_html_normalized = str_replace($formKey, $formKeyPlaceholder, $_html);
     }
 
-    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"]);
+    Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"]);
+
+    if(headers_sent() === FALSE) {
+      $bytes = strlen($_html_normalized);
+      header("saved-quickndirtyfpc: {$_cacheKey}, {$bytes} bytes");
+    }
   }
+
+  echo $_html;
 }
