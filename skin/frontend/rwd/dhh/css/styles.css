@@ -16260,21 +16260,6 @@ p:empty {
   display: none;
 }
 
-#search_mini_form #search {
-  border: 1px solid #bec4c4;
-  box-sizing: border-box;
-  color: #2c3638;
-  font-size: 14px;
-  margin: 0;
-  padding: 0 10px;
-  border-radius: 3px 0 0 3px;
-  display: inline-block;
-  height: 40px;
-  line-height: 1em;
-  vertical-align: middle;
-  width: 497px;
-}
-
 #search_mini_form .button, .add-to-cart-buttons .button.btn-cart, .loginbtmcheck button,#btncaguest,#btncareg {
   display: inline-block;
   border: none;
@@ -19664,7 +19649,7 @@ body.cms-page-view div#sidebar-nav.block.sidebar-nav-left.codnitiveSidenavLeft {
   height: 40px;
   line-height: 1em;
   vertical-align: middle;
-  width: 90%;
+  width: 80%;
 }
 
 #header-search {
