@@ -32,13 +32,13 @@
  */
 ?>
 <?php
-// echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_banner')->toHtml(); 
-?>	
+// echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_banner')->toHtml();
+?>
 
-<?php 
+<?php
 $pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionName();
 if($pageIdentifier=='checkout_cart_index'){
-	
+
 }
 
 $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both-prices' : 'display-single-price'; ?>
@@ -59,8 +59,8 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
 
   <?php echo $this->getMessagesBlock()->toHtml() ?>
 <div class="pgcrtleft">
-   
-  
+
+
     <?php echo $this->getChildHtml('form_before') ?>
     <form action="<?php echo $this->getFormActionUrl() ?>" method="post">
         <?php echo $this->getBlockHtml('formkey'); ?>
@@ -167,9 +167,7 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
     </form>
 
 
-	<?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_left_bottom')->toHtml(); 
-?>
+	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_left_bottom')->toHtml(); ?>
 	</div>
 </div>
 <div class="pgcrtright">
@@ -197,22 +195,22 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
             <?php endif; ?>
         </div>
     </div>
-	
+
 	<?php
- //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_1')->toHtml(); 
+ //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_1')->toHtml();
 ?>
 	</div>
-		
+
 		<?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_2')->toHtml(); 
+ echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_2')->toHtml();
 ?>
 	</div>
 	<div style="clear: both; height: 9px;">&nbsp;</div>
 		<?php
- //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_bottom')->toHtml(); 
+ //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_bottom')->toHtml();
 ?>
-	
-	
-	
+
+
+
     <?php echo $this->getChildHtml('crosssell') ?>
 </div>
