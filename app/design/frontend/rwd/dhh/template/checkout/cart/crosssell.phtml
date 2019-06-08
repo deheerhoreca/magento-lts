@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     rwd_default
+ * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Cart cross sell items template
+ *
+ * @see Mage_Checkout_Block_Cart_Crosssell
+ */
+?>
+<?php if($this->getItemCount()): ?>
+<div class="crosssell product-collateral">
+    <h2><?php echo $this->__('Based on your selection, you may be interested in the following items:') ?></h2>
+    <?php foreach ($this->getItems() as $_item): ?>
+      <a class="product-image" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>">
+        <div class="col-sx-12 col-sm-1 items cross-sell-product">
+          <div class="cross-sell-thumbnail">
+            <img class="cross-sell-thumbnail" src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(240, 240); ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+          </div>
+          <div class="cross-sell-text-container">
+            <div class="cross-sell-text-title">
+              <?php echo $this->htmlEscape($_item->getName()) ?>
+            </div>
+            <div class="cross-sell-text-price">
+              <?php echo $this->getPriceHtml($_item, true) ?>
+            </div>
+          </div>
+        </div>
+      </a>
+    <?php endforeach; ?>
+    <?php // <script type="text/javascript">decorateList('crosssell-products-list', 'none-recursive')</script> ?>
+</div>
+<?php endif; ?>
