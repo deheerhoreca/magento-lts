@@ -20274,6 +20274,7 @@ div.cross-sell-text-container {
 
 .ctdesc {
   padding-top: 20px;
+  clear: both;
 }
 
 .ctdesc p {

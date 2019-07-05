@@ -47,17 +47,11 @@ if($carct && ($category === 'category')) {
   $category_name = $carct->getName();
   $category_banner = $carct->getCategoryBanner();
 
-  if(empty($category_banner)) $category_banner = "generic_category_banner.jpg";
-  echo "<div class=\"ctbannerpg\" style=\"background:url('/media/catalog/category/{$category_banner}') center top; background-size: cover;\">";
-  ?>
-    <h1 class="headcatinside">
-      <?php echo $carct->getName(); ?>
-    </h1>
-  </div>
-  <?php
-  if(strlen($carct->getDescription()) > 0) {
-    echo "<div class=\"ctdesc\">{$carct->getDescription()}</div>";
+  if(empty($category_banner)) {
+    $category_banner = "generic_category_banner.jpg";
   }
+  echo "<div class=\"ctbannerpg\" style=\"background:url('/media/catalog/category/{$category_banner}') center top; background-size: cover;\">";
+  echo "<h1 class='headcatinside'>".$carct->getName()."</h1></div>";
 }
 
 /* PARENT CATEGORY, SHOW CHILDREN CATEGORIES */
@@ -417,6 +411,10 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
       echo $_afterChild->toHtml();
     }
   }
+}
+
+if(strlen($carct->getDescription()) > 0) {
+  echo "<div class=\"ctdesc\">{$carct->getDescription()}</div>";
 }
 
 function getFullProductUrl(Mage_Catalog_Model_Product $product = null){
