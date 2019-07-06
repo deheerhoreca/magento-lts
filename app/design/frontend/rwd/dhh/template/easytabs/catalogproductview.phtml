@@ -103,7 +103,7 @@ if($_product->getStockItem()->getIsInStock()) {
     $txtcltcz = 'clzinstocktemp';
   } elseif($_product->getStockItem()->getIsInStock() == 1) {
     if($_product->getStockItem()->getQty() > 1) {
-      $stmsg = (int) $_product->getStockItem()->getQty() . " op voorraad";      
+      $stmsg = (int) $_product->getStockItem()->getQty() . " op voorraad";
     } else {
       $stmsg = "Op voorraad";
     }
@@ -116,7 +116,7 @@ if($_product->getStockItem()->getIsInStock()) {
   $txtcltcz = 'clzsoldout';
 }
 $expected_delivery = $_product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($_product);
-$levertijd_verwacht = $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
+$levertijd_verwacht = (int) $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
 $lbllevertijdvl = $_product->getAttributeText('levertijd');
 $lblbestelartikel = $_product->getAttributeText('bestelartikel');
 
