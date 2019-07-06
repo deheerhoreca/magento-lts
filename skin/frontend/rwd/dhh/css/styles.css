@@ -20299,7 +20299,7 @@ div.cross-sell-text-container {
 
 .tooltip .tooltiptext {
   display: none;
-  width: 200px;
+  width: 220px;
   background-color: #fff;
   color: #000;
   border-radius: 6px;
@@ -20308,7 +20308,7 @@ div.cross-sell-text-container {
   z-index: 11;
   border: 1px solid #595959;
   padding: 10px;
-  left: -80px;
+  left: -140px;
   bottom: auto;
   top: 25px;
   text-align: left;
