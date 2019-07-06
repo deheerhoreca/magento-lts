@@ -284,12 +284,14 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
               <div class="info">
                 <ul>
                   <?php
+                  /* Brand/Manufacturer, if empty show dummy because the first elemnt is presented differently by CSS */
                   $attribute_value = $_product->getAttributeText('manufacturer');
-                  if($attribute_value != ''){
-                    echo '<li>'.$attribute_value.'</li>';
+                  if(empty($attribute_value) === true) {
+                    $attribute_value = " ";
                   }
+                  echo '<li>'.$attribute_value.'</li>';
 
-                  if($catid != 72) {
+                  if($catid !== 72) {
                     $attribute_value = $_product->getAttributeText('type_koeling');
                     //$attribute_value = $attribute ->getFrontend()->getValue($_product);
                     if($attribute_value!=''){
@@ -309,7 +311,7 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
                     }
                   }
 
-                  if($catid == 72) {
+                  if($catid === 72) {
                     $attribute_value = $_product->getBreedte();
                     if($attribute_value!='') {
                       echo '<li>'.($attribute_value/10).'cm breed</li><br />';
