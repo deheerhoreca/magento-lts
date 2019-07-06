@@ -29,7 +29,7 @@ $_finalPrice = $_product->getFinalPrice();
 
 $buttonTitle = Mage::helper('core')->quoteEscape($this->__('Add to Cart'));
 if($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->getQty() < 1 && $_product->getStockItem()->getBackorders()!=0){
-  $buttonTitle=$this->__('Reserveren');
+  $buttonTitle=$this->__('In de winkelwagen');
 }
 ?>
 
