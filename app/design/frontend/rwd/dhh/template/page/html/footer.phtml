@@ -119,7 +119,7 @@ if(array_shift($parts) === "dev") {
 <script src="/skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js" crossorigin></script>
 <script>
   elasticApm.init({
-    serviceName: 'prokoeling-dev',
+    serviceName: 'prokoeling',
     serverUrl: 'https://rum.prokoeling.nl:8200',
     environment: "<?php echo $apm_environment; ?>",
     pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
