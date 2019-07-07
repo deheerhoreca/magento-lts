@@ -1,104 +1,60 @@
-<?php
-/**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    design
- * @package     rwd_default
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
-?>
 <div class="footer-wrapper grid-inside">
-
-<div class="footertopwrp">
-
-
+  <div class="footertopwrp">
     <div class="footer grid">
-        <div class="row footer-subscribe">
-            <div class="col-7-12">
-	<?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_subscribe')->toHtml();
-?>
-            </div>
-
-
-<div class="col-5-12">
-
-<div class="footer-subscribe__form">
-  <?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?>
-</div>            </div>
-</div>
-   </div>
-</div>
-
-
-   <div class="footermidwrap">
-   <div class="footer grid">
-<div class="row footer__links-row">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml();
-
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_right')->toHtml();
-?>
-
-</div>
-</div>
-</div>
-<div class="footer grid">
-<div class="row footer-last-row">
-<div class="col-1-2">
-<div class="footer-last-row__item footer__menu-item footer__menu-item--gray">
-Alle prijzen in euro's  euro's (€), inclusief BTW, gratis verzending vanaf €150,-</div>
-</div>
-<div class="col-1-3 footer__column--big-left-pd">
-</div>
-</div>
-</div>
-
-
-
+      <div class="row footer-subscribe">
+        <div class="col-7-12">
+          <?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_subscribe')->toHtml(); ?>
+        </div>
+        <div class="col-5-12">
+          <div class="footer-subscribe__form">
+            <?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?>
+          </div>
+        </div>
+      </div>
     </div>
-	<!--
+  </div>
+  <div class="footermidwrap">
+    <div class="footer grid">
+      <div class="row footer__links-row">
+        <?php
+          echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml();
+          echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_right')->toHtml();
+        ?>
+      </div>
+    </div>
+  </div>
+  <div class="footer grid">
+    <div class="row footer-last-row">
+      <div class="col-1-2">
+        <div class="footer-last-row__item footer__menu-item footer__menu-item--gray">
+          Alle prijzen in euro's  euro's (€), inclusief BTW, gratis verzending vanaf €150,-
+        </div>
+      </div>
+      <div class="col-1-3 footer__column--big-left-pd"></div>
+    </div>
+  </div>
 </div>
--->
 
-<?php
-//get the menu blocks and set
-?>
 <div class="dvmenu1ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_1_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_1_block')->toHtml(); ?>
 </div>
 <div class="dvmenu2ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_2_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_2_block')->toHtml(); ?>
 </div>
 <div class="dvmenu3ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_3_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_3_block')->toHtml(); ?>
 </div>
 <div class="dvmenu4ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_4_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_4_block')->toHtml(); ?>
 </div>
 <div class="dvmenu5ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_5_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_5_block')->toHtml(); ?>
 </div>
 <div class="dvmenu6ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_6_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_6_block')->toHtml(); ?>
 </div>
 <div class="dvmenu7ri" style="display: none">
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_7_block')->toHtml(); ?>
+  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_7_block')->toHtml(); ?>
 </div>
 
 <script>
@@ -149,3 +105,12 @@ Alle prijzen in euro's  euro's (€), inclusief BTW, gratis verzending vanaf €
   <a href="tel:0850441003" class="scndbldh">085 044 1003</a>
 	<a href="tel:+31850441003" class="scndbl">+31 85 044 1003</a>
 </div>
+
+<script src="https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin></script>
+<script>
+  elasticApm.init({
+    serviceName: 'prokoeling',
+    serverUrl: 'https://rum.prokoeling.nl:8200',
+    environment: "dev"
+  })
+</script>
