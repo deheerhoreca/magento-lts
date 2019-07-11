@@ -19,31 +19,30 @@
  * needs please refer to http://www.magento.com for more information.
  *
  * @category    design
- * @package     rwd_default
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php
 /**
- * Top menu for store
+ * Shopping cart totals template
  *
- * @see Mage_Page_Block_Html_Topmenu
+ * @see Mage_Checkout_Block_Cart_Totals
+ * @var $this Mage_Checkout_Block_Cart_Totals
  */
 ?>
-<?php $_menu = $this->getHtml('level-top') ?>
-
-<?php if($_menu): ?>
-    <nav id="nav" class="grid-old"><div class="navhdwrap">
-        <ol class="nav-primary" style="float: left;"><li class="clzhomenavit"><a href="/" title="Home">Home</a></li>
-            <?php echo $_menu ?>
-
-        </ol><a href="tel:+31850441003" class="clzpnmincon" title="Phone"><strong>085-0441003</strong></a></div>
-    </nav>
-<?php endif ?>
-
-<script>
-  if (window.location.href.indexOf("firecheckout") > -1) {
-    document.getElementById('nav').style.display = 'none';
-  }
-</script>
+<?php if ($this->canApplyMsrp()): ?>
+    <div class="cart-msrp-totals"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></div>
+<?php else: ?>
+    <table id="shopping-cart-totals-table">
+        <col />
+        <col width="1" />
+        <tfoot>
+            <?php echo $this->renderTotals('footer'); ?>
+        </tfoot>
+        <tbody>
+            <?php echo $this->renderTotals(); ?>
+        </tbody>
+    </table>
+<?php endif; ?>

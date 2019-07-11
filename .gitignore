@@ -34,6 +34,8 @@
 /media/xmlconnect/system/*
 !/media/xmlconnect/system/ok.gif
 
+!/media/wysiwyg/brands
+
 /var/*
 !/var/.htaccess
 !/var/aoe_profiler.*

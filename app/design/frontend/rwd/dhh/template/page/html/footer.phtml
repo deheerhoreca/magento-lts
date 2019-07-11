@@ -1,7 +1,7 @@
 <div class="footer-wrapper grid-inside">
   <div class="footertopwrp">
     <div class="footer grid">
-      <div class="row footer-subscribe">
+      <div class="row footer-subscribe" id="page-footer">
         <div class="col-7-12">
           <?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_subscribe')->toHtml(); ?>
         </div>
@@ -124,4 +124,10 @@ if(array_shift($parts) === "dev") {
     environment: "<?php echo $apm_environment; ?>",
     pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
   })
+</script>
+
+<script>
+  if (window.location.href.indexOf("firecheckout") > -1) {
+    document.getElementById('page-footer').style.display = 'none';
+  }
 </script>

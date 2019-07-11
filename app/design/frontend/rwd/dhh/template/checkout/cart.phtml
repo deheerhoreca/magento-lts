@@ -40,8 +40,35 @@ $pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionN
 if($pageIdentifier=='checkout_cart_index'){
 
 }
-
 $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both-prices' : 'display-single-price'; ?>
+
+<div style="padding-top: 15px;">
+  <ul>
+    <li class="inline" style="margin-left: 1em;; margin-right: 1.6em;">
+      <div class="inline"><img class="inline" alt="Gratis verzending" src="/skin/frontend/rwd/dhh/images/trolley.svg" width="32" height="32"></div>
+      <div class="inline" style="position: relative; bottom: 0.8em;">
+        <small class="usp_text"><strong class="extra_special">Gratis</strong> verzending</small>
+        <small>&nbsp;In Nederland &amp; België bij &euro; 150+</small>
+      </div>
+    </li>
+    <li class="inline" style="margin-right: 1.6em;">
+      <div class="inline"><img class="inline" alt="De beste prijs" src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32"></div>
+      <div class="inline" style="position: relative; bottom: 0.8em;">
+          <small class="usp_text">Ergens goedkoper gezien?</small>
+          <small><a href="/klantenservice">Vertel het ons</a></small>
+      </div>
+    </li>
+    <li class="inline" style="margin-right: 1.6em;">
+      <div class="inline"><img class="inline" alt="Advies voor professionals" src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32"></div>
+      <div class="inline" style="position: relative; bottom: 0.8em;"><small class="usp_text">Advies door professionals</small></div>
+    </li>
+    <li class="inline" style="margin-right: 0em;">
+      <div class="inline"><img class="inline" alt="Snelle levrering" src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32"></div>
+      <div class="inline" style="position: relative; bottom: 0.8em;"><small class="usp_text">Snelle levering</small></div>
+    </li>
+  </ul>
+</div>
+
 <div class="cart <?php echo $_priceDisplay; ?>">
 
  <div class="page-title title-buttons">
@@ -80,30 +107,23 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
             <thead>
                 <tr>
                     <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php //echo $this->__('Product') ?></span></th>
-
                     <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
-
-                    <th class="a-center cart-price-head" colspan="<?php echo $mergedCells; ?>">
+                    <th class="align-right cart-price-head" colspan="<?php echo $mergedCells; ?>">
 <!--                            <div class="cart-price-placeholder">-->
-                            <span class="nobr"><?php echo $this->__('Price') ?></span>
+                            <?php echo $this->__('Price') ?>
 <!--                            </div>-->
                     </th>
-
                     <th rowspan="<?php echo $mergedCells; ?>" class="a-center">
                         <?php echo $this->__('Qty') ?>
-
                         <?php /*if ($this->helper('wishlist')->isAllowInCart()) : ?>
                             <span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span>
                         <?php endif*/ ?>
-
                     </th>
-
                     <th class="a-center cart-total-head" colspan="<?php echo $mergedCells; ?>">
 <!--                            <div class="cart-total-placeholder">-->
                             <?php echo $this->__('Subtotal') ?>
 <!--                            </div>-->
                     </th>
-
                <!--      <th class="a-center" rowspan="<?php echo $mergedCells; ?>">&nbsp;</th> -->
 
                 </tr>
@@ -170,41 +190,41 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
 	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_left_bottom')->toHtml(); ?>
 	</div>
 </div>
+
 <div class="pgcrtright">
-<div class="pgcrtrightinner">
-<h1 class="shopcrtrsidehd">Besteloverzicht</h1>
-    <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
-    <div class="cart-forms">
-        <?php /* Extensions placeholder */ ?>
-        <?php echo $this->getChildHtml('checkout_cart_widget') ?>
-        <?php echo $this->getChildHtml('coupon') ?>
-        <?php echo $this->getChildHtml('checkout.cart.extra') ?>
-        <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
-    </div>
-    <div class="cart-totals-wrapper">
-        <div class="cart-totals">
-            <?php echo $this->getChildHtml('totals'); ?>
-            <?php if(!$this->hasError()): ?>
-            <ul class="checkout-types bottom">
-            <?php foreach ($this->getMethods('methods') as $method): ?>
-                <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-                <li class="method-<?php echo preg_replace("/[^_a-zA-Z0-9-]/", '-', $method); ?>"><?php echo $methodHtml; ?></li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-            </ul>
-            <?php endif; ?>
-        </div>
-    </div>
+  <div class="pgcrtrightinner">
+    <h1 class="shopcrtrsidehd">Besteloverzicht</h1>
+      <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
+      <div class="cart-forms">
+          <?php /* Extensions placeholder */ ?>
+          <?php echo $this->getChildHtml('checkout_cart_widget') ?>
+          <?php echo $this->getChildHtml('coupon') ?>
+          <?php echo $this->getChildHtml('checkout.cart.extra') ?>
+          <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
+      </div>
+      <div class="cart-totals-wrapper">
+          <div class="cart-totals">
+              <?php echo $this->getChildHtml('totals'); ?>
+              <?php if(!$this->hasError()): ?>
+              <ul class="checkout-types bottom">
+              <?php foreach ($this->getMethods('methods') as $method): ?>
+                  <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+                  <li class="method-<?php echo preg_replace("/[^_a-zA-Z0-9-]/", '-', $method); ?>"><?php echo $methodHtml; ?></li>
+                  <?php endif; ?>
+              <?php endforeach; ?>
+              </ul>
+              <?php endif; ?>
+          </div>
+      </div>
 
-	<?php
- //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_1')->toHtml();
-?>
-	</div>
-
-		<?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_2')->toHtml();
-?>
-	</div>
+    <?php
+    //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_1')->toHtml();
+    ?>
+  </div>
+  <?php
+  echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_2')->toHtml();
+  ?>
+</div>
 	<div style="clear: both; height: 9px;">&nbsp;</div>
 		<?php
  //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_bottom')->toHtml();
