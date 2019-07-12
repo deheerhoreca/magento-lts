@@ -1,3 +1,4 @@
+<?php
 /**
  * Copyright (c) 2012-2019, Mollie B.V.
  * All rights reserved.
@@ -6,10 +7,10 @@
  * modification, are permitted provided that the following conditions are met:
  *
  * - Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ *   this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -27,43 +28,27 @@
  * @package     Mollie_Mpm
  * @author      Mollie B.V. (info@mollie.nl)
  * @copyright   Copyright (c) 2012-2019 Mollie B.V. (https://www.mollie.nl)
- * @license     http://www.opensource.org/licenses/bsd-license.php  Berkeley Software Distribution License (BSD-License 2)
- **/
+ * @license     http://www.opensource.org/licenses/bsd-license.php  BSD-License 2
+ */
 
+/** @var Mage_Sales_Model_Resource_Setup $installer */
+$installer = $this;
+$installer->startSetup();
 
-.mollie-loading p {
-    margin-top: 20px;
+$paths = [
+    'payment/mollie_bitcoin/active',
+    'payment/mollie_bitcoin/title',
+    'payment/mollie_bitcoin/method',
+    'payment/mollie_bitcoin/payment_description',
+    'payment/mollie_bitcoin/allowspecific',
+    'payment/mollie_bitcoin/specificcountry',
+    'payment/mollie_bitcoin/min_order_total',
+    'payment/mollie_bitcoin/max_order_total',
+    'payment/mollie_bitcoin/sort_order',
+];
+
+foreach ($paths as $path) {
+    $installer->deleteConfigData($path);
 }
 
-.mollie-loading .redirect-block {
-    padding: 10%;
-    text-align: center;
-}
-
-.mollie-loading .loader {
-    border: 16px solid #E3F0FA;
-    border-top: 16px solid #31A8F0;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.sp-methods .payment-issuer-icon {
-    width: 27px;
-    vertical-align: middle;
-    display: inline-block;
-    margin: 5px 3px 5px 3px;
-    float: none;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
+$installer->endSetup();

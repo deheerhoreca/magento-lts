@@ -67,7 +67,6 @@
 "Bank transfer","Bank transfer"
 "PayPal","PayPal"
 "paysafecard","paysafecard"
-"Bitcoin","Bitcoin"
 "KBC/CBC Payment Button","KBC/CBC Payment Button"
 "Please select","Please select"
 "Please Wait.<br>If you are not redirected shortly, click here.","Please Wait.<br>If you are not redirected shortly, click here."
@@ -121,3 +120,4 @@
 "Api Test","Api Test"
 "An error occured while processing your payment request, please try again later.","An error occured while processing your payment request, please try again later."
 "An error occured while processing your payment, please try again with other method.","An error occured while processing your payment, please try again with other method."
+"<strong>Please note:</strong> This payment method is only visible when the device of the user Apple Pay has enabled and the checkout is served over HTTPS.","<strong>Please note:</strong> This payment method is only visible when the device of the user Apple Pay has enabled and the checkout is served over HTTPS."
