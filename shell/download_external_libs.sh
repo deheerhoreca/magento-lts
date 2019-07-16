@@ -19,4 +19,5 @@ mkdir -p ../skin/frontend/rwd/external/zopim
 wget https://v2.zopim.com/?5GFYzGgeADrvMUAoHWiZPPglkc93U381  -O ../skin/frontend/rwd/external/zopim/widget.js
 
 mkdir -p ../skin/frontend/rwd/external/elastic_apm
-wget https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js  -O ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js
+# needs a touch as well because the file timestamp would be in the 1980s otherwise
+wget https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js  -O ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js && touch ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js
