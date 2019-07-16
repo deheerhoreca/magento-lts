@@ -218,7 +218,13 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
             return 0;
         }
 
-        $imageInfo = getimagesize($file);
+        /* DHH CORE HACK */
+        //$imageInfo = getimagesize($file);
+        try {
+          $imageInfo = getimagesize($file);
+        } catch (Exception $e) {
+          echo 'Caught exception: ',  $e->getMessage(), " while processing {$file}\n";
+        }
 
         if (!isset($imageInfo[0]) || !isset($imageInfo[1])) {
             return 0;
