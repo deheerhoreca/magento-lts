@@ -23,24 +23,51 @@
  * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<?php
-/**
- * Top menu for store
- *
- * @see Mage_Page_Block_Html_Topmenu
- */
-?>
-<?php $_menu = $this->getHtml('level-top') ?>
 
-<?php if($_menu): ?>
-    <nav id="nav" class="grid-old"><div class="navhdwrap">
-        <ol class="nav-primary" style="float: left;"><li class="clzhomenavit"><a href="/" title="Home">Home</a></li>
-            <?php echo $_menu ?>
+require_once __DIR__."/../dhhfpc_conf.php";
 
-        </ol><a href="tel:+31850441003" class="clzpnmincon" title="Phone"><strong>085-0441003</strong></a></div>
-    </nav>
-<?php endif ?>
+$_cacheKey = "QUICKNDIRTYFPC" . "-topmenu";
+
+// Outqualification
+$write_cache = true;
+$read_cache = true;
+
+if(isset($_GET['nofpc'])) {
+  $write_cache = false;
+  $read_cache = false;
+}
+if(isset($_GET['refreshfpc'])) {
+  $write_cache = true;
+  $read_cache = false;
+}
+if(DHH_FPC_ENABLED === false) {
+  $write_cache = false;
+  $read_cache = false;
+}
+
+$_html = null;
+
+if($read_cache === true) {
+  $_html = Mage::app()->getCache()->load($_cacheKey);
+}
+
+if(strlen($_html) > 0 === FALSE) {
+  $_html = $this->getHtml('level-top');
+  if($write_cache === true) {
+    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"]);
+  }
+}
+
+?>
+
+<nav id="nav" class="grid-old"><div class="navhdwrap">
+  <ol class="nav-primary" style="float: left;">
+    <li class="clzhomenavit">
+      <a href="/" title="Home">Home</a>
+    </li>
+    <?php echo $_html; ?>
+  </ol><a href="tel:+31850441003" class="clzpnmincon" title="Phone"><strong>085-0441003</strong></a></div>
+</nav>
 
 <script>
   if (window.location.href.indexOf("firecheckout") > -1) {
