@@ -132,9 +132,15 @@ class Aoe_Profiler_Model_Run extends Mage_Core_Model_Abstract
                     if (!isset($this->stackLog[$key][$metric . '_' . $column])) {
                         continue;
                     }
-                    $this->stackLog[$key][$metric . '_rel_' . $column] = $this->stackLog[$key][$metric . '_' . $column] / $this->stackLog['timetracker_0'][$metric . '_total'];
+                    /* DHH CORE HACK */
+                    $this->stackLog[$key][$metric . '_rel_' . $column] = 0;
+                    if($this->stackLog['timetracker_0'][$metric . '_total'] > 0)
+                        $this->stackLog[$key][$metric . '_rel_' . $column] = $this->stackLog[$key][$metric . '_' . $column] / $this->stackLog['timetracker_0'][$metric . '_total'];
                 }
-                $this->stackLog[$key][$metric . '_rel_offset'] = $this->stackLog[$key][$metric . '_start_relative'] / $this->stackLog['timetracker_0'][$metric . '_total'];
+                /* DHH CORE HACK */
+                $this->stackLog[$key][$metric . '_rel_offset'] = 0;
+                if($this->stackLog['timetracker_0'][$metric . '_total'] > 0)
+                    $this->stackLog[$key][$metric . '_rel_offset'] = $this->stackLog[$key][$metric . '_start_relative'] / $this->stackLog['timetracker_0'][$metric . '_total'];
             }
         }
     }
