@@ -62,7 +62,7 @@
           <active>false</active>
         </Mage_Captcha>
         <Mage_Wishlist>
-          <active>false</active>
+          <active>true</active>
         </Mage_Wishlist>
     </modules>
 </config>
