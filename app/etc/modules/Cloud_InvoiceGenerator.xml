@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Cloud_InvoiceGenerator>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Cloud_InvoiceGenerator>
+    </modules>
+</config> 

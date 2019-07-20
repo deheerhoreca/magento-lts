@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resource_groups>
+            <cliinvoice translate="title" module="api2">
+                <title>REST API Calls to read invoices</title>
+                <sort_order>10</sort_order>
+            </cliinvoice>
+        </resource_groups>
+        <resources>
+            <cloudinvoiceinvoice translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoiceinvoice/api2_salesinvoice</model>
+                <working_model>cloudinvoiceinvoice/api2_salesinvoice</working_model>
+                <title>Salesinvoices</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes  translate="entity_id" module="api2">
+                    <entity_id>ID</entity_id>
+                    <invoiceobj>Invoiceobj</invoiceobj>
+                    <billingaddress>Invoice Address information</billingaddress>
+                    <shippingaddress>Address information</shippingaddress>
+                    <address>Address information</address>
+                    <order_number>Ordernumber</order_number>
+                    <invoice_lines>Invoice lines</invoice_lines>
+                </attributes>
+                <routes>
+                    <route_entity>
+                        <route>/cli_salesinvoice/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/cli_salesinvoice/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoiceinvoice>
+            <cloudinvoicecreditmemo translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoicecreditmemo/api2_creditmemo</model>
+                <working_model>cloudinvoicecreditmemo/api2_creditmemo</working_model>
+                <title>CreditMemo</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes  translate="entity_id" module="api2">
+                    <entity_id>ID</entity_id>
+                    <creditmemoobj>Creditmemo</creditmemoobj>
+                    <address>Adres informatie</address>
+                    <creditmemo_lines>Regels creditmemo</creditmemo_lines>
+                </attributes>
+                <routes>
+                    <route_entity>
+                        <route>/cli_creditmemo/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/cli_creditmemo/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoicecreditmemo>
+            <cloudinvoiceorder translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoiceorder/api2_salesorder</model>
+                <working_model>cloudinvoiceorder/api2_salesorder</working_model>
+                <title>Salesorders</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes  translate="entity_id" module="api2">
+                    <entity_id>ID</entity_id>
+                    <orderobj>Bestelgegevens</orderobj>
+                    $paymentreceipt = array();
+                    <billingaddress>Invoice Address information</billingaddress>
+                    <shippingaddress>Address information</shippingaddress>
+                    <address>Adresinformatie</address>
+                    <order_items>Bestelregels</order_items>
+                </attributes>
+                <routes>
+                    <route_entity>
+                        <route>/cli_salesorder/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/cli_salesorder/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoiceorder>
+            <cloudinvoicepurchaseorder translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoicepurchaseorder/api2_purchaseorder</model>
+                <working_model>cloudinvoicepurchaseorder/api2_purchaseorder</working_model>
+                <title>Purchaseorders</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes  translate="entity_id" module="api2">
+                    <entity_id>ID</entity_id>
+                    <order_date>date</order_date>
+                    <order_number>Number</order_number>
+                    <payment_method>Payment Method</payment_method>
+                    <porderobj>Bestelgegevens</porderobj>
+                    <address>Adresinformatie</address>
+                    <entrylines>Bestelregels</entrylines>
+                </attributes>
+                <routes>
+                    <route_entity>
+                        <route>/cli_purchaseorder/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/cli_purchaseorder/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoicepurchaseorder>
+            <cloudinvoicestatuses translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoicestatuses/api2_orderstatus</model>
+                <working_model>cloudinvoicestatuses/api2_orderstatus</working_model>
+                <title>Bestelstatussen</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <label>Naam</label>
+                    <status>Status</status>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/cli_orderstatus/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoicestatuses>            
+            <cloudinvoiceshoptaxes translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoiceshoptaxes/api2_shoptax</model>
+                <working_model>cloudinvoiceshoptaxes/api2_shoptax</working_model>
+                <title>ShopTaxes</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <shoptaxobj>taxclasses</shoptaxobj>
+                    <id>taxid</id>
+                    <name>taxname</name>
+                    <country>taxcountry</country>
+                    <percentage>taxpercentage</percentage>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/cli_shoptaxes/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoiceshoptaxes>
+            <cloudinvoiceshoppaymentmethods translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoiceshoppaymentmethods/api2_shoppaymentmethod</model>
+                <working_model>cloudinvoiceshoppaymentmethods/api2_shoppaymentmethod</working_model>
+                <title>ShopPaymentmethods</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <id>id betaalmethode</id>
+                    <name>naam betaalmethode</name>
+                    <shoppaymentmethodobj>magpms</shoppaymentmethodobj>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/cli_shoppaymentmethods/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoiceshoppaymentmethods>
+            <cloudinvoiceshopcategories translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoiceshopcategories/api2_shopcategories</model>
+                <working_model>cloudinvoiceshopcategories/api2_shopcategories</working_model>
+                <title>ShopCategories</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <id>id categorie</id>
+                    <name>categorienaam</name>
+                    <parent_id>categorienaam</parent_id>
+                    <shopcategoryobj>magcats</shopcategoryobj>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/cli_shopcategories/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoiceshopcategories>
+            <cloudinvoiceshopproducts translate="title" module="api2">
+                <group>cliinvoice</group>
+                <model>cloudinvoiceshopproducts/api2_shopproducts</model>
+                <working_model>cloudinvoiceshopproducts/api2_shopproducts</working_model>
+                <title>ShopProducts</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <id>id product</id>
+                    <name>productnaam</name>
+                    <shopproductobj>magprods</shopproductobj>
+                </attributes>
+                <routes>
+                    <route_collection>
+                        <route>/cli_shopproducts/</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </cloudinvoiceshopproducts>
+        </resources>
+    </api2>
+</config>
