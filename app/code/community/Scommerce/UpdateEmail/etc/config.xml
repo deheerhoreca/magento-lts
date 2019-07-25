@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Scommerce_UpdateEmail>
+			<version>0.0.5</version>
+		</Scommerce_UpdateEmail>
+	</modules>
+	<global>
+		<blocks>
+            <scommerce_updateemail>
+                <class>Scommerce_UpdateEmail_Block</class>
+            </scommerce_updateemail>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_view_info>Scommerce_UpdateEmail_Block_Sales_Order_View_Info</sales_order_view_info>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+		<helpers>
+			<scommerce_updateemail>
+				<class>Scommerce_UpdateEmail_Helper</class>
+			</scommerce_updateemail>
+		</helpers>
+	</global>
+	<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <updateemail before="Mage_Adminhtml">Scommerce_UpdateEmail_Adminhtml</updateemail>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+	<adminhtml>
+        <layout>
+            <updates>
+                <updateemail>
+                    <file>updateemail.xml</file>
+                </updateemail>
+            </updates>
+        </layout>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<scommerce_updateemail translate="title">
+											<title>Scommerce Update Email Address</title>
+										</scommerce_updateemail>
+									</children>
+								</config>	
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>		
+	</adminhtml>
+</config>

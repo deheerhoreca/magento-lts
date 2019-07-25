@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Scommerce_UpdateEmail>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Scommerce_UpdateEmail>
+    </modules>
+</config>

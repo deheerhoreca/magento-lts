@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_sales_order_view>
+        <reference name="order_info">
+            <action method="setTemplate"><template>updateemail/sales/order/view/info.phtml</template></action>
+        </reference>
+		<reference name="head">
+            <action method="addJs"><file>scommerce/jquery.1.7.1.min.js</file></action>
+            <action method="addJs"><file>scommerce/sales.js</file></action>
+        </reference>
+    </adminhtml_sales_order_view>	
+</layout>
