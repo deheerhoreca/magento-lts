@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <firecheckout_index_index>
+        <reference name="head">
+            <block type="core/text" name="pickpoint">
+                <action method="setText">
+                    <text><![CDATA[<script type="text/javascript" src="https://pickpoint.ru/select/postamat.js"></script>]]></text>
+                </action>
+            </block>
+            <action method="addItem"><type>skin_js</type><name>js/pickpoint/pickpoint.js</name><params/></action>
+        </reference>
+        <reference name="checkout.onepage.shipping_method.available">
+            <action method="setTemplate"><template>pickpoint/checkout/shipping_method/available.phtml</template></action>
+        </reference>
+    </firecheckout_index_index>
+    <firecheckout_index_updatecheckout>
+        <reference name="checkout.shipping.method">
+            <action method="setTemplate"><template>pickpoint/checkout/shipping_method/available.phtml</template></action>
+        </reference>
+    </firecheckout_index_updatecheckout>
+</layout>

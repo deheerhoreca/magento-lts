@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <TM_Geoip>
+            <version>1.0.0</version>
+        </TM_Geoip>
+    </modules>
+    <global>
+        <models>
+            <tm_geoip>
+                <class>TM_Geoip_Model</class>
+            </tm_geoip>
+        </models>
+        <helpers>
+            <tm_geoip>
+                <class>TM_Geoip_Helper</class>
+            </tm_geoip>
+        </helpers>
+    </global>
+    <default>
+        <tm_geoip>
+            <general>
+                <enabled>0</enabled>
+            </general>
+            <maxmind>
+                <city>GeoLite2-City.mmdb</city>
+            </maxmind>
+        </tm_geoip>
+    </default>
+</config>

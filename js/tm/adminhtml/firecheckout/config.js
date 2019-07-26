@@ -1,3 +1,71 @@
+document.observe("dom:loaded", function() {
+    var firecheckoutAjaxRules = $$('#firecheckout_ajax select');
+    if (firecheckoutAjaxRules.length) {
+        firecheckoutAjaxRules.each(function(el) {
+            new Chosen(el, {
+                placeholder_text: ' ',
+                no_results_text: 'Press Enter to add',
+                width: '270px'
+            });
+        });
+    }
+
+    var layoutEl = $('firecheckout_general_layout');
+    if (layoutEl) {
+        new SelectTooltip(layoutEl);
+    }
+
+    toggleValueElements = toggleValueElements.wrap(
+        function (callOriginal, checkbox, container, excludedElements, checked){
+            var result = callOriginal(checkbox, container, excludedElements, checked);
+            Event.fire($(container).down('select'), 'chosen:updated');
+            return result;
+        }
+    );
+});
+
+/* Layout tooltip */
+var SelectTooltip = Class.create({
+    initialize: function(element, mapping) {
+        element.observe('mousemove', function(e) {
+            var el = e.element();
+            if (el.tagName !== 'OPTION') {
+                return;
+            }
+            var popup = $('firecheckout-layout-image');
+            if (!popup) {
+                popup = new Element('div');
+                popup.id = 'firecheckout-layout-image';
+                document.body.insert({
+                    bottom: popup
+                });
+            }
+            var className = 'firecheckout-' + el.value;
+
+            if (!popup.hasClassName(className)) {
+                popup.className = '';
+                if (mapping && mapping[el.value]) {
+                    className += ' ' + el.value;
+                }
+                popup.addClassName('firecheckout-layout').addClassName(className);
+            }
+
+            var offset = element.cumulativeOffset();
+            popup.setStyle({
+                left: offset.left + element.getWidth() + 5 + 'px',
+                top: offset.top + 'px'
+            });
+        });
+
+        element.observe('mouseout', function(e) {
+            var popup = $('firecheckout-layout-image');
+            if (popup) {
+                popup.remove();
+            }
+        });
+    }
+});
+
 var AddressSortObserver = Class.create({
     initialize: function(element, observer) {
         this.element  = $(element);
@@ -6,7 +74,7 @@ var AddressSortObserver = Class.create({
 
     onEnd: function() {
         Sortable.unmark();
-        this.observer(this.element)
+        this.observer(this.element);
     }
 });
 
@@ -44,7 +112,10 @@ AddressSort.prototype = {
         }));
 
         // touchscreen fix
-        if ('ontouchstart' in document.documentElement) {
+        var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        if ('ontouchstart' in document.documentElement
+            && (!isFirefox || matchMedia('(-moz-touch-enabled)').matches)) {
+
             this.switchModeTo('classic');
         } else {
             this.switchModeTo('dragdrop');
@@ -60,7 +131,7 @@ AddressSort.prototype = {
         }
 
         $$('.firecheckout-sort-order-mode a').each(function(el) {
-            var id      = el.id + '_checkbox'
+            var id      = el.id + '_checkbox',
                 checked = checkbox.readAttribute('checked') || checkbox.checked;
 
             el.insert({
@@ -213,7 +284,7 @@ AddressSort.prototype = {
             self   = this;
 
         this.elements.each(function(el) {
-            var id       = el.readAttribute('id')
+            var id       = el.readAttribute('id'),
                 parentId = self.getInputFieldId(id),
                 key      = parentId.replace(self.config.prefix, '');
 
@@ -269,7 +340,7 @@ AddressSort.prototype = {
 
 // script.aculo.us dragdrop.js v1.8.2 fixes
 Draggables.register = function(draggable) {
-    if(this.drags.length == 0) {
+    if(this.drags.length === 0) {
         this.eventMouseUp   = this.endDrag.bindAsEventListener(this);
         this.eventMouseMove = this.updateDrag.bindAsEventListener(this);
         this.eventKeypress  = this.keyPress.bindAsEventListener(this);
@@ -282,8 +353,8 @@ Draggables.register = function(draggable) {
 };
 
 Draggables.unregister = function(draggable) {
-    this.drags = this.drags.reject(function(d) { return d==draggable });
-    if(this.drags.length == 0) {
+    this.drags = this.drags.reject(function(d) { return d==draggable; });
+    if (this.drags.length === 0) {
         Event.stopObserving(document, "mouseup", this.eventMouseUp);
         Event.stopObserving(document, "mousemove", this.eventMouseMove);
         Event.stopObserving(document, "keypress", this.eventKeypress);

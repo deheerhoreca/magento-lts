@@ -1,9 +1,5 @@
 <?php
 
-include_once("MaxMind/GeoIP/geoip.php");
-include_once("MaxMind/GeoIP/geoipcity.php");
-include_once("MaxMind/GeoIP/geoipregionvars.php");
-
 class TM_FireCheckout_Model_Type_Standard
 {
     /**
@@ -131,35 +127,25 @@ class TM_FireCheckout_Model_Type_Standard
         if (($customer = Mage::getSingleton('customer/session')->getCustomer())
             && ($addresses = $customer->getAddresses())) {
 
-            if ($this->getQuote()->getShippingAddress()->getCountryId()) {
-                $shippingAddress = $this->getQuote()->getShippingAddress();
-                if (!$shippingAddress->getSameAsBilling()) {
-                    $billingAddress  = $this->getQuote()->getBillingAddress();
-                } else {
-                    $billingAddress = $shippingAddress;
+            if (!$shippingAddress = $customer->getPrimaryShippingAddress()) {
+                foreach ($addresses as $address) {
+                    $shippingAddress = $address;
+                    break;
                 }
-                $result['shipping'] = $shippingAddress->getData();
-                $result['billing']  = $billingAddress->getData();
-                $result['billing']['use_for_shipping'] = $shippingAddress->getSameAsBilling();
-            } else {
-                if (!$shippingAddress = $customer->getPrimaryShippingAddress()) {
-                    foreach ($addresses as $address) {
-                        $shippingAddress = $address;
-                        break;
-                    }
-                }
-                if (!$billingAddress = $customer->getPrimaryBillingAddress()) {
-                    foreach ($addresses as $address) {
-                        $billingAddress = $address;
-                        break;
-                    }
-                }
-                $result['shipping']['country_id']          = $shippingAddress->getCountryId();
-                $result['shipping']['customer_address_id'] = $shippingAddress->getId();
-                $result['billing']['country_id']           = $billingAddress->getCountryId();
-                $result['billing']['customer_address_id']  = $billingAddress->getId();
-                $result['billing']['use_for_shipping']     = $shippingAddress->getId() === $billingAddress->getId();
             }
+            if (!$billingAddress = $customer->getPrimaryBillingAddress()) {
+                foreach ($addresses as $address) {
+                    $billingAddress = $address;
+                    break;
+                }
+            }
+            $result['shipping'] = $shippingAddress->getData();
+            $result['shipping']['country_id']          = $shippingAddress->getCountryId();
+            $result['shipping']['customer_address_id'] = $shippingAddress->getId();
+            $result['billing'] = $billingAddress->getData();
+            $result['billing']['country_id']           = $billingAddress->getCountryId();
+            $result['billing']['customer_address_id']  = $billingAddress->getId();
+            $result['billing']['use_for_shipping']     = $shippingAddress->getId() === $billingAddress->getId();
         } else if ($this->getQuote()->getShippingAddress()->getCountryId()) {
             // Estimated shipping cost from shopping cart
             $address = $this->getQuote()->getShippingAddress();
@@ -173,97 +159,17 @@ class TM_FireCheckout_Model_Type_Standard
                 $result['billing']['use_for_shipping'] = true;
             }
         } else {
-            $detectCountry  = Mage::getStoreConfig('firecheckout/geo_ip/country');
-            $detectRegion   = Mage::getStoreConfig('firecheckout/geo_ip/region');
-            $detectCity     = Mage::getStoreConfig('firecheckout/geo_ip/city');
-            $geoipIncluded  = true;
-
-            if ($detectCountry || $detectRegion || $detectCity) {
-                if (!function_exists('geoip_open')) {
-                    $geoipIncluded = false;
-                    $this->_checkoutSession->addError(
-                        Mage::helper('firecheckout')->__("GeoIP is enabled but not included. geoip_open function doesn't found")
-                    );
-                }
-            }
-
             $remoteAddr = Mage::helper('core/http')->getRemoteAddr();
-
-            if ($detectCountry && $geoipIncluded) {
-                $filename = Mage::getBaseDir('lib')
-                    . DS
-                    . "MaxMind/GeoIP/data/"
-                    . Mage::getStoreConfig('firecheckout/geo_ip/country_file');
-
-                if (is_readable($filename)) {
-                    $gi = geoip_open($filename, GEOIP_STANDARD);
-                    $result['shipping']['country_id'] =
-                        $result['billing']['country_id'] = geoip_country_code_by_addr(
-                            $gi, $remoteAddr
-                        );
-
-                    geoip_close($gi);
-                } else {
-                    $this->_checkoutSession->addError(
-                        Mage::helper('firecheckout')->__(
-                            "Country detection is enabled but %s not found",
-                            Mage::getStoreConfig('firecheckout/geo_ip/country_file')
-                        )
-                    );
+            try {
+                $data = Mage::helper('firecheckout/geoip')->detect($remoteAddr);
+                foreach ($data as $key => $value) {
+                    $result['shipping'][$key] =
+                        $result['billing'][$key] = $value;
                 }
+            } catch (Exception $e) {
+                $this->_checkoutSession->addError($e->getMessage());
             }
 
-            if ($detectRegion && $geoipIncluded) {
-                $filename = Mage::getBaseDir('lib')
-                    . DS
-                    . "MaxMind/GeoIP/data/"
-                    . Mage::getStoreConfig('firecheckout/geo_ip/region_file');
-
-                if (is_readable($filename)) {
-                    $gi = geoip_open($filename, GEOIP_STANDARD);
-                    list($countryCode, $regionCode) = geoip_region_by_addr($gi, $remoteAddr);
-                    $region = Mage::getModel('directory/region')->loadByCode($regionCode, $countryCode);
-                    $result['shipping']['country_id'] =
-                        $result['billing']['country_id'] = $countryCode;
-                    $result['shipping']['region_id'] =
-                        $result['billing']['region_id'] = $region->getId();
-
-                    geoip_close($gi);
-                } else {
-                    $this->_checkoutSession->addError(
-                        Mage::helper('firecheckout')->__(
-                            "Region detection is enabled but %s not found",
-                            Mage::getStoreConfig('firecheckout/geo_ip/region_file')
-                        )
-                    );
-                }
-            }
-
-            if ($detectCity && $geoipIncluded) {
-                $filename = Mage::getBaseDir('lib')
-                    . DS
-                    . "MaxMind/GeoIP/data/"
-                    . Mage::getStoreConfig('firecheckout/geo_ip/city_file');
-
-                if (is_readable($filename)) {
-                    $gi = geoip_open($filename, GEOIP_STANDARD);
-                    $record = geoip_record_by_addr($gi, $remoteAddr);
-                    if ($record) {
-                        $result['shipping']['city'] =
-                            $result['billing']['city'] = $record->city;
-                        $result['shipping']['postcode'] =
-                            $result['billing']['postcode'] = $record->postal_code;
-                    }
-                    geoip_close($gi);
-                } else {
-                    $this->_checkoutSession->addError(
-                        Mage::helper('firecheckout')->__(
-                            "City detection is enabled but %s not found",
-                            Mage::getStoreConfig('firecheckout/geo_ip/city_file')
-                        )
-                    );
-                }
-            }
             if (empty($result['shipping']['country_id'])
                 || !Mage::getResourceModel('directory/country_collection')
                     ->addCountryCodeFilter($result['shipping']['country_id'])
@@ -271,11 +177,31 @@ class TM_FireCheckout_Model_Type_Standard
                     ->count()) {
 
                 $result['shipping']['country_id'] =
-                    $result['billing']['country_id'] = Mage::getStoreConfig('firecheckout/general/country');
+                    $result['billing']['country_id'] = Mage::helper('core')->getDefaultCountry();
             }
         }
 
+        // discount (free shipping rule) matters
+        $result['billing']['register_account'] = $this->_canUseRegistrationMode();
+
         return $result;
+    }
+
+    /**
+     * Check if registration checkbox is checked
+     *
+     * @return boolean
+     */
+    protected function _canUseRegistrationMode()
+    {
+        if (null !== Mage::app()->getRequest()->getParam('register')) {
+            return true;
+        }
+
+        return in_array(
+            Mage::getStoreConfig('firecheckout/general/registration_mode'),
+            array('optional-checked', 'hidden', 'required')
+        );
     }
 
     /**
@@ -295,6 +221,38 @@ class TM_FireCheckout_Model_Type_Standard
         if((!empty($minTotal) && ($total < $minTotal)) || (!empty($maxTotal) && ($total > $maxTotal))) {
             return false;
         }
+
+        if (Mage::helper('core')->isModuleOutputEnabled('Amasty_Methods')) {
+            if (!Mage::helper('ammethods')->canUseMethod($method, 'payment')) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function _canUseShippingMethod($method)
+    {
+        if (Mage::helper('core')->isModuleOutputEnabled('Amasty_Methods')) {
+            $ammethods = Mage::helper('ammethods');
+            if ($ammethods->isRestrictShippingMethod()
+                && !$ammethods->canUseMethod($method, 'shipping')) {
+
+                return false;
+            }
+        }
+
+        // copied from Ophirah_Qquoteadv_Block_Checkout_Onepage_Shipping_Method_Available
+        if (Mage::helper('core')->isModuleOutputEnabled('Ophirah_Qquoteadv')) {
+            if (Mage::helper('qquoteadv')->isActiveConfirmMode(true) &&
+                Mage::app()->getHelper('qquoteadv')->isSetQuoteShipPrice()) {
+
+                return 'qquoteshiprate' === $method;
+            } else {
+                return 'qquoteshiprate' !== $method;
+            }
+        }
+
         return true;
     }
 
@@ -327,17 +285,21 @@ class TM_FireCheckout_Model_Type_Standard
 
         // weight vs destination fix
         $weight = 0;
-        foreach($quote->getAllItems() as $item) {
+        foreach($quote->getAllVisibleItems() as $item) {
             $weight += ($item->getWeight() * $item->getQty()) ;
         }
         $shippingAddress->setFreeMethodWeight($weight)->setWeight($weight);
 
-        $shippingAddress->collectTotals()->collectShippingRates()->save();
-        $this->applyShippingMethod();
+        $this->applyPaymentMethod();
+        if (!$quote->isVirtual()) {
+            $shippingAddress->collectTotals()->collectShippingRates()->save(); // premiumrate fix
+            $this->applyShippingMethod();
+        }
         // shipping method may affect the total in both sides (discount on using shipping address)
         $quote->collectTotals();
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
+        if ($ajaxHelper->getIsShippingMethodDependsOn('total') && !$quote->isVirtual()) {
             // changing total by shipping price may affect the shipping prices theoretically
             // (free shipping may be canceled or added)
             $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
@@ -349,15 +311,18 @@ class TM_FireCheckout_Model_Type_Standard
             $quote->setTotalsCollectedFlag(false)->collectTotals();
         }
 
-        $this->applyPaymentMethod();
-        if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method @todo && method is changed
+        if ($ajaxHelper->getIsTotalDependsOn('payment-method')) { // @todo && method is changed
             // recollect totals again because adding/removing payment
             // method may add/remove some discounts in the order
 
             // to recollect discount rules need to clear previous discount
             // descriptions and mark address as modified
             // see _canProcessRule in Mage_SalesRule_Model_Validator
-            $shippingAddress->setDiscountDescriptionArray(array())->isObjectNew(true);
+
+            // this line makes subtotal calculated without tax, causing missing discount
+            // without this line discount per payment method is not applied if
+            // 'discountable' method is default one. FIXED by moving applyPayment method before applyShipping
+            // $shippingAddress->setDiscountDescriptionArray(array())->isObjectNew(true);
 
             $quote->setTotalsCollectedFlag(false)->collectTotals();
         }
@@ -428,6 +393,7 @@ class TM_FireCheckout_Model_Type_Standard
         } elseif ($methodCode) {
             $payment = $this->getQuote()->getPayment();
             $payment->setMethod($methodCode);
+            $payment->setMethodInstance(null); // fix for billmate payments
             $method = $payment->getMethodInstance();
             try {
                 $data = new Varien_Object(array('method' => $methodCode));
@@ -475,7 +441,14 @@ class TM_FireCheckout_Model_Type_Standard
                 $this->getQuote()->getShippingAddress()->setShippingMethod($rate['code']);
                 return $this;
             }
-            if (empty($rate['method']) || 'customshippingrate' == $rate['method']) {
+            if ((empty($rate['method']) && $rate['code'] !== 'productmatrix_')
+                || 'customshippingrate' == $rate['method']) {
+
+                unset($rates['items'][$k]);
+                continue;
+            }
+
+            if (!$this->_canUseShippingMethod($rate['method'])) {
                 unset($rates['items'][$k]);
             }
         }
@@ -483,7 +456,8 @@ class TM_FireCheckout_Model_Type_Standard
 
         if ((!$count = count($rates['items']))) {
             $this->getQuote()->getShippingAddress()->setShippingMethod(false);
-        } elseif (1 === $count) {
+        } elseif (1 === $count && (!Mage::helper('firecheckout')->isOnecolumnMode() || $methodCode)) {
+            // do not apply method for onecolumn mode, because shipping methods are hidden on initial page load
             $rate = current($rates['items']);
             $this->getQuote()->getShippingAddress()->setShippingMethod($rate['code']);
         } else {
@@ -501,12 +475,20 @@ class TM_FireCheckout_Model_Type_Standard
                 }
             }
             if (!$found || !$methodCode) {
-                $methodCode = Mage::getStoreConfig('firecheckout/general/shipping_method');
-                foreach ($rates['items'] as $rate) {
-                    if ($methodCode === $rate['code']) {
-                        $this->getQuote()->getShippingAddress()->setShippingMethod($methodCode);
-                        $found = true;
-                        break;
+                $methodCodes = array(
+                    Mage::getStoreConfig('firecheckout/general/shipping_method_code'),
+                    Mage::getStoreConfig('firecheckout/general/shipping_method')
+                );
+                foreach ($methodCodes as $methodCode) {
+                    if (!$methodCode) {
+                        continue;
+                    }
+                    foreach ($rates['items'] as $rate) {
+                        if ($methodCode === $rate['code']) {
+                            $this->getQuote()->getShippingAddress()->setShippingMethod($methodCode);
+                            $found = true;
+                            break 2;
+                        }
                     }
                 }
             }
@@ -531,12 +513,40 @@ class TM_FireCheckout_Model_Type_Standard
         $checkout = $this->getCheckout();
         $customerSession = $this->getCustomerSession();
 
+        $quoteSave = false;
+        $collectTotals = false;
+
         /**
          * Reset multishipping flag before any manipulations with quote address
          * addAddress method for quote object related on this flag
          */
         if ($this->getQuote()->getIsMultiShipping()) {
             $this->getQuote()->setIsMultiShipping(false);
+            $quoteSave = true;
+        }
+
+        // /**
+        //  *  Reset customer balance
+        //  */
+        // if ($this->getQuote()->getUseCustomerBalance()) {
+        //     $this->getQuote()->setUseCustomerBalance(false);
+        //     $quoteSave = true;
+        //     $collectTotals = true;
+        // }
+        // /**
+        //  *  Reset reward points
+        //  */
+        // if ($this->getQuote()->getUseRewardPoints()) {
+        //     $this->getQuote()->setUseRewardPoints(false);
+        //     $quoteSave = true;
+        //     $collectTotals = true;
+        // }
+
+        if ($collectTotals) {
+            $this->getQuote()->collectTotals();
+        }
+
+        if ($quoteSave) {
             $this->getQuote()->save();
         }
 
@@ -607,30 +617,26 @@ class TM_FireCheckout_Model_Type_Standard
     }
 
     /**
-     * Save billing address information to quote
-     * This method is called by One Page Checkout JS (AJAX) while saving the billing information.
+     * Save billing and shipping information to quote
      *
-     * @param   array $data
-     * @param   int $customerAddressId
-     * @return  Mage_Checkout_Model_Type_Onepage
+     * @param  array  $data
+     * @param  int  $customerAddressId
+     * @param  boolean $validate
+     * @param  string  $addressType
+     * @return array
      */
-    public function saveBilling($data, $customerAddressId, $validate = true)
+    protected function _saveAddress($data, $customerAddressId, $validate = true, $addressType = 'billing')
     {
         if (empty($data)) {
             return array('error' => -1, 'message' => $this->_helper->__('Invalid data.'));
         }
 
-        /* old code */
-        if (isset($data['register_account']) && $data['register_account']) {
-            $this->getQuote()->setCheckoutMethod(self::METHOD_REGISTER);
-        } else if ($this->getCustomerSession()->isLoggedIn()) {
-            $this->getQuote()->setCheckoutMethod(self::METHOD_CUSTOMER);
+        if ($addressType === 'billing') {
+            $address = $this->getQuote()->getBillingAddress();
         } else {
-            $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
+            $address = $this->getQuote()->getShippingAddress();
         }
-        /* eof old code */
 
-        $address = $this->getQuote()->getBillingAddress();
         /* @var $addressForm Mage_Customer_Model_Form */
         $addressForm = Mage::getModel('customer/form');
         $addressForm->setFormCode('customer_address_edit')
@@ -646,14 +652,32 @@ class TM_FireCheckout_Model_Type_Standard
                     );
                 }
                 $address->importCustomerAddress($customerAddress)->setSaveInAddressBook(0);
-                // invalid validation of saved street address
-                if (version_compare(Mage::helper('firecheckout')->getMagentoVersion(), '1.5.1.0') >= 0) {
-                    $addressForm->setEntity($address);
-                    if ($validate) {
-                        $addressErrors = $addressForm->validateData($address->getData());
-                        if ($addressErrors !== true) {
-                            return array('error' => 1, 'message' => $addressErrors);
+                $addressForm->setEntity($address);
+                if ($validate) {
+                    $addressErrors = $addressForm->validateData($address->getData());
+                    if ($addressErrors !== true) {
+
+                        // Prepare form data to let customer to edit it at checkout page.
+                        // Useful, when some attribute becomes required and it's
+                        // missing in the form saved earlier
+                        $addressData = $address->getData();
+                        $formData = array();
+                        foreach ($addressForm->getAttributes() as $attribute) {
+                            $code = $attribute->getAttributeCode();
+                            if (array_key_exists($code, $addressData)) {
+                                $formData[$code] = $addressData[$code];
+                            }
                         }
+
+                        return array(
+                            'error'     => 1,
+                            'message'   => $addressErrors,
+                            'address_update' => array(
+                                'type' => $addressType,
+                                'form_data' => $formData,
+                                'invalid_fields' => $this->getInvalidAddressFields($address),
+                            ),
+                        );
                     }
                 }
             }
@@ -663,7 +687,7 @@ class TM_FireCheckout_Model_Type_Standard
             // emulate request object
             $addressData = $addressForm->extractData($addressForm->prepareRequest($data));
             if ($validate) {
-                $addressErrors  = $addressForm->validateData($addressData);
+                $addressErrors = $addressForm->validateData($addressData);
                 if ($addressErrors !== true) {
                     return array('error' => 1, 'message' => $addressErrors);
                 }
@@ -680,29 +704,64 @@ class TM_FireCheckout_Model_Type_Standard
             $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
         }
 
+        return array();
+    }
+
+    /**
+     * Save billing address information to quote
+     * This method is called by One Page Checkout JS (AJAX) while saving the billing information.
+     *
+     * @param   array $data
+     * @param   int $customerAddressId
+     * @return  array
+     */
+    public function saveBilling($data, $customerAddressId, $validate = true)
+    {
+        /* old code */
+        if (!empty($data)) {
+            if (isset($data['register_account']) && $data['register_account']) {
+                $this->getQuote()->setCheckoutMethod(self::METHOD_REGISTER);
+            } else if ($this->getCustomerSession()->isLoggedIn()) {
+                $this->getQuote()->setCheckoutMethod(self::METHOD_CUSTOMER);
+            } else {
+                $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
+            }
+        }
+        /* eof old code */
+
+        $errors = $this->_saveAddress($data, $customerAddressId, $validate, 'billing');
+        if ($errors) {
+            return $errors;
+        }
+
+        $address = $this->getQuote()->getBillingAddress();
+
         // set email for newly created user
         if (!$address->getEmail() && $this->getQuote()->getCustomerEmail()) {
             $address->setEmail($this->getQuote()->getCustomerEmail());
         }
 
         // validate billing address
-        if (true !== ($result = $this->_validateCustomerData($data))) {
-            if ($validate) {
-                return $result;
-            }
+        if ($validate && ($validateRes = $address->validate()) !== true) {
+            return array('error' => 1, 'message' => $validateRes);
         }
 
         $address->implodeStreetAddress();
 
-        if ($validate && (true !== ($result = $this->_validateCustomerData($data)))) {
-            return $result;
+        if (true !== ($result = $this->_validateCustomerData($data, $validate))) {
+            if ($validate) {
+                return $result;
+            }
         }
 
         if (isset($data['taxvat'])) { // fix for euvat extension
             $this->getQuote()->setCustomerTaxvat($data['taxvat']);
         }
 
-        if (!$this->getQuote()->getCustomerId() && self::METHOD_REGISTER == $this->getQuote()->getCheckoutMethod()) {
+        if ($validate
+            && !$this->getQuote()->getCustomerId()
+            && self::METHOD_REGISTER == $this->getQuote()->getCheckoutMethod()) {
+
             if ($this->_customerEmailExists($address->getEmail(), Mage::app()->getWebsite()->getId())) {
                 return array('error' => 1, 'message' => $this->_customerEmailExistsMessage);
             }
@@ -725,11 +784,16 @@ class TM_FireCheckout_Model_Type_Standard
                     $shipping = $this->getQuote()->getShippingAddress();
                     $shippingMethod = $shipping->getShippingMethod();
 
+                    // Billing address properties that must be always copied to shipping address
+                    $requiredBillingAttributes = array('customer_address_id');
+
                     // don't reset original shipping data, if it was not changed by customer
                     foreach ($shipping->getData() as $shippingKey => $shippingValue) {
                         if (!is_null($shippingValue)
                             && !is_null($billing->getData($shippingKey))
-                            && !isset($data[$shippingKey])) {
+                            && !isset($data[$shippingKey])
+                            && !in_array($shippingKey, $requiredBillingAttributes)
+                        ) {
                             $billing->unsetData($shippingKey);
                         }
                     }
@@ -760,7 +824,7 @@ class TM_FireCheckout_Model_Type_Standard
      * @param array $data
      * @return true|array
      */
-    protected function _validateCustomerData(array $data)
+    protected function _validateCustomerData(array $data, $validate = true)
     {
         /* @var $customerForm Mage_Customer_Model_Form */
         $customerForm    = Mage::getModel('customer/form');
@@ -781,7 +845,7 @@ class TM_FireCheckout_Model_Type_Standard
         }
 
         $customerErrors = $customerForm->validateData($customerData);
-        if ($customerErrors !== true) {
+        if ($validate && $customerErrors !== true) {
             return array(
                 'error'     => -1,
                 'message'   => implode(', ', $customerErrors)
@@ -797,26 +861,30 @@ class TM_FireCheckout_Model_Type_Standard
         if ($quote->getCheckoutMethod() == self::METHOD_REGISTER) {
             // set customer password
             $password = $customerRequest->getParam('customer_password');
-            if (empty($password)) {
+            $registrationMode = Mage::getStoreConfig('firecheckout/general/registration_mode');
+            if ('hidden' === $registrationMode || empty($password)) {
                 $password = $customer->generatePassword();
                 $customer->setPassword($password);
                 $customer->setConfirmation($password);
+                $customer->setPasswordConfirmation($password);
             } else {
                 $customer->setPassword($customerRequest->getParam('customer_password'));
                 $customer->setConfirmation($customerRequest->getParam('confirm_password'));
+                $customer->setPasswordConfirmation($customerRequest->getParam('confirm_password'));
             }
         } else {
-            // emulate customer password for quest
+            // emulate customer password for guest
             $password = $customer->generatePassword();
             $customer->setPassword($password);
             $customer->setConfirmation($password);
+            $customer->setPasswordConfirmation($password);
             // set NOT LOGGED IN group id explicitly,
             // otherwise copyFieldset('customer_account', 'to_quote') will fill it with default group id value
             $customer->setGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
         $result = $customer->validate();
-        if (true !== $result && is_array($result)) {
+        if ($validate && true !== $result && is_array($result)) {
             return array(
                 'error'   => -1,
                 'message' => implode(', ', $result)
@@ -851,15 +919,24 @@ class TM_FireCheckout_Model_Type_Standard
     protected function _processValidateCustomer(Mage_Sales_Model_Quote_Address $address)
     {
         // set customer tax/vat number for further usage
-        // $taxvat = $address->getTaxvat();
-        $taxvat = $this->getQuote()->getCustomerTaxvat();
-        if (strlen($taxvat) && Mage::getStoreConfig('firecheckout/taxvat/validate')) {
-            $taxvatValidator = Mage::getModel('firecheckout/taxvat_validator');
-            if (!$taxvatValidator->isValid($taxvat, $address->getCountryId())) {
-                return array(
-                    'error'   => -1,
-                    'message' => $taxvatValidator->getMessage()
-                );
+        $fields = Mage::getStoreConfig('firecheckout/taxvat/field_names');
+        $fields = explode(',', $fields);
+
+        $vatNumbers = array(
+            'taxvat' => $this->getQuote()->getCustomerTaxvat(), // $taxvat = $address->getTaxvat();
+            'vat_id' => $address->getVatId()
+        );
+        foreach ($vatNumbers as $fieldName => $value) {
+            if (strlen($value) && in_array($fieldName, $fields)
+                && Mage::getStoreConfig('firecheckout/taxvat/validate')) {
+
+                $taxvatValidator = Mage::getModel('firecheckout/taxvat_validator');
+                if (!$taxvatValidator->isValid($value, $address->getCountryId())) {
+                    return array(
+                        'error'   => -1,
+                        'message' => $taxvatValidator->getMessage()
+                    );
+                }
             }
         }
 
@@ -876,67 +953,22 @@ class TM_FireCheckout_Model_Type_Standard
      *
      * @param   array $data
      * @param   int $customerAddressId
-     * @return  Mage_Checkout_Model_Type_Onepage
+     * @return  array
      */
     public function saveShipping($data, $customerAddressId, $validate = true)
     {
-        if (empty($data)) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid data.'));
+        $errors = $this->_saveAddress($data, $customerAddressId, $validate, 'shipping');
+        if ($errors) {
+            return $errors;
         }
+
         $address = $this->getQuote()->getShippingAddress();
-
-        /* @var $addressForm Mage_Customer_Model_Form */
-        $addressForm    = Mage::getModel('customer/form');
-        $addressForm->setFormCode('customer_address_edit')
-            ->setEntityType('customer_address')
-            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
-
-        if (!empty($customerAddressId)) {
-            $customerAddress = Mage::getModel('customer/address')->load($customerAddressId);
-            if ($customerAddress->getId()) {
-                if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
-                    return array('error' => 1,
-                        'message' => $this->_helper->__('Customer Address is not valid.')
-                    );
-                }
-
-                $address->importCustomerAddress($customerAddress)->setSaveInAddressBook(0);
-                $addressForm->setEntity($address);
-                if ($validate) {
-                    $addressErrors  = $addressForm->validateData($address->getData());
-                    if ($addressErrors !== true) {
-                        return array('error' => 1, 'message' => $addressErrors);
-                    }
-                }
-            }
-        } else {
-            $address->setCustomerAddressId(null);
-            $addressForm->setEntity($address);
-            // emulate request object
-            $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
-            if ($validate) {
-                $addressErrors  = $addressForm->validateData($addressData);
-                if ($addressErrors !== true) {
-                    return array('error' => 1, 'message' => $addressErrors);
-                }
-            }
-            $addressForm->compactData($addressData);
-            // unset shipping address attributes which were not shown in form
-            foreach ($addressForm->getAttributes() as $attribute) {
-                if (!isset($data[$attribute->getAttributeCode()])) {
-                    $address->setData($attribute->getAttributeCode(), NULL);
-                }
-            }
-
-            // Additional form data, not fetched by extractData (as it fetches only attributes)
-            $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
-        }
-
         $address->setSameAsBilling(empty($data['same_as_billing']) ? 0 : 1);
         $address->implodeStreetAddress();
         $address->setCollectShippingRates(true);
 
-        if ($validate && ($validateRes = $this->validateAddress($address))!==true) {
+        // validate billing address
+        if ($validate && ($validateRes = $address->validate()) !== true) {
             return array('error' => 1, 'message' => $validateRes);
         }
 
@@ -998,6 +1030,13 @@ class TM_FireCheckout_Model_Type_Standard
         }
 
         $payment = $quote->getPayment();
+        $payment->setMethod(isset($data['method']) ? $data['method'] : false); // Magebuzz_Rewardpoint fix
+        $payment->setMethodInstance(null); // fix for billmate payments
+
+        // fix for third-party-modules. If collect totals was called before
+        // save billing address - shipping description will stay empty
+        $quote->setTotalsCollectedFlag(false);
+
         $payment->importData($data);
 
         $quote->save();
@@ -1077,8 +1116,16 @@ class TM_FireCheckout_Model_Type_Standard
         Mage::helper('core')->copyFieldset('checkout_onepage_quote', 'to_customer', $quote, $customer);
         $customer->setPassword($customer->decryptPassword($quote->getPasswordHash()));
         $customer->setPasswordHash($customer->hashPassword($customer->getPassword()));
+        $sessionValidatorData = $this->_checkoutSession->getData('_session_validator_data');
+        if ($sessionValidatorData && isset($sessionValidatorData['session_expire_timestamp'])) {
+            $passwordCreatedTime = $sessionValidatorData['session_expire_timestamp']
+                - Mage::getSingleton('core/cookie')->getLifetime();
+            $customer->setPasswordCreatedAt($passwordCreatedTime);
+        }
+
         $quote->setCustomer($customer)
             ->setCustomerId(true);
+        $quote->setPasswordHash('');
     }
 
     /**
@@ -1125,13 +1172,29 @@ class TM_FireCheckout_Model_Type_Standard
     {
         $customer = $this->getQuote()->getCustomer();
         if ($customer->isConfirmationRequired()) {
-            $customer->sendNewAccountEmail('confirmation', '', $this->getQuote()->getStoreId());
-            $url = Mage::helper('customer')->getEmailConfirmationUrl($customer->getEmail());
-            $this->getCustomerSession()->addSuccess(
-                Mage::helper('customer')->__('Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%s">click here</a>.', $url)
+            $customer->sendNewAccountEmail(
+                'confirmation',
+                '',
+                $this->getQuote()->getStoreId(),
+                $customer->getPassword()
             );
+
+            if ('hidden' !== Mage::getStoreConfig('firecheckout/general/registration_mode')) {
+                $url = Mage::helper('customer')->getEmailConfirmationUrl($customer->getEmail());
+                $this->getCheckout()->addSuccess(
+                    Mage::helper('customer')->__(
+                        'Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%s">click here</a>.',
+                        $url
+                    )
+                );
+            }
         } else {
-            $customer->sendNewAccountEmail('registered', '', $this->getQuote()->getStoreId());
+            $customer->sendNewAccountEmail(
+                'registered',
+                '',
+                $this->getQuote()->getStoreId(),
+                $customer->getPassword()
+            );
             $this->getCustomerSession()->loginById($customer->getId());
         }
         return $this;
@@ -1159,10 +1222,7 @@ class TM_FireCheckout_Model_Type_Standard
                 break;
         }
 
-        /**
-         * @var TM_FireCheckout_Model_Service_Quote
-         */
-        $service = Mage::getModel('firecheckout/service_quote', $this->getQuote());
+        $service = Mage::getModel('sales/service_quote', $this->getQuote());
         $service->submitAll();
 
         if ($isNewCustomer) {
@@ -1196,7 +1256,11 @@ class TM_FireCheckout_Model_Type_Standard
             }
             if (!$redirectUrl && $canSendNewEmailFlag) {
                 try {
-                    $order->sendNewOrderEmail();
+                    if (method_exists($order, 'queueNewOrderEmail')) {
+                        $order->queueNewOrderEmail();
+                    } else {
+                        $order->sendNewOrderEmail();
+                    }
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }
@@ -1241,31 +1305,30 @@ class TM_FireCheckout_Model_Type_Standard
      */
     protected function validateOrder()
     {
-        $helper = Mage::helper('checkout');
         if ($this->getQuote()->getIsMultiShipping()) {
-            Mage::throwException($helper->__('Invalid checkout type.'));
+            Mage::throwException(Mage::helper('checkout')->__('Invalid checkout type.'));
         }
 
         if (!$this->getQuote()->isVirtual()) {
             $address = $this->getQuote()->getShippingAddress();
-            $addressValidation = $this->validateAddress($address);
+            $addressValidation = $address->validate();
             if ($addressValidation !== true) {
-                Mage::throwException($helper->__('Please check shipping address information.'));
+                Mage::throwException(Mage::helper('checkout')->__('Please check shipping address information.'));
             }
             $method= $address->getShippingMethod();
             $rate  = $address->getShippingRateByCode($method);
             if (!$this->getQuote()->isVirtual() && (!$method || !$rate)) {
-                Mage::throwException($helper->__('Please specify shipping method.'));
+                Mage::throwException(Mage::helper('checkout')->__('Please specify shipping method.'));
             }
         }
 
-        $addressValidation = $this->validateAddress($this->getQuote()->getBillingAddress());
+        $addressValidation = $this->getQuote()->getBillingAddress()->validate();
         if ($addressValidation !== true) {
-            Mage::throwException($helper->__('Please check billing address information.'));
+            Mage::throwException(Mage::helper('checkout')->__('Please check billing address information.'));
         }
 
         if (!($this->getQuote()->getPayment()->getMethod())) {
-            Mage::throwException($helper->__('Please select valid payment method.'));
+            Mage::throwException(Mage::helper('checkout')->__('Please select valid payment method.'));
         }
     }
 
@@ -1306,75 +1369,14 @@ class TM_FireCheckout_Model_Type_Standard
         return $orderId;
     }
 
+    /**
+     * @param  [type] $address [description]
+     * @return [type]          [description]
+     * @deprecated since 4.2.3
+     */
     public function validateAddress($address)
     {
-        $errors = array();
-        $helper = Mage::helper('customer');
-        $address->implodeStreetAddress();
-        $formConfig = Mage::getStoreConfig('firecheckout/address_form_status');
-
-        if (!Zend_Validate::is($address->getFirstname(), 'NotEmpty')) {
-            $errors[] = $helper->__('Please enter the first name.');
-        }
-        if (!Zend_Validate::is($address->getLastname(), 'NotEmpty')) {
-            $errors[] = $helper->__('Please enter the last name.');
-        }
-
-        if ('required' === $formConfig['company']
-            && !Zend_Validate::is($address->getCompany(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the company.'); // translate
-        }
-
-        if ('required' === $formConfig['street1']
-            && !Zend_Validate::is($address->getStreet(1), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the street.');
-        }
-
-        if ('required' === $formConfig['city']
-            && !Zend_Validate::is($address->getCity(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the city.');
-        }
-
-        if ('required' === $formConfig['telephone']
-            && !Zend_Validate::is($address->getTelephone(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the telephone number.');
-        }
-
-        if ('required' === $formConfig['fax']
-            && !Zend_Validate::is($address->getFax(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the fax.'); // translate
-        }
-
-        $_havingOptionalZip = Mage::helper('directory')->getCountriesWithOptionalZip();
-        if ('required' === $formConfig['postcode']
-            && !in_array($address->getCountryId(), $_havingOptionalZip)
-            && !Zend_Validate::is($address->getPostcode(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the zip/postal code.');
-        }
-
-        if ('required' === $formConfig['country_id']
-            && !Zend_Validate::is($address->getCountryId(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the country.');
-        }
-
-        if ('required' === $formConfig['region']
-            && $address->getCountryModel()->getRegionCollection()->getSize()
-            && !Zend_Validate::is($address->getRegionId(), 'NotEmpty')) {
-
-            $errors[] = $helper->__('Please enter the state/province.');
-        }
-
-        if (empty($errors) || $address->getShouldIgnoreValidation()) {
-            return true;
-        }
-        return $errors;
+        return true;
     }
 
     public function registerCustomerIfRequested()
@@ -1446,5 +1448,16 @@ class TM_FireCheckout_Model_Type_Standard
     public function getCustomerEmailExistsMessage()
     {
         return $this->_customerEmailExistsMessage;
+    }
+
+    public function getInvalidAddressFields($address)
+    {
+        $addressFormFirecheckout = Mage::getModel('firecheckout/customer_form');
+        $addressFormFirecheckout->setFormCode('customer_address_edit')
+            ->setEntityType('customer_address')
+            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax())
+            ->setEntity($address);
+
+        return $addressFormFirecheckout->getInvalidFields($address->getData());
     }
 }

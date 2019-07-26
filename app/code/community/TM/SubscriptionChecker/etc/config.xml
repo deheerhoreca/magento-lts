@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <TM_SubscriptionChecker>
+            <version>1.0.0</version>
+        </TM_SubscriptionChecker>
+    </modules>
+
+    <global>
+        <models>
+            <subscriptionchecker>
+                <class>TM_SubscriptionChecker_Model</class>
+            </subscriptionchecker>
+        </models>
+        <blocks>
+            <subscriptionchecker>
+                <class>TM_SubscriptionChecker_Block</class>
+            </subscriptionchecker>
+        </blocks>
+        <helpers>
+            <subscriptionchecker>
+                <class>TM_SubscriptionChecker_Helper</class>
+            </subscriptionchecker>
+        </helpers>
+    </global>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <subscriptionchecker>
+                    <file>tm/subscriptionchecker.xml</file>
+                </subscriptionchecker>
+            </updates>
+        </layout>
+        <events>
+            <controller_action_predispatch_adminhtml_system_config_edit>
+                <observers>
+                    <argento>
+                        <type>model</type>
+                        <class>subscriptionchecker/observer</class>
+                        <method>onBeforeConfigView</method>
+                    </argento>
+                </observers>
+            </controller_action_predispatch_adminhtml_system_config_edit>
+            <controller_action_predispatch_adminhtml_system_config_save>
+                <observers>
+                    <argento>
+                        <type>model</type>
+                        <class>subscriptionchecker/observer</class>
+                        <method>onBeforeConfigSave</method>
+                    </argento>
+                </observers>
+            </controller_action_predispatch_adminhtml_system_config_save>
+        </events>
+        <translate>
+            <modules>
+                <TM_SubscriptionChecker>
+                    <files>
+                        <default>TM_SubscriptionChecker.csv</default>
+                    </files>
+                </TM_SubscriptionChecker>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <admin>
+        <routers>
+             <adminhtml>
+                 <args>
+                     <modules>
+                         <subscriptionchecker before="Mage_Adminhtml">TM_SubscriptionChecker_Adminhtml</subscriptionchecker>
+                     </modules>
+                 </args>
+             </adminhtml>
+        </routers>
+    </admin>
+</config>

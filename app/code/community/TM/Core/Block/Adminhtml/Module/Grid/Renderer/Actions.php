@@ -1,7 +1,6 @@
 <?php
 
-class TM_Core_Block_Adminhtml_Module_Grid_Renderer_Actions
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+class TM_Core_Block_Adminhtml_Module_Grid_Renderer_Actions extends TM_Core_Block_Adminhtml_Renderer_Actions
 {
     /**
      * Renders grid column
@@ -9,17 +8,41 @@ class TM_Core_Block_Adminhtml_Module_Grid_Renderer_Actions
      * @param   Varien_Object $row
      * @return  string
      */
-    public function render(Varien_Object $row)
+    public function getActions(Varien_Object $row)
     {
         $links = array();
 
-        if ($row->getChangelog()) {
+        if ($row->getVersionStatus() === TM_Core_Model_Module::VERSION_OUTDATED) {
             $links[] = sprintf(
-                '<a href="javascript:void(0)" onclick="%s">%s</a><div style="display:none" class="changelog"><div class="title">%s</div><div class="content">%s</div></div>',
-                "tmcoreWindow.update(this.next('.changelog').down('.content').innerHTML, this.next('.changelog').down('.title').innerHTML).show()",
-                Mage::helper('tmcore')->__('Changelog'),
-                strip_tags($row->getCode()),
-                nl2br(htmlspecialchars($row->getChangelog()))
+                '<a href="%s">%s</a>',
+                $this->getUrl('*/*/upgrade/', array('_current' => true, 'id' => $row->getId())),
+                Mage::helper('tmcore')->__('Run Upgrades')
+            );
+        }
+
+        if ($row->hasUpgradesDir() || $row->getIdentityKeyLink()) {
+            $links[] = sprintf(
+                '<a href="%s">%s</a>',
+                $this->getUrl('*/*/manage/', array('_current' => true, 'id' => $row->getId())),
+                Mage::helper('tmcore')->__('Open Installer')
+            );
+        }
+
+        if ($row->getDocsLink()) {
+            $links[] = sprintf(
+                '<a href="%s" title="%s" onclick="window.open(this.href); return false;">%s</a>',
+                $row->getDocsLink(),
+                Mage::helper('tmcore')->__('Read Documentation'),
+                Mage::helper('tmcore')->__('Read Documentation')
+            );
+        }
+
+        if ($row->getChangelogLink()) {
+            $links[] = sprintf(
+                '<a href="%s" title="%s" onclick="window.open(this.href); return false;">%s</a>',
+                $row->getChangelogLink(),
+                Mage::helper('tmcore')->__('View Changelog'),
+                Mage::helper('tmcore')->__('View Changelog')
             );
         }
 
@@ -32,14 +55,6 @@ class TM_Core_Block_Adminhtml_Module_Grid_Renderer_Actions
             );
         }
 
-        if ($row->hasUpgradesDir() || $row->getIdentityKeyLink()) {
-            $links[] = sprintf(
-                '<a href="%s">%s</a>',
-                $this->getUrl('*/*/manage/', array('_current' => true, 'id' => $row->getId())),
-                Mage::helper('tmcore')->__('Manage')
-            );
-        }
-
-        return implode(' | ', $links);
+        return $links;
     }
 }

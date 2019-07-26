@@ -6,8 +6,12 @@ if (!$_order) {
 }
 
 if ($_deliveryDate = $_order->getFirecheckoutDeliveryDate()) {
+    $_date = strtotime($_deliveryDate);
+    if (empty($_date)) {
+        $_date = null; // magento 1.5 fix
+    }
     $_deliveryDate = Mage::app()->getLocale()
-        ->date(strtotime($_deliveryDate), null, null, false)
+        ->date($_date, null, null, false)
         ->toString(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_LONG));
     // $_deliveryDate = $this->formatDate($_deliveryDate, Mage_Core_Model_Locale::FORMAT_TYPE_LONG);
 }

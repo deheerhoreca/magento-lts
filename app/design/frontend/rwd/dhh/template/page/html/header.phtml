@@ -50,7 +50,7 @@
   <div class="page-header-container grid-old">
     <div class="header__inside">
       <a class="logo" href="<?php echo $this->getUrl('') ?>">
-         <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height=40 width=208 />
+        <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height=40 width=208 />
       </a>
       <div class="skip-links headerrightcontents">
         <div id="header-search" class="skip-content" style="float: left;position: relative;">
@@ -83,7 +83,7 @@
         <span class="label">Menu</span>
       </a>
 
-       <!-- Account Popup -->
+      <!-- Account Popup -->
       <div id="header-account" class="skip-content">
         <?php
         if(! Mage::getSingleton('customer/session')->isLoggedIn()){
@@ -102,5 +102,13 @@
   //echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
   ?>
 </header>
+
+<!-- 
+
+
+        NEW
+
+
+ -->
 
 <?php echo $this->getChildHtml('topContainer'); ?>

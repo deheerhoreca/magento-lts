@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <tm_checkout>
+            <label>TM Checkout</label>
+            <sort_order>190</sort_order>
+        </tm_checkout>
+    </tabs>
+    <sections>
+        <addressautocomplete translate="label" module="addressautocomplete">
+            <label>Address Autocomplete</label>
+            <tab>tm_checkout</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>115</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general>
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled>
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                        <api_key>
+                            <label>API Key</label>
+                            <comment><![CDATA[<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key">Get API Key</a>]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </api_key>
+                        <street_number_placement>
+                            <label>Street Number Placement</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>addressautocomplete/system_config_source_streetNumberPlacement</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </street_number_placement>
+                    </fields>
+                </general>
+            </groups>
+        </addressautocomplete>
+    </sections>
+</config>

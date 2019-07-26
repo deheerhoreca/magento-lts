@@ -33,22 +33,24 @@ class TM_CheckoutFields_Model_Observer
 
     public function adminhtmlAddCheckoutFields($observer)
     {
+        $request = Mage::app()->getRequest();
+        if ('save' !== $request->getActionName()) {
+            return;
+        }
         /**
          * @var TM_CheckoutFields_Helper_Data
          */
-        $helper  = Mage::helper('checkoutfields');
-        $quote   = $observer->getOrderCreateModel()->getQuote();
-        $request = $observer->getRequest();
-        foreach ($helper->getEnabledFields() as $fieldName => $fieldConfig) {
-            if (!isset($request[$fieldName])) {
+        $helper = Mage::helper('checkoutfields');
+        $quote  = $observer->getOrderCreateModel()->getQuote();
+        $post   = $observer->getRequest();
+        foreach ($helper->getFields() as $fieldName => $fieldConfig) {
+            if (!isset($post[$fieldName])) {
                 $value = '';
             } else {
-                $value = (string)$request[$fieldName];
+                $value = (string)$post[$fieldName];
             }
             if (strlen($value)) {
                 $quote->setData($fieldName, $value);
-            } elseif ('req' === $fieldConfig['status']) {
-                throw new Exception('Fill all required fields please');
             }
         }
     }

@@ -1,3 +1,5 @@
+<?php if(!Mage::getStoreConfig('giftcards/default/show_as_payment_method')): return; endif; ?>
+
 <script type="text/javascript">
 //<![CDATA[
     var activateGiftCard = new OnepageGiftcard('activateGiftCard',"<?php echo $this->getUrl('giftcards/cart/ajaxActivateGiftCard', array('_secure' => true)) ?>");

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <TM_AddressAutocomplete>
+            <version>1.1.5</version>
+        </TM_AddressAutocomplete>
+    </modules>
+
+    <global>
+        <helpers>
+            <addressautocomplete>
+                <class>TM_AddressAutocomplete_Helper</class>
+            </addressautocomplete>
+        </helpers>
+        <models>
+            <addressautocomplete>
+                <class>TM_AddressAutocomplete_Model</class>
+            </addressautocomplete>
+        </models>
+    </global>
+
+    <frontend>
+        <layout>
+            <updates>
+                <addressautocomplete>
+                    <file>tm/addressautocomplete.xml</file>
+                </addressautocomplete>
+            </updates>
+        </layout>
+    </frontend>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <TM_AddressAutocomplete>
+                    <files>
+                        <default>TM_AddressAutocomplete.csv</default>
+                    </files>
+                </TM_AddressAutocomplete>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <default>
+        <subscriptionchecker>
+            <ignored_sections>
+                <addressautocomplete/>
+            </ignored_sections>
+        </subscriptionchecker>
+        <addressautocomplete>
+            <general>
+                <enabled>0</enabled>
+                <street_number_placement>line1_start</street_number_placement>
+            </general>
+        </addressautocomplete>
+    </default>
+</config>

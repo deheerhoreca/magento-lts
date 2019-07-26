@@ -14,10 +14,41 @@ class TM_FireCheckout_Helper_Data extends Mage_Core_Helper_Abstract
         return (bool)Mage::getStoreConfig('firecheckout/general/enabled');
     }
 
+    /**
+     * Get firecheckout url from configuration option
+     *
+     * @return string
+     */
+    public function getFirecheckoutUrl()
+    {
+        return $this->_getUrl(
+            $this->getFirecheckoutUrlPath(),
+            array('_secure' => true)
+        );
+    }
+
+    /**
+     * Get firecheckout url_path
+     *
+     * @return string
+     */
+    public function getFirecheckoutUrlPath()
+    {
+        return Mage::getStoreConfig('firecheckout/general/url_path');
+    }
+
+    public function isOnecolumnMode()
+    {
+        return Mage::helper('firecheckout/layout')->getLayout() === 'col1-set';
+    }
+
     public function isAllowedGuestCheckout()
     {
-        return 'optional' == Mage::getStoreConfig('firecheckout/general/registration_mode')
-            || 'optional-checked' == Mage::getStoreConfig('firecheckout/general/registration_mode');
+        if (!Mage::getSingleton('checkout/session')->getQuote()->isAllowedGuestCheckout()) {
+            return false;
+        }
+        return ('optional' == Mage::getStoreConfig('firecheckout/general/registration_mode')
+            || 'optional-checked' == Mage::getStoreConfig('firecheckout/general/registration_mode'));
     }
 
     public function getIsSubscribed()
@@ -55,9 +86,23 @@ class TM_FireCheckout_Helper_Data extends Mage_Core_Helper_Abstract
         return !Mage::helper('firecheckout')->getIsSubscribed();
     }
 
+    public function canUseMageCaptchaModule()
+    {
+        if ($this->canUseInfolutionILStrongCaptchaModule()) {
+            return false;
+        }
+        return Mage::helper('core')->isModuleOutputEnabled('Mage_Captcha');
+    }
+
+    public function canUseInfolutionILStrongCaptchaModule()
+    {
+        return false; // not supported until module improvements in js
+        return Mage::helper('core')->isModuleOutputEnabled('Infolution_ILStrongCaptcha');
+    }
+
     public function canUseCaptchaModule()
     {
-        return Mage::helper('core')->isModuleOutputEnabled('Mage_Captcha');
+        return $this->canUseMageCaptchaModule() || $this->canUseInfolutionILStrongCaptchaModule();
     }
 
     /**
@@ -94,5 +139,18 @@ class TM_FireCheckout_Helper_Data extends Mage_Core_Helper_Abstract
     public function canUseMageWorxCustomerCredit()
     {
         return Mage::helper('core')->isModuleOutputEnabled('MageWorx_CustomerCredit');
+    }
+
+    /**
+     * Check if current locale uses rtl layout direction
+     *
+     * @return boolean
+     */
+    public function isRtl()
+    {
+        $layout = Mage::app()->getLocale()->getTranslationList('layout');
+
+        return isset($layout['characterOrder'])
+            && 'right-to-left' === $layout['characterOrder'];
     }
 }

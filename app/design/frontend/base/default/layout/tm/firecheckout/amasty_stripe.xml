@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout>
+    <firecheckout_index_index_custom>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>amasty/stripe/payment.js</name></action>
+            <block type="core/template" name="amasty.stripe.head" template="amasty/stripe/head.phtml"/>
+        </reference>
+    </firecheckout_index_index_custom>
+</layout>

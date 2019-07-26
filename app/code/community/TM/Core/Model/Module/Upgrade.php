@@ -81,6 +81,38 @@ abstract class TM_Core_Model_Module_Upgrade extends Varien_Object
     }
 
     /**
+     * @param  array $mapping key=>value pairs of old and new path
+     * @return void
+     */
+    public function renameConfigPath($mapping)
+    {
+        $table   = Mage::getResourceModel('core/config_data')->getMainTable();
+        $adapter = Mage::getModel('core/resource')
+            ->getConnection(Mage_Core_Model_Resource::DEFAULT_WRITE_RESOURCE);
+
+        $newPaths = array_values($mapping);
+        $collection = Mage::getResourceModel('core/config_data_collection');
+        $collection->addFieldToFilter('path', array('in' => $newPaths))
+            ->load();
+
+        $adapter->beginTransaction();
+        try {
+            foreach ($mapping as $oldPath => $newPath) {
+                if ($collection->getItemByColumnValue('path', $newPath)) {
+                    continue;
+                }
+                $adapter->exec(
+                    "UPDATE `$table` SET path='{$newPath}' WHERE path='{$oldPath}'"
+                );
+            }
+            $adapter->commit();
+        } catch (Exception $e) {
+            $adapter->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
      * @param array $data
      * <pre>
      *  section/group/field => value,
@@ -159,6 +191,9 @@ abstract class TM_Core_Model_Module_Upgrade extends Varien_Object
                     $website = null;
                     $store   = null;
                 } else {
+                    if (!$this->_getStore($storeId)->getId()) {
+                        continue;
+                    }
                     $website = $this->_getStore($storeId)->getWebsite()->getCode();
                     $store   = $this->_getStore($storeId)->getCode();
                 }
@@ -481,6 +516,131 @@ abstract class TM_Core_Model_Module_Upgrade extends Varien_Object
     }
 
     /**
+     * Unset easytabs from storeIds
+     *
+     * @param  string $type
+     * @param  array $storeIdsToRemove
+     * @return void
+     */
+    public function unsetEasytab($type, $storeIdsToRemove, $alias = null)
+    {
+        $isSingleStore = Mage::app()->isSingleStoreMode();
+
+        $storeIdsToRemove[] = 0;
+        $storesToKeep = Mage::getResourceModel('core/store_collection')->getAllIds();
+        $storesToKeep = array_diff($storesToKeep, $storeIdsToRemove);
+
+        $relatedTabs = Mage::getModel('easytabs/tab')->getCollection();
+        if (isset($type)) {
+            $relatedTabs->addFieldToFilter('block', $type);
+        }
+        if (isset($alias)) {
+            $relatedTabs->addFieldToFilter('alias', $alias);
+        }
+        $relatedTabs->walk('afterLoad');
+        foreach ($relatedTabs as $relatedTab) {
+            if ($isSingleStore) {
+                $relatedTab->setStatus(0);
+            } else {
+                $stores = $relatedTab->getStoreId();
+                $stores = array_diff($stores, array(0));
+                if (!$stores) { // tab was assigned to all stores
+                    $relatedTab->setStoreId($storesToKeep);
+                } else {
+                    if (!array_diff($stores, $storesToKeep)) {
+                        // tab is not assigned to storesToRemove
+                        continue;
+                    }
+                    $keep = array_intersect($stores, $storesToKeep);
+                    if ($keep) {
+                        $relatedTab->setStoreId($keep);
+                    } else {
+                        $relatedTab->setStatus(0);
+                    }
+                }
+            }
+            $relatedTab->save();
+        }
+    }
+
+    /**
+     * Backup and create new tabs
+     * Alias is used as idendifier
+     *
+     * @param  array $data
+     * <pre>
+     *     title
+     *     alias
+     *     block
+     *     template
+     *     custom_option
+     *     unset
+     *     sort_order
+     *     status
+     *     store_id
+     * </pre>
+     * @return void
+     */
+    public function runEasytabs($data)
+    {
+        $isSingleStore = Mage::app()->isSingleStoreMode();
+
+        foreach ($data as $tabData) {
+            $tab = Mage::getModel('easytabs/tab');
+            $tab->setStoreId($this->getStoreIds());
+
+            // backup existing tab with the same alias
+            if (!empty($tabData['alias'])) {
+                $tmp = Mage::getModel('easytabs/tab')->getCollection()
+                    ->addFilter('alias', array('eq' => $tabData['alias']))
+                    ->addFilter('product_tab', array('eq' => $tabData['product_tab']))
+                    ->walk('afterLoad');
+                foreach ($tmp as $tmbTab) {
+                    if (!$tmbTab->getStatus()) {
+                        continue;
+                    }
+                    $storesToLeave = array_diff($tmbTab->getStoreId(), $this->getStoreIds());
+                    if (count($storesToLeave) && !$isSingleStore) {
+                        $tmbTab->setStoreId($storesToLeave);
+                    } else {
+                        $tmbTab->setStatus(0)
+                            ->setAlias($this->_getUniqueString($tmbTab->getAlias()));
+                    }
+
+                    try {
+                        $tmbTab->save();
+                    } catch (Exception $e) {
+                        $this->_fault('easytabs_backup', $e);
+                        continue;
+                    }
+                }
+            }
+
+            if ('easytabs/tab_cms' === $tabData['block']
+                && !is_numeric($tabData['custom_option'])) {
+
+                // get cms block identifier
+                $collection = Mage::getModel('cms/block')
+                    ->getCollection()
+                    ->addStoreFilter($this->getStoreIds())
+                    ->addFieldToFilter('identifier', $tabData['custom_option']);
+
+                if (!$isSingleStore) {
+                    $collection->addStoreFilter($this->getStoreIds());
+                }
+                $cmsBlock = $collection->getFirstItem();
+
+                if (!$cmsBlock->getId()) {
+                    continue;
+                }
+                $tabData['custom_option'] = $cmsBlock->getId();
+            }
+
+            $tab->addData($tabData)->save();
+        }
+    }
+
+    /**
      * Backup and create new labels
      *
      * @param array $data
@@ -507,6 +667,13 @@ abstract class TM_Core_Model_Module_Upgrade extends Varien_Object
         $isSingleStore = Mage::app()->isSingleStoreMode();
         foreach ($data as $labelData) {
             if (!empty($labelData['type']) && isset($typeMapping[$labelData['type']])) {
+                Mage::getModel('prolabels/label')->load($typeMapping[$labelData['type']])
+                    ->addData(array(
+                        'label_status' => isset($labelData['label_status']) ?
+                            $labelData['label_status'] : 1
+                    ))
+                    ->save();
+
                 $system     = true;
                 $modelType  = 'prolabels/system';
                 $collection = Mage::getModel($modelType)->getCollection()
@@ -673,6 +840,62 @@ abstract class TM_Core_Model_Module_Upgrade extends Varien_Object
                     $this->_fault('product_attribute_save', $e);
                 }
             }
+        }
+    }
+
+    /**
+     * @param  array $data
+     * <pre>
+     * array(
+     *     'left' => array(
+     *         'name'                => 'left',
+     *         'levels_per_dropdown' => 2,
+     *         'columns'             => array(
+     *              array(
+     *                  'width' => 185
+     *              )
+     *          )
+     *      )
+     * )
+     * </pre>
+     */
+    public function runNavigationpro($data)
+    {
+        $menuDefaults = array(
+            'is_active'             => 1,
+            'columns_mode'          => 'menu',
+            'display_in_navigation' => 0,
+            'levels_per_dropdown'   => 1,
+            'style'                 => 'dropdown'
+        );
+        $columnDefaults = array(
+            'is_active'           => 1,
+            'sort_order'          => '50',
+            'type'                => TM_NavigationPro_Model_Column::TYPE_SUBCATEGORY,
+            'style'               => 'dropdown',
+            'levels_per_dropdown' => 1,
+            'direction'           => 'horizontal',
+            'columns_count'       => 1,
+            'width'               => 160
+        );
+
+        foreach ($data as $menuData) {
+            $menu = Mage::getModel('navigationpro/menu')
+                ->load($menuData['name'], 'name');
+            if ($menu->getId()) {
+                continue;
+            }
+
+            foreach ($menuData['columns'] as $i => $columnData) {
+                $menuData['columns'][$i] = array_merge($columnDefaults, $columnData);
+            }
+
+            $menu = Mage::getModel('navigationpro/menu')
+                ->setData(array_merge($menuDefaults, $menuData))
+                ->setStoreId(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
+                ->setSiblings(array())
+                ->setContent(array())
+                ->save();
         }
     }
 

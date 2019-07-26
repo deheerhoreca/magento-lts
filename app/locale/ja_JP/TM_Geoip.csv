@@ -1,0 +1,2 @@
+"<a href='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz' title='Download GeoCity database'>Download</a> and unzip file under the 'MAGETO_ROOT/lib/MaxMind/GeoIP/data' folder if you don't have it","<a href='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz' title='Download GeoCity database'>다운로드</a> 그리고 and unzip file under the 'MAGETO_ROOT/lib/MaxMind/GeoIP/data' 폴더 아래에 압축을 해제하십시오(해당 데이터베이스가 없을 시)"
+"GeoCity filename","지오시티 파일이름"

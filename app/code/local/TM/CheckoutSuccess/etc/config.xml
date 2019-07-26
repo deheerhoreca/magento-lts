@@ -2,11 +2,16 @@
 <config>
     <modules>
         <TM_CheckoutSuccess>
-            <version>1.0.0</version>
+            <version>2.0.9</version>
         </TM_CheckoutSuccess>
     </modules>
 
     <global>
+        <blocks>
+            <checkoutsuccess>
+                <class>TM_CheckoutSuccess_Block</class>
+            </checkoutsuccess>
+        </blocks>
         <models>
             <checkoutsuccess>
                 <class>TM_CheckoutSuccess_Model</class>
@@ -17,40 +22,70 @@
                 <class>TM_CheckoutSuccess_Helper</class>
             </checkoutsuccess>
         </helpers>
-        <events>
-            <core_layout_update_updates_get_after>
-                <observers>
-                    <checkoutsuccess>
-                        <class>checkoutsuccess/observer</class>
-                        <method>addLayoutUpdate</method>
-                    </checkoutsuccess>
-                </observers>
-            </core_layout_update_updates_get_after>
-        </events>
     </global>
 
     <frontend>
-        <!-- @see checkoutsuccess/observer::addLayoutUpdate -->
-        <layout_checkoutsuccess>
-             <updates>
-                  <checkoutsuccess condition="checkoutsuccess/isEnabled">
-                        <file>tm/checkoutsuccess.xml</file>
-                  </checkoutsuccess>
-             </updates>
-        </layout_checkoutsuccess>
+        <tm_layout>
+            <updates>
+                <checkoutsuccess condition="checkoutsuccess/isEnabled">
+                    <file>tm/checkoutsuccess.xml</file>
+                </checkoutsuccess>
+            </updates>
+        </tm_layout>
+        <translate>
+            <modules>
+                <TM_CheckoutSuccess>
+                    <files>
+                        <default>TM_CheckoutSuccess.csv</default>
+                    </files>
+                </TM_CheckoutSuccess>
+            </modules>
+        </translate>
         <events>
             <controller_action_predispatch_checkout_onepage_success>
                 <observers>
-                    <captcha>
+                    <checkoutsuccess>
                         <class>checkoutsuccess/observer</class>
                         <method>registerCurrentOrder</method>
-                    </captcha>
+                    </checkoutsuccess>
                 </observers>
             </controller_action_predispatch_checkout_onepage_success>
+            <controller_action_layout_load_before>
+                <observers>
+                    <checkoutsuccess>
+                        <class>checkoutsuccess/observer</class>
+                        <method>updateLayout</method>
+                    </checkoutsuccess>
+                </observers>
+            </controller_action_layout_load_before>
+            <controller_action_layout_render_before>
+                <observers>
+                    <checkoutsuccess>
+                        <class>checkoutsuccess/observer</class>
+                        <method>addCustomJsCss</method>
+                    </checkoutsuccess>
+                </observers>
+            </controller_action_layout_render_before>
         </events>
+        <routers>
+            <checkoutsuccess>
+                <use>standard</use>
+                <args>
+                    <module>TM_CheckoutSuccess</module>
+                    <frontName>checkoutsuccess</frontName>
+                </args>
+            </checkoutsuccess>
+        </routers>
     </frontend>
 
     <adminhtml>
+        <layout>
+            <updates>
+                <checkoutsuccess>
+                    <file>tm/checkoutsuccess.xml</file>
+                </checkoutsuccess>
+            </updates>
+        </layout>
         <translate>
             <modules>
                 <TM_CheckoutSuccess>
@@ -85,10 +120,10 @@
         <checkoutsuccess>
             <general>
                 <enabled>0</enabled>
-                <detailed_info>1</detailed_info>
-                <block_top>0</block_top>
-                <block_bottom>0</block_bottom>
             </general>
+            <mockup>
+                <board>{"top":[],"middleleft":["checkoutsuccess.thank.you","checkoutsuccess.quick.register"],"middleright":["sales.order.view","sales.order.info","checkoutsuccess.additional"],"bottom":["sales.recurring.profile.schedule"]}</board>
+            </mockup>
         </checkoutsuccess>
     </default>
 </config>

@@ -1,4 +1,11 @@
 <?php
+$fmeFieldsmanager = false;
+if (Mage::helper('core')->isModuleOutputEnabled('FME_Fieldsmanager')) {
+    $fmeFieldsmanager = $this->getLayout()->createBlock('fieldsmanager/checkout_payment_methods');
+}
+?>
+
+<?php
 // aheadworks points
 $awPoints = method_exists($this, 'getSummaryForCustomer');
 if ($awPoints) {
@@ -7,7 +14,7 @@ if ($awPoints) {
     $defaultValue = Mage::app()->getRequest()->getParam('payment[points_amount]');
 }
 
-// wageworx customercredit
+// mageworx customercredit
 $customerCredit = method_exists($this, 'isPartialPayment');
 if ($customerCredit) {
     $isPartial = $this->isPartialPayment();
@@ -21,6 +28,13 @@ $billsafe = false;
 <?php if (!$methods = $this->getMethods()) : ?>
 <p><?php echo $this->helper('checkout')->__('Sorry, no quotes are available for this order at this time.') ?></p>
 <?php else : ?>
+
+<?php if ($fmeFieldsmanager) : ?>
+<dl>
+    <?php echo $fmeFieldsmanager->getfieldshtml(1); ?>
+</dl>
+<?php endif; ?>
+
 <dl class="sp-methods">
     <?php if ($awPoints && $this->pointsSectionAvailable()): ?>
     <dt>
@@ -35,34 +49,34 @@ $billsafe = false;
 
 <?php foreach ($this->getMethods() as $_method): $_code = $_method->getCode() ?>
     <?php if ('billsafe' == $_code) $billsafe = true; ?>
-    <?php if ($customerCredit && $_code=='customercredit' && $isPartial == -2) continue; // hide customer credit ?>
-
+    <?php if ($_code=='customercredit' && ($isPartial == -2 || $isPartial == -3)) continue; // hide customer credit
+    ?>
     <dt>
     <?php if (sizeof($this->getMethods()) > 1): ?>
-        <?php if ($customerCredit) : ?>
-            <?php if ($_code=='customercredit' && $isPartial==1): ?>
-                <input id="p_method_<?php echo $_code ?>" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="checkbox" onclick="payment.switchMethod('<?php echo $_code ?>');" <?php if ($isCheckedCustomercredit) { ?>checked="checked"<?php } ?> />
-            <?php elseif ($_code=='customercredit' && $isPartial==-1): ?>
-                <input id="p_method_<?php echo $_code ?>_disabled" disabled="disabled" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="checkbox" />
-            <?php elseif ($_code=='customercredit' && $isPartial==0) : ?>
-                <input id="p_method_<?php echo $_code ?>_disabled" disabled="disabled" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="radio" />
-            <?php else: ?>
-                <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" onclick="payment.switchMethod('<?php echo $_code ?>')"<?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio" />
-            <?php endif; ?>
+        <?php if ($_code=='customercredit' && $isPartial==1): ?>
+            <input id="p_method_<?php echo $_code ?>" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="checkbox" onclick="payment.switchMethod('<?php echo $_code ?>');" <?php if ($isCheckedCustomercredit) { ?>checked="checked"<?php } ?> />
+        <?php elseif ($_code=='customercredit' && $isPartial==-3): ?>
+            <input id="p_method_<?php echo $_code ?>_disabled" disabled="disabled" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="checkbox" />
+        <?php elseif ($_code=='customercredit' && $isPartial==-1): ?>
+            <input id="p_method_<?php echo $_code ?>_disabled" disabled="disabled" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="checkbox" />
+        <?php elseif ($_code=='customercredit' && $isPartial==0) : ?>
+            <input id="p_method_<?php echo $_code ?>_disabled" disabled="disabled" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="radio" />
         <?php else: ?>
-            <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" onclick="payment.switchMethod('<?php echo $_code ?>')"<?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio" />
-        <?php endif ?>
+            <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="radio" onclick="payment.switchMethod('<?php echo $_code ?>')"<?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> />
+        <?php endif; ?>
     <?php else: ?>
-        <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" onclick="payment.switchMethod('<?php echo $_code ?>')" checked="checked" class="radio" /></span>
+        <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" /></span>
     <?php endif; ?>
-
         <label for="p_method_<?php echo $_code ?>">
             <?php echo $this->getMethodTitle($_method) ?>
-            <?php if ($customerCredit && $_code=='customercredit' && Mage::helper('customercredit')->isEnabledCodes()) : ?>
-                (<a href="<?php echo $this->getUrl('customercredit/') ?>" target="_blank"><?php echo Mage::helper('customercredit')->__('Recharge') ?></a>)
-            <?php endif ?>
+            <?php if ($_code=='customercredit' && (Mage::helper('mageworx_customercredit')->isEnabledCodes() || $this->needShowRechageLink())):?>
+                (<a href="<?php echo $this->getUrl('customercredit/') ?>" target="_blank"><?php echo Mage::helper('mageworx_customercredit')->__('Recharge') ?></a>)
+            <?php endif; ?>
             <?php echo $this->getMethodLabelAfterHtml($_method) ?>
         </label>
+        <?php if (($_code=='customercredit') && Mage::getStoreConfig('mageworx_customercredit/main/enable_custom_value')): ?>
+            <?php echo $this->getChildHtml('payment.custom.value'); ?>
+        <?php endif; ?>
     </dt>
     <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
     <dd>
@@ -71,6 +85,13 @@ $billsafe = false;
     <?php endif; ?>
 <?php endforeach; ?>
 </dl>
+
+<?php if ($fmeFieldsmanager) : ?>
+<dl>
+    <?php echo $fmeFieldsmanager->getfieldshtml(2); ?>
+    <?php echo $fmeFieldsmanager->getfieldshtml(3); ?>
+</dl>
+<?php endif; ?>
 
 <?php if (Mage::helper('core')->isModuleOutputEnabled('Netresearch_Billsafe') && !$billsafe) : ?>
     <p style="margin: 25px 0 10px;">
@@ -153,4 +174,11 @@ payment.init();
         });
         //]]>
     </script>
+<?php endif ?>
+
+<?php $emjaTax = $this->getChildHtml('emja_taxrelief'); ?>
+<?php if ($emjaTax) : ?>
+<dl>
+    <?php echo $emjaTax; ?>
+</dl>
 <?php endif ?>

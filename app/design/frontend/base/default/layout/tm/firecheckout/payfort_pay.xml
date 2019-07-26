@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<layout>
+    <firecheckout_index_index>
+        <reference name="checkout.onepage.review.info.items.after">
+            <block type="core/template" name="payfort.setting" template="payfort/checkout/onepage/merchant-page.phtml"/>
+        </reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>tm/firecheckout/js/integration/payfort_pay.js</name>
+            </action>
+        </reference>
+    </firecheckout_index_index>
+
+    <firecheckout_index_updatecheckout>
+        <reference name="checkout.onepage.review.info.items.after">
+            <block type="core/template" name="payfort.setting" template="payfort/checkout/onepage/merchant-page.phtml"/>
+        </reference>
+    </firecheckout_index_updatecheckout>
+</layout>

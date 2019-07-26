@@ -1,0 +1,115 @@
+<div class="page-title checkout-title">
+    <h1><?php echo Mage::getStoreConfig('firecheckout/general/title') ?></h1>
+    <?php if (!Mage::getSingleton('customer/session')->isLoggedIn()) : ?>
+    <p class="firecheckout-login-wrapper">
+        <a href="<?php echo Mage::helper('customer')->getLoginUrl() ?>" class="firecheckout-login">
+            <span><span><?php echo $this->__('Already registered? Login into your account') ?></span></span>
+        </a>
+    </p>
+    <?php endif; ?>
+
+    <?php $subtitle = trim(Mage::getStoreConfig('firecheckout/general/subtitle')); ?>
+    <?php if ($subtitle) : ?>
+        <div class="checkout-subtitle">
+            <?php echo $this->__($subtitle) ?>
+        </div>
+    <?php endif ?>
+</div>
+
+<?php
+    echo $this->getMessagesBlock()->getGroupedHtml();
+    $this->getMessagesBlock()->getMessageCollection()->clear();
+?>
+
+<?php
+    $topContainer = $this->getChildHtml('firecheckout.top.container');
+    $topContainer = trim($topContainer);
+    if (strlen($topContainer)) :
+?>
+    <div class="firecheckout-top-container">
+        <?php echo $topContainer ?>
+    </div>
+<?php endif ?>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('tm/firecheckout/js/firecheckout.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('tm/firecheckout/js/firecheckout-compatibility.js') ?>"></script>
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<script type="text/javascript">FC.Ajax.rules = <?php echo Mage::helper('core')->jsonEncode(Mage::helper('firecheckout/ajax')->getRules()) ?></script>
+<?php echo $this->getChildHtml('firecheckout.script.after') ?>
+
+<form action="" id="firecheckout-form" method="post">
+<?php echo $this->getBlockHtml('formkey') ?>
+<?php
+if ($blockId = Mage::getStoreConfig('firecheckout/additional_content/top')) :
+    echo $this->getLayout()->createBlock('cms/block')->setBlockId($blockId)->toHtml();
+endif;
+?>
+<div class="clearer"></div>
+
+<div class="col2-fire-set firecheckout-set">
+    <div class="col-fire-1">
+        <div class="firecheckout-section address-section">
+        <?php
+        foreach (array('billing.address', 'shipping.address') as $block) {
+            if (!$this->getChild($block) || !$this->getChild($block)->isShow()) {
+                continue;
+            }
+            echo $this->getChildHtml($block);
+        }
+        ?>
+        </div>
+    </div>
+
+    <?php
+        $shippingMethods = $this->getChildHtml('shipping.method');
+        $columnClass = 'col2-set ';
+        if (!$shippingMethods || 'col2-set-alt' === Mage::getStoreConfig('firecheckout/general/layout')) {
+            $columnClass = '';
+        }
+    ?>
+    <div class="col-fire-2">
+        <div class="<?php echo $columnClass ?>">
+            <div class="col-1">
+                <?php echo $this->getChildHtml('shipping.method') ?>
+            </div>
+            <div class="col-2">
+                <?php echo $this->getChildHtml('payment.method') ?>
+            </div>
+        </div>
+        <?php echo $this->getChildHtml('checkout.additional.information'); // it's not used since 3.8 ?>
+        <?php echo $this->getChildHtml('review') ?>
+    </div>
+</div>
+
+<?php
+if ($blockId = Mage::getStoreConfig('firecheckout/additional_content/bottom')) :
+    echo $this->getLayout()->createBlock('cms/block')->setBlockId($blockId)->toHtml();
+endif;
+?>
+<div class="clearer"></div>
+</form>
+
+<?php echo $this->getChildHtml('customer.login') ?>
+<?php echo $this->getChildHtml('customer.forgot') ?>
+<?php if (Mage::helper('core')->isModuleOutputEnabled('RedPandaPlus_OrderAttachments')) : ?>
+    <?php $customer = Mage::getSingleton('customer/session')->getCustomer(); ?>
+    <?php $customerCanUploadAttachment = Mage::helper('redpandaplus_orderattachments')->customerCanUploadAttachment($customer); ?>
+    <?php $canAddAttachments = Mage::helper('redpandaplus_orderattachments')->getCanAddAttachments(); ?>
+    <?php if ($customerCanUploadAttachment && $canAddAttachments): ?>
+        <div id="firecheckout-attachments-window" style="display: none;">
+            <div class="order-attachments">
+                <?php echo $this->getChildHtml('order_attachments') ?>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+<?php if (Mage::helper('core')->isModuleOutputEnabled('Mage_Persistent')) : ?>
+    <?php echo $this->getChildHtml('persistent.login') ?>
+<?php endif; ?>
+<div id="checkout-centinel-iframe-load" style="display: none;"></div>
+<div id="checkout-paypaliframe-load" class="authentication" style="display: none;"></div>
+<div id="checkout-sagepay-iframe-load"></div>
+<form id="co-payment-form" method="post" action=""></form>
+
+<?php echo $this->getChildHtml('firecheckout.scripts') ?>
+<?php echo $this->getChildHtml('firecheckout.custom') ?>

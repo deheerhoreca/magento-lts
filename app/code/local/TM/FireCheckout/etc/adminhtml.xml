@@ -11,6 +11,15 @@
                                     <firecheckout translate="title" module="firecheckout">
                                         <title>Fire Checkout Section</title>
                                     </firecheckout>
+                                    <firecheckout_address_verification translate="title" module="firecheckout">
+                                        <title>Address Verification (USPS)</title>
+                                    </firecheckout_address_verification>
+                                    <firecheckout_taxvat translate="title" module="firecheckout">
+                                        <title>Tax/Vat Validation</title>
+                                    </firecheckout_taxvat>
+                                    <firecheckout_delivery_date translate="title" module="firecheckout">
+                                        <title><![CDATA[Delivery Date&amp;Time]]></title>
+                                    </firecheckout_delivery_date>
                                 </children>
                             </config>
                         </children>

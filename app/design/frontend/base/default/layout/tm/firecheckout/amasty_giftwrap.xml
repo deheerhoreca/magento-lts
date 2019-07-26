@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<layout version="1.0.0">
+    <firecheckout_index_index_custom>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/amasty/amgiftwrap/amgiftwrap.css</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/amasty/amgiftwrap/jquery.jscrollpane.css</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/amasty/plugins/jquery-1.9.1.min.js</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>js/amasty/plugins/fancybox/jquery.fancybox.css</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/amasty/plugins/fancybox/jquery.fancybox.pack.js</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/amasty/plugins/jquery.contentcarousel.js</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/amasty/plugins/jquery.easing.1.3.js</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/amasty/plugins/tabs.js</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/amasty/amgiftwrap/cart_form.js</name>
+                <params/>
+            </action>
+
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>tm/firecheckout/js/integration/amasty_giftwrap.js</name>
+            </action>
+        </reference>
+    </firecheckout_index_index_custom>
+</layout>

@@ -8,6 +8,8 @@ class TM_FireCheckout_Model_Address_Validator_Usps extends Mage_Usa_Model_Shippi
 
     protected $_isVerified = array();
 
+    protected $_unverifiedFields = array();
+
     public function isValid()
     {
         if (!$this->getAddresses()) {
@@ -22,25 +24,30 @@ class TM_FireCheckout_Model_Address_Validator_Usps extends Mage_Usa_Model_Shippi
             return false;
         }
         $request = "<AddressValidateRequest USERID='{$userId}'>";
-        foreach ($this->getAddresses() as $id => $address) {
+        foreach ($this->getAddresses() as $type => $address) {
             $regionCode = Mage::getModel('directory/region')
                 ->load($address['region_id'])
                 ->getCode();
 
-            $request .= '<Address ID="' . $id . '">';
-            if (isset($address['street'][1])) {
-                $address1 = $address['street'][0];
-                $address2 = $address['street'][1];
+            $address1 = '';
+            if (strpos($address['postcode'], '-') !== false) {
+                list($zip5, $zip4) = explode('-', $address['postcode']);
             } else {
-                $address1 = '';
-                $address2 = $address['street'][0];
+                $zip5 = $address['postcode'];
+                $zip4 = '';
+            }
+            $request .= '<Address ID="' . $type . '">';
+            if (isset($address['street'][1])) {
+                // Address Line 1 is used to provide an apartment or suite number, if applicable.
+                // https://www.usps.com/business/web-tools-apis/address-information-api.htm
+                $address1 = $address['street'][1];
             }
             $request .= '<Address1>' . $address1 . '</Address1>';
-            $request .= '<Address2>' . $address2 . '</Address2>';
+            $request .= '<Address2>' . $address['street'][0] . '</Address2>';
             $request .= '<City>' . $address['city'] . '</City>';
             $request .= '<State>' . $regionCode . '</State>';
-            $request .= '<Zip5>' . $address['postcode'] . '</Zip5>';
-            $request .= '<Zip4></Zip4>';
+            $request .= '<Zip5>' . $zip5 . '</Zip5>';
+            $request .= '<Zip4>' . $zip4 . '</Zip4>';
             $request .= '</Address>';
         }
         $request .= "</AddressValidateRequest>";
@@ -82,9 +89,15 @@ class TM_FireCheckout_Model_Address_Validator_Usps extends Mage_Usa_Model_Shippi
         return false;
     }
 
-    public function getAddressError($id)
+    /**
+     * Retrieve errors for specified address type
+     *
+     * @param  string $type billing|shipping
+     * @return mixed string|false
+     */
+    public function getAddressError($type)
     {
-        foreach ($this->_result[$id] as $verifiedAddress) {
+        foreach ($this->_result[$type] as $verifiedAddress) {
             if (isset($verifiedAddress['error'])) {
                 return $verifiedAddress['error'];
             }
@@ -92,18 +105,31 @@ class TM_FireCheckout_Model_Address_Validator_Usps extends Mage_Usa_Model_Shippi
         return false;
     }
 
-    public function isVerified($id = null)
+    /**
+     * Returns address verification result. true, when address matches
+     * usps verified address.
+     *
+     * @param  string  $type billing|shipping
+     * @return boolean
+     */
+    public function isVerified($type = null)
     {
         if (!count($this->_isVerified)) {
             $mapping = array(
                 'Address1' => 'street',
                 'Address2' => 'street',
                 'City'     => 'city',
-                'State'    => 'region',
+                'State'    => 'region_id',
                 'Zip5'     => 'postcode'
             );
-            foreach ($this->_result as $id => $verifiedAddresses) {
-                $this->_isVerified[$id] = 0;
+
+            foreach ($this->_result as $addressType => $verifiedAddresses) {
+                $this->_isVerified[$addressType] = 0;
+                $this->_unverifiedFields[$addressType] = array();
+
+                if (!is_array($verifiedAddresses)) {
+                    continue;
+                }
 
                 foreach ($verifiedAddresses as $verifiedAddress) {
                     if (isset($verifiedAddress['error'])) {
@@ -116,50 +142,91 @@ class TM_FireCheckout_Model_Address_Validator_Usps extends Mage_Usa_Model_Shippi
                             continue;
                         }
 
+                        $originalValue = $this->_addresses[$addressType][$mapping[$name]];
                         if ('Address1' === $name) {
-                            $originalValue = $this->_addresses[$id][$mapping[$name]][0];
+                            $originalValue = isset($originalValue[1]) ? $originalValue[1] : '';
                         } elseif ('Address2' === $name) {
-                            $originalValue = $this->_addresses[$id][$mapping[$name]][1];
-                        } else {
-                            $originalValue = $this->_addresses[$id][$mapping[$name]];
+                            $originalValue = isset($originalValue[0]) ? $originalValue[0] : '';
+                        } elseif ('State' === $name) {
+                            // load region_code to compare it with usps returned value
+                            $originalValue = Mage::getModel('directory/region')
+                                ->load($originalValue)
+                                ->getCode();
+                        } elseif ('Zip5' === $name && !empty($verifiedAddress['Zip4'])) {
+                            // usps returns zip4, so compare postcode against zip5-zip4
+                            $value .= '-' . $verifiedAddress['Zip4'];
                         }
 
                         if (0 !== strcasecmp($value, $originalValue)) {
+                            $this->_unverifiedFields[$addressType][$mapping[$name]] = $mapping[$name];
                             $verified = false;
-                            break;
                         }
                     }
 
                     if ($verified) {
                         // if address ruturned by usps is same as user entered,
                         // then we should not show verification window for this address
-                        $this->_isVerified[$id] = 1;
+                        $this->_isVerified[$addressType] = 1;
                         break;
                     }
                 }
             }
         }
 
-        if ($id) {
-            return $this->_isVerified[$id];
+        if ($type && isset($this->_isVerified[$type])) {
+            return $this->_isVerified[$type];
         }
         return min($this->_isVerified);
     }
 
-    public function addAddress($address, $id)
+    /**
+     * Retrieve list of fields, that does not match usps verified address
+     *
+     * @param  string $addressType
+     * @return array
+     */
+    public function getUnverifiedFields($addressType)
     {
-        $this->_addresses[$id] = $address;
+        if (!isset($this->_unverifiedFields[$addressType])) {
+            return array();
+        }
+        return $this->_unverifiedFields[$addressType];
     }
 
-    public function getAddresses()
+    /**
+     * Add address to validate
+     *
+     * @param array $address
+     * @param string $type    billing|shipping
+     */
+    public function addAddress($address, $type)
     {
-        return $this->_addresses;
+        $this->_addresses[$type] = $address;
     }
 
-    public function getVerifiedAddresses($id)
+    /**
+     * Retrieve addresses to validate
+     *
+     * @return array
+     */
+    public function getAddresses($type = null)
     {
-        if (isset($this->_result[$id])) {
-            return $this->_result[$id];
+        if (null === $type) {
+            return $this->_addresses;
+        }
+        return $this->_addresses[$type];
+    }
+
+    /**
+     * Retrieve verified address
+     *
+     * @param  string $type billing|shipping
+     * @return mixed array|null
+     */
+    public function getVerifiedAddresses($type)
+    {
+        if (isset($this->_result[$type])) {
+            return $this->_result[$type];
         }
         return null;
     }
@@ -189,23 +256,27 @@ class TM_FireCheckout_Model_Address_Validator_Usps extends Mage_Usa_Model_Shippi
 
         $result = array();
         if (is_object($xml->Address)) {
+            $i = 0;
             foreach ($xml->Address as $address) {
+                $addressType = (string)$address->attributes()->ID;
+
                 if (is_object($address->Error) && (string)$address->Error->Description!='') {
-                    $result[(string)$address->attributes()->ID][] = array(
+                    $result[(string)$addressType][$i] = array(
                         'error' => (string)$address->Error->Description
                     );
+                    $i++;
                     continue;
                 }
 
-                $id = (string)$address->attributes()->ID;
-                $result[$id][] = array(
+                $result[$addressType][$i] = array(
                     'Address1' => is_object($address->Address1) ? (string)$address->Address1 : '',
                     'Address2' => is_object($address->Address2) ? (string)$address->Address2 : '',
                     'City'     => is_object($address->City)     ? (string)$address->City     : '',
                     'State'    => is_object($address->State)    ? (string)$address->State    : '',
-                    'Zip5'     => is_object($address->Zip5)     ? (string)$address->Zip5     : ''//,
-                    // 'Zip4'     => is_object($address->Zip4)     ? (string)$address->Zip4     : ''
+                    'Zip5'     => is_object($address->Zip5)     ? (string)$address->Zip5     : '',
+                    'Zip4'     => is_object($address->Zip4)     ? (string)$address->Zip4     : ''
                 );
+                $i++;
             }
         }
 

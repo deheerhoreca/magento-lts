@@ -2,6 +2,8 @@
 
 class TM_FireCheckout_Block_Checkout_Shipping extends Mage_Checkout_Block_Onepage_Shipping
 {
+    private $_disabledFields = array();
+
     /**
      * Added to get shipping address from quote for guests too.
      *
@@ -20,28 +22,23 @@ class TM_FireCheckout_Block_Checkout_Shipping extends Mage_Checkout_Block_Onepag
 
     public function getCountryHtmlSelect($type)
     {
-        $countryId = $this->getAddress()->getCountryId();
-        if (is_null($countryId)) {
-            $countryId = Mage::helper('core')->getDefaultCountry();
-        }
-        $select = $this->getLayout()->createBlock('core/html_select')
-            ->setName($type.'[country_id]')
-            ->setId($type.':country_id')
-            ->setTitle(Mage::helper('checkout')->__('Country'))
-            ->setClass('validate-select')
-            ->setValue($countryId)
-            ->setOptions($this->getCountryOptions());
-
-        return $select->getHtml();
+        $html = parent::getCountryHtmlSelect($type);
+        $html = str_replace('onchange="if(window.shipping)shipping.setSameAsBilling(false);"', '', $html);
+        return $html;
     }
 
-    public function getAddressesHtmlSelect($type)
+    public function enableField($field)
     {
-        return Mage::helper('firecheckout/address')->getAddressesHtmlSelect($type, $this);
+        unset($this->_disabledFields[$field]);
     }
 
-    public function hasCustomerAddressId()
+    public function disableField($field)
     {
-        return (bool)$this->getAddress()->getCustomerAddressId();
+        $this->_disabledFields[$field] = $field;
+    }
+
+    public function getDisabledFields()
+    {
+        return $this->_disabledFields;
     }
 }

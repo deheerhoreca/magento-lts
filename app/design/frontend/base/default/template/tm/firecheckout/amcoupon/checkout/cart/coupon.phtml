@@ -1,3 +1,4 @@
+<?php echo $this->getChildHtml('coupon_before') ?>
 <div id="coupon-discount" class="firecheckout-section">
     <div class="block-title"><span><?php echo $this->__('Discount Codes') ?></span></div>
     <div class="discount-form" id="discount-code">
@@ -10,18 +11,32 @@
             <div class="input-field-wrapper">
                 <input class="input-text" id="coupon-code" name="coupon[code]" value="" />
             </div>
-            <button type="button" title="<?php echo $this->__('Apply Coupon') ?>" class="button" id="coupon-apply" value="<?php echo $this->__('Apply Coupon') ?>"><span><span><?php echo $this->__('Apply Coupon') ?></span></span></button>
+            <?php if (false && strlen($this->getCouponCode())) : ?>
+                <button type="button" title="<?php echo $this->__('Cancel Coupon') ?>" id="coupon-cancel" class="button" value="<?php echo $this->__('Cancel Coupon') ?>"><span><span><?php echo $this->__('Cancel Coupon') ?></span></span></button>
+            <?php else: ?>
+                <button type="button" title="<?php echo $this->__('Apply Coupon') ?>" id="coupon-apply" class="button" value="<?php echo $this->__('Apply Coupon') ?>"><span><span><?php echo $this->__('Apply Coupon') ?></span></span></button>
+            <?php endif; ?>
         </div>
 
-        <?php if ($this->getAppliedCoupons()): ?>
+        <?php
+        if (method_exists($this, '_getAppliedCoupons')) {
+            $coupons = $this->_getAppliedCoupons();
+        } else {
+            $coupons = $this->getAppliedCoupons();
+        }
+        ?>
+        <?php if ($coupons) : ?>
             <strong><?php echo $this->__('Applied Coupons'); ?></strong>
-            <table border="0" width="100%" cellpadding="4" cellspacing="0" style="padding: 3px 5px 0 0;">
+            <table border="0" width="100%" cellpadding="4" cellspacing="0" style="margin-top: 3px;">
             <?php $couponCnt = 0; ?>
-            <?php foreach ($this->getAppliedCoupons() as $coupon): ?>
-                <tr style="padding-bottom: 3px;">
+            <?php foreach ($coupons as $coupon) : ?>
+                <tr>
                     <td><?php echo $coupon; ?></td>
-                    <td style="text-align: right;">
-                        <a href="javascript:void(0);" title="<?php echo $coupon; ?>" class="coupon-cancel"><?php echo $this->__('Cancel'); ?></a>
+                    <td style="text-align: right; padding: 0 5px 3px 0;">
+                        <a href="javascript:void(0);"
+                            title="<?php echo $coupon; ?>"
+                            class="coupon-cancel"
+                        ><?php echo $this->__('Cancel'); ?></a>
                     </td>
                 </tr>
                 <?php $couponCnt++; ?>
@@ -41,7 +56,8 @@
         }
         //$('coupon-remove').value = "0";
         checkout.update(checkout.urls.coupon, {
-            'review': 1
+            'review': 1,
+            'remove': 0
         });
     });
     $$('.coupon-cancel').each(function(el) {
@@ -67,9 +83,11 @@
         }
         //$('coupon-remove').value = "0";
         checkout.update(checkout.urls.coupon, {
-            'review': 1
+            'review': 1,
+            'remove': 0
         });
     });
     //]]>
     </script>
 </div>
+<?php echo $this->getChildHtml('coupon_after') ?>

@@ -1,0 +1,2 @@
+"<a href='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz' title='Download GeoCity database'>Download</a> and unzip file under the 'MAGETO_ROOT/lib/MaxMind/GeoIP/data' folder if you don't have it","<a href='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz' title='Download GeoCity database'>Téléchargez</a> et décompressez le fichier dans le dossier 'MAGETO_ROOT/lib/MaxMind/GeoIP/data' si vous ne l'avez pas"
+"GeoCity filename","Nom de fichier GeoCity"

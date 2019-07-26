@@ -4,19 +4,17 @@ require_once 'Mage/Checkout/controllers/OnepageController.php';
 
 class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 {
-    protected $_updateCheckoutLayout           = null;
-    protected $_shippingMethodDependsOnAddress = null;
-    protected $_totalDependsOnShippingAddress  = null;
+    protected $_updateCheckoutLayout = null;
+
+    protected $_useUpdateCheckoutLayout = false;
 
     public function getUpdateCheckoutLayout()
     {
         if (null === $this->_updateCheckoutLayout) {
+            $this->_useUpdateCheckoutLayout = true; // @see addActionLayoutHandles method
             $layout = $this->getLayout();
-            $update = $layout->getUpdate();
-            $update->load('firecheckout_index_updatecheckout');
+            $this->loadLayout();
             $this->_initLayoutMessages('checkout/session');
-            $layout->generateXml();
-            $layout->generateBlocks();
             $this->_updateCheckoutLayout = $layout;
         }
         return $this->_updateCheckoutLayout;
@@ -91,6 +89,16 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
     }
 
     /**
+     * Get order review html
+     *
+     * @return string
+     */
+    protected function _getAgreementsHtml()
+    {
+        return $this->getUpdateCheckoutLayout()->getBlock('checkout.onepage.agreements')->toHtml();
+    }
+
+    /**
      * @return TM_FireCheckout_Model_Type_Standard
      */
     public function getOnepage()
@@ -108,15 +116,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 
     public function indexAction()
     {
-        if (!Mage::helper('firecheckout')->canFireCheckout()) {
-            Mage::getSingleton('checkout/session')->addError($this->__('The fire checkout is disabled.'));
-            $this->_redirect('checkout/cart');
-            return;
-        }
-
-        if (!Mage::getStoreConfig('firecheckout/mobile/enabled')
-            && $this->_isMobile()) {
-
+        if (!Mage::getStoreConfig('firecheckout/mobile/enabled') && $this->_isMobile()) {
             $this->_redirect('checkout/onepage');
             return;
         }
@@ -130,13 +130,18 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             return;
         }
         if (!$quote->validateMinimumAmount()) {
-            $error = Mage::getStoreConfig('sales/minimum_order/error_message');
+            $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
+                Mage::getStoreConfig('sales/minimum_order/error_message') :
+                Mage::helper('checkout')->__('Subtotal must exceed minimum order amount');
+
             Mage::getSingleton('checkout/session')->addError($error);
             $this->_redirect('checkout/cart');
             return;
         }
         Mage::getSingleton('checkout/session')->setCartWasUpdated(false);
-        Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
+        Mage::getSingleton('customer/session')->setBeforeAuthUrl(
+            Mage::helper('firecheckout')->getFirecheckoutUrl()
+        );
 
         // sage server fix
 //        $sagepayModel = Mage::getModel('sagepayserver2/sagePayServer_session');
@@ -153,32 +158,80 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $this->loadLayout();
         $this->_initLayoutMessages('customer/session');
         $this->_initLayoutMessages('checkout/session');
-        $this->getLayout()->getBlock('head')->setTitle(Mage::getStoreConfig('firecheckout/general/title'));
+
+        $metaTitle = Mage::getStoreConfig('firecheckout/general/title');
+        if (Mage::getStoreConfig('firecheckout/general/use_different_meta_title')) {
+            $metaTitle = Mage::getStoreConfig('firecheckout/general/meta_title');
+        }
+        $this->getLayout()->getBlock('head')->setTitle($metaTitle);
+        $this->_addBodyClasses();
         $this->renderLayout();
     }
 
-    protected function _isShippingMethodDependsOnAddress()
+    protected function _addBodyClasses()
     {
-        if (null === $this->_shippingMethodDependsOnAddress) {
-            $this->_shippingMethodDependsOnAddress = (
-                Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_country')
-                || Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_zip')
-                || Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_region')
+        $root = $this->getLayout()->getBlock('root');
+        if ($root) {
+            $root->addBodyClass(
+                'firecheckout-' . Mage::helper('firecheckout/layout')->getLayout()
             );
+            if (Mage::getStoreConfig('firecheckout/general/empty_layout')) {
+                $root->addBodyClass('firecheckout-empty-layout');
+            }
+
+            // form design
+            $mode = Mage::getStoreConfig('firecheckout/design/form_fields_mode');
+            if (in_array($mode, array('default', 'wide')) &&
+                Mage::getStoreConfigFlag('firecheckout/design/hide_field_labels')) {
+
+                $root->addBodyClass('fc-form-compact');
+            }
+            $root->addBodyClass(
+                'fc-form-' . Mage::getStoreConfig('firecheckout/design/form_fields_mode')
+            );
+
+            // additional classes
+            $customer = $this->getCheckout()->getCustomerSession()->getCustomer();
+            if ($customer) {
+                $root->addBodyClass('fc-customer');
+                if ($customer->getAddresses()) {
+                    $root->addBodyClass('fc-has-address');
+                }
+            } else {
+                $root->addBodyClass('fc-guest');
+            }
+
+            // rtl
+            if (Mage::helper('firecheckout')->isRtl()) {
+                $root->addBodyClass('fc-rtl');
+            }
         }
-        return $this->_shippingMethodDependsOnAddress;
     }
 
-    protected function _isTotalDependsOnShippingAddress()
+    public function addActionLayoutHandles()
     {
-        if (null === $this->_totalDependsOnShippingAddress) {
-            $this->_totalDependsOnShippingAddress = (
-                Mage::getStoreConfig('firecheckout/ajax_update/total_on_shipping_country')
-                || Mage::getStoreConfig('firecheckout/ajax_update/total_on_shipping_zip')
-                || Mage::getStoreConfig('firecheckout/ajax_update/total_on_shipping_region')
+        parent::addActionLayoutHandles();
+        $update = $this->getLayout()->getUpdate();
+        $update->addHandle(
+            'firecheckout_' . Mage::helper('firecheckout/layout')->getLayout()
+        );
+        if (Mage::getStoreConfig('firecheckout/general/empty_layout')) {
+            $update->addHandle(
+                'firecheckout_empty_layout'
             );
         }
-        return $this->_totalDependsOnShippingAddress;
+
+        // Third-party module compatibility.
+        // Modules that are added prior to firecheckout layout, can't use
+        // firecheckout_index_index to reference our blocks, so we add
+        // additional firecheckout_index_index_custom handle for them
+        $update->addHandle(strtolower($this->getFullActionName()) . '_custom');
+        if ($this->_useUpdateCheckoutLayout) {
+            $update->addHandle('firecheckout_index_updatecheckout');
+            $update->addHandle('firecheckout_index_updatecheckout_custom');
+        }
+
+        return $this;
     }
 
     public function saveRewardpointsAction()
@@ -196,6 +249,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote    = $this->getCheckout()->getQuote();
         $oldTotal = $quote->getBaseGrandTotal();
         $sections = array();
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
         $cancelRewardPoints = $this->getRequest()->getPost('cancel_rewardpoints', false);
         if (!$cancelRewardPoints) {
             $session = Mage::getSingleton('core/session');
@@ -232,53 +286,21 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $sections[] = 'review';
         $sections[] = 'coupon-discount';
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
+        if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
             $sections[] = 'shipping-method';
-            // changing total by shipping price may affect the shipping prices theoretically
-            // (free shipping may be canceled or added)
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-
-            // Shipping methods always left in the place. Only price changes. (No max/min price rules that hides shipping methods)
-            // So we don't need to apply shipping method again
-
-            // if shipping price was changed, we need to recalculate totals again.
-            // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-            // previous method added a discount and selected shipping method wasn't free
-            // but removing the previous shipping method removes the discount also
-            // and selected shipping method is now free
-            $quote->setTotalsCollectedFlag(false)->collectTotals();
+            $this->recollectShippingRatesAndTotals(false);
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total') // payment methods depends on grand total
+        if ($ajaxHelper->getIsPaymentMethodDependsOn('total')
             || $quote->getBaseGrandTotal() <= 0 || $oldTotal <= 0) {
 
             $sections[] = 'payment-method';
-
-            // if only one method is available it should be chosen automatically
-            // because some discount may appear on this method
-            // and user is not required to click on single payment method,
-            // and we should display the updated grand total
-
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
 
         $quote->save();
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function awpointsAction()
@@ -296,6 +318,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote    = $this->getCheckout()->getQuote();
         $oldTotal = $quote->getBaseGrandTotal();
         $sections = array();
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
         $session = Mage::getSingleton('checkout/session');
         $payment = $this->getRequest()->getPost('payment');
         $session->setData('use_points', isset($payment['use_points']));
@@ -303,27 +326,21 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 
         $quote->collectTotals();
         $sections[] = 'review';
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) {
+        if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
             $sections[] = 'shipping-method';
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-            $quote->setTotalsCollectedFlag(false)->collectTotals();
+            $this->recollectShippingRatesAndTotals(false);
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')
+        if ($ajaxHelper->getIsPaymentMethodDependsOn('total')
             || $quote->getBaseGrandTotal() <= 0 || $oldTotal <= 0) {
 
             $sections[] = 'payment-method';
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) {
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
 
         $quote->save();
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function saveGiftcardAction()
@@ -338,6 +355,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote          = $this->getOnepage()->getQuote();
         $oldTotal       = $quote->getBaseGrandTotal();
         $sections       = array();
+        $ajaxHelper     = Mage::helper('firecheckout/ajax');
         $removeGiftcard = $this->getRequest()->getPost('remove_giftcard', false);
         $giftcardCode   = $this->getRequest()->getPost('giftcard_code');
         if (!$giftcardCode) {
@@ -374,53 +392,21 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote->collectTotals();
         $sections[] = 'review';
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
+        if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
             $sections[] = 'shipping-method';
-            // changing total by shipping price may affect the shipping prices theoretically
-            // (free shipping may be canceled or added)
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-
-            // Shipping methods always left in the place. Only price changes. (No max/min price rules that hides shipping methods)
-            // So we don't need to apply shipping method again
-
-            // if shipping price was changed, we need to recalculate totals again.
-            // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-            // previous method added a discount and selected shipping method wasn't free
-            // but removing the previous shipping method removes the discount also
-            // and selected shipping method is now free
-            $quote->setTotalsCollectedFlag(false)->collectTotals();
+            $this->recollectShippingRatesAndTotals(false);
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total') // payment methods depends on grand total
+        if ($ajaxHelper->getIsPaymentMethodDependsOn('total')
             || $quote->getBaseGrandTotal() <= 0 || $oldTotal <= 0) {
 
             $sections[] = 'payment-method';
-
-            // if only one method is available it should be chosen automatically
-            // because some discount may appear on this method
-            // and user is not required to click on single payment method,
-            // and we should display the updated grand total
-
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
 
         $quote->save();
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function savePaymentDataAction()
@@ -451,7 +437,41 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $sections['review']         = 'review';
         $sections['payment-method'] = 'payment-method';
         $result['update_section']   = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
+    }
+
+    /**
+     * Safely Validate Form Key:
+     *  - Checks for method_exists before run
+     *  - Fills response data by default to show error message
+     *
+     * @return bool
+     */
+    protected function _ajaxValidateFormKeySafely($checkSettings = true, $updateResponse = true)
+    {
+        if (version_compare(Mage::helper('firecheckout')->getMagentoVersion(), '1.8.0.0') < 0) {
+            return true;
+        }
+        if ($checkSettings) {
+            if (!method_exists($this, 'isFormkeyValidationOnCheckoutEnabled')
+                || !$this->isFormkeyValidationOnCheckoutEnabled()) {
+
+                return true;
+            }
+        }
+
+        $validated = true;
+        if (method_exists($this, '_validateFormKey')) {
+            $validated = $this->_validateFormKey();
+        }
+        if (!$validated && $updateResponse) {
+            $this->sendJsonResponse(array(
+                'success' => false,
+                'error'   => true,
+                'error_messages' => $this->__('Invalid Form Key. Please refresh the page.')
+            ));
+        }
+        return $validated;
     }
 
     public function saveBillingAction()
@@ -462,13 +482,27 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         if (!$this->getRequest()->isPost()) {
             return;
         }
+        if (!$this->_ajaxValidateFormKeySafely()) {
+            return;
+        }
 
-        $data              = $this->getRequest()->getPost('billing', array());
+        $data = $this->getRequest()->getPost('billing', array());
         $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
-        $result            = $this->getOnepage()->saveBilling($data, $customerAddressId, false);
+
+        /* Wyomind_Pickupatstore */
+        Mage::getSingleton('core/session')->setPickupatstore(false);
+        if (isset($data['use_for_shipping']) && $data['use_for_shipping'] == 2) {
+            Mage::getSingleton('core/session')->setPickupatstore(true);
+            $data['use_for_shipping'] = 1;
+        }
+        /* Wyomind_Pickupatstore */
+
+        $result = $this->getOnepage()->saveBilling(
+            $data, $customerAddressId, $this->getRequest()->getPost('force_validation', false)
+        );
 
         if (isset($result['error'])) {
-            return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+            return $this->sendJsonResponse($result);
         }
 
         /**
@@ -477,9 +511,10 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote           = $this->getOnepage()->getQuote();
         $shippingAddress = $quote->getShippingAddress();
         $sections        = array();
+        $ajaxHelper      = Mage::helper('firecheckout/ajax');
         if (!$quote->isVirtual()
             && isset($data['use_for_shipping']) && $data['use_for_shipping'] == 1
-            && $this->_isShippingMethodDependsOnAddress()) {
+            && $ajaxHelper->getIsShippingMethodDependsOn('shipping')) {
 
             $sections['shipping-method'] = 'shipping-method';
 
@@ -489,128 +524,61 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             // apply or cancel shipping method
             $this->getOnepage()->applyShippingMethod();
 
-            if ((Mage::getStoreConfig('firecheckout/ajax_update/total_on_shipping_method')
+            if (($ajaxHelper->getIsTotalDependsOn('shipping-method')
                     && $oldMethod != $shippingAddress->getShippingMethod())
-                || $this->_isTotalDependsOnShippingAddress()) {
+                || $ajaxHelper->getIsTotalDependsOn(array('shipping', 'billing'))) {
 
                 $sections['review'] = 'review';
                 // shipping method may affect the total in both sides (discount on using shipping address)
                 $quote->collectTotals();
 
-                if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
-                    // changing total by shipping price may affect the shipping prices theoretically
-                    // (free shipping may be canceled or added)
-                    $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
-                    // if shipping price was changed, we need to recalculate totals again.
-                    // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-                    // previous method added a discount and selected shipping method wasn't free
-                    // but removing the previous shipping method removes the discount also
-                    // and selected shipping method is now free
-                    $quote->setTotalsCollectedFlag(false)->collectTotals();
+                if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
+                    $this->recollectShippingRatesAndTotals(false, false);
                 }
 
-                if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
+                if ($ajaxHelper->getIsPaymentMethodDependsOn('total')) {
                     $sections['payment-method'] = 'payment-method';
-
-                    // if only one method is available it should be chosen automatically
-                    // because some discount may appear on this method
-                    // and user is not required to click on single payment method,
-                    // and we should display the updated grand total
-
-                    // total was changed [in both sides], so some payment methods
-                    // now can be removed or added (min/max order total configuration)
-                    $this->getOnepage()->applyPaymentMethod();
-
-                    if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method @todo && method is changed
-                        // recollect totals again because adding/removing payment
-                        // method may add/remove some discounts in the order
-
-                        // to recollect discount rules need to clear previous discount
-                        // descriptions and mark address as modified
-                        // see _canProcessRule in Mage_SalesRule_Model_Validator
-                        $shippingAddress->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                        $quote->setTotalsCollectedFlag(false)->collectTotals();
-                    }
+                    $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
                 }
             }
-        } elseif ($this->_isTotalDependsOnShippingAddress()) {
+        } elseif ($ajaxHelper->getIsTotalDependsOn(array('shipping', 'billing'))) {
             $sections['review'] = 'review';
 
             // shipping method may affect the total in both sides (discount on using shipping address)
             $quote->collectTotals();
 
-            if (!$quote->isVirtual() && Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
+            if (!$quote->isVirtual() && $ajaxHelper->getIsShippingMethodDependsOn('total')) {
                 $sections[] = 'shipping-method';
-                // changing total by shipping price may affect the shipping prices theoretically
-                // (free shipping may be canceled or added)
-                $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
-                // if shipping price was changed, we need to recalculate totals again.
-                // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-                // previous method added a discount and selected shipping method wasn't free
-                // but removing the previous shipping method removes the discount also
-                // and selected shipping method is now free
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
+                $this->recollectShippingRatesAndTotals(false);
             }
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
+            if ($ajaxHelper->getIsPaymentMethodDependsOn('total')) {
                 $sections[] = 'payment-method';
-
-                // if only one method is available it should be chosen automatically
-                // because some discount may appear on this method
-                // and user is not required to click on single payment method,
-                // and we should display the updated grand total
-
-                // total was changed [in both sides], so some payment methods
-                // now can be removed or added (min/max order total configuration)
-                $this->getOnepage()->applyPaymentMethod();
-
-                if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                    // recollect totals again because adding/removing payment
-                    // method may add/remove some discounts in the order
-
-                    // to recollect discount rules need to clear previous discount
-                    // descriptions and mark address as modified
-                    // see _canProcessRule in Mage_SalesRule_Model_Validator
-                    $shippingAddress->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                    $quote->setTotalsCollectedFlag(false)->collectTotals();
-                }
+                $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
             }
         }
 
-        if (!isset($sections['payment-method'])
-            && Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_country')) {
-
+        if (!isset($sections['payment-method']) && $ajaxHelper->getIsPaymentMethodDependsOn('billing')) {
             $sections['payment-method'] = 'payment-method';
-
-            // if only one method is available it should be chosen automatically
-            // because some discount may appear on this method
-            // and user is not required to click on single payment method,
-            // and we should display the updated grand total
-
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method @todo && method is changed
+            $collectTotals = $ajaxHelper->getIsTotalDependsOn('payment-method');
+            if ($collectTotals) {
                 $sections['review'] = 'review';
-
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $shippingAddress->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
             }
+            $this->applyPaymentMethodAndCollectTotals($collectTotals);
         }
+
+        if ($ajaxHelper->getIsDiscountDependsOn(array('billing', 'shipping'))) {
+            $sections[] = 'coupon-discount';
+        }
+
         $quote->save();
 
+        if ($ajaxHelper->getIsAgreementsDependsOn(array('billing', 'shipping'))) {
+            $sections['agreements'] = 'agreements';
+        }
+
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function saveShippingAction()
@@ -621,20 +589,31 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         if (!$this->getRequest()->isPost()) {
             return;
         }
+        if (!$this->_ajaxValidateFormKeySafely()) {
+            return;
+        }
 
-        $sections          = array();
-        $data              = $this->getRequest()->getPost('shipping', array());
+        $sections = array();
+        $data = $this->getRequest()->getPost('shipping', array());
         $customerAddressId = $this->getRequest()->getPost('shipping_address_id', false);
-        $result            = $this->getOnepage()->saveShipping($data, $customerAddressId, false);
+
+        /* Wyomind_Pickupatstore */
+        Mage::getSingleton('core/session')->setPickupatstore(false);
+        /* Wyomind_Pickupatstore */
+
+        $result = $this->getOnepage()->saveShipping(
+            $data, $customerAddressId, $this->getRequest()->getPost('force_validation', false)
+        );
 
         if (isset($result['error'])) {
-            return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+            return $this->sendJsonResponse($result);
         }
         /**
          * @var Mage_Sales_Model_Quote
          */
         $quote = $this->getOnepage()->getQuote();
-        if ($this->_isShippingMethodDependsOnAddress()) {
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
+        if ($ajaxHelper->getIsShippingMethodDependsOn('shipping')) {
             $sections[] = 'shipping-method';
 
             // recollect avaialable shipping methods
@@ -642,101 +621,54 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             // apply or cancel shipping method
             $this->getOnepage()->applyShippingMethod();
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_shipping_method') // @todo: && method was changed
-                || $this->_isTotalDependsOnShippingAddress()) {
+            if ($ajaxHelper->getIsTotalDependsOn('shipping-method') // @todo: && method was changed
+                || $ajaxHelper->getIsTotalDependsOn('shipping')) {
 
                 $sections[] = 'review';
 
                 // shipping method may affect the total in both sides (discount on using shipping address)
                 $quote->collectTotals();
 
-                if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
-//                    $sections[] = 'shipping-method';
-                    // changing total by shipping price may affect the shipping prices theoretically
-                    // (free shipping may be canceled or added)
-                    $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-                    // if shipping price was changed, we need to recalculate totals again.
-                    // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-                    // previous method added a discount and selected shipping method wasn't free
-                    // but removing the previous shipping method removes the discount also
-                    // and selected shipping method is now free
-                    $quote->setTotalsCollectedFlag(false)->collectTotals();
+                if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
+                    $this->recollectShippingRatesAndTotals(false);
                 }
 
-                if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
+                if ($ajaxHelper->getIsPaymentMethodDependsOn('total')) {
                     $sections[] = 'payment-method';
-
-                    // if only one method is available it should be chosen automatically
-                    // because some discount may appear on this method
-                    // and user is not required to click on single payment method,
-                    // and we should display the updated grand total
-
-                    // total was changed [in both sides], so some payment methods
-                    // now can be removed or added (min/max order total configuration)
-                    $this->getOnepage()->applyPaymentMethod();
-
-                    if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method @todo && method is changed
-                        // recollect totals again because adding/removing payment
-                        // method may add/remove some discounts in the order
-
-                        // to recollect discount rules need to clear previous discount
-                        // descriptions and mark address as modified
-                        // see _canProcessRule in Mage_SalesRule_Model_Validator
-                        $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                        $quote->setTotalsCollectedFlag(false)->collectTotals();
-                    }
+                    $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
                 }
             }
+            if ($ajaxHelper->getIsDiscountDependsOn('shipping')) {
+                $sections[] = 'coupon-discount';
+            }
             $quote->save();
-        } else if ($this->_isTotalDependsOnShippingAddress()) { // total depends on shipping address - discount is applicable
+        } else if ($ajaxHelper->getIsTotalDependsOn('shipping')) {
             $sections[] = 'review';
 
             // shipping method may affect the total in both sides (discount on using shipping address)
             $quote->collectTotals();
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
+            if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
                 $sections[] = 'shipping-method';
-                // changing total by shipping price may affect the shipping prices theoretically
-                // (free shipping may be canceled or added)
-                $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-                // if shipping price was changed, we need to recalculate totals again.
-                // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-                // previous method added a discount and selected shipping method wasn't free
-                // but removing the previous shipping method removes the discount also
-                // and selected shipping method is now free
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
+                $this->recollectShippingRatesAndTotals(false);
             }
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
+            if ($ajaxHelper->getIsPaymentMethodDependsOn('total')) {
                 $sections[] = 'payment-method';
-
-                // if only one method is available it should be chosen automatically
-                // because some discount may appear on this method
-                // and user is not required to click on single payment method,
-                // and we should display the updated grand total
-
-                // total was changed [in both sides], so some payment methods
-                // now can be removed or added (min/max order total configuration)
-                $this->getOnepage()->applyPaymentMethod();
-
-                if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                    // recollect totals again because adding/removing payment
-                    // method may add/remove some discounts in the order
-
-                    // to recollect discount rules need to clear previous discount
-                    // descriptions and mark address as modified
-                    // see _canProcessRule in Mage_SalesRule_Model_Validator
-                    $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                    $quote->setTotalsCollectedFlag(false)->collectTotals();
-                }
+                $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
+            }
+            if ($ajaxHelper->getIsDiscountDependsOn('shipping')) {
+                $sections[] = 'coupon-discount';
             }
             $quote->save();
         }
 
+        if ($ajaxHelper->getIsAgreementsDependsOn('shipping')) {
+            $sections['agreements'] = 'agreements';
+        }
+
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function saveShippingMethodAction()
@@ -744,6 +676,11 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         if ($this->_expireAjax()) {
             return;
         }
+        if (!$this->_ajaxValidateFormKeySafely()) {
+            return;
+        }
+
+        $this->_saveAdvoxInpost();
 
         $method = $this->getRequest()->getPost('shipping_method', false);
         if ($this->getRequest()->getPost('remove-shipping', false)) {
@@ -754,68 +691,53 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $oldMethod       = $shippingAddress->getShippingMethod();
 
         $this->getCheckout()->applyShippingMethod($method);
+        // EE giftwrap integration
+        Mage::dispatchEvent(
+            'checkout_controller_onepage_save_shipping_method',
+            array(
+                'request' => $this->getRequest(),
+                'quote'   => $this->getOnepage()->getQuote()
+            )
+        );
         if (Mage::helper('firecheckout')->canUseMageWorxMultifees()) {
             $shippingAddress->save();
         }
         $newMethod = $shippingAddress->getShippingMethod();
 
         $sections = array();
-        if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_shipping_method')) { // total depends on shipping method
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
+        if ($ajaxHelper->getIsTotalDependsOn('shipping-method')) {
             $sections[] = 'review';
             /**
              * @var Mage_Sales_Model_Quote
              */
             $quote->collectTotals();
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total') // shipping methods depends on total (subtotal + discount) without shipping price
+            if ($ajaxHelper->getIsShippingMethodDependsOn('total')
                 || (!$newMethod && $oldMethod != $newMethod)) { // reset method fix
 
                 $sections[] = 'shipping-method';
-                // changing total by shipping price may affect the shipping prices theoretically
-                // (free shipping may be canceled or added)
-                $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
-
-                // Shipping methods always left in the place. Only price changes. (No max/min price rules that hides shipping methods)
-                // So we don't need to apply shipping method again
-
-                // if shipping price was changed, we need to recalculate totals again.
-                // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-                // previous method added a discount and selected shipping method wasn't free
-                // but removing the previous shipping method removes the discount also
-                // and selected shipping method is now free
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
+                $this->recollectShippingRatesAndTotals(false);
             }
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
+            if ($ajaxHelper->getIsPaymentMethodDependsOn('total')) {
                 $sections[] = 'payment-method';
+                $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
+            }
 
-                // if only one method is available it should be chosen automatically
-                // because some discount may appear on this method
-                // and user is not required to click on single payment method,
-                // and we should display the updated grand total
-
-                // total was changed [in both sides], so some payment methods
-                // now can be removed or added (min/max order total configuration)
-                $this->getOnepage()->applyPaymentMethod();
-
-                if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                    // recollect totals again because adding/removing payment
-                    // method may add/remove some discounts in the order
-
-                    // to recollect discount rules need to clear previous discount
-                    // descriptions and mark address as modified
-                    // see _canProcessRule in Mage_SalesRule_Model_Validator
-                    $shippingAddress->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                    $quote->setTotalsCollectedFlag(false)->collectTotals();
-                }
+            if ($ajaxHelper->getIsDiscountDependsOn('shipping-method')) {
+                $sections[] = 'coupon-discount';
             }
 
             $quote->save();
         }
 
+        if ($ajaxHelper->getIsAgreementsDependsOn('shipping-method')) {
+            $sections['agreements'] = 'agreements';
+        }
+
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function savePaymentAction()
@@ -827,20 +749,53 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             $this->_ajaxRedirectResponse();
             return;
         }
+        if (!$this->_ajaxValidateFormKeySafely()) {
+            return;
+        }
 
         $data = $this->getRequest()->getPost('payment', array());
         if (isset($data['remove'])) {
             $data['method'] = false;
         }
-        $this->getCheckout()->applyPaymentMethod(isset($data['method']) ? $data['method'] : null);
+
+        if (Mage::helper('core')->isModuleOutputEnabled('AW_Storecredit')
+            || Mage::helper('core')->isModuleOutputEnabled('Amasty_StoreCredit')
+            || Mage::helper('core')->isModuleOutputEnabled('Klarna_Payments')) {
+
+            $dataObject = new Varien_Object($data);
+            Mage::dispatchEvent(
+                'sales_quote_payment_import_data_before',
+                array(
+                    'payment' => $this->getOnepage()->getQuote()->getPayment(),
+                    'input'   => $dataObject,
+                )
+            );
+            $data['method'] = $dataObject->getMethod();
+        }
+
+        if ($this->getRequest()->getPost('force_validation', false)) {
+            try {
+                $result = $this->getCheckout()->savePayment($data);
+            } catch (Exception $e) {
+                $result = array();
+                $result['error'] = true;
+                $result['message'] = $e->getMessage();
+                return $this->sendJsonResponse($result);
+            }
+        } else {
+            $this->getCheckout()->applyPaymentMethod(isset($data['method']) ? $data['method'] : null);
+        }
 
         $sections = array();
-        if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')
-            || Mage::helper('firecheckout')->canUseMageWorxCustomerCredit()) { // total depends on payment method
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
+        if ($ajaxHelper->getIsTotalDependsOn('payment-method')
+            || Mage::helper('firecheckout')->canUseMageWorxCustomerCredit()) {
 
             $sections[] = 'review';
 
-            if (!empty($data['use_internal_credit']) || $data['method']=='customercredit') {
+            if (!empty($data['use_internal_credit']) ||
+                (isset($data['method']) && $data['method'] === 'customercredit')
+            ) {
                 Mage::getSingleton('checkout/session')->setUseInternalCredit(true);
             } else {
                 Mage::getModel('checkout/session')->setUseInternalCredit(false);
@@ -852,45 +807,34 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             $quote = $this->getOnepage()->getQuote();
             $quote->collectTotals();
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
+            if ($ajaxHelper->getIsShippingMethodDependsOn('total')) {
                 $sections[] = 'shipping-method';
-                // changing total by payment may affect the shipping prices theoretically
-                // (free shipping may be canceled or added)
-                $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-                // if shipping price was changed, we need to recalculate totals again.
-                // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-                // previous method added a discount and selected shipping method wasn't free
-                // but removing the previous shipping method removes the discount also
-                // and selected shipping method is now free
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
+                $this->recollectShippingRatesAndTotals(false);
             }
 
-            if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
+            if ($ajaxHelper->getIsPaymentMethodDependsOn('total')) {
                 $sections[] = 'payment-method';
                 if (!isset($data['remove'])) { // if not canceled method
-                    // total was changed [in both sides], so some payment methods
-                    // now can be removed or added (min/max order total configuration)
-                    $this->getOnepage()->applyPaymentMethod(isset($data['method']) ? $data['method'] : null);
-
-                    if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                        // recollect totals again because adding/removing payment
-                        // method may add/remove some discounts in the order
-
-                        // to recollect discount rules need to clear previous discount
-                        // descriptions and mark address as modified
-                        // see _canProcessRule in Mage_SalesRule_Model_Validator
-                        $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                        $quote->setTotalsCollectedFlag(false)->collectTotals();
-                    }
+                    $this->applyPaymentMethodAndCollectTotals(
+                        $ajaxHelper->getIsTotalDependsOn('payment-method'),
+                        isset($data['method']) ? $data['method'] : null
+                    );
                 }
+            }
+
+            if ($ajaxHelper->getIsDiscountDependsOn('payment-method')) {
+                $sections[] = 'coupon-discount';
             }
 
             $quote->save();
         }
 
+        if ($ajaxHelper->getIsAgreementsDependsOn('payment-method')) {
+            $sections['agreements'] = 'agreements';
+        }
+
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function saveCouponAction()
@@ -914,13 +858,17 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 
         if ($this->getRequest()->getPost('amcoupon_code_cancel', false)) {
             $codeToCancel = $this->getRequest()->getParam('amcoupon_code_cancel');
-            $appliedCoupons = $quote->getAppliedCoupons();
+            if (method_exists($quote, '_getAppliedCoupons')) {
+                $appliedCoupons = $quote->_getAppliedCoupons();
+            } else {
+                $appliedCoupons = $quote->getAppliedCoupons();
+            }
             $session = Mage::getSingleton('checkout/session');
             foreach ($appliedCoupons as $i => $coupon) {
                 if ($coupon == $codeToCancel) {
                     unset($appliedCoupons[$i]);
                     try {
-                        if ($quote->setCouponCode($appliedCoupons)->save()) {
+                        if ($quote->setCouponCode(implode(',', $appliedCoupons))->save()) {
                             $session->addSuccess($this->__('Coupon code %s was canceled.', $codeToCancel));
                         }
                     } catch (Mage_Core_Exception $e) {
@@ -932,7 +880,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             }
             $sections[] = 'coupon-discount';
         } elseif ($this->getRequest()->getPost('remove_ugiftcert', false)) {
-            $gc = $this->getRequest()->getPost('ugiftcert_code');
+            $gc  = $this->getRequest()->getPost('gc');
             $gcs = $quote->getGiftcertCode();
             if ($gc && $gcs && strpos($gcs, $gc) !== false) {
                 $gcsArr = array();
@@ -942,32 +890,26 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                     }
                 }
                 $quote->setGiftcertCode(join(',', $gcsArr));
-                $sections[] = 'coupon-discount';
+                $sections[] = 'giftcard';
             }
-        } elseif (Mage::getStoreConfig('ugiftcert/default')
-            && ($uGiftCertificate = Mage::getModel('ugiftcert/cert'))
-            && ($cert = $uGiftCertificate->load($data['code'], 'cert_number'))
-            && $cert->getId()
-            && $cert->getStatus()=='A'
-            && $cert->getBalance()>0) {
-
+        } elseif ($code = trim($this->getRequest()->getParam('cert_code'))) {
             $session = Mage::getSingleton('checkout/session');
             $hlp = Mage::helper('ugiftcert');
             try {
-                $quote = $session->getQuote();
-                if(Mage::getStoreConfig('ugiftcert/default/use_conditions')) {
-                    $valid = $this->_validateUnirgyGiftCertificateConditions($cert, $quote);
-                    if(!$valid) {
-                        $session->addError($hlp->__("Gift certificate '%s' cannot be used with your cart items", $cert->getCertNumber()));
-                        return;
-                    }
+                if ($hlp->addCertificate($code, $quote)) {
+                    $session->addSuccess(
+                        Mage::helper('ugiftcert')->__("Gift certificate '%s' was applied to your order.", $code)
+                    );
+                } else {
+                    $session->addError($hlp->__("'%s' is not valid certificate code.", $code));
                 }
-                $cert->addToQuote($quote);
-                $session->addSuccess($hlp->__("Gift certificate '%s' was applied to your order.", $cert->getCertNumber()));
+            } catch (Unirgy_Giftcert_Exception_Coupon $gce) {
+                $session->addError($gce->getMessage());
             } catch (Exception $e) {
-                $session->addError($hlp->__("Gift certificate '%s' could not be applied to your order.", $cert->getCertNumber()));
+                $session->addError($hlp->__("Gift certificate '%s' could not be applied to your order.", $code));
+                $session->addError($e->getMessage());
             }
-            $sections[] = 'coupon-discount';
+            $sections[] = 'giftcard';
         } else {
             if (!empty($data['remove'])) {
                 $data['code'] = '';
@@ -988,70 +930,57 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                 } catch (Exception $e) {
                     Mage::getSingleton('checkout/session')->addError($this->__('Cannot apply the coupon code.'));
                 }
-                $sections[] = 'coupon-discount';
             }
+            $sections[] = 'coupon-discount';
         }
 
         // coupon may affect the total in both sides (apply or cancel)
         $quote->collectTotals(); // coupon validation is inside collectTotals method
-        $sections[] = 'review';
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total') // shipping methods depends on subtotal + discount
-            || Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_coupon')) {
+        if (!$quote->validateMinimumAmount()) {
+            $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
+                Mage::getStoreConfig('sales/minimum_order/error_message') :
+                Mage::helper('checkout')->__('Subtotal must exceed minimum order amount');
 
-            $sections[] = 'shipping-method';
-            // changing total by shipping price may affect the shipping prices theoretically
-            // (free shipping may be canceled or added)
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
+            Mage::getSingleton('checkout/session')->addError($error);
 
-            // Shipping methods always left in the place. Only price changes. (No max/min price rules that hides shipping methods)
-            // So we don't need to apply shipping method again
+            $minimumAmount = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())
+                ->toCurrency(Mage::getStoreConfig('sales/minimum_order/amount'));
+            $warning = Mage::getStoreConfig('sales/minimum_order/description')
+                ? Mage::getStoreConfig('sales/minimum_order/description')
+                : Mage::helper('checkout')->__('Minimum order amount is %s', $minimumAmount);
 
-            // if shipping price was changed, we need to recalculate totals again.
-            // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-            // previous method added a discount and selected shipping method wasn't free
-            // but removing the previous shipping method removes the discount also
-            // and selected shipping method is now free
+            Mage::getSingleton('checkout/session')->addNotice($warning);
+
+            $couponChanged = false;
+            $quote->setCouponCode('');
             $quote->setTotalsCollectedFlag(false)->collectTotals();
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')  // payment methods depends on grand total
+        $sections[] = 'review';
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
+
+        if ($ajaxHelper->getIsShippingMethodDependsOn(array('total', 'coupon'))) {
+            $sections[] = 'shipping-method';
+            $this->recollectShippingRatesAndTotals(true, true);
+        }
+
+        if ($ajaxHelper->getIsPaymentMethodDependsOn('total')
             || $quote->getBaseGrandTotal() <= 0 || $oldTotal <= 0) { // hide and show payment methods
 
             $sections[] = 'payment-method';
-
-            // if only one method is available it should be chosen automatically
-            // because some discount may appear on this method
-            // and user is not required to click on single payment method,
-            // and we should display the updated grand total
-
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
         $quote->save();
 
         if ($couponChanged) {
-            $couponToValidate = $quote->getCouponCode();
+            $coupons = $quote->getCouponCode();
             if ($quote instanceof Amasty_Coupons_Model_Sales_Quote) {
-                $coupons = explode(',', $couponToValidate);
-                if (count($coupons)){
-                    $couponToValidate = $coupons[count($coupons) - 1];
-                }
+                $coupons = explode(',', $coupons);
+            } else {
+                $coupons = array($coupons);
             }
-            if ($data['code'] == $couponToValidate) {
+            if (in_array($data['code'], $coupons)) {
                 Mage::getSingleton('checkout/session')->addSuccess(
                     $this->__('Coupon code "%s" was applied.', Mage::helper('core')->htmlEscape($data['code']))
                 );
@@ -1063,7 +992,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         }
 
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     protected function _validateUnirgyGiftCertificateConditions(Unirgy_Giftcert_Model_Cert $cert, $quote)
@@ -1121,7 +1050,9 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                     $cart->updateItems($oldCartData)
                         ->save();
 
-                    $error = Mage::getStoreConfig('sales/minimum_order/error_message');
+                    $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
+                        Mage::getStoreConfig('sales/minimum_order/error_message') :
+                        Mage::helper('checkout')->__('Subtotal must exceed minimum order amount');
                     $session->addError($error);
 
                     $minimumAmount = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())
@@ -1155,6 +1086,9 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             $this->_ajaxRedirectResponse();
             return;
         }
+        if (!$this->_ajaxValidateFormKeySafely()) {
+            return;
+        }
 
         /**
          * @var Mage_Sales_Model_Quote
@@ -1162,6 +1096,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote    = $this->getOnepage()->getQuote();
         $sections = array('review');
         $sections[] = 'coupon-discount';
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
 
         if (!$this->_updateCart($this->getRequest()->getParam('updated_cart'))
             || $quote->getHasError()) {
@@ -1174,19 +1109,18 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 
             // if unavailable product qty was received - revert to the original values
             $this->_updateCart($this->getRequest()->getParam('updated_cart_safe'));
-
-            $quote->collectTotals();
-            $result['update_section'] = $this->_renderSections($sections);
-            return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
         }
 
         if (!$quote->validateMinimumAmount()) {
-            $error = Mage::getStoreConfig('sales/minimum_order/error_message');
+            $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
+                Mage::getStoreConfig('sales/minimum_order/error_message') :
+                Mage::helper('checkout')->__('Subtotal must exceed minimum order amount');
+
             Mage::getSingleton('checkout/session')->addError($error);
-            return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array(
+            return $this->sendJsonResponse(array(
                 'redirect' => Mage::getUrl('checkout/cart', array('_secure'=>true)),
                 'success'  => true
-            )));
+            ));
         }
 
         if ($this->_expireAjax()) { // if all products were removed from the cart
@@ -1194,61 +1128,33 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         }
 
         $quote->collectTotals();
+
+        // discount depends on cart weight fix
+        // to recollect discount rules need to clear previous discount
+        // descriptions and mark address as modified
+        // see _canProcessRule in Mage_SalesRule_Model_Validator
+        $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
+
         // @todo on cart contents?
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_cart')
-            || Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
-
+        if ($ajaxHelper->getIsShippingMethodDependsOn(array('cart', 'total'))) {
             $sections[] = 'shipping-method';
-            // changing total by payment may affect the shipping prices theoretically
-            // (free shipping may be canceled or added)
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-
-            $this->getCheckout()->applyShippingMethod();
-            // if shipping price was changed, we need to recalculate totals again.
-            // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-            // previous method added a discount and selected shipping method wasn't free
-            // but removing the previous shipping method removes the discount also
-            // and selected shipping method is now free
-            $quote->setTotalsCollectedFlag(false)->collectTotals();
+            $this->recollectShippingRatesAndTotals(true);
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_cart')
-            || Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
-
+        if ($ajaxHelper->getIsPaymentMethodDependsOn(array('cart', 'total'))) {
             $sections[] = 'payment-method';
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
         $quote->save();
 
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function saveOrderAction()
     {
-        if (version_compare(Mage::helper('firecheckout')->getMagentoVersion(), '1.8.0.0') >= 0) {
-            if (!$this->_validateFormKey()) {
-                $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array(
-                    'success' => false,
-                    'error'   => true,
-                    'error_messages' => $this->__('Invalid Form Key. Please refresh the page.')
-                )));
-                return;
-            }
+        if (!$this->_ajaxValidateFormKeySafely(false)) {
+            return;
         }
 
         if ($this->_expireAjax()) {
@@ -1273,6 +1179,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $quote = $checkout->getQuote();
 
         try {
+            $this->_saveAdvoxInpost();
             $checkout->applyShippingMethod($this->getRequest()->getPost('shipping_method', false));
 
             $deliveryDate = $this->getRequest()->getPost('delivery_date');
@@ -1282,7 +1189,8 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                     $result['success'] = false;
                     $result['error']   = true;
                     $result['error_messages'] = $result['message'];
-                    $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                    $result['onecolumn_step'] = 'step-shipping-payment-method';
+                    $this->sendJsonResponse($result);
                     return;
                 }
             }
@@ -1315,9 +1223,10 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                     );
                 } else {
                     $result['error_messages'] = $result['message'];
+                    $result['onecolumn_step'] = 'step-address';
                 }
 
-                $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                $this->sendJsonResponse($result);
                 return;
             }
 
@@ -1332,42 +1241,49 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                     $result['success'] = false;
                     $result['error']   = true;
                     $result['error_messages'] = $result['message'];
-                    $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                    $result['onecolumn_step'] = 'step-address';
+                    $this->sendJsonResponse($result);
                     return;
                 }
             }
 
             if ('relaypoint_relaypoint' == $this->getRequest()->getPost('shipping_method', false)) {
                 $this->relaypointChangeAddress();
+            } elseif ('storepickup_storepickup' == $this->getRequest()->getPost('shipping_method', false)) {
+                // Magestore_Storepickup
+                $storepickup = Mage::getSingleton('checkout/session')->getData('storepickup_session');
+                if ($storepickup && isset($storepickup['store_id']) && $storepickup['store_id']) {
+                    $this->storepickupChangeAddress();
+                }
             }
 
-            $requiredAgreements = Mage::helper('checkout')->getRequiredAgreementIds();
+            $checkoutHelper = Mage::helper('checkout');
+            $checkoutHelper->getCheckout()->unsFirecheckoutApprovedAgreementIds();
+            $requiredAgreements = $checkoutHelper->getRequiredAgreementIds();
             if ($requiredAgreements) {
                 $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
                 $diff = array_diff($requiredAgreements, $postedAgreements);
                 if ($diff) {
                     $result['success'] = false;
                     $result['error']   = true;
-                    $result['error_messages'] = Mage::helper('checkout')->__('Please agree to all the terms and conditions before placing the order.');
-                    $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                    $result['error_messages'] = $checkoutHelper->__('Please agree to all the terms and conditions before placing the order.');
+                    $this->sendJsonResponse($result);
                     return;
                 }
+                $checkoutHelper->getCheckout()->setFirecheckoutApprovedAgreementIds($postedAgreements);
             }
 
             $result = $this->_savePayment();
             if ($result && !isset($result['redirect'])) {
                 $result['error_messages'] = $result['error'];
+                $result['onecolumn_step'] = 'step-shipping-payment-method';
             }
 
             $quote->collectTotals();
 
             if (!isset($result['error'])) {
                 Mage::dispatchEvent('checkout_controller_onepage_save_shipping_method', array('request'=>$this->getRequest(), 'quote'=>$quote));
-                if ($quote->getCheckoutMethod() == TM_FireCheckout_Model_Type_Standard::METHOD_GUEST) {
-                    $this->_subscribeToNewsletter();
-                } elseif ($this->getRequest()->getPost('newsletter')) {
-                    $quote->getCustomer()->setIsSubscribed(1);
-                }
+                $this->_subscribeToNewsletter();
             }
 
             // Sales representative integration
@@ -1389,12 +1305,12 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                     $this->_initLayoutMessages('checkout/session');
                     $layout->generateXml();
                     $layout->generateBlocks();
-                    return $this->getResponse()->setBody(Zend_Json::encode(array(
+                    return $this->sendJsonResponse(array(
                         'method'            => 'centinel',
                         'update_section'    => array(
                             'centinel-iframe' => $layout->getBlock('centinel.frame')->toHtml()
                         )
-                    )));
+                    ));
                 }
             }
             // 3D Secure
@@ -1415,7 +1331,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 //                'sagepaydirectpro'
 //            );
 //            if (in_array($paymentData['method'], $sagePaySuiteMethods)) {
-//                return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array(
+//                return $this->sendJsonResponse(array(
 //                    'method' => 'sagepayserver',
 //                    'update_section' => array(
 //                        'sagepay-iframe' => $this->getLayout()
@@ -1423,25 +1339,28 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 //                            ->setTemplate('tm/firecheckout/sagepay/iframe.phtml')
 //                            ->toHtml()
 //                    )
-//                )));
+//                ));
 //            }
             // SagePay Server
 
-            // Sage Pay Suite
-            $sagePaySuiteMethods = array(
-                'sagepayserver',
-                'sagepayform',
-                'sagepaypaypal',
-                'sagepaydirectpro'
+            $doNotSaveOrderMethods = array(
+                'sagepayserver',                // Ebizmarts_SagePaySuite
+                'sagepayform',                  // Ebizmarts_SagePaySuite
+                'sagepaypaypal',                // Ebizmarts_SagePaySuite
+                'sagepaydirectpro',             // Ebizmarts_SagePaySuite
+                'molpayseamless',               // Mage_MOLPaySeamless
+                'iways_paypalplus_payment',     // Iways_PayPalPlus
+                'zipmoneypayment',              // Zipmoney_ZipmoneyPayment
             );
-            if (in_array($paymentData['method'], $sagePaySuiteMethods)) {
+            if (in_array($paymentData['method'], $doNotSaveOrderMethods)
+                || $this->getRequest()->getPost('fc-dry-run')) {
+
                 $quote->save();
-                return $this->getResponse()
-                    ->setBody(Mage::helper('core')->jsonEncode(array(
+                return $this->sendJsonResponse(array(
                         'method' => $paymentData['method']
-                    )));
+                    ));
             }
-            // Sage Pay Suite
+
 
             // Authorize.Net
             if (!$this->getRequest()->getBeforeForwardInfo() // if forwarded, then we already did the translaction request to authorize.net
@@ -1454,15 +1373,13 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                 $this->_initLayoutMessages('checkout/session');
                 $layout->generateXml();
                 $layout->generateBlocks();
-                return $this->getResponse()
-                    ->setBody(Mage::helper('core')->jsonEncode(array(
+                return $this->sendJsonResponse(array(
                         'method' => $paymentData['method'],
                         'popup' => array(
                             'id'      => $paymentData['method'],
                             'content' => $layout->getBlock('payment.form.directpost')->toHtml()
                         )
-                    ))
-                );
+                    ));
             }
             // Authorize.Net
 
@@ -1473,23 +1390,28 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 
                 $checkout->saveOrder();
 
-                $paymentHelper = Mage::helper("payment");
-                if (method_exists($paymentHelper, 'getZeroSubTotalPaymentAutomaticInvoice')) {
-                    $storeId = Mage::app()->getStore()->getId();
-                    $zeroSubTotalPaymentAction = $paymentHelper->getZeroSubTotalPaymentAutomaticInvoice($storeId);
-                    if ($paymentHelper->isZeroSubTotal($storeId)
-                            && $this->_getOrder()->getGrandTotal() == 0
-                            && $zeroSubTotalPaymentAction == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
-                            && $paymentHelper->getZeroSubTotalOrderStatus($storeId) == 'pending') {
-                        $invoice = $this->_initInvoice();
-                        $invoice->getOrder()->setIsInProcess(true);
-                        $invoice->save();
+                // code for magento 1.6 and older
+                try {
+                    $paymentHelper = Mage::helper("payment");
+                    if (method_exists($paymentHelper, 'getZeroSubTotalPaymentAutomaticInvoice')) {
+                        $storeId = Mage::app()->getStore()->getId();
+                        $zeroSubTotalPaymentAction = $paymentHelper->getZeroSubTotalPaymentAutomaticInvoice($storeId);
+                        if ($paymentHelper->isZeroSubTotal($storeId)
+                                && $this->_getOrder()->getGrandTotal() == 0
+                                && $zeroSubTotalPaymentAction == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
+                                && $paymentHelper->getZeroSubTotalOrderStatus($storeId) == 'pending') {
+                            $invoice = $this->_initInvoice();
+                            $invoice->getOrder()->setIsInProcess(true);
+                            $invoice->save();
+                        }
                     }
+                } catch (Exception $e) {
+                    // IWD_OrderManager fix
                 }
 
                 $redirectUrl = $checkout->getCheckout()->getRedirectUrl();
                 $result['success'] = true;
-                $result['order_created'] = true;
+                // $result['order_created'] = true;
                 $result['error']   = false;
             } elseif (isset($result['redirect'])) {
                 // paypal express register customer fix
@@ -1553,7 +1475,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                 $layout->generateBlocks();
                 $result = array(
                     'method' => 'paypalhss',
-                    'popup' => array(
+                    'afterform' => array(
                         'id'      => $payment->getMethod(),
                         'modal'   => 1,
                         'content' => $layout->getBlock('paypal.iframe')->toHtml()
@@ -1565,7 +1487,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         }
         // paypal hss
 
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     /**
@@ -1606,7 +1528,10 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $result = array();
         foreach ($sections as $id) {
             $method = str_replace(' ', '', ucwords(str_replace('-', ' ', $id)));
-            $result[$id] = $this->{'_get' . $method . 'Html'}();
+            $method = '_get' . $method . 'Html';
+            if (method_exists($this, $method)) {
+                $result[$id] = $this->{$method}();
+            }
         }
         return $result;
     }
@@ -1620,9 +1545,14 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
 
             $isMobile = true;
         }
-        if((isset($_SERVER['HTTP_ACCEPT']) && (strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml')>0))
+
+        $strpos = 0;
+        if (isset($_SERVER['HTTP_ACCEPT'])) {
+            $strpos = strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml');
+        }
+        if ($strpos > 0
             || ((isset($_SERVER['HTTP_X_WAP_PROFILE'])
-            || isset($_SERVER['HTTP_PROFILE'])))) {
+                || isset($_SERVER['HTTP_PROFILE'])))) {
 
             $isMobile = true;
         }
@@ -1647,14 +1577,16 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         }
 
         if (isset($_SERVER['ALL_HTTP'])) {
-            if (strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini') > 0) {
+            $strpos = strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini');
+            if ($strpos > 0) {
                 $isMobile = true;
             }
         }
-        if (isset($_SERVER['HTTP_USER_AGENT'])
-            && strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') > 0) {
-
-            $isMobile = false;
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $strpos = strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows');
+            if ($strpos > 0) {
+                $isMobile = false;
+            }
         }
         return $isMobile;
     }
@@ -1686,13 +1618,16 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
                         ->loadByEmail($email)
                         ->getId();
                 if ($ownerId !== null && $ownerId != $customerSession->getId()) {
-                    return;
                     Mage::throwException(Mage::helper('newsletter')->__('Sorry, but your can not subscribe email adress assigned to another user.'));
                 }
 
                 $status = Mage::getModel('newsletter/subscriber')->subscribe($email);
-            } catch (Mage_Core_Exception $e) {
             } catch (Exception $e) {
+            }
+
+            $quote = $this->getCheckout()->getQuote();
+            if ($quote->getCheckoutMethod() != TM_FireCheckout_Model_Type_Standard::METHOD_GUEST) {
+                $quote->getCustomer()->setIsSubscribed(1);
             }
         }
     }
@@ -1745,11 +1680,14 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             $result['error'] = Mage::helper('customer')->__('Please enter your email.');
         }
 
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     public function loginAction()
     {
+        // false to prevent _expireAjax to return redirect
+        $this->getCheckout()->getCheckout()->setCartWasUpdated(false);
+
         $session = Mage::getSingleton('customer/session');
 
         if ($this->_expireAjax() || $session->isLoggedIn()) {
@@ -1765,7 +1703,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
                     $session->login($login['username'], $login['password']);
-                    $result['redirect'] = Mage::getUrl('*/*/index', array('_secure'=>true));
+                    $result['redirect'] = Mage::helper('firecheckout')->getFirecheckoutUrl();
                     $result['success'] = true;
                 } catch (Mage_Core_Exception $e) {
                     switch ($e->getCode()) {
@@ -1788,7 +1726,57 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
             }
         }
 
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
+    }
+
+    public function verifyEmailAction()
+    {
+        $customer = Mage::getModel('customer/customer')
+            ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
+            ->loadByEmail($this->getRequest()->getPost('email'));
+
+        $this->sendJsonResponse(array(
+            'exists' => (bool)$customer->getId()
+        ));
+    }
+
+    public function storepickupChangeAddress()
+    {
+        $data = Mage::getSingleton('checkout/session')->getData('storepickup_session');
+        if (isset($data['store_id']) && $data['store_id']) {
+            $store = Mage::getModel('storepickup/store')->load($data['store_id']);
+
+            $data['firstname'] = Mage::helper('storepickup')->__('Store');
+            $data['lastname'] = $store->getData('store_name');
+            $data['street'][0] = $store->getData('address');
+            $data['city'] = $store->getCity();
+            $data['region'] = $store->getState();
+            $data['region_id'] = $store->getData('state_id');
+            $data['postcode'] = $store->getData('zipcode');
+            $data['country_id'] = $store->getData('country');
+
+            $data['company'] = '';
+            if($store->getStoreFax())
+                $data['fax'] = $store->getStoreFax();
+            else
+                unset($data['fax']);
+            if($store->getStorePhone())
+                $data['telephone'] = $store->getStorePhone();
+            else
+                unset($data['telephone']);
+
+            $data['save_in_address_book'] = 1;
+        }
+
+        try {
+            $address = $this->getCheckout()->getQuote()->getShippingAddress();
+            unset($data['address_id']);
+            $address->addData($data);
+            $address->implodeStreetAddress();
+            $address->setCollectShippingRates(true);
+        } catch(Exception $e) {
+            //
+        }
     }
 
     public function relaypointChangeAddress()
@@ -1864,49 +1852,22 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
          */
         $quote    = $this->getOnepage()->getQuote();
         $sections = array('review');
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
         $quote->collectTotals();
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_cart')
-            || Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
-
+        if ($ajaxHelper->getIsShippingMethodDependsOn(array('cart', 'total'))) {
             $sections[] = 'shipping-method';
-            // changing total by payment may affect the shipping prices theoretically
-            // (free shipping may be canceled or added)
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-
-            $this->getCheckout()->applyShippingMethod();
-            // if shipping price was changed, we need to recalculate totals again.
-            // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-            // previous method added a discount and selected shipping method wasn't free
-            // but removing the previous shipping method removes the discount also
-            // and selected shipping method is now free
-            $quote->setTotalsCollectedFlag(false)->collectTotals();
+            $this->recollectShippingRatesAndTotals(true);
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_cart')
-            || Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
-
+        if ($ajaxHelper->getIsPaymentMethodDependsOn(array('cart', 'total'))) {
             $sections[] = 'payment-method';
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
         $quote->save();
 
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     /**
@@ -1931,6 +1892,7 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         $cart     = Mage::getSingleton('checkout/cart');
         $session  = $this->getCheckout()->getCheckout();
         $sections = array('review');
+        $ajaxHelper = Mage::helper('firecheckout/ajax');
 
         try {
             foreach ($quote->getAllVisibleItems() as $item) {
@@ -1976,47 +1938,19 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         }
 
         $quote->collectTotals();
-        if (Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_cart')
-            || Mage::getStoreConfig('firecheckout/ajax_update/shipping_method_on_total')) { // shipping methods depends on total (subtotal + discount) without shipping price
-
+        if ($ajaxHelper->getIsShippingMethodDependsOn(array('cart', 'total'))) {
             $sections[] = 'shipping-method';
-            // changing total by payment may affect the shipping prices theoretically
-            // (free shipping may be canceled or added)
-            $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-
-            $this->getCheckout()->applyShippingMethod();
-            // if shipping price was changed, we need to recalculate totals again.
-            // Example: SELECTED SHIPPING METHOD NOW BECOMES FREE
-            // previous method added a discount and selected shipping method wasn't free
-            // but removing the previous shipping method removes the discount also
-            // and selected shipping method is now free
-            $quote->setTotalsCollectedFlag(false)->collectTotals();
+            $this->recollectShippingRatesAndTotals(true);
         }
 
-        if (Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_cart')
-            || Mage::getStoreConfig('firecheckout/ajax_update/payment_method_on_total')) { // payment methods depends on grand total
-
+        if ($ajaxHelper->getIsPaymentMethodDependsOn(array('cart', 'total'))) {
             $sections[] = 'payment-method';
-            // total was changed [in both sides], so some payment methods
-            // now can be removed or added (min/max order total configuration)
-            $this->getOnepage()->applyPaymentMethod();
-
-            if (Mage::getStoreConfig('firecheckout/ajax_update/total_on_payment_method')) { // total depends on payment method
-                // recollect totals again because adding/removing payment
-                // method may add/remove some discounts in the order
-
-                // to recollect discount rules need to clear previous discount
-                // descriptions and mark address as modified
-                // see _canProcessRule in Mage_SalesRule_Model_Validator
-                $quote->getShippingAddress()->setDiscountDescriptionArray(array())->isObjectNew(true);
-
-                $quote->setTotalsCollectedFlag(false)->collectTotals();
-            }
+            $this->applyPaymentMethodAndCollectTotals($ajaxHelper->getIsTotalDependsOn('payment-method'));
         }
         $quote->save();
 
         $result['update_section'] = $this->_renderSections($sections);
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        $this->sendJsonResponse($result);
     }
 
     protected function _givechnageloadProduct()
@@ -2038,5 +1972,164 @@ class TM_FireCheckout_IndexController extends Mage_Checkout_OnepageController
         Mage::getSingleton('givechange/product_type_donation')->addDefaultData($product);
         $product->save()->load();
         return $product;
+    }
+
+    protected function _saveAdvoxInpost()
+    {
+        $postData = $this->getRequest()->getPost();
+        if (isset($postData['shipping_inpost_machine_id'])) {
+            Mage::getSingleton('checkout/session')->setInpostMachine($postData['shipping_inpost_machine_id']);
+            $quoteModel = Mage::getSingleton('checkout/session')->getQuote();
+            $quoteModel->setData('inpost_machine', $postData['shipping_inpost_machine_id']);
+            $quoteModel->save();
+        }
+    }
+
+    /**
+     * Ability to update saved address direclty at checkout page.
+     *
+     * If address still not valid after this method - redirect to magento's
+     * address edit form.
+     */
+    public function updateSavedAddressAction()
+    {
+        if ($this->_expireAjax()) {
+            return;
+        }
+        if (!$this->getRequest()->isPost()) {
+            return;
+        }
+
+        $addressType = $this->getRequest()->getParam('address_type', 'billing');
+        $rawData = $this->getRequest()->getPost($addressType, array());
+        $customerAddressId = $this->getRequest()->getPost($addressType . '_address_id', false);
+
+        $customerSession = Mage::getSingleton('customer/session');
+        $customer = $customerSession->getCustomer();
+        $address  = Mage::getModel('customer/address')->load($customerAddressId);
+
+        if (!$address->getId() || $address->getCustomerId() != $customer->getId()) {
+            return $this->sendJsonResponse(array(
+                'redirect' => Mage::getUrl('customer/address/edit', array('id' => $address->getId()))
+            ));
+        }
+        $errors = array();
+
+        // Allow to update missing address fields only, as all other fields are
+        // hidden in address popup, so this will prevent accident update and
+        // possible hacks
+        $data = array();
+        foreach ($this->getCheckout()->getInvalidAddressFields($address) as $field) {
+            if (array_key_exists($field, $rawData)) {
+                $data[$field] = $rawData[$field];
+            }
+        }
+
+        /* @var $addressForm Mage_Customer_Model_Form */
+        $addressForm = Mage::getModel('customer/form');
+        $addressForm->setFormCode('customer_address_edit')->setEntity($address);
+        $addressData = $addressForm->extractData($addressForm->prepareRequest($data));
+        // merge existing address with request
+        foreach ($addressData as $key => $value){
+            if (false === $value) {
+                $addressData[$key] = $address->getData($key);
+            }
+        }
+        $addressErrors = $addressForm->validateData($addressData);
+        if ($addressErrors !== true) {
+            $errors = $addressErrors;
+        }
+
+        try {
+            $addressForm->compactData($addressData);
+            $address->setCustomerId($customer->getId());
+
+            if (count($errors) === 0) {
+                $address->save();
+                return $this->sendJsonResponse(array());
+            } else {
+                $customerSession->setAddressFormData($data);
+                foreach ($errors as $errorMessage) {
+                    $customerSession->addError($errorMessage);
+                }
+            }
+        } catch (Mage_Core_Exception $e) {
+            $customerSession->setAddressFormData($data)
+                ->addException($e, $e->getMessage());
+        } catch (Exception $e) {
+            $customerSession->setAddressFormData($data)
+                ->addException($e, $this->__('Cannot save address.'));
+        }
+
+        return $this->sendJsonResponse(array(
+            'redirect' => Mage::getUrl('customer/address/edit', array('id' => $address->getId()))
+        ));
+    }
+
+    public function updateSectionsAction()
+    {
+        if ($this->_expireAjax()) {
+            return;
+        }
+        if (!$this->getRequest()->isPost()) {
+            $this->_ajaxRedirectResponse();
+            return;
+        }
+
+        $this->getOnepage()->getQuote()->collectTotals()->save();
+
+        $this->sendJsonResponse(array(
+            'update_section' => $this->_renderSections($this->getRequest()->getParam('sections', array()))
+        ));
+    }
+
+    private function sendJsonResponse($data)
+    {
+        if (is_array($data)) {
+            $data['responseUrl'] = Mage::getUrl('*/*/*');
+            $data = Mage::helper('core')->jsonEncode($data);
+        }
+        $this->getResponse()->setBody($data);
+    }
+
+    private function recollectShippingRatesAndTotals($reapplyMethod = true, $saveAddress = false)
+    {
+        $quote = $this->getCheckout()->getQuote();
+
+        $quote->getShippingAddress()
+            ->setCollectShippingRates(true)
+            ->collectShippingRates();
+
+        if ($saveAddress) {
+            $quote->getShippingAddress()->save();
+        }
+
+        if ($reapplyMethod) {
+            $this->getCheckout()->applyShippingMethod();
+        }
+
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+    }
+
+    private function applyPaymentMethodAndCollectTotals($collectTotals = true, $paymentMethod = null)
+    {
+        $quote = $this->getCheckout()->getQuote();
+
+        if (null === $paymentMethod) {
+            $this->getCheckout()->applyPaymentMethod();
+        } else {
+            $this->getCheckout()->applyPaymentMethod($paymentMethod);
+        }
+
+        if ($collectTotals) {
+            // to recollect discount rules need to clear previous discount
+            // descriptions and mark address as modified
+            // see _canProcessRule in Mage_SalesRule_Model_Validator
+            $quote->getShippingAddress()
+                ->setDiscountDescriptionArray(array())
+                ->isObjectNew(true);
+
+            $quote->setTotalsCollectedFlag(false)->collectTotals();
+        }
     }
 }

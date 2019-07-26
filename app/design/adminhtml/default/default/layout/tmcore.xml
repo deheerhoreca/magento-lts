@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <layout>
     <adminhtml_tmcore_module_index>
+        <update handle="tmcore_actions"/>
         <update handle="tmcore_popup"/>
         <reference name="content">
             <block type="tmcore/adminhtml_module" name="module.list"/>
@@ -12,6 +13,7 @@
     </adminhtml_tmcore_module_grid>
 
     <adminhtml_tmcore_module_manage>
+        <update handle="tmcore_popup"/>
         <reference name="content">
             <block type="tmcore/adminhtml_module_manage" name="module.manage"/>
         </reference>
@@ -31,4 +33,11 @@
             <block type="core/template" name="tmcore.popup" template="tmcore/popup.phtml"/>
         </reference>
     </tmcore_popup>
+
+    <tmcore_actions>
+        <reference name="head">
+            <action method="addJs"><script>tm/adminhtml/core/actions.js</script></action>
+            <action method="addItem"><type>js_css</type><name>tm/adminhtml/core/actions.css</name><params/></action>
+        </reference>
+    </tmcore_actions>
 </layout>

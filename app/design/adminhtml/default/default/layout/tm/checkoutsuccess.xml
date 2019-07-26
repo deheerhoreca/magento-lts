@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<layout>
+    <adminhtml_system_config_edit>
+        <reference name="head">
+            <action method="addJs">
+                <file>tm/lib/dragula/dragula.min.js</file>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>tm/lib/dragula/dragula.min.css</name>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>tm/lib/chosen/chosen.css</name>
+                <params>media="all"</params>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>tm/checkoutsuccess/js/checkoutsuccess.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>tm/checkoutsuccess/css/checkoutsuccess.css</name>
+            </action>
+        </reference>
+    </adminhtml_system_config_edit>
+</layout>

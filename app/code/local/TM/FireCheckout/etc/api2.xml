@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resources>
+            <order>
+                <attributes>
+                    <firecheckout_customer_comment>Firecheckout Customer Comment</firecheckout_customer_comment>
+                </attributes>
+            </order>
+        </resources>
+    </api2>
+</config>

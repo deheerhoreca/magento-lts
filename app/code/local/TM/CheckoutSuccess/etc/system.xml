@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <config>
     <tabs>
-        <templates_master>
-            <label>Templates-master</label>
-            <sort_order>195</sort_order>
-        </templates_master>
+        <tm_checkout>
+            <label>TM Checkout</label>
+            <sort_order>190</sort_order>
+        </tm_checkout>
     </tabs>
     <sections>
         <checkoutsuccess translate="label" module="checkoutsuccess">
-            <label>Checkout Success Page</label>
-            <tab>templates_master</tab>
+            <label>Success Page</label>
+            <tab>tm_checkout</tab>
             <frontend_type>text</frontend_type>
-            <sort_order>325</sort_order>
+            <sort_order>1978</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
@@ -33,43 +33,118 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled>
-                        <detailed_info>
-                            <label>Show detailed information</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>15</sort_order>
+                        <bottom_html translate="label comment">
+                            <label>Additional content at the bottom of success page</label>
+                            <comment><![CDATA[You can use this field to add some JS/HTML code. For example, google adwords conversion tracking. This field supports variables - <i>{{orderId}}</i>, <i>{{orderAmount}}</i> and others. You can read more about variables in <a href='http://docs.swissuplabs.com/m1/extensions/checkout-success/backend/#general' target='_blank'>our documentation</a>.]]></comment>
+                            <sort_order>20</sort_order>
+                            <frontend_type>textarea</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </detailed_info>
-                        <heading_blocks>
+                        </bottom_html>
+                    </fields>
+                </general>
+                <mockup translate="label">
+                    <label>Mockup</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <available_blocks translate="label comment">
+                            <label>Blocks available on Success Page</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>checkoutsuccess/system_config_source_mockupBlocks</source_model>
+                            <comment>Grab one of blocks and drag it to "Mockup of Success Page" field.</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </available_blocks>
+                        <board translate="label comment">
+                            <label>Mockup of Success Page</label>
+                            <comment>Drop one of available blocks here. It is mockup of Success Page content and it consists of four sections: top, bottom, middle left and middle right.</comment>
+                            <sort_order>20</sort_order>
+                            <frontend_type>textarea</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </board>
+                        <heading_preview translate="label">
+                            <label>Preview Checkout Success Page</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </heading_preview>
+                        <preview translate="label comment">
+                            <label>Order # to preview</label>
+                            <comment>Input order number here and press button to start preview</comment>
+                            <frontend_model>checkoutsuccess/system_config_form_field_frontendPreview</frontend_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </preview>
+                    </fields>
+                </mockup>
+                <mockupsets translate="label">
+                    <label>Additional mockup settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <heading_blocks translate="label">
                             <label>Cms blocks for additional content</label>
                             <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>26</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </heading_blocks>
-                        <block_top>
-                            <label>Above order information</label>
+                        <block1 translate="label">
+                            <label>CMS Block #1</label>
                             <frontend_type>select</frontend_type>
-                            <source_model>checkoutsuccess/system_config_source_cmsBlock</source_model>
+                            <source_model>tmcore/system_config_source_cmsBlock</source_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </block_top>
-                        <block_bottom>
-                            <label>Below order information</label>
+                        </block1>
+                        <block2 translate="label">
+                            <label>CMS Block #2</label>
                             <frontend_type>select</frontend_type>
-                            <source_model>checkoutsuccess/system_config_source_cmsBlock</source_model>
+                            <source_model>tmcore/system_config_source_cmsBlock</source_model>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </block_bottom>
+                        </block2>
+                        <block3 translate="label">
+                            <label>CMS Block #3</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tmcore/system_config_source_cmsBlock</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </block3>
+                        <block4 translate="label">
+                            <label>CMS Block #4</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>tmcore/system_config_source_cmsBlock</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </block4>
                     </fields>
-                </general>
+                </mockupsets>
             </groups>
         </checkoutsuccess>
     </sections>

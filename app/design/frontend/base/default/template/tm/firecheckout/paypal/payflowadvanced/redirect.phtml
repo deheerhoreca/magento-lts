@@ -45,11 +45,22 @@
         window_top.location="<?php echo $this->getUrl('checkout/cart') ?>";
     }
 
-    window_top.firecheckoutWindow.setModal(0).hide();
-    window_top.document.getElementById('firecheckout-form').setStyle({
-        'visibility': 'visible'
-    });
-    window_top.document.getElementById('payflow-advanced-iframe').firecheckoutCancelLoad = 1;
+    if (checkout_steps) {
+        for (var s = 0; s < checkout_steps.length; s++) {
+            if (checkout_steps[s] == '<?php echo $this->getGotoSection() ?>') {
+                break;
+            }
+            if (window_top.document.getElementById('opc-' + checkout_steps[s])) {
+                window_top.document.getElementById('opc-' + checkout_steps[s]).addClassName('allow');
+            }
+        }
+        window_top.checkout.gotoSection("<?php echo $this->getGotoSection() ?>");
+        window_top.document.getElementById('checkout-review-submit').show();
+    } else {
+        window.top.document.getElementById('firecheckout-form').show();
+        window_top.document.getElementById('payflow-advanced-iframe').firecheckoutCancelLoad = 1;
+    }
+
     window_top.document.getElementById('iframe-warning').hide();
     <?php if ($this->getErrorMsg()): ?>
         alert('<?php echo $this->getErrorMsg() ?>');

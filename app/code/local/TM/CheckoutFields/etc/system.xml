@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <config>
     <tabs>
-        <templates_master>
-            <label>Templates-master</label>
-            <sort_order>195</sort_order>
-        </templates_master>
+        <tm_checkout>
+            <label>TM Checkout</label>
+            <sort_order>190</sort_order>
+        </tm_checkout>
     </tabs>
     <sections>
         <checkoutfields translate="label" module="checkoutfields">
-            <label>Checkout Fields</label>
-            <tab>templates_master</tab>
+            <label>Additional Fields</label>
+            <tab>tm_checkout</tab>
             <frontend_type>text</frontend_type>
-            <sort_order>320</sort_order>
+            <sort_order>110</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
@@ -74,7 +74,7 @@
                             <label>Options</label>
                             <comment><![CDATA[This option affects select elements only]]></comment>
                             <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -127,7 +127,7 @@
                             <label>Options</label>
                             <comment><![CDATA[This option affects select elements only]]></comment>
                             <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -180,7 +180,7 @@
                             <label>Options</label>
                             <comment><![CDATA[This option affects select elements only]]></comment>
                             <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -233,7 +233,7 @@
                             <label>Options</label>
                             <comment><![CDATA[This option affects select elements only]]></comment>
                             <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -286,7 +286,7 @@
                             <label>Options</label>
                             <comment><![CDATA[This option affects select elements only]]></comment>
                             <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>

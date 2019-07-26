@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <firecheckout_index_index_custom>
+        <reference name="content">
+            <block type="page/html" name="sheepla.container" template="sheepla/container.phtml" before="checkout.onepage"></block>
+        </reference>
+        <reference name="checkout.onepage.shipping_method.available">
+            <action method="setTemplate">
+                <template>sheepla/available.phtml</template>
+            </action>
+        </reference>
+    </firecheckout_index_index_custom>
+
+    <firecheckout_index_updatecheckout_custom>
+        <reference name="checkout.shipping.method">
+            <action method="setTemplate">
+                <template>sheepla/available.phtml</template>
+            </action>
+        </reference>
+    </firecheckout_index_updatecheckout_custom>
+</layout>

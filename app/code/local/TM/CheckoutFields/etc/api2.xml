@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config>
+    <api2>
+        <resources>
+            <order>
+                <attributes>
+                    <tm_field1>Field #1</tm_field1>
+                    <tm_field2>Field #2</tm_field2>
+                    <tm_field3>Field #3</tm_field3>
+                    <tm_field4>Field #4</tm_field4>
+                    <tm_field5>Field #5</tm_field5>
+                </attributes>
+            </order>
+        </resources>
+    </api2>
+</config>

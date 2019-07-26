@@ -2,7 +2,7 @@
 <config>
     <modules>
         <TM_Core>
-            <version>1.2.1</version>
+            <version>1.6.6</version>
         </TM_Core>
     </modules>
 
@@ -25,6 +25,11 @@
             <tmcore>
                 <class>TM_Core_Block</class>
             </tmcore>
+            <cms>
+                <rewrite>
+                    <block>TM_Core_Block_Cms_Block</block>
+                </rewrite>
+            </cms>
         </blocks>
         <helpers>
             <tmcore>
@@ -41,6 +46,22 @@
                 </connection>
             </tm_core_setup>
         </resources>
+        <!-- nginx ip detection. @see Mage::helper('core/http')->getRemoteAddrHeaders() -->
+        <remote_addr_headers>
+            <header_tmcore_http_x_real_ip>HTTP_X_REAL_IP</header_tmcore_http_x_real_ip>
+            <header_tmcore_http_x_forewarded_for>HTTP_X_FORWARDED_FOR</header_tmcore_http_x_forewarded_for>
+        </remote_addr_headers>
+        <events>
+            <core_layout_update_updates_get_after>
+                <observers>
+                    <tm_layout>
+                        <type>model</type>
+                        <class>tmcore/observer</class>
+                        <method>addLayoutUpdate</method>
+                    </tm_layout>
+                </observers>
+            </core_layout_update_updates_get_after>
+        </events>
     </global>
 
     <adminhtml>
@@ -60,6 +81,34 @@
                     </tmcore>
                 </observers>
             </controller_action_predispatch>
+            <catalog_product_save_commit_after>
+                <observers>
+                    <tmcore>
+                        <class>tmcore/observer</class>
+                        <method>updateInvalidatedBlockHtmlCache</method>
+                    </tmcore>
+                </observers>
+            </catalog_product_save_commit_after>
+            <tm_core_module_collection_load_before>
+                <observers>
+                    <tmcore_remote>
+                        <class>tmcore/observer_module</class>
+                        <method>loadRemoteData</method>
+                    </tmcore_remote>
+                    <tmcore_local>
+                        <class>tmcore/observer_module</class>
+                        <method>loadLocalData</method>
+                    </tmcore_local>
+                </observers>
+            </tm_core_module_collection_load_before>
+            <tm_core_module_collection_load_after>
+                <observers>
+                    <tmcore>
+                        <class>tmcore/observer_module</class>
+                        <method>addModuleData</method>
+                    </tmcore>
+                </observers>
+            </tm_core_module_collection_load_after>
         </events>
         <translate>
             <modules>
@@ -70,49 +119,27 @@
                 </TM_Core>
             </modules>
         </translate>
-        <menu>
-            <templates_master>
-                <title>Templates Master</title>
-                <sort_order>71</sort_order>
-                <children>
-                    <tmcore_module translate="title" module="tmcore">
-                        <title>Modules</title>
-                        <sort_order>999</sort_order>
-                        <action>adminhtml/tmcore_module/index</action>
-                    </tmcore_module>
-                </children>
-            </templates_master>
-        </menu>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <config>
-                                    <children>
-                                        <tmcore>
-                                            <title>Core</title>
-                                        </tmcore>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                        <templates_master>
-                            <title>Templates Master</title>
-                            <sort_order>71</sort_order>
-                            <children>
-                                <tmcore_module translate="title" module="tmcore">
-                                    <title>Modules</title>
-                                    <sort_order>999</sort_order>
-                                </tmcore_module>
-                            </children>
-                        </templates_master>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
+        <events>
+            <controller_action_layout_render_before>
+                <observers>
+                    <tmcore>
+                        <class>tmcore/observer</class>
+                        <method>onBeforeRenderLayout</method>
+                    </tmcore>
+                </observers>
+            </controller_action_layout_render_before>
+        </events>
     </adminhtml>
+
+    <frontend>
+        <layout>
+            <updates>
+                <tm_core module="TM_Core">
+                    <file>tm/core.xml</file>
+                </tm_core>
+            </updates>
+        </layout>
+    </frontend>
 
     <admin>
         <routers>
@@ -127,15 +154,21 @@
     </admin>
 
     <default>
+        <subscriptionchecker>
+            <ignored_sections>
+                <tmcore/>
+            </ignored_sections>
+        </subscriptionchecker>
         <tmcore>
             <modules>
-                <feed_url>templates-master.com/modules</feed_url>
+                <feed_url>tmhub.github.io/packages</feed_url>
             </modules>
             <license>
-                <use_https>0</use_https>
+                <use_https>1</use_https>
                 <url>/license/validate</url>
             </license>
             <notification>
+                <enabled>1</enabled>
                 <feed_url>templates-master.com/notifier</feed_url>
                 <use_https>0</use_https>
                 <frequency>24</frequency>
@@ -144,6 +177,9 @@
             </notification>
             <troubleshooting>
                 <text><![CDATA[Please <a href='http://templates-master.com/contacts' onclick='window.open(this.href); return false;'>contact us</a>, if you have some issues with one of our modules.]]></text>
+                <url>http://templates-master.com/</url>
+                <consumer_key>b96f1fdbcc5df5608bab036f23caead2</consumer_key>
+                <consumer_secret>b17bb7641ffcdb267264b39460eee8ae</consumer_secret>
             </troubleshooting>
         </tmcore>
     </default>

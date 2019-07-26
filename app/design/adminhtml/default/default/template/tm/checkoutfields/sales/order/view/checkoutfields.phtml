@@ -9,12 +9,9 @@ $fields = Mage::helper('checkoutfields')->getFields();
 
 ?>
 
-<div class="box-left" id="checkoutfields">
-    <div class="entry-edit">
-        <div class="entry-edit-head">
-            <h4 class="icon-head head-checkoutfields"><?php echo $this->__('Checkout Fields') ?></h4>
-        </div>
-        <fieldset>
+<div id="checkoutfields">
+    <div class="hor-scroll">
+        <table cellspacing="0" class="form-list">
         <?php foreach ($fields as $field => $config) : ?>
             <?php $value = (string)$_order->getData($field) ?>
 
@@ -24,20 +21,27 @@ $fields = Mage::helper('checkoutfields')->getFields();
             endif;
             ?>
 
-            <label><?php echo $this->escapeHtml($config['label']) ?>:</label> <strong><?php echo $this->escapeHtml($value) ?></strong><br/>
+            <tr>
+                <td class="label">
+                    <label><?php echo $this->escapeHtml($config['label']) ?></label>
+                </td>
+                <td class="value">
+                    <?php echo $this->escapeHtml($value) ?>
+                </td>
+            </tr>
         <?php endforeach; ?>
-        </fieldset>
+        </table>
     </div>
 </div>
 
 <script type="text/javascript">
 document.observe('dom:loaded', function() {
-    var div = $('sales_order_view_tabs_order_info_content').down('div');
+    var div = $('sales_order_view_tabs_order_info_content').down('.box-right').down('.fieldset');
+    if (!div) {
+        return;
+    }
     div.insert({
         bottom: $('checkoutfields')
-    });
-    div.insert({
-        bottom: '<div class="clear"></div>'
     });
 });
 </script>

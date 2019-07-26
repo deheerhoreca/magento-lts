@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_subscriptionchecker_subscription_index>
+        <update handle="tmcore_popup"/>
+        <reference name="content">
+            <block type="subscriptionchecker/adminhtml_subscription_edit" name="subscriptionchecker_subscription"/>
+        </reference>
+    </adminhtml_subscriptionchecker_subscription_index>
+
+    <adminhtml_system_config_edit>
+        <update handle="tmcore_popup"/>
+    </adminhtml_system_config_edit>
+</layout>

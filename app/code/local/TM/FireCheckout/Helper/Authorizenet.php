@@ -43,7 +43,9 @@ class TM_FireCheckout_Helper_Authorizenet extends Mage_Authorizenet_Helper_Data
     {
         $route = array();
         switch ($controller) {
-            case 'index': // firecheckout fix
+            // firecheckout fix
+            case 'index':
+            case 'onecolumn':
                 $route['action'] = 'saveOrder';
                 $route['controller'] = 'index';
                 $route['module'] = 'firecheckout';

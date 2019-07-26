@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout version="0.1.0">
 
-    <firecheckout_index_index translate="label">
-        <reference name="checkout.onepage.review">
-            <block type="checkoutfields/form" name="checkoutfields" template="tm/checkoutfields/form.phtml"/>
+    <firecheckout_index_index>
+        <reference name="checkout.additional.information">
+            <block type="checkoutfields/form" name="checkoutfields" template="tm/checkoutfields/form.phtml" after="firecheckout.comment"/>
         </reference>
     </firecheckout_index_index>
 

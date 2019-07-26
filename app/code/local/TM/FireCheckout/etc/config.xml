@@ -2,7 +2,7 @@
 <config>
     <modules>
         <TM_FireCheckout>
-            <version>2.5.3</version>
+            <version>4.4.0</version>
         </TM_FireCheckout>
     </modules>
 
@@ -22,8 +22,7 @@
                 <class>TM_FireCheckout_Model</class>
             </firecheckout>
             <sales>
-                <rewrite><!-- Backend validator fix -->
-                    <service_quote>TM_FireCheckout_Model_Service_Quote</service_quote>
+                <rewrite>
                     <quote_address>TM_FireCheckout_Model_Quote_Address</quote_address> <!-- Fix for paypal express. Call for validate method overriden -->
                 </rewrite>
             </sales>
@@ -32,13 +31,9 @@
             <checkout>
                 <rewrite>
                     <links>TM_FireCheckout_Block_Links</links>
+                    <cart_sidebar>TM_FireCheckout_Block_Cart_Sidebar</cart_sidebar>
                 </rewrite>
             </checkout>
-            <sagepaysuite>
-                <rewrite>
-                    <checkout_serverfail>TM_FireCheckout_Block_SagePaySuite_Checkout_Serverfail</checkout_serverfail>
-                </rewrite>
-            </sagepaysuite>
             <paypal>
                 <rewrite>
                     <iframe>TM_FireCheckout_Block_Paypal_Iframe</iframe>
@@ -54,6 +49,7 @@
         <helpers>
             <checkout>
                 <rewrite>
+                    <data>TM_FireCheckout_Helper_Checkout</data>
                     <url>TM_FireCheckout_Helper_Url</url>
                 </rewrite>
             </checkout>
@@ -84,11 +80,19 @@
             </sales_copy_order>
         </fieldsets>
         <events>
+            <controller_front_init_routers>
+                <observers>
+                    <firecheckout>
+                        <class>TM_FireCheckout_Controller_Router</class>
+                        <method>initControllerRouters</method>
+                    </firecheckout>
+                </observers>
+            </controller_front_init_routers>
             <core_layout_update_updates_get_after>
                 <observers>
                     <firecheckout>
-                        <class>firecheckout/observer</class>
-                        <method>addThirdPartyModulesLayoutUpdate</method>
+                        <class>firecheckout/observer_integration</class>
+                        <method>addLayoutUpdate</method>
                     </firecheckout>
                 </observers>
             </core_layout_update_updates_get_after>
@@ -124,7 +128,32 @@
                   </firecheckout>
              </updates>
         </layout>
+        <tm_layout>
+            <updates>
+                <firecheckout_custom condition="firecheckout/canFireCheckout">
+                    <file>tm/firecheckout_custom.xml</file>
+                </firecheckout_custom>
+            </updates>
+        </tm_layout>
         <events>
+            <controller_action_layout_render_before>
+                <observers>
+                    <firecheckout>
+                        <class>firecheckout/observer</class>
+                        <method>addCustomJsCss</method>
+                    </firecheckout>
+                </observers>
+            </controller_action_layout_render_before>
+
+            <customer_address_validation_after>
+                <observers>
+                    <firecheckout>
+                        <class>firecheckout/observer</class>
+                        <method>ignoreHardcodedAddressValidationErrors</method>
+                    </firecheckout>
+                </observers>
+            </customer_address_validation_after>
+
             <checkout_cart_add_product_complete>
                 <observers>
                     <firecheckout>
@@ -144,6 +173,24 @@
                     </directpost_save_order_onepage>
                 </observers>
             </controller_action_postdispatch_firecheckout_index_saveOrder>
+            <controller_action_postdispatch_firecheckout_onecolumn_saveOrder>
+                <observers>
+                    <directpost_save_order_onepage>
+                        <class>firecheckout/observer</class>
+                        <method>addAdditionalFieldsToResponseFrontend</method>
+                    </directpost_save_order_onepage>
+                </observers>
+            </controller_action_postdispatch_firecheckout_onecolumn_saveOrder>
+
+            <!-- Magento bugifx: register during checkout when paypal express is used -->
+            <core_copy_fieldset_checkout_onepage_billing_to_customer>
+                <observers>
+                    <firecheckout>
+                        <class>firecheckout/observer</class>
+                        <method>fixCustomerRegistration</method>
+                    </firecheckout>
+                </observers>
+            </core_copy_fieldset_checkout_onepage_billing_to_customer>
 
 <!--             buyerprotect -->
             <controller_action_predispatch_firecheckout_index_buyerprotect>
@@ -160,7 +207,7 @@
             <controller_action_predispatch_firecheckout_index_login>
                 <observers>
                     <captcha>
-                        <class>firecheckout/observer</class>
+                        <class>firecheckout/observer_captcha</class>
                         <method>checkUserLogin</method>
                     </captcha>
                 </observers>
@@ -168,7 +215,7 @@
             <controller_action_predispatch_firecheckout_index_forgotpassword>
                 <observers>
                     <captcha>
-                        <class>firecheckout/observer</class>
+                        <class>firecheckout/observer_captcha</class>
                         <method>checkForgotpassword</method>
                     </captcha>
                 </observers>
@@ -176,15 +223,15 @@
             <controller_action_predispatch_firecheckout_index_saveOrder>
                 <observers>
                     <firecheckout_set_method>
-                        <class>firecheckout/observer</class>
+                        <class>firecheckout/observer_captcha</class>
                         <method>setCheckoutMethod</method>
                     </firecheckout_set_method>
                     <captcha_guest>
-                        <class>firecheckout/observer</class>
+                        <class>firecheckout/observer_captcha</class>
                         <method>checkGuestCheckout</method>
                     </captcha_guest>
                     <captcha_register>
-                        <class>firecheckout/observer</class>
+                        <class>firecheckout/observer_captcha</class>
                         <method>checkRegisterCheckout</method>
                     </captcha_register>
                     <firecheckout_validate_address>
@@ -193,6 +240,27 @@
                     </firecheckout_validate_address>
                 </observers>
             </controller_action_predispatch_firecheckout_index_saveOrder>
+
+            <controller_action_predispatch_firecheckout_onecolumn_saveBilling>
+                <observers>
+                    <firecheckout_set_method>
+                        <class>firecheckout/observer_captcha</class>
+                        <method>setCheckoutMethod</method>
+                    </firecheckout_set_method>
+                    <captcha_guest>
+                        <class>firecheckout/observer_captcha</class>
+                        <method>checkGuestCheckout</method>
+                    </captcha_guest>
+                    <captcha_register>
+                        <class>firecheckout/observer_captcha</class>
+                        <method>checkRegisterCheckout</method>
+                    </captcha_register>
+                    <firecheckout_validate_address>
+                        <class>firecheckout/observer</class>
+                        <method>validateAddressInformation</method>
+                    </firecheckout_validate_address>
+                </observers>
+            </controller_action_predispatch_firecheckout_onecolumn_saveBilling>
         </events>
     </frontend>
 
@@ -213,25 +281,6 @@
                 </TM_FireCheckout>
             </modules>
         </translate>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <config>
-                                    <children>
-                                        <firecheckout translate="title" module="firecheckout">
-                                            <title>Fire Checkout Section</title>
-                                        </firecheckout>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
         <events>
             <adminhtml_sales_order_create_process_data>
                 <observers>
@@ -248,12 +297,17 @@
         <firecheckout>
             <general>
                 <enabled>0</enabled>
-                <title>Fire Checkout</title>
+                <url_path>firecheckout</url_path>
+                <title>Complete your order</title>
+                <use_different_meta_title>0</use_different_meta_title>
+                <meta_title>Checkout</meta_title>
+                <subtitle><![CDATA[Please fill in the fields below and click Place Order to complete purchase!]]></subtitle>
                 <layout>col2-set</layout>
+                <empty_layout>0</empty_layout>
+                <use_formfill_watcher>1</use_formfill_watcher>
                 <registration_mode>optional</registration_mode>
                 <redirect_to_checkout>0</redirect_to_checkout>
                 <shipping_method>flatrate_flatrate</shipping_method>
-                <country>US</country>
                 <hide_shipping_if_free>0</hide_shipping_if_free>
                 <shipping_address>1</shipping_address>
                 <shipping_address_checkbox_state>1</shipping_address_checkbox_state>
@@ -262,23 +316,23 @@
                 <newsletter_checkbox>1</newsletter_checkbox>
                 <newsletter_checkbox_state>0</newsletter_checkbox_state>
                 <comment>0</comment>
+                <discount_checkbox_state>unchecked</discount_checkbox_state>
                 <discount>0</discount>
                 <giftcard>0</giftcard> <!-- Magento Pro -->
                 <order_review>0</order_review>
             </general>
+            <design>
+                <smart_layout>1</smart_layout>
+                <form_fields_mode>default</form_fields_mode>
+                <hide_field_labels>1</hide_field_labels>
+                <override_date_element>1</override_date_element>
+                <sticky_offset>15</sticky_offset>
+            </design>
             <additional_content>
                 <top>0</top>
                 <bottom>0</bottom>
                 <reviewtable_after>0</reviewtable_after>
             </additional_content>
-            <geo_ip>
-                <country>0</country>
-                <country_file>GeoIP.dat</country_file>
-                <region>0</region>
-                <region_file>GeoIPRegion.dat</region_file>
-                <city>0</city>
-                <city_file>GeoLiteCity.dat</city_file>
-            </geo_ip>
             <address_form_status>
                 <company>optional</company>
                 <street1>required</street1>
@@ -308,25 +362,18 @@
             <address_verification>
                 <enabled>0</enabled>
             </address_verification>
-            <ajax_update>
-                <payment_method_on_country>0</payment_method_on_country> <!-- for dynamic payment methods: allowed countries only -->
-                <payment_method_on_total>0</payment_method_on_total> <!-- if min order total (grandtotal) is used -->
-                <payment_method_on_cart>0</payment_method_on_cart> <!-- if payment methods depends on a cart subtotal, products weight or q-ty -->
-                <shipping_method_on_country>1</shipping_method_on_country> <!-- for dynamic shipping methods: allowed countries, zip and state for ups -->
-                <shipping_method_on_zip>1</shipping_method_on_zip> <!-- for dynamic shipping methods: allowed countries, zip and state for ups -->
-                <shipping_method_on_region>1</shipping_method_on_region> <!-- for dynamic shipping methods: allowed countries, zip and state for ups -->
-                <shipping_method_on_total>0</shipping_method_on_total> <!-- if min order amount (subtotal + discount) is used -->
-                <shipping_method_on_cart>1</shipping_method_on_cart> <!-- shipping price is usually calculated by cart subtotal, products weight or q-ty -->
-                <shipping_method_on_coupon>0</shipping_method_on_coupon> <!-- If coupon can change shipping total -->
-                <total_on_payment_method>0</total_on_payment_method> <!-- if some discount per payment method is avaialble -->
-                <total_on_shipping_method>1</total_on_shipping_method> <!-- !!ALWAYS!!: shipping method name is used in totals -->
-                <total_on_shipping_country>0</total_on_shipping_country> <!-- discount or tax by shipping zip, country, region, etc -->
-                <total_on_shipping_zip>0</total_on_shipping_zip> <!-- discount or tax by shipping zip, country, region, etc -->
-                <total_on_shipping_region>0</total_on_shipping_region> <!-- discount or tax by shipping zip, country, region, etc -->
-                <total_on_taxvat>0</total_on_taxvat> <!-- euvat and similar extensions -->
-            </ajax_update>
+            <ajax_save>
+                <billing><![CDATA[]]></billing>
+                <shipping><![CDATA[shipping:country_id,shipping:postcode,shipping:region_id]]></shipping>
+            </ajax_save>
+            <ajax_reload>
+                <payment-method><![CDATA[]]></payment-method>
+                <shipping-method><![CDATA[shipping,cart]]></shipping-method>
+                <review><![CDATA[shipping-method]]></review>
+            </ajax_reload>
             <agreements>
                 <output>minimal</output>
+                <agree_text>I Agree</agree_text>
             </agreements>
             <mobile>
                 <enabled>1</enabled>
@@ -334,18 +381,22 @@
             <taxvat>
                 <validate>1</validate>
                 <vies>0</vies>
+                <allow_if_service_is_down>0</allow_if_service_is_down>
+                <field_names>taxvat</field_names>
             </taxvat>
             <delivery_date>
                 <enabled>0</enabled>
                 <filter_per_shipping_method>0</filter_per_shipping_method>
                 <shipping_methods></shipping_methods>
                 <use_calendar>1</use_calendar>
+                <use_default_date_value>0</use_default_date_value>
                 <date_offset>0</date_offset>
+                <delivery_processing_end_time>23,59,59</delivery_processing_end_time>
                 <date_period>365</date_period>
                 <exclude_weekend>0</exclude_weekend>
-                <excluded_dates></excluded_dates>
+                <excluded_dates>a:0:{}</excluded_dates>
                 <use_time_range>0</use_time_range>
-                <time_range></time_range>
+                <time_range>a:0:{}</time_range>
             </delivery_date>
             <shopping_cart>
                 <editable>1</editable>

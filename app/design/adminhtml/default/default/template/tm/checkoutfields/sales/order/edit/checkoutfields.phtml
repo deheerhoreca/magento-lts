@@ -6,7 +6,7 @@ $checkoutfields = Mage::helper('checkoutfields');
 $quote = Mage::getSingleton('adminhtml/session_quote')->getQuote();
 $order = Mage::getSingleton('adminhtml/session_quote')->getOrder();
 ?>
-<?php if ($fields = $checkoutfields->getEnabledFields()) : ?>
+<?php if ($fields = $checkoutfields->getFields()) : ?>
 
 <div id="form_checkoutfields" class="box-left">
     <div class="entry-edit">
@@ -19,7 +19,7 @@ $order = Mage::getSingleton('adminhtml/session_quote')->getOrder();
                 <?php foreach ($fields as $fieldName => $fieldConfig) : ?>
                     <tr>
                     <?php
-                        $required = ('req' === $fieldConfig['status']);
+                        $required = false; // it can be optional per store level
                         $value    = $this->escapeHtml($quote->getData($fieldName));
                     ?>
                         <td class="label">

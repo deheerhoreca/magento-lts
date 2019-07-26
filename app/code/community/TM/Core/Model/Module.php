@@ -102,7 +102,7 @@ class TM_Core_Model_Module extends Mage_Core_Model_Abstract
      */
     public function isValidationRequired()
     {
-        return !$this->getRemote() || $this->getRemote()->getIdentityKeyLink();
+        return $this->getRemote() && $this->getRemote()->getIdentityKeyLink();
     }
 
     /**
@@ -138,12 +138,15 @@ class TM_Core_Model_Module extends Mage_Core_Model_Abstract
             $adapter = new Zend_Http_Client_Adapter_Curl();
             $client->setAdapter($adapter);
             $client->setUri($this->_getValidateUri($site));
-            $client->setConfig(array('maxredirects'=>0, 'timeout'=>30));
+            $client->setConfig(array('maxredirects'=>5, 'timeout'=>30));
             $client->setParameterGet('key', $secret);
             $client->setParameterGet('suffix', $suffix);
             $module = $this->getTmPurchaseCode() ? $this->getTmPurchaseCode() : $this->getCode();
             $client->setParameterGet('module', $module);
             $client->setParameterGet('module_code', $this->getCode());
+            if ($this->getConfigSection()) {
+                $client->setParameterGet('config_section', $this->getConfigSection());
+            }
             $client->setParameterGet('domain', Mage::app()->getRequest()->getHttpHost());
             $response = $client->request();
             $responseBody = $response->getBody();
@@ -173,10 +176,13 @@ class TM_Core_Model_Module extends Mage_Core_Model_Abstract
                 throw new Exception('Decoding failed');
             }
         } catch (Exception $e) {
-            $result = array('error' => array(
-                'Sorry, try again in five minutes. Validation response parsing error: %s',
-                $e->getMessage()
-            ));
+            $result = array(
+                'error' => array(
+                    'Sorry, try again in five minutes. Validation response parsing error: %s',
+                    $e->getMessage()
+                ),
+                'response' => $response
+            );
         }
         return $result;
     }
@@ -241,7 +247,8 @@ class TM_Core_Model_Module extends Mage_Core_Model_Abstract
      */
     public function getNewStores()
     {
-        return $this->getNewStoreIds();
+        $storeIds = $this->getNewStoreIds();
+        return is_null($storeIds) ? array() : $storeIds;
     }
 
     public function isInstalled()

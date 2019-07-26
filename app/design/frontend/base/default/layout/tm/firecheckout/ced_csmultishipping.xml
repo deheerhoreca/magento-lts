@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <firecheckout_index_index_custom>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>tm/firecheckout/js/integration/ced_csmultishipping.js</name>
+            </action>
+        </reference>
+        <reference name="checkout.onepage.shipping_method">
+            <block type="csmultishipping/onepage_shipping_method_available" name="checkout.onepage.shipping_method.available" as="available">
+            </block>
+        </reference>
+    </firecheckout_index_index_custom>
+
+    <firecheckout_index_updatecheckout_custom>
+        <block type="csmultishipping/onepage_shipping_method_available" name="checkout.shipping.method" as="available">
+        </block>
+    </firecheckout_index_updatecheckout_custom>
+</layout>

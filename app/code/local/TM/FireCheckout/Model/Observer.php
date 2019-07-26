@@ -4,8 +4,14 @@ class TM_FireCheckout_Model_Observer
 {
     public function addToCartComplete(Varien_Event_Observer $observer)
     {
+        if ($observer->getRequest()->getParam('return_url')) {
+            return; // paypal express checkout button was clicked
+        }
+
         $generalConfig = Mage::getStoreConfig('firecheckout/general');
-        if ($generalConfig['enabled'] && $generalConfig['redirect_to_checkout']) {
+        if (($generalConfig['enabled'] && $generalConfig['redirect_to_checkout'])
+            || $observer->getRequest()->getParam('firecheckout')) {
+
             $observer->getResponse()
                 ->setRedirect(
                     Mage::helper('firecheckout/url')->getCheckoutUrl()
@@ -20,162 +26,6 @@ class TM_FireCheckout_Model_Observer
             return Mage::getSingleton('authorizenet/directpost_observer')->addAdditionalFieldsToResponseFrontend($observer);
         }
         return $this;
-    }
-
-    /**
-     * Called before captcha check
-     */
-    public function setCheckoutMethod($observer)
-    {
-        $data  = $observer->getControllerAction()->getRequest()->getPost('billing', array());
-        $checkout = Mage::getSingleton('firecheckout/type_standard');
-        $quote = $checkout->getQuote();
-        if (isset($data['register_account']) && $data['register_account']) {
-            $quote->setCheckoutMethod(TM_FireCheckout_Model_Type_Standard::METHOD_REGISTER);
-        } else if ($checkout->getCustomerSession()->isLoggedIn()) {
-            $quote->setCheckoutMethod(TM_FireCheckout_Model_Type_Standard::METHOD_CUSTOMER);
-        } else {
-            $quote->setCheckoutMethod(TM_FireCheckout_Model_Type_Standard::METHOD_GUEST);
-        }
-        return $this;
-    }
-
-/* See Mage_Captcha_Model_Observer for the source of the next methods */
-
-    /**
-     * Check Captcha On Forgot Password Page
-     *
-     * @param Varien_Event_Observer $observer
-     * @return Mage_Captcha_Model_Observer
-     */
-    public function checkForgotpassword($observer)
-    {
-        if (!Mage::helper('firecheckout')->canUseCaptchaModule()) {
-            return $this;
-        }
-        $formId = 'user_forgotpassword';
-        $captchaModel = Mage::helper('captcha')->getCaptcha($formId);
-        if ($captchaModel->isRequired()) {
-            $controller = $observer->getControllerAction();
-            if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
-                $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-                $result = array(
-                    'success' => false,
-                    'error'   => Mage::helper('captcha')->__('Incorrect CAPTCHA.'),
-                    'captcha' => 'user_forgotpassword'
-                );
-                $controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Check Captcha On User Login Page
-     *
-     * @param Varien_Event_Observer $observer
-     * @return Mage_Captcha_Model_Observer
-     */
-    public function checkUserLogin($observer)
-    {
-        if (!Mage::helper('firecheckout')->canUseCaptchaModule()) {
-            return $this;
-        }
-        $formId = 'user_login';
-        $captchaModel = Mage::helper('captcha')->getCaptcha($formId);
-        $controller = $observer->getControllerAction();
-        $loginParams = $controller->getRequest()->getPost('login');
-        $login = array_key_exists('username', $loginParams) ? $loginParams['username'] : null;
-        if ($captchaModel->isRequired($login)) {
-            $word = $this->_getCaptchaString($controller->getRequest(), $formId);
-            if (!$captchaModel->isCorrect($word)) {
-                $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-                Mage::getSingleton('customer/session')->setUsername($login);
-                $result = array(
-                    'success' => false,
-                    'error'   => Mage::helper('captcha')->__('Incorrect CAPTCHA.'),
-                    'captcha' => 'user_login'
-                );
-                $controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-            }
-        }
-        $captchaModel->logAttempt($login);
-        return $this;
-    }
-
-    /**
-     * Check Captcha On Checkout as Guest Page
-     *
-     * @param Varien_Event_Observer $observer
-     * @return Mage_Captcha_Model_Observer
-     */
-    public function checkGuestCheckout($observer)
-    {
-        if (!Mage::helper('firecheckout')->canUseCaptchaModule()) {
-            return $this;
-        }
-        $formId = 'guest_checkout';
-        $captchaModel = Mage::helper('captcha')->getCaptcha($formId);
-        $checkoutMethod = Mage::getSingleton('checkout/type_onepage')->getQuote()->getCheckoutMethod();
-        if ($checkoutMethod == Mage_Checkout_Model_Type_Onepage::METHOD_GUEST) {
-            if ($captchaModel->isRequired()) {
-                $controller = $observer->getControllerAction();
-                if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
-                    $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-                    $result = array(
-                        'error'   => 1,
-                        'message' => Mage::helper('captcha')->__('Incorrect CAPTCHA.'),
-                        'captcha' => 'guest_checkout'
-                    );
-                    $controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Check Captcha On Checkout Register Page
-     *
-     * @param Varien_Event_Observer $observer
-     * @return Mage_Captcha_Model_Observer
-     */
-    public function checkRegisterCheckout($observer)
-    {
-        if (!Mage::helper('firecheckout')->canUseCaptchaModule()) {
-            return $this;
-        }
-        $formId = 'register_during_checkout';
-        $captchaModel = Mage::helper('captcha')->getCaptcha($formId);
-        $checkoutMethod = Mage::getSingleton('checkout/type_onepage')->getQuote()->getCheckoutMethod();
-        if ($checkoutMethod == Mage_Checkout_Model_Type_Onepage::METHOD_REGISTER) {
-            if ($captchaModel->isRequired()) {
-                $controller = $observer->getControllerAction();
-                if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
-                    $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-                    $result = array(
-                        'error'   => 1,
-                        'message' => Mage::helper('captcha')->__('Incorrect CAPTCHA.'),
-                        'captcha' => 'register_during_checkout'
-                    );
-                    $controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Get Captcha String
-     *
-     * @param Varien_Object $request
-     * @param string $formId
-     * @return string
-     */
-    protected function _getCaptchaString($request, $formId)
-    {
-        $captchaParams = $request->getPost(Mage_Captcha_Helper_Data::INPUT_NAME_FIELD_VALUE);
-        return $captchaParams[$formId];
     }
 
     /**
@@ -200,6 +50,16 @@ class TM_FireCheckout_Model_Observer
         if (is_array($result)) {
             throw new Exception($result['message']);
         }
+    }
+
+    public function validateAddressInformationIfRequired($observer)
+    {
+        $controller = $observer->getControllerAction();
+        $request = $controller->getRequest();
+        if ($request->getParam('force_validation')) {
+            return $this->validateAddressInformation($observer);
+        }
+        return $this;
     }
 
     public function validateAddressInformation($observer)
@@ -233,6 +93,7 @@ class TM_FireCheckout_Model_Observer
 
         if (!$block->getValidator()->isValid()) {
             $result = array();
+            $result['error'] = true;
             $result['body']['content'] = $block->toHtml();
             $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
             $controller->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
@@ -273,47 +134,90 @@ class TM_FireCheckout_Model_Observer
         return false;
     }
 
-    public function addThirdPartyModulesLayoutUpdate($observer)
+    public function addCustomJsCss($observer)
     {
-        $helper  = Mage::helper('core');
-        $updates = $observer->getUpdates();
-        $mapping = array(
-            'AW_Advancednewsletter'      => 'tm/firecheckout/aw_newsletter.xml',
-            'AW_Newsletter'              => 'tm/firecheckout/aw_newsletter.xml',
-            'Billpay'                    => 'tm/firecheckout/billpay.xml',
-            'Bysoft_Relaypoint'          => 'tm/firecheckout/bysoft_relaypoint.xml', // not confirmed module code
-            'CraftyClicks'               => 'tm/firecheckout/craftyclicks.xml',
-            'Ebizmarts_SagePaySuite'     => 'tm/firecheckout/ebizmarts_sagepaysuite.xml',
-            'Enterprise_Enterprise'      => 'tm/firecheckout/mage_enterprise.xml',
-            'GCMC_GiveChange'            => 'tm/firecheckout/gcmc_givechange.xml',
-            'Geissweb_Euvatgrouper'      => 'tm/firecheckout/geissweb_euvatgrouper.xml',
-            'IntellectLabs_Stripe'       => 'tm/firecheckout/intellectlabs_stripe.xml',
-            'IrvineSystems_Deliverydate' => 'tm/firecheckout/irvinesystems_deliverydate.xml',
-            'IrvineSystems_JapanPost'    => 'tm/firecheckout/irvinesystems_japanpost.xml',
-            'IrvineSystems_Sagawa'       => 'tm/firecheckout/irvinesystems_sagawa.xml',
-            'IrvineSystems_Seino'        => 'tm/firecheckout/irvinesystems_seino.xml',
-            'IrvineSystems_Yamato'       => 'tm/firecheckout/irvinesystems_yamato.xml',
-            'Kiala_LocateAndSelect'      => 'tm/firecheckout/kiala_locateandselect.xml',
-            'Klarna_KlarnaPaymentModule' => 'tm/firecheckout/klarna_klarnapaymentmodule.xml',
-            'Mage_Captcha'               => 'tm/firecheckout/mage_captcha.xml',
-            'Magestore_Storepickup'      => 'tm/firecheckout/magestore_storepickup.xml',
-            'MageWorx_MultiFees'         => 'tm/firecheckout/mageworx_multifees.xml',
-            'Netresearch_OPS'            => 'tm/firecheckout/netresearch_ops.xml',
-            'Payone_Core'                => 'tm/firecheckout/payone_core.xml',
-            'Phoenix_Ipayment'           => 'tm/firecheckout/phoenix_ipayment.xml',
-            'Rewardpoints'               => 'tm/firecheckout/rewardpoints.xml',
-            'Symmetrics_Buyerprotect'    => 'tm/firecheckout/symmetrics_buyerprotect.xml',
-            'TIG_Postcode'               => 'tm/firecheckout/tig_postcode.xml',
-            'Webtex_Giftcards'           => 'tm/firecheckout/webtex_gitcards.xml'
+        $request = Mage::app()->getRequest();
+        if ($request->getRouteName() !== 'firecheckout'
+            || $request->getControllerName() !== 'index'
+            || $request->getActionName() !== 'index') {
+
+            return;
+        }
+
+        $head = Mage::app()->getLayout()->getBlock('head');
+        if (!$head) {
+            return $this;
+        }
+
+        $design = Mage::getDesign();
+        $customFiles = array(
+            'skin_css' => array(
+                'tm/firecheckout/css/custom.css'
+            ),
+            'skin_js' => array(
+                'tm/firecheckout/js/custom.js'
+            )
         );
-        foreach ($mapping as $module => $layoutXml) {
-            if (!$helper->isModuleOutputEnabled($module)) {
-                continue;
+        foreach ($customFiles as $type => $files) {
+            foreach ($files as $file) {
+                $fileUrl = $design->getSkinUrl($file);
+
+                // detect path to the file including package and theme
+                preg_match('/\/skin\/frontend\/(.+)/', $fileUrl, $matches);
+                if (empty($matches[1])) {
+                    continue;
+                }
+
+                // check is file is actually exists
+                $baseDir = Mage::getBaseDir();
+                $absolutePath = $baseDir . '/skin/frontend/' . $matches[1];
+                if (is_readable($absolutePath)) {
+                    $head->addItem($type, $file, "");
+                }
             }
-            $tag = strtolower("firecheckout_{$module}");
-            $xml = "<{$tag}><file>{$layoutXml}</file></{$tag}>";
-            $node = new Varien_Simplexml_Element($xml);
-            $updates->appendChild($node);
+        }
+    }
+
+    /**
+     * This method fixes not working address save, when city or street is hidden
+     * in firecheckout settings.
+     *
+     * @param  Varien_Event_Observer $observer
+     * @return
+     */
+    public function ignoreHardcodedAddressValidationErrors($observer)
+    {
+        $address = $observer->getAddress();
+
+        if ($address instanceof TM_FireCheckout_Model_Quote_Address_Abstract) {
+            return;
+        }
+
+        // fix not-working address save on customer account page when some fields are hidden
+        $address->setShouldIgnoreValidation(true);
+    }
+
+    /**
+     * Magento forgot to set PasswordCreatedAt property when
+     * paypal_express is used (@see app/code/core/Mage/Paypal/Model/Express/Checkout::_prepareNewCustomerQuote)
+     *
+     * @param  Varien_Event_Observer $observer
+     */
+    public function fixCustomerRegistration($observer)
+    {
+        $customer = $observer->getTarget();
+        $session = Mage::getSingleton('checkout/session');
+        $checkout = Mage::getModel('firecheckout/type_standard');
+
+        $sessionValidatorData = $session->getData('_session_validator_data');
+        if ($customer
+            && $checkout->getCheckoutMethod() === 'register'
+            && $sessionValidatorData
+            && isset($sessionValidatorData['session_expire_timestamp'])
+        ) {
+            $passwordCreatedTime = $sessionValidatorData['session_expire_timestamp']
+                - Mage::getSingleton('core/cookie')->getLifetime();
+            $customer->setPasswordCreatedAt($passwordCreatedTime);
         }
     }
 }

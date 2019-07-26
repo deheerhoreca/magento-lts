@@ -93,6 +93,31 @@ class TM_FireCheckout_Helper_Deliverydate extends Mage_Core_Helper_Abstract
         return in_array($range, $this->getTimeRangeStrings());
     }
 
+    public function getOffset()
+    {
+        $offset = (int)Mage::getStoreConfig('firecheckout/delivery_date/date_offset');
+        if (Mage::getStoreConfig('firecheckout/delivery_date/date_offset_dynamic')) {
+            $attributeCode = Mage::getStoreConfig('firecheckout/delivery_date/date_offset_product_attribute');
+            $items = Mage::getSingleton('checkout/cart')->getItems();
+            if (count($items) && $attributeCode) {
+                $collection = Mage::getModel('catalog/product')
+                    ->getCollection()
+                    ->addAttributeToSelect($attributeCode)
+                    ->addFieldToFilter('entity_id', array(
+                        'in' => $items->getColumnValues('product_id')
+                    ));
+
+                foreach ($collection as $product) {
+                    if (!$product->hasData($attributeCode)) {
+                        continue;
+                    }
+                    $offset = max($offset, $product->getData($attributeCode));
+                }
+            }
+        }
+        return $offset;
+    }
+
     /**
      * Validates date string
      *
@@ -102,10 +127,50 @@ class TM_FireCheckout_Helper_Deliverydate extends Mage_Core_Helper_Abstract
     public function isValidDate(Zend_Date $date)
     {
         // check for past date
-        $offset = (int)Mage::getStoreConfig('firecheckout/delivery_date/date_offset');
-        $minAllowedDate  = Mage::app()->getLocale()->date()
-            ->setTime('00:00:00')
-            ->addDay($offset);
+        $offset = $this->getOffset();
+        $minAllowedDate  = Mage::app()->getLocale()->date(null, null, null, false)
+            ->setTime('00:00:00');
+
+        $nonPeriodicalDates = $this->getExcludedNonPeriodicalDateStrings();
+        $periodicalDates    = $this->getExcludedPeriodicalDateStrings();
+        $excludeWeekands = Mage::getStoreConfig('firecheckout/delivery_date/exclude_weekend');
+        $weekandDays = Mage::getStoreConfig('general/locale/weekend');
+        $weekandDays = explode(',', $weekandDays);
+
+        // offset minAllowedDate considering weekends and holidays
+        $calculatedOffset = 0;
+        $i = 0; // count iterations;
+        while ($calculatedOffset < $offset) {
+            $i++;
+            if ($i >= 365) {
+                // possible continious loop fix
+                break;
+            }
+            $minAllowedDate->addDay(1);
+
+            if ($excludeWeekands) {
+                $weekDay = $minAllowedDate->get(Zend_Date::WEEKDAY_DIGIT);
+                if (in_array($weekDay, $weekandDays)) {
+                    continue;
+                }
+            }
+
+            $dateString = $minAllowedDate->toString('MM/dd/yyyy');
+            if (in_array($dateString, $nonPeriodicalDates)
+                || in_array(substr($dateString, 0, 7), $periodicalDates)) {
+                continue;
+            }
+            $calculatedOffset += 1;
+        }
+
+        // compare with end of delivery processing day
+        $endTime = $this->getEndOfDeliveryProcessingDay();
+        $endTime = $endTime->getTime();
+        $nowTime = Mage::app()->getLocale()->date()->getTime();
+        if ($nowTime->compare($endTime) > 0) { // delivery processing day is ended
+            $minAllowedDate->addDay(1);
+        }
+
         if (1 === $minAllowedDate->compare($date)) {
             return false;
         }
@@ -116,25 +181,32 @@ class TM_FireCheckout_Helper_Deliverydate extends Mage_Core_Helper_Abstract
             return false;
         }
 
-        $dateString         = $date->toString('MM/dd/yyyy');
-        $nonPeriodicalDates = $this->getExcludedNonPeriodicalDateStrings();
-        $periodicalDates    = $this->getExcludedPeriodicalDateStrings();
-
+        $dateString = $date->toString('MM/dd/yyyy');
         if (in_array($dateString, $nonPeriodicalDates)
             || in_array(substr($dateString, 0, 7), $periodicalDates)) {
 
             return false;
         }
 
-        if (!Mage::getStoreConfig('firecheckout/delivery_date/exclude_weekend')) {
+        if (!$excludeWeekands) {
             return true;
         }
 
-        $weekandDays = Mage::getStoreConfig('general/locale/weekend');
-        $weekandDays = explode(',', $weekandDays);
-        $weekDay     = $date->get(Zend_Date::WEEKDAY_DIGIT);
+        $weekDay = $date->get(Zend_Date::WEEKDAY_DIGIT);
 
         return !in_array($weekDay, $weekandDays);
+    }
+
+    /**
+     * Retrieve time of the delivery processing day end
+     *
+     * @return Zend_Date
+     */
+    public function getEndOfDeliveryProcessingDay()
+    {
+        $time = Mage::getStoreConfig('firecheckout/delivery_date/delivery_processing_end_time');
+        $time = str_replace(',', ':', $time);
+        return Mage::app()->getLocale()->date()->setTime($time);
     }
 
     /**

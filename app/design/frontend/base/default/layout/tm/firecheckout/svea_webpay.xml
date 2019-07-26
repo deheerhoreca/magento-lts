@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <firecheckout_index_index_custom>
+        <reference name="firecheckout.billing.before">
+            <block type="page/html_wrapper" name="svea_ssn_wrap_ul">
+                <action method="setHtmlTagName"><name>ul</name></action>
+                <action method="setElementClass"><class>form-list</class></action>
+
+                <block type="page/html_wrapper" name="svea_ssn_wrap">
+                    <action method="setHtmlTagName"><name>li</name></action>
+                    <block type="svea_webpay/payment_service_ssn" name="svea_ssn"/>
+                </block>
+            </block>
+        </reference>
+    </firecheckout_index_index_custom>
+</layout>

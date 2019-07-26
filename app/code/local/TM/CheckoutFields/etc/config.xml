@@ -82,6 +82,14 @@
                     </checkoutfields_save_order_firecheckout>
                 </observers>
             </controller_action_predispatch_firecheckout_index_saveOrder>
+            <controller_action_predispatch_firecheckout_onecolumn_saveOrder>
+                <observers>
+                    <checkoutfields_save_order_firecheckout>
+                        <class>checkoutfields/observer</class>
+                        <method>setCheckoutFields</method>
+                    </checkoutfields_save_order_firecheckout>
+                </observers>
+            </controller_action_predispatch_firecheckout_onecolumn_saveOrder>
         </events>
     </frontend>
 
@@ -123,26 +131,31 @@
             <tm_field1>
                 <status>0</status>
                 <label>Field #1</label>
+                <description></description>
                 <type>text</type>
             </tm_field1>
             <tm_field2>
                 <status>0</status>
                 <label>Field #2</label>
+                <description></description>
                 <type>text</type>
             </tm_field2>
             <tm_field3>
                 <status>0</status>
                 <label>Field #3</label>
+                <description></description>
                 <type>text</type>
             </tm_field3>
             <tm_field4>
                 <status>0</status>
                 <label>Field #4</label>
+                <description></description>
                 <type>text</type>
             </tm_field4>
             <tm_field5>
                 <status>0</status>
                 <label>Field #5</label>
+                <description></description>
                 <type>text</type>
             </tm_field5>
         </checkoutfields>

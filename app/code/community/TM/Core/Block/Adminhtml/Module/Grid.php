@@ -6,8 +6,11 @@ class TM_Core_Block_Adminhtml_Module_Grid extends Mage_Adminhtml_Block_Widget_Gr
     {
         parent::__construct();
         $this->setId('moduleGrid');
-        $this->setDefaultSort('code');
-        $this->setDefaultDir('ASC');
+        $this->setDefaultSort('release_date');
+        $this->setDefaultDir('DESC');
+        $this->setDefaultFilter(array(
+            'version' => TM_Core_Block_Adminhtml_Module_Grid_Filter_Version::VERSION_AVAILABLE
+        ));
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
         $this->setVarNameFilter('module_filter');
@@ -15,7 +18,7 @@ class TM_Core_Block_Adminhtml_Module_Grid extends Mage_Adminhtml_Block_Widget_Gr
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getResourceModel('tmcore/module_AdminGridCollection');
+        $collection = Mage::getResourceModel('tmcore/module_collection');
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -29,31 +32,25 @@ class TM_Core_Block_Adminhtml_Module_Grid extends Mage_Adminhtml_Block_Widget_Gr
         ));
 
         $this->addColumn('version', array(
-            'header' => Mage::helper('tmcore')->__('Local Version'),
-            'align'  => 'right',
+            'header' => Mage::helper('tmcore')->__('Version'),
+            'align'  => 'center',
+            'filter' => 'tmcore/adminhtml_module_grid_filter_version',
+            'renderer' => 'tmcore/adminhtml_module_grid_renderer_version',
             'index'  => 'version',
-            'width'  => '80px'
+            'width'  => '150px'
         ));
 
-        $this->addColumn('latest_version', array(
-            'header' => Mage::helper('tmcore')->__('Latest Version'),
-            'align'  => 'right',
-            'index'  => 'latest_version',
-            'width'  => '80px'
-        ));
-
-        $this->addColumn('version_status', array(
-            'header'   => Mage::helper('tmcore')->__('Version Status'),
-            'width'    => '60px',
-            'index'    => 'version_status',
-            'renderer' => 'tmcore/adminhtml_module_grid_renderer_versionStatus',
-            'type'     => 'options',
-            'options'  => Mage::getModel('tmcore/module')->getVersionStatuses()
+        $this->addColumn('release_date', array(
+            'header' => Mage::helper('tmcore')->__('Latest Release Date'),
+            'index'  => 'release_date',
+            'filter' => false,
+            'width'  => '180px',
+            'type'   => 'datetime',
         ));
 
         $this->addColumn('actions', array(
             'header'   => Mage::helper('tmcore')->__('Actions'),
-            'width'    => '200px',
+            'width'    => '160px',
             'filter'   => false,
             'sortable' => false,
             'renderer' => 'tmcore/adminhtml_module_grid_renderer_actions'
@@ -69,9 +66,6 @@ class TM_Core_Block_Adminhtml_Module_Grid extends Mage_Adminhtml_Block_Widget_Gr
 
     public function getRowUrl($row)
     {
-        if ($row->hasUpgradesDir() || $row->getIdentityKeyLink()) {
-            return $this->getUrl('*/*/manage', array('id' => $row->getId()));
-        }
         return false;
     }
 }

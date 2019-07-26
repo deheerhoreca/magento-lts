@@ -5,6 +5,14 @@
         <reference name="head">
             <action method="addJs"><file>tm/adminhtml/firecheckout/config.js</file></action>
             <action method="addItem"><type>js_css</type><name>tm/adminhtml/firecheckout/styles.css</name></action>
+
+            <action method="addItem">
+                <type>js_css</type>
+                <name>tm/lib/chosen/chosen.css</name>
+                <params>media="all"</params>
+            </action>
+            <action method="addJs"><script>tm/lib/chosen/chosen.proto.js</script></action>
+            <action method="addJs"><script>tm/adminhtml/firecheckout/chosen.override.js</script></action>
         </reference>
     </adminhtml_system_config_edit>
 

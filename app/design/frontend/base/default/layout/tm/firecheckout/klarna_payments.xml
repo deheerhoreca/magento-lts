@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <firecheckout_index_index_custom>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>klarnapayment/js/address-validation.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>tm/firecheckout/js/integration/klarna_payments.js</name>
+            </action>
+        </reference>
+        <reference name="firecheckout.script.after">
+            <block type="core/template" name="klarna.js" as="klarna-js" template="klarnapayments/api.phtml" before="onestepcheckout.checkout"/>
+            <block type="klarna_payments/payments" name="klarna.payments.api" template="klarnapayments/js.phtml" after="klarna-js">
+                <block type="klarna_payments/payments" name="klarna.native" template="klarnapayments/checkout/native.phtml" after="-"/>
+            </block>
+        </reference>
+    </firecheckout_index_index_custom>
+</layout>

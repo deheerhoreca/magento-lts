@@ -1,0 +1,95 @@
+.checkoutsuccess-mockup-board {
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid #aaa;
+}
+.disabled.checkoutsuccess-mockup-board{
+    opacity: 0.5;
+}
+
+.checkoutsuccess-mockup {
+    width: 100%;
+    clear: both;
+    box-sizing: border-box;
+}
+.checkoutsuccess-mockup .chosen-choices {
+    min-height: 60px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.checkoutsuccess-mockup.top {
+    margin-bottom: 5px;
+}
+.checkoutsuccess-mockup.middleleft,
+.checkoutsuccess-mockup.middleright{
+    margin-bottom: 5px;
+    clear: none;
+    width: 49%;
+}
+.checkoutsuccess-mockup.middleleft .chosen-choices,
+.checkoutsuccess-mockup.middleright .chosen-choices {
+    min-height: 90px;
+}
+
+.checkoutsuccess-mockup.middleleft {
+    float: left;
+}
+
+.checkoutsuccess-mockup.middleright {
+    float: right;
+}
+
+.checkoutsuccess-mockup .copy-only li.search-choice {
+    padding-right: 5px;
+}
+
+li.search-choice .name,
+.checkoutsuccess-mockup .copy-only li.search-choice .search-choice-close {
+    display: none;
+}
+
+
+.checkoutsuccess-mockup .chosen-choices li.search-choice {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.checkoutsuccess-mockup .chosen-choices li.search-choice:hover {
+    border: 1px solid #5897fb;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+li.search-choice.gu-mirror {
+    cursor: move;
+    list-style: none;
+    font-size: 13px;
+}
+
+.disabled .checkoutsuccess-mockup .chosen-choices li.search-choice .search-choice-close,
+.disabled .checkoutsuccess-mockup .chosen-choices li.search-choice {
+    cursor: default;
+}
+
+#row_checkoutsuccess_mockup_available_blocks .note,
+#row_checkoutsuccess_mockup_board .note,
+#row_checkoutsuccess_mockup_preview .note {
+    width: auto;
+}
+
+.connection-insecure #cs-preview-order-number {
+    width: 150px;
+}
+
+.connection-insecure .https-warning {
+    margin-left: 5px;
+    background: url(../../../../../default/default/images/warning_msg_icon.gif) no-repeat 5px 6px !important;
+    padding: 8px 8px 2px 26px;
+}
+
+.connection-insecure .https-warning a {
+    color: #df280a;
+    font-size: .95em;
+    font-weight: bold;
+}

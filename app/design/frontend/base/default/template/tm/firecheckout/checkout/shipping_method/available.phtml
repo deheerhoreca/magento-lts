@@ -25,6 +25,13 @@
  */
 ?>
 
+<?php
+$fmeFieldsmanager = false;
+if (Mage::helper('core')->isModuleOutputEnabled('FME_Fieldsmanager')) {
+    $fmeFieldsmanager = $this->getLayout()->createBlock('fieldsmanager/checkout_shipping_method_available');
+}
+?>
+
 <?php // infostrates tnt ?>
 <?php $isInfostratesTnt = false; if (Mage::getConfig()->getModuleConfig('Infostrates_Tnt')) : ?>
 <?php $isInfostratesTnt = true; ?>
@@ -54,11 +61,37 @@ var lastPrice='';
 <?php endif ?>
 <?php // infostrates tnt ?>
 
+<?php //PostNL DeliveryOptions
+$_canUseDeliveryOptions = false;
+$_deliveryOptionsShown = false;
+if (Mage::helper('core')->isModuleOutputEnabled('TIG_PostNL')) : ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        if (window.deliveryOptions) {
+            window.deliveryOptions.reset();
+            window.deliveryOptions = false;
+        }
+        //]]>
+    </script>
+    <?php if (Mage::helper('postnl/deliveryOptions')->canUseDeliveryOptions($this->getQuote()) && Mage::helper('postnl/deliveryOptions')->canUseDeliveryOptionsForCountry($this->getQuote())): ?>
+        <?php $_canUseDeliveryOptions = true; ?>
+    <?php endif; ?>
+<?php endif;
+// TIG_PostNL end
+?>
+
 <?php if (!($_shippingRateGroups = $this->getShippingRates())): ?>
     <p><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></p>
 <?php else: ?>
+
+<?php if ($fmeFieldsmanager) : ?>
+    <ul><?php echo $fmeFieldsmanager->getfieldshtml(1); ?></ul>
+<?php endif ?>
+
 <dl class="sp-methods">
-    <?php $shippingMe = array(); ?>
+    <?php $shippingCodePrice = array(); ?>
+
+    <?php $_store = $this->getQuote()->getStore(); ?>
 
     <?php
     if (isset($_shippingRateGroups['freeshipping'])
@@ -89,9 +122,14 @@ var lastPrice='';
 
         <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
         <dd>
+            <?php // Lisää SmartPOST-koodi alkaen tästä ?>
+            <?php if($code == 'itellaSmartPost'): ?>
+                <?php echo $this->getLayout()->createBlock('core/template', 'smartpost_search')->setTemplate('smartpost/search.phtml')->toHtml() ?>
+            <?php continue; endif ?>
+            <?php // Lisää SmartPOST-koodi päättyen tähän ?>
             <ul>
             <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
-                <?php $shippingMe[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
+                <?php $shippingCodePrice[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
                 <li>
                    <?php if ($_rate->getErrorMessage()): ?>
                     <ul class="messages"><li class="error-msg"><ul><li><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li></ul></li></ul>
@@ -100,10 +138,15 @@ var lastPrice='';
                             $_id = str_replace(' ', '_', $_rate->getCode());
                             $quote = Mage::getSingleton('checkout/session')->getQuote();
                         ?>
+                        <?php
+                            // TIG_PostNL
+                            $_priceExcl = $_store->convertPrice(Mage::helper('tax')->getShippingPrice($_rate->getPrice(), false, $this->getAddress()));
+                            $_priceIncl = $_store->convertPrice(Mage::helper('tax')->getShippingPrice($_rate->getPrice(), true, $this->getAddress()));
+                        ?>
                         <?php if ($_sole) : ?>
                         <span class="no-display"><input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_id ?>" checked="checked" /></span>
                         <?php else: ?>
-                        <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_id ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio" onchange="return false; includingShipping('<?php echo $_rate->getCode();?>');"/>
+                        <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_id ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio"/>
 
                         <script type="text/javascript">
                         //<![CDATA[
@@ -114,7 +157,7 @@ var lastPrice='';
                         </script>
 
                         <?php endif; ?>
-                        <label for="s_method_<?php echo $_id ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+                        <label data-price="<?php echo $_priceExcl; ?>" data-price-incl="<?php echo $_priceIncl; ?>" for="s_method_<?php echo $_id ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
                         <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
                         <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
                         <?php echo $_excl; ?>
@@ -122,6 +165,40 @@ var lastPrice='';
                             (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
                         <?php endif; ?>
                         </label>
+
+                        <?php
+                            // ****************
+                           // paczkomaty start
+                           echo ($code == 'paczkomaty') ? $this->getChildHtml('paczkomaty') : '';
+                           // paczkomaty stop
+                            // ****************
+                        ?>
+
+                        <?php if (Mage::helper('core')->isModuleOutputEnabled('Advox_Inpost')) : ?>
+                            <?php
+                                $carrier = Mage::getModel('shipping/config')->getCarrierInstance($code);
+                                if($carrier->getFormBlock()){
+                                    $block = $this->getLayout()->createBlock($carrier->getFormBlock());
+                                    $block->setMethodCode($code);
+                                    $block->setRate($_rate);
+                                    $block->setMethodInstance($carrier);
+                                    echo $block->_toHtml();
+                                }
+                            ?>
+                        <?php endif ?>
+
+                        <?php if ($_canUseDeliveryOptions && !$_deliveryOptionsShown): ?>
+                            <?php if (Mage::helper('postnl/carrier')->isPostnlShippingMethod($_rate->getCode())
+                                && $this->getChild('postnl.delivery.options')
+                            ): ?>
+                                <div class="postnl-container">
+                                    <?php echo $this->getChild('postnl.delivery.options')->setRate($_rate)->toHtml(); ?>
+                                    <?php // echo $this->getChild('postnl.delivery.options')->setMethodName('s_method_' . $_rate->getCode())->toHtml(); ?>
+                                </div>
+                                <?php $_deliveryOptionsShown = true; ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
                         <?php if ($_rate->getCode() == 'relaypoint_relaypoint'): ?>
                             <div id="relaypoint" style="display:none">
                                 <ul class="form-list">
@@ -226,8 +303,9 @@ var lastPrice='';
                             <?php if ($_rate->getCode() == 'tnt_JD') { ?>
                                 <input name="tnt_relais" type="hidden" id="tnt_relais1" class="radio" value="" />
                                 <div id="tnt_pr" style="display:none">
+                                <?php $strpos = strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'); ?>
                                 <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-                                    if (intval(substr($_SERVER['HTTP_USER_AGENT'], strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')+5)) <= 8) { ?>
+                                    if (intval(substr($_SERVER['HTTP_USER_AGENT'], $strpos+5)) <= 8) { ?>
                                         <a href="javascript:fenetreCent('<?php echo Mage::getBaseUrl ('skin');  ?>/frontend/default/default/tnt_relaisColis.php?cp=<?php echo $quote->getShippingAddress()->getPostcode(); ?>', 'popup_tnt' ,'900', '530','scrollbars=no,location:no,menubar=no,status=no,resizable=no');" onclick="javascript:fenetreCent('<?php echo Mage::getBaseUrl ('skin');  ?>/frontend/default/default/tnt_relaisColis.php?cp=<?php echo $quote->getShippingAddress()->getPostcode(); ?>', 'popup_tnt' ,'900', '530','scrollbars=no,location:no,menubar=no,status=no,resizable=no');" id="openRelais">Choisissez votre Relais Colis®</a>
                                     <?php } else { ?>
                                         <a href="<?php echo Mage::getBaseUrl ('skin');  ?>/frontend/default/default/tnt_relaisColis.php?cp=<?php echo $quote->getShippingAddress()->getPostcode(); ?>" rel="superbox[iframe]" id="openRelais">Choisissez votre Relais Colis®</a>
@@ -243,6 +321,7 @@ var lastPrice='';
                 </li>
             <?php endforeach; ?>
             </ul>
+
             <?php if($code == 'storepickup') : ?>
             <div id="free-location-box" >
                 <?php echo $this->getChildHtml('storepickup') ?>
@@ -252,29 +331,69 @@ var lastPrice='';
         </dd>
     <?php endforeach; ?>
 </dl>
+
+<?php if ($fmeFieldsmanager) : ?>
+    <ul><?php echo $fmeFieldsmanager->getfieldshtml(2); ?></ul>
+    <ul><?php echo $fmeFieldsmanager->getfieldshtml(3); ?></ul>
+<?php endif ?>
 <script type="text/javascript">
 //<![CDATA[
-    <?php if (!empty($shippingMe)): ?>
-        var shippingMe = {<?php echo implode(',',$shippingMe); ?>};
+    <?php if (!empty($shippingCodePrice)): ?>
+        var shippingCodePrice = {<?php echo implode(',',$shippingCodePrice); ?>};
     <?php endif; ?>
 
-    function includingShipping(getShippingCode)
-    {
-        <?php if (!empty($shippingMe)): ?>
-            var newPrice = shippingMe[getShippingCode];
-            if (!lastPrice) {
-                lastPrice = newPrice;
-                quoteBaseGrandTotal += newPrice;
+    $$('input[type="radio"][name="shipping_method"]').each(function(el){
+        Event.observe(el, 'click', function(){
+            if (el.checked == true) {
+                var getShippingCode = el.getValue();
+                <?php if (!empty($shippingCodePrice)): ?>
+                    var newPrice = shippingCodePrice[getShippingCode];
+                    if (!lastPrice) {
+                        lastPrice = newPrice;
+                        quoteBaseGrandTotal += newPrice;
+                    }
+                    if (newPrice != lastPrice) {
+                        quoteBaseGrandTotal += (newPrice-lastPrice);
+                        lastPrice = newPrice;
+                    }
+                <?php endif; ?>
+                checkQuoteBaseGrandTotal = quoteBaseGrandTotal;
+                return false;
             }
-            if (newPrice != lastPrice) {
-                quoteBaseGrandTotal += (newPrice-lastPrice);
-                lastPrice = newPrice;
+       });
+    });
 
+    <?php if (Mage::helper('core')->isModuleOutputEnabled('Advox_Inpost')) : ?>
+        // jQuery(document).ready(function($){
+            hideShippingAll();
+            jQuery('input[type="radio"][name="shipping_method"]').click(function(){
+                hideShippingAll();
+                var code = jQuery(this).val();
+                if(jQuery(this).is(':checked')){
+                    showShipping(code);
+                }
+            });
+            jQuery('input[type="radio"][name="shipping_method"]').each(function(){
+                var code = jQuery(this).val();
+                if(jQuery(this).is(":checked")){
+                    showShipping(code);
+                }
+            });
+        // });
+        function showShipping(code){
+            if(jQuery('#'+'shipping_form_'+code).length != 0){
+                jQuery('#'+'shipping_form_'+code).show();
+                jQuery(this).find('.required-entry').attr('disabled','false');
             }
-        <?php endif; ?>
-        checkQuoteBaseGrandTotal = quoteBaseGrandTotal;
-        return false;
-    }
+        }
+        function hideShippingAll(){
+            jQuery('input[type="radio"][name="shipping_method"]').each(function(){
+                var code = jQuery(this).val();
+                jQuery('#'+'shipping_form_'+code).hide();
+                jQuery(this).find('.required-entry').attr('disabled','true');
+            });
+        }
+    <?php endif ?>
 //]]>
 </script>
 

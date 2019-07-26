@@ -9,8 +9,9 @@ class TM_FireCheckout_Helper_Url extends Mage_Checkout_Helper_Url
      */
     public function getCheckoutUrl()
     {
-        if (Mage::helper('firecheckout')->canFireCheckout()) {
-            return $this->_getUrl('firecheckout', array('_secure'=>true));
+        $helper = Mage::helper('firecheckout');
+        if ($helper->canFireCheckout()) {
+            return $helper->getFirecheckoutUrl();
         }
         return parent::getCheckoutUrl();
     }

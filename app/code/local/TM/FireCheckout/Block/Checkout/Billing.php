@@ -2,6 +2,8 @@
 
 class TM_FireCheckout_Block_Checkout_Billing extends Mage_Checkout_Block_Onepage_Billing
 {
+    private $_disabledFields = array();
+
     /**
      * Added to get shipping address from quote for guests too.
      *
@@ -32,13 +34,18 @@ class TM_FireCheckout_Block_Checkout_Billing extends Mage_Checkout_Block_Onepage
             || $this->getRequest()->has('register');
     }
 
-    public function getAddressesHtmlSelect($type)
+    public function enableField($field)
     {
-        return Mage::helper('firecheckout/address')->getAddressesHtmlSelect($type, $this);
+        unset($this->_disabledFields[$field]);
     }
 
-    public function hasCustomerAddressId()
+    public function disableField($field)
     {
-        return (bool)$this->getAddress()->getCustomerAddressId();
+        $this->_disabledFields[$field] = $field;
+    }
+
+    public function getDisabledFields()
+    {
+        return $this->_disabledFields;
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <firecheckout_index_index_custom>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>zipmoney/css/style.css</stylesheet>
+            </action>
+            <block type="core/text" name="zipmoney-checkout-js-lib">
+                <action method="setText" ifconfig="payment/zipmoneypayment/active">
+                    <text helper="zipmoneypayment/getCheckoutJsLibUrl"/>
+                </action>
+            </block>
+            <block type="core/text" name="zipmoney-widgets-js">
+                <action method="setText" ifconfig="payment/zipmoneypayment/active">
+                    <text><![CDATA[<script src="//static.zipmoney.com.au/lib/js/zm-widget-js/dist/zipmoney-widgets-v1.min.js"></script>]]></text>
+                </action>
+            </block>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>tm/firecheckout/js/integration/zipmoney_zipmoneypayment.js</name>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="zipmoneypayment/advert_rootEl" name="root_el"/>
+            <block type="zipmoneypayment/checkout" ifconfig="payment/zipmoneypayment/active" name="zipmoney.checkout" template="zipmoney/zipmoneypayment/checkout/js.phtml"/>
+        </reference>
+    </firecheckout_index_index_custom>
+</layout>

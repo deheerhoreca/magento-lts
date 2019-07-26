@@ -36,11 +36,22 @@ if (window.top == window.self) {
     window.location = "<?php echo $this->getUrl('checkout/cart') ?>";
 }
 <?php if ($this->getGotoSection()): ?>
-    window.top.firecheckoutWindow.setModal(0).hide();
-    window.top.document.getElementById('firecheckout-form').setStyle({
-        'visibility': 'visible'
-    });
-    window.top.document.getElementById('<?php echo (version_compare(Mage::helper('firecheckout')->getMagentoVersion(), '1.6.1.0') >= 0) ? 'hss-iframe' : 'payflow-link-iframe' ?>').firecheckoutCancelLoad = 1;
+    if (window.top.checkout.steps) {
+        for (var s = 0; s < window.top.checkout.steps.length; s++) {
+            if (window.top.checkout.steps[s] == '<?php echo $this->getGotoSection() ?>') {
+                break;
+            }
+            if (window.top.document.getElementById('opc-' + window.top.checkout.steps[s])) {
+                window.top.document.getElementById('opc-' + window.top.checkout.steps[s]).addClassName('allow');
+            }
+        }
+        window.top.checkout.gotoSection("<?php echo $this->getGotoSection() ?>");
+        window.top.document.getElementById('checkout-review-submit').show();
+    } else {
+        window.top.document.getElementById('firecheckout-form').show();
+        window.top.document.getElementById('<?php echo (version_compare(Mage::helper('firecheckout')->getMagentoVersion(), '1.6.1.0') >= 0) ? 'hss-iframe' : 'payflow-link-iframe' ?>').firecheckoutCancelLoad = 1;
+    }
+
     window.top.document.getElementById('iframe-warning').hide();
     <?php if ($this->getErrorMsg()): ?>
         alert('<?php echo $this->getErrorMsg() ?>');

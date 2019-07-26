@@ -1,0 +1,4 @@
+"<a href='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz' title='Download GeoCity database'>Download</a> and unzip file under the 'MAGETO_ROOT/lib/MaxMind/GeoIP/data' folder if you don't have it","<a href='http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz' title='Download GeoCity database'>Download</a> en unzip bestand onder de 'MAGETO_ROOT/lib/MaxMind/GeoIP/data' map als u die niet heeft"
+"GeoCity filename","GeoCity bestandsnaam"
+"Address Detection (GeoIP)","Adresdetectie (GeoIP)"
+"If you would like to get more accurate result, use the <a href='https://www.maxmind.com/en/geoip2-city'>paid version of the same database</a>","Voor nog betere resultaten is er een <a href='https://www.maxmind.com/en/geoip2-city'>betaalde versie van dezelfde database</a>"

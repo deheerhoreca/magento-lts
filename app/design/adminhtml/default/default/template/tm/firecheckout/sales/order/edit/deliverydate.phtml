@@ -3,8 +3,8 @@ $quote = Mage::getSingleton('adminhtml/session_quote')->getQuote();
 $order = Mage::getSingleton('adminhtml/session_quote')->getOrder();
 
 // $quote->getStoreId()
-$useCalendar = Mage::getStoreConfig('firecheckout/delivery_date/use_calendar');
-$useRange    = Mage::getStoreConfig('firecheckout/delivery_date/use_time_range');
+$useCalendar = true; //Mage::getStoreConfig('firecheckout/delivery_date/use_calendar');
+$useRange    = true; //Mage::getStoreConfig('firecheckout/delivery_date/use_time_range');
 
 if (!$useCalendar && !$useRange) :
     return;
@@ -39,8 +39,12 @@ $helper = Mage::helper('firecheckout/deliverydate');
                                     // $format = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
                                     // $formatted = $date->toString($format);
 
+                                    $date = strtotime($quote->getFirecheckoutDeliveryDate());
+                                    if (empty($date)) {
+                                        $date = null; // magento 1.5 fix
+                                    }
                                     $formatted = Mage::app()->getLocale()
-                                        ->date(strtotime($quote->getFirecheckoutDeliveryDate()), null, null, false)
+                                        ->date($date, null, null, false)
                                         ->toString(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT));
                                 ?>
                                 <input type="text" class="input-text" value="<?php echo $formatted; ?>" id="delivery_date" name="delivery_date[date]" />

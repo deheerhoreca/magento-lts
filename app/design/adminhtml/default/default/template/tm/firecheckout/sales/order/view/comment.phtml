@@ -12,25 +12,29 @@ if (!$_comment) {
 
 ?>
 
-<div class="box-left" id="firecheckout_comment">
-    <div class="entry-edit">
-        <div class="entry-edit-head">
-            <h4 class="icon-head head-firecheckout-comment"><?php echo $this->__('Comment') ?></h4>
-        </div>
-        <fieldset>
-            <?php echo $this->escapeHtml($_comment) ?>
-        </fieldset>
+<div id="firecheckout_comment">
+    <div class="hor-scroll">
+        <table cellspacing="0" class="form-list">
+            <tr>
+                <td class="label">
+                    <label><?php echo $this->__('Comment') ?></label>
+                </td>
+                <td class="value">
+                    <?php echo $this->escapeHtml($_comment) ?>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
 <script type="text/javascript">
 document.observe('dom:loaded', function() {
-    var div = $('sales_order_view_tabs_order_info_content').down('div');
+    var div = $('sales_order_view_tabs_order_info_content').down('.box-right').down('.fieldset');
+    if (!div) {
+        return;
+    }
     div.insert({
         bottom: $('firecheckout_comment')
-    });
-    div.insert({
-        bottom: '<div class="clear"></div>'
     });
 });
 </script>

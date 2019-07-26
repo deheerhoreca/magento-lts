@@ -1,64 +1,26 @@
-<?php
-    $comment = Mage::getStoreConfig('firecheckout/general/comment');
-    $salesrep = Mage::getStoreConfig('salesrep/setup/enabled') && Mage::getStoreConfig('salesrep/step_setup/step_enabled');
-    $checkoutFields = $this->getChildHtml('checkoutfields');
-?>
-
-<?php if ($comment || $salesrep || $checkoutFields) : ?>
-    <div id="checkout-additional" class="firecheckout-section">
-        <div class="block-title"><span><?php echo $this->__('Additional Information') ?></span></div>
-        <div class="block-content">
-            <?php if (Mage::getStoreConfig('firecheckout/general/comment')) : ?>
-            <ul class="form-list form-comment">
-                <li class="wide">
-                    <label for="order-comment"><?php echo $this->helper('sales')->__('Comment') ?></label>
-                    <div class="input-box">
-                        <textarea name="order-comment" id="order-comment" rows="5" cols="25"><?php echo trim(Mage::getSingleton('customer/session')->getOrderCustomerComment()) ?></textarea>
-                    </div>
-                </li>
-            </ul>
-            <?php endif; ?>
-
-            <?php if (Mage::getStoreConfig('salesrep/setup/enabled') && Mage::getStoreConfig('salesrep/step_setup/step_enabled')) : ?>
-            <?php $admins = Mage::helper('salesrep')->getUsersList(); ?>
-            <ul class="form-list">
-                <li>
-                    <label for="getvoice" class="required"><em>*</em><?php echo Mage::getStoreConfig('salesrep/step_setup/step_label')?></label>
-                    <div class="input-box">
-                        <select id="getvoice" name="getvoice" class="validate-select">
-                            <option value=""></option>
-                            <option value="<?php echo $this->__('No Sales Representative') ?>"><?php echo $this->__('No Sales Representative') ?></option>
-                            <?php foreach($admins as $admin): ?>
-                            <option value="<?php echo $admin['label'] ?>"><?php echo $admin['label'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div style="display: none;" id="advice-validate-select-getvoice" class="validation-advice">
-                        <?php echo Mage::getStoreConfig('salesrep/step_setup/step_error_msg')?>
-                    </div>
-                </li>
-            </ul>
-            <?php endif; ?>
-
-            <?php echo $checkoutFields ?>
-        </div>
-    </div>
-<?php endif; ?>
-
 <div id="checkout-review" class="firecheckout-section">
-    <div class="block-title"><span><?php echo $this->__('Checkout Review') ?></span></div>
+    <?php $additional = trim($this->getChildHtml('checkout.additional.information')); ?>
+    <?php if ($additional) : ?>
+        <div class="block-title"><span><?php echo $this->__('Order Confirmation') ?></span></div>
+        <?php echo $this->getChildHtml('checkout.additional.information'); ?>
+        <div class="block-subtitle"><span><?php echo $this->__('Checkout Review') ?></span></div>
+    <?php else : ?>
+        <div class="block-title"><span><?php echo $this->__('Checkout Review') ?></span></div>
+    <?php endif ?>
+
     <?php $agreements = $this->getChildHtml('agreements') ?>
-    <?php if (!empty($agreements)) : ?>
-        <div id="agreements-wrapper">
-            <?php echo $agreements; ?>
-        </div>
-    <?php endif; ?>
+    <div id="agreements-wrapper" class="checkout-agreements-load">
+        <?php echo $agreements; ?>
+    </div>
     <div id="checkout-review-load">
         <?php echo $this->getChildHtml('info') ?>
     </div>
-    <?php if ($blockId = Mage::getStoreConfig('firecheckout/additional_content/reviewtable_after')) : ?>
+    <?php
+    $html = $this->getChildHtml('review_after');
+    if ($html || $blockId = Mage::getStoreConfig('firecheckout/additional_content/reviewtable_after')) : ?>
         <div class="firecheckout-items-after">
-            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId($blockId)->toHtml(); ?>
+            <?php echo $blockId ? $this->getLayout()->createBlock('cms/block')->setBlockId($blockId)->toHtml() : ''; ?>
+            <?php echo $html ?>
         </div>
     <?php endif; ?>
     <script type="text/javascript">

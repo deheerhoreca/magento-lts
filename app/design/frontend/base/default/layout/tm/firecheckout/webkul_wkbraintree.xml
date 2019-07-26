@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <firecheckout_index_index_custom>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <file>tm/firecheckout/js/integration/webkul_wkbraintree.js</file>
+            </action>
+        </reference>
+    </firecheckout_index_index_custom>
+</layout>
