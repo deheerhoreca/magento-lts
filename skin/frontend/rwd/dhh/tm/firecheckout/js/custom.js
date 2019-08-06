@@ -20,7 +20,7 @@ document.observe('dom:loaded', function() {
             value: '',                          // value to compare with field value, can be an array
             dependentField: 'shipping:vat_id',  // dependent field, can be an array
             match: 'hidden',                    // field status, when field.value equals value
-            unmatch: 'optional'                 // field status, when field.value not equals value
+            unmatch: 'hidden'                   // field status, when field.value not equals value
         }
     );
 });
