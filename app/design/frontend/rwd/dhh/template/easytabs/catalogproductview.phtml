@@ -410,6 +410,18 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
+          if($i < 6) {
+            $attribute_name = "gewicht_kg";
+            $image = "{$skn}frontend/rwd/dhh/images/weight.svg";
+            $title = "Gewicht (kg)";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE && $value !== "Nee") {
+              $value = (int) $value." kg";
+              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
           if($i > 0) {
             echo "<div class='top_description'>";
             echo "<ul class='product-highlights'>{$str}</ul>";
