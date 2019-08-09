@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Feed
  */
 class Amasty_Feed_Adminhtml_Amfeed_RuleController extends Amasty_Feed_Controller_Abstract

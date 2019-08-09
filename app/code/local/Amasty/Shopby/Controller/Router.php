@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
 class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router_Abstract
@@ -41,10 +41,16 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
      */
     protected function matchForwardShort()
     {
-        $pageId = urldecode($this->request->getPathInfo());
+        $origPageId = urldecode($this->request->getPathInfo());
         $urlHelper = $this->getUrlHelper();
 
-        $pageId = $urlHelper->checkRemoveBrandUrlKey($pageId);
+        $pageId = $urlHelper->checkRemoveBrandUrlKey($origPageId);
+        $brandSuffixMatch = false;
+        $brandsUrlKey = trim(Mage::getStoreConfig('amshopby/brands/url_key'));
+        if ($pageId != $origPageId || empty($brandsUrlKey)) {
+            $brandSuffixMatch = true;
+        }
+
         if(trim($pageId,'/') === '')
             return false;
 
@@ -87,9 +93,13 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
                 return false;
             }
         } else { // root category
-            if (!Mage::getStoreConfig('amshopby/seo/enable_shopby_page')) {
-                $brandAttributeCode = trim(Mage::getStoreConfig('amshopby/brands/attr'));
-                if (!isset($query[$brandAttributeCode])) {
+            $brandAttributeCode = trim(Mage::getStoreConfig('amshopby/brands/attr'));
+            if (isset($query[$brandAttributeCode])) {
+                if (!$brandSuffixMatch) {
+                    return false;
+                }
+            } else {
+                if (!Mage::getStoreConfig('amshopby/seo/enable_shopby_page')) {
                     return false;
                 }
             }
@@ -119,10 +129,16 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
 
     protected function matchForwardMultilevel()
     {
-        $pageId = urldecode($this->request->getPathInfo());
+        $origPageId = urldecode($this->request->getPathInfo());
         $urlHelper = $this->getUrlHelper();
 
-        $pageId = $urlHelper->checkRemoveBrandUrlKey($pageId);
+        $pageId = $urlHelper->checkRemoveBrandUrlKey($origPageId);
+        $brandSuffixMatch = false;
+        $brandsUrlKey = trim(Mage::getStoreConfig('amshopby/brands/url_key'));
+        if ($pageId != $origPageId || empty($brandsUrlKey)) {
+            $brandSuffixMatch = true;
+        }
+
         if(trim($pageId,'/') === '')
             return false;
 
@@ -142,11 +158,14 @@ class Amasty_Shopby_Controller_Router extends Mage_Core_Controller_Varien_Router
             }
         }
         else { // root category
-            if (!Mage::getStoreConfig('amshopby/seo/enable_shopby_page')) {
-                /** @var Amasty_Shopby_Helper_Attributes $helper */
-                $helper = Mage::helper('amshopby/attributes');
-                $brand = $helper->getRequestedBrandOption();
-                if (!$brand) {
+            $helper = Mage::helper('amshopby/attributes');
+            $brand = $helper->getRequestedBrandOption();
+            if ($brand && $this->urlMode != Amasty_Shopby_Model_Source_Url_Mode::MODE_DISABLED) {
+                if (!$brandSuffixMatch) {
+                    return false;
+                }
+            } else {
+                if (!Mage::getStoreConfig('amshopby/seo/enable_shopby_page')) {
                     return false;
                 }
             }

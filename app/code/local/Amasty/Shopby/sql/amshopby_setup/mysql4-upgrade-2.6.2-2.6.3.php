@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
 $this->startSetup();
@@ -10,10 +10,14 @@ $this->startSetup();
  * @Migration field_exist:amshopby/value|cms_block_id:1
  * @Migration field_exist:amshopby/value|cms_block_bottom_id:1
  */
-$this->run("
-ALTER TABLE `{$this->getTable('amshopby/value')}`
-ADD `cms_block_id` int(11) DEFAULT NULL,
-ADD `cms_block_bottom_id` int(11) DEFAULT NULL");
+$tableName = $this->getTable('amshopby/value');
+if (!$this->getConnection()->tableColumnExists($tableName, 'cms_block_id')) {
+    $this->run("
+        ALTER TABLE `{$tableName}`
+        ADD `cms_block_id` int(11) DEFAULT NULL,
+        ADD `cms_block_bottom_id` int(11) DEFAULT NULL
+    ");
+}
 
 $this->run("
 UPDATE `{$this->getTable('amshopby/value')}` v,`{$this->getTable('cms/block')}` b

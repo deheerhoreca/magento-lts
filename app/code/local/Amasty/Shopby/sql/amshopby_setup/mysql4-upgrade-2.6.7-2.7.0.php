@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
 $this->startSetup();
@@ -14,7 +14,9 @@ function alterPageMultipleStores($setup)
      */
     $table = $setup->getTable('amshopby/page');
 
-    $setup->run("ALTER TABLE `{$table}` ADD `stores` TEXT NOT NULL AFTER `page_id`");
+    if (!$setup->getConnection()->tableColumnExists($table, 'stores')) {
+        $setup->run("ALTER TABLE `{$table}` ADD `stores` TEXT NOT NULL AFTER `page_id`");
+    }
     $setup->run("UPDATE `{$table}` SET `stores` = `store_id`");
     $setup->run("ALTER TABLE `{$table}` DROP FOREIGN KEY `FK_AMSHOPBY_PAGE_CORE_STORE`");
     $setup->run("ALTER TABLE {$table} DROP INDEX IDX_AMSHOPBY_PAGE_STORE_VIEW_ID");

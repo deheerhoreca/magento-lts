@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Feed
  */  
 class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
@@ -157,18 +157,13 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
         
         return $res;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getProductTypes()
     {
-        $res = array();
-        $res['simple']       = $this->__('Simple');
-        $res['grouped']      = $this->__('Grouped');
-        $res['configurable'] = $this->__('Configurable');
-        $res['virtual']      = $this->__('Virtual');
-        $res['bundle']       = $this->__('Bundle');
-        $res['downloadable'] = $this->__('Downloadable');
-        
-        return $res;
+        return Mage::getSingleton('catalog/product_type')->getOptionArray();
     }
     
     public function getAttributeSets(){

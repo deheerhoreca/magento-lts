@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -265,10 +265,15 @@ class Amasty_Base_Model_InformationObserver
         foreach ($conflicts as $type) {
             foreach ($type as $class) {
                 if (isset($class['rewrite'])) {
-                    foreach ($class['rewrite'] as $conflict) {
-                        $classes = $this->_getModuleConflict($conflict);
-                        if ($classes) {
-                            $result[] = $classes;
+                    foreach ($class['rewrite'] as $rewriteKey => $conflict) {
+                        $codePool = $class['codePool'][$rewriteKey];
+
+                        if (!$this->_conflictResolved($codePool, $conflict)) {
+                            $classes = $this->_getModuleConflict($conflict);
+
+                            if ($classes) {
+                                $result[] = $classes;
+                            }
                         }
                     }
                 }
@@ -282,6 +287,33 @@ class Amasty_Base_Model_InformationObserver
 
 
         return $result;
+    }
+
+    protected function _conflictResolved($codePool, $rewrites)
+    {
+        $isConflictResolved = false;
+        krsort($rewrites);
+
+        $extendsClasses = $rewrites;
+
+        foreach ($rewrites as $rewriteIndex => $class) {
+            unset($extendsClasses[$rewriteIndex]);
+
+            if (count($extendsClasses) > 0) {
+                $classPath = Amasty_Base_Model_Conflict::getClassPath($codePool[$rewriteIndex], $rewrites[$rewriteIndex]);
+                $pureClassName = Amasty_Base_Model_Conflict::getPureClassName($class);
+                $lines = file($classPath);
+
+                foreach ($lines as $line) {
+                    if (strpos($line, $pureClassName) !== false) {
+                        $isConflictResolved = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $isConflictResolved;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
 
@@ -36,7 +36,9 @@ class Amasty_Shopby_Helper_Layer_View_Strategy_Attribute extends Amasty_Shopby_H
                 } else {
                     $this->model->setDisplayType(Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY);
                 }
-            } elseif ($displayType == Amasty_Shopby_Model_Source_Attribute::DT_COLOR_SWATCHES_PRO) {
+            } elseif ($displayType == Amasty_Shopby_Model_Source_Attribute::DT_COLOR_SWATCHES_PRO
+                    && Mage::helper('amshopby')->isModuleEnabled('Amasty_Conf')
+                ) {
                 $template = 'amasty/amshopby/swatches_pro.phtml';
             }
         }

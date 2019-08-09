@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Feed
  */     
 class Amasty_Feed_Adminhtml_Amfeed_ProfileController extends Amasty_Feed_Controller_Abstract
@@ -33,8 +33,11 @@ class Amasty_Feed_Adminhtml_Amfeed_ProfileController extends Amasty_Feed_Control
                 
                 $cnt  = $feed->getInfoCnt();
                 $total = $feed->getInfoTotal();
-                    
-                if ($hasGenerated) {
+
+                if (!$total) {
+                    $message = $this->__('There are no products to export. Pleas check the filters and try again.');
+                    $isCompleted = true;
+                } elseif ($hasGenerated) {
                     $feed->compress();
                     $message = $this->__('The feed has been generated');
                     if (($feed->getDeliveryType() == Amasty_Feed_Model_Profile::DELIVERY_TYPE_FTP || $feed->getDeliveryType() == Amasty_Feed_Model_Profile::DELIVERY_TYPE_SFTP) && $feed->getDelivered()) {
@@ -44,9 +47,6 @@ class Amasty_Feed_Adminhtml_Amfeed_ProfileController extends Amasty_Feed_Control
                     $isCompleted = true;
                     $file = $feed->getDownloadUrl();
                     $fileName = $feed->getFilename();
-                } else if (!$total) {
-                    $message = $this->__('There are no products to export. Pleas check the filters and try again.');
-                    $isCompleted = true;   
                 } elseif (!$cnt) {
                     $message = $this->__('The feed generating has been started. %d products will be exported.', $total);
                 } else {

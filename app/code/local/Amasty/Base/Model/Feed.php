@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -139,7 +139,8 @@ class Amasty_Base_Model_Feed extends Mage_AdminNotification_Model_Feed
                         'title' => (string)$item->title,
                         'description' => (string)$item->description,
                         'url' => (string)$item->link,
-                        'is_amasty' => 1
+                        'is_amasty' => 1,
+                        'image_url' => (string)$item->image
                     );
                 }
             }
@@ -506,7 +507,7 @@ class Amasty_Base_Model_Feed extends Mage_AdminNotification_Model_Feed
             unset($amastyModules['Amasty_Paction']);
             unset($amastyModules['Amasty_File']);
         }
-        
+
         if (isset($amastyModules['Amasty_Ordermanagertoolkit'])) {
             unset($amastyModules['Amasty_Oaction']);
             unset($amastyModules['Amasty_Ogrid']);

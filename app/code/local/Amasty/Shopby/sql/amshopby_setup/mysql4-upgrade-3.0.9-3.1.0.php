@@ -1,21 +1,28 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
 
 
 $this->startSetup();
 
-$this->run("ALTER TABLE `{$this->getTable('amshopby/value')}` ADD `is_parent` TINYINT(1) NOT NULL DEFAULT '0'");
-$this->run("ALTER TABLE `{$this->getTable('amshopby/filter')}` ADD `use_mapping` TINYINT(1) NOT NULL DEFAULT '0'");
+$table = $this->getTable('amshopby/value');
+if (!$this->getConnection()->tableColumnExists($table, 'is_parent')) {
+    $this->run("ALTER TABLE `{$table}` ADD `is_parent` TINYINT(1) NOT NULL DEFAULT '0'");
+}
+
+$table = $this->getTable('amshopby/filter');
+if (!$this->getConnection()->tableColumnExists($table, 'use_mapping')) {
+    $this->run("ALTER TABLE `{$table}` ADD `use_mapping` TINYINT(1) NOT NULL DEFAULT '0'");
+}
 
 $this->run("
-ALTER TABLE `{$this->getTable('amshopby/filter')}` CHANGE `depend_on` `depend_on` TEXT NOT NULL;
-ALTER TABLE `{$this->getTable('amshopby/filter')}` CHANGE `depend_on_attribute` `depend_on_attribute` TEXT NOT NULL;
-ALTER TABLE `{$this->getTable('amshopby/filter')}` CHANGE `exclude_from` `exclude_from` TEXT NOT NULL;
-ALTER TABLE `{$this->getTable('amshopby/filter')}` CHANGE `include_in` `include_in` TEXT NOT NULL;
+ALTER TABLE `{$table}` CHANGE `depend_on` `depend_on` TEXT NOT NULL;
+ALTER TABLE `{$table}` CHANGE `depend_on_attribute` `depend_on_attribute` TEXT NOT NULL;
+ALTER TABLE `{$table}` CHANGE `exclude_from` `exclude_from` TEXT NOT NULL;
+ALTER TABLE `{$table}` CHANGE `include_in` `include_in` TEXT NOT NULL;
 ");
 
 $this->run("

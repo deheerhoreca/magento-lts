@@ -1,9 +1,9 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
- */  
+ */
 $this->startSetup();
 
 /**
@@ -12,7 +12,7 @@ $this->startSetup();
  */
 
 $this->run("
-CREATE TABLE `{$this->getTable('amshopby/value')}` (
+CREATE TABLE IF NOT EXISTS `{$this->getTable('amshopby/value')}` (
   `value_id` mediumint(8) unsigned NOT NULL auto_increment,
   `option_id` mediumint(8) unsigned NOT NULL,
   `filter_id` mediumint(8) unsigned NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `{$this->getTable('amshopby/value')}` (
   KEY `filter_id` (`filter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `{$this->getTable('amshopby/filter')}` (
+CREATE TABLE IF NOT EXISTS `{$this->getTable('amshopby/filter')}` (
   `filter_id` mediumint(8) unsigned NOT NULL auto_increment,
   `attribute_id` mediumint(8) unsigned NOT NULL,
   `sort_by`        TINYINT(1) NOT NULL,  

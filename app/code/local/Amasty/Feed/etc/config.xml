@@ -2,17 +2,17 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2018 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Feed
  */
 -->
 <config>
     <modules>
         <Amasty_Feed>
-            <version>3.5.2</version>
+            <version>3.5.5</version>
         </Amasty_Feed>
     </modules>
-    
+
     <global>
         <models>
             <amfeed>
@@ -24,10 +24,10 @@
                 <entities>
                     <profile>
                         <table>am_feed_profile</table>
-                    </profile> 
+                    </profile>
                     <field>
                         <table>am_feed_field</table>
-                    </field> 
+                    </field>
                     <template>
                         <table>am_feed_template</table>
                     </template>
@@ -40,7 +40,7 @@
                 </entities>
             </amfeed_mysql4>
         </models>
-        
+
         <resources>
             <amfeed_setup>
                 <setup>
@@ -67,7 +67,7 @@
                 <class>Amasty_Feed_Block</class>
             </amfeed>
         </blocks>
-         
+
         <helpers>
             <amfeed>
                 <class>Amasty_Feed_Helper</class>
@@ -84,7 +84,7 @@
             </core_config_data_save_commit_after>
         </events>
     </global>
-    
+
     <admin>
         <routers>
             <adminhtml>
@@ -121,7 +121,7 @@
                                 <title>Feeds</title>
                                 <action>adminhtml/amfeed_profile/index</action>
                                 <sort_order>10</sort_order>
-                            </feeds> 
+                            </feeds>
                             <fields translate="title" module="amfeed">
                                 <title>Custom Fields</title>
                                 <action>adminhtml/amfeed_field/index</action>
@@ -136,13 +136,13 @@
                                 <title>Settings</title>
                                 <action>adminhtml/system_config/edit/section/amfeed</action>
                                 <sort_order>40</sort_order>
-                            </settings> 
+                            </settings>
                         </children>
                     </amfeed>
                 </children>
             </catalog>
-		</menu>     
-   
+		</menu>
+
 		<acl>
 			<resources>
 				<all>
@@ -157,13 +157,13 @@
                                     <children>
                                         <feeds translate="title" module="amfeed">
                                             <title>Feeds</title>
-                                        </feeds> 
+                                        </feeds>
                                         <fields translate="title" module="amfeed">
                                             <title>Custom Fields</title>
-                                        </fields> 
+                                        </fields>
                                         <settings translate="title" module="amfeed">
                                             <title>Settings</title>
-                                        </settings> 
+                                        </settings>
                                     </children>
                                 </amfeed>
                             </children>
@@ -178,12 +178,12 @@
                                     </children>
                                 </config>
                             </children>
-                        </system>            
+                        </system>
                      </children>
-                </admin> 
+                </admin>
 			</resources>
 		</acl>
-        
+
         <translate>
             <modules>
                 <Amasty_Feed>
@@ -192,8 +192,8 @@
                     </files>
                 </Amasty_Feed>
             </modules>
-        </translate> 
-        
+        </translate>
+
         <layout>
             <updates>
                 <amfeed>
@@ -201,8 +201,8 @@
                 </amfeed>
             </updates>
         </layout>
-    </adminhtml> 
-    
+    </adminhtml>
+
     <default>
         <amfeed>
            <system>
@@ -219,7 +219,7 @@
            </amfeed_cron>-->
         </amfeed>
     </default>
-    
+
     <crontab>
         <jobs>
             <amfeed_generate>
@@ -231,5 +231,5 @@
                 </run>
             </amfeed_generate>
         </jobs>
-    </crontab> 
+    </crontab>
 </config>
