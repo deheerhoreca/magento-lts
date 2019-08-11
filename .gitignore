@@ -34,7 +34,9 @@
 /media/xmlconnect/system/*
 !/media/xmlconnect/system/ok.gif
 
-!/media/wysiwyg/brands
+!/media/
+/media/*
+!/media/wysiwyg/
 
 /var/*
 !/var/.htaccess
