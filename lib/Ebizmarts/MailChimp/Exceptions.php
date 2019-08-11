@@ -77,7 +77,8 @@ class MailChimp_Error extends Exception
             $friendlyMessage .= "\tErrors:\n".$errorDetails;
         }
 
-        $friendlyMessage .= "\tParams:\n\t\t".$this->_mailchimpParams;
+        # DHH CORE HACK
+        //$friendlyMessage .= "\tParams:\n\t\t".$this->_mailchimpParams;
         return $friendlyMessage;
     }
 

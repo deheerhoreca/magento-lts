@@ -377,8 +377,8 @@ class Ebizmarts_MailChimp
             $detail = array_key_exists('detail', $result) ? $result['detail'] : '';
             $errors = array_key_exists('errors', $result) ? $result['errors'] : null;
             $title = array_key_exists('title', $result) ? $result['title'] : '';
-
-            throw new MailChimp_Error($this->_root . $url, $method, $params, $title, $detail, $errors);
+            # DHH CORE HACK
+            throw new MailChimp_Error($method, $params, $this->_root . $url, $title, $detail, $errors);
         }
 
         return $result;
