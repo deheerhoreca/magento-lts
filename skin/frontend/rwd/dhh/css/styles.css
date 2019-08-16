@@ -18057,18 +18057,14 @@ body.checkout-cart-index .pgcrtleft #shopping-cart-table {
   font-size: 13px;
 }
 
-.product-highlights {
-  margin-top: 10px;
-}
-
 .product-highlights li img {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   vertical-align: middle;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 5px;
+  padding-bottom: 3px;
   fill: #000;
 }
 
@@ -18077,10 +18073,11 @@ body.checkout-cart-index .pgcrtleft #shopping-cart-table {
   width: 16%;
   margin: 0px;
   text-align: center;
+  margin: 5px 0px;
 }
 
 .product-highlights li span {
-  height: 40px;
+  height: 35px;
   vertical-align: middle;
   display: block;
   text-align: center;
@@ -19389,10 +19386,6 @@ body.amshopby-index-index div.page-title.category-title h1 {
 
 #brand_logo_small {
   display: inline-block;
-  position: absolute;
-  right: -10px;
-  z-index: 10;
-  bottom: 190px;
   width: 125px;
 }
 
@@ -19598,7 +19591,7 @@ input#newsletter {
   left: -15px;
   padding: 7px 13px;
   position: absolute;
-  top: 5px;
+  top: 42px;
   z-index: 10;
 }
 
@@ -20054,7 +20047,7 @@ h2.product-name a {
 a.anchor {
   display: block;
   position: relative;
-  top: -200px;
+  top: -250px;
   visibility: hidden;
 }
 

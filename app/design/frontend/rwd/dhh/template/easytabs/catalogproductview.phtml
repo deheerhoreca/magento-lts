@@ -179,7 +179,16 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       <input type="hidden" name="related_product" id="related-products-field" value="" />
     </div>
     <div style="border-top: 1px solid #dadada; padding-top: 10px;">
+
       <div class="product-img-box">
+
+        <div>
+          <?php
+          /* Small Brand Logo */
+          echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' width=125 height=44 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" />";
+          ?>
+        </div>
+
     	  <?php
       		$shoutout = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
           $energy_rating = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
@@ -197,9 +206,6 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           if(strlen($shoutout) > 1) {
             echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
           }
-
-          /* Small Brand Logo */
-          echo "<a href='#a_brand'><img alt='Merk logo' title='Over {$brand}' id='brand_logo_small' src='{$brand_logo}' width=125 height=44 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" /></a>";
 
           /* Energy Label */
           if(strlen($energy_rating) > 0) {
@@ -259,7 +265,9 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
           // General highlights
 
-          if($i < 6) {
+          $max_highlighted_attributes = 12;
+
+          if($i < $max_highlighted_attributes) {
             $attribute_names = ["breedte", "hoogte", "diepte"];
             $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
             $title = "Afmetingen (b x h x d)";
@@ -278,7 +286,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "afsluitbaar";
             $image = "{$skn}frontend/rwd/dhh/images/key.svg";
             $title = "Afsluitbaar";
@@ -290,7 +298,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "size";
             $image = "{$skn}frontend/rwd/dhh/images/size.svg";
             $title = "Maat";
@@ -302,7 +310,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "type_koeling";
             $image = "{$skn}frontend/rwd/dhh/images/forced_cooling.svg";
             $title = "Koelmethode";
@@ -314,7 +322,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "inhoud_liters";
             $image = "{$skn}frontend/rwd/dhh/images/liters.jpg";
             $title = "Inhoud";
@@ -326,7 +334,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "ontdooisysteem";
             $image = "{$skn}frontend/rwd/dhh/images/freezer.svg";
             $title = "Ontdooisysteem";
@@ -338,7 +346,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "aantal_roosters";
             $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
             $title = "Aantal roosters";
@@ -350,7 +358,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "garantie";
             $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
             $title = "Garantietermijn";
@@ -362,19 +370,65 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "vermogen";
             $image = "{$skn}frontend/rwd/dhh/images/watt.svg";
-            $title = "Vermogen (kW)";
+            $title = "Vermogen";
             $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if(empty($value) === FALSE) {
-              $value = "{$value} kW";
+              $value = str_replace(",", ".", $value);
+              $value = (double) $value;
+              if($value < 1.0) {
+                $value = (int) ($value * 1000)." W";
+              } else {
+                $value = "{$value} kW";
+              }
               $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
               $i++;
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "aansluitspanning";
+            $image = "{$skn}frontend/rwd/dhh/images/volt.svg";
+            $title = "Voltage";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE) {
+              if(strstr(strtolower($value), "V") === FALSE) {
+                $value = "{$value} V";
+              }
+              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "toeren_minuut";
+            $image = "{$skn}frontend/rwd/dhh/images/rpm.svg";
+            $title = "RPM";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE) {
+              $value = "{$value} RPM";
+              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "vermogen_kw";
+            $image = "{$skn}frontend/rwd/dhh/images/flame.svg";
+            $title = "Vermogen (gas)";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE) {
+              if(strstr(strtolower($value), "V") === FALSE) {
+                $value = "{$value} kW";
+              }
+              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "geluidsniveau";
             $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
             $title = "Stil apparaat";
@@ -386,19 +440,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
-            $attribute_name = "aansluitspanning";
-            $image = "{$skn}frontend/rwd/dhh/images/volt.svg";
-            $title = "Let op: 400V";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "230") {
-              $value = "{$value} Volt";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
-              $i++;
-            }
-          }
-
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "verlichting";
             $image = "{$skn}frontend/rwd/dhh/images/light.svg";
             $title = "Verlichting";
@@ -410,14 +452,54 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             }
           }
 
-          if($i < 6) {
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "gewicht_kg";
             $image = "{$skn}frontend/rwd/dhh/images/weight.svg";
             $title = "Gewicht (kg)";
             $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if(empty($value) === FALSE && $value !== "Nee") {
-              $value = (int) $value." kg";
+              $value = (double) $value;
+              if($value < 1.0) {
+                $value = ($value * 1000)." gr";
+              } elseif($value < 10.0) {
+                $value = number_format($value, 1, ",", ".")." kg";
+              } else {
+                $value = (int) $value." kg";
+              }
               $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "glas";
+            $image = "{$skn}frontend/rwd/dhh/images/doubleglass.svg";
+            $title = "Dubbel glas";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if($value === "dubbel glas") {
+              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
+            if(empty($pvideo) === FALSE) {
+              $image = "{$skn}frontend/rwd/dhh/images/video.svg";
+              $title = "Productvideo";
+              if($value === "dubbel glas") {
+                $str .= "<li><a href=\"#a_video\"><img src=\"{$image}\" title=\"{$title}\" /><span>{$title}</span></a></li>";
+                $i++;
+              }
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "koelmiddel";
+            $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
+            $title = "Koelmiddel";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE && $value !== "230") {
+              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
               $i++;
             }
           }
