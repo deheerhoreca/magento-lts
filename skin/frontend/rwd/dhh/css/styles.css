@@ -4112,9 +4112,9 @@ div.category-products ul.products-grid li.item .product-name {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.2;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   text-align: left;
-  min-height: 48px;
+  min-height: 4em;
 }
 
 div.category-products ul.products-grid li.item .product-name a {
@@ -19245,10 +19245,10 @@ div.cross-sell-product
 {
   width: 32.6% !important;
   padding: 10px 13px 0 !important;
-  border: 1px dotted #ccc;
+  border: 1px dotted transparent;
   margin-right: 1% !important;
   padding-bottom: 15px !important;
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  /*transition: all 0.3s cubic-bezier(.25,.8,.25,1);*/
 }
 
 div.category-products ul.products-grid li.item:hover,
@@ -19256,8 +19256,8 @@ div.category-products ul.products-grid li.item:hover,
 ul#upsell-product-table li:hover,
 div.cross-sell-product:hover
 {
-  box-shadow: 0 3px 8px rgba(0,0,0,0.90);
-  border: 1px solid transparent;
+  /*box-shadow: 0 3px 8px rgba(0,0,0,0.90);*/
+  border: 1px solid #ccc;
 }
 
 .block-content.aw-arp-block-content ul li,
@@ -19567,17 +19567,18 @@ input#newsletter {
 }
 
 .lblprolist {
-  background: #f08324 none repeat scroll 0 0;
+  background: #f08324;
   color: #ffffff;
   display: inline-block;
-  font-size: 1em;
+  font-size: 0.8em;
   left: 0;
-  padding: .5em 1em;
+  padding: .3em 1em;
   position: absolute;
-  top: 42px;
+  top: 6em;
   z-index: 1;
-  width: 100%;
+  width: 90%;
   font-weight: 600;
+  border-radius: 0.7em;
 }
 
 .lblprolistviewpg {

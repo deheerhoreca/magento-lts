@@ -462,9 +462,9 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               if($value < 1.0) {
                 $value = ($value * 1000)." gr";
               } elseif($value < 10.0) {
-                $value = number_format($value, 1, ",", ".")." kg";
+                $value = number_format(round($value, 1), 1, ",", ".")." kg";
               } else {
-                $value = (int) $value." kg";
+                $value = (int) round($value, 0)." kg";
               }
               $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
               $i++;
