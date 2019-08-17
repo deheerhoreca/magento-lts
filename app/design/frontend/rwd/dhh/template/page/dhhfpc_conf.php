@@ -1,6 +1,13 @@
 <?php
 
-define("DHH_FPC_ENABLED", true);
+if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
+  define("DHH_FPC_ENABLED", false);
+} else {
+  define("DHH_FPC_ENABLED", true);
+}
+
+$apm_transaction = Mage::app()->getFrontController()->getAction()->getFullActionName();
+echo "<script language='javascript'>var apm_trx = '{$apm_transaction}';</script>";
 
 /*
 - 1column.phtml:
