@@ -4429,23 +4429,10 @@ div.category-products .lblenergylabel::after {
 }
 
 .products-grid .actions {
-  bottom: -27px;
   left: 0;
-  min-height: 62px;
-  padding-top: 10px;
+  padding-bottom: 10px;
   position: absolute;
   width: 100%;
-}
-
-.products-grid  div.product-info div.actions button.button.btn-cart {
-  background-color: #17a249;
-  float: left;
-  font-size: 12px;
-  font-weight: normal;
-  height: 32px;
-  width: 141px;
-  position: relative;
-  top: 10px;
 }
 
 .products-grid .ratings .rating-box {
@@ -19393,18 +19380,18 @@ body.amshopby-index-index div.page-title.category-title h1 {
   margin-bottom: 2em;
 }
 
-.products-grid  div.product-info div.actions button.button.btn-cart {
+.products-grid div.product-info div.actions button.button.btn-cart {
   background-color: #17a249;
-  float: none;
+  float: right;
   font-size: 24px;
   font-weight: normal;
-  height: 35px;
-  width: 30%;
-  /*min-width: 150px;*/
+  height: 1.5em;
+  width: 3em;
   top: 0px;
   padding: 0;
   display: inline-block;
   vertical-align: middle;
+  position: relative;
 }
 
 #amshopby-price-btn {
@@ -19571,7 +19558,7 @@ input#newsletter {
   color: #ffffff;
   display: inline-block;
   font-size: 0.8em;
-  left: 0;
+  left: 5%;
   padding: .3em 1em;
   position: absolute;
   top: 6em;
@@ -19984,7 +19971,8 @@ dl.faq-items dt.active {
 
 .more-inform {
   width: 65%;
-  display: inline-block;
+  /*display: inline-block;*/
+  display: none;
   vertical-align: middle;
   font-size: 14px;
   border: 0px solid;
