@@ -453,12 +453,24 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           }
 
           if($i < $max_highlighted_attributes) {
+            $attribute_name = "aantal_flessen";
+            $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
+            $title = "Flessen";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE && $value !== "Nee") {
+              $value = "{$value} X";
+              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "aantal_branders";
             $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
             $title = "Branders";
             $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if(empty($value) === FALSE && $value !== "Nee") {
-              $value = "{$value}X";
+              $value = "{$value} X";
               $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
               $i++;
             }
