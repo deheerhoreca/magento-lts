@@ -453,6 +453,18 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           }
 
           if($i < $max_highlighted_attributes) {
+            $attribute_name = "aantal_branders";
+            $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
+            $title = "Branders";
+            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($value) === FALSE && $value !== "Nee") {
+              $value = "{$value}X";
+              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+            }
+          }
+
+          if($i < $max_highlighted_attributes) {
             $attribute_name = "gewicht_kg";
             $image = "{$skn}frontend/rwd/dhh/images/weight.svg";
             $title = "Gewicht (kg)";
