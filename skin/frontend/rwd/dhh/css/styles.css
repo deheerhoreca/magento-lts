@@ -18985,6 +18985,7 @@ html {
   /* 2 */
   -ms-text-size-adjust: 100%;
   /* 2 */
+  scroll-behavior: smooth;
 }
 
 .main-container,
