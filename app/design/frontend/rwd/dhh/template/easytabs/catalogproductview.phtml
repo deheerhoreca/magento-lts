@@ -510,10 +510,8 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             if(empty($pvideo) === FALSE) {
               $image = "{$skn}frontend/rwd/dhh/images/video.svg";
               $title = "Productvideo";
-              if($value === "dubbel glas") {
-                $str .= "<li><a href=\"#a_video\"><img src=\"{$image}\" title=\"{$title}\" /><span>{$title}</span></a></li>";
-                $i++;
-              }
+              $str .= "<li><a href=\"#a_video\"><img src=\"{$image}\" title=\"{$title}\" /><span>{$title}</span></a></li>";
+              $i++;
             }
           }
 
