@@ -7,7 +7,8 @@ if (!$helper->isOgMetaEnabled()) {
 
 $siteName = $helper->getSiteName();
 $product = Mage::registry('current_product');
-$imageAttr = getimagesize($product->getImageUrl());
+$imageFile = 'media/catalog/product' . $product->getSmallImage();
+$imageAttr = getimagesize($imageFile);
 $productVideo = $product->getResource()->getAttribute('product_video')->getFrontend()->getValue($product);
 ?>
 
