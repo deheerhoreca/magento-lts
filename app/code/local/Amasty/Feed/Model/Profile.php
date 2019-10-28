@@ -345,7 +345,8 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
                         . 'amfeed/images/' . $this->getId() . '.jpg';
                 } else {
                     if ($value && $value != "no_selection") {
-                        $value = str_replace('https://', 'http://', $mediaConfig->getMediaUrl($value));
+                        #DHH CORE HACK
+                        #$value = str_replace('https://', 'http://', $mediaConfig->getMediaUrl($value));
                     } else {
                         $value = '';
                     }
