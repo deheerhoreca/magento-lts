@@ -109,7 +109,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           <?php
           foreach($_additional['items'] as $_data) {
             $valuex = $_data['value'];
-            if($valuex==''){
+            if($valuex == '') {
               continue;
            	}
             ?>
@@ -126,6 +126,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
                 $_data['code']=='diepte' ||
                 $_data['code']=='gewicht_kg') {
                   echo round($valuex, 2);
+                } elseif($_data['code'] == 'diameter') {
+                  echo round($valuex, 0);
                 } else {
                   echo $valuex;
                 }
