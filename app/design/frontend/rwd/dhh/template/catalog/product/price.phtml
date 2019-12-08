@@ -74,7 +74,10 @@ $dhh_debug = FALSE;
     <!-- BEGIN DHH -->
     <?php
       $_discount = ($_finalPrice - $_price) * 1;
-      $_discount_pct = ($_discount / $_price) * 100 * -1;
+      $_discount_pct = null;
+      if($_price != 0) {
+        $_discount_pct = ($_discount / $_price) * 100 * -1;
+      }
     ?>
     <!-- END DHH -->
     <?php if ($_finalPrice >= $_price): ?>
