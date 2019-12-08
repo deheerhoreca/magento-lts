@@ -49,7 +49,7 @@ $htbrand = $brand = null;
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 $brand_name = $_product->getAttributeText('manufacturer');
-$brand_logo = "/skin/frontend/rwd/dhh/images/logo.png";
+$brand_logo = "/media/wysiwyg/brands/prokoeling.png";
 $brand_link = "/".strtolower($brand_name);
 
 //$brand_name = "combisteel";
@@ -185,7 +185,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
         <div>
           <?php
           /* Small Brand Logo */
-          echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' width=125 height=44 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" />";
+          echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' width=125 height=44 onerror=\"if (this.src != '/media/wysiwyg/brands/prokoeling.png') this.src = '/media/wysiwyg/brands/prokoeling.png';\" />";
           ?>
         </div>
 
@@ -1026,7 +1026,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
         <div class="content">
           <div class="brand std">
             <?php
-              //echo "<img alt='Merk logo' title='{$brand}' id='brand_logo_big' src='{$brand_logo}' width=125 onerror=\"if (this.src != '/skin/frontend/rwd/dhh/images/logo.png') this.src = '/skin/frontend/rwd/dhh/images/logo.png';\" />";
+              //echo "<img alt='Merk logo' title='{$brand}' id='brand_logo_big' src='{$brand_logo}' width=125 onerror=\"if (this.src != '/media/wysiwyg/brands/prokoeling.png') this.src = '/media/wysiwyg/brands/prokoeling.png';\" />";
               echo $htbrand;
               echo "<a href='{$brand_link}'>Alle producten van {$brand_name}</a>";
             ?>

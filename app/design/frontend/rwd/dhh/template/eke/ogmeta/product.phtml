@@ -11,7 +11,7 @@ $imageFile = 'media/catalog/product' . $product->getSmallImage();
 // DHH CORE HACK
 $imageAttr = ["mime" => null, 0 => null, 1 => null];
 if(is_file($imageFile)) {
-  $imageAttr = getimagesize($imageFile);
+  @$imageAttr = getimagesize($imageFile);
 }
 $productVideo = $product->getResource()->getAttribute('product_video')->getFrontend()->getValue($product);
 ?>

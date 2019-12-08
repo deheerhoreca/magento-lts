@@ -32,7 +32,7 @@
 ## adjust memory limit
 
 #    php_value memory_limit 64M
-    php_value memory_limit 256M
+    php_value memory_limit 1G
     php_value max_execution_time 18000
 
 ############################################
@@ -300,13 +300,15 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
   Header add Link "<https://ajax.cloudflare.com>; rel=preconnect"
   Header add Link "<https://cdn.jsdelivr.net>; rel=preconnect"
   Header add Link "<https://script.hotjar.com>; rel=preconnect"
+  Header add Link "<https://in.hotjar.com>; rel=preconnect"
+  #Header add Link "<https://www.clickcease.com>; rel=preconnect"
+  Header add Link "<https://stats.g.doubleclick.net>; rel=preconnect"
   Header add Link "<https://www.google-analytics.com>; rel=preconnect"
   Header add Link "<https://www.googletagmanager.com>; rel=preconnect"
-  Header add Link "<https://ajax.cloudflare.com/cdn-cgi/scripts/2448a7bd/cloudflare-static/rocket-loader.min.js>; rel=preload; as=script; nopush"
+  #Header add Link "<https://ajax.cloudflare.com/cdn-cgi/scripts/2448a7bd/cloudflare-static/rocket-loader.min.js>; rel=preload; as=script; nopush"
 </FilesMatch>
 
 # Do not listen to /index.php? requests, redirect them
 RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
 RewriteCond %{THE_REQUEST} ^.*/index.php
 RewriteRule ^(.*)index.php$ /$1 [R=301,L]
-

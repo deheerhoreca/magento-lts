@@ -662,8 +662,8 @@ class Ebizmarts_MailChimp_Model_Api_Subscribers_MailchimpTags
     {
         $address = $customer->getPrimaryAddress($attributeCode);
         $addressData = $this->getAddressData($address);
-
-        if (count($addressData)) {
+	//DHH CORE HACK
+        if (!empty($addressData)) {
             $this->addMailChimpTag($key, $addressData);
         }
     }

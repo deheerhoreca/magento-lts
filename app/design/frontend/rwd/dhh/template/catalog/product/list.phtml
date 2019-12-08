@@ -204,18 +204,6 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
 
             /* Automatic Labels */
 
-            /*
-            if(empty($productlabel) === TRUE && empty($energy_rating) === FALSE) {
-              switch($energy_rating) {
-            		case 'A++++':
-            		case 'A+++':
-            		case 'A++':
-            		case 'A+':
-                  $productlabel = $energy_rating;
-              }
-            }
-            */
-
             /* Product label */
             if (empty($productlabel) === FALSE) {
               echo "<span class=\"lblprolist\">{$productlabel}</span>";;
