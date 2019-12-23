@@ -115,20 +115,27 @@ if($_product->getStockItem()->getIsInStock()) {
   $stclz = "clznostockdots";
   $txtcltcz = 'clzsoldout';
 }
+
 $expected_delivery = $_product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($_product);
 $levertijd_verwacht = (int) $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
 $lbllevertijdvl = $_product->getAttributeText('levertijd');
 $lblbestelartikel = $_product->getAttributeText('bestelartikel');
-
-/* Price */
+$supplier = $_product->getAttributeText('supplier');
 $_price = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
 $_finalPrice = $_product->getFinalPrice();
-
-/* Product Video */
 $pvideo = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
-
-/* Product Title */
 $productTitle = $_helper->productAttribute($_product, $_product->getName(), 'name');
+$extra_delivery_time = 0;
+
+/* Temporarily adjust levertijd during holidays */
+if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
+  $future = strtotime("1 Jan 2020");
+  $timefromdb = time();
+  $timeleft = $future - $timefromdb;
+  $daysleft = round((($timeleft/24)/60)/60);
+
+  $extra_delivery_time = (int) $daysleft - 2;
+}
 
 /* Product Documents */
 $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)->getData();
@@ -734,6 +741,9 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               if($lbllevertijdvl === '4-5 weken') {
                 $nmwek = trim(str_replace('4-5 weken', '5', $lbllevertijdvl));
               }
+
+              $nmwek += $extra_delivery_time;
+
               if(empty($nmwek) === FALSE) {
                 $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
 
@@ -757,7 +767,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
                 <small class="clzdelvlb">
                   <span class=delivery-logo>&nbsp;</span>
                   <span class="<?php echo $txtcltcz; ?>"><?php echo $stmsg; ?></span>
-                  <br>Bezorgd op: <strong style=\"font-weight: bold;\"><?php echo $calwekdate; ?></strong> (<?php echo $expected_delivery; ?>)
+                  <br>Bezorgd op: <strong style=\"font-weight: bold;\"><?php echo $calwekdate; ?></strong> (<?php echo $expected_delivery; if($extra_delivery_time > 0) echo ", plus extra tijd voor de feestdagen"; ?>)
                   <span class="tooltip">
                     <i class="tooltip-icon fa fa-info-circle fa-lg" aria-hidden="true"></i>
                     <span class="tooltiptext clztoptoolc">
@@ -767,9 +777,13 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
                         vindt plaats van maandag t/m vrijdag doorgaans van 08:00-18:00. Indien wij een track & trace van de transporteur
                         krijgen zullen we u deze doorsturen. Kleinere bestellingen die met pakketpost worden geleverd kunnen ook op
                         zaterdag worden aangeboden. Buiten Nederland kan het in enkele gevallen voorkomen dat de zending niet de volgende
-                        dag wordt geleverd.</p>
+                        dag wordt geleverd.
+                      </p>
                     </span>
                   </span>
+                  <span style="line-height: 1.3em; font-style:italic;"><br>Wij doen er alles aan om ook rondom de drukte van de feestdagen uw bestellingen op tijd te laten bezorgen. Echter
+                  kunnen wij de levertijden niet altijd garanderen. Neemt u daarom contact op met de klantenservice voor meer
+                  informatie rondom de actuele levertijden.<span>
                 </small>
                 <?php
               }
