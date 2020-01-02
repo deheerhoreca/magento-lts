@@ -277,10 +277,31 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
           $max_highlighted_attributes = 12;
 
+          $dimension_pair_set = false;
           if($i < $max_highlighted_attributes) {
             $attribute_names = ["breedte", "hoogte", "diepte"];
             $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
             $title = "Afmetingen (b x h x d)";
+            foreach($attribute_names as $attribute_name) {
+              $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+              if(empty($values[$attribute_name]) === FALSE) {
+                $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
+              } else {
+                unset($values[$attribute_name]);
+              }
+            }
+            if(sizeof($values) === sizeof($attribute_names)) {
+              $value = implode(" x ", $values)." cm";
+              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $i++;
+              $dimension_pair_set = true;
+            }
+          }
+
+          if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
+            $attribute_names = ["breedte", "hoogte"];
+            $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
+            $title = "Afmetingen (b x h)";
             foreach($attribute_names as $attribute_name) {
               $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
               if(empty($values[$attribute_name]) === FALSE) {
