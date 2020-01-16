@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 $_product = $this->getProduct();
-$_price = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
+//$_price = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
 $_finalPrice = $_product->getFinalPrice();
 
 $buttonTitle = Mage::helper('core')->quoteEscape($this->__('Add to Cart'));
@@ -61,6 +61,42 @@ if($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->
       <div class="add-to-cart-buttons">
         <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span style="color: #fff; font-weight: 600;"><i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px; color: #fff;"></i><?php echo $buttonTitle; ?></span></button>
         <?php echo $this->getChildHtml('', true, true) ?>
+        <script src ="https://form.jotform.com/static/feedback2.js" type="text/javascript"></script>
+        <script type="text/javascript">
+        var JFL_200152323289044 = new JotformFeedback({
+          formId: '200152323289044',
+          base: 'https://form.jotform.com/',
+          windowTitle: 'Aanvraag lease',
+          background: '#f08324',
+          fontColor: '#FFFFFF',
+          type: 'false',
+          height: 600,
+          width: 700,
+          openOnLoad: false,
+          iframeParameters: {
+            'product': <?php echo json_encode($_product->getName()); ?>
+          },
+        });
+        </script>
+        <?php
+        $mininum_lease_price = 1500;
+        $minimum_amount = ceil($mininum_lease_price / $_finalPrice);
+        if(isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
+          ?>
+          <span style="line-height:1.4em; margin-top:1em; margin-bottom:1em; cursor:pointer; font-size: .9em; display: inline-block;">
+          <a class="btn lightbox-200152323289044">Interesse in <b>leasen</b>? Vraag hier uw offerte aan</a>
+          </span>
+          <?php
+        } elseif(isset($_finalPrice) && $_finalPrice >= 450) {
+          ?>
+          <span style="line-height:1.4em; margin-top:1em; margin-bottom:1em; cursor:pointer; font-size: .9em; display: inline-block;">
+            <a class="btn lightbox-200152323289044">
+              Interesse in <b>leasen</b>? Dat is mogelijk vanaf 1500 euro excl. BTW (<?php echo $minimum_amount; ?>+ stuks). Vraag hier uw offerte aan
+            </a>
+          </span>
+          <?php
+        }
+        ?>
       </div>
     </div>
   <?php
