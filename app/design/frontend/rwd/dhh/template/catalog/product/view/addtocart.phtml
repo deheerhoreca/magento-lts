@@ -80,7 +80,6 @@ if($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->
         </script>
         <?php
         $mininum_lease_price = 1500;
-        $minimum_amount = ceil($mininum_lease_price / $_finalPrice);
         if(isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
           ?>
           <span style="line-height:1.4em; margin-top:1em; margin-bottom:1em; cursor:pointer; font-size: .9em; display: inline-block;">
@@ -91,7 +90,7 @@ if($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->
           ?>
           <span style="line-height:1.4em; margin-top:1em; margin-bottom:1em; cursor:pointer; font-size: .9em; display: inline-block;">
             <a class="btn lightbox-200152323289044">
-              Interesse in <b>leasen</b>? Dat is mogelijk vanaf 1500 euro excl. BTW (<?php echo $minimum_amount; ?>+ stuks). Vraag hier uw offerte aan
+              Interesse in <b>leasen</b>? Dat is mogelijk vanaf 1500 euro excl. BTW. Vraag hier uw offerte aan
             </a>
           </span>
           <?php

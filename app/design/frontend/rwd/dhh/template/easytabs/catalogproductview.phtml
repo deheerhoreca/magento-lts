@@ -764,6 +764,8 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               $nmwek = trim(str_replace('werkdagen', '', $lbllevertijdvl));
               if($lbllevertijdvl === '4-5 weken') {
                 $nmwek = trim(str_replace('4-5 weken', '5', $lbllevertijdvl));
+              } elseif($lbllevertijdvl === '3-4 weken') {
+                $nmwek = trim(str_replace('3-4 weken', '4', $lbllevertijdvl));
               }
 
               $nmwek += $extra_delivery_time;
