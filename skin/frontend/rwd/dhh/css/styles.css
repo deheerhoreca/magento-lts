@@ -19366,7 +19366,6 @@ body.cms-page-view div#sidebar-nav.block.sidebar-nav-left.codnitiveSidenavLeft {
 .cms-page-view .std p,
 .cms-no-route .std p {
   color: #636363;
-  font-family: arial, Georgia, Times, "Times New Roman", serif;
   font-size: 14px;
   line-height: 24px;
 }
@@ -19374,7 +19373,6 @@ body.cms-page-view div#sidebar-nav.block.sidebar-nav-left.codnitiveSidenavLeft {
 .cms-page-view .std li,
 .cms-no-route .std li {
   color: #636363;
-  font-family: arial, Georgia, Times, "Times New Roman", serif;
   font-size: 14px;
   font-style: italic;
   line-height: 24px;
@@ -20180,7 +20178,7 @@ div.cross-sell-text-container {
 
 .big-tile {
   border: 1px solid transparent;
-}
+} 
 
 .big-tile:hover {
   border: 1px solid #e4e4e4;
@@ -20219,3 +20217,36 @@ section.st-ui-slide-autocomplete div.st-query-present a.st-ui-result .st-ui-type
   font-size: 12px !important;
   margin-left: 8px !important;
 }
+
+/* Blogs */
+
+div.blogcontainer {
+  color: #636363;
+  font-size: 14px;
+  line-height: 24px;
+  margin: 3em;
+}
+
+div.blogcontainer img.main {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+div.blogcontainer div.paragraph {
+  padding: 5em;
+}
+
+div.blogcontainer img.floatright {
+  float: right;
+  margin-left: 2em;
+}
+
+div.blogcontainer img.floatleft {
+  float: left;
+  margin-right: 2em;
+}
+
+div.blogcontainer a {
+  font-weight: bold;
+}
+
