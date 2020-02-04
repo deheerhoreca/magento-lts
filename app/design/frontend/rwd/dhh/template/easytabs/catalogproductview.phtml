@@ -227,13 +227,10 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           		case 'A+':    $enclz = 'enrgclz4';  break;
           		case 'A':     $enclz = 'enrgclz5';  break;
           		case 'B':     $enclz = 'enrgclz6';  break;
-          		case 'C':     $enclz = 'enrgclz7';  break;
-          		case 'D':     $enclz = 'enrgclz8';  break;
-          		case 'E':     $enclz = 'enrgclz9';  break;
-          		case 'F':     $enclz = 'enrgclz10'; break;
-          		case 'G':     $enclz = 'enrgclz11'; break;
         		}
-            echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
+            if(strlen($enclz) > 0) {
+              echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
+            }
           }
 
     		  echo $this->getChildHtml('media');
@@ -768,7 +765,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
                 $nmwek = trim(str_replace('3-4 weken', '4', $lbllevertijdvl));
               }
 
-              $nmwek += $extra_delivery_time;
+              @$nmwek += $extra_delivery_time;
 
               if(empty($nmwek) === FALSE) {
                 $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));

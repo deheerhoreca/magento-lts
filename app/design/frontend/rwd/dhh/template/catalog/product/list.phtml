@@ -229,14 +229,11 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
             		case 'A+':    $enclz = 'enrgclz4';  break;
             		case 'A':     $enclz = 'enrgclz5';  break;
             		case 'B':     $enclz = 'enrgclz6';  break;
-            		case 'C':     $enclz = 'enrgclz7';  break;
-            		case 'D':     $enclz = 'enrgclz8';  break;
-            		case 'E':     $enclz = 'enrgclz9';  break;
-            		case 'F':     $enclz = 'enrgclz10'; break;
-            		case 'G':     $enclz = 'enrgclz11'; break;
                 default: break;
           		}
-              echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
+              if(strlen($enclz) > 0) {
+                echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
+              }
             }
             ?>
             <a href="<?php echo $productUrl; ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
