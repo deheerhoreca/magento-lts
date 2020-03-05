@@ -3,7 +3,14 @@ $helper = Mage::helper("eke_ogmeta");
 if (!$helper->isOgMetaEnabled()) {
     return;
 }
-$image = $helper->getOgImage();
+
+// DHH CORE HACK: we can do better than this...
+$categoryImage = Mage::getModel('catalog/layer')->getCurrentCategory()->getImage();
+$image = Mage::getBaseUrl('media').'catalog/category/'.$categoryImage;
+
+if(strlen($categoryImage) < 1) {
+  $image = $helper->getOgImage();
+}
 $siteName = $helper->getSiteName();
 
 /*
@@ -11,6 +18,7 @@ $siteName = $helper->getSiteName();
  */
 //$imageAttr = getimagesize($image);
 $imageAttr = @getimagesize($image);
+
 ?>
 
 <!-- OG META Data -->

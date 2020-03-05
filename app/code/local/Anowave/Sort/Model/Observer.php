@@ -35,6 +35,8 @@ class Anowave_Sort_Model_Observer
 			$dom = new DOMDocument('1.0','utf-8');
 			$doc = new DOMDocument('1.0','utf-8');
 
+			/* DHH CORE HACK */
+			libxml_use_internal_errors(true);
 			$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
 
 			foreach ($dom->getElementsByTagName('select') as $element)

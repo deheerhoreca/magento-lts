@@ -21,3 +21,7 @@ wget https://v2.zopim.com/?5GFYzGgeADrvMUAoHWiZPPglkc93U381  -O ../skin/frontend
 mkdir -p ../skin/frontend/rwd/external/elastic_apm
 # needs a touch as well because the file timestamp would be in the 1980s otherwise
 wget https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js  -O ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js && touch ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js
+
+mkdir -p ../skin/frontend/rwd/external/fontawesome
+# corehacked:
+#wget https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css -O ../skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css

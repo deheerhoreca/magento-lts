@@ -947,7 +947,7 @@
   }
 }
 @media screen and (max-width: 600px) {
-  .cms-page-view .mobile-hide {
+  .mobile-hide {
     display: none;
   }
   .cms-page-view .mobile-show {

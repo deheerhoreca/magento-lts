@@ -230,12 +230,14 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      */
     public function getJsonSnippetsProduct()
     {
+      $description = (strlen($this->getProduct()->getDescription()) > 0) ? $this->getProduct()->getDescription() : $this->getProduct()->getName();
+      $description = strip_tags($description);
         $data = array(
             '@context'              => 'http://schema.org',
             '@type'                 => 'Product',
             'name'                  => $this->getProduct()->getName(),
             'image'                 => (string)Mage::helper('catalog/image')->init($this->getProduct(), 'image'),
-            'description'           => strip_tags($this->getProduct()->getDescription()),
+            'description'           => $description,
             'sku'                   => $this->getProduct()->getSku(),
             'brand'                 => $this->getProduct()->getAttributeText('manufacturer'), /* DHH CORE HACK */
             'url'                   => $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($this->getProduct()), /* DHH CORE HACK */

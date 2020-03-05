@@ -65,14 +65,14 @@ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
 	          $attribute_value = $_product->getAttributeText('type_koeling');
 	          //$attribute_value = $attribute ->getFrontend()->getValue($_product);
 	          if($attribute_value!=''){
-	            echo '<li>Koelmethode: '.$attribute_value.'</li><br />';
+	            echo '<li>Koelmethode: '.$attribute_value.'</li>';
 	          }
 
 	          /*
 	          $attribute_value = $_product->getAttributeText('aantal_deuren');
 	          //$attribute_value = $attribute ->getFrontend()->getValue($_product);
 	          if($attribute_value!=''){
-	            echo '<li>'.$attribute_value.'-deurs</li><br />';
+	            echo '<li>'.$attribute_value.'-deurs</li>';
 	          }
 	          */
 
@@ -80,7 +80,7 @@ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
 	          $attribute_value = $garentiim = $_product->getAttributeText('garantie');
 	          $attribute_value = $garentiim = $attribute ->getFrontend()->getValue($_product);
 	          if($attribute_value!=''){
-	            echo '<li>Garantie: '.$attribute_value.'</li><br />';
+	            echo '<li>Garantie: '.$attribute_value.'</li>';
 	          }
 	          */
 

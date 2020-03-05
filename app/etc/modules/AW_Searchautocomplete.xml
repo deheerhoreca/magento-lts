@@ -2,7 +2,7 @@
 <config>
     <modules>
         <AW_Searchautocomplete>
-            <active>true</active>
+            <active>false</active>
             <codePool>local</codePool>
         </AW_Searchautocomplete>
     </modules>

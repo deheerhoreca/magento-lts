@@ -1,0 +1,33 @@
+<?php
+    $meta = $this->getData('meta');
+
+    if (!$meta instanceof AW_Blog_Helper_Data && $meta->getAddress()) {
+        $canonicalUrl = $meta->getAddress();
+    } else {
+        $canonicalUrl = Mage::helper('core/url')->getCurrentUrl();
+    }
+
+    $logoSrc = Mage::getStoreConfig('design/header/logo_src');
+
+    if (Mage::getStoreConfig('blog/blog/image_meta')) {
+        $imageurl = Mage::getBaseUrl('media') . 'blog' . DS . Mage::getStoreConfig('blog/blog/image_meta');
+    } else {
+        $imageurl = $this->getSkinUrl($logoSrc);
+    }
+?>
+
+<!-- Open Graph data -->
+<meta property="og:title" content="<?php echo $meta->getTitle() ?>" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="<?php echo $meta->getMetaDescription() ?>" />
+<meta property="og:image" content="<?php echo $imageurl ?>" />
+<meta property="og:image:width" content="250" />
+<meta property="og:image:height" content="250" />
+<meta property="og:url" content= "<?php echo $canonicalUrl ?>" />
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="<?php echo $meta->getTitle() ?>" />
+<meta name="twitter:description" content="<?php echo $meta->getMetaDescription() ?>" />
+<meta name="twitter:url" content="<?php echo $canonicalUrl ?>" />
+<meta name="twitter:image" content="<?php echo $imageurl ?>" />

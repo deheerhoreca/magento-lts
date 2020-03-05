@@ -74,7 +74,8 @@ if(strlen($_html) > 0) {
   ob_start();
 
   // Just include the parent file
-  require_once __DIR__."/../../../default/template/page/".basename(__FILE__);
+  //require_once __DIR__."/../../../default/template/page/".basename(__FILE__);
+  require_once __DIR__."/html/".basename(__FILE__);
 
   $_html = ob_get_clean();
 

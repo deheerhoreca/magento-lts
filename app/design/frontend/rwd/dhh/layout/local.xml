@@ -1,0 +1,125 @@
+<!--
+
+DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
+
+-->
+
+<layout version="0.1.0">
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>scriptaculous/builder.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>scriptaculous/dragdrop.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>scriptaculous/controls.js</file>
+      </action>
+    </reference>
+  </default>
+
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>varien/menu.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>mage/translate.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>lib/ccard.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>lib/jquery/jquery-1.12.0.min.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>prototype/prototype.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>scriptaculous/effects.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <file>scriptaculous/slider.js</file>
+      </action>
+    </reference>
+  </default>
+  
+  <default>
+    <reference name="head">
+      <action method="removeItem">
+        <type>skin_js</type>
+        <file>js/lightslider.js</file>
+      </action>
+      <action method="removeItem">
+        <type>skin_css</type>
+        <file>css/lightslider.css</file>
+      </action>
+    </reference>
+  </default>
+  
+  
+  <!-- 
+  Goal: only add lightslider.css and lightslider.js on the homepage
+  https://stackoverflow.com/questions/13411764/add-css-to-only-homepage-from-xml-in-magento
+  Malfunctioned...
+  -->
+  <!--
+    <cms_index_index>
+      <reference name="head">
+          <action method="addCss"><stylesheet>css/lightslider.css</stylesheet></action>
+          <action method="addItem"><type>skin_js</type><name>js/lightslider.js</name></action>
+      </reference>
+    </cms_index_index>
+  -->
+</layout>

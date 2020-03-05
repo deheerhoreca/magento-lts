@@ -49,8 +49,14 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
                   },
                   "name": "<?php echo $organizatonParameters['name']; ?>",
                   "telephone": "<?php echo $organizatonParameters['phone']; ?>",
-                  "email": "<?php echo $organizatonParameters['email']; ?>",
-                  "sameAs": [
+                  "email": "<?php echo $organizatonParameters['email']; ?>"
+                }
+            </script>
+        <?php } ?>
+
+<?php
+/*
+                   "sameAs": [
                            [
                                "https://twitter.com/<?php echo $organizatonParameters['twitter']; ?>",
                                "https://www.facebook.com/<?php echo $organizatonParameters['facebook']; ?>",
@@ -60,10 +66,8 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
                                "https://instagram.com/<?php echo $organizatonParameters['instagram']; ?>"
                            ]
                    ]
-                }
-            </script>
-        <?php } ?>
-
+*/
+?>
 
         <?php if ($snippetsType == '1') { ?>
         <!-- Microdata -->

@@ -31,8 +31,8 @@
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post">
 	 <?php echo $this->getBlockHtml('formkey'); ?>
         <div class="block-content">
-            <input type="email" placeholder="<?php echo $this->__('Email:') ?>" autocapitalize="off" autocorrect="off" spellcheck="false" name="login[username]" id="mini-login" class="input-text" autocomplete="email" />
-            <input type="password" placeholder="<?php echo $this->__('Password:') ?>" name="login[password]" id="mini-password" class="input-text" autocomplete="current-password" />
+            <input type="email" placeholder="<?php echo $this->__('Email') ?>" autocapitalize="off" spellcheck="false" name="login[username]" id="mini-login" class="input-text" autocomplete="email" />
+            <input type="password" placeholder="<?php echo $this->__('Password') ?>" name="login[password]" id="mini-password" class="input-text" autocomplete="current-password" />
             <div class="actions">
                 <button type="submit" class="button"><span><span><?php echo $this->__('Login') ?></span></span></button>
             </div>

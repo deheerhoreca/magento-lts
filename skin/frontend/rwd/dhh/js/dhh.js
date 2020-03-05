@@ -1,14 +1,17 @@
 jQuery.noConflict();
 jQuery(document).ready(function() {
-  jQuery("#content-slider").lightSlider({
-    loop: true,
-    auto: true,
-    speed: 1000,
-    item: 1,
-    keyPress: true,
-    mode: 'fade',
-    pause: 4000
-  });
+  if(document.getElementById("content-slider")) {
+    document.getElementById("content-slider").style.visibility = "visible";
+    jQuery("#content-slider").lightSlider({
+      loop: true,
+      auto: true,
+      speed: 1000,
+      item: 1,
+      keyPress: true,
+      mode: 'fade',
+      pause: 4000
+    });
+  }
 
   jQuery(".nav-primary").hover(function() {
     jQuery('#darkness').delay(300).fadeTo(0, 1);

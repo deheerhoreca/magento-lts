@@ -1,0 +1,71 @@
+<?php
+
+if (Mage::helper('richsnippets')->snippetsEnabled()):
+    $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
+	 // Microdata
+    if ($snippetsType == '1') :
+		$data =	$this->getMicrodataSnippetsProduct();
+	    $price = $this->getPriceValues();
+
+	    $itemtype = 'http://schema.org/Offer';
+	    if (is_array($price)) :
+	        $itemtype = 'http://schema.org/AggregateOffer';
+	    endif;
+	?>
+		<div class="rich-snippets">
+			<div itemtype="http://schema.org/Product" itemscope="">
+				<div class="prod-img">
+					<img src="<?php echo $data['image']; ?>" itemprop="image">
+				</div>
+				<div class="content">
+                    <p><span class="product-name" itemprop="name"><?php echo $data['name']; ?></span>.</p>
+					<p><i><?php echo $this->__("SKU:") ?><span class="product-sku" itemprop="sku"><?php echo $data['sku']; ?></span></i></p>
+                    <?php if (array_key_exists ('aggregateRating',$data)) {
+                        if($data['aggregateRating']['@type'] == 'AggregateRating'){ ?>
+        					<div itemtype="http://schema.org/<?php echo $data['aggregateRating']['@type'] ?>" itemscope="" itemprop="aggregateRating">
+        						<div class="rating-box">
+        							<div style="width: <?php echo $data['aggregateRating']['ratingValue'] ?>%" class="rating"></div>
+        						</div>
+        						<i>Rating: <span itemprop="ratingValue"><?php echo $data['aggregateRating']['ratingValue'] ?></span>/<span itemprop="bestRating">100</span> based on <span itemprop="ratingCount">
+        							<?php echo $data['aggregateRating']['reviewCount']?></span> review(s)
+        						</i>
+        						<meta itemprop="reviewCount" content="<?php echo $data['aggregateRating']['reviewCount']?>" />
+        					</div>
+                    <?php }
+                    } ?>
+
+					<ul class="rich-snippets-options">
+						<li>
+							<div itemprop="offers" itemscope="" itemtype="<?php echo $itemtype ?>">
+							    <meta itemprop="priceCurrency" content="<?php echo $data['offers']['priceCurrency'] ?>" />
+							    <?php if (is_array($price)) : ?>
+								    <span itemprop="lowPrice" content="<?php echo $data['offers']['lowPrice'] ?>">
+                                        <?php echo $this->__("From:") ?>
+								    	<?php echo $data['offers']['priceCurrency'] ?>
+								    	<?php echo $data['offers']['lowPrice'] ?>
+								    </span>
+							        <?php if (isset($price[1])) : // grouped products fix ?>
+							            <span itemprop="highPrice" content=" <?php echo $data['offers']['highPrice'] ?>">
+                                            <?php echo $this->__("To:") ?>
+								            <?php echo $data['offers']['priceCurrency'] ?>
+								            <?php echo $data['offers']['highPrice'] ?>
+							        	</span>
+							        <?php endif; ?>
+							    <?php else: ?>
+							        <span itemprop="price" content="<?php echo $data['offers']['price'] ?>"><?php echo $this->__("Price:") ?><?php echo $this->getFormattedPrice($price); ?></span>
+							    <?php endif; ?>
+							    <?php if (Mage::getStoreConfig('richsnippets/display/stock_status')) : ?>
+							        <link itemprop="availability" href="<?php echo $data['offers']['availability'] ?>"/>
+							    <?php endif; ?>
+
+                                <link itemprop="itemCondition" href="NewCondition"/>
+
+							</div>
+						</li>
+					</ul>
+					<div itemprop="description"><?php echo $data['name']." - ".$data['description'] ?></div>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+<?php endif; ?>

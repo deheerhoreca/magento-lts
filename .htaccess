@@ -274,6 +274,7 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
 
 <IfModule mod_headers.c>
   Header set Connection keep-alive
+  Header set X-XSS-Protection "1; mode=block"
 </IfModule>
 
 <IfModule mod_rewrite.c>
@@ -301,11 +302,14 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
   Header add Link "<https://cdn.jsdelivr.net>; rel=preconnect"
   Header add Link "<https://script.hotjar.com>; rel=preconnect"
   Header add Link "<https://in.hotjar.com>; rel=preconnect"
-  #Header add Link "<https://www.clickcease.com>; rel=preconnect"
+  Header add Link "<https://www.clickcease.com>; rel=preconnect"
   Header add Link "<https://stats.g.doubleclick.net>; rel=preconnect"
-  Header add Link "<https://www.google-analytics.com>; rel=preconnect"
   Header add Link "<https://www.googletagmanager.com>; rel=preconnect"
-  #Header add Link "<https://ajax.cloudflare.com/cdn-cgi/scripts/2448a7bd/cloudflare-static/rocket-loader.min.js>; rel=preload; as=script; nopush"
+  Header add Link "<https://cdnjs.cloudflare.com>; rel=preconnect"
+  Header add Link "<https://fonts.googleapis.com>; rel=preconnect"
+  Header add Link "<https://fonts.gstatic.com>; rel=preconnect"
+  Header add Link "<https://static.sooqr.com>; rel=preconnect"
+  Header add Link "<https://static.zdassets.com>; rel=preconnect"
 </FilesMatch>
 
 # Do not listen to /index.php? requests, redirect them

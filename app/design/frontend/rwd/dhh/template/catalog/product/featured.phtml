@@ -14,6 +14,8 @@ $collection = Mage::getModel('catalog/product')
   ->addAttributeToSelect('*')
   ->addFieldToFilter([['attribute' => 'featured', 'eq' => TRUE]])
   ->addOrder('name', 'ASC')
+  ->setPageSize(16)
+  ->setCurPage(1)
   ->load();
 
 $productBlock = $this->getLayout()->createBlock('catalog/product_price');
@@ -44,7 +46,7 @@ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
          src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize); ?>"
          alt="<?php echo $this->stripTags($_product->getName(), null, true) ?>"
          title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"
-         width="<?php echo $_imgSize; ?>" height="<?php echo $_imgSize; ?> "/>
+         width="<?php echo $_imgSize; ?>" height="<?php echo $_imgSize; ?>"/>
       </a>
       <?php
       $garentiim = $_product->getAttributeText('garantie');
@@ -61,40 +63,40 @@ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
 
             $attribute_value = $_product->getAttributeText('manufacturer');
             if($attribute_value != ''){
-              echo '<li>'.$attribute_value.'</li>';
+              // '<li>'.$attribute_value.'</li>';
             } else {
-              echo '<li>&nbsp;</li>';
+              //echo '<li>&nbsp;</li>';
             }
 
             if($catid !== 72) {
                 $attribute_value = $_product->getAttributeText('type_koeling');
                 //$attribute_value = $attribute ->getFrontend()->getValue($_product);
                 if($attribute_value!=''){
-                  echo '<li>Koelmethode: '.$attribute_value.'</li><br />';
+                  echo '<li>Koelmethode: '.$attribute_value.'</li>';
                 }
 
                 $attribute_value = $_product->getInhoudLiters();
                 //$attribute_value = $attribute ->getFrontend()->getValue($_product);
                 if($attribute_value!=''){
-                  echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li><br />';
+                  echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li>';
                 }
 
                 $attribute_value = $_product->getBreedte();
                 //$attribute_value = $attribute ->getFrontend()->getValue($_product);
                 if($attribute_value!=''){
-                  echo '<li>'.($attribute_value/10).'cm breed</li><br />';
+                  echo '<li>'.($attribute_value/10).'cm breed</li>';
                 }
               }
 
               if($catid === 72){
                 $attribute_value = $_product->getBreedte();
                 if($attribute_value!=''){
-                  echo '<li>'.($attribute_value/10).'cm breed</li><br />';
+                  echo '<li>'.($attribute_value/10).'cm breed</li>';
                 }
 
                 $attribute_value = $_product->getInhoudAantalGn();
                 if($attribute_value!=''){
-                  echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li><br />';
+                  echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li>';
                 }
               }
               ?>

@@ -36,7 +36,7 @@ if(empty($_cartQty)) {
 }
 ?>
 
-<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-link skip-cart title="Winkelwagen" <?php if($_cartQty <= 0): ?> no-count <?php endif; ?>">
+<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-link skip-cart <?php if($_cartQty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">
   <i class="fa fa-shopping-cart fa-2x fa-fw"></i>
   <div class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0">
     <?php echo $_cartQty; ?>

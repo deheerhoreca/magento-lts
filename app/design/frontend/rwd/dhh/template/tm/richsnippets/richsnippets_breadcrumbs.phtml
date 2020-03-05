@@ -39,7 +39,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
     $dataBreadcrumbs = array();
     $dataBreadcrumbs['@context']    = "http://schema.org";
     $dataBreadcrumbs['@type']       = "BreadcrumbList";
-    $dataBreadcrumbs['itemListElement'] = array();
+    $dataBreadcrumbs['itemListElement'] = [];
     if($crumbs && is_array($crumbs)) {
       foreach($crumbs as $_crumbName => $_crumbInfo) {
         $dataBreadcrumbs['itemListElement'][$position - 1]['@type']         = 'ListItem';
@@ -54,30 +54,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
         $position++;
       }
     }
-/*
-    if($crumbs && is_array($crumbs)) {
-      echo '<div class="breadcrumbs">';
-        echo '<ul>';
-        foreach($crumbs as $_crumbName=>$_crumbInfo) {
-          $title = $this->escapeHtml($_crumbInfo['title']);
-          $label = $this->escapeHtml($_crumbInfo['label']);
-          echo "<li class='{$_crumbName}'>";
-            if($_crumbInfo['link']) {
-              echo "<a href='{$_crumbInfo['link']}' title='{$title}'>{$label}</a>";
-            } elseif($_crumbInfo['last']) {
-              echo "<strong>{$label}</strong>";
-            } else {
-              echo $label;
-            }
-            if(!$_crumbInfo['last']) {
-              echo "<span>/ </span>";
-            }
-          echo "</li>";
-        }
-        echo '</ul>';
-      echo '</div>';
-    }
-*/
+    
     if($crumbs && is_array($crumbs)) {
       echo '<div class="breadcrumbs">';
         echo '<ul>';
@@ -99,10 +76,12 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
       echo '</div>';
     }
     ?>
-
+    
+    <?php if(sizeof($dataBreadcrumbs['itemListElement']) >0 ) { ?>
     <script type="application/ld+json">
       <?php echo Mage::helper('core')->jsonEncode($dataBreadcrumbs); ?>
     </script>
+    <?php } ?>
 
     <?php
   } elseif ($snippetsType == '1') {

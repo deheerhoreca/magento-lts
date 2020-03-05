@@ -41,40 +41,28 @@ if ($this->getPosition() == AW_Autorelated_Model_Source_Position::INSTEAD_NATIVE
 if ($collection && $collection->getSize()) : ?>
   <div class="block block-related aw-arp-block aw-arp-block-<?php echo $this->getData('id') ?>">
     <div class="block-title">
-        <h2><?php echo $this->htmlEscape($this->getData('name')) ?></h2>
+      <h2><?php echo $this->htmlEscape($this->getData('name')) ?></h2>
     </div>
     <div class="block-content aw-arp-block-content">
       <ul>
         <?php
 				$j=0;
-        $img_size = 176;
-				foreach ($collection as $product) :
-				if($j > 4) {
-					break;
-				}
-
-				$j++;
-				?>
-        <li class="aw-arp-item">
-          <a href="<?php echo $abstractBlock->getProductUrl($product) ?>" class="imgwrp">
-            <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(2*$img_size) ?>" width="<?php echo $img_size;?>" height="<?php echo $img_size;?>" alt="<?php echo $this->escapeHtml($product->getName()) ?>" />
-          </a><br />
-          <a href="<?php echo $abstractBlock->getProductUrl($product) ?>" class="proawname"><?php echo $this->htmlEscape($product->getName()) ?></a><br />
-          <?php echo $abstractBlock->getPriceHtml($product, true, '-related') ?>
-          <?php
-          if ($product->isSaleable()) : ?>
-           <!--   <div class="aw-arp-addtocart">
-              <p>
-                  <a class="link-cart" href="javascript:setLocation('<?php echo $abstractBlock->getAddToCartUrl($product) ?>');"><?php echo $this->__('Add to Cart') ?></a>
-              </p>
-            </div> -->
-          <?php else : ?>
-            <!--  <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p> -->
-          <?php endif ?>
-          <?php if ($this->helper('wishlist')->isAllow()) : ?>
-            <a href="javascript:setLocation('<?php echo $abstractBlock->getAddToWishlistUrl($product) ?>')" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>
-          <?php endif; ?>
-        </li>
+        $img_size = 160;
+				foreach($collection as $product) :
+          if($j > 4) {
+            break;
+          }
+          $j++;
+          ?>
+          <li class="aw-arp-item">
+            <h3 class="product-name">
+              <a href="<?php echo $abstractBlock->getProductUrl($product) ?>" class="proawname"><?php echo $this->htmlEscape($product->getName()) ?></a>
+            </h3>
+            <a href="<?php echo $abstractBlock->getProductUrl($product) ?>" class="imgwrp">
+              <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(2*$img_size) ?>" width="<?php echo $img_size;?>" height="<?php echo $img_size;?>" alt="<?php echo $this->escapeHtml($product->getName()) ?>" />
+            </a>
+            <?php echo $abstractBlock->getPriceHtml($product, true, '-related') ?>
+          </li>
         <?php endforeach ?>
       </ul>
     </div>

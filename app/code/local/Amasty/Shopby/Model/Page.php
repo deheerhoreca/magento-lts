@@ -140,6 +140,7 @@ class Amasty_Shopby_Model_Page extends Mage_Core_Model_Abstract
         }
 
         $values = array();
+        usort($options, function($a, $b) { return $a['label'] <=> $b['label']; });
         foreach ($options as $option) {
             if ('select' == $frontendInput) {
                 $values[$option['value']] = $option['label'];

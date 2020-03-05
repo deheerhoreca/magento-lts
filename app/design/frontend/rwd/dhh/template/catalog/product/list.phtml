@@ -51,7 +51,7 @@ if($carct && ($category === 'category')) {
     $category_banner = "generic_category_banner.jpg";
   }
   echo "<div class=\"ctbannerpg\" style=\"background:url('/media/catalog/category/{$category_banner}') center top; background-size: cover;\">";
-  echo "<h1 class='headcatinside'>".$carct->getName()."</h1></div>";
+  echo "<span class='headcatinside'>".$carct->getName()."</span></div>";
 }
 
 /* PARENT CATEGORY, SHOW CHILDREN CATEGORIES */
@@ -82,7 +82,7 @@ if(empty($carct) === FALSE && $amschk !== 'amshopby') {
         <div class="imwrapcat">
           <img <?php echo $measurements; ?> class="center" src="<?php echo $baseUrl; ?>catalog/category/<?php echo $image; ?>" alt="<?php echo $categoryName; ?>" title="<?php echo $categoryName; ?>" />
         </div>
-        <h4 class="center bold"><?php echo $categoryName; ?></h4>
+        <h2 class="center bold"><?php echo $categoryName; ?></h4>
       </a>
     </li>
     <?php
@@ -270,41 +270,51 @@ if($amschk === 'amshopby' || $haschild === FALSE) {
                 <ul>
                   <?php
                   /* Brand/Manufacturer, if empty show dummy because the first elemnt is presented differently by CSS */
-                  $attribute_value = $_product->getAttributeText('manufacturer');
-                  if(empty($attribute_value) === true) {
-                    $attribute_value = " ";
+                 
+                  $width = $attribute_value = $_product->getBreedte();
+                  $height = $attribute_value = $_product->getHoogte();
+                  $depth = $attribute_value = $_product->getDiepte();
+                  
+                  $width = $width + 0;
+                  $height = $height + 0;
+                  $depth = $depth + 0;
+                  
+                  $width /= 10;
+                  $height /= 10;
+                  $depth /= 10;
+                  
+                  if($width > 10) $width = round($width);
+                  if($depth > 10) $depth = round($depth);
+                  if($height > 10) $height = round($height);
+                  
+                  if($width > 0 && $height > 0 && $depth > 0) {
+                    echo "<li>Breedte x Diepte x Hoogte:<br /> {$width}x{$depth}x{$height} cm</li>";
+                  } else {
+                    $attribute_value = $_product->getBreedte();
+                    //$attribute_value = $attribute ->getFrontend()->getValue($_product);
+                    if($attribute_value != '' && $attribute_value > 0) {
+                      echo '<li>'.($attribute_value/10).'cm breed</li>';
+                    }
                   }
-                  echo '<li>'.$attribute_value.'</li>';
 
                   if($catid !== 72) {
                     $attribute_value = $_product->getAttributeText('type_koeling');
                     //$attribute_value = $attribute ->getFrontend()->getValue($_product);
                     if($attribute_value!=''){
-                      echo '<li>Koelmethode: '.$attribute_value.'</li><br />';
+                      echo '<li>Koelmethode: '.$attribute_value.'</li>';
                     }
 
                     $attribute_value = $_product->getInhoudLiters();
                     //$attribute_value = $attribute ->getFrontend()->getValue($_product);
                     if($attribute_value!=''){
-                      echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li><br />';
-                    }
-
-                    $attribute_value = $_product->getBreedte();
-                    //$attribute_value = $attribute ->getFrontend()->getValue($_product);
-                    if($attribute_value != '' && $attribute_value > 0) {
-                      echo '<li>'.($attribute_value/10).'cm breed</li><br />';
+                      echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li>';
                     }
                   }
 
                   if($catid === 72) {
-                    $attribute_value = $_product->getBreedte();
-                    if($attribute_value!='') {
-                      echo '<li>'.($attribute_value/10).'cm breed</li><br />';
-                    }
-
                     $attribute_value = $_product->getInhoudAantalGn();
                     if($attribute_value!='') {
-                      echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li><br />';
+                      echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li>';
                     }
                   }
                   ?>
