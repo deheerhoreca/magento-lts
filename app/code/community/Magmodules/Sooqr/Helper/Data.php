@@ -351,6 +351,12 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             }
         }
 
+
+	// DHH CORE HACK
+	$path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($product);
+	if(strlen($path)) $url = $path;
+	// END DHH CORE HACK
+
         return $url;
     }
 
