@@ -1,0 +1,3 @@
+<?php
+class Dealer4dealer_Xcore_Model_Catalog_Product_Attribute_Api extends Mage_Api_Model_Resource_Abstract
+{}
