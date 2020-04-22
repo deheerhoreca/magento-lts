@@ -69,7 +69,8 @@ $buttonTitle_lease = $this->__('Lease aanvragen');
         <?php echo $this->getChildHtml('', true, true) ?>
         <?php
         $mininum_lease_price = 1000;
-        if(isset($_finalPrice) && $_finalPrice >= 450) {
+        // Lease disabled
+        if(0 && isset($_finalPrice) && $_finalPrice >= 450) {
           ?>
           
           <script src ="https://form.jotform.com/static/feedback2.js" type="text/javascript"></script>

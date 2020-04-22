@@ -14,8 +14,8 @@ div.MagicToolboxContainer > a {
 
 /* NOTE: container with selectors */
 div.MagicToolboxSelectorsContainer {
-  margin-top: 30px;
-    clear: both;
+  margin-top: 0em;
+  clear: both;
 }
 
 /* NOTE: selectors styles */
@@ -46,9 +46,6 @@ div.MagicToolboxContainer.selectorsBottom .MagicToolboxSelectorsContainer {
 div.MagicToolboxContainer.selectorsTop .MagicToolboxSelectorsContainer {
     padding-bottom: 5px;
 }
-
-
-
 
 /* NOTE: to highlight magic360 selector (magiczoom(plus) + magic360) */
 .zoom-with-360.mz-thumb-selected img {

@@ -1,30 +1,5 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    design
- * @package     rwd_dhh
- * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
-
-/**
  * Product view template
  *
  * @see Mage_Catalog_Block_Product_View
@@ -91,27 +66,34 @@ foreach($categoryIds as $categoryId) {
 */
 
 /* Availability, Stock */
-$stmsg = null;
+$stock_message = null;
 $stclz = null;
 $txtcltcz = null;
-if($_product->getStockItem()->getIsInStock()) {
-  if($_product->getStockItem()->getIsInStock() == 1
-     && $_product->getStockItem()->getQty() < 1
-     && $_product->getStockItem()->getBackorders() != 0) {
-    $stmsg = "Tijdelijk uitverkocht (wel bestelbaar)";
+
+$stock_qty = (int) $_product->getStockItem()->getQty();
+$in_stock = $_product->getStockItem()->getIsInStock();
+
+// Block also exists in list.phtml and featured.phtml
+if($in_stock === true) {
+  if($stock_qty < 1 && $_product->getStockItem()->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
+    $stock_message = "Tijdelijk uitverkocht (wel bestelbaar)";
     $stclz = "clzpreorderdots";
     $txtcltcz = 'clzinstocktemp';
-  } elseif($_product->getStockItem()->getIsInStock() == 1) {
-    if($_product->getStockItem()->getQty() > 1) {
-      $stmsg = (int) $_product->getStockItem()->getQty() . " op voorraad";
+  } else {
+    if($stock_qty === 100) { //100 is a special value
+      $stock_message = "Op voorraad";
+    } elseif($stock_qty > 10) {
+      $stock_message = "10+ op voorraad";
+    } elseif($stock_qty > 1) {
+      $stock_message = "{$stock_qty} op voorraad";
     } else {
-      $stmsg = "Op voorraad";
+      $stock_message = "Op voorraad";
     }
     $stclz = "clzinstockdots";
     $txtcltcz = 'clzinstock';
   }
 } else {
-  $stmsg = "Niet op voorraad";
+  $stock_message = "Niet op voorraad";
   $stclz = "clznostockdots";
   $txtcltcz = 'clzsoldout';
 }
@@ -126,6 +108,7 @@ $_finalPrice = $_product->getFinalPrice();
 $pvideo = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
 $productTitle = $_helper->productAttribute($_product, $_product->getName(), 'name');
 $extra_delivery_time = 0;
+$tagline = $_product->getTagline();
 
 /* Temporarily adjust levertijd during holidays */
 
@@ -144,134 +127,94 @@ if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
 $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)->getData();
 ?>
 
+<!--
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+-->
+<!--
 <script type="text/javascript">var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
+-->
+<script type="text/javascript">var optionsPrice = {};</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
-
-<div class="profixedbartop">
-  <div class="container">
-    <img src="<?php echo Mage::helper('catalog/image')->init($_product, 'thumbnail')->resize(200, 200); ?>" alt="">
-    <div class="title">
-      <span class=h1><?php echo $productTitle; ?></span>
-    </div>
-    <?php
-    if($_product->getStockItem()->getBackorders() != 0) {
-      $buttonTitle=$this->__('Kopen');
-    } else {
-      $buttonTitle=$this->__('Kopen');
-    }
-    ?>
-    <button class="btntrigadt" title="Doe mij die maar">
-      <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px; color: #fff;"></i>
-      <?php echo "$buttonTitle"; ?>
-    </button>
-  </div>
-</div>
-
 <div class="product-view">
   <div class="product-essential">
     <div class="product-name">
       <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-      <?php echo $this->getReviewsSummaryHtml($_product, 'short', FALSE)?>
+      <?php
+      echo "<div class='container' style='min-height:1em;'>";
+      echo "<div class='float-left' style='margin-right:2em;'><a href='{$brand_link}'>{$brand_name}</a></div>";
+      if(strlen($tagline) > 0) {
+        echo "<div class='small strong float-left product-detail-tagline'>{$tagline}</div>";
+      }
+      echo "</div>";
+      echo $this->getReviewsSummaryHtml($_product, 'short', FALSE);
+      ?>
     </div>
     <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-    <?php echo $this->getBlockHtml('formkey') ?>
-    <div class="no-display">
+      <?php echo $this->getBlockHtml('formkey') ?>
       <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
       <input type="hidden" name="related_product" id="related-products-field" value="" />
-    </div>
-    <div style="border-top: 1px solid #dadada; padding-top: 10px;">
-
-      <div class="product-img-box">
-
-        <div>
+      <div style="border-top: 1px solid #dadada; padding-top: 10px;">
+        <div class="product-img-box">
           <?php
-          /* Small Brand Logo */
-          echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' width=125 height=44 onerror=\"if (this.src != '/media/wysiwyg/brands/prokoeling.png') this.src = '/media/wysiwyg/brands/prokoeling.png';\" />";
+            $shoutout = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
+            $energy_rating = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
+
+            /* Automatic Labels */
+            if(empty($shoutout) === TRUE && empty($energy_rating) === FALSE) {
+              switch ($energy_rating) {
+                case 'A++++':
+                case 'A+++':
+                case 'A++':
+                case 'A+':
+                  $shoutout = $energy_rating;
+              }
+            }
+            if(strlen($shoutout) > 1) {
+              echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
+            }
+
+            /* Energy Label */
+            if(strlen($energy_rating) > 0) {
+              $enclz = null;
+              switch ($energy_rating) {
+                case 'A++++': $enclz = 'enrgclz1';  break;
+                case 'A+++':  $enclz = 'enrgclz2';  break;
+                case 'A++':   $enclz = 'enrgclz3';  break;
+                case 'A+':    $enclz = 'enrgclz4';  break;
+                case 'A':     $enclz = 'enrgclz5';  break;
+                case 'B':     $enclz = 'enrgclz6';  break;
+              }
+              if(strlen($enclz) > 0) {
+                echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
+              }
+            }
+
+            echo $this->getChildHtml('media');
           ?>
         </div>
-
-        <?php
-          $shoutout = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
-          $energy_rating = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
-
-          /* Automatic Labels */
-          if(empty($shoutout) === TRUE && empty($energy_rating) === FALSE) {
-            switch ($energy_rating) {
-              case 'A++++':
-              case 'A+++':
-              case 'A++':
-              case 'A+':
-                $shoutout = $energy_rating;
-            }
-          }
-          if(strlen($shoutout) > 1) {
-            echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
-          }
-
-          /* Energy Label */
-          if(strlen($energy_rating) > 0) {
-            $enclz = null;
-            switch ($energy_rating) {
-              case 'A++++': $enclz = 'enrgclz1';  break;
-              case 'A+++':  $enclz = 'enrgclz2';  break;
-              case 'A++':   $enclz = 'enrgclz3';  break;
-              case 'A+':    $enclz = 'enrgclz4';  break;
-              case 'A':     $enclz = 'enrgclz5';  break;
-              case 'B':     $enclz = 'enrgclz6';  break;
-            }
-            if(strlen($enclz) > 0) {
-              echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
-            }
-          }
-
-          echo $this->getChildHtml('media');
-        ?>
       </div>
-    </div>
 
     <div class="product-shop">
       <div class='products-content-top-center'>
         <?php
+        
           /* Product Highlights */
           $skn = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
           $i = 0;
           $str = NULL;
 
-          //echo "<pre>";
-          //print_r($firstCategoryId);
-          //echo "</pre>";
-
-          /*
-          Dev:
-            Koelen & Vriezen - 351
-            Koken - 353
-            Vaatwassen - 352
-            RVS - 291
-            Apparatuur - 292
-            Afzuiging - 293
-            Hygiene - 296
-
-          Prod:
-            Koelen & Vriezen - 3
-            Koken - 440
-            Vaatwassen - 439
-            RVS - 62
-            Apparatuur - 443
-            Afzuiging - 444
-            Hygiene - 446
-          */
-
           // General highlights
 
           $max_highlighted_attributes = 12;
+          $highlights = [];
 
           $dimension_pair_set = false;
           if($i < $max_highlighted_attributes) {
-            $attribute_names = ["breedte", "hoogte", "diepte"];
+            $id = "dimensions";
+            $attribute_names = ["breedte", "diepte", "hoogte"];
             $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-            $title = "Afmetingen (b x h x d)";
+            $title = "Afmetingen (b x d x h)";
             foreach($attribute_names as $attribute_name) {
               $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
               if(empty($values[$attribute_name]) === FALSE) {
@@ -281,8 +224,12 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               }
             }
             if(sizeof($values) === sizeof($attribute_names)) {
-              $value = implode(" x ", $values)." cm";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $text = implode(" x ", $values)." cm";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
               $dimension_pair_set = true;
             }
@@ -291,7 +238,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
             $attribute_names = ["breedte", "hoogte"];
             $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-            $title = "Afmetingen (b x h)";
+            $title = "Afmetingen (b x l)";
             foreach($attribute_names as $attribute_name) {
               $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
               if(empty($values[$attribute_name]) === FALSE) {
@@ -301,8 +248,12 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               }
             }
             if(sizeof($values) === sizeof($attribute_names)) {
-              $value = implode(" x ", $values)." cm";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $text = implode(" x ", $values)." cm";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -311,10 +262,15 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "afsluitbaar";
             $image = "{$skn}frontend/rwd/dhh/images/key.svg";
             $title = "Afsluitbaar";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($value === "Ja") {
-              $value = "Afsluitbaar";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if($text === "Ja") {
+              $text = "Afsluitbaar";
+              //$str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$text}</span></li>";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -323,10 +279,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "size";
             $image = "{$skn}frontend/rwd/dhh/images/size.svg";
             $title = "Maat";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($value === "Ja") {
-              $value = "Afsluitbaar";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if($text === "Ja") {
+              $text = "Afsluitbaar";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -335,22 +295,30 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "type_koeling";
             $image = "{$skn}frontend/rwd/dhh/images/forced_cooling.svg";
             $title = "Koelmethode";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($value === "Geforceerd" OR $value === "Recirculatie" OR $value === "Statisch met ventilator") {
-              $value = "{$value}";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if($text === "Geforceerd" OR $text === "Recirculatie" OR $text === "Statisch met ventilator") {
+              $text = "{$text}";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
 
           if($i < $max_highlighted_attributes) {
             $attribute_name = "inhoud_liters";
-            $image = "{$skn}frontend/rwd/dhh/images/liters.jpg";
+            $image = "{$skn}frontend/rwd/dhh/images/liters.svg";
             $title = "Inhoud";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              $value = round($value, 2)." liter";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE) {
+              $text = round($text, 2)." liter";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -359,10 +327,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "ontdooisysteem";
             $image = "{$skn}frontend/rwd/dhh/images/freezer.svg";
             $title = "Ontdooisysteem";
-            $nofrost_method = $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            $nofrost_method = $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if($nofrost_method === "Automatisch") {
               $nofrost_method = "Auto defrost";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$nofrost_method}</span></li>";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -371,10 +343,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "aantal_roosters";
             $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
             $title = "Aantal roosters";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              $value = "{$value} roosters";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE) {
+              $text = "{$text} roosters";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -383,10 +359,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "garantie";
             $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
             $title = "Garantietermijn";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "12 maanden") {
-              $value = "{$value}";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE && $text !== "12 maanden") {
+              $text = "{$text}";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -395,16 +375,26 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "vermogen";
             $image = "{$skn}frontend/rwd/dhh/images/watt.svg";
             $title = "Vermogen";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              $value = str_replace(",", ".", $value);
-              $value = (double) $value;
-              if($value < 1.0) {
-                $value = (int) ($value * 1000)." W";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === false) {
+              if(ctype_alnum($text) || is_numeric($text)) {
+                $text = str_replace(",", ".", $text);
+                $text = (double) $text;
+                if($text < 3) {
+                  $text = (int) ($text * 1000)." W";
+                } else {
+                  $text = number_format($text, 1, ",", ".");
+                  $text = str_replace(",0", null, $text);
+                  $text = "{$text} kW";
+                }
               } else {
-                $value = "{$value} kW";
+                // For non-numbers like "2 x 3"
               }
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -413,12 +403,16 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "aansluitspanning";
             $image = "{$skn}frontend/rwd/dhh/images/volt.svg";
             $title = "Voltage";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              if(strstr(strtolower($value), "V") === FALSE) {
-                $value = "{$value} V";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE) {
+              if(strstr(strtolower($text), "V") === FALSE) {
+                $text = "{$text} V";
               }
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -427,10 +421,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "toeren_minuut";
             $image = "{$skn}frontend/rwd/dhh/images/rpm.svg";
             $title = "RPM";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              $value = "{$value} RPM";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE) {
+              $text = "{$text} RPM";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -439,12 +437,18 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "vermogen_kw";
             $image = "{$skn}frontend/rwd/dhh/images/flame.svg";
             $title = "Vermogen (gas)";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              if(strstr(strtolower($value), "V") === FALSE) {
-                $value = "{$value} kW";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE) {
+              $text = number_format($text, 1, ",", ".");
+              $text = str_replace(",0", null, $text);
+              if(strstr(strtolower($text), "V") === FALSE) {
+                $text = "{$text} kW";
               }
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -453,10 +457,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "geluidsniveau";
             $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
             $title = "Stil apparaat";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE) {
-              $value = "{$value} dB";
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE) {
+              $text = "{$text} dB";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -465,10 +473,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "verlichting";
             $image = "{$skn}frontend/rwd/dhh/images/light.svg";
             $title = "Verlichting";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "Nee") {
-              $value = (strstr($value, "LED")) ? "LED verlichting" : "Verlichting";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE && $text !== "Nee") {
+              $text = (strstr($text, "LED")) ? "LED verlichting" : "Verlichting";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -477,10 +489,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "aantal_flessen";
             $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
             $title = "Flessen";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "Nee") {
-              $value = "{$value} X";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE && $text !== "Nee") {
+              $text = "{$text} X";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -489,10 +505,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "aantal_branders";
             $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
             $title = "Branders";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "Nee") {
-              $value = "{$value} X";
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE && $text !== "Nee") {
+              $text = "{$text} X";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -501,17 +521,21 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "gewicht_kg";
             $image = "{$skn}frontend/rwd/dhh/images/weight.svg";
             $title = "Gewicht (kg)";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "Nee") {
-              $value = (double) $value;
-              if($value < 1.0) {
-                $value = ($value * 1000)." gr";
-              } elseif($value < 10.0) {
-                $value = number_format(round($value, 1), 1, ",", ".")." kg";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === FALSE && $text !== "Nee" && $text != "0") {
+              $text = (double) $text;
+              if($text < 1.0) {
+                $text = ($text * 1000)." gr";
+              } elseif($text < 10.0) {
+                $text = number_format(round($text, 1), 1, ",", ".")." kg";
               } else {
-                $value = (int) round($value, 0)." kg";
+                $text = (int) round($text, 0)." kg";
               }
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -520,9 +544,13 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "glas";
             $image = "{$skn}frontend/rwd/dhh/images/doubleglass.svg";
             $title = "Dubbel glas";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($value === "dubbel glas") {
-              $str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if($text === "dubbel glas") {
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -531,7 +559,12 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             if(empty($pvideo) === FALSE) {
               $image = "{$skn}frontend/rwd/dhh/images/video.svg";
               $title = "Productvideo";
-              $str .= "<li><a href=\"#a_video\"><img src=\"{$image}\" title=\"{$title}\" /><span>{$title}</span></a></li>";
+              $text = "Video";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
           }
@@ -540,85 +573,33 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $attribute_name = "koelmiddel";
             $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
             $title = "Koelmiddel";
-            $value = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($value) === FALSE && $value !== "230") {
-              $str .= "<li><img class=product-highlight src=\"{$image}\" title=\"{$title}\" /><span>{$value}</span></li>";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text ) === FALSE && $text !== "230") {
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
               $i++;
             }
+          }
+          
+          $hlstr = $jsstr = null;
+          foreach($highlights as $key => $highlight) {
+            $hlstr .= "<li><img id='hl-{$key}' src=\"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==\" title=\"{$highlight["title"]}\" /><span>{$highlight["text"]}</span></li>";
+            $jsstr .= "jQuery('#hl-{$key}').attr('src','{$highlight["image"]}');";
           }
 
           if($i > 0) {
             echo "<div class='top_description'>";
-            echo "<ul class='product-highlights'>{$str}</ul>";
-            echo "<a id=specs_anchor href=\"#a_specs\">>> Alle productgegevens</a>";
+            echo "<ul class='product-highlights'>{$str}{$hlstr}</ul>";
+            echo "<a id=specs_anchor href=\"#a_specs\">>> Alle specificaties</a>";
             echo "</div>";
           }
+          
+          echo "<script type='text/javascript'>{$jsstr}</script>";
         ?>
-
-<!--  <div class="brand-row">
-        <div class="short-description-block"> </div>
-      </div>
--->
-
-    <!--BEGIN for action block center -->
-
-<!--
-
-      <div class="product-list-block">
-        <h6><?php // echo $this->__('Enkele kenmerken:'); ?></h6>
-        <div class="short-description">
-          <ul>
-            <?php
-            /*
-            $attribute = $_product->getResource()->getAttribute('type_koeling');
-            $attribute_value = $attribute ->getFrontend()->getValue($_product);
-            if($attribute_value!=''){
-              echo '<li>Type koeling: '.$attribute_value.'</li>';
-            }
-
-            $attribute = $_product->getResource()->getAttribute('aantal_roosters');
-            $attribute_value = $attribute ->getFrontend()->getValue($_product);
-            if($attribute_value!=''){
-              echo '<li>Aantal roosters: '.$attribute_value.'</li>';
-            }
-
-            $attribute = $_product->getResource()->getAttribute('garantie');
-            $attribute_value = $attribute ->getFrontend()->getValue($_product);
-            if($attribute_value!=''){
-              echo '<li>Garantie: '.$attribute_value.'</li>';
-            }
-
-            $attribute = $_product->getResource()->getAttribute('inhoud_liters');
-            $attribute_value = $attribute ->getFrontend()->getValue($_product);
-            if($attribute_value!=''){
-              echo '<li>Inhoud (Liter): '.(round($attribute_value,2)).'</li>';
-            }
-            */
-            ?>
-          </ul>
-          <p>
-            <?php //if ($_product->getShortDescription()): ?>
-            <?php //echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
-            <?php //endif; ?>
-          </p>
-        </div>
-
-      <?php
-      //$attribute = $_product->getResource()->getAttribute('product_list_info');
-       // if ($attribute)
-        //{
-        //  echo $attribute ->getFrontend()->getValue($_product);
-        // }
-      ?>
-      </div>
-      <div class="divider divider-sm"></div>
-
--->
-
-    <!-- END for action block center -->
-
     </div>
-
     <div class="products-content-middle-center">
 
       <?php /* Company USPs */ ?>
@@ -633,31 +614,39 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       <div id="company_usps">
         <ul>
           <li>
-            <div><img alt="Gratis verzending" src="/skin/frontend/rwd/dhh/images/trolley.svg" width="32"></div>
+            <div><img id="usp-a" alt="Gratis verzending" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
             <div><small class="usp_text"><strong class="extra_special">Gratis</strong> verzending</small><small><?php echo $delivery_text; ?></small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img alt="De beste prijs" src="/skin/frontend/rwd/dhh/images/euro.svg" width="32"></div>
+            <div><img id="usp-b" alt="De beste prijs" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
             <div><small class="usp_text">Ergens goedkoper gezien?</small><small><a href="/klantenservice">Vertel het ons</a></small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img alt="Advies voor professionals" src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32"></div>
+            <div><img id="usp-c" alt="Advies voor professionals" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
             <div><small class="usp_text">Advies door professionals</small><small>Wel zo fijn</small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img alt="Snelle levrering" src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32"></div>
+            <div><img id="usp-d" alt="Snelle levrering" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
             <div><small class="usp_text">Snelle levering</small><small>Door bevlogen transporteurs</small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img alt="Een vraag?" src="/skin/frontend/rwd/dhh/images/question-mark.svg" width="32"></div>
+            <div><img id="usp-e" alt="Een vraag?" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
             <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:klantenservice@prokoeling.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
           </li>
         </ul>
       </div>
+      
+      <script type="text/javascript">
+        jQuery('#usp-a').attr('src','/skin/frontend/rwd/dhh/images/trolley.svg');
+        jQuery('#usp-b').attr('src','/skin/frontend/rwd/dhh/images/euro.svg');
+        jQuery('#usp-c').attr('src','/skin/frontend/rwd/dhh/images/superhero.svg');
+        jQuery('#usp-d').attr('src','/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg');
+        jQuery('#usp-e').attr('src','/skin/frontend/rwd/dhh/images/question-mark.svg');
+      </script>
 
       <?php /* Add to Cart Block */ ?>
       <div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
@@ -708,7 +697,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               ?>
               <small class="clzdelvlb">
                 <span>Levertijd: Op aanvraag</span>
-                <span><br><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
+                <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
               </small>
               <?php
             }
@@ -742,12 +731,12 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
               ?>
               <small class="clzdelvlb">
                 <span class=delivery-logo>&nbsp;</span>
-                <span class="<?php echo $txtcltcz; ?>"><?php echo $stmsg; ?></span>
+                <span class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></span>
                 <?php if(empty($calwekdate) === FALSE) {
-                  echo "<span><br>Verwacht op: <strong style=\"font-weight: bold;\">{$calwekdate}</strong> ({$levertijd_verwacht} werkdagen)</span>";
+                  echo "<span><br />Verwacht op: <strong style=\"font-weight: bold;\">{$calwekdate}</strong> ({$levertijd_verwacht} werkdagen)</span>";
                 }
                 ?>
-                <span><br><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
+                <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
               </small>
               <?php
 
@@ -793,20 +782,22 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
                 <small class="clzdelvlb">
                   <span class=delivery-logo>&nbsp;</span>
-                  <span class="<?php echo $txtcltcz; ?>"><?php echo $stmsg; ?></span>
-                  <br>Bezorgd op: <strong style="font-weight: bold;"><?php echo $calwekdate; ?></strong> (<?php echo $expected_delivery; if($extra_delivery_time > 0) echo ", plus extra tijd voor de feestdagen"; ?>)
+                  <span class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></span>
+                  <?php if($_product->isSaleable()) { ?>
+                  <br />Bezorgd op: <strong style="font-weight: bold;"><?php echo $calwekdate; ?></strong> (<?php echo $expected_delivery; if($extra_delivery_time > 0) echo ", plus extra tijd voor de feestdagen"; ?>)
                   <span class="tooltip">
                     <i class="tooltip-icon fa fa-info-circle fa-lg" aria-hidden="true"></i>
                     <span class="tooltiptext clztoptoolc">
                       Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen.
                         Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is.
-                        <br><br><strong>Wat is de leverrtijd?</strong><br>Levering van grote goederen (pallet items)
+                        <br /><br /><strong>Wat is de leverrtijd?</strong><br />Levering van grote goederen (pallet items)
                         vindt plaats van maandag t/m vrijdag doorgaans van 08:00-18:00. Indien wij een track & trace van de transporteur
                         krijgen zullen we u deze doorsturen. Kleinere bestellingen die met pakketpost worden geleverd kunnen ook op
                         zaterdag worden aangeboden. Buiten Nederland kan het in enkele gevallen voorkomen dat de zending niet de volgende
                         dag wordt geleverd.
                     </span>
                   </span>
+                  <?php } ?>
                 </small>
                 <?php
               }
@@ -819,9 +810,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           <?php echo $this->getChildHtml('addto') ?>
           <?php //echo $this->getChildHtml('sharing') ?>
           </div>
-        <?php } ?>
-          <div class="clearer"></div>
-          <?php
+        <?php }
            //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml();
           ?>
         </div>
@@ -833,44 +822,25 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
         <?php
 
-          /* Description Block */
+        /* Description Block */
 
-          $str = $this->getChildHtml('description')."&nbsp;";
-          if(strtolower($nofrost_method) === 'Automatisch') {
-            $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_ontdooisysteem_automatisch')->toHtml().'</div>';
-          }
+        $str = $this->getChildHtml('description');
+        if(strtolower($nofrost_method) === 'Automatisch') {
+          $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_ontdooisysteem_automatisch')->toHtml().'</div>';
+        }
 
-          $attributeaansluitspanning = $_product->getResource()->getAttribute('aansluitspanning');
-          $attribute_valueaansluitspanning = $attributeaansluitspanning->getFrontend()->getValue($_product);
-          if($attribute_valueaansluitspanning === "400") {
-            $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
-          }
+        $attributeaansluitspanning = $_product->getResource()->getAttribute('aansluitspanning');
+        $attribute_valueaansluitspanning = $attributeaansluitspanning->getFrontend()->getValue($_product);
+        if($attribute_valueaansluitspanning === "400") {
+          $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
+        }
 
-          $attributegeluidsniveau = $_product->getResource()->getAttribute('geluidsniveau');
-          $attribute_valuegeluidsniveau = $attributegeluidsniveau->getFrontend()->getValue($_product);
-          if(empty($attribute_valuegeluidsniveau) === FALSE) {
-            $str .= '<div class="std">'.str_replace('replacethis', $attribute_valuegeluidsniveau, $this->getLayout()->createBlock('cms/block')->setBlockId('productpage_geluidsniveau')->toHtml()).'</div>';
-          }
-
-          $attributekoelmiddel = $_product->getResource()->getAttribute('koelmiddel');
-          $attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_product);
-          if($attribute_valuekoelmiddel === "R290") {
-            $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
-          }
-
-          $attributeenergieklasse = $_product->getResource()->getAttribute('energieklasse');
-          $attribute_valueenergieklasse = $attributeenergieklasse->getFrontend()->getValue($_product);
-          if(empty($attribute_valueenergieklasse) === FALSE) {
-            $str .= '<div class="std">'.str_replace('replacethis',$attribute_valueenergieklasse,$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_energieklasse')->toHtml()).'</div>';
-          }
-
-          /*
-          $attributegarantie = $_product->getResource()->getAttribute('garantie');
-          $attribute_valuegarantie = $attributegarantie->getFrontend()->getValue($_product);
-          if($attribute_valuegarantie !== ''){
-            $str .= '<div class="std">'.str_replace('replacethis',$attribute_valuegarantie,$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_garantie')->toHtml()).'</div>';
-          }
-          */
+        $attributekoelmiddel = $_product->getResource()->getAttribute('koelmiddel');
+        $attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_product);
+        if($attribute_valuekoelmiddel === "R290") {
+          $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
+        }
+        if(strlen($str) === 0) $str = "&nbsp;";
 
         if(empty($str) === FALSE) {
           ?>
@@ -879,7 +849,6 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             <a class="anchor" name="a_description"></a>
             <div class="content">
               <div class="description-page">
-                <h3 class=product-name><?php echo $productTitle; ?></h3><br /><br />
                   <?php echo $str; ?>
               </div>
             </div>
@@ -1055,76 +1024,58 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
   <?php
   }
 
-    /* Brand Logo & Text */
-    if(empty($htbrand) === FALSE) {
-      ?>
-      <div class="probottomdv" id="product-brand-text">
-        <a class="anchor" name="a_brand"></a>
-        <h2 class="tableftheader"><?php echo $this->__("Over {$brand}");?></h2>
-        <div class="content">
-          <div class="brand std">
-            <?php
-              echo $htbrand;
-              echo "<a href='{$brand_link}'>Alle producten van {$brand_name}</a>";
-            ?>
-          </div>
+  /* Brand Logo & Text */
+  ?>
+  <div class="probottomdv" id="product-brand-text">
+    <a class="anchor" name="a_brand"></a>
+    <?php
+    if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
+    ?>
+      <h3 class="tableftheader"><?php echo $this->__("{$brand}");?></h3>
+      <div class="brand std justify"><?php echo $htbrand; ?></div>
+    <?php
+    }
+    echo "<div class='center'><img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' onerror=\"if (this.src != '/media/wysiwyg/brands/prokoeling.png') this.src = '/media/wysiwyg/brands/prokoeling.png';\" /></div>";
+    ?>
+  </div>
+</div>
+</div>
+  <?php /* Upsell Products */ ?>
+  <?php
+  //$additional_block = $this->getChildHtml('additional');
+  $upsell_block = $this->getChildHtml('upsell_products');
+  if(empty($additional_block) === FALSE || empty($upsell_block) === FALSE) {
+    ?>
+    <div id="upsell-products">
+      <div class="probottomdv">
+        <div class="product-collateral">
+          <?php
+            //echo $additional_block;
+            echo $upsell_block;
+          ?>
         </div>
       </div>
-      <?php
-    }
+    </div>
+    <?php
+  }
   ?>
 
-</div>
-
-    
-  </div>
-
-
-<?php
-/* Upsell Products */
-
-//$additional_block = $this->getChildHtml('additional');
-$upsell_block = $this->getChildHtml('upsell_products');
-if(empty($additional_block) === FALSE || empty($upsell_block) === FALSE) {
-  ?>
-  <div id="upsell-products">
+  <?php /* Automatic Related Products */ ?>
+  <div class="product-boxbottom">
     <div class="probottomdv">
       <div class="product-collateral">
         <?php
-          //echo $additional_block;
-          echo $upsell_block;
-        ?>
+          echo $this->getChildHtml('related_products');
+          ?>
       </div>
     </div>
   </div>
-  <?php
-}
-?>
 
-<?php /* Automatic Related Products */ ?>
-
-<div class="product-boxbottom">
-  <div class="probottomdv">
-    <div class="product-collateral">
-      <?php
-        echo $this->getChildHtml('related_products');
-        ?>
-    </div>
-  </div>
+  <script>
+    jQuery(function() {
+      jQuery('.btntrigadt').click(function(){
+        jQuery('.button.btn-cart').trigger('click');
+      });
+    });
+  </script>
 </div>
-
-<script>
-  jQuery(function() {
-    jQuery('.btntrigadt').click(function(){
-      jQuery('.button.btn-cart').trigger('click');
-    });
-
-    jQuery(window).scroll(function() {
-      if(jQuery(window).scrollTop() > 500) {
-        jQuery('.profixedbartop').show();
-      } else {
-        jQuery('.profixedbartop').hide();
-      }
-    });
-  });
-</script>

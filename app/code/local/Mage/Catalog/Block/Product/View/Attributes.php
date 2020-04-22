@@ -80,7 +80,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
         }
         return $data;
     }
-// DHH START
+// DHH CORE HACK
 // Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
 
 	public function getAdditionalDataCustom(array $excludeAttr = array())

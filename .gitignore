@@ -68,3 +68,5 @@ bridge_*.php
 # Ignore downloader cache and configuration files
 /downloader/.cache/
 /downloader/cache.cfg
+
+vendor/

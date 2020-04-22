@@ -62,7 +62,7 @@ div.block-layered-nav dd a {
 
 .block-layered-nav .single-choice a.amshopby-attr,
 .block-layered-nav .single-choice a.amshopby-attr:hover {
-    background-image: url(../images/amshopby-rb1.gif);
+  /*  background-image: url(../images/amshopby-rb1.gif); */
 }
 
 .block-layered-nav .single-choice a.amshopby-attr-selected,
@@ -309,7 +309,6 @@ div.block-layered-nav dd a {
 }
 
 .amshopby-slider-ui {
-    background: url(../images/amshopby-slider-bg.gif) repeat-x 0 50%;
     margin: 10px .4em;
 }
 

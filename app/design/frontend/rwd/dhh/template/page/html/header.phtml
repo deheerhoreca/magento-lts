@@ -1,67 +1,61 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    design
- * @package     rwd_default
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
-/**
  * @var Mage_Page_Block_Html_Header $this
  */
-?>
-<div id="darkness" class="dkmenus"></div>
-<div id="darkness2" class="dkmenus"></div>
-<div id="darknessx" class="dkmenus"></div>
-<?php
 //echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
 ?>
 <header id="header" class="page-header header grid-inside">
 
   <!-- Logo, Search, Top Right Link -->
-  <div class="page-header-container grid-old">
+  <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
       <a class="logo" href="<?php echo $this->getUrl('') ?>">
-        <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height=40 width=208 />
+        <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height="40" width="208" />
       </a>
       <div class="skip-links headerrightcontents">
         <div id="header-search" class="skip-content" style="float: left;position: relative;">
           <?php echo $this->getChildHtml('topSearch') ?>
         </div>
         <div class="account-cart-wrapper" style="position: relative;text-align: right;">
-
+<!--
           <a class="sprite-with-caption kservice" href="/klantenservice" title="Klantenservice">
             <i class="fa fa-info-circle fa-2x fa-fw"></i>
-            <div class="sprite-with-caption__caption ">
-              <?php echo $this->__('Klantenservice'); ?>
+            <div class="sprite-with-caption__caption ">Service</div>
+          </a>
+-->
+
+          <div class="top-link skip-account" style="width: 177px;background-color: #f1faff;"> 
+            <span class="strong clzpnmincon">
+              <a href="tel:+31850441003" title="Bel ons"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel ons: 085-0441003</a><br>
+              <a href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel mij terug</a>
+            </span>
+          </div>
+
+          <a href="https://www.kiyoh.com/reviews/1044049/prokoeling?from=widget&amp;lang=nl" target="_blank" rel="nofollow" class="no-decoration">
+            <div class="top-link skip-account" id="header-kiyoh" style="width: 125px">
+              <div>
+                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
+                <i class="fa fa-star-half-o" aria-hidden="true" style="color: gold"></i>
+              </div>
+              <div class="small">
+                <span>
+                  U geeft ons een <strong>9.2!</strong>
+                </span>
+              </div>
             </div>
           </a>
 
           <a href="<?php echo $this->helper('customer')->getAccountUrl(); ?>" data-target-element="#header-account" class="skip-link skip-account" title="Account">
             <i class="fa fa-user-circle fa-2x fa-fw"></i>
-            <div class="sprite-with-caption__caption ">
-              <?php echo $this->__('Account'); ?>
-            </div>
+            <div class="sprite-with-caption__caption ">Account</div>
           </a>
-
-          <?php echo $this->getChildHtml('minicart_head'); ?>
+          
+          <?php
+          echo $this->getChildHtml('minicart_head');
+          ?>
 
         </div>
       </div>
@@ -69,7 +63,7 @@
       <!-- Collapsed Menu for Mobile -->
       <a href="#header-nav" class="skip-link skip-nav no-decoration">
         <i class="fa fa-bars fa-2x"></i>
-        <span class="label">Menu</span>
+        <span class="label">Producten</span>
       </a>
 
       <!-- Account Popup -->
@@ -91,13 +85,4 @@
   //echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
   ?>
 </header>
-
-<!--
-
-
-        NEW
-
-
- -->
-
 <?php echo $this->getChildHtml('topContainer'); ?>

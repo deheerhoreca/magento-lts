@@ -1,31 +1,5 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    design
- * @package     rwd_default
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
-?>
-<?php
-/**
  * Shopping cart template
  *
  * @var $this Mage_Checkout_Block_Cart
@@ -203,16 +177,45 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
           <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
       </div>
       <div class="cart-totals-wrapper">
+      
+      <script src ="https://form.jotform.com/static/feedback2.js" type="text/javascript"></script>
+      <script type="text/javascript">
+        var JFL_200152323289044 = new JotformFeedback({
+          formId: '200152323289044',
+          base: 'https://form.jotform.com/',
+          windowTitle: 'Aanvraag lease',
+          background: '#f08324',
+          fontColor: '#FFFFFF',
+          type: 'false',
+          height: 600,
+          width: 700,
+          openOnLoad: false
+        });
+      </script>
+      
           <div class="cart-totals">
               <?php echo $this->getChildHtml('totals'); ?>
               <?php if(!$this->hasError()): ?>
-              <ul class="checkout-types bottom">
-              <?php foreach ($this->getMethods('methods') as $method): ?>
-                  <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-                  <li class="method-<?php echo preg_replace("/[^_a-zA-Z0-9-]/", '-', $method); ?>"><?php echo $methodHtml; ?></li>
-                  <?php endif; ?>
-              <?php endforeach; ?>
-              </ul>
+                <ul class="checkout-types bottom">
+                  <?php
+                  foreach ($this->getMethods('methods') as $method) {
+                    if ($methodHtml = $this->getMethodHtml($method)) {
+                      echo '<li class="method-'.preg_replace("/[^_a-zA-Z0-9-]/", '-', $method).'">'.$methodHtml.'</li>';
+                    }
+                  }
+                  ?>
+                  <?php
+                  $buttonTitle_lease = $this->__('Lease aanvragen');
+                  ?>
+                  <li class="method-checkout-cart-methods-fire">
+                    <button type="button" title="Lease aanvragen" class="button btn-cart btn lightbox-200152323289044" style="margin-top:1em;background-color:#2a71db!important;display: block!important;float: none;margin: 0 auto;margin-top: 25px!important;margin-right: auto!important;margin-left: auto!important;width: 92%; text-transform: uppercase;">
+                      <span style="color: #fff; font-weight: 600;">
+                        <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px; color: #fff;"></i>
+                        <?php echo $buttonTitle_lease; ?>
+                      </span>
+                    </button>
+                  </li>
+                </ul>              
               <?php endif; ?>
           </div>
       </div>

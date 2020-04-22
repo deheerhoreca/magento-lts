@@ -1,30 +1,5 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    design
- * @package     rwd_default
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
-
-/**
  * Template for displaying product price in different places (products grid, product view page etc)
  *
  * @see Mage_Catalog_Block_Product_Abstract
@@ -50,7 +25,13 @@ $_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->get
 $_specialPriceStoreLabel = $this->getProductAttribute('special_price')->getStoreLabel();
 
 /* DHH START */
-$dhh_debug = FALSE;
+$dhh_debug = false;
+
+# Known configurations:
+# Product list: "Discount. Context: ?"
+# Product detail: "Discount. Context: ?"
+# Featured list: ?
+
 /* DHH END */
 ?>
 
@@ -383,7 +364,9 @@ $dhh_debug = FALSE;
           <?php if($dhh_debug === TRUE) echo "Discount. Context: ?".PHP_EOL; ?>
             <p class="old-price">
               <!-- BEGIN DHH -->
-              <span class="price-label"><?php echo $this->__('Adviesprijs') ?>:</span>
+              <span class="price-label" id="old-price-label-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <?php echo $this->__('Adviesprijs') ?>:
+              </span>
               <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                 <?php echo $_coreHelper->formatPrice($_price, false) ?>
               <!-- END DHH -->
@@ -402,21 +385,19 @@ $dhh_debug = FALSE;
             <!-- END DHH -->
 
             <?php if ($_taxHelper->displayBothPrices()): ?>
-                <p class="special-price">
-                    <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
-                    <span class="price-excluding-tax">
-                        <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-                        <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                            <?php echo $_coreHelper->formatPrice($_finalPrice, false) ?>
-                        </span>
-                    </span>
-                    <span class="price-including-tax">
-                        <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-                        <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                            <?php echo $_coreHelper->formatPrice($_finalPriceInclTax, false) ?>
-                        </span>
-                    </span>
-                </p>
+              <p class="special-price">
+                <span class="price-excluding-tax">
+                  <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->formatPrice($_finalPrice, false) ?>
+                  </span>
+                </span>
+                <span class="price-including-tax">
+                  <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
+                  <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->formatPrice($_finalPriceInclTax, false) ?>
+                  </span>
+                </span>
+              </p>
             <?php else: ?>
                 <p class="special-price">
                     <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>

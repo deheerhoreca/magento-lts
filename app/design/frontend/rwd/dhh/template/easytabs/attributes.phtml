@@ -1,94 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @category    design
- * @package     base_default
- * @copyright   Copyright (c) 2009 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
-
-/**
  * Product additional attributes template
  *
  * @see Mage_Catalog_Block_Product_View_Attributes
  */
-
-if(FALSE && $_product->getId() !='4934') {
-  $_helper = $this->helper('catalog/output');
-  $_product = $this->getProduct();
-  if($_additional = $this->getAdditionalData()): ?>
-    <div class="box-collateral box-additional">
-      <table class="data-table" id="product-attribute-specs-table">
-
-        <col width="25%" />
-        <col />
-        <tbody>
-        <?php
-          foreach($_additional as $_data):
-            $attributex = $_product->getResource()->getAttribute($_data['code']);
-            $valuex = $attributex->getFrontend()->getValue($_product);
-	          //var_dump( $attribute);
-        		if($valuex==''){
-        		  continue;
-        		}
-        		//$attributex->getFrontendInput() =='select' &&
-        		//if($_data['value']=='Nee'){
-        		//  continue;
-        		//}
-            // if(!in_array($_data['value'], $emptyValues)):
-        ?>
-            <tr>
-                <th class="label"><?php echo $this->htmlEscape($this->__($_data['label'])) ?></th>
-                <td class="data"><?php
-                  if($_data['code']=='hoogte_intern'
-                  || $_data['code']=='breedte_intern'
-                  || $_data['code']=='diepte_intern'
-                  || $_data['code']=='breedte'
-                  || $_data['code']=='inhoud_liters'
-                  || $_data['code']=='hoogte'
-                  || $_data['code']=='diepte'
-                  || $_data['code']=='gewicht_kg') {
-                    echo round($valuex, 2);
-                  } else {
-                    echo $valuex;
-                  }
-                    //echo $_helper->productAttribute($_product, $_data['value'], $_data['code']);
-                    //var_dump($attributex);
-                    //echo $attributex->getFrontendInput();
-    			        ?>
-                </td>
-            </tr>
-			    <?php //endif; ?>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <script type="text/javascript">decorateTable('product-attribute-specs-table')</script>
-</div>
-<?php endif;
-}
-
-
-
-
-
-
 
 // Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
 $_helper = $this->helper('catalog/output');
@@ -101,38 +16,62 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
       $i=0; foreach ($_additionalgroup as $_additional) {
         $i++;
         ?>
-      <h3 class="clzattrgname"><?php echo $this->__( $_additional['title'] )?></h3>
-      <table class="data-table" id="product-attribute-specs-table-<?php echo $i?>">
-        <col width="40%" />
-        <col />
+      <span class="h3 clzattrgname"><?php echo $this->__( $_additional['title'] )?></span>
+      <table class="data-table product-specs-table" id="product-attribute-specs-table-<?php echo $i?>">
         <tbody>
           <?php
           foreach($_additional['items'] as $_data) {
             $valuex = $_data['value'];
-            if($valuex == '') {
+            if(empty($valuex)) {
               continue;
            	}
+            $label = $this->htmlEscape($this->__($_data['label']));
             ?>
             <tr>
-              <th class="label"><?php echo $this->htmlEscape($this->__($_data['label'])) ?></th>
-              <td class="data"><?php //echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?>
               <?php
-                if($_data['code']=='hoogte_intern' ||
-                $_data['code']=='breedte_intern' ||
-                $_data['code']=='diepte_intern' ||
-                $_data['code']=='breedte' ||
-                $_data['code']=='inhoud_liters' ||
-                $_data['code']=='hoogte' ||
-                $_data['code']=='diepte' ||
-                $_data['code']=='gewicht_kg') {
-                  echo round($valuex, 2);
-                } elseif($_data['code'] == 'diameter') {
-                  echo round($valuex, 0);
-                } else {
-                  echo $valuex;
+                switch($_data['code']) {
+                  case "vermogen_kw":
+                  case "vermogen":
+                    if($valuex < 5) {
+                      $valuex *= 1000;
+                      $label = str_replace("kW", "Watt", $label);
+                    } else {
+                      $valuex = number_format($valuex, 2, ",", ".");
+                    }
+                    break;
+
+                  case "gewicht_kg":
+                    if($valuex < 1) {
+                      $valuex *= 1000;
+                      $label = str_replace("Kg", "gram", $label);
+                    } else {
+                      $valuex = round($valuex);
+                    }
+                    break;
+
+                  case "inhoud_liters":
+                    $valuex = number_format($valuex, 2, ",", ".");
+                    break;
+
+                  case "hoogte_intern":
+                  case "breedte_intern":
+                  case "diepte_intern":
+                  case "diameter":
+                  case "breedte":
+                  case "hoogte":
+                  case "diepte":
+                  case "magnetron_output_watt":
+                  case "grill_output_watt":
+                  case "aantal_m3_uur":
+                    $valuex = number_format($valuex, 0, ",", "");
+                    break;
+                  default:
+                    $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
                 }
+                
               ?>
-              </td>
+              <th class="label"><?php echo $label; ?></th>
+              <td class="data"><?php echo $valuex; ?></td>
             </tr>
           <?php } ?>
         </tbody>

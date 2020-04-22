@@ -1,38 +1,11 @@
 jQuery.noConflict();
 jQuery(document).ready(function() {
-  if(document.getElementById("content-slider")) {
-    document.getElementById("content-slider").style.visibility = "visible";
-    jQuery("#content-slider").lightSlider({
-      loop: true,
-      auto: true,
-      speed: 1000,
-      item: 1,
-      keyPress: true,
-      mode: 'fade',
-      pause: 4000
-    });
-  }
-
-  jQuery(".nav-primary").hover(function() {
-    jQuery('#darkness').delay(300).fadeTo(0, 1);
+  jQuery("#top-nav").hover(function() {
+    jQuery('#darkness').fadeTo(0, 1);
   }, function() {
     jQuery('#darkness').fadeTo(0, 0, function() {
       jQuery('#darkness').hide();
     });
-  });
-
-  jQuery(".skip-link.skip-cart").click(function() {
-    jQuery('#darknessx').delay(0).fadeTo(0, 1);
-  });
-
-  jQuery('#billing\\:firstname, #billing\\:lastname, #billing\\:city').keydown(function(event) {
-    if (this.selectionStart == 0 && event.keyCode >= 65 && event.keyCode <= 90 && !(event.shiftKey) && !(event.ctrlKey) && !(event.metaKey) && !(event.altKey)) {
-      var $t = jQuery(this);
-      event.preventDefault();
-      var char = String.fromCharCode(event.keyCode);
-      $t.val(char + $t.val().slice(this.selectionEnd));
-      this.setSelectionRange(1, 1);
-    }
   });
 });
 
@@ -41,20 +14,18 @@ jQuery(function() {
     if (jQuery(window).width() > 680) {
       if (jQuery(this).scrollTop() > 0) {
         jQuery('#header-nav').addClass('headmv');
-        jQuery('.page-header-container.grid-old').addClass('scrlng');
+        jQuery('#page-header-container').addClass('scrlng');
+        jQuery(".main-container").css("top", "58px");
+        jQuery(".footer-wrapper").css("top", "58px");
       } else {
         jQuery('#header-nav').removeClass('headmv');
-        jQuery('.page-header-container.grid-old').removeClass('scrlng');
+        jQuery('#page-header-container').removeClass('scrlng');
+        jQuery(".main-container").css("top", "");
+        jQuery(".footer-wrapper").css("top", "");
       }
     }
   });
 });
-
-function hidedark() {
-  jQuery('#darknessx').fadeTo(0, 0, function() {
-    jQuery('#darknessx').hide();
-  });
-}
 
 function discresm(gb) {
   // Get its current value
@@ -135,18 +106,3 @@ function increasem2(gb) {
     jQuery(gb).next().trigger('click');
   }
 }
-
-/*
-jQuery( ".nav-primary" ).mouseenter(function() {
-  setTimeout(function(){
-   jQuery('#darkness').fadeTo(200, 1);
-   }, 200);
-
-  }).mouseleave(function() {
-
-      jQuery('#darkness').fadeTo(0, 0, function(){
-       jQuery('#darkness').hide();
-    });
-
-  });
-*/

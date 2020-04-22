@@ -58,19 +58,27 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
     if($crumbs && is_array($crumbs)) {
       echo '<div class="breadcrumbs">';
         echo '<ul>';
+        $n = sizeof($crumbs);
+        $i = 0;
         foreach($crumbs as $_crumbName => $_crumbInfo) {
           $label = $this->escapeHtml($_crumbInfo['label']);
           $title = $this->escapeHtml($_crumbInfo['title']);
           echo "<li class='{$_crumbName}'>";
-            if($_crumbInfo['link'] && !$_crumbInfo['last']) {
-              echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'>{$label}</a>";
-            } else {
-              echo "<strong>{$label}</strong>";
-            }
-            if($_crumbName !== "product" && !$_crumbInfo['last']) {
-              echo '<i class="fa fa-angle-right" aria-hidden="true" style="padding: 0 0.5em; font-size: 1.5em; line-height: 20px"></i>';
-            }
+          
+          if($_crumbName === "product") {
+            continue;
+          }
+          
+          if($_crumbInfo['link'] && !$_crumbInfo['last']) {
+            echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'>{$label}</a>";
+          } else {
+            echo "<strong>{$label}</strong>";
+          }
+          if($_crumbName !== "product" && $i < $n-1) {
+            echo '<i class="fa fa-angle-right" aria-hidden="true" style="padding: 0 0.5em; font-size: 1.5em; line-height: 20px"></i>';
+          }
           echo "</li>";
+          $i++;
         }
         echo '</ul>';
       echo '</div>';

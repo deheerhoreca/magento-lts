@@ -229,7 +229,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      * @return Array
      */
     public function getJsonSnippetsProduct()
-    {
+    {      
       $description = (strlen($this->getProduct()->getDescription()) > 0) ? $this->getProduct()->getDescription() : $this->getProduct()->getName();
       $description = strip_tags($description);
         $data = array(
@@ -255,7 +255,24 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
                 ] /* DHH CORE HACK */
             )
         );
-
+        
+        /* DHH CORE HACK */
+      
+        $stock      = Mage::getModel('cataloginventory/stock_item')->loadByProduct($this->getProduct());
+        $in_stock   = $stock->getIsInStock();
+        
+        if($in_stock === true) {
+          $stock_qty  = (int) $stock->getQty();
+          if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
+            $data["offers"]["availability"] = "http://schema.org/OutOfStock";
+          } else {
+            $data["offers"]["availability"] = "http://schema.org/InStock";
+          }
+        } else {
+          $data["offers"]["availability"] = "http://schema.org/OutOfStock";
+        }
+        
+        /* END DHH CORE HACK */
 
         if ($this->getReviewCount() > 0) {
             $data['aggregateRating']['@type'] = 'AggregateRating';

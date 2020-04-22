@@ -117,10 +117,22 @@
     RewriteEngine on
 
 ############################################
+## DHH: block scrapers
+
+    RewriteCond %{HTTP_USER_AGENT} "=Mozilla/5.0 (compatible; Google-Apps-Script)"
+    RewriteRule ^ - [F]
+
+############################################
 ## you can put here your magento root folder
 ## path relative to web root
 
     #RewriteBase /magento/
+
+############################################
+## if pagespeed_admin or pagespeed_global_admin exist go directly to it
+
+    RewriteCond %{REQUEST_URI} !/pagespeed_admin
+    RewriteCond %{REQUEST_URI} !/pagespeed_global_admin
 
 ############################################
 ## uncomment next line to enable light API calls processing
@@ -158,13 +170,6 @@
 
     </IfModule>
 </IfModule>
-
-############################################
-## redirect for mobile user agents
-
-    #RewriteCond %{REQUEST_URI} !^/mobiledirectoryhere/.*$
-    #RewriteCond %{HTTP_USER_AGENT} "android|blackberry|ipad|iphone|ipod|iemobile|opera mobile|palmos|webos|googlebot-mobile" [NC]
-    #RewriteRule ^(.*)$ /mobiledirectoryhere/ [L,R=302]
 
 ############################################
 ## always send 404 on missing files in these folders
@@ -251,7 +256,7 @@
 # DHH ADDITIONS
 
 # non-production:
-SetEnv MAGE_IS_DEVELOPER_MODE "true"
+#SetEnv MAGE_IS_DEVELOPER_MODE "true"
 
 <IfModule mod_deflate.c>
 
@@ -302,7 +307,6 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
   Header add Link "<https://cdn.jsdelivr.net>; rel=preconnect"
   Header add Link "<https://script.hotjar.com>; rel=preconnect"
   Header add Link "<https://in.hotjar.com>; rel=preconnect"
-  Header add Link "<https://www.clickcease.com>; rel=preconnect"
   Header add Link "<https://stats.g.doubleclick.net>; rel=preconnect"
   Header add Link "<https://www.googletagmanager.com>; rel=preconnect"
   Header add Link "<https://cdnjs.cloudflare.com>; rel=preconnect"
@@ -316,3 +320,5 @@ SetEnv MAGE_IS_DEVELOPER_MODE "true"
 RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
 RewriteCond %{THE_REQUEST} ^.*/index.php
 RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+
+RedirectMatch 404 /\.git

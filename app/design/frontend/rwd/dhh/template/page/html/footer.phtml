@@ -1,5 +1,7 @@
-<div class="footer-wrapper grid-inside">
-
+<?php
+$apm_transaction = Mage::app()->getFrontController()->getAction()->getFullActionName();
+?>
+<div class="footer-wrapper grid-inside" id="footer-wrapper">
   <div class="footermidwrap">
     <div class="footer grid">
       <div class="row footer__links-row">
@@ -21,105 +23,44 @@
     </div>
   </div>
 </div>
-<?php
-/*
-<!--
-<div class="dvmenu1ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_1_block')->toHtml(); ?>
+
+<style>
+.alertbar {
+  width: 100%;
+  z-index: 9999;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: .5em;
+  text-align: center;
+  font-weight: 600;
+  position: fixed;
+  top: 0;
+}
+</style>
+<div id="coronabar" class="alertbar active" style="display: none;">
+  We blijven gewoon open tijdens de corona crisis. Wel kunnen er als gevolg van de corona crisis vertragingen in leveringen optreden door extra veiligheidsmaatregelen die onze partners in de logistieke keten moeten treffen. We hopen op uw begrip.
 </div>
-<div class="dvmenu2ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_2_block')->toHtml(); ?>
-</div>
-<div class="dvmenu3ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_3_block')->toHtml(); ?>
-</div>
-<div class="dvmenu4ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_4_block')->toHtml(); ?>
-</div>
-<div class="dvmenu5ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_5_block')->toHtml(); ?>
-</div>
-<div class="dvmenu6ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_6_block')->toHtml(); ?>
-</div>
-<div class="dvmenu7ri" style="display: none">
-  <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('menu_item_7_block')->toHtml(); ?>
-</div>
--->
-*/
-?>
-<script>
-  jQuery(function() {
-/*
-    jQuery('.nav-1 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu1ri').html()+'</div></li>');
-    jQuery('.nav-2 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu2ri').html()+'</div></li>');
-    jQuery('.nav-3 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu3ri').html()+'</div></li>');
-    jQuery('.nav-4 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu4ri').html()+'</div></li>');
-    jQuery('.nav-5 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu5ri').html()+'</div></li>');
-    jQuery('.nav-6 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu6ri').html()+'</div></li>');
-    jQuery('.nav-7 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu7ri').html()+'</div></li>');
-    jQuery('.nav-8 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu8ri').html()+'</div></li>');
-    jQuery('.nav-9 > ul > li:last-child').after('<li class="menusubrightdiv"><div class="menu1right">'+jQuery('.dvmenu9ri').html()+'</div></li>');
-*/
-    if(jQuery('#billing-address select[title=Land]').val()=='NL') {
-    	//add mask
-    	jQuery('#billing-address input[title=BTW-nummer]').val('');
-    	jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
-    	jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
+<script type="application/javascript">
+  jQuery('#coronabar').delay(1000).fadeIn(200);
+  jQuery('#coronabar').delay(5000).fadeOut('slow');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin type="application/javascript" defer></script>
+<script type="application/javascript">
+  window.onload = function () {
+    var full = window.location.host;
+    var parts = full.split(".");
+    var sub = parts[0];
+    var apm_env = "production";
+    if(sub === "dev") {
+      apm_env = "development";
     }
 
-    jQuery('.clztoggleulx li > a').click(function(ev) {
-    	ev.preventDefault();
-    	jQuery('.clztoggleulx span').hide();
-    	jQuery(this).next('span').fadeIn().css('display','block');
+    elasticApm.init({
+      serviceName: "prokoeling",
+      serverUrl: "https://rum.prokoeling.nl:8200",
+      environment: "apm_env",
+      pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
     });
-
-    jQuery('#billing-address select[title=Land]').change(function(){
-    	var ct=jQuery(this).val();
-    	if(ct=='NL'){
-    		//add mask
-    		jQuery('#billing-address input[title=BTW-nummer]').val('');
-    		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#E4E4E4');
-    		jQuery('#billing-address input[title=BTW-nummer]').attr('readonly','readonly');
-    	}
-    	else{
-    		//remove mask
-    		jQuery('#billing-address input[title=BTW-nummer]').css('background-color','#FFFFFF');
-    		jQuery('#billing-address input[title=BTW-nummer]').removeAttr("readonly");
-    	}
-    });
-    jQuery('body.firecheckout-index-index  li#shipping-new-address-form fieldset ul li.wide div.input-box input[title=BTW-nummer]').parent().parent().hide();
-  });
-</script>
-
-<div class="callbtnfelx">
-  <strong>Bel ons met al uw vragen!</strong>
-  <a href="tel:+31850441003" class="scndbldh">085 044 1003</a>
-	<a href="tel:+31850441003" class="scndbl">+31 85 044 1003</a>
-</div>
-
-<!-- <script src="/skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js" crossorigin></script> -->
-<script src="https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin></script>
-<script>
-  var full = window.location.host
-  var parts = full.split('.')
-  var sub = parts[0]
-  if(sub === "dev") {
-    var apm_env = "development"
-  } else {
-    var apm_env = "production"
-  }
-
-  elasticApm.init({
-    serviceName: "prokoeling",
-    serverUrl: "https://rum.prokoeling.nl:8200",
-    environment: apm_env,
-    pageLoadTransactionName: apm_trx
-  })
-</script>
-
-<script>
-  if (window.location.href.indexOf("firecheckout") > -1) {
-    document.getElementById('page-footer').style.display = 'none';
-  }
+  };
 </script>
