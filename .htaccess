@@ -121,6 +121,9 @@
 
     RewriteCond %{HTTP_USER_AGENT} "=Mozilla/5.0 (compatible; Google-Apps-Script)"
     RewriteRule ^ - [F]
+    
+    RewriteCond %{HTTP_USER_AGENT} "=Mozilla/5.0 (compatible; MegaIndex.ru/2.0; +http://megaindex.com/crawler)"
+    RewriteRule ^ - [F]
 
 ############################################
 ## you can put here your magento root folder

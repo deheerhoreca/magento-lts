@@ -1,25 +1,33 @@
 <?php
 $helper = Mage::helper("eke_ogmeta");
 
-if (!$helper->isOgMetaEnabled()) {
-    return;
+if(!$helper->isOgMetaEnabled()) {
+  return;
 }
 
 $siteName = $helper->getSiteName();
 $product = Mage::registry('current_product');
 $imageFile = 'media/catalog/product' . $product->getSmallImage();
 
-// DHH CORE HACK
-
 if(strlen($product->getSmallImage()) < 1) {
   $imageFile = $helper->getOgImage();
 }
 
 $imageAttr = ["mime" => null, 0 => null, 1 => null];
-if(is_file($imageFile)) {
+if(is_file($imageFile) === true) {
   @$imageAttr = getimagesize($imageFile);
 }
 $productVideo = $product->getResource()->getAttribute('product_video')->getFrontend()->getValue($product);
+
+if($helper->isProductShortEnabled()) {
+  $productDescription = htmlentities(strip_tags($product->getShortDescription()));
+} else {
+  $productDescription = htmlentities(strip_tags($product->getDescription()));
+}
+
+if(strlen($productDescription) < 10) {
+  $productDescription = htmlentities($product->getName());
+}
 ?>
 
 <!-- OG META Product Data -->
@@ -31,11 +39,7 @@ $productVideo = $product->getResource()->getAttribute('product_video')->getFront
 <meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>" />
 <meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>" />
 <meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>" />
-<?php if ($helper->isProductShortEnabled()) { ?>
-<meta property="og:description" content="<?php echo strip_tags($product->getShortDescription()); ?>" />
-<?php } else { ?>
-<meta property="og:description" content="<?php echo strip_tags($product->getDescription()); ?>" />
-<?php } ?>
+<meta property="og:description" content="<?php echo $productDescription; ?>" />
 <?php if ($helper->getFacebookAppId()) { ?>
 <meta property="fb:app_id" content="<?php echo $helper->getFacebookAppId(); ?>"/>
 <?php } ?>

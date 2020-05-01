@@ -378,7 +378,7 @@ $dhh_debug = false;
             <p class="discount-amount">
               <span class="price-label"><?php echo round($_discount_pct, 0)."% korting"; ?>:</span>
               <span class="price" id="discount-amount-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                <?php echo $_coreHelper->formatPrice($_discount, false); ?>
+                <!--sse--><?php echo $_coreHelper->formatPrice($_discount, false); ?><!--/sse-->
               </span>
             </p>
             <?php } ?>
@@ -388,7 +388,7 @@ $dhh_debug = false;
               <p class="special-price">
                 <span class="price-excluding-tax">
                   <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                    <?php echo $_coreHelper->formatPrice($_finalPrice, false) ?>
+                  <!--sse--><?php echo $_coreHelper->formatPrice($_finalPrice, false) ?><!--/sse-->
                   </span>
                 </span>
                 <span class="price-including-tax">

@@ -6,6 +6,31 @@ $store_name = $store->getFrontendName();
 if($_product = Mage::registry('current_product')) {
   $product_image = $_product->getImageUrl();
   $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
+  
+  /* 
+  There is a bug that does this, but only on product pages:
+  HOME -> SUBCATEGORY -> CATEGORY
+  */
+  if(is_array($crumbs) && $n = sizeof($crumbs)) {
+    if($n >= 2) {
+      $keys = array_keys($crumbs);
+      
+      $deepest_subcategory_key = $keys[1];
+      $deepest_subcategory = $crumbs[$deepest_subcategory_key];
+      unset($crumbs[$deepest_subcategory_key]);
+      
+      $product_element_key = array_pop($keys);
+      $product_element = $crumbs[$product_element_key];
+      unset($crumbs[$product_element_key]);
+      
+      $crumbs[$deepest_subcategory_key] = $deepest_subcategory;
+      $crumbs[$product_element_key] = $product_element;
+    }
+  }
+  
+  if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"]) === true) {
+    unset($crumbs["product"]);
+  }
 }
 
 $currentUrl = Mage::helper('core/url')->getCurrentUrl();
@@ -24,12 +49,6 @@ if(is_array($crumbs) && sizeof($crumbs) > 0) {
     }
   }
 }
-
-/*
-echo "<pre>";
-print_r($crumbs);
-echo "</pre>";
-*/
 
 if (Mage::helper('richsnippets')->snippetsEnabled()) {
   $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
@@ -55,7 +74,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
       }
     }
     
-    if($crumbs && is_array($crumbs)) {
+    if($crumbs && is_array($crumbs) && sizeof($crumbs) > 1) {
       echo '<div class="breadcrumbs">';
         echo '<ul>';
         $n = sizeof($crumbs);
@@ -65,7 +84,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
           $title = $this->escapeHtml($_crumbInfo['title']);
           echo "<li class='{$_crumbName}'>";
           
-          if($_crumbName === "product") {
+          if($n > 2 && $_crumbName === "product") {
             continue;
           }
           
@@ -74,7 +93,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
           } else {
             echo "<strong>{$label}</strong>";
           }
-          if($_crumbName !== "product" && $i < $n-1) {
+          if($i < $n-1) {
             echo '<i class="fa fa-angle-right" aria-hidden="true" style="padding: 0 0.5em; font-size: 1.5em; line-height: 20px"></i>';
           }
           echo "</li>";

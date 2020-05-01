@@ -13,7 +13,8 @@ $catid                  = null;
 $carct                  = Mage::registry('current_category');
 $amschk                 = $this->getRequest()->getRouteName();
 $haschild               = FALSE;
-$short_name_cats        = [10, 119, 434];
+$short_name_cats        = [10, 119, 434, 174];
+$max_product_info_items = 3;
 
 $_productCollection->setFlag('require_stock_items', true);
 
@@ -31,6 +32,10 @@ if($carct && ($category === 'category')) {
     $parent_categories_ids[] = (int) $parent->getEntityId();
   }
   $parent_categories_ids[] = $catid;
+  
+  if(defined("CTDESC_H1_SENT") === true) {
+    $category_desc = str_ireplace("h1>", "h2>", $category_desc);
+  }
 
   echo "<div class='ctdesc' id='ctdesc'>";
   if(empty($category_desc) === false) {
@@ -90,7 +95,11 @@ if($carct && ($category === 'category')) {
       <?php
     }
   } else {
-    echo "<h1>".$carct->getName()."</h1>";
+    if(empty($ctdesc_h1) === true) {
+      if(defined("CTDESC_H1_SENT") === false) {
+        echo "<h1>".$carct->getName()."</h1>";
+      }
+    }
   }
   echo "</div>";
 }
@@ -164,12 +173,8 @@ if($_collectionSize > 0) {
   <div class="category-products">
     <div class="top_toolbar"><?php echo $this->getToolbarHtml() ?></div>
     <?php
-      
-    /* GRID MODE */
-
-    
     $_columnCount = 3;
-    $displaySize = 264;
+    $displaySize = 280;
     $_imgSize = 2 * $displaySize;
     
     echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
@@ -179,7 +184,12 @@ if($_collectionSize > 0) {
       $i++;
       $html = null;
       
-      $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
+      $productUrl = false;
+      // If a product is present in multiple categories, we don't want to change that in this view
+      //$productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
+      if($productUrl === false) {
+        $productUrl = $_product->getProductUrl(); //fallback
+      }
       
       // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
       $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
@@ -187,15 +197,6 @@ if($_collectionSize > 0) {
       $stock_status = $stock_message = null;
       $stock_qty    = (int) $stock->getQty();
       $in_stock     = $stock->getIsInStock();
-      
-      if(0 && $_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-        echo "{$_product->getName()}:";
-        echo "<pre>";
-        var_dump($in_stock);
-        var_dump($stock_qty);
-        var_dump($stock->getBackorders());
-        echo "</pre>";
-      }
       
       // Block also exists in catalogproductview.phtml and featured.phtml
       if($in_stock === true) {
@@ -220,7 +221,7 @@ if($_collectionSize > 0) {
       }
       
       /* Product Info */
-      $product_info = null;
+      $product_info = [];
               
       $width = $attribute_value = $_product->getBreedte();
       $height = $attribute_value = $_product->getHoogte();
@@ -239,43 +240,50 @@ if($_collectionSize > 0) {
       if($height > 10) $height = round($height);
       
       if($width > 0 && $height > 0 && $depth > 0) {
-        $product_info .= "<li class=\"angle_before\">B: {$width}cm D: {$depth}cm H: {$height}cm</li>";
+        $product_info[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
       } else {
         $attribute_value = $_product->getBreedte();
         if($attribute_value != '' && $attribute_value > 0) {
-          $product_info .=  '<li class="angle_before">'.($attribute_value/10).'cm breed</li>';
+          $product_info[] = $attribute_value/10;
         }
       }
 
-      if($catid !== 72) {
-        $attribute_value = $_product->getAttributeText('type_koeling');
-        if($attribute_value !=''){
-          $product_info .=  '<li class="angle_before">Koelmethode: '.$attribute_value.'</li>';
-        }
+      $attribute_value = $_product->getAttributeText('type_koeling');
+      if($attribute_value != ''){
+        $product_info[] = "Koelmethode: {$attribute_value}";
       }
 
       if($catid === 72) {
         $attribute_value = $_product->getInhoudAantalGn();
         if($attribute_value !='') {
-          $product_info .=  '<li class="angle_before">'.$attribute_value.' x '.$gnvalue.' GN</li>';
+          $product_info[] = "{$attribute_value} x {$gnvalue}";
         }
       }
       
       $attribute_value = $_product->getData('eenheid');
       if($attribute_value > 1) {
-        $product_info .=  "<li class='angle_before'>{$attribute_value} stuks</li>";
+        $product_info[] = "{$attribute_value} stuks";
       }
+      
       $attribute_value = $_product->getAttributeText('size');
       if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
-        $product_info .=  "<li class='angle_before'>Maat: {$attribute_value}</li>";
+        $product_info[] = "Maat: {$attribute_value}";
       }
+      
       $attribute_value = $_product->getData('materiaal');
       if(strlen($attribute_value) > 0) {
-        $product_info .=  "<li class='angle_before'>{$attribute_value}</li>";
+        $product_info[] = "{$attribute_value}";
       }
+      
       $attribute_value = $_product->getData('serie');
       if(strlen($attribute_value) > 0) {
-        $product_info .=  "<li class='angle_before'>Serie: {$attribute_value}</li>";
+        $product_info[] = "Serie: {$attribute_value}";
+      }
+      
+      $code = "uitvoering";
+      $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+      if(strlen($attribute_value) > 0) {
+        $product_info[] = "Uitvoering: {$attribute_value}";
       }
       
       $stock_class = null;
@@ -428,10 +436,11 @@ if($_collectionSize > 0) {
             width='{$displaySize}' height='{$displaySize}' />";
         ?>
         </a>
-        <div class='product-title-container'>
-          <h2 class='product-name'><a href='<?php echo $productUrl; ?>' title='{$this->stripTags($product_name)} kopen'><?php echo $product_name; ?></a></h2>
-        </div>
         <div class="product-info">
+          <div class="info">
+          <h2 class='product-name'>
+            <a href='<?php echo $productUrl; ?>' title='<?php echo $this->stripTags($product_name);?> kopen'><?php echo $product_name; ?></a>
+          </h2>
           <?php
           if($this->getChild('name.after')) {
             $_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
@@ -442,16 +451,25 @@ if($_collectionSize > 0) {
             }
           }
           ?>
-          <div class="info">
-            <?php if(isset($tagline) === true) echo "<div class='product-list-tagline'>{$tagline}</div>"; ?>
-            <ul><?php echo $product_info; ?></ul>
+          
             <?php
+            if(isset($tagline) === true) {
+              echo "<div class='product-list-tagline'>{$tagline}</div>";
+            }
             
-            /* Output */
+            if(sizeof($product_info) > 0) {
+              echo "<ul>";
+              foreach($product_info as $key => $item) {
+                if($key === $max_product_info_items) break;
+                echo "<li class='angle_before'>{$item}</li>";
+              }
+              echo "</ul>";
+            }
+            
             if(sizeof($highlights) > 0) {
               echo "<ul class='product-list-highlights'>";
-              foreach($highlights as $highlight) {
-                echo "<li>{$highlight}</li>";
+              foreach($highlights as $item) {
+                echo "<li>{$item}</li>";
               }
               echo "</ul>";
             }

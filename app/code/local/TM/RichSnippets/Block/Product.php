@@ -240,7 +240,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             'description'           => $description,
             'sku'                   => $this->getProduct()->getSku(),
             'brand'                 => $this->getProduct()->getAttributeText('manufacturer'), /* DHH CORE HACK */
-            'url'                   => $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($this->getProduct()), /* DHH CORE HACK */
+            'url'                   => $this->getProduct()->getProductUrl(), // Use canonical url here, don't fuck around with SEO
             'gtin13'                => $this->getProduct()->getResource()->getAttribute('ean')->getFrontend()->getValue($this->getProduct()),
             'offers'                => array(
                 '@type'             => 'Offer',
@@ -248,7 +248,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
                 'priceCurrency'     => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
                 'itemCondition'     => "http://schema.org/NewCondition", /* DHH CORE HACK */
                 "priceValidUntil"   => date('Y-m-d',strtotime(date("Y-m-d", mktime()) . " + 365 day")), /* DHH CORE HACK */
-                'url'               => $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($this->getProduct()), /* DHH CORE HACK */
+                'url'               => $this->getProduct()->getProductUrl(), // Use canonical url here, don't fuck around with SEO
                 "seller"            => [ /* DHH CORE HACK */
                   "@type"           => "Organization", /* DHH CORE HACK */
                   "name"            => Mage::getStoreConfig('richsnippets/organization/name'), /* DHH CORE HACK */

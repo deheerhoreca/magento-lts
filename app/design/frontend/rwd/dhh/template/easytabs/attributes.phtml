@@ -29,49 +29,50 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
             ?>
             <tr>
               <?php
-                switch($_data['code']) {
-                  case "vermogen_kw":
-                  case "vermogen":
-                    if($valuex < 5) {
-                      $valuex *= 1000;
-                      $label = str_replace("kW", "Watt", $label);
-                    } else {
-                      $valuex = number_format($valuex, 2, ",", ".");
-                    }
-                    break;
-
-                  case "gewicht_kg":
-                    if($valuex < 1) {
-                      $valuex *= 1000;
-                      $label = str_replace("Kg", "gram", $label);
-                    } else {
-                      $valuex = round($valuex);
-                    }
-                    break;
-
-                  case "inhoud_liters":
+              $postfix = null;
+              switch($_data['code']) {
+                case "vermogen_kw":
+                case "vermogen":
+                  if($valuex < 5) {
+                    $valuex *= 1000;
+                    $postfix = " Watt";
+                  } else {
                     $valuex = number_format($valuex, 2, ",", ".");
-                    break;
+                    $postfix = " kW";
+                  }
+                  break;
 
-                  case "hoogte_intern":
-                  case "breedte_intern":
-                  case "diepte_intern":
-                  case "diameter":
-                  case "breedte":
-                  case "hoogte":
-                  case "diepte":
-                  case "magnetron_output_watt":
-                  case "grill_output_watt":
-                  case "aantal_m3_uur":
-                    $valuex = number_format($valuex, 0, ",", "");
-                    break;
-                  default:
-                    $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
-                }
-                
+                case "gewicht_kg":
+                  if($valuex < 1) {
+                    $valuex *= 1000;
+                    $label = str_replace("Kg", "gram", $label);
+                  } else {
+                    $valuex = round($valuex);
+                  }
+                  break;
+
+                case "inhoud_liters":
+                  $valuex = number_format($valuex, 2, ",", ".");
+                  break;
+
+                case "hoogte_intern":
+                case "breedte_intern":
+                case "diepte_intern":
+                case "diameter":
+                case "breedte":
+                case "hoogte":
+                case "diepte":
+                case "magnetron_output_watt":
+                case "grill_output_watt":
+                case "aantal_m3_uur":
+                  $valuex = number_format($valuex, 0, ",", "");
+                  break;
+                default:
+                  $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
+              }
               ?>
               <th class="label"><?php echo $label; ?></th>
-              <td class="data"><?php echo $valuex; ?></td>
+              <td class="data"><?php echo $valuex.$postfix; ?></td>
             </tr>
           <?php } ?>
         </tbody>

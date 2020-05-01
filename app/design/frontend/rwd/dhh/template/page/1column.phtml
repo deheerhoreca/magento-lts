@@ -2,12 +2,10 @@
 
 require_once __DIR__."/dhhfpc_conf.php";
 
-$formKeyPlaceholder = '<!-- fpc form_key_placeholder -->';
-
-// Outqualification
 $write_cache = true;
 $read_cache = true;
 
+// Outqualification
 $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
 if($totalItemsInCart > 0) {
   $write_cache = false;
@@ -41,22 +39,22 @@ if($read_cache === true || $write_cache === true) {
   $_cacheKey = 'QUICKNDIRTYFPC' . md5($cache_key_input);
 }
 
-if(headers_sent() === FALSE) {
-  $r = "-r";
-  $w = "-w";
-  if($write_cache === true) $w = "+w";
-  if($read_cache === true) $r = "+r";
-  header("qnd-fpc-settings: {$r} {$w}");
-}
-
 $_html = null;
 
 if($read_cache === true) {
   // Check if there is a cached version:
   $_html = Mage::app()->getCache()->load($_cacheKey);
 
-  // Handle form_key (CSRF protection)
   if($_html) {
+    
+    // Do not cache 404 content
+    if(strstr($_html, $error404tag) !== false) {
+      $_html = null;
+      $read_cache = false;
+      $write_cache = false;
+    }
+    
+    // Handle form_key (CSRF protection)
     $formKey = Mage::getSingleton('core/session')->getFormKey();
     if($formKey) {
       $_html = str_replace($formKeyPlaceholder, $formKey, $_html);
@@ -64,8 +62,16 @@ if($read_cache === true) {
   }
 }
 
-if(strlen($_html) > 0) {
-  if(headers_sent() === FALSE) {
+if(headers_sent() === false) {
+  $r = "-r";
+  $w = "-w";
+  if($write_cache === true) $w = "+w";
+  if($read_cache === true) $r = "+r";
+  header("qnd-fpc-settings: {$r} {$w}");
+}
+
+if(empty($_html) === false) {
+  if(headers_sent() === false) {
     $bytes = strlen($_html);
     header("retrieved-quickndirtyfpc: {$_cacheKey}, {$bytes} bytes");
   }
@@ -89,7 +95,7 @@ if(strlen($_html) > 0) {
 
     Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"]);
 
-    if(headers_sent() === FALSE) {
+    if(headers_sent() === false) {
       $bytes = strlen($_html_normalized);
       header("saved-quickndirtyfpc: {$_cacheKey}, {$bytes} bytes");
     }

@@ -6,6 +6,9 @@ if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
   define("DHH_FPC_ENABLED", true);
 }
 
+$formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
+$error404tag        = "<!--FPC404TAG-->";
+
 /*
 - 1column.phtml:
   - https://www.prokoeling.nl/koelkasten/alle-koelkasten/display-koelkasten/display-koelkast-zwart-wit-met-slot-klapdeuren-800ltr-exquisit.html

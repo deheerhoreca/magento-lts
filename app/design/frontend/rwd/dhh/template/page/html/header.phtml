@@ -3,10 +3,14 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 //echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
+
+if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+  $account_url = $this->helper('customer')->getAccountUrl();
+} else {
+  $account_url = Mage::getUrl('customer/account/login');
+}
 ?>
 <header id="header" class="page-header header grid-inside">
-
-  <!-- Logo, Search, Top Right Link -->
   <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
       <a class="logo" href="<?php echo $this->getUrl('') ?>">
@@ -17,17 +21,10 @@
           <?php echo $this->getChildHtml('topSearch') ?>
         </div>
         <div class="account-cart-wrapper" style="position: relative;text-align: right;">
-<!--
-          <a class="sprite-with-caption kservice" href="/klantenservice" title="Klantenservice">
-            <i class="fa fa-info-circle fa-2x fa-fw"></i>
-            <div class="sprite-with-caption__caption ">Service</div>
-          </a>
--->
-
           <div class="top-link skip-account" style="width: 177px;background-color: #f1faff;"> 
             <span class="strong clzpnmincon">
               <a href="tel:+31850441003" title="Bel ons"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel ons: 085-0441003</a><br>
-              <a href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel mij terug</a>
+              <a rel="nofollow" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel mij terug</a>
             </span>
           </div>
 
@@ -48,7 +45,7 @@
             </div>
           </a>
 
-          <a href="<?php echo $this->helper('customer')->getAccountUrl(); ?>" data-target-element="#header-account" class="skip-link skip-account" title="Account">
+          <a href="<?php echo $account_url; ?>" data-target-element="#header-account" class="skip-link skip-account" title="Account">
             <i class="fa fa-user-circle fa-2x fa-fw"></i>
             <div class="sprite-with-caption__caption ">Account</div>
           </a>

@@ -88,8 +88,50 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
 
         return $this->_cacheKeyInfo;
     }
+    
+    /* DHH CORE HACK */
+    
+    //https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
+    
+    protected function _toHtml() {
 
+      $cat_id = "";
 
+      if (Mage::registry('current_product')) {
+        $product_id = Mage::registry('current_product')->getId();
+        $obj = Mage::getModel('catalog/product');
+        $_product = $obj->load($product_id); // Enter your Product Id in $product_id
+
+        if ($product_id) {
+           $categoryIds = $_product->getCategoryIds();
+           $cat_id = $categoryIds[0];
+        }
+
+        $category = Mage::getModel('catalog/category')->load($cat_id);
+        $cat_name = $category->getName();
+        $cat_url =  $this->getBaseUrl().$category->getUrlPath();
+      }
+
+      if (is_array($this->_crumbs)) {
+        reset($this->_crumbs);
+        $this->_crumbs[key($this->_crumbs)]['first'] = true;
+        end($this->_crumbs);
+        $this->_crumbs[key($this->_crumbs)]['last'] = true;
+      }
+
+      if($cat_id) {
+        $this->_crumbs['category'.$cat_id] = array('label'=>$cat_name, 'title'=>'', 'link'=>$cat_url,'first'=>'','last'=>'','readonly'=>'');
+        ksort($this->_crumbs);
+        $home = $this->_crumbs['home'];
+        unset($this->_crumbs['home']);
+        array_unshift($this->_crumbs,$home);
+      }
+
+      $this->assign('crumbs', $this->_crumbs);
+      return parent::_toHtml();
+      }
+
+    /*
     protected function _toHtml()
     {
         if (is_array($this->_crumbs)) {
@@ -101,4 +143,6 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         $this->assign('crumbs', $this->_crumbs);
         return parent::_toHtml();
     }
+    */
+    /* END DHH CORE HACK */
 }

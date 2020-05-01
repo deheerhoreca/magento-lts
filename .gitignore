@@ -51,7 +51,7 @@
 
 # DHH
 
-/sitemap_watdachtjezelf.xml
+/sitemap_*.xml
 
 /downloader/.cache/
 /downloader/cache.cfg

@@ -4,12 +4,9 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
 <div class="footer-wrapper grid-inside" id="footer-wrapper">
   <div class="footermidwrap">
     <div class="footer grid">
-      <div class="row footer__links-row">
-        <?php
-          echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml();
-          echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_right')->toHtml();
-        ?>
-      </div>
+      <?php
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml();
+      ?>
     </div>
   </div>
   <div class="footer grid">
@@ -24,19 +21,6 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
   </div>
 </div>
 
-<style>
-.alertbar {
-  width: 100%;
-  z-index: 9999;
-  background: rgba(0,0,0,0.7);
-  color: #fff;
-  padding: .5em;
-  text-align: center;
-  font-weight: 600;
-  position: fixed;
-  top: 0;
-}
-</style>
 <div id="coronabar" class="alertbar active" style="display: none;">
   We blijven gewoon open tijdens de corona crisis. Wel kunnen er als gevolg van de corona crisis vertragingen in leveringen optreden door extra veiligheidsmaatregelen die onze partners in de logistieke keten moeten treffen. We hopen op uw begrip.
 </div>

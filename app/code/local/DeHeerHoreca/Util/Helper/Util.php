@@ -1,7 +1,42 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
+use Michelf\Markdown;
+
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
 {
+  
+  /*
+   * getFullProductUrl() runs into issues when the url including
+   * category and excluding category are different in core_url_rewrite.
+   * This function attempts to get the URL fast and easy from core_url_rewrite.
+   * It should be fallbacked with $product->getProductUrl()
+   */
+  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product) {
+    $resource = Mage::getSingleton('core/resource');
+    $readConnection = $resource->getConnection('core_read');
+    $tableName = $resource->getTableName('core_url_rewrite');
+    $product_id = (int) $product->getId();
+    $query = "SELECT * FROM `{$tableName}` WHERE product_id = '{$product_id}' AND category_id IS NOT NULL";
+    $results = $readConnection->fetchAll($query);
+    
+    if(empty($results[0]["request_path"]) === false) {
+      return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).$results[0]["request_path"];
+    }
+    
+    return false;
+  }
+  
+  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product) {
+    $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product);
+    if($url === false) {
+      $url = $product->getProductUrl(); //fallback
+    }
+    
+    return $url;
+  }
+  
   public function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
 
     // Force display deepest child category as request path.
@@ -119,4 +154,29 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     return $manufacturers;
   }
+  
+  public function sanitizeForFilename($string) {
+    // Remove anything which isn't a word, whitespace, number
+    // or any of the following caracters -_~,;[]().
+    // If you don't need to handle multi-byte characters
+    // you can use preg_replace rather than mb_ereg_replace
+    // Thanks @Łukasz Rysiak!
+    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $string);
+    // Remove any runs of periods (thanks falstro!)
+    $output = mb_ereg_replace("([\.]{2,})", '', $string);
+    return strtolower($output);
+  }
+
+  public function markdownToHtmlSafe($string) {
+    if(strstr($string, "<!--markdown-->") !== false) {
+      $string = trim(str_replace("<!--markdown-->", null, $string));
+      return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
+    }
+    return $string;
+  }
+
+  public function markdownToHtml($string) {
+    return Markdown::defaultTransform($string);
+  }
+
 }

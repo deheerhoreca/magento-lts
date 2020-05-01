@@ -127,7 +127,7 @@ $productBlock = $this->getLayout()->createBlock('catalog/product_price');
     $html = null;
     
     $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
-    $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
+    $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
     
     // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
     $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);

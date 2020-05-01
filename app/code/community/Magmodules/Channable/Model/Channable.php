@@ -391,7 +391,7 @@ class Magmodules_Channable_Model_Channable extends Magmodules_Channable_Model_Co
 
                 // DHH CORE HACK
                 // Add the proper product URL
-                $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($product);
+                $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
                 $productRow = array_merge($productRow, ["friendly_url" => $path]);
                 // DHH CORE HACK
 

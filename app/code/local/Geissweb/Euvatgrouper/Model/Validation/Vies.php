@@ -21,7 +21,9 @@
 
 class Geissweb_Euvatgrouper_Model_Validation_Vies extends Geissweb_Euvatgrouper_Model_Validation_Abstract
 {
-    var $service_url = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+    // DHH COR EHACK - to be fixed next release of this module - https://www.geissweb.de/blog/vies-wsdl-to-https/
+    //var $service_url = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+    var $service_url = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
     var $vies_params = array();
 
     /**

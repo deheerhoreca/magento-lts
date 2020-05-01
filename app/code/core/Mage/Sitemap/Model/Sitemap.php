@@ -190,7 +190,10 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
           /* DHH CORE HACK */
 
           $product = Mage::getModel('catalog/product')->load($item->getId());
-          $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($product);
+          $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product);
+          if($path === false) {
+            $path = $product->getProductUrl(); //fallback
+          }
           if(strstr($path, "index.php/")) {
             $path = substr($path, strpos($path, "index.php/") + 10);
           }

@@ -72,10 +72,14 @@ class Mage_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_Abstrac
             }
             if ($this->helper('catalog/product')->canUseCanonicalTag()) {
                 /* DHH CORE HACK */
-                $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($product);
-                $headBlock->addLinkRel('canonical', $path);
-                //$params = array('_ignore_category' => true);
-                //$headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
+                //$path = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
+                //$headBlock->addLinkRel('canonical', $path);
+                //$params = [];
+                $params = array('_ignore_category' => true);
+                // Our on function does not seem to be needed
+                // Thinking is: For SEO, we should not mess around and create multiple canonical URLs
+                // from multiple categories to the same product (if a product is listed multiple times)
+                $headBlock->addLinkRel('canonical', $product->getUrlModel()->getUrl($product, $params));
                 /* DHH CORE HACK */
             }
         }

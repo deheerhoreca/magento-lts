@@ -131,3 +131,4 @@ Disallow: /*?laden=*
 Disallow: /*?schuifdeur=*
 Disallow: /*?type_deur=*
 Disallow: /cdn-cgi/*
+Disallow: /no-route

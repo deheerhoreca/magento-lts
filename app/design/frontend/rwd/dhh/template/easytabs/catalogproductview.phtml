@@ -24,15 +24,20 @@ $htbrand = $brand = null;
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 $brand_name = $_product->getAttributeText('manufacturer');
-$brand_logo = "/media/wysiwyg/brands/prokoeling.png";
-$brand_link = "/".strtolower($brand_name);
+$brand_logo = null;
+$brand_link = "/".strtolower($brand_name).".html";
+$brand_link = str_replace([" ", "-"], Mage::getStoreConfig('amshopby/seo/special_char'), $brand_link);
+$brand_link = iconv('UTF-8', 'ASCII//TRANSLIT', $brand_link);
 
 //$brand_name = "combisteel";
 
 if(empty($brand_name) === FALSE) {
   $brand = sanitizeForFilename($brand_name);
   $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
-  $brand_logo = "/media/wysiwyg/brands/{$brand}.png";
+  $brand_logo_file = "media/wysiwyg/brands/{$brand}.png";
+  if(is_file($brand_logo_file)) {
+    $brand_logo = "/".$brand_logo_file;
+  }
 }
 
 /* Get a list of Category IDs */
@@ -160,16 +165,6 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $shoutout = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
             $energy_rating = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
 
-            /* Automatic Labels */
-            if(empty($shoutout) === TRUE && empty($energy_rating) === FALSE) {
-              switch ($energy_rating) {
-                case 'A++++':
-                case 'A+++':
-                case 'A++':
-                case 'A+':
-                  $shoutout = $energy_rating;
-              }
-            }
             if(strlen($shoutout) > 1) {
               echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
             }
@@ -400,18 +395,15 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           }
 
           if($i < $max_highlighted_attributes) {
-            $attribute_name = "aansluitspanning";
-            $image = "{$skn}frontend/rwd/dhh/images/volt.svg";
-            $title = "Voltage";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE) {
-              if(strstr(strtolower($text), "V") === FALSE) {
-                $text = "{$text} V";
-              }
+            $code   = "voltage";
+            $image  = "{$skn}frontend/rwd/dhh/images/volt.svg";
+            $title  = "Voltage";
+            $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+            if(empty($text) === false) {
               $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
+                "image"   => $image,
+                "title"   => $title,
+                "text"    => $text,
               ];
               $i++;
             }
@@ -823,15 +815,17 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
         <?php
 
         /* Description Block */
-
-        $str = $this->getChildHtml('description');
+        //$str = $this->getChildHtml('description');
+        $str = $this->getProduct()->getDescription();
+        $str = Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($str);
+        
         if(strtolower($nofrost_method) === 'Automatisch') {
           $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_ontdooisysteem_automatisch')->toHtml().'</div>';
         }
-
-        $attributeaansluitspanning = $_product->getResource()->getAttribute('aansluitspanning');
-        $attribute_valueaansluitspanning = $attributeaansluitspanning->getFrontend()->getValue($_product);
-        if($attribute_valueaansluitspanning === "400") {
+  
+        $code = "voltage";
+        $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+        if($attribute === "400") {
           $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
         }
 
@@ -847,11 +841,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
           <div class="probottomdv" id="product-page-description">
             <a class="anchor" name="a_description"></a>
-            <div class="content">
-              <div class="description-page">
-                  <?php echo $str; ?>
-              </div>
-            </div>
+            <?php echo $str; ?>
           </div>
           <?php
         }
@@ -859,7 +849,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       </div>
     </div>
     </form>
-    <script type="text/javascript">
+    <script type="application/javascript">
     //<![CDATA[
         var productAddToCartForm = new VarienForm('product_addtocart_form');
         productAddToCartForm.submit = function(button, url) {
@@ -926,7 +916,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
   <?php
 
   /* Product Video */
-  if(empty($pvideo) === FALSE) {
+  if(empty($pvideo) === false) {
     ?>
       <div class="probottomdv" id="product-video">
         <a class="anchor" name="a_video"></a>
@@ -1035,7 +1025,11 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       <div class="brand std justify"><?php echo $htbrand; ?></div>
     <?php
     }
-    echo "<div class='center'><img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' onerror=\"if (this.src != '/media/wysiwyg/brands/prokoeling.png') this.src = '/media/wysiwyg/brands/prokoeling.png';\" /></div>";
+    if(empty($brand_logo) === false) {
+      echo "<div class='center'>";
+      echo "<a title='{$brand_name}' href='{$brand_link}'>";
+      echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
+    }
     ?>
   </div>
 </div>
