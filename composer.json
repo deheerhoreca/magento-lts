@@ -3,11 +3,5 @@
         "n98/magerun": "^1.103",
         "cebe/markdown": "~1.2.0",
         "michelf/php-markdown": "^1.9"
-    },
-    "repositories": {
-        "geissweb": {
-            "type": "composer",
-            "url": "https://packages.geissweb.de"
-        }
     }
 }
