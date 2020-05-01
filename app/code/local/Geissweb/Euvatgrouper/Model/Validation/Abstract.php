@@ -81,7 +81,7 @@ class Geissweb_Euvatgrouper_Model_Validation_Abstract extends Varien_Object
 	public function isSyntaxValid($vatNumber, $countryCode)
 	{
 		// Thanks to Baldwin bvba (Pieter Hoste)
-		// based on http://ec.europa.eu/taxation_customs/vies/faq.html#item_11
+		// based on https://ec.europa.eu/taxation_customs/vies/faq.html#item_11
 		$regex = '';
 		switch ($countryCode)
 		{

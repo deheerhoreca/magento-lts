@@ -272,6 +272,14 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_order_group', $this->_store->getId());
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isModifyGroupOnError()
+	{
+		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_error', $this->_store->getId());
+	}
+
     /**
      * @return bool
      */

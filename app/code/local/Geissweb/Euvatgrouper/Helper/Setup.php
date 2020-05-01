@@ -67,7 +67,7 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
 
     /**
      * Gets the standard VAT rates for all EU countires
-     * Source: http://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
+     * Source: https://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
      * @return array
      */
     public function getStandardRates()

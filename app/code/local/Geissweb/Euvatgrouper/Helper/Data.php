@@ -22,6 +22,16 @@
 class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abstract
 {
 	/**
+	 * @param $taxClassId
+	 *
+	 * @return mixed
+	 */
+	public function getClassName($taxClassId)
+	{
+		return Mage::getModel('tax/class')->load($taxClassId)->getClassName();
+	}
+
+	/**
 	 * @param null $lastVatRequestDate
 	 *
 	 * @return bool

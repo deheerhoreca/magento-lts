@@ -235,7 +235,11 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 				   && $customer->getDefaultBillingAddress()->getEntityId() == $address->getEntityId()
 				) {
 					$newGroupId = Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount($address->toArray(), $address->getCountry());
-					if($newGroupId != $customer->getGroupId() && !in_array($customer->getGroupId(), Mage::helper('euvatgrouper')->getExcludedGroups()) && $customer->getDisableAutoGroupChange()==0) {
+					if(is_int($newGroupId)
+					   && $newGroupId != $customer->getGroupId()
+					   && !in_array($customer->getGroupId(), Mage::helper('euvatgrouper')->getExcludedGroups())
+					   && $customer->getDisableAutoGroupChange()==0
+					) {
 						if($this->_debug) Mage::log("customerAddressSaveBefore: Group change needed!", null, 'euvatenhanced.log');
 						try {
 							Mage::register('euvat_group_assignment_group', $newGroupId);
@@ -336,26 +340,27 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 
 	/**
 	 * Set active validation data to customers quote
-	 * @param $address
+	 *
+	 * @param $validationResult
 	 * @param $addressType
 	 */
-	private function _setVatSessionData($address, $addressType)
+	private function _setVatSessionData($validationResult, $addressType)
 	{
 		if(Mage::helper('euvatgrouper')->isModuleActive())
 		{
-			if($this->_debug) Mage::log("Function RUNNING: _setVatSessionData($addressType) -- Address is instanceof ".get_class($address)." | vat_is_valid:".$address->getVatIsValid(), null, 'euvatenhanced.log');
-			if(is_object($address))
+			if($this->_debug) Mage::log("Function RUNNING: _setVatSessionData($addressType) -- Address is instanceof ".get_class($validationResult) . " | vat_is_valid:" . $validationResult->getVatIsValid(), null, 'euvatenhanced.log');
+			if(is_object($validationResult))
 			{
 				try {
 					$vatDataUpdate = array(
-						'vat_id' 				=> Mage::helper('euvatgrouper')->cleanCustomerVatId($address->getVatId()),
-						'vat_is_valid' 			=> (bool)$address->getVatIsValid(),
-						'vat_request_success'	=> (bool)$address->getVatRequestSuccess(),
-						'vat_trader_name'		=> $address->getVatTraderName(),
-						'vat_trader_address'	=> $address->getVatTraderAddress(),
-						'vat_trader_company_type'=> $address->getVatTraderCompanyType(),
-						'vat_request_id'		=> $address->getVatRequestId(),
-						'vat_request_date'		=> $address->getVatRequestDate(),
+						'vat_id'                  => Mage::helper('euvatgrouper')->cleanCustomerVatId($validationResult->getVatId()),
+						'vat_is_valid'            => (bool)$validationResult->getVatIsValid(),
+						'vat_request_success'     => (bool)$validationResult->getVatRequestSuccess(),
+						'vat_trader_name'         => $validationResult->getVatTraderName(),
+						'vat_trader_address'      => $validationResult->getVatTraderAddress(),
+						'vat_trader_company_type' => $validationResult->getVatTraderCompanyType(),
+						'vat_request_id'          => $validationResult->getVatRequestId(),
+						'vat_request_date'        => $validationResult->getVatRequestDate(),
 					);
 					if($this->_debug) Mage::log("data is ".var_export($vatDataUpdate,true), null, 'euvatenhanced.log');
 
@@ -592,7 +597,6 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 						&& ($basedOnAddress->getVatIsValid() == true)
 						&& ($basedOnCc != '' && $shopCc != $basedOnCc)
 						&& $dataHelper->isEuCountry($basedOnCc)
-						&& !$dataHelper->isThresholdCountry($basedOnCc)
 					) {
 						if(!$preCheck) { //Customer has valid VAT-ID and is not domestic
 							$request->setCustomerClassId($taxExemptClassId);
@@ -605,10 +609,10 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     //Customer has valid VAT-ID and is domestic
 					} elseif( $basedOnAddress->getVatId() != ''
 						&& ($basedOnAddress->getVatIsValid() == true)
-						&& (($basedOnCc != '' && $shopCc == $basedOnCc) || $dataHelper->isThresholdCountry($basedOnCc))
+						&& (($basedOnCc != '' && $shopCc == $basedOnCc))
 					) {
-						$request->setCustomerClassId($taxIncludingClassIdBusiness);
 						if($this->_debug) Mage::log("Same $vatBasedOn and shop country - $vatBasedOn country: $basedOnCc - vatIsValid: ".$basedOnAddress->getVatIsValid()." ClassID: $taxIncludingClassId", null, 'euvatenhanced.log');
+                        $request->setCustomerClassId($taxIncludingClassIdBusiness);
 
 						//But exception for MOSS, ToDo: Validate correct taxation
 						if($dataHelper->getUseMossBasedOnVatNumber()
@@ -637,10 +641,12 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         $request->setCustomerClassId($taxExemptClassId);
                     }
 
-				} elseif ($request->getCountryId() == $shopCc
-				         && $dataHelper->isCbtEnabled()
-				         && $dataHelper->getDisableCbtForEuBusiness()
-				         && $dataHelper->isThresholdCountry($basedOnCc)
+				}
+
+				if ($request->getCountryId() == $shopCc
+                     && $dataHelper->isCbtEnabled()
+                     && $dataHelper->getDisableCbtForEuBusiness()
+                     && $dataHelper->isThresholdCountry($basedOnCc)
 				) {
 					if($this->_debug) Mage::log("CBT enabled and threshold country.", null, 'euvatenhanced.log');
 					$request->setCountryId($basedOnCc);
@@ -659,8 +665,12 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 				Mage::logException($e);
 			}
 
-			if($this->_debug) Mage::log("EVENT END: taxRateDataFetch", null, 'euvatenhanced.log');
-			if($this->_debug) Mage::log("Request after: ".get_class($request)."::".var_export($request->debug(),true), null, 'euvatenhanced.log');
+			if($this->_debug) {
+				Mage::log("Request after: ".get_class($request)."::".var_export($request->debug(),true), null, 'euvatenhanced.log');
+				Mage::log("Customer tax class: ".$dataHelper->getClassName($request->getCustomerClassId()), null, 'euvatenhanced.log');
+				Mage::log("Product tax class: ".$dataHelper->getClassName($request->getProductClassId()), null, 'euvatenhanced.log');
+				Mage::log("EVENT END: taxRateDataFetch", null, 'euvatenhanced.log');
+			}
 
 		}
 

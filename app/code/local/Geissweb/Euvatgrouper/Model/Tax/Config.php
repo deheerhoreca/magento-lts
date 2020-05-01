@@ -71,11 +71,11 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 
 			if(isset($billingCountryId) && !Mage::helper('euvatgrouper')->isEuCountry($billingCountryId) )
 			{
-				if($this->_debug) Mage::log('crossBorderTradeEnabledAdmin exception: NON-EU', null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log('crossBorderTradeEnabled exception: NON-EU', null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForOutOfEurope())
 					return false;
 			} elseif(isset($billingCountryId) && $basedOnAddress && $basedOnAddress->getVatIsValid() ) {
-				if($this->_debug) Mage::log('crossBorderTradeEnabledAdmin exception: valid VAT Number', null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log('crossBorderTradeEnabled exception: valid VAT Number', null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForEuBusiness())
 					return false;
 			}

@@ -113,12 +113,6 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
         if(is_array($vatdata) && isset($vatdata['country_id']))
         {
             $customerCc = $vatdata['country_id'];
-            /*
-            if(isset($vatdata['vat_id'])
-                && $vatdata['vat_id'] != ''
-                && $this->getVatIdCc($vatdata['vat_id']) != $customerCc)
-                $customerCc = $this->getVatIdCc($vatdata['vat_id']);
-            */
             if($this->_debug) Mage::log("[EUVAT] Getting customer group for VAT country: $customerCc VatdataCC[".$vatdata['country_id']."] (ShopCC: $shopCc)", null, 'euvatenhanced.log');
 
         } else {
@@ -152,11 +146,19 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 
             } elseif($vatdata['vat_is_valid'] == false && $vatdata['vat_request_success'] == true ) {
                 if( $this->_debug ) Mage::log("[EUVAT] InValid VAT Number -> GRP[" . $this->getInvalidGroupId() . "]", null, 'euvatenhanced.log');
-                return (int)$this->getInvalidGroupId();
+                if(!$this->isModifyGroupOnError()) {
+	                return (int)$this->getInvalidGroupId();
+                } else {
+                	return false;
+                }
 
             } elseif($vatdata['vat_request_success'] == false) {
                 if($this->_debug) Mage::log("[EUVAT] Error during VAT Number validation -> GRP[" . $this->getErrorGroupId() . "]", null, 'euvatenhanced.log');
-                return (int)$this->getErrorGroupId();
+				if(!$this->isModifyGroupOnError()) {
+					return (int)$this->getErrorGroupId();
+				} else {
+					return false;
+				}
 
 			} else {
 				if (!$this->isEuCountry($customerCc)) {
@@ -182,13 +184,14 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 
 	}
 
-
 	/**
 	 * Try to return the best fitting customer group for the order
 	 * based of supplied data
 	 *
 	 * @param $basedOnAddress
+	 *
 	 * @return mixed
+	 * @throws Mage_Core_Model_Store_Exception
 	 */
 	public function getCustomerGroupForOrder($basedOnAddress)
 	{
@@ -241,11 +244,19 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
                 && $basedOnAddress->getVatRequestSuccess() == true )
             {
                 if( $this->_debug ) Mage::log("[EUVAT] InValid VAT Number -> GRP[" . $this->getInvalidGroupId() . "]", null, 'euvatenhanced.log');
-                return (int)$this->getInvalidGroupId();
+	            if(!$this->isModifyGroupOnError()) {
+		            return (int)$this->getInvalidGroupId();
+	            } else {
+	            	return false;
+	            }
 
             } elseif($basedOnAddress->getVatId() != '' && $basedOnAddress->getVatRequestSuccess() == false) {
                 if( $this->_debug ) Mage::log("[EUVAT] Error during VAT Number validation -> GRP[" . $this->getErrorGroupId() . "]", null, 'euvatenhanced.log');
-                return (int)$this->getErrorGroupId();
+				if(!$this->isModifyGroupOnError()) {
+					return (int)$this->getErrorGroupId();
+				} else {
+					return false;
+				}
 
 			} else {
 				if (!$this->isEuCountry($customerCc)) {

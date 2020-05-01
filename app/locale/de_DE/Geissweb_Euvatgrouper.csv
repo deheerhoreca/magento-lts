@@ -197,3 +197,6 @@
 "Ask customer before setting address country","Kunden müssen Änderung des Adresslandes bestätigen"
 "If the country prefix of the VAT number is different from the country of the customer address, set the country accordingly.","Wenn sich das Länderpräfix der USt.-ID und das Adressland (Magento-Adresse) unterscheiden, setze das Adressland gleich dem Länderpräfix."
 "A confirmation question will appear, if the country should be changed.","Kunden um Bestätigung für obige Funktion bitten. (Kunde muss Ja/Nein wählen)."
+
+"Do not change the customer and order group on errors","Kundengruppe im Fehlerfall nicht überschreiben"
+"If enabled, the customer group for invalid VAT numbers and for errors during the validation will not be set.","Wenn aktiviert, wird die Kundengruppe im Falle einer ungültigen USt.-ID oder wenn die Prüfungsabfrage fehlgeschlagen ist, nicht überschrieben."

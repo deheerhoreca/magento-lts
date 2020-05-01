@@ -161,7 +161,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Calculation extends Mage_Tax_Model_Calcula
 					return $request;
 				}
 
-				if($debug) Mage::log("basedOn address: ".var_export($address->debug(),true), null, 'euvatenhanced.log');
+				//if($debug) Mage::log("basedOn address: ".var_export($address->debug(),true), null, 'euvatenhanced.log');
 
 				if(!is_null($address->getCountryId())) {
 					$basedOnCc = $address->getCountryId();
@@ -173,7 +173,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Calculation extends Mage_Tax_Model_Calcula
 					}
 				}
 				$customerVatIdCc = (!is_null($address->getVatId())) ? strtoupper(substr($address->getVatId(), 0, 2)) : $basedOnCc;
-				if($debug) Mage::log('taxCalc basedOnCC is: '.$basedOnCc." | customerVatIdCc is: ".$customerVatIdCc, null, 'euvatenhanced.log');
+				if($debug) Mage::log("taxCalc basedOnCC is: $basedOnCc | shopCc is: $shopCc | customerVatIdCc is: $customerVatIdCc", null, 'euvatenhanced.log');
 
 				// Dirty fix for Greece country prefix
 				if( $customerVatIdCc == "EL" ) $customerVatIdCc = "GR";
@@ -218,12 +218,20 @@ class Geissweb_Euvatgrouper_Model_Tax_Calculation extends Mage_Tax_Model_Calcula
 						}
 
 						//Customer has valid VAT-ID and is domestic
-					} elseif( $address->getVatId() != ''
+					} elseif($address->getVatId() != ''
 					          && ($address->getVatIsValid() == true)
-					          && ($basedOnCc != '' && $shopCc == $basedOnCc) )
-					{
+					          && ($basedOnCc != '' && $shopCc == $basedOnCc)
+                    ){
 						$request->setCustomerClassId($taxIncludingClassIdBusiness);
 						if($debug) Mage::log("Same $basedOn and shop country - $basedOn country: $basedOnCc - vatIsValid: ".$address->getVatIsValid()." ClassID: $taxIncludingClassId", null, 'euvatenhanced.log');
+
+                        //But exception for MOSS, ToDo: Validate correct taxation
+                        if($dataHelper->getUseMossBasedOnVatNumber()
+                           && $request->getProductClassId() == $dataHelper->getMossProductsClassId()
+                        ) {
+                            $request->setCustomerClassId($taxExemptClassId);
+                            if($debug) Mage::log("MOSS exception allows domestic billing address", null, 'euvatenhanced.log');
+                        }
 
 						//Customer from outside EU
 					} elseif ($basedOnCc != '' && !$dataHelper->isEuCountry($basedOnCc)) {

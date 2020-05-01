@@ -115,10 +115,9 @@ class Geissweb_Euvatgrouper_Model_Feed extends Mage_AdminNotification_Model_Feed
     public function getExtraParams()
     {
 		$params = "?magev=".base64_encode(Mage::getVersion());
+        $params .= "&srv=".base64_encode($_SERVER['SERVER_NAME']);
 		$params .= "&modv=".base64_encode(Mage::getConfig()->getNode('modules/Geissweb_Euvatgrouper')->version);
 		$params .= "&lic=".base64_encode(Mage::getStoreConfig('euvatgrouper/extension_info/license_key', Mage::app()->getStore()->getId()));
-		$params .= "&srv=".base64_encode($_SERVER['SERVER_NAME']);
-		$params .= "&docroot=".base64_encode($_SERVER['DOCUMENT_ROOT']);
 		return $params;
     }
 
