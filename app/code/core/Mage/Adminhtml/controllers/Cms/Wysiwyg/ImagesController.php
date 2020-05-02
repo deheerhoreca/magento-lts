@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -219,9 +219,11 @@ class Mage_Adminhtml_Cms_Wysiwyg_ImagesController extends Mage_Adminhtml_Control
      */
     protected function _saveSessionCurrentPath()
     {
-        $this->getStorage()
-            ->getSession()
-            ->setCurrentPath(Mage::helper('cms/wysiwyg_images')->getCurrentPath());
+        if ($this->getRequest()->isPost()) {
+            $this->getStorage()
+                ->getSession()
+                ->setCurrentPath(Mage::helper('cms/wysiwyg_images')->getCurrentPath());
+        }
         return $this;
     }
 

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Page
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,9 +67,38 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
     {
         $this->_prepareArray($crumbInfo, array('label', 'title', 'link', 'first', 'last', 'readonly'));
         if ((!isset($this->_crumbs[$crumbName])) || (!$this->_crumbs[$crumbName]['readonly'])) {
-           $this->_crumbs[$crumbName] = $crumbInfo;
+            if ($after && isset($this->_crumbs[$after])) {
+                $offset = array_search($after, array_keys($this->_crumbs)) + 1;
+                $this->_crumbs = array_slice($this->_crumbs, 0, $offset, true) + array($crumbName => $crumbInfo) + array_slice($this->_crumbs, $offset, null, true);
+            } else {
+                $this->_crumbs[$crumbName] = $crumbInfo;
+            }
         }
         return $this;
+    }
+
+    public function addCrumbBefore($crumbName, $crumbInfo, $before = false)
+    {
+        if ($before && isset($this->_crumbs[$before])) {
+            $keys = array_keys($this->_crumbs);
+            $offset = array_search($before, $keys);
+            # add before first
+            if (!$offset) {
+                $this->_prepareArray($crumbInfo, array('label', 'title', 'link', 'first', 'last', 'readonly'));
+                $this->_crumbs = array($crumbName => $crumbInfo) + $this->_crumbs;
+            } else {
+                $this->addCrumb($crumbName, $crumbInfo, $keys[$offset-1]);
+            }
+        } else {
+            $this->addCrumb($crumbName, $crumbInfo);
+        }
+    }
+
+    public function removeCrumb($crumbName)
+    {
+        if (isset($this->_crumbs[$crumbName])) {
+            unset($this->_crumbs[$crumbName]);
+        }
     }
 
     /**
@@ -88,37 +117,32 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
 
         return $this->_cacheKeyInfo;
     }
-    
+
+
     /* DHH CORE HACK */
     
     //https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
     
     protected function _toHtml() {
-
       $cat_id = "";
-
       if (Mage::registry('current_product')) {
         $product_id = Mage::registry('current_product')->getId();
         $obj = Mage::getModel('catalog/product');
         $_product = $obj->load($product_id); // Enter your Product Id in $product_id
-
         if ($product_id) {
            $categoryIds = $_product->getCategoryIds();
            $cat_id = $categoryIds[0];
         }
-
         $category = Mage::getModel('catalog/category')->load($cat_id);
         $cat_name = $category->getName();
         $cat_url =  $this->getBaseUrl().$category->getUrlPath();
       }
-
       if (is_array($this->_crumbs)) {
         reset($this->_crumbs);
         $this->_crumbs[key($this->_crumbs)]['first'] = true;
         end($this->_crumbs);
         $this->_crumbs[key($this->_crumbs)]['last'] = true;
       }
-
       if($cat_id) {
         $this->_crumbs['category'.$cat_id] = array('label'=>$cat_name, 'title'=>'', 'link'=>$cat_url,'first'=>'','last'=>'','readonly'=>'');
         ksort($this->_crumbs);
@@ -126,11 +150,9 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         unset($this->_crumbs['home']);
         array_unshift($this->_crumbs,$home);
       }
-
       $this->assign('crumbs', $this->_crumbs);
       return parent::_toHtml();
       }
-
     /*
     protected function _toHtml()
     {

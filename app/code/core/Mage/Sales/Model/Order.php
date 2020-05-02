@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -439,7 +439,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * Clear order object data
      *
      * @param string $key data key
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function unsetData($key=null)
     {
@@ -469,7 +469,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      *
      * @param string $action
      * @param boolean $flag
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function setActionFlag($action, $flag)
     {
@@ -491,7 +491,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * Set flag for order if it can sends new email to customer.
      *
      * @param bool $flag
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function setCanSendNewEmailFlag($flag)
     {
@@ -503,7 +503,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * Load order by system increment identifier
      *
      * @param string $incrementId
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function loadByIncrementId($incrementId)
     {
@@ -515,7 +515,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      *
      * @param string $attribute
      * @param string $value
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function loadByAttribute($attribute, $value)
     {
@@ -831,14 +831,14 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
             */
 
             foreach ($products as $productId) {
-                    $product = Mage::getModel('catalog/product')
-                        ->setStoreId($this->getStoreId())
-                        ->load($productId);
-                }
+                $product = Mage::getModel('catalog/product')
+                    ->setStoreId($this->getStoreId())
+                    ->load($productId);
                 if (!$product->getId() || (!$ignoreSalable && !$product->isSalable())) {
                     return false;
                 }
             }
+        }
 
         return true;
     }
@@ -889,7 +889,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Place order payments
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     protected function _placePayment()
     {
@@ -983,7 +983,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * @param string|bool $status
      * @param string $comment
      * @param bool $isCustomerNotified
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function setState($state, $status = false, $comment = '', $isCustomerNotified = null)
     {
@@ -1000,7 +1000,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * @param string $comment
      * @param bool $isCustomerNotified
      * @param $shouldProtectState
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     protected function _setState($state, $status = false, $comment = '',
         $isCustomerNotified = null, $shouldProtectState = false)
@@ -1057,7 +1057,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * @param  string $status
      * @param  string $comment
      * @param  bool $isCustomerNotified
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function addStatusToHistory($status, $comment = '', $isCustomerNotified = false)
     {
@@ -1094,8 +1094,8 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Overrides entity id, which will be saved to comments history status
      *
-     * @param string $status
-     * @return Mage_Sales_Model_Order
+     * @param string $entityName
+     * @return $this
      */
     public function setHistoryEntityName( $entityName )
     {
@@ -1106,7 +1106,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Place order
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function place()
     {
@@ -1130,7 +1130,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Attempt to unhold the order
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      * @throws Mage_Core_Exception
      */
     public function unhold()
@@ -1147,7 +1147,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Cancel order
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function cancel()
     {
@@ -1165,7 +1165,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * Prepare order totals to cancellation
      * @param string $comment
      * @param bool $graceful
-     * @return Mage_Sales_Model_Order
+     * @return $this
      * @throws Mage_Core_Exception
      */
     public function registerCancellation($comment = '', $graceful = true)
@@ -1272,7 +1272,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      *
      * @param bool $forceMode if true then email will be sent regardless of the fact that it was already sent previously
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      * @throws Exception
      */
     public function queueNewOrderEmail($forceMode = false)
@@ -1354,8 +1354,10 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
             ->setEntityType(self::ENTITY)
             ->setEventType(self::EMAIL_EVENT_NAME_NEW_ORDER)
             ->setIsForceCheck(!$forceMode);
-
-        $mailer->setQueue($emailQueue)->send();
+        
+        /* DHH CORE HACK */
+        $mailer->send();
+        //$mailer->setQueue($emailQueue)->send();
 
         $this->setEmailSent(true);
         $this->_getResource()->saveAttribute($this, 'email_sent');
@@ -1366,7 +1368,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Send email with order data
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function sendNewOrderEmail()
     {
@@ -1381,7 +1383,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * @param string $comment
      * @param bool $forceMode if true then email will be sent regardless of the fact that it was already sent previously
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function queueOrderUpdateEmail($notifyCustomer = true, $comment = '', $forceMode = false)
     {
@@ -1449,7 +1451,10 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
             ->setEntityType(self::ENTITY)
             ->setEventType(self::EMAIL_EVENT_NAME_UPDATE_ORDER)
             ->setIsForceCheck(!$forceMode);
-        $mailer->setQueue($emailQueue)->send();
+        
+        /* DHH CORE HACK */
+        $mailer->send();
+        //$mailer->setQueue($emailQueue)->send();
 
         return $this;
     }
@@ -1460,7 +1465,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * @param bool $notifyCustomer
      * @param string $comment
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function sendOrderUpdateEmail($notifyCustomer = true, $comment = '')
     {
@@ -1789,8 +1794,8 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * See the entity_id attribute backend model.
      * Or the history record can be saved standalone after this.
      *
-     * @param Mage_Sales_Model_Order_Status_History $status
-     * @return Mage_Sales_Model_Order
+     * @param Mage_Sales_Model_Order_Status_History $history
+     * @return $this
      */
     public function addStatusHistory(Mage_Sales_Model_Order_Status_History $history)
     {
@@ -2203,7 +2208,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Save order related objects
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -2217,7 +2222,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
             }
 
             $shippingAddress = $this->getShippingAddress();
-            if ($shippingAddress && $this->getShippigAddressId() != $shippingAddress->getId()) {
+            if ($shippingAddress && $this->getShippingAddressId() != $shippingAddress->getId()) {
                 $this->setShippingAddressId($shippingAddress->getId());
                 $attributesForSave[] = 'shipping_address_id';
             }
@@ -2255,7 +2260,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      * Resets all data in object
      * so after another load it will be complete new object
      *
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     public function reset()
     {
@@ -2321,7 +2326,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
 
     /**
      * Protect order delete from not admin scope
-     * @return Mage_Sales_Model_Order
+     * @return $this
      */
     protected function _beforeDelete()
     {

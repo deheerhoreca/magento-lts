@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Log
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,7 +49,7 @@ class Mage_Log_Model_Cron extends Mage_Core_Model_Abstract
     /**
      * Send Log Clean Warnings
      *
-     * @return Mage_Log_Model_Cron
+     * @return $this
      */
     protected function _sendLogCleanEmail()
     {
@@ -83,7 +83,7 @@ class Mage_Log_Model_Cron extends Mage_Core_Model_Abstract
     /**
      * Clean logs
      *
-     * @return Mage_Log_Model_Cron
+     * @return $this
      */
     public function logClean()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogIndex
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -106,7 +106,7 @@ class Mage_CatalogIndex_Model_Resource_Attribute extends Mage_CatalogIndex_Model
      * @param unknown_type $collection
      * @param unknown_type $attribute
      * @param unknown_type $value
-     * @return Mage_CatalogIndex_Model_Resource_Attribute
+     * @return $this
      */
     public function applyFilterToCollection($collection, $attribute, $value)
     {

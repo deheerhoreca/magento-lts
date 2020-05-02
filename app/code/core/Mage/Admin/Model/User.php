@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Admin
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -51,7 +51,7 @@
  * @method Mage_Admin_Model_User setReloadAclFlag(int $value)
  * @method int getIsActive()
  * @method Mage_Admin_Model_User setIsActive(int $value)
- * @method string getExtra()
+ * @method array getExtra()
  * @method Mage_Admin_Model_User setExtra(string $value)
  *
  * @category    Mage
@@ -74,13 +74,24 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
 
     /**
      * Minimum length of admin password
+     * @deprecated Use getMinAdminPasswordLength() method instead
      */
-    const MIN_PASSWORD_LENGTH = 7;
+    const MIN_PASSWORD_LENGTH = 14;
+
+    /**
+     * Configuration path for minimum length of admin password
+     */
+    const XML_PATH_MIN_ADMIN_PASSWORD_LENGTH = 'admin/security/min_admin_password_length';
 
     /**
      * Length of salt
      */
     const HASH_SALT_LENGTH = 32;
+
+    /**
+     * Empty hash salt
+     */
+    const HASH_SALT_EMPTY = null;
 
     /**
      * Model event prefix
@@ -114,7 +125,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Processing data before model save
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -188,7 +199,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Save user roles
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function saveRelations()
     {
@@ -226,7 +237,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Unassign user from his current role
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function deleteFromRole()
     {
@@ -248,7 +259,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Assign user to role
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function add()
     {
@@ -279,7 +290,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Send email with new user password
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      * @deprecated deprecated since version 1.6.1.0
      */
     public function sendNewPasswordEmail()
@@ -290,7 +301,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Send email with reset password confirmation link
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
@@ -411,7 +422,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Reload current user
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function reload()
     {
@@ -432,7 +443,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
      * Load user by its username
      *
      * @param string $username
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function loadByUsername($username)
     {
@@ -459,7 +470,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
      */
     protected function _getEncodedPassword($password)
     {
-        return $this->_getHelper('core')->getHash($password, self::HASH_SALT_LENGTH);
+        return $this->_getHelper('core')->getHashPassword($password, self::HASH_SALT_LENGTH);
     }
 
     /**
@@ -569,17 +580,23 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
         }
 
         if ($this->hasNewPassword()) {
-            if (Mage::helper('core/string')->strlen($this->getNewPassword()) < self::MIN_PASSWORD_LENGTH) {
-                $errors[] = Mage::helper('adminhtml')->__('Password must be at least of %d characters.', self::MIN_PASSWORD_LENGTH);
+            $password = $this->getNewPassword();
+        } elseif ($this->hasPassword()) {
+            $password = $this->getPassword();
+        }
+        if (isset($password)) {
+            $minAdminPasswordLength = $this->getMinAdminPasswordLength();
+            if (Mage::helper('core/string')->strlen($password) < $minAdminPasswordLength) {
+                $errors[] = Mage::helper('adminhtml')
+                    ->__('Password must be at least of %d characters.', $minAdminPasswordLength);
             }
 
-            if (!preg_match('/[a-z]/iu', $this->getNewPassword())
-                || !preg_match('/[0-9]/u', $this->getNewPassword())
-            ) {
-                $errors[] = Mage::helper('adminhtml')->__('Password must include both numeric and alphabetic characters.');
+            if (!preg_match('/[a-z]/iu', $password) || !preg_match('/[0-9]/u', $password)) {
+                $errors[] = Mage::helper('adminhtml')
+                    ->__('Password must include both numeric and alphabetic characters.');
             }
 
-            if ($this->hasPasswordConfirmation() && $this->getNewPassword() != $this->getPasswordConfirmation()) {
+            if ($this->hasPasswordConfirmation() && $password != $this->getPasswordConfirmation()) {
                 $errors[] = Mage::helper('adminhtml')->__('Password confirmation must be same as password.');
             }
 
@@ -590,7 +607,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
         }
 
         if ($this->userExists()) {
-            $errors[] = Mage::helper('adminhtml')->__('A user with the same user name or email aleady exists.');
+            $errors[] = Mage::helper('adminhtml')->__('A user with the same user name or email already exists.');
         }
 
         if (count($errors) === 0) {
@@ -627,7 +644,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
      * Stores new reset password link token and its creation time
      *
      * @param string $newResetPasswordLinkToken
-     * @return Mage_Admin_Model_User
+     * @return $this
      * @throws Mage_Core_Exception
      */
     public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
@@ -675,7 +692,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     /**
      * Clean password's validation data (password, current_password, new_password, password_confirmation)
      *
-     * @return Mage_Admin_Model_User
+     * @return $this
      */
     public function cleanPasswordsValidationData()
     {
@@ -744,5 +761,17 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
     {
         $emails = str_replace(' ', '', Mage::getStoreConfig(self::XML_PATH_ADDITIONAL_EMAILS));
         return explode(',', $emails);
+    }
+
+    /**
+     * Retrieve minimum length of admin password
+     *
+     * @return int
+     */
+    public function getMinAdminPasswordLength()
+    {
+        $minLength = (int)Mage::getStoreConfig(self::XML_PATH_MIN_ADMIN_PASSWORD_LENGTH);
+        $absoluteMinLength = Mage_Core_Model_App::ABSOLUTE_MIN_PASSWORD_LENGTH;
+        return ($minLength < $absoluteMinLength) ? $absoluteMinLength : $minLength;
     }
 }

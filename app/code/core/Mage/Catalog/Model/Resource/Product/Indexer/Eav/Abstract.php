@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -99,9 +99,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract
             $adapter->delete($this->getMainTable(), $where);
 
             // insert new index
-            $this->useDisableKeys(false);
             $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
-            $this->useDisableKeys(true);
 
             $adapter->commit();
         } catch (Exception $e) {
@@ -250,7 +248,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract
             $adapter->delete($this->getMainTable(), $where);
             $adapter->commit();
         } catch (Exception $e) {
-            $adapter->rollback();
+            $adapter->rollBack();
             throw $e;
         }
 
@@ -278,7 +276,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract
 
             $adapter->commit();
         } catch (Exception $e) {
-            $adapter->rollback();
+            $adapter->rollBack();
             throw $e;
         }
 

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api2
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,7 +68,7 @@ class Mage_Api2_Model_Multicall
      * Make call to specified subresource with data from request
      *
      * @param Mage_Core_Model_Config_Element $subresource
-     * @return Mage_Api2_Model_Multicall
+     * @return $this
      */
     protected function _callSubresource($subresource)
     {
@@ -103,7 +103,7 @@ class Mage_Api2_Model_Multicall
      * @param Mage_Core_Model_Config_Element $subresource
      * @param array $requestData
      * @throws Mage_Api2_Exception
-     * @return Mage_Api2_Model_Multicall
+     * @return $this
      */
     protected function _internalCall($subresource, $requestData)
     {

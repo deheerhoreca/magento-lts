@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api2
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,7 +111,7 @@ class Mage_Api2_Model_Acl extends Zend_Acl
     /**
      * Retrieve resources types and set into ACL
      *
-     * @return Mage_Api2_Model_Acl
+     * @return $this
      */
     protected function _setResources()
     {
@@ -124,7 +124,7 @@ class Mage_Api2_Model_Acl extends Zend_Acl
     /**
      * Retrieve roles from DB and set into ACL
      *
-     * @return Mage_Api2_Model_Acl
+     * @return $this
      */
     protected function _setRoles()
     {
@@ -138,7 +138,7 @@ class Mage_Api2_Model_Acl extends Zend_Acl
     /**
      * Retrieve rules data from DB and inject it into ACL
      *
-     * @return Mage_Api2_Model_Acl
+     * @return $this
      */
     protected function _setRules()
     {

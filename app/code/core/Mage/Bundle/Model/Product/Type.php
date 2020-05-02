@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Bundle
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -165,7 +165,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
      * Return product weight based on weight_type attribute
      *
      * @param Mage_Catalog_Model_Product $product
-     * @return decimal
+     * @return float
      */
     public function getWeight($product = null)
     {
@@ -268,7 +268,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
      * Save type related data
      *
      * @param Mage_Catalog_Model_Product $product
-     * @return Mage_Bundle_Model_Product_Type
+     * @return $this
      */
     public function save($product = null)
     {
@@ -921,7 +921,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
      * Check if product can be bought
      *
      * @param Mage_Catalog_Model_Product $product
-     * @return Mage_Bundle_Model_Product_Type
+     * @return $this
      * @throws Mage_Core_Exception
      */
     public function checkProductBuyState($product = null)

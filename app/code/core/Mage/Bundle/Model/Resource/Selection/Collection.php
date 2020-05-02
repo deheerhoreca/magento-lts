@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Bundle
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,7 +85,7 @@ class Mage_Bundle_Model_Resource_Selection_Collection extends Mage_Catalog_Model
      * Join website scope prices to collection, override default prices
      *
      * @param int $websiteId
-     * @return Mage_Bundle_Model_Resource_Selection_Collection
+     * @return $this
      */
     public function joinPrices($websiteId)
     {
@@ -115,7 +115,7 @@ class Mage_Bundle_Model_Resource_Selection_Collection extends Mage_Catalog_Model
      * Apply option ids filter to collection
      *
      * @param array $optionIds
-     * @return Mage_Bundle_Model_Resource_Selection_Collection
+     * @return $this
      */
     public function setOptionIdsFilter($optionIds)
     {
@@ -129,7 +129,7 @@ class Mage_Bundle_Model_Resource_Selection_Collection extends Mage_Catalog_Model
      * Apply selection ids filter to collection
      *
      * @param array $selectionIds
-     * @return Mage_Bundle_Model_Resource_Selection_Collection
+     * @return $this
      */
     public function setSelectionIdsFilter($selectionIds)
     {
@@ -142,7 +142,7 @@ class Mage_Bundle_Model_Resource_Selection_Collection extends Mage_Catalog_Model
     /**
      * Set position order
      *
-     * @return Mage_Bundle_Model_Resource_Selection_Collection
+     * @return $this
      */
     public function setPositionOrder()
     {

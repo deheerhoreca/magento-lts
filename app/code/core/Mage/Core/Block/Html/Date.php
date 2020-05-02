@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class Mage_Core_Block_Html_Date extends Mage_Core_Block_Template
 
     protected function _toHtml()
     {
-        $displayFormat = Varien_Date::convertZendToStrFtime($this->getFormat(), true, (bool)$this->getTime());
+        $displayFormat = Varien_Date::convertZendToStrftime($this->getFormat(), true, (bool)$this->getTime());
 
         $html  = '<input type="text" name="' . $this->getName() . '" id="' . $this->getId() . '" ';
         $html .= 'value="' . $this->escapeHtml($this->getValue()) . '" class="' . $this->getClass() . '" ' . $this->getExtraParams() . '/> ';
@@ -51,7 +51,7 @@ class Mage_Core_Block_Html_Date extends Mage_Core_Block_Template
             var calendarSetupObject = {
                 inputField  : "' . $this->getId() . '",
                 ifFormat    : "' . $displayFormat . '",
-                showsTime   : "' . ($this->getTime() ? 'true' : 'false') . '",
+                showsTime   : ' . ($this->getTime() ? 'true' : 'false') . ',
                 button      : "' . $this->getId() . '_trig",
                 align       : "Bl",
                 singleClick : true

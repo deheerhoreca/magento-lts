@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -106,7 +106,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      * Set path to template used for generating block's output.
      *
      * @param string $template
-     * @return Mage_Core_Block_Template
+     * @return $this
      */
     public function setTemplate($template)
     {
@@ -163,7 +163,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      * Set template location directory
      *
      * @param string $dir
-     * @return Mage_Core_Block_Template
+     * @return $this
      */
     public function setScriptPath($dir)
     {
@@ -237,10 +237,11 @@ HTML;
 
         try {
             $includeFilePath = realpath($this->_viewDir . DS . $fileName);
-            if (strpos($includeFilePath, realpath($this->_viewDir)) === 0 || $this->_getAllowSymlinks()) {
+            if ($includeFilePath != '' && (strpos($includeFilePath, realpath($this->_viewDir)) === 0 || $this->_getAllowSymlinks())) {
                 include $includeFilePath;
             } else {
-                Mage::log('Not valid template file:'.$fileName, Zend_Log::CRIT, null, null, true);
+                $thisClass = get_class($this);
+                Mage::log('Not valid template file:' . $fileName . ' class: ' . $thisClass, Zend_Log::CRIT, null, true);
             }
 
         } catch (Exception $e) {

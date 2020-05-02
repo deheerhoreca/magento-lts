@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
     /**
      * Initialize unique fields
      *
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     protected function _initUniqueFields()
     {
@@ -67,7 +67,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Authenticate user by $username and $password
      *
      * @param Mage_Api_Model_User $user
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     public function recordLogin(Mage_Api_Model_User $user)
     {
@@ -83,7 +83,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Record api user session
      *
      * @param Mage_Api_Model_User $user
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     public function recordSession(Mage_Api_Model_User $user)
     {
@@ -119,7 +119,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Clean old session
      *
      * @param Mage_Api_Model_User $user
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     public function cleanOldSessions(Mage_Api_Model_User $user)
     {
@@ -179,7 +179,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Clear by session
      *
      * @param string $sessid
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     public function clearBySessId($sessid)
     {
@@ -220,7 +220,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Action before save
      *
      * @param Mage_Core_Model_Abstract $user
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     protected function _beforeSave(Mage_Core_Model_Abstract $user)
     {
@@ -245,14 +245,14 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
         try {
             $dbh->delete($this->getTable('api/user'), array('user_id = ?' => $uid));
             $dbh->delete($this->getTable('api/role'), array('user_id = ?' => $uid));
+            $dbh->commit();
         } catch (Mage_Core_Exception $e) {
+            $dbh->rollBack();
             throw $e;
-            return false;
         } catch (Exception $e) {
             $dbh->rollBack();
             return false;
         }
-        $dbh->commit();
         return true;
     }
 
@@ -298,6 +298,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
             }
             $adapter->commit();
         } catch (Mage_Core_Exception $e) {
+            $adapter->rollBack();
             throw $e;
         } catch (Exception $e) {
             $adapter->rollBack();
@@ -335,7 +336,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Add Role
      *
      * @param Mage_Core_Model_Abstract $user
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     public function add(Mage_Core_Model_Abstract $user)
     {
@@ -371,7 +372,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Delete from role
      *
      * @param Mage_Core_Model_Abstract $user
-     * @return Mage_Api_Model_Resource_User
+     * @return $this
      */
     public function deleteFromRole(Mage_Core_Model_Abstract $user)
     {

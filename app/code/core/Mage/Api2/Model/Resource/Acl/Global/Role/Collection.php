@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api2
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,7 @@ class Mage_Api2_Model_Resource_Acl_Global_Role_Collection extends Mage_Core_Mode
      * Add filter by admin user id and join table with appropriate information
      *
      * @param int $id Admin user id
-     * @return Mage_Api2_Model_Resource_Acl_Global_Role_Collection
+     * @return $this
      */
     public function addFilterByAdminId($id)
     {

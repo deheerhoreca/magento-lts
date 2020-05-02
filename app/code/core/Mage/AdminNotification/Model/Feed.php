@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_AdminNotification
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,8 +61,7 @@ class Mage_AdminNotification_Model_Feed extends Mage_Core_Model_Abstract
     public function getFeedUrl()
     {
         if (is_null($this->_feedUrl)) {
-            $this->_feedUrl = (Mage::getStoreConfigFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://')
-                . Mage::getStoreConfig(self::XML_FEED_URL_PATH);
+            $this->_feedUrl = 'https://' . Mage::getStoreConfig(self::XML_FEED_URL_PATH);
         }
         return $this->_feedUrl;
     }
@@ -70,7 +69,7 @@ class Mage_AdminNotification_Model_Feed extends Mage_Core_Model_Abstract
     /**
      * Check feed for modification
      *
-     * @return Mage_AdminNotification_Model_Feed
+     * @return $this
      */
     public function checkUpdate()
     {
@@ -138,7 +137,7 @@ class Mage_AdminNotification_Model_Feed extends Mage_Core_Model_Abstract
     /**
      * Set last update time (now)
      *
-     * @return Mage_AdminNotification_Model_Feed
+     * @return $this
      */
     public function setLastUpdate()
     {

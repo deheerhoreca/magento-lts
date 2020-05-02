@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -86,13 +86,13 @@ class Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku extends Mage_Adminhtml_Block
     /**
      * Prepare Catalog Product Collection for attribute SKU in Promo Conditions SKU chooser
      *
-     * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
+     * @return $this
      */
     protected function _prepareCollection()
     {
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->setStoreId(0)
-            ->addAttributeToSelect('name', 'type_id', 'attribute_set_id');
+            ->addAttributeToSelect(array('name', 'type_id', 'attribute_set_id'));
 
         $this->setCollection($collection);
 
@@ -102,7 +102,7 @@ class Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku extends Mage_Adminhtml_Block
     /**
      * Define Cooser Grid Columns and filters
      *
-     * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
+     * @return $this
      */
     protected function _prepareColumns()
     {

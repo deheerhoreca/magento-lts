@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -252,7 +252,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
      * Delete file (and its thumbnail if exists) from storage
      *
      * @param string $target File path to be deleted
-     * @return Mage_Cms_Model_Wysiwyg_Images_Storage
+     * @return $this
      */
     public function deleteFile($target)
     {
@@ -344,13 +344,13 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
      */
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
-        $mediaRootDir = $this->getHelper()->getStorageRoot();
+        $mediaRootDir = Mage::getConfig()->getOptions()->getMediaDir() . DS;
 
         if (strpos($filePath, $mediaRootDir) === 0) {
             $thumbSuffix = self::THUMBS_DIRECTORY_NAME . DS . Mage_Cms_Model_Wysiwyg_Config::IMAGE_DIRECTORY
                 . DS . substr($filePath, strlen($mediaRootDir));
 
-            if (! $checkFile || is_readable($mediaRootDir . $thumbSuffix)) {
+            if (! $checkFile || is_readable($this->getHelper()->getStorageRoot() . $thumbSuffix)) {
                 $randomIndex = '?rand=' . time();
                 $thumbUrl = $this->getHelper()->getBaseUrl() . Mage_Cms_Model_Wysiwyg_Config::IMAGE_DIRECTORY
                     . DS . $thumbSuffix;

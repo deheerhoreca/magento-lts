@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Bundle
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,7 +28,6 @@
 /**
  * Bundle Product Price Index
  *
- * @method Mage_Bundle_Model_Resource_Price_Index _getResource()
  * @method Mage_Bundle_Model_Resource_Price_Index getResource()
  * @method Mage_Bundle_Model_Price_Index setEntityId(int $value)
  * @method int getWebsiteId()
@@ -70,7 +69,7 @@ class Mage_Bundle_Model_Price_Index extends Mage_Core_Model_Abstract
      *
      * @param int $productId
      * @param int $priceType
-     * @return Mage_Bundle_Model_Price_Index
+     * @return $this
      */
     protected function _reindexProduct($productId, $priceType)
     {
@@ -82,7 +81,7 @@ class Mage_Bundle_Model_Price_Index extends Mage_Core_Model_Abstract
      * Reindex Bundle product Price Index
      *
      * @param Mage_Core_Model_Product|Mage_Catalog_Model_Product_Condition_Interface|array|int $products
-     * @return Mage_Bundle_Model_Price_Index
+     * @return $this
      */
     public function reindex($products = null)
     {
@@ -94,7 +93,7 @@ class Mage_Bundle_Model_Price_Index extends Mage_Core_Model_Abstract
      * Add bundle price range index to Product collection
      *
      * @param Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $collection
-     * @return Mage_Bundle_Model_Price_Index
+     * @return $this
      */
     public function addPriceIndexToCollection($collection)
     {
@@ -137,7 +136,7 @@ class Mage_Bundle_Model_Price_Index extends Mage_Core_Model_Abstract
      * Add price index to bundle product after load
      *
      * @param Mage_Catalog_Model_Product $product
-     * @return Mage_Bundle_Model_Price_Index
+     * @return $this
      */
     public function addPriceIndexToProduct($product)
     {

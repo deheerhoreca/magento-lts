@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogIndex
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,7 +74,7 @@ class Mage_CatalogIndex_Model_Resource_Indexer_Abstract extends Mage_Core_Model_
      * @param unknown_type $data
      * @param unknown_type $storeId
      * @param unknown_type $productId
-     * @return Mage_CatalogIndex_Model_Resource_Indexer_Abstract
+     * @return $this
      */
     protected function _executeReplace($data, $storeId, $productId)
     {
@@ -117,8 +117,8 @@ class Mage_CatalogIndex_Model_Resource_Indexer_Abstract extends Mage_Core_Model_
     /**
      * Enter description here ...
      *
-     * @param unknown_type $conditions
-     * @return unknown
+     * @param array|string $conditions
+     * @return array
      */
     public function loadAttributeCodesByCondition($conditions)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api2
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,7 +60,7 @@ class Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
     /**
      * Prepare grid collection object
      *
-     * @return Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -76,7 +76,7 @@ class Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
     /**
      * Prepare grid columns
      *
-     * @return Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -102,7 +102,7 @@ class Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
      * Add custom column filter to collection
      *
      * @param Mage_Adminhtml_Block_Widget_Grid_Column $column
-     * @return Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
+     * @return $this
      */
     protected function _addColumnFilterToCollection($column)
     {

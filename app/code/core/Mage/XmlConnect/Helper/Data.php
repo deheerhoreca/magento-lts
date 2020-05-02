@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -919,7 +919,7 @@ EOT;
      * @param string $label
      * @param float $value
      * @param string $formattedValue
-     * @return Mage_XmlConnect_Helper_Data
+     * @return $this
      */
     public function addTotalItemToXmlObj($xmlObj, $code, $label, $value, $formattedValue)
     {

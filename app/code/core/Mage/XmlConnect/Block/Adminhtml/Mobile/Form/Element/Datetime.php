@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -174,8 +174,8 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Form_Element_Datetime extends Varie
                 $this->__('Output format is not specified. Please, specify "format" key in constructor, or set it using setFormat().')
             );
         }
-        $displayFormat = Varien_Date::convertZendToStrFtime($outputFormat, true, false);
-        $displayTimeFormat = Varien_Date::convertZendToStrFtime($outputTimeFormat, false, true);
+        $displayFormat = Varien_Date::convertZendToStrftime($outputFormat, true, false);
+        $displayTimeFormat = Varien_Date::convertZendToStrftime($outputTimeFormat, false, true);
 
         $html .= sprintf('
             <script type="text/javascript">

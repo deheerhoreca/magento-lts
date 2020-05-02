@@ -15,8 +15,8 @@ if (extension_loaded('mbstring')) {
 }
 
 spl_autoload_register(function($className) {
-    $path = explode('\\', $className);
-    if (array_shift($path) == 'phpseclib') {
+    $parts = explode('\\', $className);
+    if (array_shift($parts) == 'phpseclib') {
         return include str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
     }
 });

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -108,7 +108,7 @@ class Mage_Sales_Model_Service_Quote
      * Specify additional order data
      *
      * @param array $data
-     * @return Mage_Sales_Model_Service_Quote
+     * @return $this
      */
     public function setOrderData(array $data)
     {
@@ -187,8 +187,6 @@ class Mage_Sales_Model_Service_Quote
         Mage::dispatchEvent('sales_model_service_quote_submit_before', array('order'=>$order, 'quote'=>$quote));
         try {
             $transaction->save();
-            $this->_inactivateQuote();
-            Mage::dispatchEvent('sales_model_service_quote_submit_success', array('order'=>$order, 'quote'=>$quote));
         } catch (Exception $e) {
 
             if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
@@ -207,6 +205,8 @@ class Mage_Sales_Model_Service_Quote
             Mage::dispatchEvent('sales_model_service_quote_submit_failure', array('order'=>$order, 'quote'=>$quote));
             throw $e;
         }
+        $this->_inactivateQuote();
+        Mage::dispatchEvent('sales_model_service_quote_submit_success', array('order'=>$order, 'quote'=>$quote));
         Mage::dispatchEvent('sales_model_service_quote_submit_after', array('order'=>$order, 'quote'=>$quote));
         $this->_order = $order;
         return $order;
@@ -215,7 +215,6 @@ class Mage_Sales_Model_Service_Quote
     /**
      * Submit nominal items
      *
-     * @return array
      */
     public function submitNominalItems()
     {
@@ -272,7 +271,7 @@ class Mage_Sales_Model_Service_Quote
     /**
      * Inactivate quote
      *
-     * @return Mage_Sales_Model_Service_Quote
+     * @return $this
      */
     protected function _inactivateQuote()
     {
@@ -285,7 +284,7 @@ class Mage_Sales_Model_Service_Quote
     /**
      * Validate quote data before converting to order
      *
-     * @return Mage_Sales_Model_Service_Quote
+     * @return $this
      */
     protected function _validate()
     {

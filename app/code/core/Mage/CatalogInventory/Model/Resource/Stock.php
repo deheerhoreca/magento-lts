@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogInventory
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,7 +97,7 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
      *
      * @param Mage_CatalogInventory_Model_Stock $stock
      * @param int|array $productIds
-     * @return Mage_CatalogInventory_Model_Resource_Stock
+     * @return $this
      */
     public function lockProductItems($stock, $productIds)
     {
@@ -131,11 +131,24 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
         $productTable = $this->getTable('catalog/product');
         $select = $this->_getWriteAdapter()->select()
             ->from(array('si' => $itemTable))
-            ->join(array('p' => $productTable), 'p.entity_id=si.product_id', array('type_id'))
             ->where('stock_id=?', $stock->getId())
             ->where('product_id IN(?)', $productIds)
             ->forUpdate($lockRows);
-        return $this->_getWriteAdapter()->fetchAll($select);
+        $rows = $this->_getWriteAdapter()->fetchAll($select);
+
+        // Add type_id to result using separate select without FOR UPDATE instead
+        // of a join which causes only an S lock on catalog_product_entity rather
+        // than an X lock. An X lock on a table causes an S lock on all foreign keys
+        // so using a separate query here significantly reduces the number of
+        // unnecessarily locked rows in other tables, thereby avoiding deadlocks.
+        $select = $this->_getWriteAdapter()->select()
+            ->from($productTable, array('entity_id', 'type_id'))
+            ->where('entity_id IN(?)', $productIds);
+        $typeIds = $this->_getWriteAdapter()->fetchPairs($select);
+        foreach ($rows as &$row) {
+            $row['type_id'] = $typeIds[$row['product_id']];
+        }
+        return $rows;
     }
 
     /**
@@ -144,7 +157,7 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
      * @param Mage_CatalogInventory_Model_Stock $stock
      * @param array $productQtys
      * @param string $operator +/-
-     * @return Mage_CatalogInventory_Model_Resource_Stock
+     * @return $this
      */
     public function correctItemsQty($stock, $productQtys, $operator = '-')
     {
@@ -168,8 +181,13 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
         );
 
         $adapter->beginTransaction();
-        $adapter->update($this->getTable('cataloginventory/stock_item'), array('qty' => $value), $where);
-        $adapter->commit();
+        try {
+            $adapter->update($this->getTable('cataloginventory/stock_item'), array('qty' => $value), $where);
+            $adapter->commit();
+        } catch (Exception $e) {
+            $adapter->rollBack();
+            throw $e;
+        }
 
         return $this;
     }
@@ -178,7 +196,7 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
      * add join to select only in stock products
      *
      * @param Mage_Catalog_Model_Resource_Product_Link_Product_Collection $collection
-     * @return Mage_CatalogInventory_Model_Resource_Stock
+     * @return $this
      */
     public function setInStockFilterToCollection($collection)
     {
@@ -331,7 +349,7 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
      *
      * @param Mage_Catalog_Model_Resource_Product_Collection $collection
      * @param array $fields
-     * @return Mage_CatalogInventory_Model_Resource_Stock
+     * @return $this
      */
     public function addLowStockFilter(Mage_Catalog_Model_Resource_Product_Collection $collection, $fields)
     {

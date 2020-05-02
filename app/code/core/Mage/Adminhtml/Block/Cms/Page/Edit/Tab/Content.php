@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -81,7 +81,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Content
 
         $contentField = $fieldset->addField('content', 'editor', array(
             'name'      => 'content',
-            'style'     => 'height:100em;',
+            'style'     => 'height:36em;',
             'required'  => true,
             'disabled'  => $isElementDisabled,
             'config'    => $wysiwygConfig

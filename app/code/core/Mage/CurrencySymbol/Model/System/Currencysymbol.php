@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CurrencySymbol
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -84,7 +84,7 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
      * Sets store Id
      *
      * @param  $storeId
-     * @return Mage_CurrencySymbol_Model_System_Currencysymbol
+     * @return $this
      */
     public function setStoreId($storeId=null)
     {
@@ -98,7 +98,7 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
      * Sets website Id
      *
      * @param  $websiteId
-     * @return Mage_CurrencySymbol_Model_System_Currencysymbol
+     * @return $this
      */
     public function setWebsiteId($websiteId=null)
     {
@@ -192,7 +192,7 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
      * Saves currency symbol to config
      *
      * @param  $symbols array
-     * @return Mage_CurrencySymbol_Model_System_Currencysymbol
+     * @return $this
      */
     public function setCurrencySymbolsData($symbols=array())
     {
@@ -274,7 +274,11 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
         $result = array();
         $configData = (string)Mage::getStoreConfig($configPath, $storeId);
         if ($configData) {
-            $result = unserialize($configData);
+            try {
+                $result = Mage::helper('core/unserializeArray')->unserialize($configData);
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
         }
 
         return is_array($result) ? $result : array();

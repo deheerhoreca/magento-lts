@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -79,6 +79,7 @@ class Mage_Api_Model_Resource_Rules extends Mage_Core_Model_Resource_Db_Abstract
 
             $adapter->commit();
         } catch (Mage_Core_Exception $e) {
+            $adapter->rollBack();
             throw $e;
         } catch (Exception $e) {
             $adapter->rollBack();

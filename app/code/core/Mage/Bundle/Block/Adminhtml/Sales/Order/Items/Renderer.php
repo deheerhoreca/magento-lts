@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Bundle
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -177,13 +177,14 @@ class Mage_Bundle_Block_Adminhtml_Sales_Order_Items_Renderer extends Mage_Adminh
         return $result;
     }
 
+    /**
+     * Retrieve Order Item
+     *
+     * @return Mage_Sales_Model_Order_Item
+     */
     public function getOrderItem()
     {
-        if ($this->getItem() instanceof Mage_Sales_Order_Item) {
-            return $this->getItem();
-        } else {
-            return $this->getItem()->getOrderItem();
-        }
+        return $this->getItem()->getOrderItem();
     }
 
     public function getValueHtml($item)

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -125,7 +125,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
      * Set quote object associated with the cart
      *
      * @param Mage_Sales_Model_Quote $quote
-     * @return Mage_Checkout_Model_Cart
+     * @return $this
      */
     public function setQuote(Mage_Sales_Model_Quote $quote)
     {
@@ -136,7 +136,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
     /**
      * Initialize cart quote state to be able use it on cart page
      *
-     * @return Mage_Checkout_Model_Cart
+     * @return $this
      */
     public function init()
     {
@@ -160,7 +160,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
      *
      * @param Mage_Sales_Model_Order_Item $orderItem
      * @param mixed $qtyFlag if is null set product qty like in order
-     * @return Mage_Checkout_Model_Cart
+     * @return $this
      */
     public function addOrderItem($orderItem, $qtyFlag=null)
     {
@@ -243,6 +243,8 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
     {
         $product = $this->_getProduct($productInfo);
         $request = $this->_getProductRequest($requestInfo);
+
+        Mage::dispatchEvent('checkout_cart_product_add_before', array('request' => $request, 'product' => $product));
 
         /** @var Mage_Catalog_Helper_Product $helper */
         $helper  = Mage::helper('catalog/product');
@@ -450,7 +452,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
     /**
      * Save cart
      *
-     * @return Mage_Checkout_Model_Cart
+     * @return $this
      */
     public function save()
     {
@@ -479,7 +481,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
     /**
      * Mark all quote items as deleted (empty shopping cart)
      *
-     * @return Mage_Checkout_Model_Cart
+     * @return $this
      */
     public function truncate()
     {

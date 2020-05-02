@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,6 +36,9 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
     const VALIDATOR_PASSWORD_CREATE_TIMESTAMP   = 'password_create_timestamp';
     const SECURE_COOKIE_CHECK_KEY               = '_secure_cookie_check';
 
+    /** @var bool Flag true if session validator data has already been evaluated */
+    protected static $isValidated = FALSE;
+
     /**
      * Map of session enabled hosts
      * @example array('host.name' => true)
@@ -47,7 +50,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      * Configure and start session
      *
      * @param string $sessionName
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function start($sessionName=null)
     {
@@ -137,7 +140,8 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             // secure cookie check to prevent MITM attack
             $secureCookieName = $sessionName . '_cid';
             if (isset($_SESSION[self::SECURE_COOKIE_CHECK_KEY])) {
-                if ($_SESSION[self::SECURE_COOKIE_CHECK_KEY] !== md5($cookie->get($secureCookieName))) {
+                $cookieValue = $cookie->get($secureCookieName);
+                if (!is_string($cookieValue) || $_SESSION[self::SECURE_COOKIE_CHECK_KEY] !== md5($cookieValue)) {
                     session_regenerate_id(false);
                     $sessionHosts = $this->getSessionHosts();
                     $currentCookieDomain = $cookie->getDomain();
@@ -152,12 +156,12 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
                     /**
                      * Renew secure cookie expiration time if secure id did not change
                      */
-                    $cookie->renew($secureCookieName, null, null, null, true, null);
+                    $cookie->renew($secureCookieName, null, null, null, true, true);
                 }
             }
             if (!isset($_SESSION[self::SECURE_COOKIE_CHECK_KEY])) {
                 $checkId = Mage::helper('core')->getRandomString(16);
-                $cookie->set($secureCookieName, $checkId, null, null, null, true);
+                $cookie->set($secureCookieName, $checkId, null, null, null, true, true);
                 $_SESSION[self::SECURE_COOKIE_CHECK_KEY] = md5($checkId);
             }
         }
@@ -187,7 +191,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      * Set session hosts
      *
      * @param array $hosts
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function setSessionHosts(array $hosts)
     {
@@ -208,7 +212,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
     /**
      * Revalidate cookie
      * @deprecated after 1.4 cookie renew moved to session start method
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function revalidateCookie()
     {
@@ -220,7 +224,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      *
      * @param string $namespace
      * @param string $sessionName
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function init($namespace, $sessionName=null)
     {
@@ -269,7 +273,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      * Set custom session id
      *
      * @param string $id
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function setSessionId($id=null)
     {
@@ -293,7 +297,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      * Set session name
      *
      * @param string $name
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function setSessionName($name)
     {
@@ -304,7 +308,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
     /**
      * Unset all data
      *
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function unsetAll()
     {
@@ -315,7 +319,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
     /**
      * Alias for unsetAll
      *
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function clear()
     {
@@ -416,19 +420,29 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
     /**
      * Validate session
      *
-     * @param string $namespace
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @throws Mage_Core_Model_Session_Exception
+     * @return $this
      */
     public function validate()
     {
-        if (!isset($this->_data[self::VALIDATOR_KEY])) {
-            $this->_data[self::VALIDATOR_KEY] = $this->getValidatorData();
+        // Backwards compatibility with legacy sessions (validator data stored per-namespace)
+        if (isset($this->_data[self::VALIDATOR_KEY])) {
+            $_SESSION[self::VALIDATOR_KEY] = $this->_data[self::VALIDATOR_KEY];
+            unset($this->_data[self::VALIDATOR_KEY]);
+        }
+        if (!isset($_SESSION[self::VALIDATOR_KEY])) {
+            $_SESSION[self::VALIDATOR_KEY] = $this->getValidatorData();
         }
         else {
-            if (!$this->_validate()) {
+            if ( ! self::$isValidated && ! $this->_validate()) {
                 $this->getCookie()->delete(session_name());
                 // throw core session exception
                 throw new Mage_Core_Model_Session_Exception('');
+            }
+
+            // Refresh expire timestamp
+            if ($this->useValidateSessionExpire()) {
+                $_SESSION[self::VALIDATOR_KEY][self::VALIDATOR_SESSION_EXPIRE_TIMESTAMP] = time() + $this->getCookie()->getLifetime();
             }
         }
 
@@ -442,8 +456,9 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      */
     protected function _validate()
     {
-        $sessionData = $this->_data[self::VALIDATOR_KEY];
+        $sessionData = $_SESSION[self::VALIDATOR_KEY];
         $validatorData = $this->getValidatorData();
+        self::$isValidated = TRUE; // Only validate once since the validator data is the same for every namespace
 
         if ($this->useValidateRemoteAddr()
                 && $sessionData[self::VALIDATOR_REMOTE_ADDR_KEY] != $validatorData[self::VALIDATOR_REMOTE_ADDR_KEY]) {
@@ -454,10 +469,8 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             return false;
         }
 
-        $sessionValidateHttpXForwardedForKey = $sessionData[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY];
-        $validatorValidateHttpXForwardedForKey = $validatorData[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY];
         if ($this->useValidateHttpXForwardedFor()
-            && $sessionValidateHttpXForwardedForKey != $validatorValidateHttpXForwardedForKey ) {
+                && $sessionData[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY] != $validatorData[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY]) {
             return false;
         }
         if ($this->useValidateHttpUserAgent()
@@ -476,9 +489,6 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             && isset($sessionData[self::VALIDATOR_SESSION_EXPIRE_TIMESTAMP])
             && $sessionData[self::VALIDATOR_SESSION_EXPIRE_TIMESTAMP] < time() ) {
             return false;
-        } else {
-            $this->_data[self::VALIDATOR_KEY][self::VALIDATOR_SESSION_EXPIRE_TIMESTAMP]
-                = $validatorData[self::VALIDATOR_SESSION_EXPIRE_TIMESTAMP];
         }
         if ($this->useValidateSessionPasswordTimestamp()
             && isset($validatorData[self::VALIDATOR_PASSWORD_CREATE_TIMESTAMP])
@@ -535,7 +545,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
     /**
      * Regenerate session Id
      *
-     * @return Mage_Core_Model_Session_Abstract_Varien
+     * @return $this
      */
     public function regenerateSessionId()
     {

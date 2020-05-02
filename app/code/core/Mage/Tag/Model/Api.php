@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tag
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -229,8 +229,8 @@ class Mage_Tag_Model_Api extends Mage_Catalog_Model_Api_Resource
     /**
      * Check data before update
      *
-     * @param $data
-     * @return
+     * @param array $data
+     * @return array
      */
     protected function _prepareDataForUpdate($data)
     {

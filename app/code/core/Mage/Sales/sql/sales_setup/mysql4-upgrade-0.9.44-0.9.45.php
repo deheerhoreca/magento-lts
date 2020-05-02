@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,7 +68,7 @@ try {
     $installer->getConnection()->commit();
 
 } catch (Exception $e) {
-    $installer->getConnection()->rollback();
+    $installer->getConnection()->rollBack();
     foreach ($attributes as $attribute) {
         $installer->getConnection()->dropColumn($this->getTable('sales_order'), $attribute['attribute_code']);
     }

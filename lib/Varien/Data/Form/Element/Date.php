@@ -20,7 +20,7 @@
  *
  * @category    Varien
  * @package     Varien_Data
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -164,7 +164,7 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
         if (empty($outputFormat)) {
             throw new Exception('Output format is not specified. Please, specify "format" key in constructor, or set it using setFormat().');
         }
-        $displayFormat = Varien_Date::convertZendToStrFtime($outputFormat, true, (bool)$this->getTime());
+        $displayFormat = Varien_Date::convertZendToStrftime($outputFormat, true, (bool)$this->getTime());
 
         $html .= sprintf('
             <script type="text/javascript">

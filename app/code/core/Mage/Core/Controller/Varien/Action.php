@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -521,8 +521,6 @@ abstract class Mage_Core_Controller_Varien_Action
         if ($this->getFlag('', self::FLAG_NO_PRE_DISPATCH)) {
             return;
         }
-
-        Varien_Autoload::registerScope($this->getRequest()->getRouteName());
 
         Mage::dispatchEvent('controller_action_predispatch', array('controller_action' => $this));
         Mage::dispatchEvent('controller_action_predispatch_' . $this->getRequest()->getRouteName(),

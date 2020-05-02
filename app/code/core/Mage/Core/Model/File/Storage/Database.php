@@ -20,13 +20,16 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
 /**
  * File storage database model class
+ *
+ * @method Mage_Core_Model_Resource_File_Storage_Database _getResource()
+ * @method Mage_Core_Model_Resource_File_Storage_Database getResource()
  *
  * @category    Mage
  * @package     Mage_Core
@@ -86,7 +89,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
     /**
      * Create tables for file and directory storages
      *
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function init()
     {
@@ -110,7 +113,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
      * Load object data by filename
      *
      * @param  string $filePath
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function loadByFilename($filePath)
     {
@@ -133,7 +136,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
     /**
      * Clear files and directories in storage
      *
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function clear()
     {
@@ -187,7 +190,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
      * Import files list
      *
      * @param  array $files
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function importFiles($files)
     {
@@ -224,7 +227,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
      * Store file into database
      *
      * @param  string $filename
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function saveFile($filename)
     {
@@ -259,7 +262,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
      *
      * @param  string $oldFilePath
      * @param  string $newFilePath
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function copyFile($oldFilePath, $newFilePath)
     {
@@ -278,7 +281,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
      *
      * @param  string $oldFilePath
      * @param  string $newFilePath
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function renameFile($oldFilePath, $newFilePath)
     {
@@ -320,7 +323,7 @@ class Mage_Core_Model_File_Storage_Database extends Mage_Core_Model_File_Storage
      * Delete file from database
      *
      * @param string $path
-     * @return Mage_Core_Model_File_Storage_Database
+     * @return $this
      */
     public function deleteFile($path)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Bundle
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class Mage_Bundle_Model_Observer
      * Setting Bundle Items Data to product for father processing
      *
      * @param Varien_Object $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function prepareProductSave($observer)
     {
@@ -73,7 +73,7 @@ class Mage_Bundle_Model_Observer
      * Append bundles in upsell list for current product
      *
      * @param Varien_Object $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function appendUpsellProducts($observer)
     {
@@ -119,8 +119,7 @@ class Mage_Bundle_Model_Observer
         $bundleCollection = $product->getCollection()
             ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
             ->addStoreFilter()
-            ->addMinimalPrice()
-            ->addFinalPrice()
+            ->addPriceData()
             ->addTaxPercents();
 
         Mage::getSingleton('catalog/product_visibility')
@@ -151,7 +150,7 @@ class Mage_Bundle_Model_Observer
      * Append selection attributes to selection's order item
      *
      * @param Varien_Object $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function appendBundleSelectionData($observer)
     {
@@ -172,7 +171,7 @@ class Mage_Bundle_Model_Observer
      * only for front end
      *
      * @param Varien_Event_Observer $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function loadProductOptions($observer)
     {
@@ -187,7 +186,7 @@ class Mage_Bundle_Model_Observer
      * duplicating bundle options and selections
      *
      * @param Varien_Object $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function duplicateProduct($observer)
     {
@@ -244,7 +243,7 @@ class Mage_Bundle_Model_Observer
      * Setting attribute tab block for bundle
      *
      * @param Varien_Object $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function setAttributeTabBlock($observer)
     {
@@ -260,7 +259,7 @@ class Mage_Bundle_Model_Observer
      * Initialize product options renderer with bundle specific params
      *
      * @param Varien_Event_Observer $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function initOptionRenderer(Varien_Event_Observer $observer)
     {
@@ -275,7 +274,7 @@ class Mage_Bundle_Model_Observer
      * @deprecated since 1.4.0.0
      *
      * @param Varien_Event_Observer $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function catalogProductLoadAfter(Varien_Event_Observer $observer)
     {
@@ -295,7 +294,7 @@ class Mage_Bundle_Model_Observer
      * @see Mage_Bundle_Model_Mysql4_Indexer_Price
      *
      * @param Varien_Event_Observer $observer
-     * @return Mage_Bundle_Model_Observer
+     * @return $this
      */
     public function catalogIndexPlainReindexAfter(Varien_Event_Observer $observer)
     {

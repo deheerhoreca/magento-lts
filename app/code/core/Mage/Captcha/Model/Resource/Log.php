@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Captcha
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,7 +57,7 @@ class Mage_Captcha_Model_Resource_Log extends Mage_Core_Model_Resource_Db_Abstra
      * Save or Update count Attempts
      *
      * @param string|null $login
-     * @return Mage_Captcha_Model_Resource_Log
+     * @return $this
      */
     public function logAttempt($login)
     {
@@ -89,7 +89,7 @@ class Mage_Captcha_Model_Resource_Log extends Mage_Core_Model_Resource_Db_Abstra
      * Delete User attempts by login
      *
      * @param string $login
-     * @return Mage_Captcha_Model_Resource_Log
+     * @return $this
      */
     public function deleteUserAttempts($login)
     {

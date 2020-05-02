@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Admin
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,7 +85,7 @@ class Mage_Admin_Model_Config extends Varien_Simplexml_Config
      * @param Mage_Admin_Model_Acl $acl
      * @param Mage_Core_Model_Config_Element $resource
      * @param string $parentName
-     * @return Mage_Admin_Model_Config
+     * @return $this
      */
     public function loadAclResources(Mage_Admin_Model_Acl $acl, $resource = null, $parentName = null)
     {

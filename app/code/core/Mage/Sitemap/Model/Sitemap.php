@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sitemap
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -125,7 +125,7 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
     /**
      * Generate XML file
      *
-     * @return Mage_Sitemap_Model_Sitemap
+     * @return $this
      */
     public function generateXml()
     {
@@ -182,70 +182,7 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
             'collection' => $products,
             'store_id' => $storeId
         ));
-        /* DHH CORE HACK */
-        ini_set('memory_limit','8G'); // yup
-        set_time_limit(0); // yup
-        /* DHH CORE HACK */
         foreach ($products->getItems() as $item) {
-          /* DHH CORE HACK */
-
-          $product = Mage::getModel('catalog/product')->load($item->getId());
-          $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product);
-          if($path === false) {
-            $path = $product->getProductUrl(); //fallback
-          }
-          if(strstr($path, "index.php/")) {
-            $path = substr($path, strpos($path, "index.php/") + 10);
-          }
-          //echo $baseUrl.$path;exit;
-
-          //$product = Mage::getModel("catalog/product")->setId($item->getId());
-          //$categories = $product->getCategoryCollection();
-          //$categories_ids = [];
-          // foreach($categories as $category) {
-          //  $categories_ids[] = $category->getId();
-          //}
-
-          /*
-          $catid = NULL;
-          if(empty($categories_ids) === FALSE) {
-            foreach($categories_ids as $category_id) {
-              $catid = $category_id;
-              break;
-            }
-            $category = Mage::getModel('catalog/category')->load($catid);
-            $path = $item->getUrlPath($category);
-          } else {
-            $path = $item->getUrl();
-          }
-          */
-
-          $xml = sprintf(
-            '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
-            htmlspecialchars($baseUrl . $path),
-            $date,
-            $changefreq,
-            $priority
-          );
-          //$xml = sprintf(
-          //  '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
-          //  htmlspecialchars($baseUrl . $item->getUrl()),
-          //  $date,
-          //  $changefreq,
-          //  $priority
-          //);
-          /* DHH CORE HACK */
-            $io->streamWrite($xml);
-        }
-        unset($collection);
-
-        /**
-         * Generate cms pages sitemap
-         */
-        $changefreq = (string)Mage::getStoreConfig('sitemap/page/changefreq', $storeId);
-        $priority   = (string)Mage::getStoreConfig('sitemap/page/priority', $storeId);
-        $collection = Mage::getResourceModel('sitemap/cms_page')->getCollection($storeId);
-        foreach ($collection as $item) {
             $xml = sprintf(
                 '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
                 htmlspecialchars($baseUrl . $item->getUrl()),
@@ -256,6 +193,40 @@ class Mage_Sitemap_Model_Sitemap extends Mage_Core_Model_Abstract
             $io->streamWrite($xml);
         }
         unset($collection);
+
+        /**
+         * Generate cms pages sitemap
+         */
+        $homepage = (string)Mage::getStoreConfig('web/default/cms_home_page', $storeId);
+        $changefreq = (string)Mage::getStoreConfig('sitemap/page/changefreq', $storeId);
+        $priority   = (string)Mage::getStoreConfig('sitemap/page/priority', $storeId);
+        $collection = Mage::getResourceModel('sitemap/cms_page')->getCollection($storeId);
+        $pages = new Varien_Object();
+        $pages->setItems($collection);
+        Mage::dispatchEvent('sitemap_cms_pages_generating_before', array(
+            'collection' => $pages,
+            'store_id' => $storeId
+        ));
+        foreach ($pages->getItems() as $item) {
+            $url = $item->getUrl();
+            if ( $url == $homepage) { $url = ''; }
+            $xml = sprintf(
+                '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
+                htmlspecialchars($baseUrl . $url),
+                $date,
+                $changefreq,
+                $priority
+            );
+            $io->streamWrite($xml);
+        }
+        unset($collection);
+
+        Mage::dispatchEvent('sitemap_urlset_generating_before', array(
+            'file'      => $io ,
+            'base_url'  => $baseUrl ,
+            'date'      => $date,
+            'store_id'  => $storeId
+        ));
 
         $io->streamWrite('</urlset>');
         $io->streamClose();

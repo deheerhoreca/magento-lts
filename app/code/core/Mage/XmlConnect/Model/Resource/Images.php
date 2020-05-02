@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,7 @@ class Mage_XmlConnect_Model_Resource_Images extends Mage_Core_Model_Resource_Db_
      * Repair image order for application by type
      *
      * @param Mage_Core_Model_Abstract $image
-     * @return Mage_XmlConnect_Model_Resource_Images
+     * @return $this
      */
     public function repairOrder(Mage_Core_Model_Abstract $image)
     {
@@ -54,7 +54,7 @@ class Mage_XmlConnect_Model_Resource_Images extends Mage_Core_Model_Resource_Db_
 
         $select = $this->_getWriteAdapter()->select()->from($this->getMainTable(), array('image_id'))
             ->where('application_id=:application_id AND image_type=:image_type')
-            ->order('order', Varien_Data_Collection::SORT_ORDER_ASC);
+            ->order('order ' . Varien_Data_Collection::SORT_ORDER_ASC);
 
         $result = $this->_getWriteAdapter()->fetchCol($select, $bind);
         $imageModel = Mage::getModel('xmlconnect/images');
@@ -72,7 +72,7 @@ class Mage_XmlConnect_Model_Resource_Images extends Mage_Core_Model_Resource_Db_
      * @param string $imageFile
      * @param string $imageType
      * @param string $order
-     * @return Mage_XmlConnect_Model_Resource_Images
+     * @return $this
      */
     public function saveImage($applicationId, $imageFile, $imageType, $order)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,7 +75,7 @@ class Mage_Catalog_Model_Config extends Mage_Eav_Model_Config
      * Set store id
      *
      * @param integer $storeId
-     * @return Mage_Catalog_Model_Config
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -272,7 +272,7 @@ class Mage_Catalog_Model_Config extends Mage_Eav_Model_Config
         $attributes = Mage::getConfig()
             ->getNode(self::XML_PATH_PRODUCT_COLLECTION_ATTRIBUTES)
             ->asArray();
-        return array_keys($attributes);;
+        return array_keys($attributes);
     }
 
     /**

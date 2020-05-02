@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Api2
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,17 @@
  */
 class Mage_Api2_Adminhtml_Api2_RoleController extends Mage_Adminhtml_Controller_Action
 {
+    /**
+     * Controller predispatch method
+     *
+     * @return Mage_Adminhtml_Controller_Action
+     */
+    public function preDispatch()
+    {
+        $this->_setForcedFormKeyActions(array('delete', 'save'));
+        return parent::preDispatch();
+    }
+
     /**
      * Show grid
      */
@@ -330,7 +341,7 @@ class Mage_Api2_Adminhtml_Api2_RoleController extends Mage_Adminhtml_Controller_
      *
      * @param int $adminId
      * @param int $roleId
-     * @return Mage_Api2_Adminhtml_Api2_RoleController
+     * @return $this
      */
     protected function _deleteUserFromRole($adminId, $roleId)
     {
@@ -345,7 +356,7 @@ class Mage_Api2_Adminhtml_Api2_RoleController extends Mage_Adminhtml_Controller_
      *
      * @param int $adminId
      * @param int $roleId
-     * @return Mage_Api2_Adminhtml_Api2_RoleController
+     * @return $this
      */
     protected function _addUserToRole($adminId, $roleId)
     {

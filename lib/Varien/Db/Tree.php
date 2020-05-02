@@ -20,7 +20,7 @@
  *
  * @category    Varien
  * @package     Varien_Db
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -340,7 +340,7 @@ class Varien_Db_Tree
                         '.$this->_right.' > '.$info[$this->_right];
                 $this->_db->query($sql);
                 $this->_db->commit();
-                return new Varien_Db_Tree_Node($info, $this->getKeys());;
+                return new Varien_Db_Tree_Node($info, $this->getKeys());
             } catch (Exception $e) {
                 $this->_db->rollBack();
                 echo $e->getMessage();

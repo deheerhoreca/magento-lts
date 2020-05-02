@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Log
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,7 @@ class Mage_Log_Model_Resource_Log extends Mage_Core_Model_Resource_Db_Abstract
      * Clean logs
      *
      * @param Mage_Log_Model_Log $object
-     * @return Mage_Log_Model_Resource_Log
+     * @return $this
      */
     public function clean(Mage_Log_Model_Log $object)
     {
@@ -72,7 +72,7 @@ class Mage_Log_Model_Resource_Log extends Mage_Core_Model_Resource_Db_Abstract
      * Clean visitors table
      *
      * @param int $time
-     * @return Mage_Log_Model_Resource_Log
+     * @return $this
      */
     protected function _cleanVisitors($time)
     {
@@ -121,7 +121,7 @@ class Mage_Log_Model_Resource_Log extends Mage_Core_Model_Resource_Db_Abstract
      * Clean customer table
      *
      * @param int $time
-     * @return Mage_Log_Model_Resource_Log
+     * @return $this
      */
     protected function _cleanCustomers($time)
     {
@@ -218,7 +218,7 @@ class Mage_Log_Model_Resource_Log extends Mage_Core_Model_Resource_Db_Abstract
     /**
      * Clean url table
      *
-     * @return Mage_Log_Model_Resource_Log
+     * @return $this
      */
     protected function _cleanUrls()
     {

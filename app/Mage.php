@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,31 +30,29 @@ define('BP', dirname(dirname(__FILE__)));
 
 Mage::register('original_include_path', get_include_path());
 
-if (defined('COMPILER_INCLUDE_PATH')) {
-    $appPath = COMPILER_INCLUDE_PATH;
-    set_include_path($appPath . PS . Mage::registry('original_include_path'));
-    include_once COMPILER_INCLUDE_PATH . DS . "Mage_Core_functions.php";
-    include_once COMPILER_INCLUDE_PATH . DS . "Varien_Autoload.php";
-} else {
-    /**
-     * Set include path
-     */
-    $paths = array();
-    $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'local';
-    $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'community';
-    $paths[] = BP . DS . 'app' . DS . 'code' . DS . 'core';
-    $paths[] = BP . DS . 'lib';
+/**
+ * Set include path
+ */
+$paths = array();
+$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'local';
+$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'community';
+$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'core';
+$paths[] = BP . DS . 'lib';
 
-    $appPath = implode(PS, $paths);
-    set_include_path($appPath . PS . Mage::registry('original_include_path'));
-    include_once "Mage/Core/functions.php";
-    include_once "Varien/Autoload.php";
-}
+$appPath = implode(PS, $paths);
+set_include_path($appPath . PS . Mage::registry('original_include_path'));
+include_once "Mage/Core/functions.php";
+include_once "Varien/Autoload.php";
 
 Varien_Autoload::register();
 
 include_once "phpseclib/bootstrap.php";
 include_once "mcryptcompat/mcrypt.php";
+
+/* Support additional includes, such as composer's vendor/autoload.php files */
+foreach (glob(BP . DS . 'app' . DS . 'etc' . DS . 'includes' . DS . '*.php') as $path) {
+    include_once $path;
+}
 
 /**
  * Main Mage hub class
@@ -174,9 +172,52 @@ final class Mage
             'major'     => '1',
             'minor'     => '9',
             'revision'  => '4',
-            'patch'     => '0',
+            'patch'     => '4',
             'stability' => '',
             'number'    => '',
+        );
+    }
+
+    /**
+     * Gets the current OpenMage version string
+     * @link https://openmage.github.io/supported-versions.html
+     * @link https://semver.org/
+     *
+     * @return string
+     */
+    public static function getOpenMageVersion()
+    {
+        $i = self::getOpenMageVersionInfo();
+        $versionString = "{$i['major']}.{$i['minor']}.{$i['patch']}";
+        if ( $i['stability'] || $i['number'] ) {
+            $versionString .= "-";
+            if ( $i['stability'] && $i['number'] ) {
+                $versionString .= implode('.', [$i['stability'], $i['number']]);
+            } else {
+                $versionString .= implode('', [$i['stability'], $i['number']]);
+            }
+        }
+        return trim(
+            $versionString,
+            '.-'
+        );
+    }
+
+    /**
+     * Gets the detailed OpenMage version information
+     * @link https://openmage.github.io/supported-versions.html
+     * @link https://semver.org/
+     *
+     * @return array
+     */
+    public static function getOpenMageVersionInfo()
+    {
+        return array(
+            'major'     => '19',
+            'minor'     => '4',
+            'patch'     => '1',
+            'stability' => '', // beta,alpha,rc
+            'number'    => '', // 1,2,3,0.3.7,x.7.z.92 @see https://semver.org/#spec-item-9
         );
     }
 
@@ -422,8 +463,10 @@ final class Mage
      *
      * @param string $eventName
      * @param callback $callback
-     * @param array $arguments
+     * @param array $data
      * @param string $observerName
+     * @param string $observerClass
+     * @return Varien_Event_Collection
      */
     public static function addObserver($eventName, $callback, $data = array(), $observerName = '', $observerClass = '')
     {
@@ -476,7 +519,7 @@ final class Mage
     public static function getSingleton($modelClass='', array $arguments=array())
     {
         $registryKey = '_singleton/'.$modelClass;
-        if (!self::registry($registryKey)) {
+        if (!isset(self::$_registry[$registryKey])) {
             self::register($registryKey, self::getModel($modelClass, $arguments));
         }
         return self::registry($registryKey);
@@ -518,14 +561,14 @@ final class Mage
     public static function getResourceSingleton($modelClass = '', array $arguments = array())
     {
         $registryKey = '_resource_singleton/'.$modelClass;
-        if (!self::registry($registryKey)) {
+        if (!isset(self::$_registry[$registryKey])) {
             self::register($registryKey, self::getResourceModel($modelClass, $arguments));
         }
         return self::registry($registryKey);
     }
 
     /**
-     * Deprecated, use self::helper()
+     * @deprecated, use self::helper()
      *
      * @param string $type
      * @return object
@@ -545,7 +588,7 @@ final class Mage
     public static function helper($name)
     {
         $registryKey = '_helper/' . $name;
-        if (!self::registry($registryKey)) {
+        if (!isset(self::$_registry[$registryKey])) {
             $helperClass = self::getConfig()->getHelperClassName($name);
             self::register($registryKey, new $helperClass);
         }
@@ -561,7 +604,7 @@ final class Mage
     public static function getResourceHelper($moduleName)
     {
         $registryKey = '_resource_helper/' . $moduleName;
-        if (!self::registry($registryKey)) {
+        if (!isset(self::$_registry[$registryKey])) {
             $helperClass = self::getConfig()->getResourceHelper($moduleName);
             self::register($registryKey, $helperClass);
         }
@@ -808,16 +851,21 @@ final class Mage
         static $loggers = array();
 
         $level  = is_null($level) ? Zend_Log::DEBUG : $level;
-        $file = empty($file) ? 'system.log' : basename($file);
-
-        // Validate file extension before save. Allowed file extensions: log, txt, html, csv
-        if (!self::helper('log')->isLogFileExtensionValid($file)) {
-            return;
-        }
+        $file = empty($file) ?
+            (string) self::getConfig()->getNode('dev/log/file', Mage_Core_Model_Store::DEFAULT_CODE) : basename($file);
 
         try {
             if (!isset($loggers[$file])) {
-                $logDir  = self::getBaseDir('var') . DS . 'log';
+                // Validate file extension before save. Allowed file extensions: log, txt, html, csv
+                $_allowedFileExtensions = explode(
+                    ',',
+                    (string) self::getConfig()->getNode('dev/log/allowedFileExtensions', Mage_Core_Model_Store::DEFAULT_CODE)
+                );
+                if ( ! ($extension = pathinfo($file, PATHINFO_EXTENSION)) || ! in_array($extension, $_allowedFileExtensions)) {
+                    return;
+                }
+
+                $logDir = self::getBaseDir('var') . DS . 'log';
                 $logFile = $logDir . DS . $file;
 
                 if (!is_dir($logDir)) {

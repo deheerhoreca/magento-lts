@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
 
                 if (!$product->hasData($attribute->getAttributeCode())) {
                     $value = Mage::helper('catalog')->__('N/A');
-                } elseif ((string)$value == '') {
+                } elseif (is_null($value) || $value === false || $value === '') {
                     $value = Mage::helper('catalog')->__('No');
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = Mage::app()->getStore()->convertPrice($value, true);

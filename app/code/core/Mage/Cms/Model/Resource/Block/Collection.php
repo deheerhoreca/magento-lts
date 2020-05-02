@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,7 +59,7 @@ class Mage_Cms_Model_Resource_Block_Collection extends Mage_Core_Model_Resource_
      *
      * @param int|Mage_Core_Model_Store $store
      * @param bool $withAdmin
-     * @return Mage_Cms_Model_Resource_Block_Collection
+     * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
     {

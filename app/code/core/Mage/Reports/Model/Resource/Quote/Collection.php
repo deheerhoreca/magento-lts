@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -80,7 +80,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
      *
      * @param array $storeIds
      * @param string $filter
-     * @return Mage_Reports_Model_Resource_Quote_Collection
+     * @return $this
      */
     public function prepareForAbandonedReport($storeIds, $filter = null)
     {
@@ -100,7 +100,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
     /**
      * Prepare select query for products in carts report
      *
-     * @return Mage_Reports_Model_Resource_Quote_Collection
+     * @return $this
      */
     public function prepareForProductsInCarts()
     {
@@ -158,7 +158,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
      * Add store ids to filter
      *
      * @param array $storeIds
-     * @return Mage_Reports_Model_Resource_Quote_Collection
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {
@@ -170,7 +170,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
      * Add customer data
      *
      * @param unknown_type $filter
-     * @return Mage_Reports_Model_Resource_Quote_Collection
+     * @return $this
      */
     public function addCustomerData($filter = null)
     {
@@ -193,12 +193,12 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
         $adapter = $this->getSelect()->getAdapter();
         $customerName = $adapter->getConcatSql(array('cust_fname.value', 'cust_mname.value', 'cust_lname.value',), ' ');
         $this->getSelect()
-            ->joinInner(
+            ->joinLeft(
                 array('cust_email' => $attrEmailTableName),
                 'cust_email.entity_id = main_table.customer_id',
                 array('email' => 'cust_email.email')
             )
-            ->joinInner(
+            ->joinLeft(
                 array('cust_fname' => $attrFirstnameTableName),
                 implode(' AND ', array(
                     'cust_fname.entity_id = main_table.customer_id',
@@ -206,7 +206,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
                 )),
                 array('firstname' => 'cust_fname.value')
             )
-            ->joinInner(
+            ->joinLeft(
                 array('cust_mname' => $attrMiddlenameTableName),
                 implode(' AND ', array(
                     'cust_mname.entity_id = main_table.customer_id',
@@ -214,7 +214,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
                 )),
                 array('middlename' => 'cust_mname.value')
             )
-            ->joinInner(
+            ->joinLeft(
                 array('cust_lname' => $attrLastnameTableName),
                 implode(' AND ', array(
                     'cust_lname.entity_id = main_table.customer_id',
@@ -248,7 +248,7 @@ class Mage_Reports_Model_Resource_Quote_Collection extends Mage_Sales_Model_Reso
      *
      * @param array $storeIds
      * @param array $filter
-     * @return Mage_Reports_Model_Resource_Quote_Collection
+     * @return $this
      */
     public function addSubtotal($storeIds = '', $filter = null)
     {

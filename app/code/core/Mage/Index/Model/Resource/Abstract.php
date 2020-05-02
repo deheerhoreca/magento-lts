@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Index
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ abstract class Mage_Index_Model_Resource_Abstract extends Mage_Core_Model_Resour
      *
      * @var bool
      */
-    protected $_isDisableKeys = true;
+    protected $_isDisableKeys = false;
 
     /**
      * Whether table changes are allowed

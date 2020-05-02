@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Log
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,7 @@ class Mage_Log_Model_Resource_Visitor_Online extends Mage_Core_Model_Resource_Db
      * Prepare online visitors for collection
      *
      * @param Mage_Log_Model_Visitor_Online $object
-     * @return Mage_Log_Model_Resource_Visitor_Online
+     * @return $this
      */
     public function prepare(Mage_Log_Model_Visitor_Online $object)
     {

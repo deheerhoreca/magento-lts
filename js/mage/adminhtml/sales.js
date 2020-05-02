@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var AdminOrder = new Class.create();
@@ -281,7 +281,7 @@ AdminOrder.prototype = {
             }
 
             if (fields[i].changeUpdater) fields[i].changeUpdater();
-            if (name == 'region' && data['region_id'] && !data['region']){
+            if (name == 'region' && data['region_id'] > 0 && !data['region']){
                 fields[i].value = data['region_id'];
             }
         }
@@ -350,6 +350,7 @@ AdminOrder.prototype = {
     setShippingMethod : function(method){
         var data = {};
         data['order[shipping_method]'] = method;
+        data['shipping_as_billing'] = this.shippingAsBilling ? 1 : 0;
         this.loadArea(['shipping_method', 'totals', 'billing_method'], true, data);
     },
 

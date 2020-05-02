@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogIndex
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,7 +52,7 @@ class Mage_CatalogIndex_Model_Resource_Data_Abstract extends Mage_Core_Model_Res
      * Set link select
      *
      * @param Zend_Db_Select $select
-     * @return Mage_CatalogIndex_Model_Resource_Data_Abstract
+     * @return $this
      */
     protected function _setLinkSelect($select)
     {
@@ -85,7 +85,7 @@ class Mage_CatalogIndex_Model_Resource_Data_Abstract extends Mage_Core_Model_Res
      * @param array $products
      * @param array $attributes
      * @param int $store
-     * @return unknown
+     * @return array
      */
     public function getAttributeData($products, $attributes, $store)
     {
@@ -128,7 +128,7 @@ class Mage_CatalogIndex_Model_Resource_Data_Abstract extends Mage_Core_Model_Res
      * @param string $table
      * @param string $idField
      * @param string $whereField
-     * @param int $id
+     * @param int|array $id
      * @param array $additionalWheres
      * @return mixed
      */
@@ -247,7 +247,7 @@ class Mage_CatalogIndex_Model_Resource_Data_Abstract extends Mage_Core_Model_Res
      * @param string $field entity_id field name
      * @param int $store
      * @param int|string|array $value the filter value
-     * @return Mage_CatalogIndex_Model_Resource_Data_Abstract
+     * @return $this
      */
     protected function _addAttributeFilter(Varien_Db_Select $select, $attributeCode, $table, $field, $store, $value)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Varien
  * @package     Varien_Pear
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,7 @@ class Varien_Pear_Registry extends PEAR_Registry
                     } else {
                         $file = '.pearrc';
                     }
-                    $this->_config = &new PEAR_Config($this->statedir . DIRECTORY_SEPARATOR .
+                    $this->_config = new PEAR_Config($this->statedir . DIRECTORY_SEPARATOR .
                         $file, '-'); // NO SYSTEM INI FILE
                     $this->_config->setRegistry($this);
                     $this->_config->set('php_dir', $this->install_dir);

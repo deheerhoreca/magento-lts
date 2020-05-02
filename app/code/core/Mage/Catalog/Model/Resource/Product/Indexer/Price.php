@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -83,7 +83,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * If the deleted product was found in a composite product(s) update it
      *
      * @param Mage_Index_Model_Event $event
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     public function catalogProductDelete(Mage_Index_Model_Event $event)
     {
@@ -114,7 +114,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * Copy data from temporary index table to main table by defined ids
      *
      * @param array $processIds
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      * @throws Exception
      */
     protected function _copyIndexDataToMainTable($processIds)
@@ -131,9 +131,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
             $write->delete($this->getIdxTable(), $where);
 
             // insert new index
-            $this->useDisableKeys(false);
             $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
-            $this->useDisableKeys(true);
 
             $this->commit();
         } catch (Exception $e) {
@@ -150,7 +148,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * when product was saved and changed attribute(s) has an effect on price.
      *
      * @param Mage_Index_Model_Event $event
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     public function catalogProductSave(Mage_Index_Model_Event $event)
     {
@@ -208,7 +206,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * Process product mass update action
      *
      * @param Mage_Index_Model_Event $event
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     public function catalogProductMassAction(Mage_Index_Model_Event $event)
     {
@@ -251,7 +249,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * Reindex product prices for specified product ids
      *
      * @param array | int $ids
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     public function reindexProductIds($ids)
     {
@@ -367,7 +365,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
     /**
      * Rebuild all index data
      *
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     public function reindexAll()
     {
@@ -418,7 +416,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * Prepare tier price index table
      *
      * @param int|array $entityIds the entity ids limitation
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {
@@ -461,7 +459,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      * Prepare group price index table
      *
      * @param int|array $entityIds the entity ids limitation
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     protected function _prepareGroupPriceIndex($entityIds = null)
     {
@@ -507,7 +505,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
      *
      * @param array|int $parentIds
      * @param unknown_type $excludeIds
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
@@ -545,7 +543,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
     /**
      * Prepare website current dates table
      *
-     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     * @return $this
      */
     protected function _prepareWebsiteDateTable()
     {
@@ -592,13 +590,18 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
         }
 
         $write->beginTransaction();
-        $table = $this->_getWebsiteDateTable();
-        $write->delete($table);
+        try {
+            $table = $this->_getWebsiteDateTable();
+            $write->delete($table);
 
-        if ($data) {
-            $write->insertMultiple($table, $data);
+            if ($data) {
+                $write->insertMultiple($table, $data);
+            }
+            $write->commit();
+        } catch (Exception $e) {
+            $write->rollBack();
+            throw $e;
         }
-        $write->commit();
 
         return $this;
     }

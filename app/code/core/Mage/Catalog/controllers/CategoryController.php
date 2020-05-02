@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,7 +38,7 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
      *
      * @return Mage_Catalog_Model_Category
      */
-    protected function _initCatagory()
+    protected function _initCategory()
     {
         Mage::dispatchEvent('catalog_controller_category_init_before', array('controller_action' => $this));
         $categoryId = (int) $this->getRequest()->getParam('id', false);
@@ -74,6 +74,18 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
     }
 
     /**
+     * Initialize requested category object
+     *
+     * @deprecated use method _initCategory
+     *
+     * @return Mage_Catalog_Model_Category
+     */
+    protected function _initCatagory()
+    {
+        return $this->_initCategory();
+    }
+
+    /**
      * Recursively apply custom design settings to category if it's option
      * custom_use_parent_settings is setted to 1 while parent option is not
      *
@@ -81,7 +93,7 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
      * @param Mage_Catalog_Model_Category $category
      * @param Mage_Core_Model_Layout_Update $update
      *
-     * @return Mage_Catalog_CategoryController
+     * @return $this
      */
     protected function _applyCustomDesignSettings($category, $update)
     {
@@ -113,7 +125,7 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
      */
     public function viewAction()
     {
-        if ($category = $this->_initCatagory()) {
+        if ($category = $this->_initCategory()) {
             $design = Mage::getSingleton('catalog/design');
             $settings = $design->getDesignSettings($category);
 

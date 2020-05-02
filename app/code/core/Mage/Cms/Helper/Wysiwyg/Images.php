@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -168,7 +168,7 @@ class Mage_Cms_Helper_Wysiwyg_Images extends Mage_Core_Helper_Abstract
      */
     public function isUsingStaticUrlsAllowed()
     {
-        $checkResult = new StdClass;
+        $checkResult = new stdClass;
         $checkResult->isAllowed = false;
         Mage::dispatchEvent('cms_wysiwyg_images_static_urls_allowed', array(
             'result'   => $checkResult,
