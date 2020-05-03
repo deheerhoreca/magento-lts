@@ -180,3 +180,25 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
   }
 
 }
+
+if(function_exists('printr') === false) {
+  function printr($expr, $return = false) {
+    $ret = null;
+    if(is_array($expr) && !sizeof($expr)) {
+      return;
+    }
+    if(php_sapi_name() !== "cli") {
+      $ret .= "<pre>";
+    }
+    $ret .= print_r($expr, true);
+    if(php_sapi_name() !== "cli") {
+      $ret .= "</pre>";
+    } else {
+      $ret .= PHP_EOL;
+    }
+    if($return) {
+      return $return;
+    }
+    echo $ret;
+  }
+}

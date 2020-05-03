@@ -6,17 +6,44 @@
  */
 /* @var $this Mage_Catalog_Block_Product_List */
 
-$_productCollection     = $this->getLoadedProductCollection();
-$_helper                = $this->helper('catalog/output');
-$category               = $this->getRequest()->getControllerName();
-$catid                  = null;
-$carct                  = Mage::registry('current_category');
-$amschk                 = $this->getRequest()->getRouteName();
-$haschild               = FALSE;
-$short_name_cats        = [10, 119, 434, 174];
-$max_product_info_items = 3;
+$_productCollection          = $this->getLoadedProductCollection();
+$_helper                     = $this->helper('catalog/output');
+$category                    = $this->getRequest()->getControllerName();
+$catid                       = null;
+$carct                       = Mage::registry('current_category');
+$amschk                      = $this->getRequest()->getRouteName();
+$haschild                    = false;
+$short_name_cats             = [10, 119, 434, 174];
+$max_product_info_items      = 3;
+$max_product_highlight_items = 6;
 
 $_productCollection->setFlag('require_stock_items', true);
+
+/*
+ * If the sorting is by position, put the recommended products on top
+ * http://www.rob-st.com/2016/11/29/sort-magento-category-multiple-values-keep-newest-products-top/
+ */
+
+$currentOrder = $this->getChild('toolbar')->getCurrentOrder();
+$currentDirection = $this->getChild('toolbar')->getCurrentDirection();
+
+if($currentOrder === "position") {
+  $query = $_productCollection->getSelect()->__toString();
+  //printr($query);
+  if(strstr($query, "tagline") !== false) { // if somehow this field is not there
+    $sortByRcm = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
+    $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
+    $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
+    $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);
+    //printr($_productCollection->getSelect()->__toString());
+     
+    // Collection was loaded already...reloading...(yeah I know)
+    $_productCollection->clear();
+    $_productCollection->load();
+  }
+}
+
+$_collectionSize = $_productCollection->count();
 
 /* CATEGORY HEADER & SEO */
 
@@ -165,8 +192,6 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
 
 /* CHILD CATEGORY, SHOW PRODUCTS */
 
-$_collectionSize = $_productCollection->count();
-
 //if($catid === 4 || ($amschk === 'amshopby' || ($haschild === false || $catid === 544))) {
 if($_collectionSize > 0) {
 ?>
@@ -219,6 +244,11 @@ if($_collectionSize > 0) {
         $stock_message = "Niet op voorraad";
         $stock_status = "DISABLED";
       }
+      
+      $energy_rating = $_product->getAttributeText('energieklasse');
+      $productlabel = $_product->getProductLabel();
+      $gnvalue = $_product->getAttributeText("gn"); // can be an array if multiselect
+      $tagline = $_product->getTagline();
       
       /* Product Info */
       $product_info = [];
@@ -315,9 +345,9 @@ if($_collectionSize > 0) {
       }
       
       /* GN maat if not in a GN category */
-      if(empty($gnvalue) === FALSE
-        && empty($category_name) === FALSE
-        && strstr($category_name, "GN") === FALSE) {
+      if(empty($gnvalue) === false
+        && empty($category_name) === false
+        && strstr($category_name, "GN") === false) {
           if(is_array($gnvalue)) {
             $gnvalue = implode(" ", $gnvalue);
           }
@@ -389,12 +419,6 @@ if($_collectionSize > 0) {
       $price_html = $this->getPriceHtml($_product, true);
       $price_html = str_replace(",00", ",-", $price_html);
       $price_html = str_replace("€", null, $price_html);
-      
-      /* ATTRIBUTE HIGHLIGHTS */
-      $energy_rating = $_product->getAttributeText('energieklasse');
-      $productlabel = $_product->getProductLabel();
-      $gnvalue = $_product->getAttributeText("gn"); // can be an array if multiselect
-      $tagline = $_product->getTagline();
       
       /* Automatic Label: Product */
       if(isset($productlabel) === true) {
