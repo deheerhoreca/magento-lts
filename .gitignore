@@ -71,3 +71,16 @@ bridge_*.php
 /downloader/cache.cfg
 
 vendor/
+
+google*.html
+BingSiteAuth.xml
+
+CODE_OF_CONDUCT.md
+LICENSE.html
+LICENSE.txt
+LICENSE_AFL.txt
+LICENSE
+RELEASE_NOTES.txt
+php.ini
+php.ini.sample
+install.php
