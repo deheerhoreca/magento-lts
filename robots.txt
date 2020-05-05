@@ -106,6 +106,7 @@ User-agent: Widow
 User-agent: WWWOFFLE
 User-agent: Xaldon\ WebSpider
 User-agent: Zeus
+User-agent: BLEXBot
 Disallow: /
 
 User-agent: *
