@@ -93,7 +93,7 @@ if(empty($_html) === false) {
       $_html_normalized = str_replace($formKey, $formKeyPlaceholder, $_html);
     }
 
-    Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"]);
+    Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"], FPC_TTL);
 
     if(headers_sent() === false) {
       $bytes = strlen($_html_normalized);
