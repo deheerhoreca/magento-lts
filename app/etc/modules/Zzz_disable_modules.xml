@@ -64,8 +64,5 @@
         <Mage_Wishlist>
           <active>true</active>
         </Mage_Wishlist>
-        <Magmodules_Kiyoh>
-          <active>false</active>
-        </Magmodules_Kiyoh>
     </modules>
 </config>
