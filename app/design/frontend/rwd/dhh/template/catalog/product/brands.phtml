@@ -1,0 +1,88 @@
+<?php
+$name           = 'manufacturer';
+$attributeInfo  = Mage::getResourceModel('eav/entity_attribute_collection')->setCodeFilter($name)->getFirstItem();
+$attributeId    = $attributeInfo->getAttributeId();
+$attribute      = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+$manufacturers  = $attribute ->getSource()->getAllOptions(false); 	
+$m2             = '';
+
+usort($manufacturers, function($a, $b) {
+  return $a['label'] <=> $b['label'];
+});
+?>
+<style>
+  #manufacturer_list2 li {
+    width: 22%;
+    float: left;
+  }
+  
+  #manufacturer_list li>a,.smart-banner__icon {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  #manufacturer_list li {
+    float: left;
+    margin-right: 1.1%;
+    margin-bottom: 20px;
+    margin-left: 0;
+    padding: 5px;
+    width: 19.1%;
+    height: 100px;
+    text-align: center;
+  }
+
+  #manufacturer_list li img {
+    max-height: 60px;
+    width: auto;
+    vertical-align: middle;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    margin: auto;
+  }
+
+  #manufacturer_list li img:hover {
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+  }
+
+  #manufacturer_list li:nth-child(5n) {
+    margin-right: 0;
+  }
+
+  #manufacturer_list li>a {
+    display: block;
+    text-align: center;
+    line-height: 87px;
+  }
+</style>
+<ul id="manufacturer_list">
+  <?php
+  foreach ($manufacturers as $manufacturer) {
+	
+    $brand_logo   = null;
+    $brand_name   = $manufacturer['label'];
+    $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+    
+    if(empty($brand_name) === false) {
+      $brand = sanitizeForFilename($brand_name);
+      $brand_logo_file = "media/wysiwyg/brands/{$brand}.png";
+      if(is_file($brand_logo_file) === true) {
+        $brand_logo = "/".$brand_logo_file;
+      }
+    }
+    
+    if(empty($brand_logo) === false) {
+    ?>
+      <li>
+        <a href="/<?php echo $brand_slug; ?>">
+        <img src="<?php echo $brand_logo;?>" alt="<?php echo $brand_name; ?>" title="<?php echo $brand_name; ?>" /></a>
+      </li>
+      <?php 
+    } else {
+      $m2 .= "<li><a href='/{$brand_slug}'>{$manufacturer['label']}</a></li>";
+    }
+  }
+  ?>
+</ul>
+<ul id="manufacturer_list2" style="clear: both;"><?php echo $m2; ?></ul>

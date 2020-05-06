@@ -179,6 +179,16 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     return Markdown::defaultTransform($string);
   }
 
+  public function getBrandUrlSlug($url) {
+    $url = strtolower($url);
+    $url = str_replace([" ", "-", "/", "&"], Mage::getStoreConfig('amshopby/seo/special_char'), $url);
+    $url = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $url);
+    $url = iconv('UTF-8', 'ASCII//TRANSLIT', $url);
+    $url .= ".html";
+    
+    return $url;
+  }
+
 }
 
 if(function_exists('printr') === false) {
@@ -200,5 +210,19 @@ if(function_exists('printr') === false) {
       return $return;
     }
     echo $ret;
+  }
+}
+
+if(function_exists("sanitizeForFilename") === FALSE) {
+  function sanitizeForFilename($string) {
+    // Remove anything which isn't a word, whitespace, number
+    // or any of the following caracters -_~,;[]().
+    // If you don't need to handle multi-byte characters
+    // you can use preg_replace rather than mb_ereg_replace
+    // Thanks @Łukasz Rysiak!
+    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $string);
+    // Remove any runs of periods (thanks falstro!)
+    $output = mb_ereg_replace("([\.]{2,})", '', $string);
+    return strtolower($output);
   }
 }

@@ -25,9 +25,7 @@ $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 $brand_name = $_product->getAttributeText('manufacturer');
 $brand_logo = null;
-$brand_link = "/".strtolower($brand_name).".html";
-$brand_link = str_replace([" ", "-"], Mage::getStoreConfig('amshopby/seo/special_char'), $brand_link);
-$brand_link = iconv('UTF-8', 'ASCII//TRANSLIT', $brand_link);
+$brand_link   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 
 //$brand_name = "combisteel";
 
@@ -147,7 +145,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
       <?php
       echo "<div class='container' style='min-height:1em;'>";
-      echo "<div class='float-left' style='margin-right:2em;'><a href='{$brand_link}'>{$brand_name}</a></div>";
+      echo "<div class='float-left' style='margin-right:2em;'><a href='/{$brand_link}'>{$brand_name}</a></div>";
       if(strlen($tagline) > 0) {
         echo "<div class='small strong float-left product-detail-tagline'>{$tagline}</div>";
       }
@@ -1027,7 +1025,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
     }
     if(empty($brand_logo) === false) {
       echo "<div class='center'>";
-      echo "<a title='{$brand_name}' href='{$brand_link}'>";
+      echo "<a title='{$brand_name}' href='/{$brand_link}'>";
       echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
     }
     ?>

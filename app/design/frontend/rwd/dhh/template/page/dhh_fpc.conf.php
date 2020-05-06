@@ -17,3 +17,10 @@ const FPC_TTL       = 86400;
 - 2columns-left.phtml:
   - https://www.prokoeling.nl/koelkasten/alle-koelkasten.html
 */
+
+function get_cache_url() {
+  $url = Mage::helper('core/url')->getCurrentUrl();
+  $url = str_replace("?refreshfpc", null, $url);
+  
+  return $url;
+}
