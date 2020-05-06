@@ -8617,11 +8617,6 @@ a.footer__menu-item:active,a.footer__menu-item:hover {
   display: block;
 }
 
-#manufacturer_list li>a,.smart-banner__icon {
-  display: table-cell;
-  vertical-align: middle;
-}
-
 #upsell-product-table h3.product-name,.smart-banner__icon-img--ios {
   height: 60px;
 }
@@ -13967,53 +13962,6 @@ div.cross-sell-product {
 
 .block-content.aw-arp-block-content ul li:hover,div.category-products ul.products-grid li.item:hover,div.cross-sell-product:hover,ul#upsell-product-table li:hover {
   border: 1px solid #ccc;
-}
-
-#manufacturer_list li {
-  display: block!important;
-  float: left!important;
-  margin-right: 1.1%!important;
-  margin-bottom: 20px!important;
-  margin-left: 0!important;
-  padding: 5px!important;
-  width: 19.1%!important;
-  height: 100px!important;
-  border: 1px solid #e9e9e9!important;
-  text-align: center!important;
-  line-height: 24px;
-}
-
-#manufacturer_list li img {
-  max-height: 50px!important;
-  width: auto!important;
-  vertical-align: middle;
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-}
-
-#manufacturer_list li img:hover {
-  -webkit-filter: grayscale(0%);
-  filter: grayscale(0%);
-}
-
-#manufacturer_list li:nth-child(5n) {
-  margin-right: 0!important;
-}
-
-#manufacturer_list li.clzmanf52 img {
-  margin-top: 20px;
-  height: auto!important;
-}
-
-#manufacturer_list li.clzmanf171 img,#manufacturer_list li.clzmanf179 img,#manufacturer_list li.clzmanf183 img,#manufacturer_list li.clzmanf184 img,#manufacturer_list li.clzmanf219 img,#manufacturer_list li.clzmanf556 img {
-  margin-top: 10px;
-  height: auto!important;
-}
-
-#manufacturer_list li>a {
-  display: block;
-  text-align: center;
-  line-height: 87px;
 }
 
 .clzautomw {
