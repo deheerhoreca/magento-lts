@@ -20,7 +20,7 @@ const FPC_TTL       = 86400;
 
 function get_cache_url() {
   $url = Mage::helper('core/url')->getCurrentUrl();
-  $url = str_replace("?refreshfpc", null, $url);
+  $url = str_replace(["?refreshfpc", "?___store=default"], null, $url);
   
   return $url;
 }
