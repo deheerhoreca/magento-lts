@@ -107,6 +107,7 @@ User-agent: WWWOFFLE
 User-agent: Xaldon\ WebSpider
 User-agent: Zeus
 User-agent: BLEXBot
+User-agent: serpstatbot 
 Disallow: /
 
 User-agent: *

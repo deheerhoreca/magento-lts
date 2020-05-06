@@ -132,11 +132,9 @@
 
 ############################################
 ## DHH: block scrapers
-
-    RewriteCond %{HTTP_USER_AGENT} "=Mozilla/5.0 (compatible; Google-Apps-Script)"
-    RewriteRule ^ - [F]
+# https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
     
-    RewriteCond %{HTTP_USER_AGENT} "=Mozilla/5.0 (compatible; MegaIndex.ru/2.0; +http://megaindex.com/crawler)"
+    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script)"
     RewriteRule ^ - [F]
 
 ############################################
