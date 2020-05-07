@@ -59,14 +59,17 @@ usort($manufacturers, function($a, $b) {
 <ul id="manufacturer_list">
   <?php
   foreach ($manufacturers as $manufacturer) {
+    
+    $n = countProductsPerBrand($manufacturer["value"]);
+    
+    if($n === 0) continue;
 	
     $brand_logo   = null;
     $brand_name   = $manufacturer['label'];
     $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     
     if(empty($brand_name) === false) {
-      $brand = sanitizeForFilename($brand_name);
-      $brand_logo_file = "media/wysiwyg/brands/{$brand}.png";
+      $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
       if(is_file($brand_logo_file) === true) {
         $brand_logo = "/".$brand_logo_file;
       }
@@ -75,14 +78,28 @@ usort($manufacturers, function($a, $b) {
     if(empty($brand_logo) === false) {
     ?>
       <li>
-        <a href="/<?php echo $brand_slug; ?>">
+        <a href="/<?php echo $brand_slug; ?>.html">
         <img src="<?php echo $brand_logo;?>" alt="<?php echo $brand_name; ?>" title="<?php echo $brand_name; ?>" /></a>
       </li>
       <?php 
     } else {
-      $m2 .= "<li><a href='/{$brand_slug}'>{$manufacturer['label']}</a></li>";
+      $m2 .= "<li><a href='/{$brand_slug}.html'>{$manufacturer['label']}</a></li>";
     }
   }
   ?>
 </ul>
 <ul id="manufacturer_list2" style="clear: both;"><?php echo $m2; ?></ul>
+
+<?php
+
+function countProductsPerBrand($brand_id) {
+  try {
+    $collection = Mage::getModel('catalog/product')->getCollection();
+    $_productCollection = $collection->addAttributeToFilter('manufacturer', $brand_id)
+      ->addAttributeToFilter('status', ['eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
+      ->addAttributeToSelect('name');
+    return sizeof($_productCollection);
+  } catch (Exception $e) {
+    return "error";
+  }
+}

@@ -1,25 +1,24 @@
 .postWrapper {
-    padding-bottom: 25px;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
     clear: both;
+    border-bottom: 1px solid #cbcbcb;
 }
 
 .postTitle {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #DDDDDD;
     margin-bottom: 15px;
 }
 
 .postTitle h1 {
-    font-size: 2.5em;
-    margin: 1em 0 1em 0;
-    padding: 0px;
-    color: #32abdb;
+  font-size: min(2.5em, 6vw);
+  margin: 1em 0 1em 0;
+  padding: 0px;
+  color: #32abdb;
 }
 
 .postTitle h2,
 .postTitle h2 a {
-  font-size: 20px;
+  font-size: min(1.5em, 3vw);
   margin: 0px;
   padding: 0px;
   color: #32abdb;
@@ -31,18 +30,18 @@
 }
 
 .postTitle h3 {
-    font-size: 1em;
-    margin: 0px;
-    padding-top: 2px;
-    padding-right: 0px;
-    padding-bottom: 2px;
-    padding-left: 0px;
+  font-size: 1em;
+  margin: 0px;
+  padding-top: 2px;
+  padding-right: 0px;
+  padding-bottom: 2px;
+  padding-left: 0px;
 }
 
 .postContent {
-    padding-bottom: 10px;
-    text-align: justify;
-    font-size: 1.2em;
+  padding-bottom: 10px;
+  text-align: justify;
+  font-size: 1.2em;
 }
 
 .postContent img {
@@ -55,25 +54,25 @@
 }
 
 .postContent ul{
-    list-style: disc outside;
-    margin-bottom: 1.5em;
+  list-style: disc outside;
+  margin-bottom: 1.5em;
 }
 
 .postContent ul li{
-    margin-left: 2em;
+  margin-left: 2em;
 }
 
 .postContent ol{
-    list-style: decimal outside;
-    margin-bottom: 1.5em;
+  list-style: decimal outside;
+  margin-bottom: 1.5em;
 }
 
 .postContent ol li{
-    margin-left: 2em;
+  margin-left: 2em;
 }
 
 .postContent h2 {
-  font-size: 1.5em;
+  font-size: min(1.5em, 3vw);
   line-height: 2em;
   padding: 0.5em 0 0 0;
 }

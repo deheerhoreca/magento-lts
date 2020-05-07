@@ -20,20 +20,19 @@ if(function_exists("sanitizeForFilename") === FALSE) {
   }
 }
 
-$htbrand = $brand = null;
-$_helper = $this->helper('catalog/output');
-$_product = $this->getProduct();
-$brand_name = $_product->getAttributeText('manufacturer');
-$brand_logo = null;
-$brand_link   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$htbrand      = $brand = null;
+$_helper      = $this->helper('catalog/output');
+$_product     = $this->getProduct();
+$brand_name   = $_product->getAttributeText('manufacturer');
+$brand_logo   = null;
+$brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$brand_link   = "{$brand_slug}.html";
 
-//$brand_name = "combisteel";
-
-if(empty($brand_name) === FALSE) {
+if(empty($brand_name) === false) {
   $brand = sanitizeForFilename($brand_name);
   $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
-  $brand_logo_file = "media/wysiwyg/brands/{$brand}.png";
-  if(is_file($brand_logo_file)) {
+  $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
+  if(is_file($brand_logo_file) === true) {
     $brand_logo = "/".$brand_logo_file;
   }
 }

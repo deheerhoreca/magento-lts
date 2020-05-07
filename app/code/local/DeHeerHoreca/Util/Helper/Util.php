@@ -184,7 +184,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $url = str_replace([" ", "-", "/", "&"], Mage::getStoreConfig('amshopby/seo/special_char'), $url);
     $url = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $url);
     $url = iconv('UTF-8', 'ASCII//TRANSLIT', $url);
-    $url .= ".html";
     
     return $url;
   }

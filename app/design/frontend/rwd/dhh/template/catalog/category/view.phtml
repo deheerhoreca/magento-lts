@@ -12,15 +12,18 @@
  * @see Mage_Catalog_Block_Category_View
  */
 
-$_helper    = $this->helper('catalog/output');
-$_category  = $this->getCurrentCategory();
+$_helper      = $this->helper('catalog/output');
+$_category    = $this->getCurrentCategory();
 
-$brand_logo = "/media/wysiwyg/brands/prokoeling.png";
-$brand_name = strtolower($_category->getName());
-if(empty($brand_name) === FALSE) {
-  $brand = Mage::helper("deheerhoreca_util/util")->sanitizeForFilename($brand_name);
-  $brand_logo_file = "media/wysiwyg/brands/{$brand}.png";
-  if(is_file($brand_logo_file)) {
+$brand_name   = strtolower($_category->getName());
+$brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$brand_logo   = "/media/wysiwyg/brands/prokoeling.png";
+
+if(empty($brand_name) === false) {
+  $brand = sanitizeForFilename($brand_name);
+  $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
+  $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
+  if(is_file($brand_logo_file) === true) {
     $brand_logo = "/".$brand_logo_file;
   }
 }
@@ -28,7 +31,7 @@ if(empty($brand_name) === FALSE) {
 // Mixed mode = shop by brand
 if($this->isMixedMode()) {
   
-  $ctdesc_h1 = $_helper->categoryAttribute($_category, $_category->getName(), 'name');
+  $ctdesc_h1 = "Bekijk ons complete ".$_helper->categoryAttribute($_category, $_category->getName(), 'name')." assortiment";
   
   echo "<div class='ctdesc'>";
   echo "<img class='float-right' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' />";
