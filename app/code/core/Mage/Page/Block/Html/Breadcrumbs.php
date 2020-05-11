@@ -123,6 +123,7 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
     
     //https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
     
+    /*
     protected function _toHtml() {
       $cat_id = "";
       if (Mage::registry('current_product')) {
@@ -152,7 +153,72 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
       }
       $this->assign('crumbs', $this->_crumbs);
       return parent::_toHtml();
+    }
+    */
+    
+    protected function _toHtml() {
+      $cat_id = "";
+
+      //print_r($this->_crumbs);
+      
+      $categoryIds = [];
+      
+      
+      if(Mage::registry('current_product')) {
+        $product_id = Mage::registry('current_product')->getId();
+        $_product = Mage::getModel("catalog/product")->setId($product_id);
+        $product_category_id = $_product->getCategoryIds()[0];
+
+        if($product_id) {
+          if(empty($this->_crumbs["category{$product_category_id}"]) === true) {
+            $collection = $_product->getCategoryCollection()->addAttributeToSelect('path');
+            foreach($collection as $category) {
+              $categoryIds = explode("/", $category->getPath());
+            }
+            //print_r($categoryIds);
+          } else {
+            // We're okay, the category ID exists in the current crumbs
+          }
+        }
       }
+      if(is_array($this->_crumbs)) {
+        reset($this->_crumbs);
+        $this->_crumbs[key($this->_crumbs)]['first'] = true;
+        end($this->_crumbs);
+        $this->_crumbs[key($this->_crumbs)]['last'] = true;
+      }
+      
+      if(sizeof($categoryIds) > 0) {
+        foreach($categoryIds as $key => $category_id) {
+          if($category_id == 0) continue;
+          if($category_id == 1) continue;
+          if($category_id == 2) continue;
+          $category = Mage::getModel('catalog/category')->load($category_id);
+          $cat_name = $category->getName();
+          $cat_url =  $this->getBaseUrl().$category->getUrlPath();
+          
+          $this->_crumbs['category'.$category_id] = [
+            'label'    => $cat_name,
+            'title'    => '',
+            'link'     => $cat_url,
+            'first'    => '',
+            'last'     => '',
+            'readonly' => '',
+          ];
+        }
+        ksort($this->_crumbs);
+        $home = $this->_crumbs['home'];
+        unset($this->_crumbs['home']);
+        $this->_crumbs = ["home" => $home] + $this->_crumbs; // unshift while keeping key intact
+      }
+      
+      $this->assign('crumbs', $this->_crumbs);
+      
+      //print_r($this->_crumbs);
+      
+      return parent::_toHtml();
+    }
+    
     /*
     protected function _toHtml()
     {
