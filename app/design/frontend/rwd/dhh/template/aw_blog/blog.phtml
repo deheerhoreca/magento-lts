@@ -1,7 +1,13 @@
 <?php $posts = $this->getPosts(); ?>
+
+<div style='margin-bottom: 2em;'>
+  <h1>Horeca Blog</h1>
+  Tips, nieuws, en musings over de horeca.
+</div>
+
 <div id="messages_product_view">
-    <?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?>
-    <?php echo Mage::app()->getLayout()->getMessagesBlock()->getGroupedHtml(); ?>
+  <?php Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true)); ?>
+  <?php echo Mage::app()->getLayout()->getMessagesBlock()->getGroupedHtml(); ?>
 </div>
 
 <?php

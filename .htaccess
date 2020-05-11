@@ -29,23 +29,23 @@
 ############################################
 ## php5 settings
 
-<IfModule mod_php5.c>
+#<IfModule mod_php5.c>
 
 ############################################
 ## adjust max execution time
 
-    php_value max_execution_time 18000
+    #php_value max_execution_time 18000
 
 ############################################
 ## disable magic quotes for php request vars
 
-    php_flag magic_quotes_gpc off
+    #php_flag magic_quotes_gpc off
 
 ############################################
 ## disable automatic session start
 ## before autoload was initialized
 
-    php_flag session.auto_start off
+    #php_flag session.auto_start off
 
 ############################################
 ## enable resulting html compression
@@ -55,14 +55,14 @@
 ###########################################
 # disable user agent verification to not break multiple image upload
 
-    php_flag suhosin.session.cryptua off
+    #php_flag suhosin.session.cryptua off
 
 ###########################################
 # turn off compatibility with PHP4 when dealing with objects
 
-    php_flag zend.ze1_compatibility_mode Off
+    #php_flag zend.ze1_compatibility_mode Off
 
-</IfModule>
+#</IfModule>
 
 ############################################
 ## php7 settings
@@ -70,11 +70,9 @@
 
 <IfModule mod_php7.c>
     php_value max_execution_time 18000
-    php_flag magic_quotes_gpc off
     php_flag session.auto_start off
-    #php_flag zlib.output_compression on
+    php_flag zlib.output_compression on
     php_flag suhosin.session.cryptua off
-    php_flag zend.ze1_compatibility_mode Off
 </IfModule>
 
 <IfModule mod_security.c>
@@ -134,7 +132,7 @@
 ## DHH: block scrapers
 # https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
     
-    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script)"
+    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo)"
     RewriteRule ^ - [F]
 
 ############################################
@@ -142,12 +140,6 @@
 ## path relative to web root
 
     #RewriteBase /magento/
-
-############################################
-## if pagespeed_admin or pagespeed_global_admin exist go directly to it
-
-    RewriteCond %{REQUEST_URI} !/pagespeed_admin
-    RewriteCond %{REQUEST_URI} !/pagespeed_global_admin
 
 ############################################
 ## uncomment next line to enable light API calls processing
@@ -308,7 +300,6 @@
 </IfModule>
 
 <IfModule mod_headers.c>
-  Header set Connection keep-alive
   Header set X-XSS-Protection "1; mode=block"
 </IfModule>
 

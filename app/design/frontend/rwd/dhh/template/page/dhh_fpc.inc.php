@@ -67,7 +67,7 @@ if(headers_sent() === FALSE) {
   $w = "-w";
   if($write_cache === true) $w = "+w";
   if($read_cache === true) $r = "+r";
-  //header("qnd-fpc-settings: {$r} {$w}");
+  header("qnd-fpc-settings: {$r} {$w}");
 }
 
 if(empty($_html) === false) {
@@ -95,7 +95,6 @@ if(empty($_html) === false) {
     Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"], FPC_TTL);
 
     if(headers_sent() === FALSE) {
-      $bytes = strlen($_html_normalized);
       header("X-FPC: Saved");
     }
   }

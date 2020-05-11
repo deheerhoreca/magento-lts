@@ -6,6 +6,8 @@
  * @see Mage_Review_Block_Product_View
  */
 
+$max_highlighted_attributes = 12;
+
 if(function_exists("sanitizeForFilename") === FALSE) {
   function sanitizeForFilename($string) {
     // Remove anything which isn't a word, whitespace, number
@@ -100,21 +102,23 @@ if($in_stock === true) {
   $txtcltcz = 'clzsoldout';
 }
 
-$expected_delivery = $_product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($_product);
-$levertijd_verwacht = (int) $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
-$lbllevertijdvl = $_product->getAttributeText('levertijd');
-$lblbestelartikel = $_product->getAttributeText('bestelartikel');
-$supplier = $_product->getAttributeText('supplier');
-$_price = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
-$_finalPrice = $_product->getFinalPrice();
-$pvideo = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
-$productTitle = $_helper->productAttribute($_product, $_product->getName(), 'name');
-$extra_delivery_time = 0;
-$tagline = $_product->getTagline();
+$expected_delivery    = $_product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($_product);
+$levertijd_verwacht   = (int) $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
+$lbllevertijdvl       = $_product->getAttributeText('levertijd');
+$lblbestelartikel     = $_product->getAttributeText('bestelartikel');
+$_price               = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
+$_finalPrice          = $_product->getFinalPrice();
+$pvideo               = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
+$productTitle         = $_helper->productAttribute($_product, $_product->getName(), 'name');
+$extra_delivery_time  = 0;
+$tagline              = $_product->getTagline();
+$shoutout             = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
+$energy_rating        = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
 
 /* Temporarily adjust levertijd during holidays */
 
 /*
+$supplier             = $_product->getAttributeText('supplier');
 if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
   $future = strtotime("1 Jan 2020");
   $timefromdb = time();
@@ -126,24 +130,19 @@ if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
 */
 
 /* Product Documents */
-$files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)->getData();
-?>
+$files = Mage::getModel('staempfli_productattachment/file')
+  ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
+  ->getData();
 
-<!--
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
--->
-<!--
-<script type="text/javascript">var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
--->
+?>
 <script type="text/javascript">var optionsPrice = {};</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
   <div class="product-essential">
     <div class="product-name">
       <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+      <div class='container' style='min-height:1em;'>
       <?php
-      echo "<div class='container' style='min-height:1em;'>";
       echo "<div class='float-left' style='margin-right:2em;'><a href='/{$brand_link}'>{$brand_name}</a></div>";
       if(strlen($tagline) > 0) {
         echo "<div class='small strong float-left product-detail-tagline'>{$tagline}</div>";
@@ -159,9 +158,6 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
       <div style="border-top: 1px solid #dadada; padding-top: 10px;">
         <div class="product-img-box">
           <?php
-            $shoutout = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
-            $energy_rating = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
-
             if(strlen($shoutout) > 1) {
               echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
             }
@@ -178,7 +174,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
                 case 'B':     $enclz = 'enrgclz6';  break;
               }
               if(strlen($enclz) > 0) {
-                echo "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$enclz}\">{$energy_rating}</span>";
+                echo "<span class='lblenergylabel {$enclz}' title='Energielabel {$enclz}'>{$energy_rating}</span>";
               }
             }
 
@@ -196,9 +192,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           $i = 0;
           $str = NULL;
 
-          // General highlights
-
-          $max_highlighted_attributes = 12;
+          // Product USPs
           $highlights = [];
 
           $dimension_pair_set = false;
@@ -257,7 +251,6 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if($text === "Ja") {
               $text = "Afsluitbaar";
-              //$str .= "<li><img src=\"{$image}\" title=\"{$title}\" /><span>{$text}</span></li>";
               $highlights[] = [
                 "image" => $image,
                 "title" => $title,
@@ -545,7 +538,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
           }
 
           if($i < $max_highlighted_attributes) {
-            if(empty($pvideo) === FALSE) {
+            if(empty($pvideo) === false) {
               $image = "{$skn}frontend/rwd/dhh/images/video.svg";
               $title = "Productvideo";
               $text = "Video";
@@ -563,11 +556,26 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
             $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
             $title = "Koelmiddel";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text ) === FALSE && $text !== "230") {
+            if(empty($text ) === false) {
               $highlights[] = [
                 "image" => $image,
                 "title" => $title,
                 "text"  => $text,
+              ];
+              $i++;
+            }
+          }
+          
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "eenheid";
+            $image = "{$skn}frontend/rwd/dhh/images/amount.svg";
+            $title = "Stuks";
+            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === false) {
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text." stuks",
               ];
               $i++;
             }
@@ -581,12 +589,11 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
 
           if($i > 0) {
             echo "<div class='top_description'>";
-            echo "<ul class='product-highlights'>{$str}{$hlstr}</ul>";
+            echo "<ul class='product-highlights'>{$hlstr}</ul>";
             echo "<a id=specs_anchor href=\"#a_specs\">>> Alle specificaties</a>";
             echo "</div>";
+            echo "<script type='text/javascript'>{$jsstr}</script>";
           }
-          
-          echo "<script type='text/javascript'>{$jsstr}</script>";
         ?>
     </div>
     <div class="products-content-middle-center">
@@ -812,7 +819,6 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
         <?php
 
         /* Description Block */
-        //$str = $this->getChildHtml('description');
         $str = $this->getProduct()->getDescription();
         $str = Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($str);
         
@@ -836,7 +842,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
         if(empty($str) === FALSE) {
           ?>
 
-          <div class="probottomdv" id="product-page-description">
+          <div class="probottomdv std" id="product-page-description">
             <a class="anchor" name="a_description"></a>
             <?php echo $str; ?>
           </div>
@@ -984,13 +990,14 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
         <div class="topproducts_containter">
           <h2 class="tableftheader">Gerelateerde producten en accessoires</h2>
 
-          <?php foreach ($_crossSellProducts as $_item): ?>
-            <?php $_item = Mage::getModel('catalog/product')->load($_item->getId()); ?>
-
-            <a class="product-image" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>">
+          <?php foreach ($_crossSellProducts as $_item) {
+            $_item = Mage::getModel('catalog/product')->load($_item->getId());
+            $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_item);
+            ?>
+            <a target="_blank" class="product-image" href="<?php echo $productUrl; ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>">
               <div class="col-sx-12 col-sm-1 items cross-sell-product">
                 <div class="cross-sell-thumbnail">
-                  <img class="cross-sell-thumbnail" src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(240, 240); ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+                  <img class="cross-sell-thumbnail" src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(200, 200); ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
                 </div>
                 <div class="cross-sell-text-container">
                   <div class="cross-sell-text-title">
@@ -1002,7 +1009,7 @@ $files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId
                 </div>
               </div>
             </a>
-          <?php endforeach; ?>
+          <?php } ?>
           <div class="clearer"></div>
         </div>
       </div>

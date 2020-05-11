@@ -11,6 +11,7 @@ if($_product = Mage::registry('current_product')) {
   There is a bug that does this, but only on product pages:
   HOME -> SUBCATEGORY -> CATEGORY
   */
+  /*
   if(is_array($crumbs) && $n = sizeof($crumbs)) {
     if($n >= 2) {
       $keys = array_keys($crumbs);
@@ -27,7 +28,7 @@ if($_product = Mage::registry('current_product')) {
       $crumbs[$product_element_key] = $product_element;
     }
   }
-  
+  */  
   if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"]) === true) {
     unset($crumbs["product"]);
   }

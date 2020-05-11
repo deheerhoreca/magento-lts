@@ -144,6 +144,9 @@ try {
     ->addFieldToFilter('is_active',1);
   
   foreach($collection as $page) {
+    if(substr($page->getIdentifier(), 0, 5) === "home-") {
+      continue;
+    }
     $sitemap->addUrl(Mage::getBaseUrl().$page->getIdentifier(), $page_priority, $page->getUpdateTime());
   }
   unset($collection);

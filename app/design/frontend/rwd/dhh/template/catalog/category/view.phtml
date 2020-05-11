@@ -19,6 +19,8 @@ $brand_name   = strtolower($_category->getName());
 $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $brand_logo   = "/media/wysiwyg/brands/prokoeling.png";
 
+$htbrand      = null;
+
 if(empty($brand_name) === false) {
   $brand = sanitizeForFilename($brand_name);
   $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
@@ -36,7 +38,7 @@ if($this->isMixedMode()) {
   echo "<div class='ctdesc'>";
   echo "<img class='float-right' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' />";
   echo "<h1>{$ctdesc_h1}</h1>";
-  echo $this->getCmsBlockHtml();
+  echo $htbrand.$this->getCmsBlockHtml();
   echo "</div>";
   define("CTDESC_H1_SENT", true);
 }

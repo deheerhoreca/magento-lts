@@ -287,6 +287,10 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
 
             return $dataRow;
         }
+        
+        /* DHH CORE HACK */
+        // We use price a lot to make filters possible, remove again for Sooqr
+        $value = str_replace(" EUR", null, $value);
 
         $dataRow[$data['label']] = $value;
         return $dataRow;

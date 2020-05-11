@@ -65,17 +65,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     // Get product request path if set.
     $productRequestPath = $product->getData('request_path');
     
-    if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-      //var_dump($productUrlPath);
-    }
-
     // If URL path is not found, try using the URL key.
     if ($productUrlPath === null && $productRequestPath === null) {
       $productUrlPath = $product->getData('url_key');
-    }
-    
-    if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-      //var_dump($productUrlPath);
     }
 
     // Now grab only the product path including suffix (if any).
