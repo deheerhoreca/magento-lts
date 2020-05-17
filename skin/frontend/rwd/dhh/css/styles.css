@@ -3184,7 +3184,7 @@ div.category-products li span.lblenergylabel::after {
 
 .block-layered-nav dl dd ol>li>a,.block-layered-nav dl dd ol>li>span {
   display: block;
-  padding: 1px 15px;
+  padding: 1px 0 1px 15px;
   width: 100%;
 }
 
@@ -5642,7 +5642,10 @@ div.paypal-logo span {
   width: auto;
 }
 
-#customer-reviews .review-heading .pager .count-container .limiter,#wishlist-table td.customer-wishlist-item-cart>p,.cms-home .std .messages ul,.cms-no-route .std .messages ul,.cms-page-view .std .messages ul {
+#customer-reviews .review-heading .pager .count-container .limiter,
+#wishlist-table td.customer-wishlist-item-cart>p,
+.cms-home .std .messages ul,
+.cms-page-view .std .messages ul {
   margin-bottom: 0;
 }
 
@@ -6242,7 +6245,12 @@ div.paypal-logo span {
   border-bottom: 1px solid #ddd;
 }
 
-.cms-no-route .page-head h1,.cms-no-route .page-head h3,.cms-no-route .page-title h1,.cms-no-route .page-title h3,.cms-page-view .page-head h1,.cms-page-view .page-head h3,.cms-page-view .page-title h1,.cms-page-view .page-title h3,.contacts-index-index h1,.header-minicart .mini-products-list li.last {
+.cms-page-view .page-head h1,
+.cms-page-view .page-head h3,
+.cms-page-view .page-title h1,
+.cms-page-view .page-title h3,
+.contacts-index-index h1,
+.header-minicart .mini-products-list li.last {
   border: 0;
 }
 
@@ -6516,29 +6524,25 @@ div.paypal-logo span {
   font-size: 13px;
 }
 
-.cms-no-route .std img,.cms-page-view .std img {
+.cms-page-view .std img {
   max-width: 100%;
 }
 
-.cms-no-route .std h1,.cms-no-route .std h2,.cms-page-view .std h1,.cms-page-view .std h2 {
+.cms-no-route .std h1,
+.cms-no-route .std h2,
+.cms-page-view .std h1,
+.cms-page-view .std h2 {
   color: #39c;
 }
 
-#contactForm:after,.cms-no-route .col-left:after,.cms-page-view .col-left:after,.notice-cookie .notice-inner:after {
+#contactForm:after,.cms-page-view .col-left:after,.notice-cookie .notice-inner:after {
   display: table;
   clear: both;
   content: '';
 }
 
-.cms-no-route .std img {
-  width: 100%;
-}
-
-.cms-home .std .messages,.cms-no-route .std .messages,.cms-page-view .std .messages {
-  margin-bottom: 10px;
-}
-
-.cms-home .std .messages li,.cms-no-route .std .messages li,.cms-page-view .std .messages li {
+.cms-home .std .messages li,
+.cms-page-view .std .messages li {
   margin-left: 0;
   list-style: none;
   font-style: normal;
@@ -14045,14 +14049,10 @@ body.amshopby-index-index div.page-title.category-title h1 {
   font-size: 12px;
 }
 
-.cms-no-route .std li,.cms-no-route .std p,.cms-page-view .std li,.cms-page-view .std p {
+.cms-page-view .std li,.cms-page-view .std p {
   color: #636363;
   font-size: 14px;
   line-height: 24px;
-}
-
-.cms-no-route .std li {
-  font-style: italic;
 }
 
 .grid {
@@ -14393,7 +14393,7 @@ dl.faq-items dt.active {
 .amshopby-cat a {
   position: relative;
   left: 3px;
-  padding-right: 0!important;
+  padding-right: 0;
   text-decoration: none;
 } 
 
@@ -14542,7 +14542,8 @@ div.cross-sell-text-container {
   min-height: 380px; 
 }
 
-#product-page-description ul {
+#product-page-description ul,
+.disc-list {
   list-style: disc;
   padding: .5em 0 .5em 1.2em;
 }
@@ -14565,7 +14566,7 @@ ul.products-grid-anchor {
   width: calc(33% - 1em); 
   margin-right: 1em;
   margin-bottom: 1em;
-  padding: .8em; 
+  padding: 0 .8em 0.4em .8em; 
   border: 1px solid #e0e6ea;
   box-shadow: 0 4px 8px -2px rgba(17,34,68,.1);
   overflow: hidden;
@@ -14574,7 +14575,7 @@ ul.products-grid-anchor {
 }
  
 .products-grid-anchor li strong {
-  padding: 10px 0 0 0; 
+  padding: .3em 0 0 0; 
   overflow: hidden;
 }
  
@@ -14590,10 +14591,10 @@ ul.products-grid-anchor {
 }
 
 img.category-thumb {
-  max-height: 210px;
-  max-width: 210px;
-  margin: auto;
+  max-height: 150px;
+  max-width: 150px;
   overflow: hidden;
+  object-fit: contain;
 }
 
 #sidebar-nav {
@@ -14714,6 +14715,11 @@ img.category-thumb {
   text-align: center;
 }
 
+.xxl {
+  font-size: 200%;
+  font-weight: bolder;
+}
+
 .highlight-hover:hover {
   opacity: .7;
 }
@@ -14770,4 +14776,40 @@ div.blogcontainer a {
 
 .skip-account, .kservice, .skip-cart {
   text-transform: uppercase;
+}
+
+@media screen and (min-width: 64em) {
+  .info-box {
+    padding: 3em;
+    margin: 2em;
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .info-box {
+    height: 40em;
+    padding: 2em;
+    background-size: 600px 274px;
+  }
+}
+
+@media screen and (min-width: 30em) {
+  .info-box {
+    height: 25em;
+    padding: 1.5em;
+    background-position: center 80%;
+  }
+}
+
+.info-box {
+  height: 40em;
+  padding: 1em;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: url(/skin/frontend/rwd/dhh/images/sadklaas.jpg) 90% 90% no-repeat;
+  background-size: contain;
+}
+
+.info-box p {
+  width: 60%;
 }

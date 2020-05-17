@@ -129,17 +129,29 @@
     RewriteEngine on
 
 ############################################
-## DHH: block scrapers
-# https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
-    
-    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo)"
-    RewriteRule ^ - [F]
-
-############################################
 ## you can put here your magento root folder
 ## path relative to web root
 
     #RewriteBase /magento/
+
+############################################
+### BEGIN DHH
+
+    # Remove trailing slash from non-filepath urls
+    # https://gist.github.com/evgv/e7e84e84c46e027c3fff7396a13b3a43
+    RewriteCond %{request_method} ^GET$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !^/downloader.*$
+    RewriteCond %{REQUEST_URI} ^(.+)/$
+    RewriteRule ^(.+)$ %1 [L,R=301]
+
+    # Block scrapers
+    # https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
+    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo|Linguee)"
+    RewriteRule ^ - [F]
+
+############################################
+### END DHH
 
 ############################################
 ## uncomment next line to enable light API calls processing

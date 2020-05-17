@@ -188,9 +188,6 @@
     float: none;
     width: 100%;
   }
-  .scrlng .account-cart-wrapper {
-    width: 42%;
-  }
   .scrlng .headerrightcontents {
     width: 100%;
   }
@@ -372,10 +369,6 @@
     width: 100%;
   }
 
-  .scrlng .account-cart-wrapper {
-  width: 42%;
-  }
-
   .scrlng .headerrightcontents {
     width: 100%;
   }
@@ -435,10 +428,7 @@
   .products-content-top-center, .products-content-middle-center {
     width: 100%;
   }
-
-  .products-content-top-center {
-    border-top: 1px solid #f3f3f3;
-  }
+  
   .block-content.aw-arp-block-content ul li {
     width: 30%;
   }

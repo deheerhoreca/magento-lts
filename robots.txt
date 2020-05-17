@@ -109,6 +109,7 @@ User-agent: Zeus
 User-agent: BLEXBot
 User-agent: serpstatbot
 User-agent: ZoominfoBot
+User-agent: Linguee
 Disallow: /
 
 User-agent: *
