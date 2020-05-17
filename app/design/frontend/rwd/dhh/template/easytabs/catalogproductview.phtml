@@ -8,7 +8,7 @@
 
 $max_highlighted_attributes = 12;
 
-if(function_exists("sanitizeForFilename") === FALSE) {
+if(function_exists("sanitizeForFilename") === false) {
   function sanitizeForFilename($string) {
     // Remove anything which isn't a word, whitespace, number
     // or any of the following caracters -_~,;[]().
@@ -148,7 +148,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
         echo "<div class='small strong float-left product-detail-tagline'>{$tagline}</div>";
       }
       echo "</div>";
-      echo $this->getReviewsSummaryHtml($_product, 'short', FALSE);
+      echo $this->getReviewsSummaryHtml($_product, 'short', false);
       ?>
     </div>
     <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
@@ -203,7 +203,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $title = "Afmetingen (b x d x h)";
             foreach($attribute_names as $attribute_name) {
               $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-              if(empty($values[$attribute_name]) === FALSE) {
+              if(empty($values[$attribute_name]) === false) {
                 $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
               } else {
                 unset($values[$attribute_name]);
@@ -227,7 +227,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $title = "Afmetingen (b x l)";
             foreach($attribute_names as $attribute_name) {
               $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-              if(empty($values[$attribute_name]) === FALSE) {
+              if(empty($values[$attribute_name]) === false) {
                 $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
               } else {
                 unset($values[$attribute_name]);
@@ -297,7 +297,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $image = "{$skn}frontend/rwd/dhh/images/liters.svg";
             $title = "Inhoud";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE) {
+            if(empty($text) === false) {
               $text = round($text, 2)." liter";
               $highlights[] = [
                 "image" => $image,
@@ -328,8 +328,8 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $attribute_name = "aantal_roosters";
             $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
             $title = "Aantal roosters";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE) {
+            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === false) {
               $text = "{$text} roosters";
               $highlights[] = [
                 "image" => $image,
@@ -345,7 +345,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
             $title = "Garantietermijn";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE && $text !== "12 maanden") {
+            if(empty($text) === false && $text !== "12 maanden") {
               $text = "{$text}";
               $highlights[] = [
                 "image" => $image,
@@ -400,12 +400,12 @@ $files = Mage::getModel('staempfli_productattachment/file')
           }
 
           if($i < $max_highlighted_attributes) {
-            $attribute_name = "toeren_minuut";
+            $attribute_name = "aantal_omwentelingen_minuut";
             $image = "{$skn}frontend/rwd/dhh/images/rpm.svg";
             $title = "RPM";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE) {
-              $text = "{$text} RPM";
+            if(empty($text) === false) {
+              $text = "{$text}";
               $highlights[] = [
                 "image" => $image,
                 "title" => $title,
@@ -420,10 +420,10 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $image = "{$skn}frontend/rwd/dhh/images/flame.svg";
             $title = "Vermogen (gas)";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE) {
+            if(empty($text) === false) {
               $text = number_format($text, 1, ",", ".");
               $text = str_replace(",0", null, $text);
-              if(strstr(strtolower($text), "V") === FALSE) {
+              if(strstr(strtolower($text), "V") === false) {
                 $text = "{$text} kW";
               }
               $highlights[] = [
@@ -440,7 +440,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
             $title = "Stil apparaat";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE) {
+            if(empty($text) === false) {
               $text = "{$text} dB";
               $highlights[] = [
                 "image" => $image,
@@ -456,7 +456,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $image = "{$skn}frontend/rwd/dhh/images/light.svg";
             $title = "Verlichting";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE && $text !== "Nee") {
+            if(empty($text) === false && $text !== "Nee") {
               $text = (strstr($text, "LED")) ? "LED verlichting" : "Verlichting";
               $highlights[] = [
                 "image" => $image,
@@ -471,9 +471,25 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $attribute_name = "aantal_flessen";
             $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
             $title = "Flessen";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE && $text !== "Nee") {
+            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === false && $text !== "Nee") {
               $text = "{$text} X";
+              $highlights[] = [
+                "image" => $image,
+                "title" => $title,
+                "text"  => $text,
+              ];
+              $i++;
+            }
+          }
+          
+          if($i < $max_highlighted_attributes) {
+            $attribute_name = "capacity_wine_bottles";
+            $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
+            $title = "Aantal 75cl Wijnflessen";
+            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            if(empty($text) === false && $text !== "Nee") {
+              $text = "{$text} x 75cl.";
               $highlights[] = [
                 "image" => $image,
                 "title" => $title,
@@ -488,31 +504,8 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
             $title = "Branders";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE && $text !== "Nee") {
+            if(empty($text) === false && $text !== "Nee") {
               $text = "{$text} X";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "gewicht_kg";
-            $image = "{$skn}frontend/rwd/dhh/images/weight.svg";
-            $title = "Gewicht (kg)";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === FALSE && $text !== "Nee" && $text != "0") {
-              $text = (double) $text;
-              if($text < 1.0) {
-                $text = ($text * 1000)." gr";
-              } elseif($text < 10.0) {
-                $text = number_format(round($text, 1), 1, ",", ".")." kg";
-              } else {
-                $text = (int) round($text, 0)." kg";
-              }
               $highlights[] = [
                 "image" => $image,
                 "title" => $title,
@@ -552,7 +545,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
           }
 
           if($i < $max_highlighted_attributes) {
-            $attribute_name = "koelmiddel";
+            $attribute_name = "refrigerant";
             $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
             $title = "Koelmiddel";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
@@ -702,9 +695,9 @@ $files = Mage::getModel('staempfli_productattachment/file')
             if($_product->getStockItem()->getIsInStock() == 1
                 && $_product->getStockItem()->getQty() < 1
                 && $_product->getStockItem()->getBackorders() != 0) {
-              $instk = FALSE;
+              $instk = false;
 
-              if(empty($levertijd_verwacht) === FALSE) {
+              if(empty($levertijd_verwacht) === false) {
                 $calwekdate = date('d-m-Y', strtotime("+ {$levertijd_verwacht} weekdays"));
 
                 // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
@@ -728,7 +721,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
               <small class="clzdelvlb">
                 <span class=delivery-logo>&nbsp;</span>
                 <span class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></span>
-                <?php if(empty($calwekdate) === FALSE) {
+                <?php if(empty($calwekdate) === false) {
                   echo "<span><br />Verwacht op: <strong style=\"font-weight: bold;\">{$calwekdate}</strong> ({$levertijd_verwacht} werkdagen)</span>";
                 }
                 ?>
@@ -754,7 +747,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
 
               @$nmwek += $extra_delivery_time;
 
-              if(empty($nmwek) === FALSE) {
+              if(empty($nmwek) === false) {
                 $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
 
                 // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
@@ -832,16 +825,15 @@ $files = Mage::getModel('staempfli_productattachment/file')
           $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
         }
 
-        $attributekoelmiddel = $_product->getResource()->getAttribute('koelmiddel');
+        $attributekoelmiddel = $_product->getResource()->getAttribute('refrigerant');
         $attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_product);
         if($attribute_valuekoelmiddel === "R290") {
           $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
         }
         if(strlen($str) === 0) $str = "&nbsp;";
 
-        if(empty($str) === FALSE) {
+        if(empty($str) === false) {
           ?>
-
           <div class="probottomdv std" id="product-page-description">
             <a class="anchor" name="a_description"></a>
             <?php echo $str; ?>
@@ -1042,7 +1034,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
   <?php
   //$additional_block = $this->getChildHtml('additional');
   $upsell_block = $this->getChildHtml('upsell_products');
-  if(empty($additional_block) === FALSE || empty($upsell_block) === FALSE) {
+  if(empty($additional_block) === false || empty($upsell_block) === false) {
     ?>
     <div id="upsell-products">
       <div class="probottomdv">

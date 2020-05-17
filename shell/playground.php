@@ -1,9 +1,14 @@
 <?php
 
-if($_SERVER["REMOTE_ADDR"] !== "85.144.117.179") {
+if (php_sapi_name() !== "cli") {
   header("Location: /");
   exit;
 }
+
+// if($_SERVER["REMOTE_ADDR"] !== "85.144.117.179") {
+  // header("Location: /");
+  // exit;
+// }
 
 require_once "./app/Mage.php";
 Mage::setIsDeveloperMode(true);
@@ -18,6 +23,63 @@ if(Mage::registry('isSecureArea')) {
   Mage::unregister('isSecureArea');
 }
 Mage::register('isSecureArea', true);
+
+
+
+/*********************************************************************************************
+* CHANGE CATEGORY IMAGES
+*********************************************************************************************/
+
+/*
+$attribute_id = 45;
+
+$work[] = ["id" => 597, "sku" => "DW486"];
+$work[] = ["id" => 465, "sku" => "781395"];
+	
+// $work[] = ["id" => , "sku" => ""];
+
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+
+foreach($work as $item) {
+
+  $image = getMagento1BaseImage($item["sku"]);
+
+  //print_r($image);exit;
+
+  $image_file = basename($image);
+
+  $target = "media/catalog/category/{$image_file}";
+
+  if(copy($image, $target) === true) {
+    echo "Copied {$image} to {$target}".PHP_EOL;
+  } else {
+    echo "Error while copying {$image} to {$target}".PHP_EOL;
+  }
+
+  $query = "REPLACE INTO catalog_category_entity_varchar (entity_type_id, attribute_id, store_id, entity_id, `value`) VALUES (3, {$attribute_id}, 0, {$item["id"]}, '{$image_file}');".PHP_EOL;
+  
+  $writeConnection->query($query);
+  
+  echo "Query OK".PHP_EOL;
+}
+
+function getMagento1BaseImage($sku) {
+  $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+  return Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+}
+
+*/
+
+
+
+
+
+/*********************************************************************************************
+* GET FULL PRODUCT URLS EXPERIMENT
+*********************************************************************************************/
+
+/*
 
 $product_id = 19907;
 
@@ -110,3 +172,5 @@ function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
 
   return $product->getProductUrl();
 }
+
+*/

@@ -9,75 +9,82 @@
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 
+/* No decimals, with number formatting */
+$attr_remove_decimals = [
+  "hoogte_intern", "breedte_intern", "diepte_intern", 
+  "diameter", "breedte", "hoogte", "diepte", "magnetron_output_watt", 
+  "grill_output_watt", "aantal_m3_uur", "aantal_deuren", "aantal_roosters", 
+  "aantal_laden", "aantal_kippen", "aantal_kuipen", "aantal_spoelbak",
+  "aantal_platen", "aantal_borden", "aantal_bakken", "aantal_zetsystemen",
+  "aantal_kookzones", "aantal_manden", "aantal_pizzas", "aantal_elementen", 
+  "aantal_etages", "aantal_filters", "aantal_branders", "aantal_borden_korven", 
+  "aantal_glas_korven", "aantal_snelheden", "aantal_blikjes", "aantal_wasprogrammas",
+  "eenheid", "capacity_wine_bottles",
+];
+
+/* No zero decimals, with number formatting */
+$attr_trim_decimals = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
+  "inhoud_wastank_liter", "inhoud_wastank",
+];
+
 if($_additionalgroup = $this->getAdditionalDataCustom()) {
+  $attr_remove_decimals = array_flip($attr_remove_decimals);
+  $attr_trim_decimals   = array_flip($attr_trim_decimals);
   ?>
   <div class="box-collateral box-additional bxgroupifo">
     <?php
-      $i=0; foreach ($_additionalgroup as $_additional) {
+      $i=0;
+      foreach ($_additionalgroup as $_additional) {
         $i++;
         ?>
-      <span class="h3 clzattrgname"><?php echo $this->__( $_additional['title'] )?></span>
-      <table class="data-table product-specs-table" id="product-attribute-specs-table-<?php echo $i?>">
-        <tbody>
-          <?php
-          foreach($_additional['items'] as $_data) {
-            $valuex = $_data['value'];
-            if(empty($valuex)) {
-              continue;
-           	}
-            $label = $this->htmlEscape($this->__($_data['label']));
-            ?>
-            <tr>
-              <?php
-              $postfix = null;
-              switch($_data['code']) {
-                case "vermogen_kw":
-                case "vermogen":
-                  if($valuex < 5) {
-                    $valuex *= 1000;
-                    $postfix = " Watt";
-                  } else {
-                    $valuex = number_format($valuex, 2, ",", ".");
-                    $postfix = " kW";
-                  }
-                  break;
-
-                case "gewicht_kg":
-                  if($valuex < 1) {
-                    $valuex *= 1000;
-                    $label = str_replace("Kg", "gram", $label);
-                  } else {
-                    $valuex = round($valuex);
-                  }
-                  break;
-
-                case "inhoud_liters":
-                  $valuex = number_format($valuex, 2, ",", ".");
-                  break;
-
-                case "hoogte_intern":
-                case "breedte_intern":
-                case "diepte_intern":
-                case "diameter":
-                case "breedte":
-                case "hoogte":
-                case "diepte":
-                case "magnetron_output_watt":
-                case "grill_output_watt":
-                case "aantal_m3_uur":
-                  $valuex = number_format($valuex, 0, ",", "");
-                  break;
-                default:
-                  $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
+        <span class="h3 clzattrgname"><?php echo $this->__( $_additional['title'] )?></span>
+        <table class="data-table product-specs-table" id="product-attribute-specs-table-<?php echo $i?>">
+          <tbody>
+            <?php
+            foreach($_additional['items'] as $_data) {
+              $valuex = $_data['value'];
+              if(empty($valuex)) {
+                continue;
               }
+              $label = $this->htmlEscape($this->__($_data['label']));
               ?>
-              <th class="label"><?php echo $label; ?></th>
-              <td class="data"><?php echo $valuex.$postfix; ?></td>
-            </tr>
-          <?php } ?>
-        </tbody>
-      </table>
-      <script type="text/javascript">decorateTable('product-attribute-specs-table-<?php echo $i?>')</script>
+              <tr>
+                <?php
+                $postfix = null;
+               
+                switch($_data['code']) {
+                  case "vermogen_kw":
+                  case "vermogen":
+                    if($valuex < 5) {
+                      $valuex *= 1000;
+                      $postfix = " Watt";
+                    } else {
+                      $valuex = number_format($valuex, 2, ",", ".");
+                      $postfix = " kW";
+                    }
+                    break;
+
+                  default:
+                    $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
+                }
+                
+                if(isset($attr_remove_decimals[$_data['code']])) {
+                  $valuex = number_format($valuex, 0, ",", "");
+                }
+                
+                if(isset($attr_trim_decimals[$_data['code']])) {
+                  $valuex = number_format($valuex, 2, ",", ".");
+                  $valuex = str_replace(",00", null, $valuex);
+                }
+                
+                ?>
+                <th class="label"><?php echo $label; ?></th>
+                <td class="data"><?php echo $valuex.$postfix; ?></td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+        <script type="text/javascript">decorateTable('product-attribute-specs-table-<?php echo $i?>')</script>
     <?php }
   echo "</div>";
 }
