@@ -177,10 +177,12 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
             }
             //print_r($categoryIds);
           } else {
-            // We're okay, the category ID exists in the current crumbs
+            // We're okay, the category ID exists in the current crumbs, so
+            // do not change anything
           }
         }
       }
+      
       if(is_array($this->_crumbs)) {
         reset($this->_crumbs);
         $this->_crumbs[key($this->_crumbs)]['first'] = true;
