@@ -25,49 +25,48 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
     ?>
 
         <?php  if ($snippetsType == '0') { ?>
-        <!-- JSON Format -->
-        <?php
+          <!-- JSON Format -->
+          <?php
           $logo_src =   Mage::getStoreConfig('design/header/logo_src');
           $siteLogoUrl = $this->getSkinUrl($logo_src);
-        ?>
-            <script type="application/ld+json">
-                {
-                  "@context": "http://schema.org",
-                  "@type": "Organization",
-                  "url" : "<?php echo $organizatonParameters['url']; ?>",
-                  "logo": "<?php echo $siteLogoUrl ?>",
-                  "contactPoint" : [{
-                    "@type" : "ContactPoint",
-                    "telephone" : "<?php echo $organizatonParameters['phone']; ?>",
-                    "contactType" : "customer service"
-                  }],
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": "<?php echo $organizatonParameters['locality']; ?>",
-                    "postalCode": "<?php echo $organizatonParameters['postalcode']; ?>",
-                    "streetAddress": "<?php echo $organizatonParameters['street']; ?>"
-                  },
-                  "name": "<?php echo $organizatonParameters['name']; ?>",
-                  "telephone": "<?php echo $organizatonParameters['phone']; ?>",
-                  "email": "<?php echo $organizatonParameters['email']; ?>"
-                }
-            </script>
+          
+          /*
+          "sameAs": [
+            "https://twitter.com/<?php echo $organizatonParameters['twitter']; ?>",
+            "https://www.facebook.com/<?php echo $organizatonParameters['facebook']; ?>",
+            "https://www.linkedin.com/company/<?php echo $organizatonParameters['linkedin']; ?>",
+            "https://plus.google.com/<?php echo $organizatonParameters['googleplus']; ?>",
+            "https://www.pinterest.com/<?php echo $organizatonParameters['pinterest']; ?>",
+            "https://instagram.com/<?php echo $organizatonParameters['instagram']; ?>"
+           ]
+           */
+          ?>
+          <script type="application/ld+json">
+            {
+              "@context": "http://schema.org",
+              "@type": "Organization",
+              "url" : "<?php echo $organizatonParameters['url']; ?>",
+              "logo": "<?php echo $siteLogoUrl ?>",
+              "contactPoint" : [{
+                "@type" : "ContactPoint",
+                "telephone" : "<?php echo $organizatonParameters['phone']; ?>",
+                "contactType" : "customer service"
+              }],
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "<?php echo $organizatonParameters['locality']; ?>",
+                "postalCode": "<?php echo $organizatonParameters['postalcode']; ?>",
+                "streetAddress": "<?php echo $organizatonParameters['street']; ?>"
+              },
+              "name": "<?php echo $organizatonParameters['name']; ?>",
+              "telephone": "<?php echo $organizatonParameters['phone']; ?>",
+              "email": "<?php echo $organizatonParameters['email']; ?>",
+              "sameAs": [
+                "https://www.facebook.com/<?php echo $organizatonParameters['facebook']; ?>",
+               ]
+            }
+          </script>
         <?php } ?>
-
-<?php
-/*
-                   "sameAs": [
-                           [
-                               "https://twitter.com/<?php echo $organizatonParameters['twitter']; ?>",
-                               "https://www.facebook.com/<?php echo $organizatonParameters['facebook']; ?>",
-                               "https://www.linkedin.com/company/<?php echo $organizatonParameters['linkedin']; ?>",
-                               "https://plus.google.com/<?php echo $organizatonParameters['googleplus']; ?>",
-                               "https://www.pinterest.com/<?php echo $organizatonParameters['pinterest']; ?>",
-                               "https://instagram.com/<?php echo $organizatonParameters['instagram']; ?>"
-                           ]
-                   ]
-*/
-?>
 
         <?php if ($snippetsType == '1') { ?>
         <!-- Microdata -->
