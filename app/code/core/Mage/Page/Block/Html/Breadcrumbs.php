@@ -159,10 +159,11 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
     protected function _toHtml() {
       $cat_id = "";
 
-      //print_r($this->_crumbs);
+      // echo "<pre>";
+      // print_r($this->_crumbs);
+      // echo "</pre>";
       
       $categoryIds = [];
-      
       
       if(Mage::registry('current_product')) {
         $product_id = Mage::registry('current_product')->getId();
@@ -171,11 +172,14 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
 
         if($product_id) {
           if(empty($this->_crumbs["category{$product_category_id}"]) === true) {
+            // Breadcrumb is not complete yet, find out full category path and store IDs
             $collection = $_product->getCategoryCollection()->addAttributeToSelect('path');
             foreach($collection as $category) {
               $categoryIds = explode("/", $category->getPath());
             }
-            //print_r($categoryIds);
+            // echo "<pre>";
+            // print_r($categoryIds);
+            // echo "</pre>";
           } else {
             // We're okay, the category ID exists in the current crumbs, so
             // do not change anything
@@ -183,18 +187,11 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         }
       }
       
-      if(is_array($this->_crumbs)) {
-        reset($this->_crumbs);
-        $this->_crumbs[key($this->_crumbs)]['first'] = true;
-        end($this->_crumbs);
-        $this->_crumbs[key($this->_crumbs)]['last'] = true;
-      }
-      
-      if(sizeof($categoryIds) > 0) {
+      if(empty($categoryIds) === false) {
         foreach($categoryIds as $key => $category_id) {
-          if($category_id == 0) continue;
-          if($category_id == 1) continue;
-          if($category_id == 2) continue;
+          if($category_id == 0) continue; // Root
+          if($category_id == 1) continue; // 
+          if($category_id == 2) continue; // 
           $category = Mage::getModel('catalog/category')->load($category_id);
           $cat_name = $category->getName();
           $cat_url =  $this->getBaseUrl().$category->getUrlPath();
@@ -208,15 +205,23 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
             'readonly' => '',
           ];
         }
-        ksort($this->_crumbs);
         $home = $this->_crumbs['home'];
         unset($this->_crumbs['home']);
         $this->_crumbs = ["home" => $home] + $this->_crumbs; // unshift while keeping key intact
       }
       
+      if(is_array($this->_crumbs)) {
+        reset($this->_crumbs);
+        $this->_crumbs[key($this->_crumbs)]['first'] = true;
+        end($this->_crumbs);
+        $this->_crumbs[key($this->_crumbs)]['last'] = true;
+      }
+      
       $this->assign('crumbs', $this->_crumbs);
       
-      //print_r($this->_crumbs);
+      // echo "<pre>";
+      // print_r($this->_crumbs);
+      // echo "</pre>";
       
       return parent::_toHtml();
     }
