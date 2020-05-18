@@ -86,3 +86,5 @@ php.ini.sample
 install.php
 
 media/wysiwyg/.thumbs/
+
+.modman/*/.git
