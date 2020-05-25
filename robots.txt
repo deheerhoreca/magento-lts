@@ -110,6 +110,8 @@ User-agent: BLEXBot
 User-agent: serpstatbot
 User-agent: ZoominfoBot
 User-agent: Linguee
+User-agent: MauiBot
+User-agent: BorneoBot
 Disallow: /
 
 User-agent: *
