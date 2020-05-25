@@ -147,7 +147,7 @@
 
     # Block scrapers
     # https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
-    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo|Linguee)"
+    RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo|Linguee|MauiBot|BorneoBot)"
     RewriteRule ^ - [F]
 
 ############################################

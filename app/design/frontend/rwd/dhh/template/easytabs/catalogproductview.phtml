@@ -439,7 +439,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $attribute_name = "geluidsniveau";
             $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
             $title = "Stil apparaat";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if(empty($text) === false) {
               $text = "{$text} dB";
               $highlights[] = [
@@ -457,7 +457,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             $title = "Verlichting";
             $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
             if(empty($text) === false && $text !== "Nee") {
-              $text = (strstr($text, "LED")) ? "LED verlichting" : "Verlichting";
+              $text = "Verlichting";
               $highlights[] = [
                 "image" => $image,
                 "title" => $title,
