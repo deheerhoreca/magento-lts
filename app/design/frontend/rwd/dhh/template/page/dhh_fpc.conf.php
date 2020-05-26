@@ -1,7 +1,7 @@
 <?php
 
 if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
-  define("DHH_FPC_ENABLED", false);
+  define("DHH_FPC_ENABLED", true);
 } else {
   define("DHH_FPC_ENABLED", true);
 }

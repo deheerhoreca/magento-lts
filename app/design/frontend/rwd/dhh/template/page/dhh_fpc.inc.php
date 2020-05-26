@@ -35,8 +35,9 @@ if($_SERVER['REQUEST_METHOD'] !== 'GET') {
 $_cacheKey = null;
 if($read_cache === true || $write_cache === true) {
   $cache_key_input = get_cache_url();
-  $_cacheKey = 'QUICKNDIRTYFPC-'.base64_encode($cache_key_input);
-  //print_r("Cache URL: {$cache_key_input} - Cache Key: {$_cacheKey}");
+  $cache_key_prefix = Mage::app()->getFrontController()->getAction()->getFullActionName();
+  $_cacheKey = "QUICKNDIRTYFPC-{$cache_key_prefix}-".base64_encode($cache_key_input);
+  // print_r("Cache URL: {$cache_key_input}<br />Cache Key: {$_cacheKey}");
 }
 
 $_html = null;
@@ -62,18 +63,19 @@ if($read_cache === true) {
   }
 }
 
-if(headers_sent() === FALSE) {
+if(headers_sent() === false) {
   $r = "-r";
   $w = "-w";
   if($write_cache === true) $w = "+w";
   if($read_cache === true) $r = "+r";
-  header("qnd-fpc-settings: {$r} {$w}");
+  //header("qnd-fpc-settings: {$r} {$w}");
 }
 
 if(empty($_html) === false) {
-  if(headers_sent() === FALSE) {
+  if(headers_sent() === false) {
     $bytes = strlen($_html);
     header("X-FPC: Hit");
+    // print_r("<br />Cache: HIT");
   }
   echo $_html;
 } else {
@@ -94,8 +96,14 @@ if(empty($_html) === false) {
 
     Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"], FPC_TTL);
 
-    if(headers_sent() === FALSE) {
+    if(headers_sent() === false) {
       header("X-FPC: Saved");
+      // print_r("<br />Cache: SAVED");
+    }
+  } else {
+    if(headers_sent() === false) {
+      header("X-FPC: No Cache");
+      // print_r("<br />Cache: NO CACHE");
     }
   }
 

@@ -2,9 +2,9 @@
 
 require_once __DIR__."/../dhh_fpc.conf.php";
 
-$_cacheKey = "QUICKNDIRTYFPC-topmenu";
+$_cacheKey = "QUICKNDIRTYFPC-cms_block-topmenu";
 
-$static_file = "./media/static/topmenu.html";
+// $static_file = "./media/static/topmenu.html";
 
 // Outqualification
 $write_cache = true;
@@ -25,15 +25,22 @@ if(DHH_FPC_ENABLED === false) {
 
 $_html = null;
 
+// print_r("Cache Key: {$_cacheKey}");
+
 if($read_cache === true) {
   $_html = Mage::app()->getCache()->load($_cacheKey);
+} else {
+  // print_r("<br />Menu cache: NO CACHE");
 }
 
-if(strlen($_html) > 0 === FALSE) {
+if(strlen($_html) > 0 === false) {
   $_html = $this->getHtml('level-top');
+  // print_r("<br />Menu cache: MISS");
   if($write_cache === true) {
-    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"]);
+    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], FPC_TTL);
   }
+} else {
+  // print_r("<br />Menu cache: HIT");
 }
 
 ?>
