@@ -29,6 +29,7 @@ $brand_name   = $_product->getAttributeText('manufacturer');
 $brand_logo   = null;
 $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $brand_link   = "{$brand_slug}.html";
+$supplier_name = $_product->getAttributeText('supplier');
 
 if(empty($brand_name) === false) {
   $brand = sanitizeForFilename($brand_name);
@@ -801,6 +802,15 @@ $files = Mage::getModel('staempfli_productattachment/file')
           </div>
         <?php }
            //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml();
+          ?>
+          <?php
+          
+          if($_product->getFinalPrice() < 150) {
+            if(strtolower($supplier_name) === "gastronoble") {
+              echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
+            }
+          }
+          
           ?>
         </div>
           <div class="clearer"></div>
