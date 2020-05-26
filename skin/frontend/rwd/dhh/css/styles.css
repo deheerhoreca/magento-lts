@@ -43,7 +43,7 @@ small, .small {
   padding: 0 1em 0 0;
 }
 
-.product-list-tagline { 
+.product-list-tagline {
   padding: 0 .5em 0 0;
 }
 
@@ -96,7 +96,7 @@ textarea {
 
 hr {
   border: .5px solid #e2e2e2;
-  width: 100%; 
+  width: 100%;
 }
 
 *,:after,:before {
@@ -181,6 +181,7 @@ a:active,a:focus,a:hover {
   font-style: normal;
   font-size: 1.5em;
   line-height: 1.2;
+  text-align: initial;
 }
 
 .h1,.h2,h1,h2 {
@@ -221,7 +222,7 @@ a:active,a:focus,a:hover {
 .h4 {
   font-size: 14px;
 }
- 
+
 .h4,.h5,.h6,h4,h5,h6 {
   color: #636363;
   font-weight: 700;
@@ -460,7 +461,7 @@ body:not(.customer-account) .block:first-child .block-title {
   background-color: #297aa3;
   color: #fff;
 }
- 
+
 .no-decoration,
 .no-decoration:hover,
 .no-decoration:focus,
@@ -582,7 +583,7 @@ a.button {
 }
 
 .breadcrumbs {
-  overflow: hidden; 
+  overflow: hidden;
   padding: .5em 0;
 }
 
@@ -738,7 +739,7 @@ body.catalog-category-view .footer-container,body.catalog-product-view div.foote
   padding-right: 0;
   width: 25%;
 }
- 
+
 .col-main {
   float: left;
   width: 80%;
@@ -2096,7 +2097,7 @@ body,html {
 .logo,.logo .small {
   display: block;
 }
- 
+
 .skip-link, .top-link {
   position: relative;
   float: right;
@@ -2104,7 +2105,7 @@ body,html {
   background: #fff;
   color: #636363;
   text-align: center;
-  width: auto; 
+  width: auto;
 }
 
 .skip-link:not(.skip-active):hover {
@@ -2689,13 +2690,13 @@ div.category-products ul.products-grid li.item .product-name a {
 div.category-products ul.products-grid li.item .product-info {
   padding-bottom: 0!important;
 }
- 
+
 div.category-products ul.products-grid li.item .info {
   display: inline-block;
   margin-bottom: 3px;
   min-height: 12em;
-  width: 100%; 
-} 
+  width: 100%;
+}
 
 .headmv {
   top: 58px;
@@ -2718,7 +2719,7 @@ div.category-products ul.products-grid li.item .info {
 .angle_before {
   padding-left: 1em;
 }
- 
+
 .green_checkbox_before:before,
 .orange_circle_before:before,
 .red_x_before:before,
@@ -2779,7 +2780,7 @@ div.category-products ul.products-grid .price-box span.regular-price span.price 
   box-shadow: 0 2px 3px 0 rgba(0,0,0,.15);
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 16px; 
+  font-size: 16px;
 }
 
 .lblenergylabel {
@@ -12585,9 +12586,9 @@ body.checkout-cart-index div.pgcrtleft td.product-cart-actions .input-text.qty {
   display: block;
   padding-top: 0;
   padding-bottom: .5em;
-  width: 100%;  
+  width: 100%;
 }
- 
+
 div.product-view div.product-essential div.product-name div.ratings {
   display: inline;
   float: right;
@@ -13020,7 +13021,7 @@ a.document-link {
 }
 
 object {
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .product-image-thumbs {
@@ -13076,7 +13077,7 @@ body.checkout-cart-index .clzulres li {
 
 .product-highlights li span {
   display: block;
-  height: 35px; 
+  height: 35px;
   vertical-align: middle;
   text-align: center;
   font-weight: 600;
@@ -13137,7 +13138,7 @@ body.checkout-cart-index .clzulres li {
 #company_usps .line {
   float: none!important;
   clear: both;
-  margin-bottom: 11px; 
+  margin-bottom: 11px;
   padding-top: 11px;
   height: 5px;
   border-bottom: 1px solid #dadada;
@@ -13479,7 +13480,7 @@ div.prodetailtopright.clztypesimple div.add-to-cart-wrapper div.add-to-box div.p
 .product-view .product-shop .price-box {
   text-align: right;
 }
- 
+
 div.product-view div.product-essential form#product_addtocart_form div.product-shop div.price-info div.price-box p.special-price span.price-including-tax span.label,div.product-view div.product-essential form#product_addtocart_form div.product-shop div.price-info div.price-box span.price-including-tax.not-special span.label {
   float: right;
   padding-left: 5px;
@@ -13929,7 +13930,7 @@ nav#nav.grid-old div.navhdwrap ol.nav-primary li.level0.nav-6.parent ul.level0 l
 .block-content.aw-arp-block-content ul li,
 ul#upsell-product-table li {
   margin-right: 1%!important;
-  padding: 10px 5px 15px!important; 
+  padding: 10px 5px 15px!important;
   width: 32.6%;
   border: 1px dotted transparent;
 }
@@ -14022,7 +14023,7 @@ body.amshopby-index-index div.page-title.category-title h1 {
   width: 200px;
   height: 70px;
   max-width: 100%;
-  margin: 1em 0 0 1em; 
+  margin: 1em 0 0 1em;
 }
 
 #brand_logo_big {
@@ -14187,7 +14188,7 @@ input#newsletter {
 
 .prorightdv {
   float: right;
-  width: 52%; 
+  width: 52%;
 }
 
 .products-content-middle-center,.products-content-top-center {
@@ -14395,7 +14396,7 @@ dl.faq-items dt.active {
   left: 3px;
   padding-right: 0;
   text-decoration: none;
-} 
+}
 
 .amshopby-attr:before {
   top: 3px;
@@ -14408,7 +14409,7 @@ dl.faq-items dt.active {
   margin-right: 3px;
   padding-right: .5em;
   color: #929a9c;
-  content: "\f04b"; 
+  content: "\f04b";
   text-decoration: none;
   font-weight: 400;
   font-style: normal;
@@ -14531,7 +14532,6 @@ div.cross-sell-text-container {
 #product-page-description,
 #cat-text,
 .ctdesc {
-  text-align: justify;
   margin-bottom: .7em;
   font-size: 1em;
   line-height: 1.6em;
@@ -14539,7 +14539,7 @@ div.cross-sell-text-container {
 
 #product-page-description {
   padding-left: .5em;
-  min-height: 380px; 
+  min-height: 380px;
 }
 
 #product-page-description ul,
@@ -14556,45 +14556,10 @@ div.cross-sell-text-container {
   clear: both;
 }
 
-ul.products-grid-anchor {
-  margin-top: 1em;
-} 
-
-.products-grid-anchor .item {
-  float: left;
-  padding-bottom: 1em;
-  width: calc(33% - 1em); 
-  margin-right: 1em;
-  margin-bottom: 1em;
-  padding: 0 .8em 0.4em .8em; 
-  border: 1px solid #e0e6ea;
-  box-shadow: 0 4px 8px -2px rgba(17,34,68,.1);
-  overflow: hidden;
-  font-size: 14px;
-  white-space: nowrap; 
-}
- 
-.products-grid-anchor li strong {
-  padding: .3em 0 0 0; 
-  overflow: hidden;
-}
- 
-.products-grid-anchor li i {
-  padding: 12px 0 0 0;
-  overflow: hidden;
-}
-
 .imwrapcat {
   overflow: hidden;
   height: 130px;
   text-align: center;
-}
-
-img.category-thumb {
-  max-height: 150px;
-  max-width: 150px;
-  overflow: hidden;
-  object-fit: contain;
 }
 
 #sidebar-nav {
@@ -14615,9 +14580,9 @@ img.category-thumb {
 .headcatinside {
   font-size: 1.6em;
 }
- 
+
 #ctdesc .short {
-  height: 200px; 
+  height: 200px;
   overflow: hidden;
 }
 
@@ -14628,22 +14593,22 @@ img.category-thumb {
   bottom   : 0;
   left     : 0;
   pointer-events   : none;
-  background-image : linear-gradient(to bottom, 
-                     rgba(255,255,255, 0), 
+  background-image : linear-gradient(to bottom,
+                     rgba(255,255,255, 0),
                      rgba(255,255,255, 1) 90%);
   width    : 100%;
   height   : 4em;
-} 
+}
 
 #toggle-cat-text {
   margin: .5em 0;
-  padding: 0 .5em; 
+  padding: 0 .5em;
   font-weight: 600;
 }
 
 #ctdesc .read-more {
   cursor: pointer;
-  display: inline-block;    
+  display: inline-block;
   font-weight: 600;
   padding: 3px;
   background-color: #06c;
@@ -14660,9 +14625,9 @@ img.category-thumb {
   text-align: justify;
 }
 
-.ctdesc p:last-child { 
+.ctdesc p:last-child {
   margin-bottom: 0;
-} 
+}
 
 .tooltip .tooltiptext {
   position: absolute;
@@ -14812,4 +14777,175 @@ div.blogcontainer a {
 
 .info-box p {
   width: 60%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+img.category-thumb {
+  max-width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-position: 50% 0%;
+  display: none;
+}
+
+ul.category-grid {
+  display:grid;
+  display: -ms-grid;
+  grid-template-columns: 100%;
+  grid-column-gap: 0;
+  -ms-grid-columns: 100%;
+  grid-template-rows: auto auto auto auto;
+  grid-row-gap: 5px;
+  -ms-grid-rows: auto 5px auto 5px auto 5px auto;
+  margin: 1em 0;
+  flex-flow: row wrap;
+}
+
+ul.category-grid li {
+  transition: .15s ease-in-out;
+}
+
+ul.category-grid li a {
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0 3px #d1d9e0;
+  border: 1px solid #e0e6ea;
+  box-shadow: 0 4px 8px -2px rgba(17,34,68,.1);
+  overflow: hidden;
+}
+
+ul.category-grid li strong {
+  font-weight: 700;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: hidden;
+  display: block;
+  width: calc(100% - 45px);
+  background: #fff;
+  padding: 7px 30px 7px 7px;
+}
+
+ul.category-grid li strong:after {
+  font-family: FontAwesome;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+  content: "\f061";
+  font-size: .8em;
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  transition: all .15s ease-in-out;
+}
+
+@media (max-width: 61.9em) {
+  img.category-thumb {
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: 50% 50%;
+    object-position: 50% 50%;
+    width: 100%;
+    height: 100%;
+  }
+  
+  ul.category-grid li strong {
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 48em) {
+  ul.category-grid {
+    grid-template-columns:calc(50% - 7.5px) calc(50% - 7.5px);
+    grid-column-gap: 15px;
+    -ms-grid-columns: calc(50% - 7.5px) 15px calc(50% - 7.5px);
+    grid-template-rows: auto auto;
+    grid-row-gap: 15px;
+    -ms-grid-rows: auto 15px auto
+  }
+}
+
+@media (min-width: 62em) {
+  ul.category-grid {
+    grid-template-columns:calc(33% - 1em) calc(33% - 1em) calc(33% - 1em);
+    grid-column-gap: 15px;
+    -ms-grid-columns: calc(33% - 1em) 1em calc(33% - 1em) 1em calc(33% - 1em);
+    grid-template-rows: auto;
+    grid-row-gap: 15px;
+    -ms-grid-rows: auto
+  }
+  
+  ul.category-grid li {
+    height: 220px;
+    background-color: #efefef;
+  }
+  
+  ul.category-grid li a {
+    flex-flow: column nowrap;
+    padding-bottom: 40px;
+  }
+  
+  ul.category-grid li strong {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    min-height: 4.2em;
+
+    /* Internet Explorer 10 */
+    display:-ms-flexbox;
+    -ms-flex-align:center;
+
+    /* Firefox */
+    display:-moz-box;
+    -moz-box-align:center;
+
+    /* Safari, Opera, and Chrome */
+    display:-webkit-box;
+    -webkit-box-align:center;
+  }
+  
+  img.category-thumb {
+    display: initial;
+  }
+}
+
+@media (min-width: 75em) {
+  ul.category-grid {
+    grid-template-columns:calc(25% - 11.25px) calc(25% - 11.25px) calc(25% - 11.25px) calc(25% - 11.25px);
+    grid-column-gap: 15px;
+    -ms-grid-columns: calc(25% - 11.25px) 15px calc(25% - 11.25px) 15px calc(25% - 11.25px) 15px calc(25% - 11.25px);
+    grid-template-rows: auto;
+    grid-row-gap: 15px;
+    -ms-grid-rows: auto;
+  }
 }

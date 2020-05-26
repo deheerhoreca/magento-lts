@@ -103,7 +103,7 @@ if($carct && ($category === 'category')) {
     }
     
     if(strlen($category_desc) < 1000) {
-      echo $category_desc;
+      echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";
       ?>
@@ -133,7 +133,7 @@ if($carct && ($category === 'category')) {
   echo "</div>";
 }
 
-/* PARENT CATEGORY, SHOW CHILDREN CATEGORIES */
+/* SUBCATEGORIES */
 
 if(empty($carct) === false && $amschk !== 'amshopby') {
 
@@ -142,46 +142,34 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
   $currentCategoryId = $_category->getId();
   $media_url = Mage::getBaseUrl('media');
   $media_path = Mage::getBaseDir('media');
-  $children = Mage::getModel('catalog/category')->getCategories($currentCategoryId);
+  $subcategories = Mage::getModel('catalog/category')->getCategories($currentCategoryId);
   
   ?>
-  <ul class="products-grid-anchor">
+  <ul class="category-grid">
   <?php
-  foreach($children as $category) {
+  foreach($subcategories as $category) {
     $haschild       = true;
     $category       = Mage::getModel('catalog/category')->load($category->getId());
     $categoryName   = $category->getName();
     $image          = $category->getImage();
     $measurements   = null;
+    $img_url        = "{$media_url}/catalog/category/{$image}";
+    $img_path       = "{$media_path}/catalog/category/{$image}";
     
-    if(empty($image) === true) {
-      $image = "category_placeholder.png";
-      $measurements = "height=130 width=246";
-    }
-    
-    if(is_file($img_file) === true) {
+    if(is_file($img_path) === true) {
       try {
-        $meta = getimagesize($img_file);
+        $meta = getimagesize($img_path);
         $measurements = $meta[3];
       } catch (Exception $e) {
-        $image = "category_placeholder.png";
-        $measurements = "height=130 width=246";
+        $image = null;
         Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
       }
     }
-    
-    $img_url = "{$media_url}catalog/category/{$image}";
-    $img_path = "{$media_path}catalog/category/{$image}";    
     ?>
-    <li class="item big-tile highlight-hover">
-      <a href="<?php echo $category->getUrl() ?>">
-        <div class="imwrapcat">
-          <?php
-          echo "<img class='center category-thumb' src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' />";
-          ?>
-        </div>
-        <strong class="float-left uppercase center bold"><?php echo $categoryName; ?></strong>
-        <i class="float-right fa fa-arrow-right" aria-hidden="true"></i>
+    <li>
+      <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
+        <?php if(empty($image) === false) echo "<img class='category-thumb' src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
+        <strong><?php echo $categoryName; ?></strong>
       </a>
     </li>
     <?php
