@@ -139,11 +139,11 @@
 
     # Remove trailing slash from non-filepath urls
     # https://gist.github.com/evgv/e7e84e84c46e027c3fff7396a13b3a43
-    RewriteCond %{request_method} ^GET$
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_URI} !^/downloader.*$
-    RewriteCond %{REQUEST_URI} ^(.+)/$
-    RewriteRule ^(.+)$ %1 [L,R=301]
+#    RewriteCond %{request_method} ^GET$
+#    RewriteCond %{REQUEST_FILENAME} !-f
+#    RewriteCond %{REQUEST_URI} !^/downloader.*$
+#    RewriteCond %{REQUEST_URI} ^(.+)/$
+#    RewriteRule ^(.+)$ %1 [L,R=301]
 
     # Block scrapers
     # https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
