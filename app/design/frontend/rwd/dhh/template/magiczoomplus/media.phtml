@@ -54,27 +54,29 @@ if($galleryImagesCount) {
           // See if there is a watermarked counterpart
           // Logic exists in multiple places!
           
-          $parts       = explode("-", pathinfo($imagePath, PATHINFO_FILENAME));
-          $supplier    = $parts[0];
-          $sku         = $parts[1];
-          $number      = $parts[2];
-          $type        = $parts[3];
-          $hash        = $parts[4];
-          $extension   = pathinfo($imagePath, PATHINFO_EXTENSION);
-          
-          $hash        = substr(md5($number.$sku.FILENAME_SECRET), 0, 4);
-          $wm_filename = "{$supplier}-{$sku}-{$number}-a-{$hash}.{$extension}";
-          
-          $wm_path     = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
-          
-          if(is_file($wm_path)) {
-            $imagePath = $wm_path;
-            $imageFileOverride[$galleryImage->getFile()] = WATERMARKED_DIR."{$wm_filename}";
-            //print_r($imageFile);
+          $parts = explode("-", pathinfo($imagePath, PATHINFO_FILENAME));
+          if(sizeof($parts) === 5) {
+            $supplier    = $parts[0];
+            $sku         = $parts[1];
+            $number      = $parts[2];
+            $type        = $parts[3];
+            $hash        = $parts[4];
+            $extension   = pathinfo($imagePath, PATHINFO_EXTENSION);
+            
+            $hash        = substr(md5($number.$sku.FILENAME_SECRET), 0, 4);
+            $wm_filename = "{$supplier}-{$sku}-{$number}-a-{$hash}.{$extension}";
+            
+            $wm_path     = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
+            
+            if(is_file($wm_path) === true) {
+              $imagePath = $wm_path;
+              $imageFileOverride[$galleryImage->getFile()] = WATERMARKED_DIR."{$wm_filename}";
+              //print_r($imageFile);
+            }
           }
         }
         
-        // END
+        // END DHH
         
         if(file_exists($imagePath)) {
             $imageFile = $galleryImage->getFile();

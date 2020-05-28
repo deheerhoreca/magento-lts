@@ -164,6 +164,8 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
         $image = null;
         Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
       }
+    } else {
+      $image = null;
     }
     ?>
     <li>
@@ -190,7 +192,7 @@ if($_collectionSize > 0) {
     <?php
     $_columnCount = 3;
     $displaySize = 280;
-    $_imgSize = 2 * $displaySize;
+    $_imgSize = 1 * $displaySize;
     
     echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     

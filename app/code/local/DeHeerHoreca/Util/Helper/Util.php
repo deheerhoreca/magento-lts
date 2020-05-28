@@ -180,6 +180,323 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     return $url;
   }
 
+  public function getProductGridHtml($_product, $product_block, $options = []) {
+    
+    $image_size = $options["image_size"] ?? 150;
+    $image_dimensions = 1 * $image_size;
+    $max_product_info_items = 3;
+    
+    $product_name = $_product->getData("name");
+    $product_short_name = $_product->getData("name_short");
+    
+    $product_url = $_product->getProductUrl();
+    $image_label = $this->stripTags($_product->getData('small_image_label'));
+    if(empty($image_label)) {
+      $image_label = $product_name;
+    }
+    
+    if(empty($options["skip_info"]) || $options["skip_info"] === false) {
+      $product_info = Mage::helper("deheerhoreca_util/util")->getProductInfo($_product);
+    }
+    if(empty($options["skip_usps"]) || $options["skip_usps"] === false) {
+      $product_usps = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product);
+    }
+    $a_target = null;
+    if(isset($options["_blank"]) === true && $options["_blank"] === true) {
+      $a_target = " target='_blank'";
+    }
+    
+    $price_html = $product_block->getPriceHtml($_product, true);
+    $price_html = str_replace(",00", ",-", $price_html);
+    $price_html = str_replace("€", null, $price_html);
+    
+    // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
+    $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
+    
+    $stock_status = $stock_message = null;
+    $stock_qty    = (int) $stock->getQty();
+    $in_stock     = $stock->getIsInStock();
+    
+    // Block also exists in catalogproductview.phtml and featured.phtml
+    if($in_stock === true) {
+      if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
+        $stock_message = "Bestelbaar";
+        $stock_status = "EMPTY";
+      } else {
+        if($stock_qty === 100) { //100 is a special value
+          $stock_message = "Op voorraad";
+        } elseif($stock_qty > 10) {
+          $stock_message = "10+ op voorraad";
+        } elseif($stock_qty > 1) {
+          $stock_message = "{$stock_qty} op voorraad";
+        } else {
+          $stock_message = "Op voorraad";
+        }
+        $stock_status = "IN_STOCK";
+      }
+    } else {
+      $stock_message = "Niet op voorraad";
+      $stock_status = "DISABLED";
+    }
+    
+    $stock_class = null;
+    switch($stock_status) {
+      case "IN_STOCK":
+        $stock_class = "green_checkbox_before";
+        break;
+      case "EMPTY":
+        $stock_class = "orange_circle_before";
+        break;
+      case "DISABLED":
+        $stock_class = "red_x_before";
+        break;
+    }
+    
+    ?>
+    <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target; ?>>
+      <img id='product-collection-image-<?php echo $_product->getId(); ?>'
+        src='<?php echo $product_block->helper('catalog/image')->init($_product, 'small_image')->resize($image_dimensions); ?>'
+        alt='<?php echo $image_label; ?>' width='<?php echo $image_size; ?>' height='<?php echo $image_size; ?>' />
+    </a>
+    <div class="product-info">
+      <div class="info">
+        <h2 class='product-name'>
+          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $product_name; ?></a>
+        </h2>
+        <?php
+        if(isset($tagline) === true) {
+          echo "<div class='product-list-tagline'>{$tagline}</div>";
+        }
+        
+        if(empty($product_info) === false && (empty($options["skip_info"]) || $options["skip_info"] === false)) {
+          echo "<ul>";
+          foreach($product_info as $key => $item) {
+            if($key === $max_product_info_items) break;
+            echo "<li class='angle_before'>{$item}</li>";
+          }
+          echo "</ul>";
+        }
+        
+        if(empty($product_usps) === false && (empty($options["skip_usps"]) || $options["skip_usps"] === false)) {
+          echo "<ul class='product-list-highlights'>";
+          foreach($product_usps as $usp) {
+            echo "<li>{$usp}</li>";
+          }
+          echo "</ul>";
+        }
+        ?>
+      </div>
+      <?php
+      echo $price_html;
+      if(0 && $_product->getRatingSummary()) {
+        echo $product_block->getReviewsSummaryHtml($_product, 'short');
+      }
+      
+      // 
+      ?>
+      <div class="actions">
+        <div class="float-left" style="padding-top: 5px;">
+          <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+        </div>
+        <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
+          <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $product_block->getAddToCartUrl($_product) ?>')">
+            <i class="fa fa-shopping-cart"></i>
+          </button>
+        <?php else: ?>
+          <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $_product->getProductUrl() ?>"><?php echo $product_block->__("Productdetails") ?></a>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php
+  }
+  
+  public function getProductInfo($_product, $options = []) {
+    
+    $category_id = $options["category_id"] ?? null;
+    
+    $product_info = [];
+            
+    $width = $attribute_value = $_product->getBreedte();
+    $height = $attribute_value = $_product->getHoogte();
+    $depth = $attribute_value = $_product->getDiepte();
+    
+    $width = $width + 0;
+    $height = $height + 0;
+    $depth = $depth + 0;
+    
+    $width /= 10;
+    $height /= 10;
+    $depth /= 10;
+    
+    if($width > 10) $width = round($width);
+    if($depth > 10) $depth = round($depth);
+    if($height > 10) $height = round($height);
+    
+    if($width > 0 && $height > 0 && $depth > 0) {
+      $product_info[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
+    } else {
+      $attribute_value = $_product->getBreedte();
+      if($attribute_value != '' && $attribute_value > 0) {
+        $product_info[] = "Breedte: ".($attribute_value/10)."cm";
+      }
+    }
+
+    $attribute_value = $_product->getAttributeText('type_koeling');
+    if($attribute_value != ''){
+      $product_info[] = "Koelmethode: {$attribute_value}";
+    }
+
+    if($category_id === 72) {
+      $attribute_value = $_product->getInhoudAantalGn();
+      if($attribute_value !='') {
+        $product_info[] = "{$attribute_value} x {$gnvalue}";
+      }
+    }
+    
+    $attribute_value = (int) $_product->getData('eenheid');
+    if($attribute_value > 1) {
+      $product_info[] = "{$attribute_value} stuks";
+    }
+    
+    $attribute_value = $_product->getAttributeText('size');
+    if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
+      $product_info[] = "Maat: {$attribute_value}";
+    }
+    
+    $attribute_value = $_product->getData('materiaal');
+    if(strlen($attribute_value) > 0) {
+      $product_info[] = "{$attribute_value}";
+    }
+    
+    $attribute_value = $_product->getData('serie');
+    if(strlen($attribute_value) > 0) {
+      $product_info[] = "Serie: {$attribute_value}";
+    }
+    
+    $code = "uitvoering";
+    $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+    if(strlen($attribute_value) > 0) {
+      $product_info[] = "Uitvoering: {$attribute_value}";
+    }
+    
+    return $product_info;
+  }
+
+  public function getProductUsps($_product, $options = []) {
+    
+    $parent_categories_ids = $options["parent_categories_ids"] ?? [];
+    
+    $usps = [];
+      
+    /* Afsluitbaar */
+    $attribute_value = $_product->getAttributeText("afsluitbaar");
+    if($attribute_value === "Ja") {
+      $usps[] = "Afsluitbaar";
+    }
+    
+    /* Blikjes */
+    $attribute_value = (int) $_product->getData("aantal_blikjes");
+    if($attribute_value > 0) {
+      $usps[] = "{$attribute_value}x 33cl";
+    }
+    
+    /* Flessen */
+    $attribute_value = (int) $_product->getData("aantal_flessen");
+    if($attribute_value > 0) {
+      $usps[] = "{$attribute_value} flessen";
+    }
+    
+    /* Capacity: Wine Bottels */
+    $attribute_value = (int) $_product->getData("capacity_wine_bottles");
+    if($attribute_value > 0) {
+      $usps[] = "{$attribute_value} flessen";
+    }
+    
+    /* GN maat if not in a GN category */
+    if(empty($gnvalue) === false
+      && empty($category_name) === false
+      && strstr($category_name, "GN") === false) {
+        if(is_array($gnvalue)) {
+          $gnvalue = implode(" ", $gnvalue);
+        }
+        $usps[] = "{$gnvalue} GN";
+    }
+    
+    /* Custom highlights */
+    $attribute_value = $_product->getData("custom_highlights");
+    $parts = explode(",", $attribute_value);
+    if(sizeof($parts) > 0) {
+      foreach($parts as $part) {
+        $part = trim($part);
+        if(strlen($part) > 0) {
+          $usps[] = trim($part);
+        }
+      }
+    }            
+    
+    /* Inhoud */
+    $attribute_value = $_product->getInhoudLiters();
+    if(strlen($attribute_value) > 0) {
+      $usps[] = round($attribute_value, 2)." liter";
+    }
+    
+    /* Vermogen */
+    if(in_array(3, $parent_categories_ids) === false) { // skip "Koelingen" and everything underneath
+      $attribute_value = $_product->getVermogen();
+      if(empty($attribute_value) === false) {
+        if($attribute_value < 3) {
+          $attribute_value *= 1000;
+          $usps[] = "{$attribute_value} Watt";
+        } else {
+          //$attribute_value = str_replace(".", null, $attribute_value);
+          //$attribute_value = str_replace(",", ".", $attribute_value);
+          $attribute_value = number_format($attribute_value, 1, ",", ".");
+          $attribute_value = str_replace(",0", null, $attribute_value);
+          $usps[] = "{$attribute_value} kW";
+        }
+      }
+    }
+    
+    /* Gas Vermogen */
+    $attribute_value = $_product->getVermogenKw();
+    if(empty($attribute_value) === false) {
+      if($attribute_value < 3) {
+        $attribute_value *= 1000;
+        $usps[] = "{$attribute_value} Watt";
+      } else {
+        $attribute_value = number_format($attribute_value, 1, ",", ".");
+        $attribute_value = str_replace(",0", null, $attribute_value);
+        $usps[] = "{$attribute_value} kW";
+      }
+    }
+    
+    /* M3/hour capacity */
+    $attribute_value = $_product->getAantalM3Uur();
+    if(strlen($attribute_value) > 0) {
+      $usps[] = round($attribute_value, 2)." m3";
+    }
+    
+    /* Warranty */
+    $attribute_value = $_product->getAttributeText('garantie');
+    if($attribute_value === "24 maanden") {
+      $usps[] = "24M Garantie";
+    }
+    
+    /* Cooling Zones */
+    $attribute_code = "number_of_cooling_zones";
+    $attribute_value = (int) $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
+    if($attribute_value === 2) {
+      $usps[] = "Dual-Zone";
+    } elseif($attribute_value === 3) {
+      $usps[] = "Triple-Zone";
+    } elseif($attribute_value > 3) {
+      $usps[] = "{$attribute_value} Zones";
+    }
+    
+    return $usps;
+    
+  }
+
 }
 
 if(function_exists('printr') === false) {

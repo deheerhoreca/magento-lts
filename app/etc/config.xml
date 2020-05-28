@@ -120,6 +120,19 @@
                 </entities>
             </core_resource>
         </models>
+        
+        <!-- We want this data in the cart for use in cross sell / bargains -->
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <supplier/>
+                        <name_short/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+        
     </global>
     <default>
         <system>
