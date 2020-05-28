@@ -31,6 +31,10 @@ if($_SERVER['REQUEST_METHOD'] !== 'GET') {
   $write_cache = false;
   $read_cache = false;
 }
+if(Mage::app()->getFrontController()->getAction()->getFullActionName() === "cms_index_noRoute") {
+  $write_cache = false;
+  $read_cache = false;
+}
 
 $_cacheKey = null;
 if($read_cache === true || $write_cache === true) {
