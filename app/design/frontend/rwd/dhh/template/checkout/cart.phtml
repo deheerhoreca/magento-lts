@@ -4,10 +4,116 @@
  *
  * @var $this Mage_Checkout_Block_Cart
  */
+
+//echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_banner')->toHtml();
 ?>
-<?php
-// echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_banner')->toHtml();
-?>
+
+<style>
+.shadow {
+  -webkit-border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
+  -webkit-box-shadow: rgba(0, 0, 0,.30) 0 2px 3px;
+}
+.container {
+  margin: 0 auto;
+  width: 100%;
+  background: #f9f9f9 0 0;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 2px #fff inset,
+              -1px -1px 2px #fff inset;
+  border-radius: 3px/6px;
+  padding: .5em;
+}
+
+ul.tile-grid {
+  display:grid;
+  display: -ms-grid;
+  grid-template-columns: 100%;
+  grid-column-gap: 0;
+  -ms-grid-columns: 100%;
+  grid-template-rows: auto auto auto auto;
+  grid-row-gap: 5px;
+  -ms-grid-rows: auto 5px auto 5px auto 5px auto;
+  margin: 1em 0;
+  flex-flow: row wrap;
+}
+
+@media (min-width: 48em) {
+  ul.tile-grid {
+    grid-template-columns:calc(50% - 7.5px) calc(50% - 7.5px);
+    grid-column-gap: 15px;
+    -ms-grid-columns: calc(50% - 7.5px) 15px calc(50% - 7.5px);
+    grid-template-rows: auto auto;
+    grid-row-gap: 15px;
+    -ms-grid-rows: auto 15px auto
+  }
+}
+
+@media (min-width: 62em) {
+  
+  ul.tile-grid li {
+    height: 50px;
+  }
+  
+  ul.tile-grid li a {
+    flex-flow: column nowrap;
+    padding-bottom: 40px;
+  }
+}
+
+@media (min-width: 75em) {
+  ul.tile-grid {
+    grid-template-columns:calc(25% - 11.25px) calc(25% - 11.25px) calc(25% - 11.25px) calc(25% - 11.25px);
+    grid-column-gap: 15px;
+    -ms-grid-columns: calc(25% - 11.25px) 15px calc(25% - 11.25px) 15px calc(25% - 11.25px) 15px calc(25% - 11.25px);
+    grid-template-rows: auto;
+    grid-row-gap: 15px;
+    -ms-grid-rows: auto;
+  }
+}
+
+div.usp-icon {
+  margin: 0 .5em;
+}
+
+</style>
+
+<div class="f">
+  <ul class="tile-grid">
+     <li class="container">
+      <div class="float-left usp-icon">
+        <img alt="Gratis verzending" src="/skin/frontend/rwd/dhh/images/trolley.svg" width="32" height="32"></div>
+      <div>
+        <span class="usp_text"><strong class="extra_special">Gratis</strong> verzending</span><br />
+        <span class="small">In Nederland &amp; België vanaf &euro; 150</span>
+      </div>
+    </li>
+     <li class="container">
+      <div class="float-left usp-icon">
+        <img alt="De beste prijs" src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32">
+      </div>
+      <div class="inline">
+        <span class="usp_text">Ergens goedkoper gezien?</span><br />
+        <span class="small"><a href="/klantenservice">Vertel het ons</a></span>
+      </div>
+    </li>
+     <li class="container">
+      <div class="float-left usp-icon">
+        <img alt="Advies voor professionals" src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32">
+      </div>
+      <div class="inline">
+        <span class="usp_text">Advies door professionals</span><br />
+        <span class="small">Klaas staat klaar</span>
+      </div>
+    </li>
+     <li class="container">
+      <div class="float-left usp-icon">
+        <img alt="Snelle levrering" src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32">
+      </div>
+      <div class="inline"><span class="usp_text">Snelle levering</span></div>
+    </li>
+  </ul>
+  
+</div>
 
 <?php
 $pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionName();
@@ -16,50 +122,21 @@ if($pageIdentifier=='checkout_cart_index'){
 }
 $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both-prices' : 'display-single-price'; ?>
 
-<div style="padding-top: 15px;">
-  <ul>
-    <li class="inline" style="margin-left: 1em;; margin-right: 1.6em;">
-      <div class="inline"><img class="inline" alt="Gratis verzending" src="/skin/frontend/rwd/dhh/images/trolley.svg" width="32" height="32"></div>
-      <div class="inline" style="position: relative; bottom: 0.8em;">
-        <small class="usp_text"><strong class="extra_special">Gratis</strong> verzending</small>
-        <small>&nbsp;In Nederland &amp; België bij &euro; 150+</small>
-      </div>
-    </li>
-    <li class="inline" style="margin-right: 1.6em;">
-      <div class="inline"><img class="inline" alt="De beste prijs" src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32"></div>
-      <div class="inline" style="position: relative; bottom: 0.8em;">
-          <small class="usp_text">Ergens goedkoper gezien?</small>
-          <small><a href="/klantenservice">Vertel het ons</a></small>
-      </div>
-    </li>
-    <li class="inline" style="margin-right: 1.6em;">
-      <div class="inline"><img class="inline" alt="Advies voor professionals" src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32"></div>
-      <div class="inline" style="position: relative; bottom: 0.8em;"><small class="usp_text">Advies door professionals</small></div>
-    </li>
-    <li class="inline" style="margin-right: 0em;">
-      <div class="inline"><img class="inline" alt="Snelle levrering" src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32"></div>
-      <div class="inline" style="position: relative; bottom: 0.8em;"><small class="usp_text">Snelle levering</small></div>
-    </li>
-  </ul>
-</div>
-
 <div class="cart <?php echo $_priceDisplay; ?>">
-
- <div class="page-title title-buttons">
-        <h1 class="shpcarttitles"><?php echo $this->__('Shopping Cart') ?></h1>
-        <?php if(!$this->hasError()): ?>
-        <ul class="checkout-types top">
-        <?php foreach ($this->getMethods('top_methods') as $method): ?>
-            <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-            <li><?php echo $methodHtml; ?></li>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        </ul>
+  <div class="page-title title-buttons">
+    <h1><?php echo $this->__('Shopping Cart') ?></h1>
+    <?php if(!$this->hasError()): ?>
+    <ul class="checkout-types top">
+    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        <li><?php echo $methodHtml; ?></li>
         <?php endif; ?>
-    </div>
-
+    <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+  </div>
   <?php echo $this->getMessagesBlock()->toHtml() ?>
-<div class="pgcrtleft">
+  <div class="pgcrtleft">
 
 
     <?php echo $this->getChildHtml('form_before') ?>
@@ -83,9 +160,7 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
                     <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php //echo $this->__('Product') ?></span></th>
                     <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
                     <th class="align-right cart-price-head" colspan="<?php echo $mergedCells; ?>">
-<!--                            <div class="cart-price-placeholder">-->
-                            <?php echo $this->__('Price') ?>
-<!--                            </div>-->
+                      <?php echo $this->__('Price') ?>
                     </th>
                     <th rowspan="<?php echo $mergedCells; ?>" class="a-center">
                         <?php echo $this->__('Qty') ?>
@@ -94,12 +169,8 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
                         <?php endif*/ ?>
                     </th>
                     <th class="a-center cart-total-head" colspan="<?php echo $mergedCells; ?>">
-<!--                            <div class="cart-total-placeholder">-->
                             <?php echo $this->__('Subtotal') ?>
-<!--                            </div>-->
                     </th>
-               <!--      <th class="a-center" rowspan="<?php echo $mergedCells; ?>">&nbsp;</th> -->
-
                 </tr>
                 <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
                 <tr>
@@ -110,47 +181,7 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
                 </tr>
                 <?php endif; ?>
             </thead>
-            <tfoot style="display: none;">
-                <tr>
-                    <td colspan="50" class="a-right cart-footer-actions">
-
-                        <!-- Make this button the first responder rather than empty cart -->
-                        <button type="submit" style="visibility:hidden;" data-cart-item-update name="update_cart_action" value="update_qty" title="<?php echo $this->quoteEscape($this->__('Update Shopping Cart')); ?>" class="button2 btn-update"><span><span><?php echo $this->__('Update Shopping Cart'); ?></span></span></button>
-
-                        <button type="submit" name="update_cart_action" data-cart-empty value="empty_cart" title="<?php echo $this->quoteEscape($this->__('Empty Cart')); ?>" class="button2 btn-empty" id="empty_cart_button"><span><span><?php echo $this->__('Empty Cart'); ?></span></span></button>
-
-                        <button type="submit" name="update_cart_action" data-cart-item-update value="update_qty" title="<?php echo $this->quoteEscape($this->__('Update Shopping Cart')); ?>" class="button2 btn-update"><span><span><?php echo $this->__('Update Shopping Cart'); ?></span></span></button>
-
-                        <span class="or">-<?php echo $this->__('or'); ?>-</span>
-
-                        <?php if($this->getContinueShoppingUrl()): ?>
-                            <button type="button" title="<?php echo $this->quoteEscape($this->__('Continue Shopping')) ?>" class="button2 btn-continue" onclick="setLocation('<?php echo Mage::helper('core')->quoteEscape($this->getContinueShoppingUrl()) ?>')"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
-                        <?php endif; ?>
-                        <!--[if lt IE 8]>
-                        <input type="hidden" id="update_cart_action_container" data-cart-item-update />
-                        <script type="text/javascript">
-                        //<![CDATA[
-                            Event.observe(window, 'load', function()
-                            {
-                                // Internet Explorer (lt 8) does not support value attribute in button elements
-                                $emptyCartButton = $('empty_cart_button');
-                                $cartActionContainer = $('update_cart_action_container');
-                                if ($emptyCartButton && $cartActionContainer) {
-                                    Event.observe($emptyCartButton, 'click', function()
-                                    {
-                                        $emptyCartButton.setAttribute('name', 'update_cart_action_temp');
-                                        $cartActionContainer.setAttribute('name', 'update_cart_action');
-                                        $cartActionContainer.setValue('empty_cart');
-                                    });
-                                }
-
-                            });
-                        //]]>
-                        </script>
-                        <![endif]-->
-                    </td>
-                </tr>
-            </tfoot>
+            
             <tbody>
             <?php foreach($this->getItems() as $_item): ?>
                 <?php echo $this->getItemHtml($_item) ?>
@@ -177,7 +208,6 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
           <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
       </div>
       <div class="cart-totals-wrapper">
-      <!--
       <script src ="https://form.jotform.com/static/feedback2.js" type="text/javascript"></script>
       <script type="text/javascript">
         var JFL_200152323289044 = new JotformFeedback({
@@ -192,7 +222,6 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
           openOnLoad: false
         });
       </script>
-      -->
           <div class="cart-totals">
               <?php echo $this->getChildHtml('totals'); ?>
               <?php if(!$this->hasError()): ?>
@@ -207,16 +236,16 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
                   <?php
                   $buttonTitle_lease = $this->__('Lease aanvragen');
                   ?>
-                  <!--
                   <li class="method-checkout-cart-methods-fire">
-                    <button type="button" title="Lease aanvragen" class="button btn-cart btn lightbox-200152323289044" style="margin-top:1em;background-color:#2a71db!important;display: block!important;float: none;margin: 0 auto;margin-top: 25px!important;margin-right: auto!important;margin-left: auto!important;width: 92%; text-transform: uppercase;">
-                      <span style="color: #fff; font-weight: 600;">
-                        <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px; color: #fff;"></i>
+                    <button type="button" title="Lease aanvragen" class="button btn-cart btn lightbox-200152323289044" style="background-color:#2a71db; display: block; float: none; margin: 1em auto 1em auto; width: 92%; text-transform: uppercase;">
+                      <span>
                         <?php echo $buttonTitle_lease; ?>
+                        <span class="float-right big" style="margin: 0 1em;">
+                          <i class="fa fa-chevron-right"></i>
+                        </span>
                       </span>
                     </button>
                   </li>
-                  -->
                 </ul>              
               <?php endif; ?>
           </div>

@@ -1,21 +1,22 @@
-<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>" />
-<title><?php echo $this->getTitle() ?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7" />
-<meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
-<meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
-<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
-<link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
-<link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
-<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.8.3/builder.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.8.3/effects.min.js"></script>
-<?php
-echo $this->getCssJsHtml();
-echo $this->getChildHtml();
-# https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
-echo $this->helper('core/js')->getTranslatorScript();
-echo $this->getIncludes();
-?>
-<!-- because this allows control of font-display -->
-<link href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>" />
+  <title><?php echo $this->getTitle() ?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7" />
+  <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
+  <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
+  <meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
+  <link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
+  <link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
+  <!-- <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script> -->
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.8.3/builder.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.8.3/effects.min.js"></script>
+  <?php
+  echo $this->getCssJsHtml();
+  echo $this->getChildHtml();
+  # https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
+  echo $this->helper('core/js')->getTranslatorScript();
+  echo $this->getIncludes();
+  ?>
+  <!-- because this allows control of font-display -->
+  <link href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous" />

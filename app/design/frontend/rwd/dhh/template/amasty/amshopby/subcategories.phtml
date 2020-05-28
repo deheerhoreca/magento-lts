@@ -31,6 +31,8 @@ if ($subcategories->getSize()) {
         $image = null;
         Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
       }
+    } else {
+      $image = null;
     }
     ?>
     <li>

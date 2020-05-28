@@ -680,8 +680,9 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
 
     private function addJQuery($head)
     {
-        $head->addJs('amasty/amshopby/jquery.min.js');
+        // DHH CORE HACK $head->addJs('amasty/amshopby/jquery.min.js');
         $head->addJs('amasty/amshopby/jquery.noconflict.js');
+        $head->addJs('amasty/amshopby/jquery-ui.min.js');
         $head->addJs('amasty/amshopby/jquery-ui.min.js');
         $head->addJs('amasty/amshopby/jquery.ui.touch-punch.min.js');
         $head->addJs('amasty/amshopby/amshopby-jquery.js');

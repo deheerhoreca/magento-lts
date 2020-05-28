@@ -170,9 +170,6 @@
     margin: auto;
     margin-bottom: 0;
   }
-  .nav-primary li.level1 a {
-    padding: 0;
-  }
   .cms-block__cell--side-navigation {
     width: 20%;
   }
@@ -193,6 +190,9 @@
   }
   input#newsletter {
     width: 69%;
+  }
+  .nav-primary li.level1 a {
+    padding: 0;
   }
   #header-nav.skip-content {
     display: none;
