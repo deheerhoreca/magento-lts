@@ -110,6 +110,8 @@ class Mollie_Mpm_Model_Mollie extends Mage_Payment_Model_Method_Abstract
                 if (self::RETRY_FLAG && $methodCode != 'klarnapaylater' && $methodCode != 'klarnasliceit') {
                     $this->mollieHelper->addTolog('error', $e->getMessage());
                     $transactionResult = $this->paymentsApi->startTransaction($order);
+                } elseif ($methodCode == 'klarnapaylater' || $methodCode == 'klarnasliceit') {
+                    throw new Mollie_Mpm_Exceptions_KlarnaException($e->getMessage());
                 } else {
                     Mage::throwException($e->getMessage());
                 }
@@ -155,11 +157,23 @@ class Mollie_Mpm_Model_Mollie extends Mage_Payment_Model_Method_Abstract
         }
 
         $method = $this->mollieHelper->getApiMethod($order);
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
-        if ($method == 'order' && preg_match('/^ord_\w+$/', $transactionId)) {
-            return $this->ordersApi->processTransaction($order, $type, $paymentToken);
-        } else {
-            return $this->paymentsApi->processTransaction($order, $type, $paymentToken);
+        try {
+            $connection->beginTransaction();
+
+            if ($method == 'order' && preg_match('/^ord_\w+$/', $transactionId)) {
+                return $this->ordersApi->processTransaction($order, $type, $paymentToken);
+            } else {
+                return $this->paymentsApi->processTransaction($order, $type, $paymentToken);
+            }
+        } catch (\Exception $exception) {
+            $connection->rollback();
+            throw $exception;
+        } finally {
+            $order->save();
+            $this->commitOrder($order);
+            $connection->commit();
         }
     }
 
@@ -310,6 +324,38 @@ class Mollie_Mpm_Model_Mollie extends Mage_Payment_Model_Method_Abstract
 
         $this->mollieHelper->addTolog('error', $this->mollieHelper->__('No order found for transaction id %s', $transactionId));
         return false;
+    }
+
+    /**
+     * When wrapping a $order->save() in a transaction, the update of the grid is postponed to a later action.
+     * This function fixes 2 edge cases which prevents that the order grid is updated. Both are caused due to the fact
+     * that we update the order in a transaction.
+     *
+     * 1. Sometimes people disable the `controller_action_postdispatch` log observer, which calls all
+     *    afterCommitCallback methods outside of the transaction.
+     *
+     * 2. When disabling logging in the backend, these afterCommitCallback methods are also not called. This is due to
+     *    the fact that the code for triggering these goes trough the log module.
+     *
+     * In both cases we call the `commit()` method of the order ourselves, so the afterCommitCallbacks are still called.
+     *
+     * @param Mage_Sales_Model_Order $order
+     */
+    private function commitOrder(Mage_Sales_Model_Order $order)
+    {
+        $systemLogIsDisabled = false;
+        if (defined('Mage_Log_Helper_Data::XML_PATH_LOG_ENABLED')) {
+            $systemLogIsDisabled = $this->mollieHelper->getStoreConfig(Mage_Log_Helper_Data::XML_PATH_LOG_ENABLED) == '0';
+        }
+
+        $logObserver = Mage::getConfig()->getNode('frontend/events/controller_action_postdispatch/observers/log');
+        $logObserverIsDisabled = $logObserver && $logObserver->type == 'disabled';
+
+        if (!$logObserverIsDisabled && !$systemLogIsDisabled) {
+            return;
+        }
+
+        $order->getResource()->commit();
     }
 
 }

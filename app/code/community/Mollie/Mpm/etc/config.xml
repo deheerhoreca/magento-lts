@@ -33,7 +33,7 @@
 <config>
     <modules>
         <Mollie_Mpm>
-            <version>5.3.0</version>
+            <version>5.5.7</version>
         </Mollie_Mpm>
     </modules>
     <global>
@@ -111,11 +111,11 @@
             </sales_order_creditmemo_save_after>
             <sales_order_shipment_save_before>
                 <observers>
-                    <mollie_sales_order_shipment_save_after>
+                    <mollie_sales_order_shipment_save_before>
                         <type>singleton</type>
                         <class>Mollie_Mpm_Model_Observer</class>
                         <method>salesOrderShipmentSaveBefore</method>
-                    </mollie_sales_order_shipment_save_after>
+                    </mollie_sales_order_shipment_save_before>
                 </observers>
             </sales_order_shipment_save_before>
             <sales_order_shipment_track_save_after>
@@ -127,7 +127,130 @@
                     </mollie_sales_order_shipment_track_save_after>
                 </observers>
             </sales_order_shipment_track_save_after>
+            <controller_action_predispatch_onestepcheckout_index_index>
+                <observers>
+                    <mollie_controller_action_predispatch_onestepcheckout_index_index>
+                        <type>singleton</type>
+                        <class>Mollie_Mpm_Model_Observer</class>
+                        <method>restoreQuoteWhenReturningFromMollie</method>
+                    </mollie_controller_action_predispatch_onestepcheckout_index_index>
+                </observers>
+            </controller_action_predispatch_onestepcheckout_index_index>
+            <controller_action_predispatch_checkout_onepage_index>
+                <observers>
+                    <mollie_controller_action_predispatch_onestepcheckout_index_index>
+                        <type>singleton</type>
+                        <class>Mollie_Mpm_Model_Observer</class>
+                        <method>restoreQuoteWhenReturningFromMollie</method>
+                    </mollie_controller_action_predispatch_onestepcheckout_index_index>
+                </observers>
+            </controller_action_predispatch_checkout_onepage_index>
         </events>
+        <sales>
+            <quote>
+                <totals>
+                    <mollie_mpm_payment_fee>
+                        <class>mpm/totals_paymentFee_quote</class>
+                        <after>subtotal,discount</after>
+                        <before>grand_total,tax</before>
+                        <renderer>mpm/checkout_paymentFee</renderer>
+                        <admin_renderer>mpm/adminhtml_sales_order_create_paymentFee</admin_renderer>
+                    </mollie_mpm_payment_fee>
+                    <mollie_mpm_payment_fee_tax>
+                        <class>mpm/totals_paymentFee_quoteTax</class>
+                        <after>subtotal,discount,shipping,tax</after>
+                        <before>grand_total</before>
+                    </mollie_mpm_payment_fee_tax>
+                    <!-- Copied from: https://github.com/fooman/totals-sorting-fix/blob/master/app/code/community/Fooman/TotalsSortingFix/etc/config.xml
+                         This is to fix calculation errors when there are multiple custom totals -->
+                    <tax_subtotal>
+                        <after>nominal,subtotal,msrp,freeshipping</after>
+                        <before>tax_subtotal,weee,shipping,tax_shipping,discount,tax,grand_total</before>
+                    </tax_subtotal>
+                </totals>
+            </quote>
+            <order_invoice>
+                <totals>
+                    <mollie_mpm_payment_fee>
+                        <class>mpm/totals_paymentFee_invoice</class>
+                        <after>subtotal,discount</after>
+                        <before>grand_total,tax</before>
+                    </mollie_mpm_payment_fee>
+                    <mollie_mpm_payment_fee_tax>
+                        <class>mpm/totals_paymentFee_invoiceTax</class>
+                        <after>subtotal,discount,shipping,tax</after>
+                        <before>grand_total</before>
+                    </mollie_mpm_payment_fee_tax>
+                </totals>
+            </order_invoice>
+            <order_creditmemo>
+                <totals>
+                    <mollie_mpm_payment_fee>
+                        <class>mpm/totals_paymentFee_creditmemo</class>
+                        <after>subtotal,discount</after>
+                        <before>grand_total,tax</before>
+                    </mollie_mpm_payment_fee>
+                    <mollie_mpm_payment_fee_tax>
+                        <class>mpm/totals_paymentFee_creditmemoTax</class>
+                        <after>subtotal,discount,shipping,tax</after>
+                        <before>grand_total</before>
+                    </mollie_mpm_payment_fee_tax>
+                </totals>
+            </order_creditmemo>
+        </sales>
+        <fieldsets>
+            <sales_convert_quote_address>
+                <mollie_mpm_payment_fee>
+                    <to_order>*</to_order>
+                </mollie_mpm_payment_fee>
+                <base_mollie_mpm_payment_fee>
+                    <to_order>*</to_order>
+                </base_mollie_mpm_payment_fee>
+                <mollie_mpm_payment_fee_tax>
+                    <to_order>*</to_order>
+                </mollie_mpm_payment_fee_tax>
+                <base_mollie_mpm_payment_fee_tax>
+                    <to_order>*</to_order>
+                </base_mollie_mpm_payment_fee_tax>
+            </sales_convert_quote_address>
+            <sales_convert_order>
+                <mollie_mpm_payment_fee>
+                    <to_invoice>*</to_invoice>
+                </mollie_mpm_payment_fee>
+                <base_mollie_mpm_payment_fee>
+                    <to_invoice>*</to_invoice>
+                </base_mollie_mpm_payment_fee>
+                <mollie_mpm_payment_fee_tax>
+                    <to_invoice>*</to_invoice>
+                </mollie_mpm_payment_fee_tax>
+                <base_mollie_mpm_payment_fee_tax>
+                    <to_invoice>*</to_invoice>
+                </base_mollie_mpm_payment_fee_tax>
+                <mollie_mpm_payment_fee>
+                    <to_cm>*</to_cm>
+                </mollie_mpm_payment_fee>
+                <base_mollie_mpm_payment_fee>
+                    <to_cm>*</to_cm>
+                </base_mollie_mpm_payment_fee>
+                <mollie_mpm_payment_fee_tax>
+                    <to_cm>*</to_cm>
+                </mollie_mpm_payment_fee_tax>
+                <base_mollie_mpm_payment_fee_tax>
+                    <to_cm>*</to_cm>
+                </base_mollie_mpm_payment_fee_tax>
+            </sales_convert_order>
+        </fieldsets>
+        <pdf>
+            <totals>
+                <payment_fee translate="title">
+                    <title>Payment Fee</title>
+                    <font_size>7</font_size>
+                    <display_zero>0</display_zero>
+                    <sort_order>100</sort_order>
+                    <model>mpm/totals_paymentFee_invoicePdf</model>
+                </payment_fee>
+            </totals>
+        </pdf>
     </global>
     <frontend>
         <routers>
@@ -342,6 +465,7 @@
                 <group>mollie</group>
                 <allowspecific>0</allowspecific>
                 <method>order</method>
+                <invoice_moment>shipment</invoice_moment>
             </mollie_klarnapaylater>
             <mollie_klarnasliceit>
                 <active>1</active>
@@ -351,6 +475,7 @@
                 <group>mollie</group>
                 <allowspecific>0</allowspecific>
                 <method>order</method>
+                <invoice_moment>shipment</invoice_moment>
             </mollie_klarnasliceit>
             <mollie_paymentlink>
                 <active>1</active>
@@ -383,6 +508,16 @@
                 <method/>
                 <payment_description>{ordernumber}</payment_description>
             </mollie_applepay>
+            <mollie_mybank>
+                <active>1</active>
+                <sort_order>170</sort_order>
+                <title>MyBank</title>
+                <model>mpm/method_mybank</model>
+                <group>mollie</group>
+                <allowspecific>0</allowspecific>
+                <method/>
+                <payment_description>{ordernumber}</payment_description>
+            </mollie_mybank>
             <mollie_giftcard>
                 <active>0</active>
                 <sort_order>10</sort_order>

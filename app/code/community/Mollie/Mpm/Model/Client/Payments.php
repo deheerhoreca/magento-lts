@@ -75,7 +75,7 @@ class Mollie_Mpm_Model_Client_Payments extends Mage_Payment_Model_Method_Abstrac
         $method = $this->mollieHelper->getMethodCode($order);
         $paymentData = array(
             'amount'         => $this->mollieHelper->getOrderAmountByOrder($order),
-            'description'    => $this->mollieHelper->getPaymentDescription($method, $order->getIncrementId(), $storeId),
+            'description'    => $this->mollieHelper->getPaymentDescription($method, $order, $storeId),
             'billingAddress' => $this->getAddressLine($order->getBillingAddress()),
             'redirectUrl'    => $this->mollieHelper->getReturnUrl($orderId, $paymentToken, $storeId),
             'webhookUrl'     => $this->mollieHelper->getWebhookUrl($storeId),
@@ -105,7 +105,7 @@ class Mollie_Mpm_Model_Client_Payments extends Mage_Payment_Model_Method_Abstrac
         $paymentData = $this->mollieHelper->validatePaymentData($paymentData);
         $this->mollieHelper->addTolog('request', $paymentData);
 
-        $payment = $mollieApi->payments->create($paymentData, array('include' => 'details.qrCode'));
+        $payment = $mollieApi->payments->create($paymentData);
         $this->processResponse($order, $payment);
 
         return $payment->getCheckoutUrl();
@@ -218,7 +218,12 @@ class Mollie_Mpm_Model_Client_Payments extends Mage_Payment_Model_Method_Abstrac
                 }
 
                 if (!$order->getEmailSent()) {
-                    $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                    try {
+                        $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                    } catch (\Exception $exception) {
+                        $message = __('Unable to send the new order email: %1', $exception->getMessage());
+                        $order->addStatusHistoryComment($message)->save();
+                    }
                 }
 
                 if ($order->hasInvoices()) {
@@ -233,7 +238,12 @@ class Mollie_Mpm_Model_Client_Payments extends Mage_Payment_Model_Method_Abstrac
                     $invoice = $payment->getCreatedInvoice();
                     $sendInvoice = $this->mollieHelper->sendInvoice($storeId);
                     if ($invoice && $sendInvoice && !$invoice->getEmailSent()) {
-                        $invoice->setEmailSent(true)->sendEmail()->save();
+                        try {
+                            $invoice->setEmailSent(true)->sendEmail()->save();
+                        } catch (\Exception $exception) {
+                            $message = __('Unable to send the invoice: %1', $exception->getMessage());
+                            $order->addStatusHistoryComment($message)->save();
+                        }
                     }
                 }
             }
@@ -252,7 +262,13 @@ class Mollie_Mpm_Model_Client_Payments extends Mage_Payment_Model_Method_Abstrac
 
         if ($status == 'open') {
             if ($paymentData->method == 'banktransfer' && !$order->getEmailSent()) {
-                $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                try {
+                    $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                } catch (\Exception $exception) {
+                    $message = __('Unable to send the new order email: %1', $exception->getMessage());
+                    $order->addStatusHistoryComment($message)->save();
+                }
+
                 $message = $this->mollieHelper->__('New order email sent');
                 if (!$statusPending = $this->mollieHelper->getStatusPendingBanktransfer($storeId)) {
                     $statusPending = $order->getStatus();

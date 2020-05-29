@@ -46,6 +46,10 @@ class Mollie_Mpm_ApiController extends Mage_Core_Controller_Front_Action
      * Visible error message for cancelled transaction.
      */
     const RETURN_CANCEL_MSG = 'Payment cancelled, please try again.';
+    /**
+     * Klarna rejection message
+     */
+    const KLARNA_REJECTION_ERR_MSG = 'Payment rejected. Klarna cannot be used as a Payment Method on this order, please try another Payment Method.';
 
     /**
      * Mollie API Helper.
@@ -94,12 +98,20 @@ class Mollie_Mpm_ApiController extends Mage_Core_Controller_Front_Action
                 return;
             } else {
                 $this->mollieHelper->setError(self::REDIRECT_ERR_MSG);
-                $this->mollieHelper->addToLog('error', 'Missing Redirect Url');
+                $error = sprintf('Missing Redirect Url, increment ID: #%s', $order->getIncrementId());
+                $this->mollieHelper->addToLog('error', $error);
                 $this->mollieHelper->restoreCart();
-                $this->_cancelUnprocessedOrder($order, 'Missing Redirect Url');
+                $this->_cancelUnprocessedOrder($order, $error);
                 $this->_redirect('checkout/cart');
                 return;
             }
+        } catch (Mollie_Mpm_Exceptions_KlarnaException $exception) {
+            $this->mollieHelper->setError(self::KLARNA_REJECTION_ERR_MSG);
+            $this->mollieHelper->addToLog('error', $exception->getMessage());
+            $this->mollieHelper->restoreCart();
+            $this->_cancelUnprocessedOrder($order, $exception->getMessage(), true);
+            $this->_redirect('checkout/cart');
+            return;
         } catch (\Exception $e) {
             $this->mollieHelper->setError(self::REDIRECT_ERR_MSG);
             $this->mollieHelper->addToLog('error', $e->getMessage());
@@ -115,11 +127,12 @@ class Mollie_Mpm_ApiController extends Mage_Core_Controller_Front_Action
      *
      * @param Mage_Sales_Model_Order $order
      * @param string $message  If provided, add this message to the order status history comment
+     * @param bool $forceCancel
      * @return void
      */
-    protected function _cancelUnprocessedOrder($order, $message = null)
+    protected function _cancelUnprocessedOrder($order, $message = null, $forceCancel = false)
     {
-        if (empty($order) || empty($order->getMollieTransactionId())) {
+        if (empty($order) || (empty($order->getMollieTransactionId()) && !$forceCancel)) {
             return;
         }
 
@@ -128,7 +141,7 @@ class Mollie_Mpm_ApiController extends Mage_Core_Controller_Front_Action
             $order->getStoreId()
         );
 
-        if (!$cancelFailedOrders) {
+        if (!$forceCancel && !$cancelFailedOrders) {
             return;
         }
 
@@ -188,6 +201,12 @@ class Mollie_Mpm_ApiController extends Mage_Core_Controller_Front_Action
 
         try {
             $status = $this->mollieModel->processTransaction($orderId, 'success', $paymentToken);
+        } catch (Mollie_Mpm_Exceptions_KlarnaException $exception) {
+            $this->mollieHelper->setError(static::KLARNA_REJECTION_ERR_MSG);
+            $this->mollieHelper->addToLog('error', $exception->getMessage());
+            $this->mollieHelper->restoreCart();
+            $this->_redirect('checkout/cart');
+            return;
         } catch (\Exception $e) {
             $this->mollieHelper->setError(self::RETURN_ERR_MSG);
             $this->mollieHelper->addToLog('error', $e->getMessage());

@@ -1,6 +1,7 @@
 <?php
 
 use Mollie\Api\Resources\Payment;
+use Mollie_Mpm_Model_Adminhtml_System_Config_Source_InvoiceMoment as InvoiceMoment;
 
 /**
  * Copyright (c) 2012-2019, Mollie B.V.
@@ -193,25 +194,31 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
         $mollieOrder = $mollieApi->orders->get($transactionId, array("embed" => "payments"));
         $this->mollieHelper->addTolog($type, $mollieOrder);
         $status = $mollieOrder->status;
+        $isRefund = $mollieOrder->amountRefunded && $mollieOrder->amountRefunded->value;
 
         $this->orderLines->updateOrderLinesByWebhook($mollieOrder->lines, $mollieOrder->isPaid());
 
         /**
          * Check if last payment was canceled, failed or expired and redirect customer to cart for retry.
          */
-        $lastPayment = isset($mollieOrder->_embedded->payments) ? end($mollieOrder->_embedded->payments) : null;
-        $lastPaymentStatus = isset($lastPayment) ? $lastPayment->status : null;
+        $lastPaymentStatus = $this->mollieHelper->getLastRelevantStatus($mollieOrder);
         if ($lastPaymentStatus == 'canceled' || $lastPaymentStatus == 'failed' || $lastPaymentStatus == 'expired') {
             $order->getPayment()->setAdditionalInformation('payment_status', $lastPaymentStatus)->save();
             $this->mollieHelper->registerCancellation($order, $status);
             $msg = array('success' => false, 'status' => $lastPaymentStatus, 'order_id' => $orderId, 'type' => $type);
             $this->mollieHelper->addTolog('success', $msg);
+
+            $methodCode = $this->mollieHelper->getMethodCode($order);
+            if ($lastPaymentStatus != 'canceled' && ($methodCode == 'klarnapaylater' || $methodCode == 'klarnasliceit')) {
+                throw new Mollie_Mpm_Exceptions_KlarnaException;
+            }
+
             return $msg;
         }
 
         $order->getPayment()->setAdditionalInformation('payment_status', $status)->save();
 
-        if ($mollieOrder->isPaid() || $mollieOrder->isAuthorized()) {
+        if (!$isRefund && ($mollieOrder->isPaid() || $mollieOrder->isAuthorized())) {
             $amount = $mollieOrder->amount->value;
             $currency = $mollieOrder->amount->currency;
             $orderAmount = $this->mollieHelper->getOrderAmountByOrder($order);
@@ -245,16 +252,20 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                         /**
                          * Create pending invoice, as order has not been paid.
                          */
-                        /** @var Mage_Sales_Model_Service_Order $service */
-                        $invoice = $order->prepareInvoice();
-                        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
-                        $invoice->setTransactionId($transactionId);
-                        $invoice->register();
+                        if ($this->mollieHelper->isInvoiceMomentOnAuthorize($order)) {
+                            /** @var Mage_Sales_Model_Service_Order $service */
+                            $invoice = $order->prepareInvoice();
+                            $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+                            $invoice->setTransactionId($transactionId);
+                            $invoice->register();
 
-                        Mage::getModel('core/resource_transaction')
-                            ->addObject($invoice)
-                            ->addObject($invoice->getOrder())
-                            ->save();
+                            $invoice->setState($this->mollieHelper->getInvoiceMomentPaidStatus($order));
+
+                            Mage::getModel('core/resource_transaction')
+                                ->addObject($invoice)
+                                ->addObject($invoice->getOrder())
+                                ->save();
+                        }
                     }
 
                     $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING)->save();
@@ -272,15 +283,26 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                 }
 
                 /** @var Mage_Sales_Model_Order_Invoice $invoice */
-                $invoice = $payment->getCreatedInvoice();
-                $sendInvoice = $this->mollieHelper->sendInvoice($storeId);
+                $invoice = isset($invoice) ? $invoice : $payment->getCreatedInvoice();
+                $sendInvoice = $this->mollieHelper->sendInvoice($storeId) &&
+                    $this->mollieHelper->getInvoiceMoment($order) == \Mollie_Mpm_Model_Adminhtml_System_Config_Source_InvoiceMoment::ON_AUTHORIZE_PAID_BEFORE_SHIPMENT;
 
                 if (!$order->getEmailSent()) {
-                    $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                    try {
+                        $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                    } catch (\Exception $exception) {
+                        $message = __('Unable to send the new order email: %1', $exception->getMessage());
+                        $order->addStatusHistoryComment($message)->save();
+                    }
                 }
 
                 if ($invoice && !$invoice->getEmailSent() && $sendInvoice) {
-                    $invoice->setEmailSent(true)->sendEmail()->save();
+                    try {
+                        $invoice->setEmailSent(true)->sendEmail()->save();
+                    } catch (\Exception $exception) {
+                        $message = __('Unable to send the invoice: %1', $exception->getMessage());
+                        $order->addStatusHistoryComment($message)->save();
+                    }
                 }
 
                 if (!$order->getIsVirtual()) {
@@ -297,7 +319,7 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
             return $msg;
         }
 
-        if ($mollieOrder->isRefunded()) {
+        if ($isRefund) {
             $msg = array('success' => true, 'status' => $status, 'order_id' => $orderId, 'type' => $type);
             $this->mollieHelper->addTolog('success', $msg);
             return $msg;
@@ -305,7 +327,12 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
 
         if ($mollieOrder->isCreated()) {
             if ($mollieOrder->method == 'banktransfer' && !$order->getEmailSent()) {
-                $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                try {
+                    $order->sendNewOrderEmail()->setEmailSent(true)->save();
+                } catch (\Exception $exception) {
+                    $message = __('Unable to send the new order email: %1', $exception->getMessage());
+                    $order->addStatusHistoryComment($message)->save();
+                }
                 $message = $this->mollieHelper->__('New order email sent');
                 if (!$statusPending = $this->mollieHelper->getStatusPendingBanktransfer($storeId)) {
                     $statusPending = $order->getStatus();
@@ -416,7 +443,6 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
     public function createShipment(Mage_Sales_Model_Order_Shipment $shipment, Mage_Sales_Model_Order $order)
     {
         $shipAll = false;
-        $orderId = $order->getId();
 
         $transactionId = $order->getMollieTransactionId();
         if (empty($transactionId)) {
@@ -480,15 +506,31 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
              * Check if Transactions needs to be captures (eg. Klarna methods)
              */
             $payment = $order->getPayment();
+
             /** @var Mage_Sales_Model_Order_Invoice $invoice */
-            $invoice = $order->getInvoiceCollection()->getLastItem();
-            if ($invoice && $invoice->getState() == 1) {
-                $payment->registerCaptureNotification($order->getBaseGrandTotal(), true);
+            $invoice = $this->createPartialInvoice($shipment, $transactionId);
+
+            /**
+             * If there is no invoice created try to receive the last invoice.
+             */
+            if (!$invoice) {
+                $invoice = $order->getInvoiceCollection()->getLastItem();
+            }
+
+            if ($invoice && $invoice->getState() == Mage_Sales_Model_Order_Invoice::STATE_OPEN) {
+                $captureAmount = $this->getCaptureAmount($order, $invoice);
+                $payment->setTransactionId($transactionId);
+                $payment->registerCaptureNotification($captureAmount, true);
+
                 $order->save();
                 $sendInvoice = $this->mollieHelper->sendInvoice($order->getStoreId());
                 if ($invoice && !$invoice->getEmailSent() && $sendInvoice) {
                     $invoice->setEmailSent(true)->sendEmail()->save();
                 }
+            }
+
+            if ($shipAll) {
+                $this->markOrderAsCompleted($order);
             }
         } catch (\Exception $e) {
             $this->mollieHelper->addTolog('error', $e->getMessage());
@@ -728,7 +770,9 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                 continue;
             }
 
-            $shippableOrderItems[$item->getOrderItemId()] -= $item->getQty();
+            if ($shippableOrderItems[$item->getOrderItemId()]) {
+                $shippableOrderItems[$item->getOrderItemId()] -= $item->getQty();
+            }
         }
         /**
          * Count the total number of items in the array. If it equals 0 then all (remaining) items in the order
@@ -763,5 +807,64 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
             }
         }
         return true;
+    }
+
+    private function createPartialInvoice(Mage_Sales_Model_Order_Shipment $shipment, $transactionId)
+    {
+        $order = $shipment->getOrder();
+        $payment = $order->getPayment();
+
+        if (
+            !in_array($payment->getMethod(), array('mollie_klarnapaylater', 'mollie_klarnasliceit')) ||
+            $this->mollieHelper->getInvoiceMoment($order) != 'shipment'
+        ) {
+            return null;
+        }
+
+        $quantities = [];
+        /** @var Mage_Sales_Model_Order_Shipment_Item $item */
+        foreach ($shipment->getAllItems() as $item) {
+            $quantities[$item->getOrderItemId()] = $item->getQty();
+        }
+
+        $invoice = $order->prepareInvoice($quantities);
+        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+        $invoice->setTransactionId($transactionId);
+        $invoice->register();
+
+        $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_PAID);
+        $invoice->save();
+
+        $sendInvoice = $this->mollieHelper->sendInvoice($order->getStoreId());
+        if ($invoice && !$invoice->getEmailSent() && $sendInvoice) {
+            $invoice->setEmailSent(true)->sendEmail()->save();
+        }
+
+        return $invoice;
+    }
+
+    private function getCaptureAmount(Mage_Sales_Model_Order $order, Mage_Sales_Model_Order_Invoice $invoice = null)
+    {
+        if ($invoice) {
+            return $invoice->getBaseGrandTotal();
+        }
+
+        $payment = $order->getPayment();
+        if ($invoice = $payment->getCreatedInvoice()) {
+            return $invoice->getBaseGrandTotal();
+        }
+
+        return $order->getBaseGrandTotal();
+    }
+
+    private function markOrderAsCompleted(Mage_Sales_Model_Order $order)
+    {
+        $methodCode = $this->mollieHelper->getMethodCode($order);
+        if ($methodCode != 'klarnapaylater' && $methodCode != 'klarnasliceit') {
+            return;
+        }
+
+        $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_COMPLETE);
+        $order->save();
     }
 }
