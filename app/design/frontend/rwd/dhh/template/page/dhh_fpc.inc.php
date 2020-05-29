@@ -4,6 +4,7 @@ require_once __DIR__."/dhh_fpc.conf.php";
 
 $write_cache = true;
 $read_cache = true;
+$excluded_controllers = ["checkout_cart_index", "cms_index_noRoute"];
 
 // Outqualification
 $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
@@ -31,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] !== 'GET') {
   $write_cache = false;
   $read_cache = false;
 }
-if(Mage::app()->getFrontController()->getAction()->getFullActionName() === "cms_index_noRoute") {
+if(in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(), $excluded_controllers)) {
   $write_cache = false;
   $read_cache = false;
 }
