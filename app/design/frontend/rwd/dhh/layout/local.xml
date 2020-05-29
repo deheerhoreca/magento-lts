@@ -65,7 +65,6 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="removeItem"><type>js</type><name>billink/billink_checkout_page_controller.js</name></action>
       <action method="removeItem"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
       <action method="removeItem"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
-      <action method="removeItem"><type>skin_css</type><name>mollie/mpm/style.css</name></action>
       
       <action method="removeItem"><type>skin_js</type><name>js/minicart.js</name></action>
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
