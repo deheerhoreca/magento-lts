@@ -37,7 +37,7 @@ if ($subcategories->getSize()) {
     ?>
     <li>
       <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
-        <?php if(empty($image) === false) echo "<img class='category-thumb' src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
+        <?php if(empty($image) === false) echo "<img class='lazy category-thumb' data-src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
         <strong><?php echo $categoryName; ?></strong>
       </a>
     </li>

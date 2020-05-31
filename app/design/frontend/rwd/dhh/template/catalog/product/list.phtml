@@ -169,7 +169,7 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
     ?>
     <li>
       <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
-        <?php if(empty($image) === false) echo "<img class='category-thumb' src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
+        <?php if(empty($image) === false) echo "<img class='lazy category-thumb' data-src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
         <strong><?php echo $categoryName; ?></strong>
       </a>
     </li>
@@ -469,9 +469,9 @@ if($_collectionSize > 0) {
         <?php echo $html; ?>
         <a href="<?php echo $productUrl; ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
         <?php
-          echo "<img id=\"product-collection-image-{$_product->getId()}\"
-            src=\"{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}\"
-            alt=\"{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}\"
+          echo "<img class='lazy' id='product-collection-image-{$_product->getId()}'
+            data-src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
+            alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
             width='{$displaySize}' height='{$displaySize}' />";
         ?>
         </a>
