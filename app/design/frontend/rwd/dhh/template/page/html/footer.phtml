@@ -24,13 +24,13 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
 <div id="coronabar" class="alertbar active" style="display: none;">
   We blijven gewoon open tijdens de corona crisis. Wel kunnen er als gevolg van de corona crisis vertragingen in leveringen optreden door extra veiligheidsmaatregelen die onze partners in de logistieke keten moeten treffen. We hopen op uw begrip.
 </div>
-<script type="application/javascript">
+<script>
   jQuery('#coronabar').delay(1000).fadeIn(200);
   jQuery('#coronabar').delay(5000).fadeOut('slow');
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin type="application/javascript" defer></script>
-<script type="application/javascript">
+<script src="https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin defer></script>
+<script>
   window.onload = function () {
     var full = window.location.host;
     var parts = full.split(".");
@@ -47,4 +47,10 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
       pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
     });
   };
+</script>
+
+<script>
+  var lazyLoadInstance = new LazyLoad({
+    elements_selector: ".lazy"
+  });
 </script>

@@ -655,34 +655,24 @@ $files = Mage::getModel('staempfli_productattachment/file')
             echo $this->getChildHtml('extrahint');
             if (!$this->hasOptions()) {
               ?>
-
               <div class="add-to-box">
-                <?php if($_product->isSaleable()) {
-                  echo $this->getChildHtml('addtocart');
-                  if(false
-                    && $this->helper('wishlist')->isAllow()
-                    || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)) {
-                    echo "<span class=\"or\"><?php echo $this->__('OR') ?></span>";
-                  }
-                }
-              echo $this->getChildHtml('addto');
-              //echo $this->getChildHtml('sharing');
-            ?>
-            </div>
-
-
-            <?php
-
-            /* Stock and Delivery ETA */
-            
-            if($expected_delivery === "Op aanvraag") {
-              ?>
-              <small class="clzdelvlb">
-                <span>Levertijd: Op aanvraag</span>
-                <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
-              </small>
+                <?php
+                echo $this->getChildHtml('addto');
+                echo $this->getChildHtml('sharing');
+                ?>
+              </div>
               <?php
-            }
+
+              /* Stock and Delivery ETA */
+              
+              if($expected_delivery === "Op aanvraag") {
+                ?>
+                <small class="clzdelvlb">
+                  <span>Levertijd: Op aanvraag</span>
+                  <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
+                </small>
+                <?php
+              }
 
             $instk = TRUE;
             if($_product->getStockItem()->getIsInStock() == 1
