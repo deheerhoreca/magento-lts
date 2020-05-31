@@ -11,64 +11,66 @@
  * obtain it through the world-wide-web, please send an email
  * to info@magmodules.eu so we can send you a copy immediately.
  *
- * @category      Magmodules
- * @package       Magmodules_Sooqr
- * @author        Magmodules <info@magmodules.eu>
- * @copyright     Copyright (c) 2019 (http://www.magmodules.eu)
- * @license       http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @category    Magmodules
+ * @package     Magmodules_Sooqr
+ * @author    Magmodules <info@magmodules.eu>
+ * @copyright   Copyright (c) 2019 (http://www.magmodules.eu)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 $catalogSearchHelper = $this->helper('catalogsearch');
 ?>
 <form id="search_mini_form" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get">
-    <div class="input-box">
-        <label for="search"><?php echo $this->__('Search:') ?></label>
-        <input id="search" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text required-entry" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>"/>
-    </div>
-    <?php if ($this->multiSearch()): ?>
-        <script type="text/javascript">
-            var _wssq = _wssq || [];
-            _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions()) ?>}]);
-            _wssq.push(['suggest._setPosition', 'screen-middle']);
-            _wssq.push(['suggest._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
-            <?php if (!$this->isTrackingEnabled()) { ?>
-            _wssq.push(['suggest._disableTracking']);
-            <?php } ?>
-        </script>
-        <script type="text/javascript">
-            var _wssq = _wssq || [];
-            _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions('second')) ?>}]);
-            _wssq.push(['suggest2._setPosition', 'screen-middle']);
-            _wssq.push(['suggest2._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
-            <?php if (!$this->isTrackingEnabled()): ?>
-            _wssq.push(['suggest2._disableTracking']);
-            <?php endif; ?>
-            (function () {
-                var ws = document.createElement('script');
-                ws.type = 'text/javascript';
-                ws.async = true;
-                ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $this->getSooqrScriptUri() ?>';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(ws, s);
-            })();
-        </script>
-    <?php else: ?>
-        <script type="text/javascript">
-            var _wssq = _wssq || [];
-            _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions()) ?>}]);
-            _wssq.push(['suggest._setPosition', 'screen-middle']);
-            _wssq.push(['suggest._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
-            <?php if (!$this->isTrackingEnabled()): ?>
-            _wssq.push(['suggest._disableTracking']);
-            <?php endif; ?>
-            <?php echo $this->getSooqrJavascript() ?>
-            (function () {
-                var ws = document.createElement('script');
-                ws.type = 'text/javascript';
-                ws.async = true;
-                ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $this->getSooqrScriptUri() ?>';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(ws, s);
-            })();
-        </script>
-    <?php endif; ?>
+  <div class="input-box">
+    <label for="search" id="search-lbl"><?php echo $this->__('Search:') ?></label>
+    <input id="search" aria-labelledby="search-lbl" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text required-entry" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>"/>
+  </div>
+  <?php if ($this->multiSearch()): ?>
+    <script type="text/javascript">
+      var _wssq = _wssq || [];
+      _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions()) ?>}]);
+      _wssq.push(['suggest._setPosition', 'screen-middle']);
+      _wssq.push(['suggest._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
+      <?php if (!$this->isTrackingEnabled()) { ?>
+      _wssq.push(['suggest._disableTracking']);
+      <?php } ?>
+    </script>
+    <script type="text/javascript">
+      var _wssq = _wssq || [];
+      _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions('second')) ?>}]);
+      _wssq.push(['suggest2._setPosition', 'screen-middle']);
+      _wssq.push(['suggest2._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
+      <?php if (!$this->isTrackingEnabled()): ?>
+      _wssq.push(['suggest2._disableTracking']);
+      <?php endif; ?>
+      (function () {
+        var ws = document.createElement('script');
+        ws.type = 'text/javascript';
+        ws.async = true;
+        //ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $this->getSooqrScriptUri() ?>';
+        ws.src = '/skin/frontend/rwd/external/sooqr/sooqr.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ws, s);
+      })();
+    </script>
+  <?php else: ?>
+    <script type="text/javascript">
+      var _wssq = _wssq || [];
+      _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions()) ?>}]);
+      _wssq.push(['suggest._setPosition', 'screen-middle']);
+      _wssq.push(['suggest._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
+      <?php if (!$this->isTrackingEnabled()): ?>
+      _wssq.push(['suggest._disableTracking']);
+      <?php endif; ?>
+      <?php echo $this->getSooqrJavascript() ?>
+      (function () {
+        var ws = document.createElement('script');
+        ws.type = 'text/javascript';
+        ws.async = true;
+        //ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $this->getSooqrScriptUri() ?>';
+        ws.src = '/skin/frontend/rwd/external/sooqr/sooqr.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ws, s);
+      })();
+    </script>
+  <?php endif; ?>
 </form>

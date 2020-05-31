@@ -577,7 +577,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
           
           $hlstr = $jsstr = null;
           foreach($highlights as $key => $highlight) {
-            $hlstr .= "<li><img id='hl-{$key}' src=\"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==\" title=\"{$highlight["title"]}\" /><span>{$highlight["text"]}</span></li>";
+            $hlstr .= "<li><img class='lazy' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
             $jsstr .= "jQuery('#hl-{$key}').attr('src','{$highlight["image"]}');";
           }
 
@@ -586,7 +586,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
             echo "<ul class='product-highlights'>{$hlstr}</ul>";
             echo "<a id=specs_anchor href=\"#a_specs\">>> Alle specificaties</a>";
             echo "</div>";
-            echo "<script type='text/javascript'>{$jsstr}</script>";
+            //echo "<script type='text/javascript'>{$jsstr}</script>";
           }
         ?>
     </div>
@@ -604,39 +604,31 @@ $files = Mage::getModel('staempfli_productattachment/file')
       <div id="company_usps">
         <ul>
           <li>
-            <div><img id="usp-a" alt="Gratis verzending" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
+            <div><img class='lazy' id="usp-a" alt="Gratis verzending" data-src="/skin/frontend/rwd/dhh/images/trolley.svg" width="32" height="32" /></div>
             <div><small class="usp_text"><strong class="extra_special">Gratis</strong> verzending</small><small><?php echo $delivery_text; ?></small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img id="usp-b" alt="De beste prijs" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
+            <div><img class='lazy' id="usp-b" alt="De beste prijs" data-src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32" /></div>
             <div><small class="usp_text">Ergens goedkoper gezien?</small><small><a href="/klantenservice">Vertel het ons</a></small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img id="usp-c" alt="Advies voor professionals" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
+            <div><img class='lazy' id="usp-c" alt="Advies voor professionals" data-src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32" /></div>
             <div><small class="usp_text">Advies door professionals</small><small>Wel zo fijn</small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img id="usp-d" alt="Snelle levrering" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
+            <div><img class='lazy' id="usp-d" alt="Snelle levrering" data-src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32" /></div>
             <div><small class="usp_text">Snelle levering</small><small>Door bevlogen transporteurs</small></div>
             <div class="line">&nbsp;</div>
           </li>
           <li>
-            <div><img id="usp-e" alt="Een vraag?" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="32" height="32" /></div>
+            <div><img class='lazy' id="usp-e" alt="Een vraag?" data-src="/skin/frontend/rwd/dhh/images/question-mark.svg" width="32" height="32" /></div>
             <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:klantenservice@prokoeling.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
           </li>
         </ul>
       </div>
-      
-      <script type="text/javascript">
-        jQuery('#usp-a').attr('src','/skin/frontend/rwd/dhh/images/trolley.svg');
-        jQuery('#usp-b').attr('src','/skin/frontend/rwd/dhh/images/euro.svg');
-        jQuery('#usp-c').attr('src','/skin/frontend/rwd/dhh/images/superhero.svg');
-        jQuery('#usp-d').attr('src','/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg');
-        jQuery('#usp-e').attr('src','/skin/frontend/rwd/dhh/images/question-mark.svg');
-      </script>
 
       <?php /* Add to Cart Block */ ?>
       <div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
@@ -1056,7 +1048,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
     if(empty($brand_logo) === false) {
       echo "<div class='center'>";
       echo "<a title='{$brand_name}' href='/{$brand_link}'>";
-      echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
+      echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
     }
     ?>
   </div>

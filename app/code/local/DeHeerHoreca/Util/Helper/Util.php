@@ -190,9 +190,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $product_short_name = $_product->getData("name_short");
     
     $product_url = $_product->getProductUrl();
-    $image_label = $this->stripTags($_product->getData('small_image_label'));
+    $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
     if(empty($image_label)) {
-      $image_label = $product_name;
+      $image_label = $this->stripTags($product_name, null, true);
     }
     
     if(empty($options["skip_info"]) || $options["skip_info"] === false) {
@@ -252,10 +252,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         break;
     }
     
+    $img_url = $product_block->helper('catalog/image')->init($_product, 'small_image')->resize($image_dimensions);
+    
     ?>
     <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target; ?>>
-      <img id='product-collection-image-<?php echo $_product->getId(); ?>'
-        src='<?php echo $product_block->helper('catalog/image')->init($_product, 'small_image')->resize($image_dimensions); ?>'
+      <img class='lazy' id='product-collection-image-<?php echo $_product->getId(); ?>'
+        data-src='<?php echo $img_url; ?>'
         alt='<?php echo $image_label; ?>' width='<?php echo $image_size; ?>' height='<?php echo $image_size; ?>' />
     </a>
     <div class="product-info">

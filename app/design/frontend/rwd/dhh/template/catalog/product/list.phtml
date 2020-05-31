@@ -13,11 +13,11 @@ $catid                       = null;
 $carct                       = Mage::registry('current_category');
 $amschk                      = $this->getRequest()->getRouteName();
 $haschild                    = false;
-$short_name_cats             = [10, 119, 434, 174, 24, 38];
+$short_name_cats             = [10, 119, 434, 174, 24, 38, 23];
 $max_product_info_items      = 3;
 $max_product_highlight_items = 6;
-
-$category_thumbs_dimensions  = 300; //x2
+$category_thumbs_dimensions  = 300;
+$parent_categories_ids       = [];
 
 $_productCollection->setFlag('require_stock_items', true);
 
@@ -60,7 +60,6 @@ if($carct && ($category === 'category')) {
     $category_desc = "<h1>{$category_name}</h1>";
   }
   
-  $parent_categories_ids = [];
   foreach($parent_categories as $parent) {
     $parent_categories_ids[] = (int) $parent->getEntityId();
   }

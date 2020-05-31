@@ -112,6 +112,7 @@ User-agent: ZoominfoBot
 User-agent: Linguee
 User-agent: MauiBot
 User-agent: BorneoBot
+User-agent: CCBot
 Disallow: /
 
 User-agent: *

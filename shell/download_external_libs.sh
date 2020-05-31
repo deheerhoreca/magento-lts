@@ -25,3 +25,7 @@ wget https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js 
 mkdir -p ../skin/frontend/rwd/external/fontawesome
 # corehacked:
 #wget https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css -O ../skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css
+
+mkdir -p ../skin/frontend/rwd/external/sooqr
+wget https://static.sooqr.com/custom/115684/1/combined.css  -O ../skin/frontend/rwd/external/sooqr/combined.css
+wget https://static.sooqr.com/sooqr.js  -O ../skin/frontend/rwd/external/sooqr/sooqr.js

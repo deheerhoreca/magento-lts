@@ -1,6 +1,5 @@
 <?php
 
-$_imgSize = 225;
 
 // some helpers
 $_helper = $this->helper('catalog/output');
@@ -110,9 +109,10 @@ $catid                  = null;
 
   $_collectionSize = $collection->count();
   $_columnCount = 4;
+  
   $displaySize = 210;
   $_imgSize = 1* $displaySize;
-
+  
   echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
 
   $i = 0;
@@ -343,8 +343,6 @@ $catid                  = null;
       }
     }
     
-    
-    
     /* Product name */
     $product_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
     $product_short_name = $_product->getData("name_short");
@@ -352,20 +350,27 @@ $catid                  = null;
       $product_name = $product_short_name;
     }
     
+    $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
+    if(empty($image_label)) {
+      $image_label = $this->stripTags($product_name, null, true);
+    }
+    
+    $main_url = $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize);
+    
     ?>
     <li style="width:24%; min-height:35em;" class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
       <?php echo $html; ?>
-      <a href="<?php echo $productUrl; ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
-      <?php
-        echo "<img id=\"product-collection-image-{$_product->getId()}\"
-          src=\"{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}\"
-          alt=\"{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}\"
+      <a href="<?php echo $productUrl; ?>" title="<?php echo $image_label; ?>" class="product-image">
+        <?php
+        echo "<img class='lazy' id='product-collection-image-{$_product->getId()}'
+          data-src ='{$main_url}' alt='{$image_label}'
           width='{$displaySize}' height='{$displaySize}' />";
-      ?>
+        ?>
       </a>
       <div class='product-title-container'>
-        <h2 class='product-name'><a href='{$productUrl}' title='{$this->stripTags($product_name)} kopen'><?php echo $product_name; ?></a></h2>
-        
+        <h2 class='product-name'>
+          <a href='<?php echo $productUrl; ?>' title='<?php echo $image_label; ?> kopen'><?php echo $product_name; ?></a>
+        </h2>
       </div>
       <div class="product-info" style='min-height: 150px !important;'>
         <?php

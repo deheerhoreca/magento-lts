@@ -37,7 +37,7 @@ if(in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(),
   $read_cache = false;
 }
 
-$_cacheKey = null;
+$_cacheKey = $cache_key_input = null;
 if($read_cache === true || $write_cache === true) {
   $cache_key_input = get_cache_url();
   $cache_key_prefix = Mage::app()->getFrontController()->getAction()->getFullActionName();
@@ -79,7 +79,7 @@ if(headers_sent() === false) {
 if(empty($_html) === false) {
   if(headers_sent() === false) {
     $bytes = strlen($_html);
-    header("X-FPC: Hit");
+    header("X-FPC: Hit {$cache_key_input}");
     // print_r("<br />Cache: HIT");
   }
   echo $_html;
@@ -102,7 +102,7 @@ if(empty($_html) === false) {
     Mage::app()->getCache()->save($_html_normalized, $_cacheKey, ["quickndirtyfpc"], FPC_TTL);
 
     if(headers_sent() === false) {
-      header("X-FPC: Saved");
+      header("X-FPC: Saved {$cache_key_input}");
       // print_r("<br />Cache: SAVED");
     }
   } else {
