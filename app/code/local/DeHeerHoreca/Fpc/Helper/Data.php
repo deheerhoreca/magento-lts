@@ -81,4 +81,50 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
             )
         );
     }
+    
+    
+    function get_cache_url() {
+      $url = html_entity_decode(Mage::helper('core/url')->getCurrentUrl());
+      $url = Mage::helper("deheerhoreca_fpc/data")->strip_param_from_url($url, ["sqr", "profile", "___store", "refreshfpc", "pagespeed"]);
+      
+      return $url;
+    }
+
+    # https://stackoverflow.com/questions/4937478/strip-off-url-parameter-with-php
+    function strip_param_from_url($url, $params) {
+      $base_url = strtok($url, '?');              // Get the base url
+      $parsed_url = parse_url($url);              // Parse it
+      
+      if(empty($parsed_url['query']) === true) {
+        return $url;
+      }
+      
+      $query = $parsed_url['query'];              // Get the query string
+      parse_str($query, $parameters );            // Convert Parameters into array
+      
+      foreach($params as $param) {
+        if(isset($parameters[$param])) {
+          unset($parameters[$param]);             // Delete the one you want
+        }
+      }
+      
+      $new_query = http_build_query($parameters); // Rebuilt query string
+      $url = $base_url.'?'.$new_query;
+      
+      return rtrim($url, "?");                    // Trim possible trailing ?
+    }
+    
+    function get_cache_prefix() {
+      $cache_key_prefix = Mage::app()->getFrontController()->getAction()->getFullActionName();
+      
+      if($cache_key_prefix === "catalog_product_view") {
+        $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam('id');
+        $cache_key_prefix .= "-".$id;
+      } elseif($cache_key_prefix === "catalog_category_view") {
+        $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam('id');
+        $cache_key_prefix .= "-".$id;
+      }
+      
+      return $cache_key_prefix;
+    }
 }

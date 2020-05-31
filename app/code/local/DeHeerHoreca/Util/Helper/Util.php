@@ -305,7 +305,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
             <i class="fa fa-shopping-cart"></i>
           </button>
         <?php else: ?>
-          <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $_product->getProductUrl() ?>"><?php echo $product_block->__("Productdetails") ?></a>
+          <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $product_url; ?>"><?php echo $product_block->__("Productdetails") ?></a>
         <?php endif; ?>
       </div>
     </div>

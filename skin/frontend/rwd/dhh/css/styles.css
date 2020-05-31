@@ -14927,3 +14927,8 @@ ul.category-grid li strong:after {
   color: #3aacd9;
   text-transform: none;
 }
+
+img.payment-issuer-icon {
+  max-width: 2em;
+  margin-right: .5em;
+}

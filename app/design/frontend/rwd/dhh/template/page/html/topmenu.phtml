@@ -37,7 +37,7 @@ if(strlen($_html) > 0 === false) {
   $_html = $this->getHtml('level-top');
   // print_r("<br />Menu cache: MISS");
   if($write_cache === true) {
-    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], FPC_TTL);
+    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], 86400);
   }
 } else {
   // print_r("<br />Menu cache: HIT");
