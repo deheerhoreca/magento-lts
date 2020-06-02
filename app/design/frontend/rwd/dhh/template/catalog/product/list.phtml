@@ -477,19 +477,19 @@ if($_collectionSize > 0) {
         </a>
         <div class="product-info">
           <div class="info">
-          <h2 class='product-name'>
-            <a href='<?php echo $productUrl; ?>' title='<?php echo $this->stripTags($product_name);?> kopen'><?php echo $product_name; ?></a>
-          </h2>
-          <?php
-          if($this->getChild('name.after')) {
-            $_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
-            foreach ($_nameAfterChildren as $_nameAfterChildName) {
-              $_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
-              $_nameAfterChild->setProduct($_product);
-              echo $_nameAfterChild->toHtml();
+            <h2 class='product-name'>
+              <a href='<?php echo $productUrl; ?>' title='<?php echo $this->stripTags($product_name);?> kopen'><?php echo $product_name; ?></a>
+            </h2>
+            <?php
+            if($this->getChild('name.after')) {
+              $_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
+              foreach ($_nameAfterChildren as $_nameAfterChildName) {
+                $_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
+                $_nameAfterChild->setProduct($_product);
+                echo $_nameAfterChild->toHtml();
+              }
             }
-          }
-          ?>
+            ?>
           
             <?php
             if(isset($tagline) === true) {

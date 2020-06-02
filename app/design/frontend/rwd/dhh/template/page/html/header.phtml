@@ -45,7 +45,7 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
             </div>
           </a>
 
-          <a href="<?php echo $account_url; ?>" data-target-element="#header-account" class="skip-link skip-account" title="Account">
+          <a href="<?php echo Mage::getUrl('customer/account'); ?>" class="top-link skip-account" title="Account">
             <i class="fa fa-user-circle fa-2x fa-fw"></i>
             <div class="sprite-with-caption__caption ">Account</div>
           </a>
@@ -57,21 +57,22 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
         </div>
       </div>
 
-      <!-- Collapsed Menu for Mobile -->
       <a href="#header-nav" class="skip-link skip-nav no-decoration">
         <i class="fa fa-bars fa-2x"></i>
-        <span class="label">Producten</span>
+        <span class="label">Menu</span>
       </a>
-
-      <!-- Account Popup -->
-      <div id="header-account" class="skip-content">
-        <?php
-        if(! Mage::getSingleton('customer/session')->isLoggedIn()){
-          echo $this->getLayout()->createBlock('customer/form_login')->setTemplate('customer/form/mini.login.phtml')->toHtml();
-        } else {
-          echo $this->getChildHtml('topLinks');
-        }
+      
+      <?php
+      // Account Menu
+      // <div id="header-account" class="skip-content">
+        // <?php
+        // if(! Mage::getSingleton('customer/session')->isLoggedIn()){
+          // echo $this->getLayout()->createBlock('customer/form_login')->setTemplate('customer/form/mini.login.phtml')->toHtml();
+        // } else {
+          // echo $this->getChildHtml('topLinks');
+        // }
         ?>
+        
       </div>
     </div>
   </div>

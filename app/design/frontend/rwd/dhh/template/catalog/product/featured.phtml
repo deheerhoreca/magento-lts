@@ -1,6 +1,5 @@
 <?php
 
-
 // some helpers
 $_helper = $this->helper('catalog/output');
 $store = Mage::app()->getStore();
@@ -407,8 +406,8 @@ $catid                  = null;
       </div>
       <?php
       if(isset($category_info["url"]) === true) {
-      echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
-    }
+        echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
+      }
     ?>
     </li>
 

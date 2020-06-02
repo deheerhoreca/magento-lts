@@ -1,47 +1,47 @@
 <?php
 
-require_once __DIR__."/../dhh_fpc.conf.php";
+// require_once __DIR__."/../dhh_fpc.conf.php";
 
-$_cacheKey = "QUICKNDIRTYFPC-cms_block-topmenu";
+// $_cacheKey = "QUICKNDIRTYFPC-cms_block-topmenu";
 
-// $static_file = "./media/static/topmenu.html";
+// // $static_file = "./media/static/topmenu.html";
 
-// Outqualification
-$write_cache = true;
-$read_cache = true;
+// // Outqualification
+// $write_cache = true;
+// $read_cache = true;
 
-if(isset($_GET['nofpc'])) {
-  $write_cache = false;
-  $read_cache = false;
-}
-if(isset($_GET['refreshfpc'])) {
-  $write_cache = true;
-  $read_cache = false;
-}
-if(DHH_FPC_ENABLED === false) {
-  $write_cache = false;
-  $read_cache = false;
-}
+// if(isset($_GET['nofpc'])) {
+  // $write_cache = false;
+  // $read_cache = false;
+// }
+// if(isset($_GET['refreshfpc'])) {
+  // $write_cache = true;
+  // $read_cache = false;
+// }
+// if(DHH_FPC_ENABLED === false) {
+  // $write_cache = false;
+  // $read_cache = false;
+// }
 
-$_html = null;
+// $_html = null;
 
-// print_r("Cache Key: {$_cacheKey}");
+// // print_r("Cache Key: {$_cacheKey}");
 
-if($read_cache === true) {
-  $_html = Mage::app()->getCache()->load($_cacheKey);
-} else {
-  // print_r("<br />Menu cache: NO CACHE");
-}
+// if($read_cache === true) {
+  // $_html = Mage::app()->getCache()->load($_cacheKey);
+// } else {
+  // // print_r("<br />Menu cache: NO CACHE");
+// }
 
-if(strlen($_html) > 0 === false) {
+// if(strlen($_html) > 0 === false) {
   $_html = $this->getHtml('level-top');
-  // print_r("<br />Menu cache: MISS");
-  if($write_cache === true) {
-    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], 86400);
-  }
-} else {
-  // print_r("<br />Menu cache: HIT");
-}
+  // // print_r("<br />Menu cache: MISS");
+  // if($write_cache === true) {
+    // Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], 86400);
+  // }
+// } else {
+  // // print_r("<br />Menu cache: HIT");
+// }
 
 ?>
 
