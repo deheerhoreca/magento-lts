@@ -21,15 +21,14 @@ if(empty($_cartQty)) {
     <?php echo $this->__('Cart'); ?>
   </div>
 </a>
-<!-- header_minicart_end -->
 
 <div class="header-minicart">
   <div id="header-cart" class="block block-cart skip-content">
     <!-- header_sidebar_start -->
     <?php
-    //echo $this->getChildHtml('minicart_content');
     echo Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
     ?>
     <!-- header_sidebar_end -->
   </div>
 </div>
+<!-- header_minicart_end -->
