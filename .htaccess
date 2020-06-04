@@ -290,7 +290,7 @@
 # DHH ADDITIONS
 
 # non-production:
-SetEnv MAGE_IS_DEVELOPER_MODE "true"
+SetEnv MAGE_IS_DEVELOPER_MODE "false"
 
 <IfModule mod_deflate.c>
 
