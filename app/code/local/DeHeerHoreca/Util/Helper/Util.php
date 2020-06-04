@@ -188,13 +188,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     $product_name = $_product->getData("name");
     $product_short_name = $_product->getData("name_short");
-    
+    $tagline = $_product->getTagline();    
     $product_url = $_product->getProductUrl();
     $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
     if(empty($image_label)) {
       $image_label = $this->stripTags($product_name, null, true);
     }
     
+    /* Interpret options */
     if(empty($options["skip_info"]) || $options["skip_info"] === false) {
       $product_info = Mage::helper("deheerhoreca_util/util")->getProductInfo($_product);
     }
@@ -204,6 +205,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $a_target = null;
     if(isset($options["_blank"]) === true && $options["_blank"] === true) {
       $a_target = " target='_blank'";
+    }
+    $display_product_name = $product_name;
+    if(isset($options["use_short_product_names"]) === true && $options["use_short_product_names"] === true) {
+      $display_product_name = $product_short_name;
+    }
+    if(isset($options["show_category_link"]) === true && $options["show_category_link"] === true) {
+      $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
     }
     
     $price_html = $product_block->getPriceHtml($_product, true);
@@ -256,14 +264,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     ?>
     <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target; ?>>
-      <img class='lazy' id='product-collection-image-<?php echo $_product->getId(); ?>'
+      <img class='lazy center' id='product-collection-image-<?php echo $_product->getId(); ?>'
         data-src='<?php echo $img_url; ?>'
         alt='<?php echo $image_label; ?>' width='<?php echo $image_size; ?>' height='<?php echo $image_size; ?>' />
     </a>
     <div class="product-info">
       <div class="info">
         <h2 class='product-name'>
-          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $product_name; ?></a>
+          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $display_product_name; ?></a>
         </h2>
         <?php
         if(isset($tagline) === true) {
@@ -308,6 +316,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
           <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $product_url; ?>"><?php echo $product_block->__("Productdetails") ?></a>
         <?php endif; ?>
       </div>
+      
+      <?php
+      if(isset($category_info["url"]) === true) {
+        echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
+      }
+      ?>
+      
     </div>
     <?php
   }

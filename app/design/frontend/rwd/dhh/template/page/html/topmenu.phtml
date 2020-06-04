@@ -45,19 +45,16 @@
 
 ?>
 
-<nav id="nav" class="grid-old">
-  <div class="navhdwrap">
-    <ol id="top-nav" class="nav-primary" style="float: left;">
-      <?php
-      
-      //if(is_file($static_file) === false) {
-      //  file_put_contents($static_file, $_html);
-        echo $_html;
-      //}
-      
-      ?>
-    </ol>
-  </div>
+<nav id="nav" class="grid-old navhdwrap">
+  <a href="#header-nav" class="skip-link skip-nav no-decoration">
+    <i class="fa fa-bars fa-2x"></i>
+    <span class="label">Menu</span>
+  </a>
+  <ol id="top-nav" class="nav-primary" style="float: left;">
+    <?php
+    echo $_html;
+    ?>
+  </ol>
 </nav>
 
 <?php

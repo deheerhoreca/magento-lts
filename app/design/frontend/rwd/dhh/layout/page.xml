@@ -78,7 +78,7 @@
                 <!-- Add stylesheets with media queries for use by modern browsers -->
                 <action method="addItem"><type>skin_css</type><name>css/styles.css</name><params/></action>
                 <!-- DHH --><action method="addItem"><type>skin_css</type><name>css/responsive.css</name><params/></action>
-                <action method="addItem"><type>skin_css</type><name>css/madisonisland.css</name><params/></action>
+                <!-- <action method="addItem"><type>skin_css</type><name>css/madisonisland.css</name><params/></action> -->
 
                 <!-- Sets viewport meta tag using text block -->
                 <!-- DHH

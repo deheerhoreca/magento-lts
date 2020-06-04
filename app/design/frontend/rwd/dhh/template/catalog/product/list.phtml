@@ -143,41 +143,45 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
   $media_path = Mage::getBaseDir('media');
   $subcategories = Mage::getModel('catalog/category')->getCategories($currentCategoryId);
   
-  ?>
-  <ul class="category-grid">
-  <?php
-  foreach($subcategories as $category) {
-    $haschild       = true;
-    $category       = Mage::getModel('catalog/category')->load($category->getId());
-    $categoryName   = $category->getName();
-    $image          = $category->getImage();
-    $measurements   = null;
-    $img_url        = "{$media_url}/catalog/category/{$image}";
-    $img_path       = "{$media_path}/catalog/category/{$image}";
-    
-    if(is_file($img_path) === true) {
-      try {
-        $meta = getimagesize($img_path);
-        $measurements = $meta[3];
-      } catch (Exception $e) {
-        $image = null;
-        Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
-      }
-    } else {
-      $image = null;
-    }
+  // var_dump($subcategories);
+  
+  if(sizeof($subcategories) > 0) {
     ?>
-    <li>
-      <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
-        <?php if(empty($image) === false) echo "<img class='lazy category-thumb' data-src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
-        <strong><?php echo $categoryName; ?></strong>
-      </a>
-    </li>
+    <ul class="category-grid">
     <?php
-  }
-  echo "</ul>";
-  if($haschild === true) {
-    echo "<style>#sidebar-nav {display: block;}</style>";
+    foreach($subcategories as $category) {
+      $haschild       = true;
+      $category       = Mage::getModel('catalog/category')->load($category->getId());
+      $categoryName   = $category->getName();
+      $image          = $category->getImage();
+      $measurements   = null;
+      $img_url        = "{$media_url}/catalog/category/{$image}";
+      $img_path       = "{$media_path}/catalog/category/{$image}";
+      
+      if(is_file($img_path) === true) {
+        try {
+          $meta = getimagesize($img_path);
+          $measurements = $meta[3];
+        } catch (Exception $e) {
+          $image = null;
+          Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
+        }
+      } else {
+        $image = null;
+      }
+      ?>
+      <li>
+        <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
+          <?php if(empty($image) === false) echo "<img class='lazy category-thumb' data-src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
+          <strong><?php echo $categoryName; ?></strong>
+        </a>
+      </li>
+      <?php
+    }
+    echo "</ul>";
+    if($haschild === true) {
+      echo "<style>#sidebar-nav {display: block;}</style>";
+    }
   }
 }
 
@@ -533,49 +537,29 @@ if($_collectionSize > 0) {
         </div>
       </li>
 
-    <?php
-    if(($i === 3 OR ($i - 3) % 6 === 0) AND $_collectionSize > $i) { ?>
-      </ul>
-        <div class="new-tab-contant-text mobile-hide">
-          <div class="col-md-3 new-contant">
-            <p><i class="fa fa-check"></i>Altijd de beste prijs</p>
-            <p><i class="fa fa-check"></i>Advies door professionals</p>
+      <?php
+      if(($i === 3 OR ($i - 3) % 6 === 0) AND $_collectionSize > $i) { ?>
+        </ul>
+          <div class="new-tab-contant-text mobile-hide">
+            <div class="col-md-3 new-contant">
+              <p><i class="fa fa-check"></i>Altijd de beste prijs</p>
+              <p><i class="fa fa-check"></i>Advies door professionals</p>
+            </div>
+            <div class="col-md-3 new-contant">
+              <p><i class="fa fa-check"></i>Wij vergelijken de prijzen</p>
+              <p><i class="fa fa-check"></i>Gratis verzending vanaf &euro;150,-</p>
+            </div>
+            <div class="col-md-3 new-contant">
+              <p><i class="fa fa-check"></i>Professionele apparatuur</p>
+              <p><i class="fa fa-check"></i>Snelle levering</p>
+            </div>
           </div>
-          <div class="col-md-3 new-contant">
-            <p><i class="fa fa-check"></i>Wij vergelijken de prijzen</p>
-            <p><i class="fa fa-check"></i>Gratis verzending vanaf &euro;150,-</p>
-          </div>
-          <div class="col-md-3 new-contant">
-            <p><i class="fa fa-check"></i>Professionele apparatuur</p>
-            <p><i class="fa fa-check"></i>Snelle levering</p>
-          </div>
-        </div>
-      <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
-    <?php
+        <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
+        <?php
+      }
     }
-  }
-  ?>
-  </ul>
-  <!-- <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script> -->
-
-    <?php /* PRODUCTADVIES BLOCK */ ?>
-
-    <div class="new-tab-contant mobile-hide">
-      <div class="col-md-3 image-box">
-        <img height="100" width="100" src="/skin/frontend/rwd/dhh/images/ditzijnwij.png" alt="Prokoeling.nl service">
-      </div>
-      <div class="col-md-5 contant-box" style="width:40%">
-        <h2>Productadvies nodig?</h2>
-        <p>Heb je hulp nodig bij het uitzoeken van het juiste product? Onze adviseurs helpen je graag.<br />Prokoeling.nl - Klantenteam</p>
-      </div>
-      <div class="col-md-4 mail-box" style="width:45%">
-        <p>Bel ons: <a href="tel:+3180441003">(+31) (0)850441003</a></p>
-        <p>Of <a href="mailto:klantenservice@prokoeling.nl">E-mail Ons</a></p>
-      </div>
-    </div>
-
-    <?php /* TOOLBAR (PAGINATION) BLOCK */ ?>
-
+    ?>
+    </ul>
     <div class="toolbar-bottom">
       <?php echo $this->getToolbarHtml() ?>
     </div>
@@ -583,7 +567,7 @@ if($_collectionSize > 0) {
   <?php
 
   // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
-  if ($this->getChild('after')) {
+  if($this->getChild('after')) {
     $_afterChildren = $this->getChild('after')->getSortedChildren();
     foreach ($_afterChildren as $_afterChildName) {
       $_afterChild = $this->getChild('after')->getChild($_afterChildName);

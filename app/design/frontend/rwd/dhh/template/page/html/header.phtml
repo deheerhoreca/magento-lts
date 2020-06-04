@@ -10,26 +10,26 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
   $account_url = Mage::getUrl('customer/account/login');
 }
 ?>
-<header id="header" class="page-header header grid-inside">
+<header id="header" class="page-header header grid-inside scrlng">
   <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
-      <a class="logo" href="<?php echo $this->getUrl('') ?>">
-        <img src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" class="small" height="40" width="208" />
+      <a class="main-logo" href="<?php echo $this->getUrl('') ?>">
+        <img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" />
       </a>
       <div class="skip-links headerrightcontents">
-        <div id="header-search" class="skip-content" style="float: left;position: relative;">
+        <div id="header-search" class="skip-content">
           <?php echo $this->getChildHtml('topSearch') ?>
         </div>
-        <div class="account-cart-wrapper" style="position: relative;text-align: right;">
-          <div class="top-link skip-account" style="width: 177px;background-color: #f1faff;"> 
-            <span class="strong clzpnmincon">
+        <div class="account-cart-wrapper">
+          <div class="top-link skip-account clzpnmincon" style="width: 177px;background-color: #f1faff;"> 
+            <span class="strong">
               <a href="tel:+31850441003" title="Bel ons"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel ons: 085-0441003</a><br>
               <a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel mij terug</a>
             </span>
           </div>
 
-          <a href="https://www.kiyoh.com/reviews/1044049/prokoeling?from=widget&amp;lang=nl" target="_blank" rel="nofollow noreferrer" class="no-decoration" aria-label="Bekijk onze reviews op Kiyoh">
-            <div class="top-link skip-account" id="header-kiyoh" style="width: 125px">
+          <a id="header-kiyoh" href="https://www.kiyoh.com/reviews/1044049/prokoeling?from=widget&amp;lang=nl" target="_blank" rel="nofollow noreferrer" class="no-decoration" aria-label="Bekijk onze reviews op Kiyoh">
+            <div class="top-link skip-account" style="width: 125px">
               <div>
                 <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
                 <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
@@ -56,31 +56,15 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
 
         </div>
       </div>
-
-      <a href="#header-nav" class="skip-link skip-nav no-decoration">
-        <i class="fa fa-bars fa-2x"></i>
-        <span class="label">Menu</span>
-      </a>
-      
-      <?php
-      // Account Menu
-      // <div id="header-account" class="skip-content">
-        // <?php
-        // if(! Mage::getSingleton('customer/session')->isLoggedIn()){
-          // echo $this->getLayout()->createBlock('customer/form_login')->setTemplate('customer/form/mini.login.phtml')->toHtml();
-        // } else {
-          // echo $this->getChildHtml('topLinks');
-        // }
-        ?>
-        
-      </div>
     </div>
   </div>
+
   <div id="header-nav" class="skip-content">
     <?php echo $this->getChildHtml('topMenu') ?>
   </div>
   <?php
   //echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
   ?>
+  <?php echo $this->getChildHtml('topContainer'); ?>
 </header>
-<?php echo $this->getChildHtml('topContainer'); ?>
+

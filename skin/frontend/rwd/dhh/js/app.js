@@ -34,8 +34,8 @@
 var bp = {
     xsmall: 479,
     small: 599,
-    medium: 770,
-    large: 979,
+    medium: 1199,
+    large: 1199,
     xlarge: 1199
 };
 
@@ -718,10 +718,12 @@ $j(document).ready(function () {
 
         // Toggle stubs
         if (isSkipContentOpen) {
-            self.removeClass('skip-active');
+            // self.removeClass('skip-active');
+            $j('#top-nav').removeClass('skip-active');
         } else {
-            self.addClass('skip-active');
+            // self.addClass('skip-active');
             elem.addClass('skip-active');
+            $j('#top-nav').addClass('skip-active');
         }
     });
 
