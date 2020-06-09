@@ -1,0 +1,57 @@
+<?php
+
+$_order = $this->getOrder();
+
+if($_order) {
+  $_items = $_order->getAllItems();
+  $_itemCount = count($_items);
+  ?>
+  <tr>
+    <td class="content-cell">
+      <table class="items" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+        <thead>
+          <tr>
+            <th class="cell-name align-left">Artikel</th>
+            <th class="cell-name align-center"><?php echo $this->__('Price'); ?></th>
+          </tr>
+        </thead>
+        <?php
+        $i=0; foreach ($_order->getAllItems() as $_item) {
+          if($_item->getParentItem()) continue;
+          else $i++;
+          echo $this->getItemHtml($_item);
+        }
+        ?>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-cell"><?php echo $this->getChildHtml('order_totals') ?></td>
+  </tr>
+  
+  <?php
+  if($this->helper('giftmessage/message')->isMessagesAvailable('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()) {
+    $_giftMessage = $this->helper('giftmessage/message')->getGiftMessage($_order->getGiftMessageId());
+    if($_giftMessage) {
+      ?>
+      <br />
+      <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #EAEAEA;">
+        <thead>
+          <tr>
+            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><strong><?php echo $this->__('Gift Message for this Order') ?></strong></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="4" align="left" style="padding:3px 9px">
+            <strong><?php echo $this->__('From:'); ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><strong><?php echo $this->__('To:'); ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><strong><?php echo $this->__('Message:'); ?></strong><br /> <?php echo $this->escapeHtml($_giftMessage->getMessage()) ?>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <?php
+    }
+  }
+}
