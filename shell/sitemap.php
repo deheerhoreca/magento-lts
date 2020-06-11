@@ -100,6 +100,14 @@ if(php_sapi_name() !== "cli") {
   exit;
 }
 
+$do = [
+  "categories"    => true,
+  "products"      => true,
+  "pages"         => true,
+  "blogs"         => true,
+  "brands"        => true,
+];
+
 require_once (dirname(__FILE__).'/../app/Mage.php');
 Mage::app();
     
@@ -107,49 +115,102 @@ try {
 
   $sitemap = new PT_Magento_Sitemap($sitemap_file);
   
-  $collection = Mage::getModel('catalog/category')
-    ->getCollection()
-    ->addAttributeToSelect('*')
-    ->addIsActiveFilter();
-    
-  foreach($collection as $category) {
-    $sitemap->addUrl($category->getUrl(), $category_priority, $category->getUpdatedAt());
-  }
-  unset($collection);
+  /* Categories */
   
-  $collection = Mage::getModel('catalog/product')
-    ->getCollection()
-    ->addAttributeToSelect('*')
-    ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
-    ->addAttributeToFilter('visibility',
-      [
-        Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-        Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
-      ]
-    );
-  
-  foreach($collection as $product) {
-    //$url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product);
-    //if($url === false) {
-      $url = $product->getProductUrl(); //fallback
-    //}
-    //echo $product->getId().":".$url.PHP_EOL;
-    $sitemap->addUrl($url, $product_priority, $product->getUpdatedAt());
-  }
-  unset($collection);
-  
-  $collection = Mage::getModel('cms/page')
-    ->getCollection()
-    ->addStoreFilter(Mage::app()->getStore()->getId())
-    ->addFieldToFilter('is_active',1);
-  
-  foreach($collection as $page) {
-    if(substr($page->getIdentifier(), 0, 5) === "home-") {
-      continue;
+  if($do["categories"] === true) {
+    $collection = Mage::getModel('catalog/category')
+      ->getCollection()
+      ->addAttributeToSelect('*')
+      ->addIsActiveFilter();
+      
+    foreach($collection as $category) {
+      $sitemap->addUrl($category->getUrl(), $category_priority, $category->getUpdatedAt());
     }
-    $sitemap->addUrl(Mage::getBaseUrl().$page->getIdentifier(), $page_priority, $page->getUpdateTime());
+    unset($collection);
   }
-  unset($collection);
+  
+  /* Products */
+  
+  if($do["products"] === true) {
+    $collection = Mage::getModel('catalog/product')
+      ->getCollection()
+      ->addAttributeToSelect('*')
+      ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+      ->addAttributeToFilter('visibility',
+        [
+          Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+          Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
+        ]
+      );
+    
+    foreach($collection as $product) {
+      //$url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product);
+      //if($url === false) {
+        $url = $product->getProductUrl(); //fallback
+      //}
+      //echo $product->getId().":".$url.PHP_EOL;
+      $sitemap->addUrl($url, $product_priority, $product->getUpdatedAt());
+    }
+    unset($collection);
+  }
+  
+  /* Pages */
+  
+  if($do["pages"] === true) {
+    $collection = Mage::getModel('cms/page')
+      ->getCollection()
+      ->addStoreFilter(Mage::app()->getStore()->getId())
+      ->addFieldToFilter('is_active',1);
+    
+    foreach($collection as $page) {
+      if(substr($page->getIdentifier(), 0, 5) === "home-") {
+        continue;
+      }
+      $sitemap->addUrl(Mage::getBaseUrl().$page->getIdentifier(), $page_priority, $page->getUpdateTime());
+    }
+    unset($collection);
+  }
+  
+  /* Blogs */
+  
+  if($do["blogs"] === true) {
+    
+    $collection = Mage::getModel('blog/blog')->getCollection()
+        ->addPresentFilter()
+        ->addEnableFilter(AW_Blog_Model_Status::STATUS_ENABLED)
+    ;
+    
+    foreach($collection as $post) {
+      $url = Mage::getBaseUrl()."blog/".$post->getIdentifier();
+      print_r($post->getData());
+      $sitemap->addUrl($url, $page_priority, $post->getCreatedTime());
+    }
+    unset($collection);
+    
+  }
+  
+  /* Brands */
+  
+  if($do["brands"] === true) {
+    $name           = 'manufacturer';
+    $attributeInfo  = Mage::getResourceModel('eav/entity_attribute_collection')->setCodeFilter($name)->getFirstItem();
+    $attributeId    = $attributeInfo->getAttributeId();
+    $attribute      = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+    $manufacturers  = $attribute ->getSource()->getAllOptions(false);
+    
+    usort($manufacturers, function($a, $b) {
+      return $a['label'] <=> $b['label'];
+    });
+    
+    foreach($manufacturers as $manufacturer) {
+      $brand_name   = $manufacturer['label'];
+      $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+      $url          = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)."{$brand_slug}.html";
+      $sitemap->addUrl($url, $page_priority);    
+    }
+    
+    unset($manufacturers);
+  }
   
   // Generate and write the sitemap.
   if($sitemap->generate()) {
