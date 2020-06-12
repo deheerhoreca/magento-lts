@@ -29,13 +29,15 @@ class PT_Magento_Sitemap {
     return date('Y-m-d', $timestamp);
   }
   
-  public function addUrl($loc, $priority = '1', $lastmod = NULL)
+  public function addUrl($loc, $priority = '1', $lastmod = NULL, $images = [])
   {
-    $this->urls[] = array(
-      'loc' => $loc,
-      'priority' => $priority,
-      'lastmod' => ( $lastmod ? $this->formatDate($lastmod) : NULL ),
-    );
+    $data = [
+      'loc'       => $loc,
+      'priority'  => $priority,
+      'lastmod'   => ( $lastmod ? $this->formatDate($lastmod) : NULL ),
+      'images'    => $images,
+    ];
+    $this->urls[] = $data;
     
     return true;
   }
@@ -69,7 +71,7 @@ class PT_Magento_Sitemap {
     }
     
     fwrite($this->file, '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL);
-    fwrite($this->file, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.PHP_EOL);
+    fwrite($this->file, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'.PHP_EOL);
     
     return true;
   }
@@ -87,13 +89,29 @@ class PT_Magento_Sitemap {
   private function writeUrl($url)
   {
     $lastmod = ($url['lastmod'] ? "<lastmod>{$url['lastmod']}</lastmod>" : null);
-    fwrite($this->file, "<url><loc>{$url['loc']}</loc><priority>{$url['priority']}</priority>{$lastmod}</url>".PHP_EOL);
+    $image = (sizeof($url["images"]) > 0 ? $this->getImageXml($url["images"]) : null);
+    fwrite($this->file, "<url><loc>{$url['loc']}</loc><priority>{$url['priority']}</priority>{$lastmod}{$image}</url>".PHP_EOL);
+  }
+  
+  private function getImageXml($images) {
+    $string = PHP_EOL;
+    foreach($images as $image) {
+      $title = (isset($image["title"]) ? "<image:title>".$this->xmlEscape($image["title"])."</image:title>" : null);
+      $caption = (isset($image["caption"]) ? "<image:caption>".$this->xmlEscape($image["caption"])."</image:caption>" : null);
+      $string .= "<image:image><image:loc>".$this->xmlEscape($image["url"])."</image:loc>{$title}{$caption}</image:image>";
+    }
+    return $string;
+  }
+  
+  function xmlEscape($string) {
+    return str_replace(array('&', '<', '>', '\'', '"'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
   }
 }
 
 // make sure we don't time out
 error_reporting(E_ALL);
 set_time_limit(0);
+ini_set('memory_limit', '4g');
 
 if(php_sapi_name() !== "cli") {
   header("Location: /");
@@ -101,11 +119,12 @@ if(php_sapi_name() !== "cli") {
 }
 
 $do = [
-  "categories"    => true,
-  "products"      => true,
-  "pages"         => true,
-  "blogs"         => true,
-  "brands"        => true,
+  "categories"      => true,
+  "products"        => true,
+  "pages"           => true,
+  "blogs"           => true,
+  "brands"          => true,
+  "product_images"  => true,
 ];
 
 require_once (dirname(__FILE__).'/../app/Mage.php');
@@ -149,7 +168,44 @@ try {
         $url = $product->getProductUrl(); //fallback
       //}
       //echo $product->getId().":".$url.PHP_EOL;
-      $sitemap->addUrl($url, $product_priority, $product->getUpdatedAt());
+      $images = [];
+      
+      /* Images */
+      
+      if($do["product_images"] === true) {
+        
+		    // $image      = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product->getId(), 'image', $storeId);
+		    // $imageLoc   = '';
+		    // $imageTitle = '';
+
+		    // if ($image) {
+			    // $imageLoc   = str_replace('index.php/', '', Mage::getURL('media/catalog/product') . substr($image, 1));
+			    // $imageTitle = $product->getName();
+          // $images[] = ["url" => $imageLoc, "title" => $imageTitle, "caption" => $imageTitle];
+		    // }
+
+		    // $_product = Mage::getModel('catalog/product')->load($product->getId());
+		    // $_images = $_product->getMediaGalleryImages();
+        
+        $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+        $media_gallery = $attributes['media_gallery'];
+        $backend = $media_gallery->getBackend();
+        $backend->afterLoad($product); 
+        $mediaGallery = $product->getMediaGalleryImages();
+        
+		    // foreach($_images as $image) {
+        foreach($product->getMediaGalleryImages() as $image) {
+			    if($image->getUrl() == $imageLoc) continue;
+          // print_r($image);
+          // $label = (empty($image->getLabel()) ? $product->getName() : $image->getLabel());
+          $label = $product->getName();
+          $images[] = ["url" => $image->getUrl(), "title" => $label, "caption" => $label];
+        }
+        
+		    // unset($_product);
+      }
+      
+      $sitemap->addUrl($url, $product_priority, $product->getUpdatedAt(), $images);
     }
     unset($collection);
   }
@@ -164,6 +220,9 @@ try {
     
     foreach($collection as $page) {
       if(substr($page->getIdentifier(), 0, 5) === "home-") {
+        continue;
+      }
+      if(strstr($page->getIdentifier(),"no-route") !== false) {
         continue;
       }
       $sitemap->addUrl(Mage::getBaseUrl().$page->getIdentifier(), $page_priority, $page->getUpdateTime());
@@ -182,7 +241,7 @@ try {
     
     foreach($collection as $post) {
       $url = Mage::getBaseUrl()."blog/".$post->getIdentifier();
-      print_r($post->getData());
+      //print_r($post->getData());
       $sitemap->addUrl($url, $page_priority, $post->getCreatedTime());
     }
     unset($collection);
@@ -218,7 +277,8 @@ try {
   } else {
     echo "Error while writing sitemap".PHP_EOL;
   }
-
+  
+  `xmllint --format sitemap_watdachtjezelf.xml > sitemap_watdachtjezelf_formatted.xml`;
 
 } catch( Exception $e ) {
   die($e->getMessage());
