@@ -393,6 +393,15 @@ class Magmodules_Channable_Model_Channable extends Magmodules_Channable_Model_Co
                 // Add the proper product URL
                 $path = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
                 $productRow = array_merge($productRow, ["friendly_url" => $path]);
+                
+                // Add the category ID
+                $category = Mage::helper("deheerhoreca_util/util")->getProductCategory($product);
+                if($category === false) {
+                  $category_id = "none";
+                } else {
+                  $category_id = (int) $category->getId();
+                }
+                $productRow = array_merge($productRow, ["dhh_category_id" => $category_id]);
                 // DHH CORE HACK
 
                 $productRow = new Varien_Object($productRow);

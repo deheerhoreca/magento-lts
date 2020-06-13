@@ -37,6 +37,15 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     return $url;
   }
   
+  public function getProductCategory(Mage_Catalog_Model_Product $product = null) {
+    $category_ids = $product->getCategoryIds();
+    if(empty($category_ids) === false) {
+      return Mage::getModel('catalog/category')->load(array_shift($category_ids));
+    }
+    
+    return false;
+  }
+  
   public function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
 
     // Force display deepest child category as request path.

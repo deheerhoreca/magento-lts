@@ -353,6 +353,11 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
                     }
                 }
         }
+        
+        /* DHH CORE HACK */
+        if($code === "energieklasse" && stristr($value, "Geen") !== false) {
+          $value = null;
+        }
 
         return $value;
     }
@@ -367,6 +372,21 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
                 $value = $this->_modifyAttribute($attributeValue, $fields['attr'][$idx]);
                 break;
             case "custom_field":
+                /* DHH CORE HACK */
+                // if($fields['custom'][$idx] === "category_chain_placeholder") {
+                  // $_product = $product = Mage::getModel('catalog/product')->load($productData["entity_id"]);
+                  // $categories = $_product->getCategoryCollection()->addAttributeToSelect('name');
+
+                  // $category_chain = [];
+                  // foreach($categories as $category) {
+                    // $category_chain[] = $category->getName();
+                  // }
+                  
+                  // $value = implode(" &gt; ", $category_chain);
+                  
+                  // break;
+                // }
+                /* END DHH CORE HACK */
                 $customField = $this->getCustomField($fields['custom'][$idx]);
                 
                 if ($customField){

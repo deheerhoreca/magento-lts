@@ -719,11 +719,11 @@ $j(document).ready(function () {
         // Toggle stubs
         if (isSkipContentOpen) {
             // self.removeClass('skip-active');
-            $j('#top-nav').removeClass('skip-active');
+            if(elem.attr('id') == "header-nav") $j('#top-nav').removeClass('skip-active');
         } else {
             // self.addClass('skip-active');
             elem.addClass('skip-active');
-            $j('#top-nav').addClass('skip-active');
+            if(elem.attr('id') == "header-nav") $j('#top-nav').addClass('skip-active');
         }
     });
 

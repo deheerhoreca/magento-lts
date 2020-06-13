@@ -54,7 +54,7 @@ $collection = Mage::getModel('catalog/product')
 if($collection->getSize() > 0) { ?>
 <div class="crosssell product-collateral category-products">
   <?php
-  echo "<span class=h3>".$this->__('Hardlopers:')."</span><hr>";
+  echo "<span class=h2>".$this->__('Hardlopers:')."</span><hr>";
   echo "<ul class='products-grid products-grid-mini'>";
   foreach ($collection->getItems() as $_product) {
     $i++;

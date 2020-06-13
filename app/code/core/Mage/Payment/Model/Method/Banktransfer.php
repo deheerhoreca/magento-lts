@@ -30,6 +30,8 @@
 class Mage_Payment_Model_Method_Banktransfer extends Mage_Payment_Model_Method_Abstract
 {
     const PAYMENT_METHOD_BANKTRANSFER_CODE = 'banktransfer';
+    //DHH CORE HACK
+    protected $_canUseCheckout = false;
 
     /**
      * Payment method code

@@ -168,21 +168,23 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
       if(Mage::registry('current_product')) {
         $product_id = Mage::registry('current_product')->getId();
         $_product = Mage::getModel("catalog/product")->setId($product_id);
-        $product_category_id = $_product->getCategoryIds()[0];
+        if(isset($_product->getCategoryIds()[0])) {
+          $product_category_id = $_product->getCategoryIds()[0];
 
-        if($product_id) {
-          if(empty($this->_crumbs["category{$product_category_id}"]) === true) {
-            // Breadcrumb is not complete yet, find out full category path and store IDs
-            $collection = $_product->getCategoryCollection()->addAttributeToSelect('path');
-            foreach($collection as $category) {
-              $categoryIds = explode("/", $category->getPath());
+          if($product_id) {
+            if(empty($this->_crumbs["category{$product_category_id}"]) === true) {
+              // Breadcrumb is not complete yet, find out full category path and store IDs
+              $collection = $_product->getCategoryCollection()->addAttributeToSelect('path');
+              foreach($collection as $category) {
+                $categoryIds = explode("/", $category->getPath());
+              }
+              // echo "<pre>";
+              // print_r($categoryIds);
+              // echo "</pre>";
+            } else {
+              // We're okay, the category ID exists in the current crumbs, so
+              // do not change anything
             }
-            // echo "<pre>";
-            // print_r($categoryIds);
-            // echo "</pre>";
-          } else {
-            // We're okay, the category ID exists in the current crumbs, so
-            // do not change anything
           }
         }
       }

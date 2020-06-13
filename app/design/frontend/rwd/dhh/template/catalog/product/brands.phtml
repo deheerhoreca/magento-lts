@@ -3,7 +3,7 @@ $name           = 'manufacturer';
 $attributeInfo  = Mage::getResourceModel('eav/entity_attribute_collection')->setCodeFilter($name)->getFirstItem();
 $attributeId    = $attributeInfo->getAttributeId();
 $attribute      = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-$manufacturers  = $attribute ->getSource()->getAllOptions(false); 	
+$manufacturers  = $attribute ->getSource()->getAllOptions(false);
 $m2             = '';
 
 usort($manufacturers, function($a, $b) {

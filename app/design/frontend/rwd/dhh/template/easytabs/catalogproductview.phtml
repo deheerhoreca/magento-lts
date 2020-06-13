@@ -116,6 +116,12 @@ $tagline              = $_product->getTagline();
 $shoutout             = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
 $energy_rating        = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
 
+$_store               = $_product->getStore();
+$_taxHelper           = $this->helper('tax');
+$_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
+$_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
+$freeshipping_from    = 150;
+
 /* Temporarily adjust levertijd during holidays */
 
 /*
@@ -596,7 +602,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
 
       <?php
       $delivery_text = "In Nederland &amp; België vanaf € 150";
-      if($_finalPrice >= 150) {
+      if($_finalPriceInclTax >= $freeshipping_from) {
         $delivery_text = "In Nederland &amp; België";
       }
       ?>
@@ -625,7 +631,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
           </li>
           <li>
             <div><img class='lazy' id="usp-e" alt="Een vraag?" data-src="/skin/frontend/rwd/dhh/images/question-mark.svg" width="32" height="32" /></div>
-            <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:klantenservice@prokoeling.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
+            <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@prokoeling.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
           </li>
         </ul>
       </div>
@@ -677,8 +683,8 @@ $files = Mage::getModel('staempfli_productattachment/file')
                 <?php
               }
 
-            $instk = TRUE;
-            if($_product->getStockItem()->getIsInStock() == 1
+              $instk = TRUE;
+              if($_product->getStockItem()->getIsInStock() == 1
                 && $_product->getStockItem()->getQty() < 1
                 && $_product->getStockItem()->getBackorders() != 0) {
               $instk = false;
@@ -714,7 +720,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
                 <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
               </small>
               <?php
-
+              
               echo "</div>";
             }
 
@@ -745,12 +751,11 @@ $files = Mage::getModel('staempfli_productattachment/file')
                   "27-04-2020",
                   "21-05-2020",
                   "01-06-2020",
-                  "25-12-2019",
-                  "26-12-2019",
+                  "25-12-2020",
+                  "26-12-2020",
                 ];
                 $i = 0;
                 
-                /*
                 $tz_obj           = new DateTimeZone('Europe/Amsterdam');
                 $today            = new DateTime("now", $tz_obj);
                 $current_hour     = $today->format('H');
@@ -758,11 +763,10 @@ $files = Mage::getModel('staempfli_productattachment/file')
                 if($current_hour >= 16) {
                   $i++;
                 }
-                */
                 
                 while(in_array($calwekdate, $holidays)) {
                   $i++;
-                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' Weekday'));
+                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' weekday'));
                 }
                 ?>
 
@@ -801,6 +805,12 @@ $files = Mage::getModel('staempfli_productattachment/file')
            //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml();
           ?>
           <?php
+          
+          if($_finalPriceInclTax >= $freeshipping_from) {
+              ?>
+              <div class="buyblock-usp">Geen verzendkosten</div>
+              <?php
+            }
           
           if($_product->getFinalPrice() < 150) {
             if(strtolower($supplier_name) === "gastronoble") {
@@ -925,7 +935,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
         <h2 class="tableftheader"><?php echo $this->__('Video');?></h2>
         <div class="content">
           <div class="product-video-wrapper">
-            <iframe width="560" height="315" src="<?php echo $pvideo; ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="lazy" width="560" height="315" data-src="<?php echo $pvideo; ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </div>
       </div>

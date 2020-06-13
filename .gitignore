@@ -88,3 +88,5 @@ install.php
 media/wysiwyg/.thumbs/
 
 .modman/*/.git
+
+!/media/static
