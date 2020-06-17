@@ -46,6 +46,16 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
               if(empty($valuex)) {
                 continue;
               }
+              
+              /* Pre-process */
+              switch($_data['code']) {
+                case "eenheid":
+                  if(($valuex > 1) === false) {
+                    continue 2;
+                  }
+                  break;
+              }
+              
               $label = $this->htmlEscape($this->__($_data['label']));
               ?>
               <tr>
