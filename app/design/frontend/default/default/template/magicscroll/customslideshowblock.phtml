@@ -1,0 +1,51 @@
+<?php
+
+$magicToolboxHelper = Mage::helper('magicscroll/settings');
+$tool = $magicToolboxHelper->loadTool('customslideshowblock');
+
+$enableEffect = !$tool->params->checkValue('enable-effect', 'No');
+if(!$enableEffect) return;
+
+$gallery = $tool->params->getValue('gallery');
+if(!$gallery) return;
+
+$images = Mage::helper('core')->jsonDecode($gallery);
+
+$magicscrollData = array();
+
+foreach($images as $image) {
+
+    if($image['disabled']) continue;
+
+    $img = $this->helper('magicscroll/image')->init($image['file'])->setWatermarkFile(null)->__toString();
+    $originalSizeArray = $this->helper('magicscroll/image')->getOriginalSizeArray();
+    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $originalSizeArray);
+    $img = $this->helper('magicscroll/image')/*->setWatermarkFile(Mage::getStoreConfig("design/watermark/image_image"))*/->resize($w, $h)->__toString();
+
+    $magicscrollData[] = array(
+        'img' => $img,
+        'link' => $image['link'],
+        'title' => $this->htmlEscape($image['label']),
+        'description' => $image['description']
+    );
+
+}
+
+//$iCount = count($magicscrollData);
+//if($iCount < $tool->params->getValue('items')) {
+//    $tool->params->setValue('items', $iCount);
+//}
+
+$title = $tool->params->getValue('block-title');
+
+?>
+<div class="block block-related">
+<?php if(!empty($title)) { ?>
+    <div class="block-title">
+        <strong><span><?php echo $this->__($title) ?></span></strong>
+    </div>
+<?php } ?>
+    <div class="mt-customslideshowblock block-content">
+        <?php echo $tool->getMainTemplate($magicscrollData, array("id" => "customslideshowblock")); ?>
+    </div>
+</div>

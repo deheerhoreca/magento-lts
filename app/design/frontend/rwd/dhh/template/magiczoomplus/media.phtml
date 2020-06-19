@@ -33,7 +33,7 @@ if(!$this->_isGalleryDisabled) {
 }
 
 $productVideos = $productModel->getData('product_videos');
-$productVideos = empty($productVideos) ? array() : unserialize($productVideos);
+$productVideos = empty($productVideos) ? array() : $magicToolboxHelper->getSerializer()->unserialize($productVideos);
 
 $productImages = array();
 
@@ -179,11 +179,11 @@ foreach($productImages as &$productImage) {
 
     list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
     $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
-    $mediumImage2x = $imageHelper->watermark(null, null)->resize($w*2, $h*2)->__toString();
+    // $mediumImage2x = $imageHelper->watermark(null, null)->resize($w*2, $h*2)->__toString();
 
     list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
     $thumbImage = $imageHelper->init($productModel, 'thumbnail', $productImage['image-file'])->resize($w, $h)->__toString();
-    $thumbImage2x = $imageHelper->init($productModel, 'thumbnail', $productImage['image-file'])->resize($w*2, $h*2)->__toString();
+    // $thumbImage2x = $imageHelper->init($productModel, 'thumbnail', $productImage['image-file'])->resize($w*2, $h*2)->__toString();
 
     $productImage['alt'] = $this->htmlEscape($productImage['image-label']);
     $productImage['title'] = $productTitle;
@@ -197,9 +197,9 @@ foreach($productImages as &$productImage) {
         'img' => $bigImage,
         'img2x' => $bigImage,
         'medium' => $mediumImage,
-        'medium2x' => $mediumImage2x,
+        // 'medium2x' => $mediumImage2x,
         'thumb' => $thumbImage,
-        'thumb2x' => $thumbImage2x,
+        // 'thumb2x' => $thumbImage2x,
         'alt' => $productImage['alt'],
         'title' => $productImage['title'],
     ));
@@ -218,7 +218,7 @@ foreach($productImages as &$productImage) {
             'img' => $bigImage,
             'img2x' => $bigImage,
             'thumb' => $mediumImage,
-            'thumb2x' => $mediumImage2x,
+            // 'thumb2x' => $mediumImage2x,
             'alt' => $productImage['alt'],
             'title' => $productImage['title'],
             'description' => $productDescription,
@@ -256,7 +256,7 @@ if(empty($containersData['zoom'])) {
         'id' => $productId,
         'img' => $bigImage,
         'thumb' => $mediumImage,
-        'thumb2x' => $mediumImage2x,
+        // 'thumb2x' => $mediumImage2x,
         'alt' => $productBaseImageAlt,
         'title' => $productBaseImageTitle,
         'description' => $productDescription,

@@ -33,77 +33,69 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
   ?>
   <div class="box-collateral box-additional bxgroupifo">
     <?php
-      $i=0;
-      foreach ($_additionalgroup as $_additional) {
-        $i++;
-        ?>
-        <span class="h3 clzattrgname"><?php echo $this->__( $_additional['title'] )?></span>
-        <table class="data-table product-specs-table" id="product-attribute-specs-table-<?php echo $i?>">
-          <tbody>
-            <?php
-            foreach($_additional['items'] as $_data) {
-              $valuex = $_data['value'];
-              if(empty($valuex)) {
-                continue;
+    foreach ($_additionalgroup as $_additional) {
+      ?>
+      <span class="clzattrgname"><?php echo $this->__( $_additional['title'] )?></span>
+        <?php
+        foreach($_additional['items'] as $_data) {
+          $valuex = $_data['value'];
+          if(empty($valuex)) {
+            continue;
+          }
+          
+          /* Pre-process */
+          switch($_data['code']) {
+            case "eenheid":
+              if(($valuex > 1) === false) {
+                continue 2;
               }
-              
-              /* Pre-process */
-              switch($_data['code']) {
-                case "eenheid":
-                  if(($valuex > 1) === false) {
-                    continue 2;
-                  }
-                  break;
+              break;
+          }
+          
+          $label = $this->htmlEscape($this->__($_data['label']));
+          $postfix = null;
+         
+          switch($_data['code']) {
+            case "vermogen_kw":
+            case "vermogen":
+              if($valuex < 5) {
+                $valuex *= 1000;
+                $postfix = " Watt";
+              } else {
+                $valuex = number_format($valuex, 2, ",", ".");
+                $postfix = " kW";
               }
-              
-              $label = $this->htmlEscape($this->__($_data['label']));
-              ?>
-              <tr>
-                <?php
-                $postfix = null;
-               
-                switch($_data['code']) {
-                  case "vermogen_kw":
-                  case "vermogen":
-                    if($valuex < 5) {
-                      $valuex *= 1000;
-                      $postfix = " Watt";
-                    } else {
-                      $valuex = number_format($valuex, 2, ",", ".");
-                      $postfix = " kW";
-                    }
-                    break;
+              break;
 
-                  default:
-                    $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
-                }
-                
-                if(isset($attr_remove_decimals[$_data['code']])) {
-                  $valuex = (int) number_format($valuex, 0, ",", "");
-                }
-                
-                if(isset($attr_trim_decimals[$_data['code']])) {
-                  $valuex = number_format($valuex, 2, ",", ".");
-                  $valuex = str_replace(",00", null, $valuex);
-                }
-                
-                /* Post-processing individual attributes */
-                switch($_data['code']) {
-                  case "number_of_cooling_zones":
-                    if($valuex === 1) $valuex .= " (Single-Zone)";
-                    elseif($valuex === 2) $valuex .= " (Dual-Zone)";
-                    elseif($valuex === 3) $valuex .= " (Triple-Zone)";
-                    break;
-                }
-                
-                ?>
-                <th class="label"><?php echo $label; ?></th>
-                <td class="data"><?php echo $valuex.$postfix; ?></td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-        <script type="text/javascript">decorateTable('product-attribute-specs-table-<?php echo $i?>')</script>
-    <?php }
+            default:
+              $valuex = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
+          }
+          
+          if(isset($attr_remove_decimals[$_data['code']])) {
+            $valuex = (int) number_format($valuex, 0, ",", "");
+          }
+          
+          if(isset($attr_trim_decimals[$_data['code']])) {
+            $valuex = number_format($valuex, 2, ",", ".");
+            $valuex = str_replace(",00", null, $valuex);
+          }
+          
+          /* Post-processing individual attributes */
+          switch($_data['code']) {
+            case "number_of_cooling_zones":
+              if($valuex === 1) $valuex .= " (Single-Zone)";
+              elseif($valuex === 2) $valuex .= " (Dual-Zone)";
+              elseif($valuex === 3) $valuex .= " (Triple-Zone)";
+              break;
+          }
+          
+          ?>
+          <dl class="product-specs">
+            <dt class="label"><?php echo $label; ?></dt>
+            <dd class="data"><?php echo $valuex.$postfix; ?></dd>
+          </dl>
+        <?php
+        }
+      }
   echo "</div>";
 }

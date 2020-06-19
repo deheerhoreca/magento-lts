@@ -3,9 +3,14 @@
 div.MagicToolboxContainer {
     text-align: center;
 }
+
+/*
 div.MagicToolboxContainer.minWidth {
     min-width: 250px;
 }
+*/
+
+
 
 /* NOTE: contaner with message under Magic Scroll */
 div.MagicToolboxMessage {
@@ -44,7 +49,7 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxMainContainer,
 div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
-    font-size:0px;
+    /*font-size:0px;*/
 }
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer a,
@@ -75,10 +80,12 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer {
     flex-shrink: 0;
 }
 
-div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll,
-div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll {
-    height: 100%;
-    flex:1;
+@media only screen and (min-width: 768px) {
+    div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll,
+    div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll {
+        height: 100%;
+        flex:1;
+    }
 }
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll a,
@@ -87,6 +94,8 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicS
 }
 
 @media only screen and (max-width: 767px) {
+
+
     div.MagicToolboxContainer.selectorsLeft,
     div.MagicToolboxContainer.selectorsRight {
         flex-direction: column;
@@ -99,7 +108,9 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicS
         min-height: 0px;
         flex:auto;
         flex-basis: auto !important;
+        display: block !important;
     }
+
     div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer a,
     div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer a {
         margin:10px 5px;

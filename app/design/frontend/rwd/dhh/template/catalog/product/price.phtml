@@ -34,9 +34,10 @@ $dhh_debug = false;
 
 if(function_exists('_fixPrice') === false) {
   function _fixPrice($price) {
-    $price = str_replace("€", null, $price);
+    $price = str_replace(["€", "&nbsp;"], null, $price);
     $price = str_replace(",00", ",-", $price);
-    return $price;
+    $price = preg_replace("/(^\s+)|(\s+$)/us", null, $price); //an utf8 trim()
+    return strip_tags(trim($price));
   }
 }
 

@@ -216,7 +216,7 @@ class MagicToolbox_MagicScroll_Helper_Image extends Mage_Core_Helper_Abstract
             $paramsForHash[] = $this->getWatermarkWidth();
             $paramsForHash[] = $this->getWatermarkHeight();
         }
-        $path[] = md5(implode('_', $paramsForHash));
+        $path[] = hash('md5', implode('_', $paramsForHash), false);
 
         $this->_newFile = implode('/', $path).$file;
 

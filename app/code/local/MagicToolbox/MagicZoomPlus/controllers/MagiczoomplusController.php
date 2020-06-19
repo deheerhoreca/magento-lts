@@ -105,7 +105,7 @@ class MagicToolbox_MagicZoomPlus_MagiczoomplusController extends Mage_Adminhtml_
                 $defaultValues = Mage::helper('magiczoomplus/params')->getFixedDefaultValues();
             }
             //NOTE: quotes need to be escaped
-            $defaultValues = serialize($defaultValues);
+            $defaultValues = Mage::helper('magiczoomplus/settings')->getSerializer()->serialize($defaultValues);
 
             $model->setValue($defaultValues);
 
@@ -253,7 +253,7 @@ class MagicToolbox_MagicZoomPlus_MagiczoomplusController extends Mage_Adminhtml_
                 }
             }
 
-            $data['value'] = serialize($postSettings);
+            $data['value'] = Mage::helper('magiczoomplus/settings')->getSerializer()->serialize($postSettings);
             $data['last_edit_time'] = now();
             $model->setData($data)->setId($id);
             try {
@@ -284,31 +284,9 @@ class MagicToolbox_MagicZoomPlus_MagiczoomplusController extends Mage_Adminhtml_
 
     public function validateAction()
     {
-
         $response = new Varien_Object();
         $response->setError(false);
-        try {
-            /**
-             * @todo implement full validation process with errors returning which are ignoring now
-             */
-        }
-        catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
-            $response->setError(true);
-            $response->setAttribute($e->getAttributeCode());
-            $response->setMessage($e->getMessage());
-        }
-        catch (Mage_Core_Exception $e) {
-            $response->setError(true);
-            $response->setMessage($e->getMessage());
-        }
-        catch (Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-            $this->_initLayoutMessages('adminhtml/session');
-            $response->setError(true);
-            $response->setMessage($this->getLayout()->getMessagesBlock()->getGroupedHtml());
-        }
         $this->getResponse()->setBody($response->toJson());
-
     }
 
     protected function _isAllowed()

@@ -26,7 +26,7 @@ if(!$this->_isGalleryDisabled) {
 }
 
 $productVideos = $productModel->getData('product_videos');
-$productVideos = empty($productVideos) ? array() : unserialize($productVideos);
+$productVideos = empty($productVideos) ? array() : $magicToolboxHelper->getSerializer()->unserialize($productVideos);
 
 $productImages = array();
 

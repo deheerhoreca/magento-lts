@@ -4,7 +4,7 @@ if (!defined('MagicScrollModuleCoreClassLoaded')) {
 
 define('MagicScrollModuleCoreClassLoaded', true);
 
-require_once(dirname(__FILE__).'/magictoolbox.params.class.php');
+require_once(dirname(__FILE__) . '/magictoolbox.params.class.php');
 
 /**
  * MagicScrollModuleCoreClass
@@ -80,19 +80,19 @@ class MagicScrollModuleCoreClass
         }
         $headers = array();
         // add module version
-        $headers[] = '<!-- Magic Zoom Plus Magento module version v4.15.9 [v1.6.77:v5.2.5] -->';
+        $headers[] = '<!-- Magic Zoom Plus Magento module version v4.15.12 [v1.6.91:v5.3.5] -->';
         $headers[] = '<script type="text/javascript">window["mgctlbx$Pltm"] = "Magento";</script>';
         // add tool style link
-        $headers[] = '<link type="text/css" href="'.$cssPath.'/magicscroll.css" rel="stylesheet" media="screen" />';
+        $headers[] = '<link type="text/css" href="' . $cssPath . '/magicscroll.css" rel="stylesheet" media="screen" />';
         if ($linkModuleCss) {
             // add module style link
-            $headers[] = '<link type="text/css" href="'.$cssPath.'/magicscroll.module.css" rel="stylesheet" media="screen" />';
+            $headers[] = '<link type="text/css" href="' . $cssPath . '/magicscroll.module.css" rel="stylesheet" media="screen" />';
         }
         // add script link
-        $headers[] = '<script type="text/javascript" src="'.$jsPath.'/magicscroll.js"></script>';
+        $headers[] = '<script type="text/javascript" src="' . $jsPath . '/magicscroll.js"></script>';
         // add options
         $headers[] = $this->getOptionsTemplate();
-        return "\r\n".implode("\r\n", $headers)."\r\n";
+        return "\r\n" . implode("\r\n", $headers) . "\r\n";
     }
 
     /**
@@ -102,7 +102,7 @@ class MagicScrollModuleCoreClass
      */
     public function getOptionsTemplate()
     {
-        return "<script type=\"text/javascript\">\n\tMagicScrollOptions = {\n\t\t".$this->params->serialize(true, ",\n\t\t")."\n\t}\n</script>";
+        return "<script type=\"text/javascript\">\n\tMagicScrollOptions = {\n\t\t" . $this->params->serialize(true, ",\n\t\t") . "\n\t}\n</script>";
     }
 
     /**
@@ -137,7 +137,7 @@ class MagicScrollModuleCoreClass
         if (empty($id)) {
             $id = '';
         } else {
-            $id = ' id="'.addslashes($id).'"';
+            $id = ' id="' . addslashes($id) . '"';
         }
 
         // add div with tool className
@@ -145,7 +145,7 @@ class MagicScrollModuleCoreClass
         if (empty($additionalClasses)) {
             $additionalClasses = '';
         } else {
-            $additionalClasses = ' '.$additionalClasses;
+            $additionalClasses = ' ' . $additionalClasses;
         }
 
         //NOTE: get personal options
@@ -153,10 +153,10 @@ class MagicScrollModuleCoreClass
         if (empty($options)) {
             $options = '';
         } else {
-            $options = ' data-options="'.$options.'"';
+            $options = ' data-options="' . $options . '"';
         }
 
-        $html[] = '<div'.$id.' class="MagicScroll'.$additionalClasses.'"'.$width.$height.$options.'>';
+        $html[] = '<div' . $id . ' class="MagicScroll' . $additionalClasses . '"' . $width . $height . $options . '>';
 
         // add items
         foreach ($itemsData as $item) {
@@ -203,9 +203,9 @@ class MagicScrollModuleCoreClass
                 if (empty($target)) {
                     $target = '';
                 } else {
-                    $target = ' target="'.$target.'"';
+                    $target = ' target="' . $target . '"';
                 }
-                $link = $target.' href="'.addslashes($link).'"';
+                $link = $target . ' href="' . addslashes($link) . '"';
             }
 
             // check item alt tag
@@ -253,9 +253,9 @@ class MagicScrollModuleCoreClass
             }
 
             if (!empty($thumb2x)) {
-                //$thumb2x = ' srcset="'.$thumb2x.' 2x"';
-                //$thumb2x = ' srcset="'.$thumb.' 1x, '.$thumb2x.' 2x"';
-                $thumb2x = ' srcset="'.str_replace(' ', '%20', $thumb).' 1x, '.str_replace(' ', '%20', $thumb2x).' 2x"';
+                //$thumb2x = ' srcset="' . $thumb2x . ' 2x"';
+                //$thumb2x = ' srcset="' . $thumb . ' 1x, ' . $thumb2x . ' 2x"';
+                $thumb2x = ' srcset="' . str_replace(' ', '%20', $thumb) . ' 1x, ' . str_replace(' ', '%20', $thumb2x) . ' 2x"';
             }
 
             // add item
@@ -303,6 +303,7 @@ class MagicScrollModuleCoreClass
             "use-individual-titles"=>array("id"=>"use-individual-titles","group"=>"Multiple images","order"=>"40","default"=>"Yes","label"=>"Individual image titles","type"=>"array","subType"=>"radio","values"=>array("Yes","No"),"scope"=>"module"),
             "lazyZoom"=>array("id"=>"lazyZoom","group"=>"Miscellaneous","order"=>"10","default"=>"No","label"=>"Lazy load of zoom image","description"=>"Whether to load large image on demand (on first activation).","type"=>"array","subType"=>"radio","values"=>array("Yes","No"),"scope"=>"magiczoomplus"),
             "rightClick"=>array("id"=>"rightClick","group"=>"Miscellaneous","order"=>"20","default"=>"No","label"=>"Right-click menu on image","type"=>"array","subType"=>"radio","values"=>array("Yes","No"),"scope"=>"magiczoomplus","desktop-only"=>""),
+            "cssClass"=>array("id"=>"cssClass","advanced"=>"1","group"=>"Miscellaneous","order"=>"30","default"=>"","label"=>"Extra CSS","description"=>"Extra CSS class(es) to apply to zoom instance.","type"=>"text","scope"=>"magiczoomplus"),
             "link-to-product-page"=>array("id"=>"link-to-product-page","group"=>"Miscellaneous","order"=>"30","default"=>"Yes","label"=>"Link enlarged image to the product page","type"=>"array","subType"=>"select","values"=>array("Yes","No"),"scope"=>"module"),
             "option-associated-with-images"=>array("id"=>"option-associated-with-images","group"=>"Miscellaneous","order"=>"40","default"=>"color","label"=>"Product option names associated with images","description"=>"(e.g 'Color,Size'). You should assign labels to all the product images associated with the option's values, e.g., if option's values are 'red', 'blue' and 'white', then you should have 3 images with labels: 'red', 'blue' and 'white'","type"=>"text","scope"=>"module"),
             "show-associated-product-images"=>array("id"=>"show-associated-product-images","group"=>"Miscellaneous","order"=>"41","default"=>"Yes","label"=>"Show associated product's images","type"=>"array","subType"=>"radio","values"=>array("Yes","No"),"scope"=>"module"),
@@ -321,11 +322,10 @@ class MagicScrollModuleCoreClass
             "expandZoomOn"=>array("id"=>"expandZoomOn","group"=>"Expand mode","order"=>"21","default"=>"click","label"=>"Expand zoom on","description"=>"When and how activate zoom in expanded view. ‘always’ - zoom automatically activates upon entering the expanded view and remains active.","type"=>"array","subType"=>"radio","values"=>array("click","always"),"scope"=>"magiczoomplus"),
             "expandCaption"=>array("id"=>"expandCaption","group"=>"Expand mode","order"=>"30","default"=>"Yes","label"=>"Show caption in expand window","type"=>"array","subType"=>"radio","values"=>array("Yes","No"),"scope"=>"magiczoomplus","desktop-only"=>""),
             "closeOnClickOutside"=>array("id"=>"closeOnClickOutside","group"=>"Expand mode","order"=>"40","default"=>"Yes","label"=>"Close expanded image on click outside","type"=>"array","subType"=>"radio","values"=>array("Yes","No"),"scope"=>"magiczoomplus"),
-            "cssClass"=>array("id"=>"cssClass","group"=>"Expand mode","order"=>"50","default"=>"blurred","label"=>"Background behind the enlarged image","type"=>"array","subType"=>"radio","values"=>array("blurred","dark","white"),"scope"=>"magiczoomplus"),
             "hint"=>array("id"=>"hint","group"=>"Hint","order"=>"10","default"=>"once","label"=>"Display hint to suggest image is zoomable","description"=>"How to show hint. off - disable hint.","type"=>"array","subType"=>"radio","values"=>array("once","always","off"),"scope"=>"magiczoomplus"),
             "textHoverZoomHint"=>array("id"=>"textHoverZoomHint","advanced"=>"1","group"=>"Hint","order"=>"20","default"=>"Hover to zoom","label"=>"Hint to suggest image is zoomable (on hover)","description"=>"Hint that shows when zoom mode is enabled, but inactive, and zoom activates on hover (Zoom on: hover).","type"=>"text","scope"=>"magiczoomplus","mobile-value"=>"Touch to zoom"),
             "textClickZoomHint"=>array("id"=>"textClickZoomHint","advanced"=>"1","group"=>"Hint","order"=>"21","default"=>"Click to zoom","label"=>"Hint to suggest image is zoomable (on click)","description"=>"Hint that shows when zoom mode is enabled, but inactive, and zoom activates on click (Zoom on: click).","type"=>"text","scope"=>"magiczoomplus","mobile-value"=>"Double tap to zoom"),
-            "textExpandHint"=>array("id"=>"textExpandHint","advanced"=>"1","group"=>"Hint","order"=>"30","default"=>"Click to expand","label"=>"Hint to suggest image is expandable","description"=>"Hint that shows when zoom mode activated, or in inactive state if zoom mode is disabled.","type"=>"text","scope"=>"magiczoomplus","mobile-value"=>"Tap to expand"),
+            "textExpandHint"=>array("id"=>"textExpandHint","advanced"=>"1","group"=>"Hint","order"=>"30","default"=>"Click to expand","label"=>"Hint to suggest image is expandable","description"=>"Hint that shows when zoom mode activated, or in inactive state if zoom mode is disabled.","type"=>"text","scope"=>"magiczoomplus","mobile-value"=>"Tap or pinch to expand"),
             "textBtnClose"=>array("id"=>"textBtnClose","group"=>"Hint","order"=>"40","default"=>"Close","label"=>"Hint for “close” button","description"=>"Text label that appears on mouse over the “close” button in expanded view.","type"=>"text","scope"=>"magiczoomplus","desktop-only"=>""),
             "textBtnNext"=>array("id"=>"textBtnNext","group"=>"Hint","order"=>"50","default"=>"Next","label"=>"Hint for “next” button","description"=>"Text label that appears on mouse over the “next” button arrow in expanded view.","type"=>"text","scope"=>"magiczoomplus","desktop-only"=>""),
             "textBtnPrev"=>array("id"=>"textBtnPrev","group"=>"Hint","order"=>"60","default"=>"Previous","label"=>"Hint for “previous” button","description"=>"Text label that appears on mouse over the “previous” button arrow in expanded view.","type"=>"text","scope"=>"magiczoomplus","desktop-only"=>""),

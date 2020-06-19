@@ -7,28 +7,6 @@ if($_product = Mage::registry('current_product')) {
   $product_image = $_product->getImageUrl();
   $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
   
-  /* 
-  There is a bug that does this, but only on product pages:
-  HOME -> SUBCATEGORY -> CATEGORY
-  */
-  /*
-  if(is_array($crumbs) && $n = sizeof($crumbs)) {
-    if($n >= 2) {
-      $keys = array_keys($crumbs);
-      
-      $deepest_subcategory_key = $keys[1];
-      $deepest_subcategory = $crumbs[$deepest_subcategory_key];
-      unset($crumbs[$deepest_subcategory_key]);
-      
-      $product_element_key = array_pop($keys);
-      $product_element = $crumbs[$product_element_key];
-      unset($crumbs[$product_element_key]);
-      
-      $crumbs[$deepest_subcategory_key] = $deepest_subcategory;
-      $crumbs[$product_element_key] = $product_element;
-    }
-  }
-  */  
   if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"]) === true) {
     unset($crumbs["product"]);
   }
@@ -45,7 +23,7 @@ if(is_array($crumbs) && sizeof($crumbs) > 0) {
     if($crumbs[$_crumbName]['first']) {
       $crumbs[$_crumbName]['label'] = $store_name;
     }
-    if($crumbs[$_crumbName]['last'] && $crumbs[$_crumbName]['link'] < 1) {
+    if($crumbs[$_crumbName]['last'] && strlen($crumbs[$_crumbName]['link']) < 1) {
       $crumbs[$_crumbName]['link'] = $currentUrl;
     }
   }
@@ -81,15 +59,16 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
         $n = sizeof($crumbs);
         $i = 0;
         foreach($crumbs as $_crumbName => $_crumbInfo) {
+          $css_classes = (substr($_crumbName, 0, 8) === "category") ? "category " : null;
           $label = $this->escapeHtml($_crumbInfo['label']);
           $title = $this->escapeHtml($_crumbInfo['title']);
-          echo "<li class='{$_crumbName}'>";
+          echo "<li class='{$css_classes}{$_crumbName}'>";
           
           if($n > 2 && $_crumbName === "product") {
             continue;
           }
           
-          if($_crumbInfo['link'] && !$_crumbInfo['last']) {
+          if($_crumbInfo['link'] && ($_crumbInfo['last'] !== true || $_product)) {
             echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'>{$label}</a>";
           } else {
             echo "<strong>{$label}</strong>";

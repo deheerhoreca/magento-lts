@@ -3,9 +3,14 @@
 div.MagicToolboxContainer {
     text-align: center;
 }
+
+/*
 div.MagicToolboxContainer.minWidth {
     min-width: 250px;
 }
+*/
+
+
 
 /* NOTE: main image styles */
 div.MagicToolboxContainer > a {
@@ -50,6 +55,10 @@ div.MagicToolboxContainer.selectorsTop .MagicToolboxSelectorsContainer {
 
 
 /* NOTE: to highlight magic360 selector (magiczoom(plus) + magic360) */
+.zoom-with-360 img {
+    padding-bottom: 0px !important;
+    border-bottom:none !important;
+}
 .zoom-with-360.mz-thumb-selected img {
     -webkit-filter: none;
     filter: none;
@@ -109,7 +118,7 @@ div.MagicToolboxContainer.selectorsLeft,
 div.MagicToolboxContainer.selectorsRight {
     display: -ms-flex;
     display: -webkit-flex;
-    display: flex;        
+    display: flex;
 }
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer,
@@ -124,7 +133,7 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxMainContainer,
 div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
-    font-size:0px;
+    /*font-size:0px;*/
 }
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer a,
@@ -155,18 +164,22 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer {
     flex-shrink: 0;
 }
 
-div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll,
-div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll {
-    height: 100%;
-    flex:1;
+@media only screen and (min-width: 768px) {
+    div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll,
+    div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll {
+        height: 100%;
+        flex:1;
+    }
 }
 
-div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll a, 
-div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll a { 
-    margin: 0; 
+div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll a,
+div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll a {
+    margin: 0;
 }
 
 @media only screen and (max-width: 767px) {
+
+
     div.MagicToolboxContainer.selectorsLeft,
     div.MagicToolboxContainer.selectorsRight {
         flex-direction: column;
@@ -174,12 +187,14 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicS
     div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer,
     div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer {
         order:2;
-        width: 100% !important;        
+        width: 100% !important;
         margin-bottom:10px;
         min-height: 0px;
         flex:auto;
         flex-basis: auto !important;
+        display: block !important;
     }
+    
     div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer a,
     div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer a {
         margin:10px 5px;
@@ -188,7 +203,7 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicS
     div.MagicToolboxContainer.selectorsLeft .MagicToolboxMainContainer,
     div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
         order:1;
-        padding:0px; 
+        padding:0px;
     }
     div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer:after,
     div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer:after {
@@ -198,9 +213,9 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicS
     div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll {
         height: auto;
     }
-    div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll, 
-    div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll { 
-        margin: 10px 0 0 0; 
+    div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer .MagicScroll,
+    div.MagicToolboxContainer.selectorsRight .MagicToolboxSelectorsContainer .MagicScroll {
+        margin: 10px 0 0 0;
     }
 }
 .invisible,

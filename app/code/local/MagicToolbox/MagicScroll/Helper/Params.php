@@ -49,6 +49,18 @@ class MagicToolbox_MagicScroll_Helper_Params extends Mage_Core_Helper_Abstract
         return $defaultValues;
     }
 
+    public function getSerializer() {
+        static $serializer = null;
+
+        if ($serializer === null) {
+            if (class_exists('Zend_Serializer') && class_exists('Zend_Serializer_Adapter_PhpSerialize')) {
+                $serializer = new Zend_Serializer;
+            }
+        }
+
+        return $serializer;
+    }
+
     public function getProfiles()
     {
         return array(

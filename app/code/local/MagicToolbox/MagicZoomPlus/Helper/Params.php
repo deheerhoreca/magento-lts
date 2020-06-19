@@ -49,6 +49,18 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
         return $defaultValues;
     }
 
+    public function getSerializer() {
+        static $serializer = null;
+
+        if ($serializer === null) {
+            if (class_exists('Zend_Serializer') && class_exists('Zend_Serializer_Adapter_PhpSerialize')) {
+                $serializer = new Zend_Serializer;
+            }
+        }
+
+        return $serializer;
+    }
+
     public function getProfiles()
     {
         return array(
@@ -116,6 +128,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                 'Miscellaneous' => array(
                     'lazyZoom',
                     'rightClick',
+                    'cssClass',
                     'link-to-product-page',
                     'show-message',
                     'message'
@@ -133,8 +146,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                     'expandZoomMode',
                     'expandZoomOn',
                     'expandCaption',
-                    'closeOnClickOutside',
-                    'cssClass'
+                    'closeOnClickOutside'
                 ),
                 'Hint' => array(
                     'hint',
@@ -171,6 +183,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                 'Miscellaneous' => array(
                     'lazyZoom',
                     'rightClick',
+                    'cssClass',
                     'option-associated-with-images',
                     'show-associated-product-images',
                     'load-associated-product-images',
@@ -191,8 +204,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                     'expandZoomMode',
                     'expandZoomOn',
                     'expandCaption',
-                    'closeOnClickOutside',
-                    'cssClass'
+                    'closeOnClickOutside'
                 ),
                 'Hint' => array(
                     'hint',
@@ -244,6 +256,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                 'Miscellaneous' => array(
                     'lazyZoom',
                     'rightClick',
+                    'cssClass',
                     'link-to-product-page',
                     'show-message',
                     'message'
@@ -261,8 +274,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                     'expandZoomMode',
                     'expandZoomOn',
                     'expandCaption',
-                    'closeOnClickOutside',
-                    'cssClass'
+                    'closeOnClickOutside'
                 ),
                 'Hint' => array(
                     'hint',
@@ -290,6 +302,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                 'Miscellaneous' => array(
                     'lazyZoom',
                     'rightClick',
+                    'cssClass',
                     'link-to-product-page',
                     'show-message',
                     'message'
@@ -307,8 +320,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                     'expandZoomMode',
                     'expandZoomOn',
                     'expandCaption',
-                    'closeOnClickOutside',
-                    'cssClass'
+                    'closeOnClickOutside'
                 ),
                 'Hint' => array(
                     'hint',
@@ -336,6 +348,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                 'Miscellaneous' => array(
                     'lazyZoom',
                     'rightClick',
+                    'cssClass',
                     'link-to-product-page',
                     'show-message',
                     'message'
@@ -353,8 +366,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Params extends Mage_Core_Helper_Abstract
                     'expandZoomMode',
                     'expandZoomOn',
                     'expandCaption',
-                    'closeOnClickOutside',
-                    'cssClass'
+                    'closeOnClickOutside'
                 ),
                 'Hint' => array(
                     'hint',

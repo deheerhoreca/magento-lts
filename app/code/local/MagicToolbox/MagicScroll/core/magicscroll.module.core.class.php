@@ -4,7 +4,7 @@ if (!defined('MagicScrollModuleCoreClassLoaded')) {
 
 define('MagicScrollModuleCoreClassLoaded', true);
 
-require_once(dirname(__FILE__).'/magictoolbox.params.class.php');
+require_once(dirname(__FILE__) . '/magictoolbox.params.class.php');
 
 /**
  * MagicScrollModuleCoreClass
@@ -80,19 +80,19 @@ class MagicScrollModuleCoreClass
         }
         $headers = array();
         // add module version
-        $headers[] = '<!-- Magic Scroll Magento module version v4.15.9 [v1.6.78:v2.0.38] -->';
+        $headers[] = '<!-- Magic Scroll Magento module version v4.15.12 [v1.6.91:v2.0.44] -->';
         $headers[] = '<script type="text/javascript">window["mgctlbx$Pltm"] = "Magento";</script>';
         // add tool style link
-        $headers[] = '<link type="text/css" href="'.$cssPath.'/magicscroll.css" rel="stylesheet" media="screen" />';
+        $headers[] = '<link type="text/css" href="' . $cssPath . '/magicscroll.css" rel="stylesheet" media="screen" />';
         if ($linkModuleCss) {
             // add module style link
-            $headers[] = '<link type="text/css" href="'.$cssPath.'/magicscroll.module.css" rel="stylesheet" media="screen" />';
+            $headers[] = '<link type="text/css" href="' . $cssPath . '/magicscroll.module.css" rel="stylesheet" media="screen" />';
         }
         // add script link
-        $headers[] = '<script type="text/javascript" src="'.$jsPath.'/magicscroll.js"></script>';
+        $headers[] = '<script type="text/javascript" src="' . $jsPath . '/magicscroll.js"></script>';
         // add options
         $headers[] = $this->getOptionsTemplate();
-        return "\r\n".implode("\r\n", $headers)."\r\n";
+        return "\r\n" . implode("\r\n", $headers) . "\r\n";
     }
 
     /**
@@ -102,7 +102,7 @@ class MagicScrollModuleCoreClass
      */
     public function getOptionsTemplate()
     {
-        return "<script type=\"text/javascript\">\n\tMagicScrollOptions = {\n\t\t".$this->params->serialize(true, ",\n\t\t")."\n\t}\n</script>";
+        return "<script type=\"text/javascript\">\n\tMagicScrollOptions = {\n\t\t" . $this->params->serialize(true, ",\n\t\t") . "\n\t}\n</script>";
     }
 
     /**
@@ -137,7 +137,7 @@ class MagicScrollModuleCoreClass
         if (empty($id)) {
             $id = '';
         } else {
-            $id = ' id="'.addslashes($id).'"';
+            $id = ' id="' . addslashes($id) . '"';
         }
 
         // add div with tool className
@@ -145,7 +145,7 @@ class MagicScrollModuleCoreClass
         if (empty($additionalClasses)) {
             $additionalClasses = '';
         } else {
-            $additionalClasses = ' '.$additionalClasses;
+            $additionalClasses = ' ' . $additionalClasses;
         }
 
         //NOTE: get personal options
@@ -153,10 +153,10 @@ class MagicScrollModuleCoreClass
         if (empty($options)) {
             $options = '';
         } else {
-            $options = ' data-options="'.$options.'"';
+            $options = ' data-options="' . $options . '"';
         }
 
-        $html[] = '<div'.$id.' class="MagicScroll'.$additionalClasses.'"'.$width.$height.$options.'>';
+        $html[] = '<div' . $id . ' class="MagicScroll' . $additionalClasses . '"' . $width . $height . $options . '>';
 
         // add items
         foreach ($itemsData as $item) {
@@ -203,9 +203,9 @@ class MagicScrollModuleCoreClass
                 if (empty($target)) {
                     $target = '';
                 } else {
-                    $target = ' target="'.$target.'"';
+                    $target = ' target="' . $target . '"';
                 }
-                $link = $target.' href="'.addslashes($link).'"';
+                $link = $target . ' href="' . addslashes($link) . '"';
             }
 
             // check item alt tag
@@ -253,9 +253,9 @@ class MagicScrollModuleCoreClass
             }
 
             if (!empty($thumb2x)) {
-                //$thumb2x = ' srcset="'.$thumb2x.' 2x"';
-                //$thumb2x = ' srcset="'.$thumb.' 1x, '.$thumb2x.' 2x"';
-                $thumb2x = ' srcset="'.str_replace(' ', '%20', $thumb).' 1x, '.str_replace(' ', '%20', $thumb2x).' 2x"';
+                //$thumb2x = ' srcset="' . $thumb2x . ' 2x"';
+                //$thumb2x = ' srcset="' . $thumb . ' 1x, ' . $thumb2x . ' 2x"';
+                $thumb2x = ' srcset="' . str_replace(' ', '%20', $thumb) . ' 1x, ' . str_replace(' ', '%20', $thumb2x) . ' 2x"';
             }
 
             // add item

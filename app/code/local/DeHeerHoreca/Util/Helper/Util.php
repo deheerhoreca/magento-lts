@@ -191,6 +191,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
 
   public function getProductGridHtml($_product, $product_block, $options = []) {
     
+    /*
+    $options = [
+      "image_size"              => 150,
+      "skip_info"               => false,
+      "skip_usps"               => false,
+      "skip_actions"            => false,
+      "_blank"                  => false,
+      "use_short_product_names" => false,
+      "show_category_link"      => false,
+    ];
+    */
+    
     $image_size = $options["image_size"] ?? 150;
     $image_dimensions = 1 * $image_size;
     $max_product_info_items = 3;
@@ -222,6 +234,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     if(isset($options["show_category_link"]) === true && $options["show_category_link"] === true) {
       $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
     }
+    $skip_actions = $options["skip_actions"] ?? false;
     
     $price_html = $product_block->getPriceHtml($_product, true);
     $price_html = str_replace(",00", ",-", $price_html);
@@ -311,22 +324,23 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         echo $product_block->getReviewsSummaryHtml($_product, 'short');
       }
       
-      // 
-      ?>
-      <div class="actions">
-        <div class="float-left" style="padding-top: 5px;">
-          <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+      if($skip_actions !== true) {
+        ?>
+        <div class="actions">
+          <div class="float-left" style="padding-top: 5px;">
+            <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+          </div>
+          <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
+            <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $product_block->getAddToCartUrl($_product) ?>')">
+              <i class="fa fa-shopping-cart"></i>
+            </button>
+          <?php else: ?>
+            <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $product_url; ?>"><?php echo $product_block->__("Productdetails") ?></a>
+          <?php endif; ?>
         </div>
-        <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
-          <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $product_block->getAddToCartUrl($_product) ?>')">
-            <i class="fa fa-shopping-cart"></i>
-          </button>
-        <?php else: ?>
-          <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $product_url; ?>"><?php echo $product_block->__("Productdetails") ?></a>
-        <?php endif; ?>
-      </div>
+        <?php
+      }
       
-      <?php
       if(isset($category_info["url"]) === true) {
         echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
       }

@@ -100,7 +100,7 @@ class MagicToolbox_MagicScroll_Helper_Settings extends Mage_Core_Helper_Abstract
 
             $settings = $collection->getFirstItem()->getValue();
             if (!empty($settings)) {
-                $settings = unserialize($settings);
+                $settings = $this->getSerializer()->unserialize($settings);
                 if (isset($settings['desktop'])) {
                     foreach ($settings['desktop'] as $profile => $params) {
                         foreach ($params  as $id => $value) {
@@ -117,9 +117,6 @@ class MagicToolbox_MagicScroll_Helper_Settings extends Mage_Core_Helper_Abstract
                 }
             }
 
-            foreach ($helper->getProfiles() as $id => $label) {
-                /* load locale */
-            }
 
         }
 
@@ -193,4 +190,15 @@ class MagicToolbox_MagicScroll_Helper_Settings extends Mage_Core_Helper_Abstract
         return true;
     }
 
+    public function getSerializer() {
+        static $serializer = null;
+
+        if ($serializer === null) {
+            if (class_exists('Zend_Serializer') && class_exists('Zend_Serializer_Adapter_PhpSerialize')) {
+                $serializer = new Zend_Serializer;
+            }
+        }
+
+        return $serializer;
+    }
 }

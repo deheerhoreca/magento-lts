@@ -87,7 +87,7 @@ class MagicToolbox_MagicScroll_Block_Adminhtml_Settings_Edit_Tab_Form_Element_Ga
         if ($model) {
             $data = $model->getData();
             if (!empty($data['value'])) {
-                $settings = unserialize($data['value']);
+                $settings = Mage::helper('magicscroll/params')->getSerializer()->unserialize($data['value']);
                 if (isset($settings['desktop']['customslideshowblock']['gallery'])) {
                     $images = Mage::helper('core')->jsonDecode($settings['desktop']['customslideshowblock']['gallery']);
                     foreach ($images as &$image) {

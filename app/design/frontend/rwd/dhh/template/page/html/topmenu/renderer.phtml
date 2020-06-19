@@ -17,17 +17,21 @@ $childrenCount = $children->count();
 $parentPositionClass = $menuTree->getPositionClass();
 $itemPositionClassPrefix = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
 
+$base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+
 foreach($children as $child) {
   $child->setLevel($childLevel);
   $child->setIsFirst($counter == 1);
   $child->setIsLast($counter == $childrenCount);
   $child->setPositionClass($itemPositionClassPrefix . $counter);
+  
+  $url = str_replace($base_url, "/", $child->getUrl());
 
   $outermostClassCode = 'level'. $childLevel;
   $_hasChildren = ($child->hasChildren()) ? 'has-children' : '';
 
   if($childLevel < 2) $html .= '<li '. $this->_getRenderedMenuItemAttributes($child) .'>';
-  $html .= '<a title="Ga naar '.$this->escapeHtml($this->__($child->getName())).'" href="'. $child->getUrl() .'" class="' .$outermostClassCode.' '.$_hasChildren.'">';
+  $html .= '<a title="Ga naar '.$this->escapeHtml($this->__($child->getName())).'" href="'. $url .'" class="' .$outermostClassCode.' '.$_hasChildren.'">';
 	
   $html .= $this->escapeHtml($this->__($child->getName()));
   $html .='</a>';

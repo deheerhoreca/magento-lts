@@ -100,7 +100,7 @@ class MagicToolbox_MagicZoomPlus_Helper_Settings extends Mage_Core_Helper_Abstra
 
             $settings = $collection->getFirstItem()->getValue();
             if (!empty($settings)) {
-                $settings = unserialize($settings);
+                $settings = $this->getSerializer()->unserialize($settings);
                 if (isset($settings['desktop'])) {
                     foreach ($settings['desktop'] as $profile => $params) {
                         foreach ($params  as $id => $value) {
@@ -266,4 +266,15 @@ class MagicToolbox_MagicZoomPlus_Helper_Settings extends Mage_Core_Helper_Abstra
         return true;
     }
 
+    public function getSerializer() {
+        static $serializer = null;
+
+        if ($serializer === null) {
+            if (class_exists('Zend_Serializer') && class_exists('Zend_Serializer_Adapter_PhpSerialize')) {
+                $serializer = new Zend_Serializer;
+            }
+        }
+
+        return $serializer;
+    }
 }

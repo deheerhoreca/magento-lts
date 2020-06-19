@@ -116,17 +116,17 @@ $img_size = 2 * $img_dimensions;
           </td>
            
           <td>
-					<input id="mc-decrease-<?php echo $_item->getId(); ?>" type='button' value='-' class='qtyminus' field='quantity' onclick="discresm2(this)" />
+					<input id="mc-decrease-<?php echo $_item->getId(); ?>" type='button' value='-' class='qtyminus' onclick="discresm2(this)" />
             <input
               id="qinput-<?php echo $_item->getId(); ?>"
               data-link="<?php echo $this->getAjaxUpdateUrl() ?>"
               data-item-id="<?php echo $_item->getId(); ?>"
               data-cart-item-id="<?php echo $_item->getSku(); ?>"
-              class="qty cart-item-quantity input-text" name=""
+              class="qty cart-item-quantity input-text"
               value="<?php echo $this->getQty()?>"
               <?php if ($this->isOnCheckoutPage()) echo 'disabled'; ?>
               />
-            <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" field='quantity' />
+            <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" />
             
             <button id="qbutton-<?php echo $_item->getId(); ?>"
             data-item-id="<?php echo $_item->getId(); ?>"                 

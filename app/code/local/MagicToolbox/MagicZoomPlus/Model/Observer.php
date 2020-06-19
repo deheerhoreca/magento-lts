@@ -101,7 +101,7 @@ class MagicToolbox_MagicZoomPlus_Model_Observer
         if (empty($attrValue) || !is_string($attrValue) || strpos($attrValue, 'a:') !== 0) {
             return;
         }
-        $attrValue = unserialize($attrValue);
+        $attrValue = Mage::helper('magiczoomplus/settings')->getSerializer()->unserialize($attrValue);
         $attrValue = array_keys($attrValue);
         $attrValue = implode("\n", $attrValue)."\n";
         $productModel->setData($attrCode, $attrValue);
@@ -218,7 +218,7 @@ class MagicToolbox_MagicZoomPlus_Model_Observer
             }
 
             if ($isVimeo) {
-                $hash = unserialize(file_get_contents('http://vimeo.com/api/v2/video/'.$videoCode.'.php'));
+                $hash = Mage::helper('magiczoomplus/settings')->getSerializer()->unserialize(file_get_contents('http://vimeo.com/api/v2/video/'.$videoCode.'.php'));
                 $thumb = $hash[0]['thumbnail_small'];
             } else {
                 $thumb = 'https://i1.ytimg.com/vi/'.$videoCode.'/1.jpg';
@@ -232,6 +232,6 @@ class MagicToolbox_MagicZoomPlus_Model_Observer
             );
         }
 
-        $productModel->setData($attrCode, serialize($attrNewValue));
+        $productModel->setData($attrCode, Mage::helper('magiczoomplus/settings')->getSerializer()->serialize($attrNewValue));
     }
 }

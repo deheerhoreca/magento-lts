@@ -6,22 +6,6 @@
  * @see Mage_Review_Block_Product_View
  */
 
-$max_highlighted_attributes = 12;
-
-if(function_exists("sanitizeForFilename") === false) {
-  function sanitizeForFilename($string) {
-    // Remove anything which isn't a word, whitespace, number
-    // or any of the following caracters -_~,;[]().
-    // If you don't need to handle multi-byte characters
-    // you can use preg_replace rather than mb_ereg_replace
-    // Thanks @Łukasz Rysiak!
-    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $string);
-    // Remove any runs of periods (thanks falstro!)
-    $output = mb_ereg_replace("([\.]{2,})", '', $string);
-    return strtolower($output);
-  }
-}
-
 $htbrand      = $brand = null;
 $_helper      = $this->helper('catalog/output');
 $_product     = $this->getProduct();
@@ -29,7 +13,10 @@ $brand_name   = $_product->getAttributeText('manufacturer');
 $brand_logo   = null;
 $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $brand_link   = "{$brand_slug}.html";
-$supplier_name = $_product->getAttributeText('supplier');
+$_store       = $_product->getStore();
+$_taxHelper   = $this->helper('tax');
+$skn          = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
+$anchors      = [];
 
 if(empty($brand_name) === false) {
   $brand = sanitizeForFilename($brand_name);
@@ -51,34 +38,14 @@ if(count($categoryIds)) {
   $categoryName = $_category->getName();
 }
 
-/* Find the top level category this product belongs to */
-/*
-$top_categories = [];
-foreach($categoryIds as $categoryId) {
-  $path = Mage::getModel('catalog/category')->load($categoryId)->getPath();
-  $ids = explode("/", $path);
-  if(isset($ids[2])) {
-    $topParent = Mage::getModel('catalog/category')->setStoreId(Mage::app()->getStore()->getId())->load($ids[2]);
-  } else {
-    $topParent = null; //it means you are in one catalog root.
-  }
-  if($topParent) {
-    $top_categories[$ids[2]] = [];
-    $top_categories[$ids[2]]["name"] = $topParent->getName();
-    $top_categories[$ids[2]]["url"] = $topParent->getUrl();
-  }
-}
-*/
-
 /* Availability, Stock */
-$stock_message = null;
-$stclz = null;
-$txtcltcz = null;
+$stock_message  = null;
+$stclz          = null;
+$txtcltcz       = null;
+$stock_qty      = (int) $_product->getStockItem()->getQty();
+$in_stock       = $_product->getStockItem()->getIsInStock();
 
-$stock_qty = (int) $_product->getStockItem()->getQty();
-$in_stock = $_product->getStockItem()->getIsInStock();
-
-// Block also exists in list.phtml and featured.phtml
+// Code also exists in list.phtml and featured.phtml
 if($in_stock === true) {
   if($stock_qty < 1 && $_product->getStockItem()->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
     $stock_message = "Tijdelijk uitverkocht (wel bestelbaar)";
@@ -98,34 +65,37 @@ if($in_stock === true) {
     $txtcltcz = 'buyblock-usp';
   }
 } else {
-  $stock_message = "Niet op voorraad";
+  $stock_message = "Niet op voorraad, neem contact op voor alternatieven";
   $stclz = "clznostockdots";
   $txtcltcz = 'clzsoldout';
 }
 
+$freeshipping_from          = 150;
+$extra_delivery_time        = 0;
+$max_highlighted_attributes = 10;
+
+// Attributes used in multiple places
+$nofrost_method       = $_product->getResource()->getAttribute("ontdooisysteem")->getFrontend()->getValue($_product);
+$energy_rating        = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
+$shoutout             = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
+$productTitle         = $_helper->productAttribute($_product, $_product->getName(), 'name');
+$product_title_short  = $_product->getResource()->getAttribute('name_short')->getFrontend()->getValue($_product);
+$pvideo               = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
 $expected_delivery    = $_product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($_product);
 $levertijd_verwacht   = (int) $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
 $lbllevertijdvl       = $_product->getAttributeText('levertijd');
 $lblbestelartikel     = $_product->getAttributeText('bestelartikel');
 $_price               = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
 $_finalPrice          = $_product->getFinalPrice();
-$pvideo               = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
-$productTitle         = $_helper->productAttribute($_product, $_product->getName(), 'name');
-$extra_delivery_time  = 0;
 $tagline              = $_product->getTagline();
-$shoutout             = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
-$energy_rating        = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
-
-$_store               = $_product->getStore();
-$_taxHelper           = $this->helper('tax');
 $_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
 $_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
-$freeshipping_from    = 150;
+$supplier_name        = $_product->getAttributeText('supplier');
 
 /* Temporarily adjust levertijd during holidays */
 
 /*
-$supplier             = $_product->getAttributeText('supplier');
+$supplier = $_product->getAttributeText('supplier');
 if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
   $future = strtotime("1 Jan 2020");
   $timefromdb = time();
@@ -141,655 +111,606 @@ $files = Mage::getModel('staempfli_productattachment/file')
   ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
   ->getData();
 
+/* Energy Label */
+if(strlen($energy_rating) > 0) {
+  $enclz = null;
+  switch ($energy_rating) {
+    case 'A++++': $enclz = 'enrgclz1';  break;
+    case 'A+++':  $enclz = 'enrgclz2';  break;
+    case 'A++':   $enclz = 'enrgclz3';  break;
+    case 'A+':    $enclz = 'enrgclz4';  break;
+    case 'A':     $enclz = 'enrgclz5';  break;
+    case 'B':     $enclz = 'enrgclz6';  break;
+  }
+}
+
+// Product USPs
+$highlights = [];
+$i = 0;
+
+$dimension_pair_set = false;
+if($i < $max_highlighted_attributes) {
+  $id = "dimensions";
+  $attribute_names = ["breedte", "diepte", "hoogte"];
+  $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
+  $title = "Afmetingen (b x d x h)";
+  foreach($attribute_names as $attribute_name) {
+    $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+    if(empty($values[$attribute_name]) === false) {
+      $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
+    } else {
+      unset($values[$attribute_name]);
+    }
+  }
+  if(sizeof($values) === sizeof($attribute_names)) {
+    $text = implode(" x ", $values)." cm";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+    $dimension_pair_set = true;
+  }
+}
+
+if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
+  $attribute_names = ["breedte", "hoogte"];
+  $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
+  $title = "Afmetingen (b x l)";
+  foreach($attribute_names as $attribute_name) {
+    $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+    if(empty($values[$attribute_name]) === false) {
+      $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
+    } else {
+      unset($values[$attribute_name]);
+    }
+  }
+  if(sizeof($values) === sizeof($attribute_names)) {
+    $text = implode(" x ", $values)." cm";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "diameter";
+  $image = "{$skn}frontend/rwd/dhh/images/diameter.svg";
+  $title = "Diameter (mm)";
+  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => "{$text} mm",
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "afsluitbaar";
+  $image = "{$skn}frontend/rwd/dhh/images/key.svg";
+  $title = "Afsluitbaar";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if($text === "Ja") {
+    $text = "Afsluitbaar";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "size";
+  $image = "{$skn}frontend/rwd/dhh/images/size.svg";
+  $title = "Maat";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if($text === "Ja") {
+    $text = "Afsluitbaar";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "type_koeling";
+  $image = "{$skn}frontend/rwd/dhh/images/forced_cooling.svg";
+  $title = "Koelmethode";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if($text === "Geforceerd" OR $text === "Recirculatie" OR $text === "Statisch met ventilator") {
+    $text = "{$text}";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "inhoud_liters";
+  $image = "{$skn}frontend/rwd/dhh/images/liters.svg";
+  $title = "Inhoud";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $text = round($text, 2)." liter";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $image = "{$skn}frontend/rwd/dhh/images/freezer.svg";
+  $title = "Ontdooisysteem";
+  if($nofrost_method === "Automatisch") {
+    $nofrost_method = "Auto defrost";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "aantal_roosters";
+  $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
+  $title = "Aantal roosters";
+  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $text = "{$text} roosters";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "garantie";
+  $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
+  $title = "Garantietermijn";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false && $text !== "12 maanden") {
+    $text = "{$text}";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "vermogen";
+  $image = "{$skn}frontend/rwd/dhh/images/watt.svg";
+  $title = "Vermogen";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    if(ctype_alnum($text) || is_numeric($text)) {
+      $text = str_replace(",", ".", $text);
+      $text = (double) $text;
+      if($text < 3) {
+        $text = (int) ($text * 1000)." W";
+      } else {
+        $text = number_format($text, 1, ",", ".");
+        $text = str_replace(",0", null, $text);
+        $text = "{$text} kW";
+      }
+    } else {
+      // For non-numbers like "2 x 3"
+    }
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $code   = "voltage";
+  $image  = "{$skn}frontend/rwd/dhh/images/volt.svg";
+  $title  = "Voltage";
+  $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $highlights[] = [
+      "image"   => $image,
+      "title"   => $title,
+      "text"    => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "aantal_omwentelingen_minuut";
+  $image = "{$skn}frontend/rwd/dhh/images/rpm.svg";
+  $title = "RPM";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $text = "{$text}";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "vermogen_kw";
+  $image = "{$skn}frontend/rwd/dhh/images/flame.svg";
+  $title = "Vermogen (gas)";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $text = number_format($text, 1, ",", ".");
+    $text = str_replace(",0", null, $text);
+    if(strstr(strtolower($text), "V") === false) {
+      $text = "{$text} kW";
+    }
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "geluidsniveau";
+  $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
+  $title = "Stil apparaat";
+  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false) {
+    $text = "{$text} dB";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "verlichting";
+  $image = "{$skn}frontend/rwd/dhh/images/light.svg";
+  $title = "Verlichting";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false && $text !== "Nee") {
+    $text = "Verlichting";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "aantal_flessen";
+  $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
+  $title = "Flessen";
+  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false && $text !== "Nee") {
+    $text = "{$text} X";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "capacity_wine_bottles";
+  $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
+  $title = "Aantal 75cl Wijnflessen";
+  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false && $text !== "Nee") {
+    $text = "{$text} x 75cl.";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "aantal_branders";
+  $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
+  $title = "Branders";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false && $text !== "Nee") {
+    $text = "{$text} X";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "glas";
+  $image = "{$skn}frontend/rwd/dhh/images/doubleglass.svg";
+  $title = "Dubbel glas";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if($text === "dubbel glas") {
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "refrigerant";
+  $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
+  $title = "Koelmiddel";
+  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text ) === false) {
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+if($i < $max_highlighted_attributes) {
+  $attribute_name = "eenheid";
+  $image = "{$skn}frontend/rwd/dhh/images/amount.svg";
+  $title = "Verpakkingseenheid";
+  $text = (double) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  if(empty($text) === false && $text > 1) {
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text." stuks",
+    ];
+    $i++;
+  }
+}
+
+$hlstr = null;
+foreach($highlights as $key => $highlight) {
+  $hlstr .= "<li><img class='lazy' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
+}
+
+/* Product Description */
+
+$product_description = $this->getProduct()->getDescription();
+$product_description = Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($product_description);
+
+if(strtolower($nofrost_method) === 'Automatisch') {
+  $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_ontdooisysteem_automatisch')->toHtml().'</div>';
+}
+
+$code = "voltage";
+$text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+if($text === "400") {
+  $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
+}
+
+$attributekoelmiddel = $_product->getResource()->getAttribute('refrigerant');
+$attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_product);
+if($attribute_valuekoelmiddel === "R290") {
+  $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
+}
+if(strlen($product_description) === 0) $product_description = "&nbsp;";
 ?>
-<script type="text/javascript">var optionsPrice = {};</script>
+<script>var optionsPrice = {};</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
+
+  <div class="product-name clearfix">
+    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+    <div class='float-left' style='margin-right:2em;'>
+      <a href='/<?php echo $brand_link; ?>'><?php echo $brand_name; ?></a>
+    </div>
+    <?php echo $this->getReviewsSummaryHtml($_product, 'short', false); ?>
+  </div>
+  <div class="hide-until-m" style="border-top: 1px solid #dadada; padding-top: 10px;"></div>
+  
+  <?php /* PRODUCT IMAGES */ ?>
+  
+  <div class="proleftdv">
+    <div class="product-img-box">
+      <a class="anchor" id="photos"></a>
+      <?php
+        $anchors[] = "photos";
+        if(empty($shoutout) === false) {
+          echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
+        }
+
+        /* Energy Label */
+        if(empty($enclz) === false) {
+          echo "<span class='lblenergylabel {$enclz}' title='Energielabel {$enclz}'>{$energy_rating}</span>";
+        }
+
+        echo $this->getChildHtml('media');
+      ?>
+    </div>
+  </div>
+
   <div class="product-essential">
-    <div class="product-name">
-      <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-      <div class='container' style='min-height:1em;'>
-      <?php
-      echo "<div class='float-left' style='margin-right:2em;'><a href='/{$brand_link}'>{$brand_name}</a></div>";
-      if(strlen($tagline) > 0) {
-        echo "<div class='small strong float-left product-detail-tagline'>{$tagline}</div>";
-      }
-      echo "</div>";
-      echo $this->getReviewsSummaryHtml($_product, 'short', false);
-      ?>
-    </div>
-    <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-      <?php echo $this->getBlockHtml('formkey') ?>
-      <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-      <input type="hidden" name="related_product" id="related-products-field" value="" />
-      <div style="border-top: 1px solid #dadada; padding-top: 10px;">
-        <div class="product-img-box">
-          <?php
-            if(strlen($shoutout) > 1) {
-              echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
-            }
-
-            /* Energy Label */
-            if(strlen($energy_rating) > 0) {
-              $enclz = null;
-              switch ($energy_rating) {
-                case 'A++++': $enclz = 'enrgclz1';  break;
-                case 'A+++':  $enclz = 'enrgclz2';  break;
-                case 'A++':   $enclz = 'enrgclz3';  break;
-                case 'A+':    $enclz = 'enrgclz4';  break;
-                case 'A':     $enclz = 'enrgclz5';  break;
-                case 'B':     $enclz = 'enrgclz6';  break;
-              }
-              if(strlen($enclz) > 0) {
-                echo "<span class='lblenergylabel {$enclz}' title='Energielabel {$enclz}'>{$energy_rating}</span>";
-              }
-            }
-
-            echo $this->getChildHtml('media');
-          ?>
-        </div>
-      </div>
-
-    <div class="product-shop">
-      <div class='products-content-top-center'>
-        <?php
+    <div id="sticky-container">
+      <div class="product-shop">
         
-          /* Product Highlights */
-          $skn = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
-          $i = 0;
-          $str = NULL;
+        <?php /* Add to Cart Block */ ?>
+        
+        <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+          <?php echo $this->getBlockHtml('formkey') ?>
+          <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+          <input type="hidden" name="related_product" id="related-products-field" value="" />
+          <div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
+            
+            <?php
+            echo $this->getChildHtml('alert_urls');
+            echo $this->getChildHtml('other');
 
-          // Product USPs
-          $highlights = [];
-
-          $dimension_pair_set = false;
-          if($i < $max_highlighted_attributes) {
-            $id = "dimensions";
-            $attribute_names = ["breedte", "diepte", "hoogte"];
-            $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-            $title = "Afmetingen (b x d x h)";
-            foreach($attribute_names as $attribute_name) {
-              $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-              if(empty($values[$attribute_name]) === false) {
-                $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
-              } else {
-                unset($values[$attribute_name]);
-              }
+            if ($_product->isSaleable() && $this->hasOptions()) {
+              echo $this->getChildChildHtml('container1', '', true, true);
             }
-            if(sizeof($values) === sizeof($attribute_names)) {
-              $text = implode(" x ", $values)." cm";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-              $dimension_pair_set = true;
+            
+            if(empty($tagline) === false) {
+              echo "<div class='product-detail-tagline'>{$tagline}</div>";
             }
-          }
+            ?>
 
-          if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
-            $attribute_names = ["breedte", "hoogte"];
-            $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-            $title = "Afmetingen (b x l)";
-            foreach($attribute_names as $attribute_name) {
-              $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-              if(empty($values[$attribute_name]) === false) {
-                $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
-              } else {
-                unset($values[$attribute_name]);
-              }
-            }
-            if(sizeof($values) === sizeof($attribute_names)) {
-              $text = implode(" x ", $values)." cm";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-          
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "diameter";
-            $image = "{$skn}frontend/rwd/dhh/images/diameter.svg";
-            $title = "Diameter (mm)";
-            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => "{$text} mm",
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "afsluitbaar";
-            $image = "{$skn}frontend/rwd/dhh/images/key.svg";
-            $title = "Afsluitbaar";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($text === "Ja") {
-              $text = "Afsluitbaar";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "size";
-            $image = "{$skn}frontend/rwd/dhh/images/size.svg";
-            $title = "Maat";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($text === "Ja") {
-              $text = "Afsluitbaar";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "type_koeling";
-            $image = "{$skn}frontend/rwd/dhh/images/forced_cooling.svg";
-            $title = "Koelmethode";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($text === "Geforceerd" OR $text === "Recirculatie" OR $text === "Statisch met ventilator") {
-              $text = "{$text}";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "inhoud_liters";
-            $image = "{$skn}frontend/rwd/dhh/images/liters.svg";
-            $title = "Inhoud";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $text = round($text, 2)." liter";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "ontdooisysteem";
-            $image = "{$skn}frontend/rwd/dhh/images/freezer.svg";
-            $title = "Ontdooisysteem";
-            $nofrost_method = $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($nofrost_method === "Automatisch") {
-              $nofrost_method = "Auto defrost";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "aantal_roosters";
-            $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
-            $title = "Aantal roosters";
-            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $text = "{$text} roosters";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "garantie";
-            $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
-            $title = "Garantietermijn";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false && $text !== "12 maanden") {
-              $text = "{$text}";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "vermogen";
-            $image = "{$skn}frontend/rwd/dhh/images/watt.svg";
-            $title = "Vermogen";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              if(ctype_alnum($text) || is_numeric($text)) {
-                $text = str_replace(",", ".", $text);
-                $text = (double) $text;
-                if($text < 3) {
-                  $text = (int) ($text * 1000)." W";
-                } else {
-                  $text = number_format($text, 1, ",", ".");
-                  $text = str_replace(",0", null, $text);
-                  $text = "{$text} kW";
-                }
-              } else {
-                // For non-numbers like "2 x 3"
-              }
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $code   = "voltage";
-            $image  = "{$skn}frontend/rwd/dhh/images/volt.svg";
-            $title  = "Voltage";
-            $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $highlights[] = [
-                "image"   => $image,
-                "title"   => $title,
-                "text"    => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "aantal_omwentelingen_minuut";
-            $image = "{$skn}frontend/rwd/dhh/images/rpm.svg";
-            $title = "RPM";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $text = "{$text}";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "vermogen_kw";
-            $image = "{$skn}frontend/rwd/dhh/images/flame.svg";
-            $title = "Vermogen (gas)";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $text = number_format($text, 1, ",", ".");
-              $text = str_replace(",0", null, $text);
-              if(strstr(strtolower($text), "V") === false) {
-                $text = "{$text} kW";
-              }
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "geluidsniveau";
-            $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
-            $title = "Stil apparaat";
-            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false) {
-              $text = "{$text} dB";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "verlichting";
-            $image = "{$skn}frontend/rwd/dhh/images/light.svg";
-            $title = "Verlichting";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false && $text !== "Nee") {
-              $text = "Verlichting";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "aantal_flessen";
-            $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
-            $title = "Flessen";
-            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false && $text !== "Nee") {
-              $text = "{$text} X";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-          
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "capacity_wine_bottles";
-            $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
-            $title = "Aantal 75cl Wijnflessen";
-            $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false && $text !== "Nee") {
-              $text = "{$text} x 75cl.";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "aantal_branders";
-            $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
-            $title = "Branders";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false && $text !== "Nee") {
-              $text = "{$text} X";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "glas";
-            $image = "{$skn}frontend/rwd/dhh/images/doubleglass.svg";
-            $title = "Dubbel glas";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if($text === "dubbel glas") {
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            if(empty($pvideo) === false) {
-              $image = "{$skn}frontend/rwd/dhh/images/video.svg";
-              $title = "Productvideo";
-              $text = "Video";
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "refrigerant";
-            $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
-            $title = "Koelmiddel";
-            $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text ) === false) {
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text,
-              ];
-              $i++;
-            }
-          }
-          
-          if($i < $max_highlighted_attributes) {
-            $attribute_name = "eenheid";
-            $image = "{$skn}frontend/rwd/dhh/images/amount.svg";
-            $title = "Verpakkingseenheid";
-            $text = (double) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-            if(empty($text) === false && $text > 1) {
-              $highlights[] = [
-                "image" => $image,
-                "title" => $title,
-                "text"  => $text." stuks",
-              ];
-              $i++;
-            }
-          }
-          
-          $hlstr = $jsstr = null;
-          foreach($highlights as $key => $highlight) {
-            $hlstr .= "<li><img class='lazy' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
-            $jsstr .= "jQuery('#hl-{$key}').attr('src','{$highlight["image"]}');";
-          }
-
-          if($i > 0) {
-            echo "<div class='top_description'>";
-            echo "<ul class='product-highlights'>{$hlstr}</ul>";
-            echo "<a id=specs_anchor href=\"#a_specs\">>> Alle specificaties</a>";
-            echo "</div>";
-            //echo "<script type='text/javascript'>{$jsstr}</script>";
-          }
-        ?>
-    </div>
-    <div class="products-content-middle-center">
-
-      <?php /* Company USPs */ ?>
-
-      <?php
-      $delivery_text = "In Nederland &amp; België vanaf € 150";
-      if($_finalPriceInclTax >= $freeshipping_from) {
-        $delivery_text = "In Nederland &amp; België";
-      }
-      ?>
-
-      <div id="company_usps">
-        <ul>
-          <li>
-            <div><img class='lazy' id="usp-a" alt="Gratis verzending" data-src="/skin/frontend/rwd/dhh/images/trolley.svg" width="32" height="32" /></div>
-            <div><small class="usp_text"><strong class="extra_special">Gratis</strong> verzending</small><small><?php echo $delivery_text; ?></small></div>
-            <div class="line">&nbsp;</div>
-          </li>
-          <li>
-            <div><img class='lazy' id="usp-b" alt="De beste prijs" data-src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32" /></div>
-            <div><small class="usp_text">Ergens goedkoper gezien?</small><small><a href="/klantenservice">Vertel het ons</a></small></div>
-            <div class="line">&nbsp;</div>
-          </li>
-          <li>
-            <div><img class='lazy' id="usp-c" alt="Advies voor professionals" data-src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32" /></div>
-            <div><small class="usp_text">Advies door professionals</small><small>Wel zo fijn</small></div>
-            <div class="line">&nbsp;</div>
-          </li>
-          <li>
-            <div><img class='lazy' id="usp-d" alt="Snelle levrering" data-src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32" /></div>
-            <div><small class="usp_text">Snelle levering</small><small>Door bevlogen transporteurs</small></div>
-            <div class="line">&nbsp;</div>
-          </li>
-          <li>
-            <div><img class='lazy' id="usp-e" alt="Een vraag?" data-src="/skin/frontend/rwd/dhh/images/question-mark.svg" width="32" height="32" /></div>
-            <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@prokoeling.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
-          </li>
-        </ul>
-      </div>
-
-      <?php /* Add to Cart Block */ ?>
-      <div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
-        <!-- <div class="price-info"> -->
-          <?php //echo $this->getPriceHtml($_product); ?>
-          <?php //echo $this->getChildHtml('bundle_prices') ?>
-          <?php //echo $this->getTierPriceHtml() ?>
-        <!-- </div> -->
-        <!--
-        <div class="extra-info">
-          <span class="adelservice">Levering als pakket</span>
-          <?php //echo $this->getChildHtml('product_type_availability'); ?>
-        </div> -->
-        <?php echo $this->getChildHtml('alert_urls') ?>
-        <?php echo $this->getChildHtml('other');?>
-
-        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-        <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
-        <?php endif;?>
-
-        <div class="add-to-cart-wrapper">
-          <?php
-            echo $this->getChildHtml('product_type_data');
-            echo $this->getChildHtml('extrahint');
-            if (!$this->hasOptions()) {
-              ?>
-              <div class="add-to-box">
-                <?php
-                if($_product->isSaleable()) {
-                  echo $this->getChildHtml('addtocart');
-                }
-                echo $this->getChildHtml('addto');
-                echo $this->getChildHtml('sharing');
-                ?>
-              </div>
+            <div class="add-to-cart-wrapper">
               <?php
-
-              /* Stock and Delivery ETA */
               
-              if($expected_delivery === "Op aanvraag") {
+              echo "<div class='h1 really-strong'>{$product_title_short}</div>";
+              echo $this->getChildHtml('product_type_data');
+              echo $this->getChildHtml('extrahint');
+              if (!$this->hasOptions()) {
+                ?>
+                <div class="add-to-box">
+                  <?php
+                  if($_product->isSaleable()) {
+                    echo $this->getChildHtml('addtocart');
+                  }
+                  echo $this->getChildHtml('addto');
+                  echo $this->getChildHtml('sharing');
+                  ?>
+                </div>
+                <?php
+
+                /* Stock and Delivery ETA */
+                
+                if($expected_delivery === "Op aanvraag") {
+                  ?>
+                  <small class="clzdelvlb">
+                    <span>Levertijd: Op aanvraag</span>
+                    <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
+                  </small>
+                  <?php
+                }
+
+                $instk = TRUE;
+                if($_product->getStockItem()->getIsInStock() == 1
+                  && $_product->getStockItem()->getQty() < 1
+                  && $_product->getStockItem()->getBackorders() != 0) {
+                $instk = false;
+
+                if(empty($levertijd_verwacht) === false) {
+                  $calwekdate = date('d-m-Y', strtotime("+ {$levertijd_verwacht} weekdays"));
+
+                  // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
+                  $holidays = [
+                    "01-01-2019",
+                    "19-04-2019",
+                    "22-04-2019",
+                    "30-05-2019",
+                    "10-06-2019",
+                    "25-12-2019",
+                    "26-12-2019",
+                  ];
+                  $i = 0;
+                  while(in_array($calwekdate, $holidays)) {
+                    $i++;
+                  }
+                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' Weekday'));
+                  
+                  if($levertijd_verwacht > 180) {
+                    $calwekdate = null;
+                  }
+                }
+
                 ?>
                 <small class="clzdelvlb">
-                  <span>Levertijd: Op aanvraag</span>
+                  <span class="delivery-logo">&nbsp;</span>
+                  <span class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></span>
+                  <?php if(empty($calwekdate) === false) {
+                    echo "<span><br />Verwacht op: <strong style=\"font-weight: bold;\">{$calwekdate}</strong> ({$levertijd_verwacht} werkdagen)</span>";
+                  }
+                  ?>
                   <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
                 </small>
                 <?php
               }
 
-              $instk = TRUE;
-              if($_product->getStockItem()->getIsInStock() == 1
-                && $_product->getStockItem()->getQty() < 1
-                && $_product->getStockItem()->getBackorders() != 0) {
-              $instk = false;
+              /* Delivery time text */
 
-              if(empty($levertijd_verwacht) === false) {
-                $calwekdate = date('d-m-Y', strtotime("+ {$levertijd_verwacht} weekdays"));
-
-                // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
-                $holidays = [
-                  "01-01-2019",
-                  "19-04-2019",
-                  "22-04-2019",
-                  "30-05-2019",
-                  "10-06-2019",
-                  "25-12-2019",
-                  "26-12-2019",
-                ];
-                $i = 0;
-                while(in_array($calwekdate, $holidays)) {
-                  $i++;
+              $nmwek = '';
+              if(($lblbestelartikel === 'Nee' || $lblbestelartikel == '')
+                && $lbllevertijdvl != ''
+                && $instk === TRUE) {
+                $nmwek = trim(str_replace('werkdagen', '', $lbllevertijdvl));
+                if($lbllevertijdvl === '4-5 weken') {
+                  $nmwek = trim(str_replace('4-5 weken', '5', $lbllevertijdvl));
+                } elseif($lbllevertijdvl === '3-4 weken') {
+                  $nmwek = trim(str_replace('3-4 weken', '4', $lbllevertijdvl));
                 }
-                $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' Weekday'));
-                
-                if($levertijd_verwacht > 180) {
-                  $calwekdate = null;
-                }
-              }
 
-              ?>
-              <small class="clzdelvlb">
-                <span class="delivery-logo">&nbsp;</span>
-                <span class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></span>
-                <?php if(empty($calwekdate) === false) {
-                  echo "<span><br />Verwacht op: <strong style=\"font-weight: bold;\">{$calwekdate}</strong> ({$levertijd_verwacht} werkdagen)</span>";
-                }
-                ?>
-                <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
-              </small>
-              <?php
-              
-              echo "</div>";
-            }
+                @$nmwek += $extra_delivery_time;
 
-            /* Delivery time text */
+                if(empty($nmwek) === false) {
+                  $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
 
-            $nmwek = '';
-            if(($lblbestelartikel === 'Nee' || $lblbestelartikel == '')
-              && $lbllevertijdvl != ''
-              && $instk === TRUE) {
-              $nmwek = trim(str_replace('werkdagen', '', $lbllevertijdvl));
-              if($lbllevertijdvl === '4-5 weken') {
-                $nmwek = trim(str_replace('4-5 weken', '5', $lbllevertijdvl));
-              } elseif($lbllevertijdvl === '3-4 weken') {
-                $nmwek = trim(str_replace('3-4 weken', '4', $lbllevertijdvl));
-              }
+                  // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
+                  $holidays = [
+                    "01-01-2020",
+                    "10-04-2020",
+                    "12-04-2020",
+                    "13-04-2020",
+                    "27-04-2020",
+                    "21-05-2020",
+                    "01-06-2020",
+                    "25-12-2020",
+                    "26-12-2020",
+                  ];
+                  $i = 0;
+                  
+                  $tz_obj           = new DateTimeZone('Europe/Amsterdam');
+                  $today            = new DateTime("now", $tz_obj);
+                  $current_hour     = $today->format('H');
 
-              @$nmwek += $extra_delivery_time;
+                  if($current_hour >= 16) {
+                    $i++;
+                  }
+                  
+                  while(in_array($calwekdate, $holidays)) {
+                    $i++;
+                  }
+                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' weekday'));
+                  ?>
 
-              if(empty($nmwek) === false) {
-                $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
-
-                // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
-                $holidays = [
-                  "01-01-2020",
-                  "10-04-2020",
-                  "12-04-2020",
-                  "13-04-2020",
-                  "27-04-2020",
-                  "21-05-2020",
-                  "01-06-2020",
-                  "25-12-2020",
-                  "26-12-2020",
-                ];
-                $i = 0;
-                
-                $tz_obj           = new DateTimeZone('Europe/Amsterdam');
-                $today            = new DateTime("now", $tz_obj);
-                $current_hour     = $today->format('H');
-
-                if($current_hour >= 16) {
-                  $i++;
-                }
-                
-                while(in_array($calwekdate, $holidays)) {
-                  $i++;
-                }
-                $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' weekday'));
-                ?>
-
-                <small class="clzdelvlb">
                   <div class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></div>
                   
                   <?php
@@ -800,319 +721,341 @@ $files = Mage::getModel('staempfli_productattachment/file')
                   }
                   ?>
                   
-                  <?php if($_product->isSaleable()) { ?>
-                    <span class="delivery-logo">&nbsp;</span>
-                    Verw. levering: <strong style="font-weight: bold;"><?php echo $calwekdate; ?></strong>
-                    <?php if($extra_delivery_time > 0) echo " (extra levertijd tijdens de feestdagen)"; ?>
-                    <span class="tooltip">
-                      <i class="tooltip-icon fa fa-info-circle fa-lg" aria-hidden="true"></i>
-                      <span class="tooltiptext clztoptoolc">
-                        Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen.
-                          Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is.
-                          <br /><br /><strong>Wat is de leverrtijd?</strong><br />Levering van grote goederen (pallet items)
-                          vindt plaats van maandag t/m vrijdag doorgaans van 08:00-18:00. Indien wij een track & trace van de transporteur
-                          krijgen zullen we u deze doorsturen. Kleinere bestellingen die met pakketpost worden geleverd kunnen ook op
-                          zaterdag worden aangeboden. Buiten Nederland kan het in enkele gevallen voorkomen dat de zending niet de volgende
-                          dag wordt geleverd.
+                  <div class="clzdelvlb">
+                    <?php if($_product->isSaleable()) { ?>
+                      <span class="delivery-logo">&nbsp;</span>
+                      Verw. levering: <strong style="font-weight: bold;"><?php echo $calwekdate; ?></strong>
+                      <?php if($extra_delivery_time > 0) echo " (extra levertijd tijdens de feestdagen)"; ?>
+                      <span class="tooltip">
+                        <i class="tooltip-icon fa fa-info-circle fa-lg" aria-hidden="true"></i>
+                        <span class="tooltiptext clztoptoolc">
+                          Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen.
+                            Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is.
+                            <br /><br /><strong>Wat is de leverrtijd?</strong><br />Levering van grote goederen (pallet items)
+                            vindt plaats van maandag t/m vrijdag doorgaans van 08:00-18:00. Indien wij een track & trace van de transporteur
+                            krijgen zullen we u deze doorsturen. Kleinere bestellingen die met pakketpost worden geleverd kunnen ook op
+                            zaterdag worden aangeboden. Buiten Nederland kan het in enkele gevallen voorkomen dat de zending niet de volgende
+                            dag wordt geleverd.
+                        </span>
                       </span>
-                    </span>
-                  <?php } ?>
-                </small>
+                    <?php } ?>
+                  </div>
+                  <?php
+                }
+              }
+                
+              echo $this->getChildHtml('extra_buttons');
+            } elseif (!$_product->isSaleable()) { ?>
+              <div class="add-to-box">
                 <?php
+                echo $this->getChildHtml('addto');
+                echo $this->getChildHtml('sharing');
+                ?>
+              </div>
+              <?php
+            }
+
+            if($_product->getFinalPrice() < 150) {
+              if(strtolower($supplier_name) === "gastronoble") {
+                echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
               }
             }
+
             ?>
-
-          <?php echo $this->getChildHtml('extra_buttons') ?>
-        <?php } elseif (!$_product->isSaleable()) { ?>
-          <div class="add-to-box">
-          <?php echo $this->getChildHtml('addto') ?>
-          <?php //echo $this->getChildHtml('sharing') ?>
           </div>
-        <?php }
-        //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml();
-
-        if($_product->getFinalPrice() < 150) {
-          if(strtolower($supplier_name) === "gastronoble") {
-            echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
-          }
-        }
-
-        ?>
-        </div>
-          <div class="clearer"></div>
-          <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
-          <?php endif;?>
-        </div>
-
-        <?php
-
-        /* Description Block */
-        $str = $this->getProduct()->getDescription();
-        $str = Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($str);
-        
-        if(strtolower($nofrost_method) === 'Automatisch') {
-          $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_ontdooisysteem_automatisch')->toHtml().'</div>';
-        }
-  
-        $code = "voltage";
-        $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-        if($text === "400") {
-          $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
-        }
-
-        $attributekoelmiddel = $_product->getResource()->getAttribute('refrigerant');
-        $attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_product);
-        if($attribute_valuekoelmiddel === "R290") {
-          $str .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
-        }
-        if(strlen($str) === 0) $str = "&nbsp;";
-
-        if(empty($str) === false) {
-          ?>
-          <div class="probottomdv std" id="product-page-description">
-            <a class="anchor" name="a_description"></a>
-            <?php echo $str; ?>
           </div>
-          <?php
-        }
-        ?>
+        </form>
+          
+        <?php /* Company USPs */ ?>
+
+        <div id="company_usps">
+          <ul>
+            <li>
+              <div><img class='lazy' id="usp-b" alt="De beste prijs" data-src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32" /></div>
+              <div><small class="usp_text">Ergens goedkoper gezien?</small><small><a href="/klantenservice">Vertel het ons</a></small></div>
+              <div class="line">&nbsp;</div>
+            </li>
+            <li>
+              <div><img class='lazy' id="usp-c" alt="Advies voor professionals" data-src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32" /></div>
+              <div><small class="usp_text">Advies door professionals</small><small>Wel zo fijn</small></div>
+              <div class="line">&nbsp;</div>
+            </li>
+            <li>
+              <div><img class='lazy' id="usp-d" alt="Snelle levrering" data-src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32" /></div>
+              <div><small class="usp_text">Snelle levering</small><small>Door bevlogen transporteurs</small></div>
+              <div class="line">&nbsp;</div>
+            </li>
+            <li>
+              <div><img class='lazy' id="usp-e" alt="Een vraag?" data-src="/skin/frontend/rwd/dhh/images/question-mark.svg" width="32" height="32" /></div>
+              <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@prokoeling.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
+            </li>
+          </ul>
+        </div>
+          
+        <div class="clearer"></div>
+        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+          <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        <?php endif;?>
       </div>
     </div>
-    </form>
-    <script type="application/javascript">
-    //<![CDATA[
-        var productAddToCartForm = new VarienForm('product_addtocart_form');
-        productAddToCartForm.submit = function(button, url) {
-          if (this.validator.validate()) {
-            var form = this.form;
-            var oldUrl = form.action;
-
-            if (url) {
-               form.action = url;
-            }
-            var e = null;
-            try {
-                this.form.submit();
-            } catch (e) {
-            }
-            this.form.action = oldUrl;
-            if (e) {
-                throw e;
-            }
-
-            if (button && button != 'undefined') {
-                button.disabled = true;
-            }
-          }
-        }.bind(productAddToCartForm);
-
-        productAddToCartForm.submitLight = function(button, url){
-          if(this.validator) {
-            var nv = Validation.methods;
-            delete Validation.methods['required-entry'];
-            delete Validation.methods['validate-one-required'];
-            delete Validation.methods['validate-one-required-by-name'];
-            // Remove custom datetime validators
-            for (var methodName in Validation.methods) {
-              if (methodName.match(/^validate-datetime-.*/i)) {
-                delete Validation.methods[methodName];
-              }
-            }
-            if (this.validator.validate()) {
-              if (url) {
-                  this.form.action = url;
-              }
-              this.form.submit();
-            }
-            Object.extend(Validation.methods, nv);
-          }
-        }.bind(productAddToCartForm);
-    //]]>
-    </script>
+  
+  </div>
     
-    <div class="proleftdv">
-  <!--
-  <div class="product-boxleft">
-    <div class="content">
+  <div class="proleftdv">
+    
+    <?php /* Product USPs */ ?>
+    <?php
+    if(empty($hlstr) === false) {
+      ?>
+      <div class="probottomdv">
+        <a class="anchor" id="highlights"></a>
+        <?php
+        // An attempt to reduce the attention to sections with just 1 or 2 highlights
+        if(sizeof($highlights) > 2) {
+          echo "<h2>".$this->__('Highlights')."</h2>";
+        }
+        ?>
+        <div class="content center">
+          <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
+          <a id="specs_anchor" href="#specs" class="float-right">Alle Specificaties</a>
+        </div>
+      </div>
       <?php
-      //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_detail_services')->toHtml();
-      ?><hr>
+    }
+    ?>
+
+    <?php
+
+    /* Product Video */
+    if(empty($pvideo) === false) {
+      $anchors[] = "video";
+      ?>
+      <div class="probottomdv">
+        <a class="anchor" id="video"></a>
+        <div class="content center">
+          <iframe class="lazy" width="444" height="250" data-src="<?php echo $pvideo; ?>" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
       <?php
-      //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_detail_review_left')->toHtml();
+    }
+
+    /* Product Description */
+    if(strlen($product_description) > 10) {
+      $anchors[] = "description";
+      ?>
+      <div class="probottomdv std justify">
+        <a class="anchor" id="description"></a>
+        <?php echo $product_description; ?>
+      </div>
+      <?php
+    }
+    ?>
+
+    <?php /* Cross Sell Products */ ?>
+
+    <?php if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
+      <div class="probottomdv">
+        <div class="topproducts_containter">
+          <a class="anchor" id="accessoires"></a>
+          <h2 class="tableftheader">Gerelateerde producten en accessoires</h2>
+          <?php
+          $anchors[] = "accessoires";
+          $_columnCount = 4;
+          $i = 0;
+          if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
+            <div class="crosssell product-collateral category-products">
+              <?php
+              echo "<ul class='products-grid products-grid-mini-narrow'>";
+              foreach ($_crossSellProducts as $_product) {
+                $_product = Mage::getModel('catalog/product')->load($_product->getId());
+                $i++;
+                ?>
+                <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
+                  <?php
+                  $options = [
+                    "skip_usps"     => true,
+                    "skip_info"     => true,
+                    "display"       => "mini",
+                    "image_size"    => 100,
+                    "_blank"        => true,
+                  ];
+                  echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
+                echo "</li>";
+              }
+              ?>
+            </ul></div>
+            <?php
+          }
+          ?>
+          <div class="clearer"></div>
+        </div>
+      </div>
+      <?php
+    }
+
+    /* Product Specs */
+    $block = $this->getChildHtml('product_additional_data');
+    if(empty($block) === false) {
+      $anchors[] = "specs";
+      ?>
+      <div class="probottomdv">
+        <a class="anchor" id="specs"></a>
+        <div id="product_additional_data">
+          <?php echo $block ?>
+        </div>
+      </div>
+      <?php
+    }
+    ?>
+
+    <?php /* Documents */ ?>
+    <?php
+    if(count($files) > 0) {
+      $helper = $this->helper('staempfli_productattachment');
+      $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
+      $anchors[] = "documents";
+      ?>
+      <div class="leftbranddv">
+        <h2 class="tableftheader"><?php echo $this->__('Documenten');?></h2>
+        <div class="probottomdv" id="product-documents-list">
+          <a class="anchor" id="documents"></a>
+          <ul>
+            <li class="tab_list_element">
+              <!-- <a id="mediathek" class="headline active"><?php echo $this->__('Mediathek') ?></a> -->
+              <div id="tab-mediathek" class="tabs_content">
+                <?php
+                  //echo "<pre>";print_r($files);echo "</pre>";
+                  foreach($files as $file) {
+                    $file_name = empty($file['description']) ? $file['filename'] : $file['description'];
+                    echo '<div class="mediathek" style="margin-bottom: 10px">';
+                    echo "<a title='{$file['filename']}' class='document-link' href=\"{$dir}/{$file['path']}\" target=\"_blank\">
+                            <i class=\"fa fa-file-{$file['type']}-o fa-2x\"></i><span>{$file_name}</span>
+                          </a>";
+                    echo "</div>";
+                  }
+                ?>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <?php
+    }
+    ?>
+
+    <?php /* Brand Logo & Text */ ?>
+      
+    <div class="probottomdv" id="product-brand-text">
+      <?php
+      if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
+        $anchors[] = "brand";
+        ?>
+        <a class="anchor" id="brand"></a>
+        <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>
+        <div class="brand std justify"><?php echo $htbrand; ?></div>
+        <?php
+      }
+      if(empty($brand_logo) === false) {
+        echo "<div class='center'>";
+        echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
+        echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
+      }
       ?>
     </div>
-  </div>
-  -->
-  <?php
 
-  /* Product Video */
-  if(empty($pvideo) === false) {
-    ?>
-      <div class="probottomdv" id="product-video">
-        <a class="anchor" name="a_video"></a>
-        <h2 class="tableftheader"><?php echo $this->__('Video');?></h2>
-        <div class="content">
-          <div class="product-video-wrapper">
-            <iframe class="lazy" width="560" height="315" data-src="<?php echo $pvideo; ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
+    <?php /* Stored Upsell Products OR Automatic Related Products */ ?>
+
     <?php
-  }
-
-  /* Product Specs */
-  ?>
-  <div class="probottomdv">
-    <a class="anchor" name="a_specs"></a>
-    <div id="product_additional_data">
-      <?php echo $this->getChildHtml('product_additional_data'); ?>
-    </div>
-  </div>
-
-  <?php
-
-  /* Documents */
-  if(count($files) > 0) {
-    $helper = $this->helper('staempfli_productattachment');
-    $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
-  ?>
-  <div class="leftbranddv">
-    <h2 class="tableftheader"><?php echo $this->__('Documenten');?></h2>
-    <div class="probottomdv" id="product-documents-list">
-      <a class="anchor" name="a_documents"></a>
-      <ul>
-        <li class="tab_list_element">
-          <!-- <a id="mediathek" class="headline active"><?php echo $this->__('Mediathek') ?></a> -->
-          <div id="tab-mediathek" class="tabs_content">
-            <?php
-              //echo "<pre>";print_r($files);echo "</pre>";
-              foreach($files as $file) {
-                $file_name = empty($file['description']) ? $file['filename'] : $file['description'];
-                echo '<div class="mediathek" style="margin-bottom: 10px">';
-                echo "<a title='{$file['filename']}' class='document-link' href=\"{$dir}/{$file['path']}\" target=\"_blank\">
-                        <i class=\"fa fa-file-{$file['type']}-o fa-2x\"></i><span>{$file_name}</span>
-                      </a>";
-                echo "</div>";
-              }
-            ?>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <?php
-  }
-  ?>
-</div>
-
-<div class="prorightdv">
-
-  <?php /* Cross Sell Products */ ?>
-
-  <?php if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
-  <div class="product-boxbottom">
-    <div class="probottomdv">
-      <div class="product-collateral">
-        <div class="topproducts_containter">
-          <h2 class="tableftheader">Gerelateerde producten en accessoires</h2>
-          
-          
-            <?php
-            $_columnCount = 3;
-            $i = 0;
-            if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
-              <div class="crosssell product-collateral category-products">
-                <?php
-                echo "<ul class='products-grid products-grid-mini-narrow'>";
-                foreach ($_crossSellProducts as $_product) {
-                  $_product = Mage::getModel('catalog/product')->load($_product->getId());
-                  $i++;
-                  ?>
-                  <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
-                    <?php
-                    $options = [
-                      "skip_usps"     => true,
-                      "skip_info"     => true,
-                      "display"       => "mini",
-                      "image_size"    => 125,
-                      "_blank"        => true,
-                    ];
-                    echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
-                  echo "</li>";
-                }
-                ?>
-              </ul></div>
-              <?php }
-              ?>
-
-
-          <div class="clearer"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php
-  }
-
-  /* Brand Logo & Text */
-  ?>
-  <div class="probottomdv" id="product-brand-text">
-    <a class="anchor" name="a_brand"></a>
-    <?php
-    if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
-    ?>
-      <h3 class="tableftheader"><?php echo $this->__("{$brand}");?></h3>
-      <div class="brand std justify"><?php echo $htbrand; ?></div>
-    <?php
+    $block = $this->getChildHtml('upsell_products');
+    if(empty($block) === true) {
+      $block = $this->getLayout()->createBlock('awautorelated/blocks')->setBlockId(1)->toHtml();
     }
-    if(empty($brand_logo) === false) {
-      echo "<div class='center'>";
-      echo "<a title='{$brand_name}' href='/{$brand_link}'>";
-      echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
-    }
-    ?>
-  </div>
-</div>
-</div>
-  <?php /* Upsell Products */ ?>
-  <?php
-  //$additional_block = $this->getChildHtml('additional');
-  $upsell_block = $this->getChildHtml('upsell_products');
-  if(empty($additional_block) === false || empty($upsell_block) === false) {
-    ?>
-    <div id="upsell-products">
+    
+    if(empty($block) === false) {
+      $anchors[] = "alternatives";
+      ?>
+      <a class="anchor" id="alternatives"></a>
       <div class="probottomdv">
-        <div class="product-collateral">
-          <?php
-            //echo $additional_block;
-            echo $upsell_block;
-          ?>
-        </div>
+        <?php echo $block; ?>
       </div>
-    </div>
+      <?php
+    }
+    ?>
+    
+    <?php /* Stored Upsell Products OR Automatic Related Products */ ?>
+    
     <?php
-  }
-  ?>
-
-  <?php /* Automatic Related Products */ ?>
-  <div class="product-boxbottom">
-    <div class="probottomdv">
-      <div class="product-collateral">
-        <?php
-          echo $this->getChildHtml('related_products');
-          ?>
+    $block = $this->getChildHtml('related_products');
+    
+    if(empty($block) === false) {
+      $anchors[] = "related";
+      ?>
+      <a class="anchor" id="related"></a>
+      <div class="probottomdv" id="related">
+        <?php echo $block; ?>
       </div>
-    </div>
+      <?php
+    }
+    ?>
   </div>
-
-  <script>
-    jQuery(function() {
-      jQuery('.btntrigadt').click(function(){
-        jQuery('.button.btn-cart').trigger('click');
-      });
-    });
-  </script>
 </div>
+
+<script>
+  //<![CDATA[
+  var productAddToCartForm = new VarienForm('product_addtocart_form');
+  productAddToCartForm.submit = function(button, url) {
+    if (this.validator.validate()) {
+      var form = this.form;
+      var oldUrl = form.action;
+
+      if (url) {
+         form.action = url;
+      }
+      var e = null;
+      try {
+          this.form.submit();
+      } catch (e) {
+      }
+      this.form.action = oldUrl;
+      if (e) {
+          throw e;
+      }
+
+      if (button && button != 'undefined') {
+          button.disabled = true;
+      }
+    }
+  }.bind(productAddToCartForm);
+
+  productAddToCartForm.submitLight = function(button, url){
+    if(this.validator) {
+      var nv = Validation.methods;
+      delete Validation.methods['required-entry'];
+      delete Validation.methods['validate-one-required'];
+      delete Validation.methods['validate-one-required-by-name'];
+      // Remove custom datetime validators
+      for (var methodName in Validation.methods) {
+        if (methodName.match(/^validate-datetime-.*/i)) {
+          delete Validation.methods[methodName];
+        }
+      }
+      if (this.validator.validate()) {
+        if (url) {
+            this.form.action = url;
+        }
+        this.form.submit();
+      }
+      Object.extend(Validation.methods, nv);
+    }
+  }.bind(productAddToCartForm);
+  //]]>
+</script>
+
+<?php
+if(function_exists("sanitizeForFilename") === false) {
+  function sanitizeForFilename($string) {
+    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $string);
+    $output = mb_ereg_replace("([\.]{2,})", '', $string);
+    return strtolower($output);
+  }
+}

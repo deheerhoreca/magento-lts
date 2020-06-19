@@ -31,7 +31,7 @@ class MagicToolbox_MagicZoomPlus_Block_Adminhtml_Settings_Edit_Tab_Form extends 
             $model = Mage::registry('magiczoomplus_model_data');
             $data = $model->getData();
             if (!empty($data['value'])) {
-                $settings = unserialize($data['value']);
+                $settings = $helper->getSerializer()->unserialize($data['value']);
                 if (isset($settings['desktop'])) {
                     foreach ($settings['desktop'] as $profile => $params) {
                         //$optionsIds[$profile] = array();

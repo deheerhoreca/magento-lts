@@ -105,7 +105,7 @@ class MagicToolbox_MagicScroll_MagicscrollController extends Mage_Adminhtml_Cont
                 $defaultValues = Mage::helper('magicscroll/params')->getFixedDefaultValues();
             }
             //NOTE: quotes need to be escaped
-            $defaultValues = serialize($defaultValues);
+            $defaultValues = Mage::helper('magicscroll/settings')->getSerializer()->serialize($defaultValues);
 
             $model->setValue($defaultValues);
 
@@ -241,7 +241,12 @@ class MagicToolbox_MagicScroll_MagicscrollController extends Mage_Adminhtml_Cont
                         $imagesToSave[] = $image;
                     }
                 }
-                $compare = create_function('$a,$b', 'if ($a["position"] == $b["position"]) return 0; return (int)$a["position"] > (int)$b["position"] ? 1 : -1;');
+                $compare = function ($a, $b) {
+                    if ($a['position'] == $b['position']) {
+                        return 0;
+                    }
+                    return (int)$a['position'] > (int)$b['position'] ? 1 : -1;
+                };
                 usort($imagesToSave, $compare);
                 $post['magicscroll']['desktop']['customslideshowblock']['gallery'] = Mage::helper('core')->jsonEncode($imagesToSave);
             }
@@ -274,7 +279,7 @@ class MagicToolbox_MagicScroll_MagicscrollController extends Mage_Adminhtml_Cont
                 }
             }
 
-            $data['value'] = serialize($postSettings);
+            $data['value'] = Mage::helper('magicscroll/settings')->getSerializer()->serialize($postSettings);
             $data['last_edit_time'] = now();
             $model->setData($data)->setId($id);
             try {
@@ -305,31 +310,9 @@ class MagicToolbox_MagicScroll_MagicscrollController extends Mage_Adminhtml_Cont
 
     public function validateAction()
     {
-
         $response = new Varien_Object();
         $response->setError(false);
-        try {
-            /**
-             * @todo implement full validation process with errors returning which are ignoring now
-             */
-        }
-        catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
-            $response->setError(true);
-            $response->setAttribute($e->getAttributeCode());
-            $response->setMessage($e->getMessage());
-        }
-        catch (Mage_Core_Exception $e) {
-            $response->setError(true);
-            $response->setMessage($e->getMessage());
-        }
-        catch (Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-            $this->_initLayoutMessages('adminhtml/session');
-            $response->setError(true);
-            $response->setMessage($this->getLayout()->getMessagesBlock()->getGroupedHtml());
-        }
         $this->getResponse()->setBody($response->toJson());
-
     }
 
     protected function _isAllowed()

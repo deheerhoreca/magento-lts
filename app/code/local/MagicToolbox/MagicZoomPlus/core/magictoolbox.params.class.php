@@ -1,7 +1,6 @@
 <?php
 
-# DHH CORE HACK
-#@ini_set('memory_limit', '512M');
+//@ini_set('memory_limit', '512M');
 
 if (!defined('MagicToolboxParamsClassLoaded')) {
 
