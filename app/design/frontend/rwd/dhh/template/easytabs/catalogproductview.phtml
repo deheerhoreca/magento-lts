@@ -143,7 +143,7 @@ if($i < $max_highlighted_attributes) {
     }
   }
   if(sizeof($values) === sizeof($attribute_names)) {
-    $text = implode(" x ", $values)." cm";
+    $text = implode("x", $values)." cm";
     $highlights[] = [
       "image" => $image,
       "title" => $title,
@@ -167,7 +167,7 @@ if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
     }
   }
   if(sizeof($values) === sizeof($attribute_names)) {
-    $text = implode(" x ", $values)." cm";
+    $text = implode("x", $values)." cm";
     $highlights[] = [
       "image" => $image,
       "title" => $title,
@@ -873,11 +873,12 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
                 <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
                   <?php
                   $options = [
-                    "skip_usps"     => true,
-                    "skip_info"     => true,
-                    "display"       => "mini",
-                    "image_size"    => 100,
-                    "_blank"        => true,
+                    "skip_usps"             => true,
+                    "skip_info"             => true,
+                    "display"               => "mini",
+                    "image_size"            => 100,
+                    "_blank"                => true,
+                    "prefer_rewrite_table"  => true, // Otherwise, getting ugly urls
                   ];
                   echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
                 echo "</li>";

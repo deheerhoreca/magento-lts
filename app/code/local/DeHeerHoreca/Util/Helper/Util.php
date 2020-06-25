@@ -200,23 +200,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       "_blank"                  => false,
       "use_short_product_names" => false,
       "show_category_link"      => false,
+      "prefer_rewrite_table"    => false,
     ];
     */
     
-    $image_size = $options["image_size"] ?? 150;
-    $image_dimensions = 1 * $image_size;
-    $max_product_info_items = 3;
-    
     $product_name = $_product->getData("name");
     $product_short_name = $_product->getData("name_short");
-    $tagline = $_product->getTagline();    
-    $product_url = $_product->getProductUrl();
     $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
     if(empty($image_label)) {
       $image_label = $this->stripTags($product_name, null, true);
     }
     
     /* Interpret options */
+    $image_size = $options["image_size"] ?? 150;
     if(empty($options["skip_info"]) || $options["skip_info"] === false) {
       $product_info = Mage::helper("deheerhoreca_util/util")->getProductInfo($_product);
     }
@@ -234,15 +230,22 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     if(isset($options["show_category_link"]) === true && $options["show_category_link"] === true) {
       $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
     }
+    if(isset($options["prefer_rewrite_table"]) === true && $options["prefer_rewrite_table"] === true) {
+      $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
+    } else {
+      $product_url            = $_product->getProductUrl();
+    }
     $skip_actions = $options["skip_actions"] ?? false;
     
-    $price_html = $product_block->getPriceHtml($_product, true);
-    $price_html = str_replace(",00", ",-", $price_html);
-    $price_html = str_replace("€", null, $price_html);
-    
+    /* Get all variables */    
+    $image_dimensions       = 1 * $image_size;
+    $max_product_info_items = 3;
+    $tagline                = $_product->getTagline();
+    $price_html             = $product_block->getPriceHtml($_product, true);
+    $price_html             = str_replace(",00", ",-", $price_html);
+    $price_html             = str_replace("€", null, $price_html);
     // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
     $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
-    
     $stock_status = $stock_message = null;
     $stock_qty    = (int) $stock->getQty();
     $in_stock     = $stock->getIsInStock();
