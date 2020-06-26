@@ -409,10 +409,10 @@ if($dhh_debug === true) {
                   </span>
                 </span>
                 <span class="price-including-tax">
-                  <span class="label">incl. btw</span>
                   <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                     <?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?>
                   </span>
+                  <span class="label">incl. btw</span>
                 </span>
               </p>
             <?php else: ?>

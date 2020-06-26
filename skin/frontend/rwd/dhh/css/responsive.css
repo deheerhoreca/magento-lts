@@ -2534,8 +2534,7 @@
   .product-view .product-shop .price-box .price-including-tax {
     margin-bottom: 5px;
   }
-  .product-view .product-shop .price-box .price-excluding-tax span,
-  .product-view .product-shop .price-box .price-including-tax span {
+  .product-view .product-shop .price-box .price-excluding-tax span {
     display: block;
   }
 }

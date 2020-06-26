@@ -511,8 +511,10 @@ foreach($highlights as $key => $highlight) {
   $hlstr .= "<li><img class='lazy' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
 }
 
-/* Product Description */
+/* Cross sell items */
+$_crossSellProducts = $_product->getCrossSellProducts();
 
+/* Product Description */
 $product_description = $this->getProduct()->getDescription();
 $product_description = Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($product_description);
 
@@ -531,6 +533,11 @@ $attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_pro
 if($attribute_valuekoelmiddel === "R290") {
   $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
 }
+
+if(empty($_crossSellProducts) === false) {
+  $product_description .= "<p>De {$product_title_short} heeft één of meer door de leverancier <a href='#accessoires'>geselecteerde accessoires en/of verbruiksproducten.</a></p>";
+}
+
 if(strlen($product_description) === 0) $product_description = "&nbsp;";
 ?>
 <script>var optionsPrice = {};</script>
@@ -843,7 +850,7 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     if(strlen($product_description) > 10) {
       $anchors[] = "description";
       ?>
-      <div class="probottomdv std justify">
+      <div class="probottomdv std justify" id="product-detail-description">
         <a class="anchor" id="description"></a>
         <?php echo $product_description; ?>
       </div>
@@ -853,7 +860,7 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
 
     <?php /* Cross Sell Products */ ?>
 
-    <?php if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
+    <?php if(empty($_crossSellProducts) === false) { ?>
       <div class="probottomdv">
         <div class="topproducts_containter">
           <a class="anchor" id="accessoires"></a>

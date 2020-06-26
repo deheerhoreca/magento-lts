@@ -2,6 +2,70 @@
 
 /* DHH */
 
+// Logic exists in multiple places!
+// Allows for arbitrary number of dashes in the SKU
+function _extract_data_from_optimized_image_name($optimized_image) {
+  $filename = pathinfo($optimized_image, PATHINFO_FILENAME);
+  $parts = explode("-", $filename);
+  $count = sizeof($parts);
+
+  if($count >= 5) {
+    
+    $optimized_image_data = [
+      "input"       => $optimized_image,
+      "path"        => realpath($optimized_image),
+      "supplier"    => $parts[0],
+      // "sku"         => $parts[1],
+      "nr"          => $parts[$count-3],
+      "type"        => $parts[$count-2],
+      "hash"        => $parts[$count-1],
+    ];
+    
+    $optimized_image_data["sku"] = str_replace([
+      "{$optimized_image_data["path"]}-",
+      "{$optimized_image_data["supplier"]}-",
+      "-{$optimized_image_data["nr"]}",
+      "-{$optimized_image_data["type"]}-", // Watch this... "-a" or "-b" matches the hash sometimes
+      "{$optimized_image_data["hash"]}",
+    ], null, $filename);
+    
+    // if(VERBOSE === true) {
+      // printr($optimized_image_data);
+    // }
+    
+    return $optimized_image_data;
+    
+  } else {
+    // logger("Invalid filename: {$optimized_image}", "ERROR");
+    return false;
+  }
+}
+
+// Logic exists in multiple places!
+function _get_watermarked_image_filename($optimized_image) {
+  
+  $result = _extract_data_from_optimized_image_name($optimized_image);
+
+  if($result === false) {
+    // logger("Invalid filename: {$optimized_image}", "ERROR");
+    return false;
+  }
+
+  $supplier    = $result["supplier"];
+  $sku         = $result["sku"];
+  $nr          = $result["nr"];
+  $type        = $result["type"];
+  $hash        = $result["hash"];
+
+  $extension   = pathinfo($optimized_image, PATHINFO_EXTENSION);
+  $hash        = substr(md5($nr.$sku.FILENAME_SECRET), 0, 4);
+  $wm_path     = "{$supplier}-{$sku}-{$nr}-a-{$hash}.{$extension}";
+  
+  // logger(__FUNCTION__.": {$optimized_image} => {$wm_path}", "VERBOSE");
+  
+  return $wm_path;
+}
+
 // If a watermarked image exists, we inject it at the very end, keeping all logic intact
 
 const WATERMARKED_DIR = "haha/";
@@ -50,52 +114,15 @@ if($galleryImagesCount) {
         
         // DHH HACK
         
-        //if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-          // See if there is a watermarked counterpart
-          // Logic exists in multiple places!
-          
-          $parts = explode("-", pathinfo($imagePath, PATHINFO_FILENAME));
-          
-          /* Allow for max 1 dash in the SKU */
-          
-          if(sizeof($parts) === 5) {
-            $supplier    = $parts[0];
-            $sku         = $parts[1];
-            $number      = $parts[2];
-            $type        = $parts[3];
-            $hash        = $parts[4];
-            $extension   = pathinfo($imagePath, PATHINFO_EXTENSION);
-            
-            $hash        = substr(md5($number.$sku.FILENAME_SECRET), 0, 4);
-            $wm_filename = "{$supplier}-{$sku}-{$number}-a-{$hash}.{$extension}";
-            
-            $wm_path     = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
-            
-            if(is_file($wm_path) === true) {
-              $imagePath = $wm_path;
-              $imageFileOverride[$galleryImage->getFile()] = WATERMARKED_DIR."{$wm_filename}";
-              //print_r($imageFile);
-            }
-          } elseif(sizeof($parts) === 6) {
-            $supplier    = $parts[0];
-            $sku         = "{$parts[1]}-{$parts[2]}";
-            $number      = $parts[3];
-            $type        = $parts[4];
-            $hash        = $parts[5];
-            $extension   = pathinfo($imagePath, PATHINFO_EXTENSION);
-            
-            $hash        = substr(md5($number.$sku.FILENAME_SECRET), 0, 4);
-            $wm_filename = "{$supplier}-{$sku}-{$number}-a-{$hash}.{$extension}";
-            
-            $wm_path     = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
-            
-            if(is_file($wm_path) === true) {
-              $imagePath = $wm_path;
-              $imageFileOverride[$galleryImage->getFile()] = WATERMARKED_DIR."{$wm_filename}";
-              //print_r($imageFile);
-            }
-          }
-        //}
+        // See if there is a watermarked counterpart
+        $wm_filename = _get_watermarked_image_filename($imagePath);
+        $wm_path     = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
+        
+        if(is_file($wm_path) === true) {
+          $imagePath = $wm_path;
+          $imageFileOverride[$galleryImage->getFile()] = WATERMARKED_DIR."{$wm_filename}";
+          //print_r($imageFile);
+        }
         
         // END DHH
         
