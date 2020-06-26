@@ -137,6 +137,13 @@
 ############################################
 ### BEGIN DHH
 
+    # Prokoeling.nl -> Chefstore.nl
+    RewriteCond %{HTTP_HOST} ^prokoeling.nl$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.prokoeling.nl$
+    RewriteRule (.*)$ https://www.chefstore.nl/$1 [R=301,L]
+    RewriteCond %{HTTP_HOST} ^dev.prokoeling.nl$
+    RewriteRule (.*)$ https://dev.chefstore.nl/$1 [R=301,L]
+
     # Remove trailing slash from non-filepath urls
     # https://gist.github.com/evgv/e7e84e84c46e027c3fff7396a13b3a43
     #RewriteCond %{REQUEST_METHOD} GET
