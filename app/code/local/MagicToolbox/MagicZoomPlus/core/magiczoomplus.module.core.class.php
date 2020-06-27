@@ -75,7 +75,7 @@ class MagicZoomPlusModuleCoreClass
             $cssPath = $jsPath;
         }
         $headers = array();
-        $headers[] = '<!-- Magic Zoom Plus Magento module version v4.15.12 [v1.6.91:v5.3.5] -->';
+        $headers[] = '<!-- Magic Zoom Plus Magento module version v4.15.12 [v1.6.88:v5.3.5] -->';
         $headers[] = '<script type="text/javascript">window["mgctlbx$Pltm"] = "Magento";</script>';
         $headers[] = '<link type="text/css" href="' . $cssPath . '/magiczoomplus.css" rel="stylesheet" media="screen" />';
         $headers[] = '<link type="text/css" href="' . $cssPath . '/magiczoomplus.module.css" rel="stylesheet" media="screen" />';

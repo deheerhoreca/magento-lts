@@ -133,7 +133,7 @@ div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxMainContainer,
 div.MagicToolboxContainer.selectorsRight .MagicToolboxMainContainer {
-    /*font-size:0px;*/
+    font-size:0px;
 }
 
 div.MagicToolboxContainer.selectorsLeft .MagicToolboxSelectorsContainer a,

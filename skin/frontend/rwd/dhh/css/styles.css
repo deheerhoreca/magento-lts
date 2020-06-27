@@ -34,7 +34,7 @@ strong,
 
 small,
 .small {
-  font-size: 81%;
+  font-size: 90%;
 }
 
 .product-list-tagline:before,
@@ -189,12 +189,12 @@ button,
 input,
 table,
 textarea {
-  color: #636363;
+  color: #595959;
   font-size: 14px;
 }
 
 select {
-  color: #636363;
+  color: #595959;
   border-radius: .25em;
   border: 1px solid #ccc;
 }
@@ -537,7 +537,7 @@ body:not(.customer-account) .block:first-child .block-title {
 
 .block-account li a,
 .block-cms-menu li a {
-  color: #636363;
+  color: #595959;
 }
 
 .block-account li a:hover,
@@ -550,7 +550,7 @@ body:not(.customer-account) .block:first-child .block-title {
 .sidebar .actions .button {
   padding: 7px 15px;
   background: #ddd;
-  color: #636363;
+  color: #595959;
 }
 
 .sidebar .actions button.button {
@@ -997,7 +997,6 @@ div.paypal-logo span a img {
   margin-bottom: 5px;
   padding: 7px 10px 7px 20px;
   background: #f4f4f4;
-  font-size: 15px;
 }
 
 .messages li li:before {
@@ -1411,7 +1410,7 @@ ul#brands li:last-child {
 .pager,
 .toolbar,
 .top_toolbar .toolbar {
-  color: #636363;
+  color: #595959;
   font-size: 12px;
   line-height: 25px;
 }
@@ -1924,7 +1923,7 @@ form .legend {
 form .legend {
   padding-bottom: 7px;
   border-bottom: 1px solid #ededed;
-  color: #636363;
+  color: #595959;
   text-transform: uppercase;
   font-weight: 400;
   font-style: normal;
@@ -2128,7 +2127,7 @@ p.required {
 #checkout-shipping-method-load .sp-methods dd label,
 #co-shipping-method-form .sp-methods dd label,
 .sp-methods dt label {
-  color: #636363;
+  color: #595959;
   display: inline-block;
   min-width: 250px;
   max-width: none;
@@ -2142,7 +2141,7 @@ p.required {
   display: inline-block;
   float: none;
   padding: 6px 10px 6px 40px;
-  color: #636363;
+  color: #595959;
 }
 
 #checkout-shipping-method-load .sp-methods dd label:hover,
@@ -2304,7 +2303,7 @@ form .form-instructions {
   float: right;
   width: 30%;
   background: #fff;
-  color: #636363;
+  color: #595959;
   text-align: center;
   width: auto;
 }
@@ -2708,7 +2707,7 @@ div#header-nav ol.nav-primary li.level0.nav-2.parent ul.level0 {
 
 .footer .links a,
 .product-view .product-shop .price-box .special-price span.weee {
-  color: #636363;
+  color: #595959;
 }
 
 h2.product-name a,
@@ -3159,7 +3158,7 @@ div.category-products li span.lblenergylabel::after {
   border-style: solid;
   border-color: #ccc;
   background-color: #f4f4f4;
-  color: #636363;
+  color: #595959;
   text-transform: uppercase;
   font-weight: 400;
   cursor: pointer;
@@ -3244,7 +3243,7 @@ body.faq-index-index div.page .main-container.col3-layout {
 .block-layered-nav .currently .block-subtitle {
   display: block;
   margin: 0 0 10px;
-  color: #636363;
+  color: #595959;
   text-transform: uppercase;
   font-weight: 700;
   font-style: normal;
@@ -3355,7 +3354,7 @@ body.faq-index-index div.page .main-container.col3-layout {
 
 .product-view .product-shop .price-box .price-excluding-tax,
 .product-view .product-shop .price-box .price-including-tax {
-  color: #636363;
+  color: #595959;
 }
 
 .product-view .price-box.map-info a {
@@ -3918,7 +3917,7 @@ div.prodetailtopright.clztypegrouped div.add-to-cart-wrapper div.grouped-items-t
   padding: 0 0 10px;
   border: 0;
   background: 0;
-  color: #636363;
+  color: #595959;
 }
 
 .product-options-bottom .tier-prices li {
@@ -3930,7 +3929,7 @@ div.prodetailtopright.clztypegrouped div.add-to-cart-wrapper div.grouped-items-t
 .block-progress dt.complete,
 .product-options-bottom .tier-prices .benefit,
 .product-options-bottom .tier-prices .price {
-  color: #636363;
+  color: #595959;
 }
 
 .product-options-bottom .price-box {
@@ -4250,7 +4249,7 @@ body.customer-account .sidebar .block .block-content p.block-subtitle {
 
 .cart-table h2 {
   margin-bottom: 0;
-  color: #636363;
+  color: #595959;
   font-weight: 600;
   font-size: 14px;
 }
@@ -4874,7 +4873,7 @@ body:not(.opc-has-progressed-from-login) .opc.opc-firststep-login .section#opc-l
   clear: both;
   margin: 0 0 3px;
   padding: 0;
-  color: #636363;
+  color: #595959;
   text-transform: none;
   font-size: 13px;
 }
@@ -5031,7 +5030,7 @@ ol#cart-sidebar-reorder li input {
   display: block;
   box-sizing: content-box;
   border-radius: 3px;
-  color: #636363;
+  color: #595959;
   text-align: center;
   text-decoration: none;
   font-size: 14px;
@@ -6524,7 +6523,7 @@ div.paypal-logo span a {
   padding: 7px 10px 7px 24px;
   border-width: 1px;
   background-color: #f4f4f4;
-  color: #636363;
+  color: #595959;
   text-transform: uppercase;
   font-weight: 400;
   font-style: normal;
@@ -8130,7 +8129,7 @@ div#header-nav.skip-content nav#nav.grid-old div.navhdwrap ol.nav-primary li.lev
 }
 
 .selling-points {
-  background: #636363;
+  background: #595959;
   color: #f4f4f4;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -8217,8 +8216,8 @@ a.footer__menu-item:hover>* {
 
 .header__count-badge {
   position: absolute;
-  top: -7px;
-  right: 20px;
+  top: -5px;
+  right: -3px;
   display: inline-block;
   min-width: 1.5em;
   border-radius: 50%;
@@ -8232,7 +8231,7 @@ a.footer__menu-item:hover>* {
 
 .sprite-with-caption {
   display: block;
-  color: #636363;
+  color: #595959;
   text-align: center;
 }
 
@@ -14293,7 +14292,7 @@ ul.products-grid-mini-narrow button.btn-cart {
 
 .cms-page-view .std li,
 .cms-page-view .std p {
-  color: #636363;
+  color: #595959;
   font-size: 14px;
   line-height: 24px;
 }
@@ -14331,10 +14330,9 @@ ul.products-grid-mini-narrow button.btn-cart {
   width: 57%;
 }
 
-#search_mini_form #search,
-input#newsletter {
+#search_mini_form #search {
   display: inline-block;
-  height: 40px;
+  height: 35px;
   border-radius: 5px;
   vertical-align: middle;
   line-height: 1em;
@@ -14357,23 +14355,21 @@ input#newsletter {
 }
 
 #header-search {
-  top: 8px;
-  right: auto;
-  left: 1em;
+  top: 10px;
+  left: .5em;
   display: block;
-  padding: 0;
-  width: 40%;
-  height: 50px;
+  width: calc(100% - 430px);
+  height: 40px;
   float: left;
   position: relative;
 }
 
 .account-cart-wrapper {
   position: relative;
-  margin-top: .7em;
+  margin-top: .8em;
   float: right;
   padding: 0;
-  width: 60%;
+  width: 430px;
   text-align: right;
 }
 
@@ -14478,7 +14474,7 @@ input#newsletter {
 }
 
 .stdicountlbl {
-  color: #636363;
+  color: #595959;
   display: block;
   text-align: center;
   padding-bottom: 8px;
@@ -14494,7 +14490,7 @@ input#newsletter {
 .clzdelvlb {
   display: block;
   clear: both;
-  color: #636363;
+  color: #595959;
   font-size: 1em;
   line-height: 2em;
 }
@@ -14862,7 +14858,7 @@ section.st-ui-slide-autocomplete div.st-query-present a.st-ui-result .st-ui-type
 
 div.blogcontainer {
   margin: 3em;
-  color: #636363;
+  color: #595959;
   font-size: 14px;
   line-height: 24px;
 }
@@ -14889,12 +14885,6 @@ div.blogcontainer img.floatleft {
 
 div.blogcontainer a {
   font-weight: 700;
-}
-
-.skip-account,
-.kservice,
-.skip-cart {
-  text-transform: uppercase;
 }
 
 @media screen and (min-width: 64em) {
@@ -14958,7 +14948,7 @@ div.blogcontainer a {
  */
 
 img.lazy:not(.initial) {
-  transition: opacity 1s;
+  transition: opacity .5s;
 }
 
 img.lazy.initial,
@@ -15009,7 +14999,7 @@ img.lazy:not([src]) {
 }
 
 .breadcrumbs strong {
-  color: #636363;
+  color: #595959;
 }
 
 .breadcrumbs span {
@@ -15046,7 +15036,7 @@ i.breadcrumb-separator {
 .header-minicart .minicart-wrapper {
   position: relative;
   clear: both;
-  box-shadow: 6px 6px 9px 1px #636363ad;
+  box-shadow: 6px 6px 9px 1px #595959ad;
 }
 
 .header-minicart .minicart-wrapper:after,
@@ -15146,7 +15136,7 @@ i.breadcrumb-separator {
 
 .header-minicart .info-wrapper td {
   clear: right;
-  color: #636363;
+  color: #595959;
   text-align: center;
 }
 
@@ -15209,14 +15199,14 @@ i.breadcrumb-separator {
 }
 
 .header-minicart .subtotal .label {
-  color: #636363;
+  color: #595959;
   text-transform: none;
 }
 
 .header-minicart .subtotal .price {
   float: right;
   padding-right: 14px;
-  color: #636363;
+  color: #595959;
   font-weight: 700;
 }
 
@@ -15633,7 +15623,6 @@ img.payment-issuer-icon {
   top: 0;
   width: 100%;
   z-index: 100;
-  transition: all .3s ease;
   box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
 }
 

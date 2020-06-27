@@ -13,8 +13,8 @@ class MagicToolbox_MagicScroll_Model_Observer
         if (isset($isLayoutUpdatesAlreadyFixed)) return;
         $isLayoutUpdatesAlreadyFixed = true;
 
-        //$xml = Mage::app()->getConfig()->getNode('frontend/layout/updates')->asNiceXml();
-        //debug_log($xml);
+        $updates = Mage::app()->getConfig()->getNode('frontend/layout/updates');
+        //$xml = $updates->asNiceXml();
 
         //NOTE: default order (without sorting)
         //Magic360
@@ -34,8 +34,8 @@ class MagicToolbox_MagicScroll_Model_Observer
             'magicslideshow' => false,
         );
 
-        $pattern = '#^(?:'.implode('|', array_keys($modules)).')$#';
-        foreach (Mage::app()->getConfig()->getNode('frontend/layout/updates')->children() as $key => $child) {
+        $pattern = '#^(?:' . implode('|', array_keys($modules)).')$#';
+        foreach ($updates->children() as $key => $child) {
             if (preg_match($pattern, $key)) {
                 //NOTE: remember detected modules 
                 $modules[$key] = array(
@@ -46,10 +46,10 @@ class MagicToolbox_MagicScroll_Model_Observer
         }
 
         //NOTE: remove node to prevent dublicate
-        $path = implode(' | ', array_keys($modules));
-        $elements = Mage::app()->getConfig()->getNode('frontend/layout/updates')->xpath($path);
-        foreach ($elements as $element) {
-            unset($element->{0});
+        foreach ($modules as $key => $data) {
+            if (isset($updates->{$key})) {
+                unset($updates->{$key});
+            }
         }
 
         //NOTE: add new nodes to the end
@@ -58,7 +58,6 @@ class MagicToolbox_MagicScroll_Model_Observer
             $child = new Varien_Simplexml_Element("<{$key} module=\"{$data['module']}\"><file>{$data['file']}</file></{$key}>");
             Mage::app()->getConfig()->getNode('frontend/layout/updates')->appendChild($child);
         }
-
     }
 
     /* NOTE: before generate layout xml */

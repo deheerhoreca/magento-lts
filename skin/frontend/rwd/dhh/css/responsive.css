@@ -439,12 +439,6 @@
   #search_mini_form input.input-text {
     width: 100%;
   }
-  #header-search {
-    width: 40%;
-  }
-  .account-cart-wrapper {
-    width: 60%;
-  }
   #search_mini_form #search {
     width: 100%;
   }
@@ -2740,15 +2734,14 @@
 
 @media only screen and (max-width: 880px) {
   #header-search {
-    max-width: 95%;
     left: 0;
-    margin: 0 auto;
-    width: 95%;
+    margin: 0 .5em;
+    width: calc(100% - 1em);
     float: none !important;
   }
   
   #header.hide {
-    top: -143px;
+    top: -132px;
   }
   
   .account-cart-wrapper {

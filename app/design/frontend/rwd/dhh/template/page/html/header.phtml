@@ -9,12 +9,15 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
 } else {
   $account_url = Mage::getUrl('customer/account/login');
 }
+
+// Mage::getSingleton('core/session')->addSuccess("Prokoeling.nl heet vanaf nu Chefstore.nl! Alles is hetzelfde, behalve de naam!");
+
 ?>
 <header id="header" class="page-header header grid-inside scrlng">
   <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
       <a class="main-logo" href="<?php echo $this->getUrl('') ?>">
-        <img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" />
+        <img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" />
       </a>
       <div class="skip-links headerrightcontents">
         <div id="header-search" class="skip-content">
@@ -46,8 +49,7 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
           </a>
 
           <a href="<?php echo Mage::getUrl('customer/account'); ?>" class="top-link skip-account" title="Account">
-            <i class="fa fa-user-circle fa-2x fa-fw"></i>
-            <div class="sprite-with-caption__caption ">Account</div>
+            <i class="fa fa-user-circle fa-2x fa-fw" style="font-size: 2.5em;"></i>
           </a>
           
           <?php
@@ -67,4 +69,3 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
   ?>
   <?php echo $this->getChildHtml('topContainer'); ?>
 </header>
-
