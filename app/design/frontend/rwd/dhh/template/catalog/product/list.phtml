@@ -77,7 +77,7 @@ if($carct && ($category === 'category')) {
     
     $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
     if(is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
-      $category_desc .= "<p>Prokoeling.nl verkoopt o.a. ";
+      $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
       $n = sizeof($manufacturers);
       $i = 0;
       foreach($manufacturers as $manufacturer) {
@@ -96,9 +96,9 @@ if($carct && ($category === 'category')) {
     }
     
     if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
-      $category_desc .= "<h2>Dit is Prokoeling.nl:</h2><p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Prokoeling.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@prokoeling.nl' title='Bel ons'>e-mail</a>.</p>";
+      $category_desc .= "<h2>Chefstore.nl:</h2><p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
     } else {
-      $category_desc .= "<h2>Prokoeling.nl:</h2><p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@prokoeling.nl' title='Bel ons'>e-mail</a>.</p>";
+      $category_desc .= "<h2>Chefstore.nl:</h2><p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
     }
     
     if(strlen($category_desc) < 1000) {

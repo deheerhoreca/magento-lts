@@ -211,20 +211,20 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
 		    $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
  		    $page->setFont($font, 10);
-    		$page->drawText('De Heer Horeca B.V. | Trasmolenlaan 12 | 3447GZ Woerden | Nederland | info@prokoeling.nl | +31 (0) 85-0441003', 70, 10, 'UTF-8');
+    		$page->drawText('De Heer Horeca B.V. | Trasmolenlaan 12 | 3447GZ Woerden | Nederland | info@chefstore.nl | +31 (0) 85-0441003', 70, 10, 'UTF-8');
 
         /*
         $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));
     		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
      		$page->setFont($font, 10);
-    		$page->drawText('PROKOELING.NL', 272, 10, 'UTF-8');
+    		$page->drawText('CHEFSTORE.NL', 272, 10, 'UTF-8');
         */
 
         /*
     		$page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
     		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
      		$page->setFont($font, 10);
-    		$page->drawText(' | INFO@PROKOELING.NL | +31 (0) 85-0441003', 362, 10, 'UTF-8');
+    		$page->drawText(' | INFO@CHEFSTORE.NL | +31 (0) 85-0441003', 362, 10, 'UTF-8');
         */
     }
 
