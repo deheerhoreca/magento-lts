@@ -26,9 +26,9 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	protected $_debug;
 
 	/**
-	 * @var Mage_Core_Model_Store
+	 * @var int
 	 */
-	var $_store;
+    public $_storeId;
 
 	/**
 	 * Geissweb_Euvatgrouper_Helper_Abstract constructor.
@@ -36,8 +36,8 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	public function __construct()
 	{
 		try {
-			$this->_store = Mage::app()->getStore();
-			$this->_debug = (bool)Mage::getStoreConfig('euvatgrouper/extension_info/debug_mode', $this->_store->getId());
+			$this->_storeId = (int)Mage::app()->getStore()->getId();
+			$this->_debug = (bool)Mage::getStoreConfig('euvatgrouper/extension_info/debug_mode', $this->_storeId);
 		} catch(Exception $e) {
 			Mage::logException($e);
 		}
@@ -58,7 +58,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getEuCountries()
 	{
-		return explode(",", Mage::getStoreConfig('general/country/eu_countries', $this->_store->getId()));
+		return explode(",", Mage::getStoreConfig('general/country/eu_countries', $this->_storeId));
 	}
 
     /**
@@ -144,7 +144,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getExcludedGroups()
 	{
-		return explode(",", Mage::getStoreConfig('euvatgrouper/group_assignment/excluded_groups', $this->_store->getId()));
+		return explode(",", Mage::getStoreConfig('euvatgrouper/group_assignment/excluded_groups', $this->_storeId));
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getExcludedTaxGroups()
 	{
-		return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/excluded_groups_taxcalc', $this->_store->getId()));
+		return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/excluded_groups_taxcalc', $this->_storeId));
 	}
 
     /**
@@ -162,7 +162,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getRegularTaxCalculationGroups()
     {
-        return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/regular_tax_groups', $this->_store->getId()));
+        return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/regular_tax_groups', $this->_storeId));
     }
 
 	/**
@@ -171,7 +171,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getValidEuVatGroupId()
 	{
-		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group', $this->_store->getId());
+		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group', $this->_storeId);
 	}
 
 	/**
@@ -180,7 +180,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getSameCountryGroupId()
 	{
-		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_same_cc', $this->_store->getId());
+		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_same_cc', $this->_storeId);
 	}
 
 	/**
@@ -189,7 +189,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getOutsideEuGroupId()
 	{
-		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_outside', $this->_store->getId());
+		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_outside', $this->_storeId);
 	}
 
 	/**
@@ -198,7 +198,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getDefaultGroupId()
 	{
-		return (int)Mage::getStoreConfig('customer/create_account/default_group', $this->_store->getId());
+		return (int)Mage::getStoreConfig('customer/create_account/default_group', $this->_storeId);
 	}
 
     /**
@@ -207,7 +207,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getInvalidGroupId()
     {
-       return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_invalid', $this->_store->getId());
+       return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_invalid', $this->_storeId);
     }
 
     /**
@@ -216,7 +216,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getErrorGroupId()
     {
-        return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_errors', $this->_store->getId());
+        return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_errors', $this->_storeId);
     }
 
 
@@ -236,7 +236,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 * @return int
 	 */
 	public function getTaxExemptClassId() {
-		return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_excluding', $this->_store->getId());
+		return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_excluding', $this->_storeId);
 	}
 
 	/**
@@ -244,7 +244,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 * @return int
 	 */
 	public function getTaxIncludingClassId() {
-		return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including', $this->_store->getId());
+		return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including', $this->_storeId);
 	}
 
     /**
@@ -252,7 +252,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      * @return int
      */
     public function getTaxIncludingClassIdBusiness() {
-        return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including_business', $this->_store->getId());
+        return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including_business', $this->_storeId);
     }
 
 	/**
@@ -261,7 +261,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getOfflineValidate()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/offline_validation', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/offline_validation', $this->_storeId);
 	}
 
 	/**
@@ -269,7 +269,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isModifyOrderGroup()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_order_group', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_order_group', $this->_storeId);
 	}
 
 	/**
@@ -277,7 +277,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isModifyGroupOnError()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_error', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_error', $this->_storeId);
 	}
 
     /**
@@ -285,7 +285,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function isAutovalidationEnabled()
     {
-        return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/autovalidate_on_each_login', $this->_store->getId());
+        return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/autovalidate_on_each_login', $this->_storeId);
     }
 
     /**
@@ -293,7 +293,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getAutovalidationPeriod()
     {
-        return Mage::getStoreConfig('euvatgrouper/vat_settings/autovalidate_period', $this->_store->getId());
+        return Mage::getStoreConfig('euvatgrouper/vat_settings/autovalidate_period', $this->_storeId);
     }
 
     /**
@@ -301,7 +301,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function isModifyGroupOnCheckout()
     {
-        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_checkout', $this->_store->getId());
+        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_checkout', $this->_storeId);
     }
 
     /**
@@ -309,7 +309,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function isSyncCustomerAccountWithOrderGroup()
     {
-        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/sync_customer_group_with_order_group', $this->_store->getId());
+        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/sync_customer_group_with_order_group', $this->_storeId);
     }
 
 	/**
@@ -318,7 +318,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getAccountingFix()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/force_general_on_vat', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/force_general_on_vat', $this->_storeId);
 	}
 
 	/**
@@ -327,7 +327,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getStoreCountryCode()
 	{
-		return Mage::getStoreConfig('general/country/default', $this->_store->getId());
+		return Mage::getStoreConfig('general/country/default', $this->_storeId);
 	}
 
 	/**
@@ -336,7 +336,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isModuleActive()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/validate_vatid', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/validate_vatid', $this->_storeId);
 	}
 
 	/**
@@ -345,7 +345,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getShopVatId()
 	{
-		return Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_store->getId());
+		return Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_storeId);
 	}
 
     /**
@@ -354,7 +354,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getShopVatCc()
     {
-        return strtoupper(substr(Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_store->getId()), 0, 2));
+        return strtoupper(substr(Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_storeId), 0, 2));
     }
 
 	/**
@@ -363,7 +363,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function doSendValidationMail()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/email_settings/send_mail', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/email_settings/send_mail', $this->_storeId);
 	}
 
 
@@ -373,7 +373,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getMailSender()
 	{
-		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_sender', $this->_store->getId());
+		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_sender', $this->_storeId);
 	}
 
 	/**
@@ -382,7 +382,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getMailRecipient()
 	{
-		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_recipient', $this->_store->getId());
+		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_recipient', $this->_storeId);
 	}
 
 	/**
@@ -391,7 +391,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getMailTemplate()
 	{
-		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_template', $this->_store->getId());
+		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_template', $this->_storeId);
 	}
 
 	/**
@@ -400,7 +400,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isIPv6Mode()
 	{
-		return Mage::getStoreConfig('euvatgrouper/extension_info/ipv6_mode', $this->_store->getId());
+		return Mage::getStoreConfig('euvatgrouper/extension_info/ipv6_mode', $this->_storeId);
 	}
 	/**
 	 * Returns the IPv4 address to bind on
@@ -408,7 +408,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getIPv4ToBindOn()
 	{
-		return Mage::getStoreConfig('euvatgrouper/extension_info/ipv4_addr', $this->_store->getId());
+		return Mage::getStoreConfig('euvatgrouper/extension_info/ipv4_addr', $this->_storeId);
 	}
 
 	/**
@@ -417,7 +417,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getDisableCbtForEuBusiness()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_eub2b', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_eub2b', $this->_storeId);
 	}
 
 	/**
@@ -426,7 +426,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getDisableCbtForOutOfEurope()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_noneu', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_noneu', $this->_storeId);
 	}
 
 	/**
@@ -434,7 +434,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isCbtEnabled()
 	{
-		return (bool)Mage::getStoreConfig('tax/calculation/cross_border_trade_enabled', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('tax/calculation/cross_border_trade_enabled', $this->_storeId);
 	}
 
 	/**
@@ -444,7 +444,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isThresholdCountry($countryCode)
 	{
-		$countriesConfigured = explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/threshold_countries', $this->_store->getId()));
+		$countriesConfigured = explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/threshold_countries', $this->_storeId));
 		if(in_array($countryCode, $countriesConfigured)) {
 			return true;
 		}
@@ -457,7 +457,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getIsVatNumberRequired()
     {
-        return (int)Mage::getStoreConfig('euvatgrouper/integration/require_valid_number_to_checkout', $this->_store->getId());
+        return (int)Mage::getStoreConfig('euvatgrouper/integration/require_valid_number_to_checkout', $this->_storeId);
     }
 
 	/**
@@ -466,7 +466,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function isAdmin()
 	{
-		if($this->_store->isAdmin())
+		if(Mage::app()->getStore()->isAdmin())
 			return true;
 
 		if(Mage::getDesign()->getArea() == 'adminhtml')
@@ -481,7 +481,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getVatBasedOn()
 	{
-		return Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, $this->_store->getId());
+		return Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, $this->_storeId);
 	}
 
 	/**
@@ -489,7 +489,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
     public function getIsTakeoverVatToAccount()
     {
-        return (bool)Mage::getStoreConfig('euvatgrouper/integration/takeover_vat_to_account', $this->_store->getId());
+        return (bool)Mage::getStoreConfig('euvatgrouper/integration/takeover_vat_to_account', $this->_storeId);
     }
 
 	/**
@@ -497,7 +497,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getUseMossBasedOnVatNumber()
 	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/moss_settings/use_moss_based_on_vat_number', $this->_store->getId());
+		return (bool)Mage::getStoreConfig('euvatgrouper/moss_settings/use_moss_based_on_vat_number', $this->_storeId);
 	}
 
 	/**
@@ -505,14 +505,14 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
 	 */
 	public function getMossProductsClassId()
 	{
-		return (int)Mage::getStoreConfig('euvatgrouper/moss_settings/digital_products_class_id', $this->_store->getId());
+		return (int)Mage::getStoreConfig('euvatgrouper/moss_settings/digital_products_class_id', $this->_storeId);
 	}
 	/**
 	 * @return bool
 	 */
     public function getLicenseStatus()
     {
-        $key = Mage::getStoreConfig('euvatgrouper/extension_info/license_key', $this->_store->getId());
+        $key = Mage::getStoreConfig('euvatgrouper/extension_info/license_key', $this->_storeId);
         if($key=='')
             return false;
 

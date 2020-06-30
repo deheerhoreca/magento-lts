@@ -66,6 +66,9 @@ var validateVat = function(vatNumber, op_mode, address_type, address_id, doUpdat
                 elementIds.forEach(function(id) {
                     if(document.body.contains(document.getElementById(id))) {
                         selectCountry = $(id).getValue();
+                        if(selectCountry === 'GR') {
+                            selectCountry = 'EL';
+                        }
                     }
                 });
                 if(typeof(selectCountry) === 'string') {
