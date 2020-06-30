@@ -42,7 +42,7 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
     
     elasticApm.init({
       serviceName: "prokoeling",
-      serverUrl: "https://rum." + parts[1] + ":8200",
+      serverUrl: "https://rum." + parts[1] + ".nl:8200",
       environment: apm_env,
       pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
     });

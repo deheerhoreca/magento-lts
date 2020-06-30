@@ -6,7 +6,7 @@ $_columnCount = 3;
 $i            = 0;
 $max_items    = $_columnCount;
 
-if($collection->getSize() > 0 ) {
+if(empty($collection) === false) {
   ?>
   <div id="autorelated-products" class="product-collateral category-products">
     <?php

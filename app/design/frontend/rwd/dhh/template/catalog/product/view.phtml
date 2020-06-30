@@ -74,7 +74,8 @@ $_product = $this->getProduct();
           <?php echo $this->getChildHtml('extrahint') ?>
           <?php if (!$this->hasOptions()):?>
             <div class="add-to-box">
-              <?php if($_product->isSaleable()) {
+              <?php
+              if($_product->isSaleable()) {
                 echo $this->getChildHtml('addtocart');
                 if($this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)) {
                   echo "<span class='or'>".$this->__('OR')."</span>";
@@ -82,6 +83,7 @@ $_product = $this->getProduct();
               }
               echo $this->getChildHtml('addto');
               //echo $this->getChildHtml('sharing');
+              ?>
             </div>
             <?php echo $this->getChildHtml('extra_buttons') ?>
             <?php elseif (!$_product->isSaleable()): ?>

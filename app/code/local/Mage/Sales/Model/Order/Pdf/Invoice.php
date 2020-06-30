@@ -53,36 +53,41 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         //columns headers
         $lines[0][] = array(
             'text' => Mage::helper('sales')->__('Products'),
-            'feed' => 35
+            'feed' => 35,
+            'font' => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('SKU'),
             'feed'  => 290,
-            'align' => 'right'
+            'align' => 'right',
+            'font'  => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Qty'),
             'feed'  => 435,
-            'align' => 'right'
+            'align' => 'right',
+            'font'  => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Price'),
             'feed'  => 360,
-            'align' => 'right'
+            'align' => 'right',
+            'font'  => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Subtotal'),
             'feed'  => 565,
-            'align' => 'right'
+            'align' => 'right',
+            'font'  => 'bold',
         );
 
         $lineBlock = array(
             'lines'  => $lines,
-            'height' => 5
+            'height' => 5,
         );
 
         $this->drawLineBlocks($page, array($lineBlock), array('table_header' => true));

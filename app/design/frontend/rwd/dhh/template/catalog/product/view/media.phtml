@@ -16,7 +16,7 @@ $_helper = $this->helper('catalog/output');
          class="gallery-image visible"
          src="<?php echo $this->helper('catalog/image')->init($_product, 'image') ?>"
          alt="<?php echo $this->escapeHtml($this->getImageLabel()) ?>"
-         title="<?php echo $this->escapeHtml($this->getImageLabel()); ?>" width="500" height="500" />
+         title="<?php echo $this->escapeHtml($this->getImageLabel()); ?>" width="300" height="300" />
 
     <?php $i=0; foreach ($this->getGalleryImages() as $_image): ?>
     <?php if ($this->isGalleryImageVisible($_image)): ?>

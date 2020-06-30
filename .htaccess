@@ -138,9 +138,9 @@
 ### BEGIN DHH
 
     # Prokoeling.nl -> Chefstore.nl
-    RewriteCond %{HTTP_HOST} ^prokoeling.nl$ [OR]
-    RewriteCond %{HTTP_HOST} ^www.prokoeling.nl$
-    RewriteRule (.*)$ https://www.chefstore.nl/$1 [R=301,L]
+    #RewriteCond %{HTTP_HOST} ^prokoeling.nl$ [OR]
+    #RewriteCond %{HTTP_HOST} ^www.prokoeling.nl$
+    #RewriteRule (.*)$ https://www.chefstore.nl/$1 [R=301,L]
     RewriteCond %{HTTP_HOST} ^dev.prokoeling.nl$
     RewriteRule (.*)$ https://dev.chefstore.nl/$1 [R=301,L]
 
@@ -353,7 +353,7 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
   Header add Link "<https://static.zdassets.com>;rel=preconnect; crossorigin"
   Header add Link "<https://www.google-analytics.com>;rel=preconnect; crossorigin"
   Header add Link "<https://ssl.google-analytics.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://rum.prokoeling.nl:8200>;rel=preconnect;"
+  Header add Link "<https://rum.chefstore.nl:8200>;rel=preconnect;"
 </FilesMatch>
 
 # Do not listen to /index.php? requests, redirect them
