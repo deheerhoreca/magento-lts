@@ -1,0 +1,21 @@
+<script>
+	(function()
+	{
+		var condition = {{ee coupon code}}.toString().length > 0;
+		
+		if (condition)
+		{
+			var i = new Image();
+
+			i.onload = function()
+			{
+				console.log('Profity image loaded sucessfully');
+			};
+			i.src = 'https://www.profity.ch/imp/?s=421&b=6&lp=1&ordervalue={{ee transaction revenue}}&ordernumber={{ee transaction id}}&vouchercode={{ee coupon code}}';
+		}
+		else 
+		{
+			console.log('Profity image not loaded. No coupon code used.');
+		}
+	})();
+</script>

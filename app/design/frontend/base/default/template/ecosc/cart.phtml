@@ -1,0 +1,67 @@
+<script>
+
+	var ecomm = 
+	{
+			i: [], /* ecomm_prodid[] array */
+			v: [], /* ecomm_pvalue[] array */
+			p: []  /* ecomm_pname[]  array */
+	}
+
+	var cartProducts = [];
+
+	<?php foreach (Mage::helper('ec')->getCheckoutProducts() as $product) : ?>
+	
+		var data = <?php echo json_encode(array_diff_key(get_object_vars($product),array_flip(array('remarketingId')))) ?>;
+
+		cartProducts.push(data);
+
+		<?php
+		/**
+		 * AdWords Dynamic Remarketing
+		 */
+		?>
+		ecomm.i.push('<?php echo $product->remarketingId ?>');
+		ecomm.v.push(data.price);
+		ecomm.p.push(data.name);
+		
+	<?php endforeach ?>
+
+	if (window.google_tag_params)
+	{
+		window.google_tag_params.ecomm_prodid 		= ecomm.i;
+		window.google_tag_params.ecomm_pvalue		= ecomm.v;
+		window.google_tag_params.ecomm_pname		= ecomm.p;
+		window.google_tag_params.ecomm_pagetype 	= 'cart';
+		window.google_tag_params.ecomm_totalvalue 	= '<?php echo Mage::getModel('checkout/cart')->getQuote()->getGrandTotal() ?>';
+
+		<?php if (Mage::helper('ec')->supportsDynx()): ?>
+
+		window.google_tag_params.dynx_pagetype 		= 'conversionintent';
+		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
+		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue
+		
+		<?php endif ?>
+	}
+
+	EC.push(function(dataLayer)
+	{
+		var data = 
+		{
+			'event': 'checkout',
+			'ecommerce': 
+			{
+				'checkout': 
+				{
+					'actionField': 
+					{
+						'step': 1
+					},
+					'products': cartProducts
+				}
+			}
+		}
+
+		dataLayer.push(data);
+	});
+
+</script>

@@ -1,0 +1,296 @@
+<script>
+
+	/**
+ 	 * Push tracking 
+	 */
+	<?php if (false !== $data = $this->helper('ec/datalayer')->getPushDetail()):?>
+	
+		<?php
+		/**
+		 * Push data to dataLayer
+		 */
+		?>
+		AEC.Cookie.detail(<?php echo $data->data ?>).push(dataLayer);
+
+		<?php
+		/**
+		 * Push data to localStorage
+		 */
+		?>
+		AEC.Cookie.Storage.set('<?php echo $this->helper('ec/cache')->generateBlockCacheId($this) ?>', <?php echo $data->data ?>);
+		
+		/**
+		 * AdWords Dynamic Remarketing
+		 */
+		window.google_tag_params.ecomm_pagetype 	= 'product';
+		window.google_tag_params.ecomm_prodid 		=  <?php echo 		  $data->google_tag_params['ecomm_prodid'] ?>;
+		window.google_tag_params.ecomm_pname 		=  <?php echo 		  $data->google_tag_params['ecomm_pname'] ?>;
+		window.google_tag_params.ecomm_pvalue 		=  <?php echo (float) $data->google_tag_params['ecomm_pvalue'] ?>;
+		window.google_tag_params.ecomm_totalvalue 	=  <?php echo (float) $data->google_tag_params['ecomm_totalvalue'] ?>;
+		window.google_tag_params.ecomm_category		= '<?php echo 		  $data->google_tag_params['ecomm_category'] ?>';
+
+		<?php if ($this->helper('ec')->supportsDynx()): ?>
+
+		window.google_tag_params.dynx_pagetype 		= 'offerdetail';
+		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
+		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue;
+		
+		<?php endif ?>
+		
+		/**
+		 * Facebook Pixel Tracking
+		 */
+		<?php if ($this->helper('ec')->facebook()): ?>
+
+			if ("undefined" !== typeof fbq)
+			{
+				<?php if (Mage::helper('ec/cookie_consent')->supportCookieDirective()):?>
+
+					AEC.CookieConsent.queue(function()
+					{
+						fbq('track', 'ViewContent', <?php echo $data->fbq ?>);
+					});
+
+				<?php else: ?>
+	
+					fbq('track', 'ViewContent', <?php echo $data->fbq ?>);
+				
+				<?php endif ?>
+			}
+			
+		<?php endif ?>
+
+		<?php foreach($data->grouped as $entity): ?>
+
+				window.G.push(<?php echo Mage::helper('ec/json')->encode
+				(
+					array
+					(
+						'id' 		=> $entity->getId(),
+						'sku'		=> $entity->getSku(),
+						'name' 		=> $entity->getName(),
+						'price' 	=> Mage::helper('ec/price')->getPrice($entity),
+						'category' 	=> Mage::helper('ec')->getCategory($entity->getCategory()),
+						'brand' 	=> Mage::helper('ec')->getBrand($entity)
+					)
+				) ?>);
+
+		<?php endforeach ?>
+		
+	<?php else: ?>
+
+		<?php
+		/**
+		 * Fallback to localStorage (FPC/EE)
+		 */
+		?>
+		var data = AEC.Cookie.Storage.get('<?php echo $this->helper('ec/cache')->generateBlockCacheId($this) ?>');
+
+		if (data)
+		{
+			<?php
+			/**
+			 * Mark data as loaded from localStorage
+			 */
+			?>
+			data.localStorage = true;
+
+			<?php
+			/**
+			 * Push data to dataLayer
+			 */
+			?>
+			dataLayer.push(data);
+		}
+	
+	<?php endif ?>
+
+	<?php
+	/**
+	 * Change "Add to cart" data-price attribute upon variant/option selection
+	 * 
+	 * @experimental
+	 */
+	?>
+	if ('undefined' !== typeof Product && Product.hasOwnProperty('OptionsPrice') && Product.OptionsPrice.prototype.hasOwnProperty('formatPrice'))
+	{
+		<?php
+		/**
+		 * Update price function
+		 */
+		?>
+		
+		var updateDataPrice = function(price)
+		{
+			var price = parseFloat(price).toFixed(2);
+
+			jQuery('[data-event="addToCart"]').data('price', price).attr('data-price', price);
+		}
+		
+		<?php
+		/**
+		 * Override but keep updatable reload() method
+		 * 
+		 * @author Anowave
+		 */
+		?>
+		Product.OptionsPrice.prototype.reload = Product.OptionsPrice.prototype.reload.wrap(function(parentMethod)
+		{
+			parentMethod();
+
+			<?php
+			/**
+			 * Update price
+			 */
+			?>
+			
+			AEC.Callbacks.queue(updateDataPrice);
+			
+		});
+
+		Product.OptionsPrice.prototype.formatPrice = Product.OptionsPrice.prototype.formatPrice.wrap(function(parentMethod, price)
+		{
+			<?php
+			/**
+			 * Execute and detach previously attached callbacks
+			 */
+			?>
+			AEC.Callbacks.apply(price);
+
+			updateDataPrice(price);
+
+			var price = parentMethod(price);
+
+			return price;
+		});
+	}
+
+	<?php
+	/**
+	 * Configurable products variant impressions
+	 */
+	?>
+	<?php if (Mage::registry('current_product')): ?>
+	
+		(function($)
+		{
+			$(document).ready(function()
+			{
+				<?php $product = Mage::registry('current_product'); ?>
+
+				if (AEC.SUPER.length)
+				{
+					var attributes = $('[name^="super_attribute"]');
+		
+					attributes.on('change.ec', function()
+					{
+						var set = [], variants = [];
+						
+						$.each(attributes, function(index, attribute)
+						{
+							var value = parseInt($(this).val());
+		
+							if (value > 0)
+							{
+								set.push(value);
+							}
+	
+							var name = $(attribute).attr('name'), id = name.substring(name.indexOf('[') + 1, name.lastIndexOf(']'));
+	
+							var option = $(attribute).find('option:selected');
+	
+							if (0 < parseInt(option.val()))
+							{
+								variants.push(
+								{
+									id: 	id,
+									text: 	option.text()
+								});
+							}
+						});
+						
+						if (set.length == attributes.length)
+						{
+							var variant = [];
+							
+							for (i = 0, l = variants.length; i < l; i++)
+							{
+								for (a = 0, b = AEC.SUPER.length; a < b; a++)
+								{
+									if (AEC.SUPER[a].id == variants[i].id)
+									{
+										variant.push([AEC.SUPER[a].label,variants[i].text].join(':'));
+									}
+								}
+							}
+	
+							if (variant.length)
+							{
+								<?php
+								/**
+								 * Fire virtual impression
+								 */
+								?>
+
+								var price = jQuery('[data-event="addToCart"]').data('price', price).attr('data-price');
+
+								price = parseFloat(price);
+
+								var data = <?php echo Mage::helper('ec/json')->encode
+								(
+									array
+									(
+										'event'			=> 'virtualVariantView',
+										'ecommerce' 	=> array
+										(
+											'currencyCode' => Mage::app()->getStore()->getCurrentCurrencyCode(),
+											'detail' => array
+											(
+												'actionField' => array
+												(
+													'list' => $this->__('Configurable variants')
+												),
+												'products' => array
+												(
+													array
+													(
+														'id' 		=> $product->getSku(),
+														'name' 		=> $product->getName(),
+														'price' 	=> Mage::helper('ec/price')->getPrice($product)
+													)
+												)
+											)
+										)
+									)
+								) ?>;
+
+								<?php
+								/**
+								 * Update price
+								 */
+								?>
+								data.ecommerce.detail.products[0].price = price;
+									
+								<?php
+								/**
+								 * Add selected variant
+								 */
+								?>
+								data.ecommerce.detail.products[0].variant = variant.join('-');
+	
+								<?php
+								/**
+								 * Push the virtual detail view to dataLayer[] object
+								 */
+								?>
+
+								AEC.Cookie.detail(data).push(dataLayer);
+							}
+						}
+					});
+				}
+			});
+		})(jQuery);
+		
+	<?php endif ?>
+</script>

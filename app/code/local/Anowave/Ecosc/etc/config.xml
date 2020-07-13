@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Anowave_Ecosc>
+            <version>0.0.0.1</version>
+        </Anowave_Ecosc>
+    </modules>
+    <global>
+    	<models>
+		    <ecosc>
+		        <class>Anowave_Ecosc_Model</class>
+		    </ecosc>
+		    <ec>
+		    	<rewrite>
+		    		<observer>Anowave_Ecosc_Model_Observer</observer>
+		    	</rewrite>
+		    </ec>
+		</models>
+		<blocks>
+			<ecosc>
+                <class>Anowave_Ecosc_Block</class>
+            </ecosc>
+		</blocks>
+    </global>
+    <frontend>
+    	<events>
+    		<ec_checkout_products_get_after>
+    			<observers>
+                    <ecosc>
+                        <class>ecosc/observer</class>
+                        <method>getCheckoutProducts</method>
+                    </ecosc>
+                </observers>
+    		</ec_checkout_products_get_after>
+    	</events>
+    </frontend>
+</config>

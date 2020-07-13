@@ -1,0 +1,73 @@
+<?php if (Mage::helper('ec/cookie_consent')->supportCookieDirective()):?>
+	<?php $consent = json_encode(array('event' => Anowave_Ec_Helper_Cookie_Consent::COOKIE_CONSENT_GRANTED_EVENT)) ?>
+	<?php if (!Mage::helper('ec/cookie_consent')->isCookieConsentAccepted()):?>
+	
+		<script>
+			if ('undefined' !== typeof jQuery)
+			{
+				var endpoints = 
+				{
+					type: 			'json',
+					cookie: 		'<?php echo $this->getUrl('ec/cookie/index') ?>',
+					cookieContent:  '<?php echo $this->getUrl('ec/cookie/content') ?>'
+				};
+				
+				(function($, dataLayer, endpoint)
+				{
+					$(document).ready(function()
+					{
+						$.get(endpoints.cookieContent,function(response)
+						{
+							if (!response.cookie)
+							{
+								if (response.cookieContent !== null)
+								{
+									var directive = $('body').append(response.cookieContent).end().find('.ec-gtm-cookie-directive');
+		
+									directive.find('a.accept').off('click.ec').on('click.ec', function()
+									{
+										var message = $(this).attr('data-confirm');
+										
+										$(this).text(message);
+										
+										$.get(endpoints.cookie,function(response)
+										{
+											<?php
+											/**
+								             * Dispatch consent
+								             */
+											?>
+											
+											AEC.CookieConsent.dispatch(<?php echo $consent ?>);
+
+											<?php
+											/**
+											 * Remove directive
+											 */
+											?>
+											
+											directive.remove();
+											
+										}, endpoints.type);
+									});
+								}
+							}
+							else 
+							{
+								AEC.CookieConsent.dispatch(<?php echo $consent ?>);
+							}
+							
+						}, endpoints.type);
+					});
+				})(jQuery, dataLayer, endpoints);
+			}
+		</script>
+		
+	<?php else: ?>
+	
+		<script>
+			AEC.CookieConsent.dispatch(<?php echo $consent ?>);
+		</script>
+		
+	<?php endif ?>
+<?php endif ?>

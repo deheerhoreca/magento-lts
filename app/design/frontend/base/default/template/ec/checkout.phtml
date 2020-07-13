@@ -1,0 +1,356 @@
+<script>
+
+	var STEP_CHECKOUT_METHOD 			= 1;
+	var STEP_CHECKOUT_BILLING 			= 2;
+	var STEP_CHECKOUT_SHIPPING 			= 3;
+	var STEP_CHECKOUT_SHIPPING_METHOD 	= 4;
+	var STEP_CHECKOUT_PAYMENT_METHOD 	= 5;
+
+	/* Set ecomm_pagetype */
+	window.google_tag_params.ecomm_pagetype = 'cart';
+
+	<?php if ($data = $this->helper('ec/datalayer')->getCouponDiscountPush()): ?> 
+	
+		dataLayer.push(<?php echo  $data ?>);
+	
+	<?php endif ?>
+	
+	var checkoutProducts = [], facebook_content_ids = [];
+
+	<?php
+	/**
+	 * AdWords Dynamic Remarketing
+	 */
+	?>
+	var ecomm = 
+	{
+		i: [], /* ecomm_prodid[] array */
+		v: [], /* ecomm_pvalue[] array */
+		p: []  /* ecomm_pname[]  array */
+	};
+
+	<?php foreach ($this->helper('ec')->getCheckoutProducts() as $product) : ?>
+
+		var data = <?php echo Mage::helper('ec/json')->encode(array_diff_key(get_object_vars($product),array_flip(array('remarketingId')))) ?>;
+
+		<?php
+		/**
+		 * Add item to products collection
+		 */
+		?>
+		checkoutProducts.push(data);
+
+		<?php
+		/**
+		 * AdWords Dynamic Remarketing
+		 */
+		?>
+		ecomm.i.push('<?php echo $product->remarketingId ?>');
+		ecomm.v.push(data.price);
+		ecomm.p.push(data.name);
+
+		facebook_content_ids.push('<?php echo $product->id ?>');
+		
+	<?php endforeach ?>
+
+	if (window.google_tag_params)
+	{
+		window.google_tag_params.ecomm_prodid 		= ecomm.i;
+		window.google_tag_params.ecomm_pvalue		= ecomm.v;
+		window.google_tag_params.ecomm_pname		= ecomm.p;
+		window.google_tag_params.ecomm_pagetype 	= 'cart';
+		window.google_tag_params.ecomm_totalvalue 	= <?php echo (float) Mage::getModel('checkout/cart')->getQuote()->getGrandTotal() ?>;
+
+		<?php if ($this->helper('ec')->supportsDynx()): ?>
+
+		window.google_tag_params.dynx_pagetype 		= 'conversionintent';
+		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
+		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue
+		
+		<?php endif ?>
+	}
+
+	AEC.getSteps = function(selector)
+	{	
+		var find = function()
+		{
+			return document.querySelectorAll('.opc');
+		};
+			
+		var element = find();
+
+		if (element && 1 == element.length)
+		{
+			return element[0].children;
+		}
+
+		return null;
+	};
+
+	AEC.getStep = function(section, steps)
+	{
+		for (i = 0, l = steps.length; i < l; i++)
+		{
+			if (-1 != steps[i].id.indexOf(section))
+			{
+				return {
+					index: i, 
+					step: steps[i]
+				}
+			}
+		}
+
+		return {
+			index: -1,
+			step: null
+		}
+	};
+
+	AEC.trackStepCallbacks = 
+	{
+		checkoutMethod: function(response)
+		{
+			return response.checkoutMethod;
+		},
+		payment: function(response)
+		{
+			return response.paymentMethod;
+		},
+		shippingMethod: function(response)
+		{
+			return response.shippingMethod;
+		}
+	};
+
+	AEC.formatContent = function(content)
+	{
+		var filter = function(content)
+		{
+			return content;
+		};
+		
+		var f = <?php echo Mage::helper('ec/json')->encode(array('guest' => $this->__('Checkout as Guest'),'login_in' => $this->__('Checkout as Logged'),'register' => $this->__('Register'))) ?>;
+
+		if (f.hasOwnProperty(content))
+		{
+			return filter(f[content]);
+		}
+
+		return filter(content);
+	};
+
+	AEC.trackStepOptions = function(step)
+	{
+		setTimeout(function()
+		{
+			jQuery.get(AEC.Const.URL + 'ec/index/options', function(response)
+			{
+				var data = 
+				[
+				 	{
+					 	step: 	STEP_CHECKOUT_METHOD,
+					 	option: AEC.formatContent(response.checkoutMethod)
+					},
+					{
+					 	step: 	STEP_CHECKOUT_BILLING,
+					 	option: ''
+					},
+					{
+					 	step: 	STEP_CHECKOUT_SHIPPING,
+					 	option: ''
+					},
+					{
+					 	step: 	STEP_CHECKOUT_SHIPPING_METHOD,
+					 	option: AEC.formatContent(response.shippingMethod)
+					},
+					{
+					 	step: 	STEP_CHECKOUT_PAYMENT_METHOD,
+					 	option: AEC.formatContent(response.paymentMethod)
+					}
+				];
+				
+				for (i = 0, l = data.length; i < l; i++)
+				{
+					if (data[i].step == step && data[i].hasOwnProperty('option') && data[i].option !== null && 0 < data[i].option.toString().length)
+					{
+						AEC.Cookie.checkout(
+						{
+							'event': 'checkoutOption',
+							'ecommerce': 
+							{
+								'checkout_option': 
+								{
+									'actionField': data[i]
+								}
+							}
+						}).push(dataLayer);
+					}
+				}
+				 
+			},'json');
+		},200);
+	};
+
+	<?php
+	/**
+	 * Handle custom AJAX requests
+	 */
+	?>
+	<?php if (false): ?>
+		
+		document.observe('login:setMethod', function(event) 
+		{
+			var method = AEC.formatContent(event.memo.method);
+			
+			AEC.Cookie.checkout(
+			{
+				'event': 'checkoutOption',
+				'ecommerce': 
+				{
+					'checkout_option': 
+					{
+						'actionField': 
+						{
+							'step':		STEP_CHECKOUT_METHOD,
+							'option': 	method
+						}
+					}
+				}
+			}).push(dataLayer);
+		});
+
+	<?php endif ?>
+
+	/**
+	 * Check if customer is logged in
+	 */
+	var logged = <?php echo @Mage::getSingleton('customer/session')->isLoggedIn() ? 1 : 0 ?>;
+
+	<?php
+	/**
+	 * Hook checkout tracking
+	 */
+	?>
+
+	Checkout.prototype.gotoSection = Checkout.prototype.gotoSection.wrap(function(parentMethod, section, reloadProgressBlock) 
+	{
+		parentMethod(section, reloadProgressBlock);
+
+		var steps = AEC.getSteps(), step = AEC.getStep(section, steps), index = step.index;
+
+		if (-1 !== index)
+		{
+			/**
+			 * Check if customer is logged and shift steps by 1 to align step indexes to missing "Login/Welcome" step
+			 */
+			if (logged)
+			{
+				index += 1;
+			}
+
+			/**
+			 * Push data 
+			 */
+			AEC.Cookie.checkout(
+			{
+				'event':'checkout',
+				'ecommerce': 
+				{
+					'checkout': 
+					{
+						'actionField': 
+						{
+							'step': ++index
+						},
+						'products': checkoutProducts
+					}
+				}
+			}).push(dataLayer);
+
+				
+			/**
+			 * Track previous step option(s)
+			 */
+			AEC.trackStepOptions(index - 1);
+
+			/**
+			 * Track time 
+			 */
+			AEC.Time.trackContinue(dataLayer, AEC.Const.TIMING_CATEGORY_CHECKOUT_STEP, index, "Step " + index);	
+		}		
+	});
+
+	<?php
+	/**
+	 * Track checkout initial step
+	 */
+	?>
+	(function()
+	{
+		var current = logged ? [STEP_CHECKOUT_METHOD,STEP_CHECKOUT_BILLING] : [STEP_CHECKOUT_METHOD];
+
+		for (var i = 0, l = current.length; i < l; i++)
+		{
+			(function(dataLayer, step)
+			{
+				dataLayer.push(
+				{
+					'event':'checkout',
+					'ecommerce': 
+					{
+						'checkout': 
+						{
+							'actionField': 
+							{
+								'step': step
+							},
+							'products': checkoutProducts
+						}
+					},
+					'eventCallback': function() 
+					{
+						AEC.trackStepOptions(step - 1);
+			     	},
+			     	'eventTimeout': AEC.eventTimeout
+				});
+			})(dataLayer, current[i]);
+		}
+				
+	})(dataLayer, logged);
+
+	<?php
+	/**
+	 * Facebook Pixel Checkout
+	 */
+	?>
+	if ("undefined" !== typeof fbq)
+	{
+		(function(callback)
+		{
+			<?php if (Mage::helper('ec/cookie_consent')->supportCookieDirective()):?>
+
+				AEC.CookieConsent.queue(callback).process();
+	
+			<?php else: ?>
+		
+				callback.apply(window,[]);
+			
+			<?php endif ?>
+			
+		})((function(products)
+		{
+			return function()
+			{
+				fbq("track", "InitiateCheckout", 
+				{
+					value: 			<?php echo Mage::getModel('checkout/cart')->getQuote()->getGrandTotal() ?>,
+					content_type: 	'product',
+					content_name: 	'checkout',
+					content_ids:	products,
+					num_items:		products.length,
+					currency: 		<?php echo json_encode(Mage::app()->getStore()->getCurrentCurrencyCode()) ?>
+				});
+			}
+		}(facebook_content_ids)));	
+	}
+</script>

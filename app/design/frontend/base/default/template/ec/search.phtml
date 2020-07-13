@@ -1,0 +1,49 @@
+<?php if ($data = $this->helper('ec/datalayer')->getPushSearch()):?>
+
+	<script>
+
+		var impressionData = <?php echo $data->data ?>, payloadSize = getPayloadSize(impressionData.ecommerce.impressions);
+	
+		if (GOOGLE_PAYLOAD_SIZE > payloadSize)
+		{
+			AEC.Queue.impressions(impressionData)
+		}
+		else 
+		{
+			var chunks = getPayloadChunks(impressionData.ecommerce.impressions, Math.ceil(impressionData.ecommerce.impressions.length/Math.ceil(payloadSize/GOOGLE_PAYLOAD_SIZE)));
+	
+			var lazyPush = function(chunks)
+			{
+				if (chunks.length)
+				{
+					var chunk = chunks.shift(), chunkPush = jQuery.extend({}, impressionData);
+	
+					chunkPush['event'] 					= 'impression';
+					chunkPush.ecommerce['impressions']  = chunk;
+					chunkPush['eventCallback'] 			= (function(chunks)
+					{
+						return function()
+						{
+							lazyPush(chunks);
+						}
+					})(chunks);
+	
+					(function(data)
+					{
+						AEC.Cookie.impressions(data).push(dataLayer);
+	
+					})(chunkPush);
+				}
+			};
+	
+			/**
+			 * Call lazy push
+			 */
+			lazyPush(chunks);
+		}
+		
+		window.google_tag_params.ecomm_category = '<?php echo $data->google_tag_params['ecomm_category'] ?>';
+		
+	</script>
+	
+<?php endif ?>

@@ -46,7 +46,7 @@ $stock_qty      = (int) $_product->getStockItem()->getQty();
 $in_stock       = $_product->getStockItem()->getIsInStock();
 
 // Code also exists in list.phtml and featured.phtml
-if($in_stock === true) {
+if($in_stock === true || $in_stock === "1") {
   if($stock_qty < 1 && $_product->getStockItem()->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
     $stock_message = "Tijdelijk uitverkocht (wel bestelbaar)";
     $stclz = "clzpreorderdots";
@@ -69,6 +69,12 @@ if($in_stock === true) {
   $stclz = "clznostockdots";
   $txtcltcz = 'clzsoldout';
 }
+
+// if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+  // var_dump($in_stock);
+  // var_dump($stock_qty);
+  // var_dump($_product->isSaleable());
+// }
 
 $freeshipping_from          = 150;
 $extra_delivery_time        = 0;
@@ -511,10 +517,11 @@ foreach($highlights as $key => $highlight) {
   $hlstr .= "<li><img class='lazy' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
 }
 
-/* Cross sell items */
 $_crossSellProducts = $_product->getCrossSellProducts();
 
-/* Product Description */
+$additional_attributes = $_product->getData("additional_attributes");
+$additional_attributes = Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($additional_attributes);
+
 $product_description = $this->getProduct()->getDescription();
 $product_description = Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($product_description);
 
@@ -951,26 +958,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     }
     ?>
 
-    <?php /* Brand Logo & Text */ ?>
-      
-    <div class="probottomdv" id="product-brand-text">
-      <?php
-      if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
-        $anchors[] = "brand";
-        ?>
-        <a class="anchor" id="brand"></a>
-        <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>
-        <div class="brand std justify"><?php echo $htbrand; ?></div>
-        <?php
-      }
-      if(empty($brand_logo) === false) {
-        echo "<div class='center'>";
-        echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
-        echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
-      }
-      ?>
-    </div>
-
     <?php /* Stored Upsell Products OR Automatic Related Products */ ?>
 
     <?php
@@ -1005,6 +992,43 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
       <?php
     }
     ?>
+    
+    <?php /* Additional Attributes */ ?>
+    
+    <?php
+    if(strlen($additional_attributes) > 10) {
+      $anchors[] = "additional-attributes";
+      ?>
+      <h2 class="tableftheader"><?php echo $this->__('Extra informatie van de fabrikant');?></h2>
+      <div class="probottomdv content product-specs" id="additional-attributes">
+        <a class="anchor" id="additional-attributes"></a>
+        <div class="std specs-table"><?php echo $additional_attributes; ?>
+          <dl class="hidden"><dt>Source</dt><dd>https://www.chefstore.nl</dd></dl>
+        </div>
+      </div>
+    <?php
+    }
+    ?>
+    
+    <?php /* Brand Logo & Text */ ?>
+      
+    <div class="probottomdv" id="product-brand-text">
+      <?php
+      if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
+        $anchors[] = "brand";
+        ?>
+        <a class="anchor" id="brand"></a>
+        <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>
+        <div class="brand std justify"><?php echo $htbrand; ?></div>
+        <?php
+      }
+      if(empty($brand_logo) === false) {
+        echo "<div class='center'>";
+        echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
+        echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
+      }
+      ?>
+    </div>
   </div>
 </div>
 

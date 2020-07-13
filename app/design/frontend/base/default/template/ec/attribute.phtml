@@ -1,0 +1,4 @@
+<?php $id = mt_rand(1000000, 9999999) ?>
+<span data-experiment="<?php echo $id ?>"><?php echo $this->getContent() ?></span>
+<script type="text/experiment" id="<?php echo $id ?>"><?php echo $this->getExperiment() ?></script>
+<script>AB.experiment(<?php echo $id ?>)</script>

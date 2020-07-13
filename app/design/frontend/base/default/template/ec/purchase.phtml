@@ -1,0 +1,279 @@
+<?php echo $this->getChildHtml('ec_datalayer') ?>
+<?php echo $this->getChildHtml('ec_visitor') ?>
+<?php echo $this->getChildHtml('ec_dimensions') ?>
+<?php echo $this->getChildHtml('ec_experiments') ?>
+<?php echo $this->getChildHtml('ec_promotions') ?>
+<script>
+
+	var EC = [];
+
+	<?php
+	/**
+	 * AdWords Dynamic Remarketing
+	 */
+	?>
+	
+	window.google_tag_params = window.google_tag_params || {};
+
+	<?php
+	/**
+	 * AdWords Dynamic Remarketing default page type
+	 */
+	?>
+	
+	window.google_tag_params.ecomm_pagetype = '<?php echo $this->helper('ec')->getPageType() ?>';
+
+	<?php
+	/**
+	 * Grouped products 
+	 */
+	?>
+	
+	window.G = [];
+
+	<?php
+	/**
+	 * Global revenue
+	 */
+	?>
+	
+	window.revenue = 0;
+
+	<?php
+	/**
+	 * DoubleClick parameters
+	 */
+	?>
+	
+	window.DoubleClick = 
+	{
+		DoubleClickRevenue:	 	0,
+		DoubleClickTransaction: 0,
+		DoubleClickQuantity: 	0
+	};
+
+	<?php if (false !== $data = $this->helper('ec/datalayer')->getPushPurchase($this)): ?>
+
+		(function(data, remarketing)
+		{
+			window.remarketing = remarketing;
+
+			<?php
+			/**
+			 * Set global revenue variable
+			 */
+			?>
+			
+			window.revenue = data.ecommerce.purchase.actionField.revenue;
+					
+			<?php
+			/**
+			 * Transport layer push
+			 */
+			?>
+			
+			dataLayerTransport.push(data);
+
+			<?php
+			/**
+			 * Purchase push
+			 */
+			?>
+
+			if (window.google_tag_params && remarketing)
+			{
+				window.google_tag_params.ecomm_pagetype 	= 'purchase';
+				
+				window.google_tag_params.ecomm_prodid 		= remarketing.ecomm_prodid;
+				window.google_tag_params.ecomm_pvalue		= remarketing.ecomm_pvalue;
+				window.google_tag_params.ecomm_pname		= remarketing.ecomm_pname;
+				window.google_tag_params.ecomm_totalvalue 	= remarketing.ecomm_totalvalue;
+
+				<?php if ($this->helper('ec')->supportsDynx()): ?>
+
+				window.google_tag_params.dynx_pagetype 		= 'conversion';
+				window.google_tag_params.dynx_itemid 		= remarketing.ecomm_prodid;
+				window.google_tag_params.dynx_totalvalue 	= remarketing.ecomm_totalvalue;
+	
+				<?php endif ?>
+				
+			}
+
+			<?php if ($this->getAdwords()->getGoogleConversionId()) : ?>
+
+				window.google_conversion_id 		= <?php echo Mage::helper('ec/json')->encode($this->getAdwords()->getGoogleConversionId()) ?>;
+				window.google_conversion_language 	= <?php echo Mage::helper('ec/json')->encode($this->getAdwords()->getGoogleConversionLanguage()) ?>;
+				window.google_conversion_format 	= <?php echo Mage::helper('ec/json')->encode($this->getAdwords()->getGoogleConversionFormat()) ?>;
+				window.google_conversion_label 		= <?php echo Mage::helper('ec/json')->encode($this->getAdwords()->getGoogleConversionLabel()) ?>;
+				window.google_conversion_color		= <?php echo Mage::helper('ec/json')->encode($this->getAdwords()->getGoogleConversionColor()) ?>;
+				window.google_conversion_currency 	= <?php echo Mage::helper('ec/json')->encode($this->getAdwords()->getGoogleConversionCurrency()) ?>;
+
+				<?php
+				/**
+				 * Set conversion value
+				 */
+				?>
+				
+				window.google_conversion_value = window.revenue;
+
+				<?php
+				/**
+				 * Add an order ID to conversion tracking tag to help avoid counting duplicate conversions.
+				 */
+				?>
+				
+				window.google_conversion_order_id = data.ecommerce.purchase.actionField.id;
+
+			<?php endif ?>
+
+			<?php
+			/**
+			 * Get content_ids (Facebook Pixel Tracking parameter)
+			 */
+			?>
+			
+			var content_ids = data.ecommerce.purchase.products.map(function(product)
+			{
+				return product.id;
+			});
+
+			/**
+			 * Set DoubleClick FloodLight Sales Revenue
+			 */
+			window.DoubleClick.DoubleClickRevenue 		= data.ecommerce.purchase.actionField.revenue;
+			window.DoubleClick.DoubleClickTransaction 	= data.ecommerce.purchase.actionField.id;
+			window.DoubleClick.DoubleClickQuantity 		= data.ecommerce.purchase.products.length;
+
+			/**
+			 * AdRoll Smart Pixel
+			 */
+			adroll_conversion_value 	= data.ecommerce.purchase.actionField.revenue;
+			adroll_currency 			= data.ecommerce.currencyCode;
+			adroll_custom_data 			= 
+			{
+				'ORDER_ID': data.ecommerce.purchase.actionField.id
+			}
+
+			<?php if (Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+			
+				adroll_custom_data['USER_ID'] = <?php echo Mage::helper('ec/json')->encode(Mage::getSingleton('customer/session')->getCustomer()->getId()) ?>;
+				
+			<?php endif ?>
+
+			<?php
+			/**
+			 * Push purchase
+			 */
+			?>
+			
+			AEC.Cookie.purchase(data).push(dataLayer);
+			
+
+			<?php
+			/**
+			 * Push purchase event
+			 */
+			?>
+			
+			AEC.Cookie.purchase(<?php echo Mage::helper('ec/json')->encode(array('event' => 'purchaseEvent')) ?>).push(dataLayer);
+
+			<?php if ($this->helper('ec')->facebook()): ?>
+
+			if ("undefined" !== typeof fbq)
+			{
+				(function(callback)
+				{
+					<?php if (Mage::helper('ec/cookie_consent')->supportCookieDirective()):?>
+
+						AEC.CookieConsent.queue(callback).process();
+			
+					<?php else: ?>
+				
+						callback.apply(window,[]);
+					
+					<?php endif ?>
+					
+				})((function(content_ids, window)
+				{
+					return function()
+					{
+						fbq("track", "Purchase", 
+						{
+							content_ids:	content_ids,
+							content_type: 	'product',
+							value: 			window.revenue,
+							currency: 		<?php echo Mage::helper('ec/json')->encode(Mage::app()->getStore()->getCurrentCurrencyCode()) ?>
+						});
+					}
+				}(content_ids, window)));	
+			}
+
+		<?php endif ?>
+
+			<?php
+			/**
+			 * Clear persistant data from local storage
+			 */
+			?>
+			
+			AEC.Persist.clear();
+			
+		})(<?php echo $data->data ?>, <?php echo $data->google_tag_params ?>);
+
+	<?php endif ?>
+	
+</script>
+<script>AEC.Cookie.pushPrivate()</script>
+<?php if ($this->getOrderIds()) : ?>
+	<?php $collection = Mage::getResourceModel('sales/order_collection')->addFieldToFilter('entity_id', array('in' => $this->getOrderIds())); ?>
+	<?php if (!Mage::helper('ec/adwords')->useAdwordsConversionTrackingGtag()):?>
+		<?php if ($this->getAdwords()->getGoogleConversionId()): ?>
+			<script src="//www.googleadservices.com/pagead/conversion.js"></script>
+		    <?php foreach ($collection as $order): ?>
+				<noscript><img height=1 width=1 border=0 src="//www.googleadservices.com/pagead/conversion/<?php echo $this->getAdwords()->getGoogleConversionId() ?>/?value=<?php echo $this->getRevenue($order) ?>&label=<?php echo $this->getAdwords()->getGoogleConversionLabel() ?>&script=0"></noscript>
+		    <?php endforeach ?>
+		<?php endif ?>
+	<?php else: ?>
+		<?php echo Mage::helper('ec/adwords')->getAdwordsConversionTrackingGtagSiteTag() ?>
+		<?php foreach ($collection as $order): ?>
+	    	<script>
+				if ('undefined' !== typeof gtag)
+				{
+					gtag('event', 'conversion', <?php echo Mage::helper('ec/adwords')->getAdwordsConversionTrackingGtagConvesionEvent($order)?> );
+				}
+			</script>
+	    <?php endforeach ?>
+    <?php endif ?>
+    <?php foreach ($collection as $order): ?>
+    	<?php echo $this->getLinkShare($order) ?>
+    <?php endforeach ?>
+<?php endif ?>
+<?php echo $this->getChildHtml('ec_details') ?>
+<?php echo $this->getChildHtml('ec_impression') ?>
+<?php echo $this->getChildHtml('ec_search') ?>
+<script>
+	<?php if (Mage::getSingleton('core/session')->getCustomerLogin()): ?>
+	
+		dataLayer.push(
+		{
+			'event': 'customerLogin'
+		});
+	
+		<?php Mage::getSingleton('core/session')->unsetData('customer_login') ?>
+	
+	<?php endif ?>
+</script>
+<script>
+	<?php if (null !== $data = Mage::getSingleton('core/session')->getCartEmptyEvent()):?>
+		dataLayer.push(<?php echo $data ?>);
+		<?php Mage::getSingleton('core/session')->unsetData('cart_empty_event') ?>
+	<?php endif ?>
+	<?php if (null !== $data = Mage::getSingleton('core/session')->getCartUpdateEvent()):?>
+		dataLayer.push(<?php echo $data ?>);
+	<?php Mage::getSingleton('core/session')->unsetData('cart_update_event') ?>
+<?php endif ?>
+</script>
+<?php echo $this->getChildHtml('ec_perfectaudience') ?>
+<?php echo $this->getChildHtml('ec_adroll') ?>
+<?php echo $this->getChildHtml('ec_cookie') ?>
+<?php echo $this->helper('ec')->getHeadSnippet() ?>

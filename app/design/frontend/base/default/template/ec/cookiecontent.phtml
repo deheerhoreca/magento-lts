@@ -1,0 +1,15 @@
+<div class="ec-gtm-cookie-directive">
+	<div>
+		<div>
+			<div>
+				<p><strong><?php echo $this->__('COOKIES')?></strong></p>
+				<p><?php echo $this->getCookieDirectiveContent() ?></p>
+			</div>
+			<div>
+				<a class="action accept" data-confirm="<?php echo $this->getConfig('ec/cookie/content_text_confirm') ?>"><?php echo $this->getConfig('ec/cookie/content_text_accept') ?></a>
+				<a class="action">|</a>
+				<a class="action refuse" href="<?php echo $this->getConfig('ec/cookie/content_link_learn') ?>" target="_blank"><?php echo $this->getConfig('ec/cookie/content_text_learn') ?></a>
+			</div>
+		</div>
+	</div>
+</div>

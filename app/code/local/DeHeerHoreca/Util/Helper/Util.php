@@ -3,6 +3,7 @@
 require_once 'vendor/autoload.php';
 
 use Michelf\Markdown;
+use Michelf\MarkdownExtra;
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
 {
@@ -173,11 +174,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $string = trim(str_replace("<!--markdown-->", null, $string));
       return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
     }
+    if(strstr($string, "<!--markdownextra-->") !== false) {
+      $string = trim(str_replace("<!--markdownextra-->", null, $string));
+      return Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($string);
+    }
     return $string;
   }
 
   public function markdownToHtml($string) {
     return Markdown::defaultTransform($string);
+  }
+  
+  public function markdownExtraToHtml($string) {
+    return MarkdownExtra::defaultTransform($string);
   }
 
   public function getBrandUrlSlug($url) {
@@ -251,7 +260,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $in_stock     = $stock->getIsInStock();
     
     // Block also exists in catalogproductview.phtml and featured.phtml
-    if($in_stock === true) {
+    if($in_stock === true || $in_stock === "1") {
       if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
         $stock_message = "Bestelbaar";
         $stock_status = "EMPTY";

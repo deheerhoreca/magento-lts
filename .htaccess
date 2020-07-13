@@ -141,8 +141,8 @@
     #RewriteCond %{HTTP_HOST} ^prokoeling.nl$ [OR]
     #RewriteCond %{HTTP_HOST} ^www.prokoeling.nl$
     #RewriteRule (.*)$ https://www.chefstore.nl/$1 [R=301,L]
-    RewriteCond %{HTTP_HOST} ^dev.prokoeling.nl$
-    RewriteRule (.*)$ https://dev.chefstore.nl/$1 [R=301,L]
+    #RewriteCond %{HTTP_HOST} ^dev.prokoeling.nl$
+    #RewriteRule (.*)$ https://dev.chefstore.nl/$1 [R=301,L]
 
     # Remove trailing slash from non-filepath urls
     # https://gist.github.com/evgv/e7e84e84c46e027c3fff7396a13b3a43
@@ -156,6 +156,11 @@
     # https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
     RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo|Linguee|MauiBot|BorneoBot)"
     RewriteRule ^ - [F]
+    
+    # Block persistent DigitalOcean scrapers
+    RewriteCond %{QUERY_STRING} ccpturl=prokoeling.nl* [OR]
+    RewriteCond %{REQUEST_URI} ccpturl=prokoeling.nl*
+    RewriteRule (.*) /? [L,R=301]
 
 ############################################
 ### END DHH
@@ -331,9 +336,10 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
 </IfModule>
 
 # Remember, cache control is about how long mod_pagespeed will cache assets.
+# Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
 <filesMatch ".(jpg|jpeg|png|gif|ico|svg|webp|css|js|webp)$">
   Header unset Etag
-  Header set Cache-Control "max-age=3600, public"
+  Header set Cache-Control "max-age=60, public"
 </filesMatch>
 <FilesMatch "\.(html|htm)$">
   Header unset Etag

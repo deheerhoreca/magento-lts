@@ -195,7 +195,7 @@ try {
         
 		    // foreach($_images as $image) {
         foreach($product->getMediaGalleryImages() as $image) {
-			    if($image->getUrl() == $imageLoc) continue;
+			    // if($image->getUrl() == $imageLoc) continue;
           // print_r($image);
           // $label = (empty($image->getLabel()) ? $product->getName() : $image->getLabel());
           $label = $product->getName();

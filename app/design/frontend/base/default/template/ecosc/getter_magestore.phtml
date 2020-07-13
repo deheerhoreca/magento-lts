@@ -1,0 +1,15 @@
+<script>
+	<?php
+	/**
+	 * Default Magestore getter
+	 */
+	?>
+	
+	if ('undefined' === typeof getter)
+	{
+		var getter = function(context)
+		{
+			return context.parent().html();
+		};
+	}
+</script>

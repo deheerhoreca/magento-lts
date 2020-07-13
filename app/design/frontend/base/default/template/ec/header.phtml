@@ -1,0 +1,223 @@
+<script>
+
+	<?php
+	/**
+	 * Magento Enhanced Ecommerce Event Tracking for Google Tag Manager
+	 *
+	 * @author Anowave
+	 * @see http://www.anowave.com/marketplace/magento-extensions/magento-google-tag-manager-enhanced-ecommerce-ua-tracking/
+	 * @copyright 2018 Anowave
+	 */
+	?>
+
+	window.dataLayer = window.dataLayer || [], collection = [];
+
+	<?php
+	/**
+	 * Constants definition
+	 */
+	?>
+	
+	AEC.Const = 
+	{
+		TIMING_CATEGORY_ADD_TO_CART:		'<?php echo $this->__('Add To Cart Time') ?>',
+		TIMING_CATEGORY_REMOVE_FROM_CART:	'<?php echo $this->__('Remove From Cart Time') ?>',
+		TIMING_CATEGORY_PRODUCT_CLICK:		'<?php echo $this->__('Product Detail Click Time') ?>',
+		TIMING_CATEGORY_CHECKOUT:			'<?php echo $this->__('Checkout Time') ?>',
+		TIMING_CATEGORY_CHECKOUT_STEP:		'<?php echo $this->__('Checkout Step Time') ?>',
+		TIMING_CATEGORY_PRODUCT_WISHLIST:	'<?php echo $this->__('Add to Wishlist Time') ?>',
+		TIMING_CATEGORY_PRODUCT_COMPARE:	'<?php echo $this->__('Add to Compare Time') ?>',
+		URL:								'<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, isset($_SERVER['HTTPS'])) ?>'
+	};
+
+	<?php
+	/**
+	 * Smart Viewport
+	 */
+	?>
+	
+	AEC.Const.Viewport = <?php echo Mage::helper('ec/json')->encode($this->helper('ec')->supportViewport()) ?>;
+
+	<?php
+	/**
+	 * Google Analytics Client Id
+	 */
+	?>
+	
+	AEC.Const.ClientId = <?php echo $this->helper('ec')->getClientId() ?>;
+
+	<?php
+	/**
+	 * Cookie Consent Support
+	 */
+	?>
+	
+	AEC.CookieConsent.support = <?php echo json_encode(Mage::helper('ec/cookie_consent')->supportCookieDirective()) ?>;
+
+	<?php
+	/**
+	 * Define messages
+	 */
+	?>
+	
+	AEC.Message = 
+	{
+		confirmRemove: '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>'
+	};
+
+	AEC.currencyCode 	= '<?php echo Mage::app()->getStore()->getCurrentCurrencyCode() ?>';
+	AEC.eventTimeout 	=  <?php echo (int) $this->helper('ec')->getTimeoutValue() ?>;
+	AEC.eventCallback	=  <?php echo $this->helper('ec')->getEventCallback() ?>;
+	AEC.forceSelectors 	=  <?php echo (int) Mage::getStoreConfig('ec/selectors/force') ?>;
+	AEC.facebook 		=  <?php echo Mage::helper('ec/json')->encode($this->helper('ec')->facebook()) ?>;
+	AEC.facebookPixelId = '<?php echo Mage::getStoreConfig('ec/facebook/addPixelId')?>';
+
+	AEC.SUPER = <?php echo $this->helper('ec')->getSuper() ?>;
+
+	/**
+	 * Persistent dataLayer[] data
+	 */
+	AEC.Persist = (function(dataLayer)
+	{
+		var DATA_KEY = 'persist'; 
+
+		var proto = 'undefined' != typeof Storage ? 
+		{
+			push: function(key, entity)
+			{
+				/**
+				 * Get data
+				 */
+				var data = this.data();
+
+				/**
+				 * Push data
+				 */
+				data[key] = entity;
+
+				/**
+				 * Save to local storage
+				 */
+				localStorage.setItem(DATA_KEY, JSON.stringify(data));
+
+				return this;
+			},
+			data: function()
+			{
+				var data = localStorage.getItem(DATA_KEY);
+				
+				if (null !== data)
+				{
+					return JSON.parse(data);
+				}
+
+				return {};
+			},
+			merge: function()
+			{
+				var data = this.data();
+				var push = 
+				{
+					persist: {}
+				};
+
+				for (var i in data)
+				{
+					push.persist[i] = data[i];
+				}
+
+				dataLayer.push(push);
+
+				return this;
+			},
+			clear: function()
+			{
+				/**
+				 * Reset private local storage
+				 */
+				localStorage.setItem(DATA_KEY,JSON.stringify({}));
+
+				return this;
+			}
+		} : {
+			push: 	function(){}, 
+			merge: 	function(){},
+			clear: 	function(){}
+		}
+
+		/**
+		 * Constants
+		 */
+		proto.CONST_KEY_PROMOTION = 'persist_promotion';
+
+		return proto;
+		
+	})(dataLayer).merge();
+
+	if (AEC.facebook)
+	{
+		!function(f,b,e,v,n,t,s)
+		{
+			if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+			n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+			n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+			t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)
+		}(window,document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+		<?php
+		/**
+		 * Initialize Facebook Pixel Tracking
+		 */
+		?>
+		
+		<?php if (Mage::helper('ec/cookie_consent')->supportCookieDirective()):?>
+
+			AEC.CookieConsent.queue(function()
+			{
+				<?php
+				/**
+				 * Init Facebook Pixel
+				 */
+				?>
+				
+				fbq('init', AEC.facebookPixelId, <?php echo $this->helper('ec')->getFacebookAdvancedMatchingParams() ?>);
+
+				<?php
+				/**
+				 * Track pageview
+				 */
+				?>
+				
+				fbq('track','PageView');
+			});
+
+		<?php else: ?>
+
+				<?php
+				/**
+				 * Init Facebook Pixel
+				 */
+				?>
+				
+				fbq('init', AEC.facebookPixelId);
+
+				<?php
+				/**
+				 * Track pageview
+				 */
+				?>
+				
+				fbq('track','PageView');
+		
+		<?php endif ?>
+	}
+	
+</script>
+<?php if (Mage::helper('ec/cookie_consent')->supportCookieDirective()): ?>
+
+<style>
+	.ec-gtm-cookie-directive > div { background: <?php echo Mage::helper('ec/cookie_consent')->getCookieDirectiveBackgroundColor() ?>; color: <?php echo Mage::helper('ec/cookie_consent')->getCookieDirectiveTextColor() ?>  }
+	.ec-gtm-cookie-directive > div > div > div a.action.accept { color: <?php echo Mage::helper('ec/cookie_consent')->getCookieDirectiveTextAcceptColor() ?> }
+</style>
+
+<?php endif ?>

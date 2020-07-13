@@ -1,0 +1,40 @@
+@CHARSET "UTF-8";
+
+.ec-gtm-cookie-directive 
+{ 
+	position: fixed; 
+	bottom:20px; 
+	left: 0; 
+	right: 0; 
+	text-align: center; 
+	z-index:9999; 
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=95)";
+	filter: alpha(opacity=95);
+	-moz-opacity: 0.95;
+	-khtml-opacity: 0.95;
+	opacity: 0.95;
+	
+}
+
+.ec-gtm-cookie-directive > div 
+{ 
+	display: inline-block; 
+	text-align: left;  
+	background:#fff;
+	padding:20px; 
+	color:#000; 
+	max-width:400px;
+	-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.19);
+	-moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.19);
+	box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.19);
+}
+
+.ec-gtm-cookie-directive > div > div { float:left; }
+.ec-gtm-cookie-directive > div > div > div:before,
+.ec-gtm-cookie-directive > div > div > div:after { content: " ";display: table; }
+.ec-gtm-cookie-directive > div > div > div:after { clear: both; }
+.ec-gtm-cookie-directive > div > div > div p { display:block; padding:5px; margin:0px; }
+.ec-gtm-cookie-directive > div > div > div a { cursor:pointer; color:#8e8e8e; }
+.ec-gtm-cookie-directive > div > div > div a.action { display:block; text-align:left; padding:5px; float:left; }
+.ec-gtm-cookie-directive > div > div > div a.action.accept { color:#8bc53f; font-weight:bold; }
+.ec-gtm-cookie-directive > div > div > div a.action.refuse {  }

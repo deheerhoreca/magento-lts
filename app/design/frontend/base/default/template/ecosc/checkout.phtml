@@ -1,0 +1,284 @@
+<?php echo $this->getGetter() ?>
+<script>
+
+	var checkoutProducts = [];
+
+	var ecomm = 
+	{
+		i: [], /* ecomm_prodid[] array */
+		v: [], /* ecomm_pvalue[] array */
+		p: []  /* ecomm_pname[]  array */
+	};
+	
+	<?php foreach (Mage::helper('ec')->getCheckoutProducts() as $product) : ?>
+
+		var data = <?php echo json_encode(array_diff_key(get_object_vars($product),array_flip(array('remarketingId')))) ?>;
+
+		checkoutProducts.push(data);
+
+		<?php
+		/**
+		 * AdWords Dynamic Remarketing
+		 */
+		?>
+		ecomm.i.push('<?php echo $product->remarketingId ?>');
+		ecomm.v.push(data.price);
+		ecomm.p.push(data.name);
+		
+	<?php endforeach ?>
+
+	if (window.google_tag_params)
+	{
+		window.google_tag_params.ecomm_prodid 		= ecomm.i;
+		window.google_tag_params.ecomm_pvalue		= ecomm.v;
+		window.google_tag_params.ecomm_pname		= ecomm.p;
+		window.google_tag_params.ecomm_pagetype 	= 'cart';
+		window.google_tag_params.ecomm_totalvalue 	= '<?php echo Mage::getSingleton('checkout/session')->getQuote()->getGrandTotal() ?>';
+
+		<?php if (Mage::helper('ec')->supportsDynx()): ?>
+
+		window.google_tag_params.dynx_pagetype 		= 'conversionintent';
+		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
+		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue
+		
+		<?php endif ?>
+	}
+
+	/**
+	 * Step indexes. Funnel should match those steps
+	 */
+	var STEP_CHECKOUT_CART		= 1;
+	var STEP_CHECKOUT 			= 2;
+	var STEP_CHECKOUT_SHIPPING 	= 3;
+	var STEP_CHECKOUT_PAYMENT 	= 4;
+	
+	/**
+	 * Fire second step
+	 */
+	EC.push(function(dataLayer)
+	{
+		dataLayer.push(
+		{
+			'event':'checkout',
+			'ecommerce': 
+			{
+				'checkout': 
+				{
+					'actionField': 
+					{
+						'step': STEP_CHECKOUT
+					},
+					'products': checkoutProducts
+				}
+			}
+		});
+	});
+	
+	if ("undefined" !== typeof jQuery && "undefined" === typeof Osc && "undefined" !== typeof dataLayer)
+	{
+		var Osc = (function($)
+		{
+			/**
+			 * Private methods
+			 */
+			var getText = function(text)
+			{
+				var div = $('<div/>').html(text);
+
+				div.find('span').remove();
+				div.find('input').remove();
+				div.find('style').remove();
+
+				return div.text().trim();
+			};
+			
+			return {
+				bound: false,
+				trackedSteps:[],
+				push: function(virtualStep, text)
+				{
+					dataLayer.push(
+					{
+						'event': 'checkoutOption',
+						'ecommerce': 
+						{
+							'checkout_option': 
+							{
+								'actionField': 
+								{
+									'step': 	virtualStep, 
+									'option': 	text
+								}
+							}
+						}
+					})
+				},
+				apply: function()
+				{
+					$(window).load(function()
+					{
+						Ajax.Responders.register(
+						{
+							onComplete: function()
+							{
+								Osc.track();
+							}
+						});
+
+						/**
+						 * Bind fallback
+						 */
+						setTimeout(function()
+						{
+							if (!Osc.bound)
+							{
+								Osc.track();
+							}
+						},500);
+					});
+
+					<?php
+					/**
+					 * @todo: Implement tracking when only one option is available (such as payment, shipping). The current implementation will not fire the virtual step, as it requires customer input
+					 */
+					?>
+
+					return this;
+				},
+				track: function()
+				{
+					/**
+					 * Set bound state
+					 */
+					this.bound = true;
+
+					/**
+					 * Bind payment tracking
+					 */
+					this.getPayment().off('click.ec').on('click.ec', (function(virtualStep, trackedSteps)
+					{
+						return function()
+						{
+							var context = $(this);
+							
+							if (-1 == $.inArray(virtualStep, trackedSteps))
+							{
+								trackedSteps.push(virtualStep);	
+
+								/**
+								 * Track step
+								 */
+								dataLayer.push(
+								{
+									'event':'checkout',
+									'ecommerce': 
+									{
+										'checkout': 
+										{
+											'actionField': 
+											{
+												'step': virtualStep
+											},
+											'products': checkoutProducts
+										}
+									},
+									'eventCallback': function() 
+									{
+										Osc.push(virtualStep, getText(getter(context)));
+									}								
+								});
+							}
+							else 
+							{
+								Osc.push(virtualStep, getText(getter(context)));
+							}
+						}
+					})(STEP_CHECKOUT_PAYMENT, this.trackedSteps));
+
+					/**
+					 * Bind shipping tracking
+					 */
+					this.getShipping().off('click.ec').on('click.ec', (function(virtualStep, trackedSteps)
+					{
+						return function()
+						{
+							var context = $(this);
+							
+							if (-1 == $.inArray(virtualStep, trackedSteps))
+							{
+								trackedSteps.push(virtualStep);
+
+								/**
+								 * Track step
+								 */
+								dataLayer.push(
+								{
+									'event':'checkout',
+									'ecommerce': 
+									{
+										'checkout': 
+										{
+											'actionField': 
+											{
+												'step': virtualStep
+											},
+											'products': checkoutProducts
+										}
+									},
+									'eventCallback': function() 
+									{
+										Osc.push(virtualStep, getText(getter(context)));
+									}
+								});		
+							}
+							else 
+							{
+								Osc.push(virtualStep, getText(getter(context)));
+							}
+						}
+					})(STEP_CHECKOUT_SHIPPING, this.trackedSteps));
+
+					return this;
+				},
+				getPayment: function()
+				{
+					return $(':radio[name="payment[method]"]').add(':radio[name="payment_method"]');
+				},
+				getShipping: function()
+				{
+					return $(':radio[name="shipping[method]"]').add(':radio[name="shipping_method"]');
+				}
+			}
+		})(jQuery).apply();
+
+		(function(products)
+		{
+			var ids = [];
+
+			for (i = 0, l = products.length; i < l; i++)
+			{
+				ids.push(products[i].id);
+			}
+
+			<?php
+			/**
+			 * Facebook Pixel Checkout
+			 */
+			?>
+			if ("undefined" !== typeof fbq)
+			{
+				fbq("track", "InitiateCheckout", 
+				{
+					value: 			<?php echo Mage::getSingleton('checkout/session')->getQuote()->getGrandTotal() ?>,
+					content_type: 	'product',
+					content_name: 	'checkout',
+					content_ids:	ids,
+					num_items:		ids.length,
+					currency: 		'<?php echo Mage::app()->getStore()->getCurrentCurrencyCode() ?>'
+				});
+			}
+			
+		})(checkoutProducts);
+	}
+	
+</script>

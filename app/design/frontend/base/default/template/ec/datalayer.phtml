@@ -1,0 +1,43 @@
+<script>
+
+	/**
+ 	 * Define dataLayer[] object
+	 */
+	window.dataLayer = window.dataLayer || [];
+
+	/**
+	 * Define transport layer to use as fallback in case of Ad-Blockers
+	 * 
+	 * @copyright Anowave
+	 */
+	var dataLayerTransport = (function()
+	{
+		var data = [];
+		
+		return {
+			data:[],
+			push: function(data)
+			{
+				this.data.push(data);
+				
+				return this;
+			},
+			serialize: function()
+			{
+				return this.data;
+			}
+		}	
+	})();
+
+	<?php
+	/**
+	 * Allow others to push general stuff in dataLayer[] object
+	 */
+	?>
+	<?php if (null !== $data = $this->helper('ec')->getGeneralPush()): ?>
+
+		dataLayer.push(<?php echo $data ?>);
+	
+	<?php endif ?>
+	
+</script>

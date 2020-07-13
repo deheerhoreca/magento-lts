@@ -1,0 +1,91 @@
+<script>
+
+	var ecomm = 
+	{
+		i: [], /* ecomm_prodid[] array */
+		v: [], /* ecomm_pvalue[] array */
+		p: []  /* ecomm_pname[]  array */
+	};
+
+	<?php foreach ($this->getItems() as $item) : ?>
+
+		var data = <?php echo Mage::helper('ec/remarketing')->getParameters($item) ?>;
+
+		ecomm.i.push(data.i);
+		ecomm.v.push(data.v);
+		ecomm.p.push(data.p);
+		
+	<?php endforeach ?>
+	
+	if (window.google_tag_params)
+	{
+		window.google_tag_params.ecomm_prodid 		= ecomm.i;
+		window.google_tag_params.ecomm_pvalue		= ecomm.v;
+		window.google_tag_params.ecomm_pname		= ecomm.p;
+		window.google_tag_params.ecomm_pagetype 	= 'cart';
+		window.google_tag_params.ecomm_totalvalue 	= <?php echo (float) $this->getQuote()->getGrandTotal() ?>;
+
+		<?php if ($this->helper('ec')->supportsDynx()): ?>
+
+		window.google_tag_params.dynx_pagetype 		= 'conversionintent';
+		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
+		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue;
+		
+		<?php endif ?>
+	}
+
+	<?php if ($data = $this->helper('ec/datalayer')->getCouponDiscountPush()): ?> 
+	
+		dataLayer.push(<?php echo  $data ?>);
+
+	<?php endif ?>
+
+	<?php
+	/**
+	 * Track discount code
+	 */
+	?>
+	if ('undefined' !== typeof discountForm && 'undefined' !== typeof discountForm.submit)
+	{
+		(function(form, $)
+		{
+			<?php
+			/**
+			 * Get original action
+			 */
+			?>
+			var submit = form.submit;
+
+			form.submit = function(isRemove)
+			{
+				<?php
+				/**
+				 * Execute original action
+				 */
+				?>
+				submit(isRemove);
+
+				var code = $('[id=coupon_code]').val();
+
+				if ('' !== code)
+				{
+					var data = <?php echo Mage::helper('ec/json')->encode(array
+					(
+						'event' 		=> 'discountFormSubmit',
+						'eventCategory' => $this->__('Cart'),
+						'eventAction' 	=> $this->__('Discount'),
+						'eventLabel' 	=> $this->__('Apply')
+					)) ?>;
+
+					data['eventValue'] = code;
+								
+					dataLayer.push(data);
+				}
+
+				return false;
+			}; 
+			
+		})(discountForm, jQuery);
+	}
+	
+</script>

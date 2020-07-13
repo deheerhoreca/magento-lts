@@ -113,6 +113,32 @@ User-agent: Linguee
 User-agent: MauiBot
 User-agent: BorneoBot
 User-agent: CCBot
+User-agent: A6-Indexer
+User-agent: AlphaSeoBot
+User-agent: AlphaSeoBot-SA
+User-agent: AspiegelBot
+User-agent: Blackboard Safeassign
+User-agent: BLEXBot/1.0
+User-agent: Bytespider
+User-agent: crawler4j
+User-agent: DotBot
+User-agent: Gigabot
+User-agent: LieBaoFast
+User-agent: MauiBot
+User-agent: MauiBot (crawler.feedback+wc@gmail.com) 
+User-agent: MegaIndex.ru/2.0
+User-agent: MqqBrowser
+User-agent: Nimbostratus-Bot/v1.3.2
+User-agent: Seekport Crawler
+User-agent: SeznamBot
+User-agent: SputnikBot/2.3
+User-agent: The Knowledge AI
+User-agent: TurnitinBot
+User-agent: UCBrowser
+User-agent: yacybot
+User-agent: Yeti
+User-agent: YisouSpider
+User-agent: PetalBot
 Disallow: /
 
 User-agent: *

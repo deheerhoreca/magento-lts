@@ -1,0 +1,113 @@
+<script>
+
+	if ('undefined' !== typeof jQuery && 'undefined' !== typeof dataLayer)
+	{
+		(function($, dataLayer)
+		{
+			var events = 
+			{
+				addToCart: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.ajax(this, dataLayer);
+					
+					<?php endif ?>
+					
+				},
+				addToCartList: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.ajaxList(this, dataLayer);
+					
+					<?php endif ?>
+					
+				},
+				removeFromCart: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.remove(this, dataLayer);
+					
+					<?php endif ?>
+					
+				},
+				productClick: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.click(this, dataLayer);
+					
+					<?php endif ?>
+					
+				},
+				addToWishlist: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.wishlist(this, dataLayer);
+					
+					<?php endif ?>
+					
+				},
+				addToCartWishlist: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.ajaxList(this, dataLayer);
+					
+					<?php endif ?>
+				},
+				addToCompare: function()
+				{
+					<?php if ($this->helper('ec')->useOnHandler()):?>
+
+					AEC.compare(this, dataLayer);
+					
+					<?php endif ?>
+					
+				}
+			};
+
+			var b = function(events)
+			{
+				$.each(events, function(event, callback)
+				{
+					var elements = $('[data-event]').filter(function()
+					{
+						return $(this).data('event') == event;
+					});
+
+					elements.each(function()
+					{
+						$(this).off('click.ec').on('click.ec', callback);
+					});
+				});
+			};
+
+			<?php
+			/**
+			 * Bind events
+			 */
+			?>
+			
+			b(events);
+
+			<?php
+			/**
+			 * Bind events (for ajax loaded content);
+			 */
+			?>
+			
+			(function(events)
+			{
+				$(document).ajaxComplete(function( event, request, settings ) 
+				{
+					b(events);
+				});
+			})(events);
+			
+		})(jQuery, dataLayer);
+	}
+</script>

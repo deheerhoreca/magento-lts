@@ -215,7 +215,7 @@ dl.product-specs dt {
   float: left; 
   margin-right: 10px; 
   padding: 5px;  
-  width: 50%; 
+  width: 40%; 
 }
  
 dl.product-specs dd {
@@ -224,6 +224,35 @@ dl.product-specs dd {
 }
 
 dl.product-specs:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.specs-table dl {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  width: 100%;
+  overflow: visible;
+}
+
+.specs-table dt {
+  flex: 0 0 calc(40% - .5em);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-right: .5em;
+  padding: 5px;
+}
+
+.specs-table dd {
+  flex: 0 0 60%;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 2px 0;
+  padding: 5px 0;
+}
+
+.specs-table dl:nth-of-type(even) {
   background-color: #f3f3f3;
 }
 
@@ -392,6 +421,9 @@ h6 {
   font-weight: 700 !important;
 }
 
+.hidden {
+  display: none;
+}
 
 /* Unsorted */
 

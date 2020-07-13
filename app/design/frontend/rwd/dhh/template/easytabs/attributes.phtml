@@ -29,7 +29,7 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
 ];
 
 /* Do not show these values */
-$value_skip           = ["N.v.t.", "n.v.t."];
+$value_skip           = ["N.v.t.", "n.v.t.", "Geen / n.v.t."];
 
 if($_additionalgroup = $this->getAdditionalDataCustom()) {
   $attr_remove_decimals = array_flip($attr_remove_decimals);
@@ -65,6 +65,16 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           } else {
             $value = number_format($value, 2, ",", ".");
             $postfix = " kW";
+          }
+          break;
+        
+        case "weight":
+          if($value < 3) {
+            $value *= 1000;
+            $postfix = " g";
+          } else {
+            $value = number_format($value, 2, ",", ".");
+            $postfix = " kg";
           }
           break;
 

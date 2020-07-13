@@ -2380,6 +2380,13 @@
   }
 }
 
+@media only screen and (max-width: 479px) {
+  .specs-table dt,
+  .specs-table dd {
+    flex: 0 0 calc(50% - .5em);
+  }
+}
+
 @media only screen and (min-width: 480px) {
   .products-grid>li:nth-child(odd) {
     clear: none;
