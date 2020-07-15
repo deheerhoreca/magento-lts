@@ -67,7 +67,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      */
     public function getStockStatusUrl()
     {
-        if ($this->getProduct()->isSaleable()){
+        if ($this->getProduct()->isSaleable() === true){
             $availability = 'http://schema.org/InStock';
         } else {
             $availability = 'http://schema.org/OutOfStock';
@@ -241,7 +241,8 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             'sku'                   => $this->getProduct()->getSku(),
             'brand'                 => $this->getProduct()->getAttributeText('manufacturer'), /* DHH CORE HACK */
             'url'                   => $this->getProduct()->getProductUrl(), // Use canonical url here, don't fuck around with SEO
-            'gtin13'                => $this->getProduct()->getResource()->getAttribute('ean')->getFrontend()->getValue($this->getProduct()),
+            'gtin'                  => $this->getProduct()->getResource()->getAttribute('ean')->getFrontend()->getValue($this->getProduct()),
+            'mpn'                   => $this->getProduct()->getData("sku_seller"),
             'offers'                => array(
                 '@type'             => 'Offer',
                 'availability'      => $this->getStockStatusUrl(),
@@ -257,19 +258,23 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         );
         
         /* DHH CORE HACK */
-      
-        $stock      = Mage::getModel('cataloginventory/stock_item')->loadByProduct($this->getProduct());
-        $in_stock   = $stock->getIsInStock();
         
-        if($in_stock === true) {
-          $stock_qty  = (int) $stock->getQty();
-          if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
-            $data["offers"]["availability"] = "http://schema.org/OutOfStock";
-          } else {
+        $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($this->getProduct());
+        $overall_stock_status = $stock_data["overall_stock_status"];
+        
+        switch($overall_stock_status) {
+          case "in_stock":
             $data["offers"]["availability"] = "http://schema.org/InStock";
-          }
-        } else {
-          $data["offers"]["availability"] = "http://schema.org/OutOfStock";
+            break;
+          case "backorder":
+            $data["offers"]["availability"] = "http://schema.org/PreOrder";
+            break;
+          case "not_sellable":
+            $data["offers"]["availability"] = "http://schema.org/OutOfStock";
+            break;
+          case "eol":
+            $data["offers"]["availability"] = "http://schema.org/OutOfStock";
+            break;
         }
         
         /* END DHH CORE HACK */

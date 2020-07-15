@@ -10,6 +10,9 @@ if (php_sapi_name() !== "cli") {
   // exit;
 // }
 
+ini_set('display_errors',true);
+error_reporting(E_ALL | E_STRICT);
+
 require_once "./app/Mage.php";
 Mage::setIsDeveloperMode(true);
 Mage::app(0);
@@ -24,6 +27,15 @@ if(Mage::registry('isSecureArea')) {
 }
 Mage::register('isSecureArea', true);
 
+/*********************************************************************************************
+* DEBUG OBSERVERS
+*********************************************************************************************/
+
+// https://stackoverflow.com/questions/15014154/how-to-fix-magento-1-7-developer-mode/15014983#15014983
+
+Zend_Debug::dump(
+    Mage::getConfig()->getXpath('//controller_action_predispatch//class')
+);
 
 
 /*********************************************************************************************

@@ -253,44 +253,43 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $price_html             = $product_block->getPriceHtml($_product, true);
     $price_html             = str_replace(",00", ",-", $price_html);
     $price_html             = str_replace("€", null, $price_html);
-    // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
-    $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
-    $stock_status = $stock_message = null;
-    $stock_qty    = (int) $stock->getQty();
-    $in_stock     = $stock->getIsInStock();
     
-    // Block also exists in catalogproductview.phtml and featured.phtml
-    if($in_stock === true || $in_stock === "1") {
-      if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
-        $stock_message = "Bestelbaar";
-        $stock_status = "EMPTY";
-      } else {
-        if($stock_qty === 100) { //100 is a special value
-          $stock_message = "Op voorraad";
-        } elseif($stock_qty > 10) {
-          $stock_message = "10+ op voorraad";
-        } elseif($stock_qty > 1) {
-          $stock_message = "{$stock_qty} op voorraad";
-        } else {
-          $stock_message = "Op voorraad";
+    $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+      
+    $stock_message        = $stock_data["stock_message"];
+    $stock_class          = $stock_data["txtcltcz"];
+    $stock_qty            = $stock_data["stock_qty"];
+    $in_stock             = $stock_data["in_stock"];
+    $backorders           = $stock_data["backorders"];
+    $saleable             = $stock_data["saleable"];
+    $eol                  = $stock_data["eol"];
+    $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
+    $manage_stock         = $stock_data["manage_stock"];
+    $extra_delivery_time  = $stock_data["extra_delivery_time"];
+    $overall_stock_status = $stock_data["overall_stock_status"];
+    $txtstockdate         = $stock_data["txtstockdate"];
+    $calwekdate_min       = $stock_data["calwekdate_min"];
+    $calwekdate_max       = $stock_data["calwekdate_max"];
+    $levertijd            = $stock_data["levertijd"];
+    
+    $additional_delivery_messages = null;
+      
+    switch($overall_stock_status) {
+      case "in_stock":
+        if($finalPrice >= $freeshipping_from) {
+          $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
         }
-        $stock_status = "IN_STOCK";
-      }
-    } else {
-      $stock_message = "Niet op voorraad";
-      $stock_status = "DISABLED";
-    }
-    
-    $stock_class = null;
-    switch($stock_status) {
-      case "IN_STOCK":
-        $stock_class = "green_checkbox_before";
         break;
-      case "EMPTY":
-        $stock_class = "orange_circle_before";
+      case "backorder":
+        if($finalPrice >= $freeshipping_from) {
+          $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+        }
+        $stock_class = "buyblock-usp dark-color";
+        $stock_message = "Op nabestelling";
         break;
-      case "DISABLED":
-        $stock_class = "red_x_before";
+      case "not_sellable":
+        $stock_message = "Niet op voorraad";
+      case "eol":
         break;
     }
     
@@ -545,8 +544,173 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $usps[] = "{$attribute_value} Zones";
     }
     
-    return $usps;
+    return $usps; 
+  }
+  
+  public function getStockInfo($product) {
+    $stock_data   = [];
     
+    /* Availability, Stock */
+    $stock_message        = null;
+    $txtcltcz             = null;
+    $stock_qty            = (int) $product->getStockItem()->getQty();
+    $in_stock             = $product->getStockItem()->getIsInStock(); // "0", "1", true
+    $in_stock             = ($in_stock === true || $in_stock === "1") ? true : false;
+    $backorders           = $product->getStockItem()->getBackorders();
+    $saleable             = $product->isSaleable();
+    $eol                  = ($product->getEol() === true || $product->getEol() === "1") ? true : false;
+    $eol_replacement_sku  = $product->getEolReplacementSku();
+    $manage_stock         = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
+    $extra_delivery_time  = 0;
+    $expected_delivery    = $product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($product);
+    $levertijd_verwacht   = (int) $product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($product);
+    $levertijd            = $product->getAttributeText('levertijd');
+    $bestelartikel        = $product->getAttributeText('bestelartikel');
+    
+    $calwekdate_min = $calwekdate_max = null;
+
+    /* Temporarily adjust levertijd during holidays */
+
+    /*
+    $supplier = $product->getAttributeText('supplier');
+    if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
+      $future = strtotime("1 Jan 2020");
+      $timefromdb = time();
+      $timeleft = $future - $timefromdb;
+      $daysleft = round((($timeleft/24)/60)/60);
+
+      $extra_delivery_time = (int) $daysleft - 2;
+    }
+    */
+
+    /* Delivery time text */
+
+    // Code also exists in list.phtml and featured.phtml
+
+    if($eol === true) {
+      
+      // EOL
+      
+      $stock_message        = "Nooit meer leverbaar";
+      $delivery_text        = "";
+      $txtcltcz             = 'clzsoldout';
+      $backorder_needed     = null;      
+      $overall_stock_status = "eol";
+      
+    } elseif($in_stock === false || $saleable === false) {
+      
+      // Not sellable
+      
+      $stock_message        = "Niet op voorraad, bel voor alternatieven";
+      $delivery_text        = "";
+      $txtcltcz             = 'clzsoldout';
+      $backorder_needed     = null;
+      $tagline              = null;
+      $overall_stock_status = "not_sellable";
+      
+    } elseif($bestelartikel === "Ja" || ($stock_qty <= 0 && $manage_stock === true)) {
+        
+      // Backorder
+      
+      $stock_message        = "Op nabestelling, of bel voor alternatieven";
+      $delivery_text        = "Verw. levering: <strong>Op aanvraag</strong>";
+      $txtcltcz             = 'clzinstocktemp';
+      $backorder_needed     =  true;
+      
+      $overall_stock_status = "backorder";
+
+    } else {
+      
+      // In stock
+      
+      if($levertijd === '2-3 weken') {
+        $nmwek_min = 10;
+        $nmwek_max = 15;
+      } elseif($levertijd === '3-4 weken') {
+        $nmwek_min = 15;
+        $nmwek_max = 20;
+      } elseif($levertijd === '4-5 weken') {
+        $nmwek_min = 20;
+        $nmwek_max = 25;
+      } elseif(strstr($levertijd, "werkdagen") !== false) {
+        $nmwek_min = (int) trim(strtok($levertijd, 'werkdagen'));
+        $nmwek_max = $nmwek_min + 1;
+      }
+
+      if(empty($nmwek_min) === false) {
+        
+        $nmwek_min         += $extra_delivery_time;
+        $nmwek_max         += $extra_delivery_time;
+        
+        $calwekdate_min   = date('d-m-Y', strtotime("+ {$nmwek_min} weekdays"));
+        $calwekdate_max   = date('d-m-Y', strtotime("+ {$nmwek_max} weekdays"));
+
+        // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
+        $holidays         = ["01-01-2020", "10-04-2020", "12-04-2020", "13-04-2020", "27-04-2020", "21-05-2020",
+                             "01-06-2020", "25-12-2020", "26-12-2020"];
+        $tz_obj           = new DateTimeZone('Europe/Amsterdam');
+        $today            = new DateTime("now", $tz_obj);
+        $current_hour     = $today->format('H');
+        $i                = 0;
+        
+        while(in_array($calwekdate_min, $holidays) !== false) {
+          $i++;
+        }
+        $calwekdate_min   = date('d-m-Y', strtotime($calwekdate_min . ' +' . $i . ' weekday'));
+        $calwekdate_max   = date('d-m-Y', strtotime($calwekdate_max . ' +' . ($i + 1) . ' weekday'));
+      }
+      
+      if($manage_stock === false || $stock_qty === 100) {
+        // 100 is a special value, when we don't have an exact quantity
+        $stock_message      = "Op voorraad";
+      } elseif($stock_qty > 10) {
+        $stock_message      = "<strong>10+</strong> op voorraad";
+      } elseif($stock_qty <= 5) {
+        $stock_message      = "Nog maar <strong>{$stock_qty}</strong> op voorraad";
+      } else {
+        $stock_message      = "<strong>{$stock_qty}</strong> op voorraad";
+      }
+      $txtcltcz             = 'buyblock-usp';
+      $backorder_needed     = false;
+      
+      $overall_stock_status = "in_stock";
+    }
+    
+    $txtstockdate = $product->getData('txtstockdate');
+    if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
+      if(empty($txtstockdate) === false) {    
+        $txtstockdate = date("d-m-Y", strtotime($txtstockdate));
+      }
+    }
+    
+    $stock_data["stock_message"]        = $stock_message;
+    $stock_data["txtcltcz"]             = $txtcltcz;
+    $stock_data["stock_qty"]            = $stock_qty;
+    $stock_data["in_stock"]             = $in_stock;
+    $stock_data["backorders"]           = $backorders;
+    $stock_data["saleable"]             = $saleable;
+    $stock_data["eol"]                  = $eol;
+    $stock_data["eol_replacement_sku"]  = $eol_replacement_sku;
+    $stock_data["manage_stock"]         = $manage_stock;
+    $stock_data["extra_delivery_time"]  = $extra_delivery_time;
+    $stock_data["overall_stock_status"] = $overall_stock_status;
+    $stock_data["txtstockdate"]         = $txtstockdate;
+    $stock_data["calwekdate_min"]       = $calwekdate_min;
+    $stock_data["calwekdate_max"]       = $calwekdate_max;
+    $stock_data["levertijd"]            = $levertijd;
+    $stock_data["bestelartikel"]        = $bestelartikel;
+    
+    return $stock_data;
+  }
+
+  public function addParamToUrl($url, $param) {
+    if(strpos($url,'?') !== false) {
+      $url .= "&{$param}";
+    } else {
+      $url .= "?{$param}";
+    }
+    
+    return $url;
   }
 
 }

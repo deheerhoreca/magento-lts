@@ -6,18 +6,19 @@
  */
 /* @var $this Mage_Catalog_Block_Product_List */
 
-$_productCollection          = $this->getLoadedProductCollection();
-$_helper                     = $this->helper('catalog/output');
-$category                    = $this->getRequest()->getControllerName();
-$catid                       = null;
-$carct                       = Mage::registry('current_category');
-$amschk                      = $this->getRequest()->getRouteName();
-$haschild                    = false;
-$short_name_cats             = [10, 119, 434, 174, 24, 38, 23];
-$max_product_info_items      = 3;
-$max_product_highlight_items = 6;
-$category_thumbs_dimensions  = 300;
-$parent_categories_ids       = [];
+$_productCollection           = $this->getLoadedProductCollection();
+$_helper                      = $this->helper('catalog/output');
+$category                     = $this->getRequest()->getControllerName();
+$catid                        = null;
+$carct                        = Mage::registry('current_category');
+$amschk                       = $this->getRequest()->getRouteName();
+$haschild                     = false;
+$short_name_cats              = [10, 119, 434, 174, 24, 38, 23];
+$max_product_info_items       = 3;
+$max_product_highlight_items  = 6;
+$category_thumbs_dimensions   = 300;
+$parent_categories_ids        = [];
+$freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 
 $_productCollection->setFlag('require_stock_items', true);
 
@@ -211,71 +212,76 @@ if($_collectionSize > 0) {
         $productUrl = $_product->getProductUrl(); //fallback
       }
       
-      // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
-      $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
+      $price_html           = $this->getPriceHtml($_product, true);
+      $finalPrice           = (float) $_product->getFinalPrice();
       
-      $stock_status = $stock_message = null;
-      $stock_qty    = (int) $stock->getQty();
-      $in_stock     = $stock->getIsInStock();
+      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
       
-      // Block also exists in catalogproductview.phtml and featured.phtml
-      if($in_stock === true) {
-        if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
-          $stock_message = "Bestelbaar";
-          $stock_status = "EMPTY";
-        } else {
-          if($stock_qty === 100) { //100 is a special value
-            $stock_message = "Op voorraad";
-          } elseif($stock_qty > 10) {
-            $stock_message = "10+ op voorraad";
-          } elseif($stock_qty > 1) {
-            $stock_message = "{$stock_qty} op voorraad";
-          } else {
-            $stock_message = "Op voorraad";
+      $stock_message        = $stock_data["stock_message"];
+      $stock_class          = $stock_data["txtcltcz"];
+      $stock_qty            = $stock_data["stock_qty"];
+      $in_stock             = $stock_data["in_stock"];
+      $backorders           = $stock_data["backorders"];
+      $saleable             = $stock_data["saleable"];
+      $eol                  = $stock_data["eol"];
+      $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
+      $manage_stock         = $stock_data["manage_stock"];
+      $extra_delivery_time  = $stock_data["extra_delivery_time"];
+      $overall_stock_status = $stock_data["overall_stock_status"];
+      $txtstockdate         = $stock_data["txtstockdate"];
+      $calwekdate_min       = $stock_data["calwekdate_min"];
+      $calwekdate_max       = $stock_data["calwekdate_max"];
+      $levertijd            = $stock_data["levertijd"];
+      
+      $additional_delivery_messages = null;
+      
+      switch($overall_stock_status) {
+        case "in_stock":
+          if($finalPrice >= $freeshipping_from) {
+            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
           }
-          $stock_status = "IN_STOCK";
-        }
-      } else {
-        $stock_message = "Niet op voorraad";
-        $stock_status = "DISABLED";
+          break;
+        case "backorder":
+          if($finalPrice >= $freeshipping_from) {
+            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+          }
+          $stock_class = "buyblock-usp dark-color";
+          $stock_message = "Op nabestelling";
+          break;
+        case "not_sellable":
+          $stock_message = "Niet op voorraad";
+        case "eol":
+          break;
       }
       
-      $energy_rating = $_product->getAttributeText('energieklasse');
-      $productlabel = $_product->getProductLabel();
-      $gnvalue = $_product->getAttributeText("gn"); // can be an array if multiselect
-      $tagline = $_product->getTagline();
+      $energy_rating  = $_product->getAttributeText('energieklasse');
+      $productlabel   = $_product->getProductLabel();
+      $gnvalue        = $_product->getAttributeText("gn"); // can be an array if multiselect
+      $tagline        = $_product->getTagline();
       
       /* Listview Info */
-      $product_info = [];
+      $product_info   = [];
               
-      $width = $attribute_value = $_product->getBreedte();
-      $height = $attribute_value = $_product->getHoogte();
-      $depth = $attribute_value = $_product->getDiepte();
+      $width          = ($_product->getBreedte() + 0) / 10;
+      $height         = ($_product->getHoogte()  + 0) / 10;
+      $depth          = ($_product->getDiepte()  + 0) / 10;
       
-      $width = $width + 0;
-      $height = $height + 0;
-      $depth = $depth + 0;
-      
-      $width /= 10;
-      $height /= 10;
-      $depth /= 10;
-      
-      if($width > 10) $width = round($width);
-      if($depth > 10) $depth = round($depth);
+      if($width  > 10) $width  = round($width);
+      if($depth  > 10) $depth  = round($depth);
       if($height > 10) $height = round($height);
       
       if($width > 0 && $height > 0 && $depth > 0) {
         $product_info[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
       } else {
-        $attribute_value = $_product->getBreedte();
-        if($attribute_value != '' && $attribute_value > 0) {
-          $product_info[] = "Breedte: ".($attribute_value/10)."cm";
+        $width = $_product->getBreedte();
+        if($width != '' && $width > 0) {
+          $product_info[] = "Breedte: ".($width/10)."cm";
         }
       }
-
-      $attribute_value = $_product->getAttributeText('type_koeling');
+      
+      $attribute_value = $_product->getData('diameter_mm');
       if($attribute_value != ''){
-        $product_info[] = "Koelmethode: {$attribute_value}";
+        $product_info[] = "Diameter: {$attribute_value} mm";
       }
 
       if($catid === 72) {
@@ -305,27 +311,21 @@ if($_collectionSize > 0) {
         $product_info[] = "Serie: {$attribute_value}";
       }
       
-      $code = "uitvoering";
-      $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+      $attribute_value = $_product->getData('uitvoering');
       if(strlen($attribute_value) > 0) {
         $product_info[] = "Uitvoering: {$attribute_value}";
       }
       
-      $stock_class = null;
-      switch($stock_status) {
-        case "IN_STOCK":
-          $stock_class = "green_checkbox_before";
-          break;
-        case "EMPTY":
-          $stock_class = "orange_circle_before";
-          break;
-        case "DISABLED":
-          $stock_class = "red_x_before";
-          break;
-      }
+      $code = "uitvoering";
+      $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
       
       /* Listview USPs */
       $usps = [];
+      
+      $attribute_value = $_product->getAttributeText('type_koeling');
+      if(empty($attribute_value) === false){
+        $usps[] = $attribute_value;
+      }
       
       /* Afsluitbaar */
       $attribute_value = $_product->getAttributeText("afsluitbaar");
@@ -435,7 +435,6 @@ if($_collectionSize > 0) {
       /* ------------------------------------- */
       
       /* Price Block */
-      $price_html = $this->getPriceHtml($_product, true);
       $price_html = str_replace(",00", ",-", $price_html);
       $price_html = str_replace("€", null, $price_html);
       
@@ -525,13 +524,13 @@ if($_collectionSize > 0) {
           }
           ?>
           <div class="actions">
-            <div class="float-left" style="padding-top: 5px;">
-              <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+            <div class="float-left">
+              <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span><?php echo $additional_delivery_messages; ?>
             </div>
             <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
-            <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><i class="fa fa-shopping-cart"></i></span></span></button>
-            <?php else: ?>
-            <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->__("Productdetails") ?></a>
+              <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
+              <?php else: ?>
+              <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->__("Productdetails") ?></a>
             <?php endif; ?>
           </div>
         </div>

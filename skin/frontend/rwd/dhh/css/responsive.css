@@ -2782,7 +2782,7 @@
 
 @media only screen and (min-width: 880.1px) {
   #sticky-container {
-    min-height: max(2500px, 150vh);
+    min-height: max(3000px, 175vh);
     width: 350px;
   }
   

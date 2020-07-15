@@ -6,17 +6,20 @@
  * @see Mage_Review_Block_Product_View
  */
 
-$htbrand      = $brand = null;
-$_helper      = $this->helper('catalog/output');
-$_product     = $this->getProduct();
-$brand_name   = $_product->getAttributeText('manufacturer');
-$brand_logo   = null;
-$brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_link   = "{$brand_slug}.html";
-$_store       = $_product->getStore();
-$_taxHelper   = $this->helper('tax');
-$skn          = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
-$anchors      = [];
+$htbrand          = $brand = null;
+$_helper          = $this->helper('catalog/output');
+$_product         = $this->getProduct();
+$brand_name       = $_product->getAttributeText('manufacturer');
+$brand_logo       = null;
+$brand_slug       = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$brand_link       = "{$brand_slug}.html";
+$_store           = $_product->getStore();
+$skn              = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
+$anchors          = [];
+$in3_minimum      = 100;
+$in3_maximum      = 3000;
+$billink_minimum  = 10;
+$billink_maximum  = 3500;
 
 if(empty($brand_name) === false) {
   $brand = sanitizeForFilename($brand_name);
@@ -38,46 +41,6 @@ if(count($categoryIds)) {
   $categoryName = $_category->getName();
 }
 
-/* Availability, Stock */
-$stock_message  = null;
-$stclz          = null;
-$txtcltcz       = null;
-$stock_qty      = (int) $_product->getStockItem()->getQty();
-$in_stock       = $_product->getStockItem()->getIsInStock();
-
-// Code also exists in list.phtml and featured.phtml
-if($in_stock === true || $in_stock === "1") {
-  if($stock_qty < 1 && $_product->getStockItem()->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
-    $stock_message = "Tijdelijk uitverkocht (wel bestelbaar)";
-    $stclz = "clzpreorderdots";
-    $txtcltcz = 'clzinstocktemp';
-  } else {
-    if($stock_qty === 100) { //100 is a special value
-      $stock_message = "Op voorraad";
-    } elseif($stock_qty > 10) {
-      $stock_message = "10+ op voorraad";
-    } elseif($stock_qty > 1) {
-      $stock_message = "{$stock_qty} op voorraad";
-    } else {
-      $stock_message = "Op voorraad";
-    }
-    $stclz = "clzinstockdots";
-    $txtcltcz = 'buyblock-usp';
-  }
-} else {
-  $stock_message = "Niet op voorraad, neem contact op voor alternatieven";
-  $stclz = "clznostockdots";
-  $txtcltcz = 'clzsoldout';
-}
-
-// if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-  // var_dump($in_stock);
-  // var_dump($stock_qty);
-  // var_dump($_product->isSaleable());
-// }
-
-$freeshipping_from          = 150;
-$extra_delivery_time        = 0;
 $max_highlighted_attributes = 10;
 
 // Attributes used in multiple places
@@ -87,30 +50,81 @@ $shoutout             = $_product->getResource()->getAttribute('product_label')-
 $productTitle         = $_helper->productAttribute($_product, $_product->getName(), 'name');
 $product_title_short  = $_product->getResource()->getAttribute('name_short')->getFrontend()->getValue($_product);
 $pvideo               = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
-$expected_delivery    = $_product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($_product);
-$levertijd_verwacht   = (int) $_product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($_product);
-$lbllevertijdvl       = $_product->getAttributeText('levertijd');
-$lblbestelartikel     = $_product->getAttributeText('bestelartikel');
 $_price               = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
 $_finalPrice          = $_product->getFinalPrice();
 $tagline              = $_product->getTagline();
-$_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
-$_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
 $supplier_name        = $_product->getAttributeText('supplier');
 
-/* Temporarily adjust levertijd during holidays */
+$additional_buyblock_content = $top_buyblock_content = $delivery_text = null;
 
-/*
-$supplier = $_product->getAttributeText('supplier');
-if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
-  $future = strtotime("1 Jan 2020");
-  $timefromdb = time();
-  $timeleft = $future - $timefromdb;
-  $daysleft = round((($timeleft/24)/60)/60);
+/* Availability, Stock */
+$stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+$stock_message        = $stock_data["stock_message"];
+$txtcltcz             = $stock_data["txtcltcz"];
+$stock_qty            = $stock_data["stock_qty"];
+$in_stock             = $stock_data["in_stock"];
+$backorders           = $stock_data["backorders"];
+$saleable             = $stock_data["saleable"];
+$eol                  = $stock_data["eol"];
+$eol_replacement_sku  = $stock_data["eol_replacement_sku"];
+$manage_stock         = $stock_data["manage_stock"];
+$extra_delivery_time  = $stock_data["extra_delivery_time"];
+$overall_stock_status = $stock_data["overall_stock_status"];
+$txtstockdate         = $stock_data["txtstockdate"];
+$calwekdate_min       = $stock_data["calwekdate_min"];
+$calwekdate_max       = $stock_data["calwekdate_max"];
+$levertijd            = $stock_data["levertijd"];
+$bestelartikel        = $stock_data["bestelartikel"];
 
-  $extra_delivery_time = (int) $daysleft - 2;
+if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
+  if(empty($txtstockdate) === false) {
+    $delivery_text .= "Terug op voorraad: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de datum waarop de leverancier aangeeft het product weer te kunnen leveren.</span>";
+  }
 }
-*/
+
+if($bestelartikel === "Ja") {
+  $additional_buyblock_content .= "<div class='clzinstocktemp'>Bestelartikel</div>";
+}
+
+if($overall_stock_status === "in_stock") {
+  
+  if(empty($calwekdate_min) === true) {
+    $calwekdate_min = $levertijd;
+  }
+  $delivery_text .= "Verwacht op: <strong>{$calwekdate_min}</strong>";
+  
+  if($extra_delivery_time > 0) {
+    $delivery_text .= " (extra levertijd tijdens de feestdagen)";
+  }
+  
+  if(empty($calwekdate_max) === false) {
+    $extra = " De uitloopdatum voor deze levering is {$calwekdate_max}";
+  }
+  $delivery_text .= "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is.{$extra}</span></span>";
+}
+
+if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
+  if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
+    $additional_buyblock_content .= "<div class=\"buyblock-usp\">Betaal <strong>achteraf</strong> met Billink<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Met Billink betaal je het volledige bedrag zonder rente binnen 14 dagen.</span></span></div>";
+  }
+    
+  // if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {
+    // $payment = number_format($_finalPrice / 3, 2, ",", ".");
+    // $additional_buyblock_content .= "<div class=\"buyblock-usp\">Of <strong>3 termijnen van {$payment}</strong> zonder rente<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Met In3 betaal je het volledige bedrag zonder rente over 3 termijnen: 1/3 deel betaal je direct, 1/3 deel betaal je na 30 dagen en het laatste 1/3 deel betaal je na 60 dagen.</span></span></div>";
+  // }
+}
+
+if($overall_stock_status === "eol") {
+  $eol_text             = null;
+  if(empty($eol_replacement_sku) === false) {
+    $replacement_product = Mage::getModel('catalog/product')->loadByAttribute('sku', $eol_replacement_sku);
+    if($replacement_product !== false) {
+      $name             = $_helper->productAttribute($replacement_product, $replacement_product->getName(), 'name');
+      $url              = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($replacement_product);
+      $eol_text         = "<strong>Vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
+    }
+  }
+}
 
 /* Product Documents */
 $files = Mage::getModel('staempfli_productattachment/file')
@@ -120,7 +134,7 @@ $files = Mage::getModel('staempfli_productattachment/file')
 /* Energy Label */
 if(strlen($energy_rating) > 0) {
   $enclz = null;
-  switch ($energy_rating) {
+  switch($energy_rating) {
     case 'A++++': $enclz = 'enrgclz1';  break;
     case 'A+++':  $enclz = 'enrgclz2';  break;
     case 'A++':   $enclz = 'enrgclz3';  break;
@@ -545,14 +559,41 @@ if(empty($_crossSellProducts) === false) {
   $product_description .= "<p>De {$product_title_short} heeft één of meer door de leverancier <a href='#accessoires'>geselecteerde accessoires en/of verbruiksproducten.</a></p>";
 }
 
-if(strlen($product_description) === 0) $product_description = "&nbsp;";
+if(strlen($product_description) === 0) {
+  $product_description = "&nbsp;";
+}
+
+$related_products_block = $this->getChildHtml('related_products');
+$product_additional_data_block = $this->getChildHtml('product_additional_data');
+$upsell_products_block = $this->getChildHtml('upsell_products');
+if(empty($block) === true) {
+  $upsell_products_block = $this->getLayout()->createBlock('awautorelated/blocks')->setBlockId(1)->toHtml();
+}
+
+$anchors["photos"] = "Foto's";
+if(empty($pvideo) === false)                        $anchors["video"]         = "Productvideo";
+if(strlen($product_description) > 10)               $anchors["description"]   = "Beschrijving";
+if(empty($_crossSellProducts) === false)            $anchors["accessoires"]   = "Accessoires en verbruiksartikelen";
+if(empty($product_additional_data_block) === false) $anchors["specs"]         = "Specificaties";
+if(count($files) > 0)                               $anchors["documents"]     = "Documenten";
+if(empty($upsell_products_block) === false)         $anchors["alternatives"]  = "Alternatieven";
+if(empty($related_products_block) === false)        $anchors["related"]       = "Gerelateerde producten";
+if(strlen($additional_attributes) > 10)             $anchors["additional"]    = "Extra info van de leverancier";
+if(strlen($htbrand) > 10)                           $anchors["brand"]         = "Over {$brand_name}";
+
+if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+  echo "<pre>";
+  var_dump($stock_data);
+  echo "</pre>";
+}
 ?>
+
 <script>var optionsPrice = {};</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
 
   <div class="product-name clearfix">
-    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+    <h1><?php echo $productTitle; ?></h1>
     <div class='float-left' style='margin-right:2em;'>
       <a href='/<?php echo $brand_link; ?>'><?php echo $brand_name; ?></a>
     </div>
@@ -566,21 +607,20 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     <div class="product-img-box">
       <a class="anchor" id="photos"></a>
       <?php
-        $anchors[] = "photos";
         if(empty($shoutout) === false) {
           echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
         }
-
+        
         /* Energy Label */
         if(empty($enclz) === false) {
           echo "<span class='lblenergylabel {$enclz}' title='Energielabel {$enclz}'>{$energy_rating}</span>";
         }
-
+        
         echo $this->getChildHtml('media');
       ?>
     </div>
   </div>
-
+  
   <div class="product-essential">
     <div id="sticky-container">
       <div class="product-shop">
@@ -597,7 +637,7 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
             echo $this->getChildHtml('alert_urls');
             echo $this->getChildHtml('other');
 
-            if ($_product->isSaleable() && $this->hasOptions()) {
+            if ($saleable === true && $this->hasOptions()) {
               echo $this->getChildChildHtml('container1', '', true, true);
             }
             
@@ -607,207 +647,83 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
             ?>
 
             <div class="add-to-cart-wrapper">
-              <?php
-              
+              <?php              
               echo "<div class='h1 really-strong'>{$product_title_short}</div>";
               echo $this->getChildHtml('product_type_data');
               echo $this->getChildHtml('extrahint');
-              if (!$this->hasOptions()) {
+              if(!$this->hasOptions()) {
                 ?>
                 <div class="add-to-box">
                   <?php
-                  if($_product->isSaleable()) {
-                    echo $this->getChildHtml('addtocart');
-                  }
+                  echo $this->getChildHtml('addtocart');
+                  echo $this->getChildHtml('addto');     
+                  ?>
+                </div>
+                <div class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></div>
+                <?php
+                if($eol === true) {
+                  echo "<div>Dit product is helaas niet meer leverbaar.</div>";
+                }
+                if(empty($eol_text) !== true) {
+                  echo "<div class=eol_text>{$eol_text}</div>";
+                }
+                if(empty($delivery_text) !== true) {
+                  echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
+                }
+                
+                echo $additional_buyblock_content;
+                echo $this->getChildHtml('extra_buttons');
+              } elseif($saleable === false) { ?>
+                <div class="add-to-box">
+                  <?php
                   echo $this->getChildHtml('addto');
-                  echo $this->getChildHtml('sharing');
+                  echo $additional_buyblock_content;
                   ?>
                 </div>
                 <?php
-
-                /* Stock and Delivery ETA */
-                
-                if($expected_delivery === "Op aanvraag") {
-                  ?>
-                  <small class="clzdelvlb">
-                    <span>Levertijd: Op aanvraag</span>
-                    <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
-                  </small>
-                  <?php
-                }
-
-                $instk = TRUE;
-                if($_product->getStockItem()->getIsInStock() == 1
-                  && $_product->getStockItem()->getQty() < 1
-                  && $_product->getStockItem()->getBackorders() != 0) {
-                $instk = false;
-
-                if(empty($levertijd_verwacht) === false) {
-                  $calwekdate = date('d-m-Y', strtotime("+ {$levertijd_verwacht} weekdays"));
-
-                  // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
-                  $holidays = [
-                    "01-01-2019",
-                    "19-04-2019",
-                    "22-04-2019",
-                    "30-05-2019",
-                    "10-06-2019",
-                    "25-12-2019",
-                    "26-12-2019",
-                  ];
-                  $i = 0;
-                  while(in_array($calwekdate, $holidays)) {
-                    $i++;
-                  }
-                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' Weekday'));
-                  
-                  if($levertijd_verwacht > 180) {
-                    $calwekdate = null;
-                  }
-                }
-
-                ?>
-                <small class="clzdelvlb">
-                  <span class="delivery-logo">&nbsp;</span>
-                  <span class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></span>
-                  <?php if(empty($calwekdate) === false) {
-                    echo "<span><br />Verwacht op: <strong style=\"font-weight: bold;\">{$calwekdate}</strong> ({$levertijd_verwacht} werkdagen)</span>";
-                  }
-                  ?>
-                  <span><br /><a href="tel:+31850441003">Bel ons</a> voor alternatieven en levertijden!</span>
-                </small>
-                <?php
               }
 
-              /* Delivery time text */
-
-              $nmwek = '';
-              if(($lblbestelartikel === 'Nee' || $lblbestelartikel == '')
-                && $lbllevertijdvl != ''
-                && $instk === TRUE) {
-                $nmwek = trim(str_replace('werkdagen', '', $lbllevertijdvl));
-                if($lbllevertijdvl === '4-5 weken') {
-                  $nmwek = trim(str_replace('4-5 weken', '5', $lbllevertijdvl));
-                } elseif($lbllevertijdvl === '3-4 weken') {
-                  $nmwek = trim(str_replace('3-4 weken', '4', $lbllevertijdvl));
-                }
-
-                @$nmwek += $extra_delivery_time;
-
-                if(empty($nmwek) === false) {
-                  $calwekdate = date('d-m-Y', strtotime("+ {$nmwek} weekdays"));
-
-                  // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
-                  $holidays = [
-                    "01-01-2020",
-                    "10-04-2020",
-                    "12-04-2020",
-                    "13-04-2020",
-                    "27-04-2020",
-                    "21-05-2020",
-                    "01-06-2020",
-                    "25-12-2020",
-                    "26-12-2020",
-                  ];
-                  $i = 0;
-                  
-                  $tz_obj           = new DateTimeZone('Europe/Amsterdam');
-                  $today            = new DateTime("now", $tz_obj);
-                  $current_hour     = $today->format('H');
-
-                  if($current_hour >= 16) {
-                    $i++;
-                  }
-                  
-                  while(in_array($calwekdate, $holidays)) {
-                    $i++;
-                  }
-                  $calwekdate = date('d-m-Y', strtotime($calwekdate . ' +' . $i . ' weekday'));
-                  ?>
-
-                  <div class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></div>
-                  
-                  <?php
-                  if($_finalPriceInclTax >= $freeshipping_from) {
-                    ?>
-                    <div class="buyblock-usp">Geen verzendkosten</div>
-                    <?php
-                  }
-                  ?>
-                  
-                  <div class="clzdelvlb">
-                    <?php if($_product->isSaleable()) { ?>
-                      <span class="delivery-logo">&nbsp;</span>
-                      Verw. levering: <strong style="font-weight: bold;"><?php echo $calwekdate; ?></strong>
-                      <?php if($extra_delivery_time > 0) echo " (extra levertijd tijdens de feestdagen)"; ?>
-                      <span class="tooltip">
-                        <i class="tooltip-icon fa fa-info-circle fa-lg" aria-hidden="true"></i>
-                        <span class="tooltiptext clztoptoolc">
-                          Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen.
-                            Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is.
-                            <br /><br /><strong>Wat is de leverrtijd?</strong><br />Levering van grote goederen (pallet items)
-                            vindt plaats van maandag t/m vrijdag doorgaans van 08:00-18:00. Indien wij een track & trace van de transporteur
-                            krijgen zullen we u deze doorsturen. Kleinere bestellingen die met pakketpost worden geleverd kunnen ook op
-                            zaterdag worden aangeboden. Buiten Nederland kan het in enkele gevallen voorkomen dat de zending niet de volgende
-                            dag wordt geleverd.
-                        </span>
-                      </span>
-                    <?php } ?>
-                  </div>
-                  <?php
+              if($_product->getFinalPrice() < 150) {
+                if(strtolower($supplier_name) === "gastronoble") {
+                  echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
                 }
               }
-                
-              echo $this->getChildHtml('extra_buttons');
-            } elseif (!$_product->isSaleable()) { ?>
-              <div class="add-to-box">
+
+              ?>
+              <div id="company_usps">
+                <div class="buyblock-usp"><span class="dark-color">Wij scoren een <strong>9.1</strong> op tevredenheid</span></div>
+                <div class="buyblock-usp"><span class="dark-color">Advies door professionals: <a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@chefstore.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</span></div>
+              </div>
+              <?php
+              echo $this->getChildHtml('sharing');
+              ?>
+            </div>
+            
+            <?php
+            if(sizeof($anchors) > 2) {
+              ?>
+              <div class="add-to-cart-wrapper">
                 <?php
-                echo $this->getChildHtml('addto');
-                echo $this->getChildHtml('sharing');
+                echo "<strong>Navigatie:</strong>";
+                echo "<ul class='internal-product-nav disc-list'>";
+                foreach($anchors as $key => $anchor) {
+                  echo "<li><a href='#{$key}'>{$anchor}</a></li>";
+                }
+                echo "</ul>";
+                
+                if(empty($categoryUrl) === false && empty($categoryName) === false) {
+                  echo "<small>Of ga naar alle <a href='{$categoryUrl}'>{$categoryName}</a></small>";
+                }
                 ?>
               </div>
               <?php
             }
-
-            if($_product->getFinalPrice() < 150) {
-              if(strtolower($supplier_name) === "gastronoble") {
-                echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
-              }
-            }
-
             ?>
-          </div>
+            
           </div>
         </form>
-          
-        <?php /* Company USPs */ ?>
-
-        <div id="company_usps">
-          <ul>
-            <li>
-              <div><img class='lazy' id="usp-b" alt="De beste prijs" data-src="/skin/frontend/rwd/dhh/images/euro.svg" width="32" height="32" /></div>
-              <div><small class="usp_text">Ergens goedkoper gezien?</small><small><a href="/klantenservice">Vertel het ons</a></small></div>
-              <div class="line">&nbsp;</div>
-            </li>
-            <li>
-              <div><img class='lazy' id="usp-c" alt="Advies voor professionals" data-src="/skin/frontend/rwd/dhh/images/superhero.svg" width="32" height="32" /></div>
-              <div><small class="usp_text">Advies door professionals</small><small>Wel zo fijn</small></div>
-              <div class="line">&nbsp;</div>
-            </li>
-            <li>
-              <div><img class='lazy' id="usp-d" alt="Snelle levrering" data-src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" width="32" height="32" /></div>
-              <div><small class="usp_text">Snelle levering</small><small>Door bevlogen transporteurs</small></div>
-              <div class="line">&nbsp;</div>
-            </li>
-            <li>
-              <div><img class='lazy' id="usp-e" alt="Een vraag?" data-src="/skin/frontend/rwd/dhh/images/question-mark.svg" width="32" height="32" /></div>
-              <div><small class="usp_text">Een vraag?</small><small><a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@chefstore.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</small></div>
-            </li>
-          </ul>
-        </div>
-          
-        <div class="clearer"></div>
-        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                  
+        <?php if($saleable === true && $this->hasOptions()):?>
           <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
         <?php endif;?>
       </div>
@@ -831,7 +747,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
         ?>
         <div class="content center">
           <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
-          <a id="specs_anchor" href="#specs" class="float-right">Alle Specificaties</a>
         </div>
       </div>
       <?php
@@ -842,7 +757,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
 
     /* Product Video */
     if(empty($pvideo) === false) {
-      $anchors[] = "video";
       ?>
       <div class="probottomdv">
         <a class="anchor" id="video"></a>
@@ -855,7 +769,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
 
     /* Product Description */
     if(strlen($product_description) > 10) {
-      $anchors[] = "description";
       ?>
       <div class="probottomdv std justify" id="product-detail-description">
         <a class="anchor" id="description"></a>
@@ -873,7 +786,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
           <a class="anchor" id="accessoires"></a>
           <h2 class="tableftheader">Gerelateerde producten en accessoires</h2>
           <?php
-          $anchors[] = "accessoires";
           $_columnCount = 4;
           $i = 0;
           if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
@@ -909,14 +821,12 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     }
 
     /* Product Specs */
-    $block = $this->getChildHtml('product_additional_data');
-    if(empty($block) === false) {
-      $anchors[] = "specs";
+    if(empty($product_additional_data_block) === false) {
       ?>
       <div class="probottomdv">
         <a class="anchor" id="specs"></a>
         <div id="product_additional_data">
-          <?php echo $block ?>
+          <?php echo $product_additional_data_block ?>
         </div>
       </div>
       <?php
@@ -928,7 +838,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     if(count($files) > 0) {
       $helper = $this->helper('staempfli_productattachment');
       $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
-      $anchors[] = "documents";
       ?>
       <div class="leftbranddv">
         <h2 class="tableftheader"><?php echo $this->__('Documenten');?></h2>
@@ -961,33 +870,24 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     <?php /* Stored Upsell Products OR Automatic Related Products */ ?>
 
     <?php
-    $block = $this->getChildHtml('upsell_products');
-    if(empty($block) === true) {
-      $block = $this->getLayout()->createBlock('awautorelated/blocks')->setBlockId(1)->toHtml();
-    }
-    
-    if(empty($block) === false) {
-      $anchors[] = "alternatives";
+    if(empty($upsell_products_block) === false) {
       ?>
       <a class="anchor" id="alternatives"></a>
       <div class="probottomdv">
-        <?php echo $block; ?>
+        <?php echo $upsell_products_block; ?>
       </div>
       <?php
     }
     ?>
     
-    <?php /* Stored Upsell Products OR Automatic Related Products */ ?>
+    <?php /* Related Products */ ?>
     
     <?php
-    $block = $this->getChildHtml('related_products');
-    
-    if(empty($block) === false) {
-      $anchors[] = "related";
+    if(empty($related_products_block) === false) {
       ?>
       <a class="anchor" id="related"></a>
       <div class="probottomdv" id="related">
-        <?php echo $block; ?>
+        <?php echo $related_products_block; ?>
       </div>
       <?php
     }
@@ -997,7 +897,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     
     <?php
     if(strlen($additional_attributes) > 10) {
-      $anchors[] = "additional-attributes";
       ?>
       <h2 class="tableftheader"><?php echo $this->__('Extra informatie van de fabrikant');?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
@@ -1015,7 +914,6 @@ if(strlen($product_description) === 0) $product_description = "&nbsp;";
     <div class="probottomdv" id="product-brand-text">
       <?php
       if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
-        $anchors[] = "brand";
         ?>
         <a class="anchor" id="brand"></a>
         <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>

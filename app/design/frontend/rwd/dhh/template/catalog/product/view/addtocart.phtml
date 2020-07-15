@@ -1,13 +1,20 @@
 <?php
-$_product = $this->getProduct();
-//$_price = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
-$_finalPrice = $_product->getFinalPrice();
+$_product             = $this->getProduct();
+$_store               = $_product->getStore();
+$_finalPrice          = $_product->getFinalPrice();
+$_taxHelper           = $this->helper('tax');
+$_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
+$_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
+$freeshipping_from    = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
+$saleable             = $_product->isSaleable();
 
-$buttonTitle_buy = Mage::helper('core')->quoteEscape($this->__('Kopen'));
-if($_product->getStockItem()->getIsInStock() == 1 && $_product->getStockItem()->getQty() < 1 && $_product->getStockItem()->getBackorders()!=0){
-  $buttonTitle_buy = $this->__('Kopen');
+$buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('Kopen'));
+$buttonTitle_lease    = $this->__('Lease aanvragen');
+$top_buyblock_content = null;
+
+if($_finalPriceInclTax >= $freeshipping_from && $saleable === true) {
+  $top_buyblock_content .= "<div><strong class=green>Gratis</strong> bezorgd</div>";
 }
-$buttonTitle_lease = $this->__('Lease aanvragen');
 ?>
 
 <div class="price-info">
@@ -17,22 +24,23 @@ $buttonTitle_lease = $this->__('Lease aanvragen');
     echo $this->getTierPriceHtml();
 	?>
 </div>
-  <?php
-  if($_product->isSaleable()) { ?>
-    <div class="add-to-cart">
+<?php
 
+echo $top_buyblock_content;
+
+if($_product->isSaleable()) { ?>
+  <div class="add-to-cart">
+    <?php
+    
+    /* Grouped Products */
+    if(0 && !$_product->isGrouped()) {
+      ?>
+      <div class="qty-wrapper" style="display: none;">
+        <label for="qty"><?php echo $this->__('Qty:') ?></label>
+        <input type="text" pattern="\d*(\.\d+)?" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
+      </div>
       <?php
-
-      /* Grouped Products */
-
-      if(0 && !$_product->isGrouped()) {
-        ?>
-        <div class="qty-wrapper" style="display: none;">
-          <label for="qty"><?php echo $this->__('Qty:') ?></label>
-          <input type="text" pattern="\d*(\.\d+)?" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
-        </div>
-        <?php
-      }
+    }
     ?>
 
     <div class="add-to-cart-buttons">

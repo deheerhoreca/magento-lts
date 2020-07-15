@@ -1,17 +1,47 @@
 <?xml version="1.0"?>
 <config>
+
   <modules>
     <DeHeerHoreca_Util>
       <version>0.1.0</version>
     </DeHeerHoreca_Util>
   </modules>
+  
   <global>
     <helpers>
       <deheerhoreca_util>
         <class>DeHeerHoreca_Util_Helper</class>
       </deheerhoreca_util>
     </helpers>
+    
+    <models>
+      <deheerhoreca_util>
+        <class>DeHeerHoreca_Util_Model</class>
+      </deheerhoreca_util>
+    </models>
+    
+    <events>
+      <catalog_product_save_before>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>updateProductBeforeSave</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_save_before>
+      <catalog_product_save_after>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>updateProductAfterSave</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_save_after>
+    </events>
   </global>
+  
   <frontend>
     <events>
       <catalog_controller_product_view>

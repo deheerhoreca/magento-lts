@@ -28,13 +28,35 @@ if($helper->isProductShortEnabled()) {
 if(strlen($productDescription) < 10) {
   $productDescription = htmlentities($product->getName());
 }
+
+$product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
+
+$stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product, $_helper);
+$overall_stock_status = $stock_data["overall_stock_status"];
+
+$availability = null;
+switch($overall_stock_status) {
+  case "in_stock":
+    $availability = "instock";
+    break;
+  case "backorder":
+    $availability = "backorder";
+    break;
+  case "not_sellable":
+    $availability = "out of stock";
+    break;
+  case "eol":
+    $availability = "discontinued";
+    break;
+}
 ?>
 
 <!-- OG META Product Data -->
 <meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
 <meta property="og:site_name" content="<?php echo $siteName; ?>" />
 <meta property="og:type" content="product" />
-<meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" />
+<meta property="og:availability" content="<?php echo $availability; ?>" />
+<meta property="og:url" content="<?php echo $product_url; ?>" />
 <meta property="og:image" content="<?php echo $product->getImageUrl(); ?>" />
 <meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>" />
 <meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>" />

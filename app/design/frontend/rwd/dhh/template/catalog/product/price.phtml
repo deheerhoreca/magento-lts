@@ -372,37 +372,23 @@ if($dhh_debug === true) {
                     </span>
                 </span>
             </p>
-            
-            
-            
+
+
             
         <?php else: // excl. ?>
           <?php /* Usages: related products with discount | Product detail page with discount */ ?>
           <?php if($dhh_debug === true) echo "Discount. Context: ?".PHP_EOL; ?>
           
             <?php // OLD PRICE ?>
-            <p class="old-price">
-              <span class="price-label" id="old-price-label-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                <?php echo $this->__('Adviesprijs') ?>:
+            <div class="old-price">
+              <span class="price strike" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_price, false)) ?><!--/sse-->
               </span>
-              <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                <?php echo _fixPrice($_coreHelper->formatPrice($_price, false)) ?>
-              </span>
-            </p>
-
-            <?php // DISCOUNT ?>
-            <?php if($_discount < 0) { ?>
-            <p class="discount-amount">
-              <span class="price-label">U bespaart:</span>
-              <span class="price" id="discount-amount-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_discount * -1, false)); ?><!--/sse-->
-              </span>
-            </p>
-            <?php } ?>
+            </div>
 
             <?php // SPECIAL PRICE ?>
             <?php if ($_taxHelper->displayBothPrices()): ?>
-              <p class="special-price">
+              <div class="special-price">
                 <span class="price-excluding-tax">
                   <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                     <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?><!--/sse-->
@@ -410,19 +396,30 @@ if($dhh_debug === true) {
                 </span>
                 <span class="price-including-tax">
                   <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                    <?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?>
+                    <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?><!--/sse-->
                   </span>
                   <span class="label">incl. btw</span>
                 </span>
-              </p>
+              </div>
             <?php else: ?>
-                <p class="special-price">
-                    <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
+              <div class="special-price">
+                <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
                 <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
-                    <?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?>
+                  <?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?>
                 </span>
-                </p>
+              </div>
             <?php endif; ?>
+            
+            <?php // DISCOUNT ?>
+            <?php if($_discount < 0) { ?>
+            <div class="discount-amount">
+              <span class="price-label">Je bespaart:</span>
+              <span class="price green" id="discount-amount-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_discount * -1, false)); ?><!--/sse-->
+              </span>
+            </div>
+            <?php } ?>
+            
         <?php endif; ?>
         
         
