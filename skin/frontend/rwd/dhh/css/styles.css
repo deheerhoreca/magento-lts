@@ -138,6 +138,7 @@ hr {
 
 html {
   -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
 }
 
 caption,
@@ -189,7 +190,7 @@ button,
 input,
 table,
 textarea {
-  color: #2c3638;
+  color: #464646;
   font-size: 14px;
 }
 
@@ -205,7 +206,8 @@ a {
 
 a:active,
 a:focus,
-a:hover {
+a:hover
+{
   color: #2e8ab8;
   text-decoration: underline;
 }
@@ -273,7 +275,6 @@ h2,
 .h2,
 h3,
 .h3 {
-  color: #464646;
   text-transform: uppercase;
   text-rendering: optimizeLegibility;
 }
@@ -443,6 +444,10 @@ h6 {
   opacity: 0.5;
   transform: skewY(-15deg);
   color: #ff0000b5;
+}
+
+.no-border {
+  border: 0px!important;
 }
 
 /* Unsorted */
@@ -2260,6 +2265,7 @@ form .form-instructions {
   text-transform: none;
   white-space: nowrap;
   line-height: 1.4;
+  font-weight: 600;
 }
 
 .data-table tbody td,
@@ -2274,17 +2280,6 @@ form .form-instructions {
 .data-table tbody td .item-options {
   margin-top: 10px;
   margin-left: 20px;
-}
-
-.info-box {
-  margin: 0 0 15px;
-  padding: 12px 15px;
-  border: 1px solid silver;
-}
-
-.info-box h2 {
-  font-weight: 700;
-  font-size: 13px;
 }
 
 .info-table td,
@@ -2451,7 +2446,7 @@ form .form-instructions {
   text-transform: uppercase;
   text-decoration: none;
   font-size: .9em;
-  padding: 0 4px;
+  padding: 0 7px;
 }
 
 .nav-primary .menu-active>ul {
@@ -5290,20 +5285,6 @@ body.customer-account .data-table {
   margin-top: 5px;
 }
 
-body.customer-account .data-table td a {
-  text-transform: uppercase;
-  font-style: normal;
-  font-size: 13px;
-}
-
-body.customer-account .data-table span.nobr {
-  white-space: normal;
-}
-
-body.customer-account .data-table span.nobr a {
-  white-space: nowrap;
-}
-
 .sidebar .paypal-logo>a img,
 .top-container .bml-ad span a,
 body.customer-account .data-table td.view a {
@@ -5367,22 +5348,10 @@ body.customer-account .sidebar .block-reorder ol#cart-sidebar-reorder p.product-
   padding: 10px;
 }
 
-.dashboard .box-head a,
-.dashboard .box-title a {
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
 .dashboard .box-account {
   margin-bottom: 45px;
   padding-bottom: 40px;
   border-bottom: 1px solid #ccc;
-}
-
-.dashboard .box-account address,
-.dashboard .box-account p {
-  font-style: italic;
-  font-family: Georgia, Times, "Times New Roman", serif;
 }
 
 .dashboard .col2-set .col-1,
@@ -5495,10 +5464,6 @@ ol#cart-sidebar-reorder p.product-name {
 section.cms article>nav.content-menu>ul>li:first-child,
 section.cms ul.l-horizontal>li:first-child {
   margin-left: 0;
-}
-
-.order-date {
-  text-transform: uppercase;
 }
 
 .order-info-box {
@@ -6254,12 +6219,14 @@ div.paypal-logo span a {
 }
 
 .header-minicart #minicart-error-message {
+  display:none;
   color: red;
   text-align: center;
   background-color: #ff00000d;
 }
 
 .header-minicart #minicart-success-message {
+  display:none;
   color: green;
   text-align: center;
   background-color: #0080001f;
@@ -8104,12 +8071,6 @@ a.footer__menu-item:hover>* {
   text-transform: uppercase;
   font-size: 10px;
   line-height: 1;
-}
-
-.lang-switch .is-selected,
-.lang-switch a:active,
-.lang-switch__separator {
-  color: #bec4c4;
 }
 
 .header-user-account {
@@ -10650,11 +10611,6 @@ div.col-2.logindvchecko div.frmloginwrap form#login-form div.fieldset ul.form-li
 div.pgcrtleft form table#shopping-cart-table td.product-cart-info h2.product-name a,
 div.pgcrtleft form table#shopping-cart-table.cart-table.data-table thead th {
   font-weight: 700;
-}
-
-.styles figure a:active,
-.styles figure a:hover {
-  text-decoration: none;
 }
 
 .bcm--block,
@@ -13217,8 +13173,8 @@ nav#nav.grid-old div.navhdwrap ol.nav-primary li.level0.nav-6.parent ul.level0 l
 
 #header-nav .level0>.level1 {
   float: left;
-  margin-top: .5em;
-  max-width: 210px;
+  margin: .5em 0.5em 0 0;
+  max-width: calc((100% / 4) - 0.5em);
   width: 100%;
   line-height: 1.6em;
 }
@@ -13953,14 +13909,23 @@ div.blogcontainer a {
   }
 }
 
+.info-box h2 {
+  font-weight: 700;
+  font-size: 13px;
+}
+
 .info-box {
+  margin: 0 0 15px;
   height: 40em;
   padding: 1em;
   border: 1px solid #aaa;
   border-radius: 4px;
+  line-height: 1.6em;
+}
+
+.info-box-not-found {
   background: url(/skin/frontend/rwd/dhh/images/sadklaas.jpg) 90% 90% no-repeat;
   background-size: contain;
-  line-height: 1.6em;
 }
 
 .info-box-cart-success {
@@ -14359,7 +14324,7 @@ div.category-products ul.products-grid li.item .product-info {
 div.category-products ul.products-grid li.item .info {
   display: inline-block;
   margin-bottom: 3px;
-  min-height: 12em;
+  min-height: 13em;
   width: 100%;
 }
 
@@ -14405,8 +14370,12 @@ div.category-products ul.products-grid li.item.first {
   margin-left: 0;
 }
 
-div.category-products ul.products-grid li.item {
+body.catalog-category-view div.category-products ul.products-grid li.item {
   min-height: 40em;
+}
+
+div.category-products ul.products-grid li.item {
+  min-height: 30em;
 }
 
 ul.products-grid-mini>li,

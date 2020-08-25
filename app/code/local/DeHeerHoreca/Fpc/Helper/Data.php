@@ -110,6 +110,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       return rtrim($url, "?");                    // Trim possible trailing ?
     }
     
+    // Logic also exists in DeHeerHoreca_Fpc_Model_Observer
     public function get_cache_prefix() {
       $cache_key_prefix = Mage::app()->getFrontController()->getAction()->getFullActionName();
       
@@ -163,6 +164,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "customer")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "api")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
+        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
         ) {
         $enabled = false;
       }
@@ -193,6 +195,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "customer")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "api")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
+        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
       ) {
         if(DHH_FPC_DEBUG === true) {
           print_r("<br />Write cache disabled");

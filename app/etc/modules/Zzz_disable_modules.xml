@@ -61,5 +61,14 @@
         <Mage_Wishlist>
           <active>true</active>
         </Mage_Wishlist>
+        <HM_Faq>
+          <active>false</active>
+        </HM_Faq>
+        <Flagbit_Faq>
+          <active>true</active>
+        </Flagbit_Faq>
+        <Magiecommerce_Faqs>
+          <active>false</active>
+        </Magiecommerce_Faqs>
     </modules>
 </config>

@@ -368,6 +368,10 @@
     text-decoration: none;
     background: #ececec;
   }
+  
+  .info-box-cart-success {
+    background-image: none;
+  }
 }
 
 @media screen and (min-width: 1200.1px) {
@@ -2534,9 +2538,6 @@
   .product-view .product-shop .price-box .price-excluding-tax,
   .product-view .product-shop .price-box .price-including-tax {
     margin-bottom: 5px;
-  }
-  .product-view .product-shop .price-box .price-excluding-tax span {
-    display: block;
   }
 }
 

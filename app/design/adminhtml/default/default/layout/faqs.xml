@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_categories_index>
+        <reference name="content">
+            <block type="faqs/adminhtml_categories" name="faqs_categories"></block>
+        </reference>
+    </adminhtml_categories_index>
+    
+    <adminhtml_faqs_index>
+        <reference name="content">
+            <block type="faqs/adminhtml_faqs" name="faqs_faqs"></block>
+        </reference>
+    </adminhtml_faqs_index>
+</layout>

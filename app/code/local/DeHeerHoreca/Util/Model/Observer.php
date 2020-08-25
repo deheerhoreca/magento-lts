@@ -24,6 +24,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("bargain", "0");
         Mage::getSingleton('core/session')->addSuccess("Product is EOL: Bargain flag removed");
       }
+      if(empty($product->getData("txtstockdate")) === false) {
+        $product->setData("txtstockdate", null);
+        Mage::getSingleton('core/session')->addSuccess("Product is EOL: Back in stock date removed");
+      }
+      if($product->getData("skip_auto_stock") !== "1") {
+        $product->setData("skip_auto_stock", "1");
+        Mage::getSingleton('core/session')->addSuccess("Product is EOL: Excluded from stock updates");
+      }
     }
     
     /* MERCHANDISING */
@@ -57,7 +65,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         } catch (Excpetion $e) {
           Mage::getSingleton('core/session')->addError("Failed to apply EOL business rules on stock item: {$e->getMessage()}");
         }
-      }      
+      }
     }
     
     /* STOCK */    

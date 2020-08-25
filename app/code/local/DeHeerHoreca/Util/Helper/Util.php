@@ -203,6 +203,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     /*
     $options = [
       "image_size"              => 150,
+      "display"                 => normal | mini,
       "skip_info"               => false,
       "skip_usps"               => false,
       "skip_actions"            => false,
@@ -246,6 +247,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     }
     $skip_actions = $options["skip_actions"] ?? false;
     
+    if(empty($options["display"]) === false) {
+      $display = $options["display"];
+    } else {
+      $display = "normal";
+    }
+    
     /* Get all variables */    
     $image_dimensions       = 1 * $image_size;
     $max_product_info_items = 3;
@@ -276,19 +283,20 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       
     switch($overall_stock_status) {
       case "in_stock":
-        if($finalPrice >= $freeshipping_from) {
-          $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+        if($display === "mini") {
+          $stock_message = "Voorraad";
         }
         break;
       case "backorder":
-        if($finalPrice >= $freeshipping_from) {
-          $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
-        }
         $stock_class = "buyblock-usp dark-color";
-        $stock_message = "Op nabestelling";
+        if($display === "mini") {
+          $stock_message = "Nabestelling";
+        }
         break;
       case "not_sellable":
-        $stock_message = "Niet op voorraad";
+        if($display === "mini") {
+          $stock_message = "Voorraad";
+        }
       case "eol":
         break;
     }
@@ -392,11 +400,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       }
     }
 
-    $attribute_value = $_product->getAttributeText('type_koeling');
-    if($attribute_value != ''){
-      $product_info[] = "Koelmethode: {$attribute_value}";
-    }
-
     if($category_id === 72) {
       $attribute_value = $_product->getInhoudAantalGn();
       if($attribute_value !='') {
@@ -414,9 +417,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $product_info[] = "Maat: {$attribute_value}";
     }
     
-    $attribute_value = $_product->getData('materiaal');
-    if(strlen($attribute_value) > 0) {
-      $product_info[] = "{$attribute_value}";
+    if($display === "normal") {
+      $attribute_value = $_product->getData('materiaal');
+      if(strlen($attribute_value) > 0) {
+        $product_info[] = "{$attribute_value}";
+      }
     }
     
     $attribute_value = $_product->getData('serie');
@@ -438,6 +443,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $parent_categories_ids = $options["parent_categories_ids"] ?? [];
     
     $usps = [];
+    
+    /* Type koeling */
+    $attribute_value = $_product->getAttributeText('type_koeling');
+    if($attribute_value != ''){
+      $usps[] = "{$attribute_value}";
+    }
       
     /* Afsluitbaar */
     $attribute_value = $_product->getAttributeText("afsluitbaar");
@@ -563,7 +574,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $manage_stock         = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
     $extra_delivery_time  = 0;
     $expected_delivery    = $product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($product);
-    $levertijd_verwacht   = (int) $product->getResource()->getAttribute('levertijd_verwacht')->getFrontend()->getValue($product);
     $levertijd            = $product->getAttributeText('levertijd');
     $bestelartikel        = $product->getAttributeText('bestelartikel');
     
@@ -676,10 +686,17 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $overall_stock_status = "in_stock";
     }
     
-    $txtstockdate = $product->getData('txtstockdate');
+    // $txtstockdate      = $product->getData('txtstockdate');
+    $real_txtstockdate = $product->getData('txtstockdate');
     if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
-      if(empty($txtstockdate) === false) {    
-        $txtstockdate = date("d-m-Y", strtotime($txtstockdate));
+      if(empty($real_txtstockdate) === false) {
+        $datetime1  = new DateTime($real_txtstockdate);
+        $now        = new DateTime("now");
+        $interval   = $now->diff($datetime1)->format("%a");
+        
+        if($datetime1 > $now && $interval < 90) {        
+          $txtstockdate = date("d-m-Y", strtotime($real_txtstockdate));
+        }
       }
     }
     
@@ -695,6 +712,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $stock_data["extra_delivery_time"]  = $extra_delivery_time;
     $stock_data["overall_stock_status"] = $overall_stock_status;
     $stock_data["txtstockdate"]         = $txtstockdate;
+    $stock_data["real_txtstockdate"]    = $real_txtstockdate;
     $stock_data["calwekdate_min"]       = $calwekdate_min;
     $stock_data["calwekdate_max"]       = $calwekdate_max;
     $stock_data["levertijd"]            = $levertijd;

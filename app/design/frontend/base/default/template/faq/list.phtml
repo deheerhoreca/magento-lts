@@ -18,20 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * FAQ accordion for Magento
- *
- * Website: www.hiremagento.com 
- * Email: hiremagento@gmail.com
- *
-/* @var $this HM_Faq_Block_Frontend_List */
+ * @category   design_default
+ * @package    Flagbit
+ * @copyright  Copyright (c) 2009 Flagbit GmbH & Co. KG (http://www.flagbit.de)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this Flagbit_Faq_Block_Frontend_List */
 ?>
 <div class="page-title">
-	<h1><?php echo $this->__('FAQ List'); ?></h1>
+	<h1><?php echo $this->__('FAQ overview'); ?></h1>
 </div>
-<div style="padding-bottom: 10px;"><?php
- echo $this->getLayout()->createBlock('cms/block')->setBlockId('faq_top_block')->toHtml(); 
-?>	</div>
+
 <?php if ($this->hasFaq()): ?>
+
+<h2><?php echo $this->__('Questions'); ?></h2>
 <?php if ($this->getCategoryCollection()) : ?>
 <dl class="faq-list">
     <?php foreach ($this->getCategoryCollection() as $category) : ?>
@@ -58,28 +58,17 @@
 </ul>
 <?php endif; ?>
 
+<h2><?php echo $this->__('Answers'); ?></h2>
 <dl class="faq-items">
 	<?php foreach ($this->getFaqCollection() as $faqItem): ?>
-	<dt id="faq-que-<?php echo $faqItem->getId() ?>" onclick="slide('faq-que-<?php echo $faqItem->getId() ?>','faq-ans-<?php echo $faqItem->getId() ?>')">
+	<dt id="faq-item-<?php echo $faqItem->getId() ?>">
 		<?php echo $this->htmlEscape($faqItem->getQuestion()) ?>
 	</dt>
-	<dd id="faq-ans-<?php echo $faqItem->getId() ?>" style="display:none;">
-	<?php $_process = Mage::helper('cms')->getBlockTemplateProcessor();?>
-    <?php echo $_process->filter($faqItem->getAnswer()); ?>
+	<dd>
+		<?php echo ($faqItem->getAnswerHtml() ? $faqItem->getAnswer() : '<p>' . implode('</p><p>', explode("\n", $this->htmlEscape($faqItem->getAnswer()))) . '</p>') ?>
 	</dd>
 	<?php endforeach; ?>
 </dl>
 <?php else: ?>
 <p class="faq-items"><?php echo $this->__('There are no FAQ items at the moment.') ?></p>
 <?php endif; ?>
-<script type="text/javascript">
-   function slide(element1, element2){
-       new Effect.toggle(element2,'Slide', {duration:0});
-	    if( $(element1).hasClassName("active") ){
-		  $(element1).removeClassName("active");
-	   }
-	   else{
-		   $(element1).addClassName("active");
-	   }
-   }
-</script>

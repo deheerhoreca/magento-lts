@@ -33,22 +33,19 @@ Mage::register('isSecureArea', true);
 
 // https://stackoverflow.com/questions/15014154/how-to-fix-magento-1-7-developer-mode/15014983#15014983
 
-Zend_Debug::dump(
-    Mage::getConfig()->getXpath('//controller_action_predispatch//class')
-);
+// Zend_Debug::dump(
+    // Mage::getConfig()->getXpath('//controller_action_predispatch//class')
+// );
 
 
 /*********************************************************************************************
 * CHANGE CATEGORY IMAGES
 *********************************************************************************************/
 
-/*
+
 $attribute_id = 45;
 
-$work[] = ["id" => 597, "sku" => "DW486"];
-$work[] = ["id" => 465, "sku" => "781395"];
-	
-// $work[] = ["id" => , "sku" => ""];
+$work[] = ["id" => 432, "sku" => "BA-115129"];
 
 $resource = Mage::getSingleton('core/resource');
 $writeConnection = $resource->getConnection('core_write');
@@ -78,10 +75,11 @@ foreach($work as $item) {
 
 function getMagento1BaseImage($sku) {
   $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+  if(!$product) die("Cannot find SKU {$sku}".PHP_EOL);
   return Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
 }
 
-*/
+
 
 
 

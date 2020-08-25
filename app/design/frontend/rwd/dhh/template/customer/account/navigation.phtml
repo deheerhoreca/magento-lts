@@ -1,5 +1,9 @@
 <?php
 
+if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+  // echo Mage::app()->getFrontController()->getAction()->getFullActionName();
+}
+
 $_links = $this->getLinks();
 $_count = count($_links); /* Add or Remove Account Left Navigation Links Here -*/
 // unset($_links['account']); /* Account Info */     
@@ -38,7 +42,10 @@ unset($_links['enterprise_giftcardaccount']); /* Gift Card Link */
                 <?php endif; ?>
             <?php endforeach; ?>
             <li class="current strong">
-              <a href="<?php echo Mage::getUrl('customer/account/logout'); ?>"><?php echo $this->__('Log out'); ?></a>
+              <a href="/klantenservice"><?php echo $this->__('Klantenservice'); ?></a>
+            </li>
+            <li class="current strong">
+              <a href="<?php echo Mage::getUrl('customer/account/logout'); ?>"><?php echo $this->__('Uitloggen'); ?></a>
             </li>
         </ul>
     </div>
