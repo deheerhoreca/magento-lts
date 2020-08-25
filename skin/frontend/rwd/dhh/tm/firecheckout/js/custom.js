@@ -30,3 +30,18 @@ document.observe('dom:loaded', function() {
   document.getElementById("step-shipping-payment-method").classList.remove("col2-set");
   document.getElementById("step-shipping-payment-method").classList.add("col1-set");
 });
+
+// https://docs.swissuplabs.com/m1/extensions/firecheckout/housenumber/
+document.observe('dom:loaded', function() {
+    var addressTypes = ['billing', 'shipping'];
+    addressTypes.each(function(addressType) {
+        if (!$(addressType + '-new-address-form')) {
+            return;
+        }
+        new FC.Housenumber(addressType, {
+            required: ['NL', 'BE'],
+            optional: ['*'],
+            label: Translator.translate('House Number')
+        });
+    });
+});
