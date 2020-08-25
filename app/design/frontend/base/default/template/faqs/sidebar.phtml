@@ -1,0 +1,18 @@
+<div class="category-sidebar">
+  <h1>
+      <?php echo $this->__('Category'); ?>
+  </h1>
+
+<?php $category = $this->getAllcategory(); ?>
+<?php $_faqCollection = Mage::getModel('faqs/categories')->load($this->getRequest()->getParam('id')); ?>
+
+<?php $catid = $_faqCollection->getParentcatid();?>
+
+<?php $category = $this->getAllcategory(); ?>
+<ul class="main-cat">
+<?php foreach ($category as $cat):?>
+    <?php $catId = $cat->getCatId();?>
+    <li><a  href="<?php echo Mage::getBaseUrl().$cat->getUrlkey(); ?>"> <h2 class="faq-cat-title"><?php echo $cat->getCatName();?></h2></a></li>
+<?php endforeach; ?>
+</ul>
+</div>

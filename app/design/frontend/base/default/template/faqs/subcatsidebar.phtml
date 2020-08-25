@@ -1,0 +1,32 @@
+<div class="category-sidebar">
+  <h1>
+      <?php echo $this->__('Category'); ?>
+  </h1>
+
+<?php $category = $this->getAllcategory(); ?>
+<ul class="main-cat">
+<?php foreach ($category as $cat):?>
+	<?php $parent = $this->getParantCategory($this->getRequest()->getParam('id')); ?>
+    <li class="<?php echo ($parent==$cat->getCatId())? 'current' : '' ?>"><a  href="<?php echo Mage::getBaseUrl().$cat->getUrlkey(); ?>"> <h2 class="faq-cat-title"><?php echo $cat->getCatName();?></h2></a>
+
+     <?php if($parent==$cat->getCatId()): ?>
+	    <ul class="sub-cat">
+	    	<?php $subcategory_collections = $this->getAllsubcategory($parent);?>
+	    	<?php foreach ($subcategory_collections as $subcategory_collection) : ?>
+	    		<li class="<?php echo ($this->getRequest()->getParam('id')==$subcategory_collection->getCatId())? 'sub-current' : '' ?>" ><a  href="<?php echo Mage::getBaseUrl().$subcategory_collection->getUrlkey(); ?>"> <h2><?php echo $subcategory_collection->getCatName();?></h2></a></li>
+	    	<?php endforeach; ?>
+
+	    </ul>
+	<?php endif;  ?>
+	</li>
+<?php endforeach; ?>
+</ul>
+    </div>
+
+
+
+
+
+
+
+

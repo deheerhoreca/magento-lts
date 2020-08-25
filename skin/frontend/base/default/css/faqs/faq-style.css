@@ -1,0 +1,96 @@
+#accordion { font-family: Arial }
+.search-faqs {float: left;width: 100%; margin: 10px 0;}
+.search-faqs .form-list .field {width: 100%;}
+.search-faqs .input-box {float: left;width: 225px; padding: 0px;}
+.search-faqs .input-box .input-text {float: left;width: 225px; border-radius: 2px 0px 0px 2px; border-right: none; font-weight: normal; font-family: arial;}
+.search-faqs .legend { border: 0; float: left; font-size: 16px; margin: 5px 10px 0 0; padding: 0}
+.search-faqs .form-list { float: left;}
+.search-faqs .form-list li { float: left; width: 100%;}
+
+.accordion .faq-cat-title { text-transform: none;}
+.accordion .faq-cat-desc {margin-bottom: 15px;text-align: justify; margin-left: 0;}
+.accordion .heading {text-transform: none; font-weight: normal; font-family: Arial;}
+
+.accordion {float: left;width: 100%;margin-top: 15px;}
+.accordion li.faq {margin-bottom:15px; border-bottom: 1px solid #cccccc; padding-bottom: 5px;}
+.accordion li.faq:last-child { border-bottom: 0;}
+.accordion li .trigger:hover { text-decoration: none;}
+.accordion li .trigger {display:block; padding-left:25px; background-image: url(plus-icon.png); background-repeat: no-repeat; background-position: 0px 45%;  font-size: 16px; outline: none;}
+.accordion li .trigger.open {background-image: url(minus-icon.png)}
+.accordion li .faq-que-ans .trigger { font-size: 14px;}
+.accordion li a {text-decoration: none; outline: none;}
+
+.accordion .faq .faq-cat-title a {background: none; padding-left: 0px;}
+.outer { margin-bottom: 15px; margin-left: 25px;}
+.no-accordion .faq-que-ans { margin-left: 20px; margin-top: 20px;}
+.no-accordion { float: left; width: 100%; }
+.no-accordion .faq-que-ans ul li { margin-bottom: 20px; border-bottom: 1px dotted #cccccc; padding-bottom: 15px; }
+.no-accordion .faq-que-ans ul li:last-child { margin-bottom: 0; border-bottom: 0px dotted #cccccc; padding-bottom: 0; }
+.no-accordion li.faq:last-child { margin-bottom: 0; border-bottom: 0px dotted #cccccc; padding-bottom: 0; }
+.no-accordion li.faq { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #cccccc;}
+.no-accordion .faq-que-ans .question { background-image: url(question-icon.jpg); background-repeat: no-repeat; background-position: left 0px; padding-left: 30px; text-transform: none; font-weight: normal; font-family: Arial; font-size: 16px;}
+.no-accordion .faq-que-ans .answer { background-image: url(answer-icon.jpg); background-repeat: no-repeat; background-position: left 0px; padding-left: 30px; font-family: Arial; text-align: justify;}
+.no-accordion .faq-que-ans .outer { margin-left: 55px; }
+.no-accordion .faq-cat-title { text-transform: none; font-family: Arial;}
+.no-accordion .faq-que-ans ul li ul { list-style: inside none disc; margin-top: 10px;}
+.no-accordion .faq-que-ans ul li ul li { margin-bottom: 8px; border-bottom: 0 dotted #cccccc; padding-bottom: 0; padding-left: 2px; }
+.reset-button { float: left; margin-left: 10px; cursor: pointer; background: #dddddd none repeat scroll 0 0; color: #636363; padding: 7px 15px 4px; border: 0; box-shadow: none; font-size: 13px; font-weight: normal; text-transform: uppercase; font-family: "Raleway","Helvetica Neue",Verdana,Arial,sans-serif}
+.reset-button:hover { background-color: #d0d0d0;}
+.search-faqs .form-list .field .button { float: left; padding: 6px 15px 5px;}
+.form-list > div { clear: both; display: inline-block; float: left; font-family: Arial; font-weight: normal; margin-top: 5px;}
+.form-list > div > #myP { font-weight: bold;}
+#accordion li.sub:last-child { margin-bottom: 25px; }
+#accordion li.sub { margin-left: 25px; margin-bottom: 40px;}
+#accordion li.sub h2 { font-size: 18px;}
+.accordion li.faq a h2 { font-size: 20px;}
+.accordion li.faq a:hover h2 { color: #3399cc;}
+.go-to-home-button { clear: both; float: left; }
+#myP { width: 100%; display: block; background: #f4f4f4 none repeat scroll 0 0; border-bottom: 1px solid #cccccc; border-top: 1px solid #cccccc; margin-bottom: 5px; margin-top: 10px; padding: 5px 10px 7px;}
+
+.sidebar .sidebar-cat-title { outline: none; background-color: #f4f4f4; border: 1px solid #cccccc; border-bottom: 0;  color: #636363; display: block; font-family: "Raleway","Helvetica Neue",Verdana,Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 1.4; margin: 0; padding: 9px 10px 9px 10px; text-transform: uppercase;}
+.sidebar .sidebar-cat-title h2 { font-size: 14px; margin: 0;}
+.sidebar .sidebar-cat-title:hover {background-color: #ececec; text-decoration: none;}
+.sidebar .sub-cat { margin: 0; padding:0 0 0 20px; }
+.sidebar .sub-cat li a { display: block; outline: none; padding: 5px 15px; color: #3399cc; font-size: 13px;}
+.sidebar .sub-cat li a h3 { color: #3399cc; font-size: 13px; font-weight: 700; margin: 0;}
+.sidebar .main-cat li a { outline: none; border-bottom: 0;  color: #636363; display: block; font-family: "Raleway","Helvetica Neue",Verdana,Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; margin: 0; padding: 5px 15px; text-transform: uppercase;}
+.sidebar .main-cat li a h2 { margin: 0; font-size: 14px; color: #3399cc; text-transform: capitalize; font-weight: bold;}
+.sidebar .main-cat li a:hover {text-decoration:underline; color: #3399cc;}
+.sidebar .main-cat li.current a h2{color: #2e5366; text-decoration: none;}
+.sidebar .main-cat li.current ul.sub-cat a:hover{text-decoration: underline !important;}
+.sidebar .main-cat li.current .sub-cat li.sub-current a{text-decoration: none !important;}
+.sidebar .main-cat li.current a:hover{text-decoration: none !important;}
+.sidebar .main-cat li.current .sub-cat a h2{color: #3399cc;}
+.sidebar .main-cat li.current .sub-cat li.sub-current a h2{color: #2e5366; }
+
+.sidebar .category-sidebar{border: 1px solid #cccccc; margin-top: 6px;}
+.sidebar .category-sidebar h1{border-bottom: 1px solid #cccccc; padding: 7px 10px 7px 10px; background-color: #f4f4f4; color: #636363; display: block;font-family: "Raleway","Helvetica Neue",Verdana,Arial,sans-serif;  font-size: 14px; font-style: normal;  font-weight: normal;  line-height: 1.4;  margin: 0; position: relative; text-transform: uppercase;}
+.sidebar .main-cat{ padding: 10px;}
+
+
+
+
+@media screen and (max-width:767px){
+    .go-to-home-button { float: none;}
+}
+@media screen and (max-width:600px){
+    .search-faqs .form-list .field {width: 100%;}
+    .search-faqs .input-box .input-text { width: 100%;}
+    .search-faqs .input-box { width: 68%; }
+    .search-faqs .form-list { width: 72%; }
+}
+
+@media screen and (max-width:460px){
+    .search-faqs .form-list .field { width: 100%; }
+    .search-faqs .input-box { width: 65%;}
+    .search-faqs .input-box .input-text { width: 100%;}
+    .no-accordion .faq-que-ans { margin-left: 15px; }
+    .reset-button { margin: 8px 0 0 0;}
+    .search-faqs .form-list { width: 100%;}
+    .search-faqs .legend { margin: 0 0 5px; }
+    .search-faqs .form-list li { margin: 0;}
+}
+
+@media screen and (max-width:360px){
+.search-faqs .input-box {width: 205px;}
+}
