@@ -5,6 +5,8 @@
  * @package Amasty_Shopby
  */
 
+$category_thumbs_dimensions   = 140;
+
 /** @var Amasty_Shopby_Block_Subcategories $this */
 /** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
 $subcategories = $this->getSubcategories();
@@ -13,35 +15,41 @@ $media_url = Mage::getBaseUrl('media');
 $media_path = Mage::getBaseDir('media');
 echo '<div style="clear: both;"></div>';
 if ($subcategories->getSize()) {
-  echo '<ul class="category-grid">';
+  echo '<ul class="grid-shadow-tiles-text">';
+  
+  // Logic copied from catalog/product/list.phtml
   foreach($subcategories as $category) {
-    $haschild       = true;
-    $category       = Mage::getModel('catalog/category')->load($category->getId());
-    $categoryName   = $category->getName();
-    $image          = $category->getImage();
-    $measurements   = null;
-    $img_url        = "{$media_url}/catalog/category/{$image}";
-    $img_path       = "{$media_path}/catalog/category/{$image}";
-    
-    if(is_file($img_path) === true) {
-      try {
-        $meta = getimagesize($img_path);
-        $measurements = $meta[3];
-      } catch (Exception $e) {
-        $image = null;
-        Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
+      $haschild         = true;
+      $category         = Mage::getModel('catalog/category')->load($category->getId());
+      $categoryName     = $category->getName();
+      $image            = $category->getImage();
+      $img_path         = "{$media_path}/catalog/category/{$image}";
+      $resized_img_name = ($category_thumbs_dimensions*2)."_".basename($img_path);
+      $resized_img_path = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
+      $resized_img_url  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
+      
+      if(empty($image) === false && is_file($resized_img_path) !== true) {
+        $imageObj = new Varien_Image($img_path);
+        $imageObj->constrainOnly(true);
+        $imageObj->keepAspectRatio(true);
+        $imageObj->keepFrame(true);
+        $imageObj->backgroundColor(array(255,255,255));
+        $imageObj->resize($category_thumbs_dimensions * 2, $category_thumbs_dimensions * 2);
+        $imageObj->save($resized_img_path);
       }
-    } else {
-      $image = null;
+      ?>
+      <li>
+        <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
+          <?php
+          if(empty($image) === false) {
+            echo "<img class='lazy' data-src='{$resized_img_url}' alt='{$categoryName}' title='{$categoryName}' 
+            height='".($category_thumbs_dimensions*2)."' width='".($category_thumbs_dimensions*2)."' />";
+          }
+          ?>
+          <strong><?php echo $categoryName; ?></strong>
+        </a>
+      </li>
+      <?php
     }
-    ?>
-    <li>
-      <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
-        <?php if(empty($image) === false) echo "<img class='lazy category-thumb' data-src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
-        <strong><?php echo $categoryName; ?></strong>
-      </a>
-    </li>
-    <?php
-  }
   echo "</ul>";
 }

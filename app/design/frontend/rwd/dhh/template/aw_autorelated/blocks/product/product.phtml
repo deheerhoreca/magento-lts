@@ -1,5 +1,5 @@
 <?php
-// $abstractBlock = $this->helper('awautorelated')->getAbstractProductBlock();
+$abstractBlock = $this->helper('awautorelated')->getAbstractProductBlock();
 $collection = $this->getCollection();
 
 $_columnCount = 3;
@@ -19,12 +19,12 @@ if(empty($collection) === false) {
       <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
         <?php
         $options = [
-          "display"                 => "mini",
           "image_size"              => 125,
           "_blank"                  => false,
           "use_short_product_names" => true,
+          "display"                 => "normal",
         ];
-        echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
+        echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $abstractBlock, $options);
       echo "</li>";
     }
     ?>

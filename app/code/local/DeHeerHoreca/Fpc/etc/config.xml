@@ -5,21 +5,29 @@
       <version>0.1.0</version>
     </DeHeerHoreca_Fpc>
   </modules>
-  
   <global>
     <helpers>
       <deheerhoreca_fpc>
         <class>DeHeerHoreca_Fpc_Helper</class>
       </deheerhoreca_fpc>
     </helpers>
-    
     <models>
       <deheerhoreca_fpc>
         <class>DeHeerHoreca_Fpc_Model</class>
       </deheerhoreca_fpc>
     </models>
+    <events>
+      <catalog_product_save_after>
+        <observers>
+          <DeHeerHoreca_Fpc_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_fpc/observer</class>
+            <method>clearProductCache</method>
+          </DeHeerHoreca_Fpc_Model_Observer>
+        </observers>
+      </catalog_product_save_after>
+    </events>
   </global>
-  
   <frontend>
     <routers>
       <deheerhoreca_fpc>
@@ -30,7 +38,6 @@
         </args>
       </deheerhoreca_fpc>
     </routers>
-    
     <events>
       <controller_action_predispatch>
         <observers>
@@ -43,7 +50,6 @@
       </controller_action_predispatch>
     </events>
   </frontend>
-  
   <adminhtml>
     <layout>
       <updates>

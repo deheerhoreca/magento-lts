@@ -1,0 +1,143 @@
+<?php
+$_isAccordion = Mage::getStoreConfig('faqs/faqs/faqs_style');
+$includeminjs = Mage::getStoreConfig('faqs/faqs/faqs_libjs');
+if($includeminjs==1):
+if($_isAccordion == 1) : ?>
+<script type="text/javascript">
+  j("faq-list").addClass("js");
+  j.fn.accordion.defaults.container = false;
+  j(function() {
+    j("#accordion").accordion({
+      el: ".heading",
+      next: "div.outer",
+      initShow : "div.outer:eq()"
+    });
+  });
+</script>
+<?php endif;?>
+<?php else:?>
+    <script type="text/javascript">
+  jQuery("faq-list").addClass("js");
+  jQuery.fn.accordion.defaults.container = false;
+  jQuery(function() {
+    jQuery("#accordion").accordion({
+      el: ".heading",
+      next: "div.outer",
+      initShow : "div.outer:eq()"
+    });
+  });
+</script>
+    <?php endif;?>
+<div class="page-title">
+  <h1>
+    <?php if(!Mage::getStoreConfig('faqs/faqs/faq_lable')): ?>
+      <?php echo $this->__('FAQs'); ?>
+    <?php else: ?>
+      <?php echo Mage::getStoreConfig('faqs/faqs/faq_lable'); ?>
+    <?php endif; ?>
+  </h1>
+</div>
+<?php $value = $this->getRequest()->getPost('search-faqs'); ?>
+<form action="<?php echo Mage::getUrl('faqs/index/search'); ?>" method="get" id="search-faqs" class="search-faqs">
+  <div class="fieldset">
+    <h2 class="legend"><?php echo $this->__('Search FAQ') ?></h2>
+  <ul class="form-list">
+    <li class="fields">
+      <div class="field">
+        <div class="input-box">
+          <input type="hidden" value="<?php echo $this->getRequest()->getParam('id') ?>" name="searchid" >
+          <input type="text" name="search-faqs" value="<?php if(isset($value)){ echo $value; } ?>" class="input-text required-entry" />
+        </div>
+        <button type="submit" class="button" /><span><span><?php echo $this->__('Search') ?></span></span></button>
+
+      </div>
+    </li>
+  </ul>
+  </div>
+</form>
+<ul id="accordion" class="<?php if($_isAccordion): ?>accordion <?php else: ?>no-accordion<?php endif; ?>">
+<?php $_faqCollection = Mage::getModel('faqs/categories')->load($this->getRequest()->getParam('id')); ?>
+ <?php $catId = $_faqCollection->getCatId(); ?>
+
+
+
+<?php $currentStoreId = Mage::app()->getStore(true)->getId();
+        $categories =  Mage::getModel('faqs/categories')->getCollection()
+                ->addFieldToFilter('status','1')
+                ->addFieldToFilter('store_id', array(
+              array('finset' => $currentStoreId),
+              array('finset' => '0'))
+              );
+        $categories->addOrder('cat_sortorder','ASC'); ?>
+
+<?php $faqs = $this->getFaqCollection($catId); ?>
+
+
+  <?php //if (!empty($faqs)): ?>
+    <li class="faq">
+        <a href="<?php echo Mage::getBaseUrl().$_faqCollection->getUrlkey(); ?>"> <h2 class="faq-cat-title root"><?php echo $_faqCollection->getCatName();?></h2></a>
+          <?php if($_faqCollection->getDescription()): ?>
+        <div class="<?php if($_isAccordion): ?>outer <?php endif; ?>faq-cat-desc"><?php echo $_faqCollection->getDescription(); ?></div>
+      <?php endif;?>
+      <div class="faq-que-ans">
+        <ul>
+          <?php foreach($faqs as $faq): ?>
+          <li>
+            <h3 class="heading <?php if(!$_isAccordion): ?>question<?php endif; ?>">
+              <?php if($_isAccordion): ?>
+                <a class="trigger" href="javascript:void(0);"><?php echo $faq['quetion']; ?></a>
+              <?php else: ?>
+                <?php echo $faq['quetion']; ?>
+              <?php endif; ?>
+            </h3>
+            <div class="<?php if($_isAccordion): ?>outer <?php else: ?>answer<?php endif; ?>">
+              <?php $_cmsHelper = Mage::helper('cms');?>
+              <?php $_process = $_cmsHelper->getBlockTemplateProcessor();?>
+              <?php echo $_process->filter($faq['answer']); ?>
+            </div>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </li>
+    <?php //endif; ?>
+
+ <?php $subcatcollection = $categories->addFieldToFilter('parentcatid',$catId); ?>
+ <?php foreach ($subcatcollection as $subcat):?>
+ <?php $subcatId = $subcat->getCatId(); ?>
+<?php $faqs = $this->getFaqCollection($subcatId); ?>
+  <?php //if (!empty($faqs)): ?>
+    <li class="faq sub">
+      <a href="<?php echo Mage::getBaseUrl().$subcat->getUrlkey(); ?>"> <h3 class="faq-cat-title"><?php echo $subcat->getCatName();?></h3></a>
+      <?php if($subcat->getDescription()): ?>
+        <div class="<?php if($_isAccordion): ?>outer <?php endif; ?>faq-cat-desc"><?php echo $subcat->getDescription(); ?></div>
+      <?php endif;?>
+      <div class="faq-que-ans">
+        <ul>
+          <?php foreach($faqs as $faq): ?>
+            <?php array_push($faqcountArray, "1"); ?>
+          <li>
+            <h3 class="heading <?php if(!$_isAccordion): ?>question<?php endif; ?>">
+              <?php if($_isAccordion): ?>
+                <a class="trigger" href="javascript:void(0);"><?php echo $faq['quetion']; ?></a>
+              <?php else: ?>
+                <?php echo $faq['quetion']; ?>
+              <?php endif; ?>
+            </h3>
+            <div class="<?php if($_isAccordion): ?>outer <?php else: ?>answer<?php endif; ?>">
+              <?php $_cmsHelper = Mage::helper('cms');?>
+              <?php $_process = $_cmsHelper->getBlockTemplateProcessor();?>
+              <?php echo $_process->filter($faq['answer']); ?>
+            </div>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </li>
+    <?php //endif; ?>
+ <?php endforeach; ?>
+
+</ul>
+     
+
+

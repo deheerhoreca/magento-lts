@@ -71,14 +71,14 @@ $manage_stock         = $stock_data["manage_stock"];
 $extra_delivery_time  = $stock_data["extra_delivery_time"];
 $overall_stock_status = $stock_data["overall_stock_status"];
 $txtstockdate         = $stock_data["txtstockdate"];
-$calwekdate_min       = $stock_data["calwekdate_min"];
-$calwekdate_max       = $stock_data["calwekdate_max"];
 $levertijd            = $stock_data["levertijd"];
 $bestelartikel        = $stock_data["bestelartikel"];
 
 if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
   if(empty($txtstockdate) === false) {
     $delivery_text .= "Terug op voorraad: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de datum waarop de leverancier aangeeft het product weer te kunnen leveren.</span>";
+  } else {
+    $delivery_text .= "Terug op voorraad: Op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit product komt spoedig weer op voorraad, maar wij hebben nog geen datum doorgekregen van de leverancier. U kunt een nabestelling (backorder) plaatsen, of contact met ons opnemen over verwachte levertijden en alternatieven.</span>";
   }
 }
 
@@ -87,20 +87,9 @@ if($bestelartikel === "Ja") {
 }
 
 if($overall_stock_status === "in_stock") {
+  $delivery_text .= "Verwachte levertijd: <strong>{$levertijd}</strong>";
   
-  if(empty($calwekdate_min) === true) {
-    $calwekdate_min = $levertijd;
-  }
-  $delivery_text .= "Verwacht op: <strong>{$calwekdate_min}</strong>";
-  
-  if($extra_delivery_time > 0) {
-    $delivery_text .= " (extra levertijd tijdens de feestdagen)";
-  }
-  
-  if(empty($calwekdate_max) === false) {
-    $extra = " De uitloopdatum voor deze levering is {$calwekdate_max}";
-  }
-  $delivery_text .= "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is.{$extra}</span></span>";
+  $delivery_text .= "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
 }
 
 if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
@@ -466,10 +455,10 @@ if($i < $max_highlighted_attributes) {
 }
 
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "aantal_branders";
+  $attribute_name = "cooking_zones";
   $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
-  $title = "Branders";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $title = "Kookzones";
+  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false && $text !== "Nee") {
     $text = "{$text} X";
     $highlights[] = [
@@ -565,8 +554,8 @@ if(strlen($product_description) === 0) {
 
 $related_products_block = $this->getChildHtml('related_products');
 $product_additional_data_block = $this->getChildHtml('product_additional_data');
-$upsell_products_block = $this->getChildHtml('upsell_products');
-if(empty($block) === true) {
+$alternative_products_block = $this->getChildHtml('upsell_products');
+if(empty($alternative_products_block) === true) {
   $upsell_products_block = $this->getLayout()->createBlock('awautorelated/blocks')->setBlockId(1)->toHtml();
 }
 
@@ -574,18 +563,19 @@ $anchors["photos"] = "Foto's";
 if(empty($pvideo) === false)                        $anchors["video"]         = "Productvideo";
 if(strlen($product_description) > 10)               $anchors["description"]   = "Beschrijving";
 if(empty($_crossSellProducts) === false)            $anchors["accessoires"]   = "Accessoires en verbruiksartikelen";
+if(empty($alternative_products_block) === false)    $anchors["alternatives"]  = "Alternatieven";
 if(empty($product_additional_data_block) === false) $anchors["specs"]         = "Specificaties";
 if(count($files) > 0)                               $anchors["documents"]     = "Documenten";
-if(empty($upsell_products_block) === false)         $anchors["alternatives"]  = "Alternatieven";
+if(empty($upsell_products_block) === false)         $anchors["upsells"]       = "Bekijk ook";
 if(empty($related_products_block) === false)        $anchors["related"]       = "Gerelateerde producten";
 if(strlen($additional_attributes) > 10)             $anchors["additional"]    = "Extra info van de leverancier";
 if(strlen($htbrand) > 10)                           $anchors["brand"]         = "Over {$brand_name}";
 
-if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-  echo "<pre>";
-  var_dump($stock_data);
-  echo "</pre>";
-}
+// if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+  // echo "<pre>";
+  // var_dump($stock_data);
+  // echo "</pre>";
+// }
 ?>
 
 <script>var optionsPrice = {};</script>
@@ -691,7 +681,7 @@ if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
 
               ?>
               <div id="company_usps">
-                <div class="buyblock-usp"><span class="dark-color">Wij scoren een <strong>9.1</strong> op tevredenheid</span></div>
+                <div class="buyblock-usp"><span class="dark-color">Wij scoren een <strong class='green'>9.1</strong> op klanttevredenheid</span></div>
                 <div class="buyblock-usp"><span class="dark-color">Advies door professionals: <a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@chefstore.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</span></div>
               </div>
               <?php
@@ -819,6 +809,16 @@ if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
       </div>
       <?php
     }
+    
+    /* Alternatives */
+    if(empty($alternative_products_block) === false) {
+      ?>
+      <a class="anchor" id="alternatives"></a>
+      <div class="probottomdv">
+        <?php echo $alternative_products_block; ?>
+      </div>
+      <?php
+    }
 
     /* Product Specs */
     if(empty($product_additional_data_block) === false) {
@@ -867,12 +867,12 @@ if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
     }
     ?>
 
-    <?php /* Stored Upsell Products OR Automatic Related Products */ ?>
+    <?php /* Automatic Related Products */ ?>
 
     <?php
     if(empty($upsell_products_block) === false) {
       ?>
-      <a class="anchor" id="alternatives"></a>
+      <a class="anchor" id="upsells"></a>
       <div class="probottomdv">
         <?php echo $upsell_products_block; ?>
       </div>
@@ -900,7 +900,7 @@ if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
       ?>
       <h2 class="tableftheader"><?php echo $this->__('Extra informatie van de fabrikant');?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
-        <a class="anchor" id="additional-attributes"></a>
+        <a class="anchor" id="additional"></a>
         <div class="std specs-table"><?php echo $additional_attributes; ?>
           <dl class="hidden"><dt>Source</dt><dd>https://www.chefstore.nl</dd></dl>
         </div>

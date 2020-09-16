@@ -1,0 +1,99 @@
+<?php
+$_isAccordion = Mage::getStoreConfig('faqs/faqs/faqs_style');
+$includeminjs = Mage::getStoreConfig('faqs/faqs/faqs_libjs');
+if($includeminjs==1):
+if($_isAccordion == 1) : ?>
+<script type="text/javascript">
+  j("faq-list").addClass("js");
+  j.fn.accordion.defaults.container = false;
+  j(function() {
+    j("#accordion").accordion({
+      el: ".heading",
+      next: "div.outer",
+      initShow : "div.outer:eq()"
+    });
+  });
+</script>
+<?php endif;?>
+<?php else:?>
+    <script type="text/javascript">
+  jQuery("faq-list").addClass("js");
+  jQuery.fn.accordion.defaults.container = false;
+  jQuery(function() {
+    jQuery("#accordion").accordion({
+      el: ".heading",
+      next: "div.outer",
+      initShow : "div.outer:eq()"
+    });
+  });
+</script>
+    <?php endif;?>
+    <div class="page-title">
+  <h1>
+      <?php $searchvar = $this->getRequest()->getParam('search-faqs');?>
+      <?php if($searchvar):?>
+      <?php  echo "Search results for "; ?>'<?php echo $searchvar; ?>'
+      <?php endif;?>
+
+
+
+  </h1>
+</div>
+<span id="myP"></span>
+    <ul id="accordion" class="<?php if($_isAccordion): ?>accordion <?php else: ?>no-accordion<?php endif; ?>">
+        <?php $faqcountArray = array(); ?>
+<?php
+$categoriesCollections = $this->getSearchCollection();
+foreach ($categoriesCollections as $categoriesCollection):
+    ?>
+    <?php $searchCollections = $this->getFaqaAndAnswer($categoriesCollection->getCatId()); ?>
+
+    <?php if (count($searchCollections) > 0): ?>
+        <li class="faq">
+            <a href="<?php echo Mage::getBaseUrl(), $categoriesCollection->getUrlkey(); ?>">
+                <h2 class="faq-cat-title"><?php echo $categoriesCollection->getCatName(); ?></h2>
+            </a>
+            <?php if ($categoriesCollection->getDescription()): ?>
+                <div class="<?php if ($_isAccordion): ?>outer <?php endif; ?>faq-cat-desc"><?php echo $categoriesCollection->getDescription(); ?></div>
+        <?php endif; ?>
+        <?php foreach ($searchCollections as $searchCollection): ?>
+
+                <div class="faq-que-ans">
+                    <ul>
+                        <li>
+ <?php array_push($faqcountArray, "1"); ?>
+                            <h3 class="heading <?php if (!$_isAccordion): ?>question<?php endif; ?>">
+                                <?php if ($_isAccordion): ?>
+                                    <a class="trigger" href="javascript:void(0);"><?php echo $searchCollection->getQuetion(); ?></a>
+                                <?php else: ?>
+               <?php echo $searchCollection->getQuetion(); ?>
+                                <?php endif; ?>
+                            </h3>
+                            <div class="<?php if ($_isAccordion): ?>outer <?php else: ?>answer<?php endif; ?>">
+                                <?php $_cmsHelper = Mage::helper('cms'); ?>
+            <?php $_process = $_cmsHelper->getBlockTemplateProcessor(); ?>
+            <?php echo $_process->filter($searchCollection->getAnswer()); ?>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+        <?php endforeach ?>
+        </li>
+    <?php endif; ?>
+<?php endforeach ?>
+    </ul>
+       <?php   $a = array_count_values($faqcountArray);?>
+      <?php if(empty($faqcountArray)): ?>
+
+       <p class="note-msg"><?php echo $this->__('Your search returns no results.'); ?></p>
+   <?php endif; ?>
+
+
+<script>
+   var x = "<?php if(empty($a[1])){echo "0";}else{echo $a[1];}?> keywords Matches";
+ if(document.getElementById("myP")!=null)
+    {
+    document.getElementById("myP").innerHTML = x;
+    }
+</script>

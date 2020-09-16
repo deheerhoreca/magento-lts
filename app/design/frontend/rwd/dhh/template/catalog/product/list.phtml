@@ -16,7 +16,7 @@ $haschild                     = false;
 $short_name_cats              = [10, 119, 434, 174, 24, 38, 23];
 $max_product_info_items       = 3;
 $max_product_highlight_items  = 6;
-$category_thumbs_dimensions   = 300;
+$category_thumbs_dimensions   = 140;
 $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 
@@ -34,11 +34,15 @@ if($currentOrder === "position") {
   $query = $_productCollection->getSelect()->__toString();
   //printr($query);
   if(strstr($query, "tagline") !== false) { // if somehow this field is not there
-    $sortByRcm = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
+    $sortByRcm    = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
+    $sortByNonEol = "IF(e.eol = '0' OR e.eol IS NULL, 1, 0) DESC";
     $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
     $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
+    $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByNonEol));
     $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);
-    //printr($_productCollection->getSelect()->__toString());
+    if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+      // printr($_productCollection->getSelect()->__toString());
+    }
      
     // Collection was loaded already...reloading...(yeah I know)
     $_productCollection->clear();
@@ -49,6 +53,9 @@ if($currentOrder === "position") {
 $_collectionSize = $_productCollection->count();
 
 /* CATEGORY HEADER & SEO */
+
+$current_page_nr = Mage::app()->getRequest()->getParam('p');
+$on_first_page = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
 
 if($carct && ($category === 'category')) {
   $catid = (int) $carct->getId();
@@ -77,7 +84,7 @@ if($carct && ($category === 'category')) {
     /* Augment category description */
     
     $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
-    if(is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
+    if($on_first_page === true && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
       $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
       $n = sizeof($manufacturers);
       $i = 0;
@@ -96,10 +103,12 @@ if($carct && ($category === 'category')) {
       $category_desc .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
     }
     
-    if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
-      $category_desc .= "<h2>Chefstore.nl:</h2><p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
-    } else {
-      $category_desc .= "<h2>Chefstore.nl:</h2><p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+    if($on_first_page === true) {
+      if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
+        $category_desc .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+      } else {
+        $category_desc .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+      }
     }
     
     if(strlen($category_desc) < 1000) {
@@ -146,34 +155,39 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
   
   // var_dump($subcategories);
   
-  if(sizeof($subcategories) > 0) {
+  if(sizeof($subcategories) > 1) {
     ?>
-    <ul class="category-grid">
+    <ul class="grid-shadow-tiles-text">
     <?php
+    // Logic copied to amasty/amshopby/subcategories.phtml
     foreach($subcategories as $category) {
-      $haschild       = true;
-      $category       = Mage::getModel('catalog/category')->load($category->getId());
-      $categoryName   = $category->getName();
-      $image          = $category->getImage();
-      $measurements   = null;
-      $img_url        = "{$media_url}/catalog/category/{$image}";
-      $img_path       = "{$media_path}/catalog/category/{$image}";
+      $haschild         = true;
+      $category         = Mage::getModel('catalog/category')->load($category->getId());
+      $categoryName     = $category->getName();
+      $image            = $category->getImage();
+      $img_path         = "{$media_path}/catalog/category/{$image}";
+      $resized_img_name = ($category_thumbs_dimensions*2)."_".basename($img_path);
+      $resized_img_path = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
+      $resized_img_url  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
       
-      if(is_file($img_path) === true) {
-        try {
-          $meta = getimagesize($img_path);
-          $measurements = $meta[3];
-        } catch (Exception $e) {
-          $image = null;
-          Mage::log("Error while trying to getimagesize() on {$img_file}: ".$e->getMessage(), null, 'system.log', true);
-        }
-      } else {
-        $image = null;
+      if(empty($image) === false && is_file($resized_img_path) !== true) {
+        $imageObj = new Varien_Image($img_path);
+        $imageObj->constrainOnly(true);
+        $imageObj->keepAspectRatio(true);
+        $imageObj->keepFrame(true);
+        $imageObj->backgroundColor(array(255,255,255));
+        $imageObj->resize($category_thumbs_dimensions * 2, $category_thumbs_dimensions * 2);
+        $imageObj->save($resized_img_path);
       }
       ?>
       <li>
         <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
-          <?php if(empty($image) === false) echo "<img class='lazy category-thumb' data-src='{$img_url}' alt='{$categoryName}' title='{$categoryName}' {$measurements} />"; ?>
+          <?php
+          if(empty($image) === false) {
+            echo "<img class='lazy' data-src='{$resized_img_url}' alt='{$categoryName}' title='{$categoryName}' 
+            height='".($category_thumbs_dimensions*2)."' width='".($category_thumbs_dimensions*2)."' />";
+          }
+          ?>
           <strong><?php echo $categoryName; ?></strong>
         </a>
       </li>
@@ -229,8 +243,6 @@ if($_collectionSize > 0) {
       $extra_delivery_time  = $stock_data["extra_delivery_time"];
       $overall_stock_status = $stock_data["overall_stock_status"];
       $txtstockdate         = $stock_data["txtstockdate"];
-      $calwekdate_min       = $stock_data["calwekdate_min"];
-      $calwekdate_max       = $stock_data["calwekdate_max"];
       $levertijd            = $stock_data["levertijd"];
       
       $additional_delivery_messages = null;
@@ -430,6 +442,12 @@ if($_collectionSize > 0) {
         $usps[] = "Triple-Zone";
       } elseif($attribute_value > 3) {
         $usps[] = "{$attribute_value} Zones";
+      }
+      
+      /* Cooking Zones */
+      $attribute_value = $_product->getCookingZones();
+      if(strlen($attribute_value) > 0) {
+        $usps[] = round($attribute_value, 2)." Zones";
       }
       
       /* ------------------------------------- */

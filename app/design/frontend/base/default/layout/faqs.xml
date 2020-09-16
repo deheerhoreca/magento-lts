@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+             <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/faqs/faq-style.css</stylesheet>
+            </action>
+            <action method="addItem" ifconfig="faqs/faqs/faqs_libjs">
+                <type>skin_js</type>
+                <name>js/jquery-v-1-9.js</name>
+            </action>
+            <action method="addItem" ifconfig="faqs/faqs/faqs_style">
+                <type>skin_js</type>
+                <name>js/accordion.js</name>
+            </action>
+        </reference>
+        <reference name="footer_links">
+            <action method="addLink" translate="label title" module="faqs" ifconfig="faqs/faqs/faq_footer">
+                <label helper="faqs/getFaqsLabel" />
+                <url helper="faqs/getFaqsUrl" />
+                <title helper="faqs/getFaqsLabel" />
+            </action>
+        </reference>
+        <reference name="top.links">
+            <action method="addLink" translate="label title" module="faqs" ifconfig="faqs/faqs/faqs_top">
+                 <label helper="faqs/getFaqsLabel" />
+                <url helper="faqs/getFaqsUrl" />
+                <title helper="faqs/getFaqsLabel" />
+            </action>
+        </reference>
+    </default>
+    <faqs_index_index>
+   
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <reference name="breadcrumbs">
+                <action method="addCrumb" ifconfig="faqs/faqs/enabled">
+                    <name>home</name>
+                    <params>
+                        <label>Home</label>
+                        <title>Home</title>
+                        <link>/</link>
+                    </params>
+                </action>
+<!--                <action method="addCrumb" ifconfig="faqs/faqs/enabled">
+                    <name>faq</name>
+                    <params>
+                        <label>faq</label>
+                        <title>faq</title>
+                    </params>
+                </action>-->
+            </reference>
+            <block type="faqs/frontend_list" name="faqs_list" template="faqs/list.phtml" />
+        </reference>
+              <reference name="left">
+            <block type="faqs/frontend_sidebar" name="faqs_left" template="faqs/sidebar.phtml" before="-"></block>
+        </reference>
+        <reference name="right">
+            <block type="faqs/frontend_sidebar" name="faqs_left" template="faqs/sidebar.phtml" before="-"></block>
+        </reference>
+    </faqs_index_index>
+    
+    <faqs_index_category>
+        <reference name="content">
+            <block type="faqs/frontend_view" name="faqs_view" template="faqs/view.phtml" />
+        </reference>
+        <reference name="left">
+            <block type="faqs/frontend_sidebar" name="faqs_left" template="faqs/subcatsidebar.phtml" before="-"></block>
+        </reference>
+        <reference name="right">
+            <block type="faqs/frontend_sidebar" name="faqs_left" template="faqs/subcatsidebar.phtml" before="-"></block>
+        </reference>
+    </faqs_index_category>
+
+    <faqs_index_search>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/faqs/faq-style.css</stylesheet>
+            </action>
+            <action method="addItem" ifconfig="faqs/faqs/faqs_style">
+                <type>skin_js</type>
+                <name>js/jquery-v-1-9.js</name>
+            </action>
+            <action method="addItem" ifconfig="faqs/faqs/faqs_style">
+                <type>skin_js</type>
+                <name>js/accordion.js</name>
+            </action>
+        </reference>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <reference name="breadcrumbs">
+                <action method="addCrumb" ifconfig="faqs/faqs/enabled">
+                    <name>home</name>
+                    <params>
+                        <label>Home</label>
+                        <title>Home</title>
+                        <link>/</link>
+                    </params>
+                </action>
+                <action method="addCrumb" ifconfig="faqs/faqs/enabled">
+                    <name>faq</name>
+                    <params>
+                        <label>faq</label>
+                        <title>faq</title>
+                    </params>
+                </action>
+            </reference>
+            <block type="faqs/frontend_search" name="faqs_list" template="faqs/search.phtml" />
+        </reference>
+              <reference name="left">
+            <block type="faqs/frontend_sidebar" name="faqs_left" template="faqs/sidebar.phtml" before="-"></block>
+        </reference>
+        <reference name="right">
+            <block type="faqs/frontend_sidebar" name="faqs_left" template="faqs/sidebar.phtml" before="-"></block>
+        </reference>
+    </faqs_index_search>
+  
+</layout>

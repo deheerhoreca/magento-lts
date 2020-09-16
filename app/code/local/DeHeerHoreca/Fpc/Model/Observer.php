@@ -35,4 +35,27 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       }
     }
   }
+  
+  public function clearProductCache($observer) {
+    $product = $observer->getProduct();
+    $productId = $product->getId();
+    
+    /* catalog_product_view */
+    $pattern = "*QUICKNDIRTYFPC_catalog_product_view_{$productId}_*";
+    $result .= shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
+    // Mage::getSingleton('core/session')->addSuccess("FPC Cache cleared: {$result}x catalog_product_view");
+    
+    /* catalog_category_view */
+    $category_ids = $product->getCategoryIds();
+    $result = null;
+    if(empty($category_ids) === false) {
+      foreach($category_ids as $category_id) {
+        $pattern = "*QUICKNDIRTYFPC_catalog_category_view_{$category_id}_*";
+        $result .= shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
+      }
+    }
+    // Mage::getSingleton('core/session')->addSuccess("FPC Cache cleared: {$result}x catalog_category_view");
+    
+    return true;
+  }
 }

@@ -90,3 +90,4 @@ media/wysiwyg/.thumbs/
 .modman/*/.git
 
 !/media/static
+.well-known/

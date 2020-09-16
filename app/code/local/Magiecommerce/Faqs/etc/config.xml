@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Magiecommerce_Faqs>
+            <version>1.0.3</version>
+        </Magiecommerce_Faqs>
+    </modules>
+    <frontend>
+      <routers>
+         <faqs>
+            <use>standard</use>
+            <args>
+               <module>Magiecommerce_Faqs</module>
+               <frontName>faqs</frontName>
+            </args>
+         </faqs>
+      </routers>
+      <layout>
+            <updates>
+                <faqs>
+                    <file>faqs.xml</file>
+                </faqs>
+            </updates>
+        </layout>
+   </frontend>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Magiecommerce_faqs after="Mage_Adminhtml">Magiecommerce_Faqs_Adminhtml</Magiecommerce_faqs>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <global>
+            <events>
+        <admin_system_config_changed_section_faqs>
+            <observers>
+                <shopthelook>
+                    <type>singleton</type>
+                    <class>Magiecommerce_Faqs_Model_Observer</class>
+                    <method>systemConfigChangedfaqs</method>
+                </shopthelook>
+            </observers>
+        </admin_system_config_changed_section_faqs>
+      </events>
+        <models>
+            <faqs>
+                <class>Magiecommerce_Faqs_Model</class>
+                <resourceModel>Magiecommerce_faqs_mysql4</resourceModel>               
+            </faqs>
+            <Magiecommerce_faqs_mysql4>
+                <class>Magiecommerce_Faqs_Model_Mysql4</class>
+                <entities>
+                    <categories>
+                        <table>ltpl_faq_categories</table>
+                    </categories>
+                    <items>
+                        <table>ltpl_faq_faqitems</table>
+                    </items>
+                </entities>
+            </Magiecommerce_faqs_mysql4>            
+        </models>
+
+        <resources>
+            <faqs_setup>
+                <setup>
+                    <module>Magiecommerce_Faqs</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </faqs_setup>
+            <faqs_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </faqs_write>
+            <faqs_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </faqs_read>
+        </resources>
+
+        <blocks>
+            <faqs>
+                <class>Magiecommerce_Faqs_Block</class>
+            </faqs>
+        </blocks>
+
+        <helpers>
+            <faqs>
+                <class>Magiecommerce_Faqs_Helper</class>
+            </faqs>
+        </helpers>
+    </global>
+
+    <adminhtml>
+        <menu>
+            <faqs module="faqs">
+                <title>FAQ</title>
+                <sort_order>1051</sort_order>
+                <children>
+                     <items module="faqs">
+                        <title>Manage FAQ</title>
+                        <sort_order>1</sort_order>
+                        <action>adminhtml/faqs</action>
+                    </items>
+                    <index module="faqs">
+                        <title>Manage FAQ Categories</title>
+                        <sort_order>1</sort_order>
+                        <action>adminhtml/categories</action>
+                    </index>
+                    <config module="faqs">
+                        <title>FAQ Configuration</title>
+                        <sort_order>2</sort_order>
+                        <action>adminhtml/system_config/edit/section/faqs</action>
+                    </config>
+                </children>
+            </faqs>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <faqs module="faqs">
+                            <title>FAQ</title>
+                            <sort_order>1051</sort_order>
+                            <children>
+                                 <items module="faqs">
+                                    <title>Manage FAQ</title>
+                                    <sort_order>1</sort_order>
+                                    <action>adminhtml/faqs</action>
+                                </items>
+                                <index module="faqs">
+                                    <title>Manage FAQ Categories</title>
+                                    <sort_order>1</sort_order>
+                                    <action>adminhtml/categories</action>
+                                </index>
+                                <config module="faqs">
+                                    <title>FAQ Configuration</title>
+                                    <sort_order>2</sort_order>
+                                    <action>adminhtml/system_config/edit/section/faqs</action>
+                                </config>
+                            </children>
+                        </faqs>
+                    </children>
+                </admin>
+            </resources>             
+        </acl>        
+        <layout>
+            <updates>
+                <faqs>
+                    <file>faqs.xml</file>
+                </faqs>
+            </updates>
+        </layout>
+    </adminhtml>   
+</config>

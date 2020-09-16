@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<config>
+   <tabs>
+        <Magiecommerce_tab translate="label"  module="faqs">
+            <label>Magiecommerce Extensions</label>
+            <sort_order>100</sort_order>
+        </Magiecommerce_tab>
+    </tabs>
+    <sections>
+        <faqs translate="label" module="faqs">
+            <label>FAQ Configuration</label>
+            <tab>Magiecommerce_tab</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <faqs translate="label">
+                    <label>Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enable Module</label>
+                            <comment>Enable or Disable Module</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                               <faq_url translate="label">
+                            <label>Landing Page URL Key</label>
+                            <comment>Default: faqs</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faq_url>
+                        <faq_lable translate="label">
+                            <label>Landing Page Link Title</label>
+                            <comment>Example: FAQ, Faq, faq etc. </comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faq_lable>
+                         <faqs_top translate="label">
+                            <label>Enable Top Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faqs_top>
+                        <faq_footer translate="label">
+                            <label>Enable Footer Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faq_footer>
+                        <faqs_style translate="label">
+                            <label>Use Accordion Style</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faqs_style>
+                        <faqs_libjs translate="label">
+                            <label>Include jQuery Library</label>
+                            <comment>Include jquery-v-1-9.js, select "No" to avoid jQuery confliction if you are already using jQuery library in frontend.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faqs_libjs>
+                        <faqs_page translate="label">
+                            <label>Landing Page Layout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>page/source_layout</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faqs_page>
+                    </fields>
+                </faqs>
+                <seo translate="label">
+                    <label>Search Engine Optimization</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>                       
+                        <faq_meta translate="label">
+                            <label>Meta Title</label>
+                            <comment>Example: FAQ, Frequently Asked Questions etc.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faq_meta>
+                        <faq_keywords translate="label">
+                            <label>Meta Keywords</label>
+                            <comment>Example: Comma separated keywords for FAQ page</comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faq_keywords>
+                        <faq_description translate="label">
+                            <label>Meta Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </faq_description>                        
+                    </fields>
+                </seo>
+            </groups>
+        </faqs>
+    </sections>
+</config>
