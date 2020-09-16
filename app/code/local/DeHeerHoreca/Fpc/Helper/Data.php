@@ -165,6 +165,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "api")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
+        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "sales")
         ) {
         $enabled = false;
       }
@@ -196,6 +197,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "api")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
+        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "sales")
       ) {
         if(DHH_FPC_DEBUG === true) {
           print_r("<br />Write cache disabled");

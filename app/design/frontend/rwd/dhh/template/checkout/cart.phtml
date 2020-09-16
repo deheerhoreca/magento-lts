@@ -14,14 +14,14 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
 <div class="cart <?php echo $_priceDisplay; ?>">
   <div class="page-title title-buttons">
     <h1><?php echo $this->__('Shopping Cart') ?></h1>
-    <?php if(!$this->hasError()): ?>
-    <ul class="checkout-types top">
-    <?php foreach ($this->getMethods('top_methods') as $method): ?>
-        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-        <li><?php echo $methodHtml; ?></li>
-        <?php endif; ?>
-    <?php endforeach; ?>
-    </ul>
+    <?php if(0 && !$this->hasError()): ?>
+      <ul class="checkout-types top">
+      <?php foreach ($this->getMethods('top_methods') as $method): ?>
+          <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+          <li><?php echo $methodHtml; ?></li>
+          <?php endif; ?>
+      <?php endforeach; ?>
+      </ul>
     <?php endif; ?>
   </div>
   <?php echo $this->getMessagesBlock()->toHtml() ?>
@@ -30,22 +30,22 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
     <form action="<?php echo $this->getFormActionUrl() ?>" method="post">
         <?php echo $this->getBlockHtml('formkey'); ?>
         <table id="shopping-cart-table" class="cart-table data-table">
-            <col width="1" />
-            <col width="1" />
-            <col width="1" />
+            <col width="120" />
+            <col width="200" />
+            <col width="100" />
             <col width="1" />
             <col width="1" />
             <col width="1" />
             <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
-            <col width="1" />
-            <col width="1" />
+              <col width="1" />
+              <col width="1" />
             <?php endif; ?>
 
         <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
             <thead>
                 <tr>
-                    <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php //echo $this->__('Product') ?></span></th>
-                    <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
+                    <th rowspan="<?php echo $mergedCells; ?>" class="nobr">&nbsp;</th>
+                    <th rowspan="<?php echo $mergedCells; ?>"  class="nobr"><?php echo $this->__('Product') ?></th>
                     <th class="align-right cart-price-head" colspan="<?php echo $mergedCells; ?>">
                       <?php echo $this->__('Price') ?>
                     </th>

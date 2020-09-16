@@ -43,21 +43,22 @@ Mage::register('isSecureArea', true);
 *********************************************************************************************/
 
 
+if(empty($argv[1]) || empty($argv[2])) {
+  die("Usage: playround.php <category_id> <sku>".PHP_EOL);
+}
+
 $attribute_id = 45;
 
-$work[] = ["id" => 432, "sku" => "BA-115129"];
+$work[] = ["id" => $argv[1], "sku" => $argv[2]];
 
 $resource = Mage::getSingleton('core/resource');
 $writeConnection = $resource->getConnection('core_write');
 
 foreach($work as $item) {
 
-  $image = getMagento1BaseImage($item["sku"]);
-
-  //print_r($image);exit;
-
+  $product = getMagento1ProductBySku($item["sku"]);
+  $image = getMagento1BaseImage($product);
   $image_file = basename($image);
-
   $target = "media/catalog/category/{$image_file}";
 
   if(copy($image, $target) === true) {
@@ -69,14 +70,28 @@ foreach($work as $item) {
   $query = "REPLACE INTO catalog_category_entity_varchar (entity_type_id, attribute_id, store_id, entity_id, `value`) VALUES (3, {$attribute_id}, 0, {$item["id"]}, '{$image_file}');".PHP_EOL;
   
   $writeConnection->query($query);
-  
   echo "Query OK".PHP_EOL;
+  
+  $m = Mage::getModel('catalog/category')->load($item["id"])->getParentCategory();
+  $direct_parent_id = (int) $m->getId();
+  if(empty($direct_parent_id) === false) {
+    $pattern = "*QUICKNDIRTYFPC_catalog_category_view_{$direct_parent_id}";
+    $cmd = "redis-cli --scan --pattern {$pattern}_* | xargs redis-cli del";
+    $count = shell_exec($cmd);
+    echo "Category FPC cleared: {$count}".PHP_EOL;
+  } else {
+    echo "No parent category found for {$item["id"]}".PHP_EOL;
+  }
 }
 
-function getMagento1BaseImage($sku) {
+function getMagento1BaseImage($product) {
+  return Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+}
+
+function getMagento1ProductBySku($sku) {
   $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
   if(!$product) die("Cannot find SKU {$sku}".PHP_EOL);
-  return Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+  return $product;
 }
 
 

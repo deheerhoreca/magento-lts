@@ -16,11 +16,11 @@ $attr_remove_decimals = [
   "grill_output_watt", "aantal_m3_uur", "aantal_deuren", "aantal_roosters", 
   "aantal_laden", "aantal_kippen", "aantal_kuipen", "aantal_spoelbak",
   "aantal_platen", "aantal_borden", "aantal_bakken", "aantal_zetsystemen",
-  "aantal_kookzones", "aantal_manden", "aantal_pizzas", "aantal_elementen", 
+  "aantal_manden", "aantal_pizzas", "aantal_elementen", 
   "aantal_etages", "aantal_filters", "aantal_branders", "aantal_borden_korven", 
   "aantal_glas_korven", "aantal_snelheden", "aantal_blikjes", "aantal_wasprogrammas",
   "eenheid", "capacity_wine_bottles","geluidsniveau","number_of_cooling_zones",
-  "aantal_flessen",
+  "aantal_flessen","cooking_zones",
 ];
 
 /* No zero decimals, with number formatting */
@@ -31,12 +31,15 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
 /* Do not show these values */
 $value_skip           = ["N.v.t.", "n.v.t.", "Geen / n.v.t."];
 
+$attributes           = [];
+
 if($_additionalgroup = $this->getAdditionalDataCustom()) {
   $attr_remove_decimals = array_flip($attr_remove_decimals);
   $attr_trim_decimals   = array_flip($attr_trim_decimals);
-  echo '<div class="box-collateral box-additional bxgroupifo">';
+  // echo '<div class="box-collateral box-additional bxgroupifo">';
+  
   foreach($_additionalgroup as $_additional) {
-    echo "<span class='clzattrgname'>{$this->__($_additional['title'])}</span>";
+    // echo "<span class='clzattrgname'>{$this->__($_additional['title'])}</span>";
     foreach($_additional['items'] as $_data) {
       $value = $_data['value'];
       
@@ -100,12 +103,36 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           break;
       }
       
+      $value = $value.$postfix;
+      
+      $attributes[$this->__($_additional['title'])][$label] = $value;
+      /*
       ?>
       <dl class="product-specs">
         <dt class="label"><?php echo $label; ?></dt>
         <dd class="data"><?php echo $value.$postfix; ?></dd>
       </dl>
-    <?php
+      <?php
+      */
+    }
+  }
+  // echo "</div>";
+}
+
+// if($_SERVER["REMOTE_ADDR"] === "185.127.111.251") {
+  // echo "<pre>";
+  // print_r($attributes);
+  // echo "</pre>";
+// }  
+
+if($attributes !== []) {
+  echo '<div class="box-collateral box-additional bxgroupifo">';
+  foreach($attributes as $group => $subattributes) {
+    echo "<span class='clzattrgname'>{$this->__($group)}</span>";
+    foreach($subattributes as $label => $value) {
+      ?>
+      <dl class="product-specs"><dt class="label"><?php echo $label; ?></dt><dd class="data"><?php echo $value; ?></dd></dl>
+      <?php
     }
   }
   echo "</div>";

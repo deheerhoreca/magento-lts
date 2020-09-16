@@ -79,7 +79,7 @@ usort($manufacturers, function($a, $b) {
     ?>
       <li>
         <a href="/<?php echo $brand_slug; ?>.html">
-        <img src="<?php echo $brand_logo;?>" alt="<?php echo $brand_name; ?>" title="<?php echo $brand_name; ?>" /></a>
+        <img class="lazy" data-src="<?php echo $brand_logo;?>" alt="<?php echo $brand_name; ?>" title="<?php echo $brand_name; ?>" /></a>
       </li>
       <?php 
     } else {

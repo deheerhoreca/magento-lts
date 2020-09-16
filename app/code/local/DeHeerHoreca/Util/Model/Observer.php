@@ -4,11 +4,29 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   public function __construct() {}
   
+  public function updateProductOnEdit($observer) {
+    $event = $observer->getEvent();
+    $product = $event->getProduct();
+    $product->lockAttribute('cost');
+    $product->lockAttribute('price_min');
+    $product->lockAttribute('recommended_product');
+    $product->lockAttribute('additional_attributes');
+    $product->lockAttribute('automation_flags_json');
+    $product->lockAttribute('amazon_id');
+  }
+  
   public function updateProductBeforeSave($observer) {
     $product = $observer->getProduct();
     // echo "<pre>"; print_r($product->getData());
     // var_dump($product->getData("bargain"));
     // var_dump($product->getData("featured"));
+    
+    /* SHORT NAME */
+    if(strlen($product->getData("name_short")) < 3) {
+      $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
+      $product->setData("name_short", $new_value);
+      Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
+    }
     
     /* END OF LIFE */
     if($product->getData("eol") === "1") {
@@ -34,12 +52,59 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       }
     }
     
-    /* MERCHANDISING */
+    /* PRICING */
+    if(empty($product->getData("msrp")) === false) {
+      if(empty($product->getData("price_supplier_discount_perc")) === false) {
+        $new_value = (float) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_discount_perc") / 100)), 2);
+        if($new_value > 0) {
+          $current_value = (double) $product->getData("cost");
+          if($current_value !== $new_value) {
+            $product->setData("cost", $new_value);
+            Mage::getSingleton('core/session')->addSuccess("Cost Price overwritten");
+          }
+        }
+      }
+      if(empty($product->getData("price_supplier_msrp_disc_limit")) === false) {
+        $new_value = (double) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_msrp_disc_limit") / 100)), 2);
+        if($new_value > 0) {
+          $current_value = (double) $product->getData("price_min");
+          if($current_value !== $new_value) {
+            $product->setData("price_min", $new_value);
+            Mage::getSingleton("core/session")->addSuccess("price_min overwritten");
+          }
+        }
+      }
+    }
     
+    if(empty($product->getData("price_bol_be_auto")) === false && $product->getData("price_bol_be_auto") === "1") {
+      $new_value = (float) $product->getData("special_price") * 1.21;
+      $new_value = round($new_value, 0);
+      $new_value = (string) $new_value;
+      if($new_value > 0 && $new_value != $product->getData("price_bol_be")) {
+        $product->setData("price_bol_be", $new_value);
+        Mage::getSingleton('core/session')->addSuccess("price_bol_be auto-filled");
+      }
+    }
+    
+    if(empty($product->getData("price_bol_nl_auto")) === false && $product->getData("price_bol_nl_auto") === "1") {
+      $new_value = (float) $product->getData("special_price") * 1.21;
+      $new_value = round($new_value, 0);
+      $new_value = (string) $new_value;
+      if($new_value > 0 && $new_value != $product->getData("price_bol_nl")) {
+        $product->setData("price_bol_nl", $new_value);
+        Mage::getSingleton('core/session')->addSuccess("price_bol_nl auto-filled");
+      }
+    }
+    
+    /* MERCHANDISING */
     if(empty($product->getData("tagline")) === false) {
-      $product->setData("recommended_product", "1826");
+      if($product->getData("recommended_product") !== "1826") {
+        $product->setData("recommended_product", "1826");
+      }
     } else {
-      $product->setData("recommended_product", "0");
+      if($product->getData("recommended_product") !== "0") {
+        $product->setData("recommended_product", "0");
+      }
     }
   }
   

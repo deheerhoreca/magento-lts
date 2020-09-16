@@ -139,6 +139,7 @@ User-agent: yacybot
 User-agent: Yeti
 User-agent: YisouSpider
 User-agent: PetalBot
+User-agent: Barkrowler/0.9
 Disallow: /
 
 User-agent: *

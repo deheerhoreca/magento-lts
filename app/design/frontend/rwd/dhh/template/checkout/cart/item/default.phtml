@@ -5,6 +5,7 @@ $_product = $this->getProduct();
 $product_long_name = $_product->getName();
 $product_name = (strlen($_product->getNameShort()) > 0) ? $_product->getNameShort() : $product_long_name;
 $show_product_long_name = (bool) (strlen($_product->getNameShort()) > 0);
+$levertijd = Mage::getModel('catalog/product')->load($_product->getId())->getAttributeText("levertijd");
 
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
@@ -44,6 +45,9 @@ $thumb_dimensions = 2 * $thumb_size;
     <?php
     if($show_product_long_name === true) {
       echo "<span class=gray><em>{$product_long_name}</em></span>";
+    }
+    if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+      echo "<p class='small'>Verwacht: {$levertijd}</p>";
     }
     ?>
 

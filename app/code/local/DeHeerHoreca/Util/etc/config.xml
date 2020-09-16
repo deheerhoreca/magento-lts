@@ -21,6 +21,15 @@
     </models>
     
     <events>
+    <catalog_product_edit_action>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>updateProductOnEdit</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_edit_action>
       <catalog_product_save_before>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>

@@ -626,49 +626,50 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $delivery_text        = "Verw. levering: <strong>Op aanvraag</strong>";
       $txtcltcz             = 'clzinstocktemp';
       $backorder_needed     =  true;
-      
       $overall_stock_status = "backorder";
 
     } else {
       
       // In stock
       
-      if($levertijd === '2-3 weken') {
-        $nmwek_min = 10;
-        $nmwek_max = 15;
-      } elseif($levertijd === '3-4 weken') {
-        $nmwek_min = 15;
-        $nmwek_max = 20;
-      } elseif($levertijd === '4-5 weken') {
-        $nmwek_min = 20;
-        $nmwek_max = 25;
-      } elseif(strstr($levertijd, "werkdagen") !== false) {
-        $nmwek_min = (int) trim(strtok($levertijd, 'werkdagen'));
-        $nmwek_max = $nmwek_min + 1;
-      }
+      // Date calculation is disabled
+      
+      // if($levertijd === '2-3 weken') {
+        // $nmwek_min = 10;
+        // $nmwek_max = 15;
+      // } elseif($levertijd === '3-4 weken') {
+        // $nmwek_min = 15;
+        // $nmwek_max = 20;
+      // } elseif($levertijd === '4-5 weken') {
+        // $nmwek_min = 20;
+        // $nmwek_max = 25;
+      // } elseif(strstr($levertijd, "werkdagen") !== false) {
+        // $nmwek_min = (int) trim(strtok($levertijd, 'werkdagen'));
+        // $nmwek_max = $nmwek_min + 1;
+      // }
 
-      if(empty($nmwek_min) === false) {
+      // if(empty($nmwek_min) === false) {
         
-        $nmwek_min         += $extra_delivery_time;
-        $nmwek_max         += $extra_delivery_time;
+        // $nmwek_min         += $extra_delivery_time;
+        // $nmwek_max         += $extra_delivery_time;
         
-        $calwekdate_min   = date('d-m-Y', strtotime("+ {$nmwek_min} weekdays"));
-        $calwekdate_max   = date('d-m-Y', strtotime("+ {$nmwek_max} weekdays"));
+        // $calwekdate_min   = date('d-m-Y', strtotime("+ {$nmwek_min} weekdays"));
+        // $calwekdate_max   = date('d-m-Y', strtotime("+ {$nmwek_max} weekdays"));
 
-        // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
-        $holidays         = ["01-01-2020", "10-04-2020", "12-04-2020", "13-04-2020", "27-04-2020", "21-05-2020",
-                             "01-06-2020", "25-12-2020", "26-12-2020"];
-        $tz_obj           = new DateTimeZone('Europe/Amsterdam');
-        $today            = new DateTime("now", $tz_obj);
-        $current_hour     = $today->format('H');
-        $i                = 0;
+        // // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
+        // $holidays         = ["01-01-2020", "10-04-2020", "12-04-2020", "13-04-2020", "27-04-2020", "21-05-2020",
+                             // "01-06-2020", "25-12-2020", "26-12-2020"];
+        // $tz_obj           = new DateTimeZone('Europe/Amsterdam');
+        // $today            = new DateTime("now", $tz_obj);
+        // $current_hour     = $today->format('H');
+        // $i                = 0;
         
-        while(in_array($calwekdate_min, $holidays) !== false) {
-          $i++;
-        }
-        $calwekdate_min   = date('d-m-Y', strtotime($calwekdate_min . ' +' . $i . ' weekday'));
-        $calwekdate_max   = date('d-m-Y', strtotime($calwekdate_max . ' +' . ($i + 1) . ' weekday'));
-      }
+        // while(in_array($calwekdate_min, $holidays) !== false) {
+          // $i++;
+        // }
+        // $calwekdate_min   = date('d-m-Y', strtotime($calwekdate_min . ' +' . $i . ' weekday'));
+        // $calwekdate_max   = date('d-m-Y', strtotime($calwekdate_max . ' +' . ($i + 1) . ' weekday'));
+      // }
       
       if($manage_stock === false || $stock_qty === 100) {
         // 100 is a special value, when we don't have an exact quantity
@@ -682,11 +683,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       }
       $txtcltcz             = 'buyblock-usp';
       $backorder_needed     = false;
-      
       $overall_stock_status = "in_stock";
+      
     }
     
-    // $txtstockdate      = $product->getData('txtstockdate');
+    // $txtstockdate = $product->getData('txtstockdate');
     $real_txtstockdate = $product->getData('txtstockdate');
     if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
       if(empty($real_txtstockdate) === false) {
@@ -713,8 +714,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $stock_data["overall_stock_status"] = $overall_stock_status;
     $stock_data["txtstockdate"]         = $txtstockdate;
     $stock_data["real_txtstockdate"]    = $real_txtstockdate;
-    $stock_data["calwekdate_min"]       = $calwekdate_min;
-    $stock_data["calwekdate_max"]       = $calwekdate_max;
+    // $stock_data["calwekdate_min"]       = $calwekdate_min;
+    // $stock_data["calwekdate_max"]       = $calwekdate_max;
     $stock_data["levertijd"]            = $levertijd;
     $stock_data["bestelartikel"]        = $bestelartikel;
     
