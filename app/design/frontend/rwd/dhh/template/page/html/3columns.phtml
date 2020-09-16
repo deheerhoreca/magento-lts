@@ -18,7 +18,9 @@
               <div class="col-left sidebar col-left-first"><?php echo $_leftContent;   ?></div>
             <?php endif; ?>
             <div class="col-main">
+              <!-- core_messages_start -->
               <?php echo $this->getChildHtml('global_messages') ?>
+              <!-- core_messages_end -->
               <?php echo $this->getChildHtml('content') ?>
             </div>
             <div class="col-left sidebar"><?php echo $this->getChildHtml('left') ?></div>

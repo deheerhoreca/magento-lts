@@ -130,13 +130,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
          || Mage::getSingleton('customer/session')->isLoggedIn()
       ) {
         if(DHH_FPC_DEBUG === true) {
-          print_r("<br />Request is NOT anonymous");
+          print_r("<br /><br /><br /><br /><br /><br />Request is NOT anonymous");
         }
         return false;
       }
       
       if(DHH_FPC_DEBUG === true) {
-        print_r("<br />Request IS anonymous");
+        print_r("<br /><br /><br /><br /><br /><br />Request IS anonymous");
       }
       
       return true;
@@ -266,10 +266,19 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
           ->createBlock('checkout/cart_sidebar')
           ->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
         
-        // echo $sidebar_html;exit;
+        $messages_html .= Mage::app()
+          ->getLayout()
+          ->createBlock('core/messages')
+          ->setTemplate("page/html/notices.phtml")->toHtml();
+        
+        // Mage::getSingleton('core/session')->addNotice(Mage::helper('core')->__("Notice ".date("c")));
+        
+        // printr($messages_html);exit;
         
         $minicart_html = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
+        
         $html = str_replace("<!-- header_minicart_here -->", $minicart_html, $html);
+        $html = str_replace("<!-- core_messages_here -->", $messages_html, $html);
       }
       
       if(empty($html)) {
@@ -300,6 +309,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       if($replace_blocks === true) {
         $html = self::replace_between($html, "<!-- header_minicart_start -->", "<!-- header_minicart_end -->", "<!-- header_minicart_here -->");
         $html = self::replace_between($html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", "<!-- header_sidebar_here -->");
+        $html = self::replace_between($html, "<!-- core_messages_start -->", "<!-- core_messages_end -->", "<!-- core_messages_here -->");
       }
       
       Mage::app()->getCache()->save($html, $key, ["quickndirtyfpc"], 86400);
@@ -329,4 +339,26 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
 
       return substr_replace($str, $replacement, $start, $end - $start);
     } 
+}
+
+if(function_exists('printr') === false) {
+  function printr($expr, $return = false) {
+    $ret = null;
+    if(is_array($expr) && !sizeof($expr)) {
+      return;
+    }
+    if(php_sapi_name() !== "cli") {
+      $ret .= "<pre>";
+    }
+    $ret .= print_r($expr, true);
+    if(php_sapi_name() !== "cli") {
+      $ret .= "</pre>";
+    } else {
+      $ret .= PHP_EOL;
+    }
+    if($return) {
+      return $return;
+    }
+    echo $ret;
+  }
 }

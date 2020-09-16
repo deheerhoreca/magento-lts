@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js" itemscope itemtype="http://schema.org/WebPage">
-<head>
-<?php echo $this->getChildHtml('head') ?>
-</head>
-<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
-<?php echo $this->getChildHtml('after_body_start') ?>
-<div class="wrapper">
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="page">
+  <head>
+    <?php echo $this->getChildHtml('head') ?>
+  </head>
+  <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+    <?php echo $this->getChildHtml('after_body_start') ?>
+    <div class="wrapper">
+      <?php echo $this->getChildHtml('global_notices') ?>
+      <div class="page">
         <?php echo $this->getChildHtml('header') ?>
         <div class="main-container col2-right-layout">
-            <div class="main">
-                <?php echo $this->getChildHtml('breadcrumbs') ?>
-                <div class="col-main">
-                    <?php echo $this->getChildHtml('global_messages') ?>
-                    <?php echo $this->getChildHtml('content') ?>
-                </div>
-                <div class="col-right sidebar"><?php echo $this->getChildHtml('right') ?></div>
+          <div class="main">
+            <?php echo $this->getChildHtml('breadcrumbs') ?>
+            <div class="col-main">
+              <!-- core_messages_start -->
+              <?php echo $this->getChildHtml('global_messages') ?>
+              <!-- core_messages_end -->
+              <?php echo $this->getChildHtml('content') ?>
             </div>
+            <div class="col-right sidebar"><?php echo $this->getChildHtml('right') ?></div>
+          </div>
         </div>
         <?php echo $this->getChildHtml('footer_before') ?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('global_cookie_notice') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
+      </div>
     </div>
-</div>
-<?php echo $this->getAbsoluteFooter() ?>
-</body>
+    <?php echo $this->getAbsoluteFooter() ?>
+  </body>
 </html>
