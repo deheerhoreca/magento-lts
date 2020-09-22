@@ -17,7 +17,7 @@ $_category    = $this->getCurrentCategory();
 
 $brand_name   = strtolower($_category->getName());
 $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_logo   = "/media/wysiwyg/brands/prokoeling.png";
+$brand_logo   = null;
 
 $htbrand      = null;
 
@@ -36,7 +36,9 @@ if($this->isMixedMode()) {
   $ctdesc_h1 = "Bekijk ons complete ".$_helper->categoryAttribute($_category, $_category->getName(), 'name')." assortiment";
   
   echo "<div class='ctdesc'>";
-  echo "<img class='float-right' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' />";
+  if(empty($brand_logo) === false) {
+    echo "<img class='float-right' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' />";
+  }
   echo "<h1>{$ctdesc_h1}</h1>";
   echo $htbrand.$this->getCmsBlockHtml();
   echo "</div>";
