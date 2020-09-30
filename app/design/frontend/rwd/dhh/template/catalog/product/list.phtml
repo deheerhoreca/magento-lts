@@ -443,7 +443,10 @@ if($_collectionSize > 0) {
       }
       
       $attribute_value = $_product->getAttributeText('uitvoering');
-      if(strlen($attribute_value) > 0) {
+      if(is_array($attribute_value) === true) {
+        $attribute_value = implode(", ", $attribute_value);
+      }
+      if(is_scalar($attribute_value) === true && strlen($attribute_value) > 0) {
         $usps[] = $attribute_value;
       }
       
