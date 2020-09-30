@@ -1,3 +1,9 @@
+<script>
+  var lazyLoadInstance = new LazyLoad({
+    elements_selector: ".lazy"
+  });
+</script>
+
 <?php
 $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullActionName();
 ?>
@@ -21,14 +27,6 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
   </div>
 </div>
 
-<div id="coronabar" class="alertbar active" style="display: none;">
-  We blijven gewoon open tijdens de corona crisis. Wel kunnen er als gevolg van de corona crisis vertragingen in leveringen optreden door extra veiligheidsmaatregelen die onze partners in de logistieke keten moeten treffen. We hopen op uw begrip.
-</div>
-<script>
-  jQuery('#coronabar').delay(1000).fadeIn(200);
-  jQuery('#coronabar').delay(5000).fadeOut('slow');
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin defer></script>
 <script>
   window.onload = function () {
@@ -49,8 +47,17 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
   };
 </script>
 
-<script>
-  var lazyLoadInstance = new LazyLoad({
-    elements_selector: ".lazy"
-  });
-</script>
+<?php
+$logoSrc = Mage::getStoreConfig('design/header/logo_src');
+$logoAlt = Mage::getStoreConfig('design/header/logo_alt');
+$imageurl = $this->getSkinUrl($logoSrc);
+?>
+
+<div id="modal" style="display:none;">
+  <img id="main-logo" src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
+  <h2><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Contact met Chefstore.nl</h2>
+  <div style="margin-top: 1em;"><strong>Sales & Advies: <a href="tel:+31850441003" title="Bel ons">+31 85 0441003</a></strong><small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small>.</div>
+  <div style="margin-top: 1em;"><strong>Klantenservice:</strong> Stuur een mail naar <a href="mailto:service@chefstore.nl" title="Klantenservice">service@chefstore.nl</a> of <a href="/service">vul direct een Serviceverzoek in</a>.</div>
+  <div style="margin-top: 1em;">U kunt ook een verzoek indienen om door ons gebeld te worden, klik daarvoor <a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">hier</a>.</div>
+  <div style="margin-top: 1em;">Daarnaast zijn wij bereikbaar op de chat, zie daarvoor de knop rechtsonderin op onze website.</div>
+</div>

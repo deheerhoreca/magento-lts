@@ -170,7 +170,7 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
       $resized_img_path = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
       $resized_img_url  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
       
-      if(empty($image) === false && is_file($resized_img_path) !== true) {
+      if(empty($image) === false && is_file($resized_img_path) !== true && is_file($img_path) === true) {
         $imageObj = new Varien_Image($img_path);
         $imageObj->constrainOnly(true);
         $imageObj->keepAspectRatio(true);

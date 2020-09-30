@@ -19,7 +19,7 @@ if(empty($_cartQty)) {
   <div id="minicart-success-message" class="minicart-message"></div>
 
   <p class="block-subtitle">
-    <?php echo $this->__('Recently added item(s)') ?>
+    <a class="blanc" alt="Winkelwagen" href='<?php echo $this->getUrl('checkout/cart') ?>'>Winkelwagen</a>
     <a class="close skip-link-close" href="#" title="<?php echo $this->quoteEscape($this->__('Close')); ?>">
       <i class="fa fa-times" aria-hidden="true"></i>
     </a>
@@ -66,7 +66,7 @@ if(empty($_cartQty)) {
     <div class="minicart-actions">
       <button type="button" title="Ga door naar afrekenen" class="button btn-proceed-checkout btn-checkout" onclick="window.location='<?php echo $this->getUrl('checkout/cart'); ?>';">
         <span>Bekijk winkelmandje</span>
-        <span class="float-right big" style="margin: 0 1em;">
+        <span class="float-right" style="margin: 0 .5em;">
           <i class="fa fa-chevron-right"></i>
         </span>
       </button>

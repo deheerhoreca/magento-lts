@@ -20,6 +20,7 @@ $in3_minimum      = 100;
 $in3_maximum      = 3000;
 $billink_minimum  = 10;
 $billink_maximum  = 3500;
+$_taxHelper       = $this->helper('tax');
 
 if(empty($brand_name) === false) {
   $brand = sanitizeForFilename($brand_name);
@@ -74,6 +75,21 @@ $txtstockdate         = $stock_data["txtstockdate"];
 $levertijd            = $stock_data["levertijd"];
 $bestelartikel        = $stock_data["bestelartikel"];
 
+$freeshipping_from    = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
+$_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
+$top_buyblock_content = null;
+
+if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
+  if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {
+    $payment = number_format($_finalPrice / 3, 2, ",", ".");
+    $top_buyblock_content .= "<div><a data-fancybox data-touch='false' href='#info-in3' class='gray small fw-600'>Of {$payment} in drie termijnen<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i></span></a></div>";
+  }
+}
+
+if($_finalPriceInclTax >= $freeshipping_from && $_product->isSaleable() === true) {
+  $top_buyblock_content .= "<div><strong class=green>Gratis</strong> bezorgd</div>";
+}
+
 if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
   if(empty($txtstockdate) === false) {
     $delivery_text .= "Terug op voorraad: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de datum waarop de leverancier aangeeft het product weer te kunnen leveren.</span>";
@@ -89,18 +105,13 @@ if($bestelartikel === "Ja") {
 if($overall_stock_status === "in_stock") {
   $delivery_text .= "Verwachte levertijd: <strong>{$levertijd}</strong>";
   
-  $delivery_text .= "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
+  $delivery_text .= "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
 }
 
 if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
   if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
-    $additional_buyblock_content .= "<div class=\"buyblock-usp\">Betaal <strong>achteraf</strong> met Billink<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Met Billink betaal je het volledige bedrag zonder rente binnen 14 dagen.</span></span></div>";
+    $additional_buyblock_content .= "<div class='buyblock-usp'><a data-fancybox data-touch='false' href='#info-billink' class=''>Betaal <span class='fw-600'>achteraf</span> met Billink<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i></span></a></div>";
   }
-    
-  // if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {
-    // $payment = number_format($_finalPrice / 3, 2, ",", ".");
-    // $additional_buyblock_content .= "<div class=\"buyblock-usp\">Of <strong>3 termijnen van {$payment}</strong> zonder rente<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Met In3 betaal je het volledige bedrag zonder rente over 3 termijnen: 1/3 deel betaal je direct, 1/3 deel betaal je na 30 dagen en het laatste 1/3 deel betaal je na 60 dagen.</span></span></div>";
-  // }
 }
 
 if($overall_stock_status === "eol") {
@@ -638,15 +649,23 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
 
             <div class="add-to-cart-wrapper">
               <?php              
-              echo "<div class='h1 really-strong'>{$product_title_short}</div>";
+              // echo "<div class='h1 really-strong'>{$product_title_short}</div>";
               echo $this->getChildHtml('product_type_data');
               echo $this->getChildHtml('extrahint');
               if(!$this->hasOptions()) {
                 ?>
                 <div class="add-to-box">
+                  <div class="price-info">
+                    <?php
+                      echo $this->getPriceHtml($_product);
+                      echo $this->getChildHtml('bundle_prices');
+                      echo $this->getTierPriceHtml();
+                    ?>
+                  </div>
                   <?php
+                  echo $top_buyblock_content;
                   echo $this->getChildHtml('addtocart');
-                  echo $this->getChildHtml('addto');     
+                  echo $this->getChildHtml('addto');
                   ?>
                 </div>
                 <div class="<?php echo $txtcltcz; ?>"><?php echo $stock_message; ?></div>
@@ -662,6 +681,7 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
                 }
                 
                 echo $additional_buyblock_content;
+                
                 echo $this->getChildHtml('extra_buttons');
               } elseif($saleable === false) { ?>
                 <div class="add-to-box">
@@ -681,8 +701,7 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
 
               ?>
               <div id="company_usps">
-                <div class="buyblock-usp"><span class="dark-color">Wij scoren een <strong class='green'>9.1</strong> op klanttevredenheid</span></div>
-                <div class="buyblock-usp"><span class="dark-color">Advies door professionals: <a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@chefstore.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</span></div>
+                <div class="buyblock-usp"><span class="dark-color">Advies: <a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@chefstore.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</span></div>
               </div>
               <?php
               echo $this->getChildHtml('sharing');
@@ -989,3 +1008,40 @@ if(function_exists("sanitizeForFilename") === false) {
     return strtolower($output);
   }
 }
+
+?>
+<div id="info-stock" style="display:none;" class="std">
+  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
+  <h2><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Contact met Chefstore.nl</h2>
+  <div style="margin-top: 1em;"><strong>Sales & Advies: <a href="tel:+31850441003" title="Bel ons">+31 85 0441003</a></strong><small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small>.</div>
+  <div style="margin-top: 1em;"><strong>Klantenservice:</strong> Stuur een mail naar <a href="mailto:service@chefstore.nl" title="Klantenservice">service@chefstore.nl</a> of <a href="/service">vul direct een Serviceverzoek in</a>.</div>
+  <div style="margin-top: 1em;">U kunt ook een verzoek indienen om door ons gebeld te worden, klik daarvoor <a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">hier</a>.</div>
+  <div style="margin-top: 1em;">Daarnaast zijn wij bereikbaar op de chat, zie daarvoor de knop rechtsonderin op onze website.</div>
+</div>
+
+<div id="info-billink" style="display:none;" class="std">
+  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
+  <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="max-width:140px;" />
+  <h2>🤩&nbsp;Achteraf betalen met Billink</h2>
+  <h5><i>Voor zakelijk en particulier</i></h5>
+  <div style="max-width: 600px;">
+    <strong>Met Billink betaal je het volledige bedrag zonder rente binnen 14 dagen.</strong>
+  </div>
+  <div style="max-width: 600px;">
+  Bestel nu online, betaal achteraf. Betalen met Billink is heel gemakkelijk. Je bestelt wat je nodig hebt en selecteert tijdens het betaalproces dat je wilt betalen met Billink. Wil je graag een zakelijke bestelling achteraf betalen? Van Billink ontvang je een handige factuur, die je vervolgens binnen 14 dagen betaalt.
+  </div>
+</div>
+
+<div id="info-in3" style="display:none;" class="std">
+  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
+  <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="max-width:140px;" />
+  <h2>🤩&nbsp;In 3 keer gespreid betalen zonder rente</h2>
+  <h5><i>Voor zakelijk en particulier</i></h5>
+  <div style="max-width: 700px;">
+    <h3>Hoe werkt In3?</h3>
+    <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_stappen.png" alt="In3 logo" title="In3" style="max-width:100%;" />
+  </div>
+  <div class="center" style="margin-top: 20px;">
+    <iframe style="max-width:100%;" width="560" height="315" src="https://www.youtube-nocookie.com/embed/9XTdoGzjefY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>

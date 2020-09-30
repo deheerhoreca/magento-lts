@@ -129,14 +129,14 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @var bool
      */
-    protected $_logCallStack        = false;
+    protected $_logCallStack        = true;
 
     /**
      * Path to SQL debug data log
      *
      * @var string
      */
-    protected $_debugFile           = 'var/debug/pdo_mysql.log';
+    protected $_debugFile           = 'var/log/pdo_mysql.log';
 
     /**
      * Io File Adapter

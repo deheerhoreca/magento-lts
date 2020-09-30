@@ -1,33 +1,40 @@
-<!--@subject {{var quote.getStoreGroupName()}}: Quote request # {{var quote.increment_id}} is rejected @-->
+<!--@subject {{var quote.getStoreGroupName()}}: Offerteaanvraag # {{var quote.increment_id}} is afgewezen @-->
 
 <!--@styles
     body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
 @-->
 <div style="font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;">
-<table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
-<tr>
-    <td align="center" valign="top">
-        <!-- [ header starts here] -->
-        <table cellspacing="0" cellpadding="0" border="0" width="650">
-            <tr>
-                <td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="Magento"  style="margin-bottom:10px;" border="0"/></a></td>
-            </tr>
-        </table>
-        <!-- [ middle starts here] -->
-        <table cellspacing="0" cellpadding="0" border="0" width="650">
-            <tr>
-                <td valign="top">
-                    <p>
-                        <strong>Hello {{var customer.name}}</strong>,<br/><br>
-                        Your Quote Request from {{var quote.getStoreGroupName()}} with number # {{var quote.increment_id}} has been cancelled<br><br>
-                        You can check the status of your cancelled Request by <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">logging into your account</a>.<br><br>
-                        If you have any questions about making a new Quote Request please contact us at <a href="mailto:dummyemail@magentocommerce.com" style="color:#1E7EC8;">dummyemail@magentocommerce.com</a> or call us at <span class="nobr">(555) 555-0123</span> Monday - Friday, 8am - 5pm PST.
-                    </p><br>
-                    <p>Regards {{var order.getStoreGroupName()}} team</p>
-					</td>
-			</tr>
-		</table>		
-     </td>
-	</tr>
-</table>
-</div>               
+    <table cellspacing="0" cellpadding="0" border="0" width="98%"
+           style="margin-top:10px; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                      <td valign="top" style='text-align: center;'><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px; max-width:75%;" border="0"/></a></td>
+                    </tr>
+                </table>
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                <strong>Beste {{htmlescape var=$customer.name}}</strong>,<br/><br>
+                                Uw offerteaanvraag bij {{var quote.getStoreGroupName()}} met nummer # {{var
+                                quote.increment_id}} is afgewezen.<br><br>
+                                U kunt de status van de afgewezen offerte bekijken door <a href="{{store url='customer/account/'}}"
+                                style="color:#1E7EC8;"> u in te loggen</a>.<br><br>
+                                Als u vragen heeft over het maken van een nieuwe offerteaanvraag neem dan contact met ons op via <a
+                                    href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a>
+                                Wij zijn bereikbaar op: <span class="nobr">{{config path='general/store_information/phone'}}</span> van maandag - vrijdag, tussen 8:30hr - 17:00hr.
+                            </p><br>
+
+                            <p style="font-size:12px; margin:0;">Met vriendelijke groeten, <strong>{{var
+                                quote.getStoreGroupName()}}</strong></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -5,44 +5,47 @@
 
 // For editing, refresh Blocks Cache (and FPC)
 
-$html = '';
+$html                     = '';
 
-$children = $menuTree->getChildren();
-$parentLevel = $menuTree->getLevel();
-$childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
+$children                 = $menuTree->getChildren();
+$parentLevel              = $menuTree->getLevel();
+$childLevel               = is_null($parentLevel) ? 0 : $parentLevel + 1;
 
-$counter = 1;
-$childrenCount = $children->count();
+$counter                  = 1;
+$topLeveChildrenCount     = $children->count();
 
-$parentPositionClass = $menuTree->getPositionClass();
-$itemPositionClassPrefix = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
+$parentPositionClass      = $menuTree->getPositionClass();
+$itemPositionClassPrefix  = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
 
 $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 
 foreach($children as $child) {
+  
+  if($childLevel > 2) return;
+  
   $child->setLevel($childLevel);
   $child->setIsFirst($counter == 1);
-  $child->setIsLast($counter == $childrenCount);
+  $child->setIsLast($counter == $topLeveChildrenCount);
   $child->setPositionClass($itemPositionClassPrefix . $counter);
   
   $url = str_replace($base_url, "/", $child->getUrl());
 
   $outermostClassCode = 'level'. $childLevel;
-  $_hasChildren = ($child->hasChildren()) ? 'has-children' : '';
+  $_hasChildren = $child->hasChildren();
+  $has_children_class = ($_hasChildren && $childLevel < 1) ? ' has-children' : '';
 
-  if($childLevel < 2) $html .= '<li '. $this->_getRenderedMenuItemAttributes($child) .'>';
-  $html .= '<a title="Ga naar '.$this->escapeHtml($this->__($child->getName())).'" href="'. $url .'" class="' .$outermostClassCode.' '.$_hasChildren.'">';
-	
+  if($childLevel < 2) $html .= "<li {$this->_getRenderedMenuItemAttributes($child)}>";
+  $html .= "<a title='{$this->escapeHtml($this->__($child->getName()))}' href='{$url}' class='{$outermostClassCode}{$has_children_class}'>";
   $html .= $this->escapeHtml($this->__($child->getName()));
-  $html .='</a>';
+  $html .= "</a>";
 
-  if(!empty($_hasChildren)) {
-    if($childLevel < 1) $html .= '<ul class="level'. ($childLevel) .'">';
+  if($_hasChildren) {
+    if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";
     $html .= $this->render($child, $childrenWrapClass);
-    if($childLevel < 1) $html .= '</ul>';
+    if($childLevel < 1) $html .= "</ul>";
   }
 
-  if($childLevel < 2) $html .= '</li>';
+  if($childLevel < 2) $html .= "</li>";
   $counter++;
 }
 

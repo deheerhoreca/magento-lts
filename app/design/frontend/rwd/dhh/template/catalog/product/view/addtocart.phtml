@@ -2,31 +2,8 @@
 $_product             = $this->getProduct();
 $_store               = $_product->getStore();
 $_finalPrice          = $_product->getFinalPrice();
-$_taxHelper           = $this->helper('tax');
 $_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
-$_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
-$freeshipping_from    = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
-$saleable             = $_product->isSaleable();
-
-$buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('Kopen'));
-$buttonTitle_lease    = $this->__('Lease aanvragen');
-$top_buyblock_content = null;
-
-if($_finalPriceInclTax >= $freeshipping_from && $saleable === true) {
-  $top_buyblock_content .= "<div><strong class=green>Gratis</strong> bezorgd</div>";
-}
-?>
-
-<div class="price-info">
-  <?php
-    echo $this->getPriceHtml($_product);
-    echo $this->getChildHtml('bundle_prices');
-    echo $this->getTierPriceHtml();
-	?>
-</div>
-<?php
-
-echo $top_buyblock_content;
+$buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('In Winkelmandje'));
 
 if($_product->isSaleable()) { ?>
   <div class="add-to-cart">
@@ -42,16 +19,21 @@ if($_product->isSaleable()) { ?>
       <?php
     }
     ?>
-
     <div class="add-to-cart-buttons">
       <button type="button" title="<?php echo $buttonTitle_buy ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)">
         <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px;"></i>
         <?php echo $buttonTitle_buy; ?>
       </button>
-      <?php echo $this->getChildHtml('', true, true) ?>
       <?php
+      
+      // cart2quote
+      echo Mage::app()->getLayout()->createBlock('qquoteadv/qquotebtn')
+           ->setData('product', $_product)->setTemplate('qquoteadv/catalog/product/view/addtoquoteadv.phtml')->toHtml();
+      
+      echo $this->getChildHtml('', true, true);
+      
       $mininum_lease_price = 1000;
-      if(isset($_finalPrice) && $_finalPrice >= 450) {
+      if(0 && isset($_finalPrice) && $_finalPrice >= 450) {
         ?>
         
         <script src ="https://form.jotform.com/static/feedback2.js" type="application/javascript"></script>
@@ -72,7 +54,7 @@ if($_product->isSaleable()) { ?>
           });
         </script>
         
-        <button type="button" title="<?php echo $buttonTitle_lease ?>" class="button btn lightbox-200152323289044" style="margin-top:1em; background-color:#2a71db !important;">
+        <button type="button" title="<?php echo $buttonTitle_lease ?>" class="button btn-lease btn lightbox-200152323289044">
           <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px;"></i>
           <?php echo $buttonTitle_lease; ?>
         </button>

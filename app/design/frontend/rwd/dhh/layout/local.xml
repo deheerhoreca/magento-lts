@@ -30,6 +30,9 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
         <script>ebizmarts/mailchimp/campaignCatcher.js</script><params>defer</params>
       </action>
       <action method="removeItem"><type>skin_css</type><name>magmodules/kiyoh/sidebar.css</name></action>
+      
+      <!-- Cart2Quote -->
+      <action method="addItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
     </reference>
   </default>
   

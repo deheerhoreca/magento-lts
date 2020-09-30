@@ -9,53 +9,44 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
 } else {
   $account_url = Mage::getUrl('customer/account/login');
 }
-
-// Mage::getSingleton('core/session')->addSuccess("Prokoeling.nl heet vanaf nu Chefstore.nl! Alles is hetzelfde, behalve de naam!");
-
 ?>
 <header id="header" class="page-header header grid-inside scrlng">
   <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
-      <a class="main-logo" href="<?php echo $this->getUrl('') ?>">
-        <img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" />
-      </a>
       <div class="skip-links headerrightcontents">
+        <div>
+          <a class="main-logo" href="<?php echo $this->getUrl('') ?>">
+            <img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" />
+          </a>
+        </div>
         <div id="header-search" class="skip-content">
           <?php echo $this->getChildHtml('topSearch') ?>
         </div>
         <div class="account-cart-wrapper">
-          <div class="top-link skip-account clzpnmincon" style="width: 190px;background-color: #f1faff;"> 
-            <span class="strong">
-              <a href="tel:+31850441003" title="Bel ons"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel ons: 085-0441003</a><br>
-              <a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u"><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Bel mij terug</a>
-            </span>
-          </div>
-
-          <a id="header-kiyoh" href="https://www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer" class="no-decoration" aria-label="Bekijk onze reviews op Kiyoh">
-            <div class="top-link skip-account" style="width: 125px">
-              <div>
-                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
-                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
-                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
-                <i class="fa fa-star" aria-hidden="true" style="color: gold"></i>
-                <i class="fa fa-star-half-o" aria-hidden="true" style="color: gold"></i>
+          <span id="header-kiyoh">
+            <a href="https://www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer" class="no-decoration center" aria-label="Bekijk onze reviews op Kiyoh">
+              <div class="skip-account" style="width: 125px">
+                <div>
+                  <span class="gold" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div class="small">
+                  <span>
+                    U geeft ons een <strong>9.2!</strong>
+                  </span>
+                </div>
               </div>
-              <div class="small">
-                <span>
-                  U geeft ons een <strong>9.2!</strong>
-                </span>
-              </div>
-            </div>
-          </a>
-
-          <a href="<?php echo Mage::getUrl('customer/account'); ?>" class="top-link skip-account" title="Account">
-            <i class="fa fa-user-circle fa-2x fa-fw" style="font-size: 2.5em;"></i>
-          </a>
-          
-          <?php
-          echo $this->getChildHtml('minicart_head');
-          ?>
-
+            </a>
+          </span>
+          <span>
+            <a data-fancybox data-touch="false" href="#modal" class="btn btn-primary toplink-phone skip-phone top-link"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a>
+          </span>
+          <span>
+            <a href="<?php echo Mage::getUrl('customer/account'); ?>" class="skip-account top-link" title="Account">
+              <i class="fa fa-user-circle fa-2x fa-fw"></i>
+            </a>
+          </span>
+          <span><?php echo $this->getChildHtml('miniquote_head'); ?></span>
+          <span><?php echo $this->getChildHtml('minicart_head'); ?></span>
         </div>
       </div>
     </div>

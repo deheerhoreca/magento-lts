@@ -166,6 +166,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "sales")
+        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "qquoteadv")        
         ) {
         $enabled = false;
       }
@@ -198,6 +199,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "sales")
+        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "qquoteadv")        
       ) {
         if(DHH_FPC_DEBUG === true) {
           print_r("<br />Write cache disabled");
@@ -263,27 +265,36 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       if($replace_blocks === true) {
         $minicart_html = Mage::app()
           ->getLayout()
-          ->createBlock('checkout/cart_minicart')
-          ->setTemplate('checkout/cart/minicart.phtml')
+          ->createBlock("checkout/cart_minicart")
+          ->setTemplate("checkout/cart/minicart.phtml")
           ->toHtml();
         $sidebar_html = Mage::app()
           ->getLayout()
-          ->createBlock('checkout/cart_sidebar')
+          ->createBlock("checkout/cart_sidebar")
           ->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
         
         $messages_html .= Mage::app()
           ->getLayout()
-          ->createBlock('core/messages')
+          ->createBlock("core/messages")
           ->setTemplate("page/html/notices.phtml")->toHtml();
+        $messages_html .= Mage::app()->getLayout()->getMessagesBlock()->toHtml();
+          
+        $miniquote_html = Mage::app()
+          ->getLayout()
+          ->createBlock("qquoteadv/checkout_miniquote_miniquote")
+          ->setTemplate("qquoteadv/checkout/quote/miniquotehead.phtml")
+          ->toHtml();
         
         // Mage::getSingleton('core/session')->addNotice(Mage::helper('core')->__("Notice ".date("c")));
+        // Mage::getSingleton('core/session')->addSuccess(Mage::helper('core')->__("Notice ".date("c")));
         
-        // printr($messages_html);exit;
+        // printr($messages_html);
         
         $minicart_html = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
         
         $html = str_replace("<!-- header_minicart_here -->", $minicart_html, $html);
         $html = str_replace("<!-- core_messages_here -->", $messages_html, $html);
+        $html = str_replace("<!-- header_miniquote_here -->", $miniquote_html, $html);
       }
       
       if(empty($html)) {
@@ -313,6 +324,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       
       if($replace_blocks === true) {
         $html = self::replace_between($html, "<!-- header_minicart_start -->", "<!-- header_minicart_end -->", "<!-- header_minicart_here -->");
+        $html = self::replace_between($html, "<!-- header_miniquote_start -->", "<!-- header_miniquote_end -->", "<!-- header_miniquote_here -->");
         $html = self::replace_between($html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", "<!-- header_sidebar_here -->");
         $html = self::replace_between($html, "<!-- core_messages_start -->", "<!-- core_messages_end -->", "<!-- core_messages_here -->");
       }
