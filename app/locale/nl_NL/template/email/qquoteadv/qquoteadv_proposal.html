@@ -12,7 +12,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                        style="border:1px solid #E0E0E0;">
                     <!-- [ header starts here] -->
                     <tr>
-                        <td valign="top"><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a></td>
+                      <td valign="top" style='text-align: center;'><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px; max-width:75%;" border="0"/></a></td>
                     </tr>
                     <!-- [ middle starts here] -->
                     <tr>
@@ -22,7 +22,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                             <p style="font-size:12px; line-height:16px; margin:0;">
                                 Nogmaals dank voor uw offerteaanvraag bij {{var quote.getStoreGroupName()}}.
                                 {{if attach_pdf}}<br><br>U vindt ons voorstel in de bijgevoegde PDF.{{/if}}
-                                Onze Algemene Voorwaarden zijn {{if attach_pdf}} ook {{/if}} bijgevoegd als PDF.
+                                <p>Onze algemene voorwaarden zijn beschikbaar op <a href="https://www.chefstore.nl/algemene-voorwaarden">https://www.chefstore.nl/algemene-voorwaarden</a>.<br>
                                 <br>Om alle details te bekijken, te wijzigen of om deze offerte te accepteren bezoek dan <a style="color:#1E7EC8;" href="{{var link}}">Mijn
                                 Offertes</a> in uw klanten dashboard.
                             </p>
@@ -68,13 +68,11 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                             <br/>
                             {{layout handle="qquoteadv_email_qquoteadv_items" quote=$quote autoproposal=1}} <br>
 
-                            <p><i>Voorwaarden:{{depend remark}}<br/>{{var remark}}<br/>{{/depend}}</i><br>
+                            <p><i>{{depend remark}}<br/>{{var remark}}<br/>{{/depend}}</i><br>
                                 Als u vragen heeft over uw offerteaanvraag, dan kunt u contact opnemen met ons via <a
                                         href="mailto:{{config path='trans_email/ident_support/email'}}"
                                         style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a>
-                                        Wij zijn bereikbaar op: <span class="nobr">{{config path='general/store_information/phone'}}</span> van maandag - vrijdag, tussen 8:30hr - 17:00hr.
-                                         {{depend adminname}}Deze offerte is gemaakt door: {{var
-                                adminname}}{{/depend}}
+                                        Wij zijn bereikbaar op: <span class="nobr">{{config path='general/store_information/phone'}}</span> van maandag - vrijdag, tussen 08:30 en 18:00.
                             </p>
                         </td>
                     </tr>

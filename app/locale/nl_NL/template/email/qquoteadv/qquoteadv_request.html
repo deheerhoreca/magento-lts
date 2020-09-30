@@ -11,7 +11,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                 <!-- [ header starts here] -->
                 <table cellspacing="0" cellpadding="0" border="0" width="650">
                     <tr>
-                        <td valign="top"><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a></td>
+                      <td valign="top" style='text-align: center;'><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px; max-width:75%;" border="0"/></a></td>
                     </tr>
                 </table>
                 <!-- [ middle starts here] -->
@@ -21,7 +21,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                             <p>
                                 <strong>Beste {{htmlescape var=$customer.name}}</strong>,<br/><br>
                                 Bedankt voor uw offerteaanvraag bij {{var quote.getStoreGroupName()}}.<br><br>
-                                U kunt binnen 48 uur ons aanbod verwachten.<br>
+                                U kunt binnen één werkdag ons aanbod verwachten.<br>
                                 U kunt de status van onze reacties bekijken door <a href="{{store url='customer/account/'}}"
                                 style="color:#1E7EC8;">in te loggen op uw account</a>.<br><br>
                                 Als u vragen heeft over uw offerte, dan kunt u contact opnemen via <a

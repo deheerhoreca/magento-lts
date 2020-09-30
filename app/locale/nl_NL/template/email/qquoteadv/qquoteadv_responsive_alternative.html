@@ -16,7 +16,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     <td class="email-heading">
                         <h2>Beste {{htmlescape var=$customer.name}},</h2>
                         <h1>Nogmaals bedankt voor uw offerteaanvraag van {{var store.getFrontendName()}}.</h1>
-                        <p>{{if attach_pdf}}U vindt ons voorstel in de bijgevoegde PDF.{{/if}}<br>
+                        <p>U vindt ons voorstel in de bijgevoegde PDF en/of beschikbaar op <a href="https://www.chefstore.nl/algemene-voorwaarden">https://www.chefstore.nl/algemene-voorwaarden</a>.<br>
                             Onze Algemene Voorwaarden zijn {{if attach_pdf}} ook {{/if}} bijgevoegd als PDF.
                             <br>Om alle details te bekijken, te wijzigen of om deze offerte te accepteren bezoek dan <a style="color:#1E7EC8;" href="{{var link}}">Mijn Offertes</a> in uw klanten dashboard.
                             {{if quote.getPath()}}<br>de {{var quote.getFileTitle()}} kunt u hier downloaden:<a style="color:#1E7EC8;" href="{{var quote.getFullPath()}}">{{var quote.getFullPath()}}</a>{{/if}}
