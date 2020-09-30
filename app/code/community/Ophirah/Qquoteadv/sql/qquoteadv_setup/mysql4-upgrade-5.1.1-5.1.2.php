@@ -82,17 +82,22 @@ if (!$installer->getConnection()->isTableExists($installer->getTable($product_do
     /**
      * Add foreign key Constraint - Quoteadv_Product_Downloadable -> Downloadable_Link
      */
-    $tableDownload = $installer->getTable($downloadable);
-    $installer->getConnection()->addForeignKey(
-        $installer->getFkName(
-            $product_downloadable,  'link_id',
-            $downloadable,  'link_id'
-        ),
-        $installer->getTable($product_downloadable), 'link_id',
-        $installer->getTable($downloadable), 'link_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE,
-        Varien_Db_Ddl_Table::ACTION_CASCADE
-    );
+    if (Mage::helper('core')->isModuleEnabled('Mage_Downloadable')) {
+        $tableDownload = $installer->getTable($downloadable);
+        $installer->getConnection()->addForeignKey(
+            $installer->getFkName(
+                $product_downloadable, 'link_id',
+                $downloadable, 'link_id'
+            ),
+            $installer->getTable($product_downloadable), 'link_id',
+            $installer->getTable($downloadable), 'link_id',
+            Varien_Db_Ddl_Table::ACTION_CASCADE,
+            Varien_Db_Ddl_Table::ACTION_CASCADE
+        );
+    } else {
+        $message = "Module Mage_Downloadable is disabled. Some features might not work.";
+        Mage::log('Warning: ' . $message, null, 'c2q_install.log', true);
+    }
 }
 
 $installer->endSetup();

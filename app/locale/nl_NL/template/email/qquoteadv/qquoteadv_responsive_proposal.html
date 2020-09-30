@@ -18,8 +18,8 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                         <h1>Nogmaals bedankt voor uw offerteaanvraag bij {{var store.getFrontendName()}}.</h1>
 
                         <p>{{if attach_pdf}}U vindt ons voorstel in de bijgevoegde PDF vinden.{{/if}}<br>
-                            <p>U vindt ons voorstel in de bijgevoegde PDF. Onze algemene voorwaarden zijn beschikbaar op <a href="https://www.chefstore.nl/algemene-voorwaarden">https://www.chefstore.nl/algemene-voorwaarden</a>.<br>
-                            Om alle details te bekijken, te wijzigen of om deze offerte te accepteren bezoek dan
+                            Onze Algemene Voorwaarden zijn {{if attach_pdf}} ook {{/if}} bijgevoegd als PDF.
+                            <br> Om alle details te bekijken, te wijzigen of om deze offerte te accepteren bezoek dan
                             <a style="color:#1E7EC8;" href="{{var link}}">Mijn Offertes</a> in uw klanten dashboard.
                             {{if quote.getPath()}}<br>De download {{var quote.getFileTitle()}} kan gevonden worden op:<a
                                     style="color:#1E7EC8;" href="{{var quote.getFullPath()}}">{{var

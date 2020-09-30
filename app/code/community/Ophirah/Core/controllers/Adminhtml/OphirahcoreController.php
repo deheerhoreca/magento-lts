@@ -63,7 +63,7 @@ class Ophirah_Core_Adminhtml_OphirahcoreController extends Mage_Adminhtml_Contro
 
         //make sure the unzip path exists
         if (!is_dir($unzipPath)) {
-            mkdir($unzipPath);
+            mkdir($unzipPath, 0777, true);
         }
 
         //define the filter to unpack a zip file

@@ -71,7 +71,7 @@ final class Ophirah_CustomProducts_Model_Customproduct extends Ophirah_CustomPro
 
             //fallback if product is not available for this store or disabled.
             if (!$product) {
-                $productId = Mage::getModel('catalog/product')->getIdBySku($this->productSku);
+                $productId = $product->getIdBySku($this->productSku);
 
                 if ($productId) {
                     $product = Mage::getModel('catalog/product')->load($productId);

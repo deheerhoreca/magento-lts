@@ -44,7 +44,7 @@
             <groups>
                 <quotations>
                     <label>Quotations</label>
-                    <comment><![CDATA[<div class="box"><p><b>Cart2Quote (Version 6.4.2) Provided by <a target="_blank" href="https://batao.io/">Batao | Full Service E-Commerce</a></b></p>
+                    <comment><![CDATA[<div class="box"><p><b>Cart2Quote (Version 6.4.3) Provided by <a target="_blank" href="https://batao.io/">Batao | Full Service E-Commerce</a></b></p>
             For documentation and support visit <a target="_blank" href="https://cart2quote.zendesk.com">cart2quote.zendesk.com</a> or contact <a target="_blank" href="mailto:support@cart2quote.com">support@cart2quote.com</a>
             </div>]]></comment>
                     <frontend_type>text</frontend_type>
