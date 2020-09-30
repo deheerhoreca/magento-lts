@@ -323,14 +323,6 @@ if($_collectionSize > 0) {
         $product_info[] = "Serie: {$attribute_value}";
       }
       
-      $attribute_value = $_product->getData('uitvoering');
-      if(strlen($attribute_value) > 0) {
-        $product_info[] = "Uitvoering: {$attribute_value}";
-      }
-      
-      $code = "uitvoering";
-      $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-      
       /* Listview USPs */
       $usps = [];
       
@@ -446,8 +438,16 @@ if($_collectionSize > 0) {
       
       /* Cooking Zones */
       $attribute_value = $_product->getCookingZones();
-      if(strlen($attribute_value) > 0) {
+      if(strlen($attribute_value) > 0 && (double) $attribute_value > 1) {
         $usps[] = round($attribute_value, 2)." Zones";
+      }
+      
+      $attribute_value = $_product->getAttributeText('uitvoering');
+      if(is_array($attribute_value) === true) {
+        $attribute_value = implode(", ", $attribute_value);
+      }
+      if(is_scalar($attribute_value) === true && strlen($attribute_value) > 0) {
+        $usps[] = $attribute_value;
       }
       
       /* ------------------------------------- */

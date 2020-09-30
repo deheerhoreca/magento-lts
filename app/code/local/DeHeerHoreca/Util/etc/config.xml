@@ -21,7 +21,7 @@
     </models>
     
     <events>
-    <catalog_product_edit_action>
+      <catalog_product_edit_action>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
             <type>singleton</type>

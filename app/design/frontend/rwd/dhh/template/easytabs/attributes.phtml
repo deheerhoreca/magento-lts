@@ -71,6 +71,17 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           }
           break;
         
+        case "total_power_watt":
+          if($value  >= 5000) {
+            $value   /= 1000;
+            $value    = number_format($value, 2, ",", ".");
+            $postfix  = " kW";
+          } else {
+            $value = (int) number_format($value, 0, ",", "");
+            $postfix = " Watt";
+          }
+          break;
+        
         case "weight":
           if($value < 3) {
             $value *= 1000;

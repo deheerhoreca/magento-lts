@@ -14,7 +14,8 @@ $subcategories = $this->getSubcategories();
 $media_url = Mage::getBaseUrl('media');
 $media_path = Mage::getBaseDir('media');
 echo '<div style="clear: both;"></div>';
-if ($subcategories->getSize()) {
+
+if(sizeof($subcategories) > 1) {
   echo '<ul class="grid-shadow-tiles-text">';
   
   // Logic copied from catalog/product/list.phtml

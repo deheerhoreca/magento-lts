@@ -101,4 +101,26 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
     </reference>
   </blog_post_view>
 
+  <catalog_category_default translate="label">
+
+    <!-- Disable memorizing toolbar parameters -->
+    <reference name="content">
+      <reference name="product_list_toolbar">
+        <action method="disableParamsMemorizing" />
+      </reference>
+    </reference>
+
+  </catalog_category_default>
+
+  <catalog_category_layered translate="label">
+
+    <!-- Disable memorizing toolbar parameters -->
+    <reference name="content">
+      <reference name="product_list_toolbar">
+        <action method="disableParamsMemorizing" />
+      </reference>
+    </reference>
+
+  </catalog_category_layered>
+
 </layout>
