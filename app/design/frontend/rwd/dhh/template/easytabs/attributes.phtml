@@ -47,7 +47,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
         continue;
       }
       
-      /* Pre-process */
+      /* Pre-processing individual attributes */
       switch($_data['code']) {
         case "eenheid":
           if(($value > 1) === false) {
@@ -112,6 +112,11 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           elseif($value === 2) $value .= " (Dual-Zone)";
           elseif($value === 3) $value .= " (Triple-Zone)";
           break;
+      }
+      
+      /* Post-processing all attributes */
+      if($value === "Nee") {
+        $value = "-";
       }
       
       $value = $value.$postfix;
