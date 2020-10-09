@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<gridcontrol>
+    <grids>
+        <!-- grid id -->
+        <productGrid>
+
+            <set_name>
+                <remove/>
+            </set_name>
+            
+            <visibility>
+                <remove/>
+            </visibility>
+            
+            <websites>
+                <remove/>
+            </websites>
+            
+            <bi_supplier_sold_365>
+                <add>
+                    <header>Supplier365</header>
+                    <type>number</type>
+                    <index>bi_supplier_sold_365</index>
+                </add>
+                <after>status</after>
+            </bi_supplier_sold_365>
+            
+            <bi_dhh_sold_365>
+                <add>
+                    <header>Sold365</header>
+                    <type>number</type>
+                    <index>bi_dhh_sold_365</index>
+                </add>
+                <after>bi_supplier_sold_365</after>
+            </bi_dhh_sold_365>
+
+        </productGrid>
+    </grids>
+</gridcontrol>
