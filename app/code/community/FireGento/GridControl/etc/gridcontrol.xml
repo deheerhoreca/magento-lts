@@ -16,13 +16,27 @@
                 <remove/>
             </websites>
             
+            <action>
+                <remove/>
+            </action>
+                        
+            <eol>
+                <add>
+                    <header>EOL</header>
+                    <type>options</type>
+                    <index>eol</index>
+                    <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(eol)</options>
+                </add>
+                <after>status</after>
+            </eol>
+            
             <bi_supplier_sold_365>
                 <add>
                     <header>Supplier365</header>
                     <type>number</type>
                     <index>bi_supplier_sold_365</index>
                 </add>
-                <after>status</after>
+                <after>eol</after>
             </bi_supplier_sold_365>
             
             <bi_dhh_sold_365>
@@ -33,7 +47,27 @@
                 </add>
                 <after>bi_supplier_sold_365</after>
             </bi_dhh_sold_365>
+            
+            <supplier>
+                <add>
+                    <header>Leverancier</header>
+                    <type>options</type>
+                    <index>supplier</index>
+                    <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
+                </add>
+                <after>bi_dhh_sold_365</after>
+            </supplier>
+            
+            <manufacturer>
+                <add>
+                    <header>Merk</header>
+                    <type>options</type>
+                    <index>manufacturer</index>
+                    <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options>
+                </add>
+                <after>supplier</after>
+            </manufacturer>
 
-        </productGrid>
+        </productGrid>        
     </grids>
 </gridcontrol>
