@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file is part of a FireGento e.V. module.
+ *
+ * This FireGento e.V. module is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This script is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * @category  FireGento
+ * @package   FireGento_DynamicCategory
+ * @author    FireGento Team <team@firegento.com>
+ * @copyright 2013 FireGento Team (http://www.firegento.com)
+ * @license   http://opensource.org/licenses/gpl-3.0 GNU General Public License, version 3 (GPLv3)
+ */
+ -->
+<config>
+    <modules>
+        <FireGento_DynamicCategory>
+            <version>1.0.0</version>
+        </FireGento_DynamicCategory>
+    </modules>
+    <global>
+        <blocks>
+            <dynamiccategory>
+                <class>FireGento_DynamicCategory_Block</class>
+            </dynamiccategory>
+        </blocks>
+        <helpers>
+            <dynamiccategory>
+                <class>FireGento_DynamicCategory_Helper</class>
+            </dynamiccategory>
+        </helpers>
+        <models>
+            <dynamiccategory>
+                <class>FireGento_DynamicCategory_Model</class>
+                <resourceModel>dynamiccategory_resource</resourceModel>
+            </dynamiccategory>
+            <dynamiccategory_resource>
+                <class>FireGento_DynamicCategory_Model_Resource</class>
+                <deprecatedNode>dynamiccategory_mysql4</deprecatedNode>
+                <entities>
+                    <rule>
+                        <table>dynamiccategory_rule</table>
+                    </rule>
+                </entities>
+            </dynamiccategory_resource>
+        </models>
+        <index>
+            <indexer>
+                <dynamiccategory>
+                    <model>dynamiccategory/indexer_rule</model>
+                </dynamiccategory>
+                <catalog_category_product>
+                    <depends>
+                        <dynamiccategory/>
+                    </depends>
+                </catalog_category_product>
+            </indexer>
+        </index>
+        <resources>
+            <dynamiccategory_setup>
+                <setup>
+                    <module>FireGento_DynamicCategory</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </dynamiccategory_setup>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <dynamiccategory before="Mage_Adminhtml">FireGento_DynamicCategory_Adminhtml</dynamiccategory>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <events>
+            <adminhtml_catalog_category_tabs>
+                <observers>
+                    <dynamiccategory>
+                        <class>dynamiccategory/observer</class>
+                        <method>adminhtmlCatalogCategoryTabs</method>
+                    </dynamiccategory>
+                </observers>
+            </adminhtml_catalog_category_tabs>
+            <catalog_category_prepare_save>
+                <observers>
+                    <dynamiccategory>
+                        <class>dynamiccategory/observer</class>
+                        <method>catalogCategoryPrepareSave</method>
+                    </dynamiccategory>
+                </observers>
+            </catalog_category_prepare_save>
+            <adminhtml_block_html_before>
+                <observers>
+                    <dynamiccategory>
+                        <class>dynamiccategory/observer</class>
+                        <method>adminhtmlBlockHtmlBefore</method>
+                    </dynamiccategory>
+                </observers>
+            </adminhtml_block_html_before>
+        </events>
+        <translate>
+            <modules>
+                <FireGento_DynamicCategory>
+                    <files>
+                        <default>FireGento_DynamicCategory.csv</default>
+                    </files>
+                </FireGento_DynamicCategory>
+            </modules>
+        </translate>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <dynamiccategorycron>
+                <schedule>
+                    <config_path>system/dynamiccategory/cron_expr</config_path>
+                </schedule>
+                <run>
+                    <model>dynamiccategory/cron::updateCategories</model>
+                </run>
+            </dynamiccategorycron>
+        </jobs>
+    </crontab>
+    <default>
+        <system>
+            <dynamiccategory>
+                <cron_expr>0 2 * * *</cron_expr>
+            </dynamiccategory>
+        </system>
+    </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <FireGento_DynamicCategory/>
+            </modules>
+        </suite>
+    </phpunit>
+</config>
