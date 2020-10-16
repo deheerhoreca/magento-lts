@@ -1593,6 +1593,7 @@ ul#brands li:last-child {
   position: relative;
   float: left;
   overflow: hidden;
+  border: 1px solid black;
 }
 
 .selwrapper::after {
@@ -2461,10 +2462,6 @@ form .form-instructions {
   letter-spacing: .5px;
   height: 100%;
   line-height: 42px;
-}
-
-#top-nav li.level0.last {
-  background-color: #e01c1c;
 }
 
 #top-nav a {

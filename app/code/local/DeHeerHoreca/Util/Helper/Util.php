@@ -431,6 +431,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     $code = "uitvoering";
     $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+    if(is_array($attribute_value) === true) {
+      $attribute_value = implode(", ", $attribute_value);
+    }
     if(strlen($attribute_value) > 0) {
       $product_info[] = "Uitvoering: {$attribute_value}";
     }
@@ -569,7 +572,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $in_stock             = ($in_stock === true || $in_stock === "1") ? true : false;
     $backorders           = $product->getStockItem()->getBackorders();
     $saleable             = $product->isSaleable();
-    $eol                  = ($product->getEol() === true || $product->getEol() === "1") ? true : false;
+    $eol                  = ($product->getEol() === true || $product->getEol() === "2075") ? true : false;
     $eol_replacement_sku  = $product->getEolReplacementSku();
     $manage_stock         = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
     $extra_delivery_time  = 0;

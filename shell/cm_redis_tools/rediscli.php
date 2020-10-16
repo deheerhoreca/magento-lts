@@ -1,4 +1,7 @@
 <?php
+
+# https://inchoo.net/magento/using-redis-cache-backend-and-session-storage-in-magento/
+
 /* Load Credis client library */
 include_once("lib/Credis/Client.php");
 

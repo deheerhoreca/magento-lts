@@ -10,8 +10,9 @@ $catalog = $this->getLayout()->createBlock('catalog/product_list')->setStoreId($
 $collection = Mage::getModel('catalog/product')
   ->getCollection()
   ->addAttributeToSelect('*')
-  ->addFieldToFilter([['attribute' => 'featured', 'eq' => TRUE]])
+  ->addFieldToFilter([['attribute' => 'featured', 'eq' => true]])
   ->addOrder('name', 'ASC')
+  ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
   ->setPageSize(16)
   ->setCurPage(1)
   ->load();

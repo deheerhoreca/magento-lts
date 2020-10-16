@@ -91,6 +91,8 @@ endif;
             $columnClass = '';
             $saveMethod = 'savePaymentMethod';
         }
+
+    $total = $this->helper('checkout/cart')->getQuote()->getGrandTotal();
     ?>
     <div class="<?php echo $columnClass ?>step step-shipping-payment-method" id="step-shipping-payment-method" data-step-save="<?php echo $saveMethod ?>">
         <div class="step-content">
@@ -100,6 +102,7 @@ endif;
                 </div>
             <?php endif ?>
             <div class="col-2">
+                <?php if($total > 3000) echo "Gespreid betalen (in3) is beschikbaar tot 3000 euro incl. BTW.<br /><br />"; ?>
                 <?php echo $this->getChildHtml('payment.method') ?>
             </div>
             <div class="step-mask"></div>

@@ -79,7 +79,7 @@ switch ($this->getDisplayType()){
     
     case Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN:
         echo '<li><select onchange="if (this.value) window.location.href = this.value" class="amshopby-select amshopby-ajax-select">';
-        echo '<option value="'.$this->getRemoveUrl().'" data-config=\' '.$this->getRemoveOptionConfig().' \'>'.Mage::helper('amshopby')->__('Please Select ...').'</option>';
+        echo '<option value="'.$this->getRemoveUrl().'" data-config=\' '.$this->getRemoveOptionConfig().' \'>'.Mage::helper('amshopby')->__('Selecteer ...').'</option>';
         foreach ($this->getItemsAsArray() as $item){
             echo '<option '.$item['css'] . $item['rel'] . ' value="'.$item['url'].'" data-config=\' '.$item['data-config'].'\'>'. $item['label'] . $item['count'] . '</option>';
         }

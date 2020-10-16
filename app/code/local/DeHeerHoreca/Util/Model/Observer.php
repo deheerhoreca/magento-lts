@@ -39,7 +39,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     }
     
     /* END OF LIFE */
-    if($product->getData("eol") === "1") {
+    if($product->getData("eol") === "2075") {
       if(empty($product->getData("tagline")) === false) {
         $product->setData("tagline", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Tagline removed");
@@ -59,6 +59,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       if($product->getData("skip_auto_stock") !== "1") {
         $product->setData("skip_auto_stock", "1");
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Excluded from stock updates");
+      }
+      if(empty($product->getData("product_label")) === false) {
+        $product->setData("product_label", null);
+        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
       }
     }
     
@@ -87,9 +91,11 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     }
     
     if(empty($product->getData("price_supplier_msrp_disc_limit")) === true) {
-      // Clear the value if price_supplier_msrp_disc_limit is empty 
-      $product->setData("price_min", null);
-      if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
+      // Clear the value if price_supplier_msrp_disc_limit is empty
+      if(empty($product->getData("price_min")) === false) {
+        $product->setData("price_min", null);
+        if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
+      }
     }
     
     if(empty($product->getData("price_bol_be_auto")) === false && $product->getData("price_bol_be_auto") === "1") {

@@ -119,20 +119,6 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
           <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
       </div>
       <div class="cart-totals-wrapper">
-      <script src ="https://form.jotform.com/static/feedback2.js" type="text/javascript"></script>
-      <script type="text/javascript">
-        var JFL_200152323289044 = new JotformFeedback({
-          formId: '200152323289044',
-          base: 'https://form.jotform.com/',
-          windowTitle: 'Aanvraag lease',
-          background: '#f08324',
-          fontColor: '#FFFFFF',
-          type: 'false',
-          height: 600,
-          width: 700,
-          openOnLoad: false
-        });
-      </script>
           <div class="cart-totals">
               <?php echo $this->getChildHtml('totals'); ?>
               <?php if(!$this->hasError()): ?>
@@ -144,19 +130,6 @@ $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both
                     }
                   }
                   ?>
-                  <?php
-                  $buttonTitle_lease = $this->__('Lease aanvragen');
-                  ?>
-                  <li class="method-checkout-cart-methods-fire">
-                    <button type="button" title="Lease aanvragen" class="button btn-cart btn lightbox-200152323289044" style="background-color:#2a71db; display: block; float: none; margin: 1em auto 1em auto; width: 92%; text-transform: uppercase;">
-                      <span>
-                        <?php echo $buttonTitle_lease; ?>
-                        <span class="float-right big" style="margin: 0 1em;">
-                          <i class="fa fa-chevron-right"></i>
-                        </span>
-                      </span>
-                    </button>
-                  </li>
                 </ul>              
               <?php endif; ?>
           </div>

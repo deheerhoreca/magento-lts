@@ -16,8 +16,8 @@ $brand_link       = "{$brand_slug}.html";
 $_store           = $_product->getStore();
 $skn              = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
 $anchors          = [];
-$in3_minimum      = 100;
-$in3_maximum      = 3000;
+$in3_minimum      = 100 / 1.21;
+$in3_maximum      = 3000 / 1.21;
 $billink_minimum  = 10;
 $billink_maximum  = 3500;
 $_taxHelper       = $this->helper('tax');
@@ -121,7 +121,7 @@ if($overall_stock_status === "eol") {
     if($replacement_product !== false) {
       $name             = $_helper->productAttribute($replacement_product, $replacement_product->getName(), 'name');
       $url              = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($replacement_product);
-      $eol_text         = "<strong>Vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
+      $eol_text         = "<strong>Kijkt u naar het vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
     }
   }
 }
@@ -1020,8 +1020,8 @@ if(function_exists("sanitizeForFilename") === false) {
 </div>
 
 <div id="info-billink" style="display:none;" class="std">
-  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
-  <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="max-width:140px;" />
+  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" style="max-width:140px; height:auto;" />
+  <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="max-width:140px; height:auto;" />
   <h2>🤩&nbsp;Achteraf betalen met Billink</h2>
   <h5><i>Voor zakelijk en particulier</i></h5>
   <div style="max-width: 600px;">
@@ -1034,14 +1034,15 @@ if(function_exists("sanitizeForFilename") === false) {
 
 <div id="info-in3" style="display:none;" class="std">
   <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
-  <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="max-width:140px;" />
+  <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="max-width:140px; height:auto;" />
   <h2>🤩&nbsp;In 3 keer gespreid betalen zonder rente</h2>
-  <h5><i>Voor zakelijk en particulier</i></h5>
+  <h5><i>Voor zakelijk en particulier, tot 3000 euro inclusief BTW. Momenteel alleen in Nederland.</i></h5>
   <div style="max-width: 700px;">
     <h3>Hoe werkt In3?</h3>
-    <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_stappen.png" alt="In3 logo" title="In3" style="max-width:100%;" />
+    <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_stappen.png" alt="In3 logo" title="In3" style="max-width:100%; height:auto;" />
   </div>
   <div class="center" style="margin-top: 20px;">
     <iframe style="max-width:100%;" width="560" height="315" src="https://www.youtube-nocookie.com/embed/9XTdoGzjefY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
+  Momenteel is in3 alleen actief in Nederland maar heeft wel grote ambities om naar andere landen uit te rollen. Het eerstvolgende land waar in3 actief zal zijn is België.
 </div>

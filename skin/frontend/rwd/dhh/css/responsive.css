@@ -2845,6 +2845,7 @@
     left: 0;
     margin: 0 .5em;
     width: calc(100% - 1em);
+    z-index: 100;
     /* float: none !important; */
   }
   
@@ -2859,12 +2860,14 @@
   
   #main-logo {
     margin: .5em auto;
+    z-index: 101;
   }
   
   .main-logo {
     top: 0;
     float: left;
     width: 100%;
+    z-index: 101;
   }
   
   .account-cart-wrapper {
