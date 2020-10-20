@@ -33,11 +33,11 @@ foreach($children as $child) {
   $outermostClassCode = 'level'. $childLevel;
   $_hasChildren = $child->hasChildren();
   $has_children_class = ($_hasChildren && $childLevel < 1) ? ' has-children' : '';
+  $title = $this->escapeHtml($this->__($child->getName()));
+  $name  = $this->escapeHtml($this->__($child->getName()));
 
   if($childLevel < 2) $html .= "<li {$this->_getRenderedMenuItemAttributes($child)}>";
-  $html .= "<a title='{$this->escapeHtml($this->__($child->getName()))}' href='{$url}' class='{$outermostClassCode}{$has_children_class}'>";
-  $html .= $this->escapeHtml($this->__($child->getName()));
-  $html .= "</a>";
+  $html .= "<a title=\"{$title}\" href='{$url}' class='{$outermostClassCode}{$has_children_class}'>{$title}</a>";
 
   if($_hasChildren) {
     if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";
