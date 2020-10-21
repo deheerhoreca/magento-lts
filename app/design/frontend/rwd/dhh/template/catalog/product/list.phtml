@@ -13,7 +13,7 @@ $catid                        = null;
 $carct                        = Mage::registry('current_category');
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
-$short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104];
+$short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104, 3, 544, 10];
 $max_product_info_items       = 3;
 $max_product_highlight_items  = 6;
 $category_thumbs_dimensions   = 140;
@@ -32,32 +32,17 @@ $currentDirection = $this->getChild('toolbar')->getCurrentDirection();
 
 if($currentOrder === "position") {
   $query = $_productCollection->getSelect()->__toString();
-  // if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-    // printr($query);
-  // }
   if(strstr($query, "tagline") !== false) { // if somehow this field is not there
     $sortByRcm    = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
-    $sortByNonEol = "IF(e.eol = '2074' OR e.eol IS NULL, 1, 0) DESC";
+    $sortByNonEol = "IF(e.eol IN ('2074', '1910') OR e.eol IS NULL, 1, 0) DESC"; // Prod and Dev IDs
     $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
     $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
     $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByNonEol));
     $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);
     
-    /* If Amasty ShopBy is enabled, and the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
-    $eol_filter = Mage::helper('amshopby')->getRequestValues("eol") ?? false;
-    if(empty($eol_filter[0]) === false && $eol_filter[0] === "2075") {
-      // EOL filter set to "Yes", do nothing
-    } else {
-      $_productCollection->addAttributeToFilter([
-        ['attribute' => "eol",  ['null' => true]],
-        ['attribute' => "eol", ['eq'   => '2074']],
-        ['attribute' => "eol", ['eq'   => 'NO FIELD']],
-      ], '', 'left');
-    }
-    
-    if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
-      printr($_productCollection->getSelect()->__toString());
-    }
+    // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+      // printr($_productCollection->getSelect()->__toString());
+    // }
      
     // Collection was loaded already...reloading...(yeah I know)
     $_productCollection->clear();
@@ -168,13 +153,12 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
   $media_path = Mage::getBaseDir('media');
   $subcategories = Mage::getModel('catalog/category')->getCategories($currentCategoryId);
   
-  // var_dump($subcategories);
-  
   if(sizeof($subcategories) > 1) {
     ?>
     <ul class="grid-shadow-tiles-text">
     <?php
     // Logic copied to amasty/amshopby/subcategories.phtml
+    
     foreach($subcategories as $category) {
       $haschild         = true;
       $category         = Mage::getModel('catalog/category')->load($category->getId());

@@ -49,15 +49,16 @@ const DEBUG = false;
 // <option value="1296">Virtus Mastro</option>
 
 // $supplier_ids = [1294];
-// $sku = "DE314";
+// $dhh_sku  = "BA-A150685";
 $fromDate = date('1970-01-01 00:00:00');
 $toDate   = date('Y-m-d H:i:s', strtotime("-1 day"));
 
 $collection = Mage::getModel('catalog/product')->getCollection()
   ->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
   ->addAttributeToSelect('id')
-  ->setPageSize(1000000)
-  ->setCurPage(1);
+  // ->setPageSize(1000000)
+  // ->setCurPage(1)
+;
 
 if(empty($supplier_ids) === false) {
   $ors = [];
@@ -77,8 +78,8 @@ if(empty($fromDate) === false && empty($toDate) === false) {
   ]);
 }
 
-if(empty($sku) === false) {
-  $collection->addFieldToFilter('sku', array('eq' => $sku));
+if(empty($dhh_sku) === false) {
+  $collection->addFieldToFilter('sku', array('eq' => $dhh_sku));
 }
 
 $size = $collection->getSize();
@@ -98,10 +99,11 @@ foreach($collection as $product) {
   $product->setDataChanges(true);
   $product->setData("_hasDataChanges", true);
   
-  $product = DeHeerHoreca_Util_Model_Observer::updateProductBeforeSave($product);  
-  $product = DeHeerHoreca_Util_Model_Observer::updateProductAfterSave($product);  
-  
+  $product = DeHeerHoreca_Util_Model_Observer::updateProductBeforeSave($product);
+  $product = DeHeerHoreca_Util_Model_Observer::updateProductAfterSave($product);
+  print_r($product->debug());
   $product->save();
+
   $i++;
   unset($product);
 }

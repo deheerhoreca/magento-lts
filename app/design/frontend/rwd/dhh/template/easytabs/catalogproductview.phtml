@@ -531,7 +531,18 @@ foreach($highlights as $key => $highlight) {
   $hlstr .= "<li><img class='lazy' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
 }
 
+/* Impossible to influence the cross sell query, so filtering out EOLs afterwards */
 $_crossSellProducts = $_product->getCrossSellProducts();
+foreach($_crossSellProducts as $key => $_crossSellProduct) {
+  // print_r($_crossSellProduct->getId());
+  
+  $cross_sell_product = Mage::getModel('catalog/product')->load($_crossSellProduct->getId());
+  if($cross_sell_product->getAttributeText("eol") === "Ja") {
+    unset($_crossSellProducts[$key]);
+  } else {
+    $_crossSellProducts[$key] = $cross_sell_product;
+  }
+}
 
 $additional_attributes = $_product->getData("additional_attributes");
 $additional_attributes = Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($additional_attributes);
@@ -797,12 +808,11 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
           <?php
           $_columnCount = 4;
           $i = 0;
-          if($_crossSellProducts = $_product->getCrossSellProducts()) { ?>
-            <div class="crosssell product-collateral category-products">
-              <?php
-              echo "<ul class='products-grid products-grid-mini-narrow'>";
+          ?>
+          <div class="crosssell product-collateral category-products">
+            <?php
+            echo "<ul class='products-grid products-grid-mini-narrow'>";
               foreach ($_crossSellProducts as $_product) {
-                $_product = Mage::getModel('catalog/product')->load($_product->getId());
                 $i++;
                 ?>
                 <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
@@ -820,9 +830,6 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
               }
               ?>
             </ul></div>
-            <?php
-          }
-          ?>
           <div class="clearer"></div>
         </div>
       </div>

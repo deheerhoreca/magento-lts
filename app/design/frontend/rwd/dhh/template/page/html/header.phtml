@@ -23,20 +23,20 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
           <?php echo $this->getChildHtml('topSearch') ?>
         </div>
         <div class="account-cart-wrapper">
-          <span id="header-kiyoh">
-            <a href="https://www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer" class="no-decoration center" aria-label="Bekijk onze reviews op Kiyoh">
-              <div class="skip-account" style="width: 125px">
-                <div>
-                  <span class="gold" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                </div>
-                <div class="small">
-                  <span>
-                    U geeft ons een <strong>9.2!</strong>
-                  </span>
-                </div>
+          
+          <span id="header-kiyoh" style="display:inline;">
+            <div class="skip-account center" style="width: 125px">
+              <div>
+                <span class="gold" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
               </div>
-            </a>
+              <div class="small">
+                <a href="https://www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer" class="no-decoration" aria-label="Bekijk onze reviews op Kiyoh">
+                  <span>U geeft ons een <strong>9.2!</strong></span>
+                </a>
+              </div>
+            </div>
           </span>
+          
           <span>
             <a data-fancybox data-touch="false" href="#modal" class="btn btn-primary toplink-phone skip-phone top-link"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a>
           </span>

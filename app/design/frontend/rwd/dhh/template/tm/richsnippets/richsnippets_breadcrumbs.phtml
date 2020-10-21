@@ -1,5 +1,8 @@
 <?php
 
+/* Ignore these categories in the breadcrumb */
+$ignored_categorie_keys = ["category834"]; // Promotions
+
 $store = Mage::app()->getStore();
 $store_name = $store->getFrontendName();
 
@@ -58,7 +61,19 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
         echo '<ul>';
         $n = sizeof($crumbs);
         $i = 0;
+        
+        // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+          // echo "<pre>";
+          // print_r($crumbs);
+          // echo "</pre>";
+        // }
+        
         foreach($crumbs as $_crumbName => $_crumbInfo) {
+          
+          if(in_array($_crumbName, $ignored_categorie_keys) !== false) {
+            continue;
+          }
+          
           $css_classes = (substr($_crumbName, 0, 8) === "category") ? "category " : null;
           $label = $this->escapeHtml($_crumbInfo['label']);
           $title = $this->escapeHtml($_crumbInfo['title']);

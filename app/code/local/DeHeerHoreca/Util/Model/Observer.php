@@ -18,7 +18,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   }
   
   // Also used directly in resave_all_products.php
-  public function updateProductBeforeSave($observer_or_product) {    
+  public function updateProductBeforeSave($observer_or_product) {
     if(get_class($observer_or_product) === "Varien_Event_Observer") {
       $product = $observer_or_product->getProduct();
       $return = false;
@@ -180,7 +180,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   }
   
   // Also used directly in resave_all_products.php
-  public function updateProductAfterSave($observer_or_product) {    
+  public function updateProductAfterSave($observer_or_product) {
     if(get_class($observer_or_product) === "Varien_Event_Observer") {
       $product = $observer_or_product->getProduct();
       $return = false;
@@ -193,7 +193,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $productId = $product->getId();
     
     /* END OF LIFE */
-    if($product->getData("eol") === "1") {
+    if($product->getAttributeText("eol") === "Ja") {
       $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId);
       $stockItem->setData('use_config_manage_stock', 0);
       $stockItem->setData('use_config_backorders', 0);
@@ -250,4 +250,34 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     // exit;
     return;
   }
+
+  // Adds an EOL = No filter to any listview unless it's explicitly set to Yes
+  public function addEolFilter($observer) {
+    $productCollection = $observer->getEvent()->getCollection();
+    
+    /* If the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
+    if(Mage::helper('core')->isModuleEnabled('Amasty_Shopby')) {
+      $eol_filter = Mage::helper('amshopby')->getRequestValues("eol") ?? false;
+      if(empty($eol_filter[0]) === false && 
+        ($eol_filter[0] === "2075" || $eol_filter[0] === "1910")) { // Prod and Dev IDs
+        // EOL filter set to "Yes", do nothing
+      } else {
+        $productCollection->addAttributeToFilter([
+          ['attribute' => "eol",  ['null' => true]],
+          ['attribute' => "eol", ['eq'   => '2074']],
+          ['attribute' => "eol", ['eq'   => 'NO FIELD']],
+        ], '', 'left');
+      }
+    }
+
+    $observer->getEvent()->setCollection($productCollection);    
+    
+    // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+      // echo $productCollection->getSelect()->__toString();
+      // $filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
+      // echo $productCollection->getSize();
+    // }
+    
+  }
+
 }

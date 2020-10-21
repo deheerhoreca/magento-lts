@@ -44,7 +44,7 @@ Mage::register('isSecureArea', true);
 
 
 if(empty($argv[1]) || empty($argv[2])) {
-  die("Usage: playround.php <category_id> <sku>".PHP_EOL);
+  die("Usage: playround.php <category_id> <dhh_sku>".PHP_EOL);
 }
 
 $attribute_id = 45;

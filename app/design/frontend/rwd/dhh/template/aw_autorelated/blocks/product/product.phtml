@@ -1,6 +1,6 @@
 <?php
 $abstractBlock = $this->helper('awautorelated')->getAbstractProductBlock();
-$collection = $this->getCollection();
+$collection    = $this->getCollection();
 
 $_columnCount = 3;
 $i            = 0;
@@ -10,7 +10,7 @@ if(empty($collection) === false) {
   ?>
   <div id="autorelated-products" class="product-collateral category-products">
     <?php
-    echo "<span class=h3>In dezelfde categorie</span><hr>";
+    echo "<h2 class='tableftheader'>Bekijk ook</h2>";
     echo "<ul class='products-grid'>";
     foreach($collection as $_product) {
       if($i === $max_items) break;

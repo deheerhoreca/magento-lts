@@ -4,8 +4,10 @@
  *
  * @see Mage_Catalog_Block_Product_List_Toolbar
  */
-?>
-<?php if($this->getCollection()->getSize()): ?>
+
+$limits = $this->getAvailableLimit();
+
+if($this->getCollection()->getSize()): ?>
 <div class="toolbar">
   <?php if( $this->isExpanded() ): ?>
     <div class="sorter">
@@ -21,17 +23,18 @@
         </select>
         </div>
         <?php if($this->getCurrentDirection() == 'desc'): ?>
-          <a href="<?php echo $this->getOrderUrl(null, 'asc') ?>" class="sort-by-switcher sort-by-switcher--desc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Ascending Direction')) ?>"><?php echo $this->__('Set Ascending Direction') ?></a>
+          <a href="<?php echo $this->getOrderUrl(null, 'asc') ?>" class="no-transition sort-by-switcher sort-by-switcher--desc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Ascending Direction')) ?>"><?php echo $this->__('Set Ascending Direction') ?></a>
         <?php else: ?>
-          <a href="<?php echo $this->getOrderUrl(null, 'desc') ?>" class="sort-by-switcher sort-by-switcher--asc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Descending Direction')) ?>"><?php echo $this->__('Set Descending Direction') ?></a>
+          <a href="<?php echo $this->getOrderUrl(null, 'desc') ?>" class="no-transition sort-by-switcher sort-by-switcher--asc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Descending Direction')) ?>"><?php echo $this->__('Set Descending Direction') ?></a>
         <?php endif; ?>
       </div>
     </div>
   <?php endif; ?>
   
-  <div class="sorter">
+  <!-- <div class="sorter">
     <p><strong><?php echo $this->getCollection()->getSize(); ?></strong> resultaten</p>
   </div>
+  -->
   
   <div class="pager">  
     <div class="count-container">
@@ -45,16 +48,18 @@
         </p>
       <?php endif; ?>
 
-      <div class="limiter">
-        <label><?php echo $this->__('Toon') ?></label>
-        <select onchange="setLocation(this.value)" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Results per page')); ?>">
-        <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
-          <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
-            <?php echo $_limit ?>
-          </option>
-        <?php endforeach; ?>
-        </select>
-      </div>
+      <?php if(sizeof($limits) > 1) { ?>
+        <div class="limiter">
+          <label><?php echo $this->__('Toon') ?></label>
+          <select onchange="setLocation(this.value)" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Results per page')); ?>">
+          <?php foreach ($limits as $_key => $_limit): ?>
+            <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
+              <?php echo $_limit ?>
+            </option>
+          <?php endforeach; ?>
+          </select>
+        </div>
+      <?php } ?>
     </div>
 
     <?php echo $this->getPagerHtml() ?>

@@ -493,6 +493,10 @@ h6 {
   font-size: 1em !important;
 }
 
+.no-transition {
+  transition: none !important;
+}
+
 
 /* Unsorted */
 
@@ -13364,7 +13368,7 @@ body.amshopby-index-index div.page-title.category-title h1 {
   display: inline-block;
   float: right;
   padding: 0;
-  width: 3em;
+  width: 2em;
   height: 1.5em;
   background-color: #17a249;
   vertical-align: middle;
@@ -14598,7 +14602,7 @@ ul.html5-grid-4-col {
   width: 100%;
   border-radius: 5px;
   transition-duration: 100ms;
-  border: 1px solid #cacfd2;
+  /* border: 1px solid #cacfd2; */
 }
 
 .grid-shadow-tiles-text li:hover strong {
@@ -14622,8 +14626,8 @@ ul.html5-grid-4-col {
 }
 
 .grid-shadow-tiles-text li:hover img {
-  transition: transform .5s ease;
-  transform: scale(1.12);
+  transition: transform .3s ease;
+  transform: scale(1.25);
 }
 
 img.category-thumb {
