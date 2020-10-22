@@ -36,7 +36,7 @@
                     <host>localhost</host>
                     <username/>
                     <password/>
-                    <dbname>magento</dbname>
+                    <dbname>openmage_lts</dbname>
                     <model>mysql4</model>
                     <initStatements>SET NAMES utf8</initStatements>
                     <type>pdo_mysql</type>
@@ -120,19 +120,6 @@
                 </entities>
             </core_resource>
         </models>
-        
-        <!-- We want this data in the cart for use in cross sell / bargains -->
-        <sales>
-            <quote>
-                <item>
-                    <product_attributes>
-                        <supplier/>
-                        <name_short/>
-                    </product_attributes>
-                </item>
-            </quote>
-        </sales>
-        
     </global>
     <default>
         <system>

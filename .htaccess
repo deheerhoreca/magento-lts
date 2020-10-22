@@ -31,7 +31,7 @@
 ############################################
 ## enable resulting html compression
 
-    php_flag zlib.output_compression on
+     php_flag zlib.output_compression on
 
 ###########################################
 # disable user agent verification to not break multiple image upload
@@ -317,7 +317,6 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
   Header add Link "<https://ajax.cloudflare.com>;rel=preconnect; crossorigin"
   Header add Link "<https://cdn.jsdelivr.net>;rel=preconnect; crossorigin"
   Header add Link "<https://stats.g.doubleclick.net>;rel=preconnect; crossorigin"
-  Header add Link "<https://www.googletagmanager.com>;rel=preconnect; crossorigin"
   Header add Link "<https://cdnjs.cloudflare.com>;rel=preconnect"
   Header add Link "<https://static.sooqr.com>;rel=preconnect; crossorigin"
   Header add Link "<https://dynamic.sooqr.com>;rel=preconnect; crossorigin"

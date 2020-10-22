@@ -46,14 +46,6 @@ include_once "Varien/Autoload.php";
 
 Varien_Autoload::register();
 
-/** AUTOLOADER PATCH **/
-if (file_exists($autoloaderPath = BP . DS . 'vendor/autoload.php') ||
-    file_exists($autoloaderPath = BP . DS . '../vendor/autoload.php')
-) {
-    require $autoloaderPath;
-}
-/** AUTOLOADER PATCH **/
-
 include_once "phpseclib/bootstrap.php";
 include_once "mcryptcompat/mcrypt.php";
 
@@ -180,7 +172,7 @@ final class Mage
             'major'     => '1',
             'minor'     => '9',
             'revision'  => '4',
-            'patch'     => '4',
+            'patch'     => '5',
             'stability' => '',
             'number'    => '',
         );
@@ -223,7 +215,7 @@ final class Mage
         return array(
             'major'     => '19',
             'minor'     => '4',
-            'patch'     => '1',
+            'patch'     => '8',
             'stability' => '', // beta,alpha,rc
             'number'    => '', // 1,2,3,0.3.7,x.7.z.92 @see https://semver.org/#spec-item-9
         );
@@ -325,7 +317,7 @@ final class Mage
 
         $appRoot = realpath($appRoot);
 
-        if (is_dir($appRoot) and is_readable($appRoot)) {
+        if (is_dir($appRoot) && is_readable($appRoot)) {
             self::$_appRoot = $appRoot;
         } else {
             self::throwException($appRoot . ' is not a directory or not readable by this user');
@@ -538,7 +530,7 @@ final class Mage
      *
      * @param   string $modelClass
      * @param   array $arguments
-     * @return  Object
+     * @return  Mage_Core_Model_Resource_Db_Collection_Abstract|false
      */
     public static function getResourceModel($modelClass, $arguments = array())
     {

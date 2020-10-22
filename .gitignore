@@ -1,8 +1,9 @@
-#--------------------------#
-# Magento Default Files    #
-#--------------------------#
-
 /app/etc/local.xml
+/media/catalog
+/dev/tests/functional/generated
+/dev/tests/functional/vendor
+
+# DHH
 
 /media/*
 !/media/.htaccess
@@ -37,19 +38,6 @@
 !/media/
 /media/*
 !/media/wysiwyg/
-
-/var/*
-!/var/.htaccess
-!/var/aoe_profiler.*
-
-!/var/package
-/var/package/*
-!/var/package/*.xml
-
-/tmp/*
-/downloader/connect.cfg
-
-# DHH
 
 /sitemap_*.xml
 
@@ -91,3 +79,13 @@ media/wysiwyg/.thumbs/
 
 !/media/static
 .well-known/
+
+# Store Manager
+tmp/
+
+# OpenMage
+.all-contributorsrc
+.github/
+.htaccess.sample
+SECURITY.md
+index.php.sample

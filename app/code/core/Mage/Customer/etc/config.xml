@@ -443,6 +443,14 @@
                     </customer_addres_after_save_viv_observer>
                 </observers>
             </customer_address_save_after>
+            <customer_customer_authenticated>
+                <observers>
+                    <customer_upgrade_password>
+                        <class>Mage_Customer_Model_Observer</class>
+                        <method>actionUpgradeCustomerPassword</method>
+                    </customer_upgrade_password>
+                </observers>
+            </customer_customer_authenticated>
         </events>
     </global>
     <adminhtml>
@@ -513,7 +521,7 @@
                 <confirm>0</confirm>
                 <default_group>1</default_group>
                 <tax_calculation_address_type>billing</tax_calculation_address_type>
-                <email_domain>deheerhoreca.nl</email_domain>
+                <email_domain>example.com</email_domain>
                 <email_identity>general</email_identity>
                 <email_template>customer_create_account_email_template</email_template>
                 <email_confirmation_template>customer_create_account_email_confirmation_template</email_confirmation_template>

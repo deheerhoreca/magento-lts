@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright  Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,10 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
 {
     protected $_product = null;
 
-    function getProduct()
+    /**
+     * @return mixed|null
+     */
+    public function getProduct()
     {
         if (!$this->_product) {
             $this->_product = Mage::registry('product');
@@ -63,7 +66,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
 
                 if (!$product->hasData($attribute->getAttributeCode())) {
                     $value = Mage::helper('catalog')->__('N/A');
-                } elseif ((string)$value == '') {
+                } elseif (is_null($value) || $value === false || $value === '') {
                     $value = Mage::helper('catalog')->__('No');
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = Mage::app()->getStore()->convertPrice($value, true);
@@ -80,49 +83,50 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
         }
         return $data;
     }
-// DHH CORE HACK
-// Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
+  
+    // DHH CORE HACK
+    // Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
 
-	public function getAdditionalDataCustom(array $excludeAttr = array())
-  {
-    $data = array();
-    $product = $this->getProduct();
-    $attributes = $product->getAttributes();
-    foreach ($attributes as $attribute) {
-      if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+    public function getAdditionalDataCustom(array $excludeAttr = array())
+    {
+      $data = array();
+      $product = $this->getProduct();
+      $attributes = $product->getAttributes();
+      foreach ($attributes as $attribute) {
+        if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
 
-        $value = $attribute->getFrontend()->getValue($product);
+          $value = $attribute->getFrontend()->getValue($product);
 
-        if (is_string($value)) {
-          if (strlen($value) && $product->hasData($attribute->getAttributeCode())) {
-          //if ($attribute->getFrontendInput() == 'price') {
-          //$value = Mage::app()->getStore()->convertPrice($value,true);
-          //}
+          if (is_string($value)) {
+            if (strlen($value) && $product->hasData($attribute->getAttributeCode())) {
+            //if ($attribute->getFrontendInput() == 'price') {
+            //$value = Mage::app()->getStore()->convertPrice($value,true);
+            //}
 
-          $group = 0;
-          if( $tmp = $attribute->getData('attribute_group_id') ) {
-            $group = $tmp;
-          }
+            $group = 0;
+            if( $tmp = $attribute->getData('attribute_group_id') ) {
+              $group = $tmp;
+            }
 
-          $data[$group]['items'][ $attribute->getAttributeCode()] = array(
-            'label' => $attribute->getStoreLabel(),
-            'value' => $value,
-            'code' => $attribute->getAttributeCode()
-            );
+            $data[$group]['items'][ $attribute->getAttributeCode()] = array(
+              'label' => $attribute->getStoreLabel(),
+              'value' => $value,
+              'code' => $attribute->getAttributeCode()
+              );
 
-          $data[$group]['attrid'] = $attribute->getId();
+            $data[$group]['attrid'] = $attribute->getId();
 
+            }
           }
         }
       }
-    }
 
-    foreach( $data AS $groupId => &$group ) {
-      $groupModel = Mage::getModel('eav/entity_attribute_group')->load( $groupId );
-      $group['title'] = $groupModel->getAttributeGroupName();
-    }
+      foreach( $data AS $groupId => &$group ) {
+        $groupModel = Mage::getModel('eav/entity_attribute_group')->load( $groupId );
+        $group['title'] = $groupModel->getAttributeGroupName();
+      }
 
-    return $data;
-  }
+      return $data;
+    }
 // DHH END
 }

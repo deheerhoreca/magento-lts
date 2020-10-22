@@ -31,6 +31,9 @@
  * @category   Mage
  * @package    Mage_Tag
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @method int getTagId()
+ * @method $this setTagId(int $value)
  */
 class Mage_Tag_Block_Customer_View extends Mage_Catalog_Block_Product_Abstract
 {
@@ -89,7 +92,7 @@ class Mage_Tag_Block_Customer_View extends Mage_Catalog_Block_Product_Abstract
      */
     public function getCount()
     {
-        return sizeof($this->getMyProducts());
+        return count($this->getMyProducts());
     }
 
     /**
@@ -106,7 +109,7 @@ class Mage_Tag_Block_Customer_View extends Mage_Catalog_Block_Product_Abstract
     /**
      * Preparing block layout
      *
-     * @return $this
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {

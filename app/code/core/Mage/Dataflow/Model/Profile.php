@@ -185,7 +185,10 @@ class Mage_Dataflow_Model_Profile extends Mage_Core_Model_Abstract
                     $uploader->save($path);
                     $uploadFile = $uploader->getUploadedFileName();
 
-                    if ($_FILES['file_' . ($index + 1)]['type'] == "text/csv") {
+                    if (
+                        $_FILES['file_' . ($index + 1)]['type'] == "text/csv"
+                        || $_FILES['file_' . ($index + 1)]['type'] == "application/vnd.ms-excel"
+                    ) {
                         $fileData = $csvParser->getData($path . $uploadFile);
                         $fileData = array_shift($fileData);
                     } else {
@@ -390,7 +393,7 @@ class Mage_Dataflow_Model_Profile extends Mage_Core_Model_Abstract
         }
         $mapXml .= '<action type="dataflow/convert_mapper_column" method="map">' . $nl;
         $map = $p['map'][$this->getEntityType()];
-        if (sizeof($map['db']) > 0) {
+        if (count($map['db'])) {
             $from = $map[$import?'file':'db'];
             $to = $map[$import?'db':'file'];
             $mapXml .= '    <var name="map">' . $nl;

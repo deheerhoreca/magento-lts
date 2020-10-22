@@ -63,6 +63,12 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         $this->setTemplate('page/html/breadcrumbs.phtml');
     }
 
+    /**
+     * @param string $crumbName
+     * @param array $crumbInfo
+     * @param bool $after
+     * @return $this
+     */
     public function addCrumb($crumbName, $crumbInfo, $after = false)
     {
         $this->_prepareArray($crumbInfo, array('label', 'title', 'link', 'first', 'last', 'readonly'));
@@ -77,6 +83,11 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         return $this;
     }
 
+    /**
+     * @param string $crumbName
+     * @param array $crumbInfo
+     * @param bool $before
+     */
     public function addCrumbBefore($crumbName, $crumbInfo, $before = false)
     {
         if ($before && isset($this->_crumbs[$before])) {
@@ -94,6 +105,9 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         }
     }
 
+    /**
+     * @param string $crumbName
+     */
     public function removeCrumb($crumbName)
     {
         if (isset($this->_crumbs[$crumbName])) {
@@ -117,8 +131,8 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
 
         return $this->_cacheKeyInfo;
     }
-
-
+    
+    
     /* DHH CORE HACK */
     
     //https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
@@ -227,7 +241,10 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
       
       return parent::_toHtml();
     }
-    
+
+    /**
+     * @return string
+     */
     /*
     protected function _toHtml()
     {
@@ -241,5 +258,6 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         return parent::_toHtml();
     }
     */
-    /* END DHH CORE HACK */
+    
+    
 }
