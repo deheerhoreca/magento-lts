@@ -211,7 +211,10 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
     
     public function joinCategories(){
         if (!$this->_checkJoin('category_id')){
-            $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', null, 'left');
+            // DHH CORE HACK
+            // $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', null, 'left');
+            $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', "(dynamic=0)", 'left');
+            
             $this->getSelect()->columns("GROUP_CONCAT(at_category_id.category_id) as category_ids");
 //            $this->joinField('category_id', 'catalog/category_product_index', 'category_id', 'product_id = entity_id', '{{table}}.store_id = ' . $this->getStoreId(), 'left');
         }
