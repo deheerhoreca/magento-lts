@@ -75,8 +75,14 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
           }
           
           $css_classes = (substr($_crumbName, 0, 8) === "category") ? "category " : null;
-          $label = $this->escapeHtml($_crumbInfo['label']);
-          $title = $this->escapeHtml($_crumbInfo['title']);
+          $label = $this->htmlEscape($_crumbInfo['label']);
+          $label = str_replace("[V]", null, $label); // Remove virtual category marker from frontend
+          $label = trim($label);
+          
+          $title = $this->htmlEscape($_crumbInfo['title']);
+          $title = str_replace("[V]", null, $title); // Remove virtual category marker from frontend
+          $title = trim($title);
+            
           echo "<li class='{$css_classes}{$_crumbName}'>";
           
           if($n > 2 && $_crumbName === "product") {
@@ -110,30 +116,40 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
     if($crumbs && is_array($crumbs)) { ?>
       <div class="breadcrumbs">
         <ul itemscope itemtype="http://schema.org/BreadcrumbList">
-          <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
-            <li class="<?php echo $_crumbName ?>"
-              <?php if($_crumbInfo['link']): ?>
-                itemprop="itemListElement"
-                itemscope
-                itemtype="http://schema.org/ListItem"
-              <?php endif; ?>
-            >
-            <?php if($_crumbInfo['link']): ?>
-              <a itemprop="item"
-                href="<?php echo $_crumbInfo['link'] ?>"
-                title="<?php echo $this->htmlEscape($_crumbInfo['title']) ?>"
-              ><span itemprop="name"><?php echo $this->htmlEscape($_crumbInfo['label']) ?></span
-              ></a>
-            <?php elseif($_crumbInfo['last']): ?>
-              <strong><?php echo $this->htmlEscape($_crumbInfo['label']) ?></strong>
-            <?php else: ?>
-              <?php echo $this->htmlEscape($_crumbInfo['label']) ?>
-            <?php endif; ?>
-            <?php if(!$_crumbInfo['last']): ?>
-              <span>/ </span>
-            <?php endif; ?>
-            </li>
-          <?php endforeach; ?>
+          <?php
+          foreach($crumbs as $_crumbName=>$_crumbInfo) {
+            
+            $label = $this->htmlEscape($_crumbInfo['label']);
+            $label = str_replace("[V]", null, $label); // Remove virtual category marker from frontend
+            $label = trim($label);
+            
+            $title = $this->htmlEscape($_crumbInfo['title']);
+            $title = str_replace("[V]", null, $title); // Remove virtual category marker from frontend
+            $title = trim($title);
+            
+            echo "<li class='{$_crumbName}'";
+            if($_crumbInfo['link']) {
+              echo "itemprop='itemListElement' itemscope itemtype='http://schema.org/ListItem'";
+            }
+            echo ">";
+            if($_crumbInfo['link']) {
+              ?>
+              <a itemprop="item" href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $title; ?>">
+                <span itemprop="name"><?php echo $label; ?></span>
+              </a>
+              <?php
+            } elseif($_crumbInfo['last']) {
+              echo "<strong>{$label}</strong>";
+            } else {
+              echo $label;
+            }
+            
+            if(!$_crumbInfo['last']) {
+              echo "<span>/ </span>";
+            }
+            echo "</li>";
+          }
+          ?>
         </ul>
       </div>
     <?php

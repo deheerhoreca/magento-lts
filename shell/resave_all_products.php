@@ -1,6 +1,8 @@
 <?php
 
-if (php_sapi_name() !== "cli") {
+const DEBUG = true;
+
+if(php_sapi_name() !== "cli") {
   header("Location: /");
   exit;
 }
@@ -23,42 +25,38 @@ if(Mage::registry('isSecureArea')) {
 }
 Mage::register('isSecureArea', true);
 
-echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual");
+if(DEBUG === false) {
+  echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual");
+}
 
-const DEBUG = false;
-
-// Filters
-// <option value="1300">Bartscher</option>
-// <option value="1294">Combisteel</option>
-// <option value="1585">Culimat</option>
-// <option value="1794">De Heer Horeca</option>
-// <option value="1798">De Jong Luchttechniek</option>
-// <option value="1895">Desinfectietoren.nl</option>
-// <option value="1297">Diamond</option>
-// <option value="1295">Domest</option>
-// <option value="1787">Emga</option>
-// <option value="1790">Gastro-Inox</option>
-// <option value="1293">Gastronoble</option>
-// <option value="1618">Hendi</option>
-// <option value="1301">Hoshizaki</option>
-// <option value="1797">KamadoSheriff</option>
-// <option value="1302">Naomi-Grills</option>
-// <option value="1299">Saro</option>
-// <option value="1298">Scancool</option>
-// <option value="1793">SousVide Supreme</option>
-// <option value="1296">Virtus Mastro</option>
-
-// $supplier_ids = [1294];
-// $dhh_sku  = "BA-A150685";
+/* FILTERS */
+// $supplier_names = ["veba"];
+// $dhh_sku  = "DIA-PCT/10-35WT";
 $fromDate = date('1970-01-01 00:00:00');
-$toDate   = date('Y-m-d H:i:s', strtotime("-1 day"));
+$toDate   = date('Y-m-d H:i:s', strtotime("-1 hour"));
 
 $collection = Mage::getModel('catalog/product')->getCollection()
   ->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
   ->addAttributeToSelect('id')
-  // ->setPageSize(1000000)
+  // ->setPageSize(10)
   // ->setCurPage(1)
 ;
+
+if(empty($supplier_names) === false) {
+  
+  $supplier_attr = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "supplier");
+  $supplier_options = $supplier_attr->getSource()->getAllOptions(false);
+  
+  foreach($supplier_names as $supplier) {
+    reset($supplier_options);        
+    foreach($supplier_options as $option) {
+      if(strtolower($option['label']) === $supplier) {
+        $collection->addAttributeToFilter("supplier", $option['value']);
+        break 1;
+      }
+    }
+  }
+}
 
 if(empty($supplier_ids) === false) {
   $ors = [];
@@ -68,7 +66,7 @@ if(empty($supplier_ids) === false) {
   $collection->addFieldToFilter('supplier', [$ors]);
 }
 
-if(empty($fromDate) === false && empty($toDate) === false) {
+if(empty($dhh_sku) === true && empty($fromDate) === false && empty($toDate) === false) {
   echo "From: {$fromDate}".PHP_EOL;
   echo "To: {$toDate}".PHP_EOL;
   $collection->addFieldToFilter('updated_at', [
@@ -101,7 +99,7 @@ foreach($collection as $product) {
   
   $product = DeHeerHoreca_Util_Model_Observer::updateProductBeforeSave($product);
   $product = DeHeerHoreca_Util_Model_Observer::updateProductAfterSave($product);
-  print_r($product->debug());
+  // print_r($product->debug());
   $product->save();
 
   $i++;
@@ -110,6 +108,10 @@ foreach($collection as $product) {
 
 echo PHP_EOL."Saved {$i} product(s)".PHP_EOL;
 
-echo "Reindexing...".PHP_EOL;
-echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime");
-echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php reindexall");
+if(DEBUG === false) {
+  echo "Reindexing...".PHP_EOL;
+  echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime");
+  echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php reindexall");
+} else {
+  echo "Skipping reindex".PHP_EOL;
+}

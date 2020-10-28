@@ -1256,20 +1256,26 @@ div.paypal-logo span a img {
   color: #d84d3c;
 }
 
+.tier-pricing-container {
+   margin-top: 1em;
+}
+
 .product-pricing,
 .tier-prices,
 .tier-prices-grouped {
   display: inline-block;
   margin-top: 7px;
   padding: 4px 8px;
-  border: 1px solid #e2d4c7;
-  background: #fbf4de;
+  border: 1px solid #31a4017d;
+  border-radius: 5px;
+  background: #31a4011f;
+  width: 100%;
 }
 
 .product-pricing li,
 .tier-prices li,
 .tier-prices-grouped li {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .block-progress dd address,

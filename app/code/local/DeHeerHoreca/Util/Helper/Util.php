@@ -514,7 +514,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     /* Vermogen */
     if(in_array(3, $parent_categories_ids) === false) { // skip "Koelingen" and everything underneath
       $attribute_value = $_product->getVermogen();
-      if(empty($attribute_value) === false) {
+      if(empty($attribute_value) === false && $attribute_value > 0) {
         if($attribute_value < 3) {
           $attribute_value *= 1000;
           $usps[] = "{$attribute_value} Watt";
@@ -530,7 +530,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     /* Gas Vermogen */
     $attribute_value = $_product->getVermogenKw();
-    if(empty($attribute_value) === false) {
+    if(empty($attribute_value) === false && $attribute_value > 0) {
       if($attribute_value < 3) {
         $attribute_value *= 1000;
         $usps[] = "{$attribute_value} Watt";
@@ -582,9 +582,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $eol_replacement_sku  = $product->getEolReplacementSku();
     $manage_stock         = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
     $extra_delivery_time  = 0;
-    $expected_delivery    = $product->getResource()->getAttribute('levertijd')->getFrontend()->getValue($product);
-    $levertijd            = $product->getAttributeText('levertijd');
-    $bestelartikel        = $product->getAttributeText('bestelartikel');
+    $expected_delivery    = $product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($product);
+    $levertijd            = $product->getAttributeText("levertijd");
+    $bestelartikel        = $product->getAttributeText("bestelartikel");
+    $min_sale_qty         = $product->getStockItem()->getMinSaleQty();
     
     $calwekdate_min = $calwekdate_max = null;
 
@@ -727,6 +728,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     // $stock_data["calwekdate_max"]       = $calwekdate_max;
     $stock_data["levertijd"]            = $levertijd;
     $stock_data["bestelartikel"]        = $bestelartikel;
+    $stock_data["min_sale_qty"]         = $min_sale_qty;
     
     return $stock_data;
   }

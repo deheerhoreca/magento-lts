@@ -34,10 +34,8 @@ if($currentOrder === "position") {
   $query = $_productCollection->getSelect()->__toString();
   if(strstr($query, "tagline") !== false) { // if somehow this field is not there
     $sortByRcm    = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
-    $sortByNonEol = "IF(e.eol IN ('2074', '1910') OR e.eol IS NULL, 1, 0) DESC"; // Prod and Dev IDs
     $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
     $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
-    $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByNonEol));
     $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);
     
     // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
@@ -437,7 +435,7 @@ if($_collectionSize > 0) {
       /* M3/hour capacity */
       $attribute_value = $_product->getAantalM3Uur();
       if(strlen($attribute_value) > 0) {
-        $usps[] = round($attribute_value, 2)." m3";
+        $usps[] = round($attribute_value, 2)." m3/UUR";
       }
       
       /* Warranty */
@@ -466,7 +464,7 @@ if($_collectionSize > 0) {
       /* Aftap */
       $attribute_value = $_product->getAttributeText('aftap');
       if($attribute_value === "Ja") {
-        $usps[] = "Aftap";
+        $usps[] = "Met Aftap";
       }
       
       /* Afsluitbaar */

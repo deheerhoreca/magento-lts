@@ -48,15 +48,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_save_after>
-      <catalog_block_product_list_collection>
-        <observers>
-          <retailon_configurable_list>
-            <type>singleton</type>
-            <class>deheerhoreca_util/observer</class>
-            <method>addEolFilter</method>
-          </retailon_configurable_list>
-        </observers>
-      </catalog_block_product_list_collection>
     </events>
   </global>
   

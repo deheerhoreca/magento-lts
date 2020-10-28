@@ -4,111 +4,6 @@
  * https://raw.githubusercontent.com/papertank/magento-php-sitemap/master/sitemap.php
  */
 
-$sitemap_file = dirname(__FILE__).'/../sitemap_watdachtjezelf.xml';
-
-$page_priority = '1';
-$category_priority = '0.5';
-$product_priority = '0.5';
-
-class PT_Magento_Sitemap {
-
-  protected $file;
-  protected $filename;
-
-  protected $urls;
-  
-  public function __construct($filename)
-  { 
-    $this->urls = array();
-    $this->filename = $filename;
-  }
-  
-  public function formatDate($datetime)
-  {
-    $timestamp = strtotime($datetime);
-    return date('Y-m-d', $timestamp);
-  }
-  
-  public function addUrl($loc, $priority = '1', $lastmod = NULL, $images = [])
-  {
-    $data = [
-      'loc'       => $loc,
-      'priority'  => $priority,
-      'lastmod'   => ( $lastmod ? $this->formatDate($lastmod) : NULL ),
-      'images'    => $images,
-    ];
-    $this->urls[] = $data;
-    
-    return true;
-  }
-  
-  public function generate()
-  {
-    if ( ! $this->file ) {
-      $this->openFile();
-    }
-  
-    if ( ! $this->urls ) {
-      return false;
-    }
-  
-    foreach ( $this->urls as $url )  {
-      $this->writeUrl($url);
-    }
-    
-    $this->closeFile();
-    
-    return true;
-  }
-  
-  private function openFile()
-  {
-    $this->file = fopen($this->filename, 'w');
-    
-    if ( ! $this->file ) {
-      throw new Exception('Sitemap file '.$file.' is not writable');
-      return false;
-    }
-    
-    fwrite($this->file, '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL);
-    fwrite($this->file, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'.PHP_EOL);
-    
-    return true;
-  }
-  
-  private function closeFile()
-  {
-    if ( $this->file ) {
-      fwrite($this->file, "</urlset>");
-      fclose($this->file);
-    }
-     
-    return true;
-  }
-  
-  private function writeUrl($url)
-  {
-    $lastmod = ($url['lastmod'] ? "<lastmod>{$url['lastmod']}</lastmod>" : null);
-    $image = (sizeof($url["images"]) > 0 ? $this->getImageXml($url["images"]) : null);
-    fwrite($this->file, "<url><loc>{$url['loc']}</loc><priority>{$url['priority']}</priority>{$lastmod}{$image}</url>".PHP_EOL);
-  }
-  
-  private function getImageXml($images) {
-    $string = PHP_EOL;
-    foreach($images as $image) {
-      $title = (isset($image["title"]) ? "<image:title>".$this->xmlEscape($image["title"])."</image:title>" : null);
-      $caption = (isset($image["caption"]) ? "<image:caption>".$this->xmlEscape($image["caption"])."</image:caption>" : null);
-      $string .= "<image:image><image:loc>".$this->xmlEscape($image["url"])."</image:loc>{$title}{$caption}</image:image>";
-    }
-    return $string;
-  }
-  
-  function xmlEscape($string) {
-    return str_replace(array('&', '<', '>', '\'', '"'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
-  }
-}
-
-// make sure we don't time out
 error_reporting(E_ALL);
 set_time_limit(0);
 ini_set('memory_limit', '4g');
@@ -116,6 +11,22 @@ ini_set('memory_limit', '4g');
 if(php_sapi_name() !== "cli") {
   header("Location: /");
   exit;
+}
+
+$page_priority        = '1';
+$category_priority    = '0.5';
+$product_priority     = '0.5';
+
+$longopts = [
+  "which::",
+];
+
+$options = getopt("", $longopts);
+
+$which = "all";
+
+if(empty($options["which"]) === false) {
+  $which = $options["which"];
 }
 
 $do = [
@@ -127,7 +38,22 @@ $do = [
   "product_images"  => true,
 ];
 
-require_once (dirname(__FILE__).'/../app/Mage.php');
+$sitemap_file = dirname(__FILE__).'/../sitemap_watdachtjezelf.xml';
+
+if($which === "categories") {
+  $do = [
+    "categories"      => true,
+    "products"        => false,
+    "pages"           => false,
+    "blogs"           => false,
+    "brands"          => false,
+    "product_images"  => false,
+  ];
+  
+  $sitemap_file = dirname(__FILE__).'/../sitemap_watdachtjezelf_categories.xml';
+}
+
+require_once(dirname(__FILE__).'/../app/Mage.php');
 Mage::app();
     
 try {
@@ -282,4 +208,102 @@ try {
 
 } catch( Exception $e ) {
   die($e->getMessage());
+}
+
+class PT_Magento_Sitemap {
+
+  protected $file;
+  protected $filename;
+
+  protected $urls;
+  
+  public function __construct($filename)
+  { 
+    $this->urls = array();
+    $this->filename = $filename;
+  }
+  
+  public function formatDate($datetime)
+  {
+    $timestamp = strtotime($datetime);
+    return date('Y-m-d', $timestamp);
+  }
+  
+  public function addUrl($loc, $priority = '1', $lastmod = NULL, $images = [])
+  {
+    $data = [
+      'loc'       => $loc,
+      'priority'  => $priority,
+      'lastmod'   => ( $lastmod ? $this->formatDate($lastmod) : NULL ),
+      'images'    => $images,
+    ];
+    $this->urls[] = $data;
+    
+    return true;
+  }
+  
+  public function generate()
+  {
+    if ( ! $this->file ) {
+      $this->openFile();
+    }
+  
+    if ( ! $this->urls ) {
+      return false;
+    }
+  
+    foreach ( $this->urls as $url )  {
+      $this->writeUrl($url);
+    }
+    
+    $this->closeFile();
+    
+    return true;
+  }
+  
+  private function openFile()
+  {
+    $this->file = fopen($this->filename, 'w');
+    
+    if ( ! $this->file ) {
+      throw new Exception('Sitemap file '.$file.' is not writable');
+      return false;
+    }
+    
+    fwrite($this->file, '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL);
+    fwrite($this->file, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'.PHP_EOL);
+    
+    return true;
+  }
+  
+  private function closeFile()
+  {
+    if ( $this->file ) {
+      fwrite($this->file, "</urlset>");
+      fclose($this->file);
+    }
+     
+    return true;
+  }
+  
+  private function writeUrl($url)
+  {
+    $lastmod = ($url['lastmod'] ? "<lastmod>{$url['lastmod']}</lastmod>" : null);
+    $image = (sizeof($url["images"]) > 0 ? $this->getImageXml($url["images"]) : null);
+    fwrite($this->file, "<url><loc>{$url['loc']}</loc><priority>{$url['priority']}</priority>{$lastmod}{$image}</url>".PHP_EOL);
+  }
+  
+  private function getImageXml($images) {
+    $string = PHP_EOL;
+    foreach($images as $image) {
+      $title = (isset($image["title"]) ? "<image:title>".$this->xmlEscape($image["title"])."</image:title>" : null);
+      $caption = (isset($image["caption"]) ? "<image:caption>".$this->xmlEscape($image["caption"])."</image:caption>" : null);
+      $string .= "<image:image><image:loc>".$this->xmlEscape($image["url"])."</image:loc>{$title}{$caption}</image:image>";
+    }
+    return $string;
+  }
+  
+  function xmlEscape($string) {
+    return str_replace(array('&', '<', '>', '\'', '"'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
+  }
 }

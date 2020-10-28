@@ -41,7 +41,7 @@ if(function_exists('_fixPrice') === false) {
   }
 }
 
-if($dhh_debug === true) {
+if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) {
   echo "Tax: displayBothPrices() = {$_taxHelper->displayBothPrices()}<br />";
 }
 
@@ -67,17 +67,24 @@ if($dhh_debug === true) {
     <?php $_weeeDisplayType = $_weeeHelper->getPriceDisplayType(); ?>
     <!-- BEGIN DHH -->
     <?php
-      $_discount = ($_finalPrice - $_price) * 1;
-      $_discount_pct = null;
-      if($_price != 0) {
-        $_discount_pct = ($_discount / $_price) * 100 * -1;
-      }
+    $_discount = ($_finalPrice - $_price) * 1;
+    $_discount_pct = null;
+    if($_price != 0) {
+      $_discount_pct = ($_discount / $_price) * 100 * -1;
+    }
+    
+    if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) {
+      echo "<pre>";
+      echo "weetaxamount: {$_weeeTaxAmount}";
+      echo "</pre>";
+    }
+      
     ?>
     <!-- END DHH -->
     <?php if ($_finalPrice >= $_price): ?>
         <?php if ($_taxHelper->displayBothPrices()): ?>
             <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)): // including ?>
-              <?php if($dhh_debug === TRUE) echo "Display both prices. Context: 0".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Display both prices. Context: 0".PHP_EOL; ?>
                 <span class="price-excluding-tax">
                     <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
                     <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -91,7 +98,7 @@ if($dhh_debug === true) {
                     </span>
                 </span>
             <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)): // incl. + weee ?>
-              <?php if($dhh_debug === TRUE) echo "Display both prices. Context: 1".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Display both prices. Context: 1".PHP_EOL; ?>
                 <span class="price-excluding-tax">
                     <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
                     <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -112,7 +119,7 @@ if($dhh_debug === true) {
                     </span>
                 </span>
             <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)): // incl. + weee ?>
-              <?php if($dhh_debug === TRUE) echo "Display both prices. Context: 4".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Display both prices. Context: 4".PHP_EOL; ?>
                 <span class="price-excluding-tax">
                     <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
                     <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -133,7 +140,7 @@ if($dhh_debug === true) {
                         )</span>
                 </span>
             <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)): // excl. + weee + final ?>
-              <?php if($dhh_debug === TRUE) echo "Display both prices. Context: 2".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Display both prices. Context: 2".PHP_EOL; ?>
                 <span class="price-excluding-tax">
                     <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
                     <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -154,7 +161,7 @@ if($dhh_debug === true) {
                 </span>
             <?php else: ?>
               <?php /* Usage: Related products without a discount */ ?>
-              <?php if($dhh_debug === TRUE) echo "Display both prices. Context: ?".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Display both prices. Context: 3".PHP_EOL; ?>
                 <span class="price-excluding-tax not-special">
                     <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
                     <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -174,7 +181,7 @@ if($dhh_debug === true) {
             <?php endif; ?>
         <?php else: ?>
             <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1))): // including ?>
-              <?php if($dhh_debug === TRUE) echo "Don't display both prices. Context: 0,1".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Don't display both prices. Context: 0,1".PHP_EOL; ?>
                 <?php $weeeAmountToDisplay = $_taxHelper->displayPriceIncludingTax() ? $_weeeTaxAmountInclTaxes : $_weeeTaxAmount ?>
                 <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                      <?php echo $_coreHelper->currency($_price + $weeeAmountToDisplay, true, true) ?>
@@ -191,7 +198,7 @@ if($dhh_debug === true) {
                         )</span>
                 <?php endif; ?>
             <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)): // incl. + weee ?>
-              <?php if($dhh_debug === TRUE) echo "Don't display both prices. Context: 4".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Don't display both prices. Context: 4".PHP_EOL; ?>
                 <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                     <?php echo $_coreHelper->formatPrice($_price + $_weeeTaxAmount, true) ?>
                 </span>
@@ -203,7 +210,7 @@ if($dhh_debug === true) {
                     <?php endforeach; ?>
                     )</span>
             <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)): // excl. + weee + final ?>
-              <?php if($dhh_debug === TRUE) echo "Don't display both prices. Context: 2".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Don't display both prices. Context: 2".PHP_EOL; ?>
                 <span class="regular-price"><?php echo $_coreHelper->formatPrice($_price, true) ?></span><br/>
                 <?php $weeeAmountToDisplay = $_taxHelper->displayPriceIncludingTax() ? $_weeeTaxAmountInclTaxes : $_weeeTaxAmount ?>
                 <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
@@ -216,7 +223,7 @@ if($dhh_debug === true) {
                     <?php echo $_coreHelper->currency($_price + $weeeAmountToDisplay, true, true) ?>
                 </span>
             <?php else: ?>
-              <?php if($dhh_debug === TRUE) echo "Don't display both prices. Context: ?".PHP_EOL; ?>
+              <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Don't display both prices. Context: 6".PHP_EOL; ?>
                 <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                     <?php if ($_finalPrice == $_price): ?>
                         <?php echo $_coreHelper->formatPrice($_price, true) ?>
@@ -231,7 +238,7 @@ if($dhh_debug === true) {
         <?php $_originalWeeeTaxAmount = $_store->roundPrice($_store->convertPrice($_originalWeeeTaxAmount)) ?>
 
         <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)): // including ?>
-          <?php if($dhh_debug === TRUE) echo "Discount. Context: 0".PHP_EOL; ?>
+          <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Discount. Context: 7".PHP_EOL; ?>
             <p class="old-price">
                 <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
                 <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -265,7 +272,7 @@ if($dhh_debug === true) {
             <?php endif; ?>
 
         <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)): // incl. + weee ?>
-          <?php if($dhh_debug === TRUE) echo "Discount. Context: 1".PHP_EOL; ?>
+          <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Discount. Context: 8".PHP_EOL; ?>
             <p class="old-price">
                 <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
                 <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -312,7 +319,7 @@ if($dhh_debug === true) {
             <?php endif; ?>
             </p>
         <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)): // incl. + weee ?>
-          <?php if($dhh_debug === TRUE) echo "Discount. Context: 4".PHP_EOL; ?>
+          <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Discount. Context: 9".PHP_EOL; ?>
             <p class="old-price">
                 <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
                 <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -343,7 +350,7 @@ if($dhh_debug === true) {
             </span>
             </p>
         <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)): // excl. + weee + final ?>
-          <?php if($dhh_debug === TRUE) echo "Discount. Context: 2".PHP_EOL; ?>
+          <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Discount. Context: 10".PHP_EOL; ?>
             <p class="old-price">
                 <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
                 <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
@@ -377,7 +384,7 @@ if($dhh_debug === true) {
             
         <?php else: // excl. ?>
           <?php /* Usages: related products with discount | Product detail page with discount */ ?>
-          <?php if($dhh_debug === true) echo "Discount. Context: ?".PHP_EOL; ?>
+          <?php if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc']) && $dhh_debug === true) echo "Discount. Context: 11".PHP_EOL; ?>
           
             <?php // OLD PRICE ?>
             <div class="old-price">

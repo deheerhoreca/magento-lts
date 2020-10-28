@@ -64,6 +64,15 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("product_label", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
       }
+      // echo $product->getVisibility();exit;
+      if($product->getVisibility() === 4) {
+        $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
+        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility reduced to Search");
+      }
+      if($product->getVisibility() === 4 || $product->getVisibility() === 2) {
+        $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
+        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
+      }
     }
     
     /* PRICING */
@@ -253,24 +262,24 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
 
   // Adds an EOL = No filter to any listview unless it's explicitly set to Yes
   public function addEolFilter($observer) {
-    $productCollection = $observer->getEvent()->getCollection();
+    // $productCollection = $observer->getEvent()->getCollection();
     
-    /* If the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
-    if(Mage::helper('core')->isModuleEnabled('Amasty_Shopby')) {
-      $eol_filter = Mage::helper('amshopby')->getRequestValues("eol") ?? false;
-      if(empty($eol_filter[0]) === false && 
-        ($eol_filter[0] === "2075" || $eol_filter[0] === "1910")) { // Prod and Dev IDs
-        // EOL filter set to "Yes", do nothing
-      } else {
-        $productCollection->addAttributeToFilter([
-          ['attribute' => "eol",  ['null' => true]],
-          ['attribute' => "eol", ['eq'   => '2074']],
-          ['attribute' => "eol", ['eq'   => 'NO FIELD']],
-        ], '', 'left');
-      }
-    }
+    // /* If the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
+    // if(Mage::helper('core')->isModuleEnabled('Amasty_Shopby')) {
+      // $eol_filter = Mage::helper('amshopby')->getRequestValues("eol") ?? false;
+      // if(empty($eol_filter[0]) === false && 
+        // ($eol_filter[0] === "2075" || $eol_filter[0] === "1910")) { // Prod and Dev IDs
+        // // EOL filter set to "Yes", do nothing
+      // } else {
+        // $productCollection->addAttributeToFilter([
+          // ['attribute' => "eol",  ['null' => true]],
+          // ['attribute' => "eol", ['eq'   => '2074']],
+          // ['attribute' => "eol", ['eq'   => 'NO FIELD']],
+        // ], '', 'left');
+      // }
+    // }
 
-    $observer->getEvent()->setCollection($productCollection);    
+    // $observer->getEvent()->setCollection($productCollection);    
     
     // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
       // echo $productCollection->getSelect()->__toString();

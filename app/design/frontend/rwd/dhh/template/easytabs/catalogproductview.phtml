@@ -74,6 +74,7 @@ $overall_stock_status = $stock_data["overall_stock_status"];
 $txtstockdate         = $stock_data["txtstockdate"];
 $levertijd            = $stock_data["levertijd"];
 $bestelartikel        = $stock_data["bestelartikel"];
+$min_sale_qty         = $stock_data["min_sale_qty"];
 
 $freeshipping_from    = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $_finalPriceInclTax   = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
@@ -422,7 +423,7 @@ if($i < $max_highlighted_attributes) {
   $image = "{$skn}frontend/rwd/dhh/images/light.svg";
   $title = "Verlichting";
   $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if(empty($text) === false && $text !== "Nee") {
+  if(empty($text) === false && $text === "Ja") {
     $text = "Verlichting";
     $highlights[] = [
       "image" => $image,
@@ -683,9 +684,12 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
                 <?php
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
+                  if(empty($eol_text) !== true) {
+                    echo "<div class=eol_text>{$eol_text}</div>";
+                  }
                 }
-                if(empty($eol_text) !== true) {
-                  echo "<div class=eol_text>{$eol_text}</div>";
+                if(empty($min_sale_qty) !== true && $min_sale_qty > 1) {
+                  echo "<div class='buyblock-usp'><span class='dark-color'>Ordergrootte: vanaf <strong>{$min_sale_qty}</strong> stuks</span></div>";
                 }
                 if(empty($delivery_text) !== true) {
                   echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
@@ -712,7 +716,8 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
 
               ?>
               <div id="company_usps">
-                <div class="buyblock-usp"><span class="dark-color">Advies: <a href='tel:+31850441003'>Bel</a>, <a href='mailto:service@chefstore.nl'>e-mail</a> of <a href="javascript:$zopim.livechat.window.show();">chat</a>!</span></div>
+                <i style="    height: 22px; width: 22px; margin-left: 0.2em; font-size: 18px; color: #595959;" class="fa fa-phone fa-fw" title="Bellen"></i>
+                Vragen? <a data-fancybox="" data-touch="false" href="#modal">Contact met Chefstore.nl</a>
               </div>
               <?php
               echo $this->getChildHtml('sharing');
