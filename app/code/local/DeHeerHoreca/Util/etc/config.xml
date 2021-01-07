@@ -60,6 +60,16 @@
           </reports>
         </observers>
       </catalog_controller_product_view>
+      
+      <controller_front_send_response_after>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>logClick</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </controller_front_send_response_after>
     </events>
   </frontend>
 </config>

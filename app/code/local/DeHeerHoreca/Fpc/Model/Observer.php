@@ -7,7 +7,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
-  define("DHH_FPC_ENABLED", false);
+  define("DHH_FPC_ENABLED", true);
 } else {
   define("DHH_FPC_ENABLED", true);
 }
@@ -20,6 +20,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     $read_cache = Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true);
     
     if($read_cache === false) {
+      Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "BYPASS");
       return;
     }
     
@@ -29,11 +30,14 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     if(empty($html) === false) {
      if(print($html)) {
         flush();
+        Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "HIT");
         // To allow for closing actions (AoE Profiler is one)
         Mage::dispatchEvent('controller_front_send_response_after');
         exit;
       }
     }
+    
+    Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "MISS");
   }
   
   public function clearProductCache($observer) {
@@ -58,4 +62,5 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     return true;
   }
+  
 }
