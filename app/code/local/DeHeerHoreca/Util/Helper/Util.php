@@ -5,6 +5,8 @@ require_once 'vendor/autoload.php';
 use Michelf\Markdown;
 use Michelf\MarkdownExtra;
 
+$dhh_click_log = [];
+
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
 {
   
@@ -753,7 +755,33 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     return $url;
   }
+  
+  public static function addToClickLog($key, $val):void {
+    global $dhh_click_log;
+    $dhh_click_log[$key] = $val;
+  }
+  
+  public static function addLabelToClickLog($key, $val):void {
+    global $dhh_click_log;
+    $dhh_click_log["labels"][$key] = $val;
+  }
+  
+  public static function getUserIP() {
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+          $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+          $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+    }
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
 
+    if(filter_var($client, FILTER_VALIDATE_IP)) { $ip = $client; }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP)) { $ip = $forward; }
+    else { $ip = $remote; }
+
+    return $ip;
+  }
+  
 }
 
 if(function_exists('printr') === false) {

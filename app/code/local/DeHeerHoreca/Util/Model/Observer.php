@@ -290,5 +290,46 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     // }
     
   }
-
+  
+  public function logClick():void {
+    global $dhh_click_log;
+    
+    $action = Mage::app()->getFrontController()->getAction()->getFullActionName();
+    
+    $full_url = Mage::helper('core/url')->getCurrentUrl();
+    $url = Mage::getSingleton('core/url')->parseUrl($full_url);
+    $path = ltrim($url->getPath(), '/');
+    
+    // In case of an FPC HIT, we cannot use current_product or current_category
+    $oRewrite = Mage::getModel('core/url_rewrite')
+      ->setStoreId(Mage::app()->getStore()->getId())->loadByRequestPath($path);
+    
+    $entity_id = null;
+    switch($action) {
+      case "catalog_product_view":                      
+        $entity_id = $oRewrite->getProductId();
+        break;
+      case "catalog_category_view":
+        $entity_id = $oRewrite->getCategoryId();
+        break;
+    }
+    
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.created", date("c"));
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("client.ip", Mage::helper("deheerhoreca_util/util")->getUserIP());
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.action", $action);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.id", $entity_id);
+    // Mage::helper("deheerhoreca_util/util")->addToClickLog("url.full", $full_url);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("url.path", $path);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("host.name", gethostname());
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("ecs.version", "1.7.0");
+    
+    try {
+      $json = json_encode($dhh_click_log);
+      $target = "./var/log/clicks.jsonl";
+      file_put_contents($target, $json.PHP_EOL, FILE_APPEND);
+    } catch (Exception $e) {
+      Mage::log($e->getMessage(), null, 'exception.log', true);
+    }
+  }
+  
 }
