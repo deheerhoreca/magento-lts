@@ -238,10 +238,14 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
             $fileType = $this->_fileType;
         }
         if (empty(self::$_callbacks[$fileType])) {
-            throw new Exception($unsupportedText);
+            $msg = "{$unsupportedText}. Type was: {$fileType}. File was: {$this->_fileName}";
+            Mage::log($msg, null, 'exception.log', true);
+            throw new Exception($msg);
         }
         if (empty(self::$_callbacks[$fileType][$callbackType])) {
-            throw new Exception('Callback not found.');
+            $msg = "Callback not found. Callbacktype was: {$callbackType}. File was: {$this->_fileName}";
+            Mage::log($msg, null, 'exception.log', true);
+            throw new Exception($msg);
         }
         return self::$_callbacks[$fileType][$callbackType];
     }

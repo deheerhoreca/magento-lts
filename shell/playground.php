@@ -1,5 +1,8 @@
 <?php
 
+const DRYRUN      = false;
+const DEBUG       = true;
+
 if (php_sapi_name() !== "cli") {
   header("Location: /");
   exit;
@@ -10,10 +13,11 @@ if (php_sapi_name() !== "cli") {
   // exit;
 // }
 
-ini_set('display_errors',true);
+ini_set("display_errors",true);
 error_reporting(E_ALL | E_STRICT);
+ini_set("memory_limit", "8G");
 
-require_once "./app/Mage.php";
+require_once __DIR__."/../app/Mage.php";
 Mage::setIsDeveloperMode(true);
 Mage::app(0);
 Mage::init();
@@ -22,10 +26,103 @@ Mage::init();
 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
 // https://inchoo.net/magento/programming-magento/how-to-delete-magento-product-from-frontend-template-code-from-view-files/
-if(Mage::registry('isSecureArea')) {
-  Mage::unregister('isSecureArea');
+if(Mage::registry("isSecureArea")) {
+  Mage::unregister("isSecureArea");
 }
-Mage::register('isSecureArea', true);
+Mage::register("isSecureArea", true);
+
+
+/*********************************************************************************************
+* MODIFY ALL PRODUCTS
+*********************************************************************************************
+
+$collection = Mage::getModel('catalog/product')
+  ->getCollection()
+  ->addAttributeToSelect(['sku'])
+  ->setStore(0)
+  ->addAttributeToFilter('special_price', ['neq' => ''])
+  // ->addAttributeToFilter("sku", "BA-601196")
+  ->load();
+
+foreach($collection as $_product) {
+  
+  $product = Mage::getModel('catalog/product')->load($_product->getId());
+  
+  $price          = $product->getPrice();
+  $final_price    = $product->getFinalPrice();
+  
+  echo "SKU: {$product->getSku()}: price = {$price}, final price = {$final_price}".PHP_EOL;
+  if($final_price > 0 && $price == $final_price) {
+    $product
+      ->setSpecialPrice('')
+      ->setSpecialToDate('')
+      ->setSpecialFromDate('');
+      
+    if(DRYRUN === false) {
+      $product->save();
+      echo "Saved {$product->getSku()}".PHP_EOL;
+    }
+  } else {
+    echo "No changes necessary".PHP_EOL;
+  }
+  
+  sleep(0);
+}
+
+
+/*********************************************************************************************
+* MANUALLY ADD TRANSACTIONS
+*********************************************************************************************/
+
+// $order_id = 100009136;
+// $payment_data = [
+  // "id"     => uniqid(),
+  // "method" => "manual",
+// ];
+
+// $order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
+// print_r($order->debug());
+
+// print_r(addTransactionToOrder($order, $payment_data));
+
+// function addTransactionToOrder($order, $paymentData) {
+  // try {
+    // // Prepare payment object
+    // $payment = $order->getPayment();
+    // $payment->setMethod('manual'); 
+    // $payment->setLastTransId($paymentData['id']);
+    // $payment->setTransactionId($paymentData['id']);
+    // $payment->setAdditionalInformation([Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS => (array) $paymentData]);
+
+    // // Formatted price
+    // // $formatedPrice = $order->getBaseCurrency()->formatTxt($order->getGrandTotal());
+    // $formatedPrice = 0;
+
+    // // Prepare transaction
+    // $transaction = $this->transactionBuilder->setPayment($payment)
+    // ->setOrder($order)
+    // ->setTransactionId($paymentData['id'])
+    // ->setAdditionalInformation([Transaction::RAW_DETAILS => (array) $paymentData])
+    // ->setFailSafe(true)
+    // ->build(Transaction::TYPE_CAPTURE);
+
+    // // Add transaction to payment
+    // $payment->addTransactionCommentsToOrder($transaction, __('The authorized amount is %1.', $formatedPrice));
+    // $payment->setParentTransactionId(null);
+
+    // // Save payment, transaction and order
+    // // $payment->save();
+    // // $order->save();
+    // // $transaction->save();
+
+    // return  $transaction->getTransactionId();
+
+  // } catch (Exception $e) {
+    // $this->messageManager->addExceptionMessage($e, $e->getMessage());
+  // }
+// }
+
+
 
 /*********************************************************************************************
 * DEBUG OBSERVERS
@@ -36,68 +133,6 @@ Mage::register('isSecureArea', true);
 // Zend_Debug::dump(
     // Mage::getConfig()->getXpath('//controller_action_predispatch//class')
 // );
-
-
-/*********************************************************************************************
-* CHANGE CATEGORY IMAGES
-*********************************************************************************************/
-
-
-if(empty($argv[1]) || empty($argv[2])) {
-  die("Usage: playround.php <category_id> <dhh_sku>".PHP_EOL);
-}
-
-$attribute_id = 45;
-
-$work[] = ["id" => $argv[1], "sku" => $argv[2]];
-
-$resource = Mage::getSingleton('core/resource');
-$writeConnection = $resource->getConnection('core_write');
-
-foreach($work as $item) {
-
-  $product = getMagento1ProductBySku($item["sku"]);
-  $image = getMagento1BaseImage($product);
-  $image_file = basename($image);
-  $target = "media/catalog/category/{$image_file}";
-
-  if(copy($image, $target) === true) {
-    echo "Copied {$image} to {$target}".PHP_EOL;
-  } else {
-    echo "Error while copying {$image} to {$target}".PHP_EOL;
-  }
-
-  $query = "REPLACE INTO catalog_category_entity_varchar (entity_type_id, attribute_id, store_id, entity_id, `value`) VALUES (3, {$attribute_id}, 0, {$item["id"]}, '{$image_file}');".PHP_EOL;
-  
-  $writeConnection->query($query);
-  echo "Query OK".PHP_EOL;
-  
-  $m = Mage::getModel('catalog/category')->load($item["id"])->getParentCategory();
-  $direct_parent_id = (int) $m->getId();
-  if(empty($direct_parent_id) === false) {
-    $pattern = "*QUICKNDIRTYFPC_catalog_category_view_{$direct_parent_id}";
-    $cmd = "redis-cli --scan --pattern {$pattern}_* | xargs redis-cli del";
-    $count = shell_exec($cmd);
-    echo "Category FPC cleared: {$count}".PHP_EOL;
-  } else {
-    echo "No parent category found for {$item["id"]}".PHP_EOL;
-  }
-}
-
-function getMagento1BaseImage($product) {
-  return Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
-}
-
-function getMagento1ProductBySku($sku) {
-  $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
-  if(!$product) die("Cannot find SKU {$sku}".PHP_EOL);
-  return $product;
-}
-
-
-
-
-
 
 
 /*********************************************************************************************

@@ -1,0 +1,77 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Mage_Payment_Block_Info
+ */
+
+# DHH CORE HACK - COPIED FROM app/design/adminhtml/default/default/template/payment/info/pdf/default.phtml
+# After getting errors in exception.log and lots of missing invoices, added this file:
+
+/*
+2020-11-01T11:08:11+00:00 ERR (3): 
+Exception: Warning: include(/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/design/frontend/base/default/template/payment/info/pdf/default.phtml): failed to open stream: No such file or directory  in /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Block/Template.php on line 243 in /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/functions.php:207
+Stack trace:
+#0 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Block/Template.php(243): mageCoreErrorHandler(2, 'include(/var/ww...', '/var/www/vhosts...', 243, Array)
+#1 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Block/Template.php(243): include()
+#2 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Block/Template.php(274): Mage_Core_Block_Template->fetchView('frontend/base/d...')
+#3 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Block/Template.php(288): Mage_Core_Block_Template->renderView()
+#4 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Block/Abstract.php(937): Mage_Core_Block_Template->_toHtml()
+#5 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Payment/Block/Info.php(78): Mage_Core_Block_Abstract->toHtml()
+#6 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/local/Mage/Sales/Model/Order/Pdf/Abstract.php(319): Mage_Payment_Block_Info->toPdf()
+#7 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php(143): Mage_Sales_Model_Order_Pdf_Abstract->insertOrder(Object(Zend_Pdf_Page), Object(Mage_Sales_Model_Order), true)
+#8 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/community/Geissweb/InvoiceAutoSend/Model/Invoice.php(137): Mage_Sales_Model_Order_Pdf_Invoice->getPdf(Array)
+#9 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/community/Geissweb/InvoiceAutoSend/Model/Observer.php(37): Geissweb_InvoiceAutoSend_Model_Invoice->sendEmail(true)
+#10 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Model/App.php(1410): Geissweb_InvoiceAutoSend_Model_Observer->salesOrderInvoiceSaveAfter(Object(Varien_Event_Observer))
+#11 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Model/App.php(1389): Mage_Core_Model_App->_callObserverMethod(Object(Geissweb_InvoiceAutoSend_Model_Observer), 'salesOrderInvoi...', Object(Varien_Event_Observer))
+#12 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/Mage.php(494): Mage_Core_Model_App->dispatchEvent('sales_order_inv...', Array)
+#13 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Model/Abstract.php(478): Mage::dispatchEvent('sales_order_inv...', Array)
+#14 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Sales/Model/Order/Invoice.php(1033): Mage_Core_Model_Abstract->_afterSave()
+#15 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Model/Abstract.php(331): Mage_Sales_Model_Order_Invoice->_afterSave()
+#16 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Sales/Model/Order.php(2437): Mage_Core_Model_Abstract->save()
+#17 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Model/Abstract.php(331): Mage_Sales_Model_Order->_afterSave()
+#18 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/community/Mollie/Mpm/Model/Client/Orders.php(271): Mage_Core_Model_Abstract->save()
+#19 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/community/Mollie/Mpm/Model/Mollie.php(166): Mollie_Mpm_Model_Client_Orders->processTransaction(Object(Mage_Sales_Model_Order), 'webhook', NULL)
+#20 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/community/Mollie/Mpm/controllers/ApiController.php(178): Mollie_Mpm_Model_Mollie->processTransaction('9419', 'webhook')
+#21 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Controller/Varien/Action.php(437): Mollie_Mpm_ApiController->webhookAction()
+#22 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Controller/Varien/Router/Standard.php(262): Mage_Core_Controller_Varien_Action->dispatch('webhook')
+#23 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Controller/Varien/Front.php(192): Mage_Core_Controller_Varien_Router_Standard->match(Object(Mage_Core_Controller_Request_Http))
+#24 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/code/core/Mage/Core/Model/App.php(381): Mage_Core_Controller_Varien_Front->dispatch()
+#25 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/app/Mage.php(729): Mage_Core_Model_App->run(Array)
+#26 /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/index.php(78): Mage::run('', 'store')
+#27 {main}
+*/
+?>
+<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>{{pdf_row_separator}}
+
+<?php if ($_specificInfo = $this->getSpecificInformation()):?>
+<?php foreach ($_specificInfo as $_label => $_value):?>
+<?php echo $_label ?>: <?php echo implode(' ', $this->getValueAsArray($_value))?>{{pdf_row_separator}}
+<?php endforeach; ?>
+<?php endif;?>
+
+<?php echo implode('{{pdf_row_separator}}', $this->getChildPdfAsArray()) ?>

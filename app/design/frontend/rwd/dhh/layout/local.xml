@@ -6,6 +6,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
 
 <layout version="0.1.0">
   <default>
+  
     <reference name="head">
       <action method="removeItem"><type>js</type><file>scriptaculous/builder.js</file></action>
       <action method="removeItem"><type>js</type><file>scriptaculous/dragdrop.js</file></action>
@@ -17,6 +18,12 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="removeItem"><type>js</type><file>prototype/prototype.js</file></action>
       <action method="removeItem"><type>js</type><file>scriptaculous/effects.js</file></action>
       <action method="removeItem"><type>js</type><file>scriptaculous/slider.js</file></action>
+      <action method="removeItem"><type>skin_css</type><name>css/billink.css</name></action>
+      <action method="removeItem"><type>js</type><name>billink/billink_base.js</name></action>
+      <action method="removeItem"><type>js</type><name>billink/billink_mage_validationfix.js</name></action>
+      <action method="removeItem"><type>js</type><name>billink/billink_checkout_page_controller.js</name></action>
+      <action method="removeItem"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
+      <action method="removeItem"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
       <action method="removeItem"><type>skin_js</type><file>js/lightslider.js</file></action>
       <action method="removeItem"><type>skin_css</type><file>css/lightslider.css</file></action>
       <action method="removeItem"><type>skin_js</type><file>js/slideshow.js</file></action>
@@ -33,6 +40,10 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       
       <!-- Cart2Quote -->
       <action method="addItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
+      
+      <!-- The following are removed from default, then added where needed -->
+      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/category.css</name></action>
+      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/product.css</name></action>
     </reference>
   </default>
   
@@ -41,15 +52,11 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="removeItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar.js</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
-      <action method="removeItem"><type>skin_css</type><name>css/billink.css</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_base.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_mage_validationfix.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_checkout_page_controller.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
       <!-- <action method="removeItem"><type>js</type><file>varien/product_options.js</file></action> -->
+      <action method="removeItem"><type>skin_css</type><name>css/amshopby.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/minicart.js</name></action>
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
+      <action method="removeItem"><type>skin_css</type><name>css/tm/richsnippets.css</name></action>
     </reference>
   </catalog_product_view>
   
@@ -61,19 +68,13 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
   
   <cms_index_index>
     <reference name="head"> 
-      <action method="removeItem"><type>skin_css</type><name>css/billink.css</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_base.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_mage_validationfix.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_checkout_page_controller.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
-      <action method="removeItem"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/minicart.js</name></action>
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
       <action method="removeItem"><type>skin_css</type><name>css/amshopby.css</name></action>
-      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/category.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>css/codnitive/sidenav.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>css/easytabs.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>magmodules/kiyoh/richsnippets.css</name></action>
+      <action method="addItem"><type>skin_css</type><name>css/cms_index_index.css</name></action>
     </reference>
   </cms_index_index>
   

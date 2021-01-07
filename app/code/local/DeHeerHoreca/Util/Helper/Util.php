@@ -267,23 +267,24 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $price_html             = str_replace(",00", ",-", $price_html);
     $price_html             = str_replace("€", null, $price_html);
     
-    $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+    $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
       
-    $stock_message        = $stock_data["stock_message"];
-    $stock_class          = $stock_data["txtcltcz"];
-    $stock_qty            = $stock_data["stock_qty"];
-    $in_stock             = $stock_data["in_stock"];
-    $backorders           = $stock_data["backorders"];
-    $saleable             = $stock_data["saleable"];
-    $eol                  = $stock_data["eol"];
-    $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
-    $manage_stock         = $stock_data["manage_stock"];
-    $extra_delivery_time  = $stock_data["extra_delivery_time"];
-    $overall_stock_status = $stock_data["overall_stock_status"];
-    $txtstockdate         = $stock_data["txtstockdate"];
-    $calwekdate_min       = $stock_data["calwekdate_min"];
-    $calwekdate_max       = $stock_data["calwekdate_max"];
-    $levertijd            = $stock_data["levertijd"];
+    $stock_message          = $stock_data["stock_message"];
+    $stock_class            = $stock_data["txtcltcz"];
+    $stock_qty              = $stock_data["stock_qty"];
+    $in_stock               = $stock_data["in_stock"];
+    $backorders             = $stock_data["backorders"];
+    $saleable               = $stock_data["saleable"];
+    $eol                    = $stock_data["eol"];
+    $eol_replacement_sku    = $stock_data["eol_replacement_sku"];
+    $manage_stock           = $stock_data["manage_stock"];
+    $extra_delivery_time    = $stock_data["extra_delivery_time"];
+    $overall_stock_status   = $stock_data["overall_stock_status"];
+    $txtstockdate           = $stock_data["txtstockdate"];
+    $calwekdate_min         = $stock_data["calwekdate_min"];
+    $calwekdate_max         = $stock_data["calwekdate_max"];
+    $levertijd              = $stock_data["levertijd"];
+    $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
     
     $additional_delivery_messages = null;
       
@@ -430,11 +431,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       }
     }
     
-    $attribute_value = $_product->getData('serie');
-    if(strlen($attribute_value) > 0) {
-      $product_info[] = "Serie: {$attribute_value}";
-    }
-    
     $code = "uitvoering";
     $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
     if(is_array($attribute_value) === true) {
@@ -568,29 +564,30 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
   }
   
   public function getStockInfo($product) {
-    $stock_data   = [];
+    $stock_data = [];
     
     /* Availability, Stock */
-    $stock_message        = null;
-    $txtcltcz             = null;
-    $stock_qty            = (int) $product->getStockItem()->getQty();
-    $in_stock             = $product->getStockItem()->getIsInStock(); // "0", "1", true
-    $in_stock             = ($in_stock === true || $in_stock === "1") ? true : false;
-    $backorders           = $product->getStockItem()->getBackorders();
-    $saleable             = $product->isSaleable();
-    $eol                  = ($product->getEol() === true || $product->getEol() === "2075") ? true : false;
-    $eol_replacement_sku  = $product->getEolReplacementSku();
-    $manage_stock         = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
-    $extra_delivery_time  = 0;
-    $expected_delivery    = $product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($product);
-    $levertijd            = $product->getAttributeText("levertijd");
-    $bestelartikel        = $product->getAttributeText("bestelartikel");
-    $min_sale_qty         = $product->getStockItem()->getMinSaleQty();
+    $stock_message          = null;
+    $txtcltcz               = null;
+    $stock_qty              = (int) $product->getStockItem()->getQty();
+    $in_stock               = $product->getStockItem()->getIsInStock(); // "0", "1", true
+    $in_stock               = ($in_stock === true || $in_stock === "1") ? true : false;
+    $backorders             = $product->getStockItem()->getBackorders();
+    $saleable               = $product->isSaleable();
+    $eol                    = ($product->getEol() === true || $product->getEol() === "2075") ? true : false;
+    $eol_replacement_sku    = $product->getEolReplacementSku();
+    $manage_stock           = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
+    $extra_delivery_time    = 0;
+    $expected_delivery      = $product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($product);
+    $levertijd              = $product->getAttributeText("levertijd");
+    $levertijd_tmp_override = $product->getAttributeText("levertijd_tmp_override");
+    $bestelartikel          = $product->getAttributeText("bestelartikel");
+    $min_sale_qty           = $product->getStockItem()->getMinSaleQty();
     
-    $calwekdate_min = $calwekdate_max = null;
-
+    $calwekdate_min         = $calwekdate_max = null;
+    
     /* Temporarily adjust levertijd during holidays */
-
+    
     /*
     $supplier = $product->getAttributeText('supplier');
     if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
@@ -598,10 +595,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $timefromdb = time();
       $timeleft = $future - $timefromdb;
       $daysleft = round((($timeleft/24)/60)/60);
-
+      
       $extra_delivery_time = (int) $daysleft - 2;
     }
     */
+    
+    if(strtolower($levertijd_tmp_override) === "n.v.t.") {
+      $levertijd_tmp_override = null;
+    }
 
     /* Delivery time text */
 
@@ -637,12 +638,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $txtcltcz             = 'clzinstocktemp';
       $backorder_needed     =  true;
       $overall_stock_status = "backorder";
+      $stock_data["bestelartikel"] = $bestelartikel;
 
     } else {
       
       // In stock
       
-      // Date calculation is disabled
+      // Date calculation is disabled      
+      // If enabled some day, levertijd_tmp_override should be added here as well
       
       // if($levertijd === '2-3 weken') {
         // $nmwek_min = 10;
@@ -695,6 +698,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $backorder_needed     = false;
       $overall_stock_status = "in_stock";
       
+      $stock_data["bestelartikel"] = $bestelartikel;
+      
     }
     
     // $txtstockdate = $product->getData('txtstockdate');
@@ -711,24 +716,30 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       }
     }
     
-    $stock_data["stock_message"]        = $stock_message;
-    $stock_data["txtcltcz"]             = $txtcltcz;
-    $stock_data["stock_qty"]            = $stock_qty;
-    $stock_data["in_stock"]             = $in_stock;
-    $stock_data["backorders"]           = $backorders;
-    $stock_data["saleable"]             = $saleable;
-    $stock_data["eol"]                  = $eol;
-    $stock_data["eol_replacement_sku"]  = $eol_replacement_sku;
-    $stock_data["manage_stock"]         = $manage_stock;
-    $stock_data["extra_delivery_time"]  = $extra_delivery_time;
-    $stock_data["overall_stock_status"] = $overall_stock_status;
-    $stock_data["txtstockdate"]         = $txtstockdate;
-    $stock_data["real_txtstockdate"]    = $real_txtstockdate;
-    // $stock_data["calwekdate_min"]       = $calwekdate_min;
-    // $stock_data["calwekdate_max"]       = $calwekdate_max;
-    $stock_data["levertijd"]            = $levertijd;
-    $stock_data["bestelartikel"]        = $bestelartikel;
-    $stock_data["min_sale_qty"]         = $min_sale_qty;
+    $stock_data["stock_message"]          = $stock_message;
+    $stock_data["txtcltcz"]               = $txtcltcz;
+    $stock_data["stock_qty"]              = $stock_qty;
+    $stock_data["in_stock"]               = $in_stock;
+    $stock_data["backorders"]             = $backorders;
+    $stock_data["saleable"]               = $saleable;
+    $stock_data["eol"]                    = $eol;
+    $stock_data["eol_replacement_sku"]    = $eol_replacement_sku;
+    $stock_data["manage_stock"]           = $manage_stock;
+    $stock_data["extra_delivery_time"]    = $extra_delivery_time;
+    $stock_data["overall_stock_status"]   = $overall_stock_status;
+    $stock_data["txtstockdate"]           = $txtstockdate;
+    $stock_data["real_txtstockdate"]      = $real_txtstockdate;
+    // $stock_data["calwekdate_min"]         = $calwekdate_min;
+    // $stock_data["calwekdate_max"]         = $calwekdate_max;
+    $stock_data["levertijd"]              = $levertijd;
+    $stock_data["levertijd_tmp_override"] = $levertijd_tmp_override;
+    $stock_data["min_sale_qty"]           = $min_sale_qty;
+    
+    // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+      // echo "<pre>";
+      // printr($stock_data);
+      // echo "</pre>";
+    // }
     
     return $stock_data;
   }

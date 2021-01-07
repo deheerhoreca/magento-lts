@@ -1,3 +1,57 @@
+.amshopby-filters-left .form-button {
+  margin-bottom: 4px;
+  height: 30px;
+  font-size: 12px;
+}
+
+body.amshopby-index-index div.col-left.sidebar.col-left-first {
+  padding-left: 0!important;
+}
+
+body.amshopby-index-index div.page-title.category-title {
+  display: block!important;
+  padding: 5px 10px;
+  background: #ddd;
+}
+
+body.amshopby-index-index div.page-title.category-title h1 {
+  margin: 0;
+  color: #666;
+}
+
+#amshopby-price-btn {
+  margin-bottom: 4px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.amshopby-attr,
+.amshopby-cat a {
+  position: relative;
+  left: 3px;
+  padding-right: 0;
+  text-decoration: none;
+}
+
+.amshopby-attr:before {
+  top: 3px;
+}
+
+.amshopby-attr:before,
+.amshopby-cat:before {
+  position: absolute;
+  left: 0;
+  margin-right: 3px;
+  padding-right: .5em;
+  color: #929a9c;
+  content: "\f04b";
+  text-decoration: none;
+  font-weight: 400;
+  font-style: normal;
+  font-size: .8em;
+  font-family: FontAwesome;
+}
+
 div.amshopby-column {
     float: left;
     width: 49%;
@@ -310,6 +364,7 @@ div.block-layered-nav dd a {
 
 .amshopby-slider-ui {
     margin: 10px .4em;
+    height: .8em; /* CLS fix */
 }
 
 .amshopby-slider-ui .ui-slider-handle {

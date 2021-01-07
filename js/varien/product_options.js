@@ -37,7 +37,7 @@ Product.OptionsPrice.prototype = {
         this.productPrice       = config.productPrice;
         this.showIncludeTax     = config.showIncludeTax;
         this.showBothPrices     = config.showBothPrices;
-        this.productOldPrice    = config.productOldPrice;
+        this.productOldPrice    = config.productOldPrice / (1 + (this.currentTax / 100)); //compensation for later calc
         this.priceInclTax       = config.priceInclTax;
         this.priceExclTax       = config.priceExclTax;
         this.skipCalculate      = config.skipCalculate; /** @deprecated after 1.5.1.0 */
@@ -212,6 +212,10 @@ Product.OptionsPrice.prototype = {
 
                 if (price > 0 || this.displayZeroPrice) {
                     formattedPrice = this.formatPrice(price);
+                    // DHH
+                    formattedPrice = formattedPrice.replace(",00", "");
+                    formattedPrice = formattedPrice.replace("€", "");
+                    formattedPrice = formattedPrice.trim();
                 } else {
                     formattedPrice = '';
                 }
@@ -227,6 +231,15 @@ Product.OptionsPrice.prototype = {
                         $(pair.value+this.duplicateIdSuffix).innerHTML = formattedPrice;
                     }
                 }
+                
+                // DHH
+                
+                // at this time, productOldPrice has no VAT yet
+                // savings = (productOldPrice * (1 + (config.currentTax / 100))) - this.productPrice;
+                // console.log(price);
+                
+                // $('discount-amount-' + this.productId).innerHTML = this.formatPrice(this.savings);
+                
             };
         }.bind(this));
 
@@ -283,7 +296,25 @@ Product.OptionsPrice.prototype = {
                 }, this);
             }
         }
-
+        
+        // DHH
+        
+        _oldprice = $('old-price-'+this.productId).innerHTML;
+        _exprice = $('price-excluding-tax-'+this.productId).innerHTML;
+        
+        _oldprice = _oldprice.replace(".", "");
+        _oldprice = _oldprice.replace(",", ".");
+        _exprice  = _exprice.replace(".", "");
+        _exprice  = _exprice.replace(",", ".");
+        
+        console.log(_oldprice);
+        console.log(_exprice);
+        
+        _discount = (_oldprice - _exprice);
+        if(_discount > 0 && _discount < _oldprice) {
+          _discount = this.formatPrice(_discount);
+          document.querySelector('#discount-amount-'+this.productId).innerHTML = _discount;
+        }
     },
     formatPrice: function(price) {
         return formatCurrency(price, this.priceFormat);

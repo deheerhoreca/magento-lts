@@ -78,10 +78,18 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
         )
       );
     }
-      
+    
+    /*
+     * Cleans the cached URL by removing URL parameters that do not affect the payload
+     * If not done, we would cache index.html?sqr=x separately from index.html
+     */
     public function get_cache_url() {
       $url = html_entity_decode(Mage::helper('core/url')->getCurrentUrl());
-      $url = Mage::helper("deheerhoreca_fpc/data")->strip_param_from_url($url, ["sqr", "profile", "___store", "refreshfpc", "pagespeed"]);
+      
+      $ignored_url_query_keys = [
+        "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
+      ];
+      $url = Mage::helper("deheerhoreca_fpc/data")->strip_param_from_url($url, $ignored_url_query_keys);
       
       return $url;
     }

@@ -1,0 +1,14 @@
+<?php 
+/**
+ * Overwritten Order View Info Block
+ *
+ * @package 	Scommerce_UpdateEmail
+ * @category 	Scommerce
+ * @author	 	Scommerce Mage <core@scommerce-mage.co.uk>
+ */
+
+# DHH CORE HACK
+# class Scommerce_UpdateEmail_Block_Sales_Order_View_Info extends Mage_Adminhtml_Block_Sales_Order_View_Info
+class Scommerce_UpdateEmail_Block_Sales_Order_View_Info extends Geissweb_Euvatgrouper_Block_Adminhtml_Sales_Order_View_Additional
+{
+}

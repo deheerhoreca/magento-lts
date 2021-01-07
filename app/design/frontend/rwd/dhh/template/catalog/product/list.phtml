@@ -20,7 +20,13 @@ $category_thumbs_dimensions   = 140;
 $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 
-$_productCollection->setFlag('require_stock_items', true);
+/*
+ * Bug fix: Using require_stock_items there was a bug that lead
+ * to wrong stock info on listview during flat index rebuild.
+ * addItemsToProducts() seems to add stock data correctly even during a reindex
+ */
+// $_productCollection->setFlag('require_stock_items', true);
+Mage::getModel('catalogInventory/stock')->addItemsToProducts($_productCollection);
 
 /*
  * If the sorting is by position, put the recommended products on top
@@ -33,7 +39,7 @@ $currentDirection = $this->getChild('toolbar')->getCurrentDirection();
 if($currentOrder === "position") {
   $query = $_productCollection->getSelect()->__toString();
   if(strstr($query, "tagline") !== false) { // if somehow this field is not there
-    $sortByRcm    = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
+    $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
     $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
     $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
     $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);
@@ -56,15 +62,15 @@ $current_page_nr = Mage::app()->getRequest()->getParam('p');
 $on_first_page = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
 
 if($carct && ($category === 'category')) {
-  $catid = (int) $carct->getId();
-  $category_name = $carct->getName();
-  $category_name_lwr = strtolower($category_name);
-  $category_desc = $carct->getDescription();
-  $parent_categories = $carct->getParentCategories();
-  
+  $parent_categories  = $carct->getParentCategories();
+  $catid              = (int) $carct->getId();
+  $category_desc      = $carct->getDescription();
+  $category_name      = $carct->getName();
+  $category_name      = str_replace("[V] ", null, $category_name);
   if(strlen($category_desc) < 5) {
-    $category_desc = "<h1>{$category_name}</h1>";
+    $category_desc      = "<h1>{$category_name}</h1>";
   }
+  $category_name_lwr  = strtolower($category_name);
   
   foreach($parent_categories as $parent) {
     $parent_categories_ids[] = (int) $parent->getEntityId();
@@ -81,35 +87,40 @@ if($carct && ($category === 'category')) {
 
     /* Augment category description */
     
-    $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
-    if($on_first_page === true && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
-      $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
-      $n = sizeof($manufacturers);
-      $i = 0;
-      foreach($manufacturers as $manufacturer) {
-        if(strlen($manufacturer) < 3) continue;
-        $category_desc .= "{$manufacturer} {$category_name_lwr}";
-        $i++;
-        if($i === $n-1) {
-          $category_desc .= " en ";
-        } elseif($i < $n) {
-          $category_desc .= ", ";
+    if(strstr($category_desc, "<!--no_auto_desc-->") === false) {
+    
+      $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
+      if($on_first_page === true && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
+        $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
+        $n = sizeof($manufacturers);
+        $i = 0;
+        foreach($manufacturers as $manufacturer) {
+          if(strlen($manufacturer) < 3) continue;
+          $category_desc .= "{$manufacturer} {$category_name_lwr}";
+          $i++;
+          if($i === $n-1) {
+            $category_desc .= " en ";
+          } elseif($i < $n) {
+            $category_desc .= ", ";
+          } else {
+            $category_desc .= ".";
+          }
+        }
+        $category_desc .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
+      }
+      
+      if($on_first_page === true) {
+        if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
+          $category_desc .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
         } else {
-          $category_desc .= ".";
+          $category_desc .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
         }
       }
-      $category_desc .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
     }
     
-    if($on_first_page === true) {
-      if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
-        $category_desc .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
-      } else {
-        $category_desc .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
-      }
-    }
+    /* Optionally cut off description and show a 'More' button */
     
-    if(strlen($category_desc) < 1000) {
+    if(strstr($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";
@@ -144,28 +155,33 @@ if($carct && ($category === 'category')) {
 
 if(empty($carct) === false && $amschk !== 'amshopby') {
 
-  $layer = Mage::getSingleton('catalog/layer');
-  $_category = $layer->getCurrentCategory();
-  $currentCategoryId = $_category->getId();
-  $media_url = Mage::getBaseUrl('media');
-  $media_path = Mage::getBaseDir('media');
-  $subcategories = Mage::getModel('catalog/category')->getCategories($currentCategoryId);
+  $media_path       = Mage::getBaseDir('media');
+  $subcategories    = Mage::getModel('catalog/category')->getCategories($carct->getId(), 0, true);
   
-  if(sizeof($subcategories) > 1) {
+  if(sizeof($subcategories) > 0) {
     ?>
+    <h3>Populair</h3>
     <ul class="grid-shadow-tiles-text">
     <?php
     // Logic copied to amasty/amshopby/subcategories.phtml
+    $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
     
     foreach($subcategories as $category) {
       $haschild         = true;
       $category         = Mage::getModel('catalog/category')->load($category->getId());
-      $categoryName     = $category->getName();
+      $categoryName     = str_replace("[V] ", null, $category->getName());
       $image            = $category->getImage();
       $img_path         = "{$media_path}/catalog/category/{$image}";
-      $resized_img_name = ($category_thumbs_dimensions*2)."_".basename($img_path);
+      $resized_img_name = $category_thumbs_dimensions."_{$category->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
       $resized_img_path = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
       $resized_img_url  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
+      
+      // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+        // echo "<pre>";
+        // echo sizeof($subcategories);
+        // printr($categoryName);
+        // echo "</pre>";
+      // }
       
       if(empty($image) === false && is_file($resized_img_path) !== true && is_file($img_path) === true) {
         $imageObj = new Varien_Image($img_path);
@@ -173,16 +189,16 @@ if(empty($carct) === false && $amschk !== 'amshopby') {
         $imageObj->keepAspectRatio(true);
         $imageObj->keepFrame(true);
         $imageObj->backgroundColor(array(255,255,255));
-        $imageObj->resize($category_thumbs_dimensions * 2, $category_thumbs_dimensions * 2);
+        $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
         $imageObj->save($resized_img_path);
       }
       ?>
-      <li>
+      <li style='max-width: 180px;'>
         <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
           <?php
           if(empty($image) === false) {
-            echo "<img class='lazy' data-src='{$resized_img_url}' alt='{$categoryName}' title='{$categoryName}' 
-            height='".($category_thumbs_dimensions*2)."' width='".($category_thumbs_dimensions*2)."' />";
+            echo "<img class='lazy trans-opacity' data-src='{$resized_img_url}' alt='Bekijk {$categoryName}' title='Bekijk {$categoryName}' 
+            height='".($category_thumbs_dimensions)."' width='".($category_thumbs_dimensions)."' />";
           }
           ?>
           <strong><?php echo $categoryName; ?></strong>
@@ -205,9 +221,9 @@ if($_collectionSize > 0) {
   <div class="category-products">
     <div class="top_toolbar"><?php echo $this->getToolbarHtml() ?></div>
     <?php
-    $_columnCount = 3;
-    $displaySize = 280;
-    $_imgSize = 1 * $displaySize;
+    $_columnCount   = 3;
+    $displaySize    = 280;
+    $_imgSize       = 1 * $displaySize;
     
     echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     
@@ -310,18 +326,14 @@ if($_collectionSize > 0) {
         $product_info[] = "Maat: {$attribute_value}";
       }
       
-      $attribute_value = $_product->getData('materiaal');
-      if(strlen($attribute_value) > 0) {
-        $product_info[] = "{$attribute_value}";
-      }
-      
-      $attribute_value = $_product->getData('serie');
-      if(strlen($attribute_value) > 0) {
-        $product_info[] = "Serie: {$attribute_value}";
-      }
-      
       /* Listview USPs */
       $usps = [];
+      
+      // Material
+      $attribute_value = $_product->getData('materiaal');
+      if(strlen($attribute_value) > 0) {
+        $usps[] = $attribute_value;
+      }
       
       /* Uitvoering */
       $attribute_value = $_product->getAttributeText('uitvoering');
@@ -513,7 +525,7 @@ if($_collectionSize > 0) {
         <?php echo $html; ?>
         <a href="<?php echo $productUrl; ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
         <?php
-          echo "<img class='lazy' id='product-collection-image-{$_product->getId()}'
+          echo "<img class='lazy trans-opacity' id='product-collection-image-{$_product->getId()}'
             data-src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
             alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
             width='{$displaySize}' height='{$displaySize}' />";
@@ -565,14 +577,23 @@ if($_collectionSize > 0) {
           }
           ?>
           <div class="actions">
-            <div class="float-left">
-              <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span><?php echo $additional_delivery_messages; ?>
-            </div>
-            <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
-              <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
-              <?php else: ?>
-              <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->__("Productdetails") ?></a>
-            <?php endif; ?>
+            <?php
+            if(!$_product->canConfigure() && $_product->isSaleable()) {
+              ?>
+              <div class="float-left">
+                <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
+                <?php echo $additional_delivery_messages; ?>
+              </div>
+              <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
+              <?php
+            } else {
+              ?>
+              <div class="float-left">
+                <span class="buyblock-usp" style='line-height: 1.5em;'>Meerdere varianten</span>
+                <?php echo $additional_delivery_messages; ?>
+              </div>
+              <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
+            <?php } ?>
           </div>
         </div>
       </li>

@@ -27,24 +27,20 @@ $apm_transaction = Mage::app()->getFrontController()->getAction()->getFullAction
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js" crossorigin defer></script>
 <script>
-  window.onload = function () {
-    var hostName = window.location.host;
-    var parts = hostName.split(".");
-    var sub = parts[0];
-    var apm_env = "production";
-    if(sub === "dev") {
-      apm_env = "development";
-    }
-    
-    elasticApm.init({
-      serviceName: "prokoeling",
-      serverUrl: "https://rum." + parts[1] + ".nl:8200",
-      environment: apm_env,
-      pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
-    });
-  };
+  ;(function(d, s, c) {
+    var j = d.createElement(s),
+      t = d.getElementsByTagName(s)[0]
+
+    j.src = '//cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js'
+    j.onload = function() {elasticApm.init(c)}
+    t.parentNode.insertBefore(j, t)
+  })(document, 'script', {    
+    serviceName: "chefstore_nl",
+    serverUrl: 'https://rum.chefstore.nl:8200',
+    environment: window.location.host.split(".")[0] == "dev" ? "development" : "production",
+    pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
+  })
 </script>
 
 <?php
@@ -54,7 +50,7 @@ $imageurl = $this->getSkinUrl($logoSrc);
 ?>
 
 <div id="modal" style="display: none;">
-  <img data-src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" class="lazy" />
+  <img data-src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" class="lazy center" height=80 width=416 />
   <h2><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Contact met Chefstore.nl</h2>
   <div style="margin-top: 1em;"><h3>Sales & Advies:</h3>
   <ul class="indented-disc" style="line-height: 1.5em;">

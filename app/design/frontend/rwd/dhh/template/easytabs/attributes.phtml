@@ -14,125 +14,142 @@ $attr_remove_decimals = [
   "hoogte_intern", "breedte_intern", "diepte_intern", 
   "diameter", "breedte", "hoogte", "diepte", "magnetron_output_watt", 
   "grill_output_watt", "aantal_m3_uur", "aantal_deuren", "aantal_roosters", 
-  "aantal_laden", "aantal_kippen", "aantal_kuipen", "aantal_spoelbak",
-  "aantal_platen", "aantal_borden", "aantal_bakken", "aantal_zetsystemen",
-  "aantal_manden", "aantal_pizzas", "aantal_elementen", 
-  "aantal_etages", "aantal_filters", "aantal_branders", "aantal_borden_korven", 
-  "aantal_glas_korven", "aantal_snelheden", "aantal_blikjes", "aantal_wasprogrammas",
-  "eenheid", "capacity_wine_bottles","geluidsniveau","number_of_cooling_zones",
-  "aantal_flessen","cooking_zones",
+  "aantal_kippen", "aantal_kuipen", "aantal_platen", "aantal_borden",
+  "aantal_bakken", "aantal_zetsystemen", "aantal_manden", "aantal_pizzas",
+  "aantal_elementen", "aantal_etages", "aantal_filters", "aantal_branders",
+  "aantal_borden_korven", "aantal_glas_korven", "aantal_snelheden",
+  "aantal_blikjes", "aantal_wasprogrammas", "eenheid", "capacity_wine_bottles",
+  "geluidsniveau", "number_of_cooling_zones", "aantal_flessen",
+  "cooking_zones",
 ];
 
 /* No zero decimals, with number formatting */
 $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
-  "inhoud_wastank_liter", "vermogen_boiler",
+  "inhoud_wastank_liter", "vermogen_boiler", "weight",
 ];
 
 /* Do not show these values */
 $value_skip           = ["N.v.t.", "n.v.t.", "Geen / n.v.t."];
+
+/* Do not show these attribute_codes */
+$code_skip            = [];
 
 $attributes           = [];
 
 if($_additionalgroup = $this->getAdditionalDataCustom()) {
   $attr_remove_decimals = array_flip($attr_remove_decimals);
   $attr_trim_decimals   = array_flip($attr_trim_decimals);
-  // echo '<div class="box-collateral box-additional bxgroupifo">';
   
   foreach($_additionalgroup as $_additional) {
-    // echo "<span class='clzattrgname'>{$this->__($_additional['title'])}</span>";
+    
     foreach($_additional['items'] as $_data) {
-      $value = $_data['value'];
+      $values         = $_data['value'];
+      $code           = $_data['code'];
+      $output_values  = [];
       
-      if(empty($value) || in_array($value, $value_skip, true)) {
-        continue;
-      }
+      foreach($values as $value) {
       
-      /* Pre-processing individual attributes */
-      switch($_data['code']) {
-        case "eenheid":
-          if(($value > 1) === false) {
-            continue 2;
-          }
-          break;
-      }
-      
-      $label = $this->htmlEscape($this->__($_data['label']));
-      $postfix = null;
-     
-      switch($_data['code']) {
-        case "vermogen_kw":
-        case "vermogen":
-          if($value < 5) {
-            $value *= 1000;
-            $postfix = " Watt";
-          } else {
-            $value = number_format($value, 2, ",", ".");
-            $postfix = " kW";
-          }
-          break;
+        if(empty($value) || in_array($value, $value_skip, true)) {
+          continue;
+        }
         
-        case "total_power_watt":
-          if($value  >= 5000) {
-            $value   /= 1000;
-            $value    = number_format($value, 2, ",", ".");
-            $postfix  = " kW";
-          } else {
-            $value = (int) number_format($value, 0, ",", "");
-            $postfix = " Watt";
-          }
-          break;
+        if(empty($code) || in_array($code, $code_skip, true)) {
+          continue;
+        }
         
-        case "weight":
-          if($value < 3) {
-            $value *= 1000;
-            $postfix = " g";
-          } else {
-            $value = number_format($value, 2, ",", ".");
-            $postfix = " kg";
-          }
-          break;
+        /* Pre-processing individual attributes */
+        switch($code) {
+          case "eenheid":
+            if(($value > 1) === false) {
+              continue 2;
+            }
+            break;
+        }
+        
+        $label = $this->htmlEscape($this->__($_data['label']));
+        $postfix = null;
+       
+        switch($code) {
+          case "vermogen_kw":
+          case "vermogen":
+            if($value < 5) {
+              $value *= 1000;
+              $postfix = " Watt";
+            } else {
+              $value = number_format($value, 2, ",", ".");
+              $postfix = " kW";
+            }
+            break;
+          
+          case "total_power_watt":
+            if($value  >= 5000) {
+              $value   /= 1000;
+              $value    = number_format($value, 2, ",", ".");
+              $postfix  = " kW";
+            } else {
+              $value = (int) number_format($value, 0, ",", "");
+              $postfix = " Watt";
+            }
+            break;
+          
+          case "weight":
+            if($value < 3) {
+              $value *= 1000;
+              $postfix = " g";
+            } else {
+              $value = number_format($value, 2, ",", ".");
+              $postfix = " kg";
+            }
+            break;
+          
+          case "hoogte":
+          case "breedte":
+          case "diepte":
+          case "diameter":
+          case "hoogte_intern":
+          case "breedte_intern":
+          case "diepte_intern":
+            $postfix = " mm";
+            break;
 
-        default:
-          $value = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
+          default:
+            $value = $_helper->productAttribute($_product, $value, $code);
+        }
+        
+        if(isset($attr_remove_decimals[$code])) {
+          $value = (int) number_format($value, 0, ",", "");
+        }
+        
+        if(isset($attr_trim_decimals[$code])) {
+          $value = number_format($value, 2, ",", ".");
+          $value = str_replace(",00", null, $value);
+        }
+      
+        /* Post-processing individual attributes */
+        switch($code) {
+          case "number_of_cooling_zones":
+            if($value === 1) $value .= " (Single-Zone)";
+            elseif($value === 2) $value .= " (Dual-Zone)";
+            elseif($value === 3) $value .= " (Triple-Zone)";
+            break;
+        }
+        
+        /* Post-processing all attributes */
+        if($value === "Nee") {
+          $value = "-";
+        }
+        
+        $output_values[] = $value.$postfix;
       }
       
-      if(isset($attr_remove_decimals[$_data['code']])) {
-        $value = (int) number_format($value, 0, ",", "");
+      $output_values = array_unique($output_values);
+      $_output_value = implode("<i style='font-size:8px;color:#adadad;padding:0 5px;' class='fa fa-minus' aria-hidden='true'></i>", $output_values);
+      
+      if(empty($_output_value) === false) {
+        $attributes[$this->__($_additional['title'])][$label] = $_output_value;
       }
-      
-      if(isset($attr_trim_decimals[$_data['code']])) {
-        $value = number_format($value, 2, ",", ".");
-        $value = str_replace(",00", null, $value);
-      }
-      
-      /* Post-processing individual attributes */
-      switch($_data['code']) {
-        case "number_of_cooling_zones":
-          if($value === 1) $value .= " (Single-Zone)";
-          elseif($value === 2) $value .= " (Dual-Zone)";
-          elseif($value === 3) $value .= " (Triple-Zone)";
-          break;
-      }
-      
-      /* Post-processing all attributes */
-      if($value === "Nee") {
-        $value = "-";
-      }
-      
-      $value = $value.$postfix;
-      
-      $attributes[$this->__($_additional['title'])][$label] = $value;
-      /*
-      ?>
-      <dl class="product-specs">
-        <dt class="label"><?php echo $label; ?></dt>
-        <dd class="data"><?php echo $value.$postfix; ?></dd>
-      </dl>
-      <?php
-      */
     }
   }
-  // echo "</div>";
 }
 
 // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251") {
@@ -142,13 +159,11 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
 // }  
 
 if($attributes !== []) {
-  echo '<div class="box-collateral box-additional bxgroupifo">';
+  echo '<div class="box-collateral box-additional bxgroupifo product-specs">';
   foreach($attributes as $group => $subattributes) {
     echo "<span class='clzattrgname'>{$this->__($group)}</span>";
     foreach($subattributes as $label => $value) {
-      ?>
-      <dl class="product-specs"><dt class="label"><?php echo $label; ?></dt><dd class="data"><?php echo $value; ?></dd></dl>
-      <?php
+      echo "<dl><dt>{$label}</dt><dd>{$value}</dd></dl>";
     }
   }
   echo "</div>";

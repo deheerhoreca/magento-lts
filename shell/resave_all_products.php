@@ -1,6 +1,6 @@
 <?php
 
-const DEBUG = true;
+const DEBUG = false;
 
 if(php_sapi_name() !== "cli") {
   header("Location: /");
@@ -30,10 +30,10 @@ if(DEBUG === false) {
 }
 
 /* FILTERS */
-// $supplier_names = ["veba"];
-// $dhh_sku  = "DIA-PCT/10-35WT";
-$fromDate = date('1970-01-01 00:00:00');
-$toDate   = date('Y-m-d H:i:s', strtotime("-1 hour"));
+$supplier_names = ["combisteel"];
+// $dhh_sku  = "GH133";
+// $fromDate = date('1970-01-01 00:00:00');
+// $toDate   = date('Y-m-d H:i:s', strtotime("-1 day"));
 
 $collection = Mage::getModel('catalog/product')->getCollection()
   ->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
@@ -98,9 +98,8 @@ foreach($collection as $product) {
   $product->setData("_hasDataChanges", true);
   
   $product = DeHeerHoreca_Util_Model_Observer::updateProductBeforeSave($product);
-  $product = DeHeerHoreca_Util_Model_Observer::updateProductAfterSave($product);
-  // print_r($product->debug());
   $product->save();
+  $product = DeHeerHoreca_Util_Model_Observer::updateProductAfterSave($product);
 
   $i++;
   unset($product);
@@ -109,9 +108,10 @@ foreach($collection as $product) {
 echo PHP_EOL."Saved {$i} product(s)".PHP_EOL;
 
 if(DEBUG === false) {
-  echo "Reindexing...".PHP_EOL;
+  echo "Re-enabling realtime indexing...".PHP_EOL;
   echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime");
+  echo "Reindexing...".PHP_EOL;
   echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php reindexall");
 } else {
-  echo "Skipping reindex".PHP_EOL;
+  echo "Skipping reindex, did not disable it".PHP_EOL;
 }

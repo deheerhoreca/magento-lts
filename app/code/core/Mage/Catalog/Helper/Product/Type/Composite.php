@@ -157,6 +157,13 @@ class Mage_Catalog_Helper_Product_Type_Composite extends Mage_Core_Helper_Abstra
         $currentTax = Mage::getSingleton('tax/calculation')->getRate($_request);
 
         $_regularPrice = $product->getPrice();
+        
+        // DHH CORE HACK -- replace regular price with MSRP
+        // remove tax because product_options.js will add it again
+        if(empty($product->getMsrp()) === false) {
+          $_regularPrice = $product->getMsrp();
+        }
+        
         $_finalPrice = $product->getFinalPrice();
         if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
             $_priceInclTax = Mage::helper('tax')->getPrice(

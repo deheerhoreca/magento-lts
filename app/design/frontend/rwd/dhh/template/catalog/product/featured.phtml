@@ -13,7 +13,7 @@ $collection = Mage::getModel('catalog/product')
   ->addFieldToFilter([['attribute' => 'featured', 'eq' => true]])
   ->addOrder('name', 'ASC')
   ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
-  ->setPageSize(16)
+  ->setPageSize(24)
   ->setCurPage(1)
   ->load();
 
@@ -103,7 +103,7 @@ $catid                  = null;
     }
   }
 </style>
-<span class='h1 center' style='margin-bottom: 1em;'>Top Sellers:</span>
+
 <div class="category-products">
   <?php
 
@@ -185,20 +185,6 @@ $catid                  = null;
         $product_info .=  '<li class="angle_before">'.($attribute_value/10).'cm breed</li>';
       }
     }
-
-    if($catid !== 72) {
-      $attribute_value = $_product->getAttributeText('type_koeling');
-      if($attribute_value !=''){
-        $product_info .=  '<li class="angle_before">Koelmethode: '.$attribute_value.'</li>';
-      }
-    }
-
-    if($catid === 72) {
-      $attribute_value = $_product->getInhoudAantalGn();
-      if($attribute_value !='') {
-        $product_info .=  '<li class="angle_before">'.$attribute_value.' x '.$gnvalue.' GN</li>';
-      }
-    }
     
     $attribute_value = $_product->getData('eenheid');
     if($attribute_value > 1) {
@@ -207,14 +193,6 @@ $catid                  = null;
     $attribute_value = $_product->getAttributeText('size');
     if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
       $product_info .=  "<li class='angle_before'>Maat: {$attribute_value}</li>";
-    }
-    $attribute_value = $_product->getData('materiaal');
-    if(strlen($attribute_value) > 0) {
-      $product_info .=  "<li class='angle_before'>{$attribute_value}</li>";
-    }
-    $attribute_value = $_product->getData('serie');
-    if(strlen($attribute_value) > 0) {
-      $product_info .=  "<li class='angle_before'>Serie: {$attribute_value}</li>";
     }
     
     /* Warranty */
@@ -309,6 +287,12 @@ $catid                  = null;
     $attribute_value = $_product->getAantalM3Uur();
     if(strlen($attribute_value) > 0) {
       $highlights[] = round($attribute_value, 2)." m3";
+    }
+    
+    /* Automatic Label: Product */
+    $productlabel   = $_product->getProductLabel();
+    if(isset($productlabel) === true) {
+      $html .= "<span style='width:100%; padding: 0;' class=\"lblprolist\">{$productlabel}</span>";
     }
     
     $price_html = $productBlock->getPriceHtml($_product, true);
