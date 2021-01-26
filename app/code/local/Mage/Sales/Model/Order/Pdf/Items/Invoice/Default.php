@@ -45,25 +45,22 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
         $lines  = array();
 
         // draw Product name
+        $clean_name = $item->getName();
+        $clean_name = str_replace(["-", "|", $this->getSku($item)], null, $clean_name);
+        $clean_name = trim($clean_name);
+        
         $lines[0] = array(array(
-            'text' => Mage::helper('core/string')->str_split($item->getName(), 35, true, true),
+            'text' => Mage::helper('core/string')->str_split($clean_name, 43-15, true, true),
             'feed' => 35,
         ));
-
+        
         // draw SKU
         $lines[0][] = array(
             'text'  => Mage::helper('core/string')->str_split($this->getSku($item), 17),
-            'feed'  => 290,
+            'feed'  => 330,
             'align' => 'right'
         );
-
-        // draw QTY
-        $lines[0][] = array(
-            'text'  => $item->getQty() * 1,
-            'feed'  => 435,
-            'align' => 'right'
-        );
-
+        
         // draw item Prices
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
@@ -101,8 +98,14 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
             );
             $i++;
         }
-
-
+        
+        // draw QTY
+        $lines[0][] = array(
+            'text'  => $item->getQty() * 1,
+            'feed'  => 465,
+            'align' => 'right'
+        );
+        
         // custom options
         $options = $this->getItemOptions();
         if ($options) {

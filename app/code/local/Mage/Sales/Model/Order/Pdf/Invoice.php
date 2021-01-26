@@ -59,28 +59,28 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('SKU'),
-            'feed'  => 290,
+            'feed'  => 320,
             'align' => 'right',
             'font'  => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Qty'),
-            'feed'  => 435,
+            'feed'  => 465,
             'align' => 'right',
             'font'  => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Price'),
-            'feed'  => 360,
+            'feed'  => 390,
             'align' => 'right',
             'font'  => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Subtotal'),
-            'feed'  => 565,
+            'feed'  => 620,
             'align' => 'right',
             'font'  => 'bold',
         );
@@ -164,7 +164,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
                 Mage::app()->getLocale()->revert();
             }
         }
-		    $this->insertFooter($page);
+		    $this->insertFooter(end($pdf->pages));
         $this->_afterGetPdf();
         return $pdf;
     }

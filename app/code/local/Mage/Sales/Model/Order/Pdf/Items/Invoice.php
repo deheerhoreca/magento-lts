@@ -46,8 +46,8 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         /* DHH */ $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $this->y, 570, $this->y -15);
-        $this->y -= 10;
+        $page->drawRectangle(20, $this->y, 570, $this->y -15);
+        $this->y -= 50;
         /* DHH */ $page->setFillColor(new Zend_Pdf_Color_RGB(255, 255, 255));
 
         //columns headers
@@ -58,19 +58,19 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('SKU'),
-            'feed'  => 290,
+            'feed'  => 330,
+            'align' => 'right'
+        );
+        
+        $lines[0][] = array(
+            'text'  => Mage::helper('sales')->__('Price'),
+            'feed'  => 395,
             'align' => 'right'
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Qty'),
-            'feed'  => 435,
-            'align' => 'right'
-        );
-
-        $lines[0][] = array(
-            'text'  => Mage::helper('sales')->__('Price'),
-            'feed'  => 360,
+            'feed'  => 465,
             'align' => 'right'
         );
 
