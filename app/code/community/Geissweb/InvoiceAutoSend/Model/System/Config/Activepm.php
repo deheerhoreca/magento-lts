@@ -29,13 +29,14 @@ class Geissweb_InvoiceAutoSend_Model_System_Config_Activepm {
         foreach ($payments as $paymentCode => $paymentModel)
         {
             $paymentTitle = Mage::getStoreConfig('payment/'.$paymentCode.'/title');
-            if($paymentModel->canUseCheckout() == true)
-            {
+            // DHH CORE HACK
+            // if($paymentModel->canUseCheckout() == true)
+            // {
                 $methods[$paymentCode] = array(
                     'label'   => $paymentTitle,
                     'value' => $paymentCode,
                 );
-            }
+            // }
         }
         return $methods;
     }
