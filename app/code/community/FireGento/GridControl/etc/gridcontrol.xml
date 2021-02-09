@@ -14,9 +14,9 @@
         <remove/>
       </websites>
 
-      <action>
-        <remove/>
-      </action>
+      <!-- <action> -->
+        <!-- <remove/> -->
+      <!-- </action> -->
 
       <eol>
         <add>
@@ -136,7 +136,7 @@
     <sales_order_grid>
       <websites>
         <remove/>
-      </websites>
+      </websites>      
     </sales_order_grid>
     
     <!-- Attribute Grid -->

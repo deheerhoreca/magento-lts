@@ -52,15 +52,15 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
 
         //columns headers
         $lines[0][] = array(
-            'text' => Mage::helper('sales')->__('Products'),
-            'feed' => 35,
+            'text' => Mage::helper('sales')->__('Product'),
+            'feed' => 25,
             'font' => 'bold',
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('SKU'),
-            'feed'  => 320,
-            'align' => 'right',
+            'feed'  => 270,
+            'align' => 'left',
             'font'  => 'bold',
         );
 
@@ -80,7 +80,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Subtotal'),
-            'feed'  => 620,
+            'feed'  => 560,
             'align' => 'right',
             'font'  => 'bold',
         );
@@ -147,6 +147,11 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
                 $page,
                 Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId()
             );
+            
+            $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen", 200, $top-20, 'UTF-8');
+            $page->drawText("over te maken onder vermelding van het factuurnummer", 200, $top-30, 'UTF-8');
+            $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 200, $top-45, 'UTF-8');
+            
             /* Add table */
             $this->_drawHeader($page);
             /* Add body */
@@ -180,7 +185,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         /* Add new table head */
         $page = $this->_getPdf()->newPage(Zend_Pdf_Page::SIZE_A4);
         $this->_getPdf()->pages[] = $page;
-        $this->y = 800;
+        $this->y = 75;
         if (!empty($settings['table_header'])) {
             $this->_drawHeader($page);
         }
@@ -191,32 +196,32 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
     {
 		    $this->_setFontRegular($page, 10);
 
-        $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen over te maken onder vermelding van het factuurnummer", 35, 80, 'UTF-8');
-        $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 35, 65, 'UTF-8');
+        // $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen over te maken onder vermelding van het factuurnummer", 35, 80, 'UTF-8');
+        // $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 35, 65, 'UTF-8');
 
         $page->setFillColor(new Zend_Pdf_Color_Html('#4F81BD'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
 		    $width = 842;
-        $height = 60;
+        $height = 50;
         $y  =   $height /2.5;
         $page->drawRectangle(1, 20, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-    		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+    		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/Corbel_Bold.ttf');
      		$page->setFont($font, 10);
-    		$page->drawText('Non-food horeca groothandel nr 1 voor hotels, restaurants, bedrijfskantines, scholen, catering, gemeentes, grootkeukens en café\'s', 30, 38, 'UTF-8');
+    		$page->drawText('Chefstore.nl: Alles voor de Chef', 250, 31, 'UTF-8');
 
         $page->setFillColor(new Zend_Pdf_Color_Html('#1F497D'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
 		    $width = 842;
-        $height = 30;
+        $height = 25;
         $y  =   $height /2.5;
         $page->drawRectangle(1, 1, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-		    $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+    		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/Corbel_Bold.ttf');
  		    $page->setFont($font, 10);
-    		$page->drawText('De Heer Horeca B.V. | Trasmolenlaan 12 | 3447GZ Woerden | Nederland | info@chefstore.nl | +31 (0) 85-0441003', 70, 10, 'UTF-8');
+    		$page->drawText('De Heer Horeca B.V. Johan Huizingalaan 763A 1066 VH Amsterdam Nederland info@chefstore.nl +31 (0) 85-0441003', 70, 10, 'UTF-8');
 
         /*
         $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));

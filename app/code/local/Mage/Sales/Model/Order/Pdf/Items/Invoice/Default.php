@@ -50,22 +50,22 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
         $clean_name = trim($clean_name);
         
         $lines[0] = array(array(
-            'text' => Mage::helper('core/string')->str_split($clean_name, 43-15, true, true),
-            'feed' => 35,
+            'text' => Mage::helper('core/string')->str_split($clean_name, 65-15, true, true),
+            'feed' => 25,
         ));
         
         // draw SKU
         $lines[0][] = array(
             'text'  => Mage::helper('core/string')->str_split($this->getSku($item), 17),
-            'feed'  => 330,
-            'align' => 'right'
+            'feed'  => 270,
+            'align' => 'left'
         );
         
         // draw item Prices
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
-        $feedPrice = 395;
-        $feedSubtotal = $feedPrice + 170;
+        $feedPrice = 400;
+        $feedSubtotal = $feedPrice + 160;
         foreach ($prices as $priceData){
             if (isset($priceData['label'])) {
                 // draw Price label
@@ -86,14 +86,12 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
             $lines[$i][] = array(
                 'text'  => $priceData['price'],
                 'feed'  => $feedPrice,
-                'font'  => 'bold',
                 'align' => 'right'
             );
             // draw Subtotal
             $lines[$i][] = array(
                 'text'  => $priceData['subtotal'],
                 'feed'  => $feedSubtotal,
-                'font'  => 'bold',
                 'align' => 'right'
             );
             $i++;
@@ -136,7 +134,7 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
 
         $lineBlock = array(
             'lines'  => $lines,
-            'height' => 20
+            'height' => 18
         );
 
         $page = $pdf->drawLineBlocks($page, array($lineBlock), array('table_header' => true));

@@ -18,6 +18,11 @@
                     <element name="tm_field3" type="xsd:string" minOccurs="0" />
                     <element name="tm_field4" type="xsd:string" minOccurs="0" />
                     <element name="tm_field5" type="xsd:string" minOccurs="0" />
+                    <element name="tm_field6" type="xsd:string" minOccurs="0" />
+                    <element name="tm_field7" type="xsd:string" minOccurs="0" />
+                    <element name="tm_field8" type="xsd:string" minOccurs="0" />
+                    <element name="tm_field9" type="xsd:string" minOccurs="0" />
+                    <element name="tm_field10" type="xsd:string" minOccurs="0" />
                 </all>
             </complexType>
         </schema>

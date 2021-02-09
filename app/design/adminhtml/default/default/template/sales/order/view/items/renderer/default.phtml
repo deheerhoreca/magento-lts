@@ -23,10 +23,16 @@
  * @copyright   Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+$_item = $this->getItem();
+$this->setPriceDataObject($_item);
+$_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+$_imageUrl = $this->helper('catalog/image')->init($_product, 'small_image')->resize(120, 120);
 ?>
-<?php $_item = $this->getItem() ?>
-<?php $this->setPriceDataObject($_item) ?>
 <tr<?php if (!$this->canDisplayGiftmessage()): ?> class="border"<?php endif; ?>>
+    <td class='a-center'>
+      <img style="max-width:60px; max-height:60px;" src="<?php echo $_imageUrl ?>" />
+    </td>
     <td>
         <?php if ($this->canDisplayContainer()): ?>
         <div id="<?php echo $this->getHtmlId() ?>" class="item-container">
@@ -37,8 +43,11 @@
         <?php if ($this->canDisplayContainer()): ?>
         </div>
         <?php endif ?>
+        <a target="_blank" rel="external" href="<?php echo $_product->getProductUrl();?>">Chefstore.nl</a> - 
+        <a target="_blank" href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', ['id' => $_product->getId()])?>"> Admin</a>
     </td>
     <td class="a-center"><?php echo $_item->getStatus() ?></td>
+    <td class="a-left"><?php print_r($_product->getAttributeText("supplier")); ?></td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('original_price') ?></td>
     <td class="a-right">
         <?php if ($this->helper('tax')->displaySalesBothPrices() || $this->helper('tax')->displaySalesPriceExclTax()): ?>

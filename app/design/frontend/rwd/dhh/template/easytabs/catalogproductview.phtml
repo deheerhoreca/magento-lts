@@ -164,6 +164,7 @@ if($i < $max_highlighted_attributes) {
   $attribute_names = ["breedte", "diepte", "hoogte"];
   $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
   $title = "Afmetingen (b x d x h)";
+  $name  = "Afmetingen";
   foreach($attribute_names as $attribute_name) {
     $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
     if(empty($values[$attribute_name]) === false) {
@@ -178,6 +179,7 @@ if($i < $max_highlighted_attributes) {
       "image" => $image,
       "title" => $title,
       "text"  => $text,
+      "name"  => $name,
     ];
     $i++;
     $dimension_pair_set = true;
@@ -210,7 +212,7 @@ if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   $attribute_name = "diameter";
   $image = "{$skn}frontend/rwd/dhh/images/diameter.svg";
-  $title = "Diameter (mm)";
+  $title = "Diameter";
   $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false) {
     $highlights[] = [
@@ -228,11 +230,11 @@ if($i < $max_highlighted_attributes) {
   $title = "Afsluitbaar";
   $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if($text === "Ja") {
-    $text = "Afsluitbaar";
     $highlights[] = [
       "image" => $image,
       "title" => $title,
       "text"  => $text,
+      "name"  => $title,
     ];
     $i++;
   }
@@ -303,10 +305,10 @@ if($i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   $attribute_name = "aantal_roosters";
   $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
-  $title = "Aantal roosters";
+  $title = "Roosters";
   $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false) {
-    $text = "{$text} roosters";
+    $text = "{$text}";
     $highlights[] = [
       "image" => $image,
       "title" => $title,
@@ -319,7 +321,7 @@ if($i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   $attribute_name = "garantie";
   $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
-  $title = "Garantietermijn";
+  $title = "Garantie";
   $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false && $text !== "12 maanden") {
     $text = "{$text}";
@@ -433,11 +435,11 @@ if($i < $max_highlighted_attributes) {
   $title = "Verlichting";
   $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false && $text === "Ja") {
-    $text = "Verlichting";
     $highlights[] = [
       "image" => $image,
       "title" => $title,
       "text"  => $text,
+      "name"  => $title,
     ];
     $i++;
   }
@@ -446,7 +448,7 @@ if($i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   $attribute_name = "aantal_flessen";
   $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
-  $title = "Flessen";
+  $title = "Flesjes";
   $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false && $text !== "Nee") {
     $text = "{$text} X";
@@ -538,7 +540,8 @@ if($i < $max_highlighted_attributes) {
 
 $hlstr = null;
 foreach($highlights as $key => $highlight) {
-  $hlstr .= "<li><img class='lazy no-transition' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span>{$highlight["text"]}</span></li>";
+  $name = $highlight["name"] ?? $highlight["title"];
+  $hlstr .= "<li><span class='key small gray mb-1'>{$name}:</span><img class='lazy no-transition' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span class='value'>{$highlight["text"]}</span></li>";
 }
 
 /* Impossible to influence the cross sell query, so filtering out EOLs afterwards */
@@ -848,14 +851,8 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
     <?php
     if(empty($hlstr) === false) {
       ?>
-      <div class="probottomdv">
+      <div class="my-3 py-1 pt-1 product-highlight-box">
         <a class="anchor" id="highlights"></a>
-        <?php
-        // An attempt to reduce the attention to sections with just 1 or 2 highlights
-        if(sizeof($highlights) > 2) {
-          echo "<h2>".$this->__('Highlights')."</h2>";
-        }
-        ?>
         <div class="content center">
           <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
         </div>
@@ -868,11 +865,15 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
 
     /* Product Video */
     if(empty($pvideo) === false) {
+      if(strstr("http", $pvideo) === false) {
+        // Best way is to just store the youtube ID and build the URL
+        $pvideo = "https://www.youtube-nocookie.com/embed/{$pvideo}?modestbranding=1&origin=https://www.chefstore.nl&loop=1&rel=1&hl=nl&controls=1";
+      }
       ?>
-      <div class="probottomdv">
+      <div class="py-1">
         <a class="anchor" id="video"></a>
         <div class="content center">
-          <iframe class="lazy" width="444" height="250" data-src="<?php echo $pvideo; ?>" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe class="lazy" width="534" height="300" data-src="<?php echo $pvideo; ?>" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style='border:0;max-width:100%;' frameborder="0"></iframe>
         </div>
       </div>
       <?php
@@ -881,7 +882,7 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
     /* Product Description */
     if(strlen($product_description) > 10) {
       ?>
-      <div class="probottomdv std justify" id="product-detail-description">
+      <div class="py-1 std justify" id="product-detail-description">
         <a class="anchor" id="description"></a>
         <?php echo $product_description; ?>
       </div>

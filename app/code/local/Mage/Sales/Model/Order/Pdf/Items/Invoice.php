@@ -53,7 +53,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         //columns headers
         $lines[0][] = array(
             'text' => Mage::helper('sales')->__('Products'),
-            'feed' => 35
+            'feed' => 25
         );
 
         $lines[0][] = array(

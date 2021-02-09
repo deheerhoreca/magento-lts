@@ -77,11 +77,11 @@ small,
 .product-detail-tagline {
   padding: 0.5em;
   font-size: 1.1em;
-  background-color: #30a40017;
+  background-color: #17a24917;
   border-radius: 0.5em;
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .15);
-  border: 1px solid #30a400;
-  color: #30a400;
+  border: 1px solid #17a249;
+  color: #17a249;
 }
 
 .product-list-tagline {
@@ -370,7 +370,7 @@ h6 {
 }
 
 .green {
-  color: #30a400 !important;
+  color: #17a249 !important;
 }
 
 .gray {
@@ -390,7 +390,7 @@ h6 {
 }
 
 .bg-green {
-  background-color: #30a400 !important;
+  background-color: #17a249 !important;
 }
 
 .bg-gray {
@@ -403,6 +403,10 @@ h6 {
 
 .bg-blanc {
   background-color: #fff !important;
+}
+
+.bg-lightgray {
+  background-color: #929a9c !important;
 }
 
 .green_checkbox_before,
@@ -1280,7 +1284,7 @@ table[id^=product-attribute-specs-table-] {
 }
 
 .availability.in-stock {
-  color: #30a400;
+  color: #17a249;
 }
 
 .availability.available-soon,
@@ -1835,7 +1839,7 @@ div.paypal-logo span a img {
 }
 
 .success {
-  color: #30a400;
+  color: #17a249;
 }
 
 .error,
@@ -1897,13 +1901,13 @@ div.paypal-logo span a img {
 }
 
 .messages .success-msg li {
-  border-left: 5px solid #30a400;
+  border-left: 5px solid #17a249;
   background-color: #eff5ea;
   color: #000;
 }
 
 .messages .success-msg li:before {
-  border-left: 6px solid #30a400;
+  border-left: 6px solid #17a249;
 }
 
 .page-popup {
@@ -3757,7 +3761,7 @@ button.btn {
 }
 
 .btn-lease {
-  background-color: #30a400 !important;
+  background-color: #17a249 !important;
 }
 
 .lblenergylabel {
@@ -12681,8 +12685,8 @@ body.checkout-cart-index div.pgcrtleft td.product-cart-actions .input-text.qty {
 }
 
 .checkout-cart-index .messages .success-msg li {
-  border: 1px solid #30a400;
-  border-left: 5px solid #30a400;
+  border: 1px solid #17a249;
+  border-left: 5px solid #17a249;
   background-color: #eff5ea;
   color: #000;
 }
@@ -13342,11 +13346,14 @@ body.checkout-cart-index .clzulres li {
 
 .product-highlights li span {
   display: block;
-  height: 35px;
   vertical-align: middle;
   text-align: center;
   font-weight: 600;
   font-size: .9em;
+}
+
+.product-highlights li .value {
+  height: 35px;
 }
 
 .product-list-highlights {
@@ -13354,17 +13361,18 @@ body.checkout-cart-index .clzulres li {
 }
 
 .product-list-highlights li {
-  padding: 0em .5em !important;
+  padding: 0em 0.3em !important;
   display: inline-block;
-  margin: .3em 1em .3em 0;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 9px;
-  background: #dddddd;
-  color: #2c2c2c;
+  margin: 0.3em 0.5em .3em 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #ededed;
+  color: #414141;
   font-weight: 600;
   font-size: 12px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
+  border: 1px solid rgb(229 229 229);
 }
 
 .product-list-highlights li:first-child {
@@ -13588,12 +13596,12 @@ div.box-collateral.box-up-sell .product-name {
 }
 
 .buyblock-usp {
-  color: #30a400;
+  color: #17a249;
   line-height: 2em;
 }
 
 .clzsoldout {
-  color: red;
+  color: #595959;
   line-height: 2em;
 }
 
@@ -14071,7 +14079,8 @@ div.cross-sell-product {
 div.category-products ul.products-grid li.item:hover,
 div.cross-sell-product:hover,
 ul#upsell-product-table li:hover,
-ul.products-grid li.item:hover {
+/* ul.products-grid li.item:hover */
+{
   border: 1px solid #ccc;
 }
 
@@ -14380,11 +14389,12 @@ h2.product-name a {
 
 .new-tab-contant-text {
   display: inline-block;
-  margin-bottom: 15px;
-  padding: 5px;
+  padding: .5em .7em;
   width: 100%;
   border: 1px solid #cacaca;
+  border-radius: .5em;
   background-color: #f3f3f3;
+  box-shadow: 0px 3px 15px rgb(0 0 0 / 15%);
 }
 
 .new-contant {
@@ -15095,7 +15105,7 @@ div.category-products ul.products-grid li.item .product-info {
 div.category-products ul.products-grid li.item .info {
   display: inline-block;
   margin-bottom: 3px;
-  min-height: 13em;
+  min-height: 12em;
   width: 100%;
 }
 
@@ -15117,8 +15127,8 @@ ul.products-grid-mini-narrow>li {
 
 div.category-products ul.products-grid li.item,
 ul.products-grid>li {
-  margin: .5em .5em;
-  width: calc((100%/3) - (2em/3));
+  margin: .2em .5em;
+  width: calc((100%/4) - (3em/4));
 }
 
 ul.products-grid-mini>li {
@@ -15143,7 +15153,7 @@ div.category-products ul.products-grid li.item.first {
 }
 
 body.catalog-category-view div.category-products ul.products-grid li.item {
-  min-height: 41em;
+  min-height: 36em;
 }
 
 div.category-products ul.products-grid li.item {
@@ -15310,6 +15320,18 @@ ul.html5-grid-4-col {
   transition-duration: 300ms;
   transition-timing-function: ease;
   transform: scale(1.25);
+}
+
+.products-grid li img {
+  transition: transform 150ms ease;
+  padding-bottom: 6px;
+}
+
+.products-grid li:hover img {
+  transition-property: transform;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+  transform: scale(1.1);
 }
 
 img.category-thumb {

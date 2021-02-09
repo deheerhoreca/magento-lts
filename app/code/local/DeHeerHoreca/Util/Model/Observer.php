@@ -314,10 +314,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         break;
     }
     
+    if(is_numeric($entity_id)) $entity_id = intval($entity_id);
+    
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.created", date("c"));
     Mage::helper("deheerhoreca_util/util")->addToClickLog("client.ip", Mage::helper("deheerhoreca_util/util")->getUserIP());
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.action", $action);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.id", $entity_id);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.module", "mage-clicks");
     // Mage::helper("deheerhoreca_util/util")->addToClickLog("url.full", $full_url);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("url.path", $path);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("host.name", gethostname());
