@@ -13,7 +13,8 @@ $catid                        = null;
 $carct                        = Mage::registry('current_category');
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
-$short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104, 3, 544, 10];
+$short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104, 3, 544];
+$short_name_parent_cats       = [3];
 $max_product_info_items       = 3;
 $max_product_highlight_items  = 6;
 $category_thumbs_dimensions   = 140;
@@ -24,8 +25,13 @@ $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipp
  * Bug fix: Using require_stock_items there was a bug that lead
  * to wrong stock info on listview during flat index rebuild.
  * addItemsToProducts() seems to add stock data correctly even during a reindex
+ *
+ * However, with addItemsToProducts() we are missing essential stock data like
+ * manage_stock, leading to wrong results.
+ *
+ * We now use both as an experiment...
  */
-// $_productCollection->setFlag('require_stock_items', true);
+$_productCollection->setFlag('require_stock_items', true);
 Mage::getModel('catalogInventory/stock')->addItemsToProducts($_productCollection);
 
 /*
@@ -530,10 +536,17 @@ if($_collectionSize > 0) {
       
       /* Product name */
       $product_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
-      $product_short_name = $_product->getData("name_short");
-      if(in_array($catid, $short_name_cats) === true && strlen($product_short_name) > 0) {
-        $product_name = $product_short_name;
+      if(in_array($catid, $short_name_cats)) {
+        $product_name = $_product->getData("name_short");
+      } elseif(!empty(array_intersect($parent_categories_ids, $short_name_parent_cats))) {
+        $product_name = $_product->getData("name_short");
       }
+      
+      // if($_SERVER["REMOTE_ADDR"] === "85.144.117.179" && isset($_GET['nofpc'])) {
+        // printr($parent_categories_ids);
+        // printr($short_name_parent_cats);
+        // printr($product_name);
+      // }
       
       ?>
       <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">

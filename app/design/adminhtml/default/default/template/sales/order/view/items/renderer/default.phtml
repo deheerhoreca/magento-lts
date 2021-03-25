@@ -43,8 +43,16 @@ $_imageUrl = $this->helper('catalog/image')->init($_product, 'small_image')->res
         <?php if ($this->canDisplayContainer()): ?>
         </div>
         <?php endif ?>
+        <?php // DHH CORE HACK ?>
         <a target="_blank" rel="external" href="<?php echo $_product->getProductUrl();?>">Chefstore.nl</a> - 
-        <a target="_blank" href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', ['id' => $_product->getId()])?>"> Admin</a>
+        <a target="_blank" rel="external" href="https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsL2ludGVsLnBocA%3D%3D&identifier=<?php echo $_product->getSku()?>">Intel</a> -
+        <a target="_blank" href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', ['id' => $_product->getId()])?>">Admin</a> - 
+        <?php if(empty($_product->getEan()) === false) {
+          ?>
+          <a refl="external noreferrer" target="_blank" href="https://www.bol.com/nl/s/?searchtext=<?php echo $_product->getEan(); ?>">Bol.com</a>
+          <?php
+        }
+        ?>
     </td>
     <td class="a-center"><?php echo $_item->getStatus() ?></td>
     <td class="a-left"><?php print_r($_product->getAttributeText("supplier")); ?></td>

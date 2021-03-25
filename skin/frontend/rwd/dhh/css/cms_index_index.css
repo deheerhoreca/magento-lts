@@ -93,3 +93,35 @@
   font-weight: 700;
   font-size: 1.5em;
 }
+
+.scale-1 img,
+.scale-2 img {
+  transition: transform 150ms ease;
+}
+
+.scale-1:hover img,
+.scale-2:hover img {
+  transition-property: transform;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
+.scale-1:hover img {
+  transform: scale(1.05);
+}
+
+.scale-2:hover img {
+  transform: scale(1.15);
+}
+
+ul#brands li {
+  float: left;
+  width: 130px;
+  list-style: none;
+  padding: 0 1em;
+  max-width: 12%;
+}
+
+ul#brands li:last-child {
+  margin-right: 0!important;
+}

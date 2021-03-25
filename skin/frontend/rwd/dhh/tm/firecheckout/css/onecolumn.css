@@ -239,7 +239,7 @@
 .firecheckout-set #checkout-payment-method-load { padding: 0; }
 
 .firecheckout-set .step-shipping-payment-method .col-1,
-.firecheckout-set .step-shipping-payment-method .col-2 { width: 75%; }
+.firecheckout-set .step-shipping-payment-method .col-2 { width: 86%; }
 
 .firecheckout-set .gift-messages { margin: 15px 0; }
 .firecheckout-set .gift-messages-form h4 { margin-bottom: 5px; }

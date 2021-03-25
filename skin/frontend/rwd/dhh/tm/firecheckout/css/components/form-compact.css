@@ -106,7 +106,7 @@
 .fc-form-compact .dob-day label,
 .fc-form-compact .dob-month label,
 .fc-form-compact .dob-year label {
-    display: none;
+    /* display: none; */
 }
 
 /* Fix for not working placeholder on DOB element */

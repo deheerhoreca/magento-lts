@@ -1,0 +1,71 @@
+<?php
+# KEEP IN SYNC:
+# - app/design/frontend/rwd/dhh/template/paysafecash/success.phtml
+# - app/design/frontend/rwd/dhh/template/checkout/success.phtml
+?>
+<style>
+.info-box-cart-success {
+  background: url(/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
+  background-size: contain;
+}
+</style>
+<div class="info-box info-box-cart-success">
+  <div class="info-box-inner">
+    <div class="page-title xxl"><h1>Bedankt!</h1></div>
+    <p>Alles is goed gegaan, dank je wel voor je bestelling!</p>
+    <h1 style="padding-top: 1em;">Wat gaan wij nu doen?</h1>
+    <ol class="disc-list">
+      <li>We sturen je order direct naar het magazijn of de leverancier</li>
+      <li>Indien nodig nemen wij contact op om de details van de order en/of de levering door te nemen</li>
+      <li>Indien het pakket mee kan met de postbode, dan zal het via reguliere pakketpost komen. Het kan ook zijn dat het item met een transporteur wordt bezorgd. De meeste transporteurs ondersteunen Track &amp; Trace, en die krijg je van ons zodra wij hem hebben.</li>
+    
+    <?php if ($this->getOrderId()):?>
+      <?php if ($this->getCanViewOrder()) :?>
+        <li><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></li>
+      <?php else :?>
+        <li><strong><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></strong></p>
+      <?php endif;?>
+        <li>Je krijgt een e-mail met je orderbevestiging. Natuurlijk sturen wij ook order updates daarnaartoe</li>
+      <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+        <li>
+          <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+          <?php echo $this->getChildHtml() ?>
+        </li>
+      <?php endif;?>
+    <?php endif;?>
+    
+    <?php if ($this->getAgreementRefId()): ?>
+      <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+    <?php endif;?>
+
+    <?php if ($profiles = $this->getRecurringProfiles()):?>
+      <p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+      <ul class="disc">
+        <?php foreach($profiles as $profile):?>
+          <?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+          <li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+        <?php endforeach;?>
+      </ul>
+    <?php endif;?>
+    </ol>
+    
+    <button type="button" style="margin: 2em auto;" class="center button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Continue Shopping')) ?>" onclick="window.location='<?php echo $this->getUrl() ?>'">
+      Naar Chefstore.nl
+    </button>
+  
+  </div>
+</div>
+
+<?php /* Clickcease.com Conversion tracking */ ?>
+
+<script>
+  ccConVal = 0;
+  var script = document.createElement("script");
+  script.async = true;
+  script.type = "text/javascript";
+  var target = 'https://www.clickcease.com/monitor/cccontrack.js';
+  script.src = target; var elem = document.head; elem.appendChild(script);
+</script>
+<noscript>
+  <a href="https://www.clickcease.com" rel="nofollow"><img src="https://monitor.clickcease.com/conversions/conversions.aspx?value=0" alt="ClickCease"/></a>
+</noscript>

@@ -134,9 +134,16 @@
     <!-- Orders Grid -->
 
     <sales_order_grid>
-      <websites>
+      <!-- <store_id> -->
+        <!-- <remove/> -->
+      <!-- </store_id> -->
+      <base_grand_total>
         <remove/>
-      </websites>      
+      </base_grand_total>
+      <action>
+        <remove/>
+      </action>
+      
     </sales_order_grid>
     
     <!-- Attribute Grid -->

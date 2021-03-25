@@ -89,7 +89,9 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
             continue;
           }
           
-          if($_crumbInfo['link'] && ($_crumbInfo['last'] !== true || $_product)) {
+          if($_crumbName === "home") {
+            echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'><i class='fa fa-home'></i></a>";
+          } elseif($_crumbInfo['link'] && ($_crumbInfo['last'] !== true || $_product)) {
             echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'>{$label}</a>";
           } else {
             echo "<strong>{$label}</strong>";

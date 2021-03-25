@@ -16,6 +16,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute('gross_margin_perc');
     $product->lockAttribute('gross_margin_euro');
     $product->lockAttribute('last_auto_stock');
+    $product->lockAttribute('supplier_description');
+    $product->lockAttribute('last_stock_info_date');
   }
   
   // Also used directly in resave_all_products.php
@@ -57,10 +59,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("txtstockdate", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Back in stock date removed");
       }
-      if($product->getData("skip_auto_stock") !== "1") {
-        $product->setData("skip_auto_stock", "1");
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Excluded from stock updates");
-      }
+//      if($product->getData("skip_auto_stock") !== "1") {
+//        $product->setData("skip_auto_stock", "1");
+//        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Excluded from stock updates");
+//      }
       if(empty($product->getData("product_label")) === false) {
         $product->setData("product_label", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");

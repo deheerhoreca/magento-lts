@@ -100,6 +100,7 @@ try {
         [
           Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
           Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
+          Mage_Catalog_Model_Product_Visibility::VISIBILITY_SEARCH
         ]
       );
     

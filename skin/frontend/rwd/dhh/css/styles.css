@@ -2237,18 +2237,6 @@ ul.indented-disc {
   background: #fff;
 }
 
-ul#brands li {
-  float: left;
-  width: 144px;
-  list-style: none;
-  padding: 0 1em;
-  max-width: 12%;
-}
-
-ul#brands li:last-child {
-  margin-right: 0!important;
-}
-
 .container-wrapper .hero-title {
   margin: 0 auto;
   width: 70%;
@@ -14704,11 +14692,6 @@ div.blogcontainer a {
   background-size: contain;
 }
 
-.info-box-cart-success {
-  background: url(/skin/frontend/rwd/dhh/images/topklaas.jpg) 90% 90% no-repeat;
-  background-size: contain;
-}
-
 .info-box-inner {
   max-width: 35em;
 }
@@ -14727,7 +14710,6 @@ div.blogcontainer a {
 #header-cart.skip-active {
   display: block;
 }
-
 
 /*
  * Vanilla Lazyload

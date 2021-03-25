@@ -740,6 +740,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
       // echo "<pre>";
       // printr($stock_data);
+      // printr($product->getStockItem()->debug());
       // echo "</pre>";
     // }
     
