@@ -1,0 +1,127 @@
+.alert {
+  padding: 10px;
+  background-color: #ffd2d2;
+  /* Red */
+  color: #3e3e3e;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Frontpage banners */
+
+.fp-banner {
+  transition: opacity .2s, visibility .2s;
+  opacity: 1;
+}
+
+.fp-banner:hover {
+  transition: opacity .2s, visibility .2s;
+  cursor: pointer;
+  opacity: .8;
+}
+
+.fp-banner img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  /* border: 1px solid #ddd; */
+}
+
+.fp-banner-product-image {
+  position: relative;
+  height: 10rem;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.fp-banner-smile-upper {
+  /* overflow: visible; */
+  /* position: fixed; */
+  width: 100%;
+  /* height: 162px; */
+  /* left: 0; */
+  /* top: 0; */
+  transform: matrix(1,0,0,1,0,0);
+  margin-top: -27%;
+  vertical-align: top;
+}
+
+.fp-banner-smile-lower {
+  overflow: visible;
+  /* position: absolute; */
+  width: 80%;
+  /* height: 100%; */
+  left: 108px;
+  top: 0;
+  transform: matrix(1,0,0,1,0,0);
+  /* display: inline-block; */
+  vertical-align: top;
+}
+
+.fp-banner-dark * {
+  color: #efefef;
+}
+
+.fp-banner-titles-high {
+  margin-left: 6%;
+}
+
+.fp-banner-titles-low {
+  margin-left: 6%;
+  margin-top: 50%;
+}
+
+.fp-banner-title {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+.fp-banner-subtitle {
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.fp-banner-footer {
+  padding: 1em .5em 1em .5em;
+  margin-top: auto;
+  white-space: nowrap;
+  background-color: #ed7e2f;
+  color: #efefef;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+.scale-1 img,
+.scale-2 img {
+  transition: transform 150ms ease;
+}
+
+.scale-1:hover img,
+.scale-2:hover img {
+  transition-property: transform;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
+.scale-1:hover img {
+  transform: scale(1.05);
+}
+
+.scale-2:hover img {
+  transform: scale(1.15);
+}
+
+ul#brands li {
+  float: left;
+  width: 130px;
+  list-style: none;
+  padding: 0 1em;
+  max-width: 12%;
+}
+
+ul#brands li:last-child {
+  margin-right: 0!important;
+}

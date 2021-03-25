@@ -3,7 +3,7 @@ $_item = $this->getItem();
 ?>
 <tbody>
   <tr>
-    <td class="cell-content product-info">
+    <td class="purchase_item cell-content product-info">
       <p class="product-name"><?php echo $this->escapeHtml($_item->getName()) ?></p>
       <?php if ($this->getItemOptions()): ?>
         <dl style="margin:0; padding:0;">
@@ -19,7 +19,11 @@ $_item = $this->getItem();
       <?php endif; ?>
       <?php echo $this->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="cell-content align-center"><p><?php echo $this->escapeHtml($this->getSku($_item)) ?></p></td>
-    <td class="cell-content align-right"><p><?php echo $_item->getQty()*1 ?></p></td>
+    <td class="cell-content align-center">
+      <p><?php echo $this->escapeHtml($this->getSku($_item)) ?></p>
+    </td>
+    <td class="cell-content align-right nowrap">
+      <p><?php echo $_item->getQty()*1 ?></p>
+    </td>
   </tr>
 </tbody>

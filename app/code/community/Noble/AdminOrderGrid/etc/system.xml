@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <noble module="adminordergrid">
+            <label>Noble Extensions</label>
+            <sort_order>100</sort_order>
+        </noble>
+    </tabs>
+    <sections>
+        <noble translate="label" module="adminordergrid">
+            <label>Extended Order Grid</label>
+            <tab>noble</tab>
+            <sort_order>1</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            
+            <groups>
+                <default_columns translate="label" module="adminordergrid">
+                    <label>Default columns</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <expanded>1</expanded>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<strong>Configure which columns to show in the admin Orders grid.</strong>]]></comment>
+                    
+                    <fields>
+                        <default_global translate="label">
+                            <label>You can only edit these columns in the global config.</label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>199</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_global>
+                        <real_order_id translate="label">
+                            <label>Order #: </label>
+                            <comment>Order number</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>101</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </real_order_id>
+                        <store_id translate="label">
+                            <label>Purchased From (Store): </label>
+                            <comment>Even when 'Yes' is selected, the column will only be shown if there are multiple storeviews.</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>102</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </store_id>
+                        <created_at translate="label">
+                            <label>Purchased On: </label>
+                            <comment>Date of purchase</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>103</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </created_at>
+                        <billing_name translate="label">
+                            <label>Bill to Name: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>104</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </billing_name>
+                        <shipping_name translate="label">
+                            <label>Ship to Name: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>105</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </shipping_name>
+                        <base_grand_total translate="label">
+                            <label>G.T. (Base): </label>
+                            <comment>Base Grand Total</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>106</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </base_grand_total>
+                        <grand_total translate="label">
+                            <label>G.T. (Purchased): </label>
+                            <comment>Purchased Grand Total</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>107</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </grand_total>
+                        <status translate="label">
+                            <label>Status: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>108</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </status>
+                        <action translate="label">
+                            <label>Action: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>109</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </action>
+                    </fields>
+                </default_columns>
+                <extended_columns translate="label" module="adminordergrid">
+                    <label>Extended columns</label>
+                    <frontend_type>text</frontend_type>
+                    <expanded>1</expanded>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<strong>Configure which columns to show in the admin Orders grid.</strong>]]></comment>
+                    
+                    <fields>
+                        <default_global translate="label">
+                            <label>You can only edit these columns in the global config.</label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>299</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_global>
+                        <shipping_method translate="label">
+                            <label>Shipping Method: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>205</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </shipping_method>
+                        <shipping_description translate="label">
+                            <label>Shipping Description: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </shipping_description>
+                        <payment_method translate="label">
+                            <label>Payment Method: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>215</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </payment_method>
+                        <shipping_country translate="label">
+                            <label>Shipping Country: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>noble_adminordergrid/system_config_source_dropdown_country</source_model>
+                        </shipping_country>
+                        <shipping_region translate="label">
+                            <label>Shipping Region: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>225</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </shipping_region>
+                        <shipping_city translate="label">
+                            <label>Shipping City: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>230</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </shipping_city>
+                        <shipping_postcode translate="label">
+                            <label>Shipping Postcode: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>235</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </shipping_postcode>
+                        <billing_country translate="label">
+                            <label>Billing Country: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>240</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>noble_adminordergrid/system_config_source_dropdown_country</source_model>
+                        </billing_country>
+                        <billing_region translate="label">
+                            <label>Billing Region: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>245</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </billing_region>
+                        <billing_city translate="label">
+                            <label>Billing City: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>250</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </billing_city>
+                        <billing_postcode translate="label">
+                            <label>Billing Postcode: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>255</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </billing_postcode>
+                        <customer_email translate="label">
+                            <label>Customer Email: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>260</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </customer_email>
+                        <amount_items translate="label">
+                            <label># of Items: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>265</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </amount_items>
+                        <weight translate="label">
+                            <label>Weight: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>270</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </weight>
+                        <subtotal translate="label">
+                            <label>Subtotal: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>275</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </subtotal>
+                        <customer_group translate="label">
+                            <label>Customer Group: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>280</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </customer_group>
+                        <remote_ip translate="label">
+                            <label>Remote IP: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>285</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </remote_ip>
+                        <coupon_code translate="label">
+                            <label>Coupon code: </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>290</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </coupon_code>
+                    </fields>
+                </extended_columns>
+            </groups>
+        </noble>
+    </sections>
+</config>

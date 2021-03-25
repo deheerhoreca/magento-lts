@@ -24,13 +24,9 @@ $enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_bus
     <?php
     if ($enablePersonal == 1 && $enableBusiness == 1) {
         ?>
-            Type bestelling
-        <li>
-        </li>
-        <li>
-            <input onchange="document.getElementById('paynl-data-personal').style.display='';document.getElementById('paynl-data-business').style.display='none';" type="radio" name="payment[type_order]" id="type_order_p" value="p" /> <label for="type_order_p">Persoonlijk</label><br />
-            <input onchange="document.getElementById('paynl-data-personal').style.display='none';document.getElementById('paynl-data-business').style.display='';" type="radio" name="payment[type_order]" id="type_order_b" value="b" /> <label for="type_order_b">Zakelijk</label>
-        </li>
+        Type bestelling:
+        <li><input onchange="document.getElementById('paynl-data-personal').style.display='';document.getElementById('paynl-data-business').style.display='none';" type="radio" name="payment[type_order]" id="type_order_p" value="p" /> <label for="type_order_p">Persoonlijk</label></li>
+        <li><input onchange="document.getElementById('paynl-data-personal').style.display='none';document.getElementById('paynl-data-business').style.display='';" type="radio" name="payment[type_order]" id="type_order_b" value="b" /> <label for="type_order_b">Zakelijk</label></li>
         <?php
     }
     if ($enablePersonal == 1) {
@@ -56,11 +52,11 @@ $enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_bus
     <?php if ($enableBusiness == 1) { ?>
         <div <?php echo $enablePersonal == 1?'style="display:none;"':''; ?> id="paynl-data-business">
             <li>
-                KVK nummer
+                KVK nummer:
             </li>
             <li>
                 <div class="input-box">
-                    <input type="text" name="payment[kvknummer]" />
+                    <input type="text" name="payment[kvknummer]" class="input-text" />
                 </div>
             </li>                 
         </div>

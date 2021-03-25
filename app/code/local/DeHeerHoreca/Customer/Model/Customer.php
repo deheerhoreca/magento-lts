@@ -5,7 +5,7 @@
  * Bugfix taken from https://magento.stackexchange.com/questions/46404/ce1-9-1-please-make-sure-your-password-match-issue-during-user-registration
  */
 
-class DeHeerHoreca_Customer_Model_Customer extends Mage_Customer_Model_Customer
+class DeHeerHoreca_Customer_Model_Customer extends DeHeerHoreca_Customer_Model_Customer_Amasty_Pure
 {
 
   /**

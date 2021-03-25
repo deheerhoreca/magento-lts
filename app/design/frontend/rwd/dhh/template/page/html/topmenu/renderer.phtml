@@ -3,7 +3,7 @@
 /** @var Varien_Data_Tree_Node $menuTree */
 /** @var string $childrenWrapClass */
 
-// For editing, refresh Blocks Cache (and FPC)
+// After editing, refresh Blocks Cache (and FPC)
 
 $html                     = '';
 
@@ -12,7 +12,7 @@ $parentLevel              = $menuTree->getLevel();
 $childLevel               = is_null($parentLevel) ? 0 : $parentLevel + 1;
 
 $counter                  = 1;
-$topLeveChildrenCount     = $children->count();
+$topLeveChildrenCount     = (int) $children->count();
 
 $parentPositionClass      = $menuTree->getPositionClass();
 $itemPositionClassPrefix  = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
@@ -24,20 +24,21 @@ foreach($children as $child) {
   if($childLevel > 2) return;
   
   $child->setLevel($childLevel);
-  $child->setIsFirst($counter == 1);
-  $child->setIsLast($counter == $topLeveChildrenCount);
+  $child->setIsFirst($counter === 1);
+  $child->setIsLast($counter === $topLeveChildrenCount);
   $child->setPositionClass($itemPositionClassPrefix . $counter);
   
   $url = str_replace($base_url, "/", $child->getUrl());
 
   $outermostClassCode = 'level'. $childLevel;
-  $_hasChildren = $child->hasChildren();
+  $_hasChildren       = $child->hasChildren();
   $has_children_class = ($_hasChildren && $childLevel < 1) ? ' has-children' : '';
-  $title = $this->escapeHtml($this->__($child->getName()));
-  $name  = $this->escapeHtml($this->__($child->getName()));
-
+  $name               = $this->escapeHtml($this->__($child->getName()));
+  $name               = str_replace("[V]", null, $name);
+  $name               = trim($name);
+  
   if($childLevel < 2) $html .= "<li {$this->_getRenderedMenuItemAttributes($child)}>";
-  $html .= "<a title=\"{$title}\" href='{$url}' class='{$outermostClassCode}{$has_children_class}'>{$title}</a>";
+  $html .= "<a title=\"{$name}\" href='{$url}' class='{$outermostClassCode}{$has_children_class}'>{$name}</a>";
 
   if($_hasChildren) {
     if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";

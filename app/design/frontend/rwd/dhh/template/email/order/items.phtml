@@ -8,15 +8,16 @@ if($_order) {
   ?>
   <tr>
     <td class="content-cell">
-      <table class="items" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+      <table class="items purchase_content" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
         <thead>
           <tr>
-            <th class="cell-name align-left">Artikel</th>
-            <th class="cell-name align-center"><?php echo $this->__('Price'); ?></th>
+            <th colspan="2" class="purchase_heading cell-name align-left nowrap">Artikel</th>
+            <th class="purchase_heading cell-name align-left nowrap"><?php echo $this->__('Price'); ?></th>
           </tr>
         </thead>
         <?php
-        $i=0; foreach ($_order->getAllItems() as $_item) {
+        $i=0;
+        foreach($_order->getAllItems() as $_item) {
           if($_item->getParentItem()) continue;
           else $i++;
           echo $this->getItemHtml($_item);
@@ -44,9 +45,9 @@ if($_order) {
         <tbody>
           <tr>
             <td colspan="4" align="left" style="padding:3px 9px">
-            <strong><?php echo $this->__('From:'); ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><strong><?php echo $this->__('To:'); ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><strong><?php echo $this->__('Message:'); ?></strong><br /> <?php echo $this->escapeHtml($_giftMessage->getMessage()) ?>
+              <strong><?php echo $this->__('From:'); ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?>
+              <br /><strong><?php echo $this->__('To:'); ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?>
+              <br /><strong><?php echo $this->__('Message:'); ?></strong><br /> <?php echo $this->escapeHtml($_giftMessage->getMessage()) ?>
             </td>
           </tr>
         </tbody>

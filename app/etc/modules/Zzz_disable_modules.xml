@@ -78,8 +78,9 @@
         <Anowave_Ecosc>
           <active>false</active>
         </Anowave_Ecosc>
+        <!-- Disabling causes issues with opening existing old orders -->
         <Shopworks_Billink>
-          <active>false</active>
+          <active>true</active>
         </Shopworks_Billink>
     </modules>
 </config>

@@ -1,0 +1,11 @@
+<fieldset class="form-list">
+    <?php $_code=$this->getMethodCode() ?>
+    <ul id="payment_form_<?php echo $_code ?>" style="display:none">
+        <li>
+            <div class="input-box">
+			<img src="<?php echo Mage::getBaseUrl('media') . 'paysafecash/paysafecash.png'; ?>" alt="paysafecash">
+            </div>
+			<?php echo $this->__('PAY WITH CASH: Generate a barcode and go to a <a href="https://www.paysafecash.com/pos" target="blank">payment point near you</a> to complete the payment.') ?>
+        </li>
+    </ul>
+</fieldset>

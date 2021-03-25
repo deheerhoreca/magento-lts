@@ -7,7 +7,6 @@
 ?>
 
 <h2 class="tableftheader"><?php echo $this->__('Specificaties');?></h2>
-
 <div class="padder">
   <?php foreach ($this->getTabs() as $_index => $_tab): ?>
     <?php if($this->getChildHtml($_tab['alias'])): ?>
@@ -15,3 +14,9 @@
     <?php endif; ?>
   <?php endforeach; ?>
 </div>
+
+<?php
+$product = Mage::registry('current_product');
+if($product->getTypeId() === Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
+  echo "<p class='small gray py-2'>Dit product heeft meerdere configuraties, deze zijn gecombineerd in de tabel.</p>";
+}

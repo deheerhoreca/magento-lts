@@ -1,0 +1,3 @@
+<?php /* added automatically by conflict fixing tool */ if (Mage::getConfig()->getNode('modules/Geissweb_Euvatgrouper/active')) {
+            class Scommerce_UpdateEmail_Block_Sales_Order_View_Info_Amasty_Pure extends Geissweb_Euvatgrouper_Block_Adminhtml_Sales_Order_View_Additional {}
+        } else { class Scommerce_UpdateEmail_Block_Sales_Order_View_Info_Amasty_Pure extends Geissweb_Euvatgrouper_Block_Adminhtml_Sales_Order_View_Additional {} } ?>

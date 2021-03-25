@@ -33,7 +33,7 @@
         <reference name="head">
             <remove name="ajaxpro.head"/>
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte Aanvragen voor Lease en Koop</title>
             </action>
             <action method="addCss">
                 <link>css/qquoteadv.css</link>
@@ -140,7 +140,7 @@
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte Aanvragen voor Lease en Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -164,7 +164,7 @@
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte Aanvragen voor Lease en Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -189,7 +189,7 @@
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte Aanvragen voor Lease en Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -214,7 +214,7 @@
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte Aanvragen voor Lease en Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -284,7 +284,7 @@
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte Aanvragen voor Lease en Koop</title>
             </action>
             <reference name="head">
                 <action method="addItem">

@@ -72,4 +72,15 @@
       </controller_front_send_response_after>
     </events>
   </frontend>
+  
+  <adminhtml>
+    <layout>
+      <updates>
+        <adminhtml_catalog_product_edit>
+          <file>dhh.xml</file>
+        </adminhtml_catalog_product_edit>
+      </updates>
+    </layout>
+  </adminhtml>
+  
 </config>

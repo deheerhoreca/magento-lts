@@ -791,7 +791,7 @@ abstract class Mage_Sales_Model_Order_Pdf_Abstract extends Varien_Object
      */
     protected function _setFontRegular($object, $size = 7)
     {
-        $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
         $object->setFont($font, $size);
         return $font;
     }
@@ -805,7 +805,7 @@ abstract class Mage_Sales_Model_Order_Pdf_Abstract extends Varien_Object
      */
     protected function _setFontBold($object, $size = 7)
     {
-        $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/Corbel_Bold.ttf');
+        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
         $object->setFont($font, $size);
         return $font;
     }
@@ -819,7 +819,7 @@ abstract class Mage_Sales_Model_Order_Pdf_Abstract extends Varien_Object
      */
     protected function _setFontItalic($object, $size = 7)
     {
-        $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/Corbel_Italic.ttf');
+        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_OBLIQUE);
         $object->setFont($font, $size);
         return $font;
     }

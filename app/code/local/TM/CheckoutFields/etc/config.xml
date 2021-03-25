@@ -45,6 +45,11 @@
                 <tm_field3><to_order>*</to_order></tm_field3>
                 <tm_field4><to_order>*</to_order></tm_field4>
                 <tm_field5><to_order>*</to_order></tm_field5>
+                <tm_field6><to_order>*</to_order></tm_field6>
+                <tm_field7><to_order>*</to_order></tm_field7>
+                <tm_field8><to_order>*</to_order></tm_field8>
+                <tm_field9><to_order>*</to_order></tm_field9>
+                <tm_field10><to_order>*</to_order></tm_field10>
             </sales_convert_quote>
             <sales_copy_order>
                 <tm_field1><to_edit>*</to_edit></tm_field1>
@@ -52,6 +57,11 @@
                 <tm_field3><to_edit>*</to_edit></tm_field3>
                 <tm_field4><to_edit>*</to_edit></tm_field4>
                 <tm_field5><to_edit>*</to_edit></tm_field5>
+                <tm_field6><to_edit>*</to_edit></tm_field6>
+                <tm_field7><to_edit>*</to_edit></tm_field7>
+                <tm_field8><to_edit>*</to_edit></tm_field8>
+                <tm_field9><to_edit>*</to_edit></tm_field9>
+                <tm_field10><to_edit>*</to_edit></tm_field10>
             </sales_copy_order>
         </fieldsets>
     </global>
@@ -158,6 +168,36 @@
                 <description></description>
                 <type>text</type>
             </tm_field5>
+            <tm_field6>
+                <status>0</status>
+                <label>Field #6</label>
+                <description></description>
+                <type>text</type>
+            </tm_field6>
+            <tm_field7>
+                <status>0</status>
+                <label>Field #7</label>
+                <description></description>
+                <type>text</type>
+            </tm_field7>
+            <tm_field8>
+                <status>0</status>
+                <label>Field #8</label>
+                <description></description>
+                <type>text</type>
+            </tm_field8>
+            <tm_field9>
+                <status>0</status>
+                <label>Field #9</label>
+                <description></description>
+                <type>text</type>
+            </tm_field9>
+            <tm_field10>
+                <status>0</status>
+                <label>Field #10</label>
+                <description></description>
+                <type>text</type>
+            </tm_field10>
         </checkoutfields>
     </default>
 </config>

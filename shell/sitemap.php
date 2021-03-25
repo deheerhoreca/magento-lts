@@ -46,12 +46,27 @@ if($which === "categories") {
     "products"        => false,
     "pages"           => false,
     "blogs"           => false,
-    "brands"          => false,
+    "brands"          => true,
     "product_images"  => false,
   ];
   
   $sitemap_file = dirname(__FILE__).'/../sitemap_watdachtjezelf_categories.xml';
 }
+
+if($which === "other") {
+  $do = [
+    "categories"      => false,
+    "products"        => false,
+    "pages"           => true,
+    "blogs"           => true,
+    "brands"          => false,
+    "product_images"  => false,
+  ];
+  
+  $sitemap_file = dirname(__FILE__).'/../sitemap_watdachtjezelf_other.xml';
+}
+
+touch($sitemap_file);
 
 require_once(dirname(__FILE__).'/../app/Mage.php');
 Mage::app();
@@ -85,6 +100,7 @@ try {
         [
           Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
           Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
+          Mage_Catalog_Model_Product_Visibility::VISIBILITY_SEARCH
         ]
       );
     

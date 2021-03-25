@@ -1,0 +1,3 @@
+<?php /* added automatically by conflict fixing tool */ if (Mage::getConfig()->getNode('modules/Ebizmarts_MailChimp/active')) {
+            class Geissweb_InvoiceAutoSend_Model_Email_Template_Amasty_Pure extends Ebizmarts_MailChimp_Model_Email_Template {}
+        } else { class Geissweb_InvoiceAutoSend_Model_Email_Template_Amasty_Pure extends Geissweb_InvoiceAutoSend_Model_Email_TemplateRewrite {} } ?>

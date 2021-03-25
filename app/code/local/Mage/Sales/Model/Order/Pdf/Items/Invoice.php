@@ -46,31 +46,31 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         /* DHH */ $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $this->y, 570, $this->y -15);
-        $this->y -= 10;
+        $page->drawRectangle(20, $this->y, 570, $this->y -15);
+        $this->y -= 50;
         /* DHH */ $page->setFillColor(new Zend_Pdf_Color_RGB(255, 255, 255));
 
         //columns headers
         $lines[0][] = array(
             'text' => Mage::helper('sales')->__('Products'),
-            'feed' => 35
+            'feed' => 25
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('SKU'),
-            'feed'  => 290,
+            'feed'  => 330,
+            'align' => 'right'
+        );
+        
+        $lines[0][] = array(
+            'text'  => Mage::helper('sales')->__('Price'),
+            'feed'  => 395,
             'align' => 'right'
         );
 
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Qty'),
-            'feed'  => 435,
-            'align' => 'right'
-        );
-
-        $lines[0][] = array(
-            'text'  => Mage::helper('sales')->__('Price'),
-            'feed'  => 360,
+            'feed'  => 465,
             'align' => 'right'
         );
 
@@ -126,8 +126,8 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             $this->y = $this->y ? $this->y : 815;
             $top = $this->y;
       			$page->setFillColor(new Zend_Pdf_Color_Html('#000000'));
-      			$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
-      			$page->setFont($font, 10);
+      			// $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+      			// $page->setFont($font, 10);
       			$page->drawText(Mage::helper('sales')->__('Factuurdatum: ') . $invoiceDate, 35, $top, 'UTF-8');
       			//$page->drawText(Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId(), 25, 740, 'UTF-8');
       			//$page->drawText(Mage::helper('sales')->__('Order # ') . $order->getRealOrderId(), 25, 725, 'UTF-8');
@@ -195,9 +195,9 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $y  =   $height /2.5;
         $page->drawRectangle(1, 20, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-  	    $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
-   	  	$page->setFont($font, 8);
-  	  	$page->drawText('DE LEVERANCIER VAN PROFESSIONELE KOELINGEN | GRATIS GELEVERD VANAF EUR 150.- | LEVERING IN NEDERLAND EN BELGIE', 92, 40, 'UTF-8');
+  	    // $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+   	  	// $page->setFont($font, 8);
+  	  	$page->drawText('DE LEVERANCIER VAN PROFESSIONELE KOELINGEN - GRATIS GELEVERD VANAF EUR 150 - LEVERING IN NEDERLAND EN BELGIE', 92, 40, 'UTF-8');
         $page->setFillColor(new Zend_Pdf_Color_Html('#1F497D'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
@@ -205,16 +205,16 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $y  =   $height /2.5;
         $page->drawRectangle(1, 1, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-  	  	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
-   	  	$page->setFont($font, 10);
-  	  	$page->drawText('De Heer Horeca B.V. | Trasmolenlaan 12 | 3447GZ Woerden | Nederland', 42, 10, 'UTF-8');
+  	  	// $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+   	  	// $page->setFont($font, 10);
+  	  	$page->drawText('De Heer Horeca B.V. Johan Huizingalaan 763A 1066 VH Amsterdam Nederland info@chefstore.nl +31 (0) 85-0441003, 42, 10, 'UTF-8');
         $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));
 	    	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
  		    $page->setFont($font, 10);
 		    $page->drawText('CHEFSTORE.NL', 272, 10, 'UTF-8');
 		    $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-	      $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
- 		    $page->setFont($font, 10);
+	      // $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
+ 		    // $page->setFont($font, 10);
 		    $page->drawText(' | INFO@CHEFSTORE.NL | 085-0441003', 362, 10, 'UTF-8');
     }
 

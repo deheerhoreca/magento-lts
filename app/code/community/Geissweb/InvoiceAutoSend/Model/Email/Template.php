@@ -20,7 +20,7 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
-class Geissweb_InvoiceAutoSend_Model_Email_Template extends Geissweb_InvoiceAutoSend_Model_Email_TemplateRewrite //Mirasvit_EmailSmtp_Model_Email_Template
+class Geissweb_InvoiceAutoSend_Model_Email_Template extends Geissweb_InvoiceAutoSend_Model_Email_Template_Amasty_Pure //Mirasvit_EmailSmtp_Model_Email_Template
 {
     /**
      * Retrieve mail object instance

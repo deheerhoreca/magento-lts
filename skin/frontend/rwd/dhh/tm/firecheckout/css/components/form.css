@@ -154,20 +154,25 @@
 .firecheckout-set .form-list .customer-dob .dob-day,
 .firecheckout-set .form-list .customer-dob .dob-month {
     width: 30%;
+    max-width: 100px;
+    padding: 0 .5em;
     margin: 0;
-    padding: 0;
     box-sizing: border-box !important;
 }
 .firecheckout-set .form-list .customer-dob .dob-day .input-text,
-.firecheckout-set .form-list .customer-dob .dob-month .input-text { width: 100%; border-right: 0 !important; }
-.firecheckout-set .form-list .customer-dob .dob-year { width: 40%; }
+.firecheckout-set .form-list .customer-dob .dob-month .input-text { width: 100%; }
+.firecheckout-set .form-list .customer-dob .dob-year {
+    width: 40%;
+    max-width: 140px;
+    padding: 0 .5em;
+}
 .firecheckout-set .form-list .customer-dob .dob-year input.input-text { width: 100%; }
 
 /* Hide validation message below date because another message is shown below all fields */
-.firecheckout-set .dob-day .validation-advice,
-.firecheckout-set .dob-month .validation-advice,
-.firecheckout-set .dob-year .validation-advice,
-.firecheckout-set .dob-full .validation-advice { display: none; }
+/* .firecheckout-set .dob-day .validation-advice, */
+/* .firecheckout-set .dob-month .validation-advice, */
+/* .firecheckout-set .dob-year .validation-advice, */
+/* .firecheckout-set .dob-full .validation-advice { display: none; } */
 
 .address-select-item { text-align: left !important; }
 .address-select-item label { width: auto !important; text-align: left !important; margin: 0 0 5px !important; }

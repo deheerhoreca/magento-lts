@@ -1,0 +1,21 @@
+<div class="page-title">
+    <h1><?php echo $this->__('An error occurred in the process of payment') ?></h1>
+</div>
+<?php if ($this->getRealOrderId()) : ?><p><?php echo $this->__('Order #') . $this->getRealOrderId() ?></p><?php endif ?>
+<?php if ($error = $this->getErrorMessage()) : ?><p><?php echo $error ?></p><?php endif ?>
+
+<?php if (Mage::getSingleton('core/session')->getPscErrorNo()):?>
+<p><?php echo $this->__('Unfortunately, a technical error has occurred. Please try again later or contact the Support Team.'); ?></p>
+<?php endif;?>
+
+<?php if (Mage::getSingleton('core/session')->getPscTxId()):?>
+<p><?php echo $this->__(sprintf( __( '%s Payment interrupted! Transaction number: %s' ), Mage::getSingleton('core/session')->getPscStatus(), Mage::getSingleton('core/session')->getPscTxId() )); ?></p>
+<?php endif;?>
+
+<?php
+Mage::getSingleton('core/session')->unsPscTxId();
+Mage::getSingleton('core/session')->unsPscErrorNo();
+?>
+
+
+<p><?php echo $this->__('Click <a href="%s">here</a> to continue shopping.', Mage::helper('core')->quoteEscape($this->getContinueShoppingUrl())) ?></p>

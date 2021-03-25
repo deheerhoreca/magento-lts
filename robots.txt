@@ -140,6 +140,11 @@ User-agent: Yeti
 User-agent: YisouSpider
 User-agent: PetalBot
 User-agent: Barkrowler/0.9
+User-agent: Sidetrade indexer bot
+User-agent: BPImageWalker/2.0
+User-agent: magpie-crawler
+User-agent: LinkWalker/3.0
+User-agent: LinkWalker/2.0
 Disallow: /
 
 User-agent: *

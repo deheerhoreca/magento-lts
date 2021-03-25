@@ -1,69 +1,249 @@
 <?xml version="1.0"?>
 <gridcontrol>
-    <grids>
-        <!-- grid id -->
-        <productGrid>
+  <grids>
+    
+    <!-- Products Grid -->
+    
+    <productGrid>
 
-            <set_name>
-                <remove/>
-            </set_name>
-            
-            <websites>
-                <remove/>
-            </websites>
-            
-            <action>
-                <remove/>
-            </action>
-                        
-            <eol>
-                <add>
-                    <header>EOL</header>
-                    <type>options</type>
-                    <index>eol</index>
-                    <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(eol)</options>
-                </add>
-                <after>status</after>
-            </eol>
-            
-            <bi_supplier_sold_365>
-                <add>
-                    <header>Supplier365</header>
-                    <type>number</type>
-                    <index>bi_supplier_sold_365</index>
-                </add>
-                <after>eol</after>
-            </bi_supplier_sold_365>
-            
-            <bi_dhh_sold_365>
-                <add>
-                    <header>Sold365</header>
-                    <type>number</type>
-                    <index>bi_dhh_sold_365</index>
-                </add>
-                <after>bi_supplier_sold_365</after>
-            </bi_dhh_sold_365>
-            
-            <supplier>
-                <add>
-                    <header>Leverancier</header>
-                    <type>options</type>
-                    <index>supplier</index>
-                    <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
-                </add>
-                <after>bi_dhh_sold_365</after>
-            </supplier>
-            
-            <manufacturer>
-                <add>
-                    <header>Merk</header>
-                    <type>options</type>
-                    <index>manufacturer</index>
-                    <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options>
-                </add>
-                <after>supplier</after>
-            </manufacturer>
+      <set_name>
+        <remove/>
+      </set_name>
 
-        </productGrid>        
-    </grids>
+      <websites>
+        <remove/>
+      </websites>
+
+      <!-- <action> -->
+        <!-- <remove/> -->
+      <!-- </action> -->
+
+      <eol>
+        <add>
+          <header>EOL</header>
+          <type>options</type>
+          <index>eol</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(eol)</options>
+        </add>
+        <after>status</after>
+      </eol>
+
+      <bi_supplier_sold_365>
+        <add>
+          <header>Supplier365</header>
+          <type>number</type>
+          <index>bi_supplier_sold_365</index>
+        </add>
+        <after>eol</after>
+      </bi_supplier_sold_365>
+
+      <bi_dhh_sold_365>
+        <add>
+          <header>Sold365</header>
+          <type>number</type>
+          <index>bi_dhh_sold_365</index>
+        </add>
+        <after>bi_supplier_sold_365</after>
+      </bi_dhh_sold_365>
+
+      <supplier>
+        <add>
+          <header>Leverancier</header>
+          <type>options</type>
+          <index>supplier</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
+        </add>
+        <after>bi_dhh_sold_365</after>
+      </supplier>
+
+      <manufacturer>
+        <add>
+          <header>Merk</header>
+          <type>options</type>
+          <index>manufacturer</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options>
+        </add>
+        <after>supplier</after>
+      </manufacturer>
+
+    </productGrid>
+    
+    <!-- Category Products Grid -->
+    
+    <catalog_category_products>
+      <status>
+        <add>
+          <header>Status</header>
+          <type>options</type>
+          <index>status</index>
+          <options>catalog/product_status::getOptionArray</options>
+        </add>
+        <after>name</after>
+      </status>
+      
+      <eol>
+        <add>
+          <header>EOL</header>
+          <type>options</type>
+          <index>eol</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(eol)</options>
+        </add>
+        <after>status</after>
+      </eol>
+      
+      <bi_supplier_sold_365>
+        <add>
+          <header>SuppSold365</header>
+          <type>number</type>
+          <index>bi_supplier_sold_365</index>
+          <width>4</width>
+        </add>
+        <after>eol</after>
+      </bi_supplier_sold_365>
+      
+      <supplier>
+        <add>
+          <header>Leverancier</header>
+          <type>options</type>
+          <index>supplier</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
+        </add>
+        <after>bi_supplier_sold_365</after>
+      </supplier>
+
+      <manufacturer>
+        <add>
+          <header>Merk</header>
+          <type>options</type>
+          <index>manufacturer</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options>
+        </add>
+        <after>supplier</after>
+      </manufacturer>
+      
+      <qty>
+        <remove/>
+      </qty>
+      
+      <entity_id>
+        <remove/>
+      </entity_id>
+      
+    </catalog_category_products>
+    
+    <!-- Orders Grid -->
+
+    <sales_order_grid>
+      <!-- <store_id> -->
+        <!-- <remove/> -->
+      <!-- </store_id> -->
+      <base_grand_total>
+        <remove/>
+      </base_grand_total>
+      <action>
+        <remove/>
+      </action>
+      
+    </sales_order_grid>
+    
+    <!-- Attribute Grid -->
+    
+    <attributeGrid>
+    
+      <attribute_id>
+        <add>
+          <align>center</align>
+          <header>ID</header>
+          <type>text</type>
+          <index>attribute_id</index>
+          <width>50</width>
+        </add>
+        <after>attribute_code</after>
+      </attribute_id>
+      
+      <position>
+        <add>
+          <align>center</align>
+          <header>Positie</header>
+          <type>text</type>
+          <index>position</index>
+          <width>50</width>
+        </add>
+        <after>attribute_id</after>
+      </position>
+      
+      <frontend_input>
+        <add>
+          <align>center</align>
+          <header>Type</header>
+          <type>text</type>
+          <index>frontend_input</index>
+          <width>100</width>
+        </add>
+        <after>attribute_code</after>
+      </frontend_input>
+    
+      <is_html_allowed_on_front>
+        <add>
+          <align>center</align>
+          <header>HTML</header>
+          <type>options</type>
+          <index>is_html_allowed_on_front</index>
+          <options>
+            <option_1>
+              <key>1</key>
+              <value>Ja</value>
+            </option_1>
+            <option_0>
+              <key>0</key>
+              <value>Nee</value>
+            </option_0>
+          </options>
+        </add>
+        <after>is_global</after>
+      </is_html_allowed_on_front>
+      
+      <is_used_for_price_rules>
+        <add>
+          <align>center</align>
+          <header>PriceRules</header>
+          <type>options</type>
+          <index>is_used_for_price_rules</index>
+          <options>
+            <option_1>
+              <key>1</key>
+              <value>Ja</value>
+            </option_1>
+            <option_0>
+              <key>0</key>
+              <value>Nee</value>
+            </option_0>
+          </options>
+        </add>
+        <after>is_global</after>
+      </is_used_for_price_rules>
+      
+      <is_visible_in_advanced_search>
+        <add>
+          <align>center</align>
+          <header>Adv. Search</header>
+          <type>options</type>
+          <index>is_visible_in_advanced_search</index>
+          <options>
+            <option_1>
+              <key>1</key>
+              <value>Ja</value>
+            </option_1>
+            <option_0>
+              <key>0</key>
+              <value>Nee</value>
+            </option_0>
+          </options>
+        </add>
+        <after>is_global</after>
+      </is_visible_in_advanced_search>
+    
+    </attributeGrid>
+    
+  </grids>
 </gridcontrol>

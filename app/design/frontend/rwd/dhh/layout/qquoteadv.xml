@@ -36,7 +36,7 @@ DHH: Keep this in sync with app/design/frontend/rwd/default/layout/qquoteadv.xml
         <reference name="head">
             <remove name="ajaxpro.head"/>
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte voor Lease of Koop</title>
             </action>
             <action method="addCss">
                 <link>css/qquoteadv.css</link>
@@ -308,7 +308,7 @@ DHH: Keep this in sync with app/design/frontend/rwd/default/layout/qquoteadv.xml
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte voor Lease of Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -333,7 +333,7 @@ DHH: Keep this in sync with app/design/frontend/rwd/default/layout/qquoteadv.xml
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte voor Lease of Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -358,7 +358,7 @@ DHH: Keep this in sync with app/design/frontend/rwd/default/layout/qquoteadv.xml
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte voor Lease of Koop</title>
             </action>
             <action method="addItem">
                 <type>skin_js</type>
@@ -428,7 +428,7 @@ DHH: Keep this in sync with app/design/frontend/rwd/default/layout/qquoteadv.xml
         </reference>
         <reference name="head">
             <action method="setTitle">
-                <title>Quote List</title>
+                <title>Offerte voor Lease of Koop</title>
             </action>
             <reference name="head">
                 <action method="addItem">
