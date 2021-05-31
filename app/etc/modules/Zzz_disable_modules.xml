@@ -12,6 +12,9 @@
         <Mage_PaypalUk>
             <active>false</active>
         </Mage_PaypalUk>
+        <Mage_Paypal>
+            <active>false</active>
+        </Mage_Paypal>
         <Mage_Rss>
             <active>false</active>
         </Mage_Rss>

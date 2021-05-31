@@ -42,7 +42,7 @@ $product_ids  = getCartProductIDs();
 $collection = Mage::getModel('catalog/product')
   ->getCollection()
   ->addAttributeToSelect('*')
-  ->addFieldToFilter([['attribute' => 'bargain', 'eq' => true]])
+  ->addFieldToFilter([['attribute' => 'bargain', 'eq' => '1']])
   ->addAttributeToFilter('supplier', ['in' => $supplier_ids])
   ->addAttributeToFilter('entity_id', ['nin' => $product_ids])
   ->addAttributeToFilter('status', ['eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
@@ -50,6 +50,8 @@ $collection = Mage::getModel('catalog/product')
   ->setPageSize(10)
   ->setCurPage(1)
   ->load();
+
+//echo $collection->getSelect()->__toString();
 
 if($collection->getSize() > 0) { ?>
 <div class="crosssell product-collateral category-products">
@@ -80,6 +82,9 @@ function getCartSupplierIDs() {
   $suppliers = [];
   foreach($quote->getAllItems() as $item) {
     $suppliers[] = $item->getProduct()->getData('supplier');
+    if($_SERVER["REMOTE_ADDR"] === "5.132.21.238" && isset($_GET['nofpc'])) {
+      // printr($item->getProduct()->debug());
+    }
   }
 
   return array_unique($suppliers);

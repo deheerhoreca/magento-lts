@@ -1632,3 +1632,5 @@ div.actions:after,
 .files-wide .row:after,
 .grid tr.filter .range .range-line:after,
 .store-scope:after { display:block; clear:both; content:"."; font-size:0; line-height:0; height:0; overflow:hidden; }
+
+#productGrid_product_filter_massaction { display: none; }

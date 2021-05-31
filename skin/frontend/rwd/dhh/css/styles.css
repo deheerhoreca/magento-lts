@@ -3916,7 +3916,7 @@ div.category-products li span.lblenergylabel::after {
 }
 
 .products-grid .product-image {
-  margin-bottom: 2px;
+  margin-bottom: 8px;
 }
 
 .products-grid .product-image:after,
@@ -15306,7 +15306,7 @@ ul.html5-grid-4-col {
 
 .products-grid li img {
   transition: transform 150ms ease;
-  padding-bottom: 6px;
+  /* padding-bottom: 6px; */
 }
 
 .products-grid li:hover img {

@@ -40,6 +40,7 @@
 !/media/wysiwyg/
 
 /sitemap_*.xml
+/google_shopping_*.xml*
 
 /downloader/.cache/
 /downloader/cache.cfg

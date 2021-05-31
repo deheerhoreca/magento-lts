@@ -1,16 +1,18 @@
 <?php
 
-if(defined('DHH_FPC_ENABLED') === false) {
-  if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
-    define("DHH_FPC_ENABLED", false);
-  } else {
-    define("DHH_FPC_ENABLED", true);
-  }
-}
+// Moved to app/code/local/DeHeerHoreca/Fpc/Model/Observer.php
 
-if(defined('DHH_FPC_DEBUG') === false) {
-  define('DHH_FPC_DEBUG', false);
-}
+// if(defined('DHH_FPC_ENABLED') === false) {
+  // if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
+    // define("DHH_FPC_ENABLED", false);
+  // } else {
+    // define("DHH_FPC_ENABLED", true);
+  // }
+// }
+
+// if(defined('DHH_FPC_DEBUG') === false) {
+  // define('DHH_FPC_DEBUG', false);
+// }
 
 $html = null;
 ob_start();

@@ -20,13 +20,13 @@ $attr_remove_decimals = [
   "aantal_borden_korven", "aantal_glas_korven", "aantal_snelheden",
   "aantal_blikjes", "aantal_wasprogrammas", "eenheid", "capacity_wine_bottles",
   "geluidsniveau", "number_of_cooling_zones", "aantal_flessen",
-  "cooking_zones","gross_weight_gram",
+  "cooking_zones","gross_weight_gram","length_mm",
 ];
 
 /* No zero decimals, with number formatting */
 $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "inhoud_wastank_liter", "vermogen_boiler", "weight", "volume_freezer_liter",
-  "volume_refrigerator_liter",
+  "volume_refrigerator_liter","volume_net_liter", "ijs_productie", "ijs_bunker",
 ];
 
 /* Do not show these values */
@@ -103,10 +103,22 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
             }
             break;
           
+          // "kg" postfix
+          case "voorraadbunker_kg":
+          case "ijs_productie":
+          case "ijs_bunker":
+            $postfix = " kg";
+            break;
+          
           case "inhoud_liters":
+          case "volume_net_liter":
           case "volume_freezer_liter":
           case "volume_refrigerator_liter":
             $postfix = " liter";
+            break;
+          
+          case "inhoud_m3":
+            $postfix = " m³";
             break;
           
           case "hoogte":
@@ -116,6 +128,10 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           case "hoogte_intern":
           case "breedte_intern":
           case "diepte_intern":
+          case "insulation_thickness_mm":
+          case "isolatiedikte":
+          case "breedte_deur":
+          case "length_mm":
             $postfix = " mm";
             break;
 
@@ -159,8 +175,9 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
   }
 }
 
-// if($_SERVER["REMOTE_ADDR"] === "185.127.111.251") {
+// if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
   // echo "<pre>";
+  // print_r($_additionalgroup);
   // print_r($attributes);
   // echo "</pre>";
 // }  

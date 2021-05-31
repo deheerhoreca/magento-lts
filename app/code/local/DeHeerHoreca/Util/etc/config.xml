@@ -49,6 +49,15 @@
         </observers>
       </catalog_product_save_after>
     </events>
+    
+    <blocks>
+      <adminhtml>
+        <rewrite>
+          <catalog_product_grid>DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid</catalog_product_grid>
+        </rewrite>
+      </adminhtml>
+    </blocks>
+    
   </global>
   
   <frontend>

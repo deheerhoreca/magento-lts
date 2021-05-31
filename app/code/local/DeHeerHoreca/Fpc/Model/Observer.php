@@ -12,6 +12,8 @@ if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
   define("DHH_FPC_ENABLED", true);
 }
 
+const FPC_LOG = "./var/log/fpc.json";
+
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   public function ServeCachedHTML($observer) {
@@ -45,7 +47,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     $productId = $product->getId();
     
     /* catalog_product_view */
-    $pattern = "*QUICKNDIRTYFPC_catalog_product_view_{$productId}_*";
+    $pattern = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
     $result .= shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
     // Mage::getSingleton('core/session')->addSuccess("FPC Cache cleared: {$result}x catalog_product_view");
     
@@ -54,7 +56,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     $result = null;
     if(empty($category_ids) === false) {
       foreach($category_ids as $category_id) {
-        $pattern = "*QUICKNDIRTYFPC_catalog_category_view_{$category_id}_*";
+        $pattern = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
         $result .= shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
       }
     }

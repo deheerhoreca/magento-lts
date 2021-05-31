@@ -20,7 +20,7 @@
 ############################################
 ## adjust max execution time
 
-    php_value max_execution_time 18000
+    php_value max_execution_time 1800
 
 ############################################
 ## disable automatic session start

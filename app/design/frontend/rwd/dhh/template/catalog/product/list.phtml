@@ -315,7 +315,7 @@ if($_collectionSize > 0) {
       if($height > 10) $height = round($height);
       
       if($width > 0 && $height > 0 && $depth > 0) {
-        // $usps[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
+        $usps[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
       } else {
         $width = $_product->getBreedte();
         if($width != '' && $width > 0) {
@@ -410,15 +410,23 @@ if($_collectionSize > 0) {
         }
       }            
       
-      /* Inhoud */
-      $attribute_value = $_product->getInhoudLiters();
-      if(strlen($attribute_value) > 0) {
-        $usps[] = round($attribute_value, 2)." liter";
+      /* Volumes */
+      $volume_usp_done = false;
+      $attribute_value = $_product->getVolumeNetLiter();
+      if($volume_usp_done === false && strlen($attribute_value) > 0) {
+        $usps[] = "Netto ".round($attribute_value, 2)." liter";
+        $volume_usp_done = true;
       }
+      $attribute_value = $_product->getInhoudLiters();
+      if($volume_usp_done === false && strlen($attribute_value) > 0) {
+        $usps[] = round($attribute_value, 2)." liter";
+        $volume_usp_done = true;
+      }
+      unset($volume_usp_done);
       
+      
+      /* Powers */
       $power_usp_done = false;
-      
-      /* Total Power */
       if(in_array(3, $parent_categories_ids) === false) { // skip "Koelingen" and everything underneath
         $attribute_value = $_product->getData("total_power_watt");
         
@@ -434,8 +442,6 @@ if($_collectionSize > 0) {
           $power_usp_done = true;
         }
       }
-      
-      /* Electrical Power */
       if($power_usp_done !== true && in_array(3, $parent_categories_ids) === false) { // skip "Koelingen" and everything underneath
         $attribute_value = $_product->getVermogen();
         if(empty($attribute_value) === false) {
@@ -451,8 +457,6 @@ if($_collectionSize > 0) {
           }
         }
       }
-      
-      /* Gas Power */
       $attribute_value = $_product->getVermogenKw();
       if($power_usp_done !== true && empty($attribute_value) === false) {
         if($attribute_value < 3) {
@@ -464,6 +468,7 @@ if($_collectionSize > 0) {
           $usps[] = "{$attribute_value} kW";
         }
       }
+      unset($power_usp_done);
       
       /* M3/hour capacity */
       $attribute_value = $_product->getAantalM3Uur();
@@ -504,6 +509,21 @@ if($_collectionSize > 0) {
       $attribute_value = $_product->getAttributeText("afsluitbaar");
       if($attribute_value === "Ja") {
         $usps[] = "Afsluitbaar";
+      }
+      
+      /* Motor */
+      $attribute_value = $_product->getAttributeText("motor");
+      if($attribute_value === "Ja") {
+        $usps[] = "✔️ Motor";
+      }
+      
+      /* Insulation thickness */
+      $attribute_value = $_product->getAttributeText("isolatiedikte");
+      if(is_array($attribute_value)) {
+        $attribute_value = implode(", ", $attribute_value);
+      }
+      if(strlen($attribute_value) > 0) {
+        $usps[] = "{$attribute_value} mm";
       }
       
       /* ------------------------------------- */

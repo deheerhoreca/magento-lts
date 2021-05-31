@@ -6,34 +6,25 @@
  * @author Fabrizio Branca
  * @since  2013-05-23
  */
-class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
-{
-
-    const LOG_FILE = 'dhh_fpc.log';
-
-    /**
-     * Clear the class path cache
-     *
-     * @return bool
-     */
+class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
+    
     public function clearCache() {
       $mode = Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
       $tag = "quickndirtyfpc";
-
-      //Beaufiul, isn't it?
+      
+      // Beaufiul, isn't it?
       echo "<pre>";
       echo "------- Clearing Redis FPC cache --------".PHP_EOL.PHP_EOL;
-      echo shell_exec("redis-cli --scan --pattern *QUICKNDIRTYFPC* | xargs redis-cli del");
+      echo shell_exec("redis-cli --scan --pattern zc:k:e6b_FPC* | xargs redis-cli del");
       echo PHP_EOL."----- Done clearing Redis FPC cache -----".PHP_EOL;
       echo "</pre>";
-
+      
       $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
       echo "<span><a href='{$url}'>Back</a></span><br><br>";
-
+      
       return true;
-
     }
-
+    
     /**
      * Revalidate all currently cached entries
      */
@@ -47,9 +38,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
           Varien_Autoload::getFullPath($className);
       }
       $duration = microtime(true) - $start;
-      Mage::log('[DeHeerHoreca_Fpc] Revalidated ' . count($cache) . ' classes (duration: ' . round($duration, 2) . ' sec)', 6 /* Zend_Log::INFO */, self::LOG_FILE);
+      Mage::log('[DeHeerHoreca_Fpc] Revalidated '.count($cache).' classes (duration: '.round($duration, 2).' sec)', 6 /* Zend_Log::INFO */, self::FPC_LOG);
     }
-
+    
     /**
      * Check url
      *
@@ -61,7 +52,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       $ek = Mage::helper('core')->decrypt($v);
       return $k && $v && ($ek == $k);
     }
-
+    
     /**
      * Check url
      *
@@ -91,9 +82,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       ];
       $url = Mage::helper("deheerhoreca_fpc/data")->strip_param_from_url($url, $ignored_url_query_keys);
       
+      $url = rtrim($url, "?");
+      
       return $url;
     }
-
+    
     # https://stackoverflow.com/questions/4937478/strip-off-url-parameter-with-php
     public function strip_param_from_url($url, $params) {
       $base_url = strtok($url, '?');              // Get the base url
@@ -238,9 +231,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
       if(empty($cache_key_prefix) === true) {
         $cache_key_prefix = Mage::helper("deheerhoreca_fpc/data")->get_cache_prefix();
       }
-      $_cacheKey = "QUICKNDIRTYFPC-{$cache_key_prefix}-".base64_encode($cache_key_url);
+      $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
+      $_cacheKey = "FPC-{$cache_key_prefix}-".base64_encode($cache_key_url_hash);
       if(DHH_FPC_DEBUG === true) {
         print_r("<br />Cache URL: {$cache_key_url}");
+        print_r("<br />Cache URL hash: {$cache_key_url_hash}");
         print_r("<br />Cache Key Prefix: {$cache_key_prefix}");
         print_r("<br />Cache Key: {$_cacheKey}");
       }
@@ -276,10 +271,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract
           ->createBlock("checkout/cart_minicart")
           ->setTemplate("checkout/cart/minicart.phtml")
           ->toHtml();
-        $sidebar_html = Mage::app()
-          ->getLayout()
-          ->createBlock("checkout/cart_sidebar")
-          ->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
+        // Disabled for performance
+        // To re-enable, also make changes to checkout/cart/minicart.phtml
+        // $sidebar_html = Mage::app()
+          // ->getLayout()
+          // ->createBlock("checkout/cart_sidebar")
+          // ->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
+        $sidebar_html = "";
         
         $messages_html .= Mage::app()
           ->getLayout()

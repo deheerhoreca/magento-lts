@@ -567,24 +567,33 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
   
   public function getStockInfo($product) {
     $stock_data = [];
-    
+        
     /* Availability, Stock */
+    $stockitem              = $product->getStockItem();
     $stock_message          = null;
     $txtcltcz               = null;
-    $stock_qty              = (int) $product->getStockItem()->getQty();
-    $in_stock               = $product->getStockItem()->getIsInStock(); // "0", "1", true
+    if($stockitem) {
+      $stock_qty              = (int) $stockitem->getQty();
+      $in_stock               = $stockitem->getIsInStock(); // "0", "1", true
+      $backorders             = $stockitem->getBackorders();
+      $manage_stock           = ($stockitem->getManageStock() === true || $stockitem->getManageStock() === "1") ? true : false;
+      $min_sale_qty           = $stockitem->getMinSaleQty();
+    } else {
+      $stock_qty              = 0;
+      $in_stock               = "0";
+      $backorders             = null;
+      $manage_stock           = false;
+      $min_sale_qty           = 0;
+    }
     $in_stock               = ($in_stock === true || $in_stock === "1") ? true : false;
-    $backorders             = $product->getStockItem()->getBackorders();
     $saleable               = $product->isSaleable();
+    $extra_delivery_time    = 0;
     $eol                    = ($product->getEol() === true || $product->getEol() === "2075") ? true : false;
     $eol_replacement_sku    = $product->getEolReplacementSku();
-    $manage_stock           = ($product->getStockItem()->getManageStock() === true || $product->getStockItem()->getManageStock() === "1") ? true : false;
-    $extra_delivery_time    = 0;
     $expected_delivery      = $product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($product);
     $levertijd              = $product->getAttributeText("levertijd");
     $levertijd_tmp_override = $product->getAttributeText("levertijd_tmp_override");
     $bestelartikel          = $product->getAttributeText("bestelartikel");
-    $min_sale_qty           = $product->getStockItem()->getMinSaleQty();
     
     $calwekdate_min         = $calwekdate_max = null;
     
@@ -686,15 +695,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         // $calwekdate_max   = date('d-m-Y', strtotime($calwekdate_max . ' +' . ($i + 1) . ' weekday'));
       // }
       
-      if($manage_stock === false || $stock_qty === 100) {
-        // 100 is a special value, when we don't have an exact quantity
+      if($manage_stock === false) {
         $stock_message      = "Op voorraad";
-      } elseif($stock_qty > 10) {
-        $stock_message      = "<strong>10+</strong> op voorraad";
-      } elseif($stock_qty <= 5) {
+      } elseif($stock_qty < 4) {
         $stock_message      = "Nog maar <strong>{$stock_qty}</strong> op voorraad";
       } else {
-        $stock_message      = "<strong>{$stock_qty}</strong> op voorraad";
+        $stock_message      = "Op voorraad";
       }
       $txtcltcz             = 'buyblock-usp';
       $backorder_needed     = false;
@@ -704,6 +710,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       
     }
     
+    $txtstockdate = null;
     // $txtstockdate = $product->getData('txtstockdate');
     $real_txtstockdate = $product->getData('txtstockdate');
     if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
@@ -768,17 +775,21 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
   }
   
   public static function getUserIP() {
-    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
-          $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-          $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+    if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+      $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+      $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
     }
     $client  = @$_SERVER['HTTP_CLIENT_IP'];
     $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
     $remote  = $_SERVER['REMOTE_ADDR'];
 
-    if(filter_var($client, FILTER_VALIDATE_IP)) { $ip = $client; }
-    elseif(filter_var($forward, FILTER_VALIDATE_IP)) { $ip = $forward; }
-    else { $ip = $remote; }
+    if(filter_var($client, FILTER_VALIDATE_IP)) {
+      $ip = $client;
+    } elseif(filter_var($forward, FILTER_VALIDATE_IP)) {
+      $ip = $forward;
+    } else {
+      $ip = $remote;
+    }
 
     return $ip;
   }

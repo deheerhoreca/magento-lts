@@ -134,7 +134,7 @@
                 <cron>0</cron>
                 <cron_schedule>0 0 * * *</cron_schedule>
                 <memory_limit>1024M</memory_limit>
-                <max_execution_time>300</max_execution_time>
+                <max_execution_time>1800</max_execution_time>
                 <overwrite>0</overwrite>
             </generate>
         </sooqr_connect>

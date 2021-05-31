@@ -96,7 +96,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
       if($product->getTypeId() === Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
         // $childIds = Mage::getModel('catalog/product_type_configurable')->getChildrenIds($product->getId());
         $childIds = Mage::getModel('catalog/product_type_configurable')->getChildrenIds($product->getId());
-        // if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+        // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
          // print_r($childIds);
         // }
         $childIds = array_pop($childIds);
@@ -117,8 +117,16 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
             
             $value = $attribute->getFrontend()->getValue($product);
             
-            // if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-              // echo "<pre>";print_r($attribute->getAttributeCode().$value);echo "</pre>";
+            // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
+              // // printr($attribute->debug());
+              // printr($attribute->getFrontendInput()."::".$attribute->getAttributeCode()."::{$value}");
+            // }
+            
+            // Do not display "No" on some attribute types
+            // "No/Nee" is put 
+            // @todo replace boolean attributes with proper dropdowns that include "n.v.t."
+            // if($value === "Nee") {
+              // continue;
             // }
             
             if(is_string($value)) {
@@ -157,7 +165,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
         $group['title'] = $groupModel->getAttributeGroupName();
       }
       
-      // if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
+      // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
         // echo "<pre>";print_r($data);echo "</pre>";
       // }
 

@@ -418,7 +418,7 @@ if($i < $max_highlighted_attributes) {
   $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
   $title = "Stil apparaat";
   $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if(empty($text) === false) {
+  if(empty($text) === false && $text < 50) {
     $text = "{$text} dB";
     $highlights[] = [
       "image" => $image,
@@ -963,17 +963,12 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
           <a class="anchor" id="documents"></a>
           <ul>
             <li class="tab_list_element">
-              <!-- <a id="mediathek" class="headline active"><?php echo $this->__('Mediathek') ?></a> -->
               <div id="tab-mediathek" class="tabs_content">
                 <?php
                   //echo "<pre>";print_r($files);echo "</pre>";
                   foreach($files as $file) {
-                    $file_name = empty($file['description']) ? $file['filename'] : $file['description'];
-                    echo '<div class="mediathek" style="margin-bottom: 10px">';
-                    echo "<a title='{$file['filename']}' class='document-link' href=\"{$dir}/{$file['path']}\" target=\"_blank\">
-                            <i class=\"fa fa-file-{$file['type']}-o fa-2x\"></i><span>{$file_name}</span>
-                          </a>";
-                    echo "</div>";
+                    $file_name = empty($file['title']) ? $file['filename'] : $file['title'];
+                    echo "<a title='{$file['filename']}' class='document-link' href='{$dir}/{$file['path']}' target='_blank' style='margin-bottom: 10px;'><i class='fa fa-file-{$file['type']}-o fa-2x'></i><span>{$file_name}</span></a>";
                   }
                 ?>
               </div>

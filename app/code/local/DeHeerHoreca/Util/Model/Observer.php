@@ -7,17 +7,27 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   public function updateProductOnEdit($observer) {
     $event = $observer->getEvent();
     $product = $event->getProduct();
-    $product->lockAttribute('cost');
-    $product->lockAttribute('price_min');
-    $product->lockAttribute('recommended_product');
-    $product->lockAttribute('additional_attributes');
-    $product->lockAttribute('automation_flags_json');
-    $product->lockAttribute('amazon_id');
-    $product->lockAttribute('gross_margin_perc');
-    $product->lockAttribute('gross_margin_euro');
-    $product->lockAttribute('last_auto_stock');
-    $product->lockAttribute('supplier_description');
-    $product->lockAttribute('last_stock_info_date');
+    $product->lockAttribute("cost");
+    $product->lockAttribute("price_min");
+    $product->lockAttribute("recommended_product");
+    $product->lockAttribute("additional_attributes");
+    $product->lockAttribute("automation_flags_json");
+    $product->lockAttribute("amazon_id");
+    $product->lockAttribute("gross_margin_perc");
+    $product->lockAttribute("gross_margin_euro");
+    $product->lockAttribute("last_auto_stock");
+    $product->lockAttribute("supplier_description");
+    $product->lockAttribute("last_stock_info_date");
+    $product->lockAttribute("bol_commission_perc");
+    $product->lockAttribute("bol_commission_fixed");
+    $product->lockAttribute("price_bol_be");
+    $product->lockAttribute("price_bol_nl");
+    $product->lockAttribute("price_bol_nl_auto");
+    $product->lockAttribute("price_bol_be_auto");
+    $product->lockAttribute("price_bol_nl_reason");
+    $product->lockAttribute("price_bol_be_reason");
+    $product->lockAttribute("price_bol_be_updated");
+    $product->lockAttribute("price_bol_nl_updated");
   }
   
   // Also used directly in resave_all_products.php
@@ -299,12 +309,11 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $action = Mage::app()->getFrontController()->getAction()->getFullActionName();
     
     $full_url = Mage::helper('core/url')->getCurrentUrl();
-    $url = Mage::getSingleton('core/url')->parseUrl($full_url);
-    $path = ltrim($url->getPath(), '/');
+    $url      = Mage::getSingleton('core/url')->parseUrl($full_url);
+    $path     = ltrim($url->getPath(), '/');
     
     // In case of an FPC HIT, we cannot use current_product or current_category
-    $oRewrite = Mage::getModel('core/url_rewrite')
-      ->setStoreId(Mage::app()->getStore()->getId())->loadByRequestPath($path);
+    $oRewrite = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByRequestPath($path);
     
     $entity_id = null;
     switch($action) {
@@ -326,7 +335,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     // Mage::helper("deheerhoreca_util/util")->addToClickLog("url.full", $full_url);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("url.path", $path);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("host.name", gethostname());
-    Mage::helper("deheerhoreca_util/util")->addToClickLog("ecs.version", "1.7.0");
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("ecs.version", "1.9.0");
     
     try {
       $json = json_encode($dhh_click_log);
