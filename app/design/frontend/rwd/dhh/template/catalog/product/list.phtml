@@ -20,6 +20,14 @@ $max_product_highlight_items  = 6;
 $category_thumbs_dimensions   = 140;
 $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
+$active_filters               = Mage::getSingleton('catalog/layer')->getState()->getFilters();
+$have_active_filters          = (bool) empty($active_filters) === false;
+
+if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+  // foreach($active_filters as $filter) {
+    // printr($filter->debug());
+  // }
+}  
 
 /*
  * Bug fix: Using require_stock_items there was a bug that lead
@@ -70,9 +78,16 @@ $on_first_page = (empty($current_page_nr) === false && $current_page_nr > 1) ? f
 if($carct && ($category === 'category')) {
   $parent_categories  = $carct->getParentCategories();
   $catid              = (int) $carct->getId();
-  $category_desc      = $carct->getDescription();
   $category_name      = $carct->getName();
   $category_name      = str_replace("[V] ", null, $category_name);
+  
+  // Do not display description when filtering
+  if($have_active_filters === true || $on_first_page === false) {
+    $category_desc      = "";
+  } else {
+    $category_desc      = $carct->getDescription();
+  }
+
   if(strlen($category_desc) < 5) {
     $category_desc      = "<h1>{$category_name}</h1>";
   }
@@ -87,16 +102,16 @@ if($carct && ($category === 'category')) {
   if(defined("CTDESC_H1_SENT") === true) {
     $category_desc = str_ireplace("h1>", "h2>", $category_desc);
   }
-
+  
   echo "<div class='ctdesc std' id='ctdesc'>";
   if(empty($category_desc) === false) {
-
+    
     /* Augment category description */
     
-    if(strstr($category_desc, "<!--no_auto_desc-->") === false) {
-    
+    if(strpos($category_desc, "<!--no_auto_desc-->") === false) {
+      
       $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
-      if($on_first_page === true && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
+      if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
         $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
         $n = sizeof($manufacturers);
         $i = 0;
@@ -115,7 +130,7 @@ if($carct && ($category === 'category')) {
         $category_desc .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
       }
       
-      if($on_first_page === true) {
+      if($on_first_page === true && $have_active_filters === false) {
         if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
           $category_desc .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:service@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
         } else {
@@ -126,7 +141,7 @@ if($carct && ($category === 'category')) {
     
     /* Optionally cut off description and show a 'More' button */
     
-    if(strstr($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
+    if(strpos($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";

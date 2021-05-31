@@ -188,6 +188,5 @@ Disallow: /
 
 User-agent: *
 Disallow: /catalogsearch/
-Disallow: /*?multiple_selects=true
 Disallow: /cdn-cgi/*
 Disallow: /no-route
