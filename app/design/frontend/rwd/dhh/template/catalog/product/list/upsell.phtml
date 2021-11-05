@@ -6,11 +6,12 @@ $i            = 0;
 $max_items    = $_columnCount;
 
 if($collection->getSize() > 0 ) {
+  Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
   ?>
   <div id="autorelated-products" class="product-collateral category-products">
     <?php
     echo "<span class=h3>Alternatieven</span><hr>";
-    echo "<ul class='products-grid'>";
+    echo "<ul class='products-grid products-grid-mini'>";
     foreach($collection as $_product) {
       if($i === $max_items) break;
       $i++;
@@ -21,7 +22,7 @@ if($collection->getSize() > 0 ) {
           "image_size"              => 125,
           "_blank"                  => false,
           "use_short_product_names" => true,
-          "display"                 => "normal",
+          "display"                 => "mini",
         ];
         echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
       echo "</li>";
@@ -30,4 +31,3 @@ if($collection->getSize() > 0 ) {
   </ul></div>
   <?php
 }
-?>

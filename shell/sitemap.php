@@ -1,4 +1,6 @@
 <?php
+// @deprecated
+die();
 
 /*
  * https://raw.githubusercontent.com/papertank/magento-php-sitemap/master/sitemap.php

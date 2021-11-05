@@ -6,7 +6,13 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
 
 <layout version="0.1.0">
   <default>
-  
+    
+    <customer_logged_in>
+      <remove name="sale.reorder.sidebar"/>
+      <remove name="left.reports.product.viewed"/>
+      <remove name="right.reports.product.viewed"/>
+    </customer_logged_in>
+    
     <reference name="head">
       <action method="removeItem"><type>js</type><file>scriptaculous/builder.js</file></action>
       <action method="removeItem"><type>js</type><file>scriptaculous/dragdrop.js</file></action>

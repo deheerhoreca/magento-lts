@@ -57,8 +57,14 @@ if ($statusPrintOnlyMatch) {
     }
 }
 ?>
-
-
+<style>
+@media screen and (min-width: 1200.1px) {
+  .info-box-cart-success {
+    background: url(/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
+    background-size: contain;
+  }
+}
+</style>
 <div class="info-box info-box-cart-success">
   <div class="info-box-inner std">
     <h1 class="xxl">Bedankt!</h1>
@@ -72,6 +78,7 @@ if ($statusPrintOnlyMatch) {
   </div>
 </div>
 
+<!--
 <form action="<?php echo $this->getUrl('*/index/downloadQuotePdf') ?>" method="post" id="downloadQuotePdf">
   <input type="hidden" name="quoteID" value="<?php echo $quote->quote_id; ?>"/>
 </form>
@@ -81,3 +88,4 @@ if ($statusPrintOnlyMatch) {
       $('downloadQuotePdf').submit();
   }
 </script>
+-->

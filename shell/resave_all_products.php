@@ -1,11 +1,18 @@
 <?php
 
-const DEBUG = false;
-
 if(php_sapi_name() !== "cli") {
   header("Location: /");
   exit;
 }
+
+const DEBUG = false;
+// const N     = 10;
+
+/* FILTERS */
+// $supplier_names = ["combisteel"];
+// $dhh_sku  = "BA-109881";
+$fromDate = date('1970-01-01 00:00:00');
+$toDate   = date('Y-m-d H:i:s', strtotime("-1 day"));
 
 ini_set('memory_limit', '8G');
 ini_set('display_errors', true);
@@ -26,21 +33,20 @@ if(Mage::registry('isSecureArea')) {
 Mage::register('isSecureArea', true);
 
 if(DEBUG === false) {
-  echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual");
+  echo "Setting 3 indexers to manual...".PHP_EOL;
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual cataloginventory_stock");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual catalog_product_attribute");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual catalog_product_flat");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual catalog_product_price");
 }
-
-/* FILTERS */
-$supplier_names = ["combisteel"];
-// $dhh_sku  = "GH133";
-// $fromDate = date('1970-01-01 00:00:00');
-// $toDate   = date('Y-m-d H:i:s', strtotime("-1 day"));
 
 $collection = Mage::getModel('catalog/product')->getCollection()
   ->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
-  ->addAttributeToSelect('id')
-  // ->setPageSize(10)
-  // ->setCurPage(1)
-;
+  ->addAttributeToSelect('id');
+
+if(defined("N")) {
+  $collection->setPageSize(N)->setCurPage(1);
+}
 
 if(empty($supplier_names) === false) {
   
@@ -51,6 +57,7 @@ if(empty($supplier_names) === false) {
     reset($supplier_options);        
     foreach($supplier_options as $option) {
       if(strtolower($option['label']) === $supplier) {
+        echo "Supplier: {$option['label']}".PHP_EOL;
         $collection->addAttributeToFilter("supplier", $option['value']);
         break 1;
       }
@@ -67,8 +74,8 @@ if(empty($supplier_ids) === false) {
 }
 
 if(empty($dhh_sku) === true && empty($fromDate) === false && empty($toDate) === false) {
-  echo "From: {$fromDate}".PHP_EOL;
-  echo "To: {$toDate}".PHP_EOL;
+  echo "Date From: {$fromDate}".PHP_EOL;
+  echo "Date To: {$toDate}".PHP_EOL;
   $collection->addFieldToFilter('updated_at', [
     'from'  => $fromDate,
     'to'    => $toDate,
@@ -109,9 +116,16 @@ echo PHP_EOL."Saved {$i} product(s)".PHP_EOL;
 
 if(DEBUG === false) {
   echo "Re-enabling realtime indexing...".PHP_EOL;
-  echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime cataloginventory_stock");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime catalog_product_attribute");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime catalog_product_flat");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime catalog_product_price");
+  
   echo "Reindexing...".PHP_EOL;
-  echo shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php reindexall");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex cataloginventory_stock");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex catalog_product_attribute");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex catalog_product_flat");
+  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex catalog_product_price");
 } else {
   echo "Skipping reindex, did not disable it".PHP_EOL;
 }

@@ -6,6 +6,7 @@ $i            = 0;
 $max_items    = $_columnCount;
 
 if($collection->getSize() > 0 ) {
+  Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
   ?>
   <div id="autorelated-products" class="product-collateral category-products">
     <?php
@@ -21,7 +22,8 @@ if($collection->getSize() > 0 ) {
           "image_size"              => 125,
           "_blank"                  => false,
           "use_short_product_names" => true,
-          "display"                 => "normal",
+          "display"                 => "mini",
+          "skip_actions"            => true,
         ];
         echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
       echo "</li>";

@@ -76,11 +76,11 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
           
           $css_classes = (substr($_crumbName, 0, 8) === "category") ? "category " : null;
           $label = $this->htmlEscape($_crumbInfo['label']);
-          $label = str_replace("[V]", null, $label); // Remove virtual category marker from frontend
+          $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
           $label = trim($label);
           
           $title = $this->htmlEscape($_crumbInfo['title']);
-          $title = str_replace("[V]", null, $title); // Remove virtual category marker from frontend
+          $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
           $title = trim($title);
             
           echo "<li class='{$css_classes}{$_crumbName}'>";
@@ -122,11 +122,11 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
           foreach($crumbs as $_crumbName=>$_crumbInfo) {
             
             $label = $this->htmlEscape($_crumbInfo['label']);
-            $label = str_replace("[V]", null, $label); // Remove virtual category marker from frontend
+            $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
             $label = trim($label);
             
             $title = $this->htmlEscape($_crumbInfo['title']);
-            $title = str_replace("[V]", null, $title); // Remove virtual category marker from frontend
+            $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
             $title = trim($title);
             
             echo "<li class='{$_crumbName}'";

@@ -55,13 +55,6 @@ User-agent: Mail.RU_Bot
 User-agent: KINGSpider
 User-agent: OpenindexSpider
 User-Agent: AspiegelBot
-User-agent: SemrushBot
-User-agent: SemrushBot-SA
-User-agent: SemrushBot-BA
-User-agent: SemrushBot-SI
-User-agent: SemrushBot-SWA
-User-agent: SemrushBot-CT
-User-agent: SemrushBot-BM
 User-agent: Rogerbot
 User-agent: Exabot
 User-agent: MJ12bot
@@ -184,6 +177,13 @@ User-agent: LinkWalker/2.0
 User-agent: Coccoc
 User-agent: Coccocbot-web
 User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: SemrushBot-SA
+User-agent: SemrushBot-BA
+User-agent: SemrushBot-SI
+User-agent: SemrushBot-SWA
+User-agent: SemrushBot-CT
+User-agent: SemrushBot-BM
 Disallow: /
 
 User-agent: *

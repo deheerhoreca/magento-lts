@@ -1,21 +1,27 @@
 <?php
 $_item = $this->getItem();
 
-$_product = $this->getProduct();
+// $_product = $this->getProduct();
 $_product = $_item->getProduct();
 $product_long_name = $_product->getName();
 $product_name = (strlen($_product->getNameShort()) > 0) ? $_product->getNameShort() : $product_long_name;
 $show_product_long_name = (bool) (strlen($_product->getNameShort()) > 0);
-// $levertijd = Mage::getModel('catalog/product')->load($_product->getId())->getAttributeText("levertijd");
-// $levertijd = $_product->getAttributeText("levertijd");
+
+$stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+$overall_stock_status   = $stock_data["overall_stock_status"];
+$manage_stock           = $stock_data["manage_stock"];
+
+// if(_dhh_debug()) {
+  // printr($stock_data);
+// }
 
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
-$thumb_size = 120;
-$thumb_dimensions = 2 * $thumb_size;
+$thumb_size = 90;
+$thumb_dimensions = 1.5 * $thumb_size;
 ?>
 <tr>
-  <td class="product-cart-image" width="<?php echo $thumb_size; ?>">
+  <td class="product-cart-image">
     <?php if ($this->hasProductUrl()):?>
     <?php endif;?>
       <img height="<?php echo $thumb_size; ?>" width="<?php echo $thumb_size; ?>" src="<?php echo $this->getProductThumbnail()->resize($thumb_dimensions, $thumb_dimensions); ?>" alt="<?php echo $this->escapeHtml($product_name) ?>" />
@@ -48,9 +54,6 @@ $thumb_dimensions = 2 * $thumb_size;
     if($show_product_long_name === true) {
       echo "<span class=gray><em>{$product_long_name}</em></span>";
     }
-    // if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-      // echo "<p class='small'>Verwacht: {$levertijd}</p>";
-    // }
     ?>
 
     <?php if ($_options = $this->getOptionList()):?>
@@ -72,27 +75,36 @@ $thumb_dimensions = 2 * $thumb_size;
     </dl>
     <?php endif;?>
 
-    <?php if ($messages = $this->getMessages()): ?>
-    <?php foreach ($messages as $message): ?>
-		<?php
-		 $clzpm='';
-		if (strpos($message['text'],'deze worden als backorder') !== false) {
-  $clzpm='clzctbcmsg';
+    <?php
+    if($messages = $this->getMessages()) {
+      foreach($messages as $message) {
+        if(stripos($message['text'], 'backorder') !== false && !empty($_product->getData("txtstockdate"))) {
+          $txtstockdate = strtotime($_product->getData("txtstockdate"));
+          if($txtstockdate > time()) {
+            $txtstockdate = date("d-m-Y", $txtstockdate);
+            echo "<span class='buyblock-usp' style='line-height: 1.5em;'>Verwacht: {$txtstockdate}</span><br>";
+          }
+        }
+        ?>
+        <p class="item-msg clzctbcmsg">
+          <?php echo $this->escapeHtml($message['text']) ?>
+        </p>
+        <?php
+      }
+    } elseif($overall_stock_status === "in_stock") {
+      if($manage_stock === true) {
+        echo "<span class='buyblock-usp' style='line-height: 1.5em;'>Direct leverbaar</span>";
+      } else {
+        echo "<span class='buyblock-usp' style='line-height: 1.5em;'>Levering in overleg</span>";
+      }
+    }
+    ?>
 
-	$product = Mage::getModel('catalog/product')->load($_item->getProduct()->getId());
-  $attribute=$product->getResource()->getAttribute('txtstockdate');
-	echo '<small style="font-size: 10px;padding-left: 6px;color: #28aadd;"><strong style="font-weight: bold;">Verwacht: </strong>'.$attribute->getFrontend()->getValue($product).'</small>';
-}
-?><p class="item-msg <?php echo $message['type'] ?> <?php echo $clzpm;?>">
-        * <?php echo $this->escapeHtml($message['text']) ?>
-      </p>
-    <?php endforeach; ?>
-    <?php endif; ?>
-
-    <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
-    <?php if ($addInfoBlock): ?>
-      <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
-    <?php endif;?>
+    <?php
+    if($addInfoBlock = $this->getProductAdditionalInformationBlock()) {
+      echo $addInfoBlock->setItem($_item)->toHtml();
+    }
+    ?>
 
   </td>
 

@@ -220,23 +220,21 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       "show_category_link"      => false,
       "prefer_rewrite_table"    => false,
     ];
+    
+    Display usage:
+    - mini: related, autorelated, upsell
+    - normal: listview
     */
     
-    $product_name = $_product->getData("name");
+    $product_name = $image_label = $_product->getData("name");
     $product_short_name = $_product->getData("name_short");
-    $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
-    if(empty($image_label)) {
-      $image_label = $this->stripTags($product_name, null, true);
-    }
+    // $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
+    // if(empty($image_label)) {
+      // $image_label = $this->stripTags($product_name, null, true);
+    // }
     
     /* Interpret options */
     $image_size = $options["image_size"] ?? 150;
-    if(empty($options["skip_info"]) || $options["skip_info"] === false) {
-      $product_info = Mage::helper("deheerhoreca_util/util")->getProductInfo($_product);
-    }
-    if(empty($options["skip_usps"]) || $options["skip_usps"] === false) {
-      $product_usps = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product);
-    }
     $a_target = null;
     if(isset($options["_blank"]) === true && $options["_blank"] === true) {
       $a_target = " target='_blank'";
@@ -244,14 +242,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $display_product_name = $product_name;
     if(isset($options["use_short_product_names"]) === true && $options["use_short_product_names"] === true) {
       $display_product_name = $product_short_name;
-    }
-    if(isset($options["show_category_link"]) === true && $options["show_category_link"] === true) {
-      $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
-    }
-    if(isset($options["prefer_rewrite_table"]) === true && $options["prefer_rewrite_table"] === true) {
-      $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
-    } else {
-      $product_url            = $_product->getProductUrl();
     }
     $skip_actions = $options["skip_actions"] ?? false;
     
@@ -261,7 +251,27 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $display = "normal";
     }
     
-    /* Get all variables */    
+    $max_product_usps = 10;
+    if($display === "mini") {
+      $max_product_usps = 4;
+    }
+    
+    /* Get data */
+    if(empty($options["skip_info"]) || $options["skip_info"] === false) {
+      $product_info = Mage::helper("deheerhoreca_util/util")->getProductInfo($_product);
+    }
+    if(empty($options["skip_usps"]) || $options["skip_usps"] === false) {
+      $product_usps = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product);
+    }
+    if(isset($options["show_category_link"]) === true && $options["show_category_link"] === true) {
+      $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
+    }
+    if(isset($options["prefer_rewrite_table"]) === true && $options["prefer_rewrite_table"] === true) {
+      $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
+    } else {
+      $product_url = $_product->getProductUrl();
+    }
+    
     $image_dimensions       = 1 * $image_size;
     $max_product_info_items = 3;
     $tagline                = $_product->getTagline();
@@ -289,17 +299,23 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
     
     $additional_delivery_messages = null;
-      
+    
+    // if(_dhh_debug()) {
+      // echo "<pre>";
+      // printr($stock_data);
+      // echo "</pre>";
+    // }
+    
     switch($overall_stock_status) {
       case "in_stock":
         if($display === "mini") {
-          $stock_message = "Voorraad";
+          $stock_message = "Op voorraad";
         }
         break;
       case "backorder":
-        $stock_class = "buyblock-usp dark-color";
+        $stock_class = "buyblock-usp";
         if($display === "mini") {
-          $stock_message = "Nabestelling";
+          $stock_message = "Reserveren";
         }
         break;
       case "not_sellable":
@@ -314,9 +330,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     ?>
     <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target; ?>>
-      <img class='lazy center' id='product-collection-image-<?php echo $_product->getId(); ?>'
-        data-src='<?php echo $img_url; ?>'
-        alt='<?php echo $image_label; ?>' width='<?php echo $image_size; ?>' height='<?php echo $image_size; ?>' />
+      <img class="lazy center" id="product-collection-image-<?php echo $_product->getId(); ?>" data-src="<?php echo $img_url; ?>" alt="<?php echo $image_label; ?>" width="<?php echo $image_size; ?>" height="<?php echo $image_size; ?>" />
     </a>
     <div class="product-info">
       <div class="info">
@@ -325,7 +339,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         </h2>
         <?php
         if(isset($tagline) === true) {
-          echo "<div class='product-list-tagline'>{$tagline}</div>";
+          if($display === "mini") {
+            echo "<div class='product-list-tagline'>Onze Keuze</div>";
+          } else {
+            echo "<div class='product-list-tagline'>{$tagline}</div>";
+          }
         }
         
         if(empty($product_info) === false && (empty($options["skip_info"]) || $options["skip_info"] === false)) {
@@ -337,10 +355,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
           echo "</ul>";
         }
         
-        if(empty($product_usps) === false && (empty($options["skip_usps"]) || $options["skip_usps"] === false)) {
+        if(empty($product_usps) === false
+        && (empty($options["skip_usps"]) || $options["skip_usps"] === false)) {
+          $product_usps = array_splice($product_usps, 0, $max_product_usps); // Take max amount
           echo "<ul class='product-list-highlights'>";
-          foreach($product_usps as $usp) {
-            echo "<li>{$usp}</li>";
+          $class    = ($display === "mini") ? "" : "green_checkbox_before";
+          $postfix  = ($display === "mini") ? ", " : "";
+          $count = sizeof($product_usps);
+          foreach($product_usps as $key => $usp) {
+            if($count > ($key+1)) {
+              $usp .= $postfix;
+            }
+            echo "<li><span class='{$class}' style='position: relative;'></span>{$usp}</li>";
           }
           echo "</ul>";
         }
@@ -367,6 +393,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
           <?php endif; ?>
         </div>
         <?php
+      } else {
+        ?>
+        <div class="actions">
+          <div class="float-left" style="padding-top: 5px;">
+            <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+          </div>
+        </div>
+        <?php
       }
       
       if(isset($category_info["url"]) === true) {
@@ -384,101 +418,137 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     $product_info = [];
             
-    $width = $attribute_value = $_product->getBreedte();
-    $height = $attribute_value = $_product->getHoogte();
-    $depth = $attribute_value = $_product->getDiepte();
+    // $width = $attribute_value = $_product->getBreedte();
+    // $height = $attribute_value = $_product->getHoogte();
+    // $depth = $attribute_value = $_product->getDiepte();
     
-    $width = $width + 0;
-    $height = $height + 0;
-    $depth = $depth + 0;
+    // $width = $width + 0;
+    // $height = $height + 0;
+    // $depth = $depth + 0;
     
-    $width /= 10;
-    $height /= 10;
-    $depth /= 10;
+    // $width /= 10;
+    // $height /= 10;
+    // $depth /= 10;
     
-    if($width > 10) $width = round($width);
-    if($depth > 10) $depth = round($depth);
-    if($height > 10) $height = round($height);
+    // if($width > 10) $width = round($width);
+    // if($depth > 10) $depth = round($depth);
+    // if($height > 10) $height = round($height);
     
-    if($width > 0 && $height > 0 && $depth > 0) {
-      $product_info[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
-    } else {
-      $attribute_value = $_product->getBreedte();
-      if($attribute_value != '' && $attribute_value > 0) {
-        $product_info[] = "Breedte: ".($attribute_value/10)."cm";
-      }
-    }
+    // if($width > 0 && $height > 0 && $depth > 0) {
+      // $product_info[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
+    // } else {
+      // $attribute_value = $_product->getBreedte();
+      // if($attribute_value != '' && $attribute_value > 0) {
+        // $product_info[] = "Breedte: ".($attribute_value/10)."cm";
+      // }
+    // }
 
-    if($category_id === 72) {
-      $attribute_value = $_product->getInhoudAantalGn();
-      if($attribute_value !='') {
-        $product_info[] = "{$attribute_value} x {$gnvalue}";
-      }
-    }
+    // if($category_id === 72) {
+      // $attribute_value = $_product->getInhoudAantalGn();
+      // if($attribute_value !='') {
+        // $product_info[] = "{$attribute_value} x {$gnvalue}";
+      // }
+    // }
     
-    $attribute_value = (int) $_product->getData('eenheid');
-    if($attribute_value > 1) {
-      $product_info[] = "{$attribute_value} stuks";
-    }
+    // $attribute_value = (int) $_product->getData('eenheid');
+    // if($attribute_value > 1) {
+      // $product_info[] = "{$attribute_value} stuks";
+    // }
     
-    $attribute_value = $_product->getAttributeText('size');
-    if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
-      $product_info[] = "Maat: {$attribute_value}";
-    }
+    // $attribute_value = $_product->getAttributeText('size');
+    // if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
+      // $product_info[] = "Maat: {$attribute_value}";
+    // }
     
-    if($display === "normal") {
-      $attribute_value = $_product->getData('materiaal');
-      if(strlen($attribute_value) > 0) {
-        $product_info[] = "{$attribute_value}";
-      }
-    }
+    // if($display === "normal") {
+      // $attribute_value = $_product->getData('materiaal');
+      // if(strlen($attribute_value) > 0) {
+        // $product_info[] = "{$attribute_value}";
+      // }
+    // }
     
-    $code = "uitvoering";
-    $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-    if(is_array($attribute_value) === true) {
-      $attribute_value = implode(", ", $attribute_value);
-    }
-    if(strlen($attribute_value) > 0) {
-      $product_info[] = "Uitvoering: {$attribute_value}";
-    }
+    // $code = "uitvoering";
+    // $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+    // if(is_array($attribute_value) === true) {
+      // $attribute_value = implode(", ", $attribute_value);
+    // }
+    // if(strlen($attribute_value) > 0) {
+      // $product_info[] = "Uitvoering: {$attribute_value}";
+    // }
     
     return $product_info;
   }
-
+  
+  // Sync with list.phtml
   public function getProductUsps($_product, $options = []) {
     
     $parent_categories_ids = $options["parent_categories_ids"] ?? [];
     
     $usps = [];
     
-    /* Type koeling */
-    $attribute_value = $_product->getAttributeText('type_koeling');
-    if($attribute_value != ''){
-      $usps[] = "{$attribute_value}";
-    }
-      
-    /* Afsluitbaar */
-    $attribute_value = $_product->getAttributeText("afsluitbaar");
-    if($attribute_value === "Ja") {
-      $usps[] = "Afsluitbaar";
+    // Size
+    $attribute_value = $_product->getAttributeText('size');
+    if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
+      $usps[] = "Maat: {$attribute_value}";
     }
     
-    /* Blikjes */
+    // Material
+    $attribute_value = $_product->getResource()->getAttribute('material_group')->getFrontend()->getValue($_product);
+    if(strlen($attribute_value) > 0) {
+      foreach(explode(",", $attribute_value) as $value) {
+        $value = str_ireplace(["(Roestvast staal)"], null, $value);
+        $usps[] = trim($value);
+      }
+    }
+    
+    // Uitvoering
+    $attribute_value = $_product->getAttributeText('uitvoering');
+    if(is_array($attribute_value) === true) {
+      $attribute_value = implode(", ", $attribute_value);
+    }
+    if(is_scalar($attribute_value) === true && strlen($attribute_value) > 0) {
+      $usps[] = $attribute_value;
+    }
+    
+    $attribute_value = $_product->getAttributeText('type_koeling');
+    if(empty($attribute_value) === false && $attribute_value !== "N.v.t.") {
+      $usps[] = $attribute_value;
+    }
+    
+    // Blikjes
     $attribute_value = (int) $_product->getData("aantal_blikjes");
     if($attribute_value > 0) {
       $usps[] = "{$attribute_value}x 33cl";
     }
     
-    /* Flessen */
+    // Flessen
     $attribute_value = (int) $_product->getData("aantal_flessen");
     if($attribute_value > 0) {
       $usps[] = "{$attribute_value} flessen";
     }
     
-    /* Capacity: Wine Bottels */
+    // Capacity: Wine Bottles
     $attribute_value = (int) $_product->getData("capacity_wine_bottles");
     if($attribute_value > 0) {
       $usps[] = "{$attribute_value} flessen";
+    }
+    
+    // voorraadbunker_kg
+    $attribute_value = (int) $_product->getData("voorraadbunker_kg");
+    if($attribute_value > 0) {
+      $usps[] = "{$attribute_value} kg Bunker";
+    }
+    
+    // icecube_type
+    $attribute_value = $_product->getAttributeText('icecube_type');
+    if(empty($attribute_value) === false && $attribute_value !== "N.v.t.") {
+      $usps[] = $attribute_value;
+    }
+    
+    // ijs_productie
+    $attribute_value = (int) $_product->getData("ijs_productie");
+    if($attribute_value > 0) {
+      $usps[] = "{$attribute_value} kg/24u";
     }
     
     /* GN maat if not in a GN category */
@@ -488,7 +558,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         if(is_array($gnvalue)) {
           $gnvalue = implode(" ", $gnvalue);
         }
-        $usps[] = "{$gnvalue} GN";
+        $usps[] = "{$gnvalue}";
     }
     
     /* Custom highlights */
@@ -503,46 +573,83 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       }
     }            
     
-    /* Inhoud */
-    $attribute_value = $_product->getInhoudLiters();
-    if(strlen($attribute_value) > 0) {
-      $usps[] = round($attribute_value, 2)." liter";
+    /* Volumes */
+    $volume_usp_done = false;
+    $attribute_value = $_product->getData("volume_net_liter");
+    if($volume_usp_done === false && strlen($attribute_value) > 0) {
+      if($attribute_value > 2000) {
+        $usps[] = "Netto ".round($attribute_value / 1000, 2)." m<sup>3</sup>";
+      } else {
+        $usps[] = "Netto ".round($attribute_value, 2)." liter";
+      }
+      $volume_usp_done = true;
     }
+    $attribute_value = $_product->getData("inhoud_liters");
+    if($volume_usp_done === false && strlen($attribute_value) > 0) {
+      $usps[] = round($attribute_value, 2)." liter";
+      $volume_usp_done = true;
+    }
+    unset($volume_usp_done);
     
-    /* Vermogen */
-    if(in_array(3, $parent_categories_ids) === false) { // skip "Koelingen" and everything underneath
-      $attribute_value = $_product->getVermogen();
-      if(empty($attribute_value) === false && $attribute_value > 0) {
+    /* Powers */
+    $power_usp_done = false;
+    $attribute_value = $_product->getData("total_power_watt");
+    
+    if(empty($attribute_value) === false) {
+      if($attribute_value  >= 5000) {
+        $attribute_value   /= 1000;
+        $attribute_value    = number_format($attribute_value, 2, ",", ".");
+        if($attribute_value > 0) {
+          $usps[] = "{$attribute_value} kW";
+        }
+      } else {
+        $attribute_value = (int) number_format($attribute_value, 0, ",", "");
+        if($attribute_value > 0) {
+          $usps[] = "{$attribute_value} W";
+        }
+      }
+      $power_usp_done = true;
+    }
+    if($power_usp_done !== true) {
+      $attribute_value = $_product->getData("vermogen");
+      if(empty($attribute_value) === false) {
         if($attribute_value < 3) {
           $attribute_value *= 1000;
-          $usps[] = "{$attribute_value} Watt";
+          if($attribute_value > 0) {
+            $usps[] = "{$attribute_value} Watt";
+          }
         } else {
           //$attribute_value = str_replace(".", null, $attribute_value);
           //$attribute_value = str_replace(",", ".", $attribute_value);
           $attribute_value = number_format($attribute_value, 1, ",", ".");
           $attribute_value = str_replace(",0", null, $attribute_value);
+          if($attribute_value > 0) {
+            $usps[] = "{$attribute_value} kW";
+          }
+        }
+      }
+    }
+    $attribute_value = $_product->getData("vermogen_kw");
+    if($power_usp_done !== true && empty($attribute_value) === false) {
+      if($attribute_value < 3) {
+        $attribute_value *= 1000;
+        if($attribute_value > 0) {
+          $usps[] = "{$attribute_value} Watt";
+        }
+      } else {
+        $attribute_value = number_format($attribute_value, 1, ",", ".");
+        $attribute_value = str_replace(",0", null, $attribute_value);
+        if($attribute_value > 0) {
           $usps[] = "{$attribute_value} kW";
         }
       }
     }
-    
-    /* Gas Vermogen */
-    $attribute_value = $_product->getVermogenKw();
-    if(empty($attribute_value) === false && $attribute_value > 0) {
-      if($attribute_value < 3) {
-        $attribute_value *= 1000;
-        $usps[] = "{$attribute_value} Watt";
-      } else {
-        $attribute_value = number_format($attribute_value, 1, ",", ".");
-        $attribute_value = str_replace(",0", null, $attribute_value);
-        $usps[] = "{$attribute_value} kW";
-      }
-    }
+    unset($power_usp_done);
     
     /* M3/hour capacity */
     $attribute_value = $_product->getAantalM3Uur();
     if(strlen($attribute_value) > 0) {
-      $usps[] = round($attribute_value, 2)." m3";
+      $usps[] = round($attribute_value, 2)." m3/UUR";
     }
     
     /* Warranty */
@@ -562,15 +669,88 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $usps[] = "{$attribute_value} Zones";
     }
     
+    /* Cooking Zones */
+    $attribute_value = $_product->getCookingZones();
+    if(strlen($attribute_value) > 0 && (double) $attribute_value > 1) {
+      $usps[] = round($attribute_value, 2)." Zones";
+    }
+    
+    /* Aftap */
+    $attribute_value = $_product->getAttributeText('aftap');
+    if($attribute_value === "Ja") {
+      $usps[] = "Met Aftap";
+    }
+    
+    /* Afsluitbaar */
+    $attribute_value = $_product->getAttributeText("afsluitbaar");
+    if($attribute_value === "Ja") {
+      $usps[] = "Afsluitbaar";
+    }
+    
+    /* Motor */
+    $attribute_value = $_product->getAttributeText("motor");
+    if($attribute_value === "Ja") {
+      $usps[] = "Incl. motor";
+    }
+    
+    /* Insulation thickness */
+    $attribute_value = $_product->getAttributeText("isolatiedikte");
+    if(is_array($attribute_value)) {
+      $attribute_value = implode(", ", $attribute_value);
+    }
+    if(strlen($attribute_value) > 0) {
+      $usps[] = "{$attribute_value} mm";
+    }
+    
+    // Dimensions
+    $width          = ($_product->getBreedte() + 0) / 10;
+    $height         = ($_product->getHoogte()  + 0) / 10;
+    $depth          = ($_product->getDiepte()  + 0) / 10;
+    
+    if($width  > 10) $width  = round($width);
+    if($depth  > 10) $depth  = round($depth);
+    if($height > 10) $height = round($height);
+    
+    if($width > 0 && $height > 0 && $depth > 0) {
+      $usps[] = "(B){$width} x (D){$depth} x (H){$height}cm";
+    } else {
+      $width = $_product->getBreedte();
+      if($width != '' && $width > 0) {
+        // $usps[] = "Breedte: ".($width/10)."cm";
+      }
+    }
+    
+    // Diameter
+    $attribute_value = $_product->getData('diameter_mm');
+    if($attribute_value != ''){
+      $usps[] = "Ø {$attribute_value} mm";
+    }
+    
+    // Length
+    $code = "length_mm";
+    $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+    if($attribute_value != '') {
+      $attribute_value /= 10;
+      $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+      $usps[] = "Lengte: {$attribute_value} cm";
+    }
+    
+    // Quantity
+    $attribute_value = (int) $_product->getData('eenheid');
+    if($attribute_value > 1) {
+      $usps[] = "{$attribute_value} stuks";
+    }
+    
     return $usps; 
   }
   
-  public function getStockInfo($product) {
+  public function getStockInfo($product, $context = null) {
     $stock_data = [];
         
     /* Availability, Stock */
     $stockitem              = $product->getStockItem();
     $stock_message          = null;
+    $stock_tooltip          = null;
     $txtcltcz               = null;
     if($stockitem) {
       $stock_qty              = (int) $stockitem->getQty();
@@ -616,6 +796,22 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     }
 
     /* Delivery time text */
+    
+    $txtstockdate = null;
+    $real_txtstockdate = $product->getData("txtstockdate");
+    if(empty($real_txtstockdate) === false
+    // && ($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder" || $manage_stock === false)
+    ) {
+      if(empty($real_txtstockdate) === false) {
+        $datetime1  = new DateTime($real_txtstockdate);
+        $now        = new DateTime("now");
+        $interval   = $now->diff($datetime1)->format("%a");
+        
+        if($datetime1 > $now && $interval < 90) {        
+          $txtstockdate = date("d-m-Y", strtotime($real_txtstockdate));
+        }
+      }
+    }
 
     // Code also exists in list.phtml and featured.phtml
 
@@ -623,11 +819,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       
       // EOL
       
-      $stock_message        = "Nooit meer leverbaar";
+      $stock_message        = "Niet meer leverbaar";
+      $stock_tooltip        = "Dit product is verlopen en helaas niet meer leverbaar.";
       $delivery_text        = "";
       $txtcltcz             = 'clzsoldout';
       $backorder_needed     = null;      
       $overall_stock_status = "eol";
+      $txtstockdate         = null;
       
     } elseif($in_stock === false || $saleable === false) {
       
@@ -644,7 +842,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         
       // Backorder
       
-      $stock_message        = "Op nabestelling, of bel voor alternatieven";
+      $stock_message        = "Nu te reserveren";
+      $stock_tooltip        = "Momenteel niet op vooraad, maar wel reserveerbaar. U bent dan de eerste die het product krijgt.";
       $delivery_text        = "Verw. levering: <strong>Op aanvraag</strong>";
       $txtcltcz             = 'clzinstocktemp';
       $backorder_needed     =  true;
@@ -695,14 +894,31 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         // $calwekdate_max   = date('d-m-Y', strtotime($calwekdate_max . ' +' . ($i + 1) . ' weekday'));
       // }
       
+      $txtcltcz             = "buyblock-usp";
+      
       if($manage_stock === false) {
-        $stock_message      = "Op voorraad";
+        
+        // Unmanaged, be careful with overpromising
+        
+        $stock_message        = "Op aanvraag";
+        $txtcltcz             = "buyblock-usp";
+        
+        // If we have an unmanaged product, we cannot really say when it will be available again
+        $levertijd = null;
+        
       } elseif($stock_qty < 4) {
-        $stock_message      = "Nog maar <strong>{$stock_qty}</strong> op voorraad";
+        $stock_message        = "Op voorraad";
+        if($context === "listview") {
+          $stock_message        = "Op voorraad";
+        } else {
+          $stock_message        = "Let op: <strong>{$stock_qty}</strong> op voorraad";
+        }
+        $txtstockdate         = null;
       } else {
-        $stock_message      = "Op voorraad";
+        $stock_message        = "Op voorraad";
+        $txtstockdate         = null;
       }
-      $txtcltcz             = 'buyblock-usp';
+      
       $backorder_needed     = false;
       $overall_stock_status = "in_stock";
       
@@ -710,22 +926,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       
     }
     
-    $txtstockdate = null;
-    // $txtstockdate = $product->getData('txtstockdate');
-    $real_txtstockdate = $product->getData('txtstockdate');
-    if($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder") {
-      if(empty($real_txtstockdate) === false) {
-        $datetime1  = new DateTime($real_txtstockdate);
-        $now        = new DateTime("now");
-        $interval   = $now->diff($datetime1)->format("%a");
-        
-        if($datetime1 > $now && $interval < 90) {        
-          $txtstockdate = date("d-m-Y", strtotime($real_txtstockdate));
-        }
-      }
-    }
-    
     $stock_data["stock_message"]          = $stock_message;
+    $stock_data["stock_tooltip"]          = $stock_tooltip;
     $stock_data["txtcltcz"]               = $txtcltcz;
     $stock_data["stock_qty"]              = $stock_qty;
     $stock_data["in_stock"]               = $in_stock;
@@ -744,11 +946,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $stock_data["levertijd_tmp_override"] = $levertijd_tmp_override;
     $stock_data["min_sale_qty"]           = $min_sale_qty;
     
-    // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
-      // echo "<pre>";
+    // if(_dhh_debug()) {
       // printr($stock_data);
-      // printr($product->getStockItem()->debug());
-      // echo "</pre>";
     // }
     
     return $stock_data;
@@ -794,6 +993,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     return $ip;
   }
   
+  public static function trim_decimals($value, $decimals = 2) {
+    if(is_scalar($value) && is_numeric($value)) {
+      $value = number_format($value, $decimals, ",", ".");
+      $decimal_string = ",".str_repeat("0", $decimals);
+      $value = str_replace(",00", null, $value);
+    }
+    
+    return $value;
+  }
+  
+  public static function cleanCategoryName($category_name) {
+    return trim(str_replace(["[V]", "[SKIPMENU]"], null, $category_name));
+  }
 }
 
 if(function_exists('printr') === false) {
@@ -818,7 +1030,7 @@ if(function_exists('printr') === false) {
   }
 }
 
-if(function_exists("sanitizeForFilename") === FALSE) {
+if(function_exists("sanitizeForFilename") === false) {
   function sanitizeForFilename($string) {
     // Remove anything which isn't a word, whitespace, number
     // or any of the following caracters -_~,;[]().
@@ -829,5 +1041,16 @@ if(function_exists("sanitizeForFilename") === FALSE) {
     // Remove any runs of periods (thanks falstro!)
     $output = mb_ereg_replace("([\.]{2,})", '', $string);
     return strtolower($output);
+  }
+}
+
+if(function_exists("_dhh_debug") === false) {
+  function _dhh_debug() {
+    if(isset($_SERVER["REMOTE_ADDR"])
+    && in_array($_SERVER["REMOTE_ADDR"], ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235"])
+    && isset($_GET['nofpc'])) {
+      return true;
+    }
+    return false;
   }
 }

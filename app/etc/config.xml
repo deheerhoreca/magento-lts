@@ -120,6 +120,18 @@
                 </entities>
             </core_resource>
         </models>
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <txtstockdate/> <!-- Makes it available in cart -->
+                        <bestelartikel/> <!-- Makes it available in cart -->
+                        <levertijd/> <!-- Makes it available in cart -->
+                        <levertijd_tmp_override/> <!-- Makes it available in cart -->
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
     </global>
     <default>
         <system>

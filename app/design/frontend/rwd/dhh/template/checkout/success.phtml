@@ -3,10 +3,27 @@
 # - app/design/frontend/rwd/dhh/template/paysafecash/success.phtml
 # - app/design/frontend/rwd/dhh/template/checkout/success.phtml
 ?>
+
+<?php /* Bing Conversion tracking */ ?>
+<?php
+$order_id = Mage::getSingleton('checkout/session')->getLastOrderId();
+$order    = Mage::getModel('sales/order')->load($order_id);
+$total    = $order->getGrandTotal() / 1.21; // VAT
+?>
+<script>
+  window.uetq = window.uetq || [];  
+  window.uetq.push('event', '', {'revenue_value': GetBingRevenueValue(), 'currency': 'EUR'});    
+</script>
+<script>
+  function GetBingRevenueValue() { return <?php echo $total; ?>; }
+</script>
+
 <style>
-.info-box-cart-success {
-  background: url(/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
-  background-size: contain;
+@media screen and (min-width: 1200.1px) {
+  .info-box-cart-success {
+    background: url(/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
+    background-size: contain;
+  }
 }
 </style>
 <div class="info-box info-box-cart-success">

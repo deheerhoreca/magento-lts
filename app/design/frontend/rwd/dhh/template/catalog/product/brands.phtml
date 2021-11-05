@@ -61,12 +61,13 @@ usort($manufacturers, function($a, $b) {
   foreach ($manufacturers as $manufacturer) {
     
     $n = countProductsPerBrand($manufacturer["value"]);
-    
     if($n === 0) continue;
 	
     $brand_logo   = null;
     $brand_name   = $manufacturer['label'];
     $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+    $brand_id     = $manufacturer["value"];
+    $brand_link   = "/shop?manufacturer={$brand_id}";
     
     if(empty($brand_name) === false) {
       $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
@@ -78,12 +79,12 @@ usort($manufacturers, function($a, $b) {
     if(empty($brand_logo) === false) {
     ?>
       <li>
-        <a href="/<?php echo $brand_slug; ?>.html">
+        <a href="<?php echo $brand_link; ?>">
         <img class="lazy" data-src="<?php echo $brand_logo;?>" alt="<?php echo $brand_name; ?>" title="<?php echo $brand_name; ?>" /></a>
       </li>
       <?php 
     } else {
-      $m2 .= "<li><a href='/{$brand_slug}.html'>{$manufacturer['label']}</a></li>";
+      $m2 .= "<li><a href='{$brand_link}'>{$manufacturer['label']}</a></li>";
     }
   }
   ?>
@@ -94,10 +95,9 @@ usort($manufacturers, function($a, $b) {
 
 function countProductsPerBrand($brand_id) {
   try {
-    $collection = Mage::getModel('catalog/product')->getCollection();
-    $_productCollection = $collection->addAttributeToFilter('manufacturer', $brand_id)
-      ->addAttributeToFilter('status', ['eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
-      ->addAttributeToSelect('name');
+    $collection = Mage::getModel("catalog/product")->getCollection();
+    $_productCollection = $collection->addAttributeToFilter("manufacturer", $brand_id)
+      ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]);
     return sizeof($_productCollection);
   } catch (Exception $e) {
     return "error";

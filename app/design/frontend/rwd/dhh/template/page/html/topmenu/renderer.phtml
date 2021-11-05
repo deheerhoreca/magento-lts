@@ -33,12 +33,14 @@ foreach($children as $child) {
   $outermostClassCode = 'level'. $childLevel;
   $_hasChildren       = $child->hasChildren();
   $has_children_class = ($_hasChildren && $childLevel < 1) ? ' has-children' : '';
-  $name               = $this->escapeHtml($this->__($child->getName()));
-  $name               = str_replace("[V]", null, $name);
-  $name               = trim($name);
+  $category_name      = $this->escapeHtml($this->__($child->getName()));
+  if(strpos($category_name, "[SKIPMENU]") !== false) {
+    continue;
+  }
+  $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   
   if($childLevel < 2) $html .= "<li {$this->_getRenderedMenuItemAttributes($child)}>";
-  $html .= "<a title=\"{$name}\" href='{$url}' class='{$outermostClassCode}{$has_children_class}'>{$name}</a>";
+  $html .= "<a title=\"{$category_name}\" href='{$url}' class='{$outermostClassCode}{$has_children_class}'>{$category_name}</a>";
 
   if($_hasChildren) {
     if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";

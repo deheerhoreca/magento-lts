@@ -13,21 +13,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute("additional_attributes");
     $product->lockAttribute("automation_flags_json");
     $product->lockAttribute("amazon_id");
-    $product->lockAttribute("gross_margin_perc");
-    $product->lockAttribute("gross_margin_euro");
     $product->lockAttribute("last_auto_stock");
     $product->lockAttribute("supplier_description");
     $product->lockAttribute("last_stock_info_date");
     $product->lockAttribute("bol_commission_perc");
     $product->lockAttribute("bol_commission_fixed");
-    $product->lockAttribute("price_bol_be");
-    $product->lockAttribute("price_bol_nl");
-    $product->lockAttribute("price_bol_nl_auto");
-    $product->lockAttribute("price_bol_be_auto");
-    $product->lockAttribute("price_bol_nl_reason");
-    $product->lockAttribute("price_bol_be_reason");
-    $product->lockAttribute("price_bol_be_updated");
-    $product->lockAttribute("price_bol_nl_updated");
+    $product->lockAttribute("stock_status");
+    $product->lockAttribute("popularity");
+    $product->lockAttribute("bol_category_current");
   }
   
   // Also used directly in resave_all_products.php
@@ -39,10 +32,6 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       $return = true;
       $product = $observer_or_product;
     }
-    
-    // echo "<pre>"; print_r($product->getData());
-    // var_dump($product->getData("bargain"));
-    // var_dump($product->getData("featured"));
     
     /* SHORT NAME */
     if(strlen($product->getData("name_short")) < 3) {
@@ -86,40 +75,42 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     
     /* PRICING */
     
-    // Fill cost from msrp and price_supplier_discount_perc
-    if(empty($product->getData("msrp")) === false) {
-      if(empty($product->getData("price_supplier_discount_perc")) === false) {
-        $new_value = (float) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_discount_perc") / 100)), 2);
-        if($new_value > 0) {
-          $current_value = (double) $product->getData("cost");
-          if($current_value !== $new_value) {
-            $product->setData("cost", $new_value);
-            if($return === false) Mage::getSingleton('core/session')->addSuccess("Cost Price overwritten");
-          }
-        }
-      }
+    // Disabled, intel is better for this
+    
+    // // Fill cost from msrp and price_supplier_discount_perc
+    // if(empty($product->getData("msrp")) === false) {
+      // if(empty($product->getData("price_supplier_discount_perc")) === false) {
+        // $new_value = (float) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_discount_perc") / 100)), 2);
+        // if($new_value > 0) {
+          // $current_value = (double) $product->getData("cost");
+          // if($current_value !== $new_value) {
+            // $product->setData("cost", $new_value);
+            // if($return === false) Mage::getSingleton('core/session')->addSuccess("Cost Price overwritten");
+          // }
+        // }
+      // }
       
-      // Fill price_min from msrp and price_supplier_msrp_disc_limit
-      if(empty($product->getData("price_supplier_msrp_disc_limit")) === false) {
-        $new_value = (double) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_msrp_disc_limit") / 100)), 2);
-        if($new_value > 0) {
-          $current_value = (double) $product->getData("price_min");
-          if($current_value !== $new_value) {
-            $product->setData("price_min", $new_value);
-            if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min overwritten");
-          }
-        }
-      }
-    }
+      // // Fill price_min from msrp and price_supplier_msrp_disc_limit
+      // if(empty($product->getData("price_supplier_msrp_disc_limit")) === false) {
+        // $new_value = (double) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_msrp_disc_limit") / 100)), 2);
+        // if($new_value > 0) {
+          // $current_value = (double) $product->getData("price_min");
+          // if($current_value !== $new_value) {
+            // $product->setData("price_min", $new_value);
+            // if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min overwritten");
+          // }
+        // }
+      // }
+    // }
     
     
-    if(empty($product->getData("price_supplier_msrp_disc_limit")) === true) {
-      // Clear the value if price_supplier_msrp_disc_limit is empty
-      if(empty($product->getData("price_min")) === false) {
-        $product->setData("price_min", null);
-        if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
-      }
-    }
+    // if(empty($product->getData("price_supplier_msrp_disc_limit")) === true) {
+      // // Clear the value if price_supplier_msrp_disc_limit is empty
+      // if(empty($product->getData("price_min")) === false) {
+        // $product->setData("price_min", null);
+        // if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
+      // }
+    // }
     
     // if(empty($product->getData("price_bol_be_auto")) === false && $product->getData("price_bol_be_auto") === "1") {
       // $new_value = (float) $product->getData("special_price") * 1.21;
@@ -141,28 +132,28 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       // }
     // }
     
-    if(empty($product->getData("cost")) === false && $product->getData("cost") > 0) {
-      $our_price = (float) $product->getData("price");
-      if(empty($product->getData("special_price")) === false) {
-        $our_price = (float) $product->getData("special_price");
-      }
+    // if(empty($product->getData("cost")) === false && $product->getData("cost") > 0) {
+      // $our_price = (float) $product->getData("price");
+      // if(empty($product->getData("special_price")) === false) {
+        // $our_price = (float) $product->getData("special_price");
+      // }
       
-      if($our_price > 0) {
-        // Gross Margin EUR
-        $new_value = (float) number_format($our_price - $product->getData("cost"), 4, null, "");
-        if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_euro")) {
-          $product->setData("gross_margin_euro", $new_value);
-          if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_euro auto-filled");
-        }
+      // if($our_price > 0) {
+        // // Gross Margin EUR
+        // $new_value = (float) number_format($our_price - $product->getData("cost"), 4, null, "");
+        // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_euro")) {
+          // $product->setData("gross_margin_euro", $new_value);
+          // if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_euro auto-filled");
+        // }
         
-        // Gross Margin PERC
-        $new_value = (float) number_format(((($our_price - $product->getData("cost")) / $our_price) * 100), 4, null, "");
-        if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_perc")) {
-          $product->setData("gross_margin_perc", $new_value);
-          if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_perc auto-filled");
-        }
-      }
-    }
+        // // Gross Margin PERC
+        // $new_value = (float) number_format(((($our_price - $product->getData("cost")) / $our_price) * 100), 4, null, "");
+        // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_perc")) {
+          // $product->setData("gross_margin_perc", $new_value);
+          // if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_perc auto-filled");
+        // }
+      // }
+    // }
     
     /* MERCHANDISING */
     if(empty($product->getData("tagline")) === false) {
@@ -273,7 +264,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     // exit;
     return;
   }
-
+  
   // Adds an EOL = No filter to any listview unless it's explicitly set to Yes
   public function addEolFilter($observer) {
     // $productCollection = $observer->getEvent()->getCollection();
@@ -292,7 +283,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // ], '', 'left');
       // }
     // }
-
+    
     // $observer->getEvent()->setCollection($productCollection);    
     
     // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
@@ -300,50 +291,79 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       // $filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
       // echo $productCollection->getSize();
     // }
-    
   }
   
   public function logClick():void {
     global $dhh_click_log;
     
-    $action = Mage::app()->getFrontController()->getAction()->getFullActionName();
+    $action     = Mage::app()->getFrontController()->getAction()->getFullActionName();
     
-    $full_url = Mage::helper('core/url')->getCurrentUrl();
-    $url      = Mage::getSingleton('core/url')->parseUrl($full_url);
-    $path     = ltrim($url->getPath(), '/');
+    $full_url   = Mage::helper('core/url')->getCurrentUrl();
+    $url        = Mage::getSingleton('core/url')->parseUrl($full_url);
+    $path       = ltrim($url->getPath(), "/");
+    $query      = ltrim($url->getQuery(), "?");
+    $entity_id  = null;
     
-    // In case of an FPC HIT, we cannot use current_product or current_category
-    $oRewrite = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByRequestPath($path);
-    
-    $entity_id = null;
-    switch($action) {
-      case "catalog_product_view":                      
-        $entity_id = $oRewrite->getProductId();
-        break;
-      case "catalog_category_view":
-        $entity_id = $oRewrite->getCategoryId();
-        break;
+    // current_* is fastest, but in case of an FPC HIT we cannot use them
+    if(isset($dhh_click_log["label"]["fpc_cache"]) && $dhh_click_log["label"]["fpc_cache"] !== "HIT") {
+      switch($action) {
+        case "catalog_product_view":
+          $entity_id = Mage::registry('current_product')->getId();
+          break;
+        case "catalog_category_view":
+          $entity_id = Mage::registry('current_category')->getId();
+          break;
+      }
+    } else {
+      $oRewrite = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByRequestPath($path);
+      switch($action) {
+        case "catalog_product_view":
+          $entity_id = $oRewrite->getProductId();
+          break;
+        case "catalog_category_view":
+          $entity_id = $oRewrite->getCategoryId();
+          break;
+      }
     }
     
-    if(is_numeric($entity_id)) $entity_id = intval($entity_id);
+    if(is_numeric($entity_id) === true) {
+      $entity_id = intval($entity_id);
+    }
     
-    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.created", date("c"));
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("@timestamp", date("Y-m-d\TH:i:s.uP"));
     Mage::helper("deheerhoreca_util/util")->addToClickLog("client.ip", Mage::helper("deheerhoreca_util/util")->getUserIP());
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.action", $action);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.id", $entity_id);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.module", "mage-clicks");
-    // Mage::helper("deheerhoreca_util/util")->addToClickLog("url.full", $full_url);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.kind", "event");
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("url.full", $full_url);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("url.domain", "www.chefstore.nl");
     Mage::helper("deheerhoreca_util/util")->addToClickLog("url.path", $path);
+    if(strlen($query) > 0) {
+      Mage::helper("deheerhoreca_util/util")->addToClickLog("url.query", $query);
+    }
     Mage::helper("deheerhoreca_util/util")->addToClickLog("host.name", gethostname());
-    Mage::helper("deheerhoreca_util/util")->addToClickLog("ecs.version", "1.9.0");
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("ecs.version", "1.11.0");
     
     try {
       $json = json_encode($dhh_click_log);
-      $target = "./var/log/clicks.jsonl";
-      file_put_contents($target, $json.PHP_EOL, FILE_APPEND);
+      file_put_contents("./var/log/clicks.jsonl", $json.PHP_EOL, FILE_APPEND);
     } catch (Exception $e) {
       Mage::log($e->getMessage(), null, 'exception.log', true);
     }
+  }
+  
+  // Called during placement of an order, to clear tm_field fields
+  // These fields need to be cleared during reorder (admin only)
+  public function beforeOrderPlace(Varien_Event_Observer $observer): void {
+    $_order = $observer->getEvent()->getOrder();
+    $_order->setData("tm_field1", null); // Wholesale Order ID
+    $_order->setData("tm_field2", null); // Delivery Date
+    $_order->setData("tm_field3", null); // Transportation Company
+    $_order->setData("tm_field4", null); // Wholesalers
+    $_order->setData("tm_field5", null); // Flags
+    $_order->setData("tm_field6", null); // Platform Order ID
+    $_order->setData("tm_field8", null); // Packing Slip ID
   }
   
 }

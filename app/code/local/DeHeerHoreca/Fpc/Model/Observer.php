@@ -48,19 +48,32 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     /* catalog_product_view */
     $pattern = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
-    $result .= shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
-    // Mage::getSingleton('core/session')->addSuccess("FPC Cache cleared: {$result}x catalog_product_view");
+    $result  = shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
     
     /* catalog_category_view */
     $category_ids = $product->getCategoryIds();
-    $result = null;
     if(empty($category_ids) === false) {
       foreach($category_ids as $category_id) {
         $pattern = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-        $result .= shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
+        $result  = shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
       }
     }
-    // Mage::getSingleton('core/session')->addSuccess("FPC Cache cleared: {$result}x catalog_category_view");
+    
+    return true;
+  }
+  
+  public function clearCategoryCache($observer) {
+    $category     = $observer->getEvent()->getCategory();
+    $category_id  = $category->getId();
+    
+    if(empty($category_id)) {
+      return true;
+    }
+    
+    $pattern = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
+    $result  = shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
+    
+    // Mage::getSingleton('core/session')->addSuccess("Category FPC pattern '{$pattern}' cleared");
     
     return true;
   }

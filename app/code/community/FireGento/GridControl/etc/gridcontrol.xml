@@ -15,12 +15,15 @@
       </websites>
       
       <entity_id>
-        <remove/>
+        <!-- <remove/> -->
+        <updateColumn>
+          <width>5%</width>
+        </updateColumn>
       </entity_id>
       
       <name>
         <updateColumn>
-          <width>40%</width>
+          <width>30%</width>
         </updateColumn>
       </name>
       
@@ -82,49 +85,69 @@
         <!-- </add> -->
         <!-- <after>bi_supplier_sold_365</after> -->
       <!-- </bi_dhh_sold_365> -->
+
+      <manufacturer>
+        <add>
+          <header>Merk</header>
+          <size>5</size>
+          <type>options</type>
+          <index>manufacturer</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options>
+        </add>
+        <after>eol</after>
+      </manufacturer>
       
-      <product_type>
+      <ean>
         <add>
-          <header>Type</header>
-          <size>5</size>
-          <type>options</type>
-          <index>product_type</index>
-          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(product_type)</options>
+          <header>EAN</header>
+          <size>10</size>
+          <type>text</type>
+          <index>ean</index>
         </add>
-        <after>eol</after>
-      </product_type>
-
-      <supplier>
-        <add>
-          <header>Leverancier</header>
-          <size>5</size>
-          <type>options</type>
-          <index>supplier</index>
-          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
-        </add>
-        <after>eol</after>
-      </supplier>
-
-      <!-- <manufacturer> -->
-        <!-- <add> -->
-          <!-- <header>Merk</header> -->
-          <!-- <size>5</size> -->
-          <!-- <type>options</type> -->
-          <!-- <index>manufacturer</index> -->
-          <!-- <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options> -->
-        <!-- </add> -->
-        <!-- <after>supplier</after> -->
-      <!-- </manufacturer> -->
+        <after>manufacturer</after>
+      </ean>
       
       <qty>
         <remove/>
       </qty>
+      
+      <product_type>
+        <add>
+          <header>Type</header>
+          <size>100</size>
+          <type>options</type>
+          <index>product_type</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(product_type)</options>
+        </add>
+        <after>ean</after>
+      </product_type>
+      
+      <bol_category>
+        <add>
+          <header>Bol Category</header>
+          <size>100</size>
+          <type>text</type>
+          <index>bol_category</index>
+        </add>
+        <after>product_type</after>
+      </bol_category>
 
     </productGrid>
     
     <!-- Category Products Grid -->
     
     <catalog_category_products>
+      
+      <product_type>
+        <add>
+          <header>Product Type</header>
+          <type>options</type>
+          <index>product_type</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(product_type)</options>
+        </add>
+        <after>name</after>
+      </product_type>
+      
       <status>
         <add>
           <header>Status</header>
@@ -145,15 +168,15 @@
         <after>status</after>
       </eol>
       
-      <bi_supplier_sold_365>
-        <add>
-          <header>SuppSold365</header>
-          <type>number</type>
-          <index>bi_supplier_sold_365</index>
-          <width>4</width>
-        </add>
-        <after>eol</after>
-      </bi_supplier_sold_365>
+      <!-- <bi_supplier_sold_365> -->
+        <!-- <add> -->
+          <!-- <header>SuppSold365</header> -->
+          <!-- <type>number</type> -->
+          <!-- <index>bi_supplier_sold_365</index> -->
+          <!-- <width>4</width> -->
+        <!-- </add> -->
+        <!-- <after>eol</after> -->
+      <!-- </bi_supplier_sold_365> -->
       
       <supplier>
         <add>

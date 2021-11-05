@@ -26,6 +26,15 @@
           </DeHeerHoreca_Fpc_Model_Observer>
         </observers>
       </catalog_product_save_after>
+      <catalog_category_prepare_save>
+        <observers>
+          <DeHeerHoreca_Fpc_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_fpc/observer</class>
+            <method>clearCategoryCache</method>
+          </DeHeerHoreca_Fpc_Model_Observer>
+        </observers>
+      </catalog_category_prepare_save>
     </events>
   </global>
   <frontend>

@@ -5,7 +5,10 @@ $_finalPrice          = $_product->getFinalPrice();
 $_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
 $buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('In Winkelmandje'));
 
-if($_product->isSaleable()) { ?>
+// We have seen situations where EOL products were saleable due to the way we update stock info
+// Adding another check to make sure
+if($_product->isSaleable() && $_product->getAttributeText("eol") !== "Ja") {
+  ?>
   <div class="add-to-cart">
     <?php
     

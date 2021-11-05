@@ -116,12 +116,11 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
           if($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
             
             $value = $attribute->getFrontend()->getValue($product);
-            
-            // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
-              // // printr($attribute->debug());
-              // printr($attribute->getFrontendInput()."::".$attribute->getAttributeCode()."::{$value}");
-            // }
-            
+            $option_id = null;
+            if($attribute->usesSource()) {
+              $option_id = $attribute->setStoreId(0)->getSource()->getOptionId($value);
+            }
+                        
             // Do not display "No" on some attribute types
             // "No/Nee" is put 
             // @todo replace boolean attributes with proper dropdowns that include "n.v.t."
@@ -141,14 +140,13 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
               }
               
               if(isset($data[$group]['items'][$attribute->getAttributeCode()])) {
-                
                 $data[$group]['items'][$attribute->getAttributeCode()]["value"][] = $value;
-                
               } else {
                 $data[$group]['items'][$attribute->getAttributeCode()] = [
-                  'label'   => $attribute->getStoreLabel(),
-                  'value'   => [$value],
-                  'code'    => $attribute->getAttributeCode(),
+                  'label'     => $attribute->getStoreLabel(),
+                  'value'     => [$value],
+                  'code'      => $attribute->getAttributeCode(),
+                  'option_id' => $option_id,
                 ];
               }
 

@@ -8,19 +8,19 @@
 <?php $_filters = $this->getActiveFilters() ?>
 <?php $_removeTxt = Mage::helper('catalog')->__('Remove This Item') ?>
 <?php if (!empty($_filters)): ?>
-  <ul class="disc-list">
+  <ul>
     <?php foreach ($_filters as $_filter):?>
       <li>
         <?php if ($_filter->hasData('children')): ?>
           <?php foreach ($_filter->getData('children') as $child): ?>
             <span class="multiselect-child">
               <?php echo $child['label']  ?>
-              <a href="<?php echo $child['url'] ?>" class="btn-remove-inline" title="<?php echo $_removeTxt ?>">&nbsp;</a>
+              <a href="<?php echo $child['url'] ?>" class="btn-remove-inline" title="<?php echo $_removeTxt ?>"></a>
               <span class="label strong"><?php echo Mage::helper('catalog')->__($_filter->getName()) ?>:</span>
             </span>
           <?php endforeach ?>
         <?php else: ?>
-          <a href="<?php echo $_filter->getRemoveUrl() ?>" class="btn-remove" title="<?php echo $_removeTxt ?>">&nbsp;</a>
+          <a href="<?php echo $_filter->getRemoveUrl() ?>" class="btn-remove" title="<?php echo $_removeTxt ?>"></a>
           <span class="label strong"><?php echo Mage::helper('catalog')->__($_filter->getName()) ?>:</span>
           <?php echo $_filter->getLabel() ?>
         <?php endif ?>

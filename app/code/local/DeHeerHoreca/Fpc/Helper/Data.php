@@ -148,19 +148,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       $enabled = true;
       
-      if(isset($_GET['nofpc'])) {
+      if($enabled === true && isset($_GET['nofpc'])) {
         $enabled = false;
-      } elseif(isset($_GET['refreshfpc'])) {
+      } elseif($enabled === true && isset($_GET['refreshfpc'])) {
         $enabled = false;
-      } elseif(DHH_FPC_ENABLED === false) {
+      // } elseif($enabled === true && isset($_GET['stock_status'])) {
+        // $enabled = false;
+      } elseif($enabled === true && DHH_FPC_ENABLED === false) {
         $enabled = false;
-      } elseif($_SERVER['REQUEST_METHOD'] !== 'GET') {
+      } elseif($enabled === true && $_SERVER['REQUEST_METHOD'] !== 'GET') {
         $enabled = false;
-      } elseif(in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(),
+      } elseif($enabled === true && in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(),
           ["cms_index_noRoute"])
         ) {
         $enabled = false;
-      } elseif(
+      } elseif($enabled === true && (
         strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "checkout")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "customer")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "api")
@@ -168,11 +170,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "sales")
         || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "qquoteadv")        
-        ) {
+        )) {
         $enabled = false;
       }
       
-      if(Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
+      if($enabled === true && Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
         if($non_anonymous_okay === false) {
           $enabled = false;
         }

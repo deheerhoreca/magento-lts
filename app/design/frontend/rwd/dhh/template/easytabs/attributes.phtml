@@ -9,6 +9,11 @@
 $_helper              = $this->helper('catalog/output');
 $_product             = $this->getProduct();
 
+/* Optional toolips */
+$attr_tooltips = [
+  "koeltemperatuur"     => "De koeltemperatuur in de kast kan viarieren. Facturen die van invloed zijn op de koeltemperatuur zijn onder andere: type koeling, omgevingstemperatuur, open-frequentie, ventilatie rondom het apparaat, en de koelcyclus.",
+];
+
 /* No decimals, with number formatting */
 $attr_remove_decimals = [
   "hoogte_intern", "breedte_intern", "diepte_intern", 
@@ -20,13 +25,15 @@ $attr_remove_decimals = [
   "aantal_borden_korven", "aantal_glas_korven", "aantal_snelheden",
   "aantal_blikjes", "aantal_wasprogrammas", "eenheid", "capacity_wine_bottles",
   "geluidsniveau", "number_of_cooling_zones", "aantal_flessen",
-  "cooking_zones","gross_weight_gram","length_mm",
+  "cooking_zones","gross_weight_gram","length_mm","isolatiedikte",
+  "number_of_slots",
 ];
 
 /* No zero decimals, with number formatting */
 $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "inhoud_wastank_liter", "vermogen_boiler", "weight", "volume_freezer_liter",
   "volume_refrigerator_liter","volume_net_liter", "ijs_productie", "ijs_bunker",
+  "annual_energy_consumption_kwh",
 ];
 
 /* Do not show these values */
@@ -41,12 +48,15 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
   $attr_remove_decimals = array_flip($attr_remove_decimals);
   $attr_trim_decimals   = array_flip($attr_trim_decimals);
   
+  // if(_dhh_debug()) printr($_additionalgroup);
+  
   foreach($_additionalgroup as $_additional) {
     
     foreach($_additional['items'] as $_data) {
       $values         = $_data['value'];
       $code           = $_data['code'];
       $output_values  = [];
+      $link           = null;
       
       foreach($values as $value) {
       
@@ -65,10 +75,23 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
               continue 2;
             }
             break;
+          
+          case "ean":
+            $eans = _getAlternativeEans($value);
+            $value = implode(", ", $eans);
+            break;
+          
+          case "manufacturer":
+          case "brand_series":
+            if(empty($_data["option_id"]) === false) {
+              $link = "/shop?{$_data["code"]}={$_data["option_id"]}";
+            }
         }
         
         $label = $this->htmlEscape($this->__($_data['label']));
         $postfix = null;
+        
+        /* Processing individual attributes */
        
         switch($code) {
           case "vermogen_kw":
@@ -162,33 +185,68 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           $value = "-";
         }
         
-        $output_values[] = $value.$postfix;
+        if(empty($link) === false) {
+          $output_values[] = "<a href='{$link}'>{$value}{$postfix}</a>";
+        } else {
+          $output_values[] = "{$value}{$postfix}";
+        }
       }
       
       $output_values = array_unique($output_values);
       $_output_value = implode("<i style='font-size:8px;color:#adadad;padding:0 5px;' class='fa fa-minus' aria-hidden='true'></i>", $output_values);
       
+      $tooltip = "";
+      if(isset($attr_tooltips[$code]) === true) {
+        $tooltip = $attr_tooltips[$code];
+      }
+      
       if(empty($_output_value) === false) {
-        $attributes[$this->__($_additional['title'])][$label] = $_output_value;
+        $attributes[$this->__($_additional['title'])][$code] = [
+          "label"     => $label,
+          "value"     => $_output_value,
+          "tooltip"   => $tooltip,
+        ];
       }
     }
   }
 }
 
-// if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
+// if(_dhh_debug()) {
   // echo "<pre>";
-  // print_r($_additionalgroup);
+  // // print_r($_additionalgroup);
   // print_r($attributes);
   // echo "</pre>";
-// }  
+// }
 
 if($attributes !== []) {
   echo '<div class="box-collateral box-additional bxgroupifo product-specs">';
   foreach($attributes as $group => $subattributes) {
     echo "<span class='clzattrgname'>{$this->__($group)}</span>";
-    foreach($subattributes as $label => $value) {
-      echo "<dl><dt>{$label}</dt><dd>{$value}</dd></dl>";
+    foreach($subattributes as $key => $attr) {
+      $tooltip = "";
+      if(empty($attr["tooltip"]) === false) {
+        $tooltip = "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>{$attr["tooltip"]}</span></span>";
+      }
+      echo "<dl><dt>{$attr["label"]}{$tooltip}</dt><dd>{$attr["value"]}</dd></dl>";
     }
   }
   echo "</div>";
+}
+
+function _getAlternativeEans($ean) {
+  $eans = [$ean];
+  if(strlen($ean) === 13) {
+    $eans[] = sprintf("%014d", $ean);
+  }
+  if(substr($ean, 0, 1) === "0") {
+    $eans[] = substr($ean, 1);
+  }
+  if(substr($ean, 0, 2) === "00") {
+    $eans[] = substr($ean, 2);
+  }
+  if(substr($ean, 0, 3) === "000") {
+    $eans[] = substr($ean, 3);
+  }
+  
+  return $eans;
 }

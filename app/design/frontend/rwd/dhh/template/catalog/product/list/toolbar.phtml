@@ -7,50 +7,55 @@
 
 $limits = $this->getAvailableLimit();
 
-if($this->getCollection()->getSize()): ?>
-<div class="toolbar">
-  <?php if( $this->isExpanded() ): ?>
+if($this->getCollection()->getSize()) {
+  $size_human = $this->getCollection()->getSize();
+  if($size_human > 1000) {
+    $size_human = "Meer dan 1000";
+  }
+  ?>
+  <div class="toolbar">
+  <?php if($this->isExpanded()) { ?>
     <div class="sorter">
       <div class="sort-by">
-        <label><?php echo $this->__('Sort By') ?></label>
+        <label><?php echo $this->__("Sort By") ?></label>
         <div class="selwrapper">
-        <select onchange="setLocation(this.value)" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Sort By')) ?>">
+        <select onchange="setLocation(this.value)" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Sort By")) ?>">
           <?php foreach($this->getAvailableOrders() as $_key=>$_order): ?>
-            <option value="<?php echo $this->getOrderUrl($_key, 'asc') ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
+            <option value="<?php echo $this->getOrderUrl($_key, "asc") ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
               <?php echo $this->__($_order) ?>
             </option>
           <?php endforeach; ?>
         </select>
         </div>
-        <?php if($this->getCurrentDirection() == 'desc'): ?>
-          <a href="<?php echo $this->getOrderUrl(null, 'asc') ?>" class="no-transition sort-by-switcher sort-by-switcher--desc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Ascending Direction')) ?>"><?php echo $this->__('Set Ascending Direction') ?></a>
+        <?php if($this->getCurrentDirection() == "desc"): ?>
+          <a href="<?php echo $this->getOrderUrl(null, "asc") ?>" class="no-transition sort-by-switcher sort-by-switcher--desc" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Set Ascending Direction")) ?>"><?php echo $this->__("Set Ascending Direction") ?></a>
         <?php else: ?>
-          <a href="<?php echo $this->getOrderUrl(null, 'desc') ?>" class="no-transition sort-by-switcher sort-by-switcher--asc" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Set Descending Direction')) ?>"><?php echo $this->__('Set Descending Direction') ?></a>
+          <a href="<?php echo $this->getOrderUrl(null, "desc") ?>" class="no-transition sort-by-switcher sort-by-switcher--asc" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Set Descending Direction")) ?>"><?php echo $this->__("Set Descending Direction") ?></a>
         <?php endif; ?>
       </div>
     </div>
-  <?php endif; ?>
+  <?php } ?>
   
   <div class="sorter">
-    <p><strong><?php echo $this->getCollection()->getSize(); ?></strong> om uit te kiezen</p>
+    <p><strong><?php echo $size_human; ?></strong> producten om uit te kiezen</p>
   </div>
   
   <div class="pager">  
     <div class="count-container">
       <?php if($this->getLastPageNum()>1): ?>
         <p class="amount amount--has-pages">
-          <?php echo $this->__('%s-%s of %s', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+          <?php echo $this->__("%s-%s of %s", $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
         </p>
       <?php else: ?>
         <p class="amount amount--no-pages">
-          <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+          <strong><?php echo $this->__("%s Item(s)", $this->getTotalNum()) ?></strong>
         </p>
       <?php endif; ?>
 
       <?php if(sizeof($limits) > 1) { ?>
         <div class="limiter">
-          <label><?php echo $this->__('Toon') ?></label>
-          <select onchange="setLocation(this.value)" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Results per page')); ?>">
+          <label><?php echo $this->__("Toon") ?></label>
+          <select onchange="setLocation(this.value)" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Results per page")); ?>">
           <?php foreach ($limits as $_key => $_limit): ?>
             <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
               <?php echo $_limit ?>
@@ -65,4 +70,5 @@ if($this->getCollection()->getSize()): ?>
 
   </div>
 </div>
-<?php endif ?>
+<?php
+}

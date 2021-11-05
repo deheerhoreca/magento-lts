@@ -9,7 +9,7 @@ $_order   = $this->getItem()->getOrder();
       <img style="max-width:60px; max-height:60px;" src="<?php echo Mage::getModel('catalog/product_media_config')->getMediaUrl($_product->getThumbnail()); ?>" alt="<?php echo $_item->getNameShort(); ?>" />
     </td>
     <td class="cell-content product-info">
-      <p class="product-name"><?php echo $_item->getQtyOrdered()*1; echo " X ".$this->escapeHtml($_item->getName()); ?></p>
+      <p class="product-name"><?php echo $_item->getQtyOrdered()*1; echo "x ".$this->escapeHtml($_item->getName()); ?></p>
       <?php if ($this->getItemOptions()): ?>
         <dl style="margin:0; padding:0;">
           <?php foreach ($this->getItemOptions() as $option): ?>
@@ -26,7 +26,7 @@ $_order   = $this->getItem()->getOrder();
       <?php endif; ?>
       <?php echo $this->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="cell-content align-left">
+    <td class="cell-content align-left" style="white-space: nowrap">
       <?php if ($this->helper('tax')->displaySalesPriceExclTax($_order->getStore()) || $this->helper('tax')->displaySalesBothPrices($_order->getStore())): ?>
         <?php if ($this->helper('tax')->displaySalesBothPrices($_order->getStore())): ?>
           <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax'); ?>:</span>

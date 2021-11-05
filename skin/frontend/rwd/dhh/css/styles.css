@@ -235,7 +235,7 @@ div.product-specs dt{
   float: left; 
   margin-right: 10px; 
   padding: 5px;  
-  width: 40%; 
+  width: 35%; 
 }
  
 dl.product-specs dd, /* deprecated */
@@ -1723,7 +1723,7 @@ body.catalog-product-view div.footer-wrapper.grid-inside div.footer.grid {
   float: left;
   clear: left;
   padding-left: 0;
-  width: 17%;
+  width: 19%;
 }
 
 .col-left img,
@@ -1990,6 +1990,10 @@ div.paypal-logo span a img {
   line-height: 1.5em;
 }
 
+body.catalog-product-view ul.products-grid-mini .price-box .price-excluding-tax {
+  line-height: 1em;
+}
+
 body.catalog-product-view .price-box .price-excluding-tax {
   line-height: 3em;
 }
@@ -2034,6 +2038,10 @@ body.catalog-product-view .price-box .price-excluding-tax {
 
 .tier-pricing-container {
    margin-top: 1em;
+}
+
+.tier-pricing-outer-container {
+   margin-bottom: 2em;
 }
 
 .product-pricing,
@@ -4069,7 +4077,7 @@ div.category-products li span.lblenergylabel::after {
 .block-layered-nav .block-subtitle--filter {
   position: relative;
   margin: 0;
-  padding: 7px 10px 7px 24px;
+  padding: 15px 10px 0px 24px;
   font-style: normal;
   font-size: 14px;
   line-height: 1.4;
@@ -4142,7 +4150,7 @@ div.category-products li span.lblenergylabel::after {
 .block-layered-nav dl dd ol>li>a,
 .block-layered-nav dl dd ol>li>span {
   display: block;
-  padding: 5px 0 5px 15px;
+  padding: 4px 0 4px 13px;
   width: 100%;
   max-width: 25em;
 }
@@ -4442,9 +4450,8 @@ body.faq-index-index div.page .main-container.col3-layout {
 }
 
 .clzctbcmsg {
-  position: absolute;
-  white-space: nowrap;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .clzstmsg2 {
@@ -5118,12 +5125,6 @@ body.customer-account .sidebar .block .block-content p.block-subtitle {
   margin-bottom: 7px;
 }
 
-.cart-table tbody td,
-.cart-table td,
-.cart-table th {
-  border-bottom: none;
-}
-
 .cart-table h2 {
   margin-bottom: 0;
   font-weight: 600;
@@ -5132,13 +5133,7 @@ body.customer-account .sidebar .block .block-content p.block-subtitle {
 
 .cart-table tbody td,
 .cart-table thead th {
-  padding: 3px 5px;
-  background-color: transparent;
-}
-
-.cart-table .product-cart-actions,
-.cart-table .product-cart-info {
-  padding-left: 5px;
+  padding: 6px 0;
 }
 
 .cart-table tfoot tr,
@@ -5150,11 +5145,6 @@ body.customer-account .sidebar .block .block-content p.block-subtitle {
   padding: 0 5px;
   text-transform: uppercase;
   font-size: 9px;
-}
-
-.cart-table .product-cart-image {
-  padding-right: 0;
-  padding-left: 0;
 }
 
 .cart-table .product-cart-sku {
@@ -11493,8 +11483,7 @@ body.checkout-cart-index div.cart.display-single-price ul.messages {
 .bcm--bold,
 .checkout-cart-index table#shopping-cart-totals-table tfoot tr td.a-right strong,
 div.col-2.logindvchecko div.frmloginwrap form#login-form div.fieldset ul.form-list li label,
-div.pgcrtleft form table#shopping-cart-table td.product-cart-info h2.product-name a,
-div.pgcrtleft form table#shopping-cart-table.cart-table.data-table thead th {
+div.pgcrtleft form table#shopping-cart-table td.product-cart-info h2.product-name a {
   font-weight: 700;
 }
 
@@ -12525,14 +12514,8 @@ div#checkout-step-login.step.a-item div.col2-set div.col-1 {
   border: medium;
 }
 
-#shopping-cart-table,
 .bannersetshm .col-1-4 img {
   width: 100%;
-}
-
-table#shopping-cart-table td.product-cart-info h2.product-name {
-  font-weight: 400;
-  line-height: 1.1em;
 }
 
 .pgcrtright #shopping-cart-totals-table tfoot tr td {
@@ -12660,7 +12643,7 @@ body.checkout-cart-index div.pgcrtleft td.product-cart-actions .input-text.qty {
 }
 
 .pgcrtrightinner {
-  padding: 12px 0 3px;
+  padding: 12px 0 12px;
   border: 1px solid #ccc;
   background: #f9f9f9 0 0;
   border-radius: 5px;
@@ -13345,22 +13328,35 @@ body.checkout-cart-index .clzulres li {
 }
 
 .product-list-highlights {
-  margin-top: .5em;
+  margin-top: .2em;
 }
 
 .product-list-highlights li {
-  padding: 0em 0.3em !important;
+  padding: 0 .2em 0 0;
   display: inline-block;
-  margin: 0.3em 0.5em .3em 0;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background: #ededed;
+  margin: .1em .3em .1em 0;
   color: #414141;
-  font-weight: 600;
-  font-size: 12px;
-  /* text-transform: uppercase; */
-  border: 1px solid rgb(229 229 229);
+  font-size: 13px;
+}
+
+.products-grid-mini ul.product-list-highlights {
+  line-height: 1.3em;
+}
+
+.products-grid-mini div.product-info {
+  line-height: 1.3em;
+  min-height: 175px;
+  display: flex;
+	flex-direction: column;
+}
+
+.products-grid-mini div.actions {
+  margin-top: auto;
+}
+
+.products-grid-mini .product-list-highlights li {
+  display: inline !important;
+  margin: .1em 0 .1em 0;
 }
 
 .product-list-highlights li:first-child {
@@ -13586,6 +13582,7 @@ div.box-collateral.box-up-sell .product-name {
 .buyblock-usp {
   color: #17a249;
   line-height: 2em;
+  font-weight: 600;
 }
 
 .clzsoldout {
@@ -13600,7 +13597,6 @@ div.box-collateral.box-up-sell .product-name {
 }
 
 .clzinstocktemp {
-  color: #828282;
   line-height: 2em;
 }
 
@@ -13608,6 +13604,7 @@ div.box-collateral.box-up-sell .product-name {
   content: "\f111";
   font-family: FontAwesome;
   margin: 0 0.6em;
+  color: #929a9c;
 }
 
 .buyblock-usp:before {
@@ -15077,7 +15074,8 @@ ul.products-grid-mini li.item .product-name {
 div.category-products ul.products-grid li.item .product-name a {
   display: block;
   color: #3aacd9;
-  text-transform: capitalize;
+  text-transform: none;
+  letter-spacing: -0.3px;
 }
 
 div.category-products ul.products-grid li.item .product-info {
@@ -15114,7 +15112,7 @@ ul.products-grid>li {
 }
 
 ul.products-grid-mini>li {
-  width: calc((100%/5) - (4em/4)) !important;
+  width: calc((100%/4) - (3em/4)) !important;
 }
 
 ul.products-grid-mini-narrow>li {
@@ -15235,6 +15233,7 @@ ul.html5-grid-4-col {
   display: grid;
   grid-gap: .5em;
   grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  margin-bottom: 2em;
 }
 
 .grid-shadow-tiles-text li strong {
@@ -15480,6 +15479,7 @@ div.main div.col-left.sidebar div.block.block-reorder,
 body.checkout-cart-index #discount-coupon-form,
 body.checkout-cart-index div.shipping,
 .clztypebundle .price-info,
+body.catalog-category-view div.product-info a.minimal-price-link,
 #sidebar-nav {
   display: none;
 }
@@ -15618,4 +15618,8 @@ div.sooqrSearchContainer span.sqr-closeButton {
 
 div.sooqrSearchContainer div.sooqrSearchFilters div.searchFilter {
   padding: 0 0 5px 0 !important;
+}
+
+div.sooqrSearchContainer div.sqr-results.sqr-grid div.sqr-image img {
+  background-color: transparent !important;
 }
