@@ -111,7 +111,15 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
                 $data = array_merge($data, $rows);
             }
         }
-
+        
+        // DHH CORE HACK: Sooqr does not hide MSRP when it's smaller than the sales price
+        if(empty($data["price"]["price"]) === false
+        && empty($data["msrp"]) === false
+        && $data["msrp"] < $data["price"]["price"]) {
+          // print_r("{$data["sku"]} MSRP {$data["msrp"]} < price {$data["price"]["price"]}, adjusting MSRP".PHP_EOL);
+          $data["msrp"] = $data["price"]["price"] * 1.05;
+        }
+        
         if (empty($config['skip_validation'])) {
             if (!empty($data[$fields['price']['label']])) {
                 return $data;
@@ -289,8 +297,12 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
         }
         
         /* DHH CORE HACK */
-        // We use price a lot to make filters possible, remove again for Sooqr
+        // We use price fields a lot to make filters possible, remove again for Sooqr
         $value = str_replace(" EUR", null, $value);
+        // We need to have this field as an INT in Sooqr to make it sortable
+        if($field === "popularity") {
+          $value = intval($value);
+        }
 
         $dataRow[$data['label']] = $value;
         return $dataRow;

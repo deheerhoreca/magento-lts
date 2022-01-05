@@ -675,14 +675,16 @@ class Magmodules_Sooqr_Model_Sooqr extends Magmodules_Sooqr_Model_Common
                 foreach ($config['currency_data'] as $key => $value) {
                     if ($currency == $key) {
                         if (isset($data['sales_price'])) {
-                            $prices['normal_price'] = $data['regular_price'];
+                            // DHH CORE HACK: normal_price messes with the MSRP field and leads to failures in Sooqr
+                            // $prices['normal_price'] = $data['regular_price'];
                             $prices['price'] = $data['sales_price'];
                         } else {
                             $prices['price'] = $data['price'];
                         }
                     } else {
                         if (isset($data['sales_price'])) {
-                            $prices['normal_price_' . strtolower($key)] = round(($data['regular_price'] * $value), 2);
+                            // DHH CORE HACK: normal_price messes with the MSRP field and leads to failures in Sooqr
+                            // $prices['normal_price_' . strtolower($key)] = round(($data['regular_price'] * $value), 2);
                             $prices['price_' . strtolower($key)] = round(($data['sales_price'] * $value), 2);
                         } else {
                             $prices['price_' . strtolower($key)] = round(($data['price'] * $value), 2);
@@ -691,7 +693,8 @@ class Magmodules_Sooqr_Model_Sooqr extends Magmodules_Sooqr_Model_Common
                 }
             } else {
                 if (isset($data['sales_price'])) {
-                    $prices['normal_price'] = $data['regular_price'];
+                    // DHH CORE HACK: normal_price messes with the MSRP field and leads to failures in Sooqr
+                    // $prices['normal_price'] = $data['regular_price'];
                     $prices['price'] = $data['sales_price'];
                 } else {
                     $prices['price'] = $data['price'];
