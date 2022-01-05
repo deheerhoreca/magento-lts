@@ -2,45 +2,45 @@
 $page_title = $this->getTitle();
 $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($page_title);
 ?><meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>" />
-  <title><?php echo $page_title; ?></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7" />
-  <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
-  <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
-  <meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
-  <meta name="theme-color" content="#fff">  
-  <link rel="apple-touch-icon" sizes="57x57" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-57x57.png" />
-  <link rel="apple-touch-icon" sizes="114x114" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-114x114.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="144x144" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-144x144.png" />
-  <link rel="apple-touch-icon" sizes="60x60" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-60x60.png" />
-  <link rel="apple-touch-icon" sizes="120x120" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-120x120.png" />
-  <link rel="apple-touch-icon" sizes="76x76" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-76x76.png" />
-  <link rel="apple-touch-icon" sizes="152x152" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png" />
-  <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-196x196.png" sizes="196x196" />
-  <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-16x16.png" sizes="16x16" />
-  <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-128.png" sizes="128x128" />
-  <meta name="application-name" content="Chefstore.nl"/>
-  <meta name="msapplication-TileColor" content="#fff" />
-  <meta name="msapplication-TileImage" content="/skin/frontend/rwd/dhh/images/favicons/mstile-144x144.png" />
-  <meta name="msapplication-square70x70logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-70x70.png" />
-  <meta name="msapplication-square150x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-150x150.png" />
-  <meta name="msapplication-wide310x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x150.png" />
-  <meta name="msapplication-square310x310logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x310.png" />  
-  <script src="//cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.1.3/lazyload.min.js" integrity="sha512-V3DZ9ZAJrv8ZYY5Zarlfjusec9J6S8htRT3bJDKTdEgq0g9OhbHQUjK+vsBkE6CH0J5VJtBCzPSXJ0ZCVpjPdQ==" crossorigin="anonymous"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <?php
-  echo $this->getCssJsHtml();
-  echo $this->getChildHtml();
-  # https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
-  echo $this->helper("core/js")->getTranslatorScript();
-  echo $this->getIncludes();
-  ?>
-  <!-- because this allows control of font-display -->
-  <link href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous" />
-  <link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet" crossorigin="anonymous" />
+<title><?php echo $page_title; ?></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7" />
+<meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
+<meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
+<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
+<meta name="theme-color" content="#fff">  
+<link rel="apple-touch-icon" sizes="57x57" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="60x60" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-128.png" sizes="128x128" />
+<meta name="application-name" content="Chefstore.nl"/>
+<meta name="msapplication-TileColor" content="#fff" />
+<meta name="msapplication-TileImage" content="/skin/frontend/rwd/dhh/images/favicons/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x310.png" />  
+<script src="//cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.1.3/lazyload.min.js" integrity="sha512-V3DZ9ZAJrv8ZYY5Zarlfjusec9J6S8htRT3bJDKTdEgq0g9OhbHQUjK+vsBkE6CH0J5VJtBCzPSXJ0ZCVpjPdQ==" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<?php
+echo $this->getCssJsHtml();
+echo $this->getChildHtml();
+# https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
+echo $this->helper("core/js")->getTranslatorScript();
+echo $this->getIncludes();
+?>
+<!-- because this allows control of font-display -->
+<link href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet" crossorigin="anonymous" />

@@ -1,406 +1,589 @@
 <?php
 
+// Settings
+$_helper                      = $this->helper("catalog/output");
+$catid                        = null;
+$carct                        = Mage::registry("current_category");
+$amschk                       = $this->getRequest()->getRouteName();
+$haschild                     = false;
+$short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104, 3, 544];
+$short_name_parent_cats       = [3];
+$max_product_highlight_items  = 6;
+$category_thumbs_dimensions   = 140;
+$parent_categories_ids        = [];
+$freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
+$active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
+$have_active_filters          = (bool) empty($active_filters) === false;
+$mininum_lease_price          = 400;
+$show_ups_block               = false;
+$show_black_friday            = false;
+$show_actions                 = false;
+
 // some helpers
-$_helper = $this->helper('catalog/output');
-$store = Mage::app()->getStore();
-$storeId = $store->getId();
-$catalog = $this->getLayout()->createBlock('catalog/product_list')->setStoreId($storeId);
+$_helper                      = $this->helper("catalog/output");
+$store                        = Mage::app()->getStore();
+$storeId                      = $store->getId();
+$catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
+
+$productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
 
 // get all products that are marked as featured
-$collection = Mage::getModel('catalog/product')
+$_productCollection = Mage::getModel("catalog/product")
   ->getCollection()
-  ->addAttributeToSelect('*')
-  ->addFieldToFilter([['attribute' => 'featured', 'eq' => true]])
-  ->addOrder('name', 'ASC')
-  ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+  ->addAttributeToSelect("*")
+  ->addFieldToFilter([["attribute" => "featured", "eq" => true]])
+  ->addOrder("name", "ASC")
+  ->addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
   ->setPageSize(24)
-  ->setCurPage(1)
-  ->load();
+  ->setCurPage(1);
+
+/*
+ * Bugfix: Using require_stock_items there was a bug that lead
+ * to wrong stock info on listview during flat index rebuild.
+ * addItemsToProducts() seems to add stock data correctly even during a reindex
+ *
+ * However, with addItemsToProducts() we are missing essential stock data like
+ * manage_stock, leading to wrong results.
+ *
+ * We now use both as an experiment...
+ */
+$_productCollection->setFlag('require_stock_items', true);
+Mage::getModel('catalogInventory/stock')->addItemsToProducts($_productCollection);
+
+$_collectionSize        = $_productCollection->count();
 
 $productBlock           = $this->getLayout()->createBlock('catalog/product_price');
 $parent_categories_ids  = [];
-$catid                  = null;
+
 ?>
-<?php
-/*
 <style>
-  #featured-products-list li.item {
-    margin: 5px 2px;
-    min-height: 555px;
-    width: 24%!important;
-    list-style: none;
+  /* Overrides .std */
+  .category-products {
+    line-height: 1.3em;
   }
-
-  #featured-products-list ul.miniflist li {
-    margin-left: 0;
-    list-style: none;
-  }
-
-  #featured-products-list li:nth-child(4n) {
-    margin-right: 0!important;
-  }
-
-  #featured-products-list a.product-image {
-    display: block;
-    min-height: 189px;
-    text-align: center;
-  }
-
-  #featured-products-list p {
-    margin: 0!important;
-  }
-
-  #featured-products-list div.actions button.button.btn-cart {
-    padding-right: 5px;
-    padding-left: 5px;
-    font-size: 24px;
-  }
-
-  #featured-products-list div.price-box p.special-price span.price {
-    font-weight: bolder;
-    font-size: 24px;
-  }
-
-  #featured-products-list div.price-box p.old-price span.price {
-    font-weight: 400;
-    font-size: 17px;
-  }
-
-  #featured-products-list .actions {
-    bottom: -36px;
-    display: block;
-    min-height: 45px;
-  }
-
-  #featured-products-list .product-image img {
-    max-width: 244px;
-    max-height: 244px;
-  }
-
-  @media screen and (max-width: 767px) {
-    .products-grid > li:nth-child(3n+1) {
-      clear: none;
-    }
-    #featured-products-list li.item {
-      width: 49% !important;
-    }
-  }
-
-  @media screen and (max-width: 990px) {
-    #featured-products-list li:nth-child(5n) {
-      margin-right: 1% !important;
-    }
-    #featured-products-list li.item {
-      width: 32% !important;
-    }
-  }
-
-  @media screen and (max-width: 680px) {
-    #featured-products-list li.item {
-      width: calc(100% - 2em) !important;
-      list-style: none;
-      min-height: 350px;
-      margin: 0 1em 3em 1em !important;
-      padding: 0 !important;
-    }
+  
+  .category-products ul {
+    margin-bottom: 0;
   }
 </style>
-*/
+<?php
+
+$show_toolbar   = false;
+$_columnCount   = 4;
+$displaySize    = 200;
+$_imgSize       = 1 * $displaySize;
+
+if($_collectionSize > 0) {
 ?>
-<div class="category-products">
-  <?php
-
-  $_collectionSize = $collection->count();
-  $_columnCount = 4;
-  
-  $displaySize = 210;
-  $_imgSize = 1* $displaySize;
-  
-  echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
-
-  $i = 0;
-  foreach($collection as $_product) {
-    $i++;
-    $html = null;
-    
-    $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
-    $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
-    
-    // Yeah, I know. Sucks. But, otherwise we cannot get the stock info we need
-    $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
-    
-    $stock_status = $stock_message = null;
-    $stock_qty    = (int) $stock->getQty();
-    $in_stock     = $stock->getIsInStock();
-    
-    if(0 && $_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-      echo "<pre>";
-      var_dump($category_info);
-      echo "</pre>";
+  <div class="category-products">
+    <?php
+    if($show_toolbar === true) {
+      echo "<div class='top_toolbar'>{$this->getToolbarHtml()}</div>";
     }
-    
-    // Block also exists in catalogproductview.phtml and featured.phtml
-    if($in_stock === true) {
-      if($stock_qty < 1 && $stock->getBackorders() !== Mage_CatalogInventory_Model_Stock::BACKORDERS_NO) {
-        $stock_message = "Bestelbaar";
-        $stock_status = "EMPTY";
-      } else {
-        if($stock_qty === 100) { //100 is a special value
-          $stock_message = "Op voorraad";
-        } elseif($stock_qty > 10) {
-          $stock_message = "10+ op voorraad";
-        } elseif($stock_qty > 1) {
-          $stock_message = "{$stock_qty} op voorraad";
-        } else {
-          $stock_message = "Op voorraad";
-        }
-        $stock_status = "IN_STOCK";
+    echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
+    $i = 0;
+    foreach($_productCollection as $_product) {
+      // $hideQuoteButton = Mage::helper("qquoteadv")->hideQuoteButton($_product);
+      $i++;
+      $html = null;
+      
+      $productUrl = false;
+      // If a product is present in multiple categories, we don't want to change that in this view
+      //$productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
+      if($productUrl === false) {
+        $productUrl = $_product->getProductUrl(); // Fallback
       }
-    } else {
-      $stock_message = "Niet op voorraad";
-      $stock_status = "DISABLED";
-    }
-    
-    /* Product Info */
-    $product_info = null;
-            
-    $width = $attribute_value = $_product->getBreedte();
-    $height = $attribute_value = $_product->getHoogte();
-    $depth = $attribute_value = $_product->getDiepte();
-    
-    $width = $width + 0;
-    $height = $height + 0;
-    $depth = $depth + 0;
-    
-    $width /= 10;
-    $height /= 10;
-    $depth /= 10;
-    
-    if($width > 10) $width = round($width);
-    if($depth > 10) $depth = round($depth);
-    if($height > 10) $height = round($height);
-    
-    if($width > 0 && $height > 0 && $depth > 0) {
-      $product_info .= "<li class=\"angle_before\">B: {$width}cm D: {$depth}cm H: {$height}cm</li>";
-    } else {
-      $attribute_value = $_product->getBreedte();
-      if($attribute_value != '' && $attribute_value > 0) {
-        $product_info .=  '<li class="angle_before">'.($attribute_value/10).'cm breed</li>';
+      
+      // $price_html           = $this->getPriceHtml($_product, true); // ListView version
+      $price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
+      $finalPrice           = (float) $_product->getFinalPrice();
+      
+      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, "listview");
+      
+      $stock_message        = $stock_data["stock_message"];
+      $stock_class          = $stock_data["txtcltcz"];
+      $stock_qty            = $stock_data["stock_qty"];
+      $in_stock             = $stock_data["in_stock"];
+      $backorders           = $stock_data["backorders"];
+      $saleable             = $stock_data["saleable"];
+      $eol                  = $stock_data["eol"];
+      $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
+      $manage_stock         = $stock_data["manage_stock"];
+      $extra_delivery_time  = $stock_data["extra_delivery_time"];
+      $overall_stock_status = $stock_data["overall_stock_status"];
+      $txtstockdate         = $stock_data["txtstockdate"];
+      $levertijd            = $stock_data["levertijd"];
+      
+      $additional_delivery_messages = null;
+      
+      switch($overall_stock_status) {
+        case "in_stock":
+          if($finalPrice >= $freeshipping_from) {
+            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+          }
+          break;
+        case "backorder":
+          if($finalPrice >= $freeshipping_from) {
+            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+          }
+          $stock_class = "buyblock-usp";
+          break;
       }
-    }
-    
-    $attribute_value = $_product->getData('eenheid');
-    if($attribute_value > 1) {
-      $product_info .=  "<li class='angle_before'>{$attribute_value} stuks</li>";
-    }
-    $attribute_value = $_product->getAttributeText('size');
-    if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
-      $product_info .=  "<li class='angle_before'>Maat: {$attribute_value}</li>";
-    }
-    
-    /* Warranty */
-    $garentiim = $_product->getAttributeText('garantie');
-    if($garentiim === "24 maanden") {
-      $product_info .=  "<li class='angle_before'>24 maanden garantie</li>";
-    }
-    
-    $stock_class = null;
-    switch($stock_status) {
-      case "IN_STOCK":
-        $stock_class = "green_checkbox_before";
-        break;
-      case "EMPTY":
-        $stock_class = "orange_circle_before";
-        break;
-      case "DISABLED":
-        $stock_class = "red_x_before";
-        break;
-    }
-    
-    /* Inline highlights */
-    $highlights = [];
-    
-    /* Afsluitbaar */
-    $attribute_value = $_product->getAttributeText("afsluitbaar");
-    if($attribute_value === "Ja") {
-      $highlights[] = "Afsluitbaar";
-    }
-    
-    /* Blikjes */
-    $attribute_value = (int) $_product->getData("aantal_blikjes");
-    if($attribute_value > 0) {
-      $highlights[] = "{$attribute_value}x 33cl";
-    }
-    
-    /* GN maat if not in a GN category */
-    if(empty($gnvalue) === FALSE
-      && empty($category_name) === FALSE
-      && strstr($category_name, "GN") === FALSE) {
-        if(is_array($gnvalue)) {
-          $gnvalue = implode(" ", $gnvalue);
-        }
-        $highlights[] = "{$gnvalue} GN";
-    }
-    
-    /* Custom highlights */
-    $attribute_value = $_product->getData("custom_highlights");
-    $parts = explode(",", $attribute_value);
-    if(sizeof($parts) > 0) {
-      foreach($parts as $part) {
-        $part = trim($part);
-        if(strlen($part) > 0) {
-          $highlights[] = trim($part);
-        }
+      
+      $energy_rating  = $_product->getAttributeText('energieklasse');
+      $productlabel   = $_product->getProductLabel();
+      $gnvalue        = $_product->getAttributeText("gn_capacity"); // can be an array if multiselect
+      if(empty($gnvalue)) {
+        $gnvalue        = $_product->getAttributeText("gn"); // can be an array if multiselect
       }
-    }            
-    
-    /* Inhoud */
-    $attribute_value = $_product->getInhoudLiters();
-    if(strlen($attribute_value) > 0) {
-      $highlights[] = round($attribute_value, 2)." liter";
-    }
-    
-    /* Vermogen */
-    if(in_array(3, $parent_categories_ids) === false) { // skip "Koelingen" and everything underneath
-      $attribute_value = $_product->getVermogen();
+      $tagline        = $_product->getTagline();
+      $brand          = $_product->getAttributeText("manufacturer");
+      $sku_seller     = $_product->getData("sku_seller");
+      
+      /* Listview USPs */
+      
+      $usps = [];
+      
+      // Size
+      $attribute_value = $_product->getAttributeText('size');
+      if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
+        $usps[] = "Maat: {$attribute_value}";
+      }
+      
+      // Material
+      $attribute_value = $_product->getResource()->getAttribute('material_group')->getFrontend()->getValue($_product);
       if(strlen($attribute_value) > 0) {
+        foreach(explode(",", $attribute_value) as $value) {
+          $value = str_ireplace(["(Roestvast staal)"], null, $value);
+          $usps[] = trim($value);
+        }
+      }
+      
+      // Uitvoering
+      $attribute_value = $_product->getAttributeText('uitvoering');
+      if(is_array($attribute_value) === true) {
+        $attribute_value = implode(", ", $attribute_value);
+      }
+      if(is_scalar($attribute_value) === true && strlen($attribute_value) > 0) {
+        $usps[] = $attribute_value;
+      }
+      
+      $attribute_value = $_product->getAttributeText('type_koeling');
+      if(empty($attribute_value) === false && $attribute_value !== "N.v.t.") {
+        $usps[] = $attribute_value;
+      }
+      
+      // Blikjes
+      $attribute_value = (int) $_product->getData("aantal_blikjes");
+      if($attribute_value > 0) {
+        $usps[] = "{$attribute_value}x 33cl";
+      }
+      
+      // Flessen
+      $attribute_value = (int) $_product->getData("aantal_flessen");
+      if($attribute_value > 0) {
+        $usps[] = "{$attribute_value} flessen";
+      }
+      
+      // Capacity: Wine Bottles
+      $attribute_value = (int) $_product->getData("capacity_wine_bottles");
+      if($attribute_value > 0) {
+        $usps[] = "{$attribute_value} flessen";
+      }
+      
+      // voorraadbunker_kg
+      $attribute_value = (int) $_product->getData("voorraadbunker_kg");
+      if($attribute_value > 0) {
+        $usps[] = "{$attribute_value} kg Bunker";
+      }
+      
+      // icecube_type
+      $attribute_value = $_product->getAttributeText('icecube_type');
+      if(empty($attribute_value) === false && $attribute_value !== "N.v.t.") {
+        $usps[] = $attribute_value;
+      }
+      
+      // ijs_productie
+      $attribute_value = (int) $_product->getData("ijs_productie");
+      if($attribute_value > 0) {
+        $usps[] = "{$attribute_value} kg/24u";
+      }
+      
+      /* GN maat if not in a GN category */
+      if(empty($gnvalue) === false
+      && empty($category_name) === false
+      && strstr($category_name, "GN") === false) {
+          if(is_array($gnvalue)) {
+            $gnvalue = implode(" ", $gnvalue);
+          }
+          $gnvalue = str_ireplace("n.v.t.", null, $gnvalue);
+          if(empty($gnvalue) === false) {
+            $usps[] = "{$gnvalue}";
+          }
+      }
+      
+      /* Custom highlights */
+      $attribute_value = $_product->getData("custom_highlights");
+      $parts = explode(",", $attribute_value);
+      if(sizeof($parts) > 0) {
+        foreach($parts as $part) {
+          $part = trim($part);
+          if(strlen($part) > 0) {
+            $usps[] = trim($part);
+          }
+        }
+      }            
+      
+      /* Volumes */
+      $volume_usp_done = false;
+      $attribute_value = $_product->getData("volume_net_liter");
+      if($volume_usp_done === false && strlen($attribute_value) > 0) {
+        if($attribute_value > 2000) {
+          $usps[] = "Netto ".round($attribute_value / 1000, 2)." m<sup>3</sup>";
+        } else {
+          $usps[] = "Netto ".round($attribute_value, 2)." liter";
+        }
+        $volume_usp_done = true;
+      }
+      $attribute_value = $_product->getData("inhoud_liters");
+      if($volume_usp_done === false && strlen($attribute_value) > 0) {
+        $usps[] = round($attribute_value, 2)." liter";
+        $volume_usp_done = true;
+      }
+      unset($volume_usp_done);
+      
+      /* Powers */
+      $power_usp_done = false;
+      $attribute_value = $_product->getData("total_power_watt");
+      
+      if(empty($attribute_value) === false) {
+        if($attribute_value  >= 5000) {
+          $attribute_value   /= 1000;
+          $attribute_value    = number_format($attribute_value, 2, ",", ".");
+          if($attribute_value > 0) {
+            $usps[] = "{$attribute_value} kW";
+          }
+        } else {
+          $attribute_value = (int) number_format($attribute_value, 0, ",", "");
+          if($attribute_value > 0) {
+            $usps[] = "{$attribute_value} W";
+          }
+        }
+        $power_usp_done = true;
+      }
+      if($power_usp_done !== true) {
+        $attribute_value = $_product->getData("vermogen");
+        if(empty($attribute_value) === false) {
+          if($attribute_value < 3) {
+            $attribute_value *= 1000;
+            if($attribute_value > 0) {
+              $usps[] = "{$attribute_value} Watt";
+            }
+          } else {
+            //$attribute_value = str_replace(".", null, $attribute_value);
+            //$attribute_value = str_replace(",", ".", $attribute_value);
+            $attribute_value = number_format($attribute_value, 1, ",", ".");
+            $attribute_value = str_replace(",0", null, $attribute_value);
+            if($attribute_value > 0) {
+              $usps[] = "{$attribute_value} kW";
+            }
+          }
+        }
+      }
+      $attribute_value = $_product->getData("vermogen_kw");
+      if($power_usp_done !== true && empty($attribute_value) === false) {
         if($attribute_value < 3) {
           $attribute_value *= 1000;
-          $highlights[] = "{$attribute_value} Watt";
+          if($attribute_value > 0) {
+            $usps[] = "{$attribute_value} Watt";
+          }
         } else {
-          $highlights[] = number_format($attribute_value, 1, ",", ".")." kW";
+          $attribute_value = number_format($attribute_value, 1, ",", ".");
+          $attribute_value = str_replace(",0", null, $attribute_value);
+          if($attribute_value > 0) {
+            $usps[] = "{$attribute_value} kW";
+          }
         }
       }
-    }
-    
-    /* Gas Vermogen */
-    $attribute_value = $_product->getVermogenKw();
-    if(empty($attribute_value) === false) {
-      if($attribute_value < 3) {
-        $attribute_value *= 1000;
-        $highlights[] = "{$attribute_value} Watt";
+      unset($power_usp_done);
+      
+      /* M3/hour capacity */
+      $attribute_value = $_product->getAantalM3Uur();
+      if(strlen($attribute_value) > 0) {
+        $usps[] = round($attribute_value, 2)." m3/UUR";
+      }
+      
+      /* Warranty */
+      $attribute_value = $_product->getAttributeText('garantie');
+      if($attribute_value === "24 maanden") {
+        $usps[] = "24M Garantie";
+      }
+      
+      /* Cooling Zones */
+      $attribute_code = "number_of_cooling_zones";
+      $attribute_value = (int) $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
+      if($attribute_value === 2) {
+        $usps[] = "Dual-Zone";
+      } elseif($attribute_value === 3) {
+        $usps[] = "Triple-Zone";
+      } elseif($attribute_value > 3) {
+        $usps[] = "{$attribute_value} Zones";
+      }
+      
+      /* Cooking Zones */
+      $attribute_value = $_product->getCookingZones();
+      if(strlen($attribute_value) > 0 && (double) $attribute_value > 1) {
+        $usps[] = round($attribute_value, 2)." Zones";
+      }
+      
+      /* Aftap */
+      $attribute_value = $_product->getAttributeText('aftap');
+      if($attribute_value === "Ja") {
+        $usps[] = "Met Aftap";
+      }
+      
+      /* Afsluitbaar */
+      $attribute_value = $_product->getAttributeText("afsluitbaar");
+      if($attribute_value === "Ja") {
+        $usps[] = "Afsluitbaar";
+      }
+      
+      /* Motor */
+      $attribute_value = $_product->getAttributeText("motor");
+      if($attribute_value === "Ja") {
+        $usps[] = "Incl. motor";
+      }
+      
+      /* Insulation thickness */
+      $attribute_value = $_product->getAttributeText("isolatiedikte");
+      if(is_array($attribute_value)) {
+        $attribute_value = implode(", ", $attribute_value);
+      }
+      if(strlen($attribute_value) > 0) {
+        $usps[] = "{$attribute_value} mm";
+      }
+      
+      // Dimensions
+      $width          = ($_product->getBreedte() + 0) / 10;
+      $height         = ($_product->getHoogte()  + 0) / 10;
+      $depth          = ($_product->getDiepte()  + 0) / 10;
+      
+      if($width  > 10) $width  = round($width);
+      if($depth  > 10) $depth  = round($depth);
+      if($height > 10) $height = round($height);
+      
+      if($width > 0 && $height > 0 && $depth > 0) {
+        $usps[] = "(B){$width} x (D){$depth} x (H){$height}cm";
       } else {
-        $attribute_value = number_format($attribute_value, 1, ",", ".");
-        $attribute_value = str_replace(",0", null, $attribute_value);
-        $highlights[] = "{$attribute_value} kW";
-      }
-    }
-    
-    /* M3/hour capacity */
-    $attribute_value = $_product->getAantalM3Uur();
-    if(strlen($attribute_value) > 0) {
-      $highlights[] = round($attribute_value, 2)." m3";
-    }
-    
-    /* Automatic Label: Product */
-    $productlabel   = $_product->getProductLabel();
-    if(isset($productlabel) === true) {
-      $html .= "<span style='width:100%; padding: 0;' class=\"lblprolist\">{$productlabel}</span>";
-    }
-    
-    $price_html = $productBlock->getPriceHtml($_product, true);
-    $price_html = str_replace(",00", ",-", $price_html);
-    $price_html = str_replace("€", null, $price_html);
-    
-    /* ATTRIBUTE HIGHLIGHTS */
-    $energy_rating = $_product->getAttributeText('energieklasse');
-    $productlabel = $_product->getProductLabel();
-    $gnvalue = $_product->getAttributeText("gn"); // can be an array if multiselect
-    $tagline = $_product->getTagline();
-    
-    /* Automatic Label: Product */
-    if(isset($productlabel) === true) {
-      //$html .= "<span class=\"lblprolist\">{$productlabel}</span>";
-    }
-
-    /* Automatic Label: Energy */
-    if(isset($energy_rating) === true) {
-      $enclz = null;
-      switch ($energy_rating) {
-        case 'A++++': $enclz = 'enrgclz1';  break;
-        case 'A+++':  $enclz = 'enrgclz2';  break;
-        case 'A++':   $enclz = 'enrgclz3';  break;
-        case 'A+':    $enclz = 'enrgclz4';  break;
-        case 'A':     $enclz = 'enrgclz5';  break;
-        case 'B':     $enclz = 'enrgclz6';  break;
-        default: break;
-      }
-      if(isset($enclz) === true) {
-        $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$energy_rating}'>{$energy_rating}</span>";
-      }
-    }
-    
-    /* Product name */
-    $product_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
-    $product_short_name = $_product->getData("name_short");
-    if(strlen($product_short_name) > 0) {
-      $product_name = $product_short_name;
-    }
-    
-    $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
-    if(empty($image_label)) {
-      $image_label = $this->stripTags($product_name, null, true);
-    }
-    
-    $main_url = $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize);
-    
-    ?>
-    <li style="width:24%; min-height:35em;" class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
-      <?php echo $html; ?>
-      <a href="<?php echo $productUrl; ?>" title="<?php echo $image_label; ?>" class="product-image">
-        <?php
-        echo "<img class='lazy' id='product-collection-image-{$_product->getId()}'
-          data-src ='{$main_url}' alt='{$image_label}'
-          width='{$displaySize}' height='{$displaySize}' />";
-        ?>
-      </a>
-      <div class='product-title-container'>
-        <h2 class='product-name'>
-          <a href='<?php echo $productUrl; ?>' title='<?php echo $image_label; ?> kopen'><?php echo $product_name; ?></a>
-        </h2>
-      </div>
-      <div class="product-info" style='min-height: 150px !important;'>
-        <?php
-        if($this->getChild('name.after')) {
-          $_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
-          foreach ($_nameAfterChildren as $_nameAfterChildName) {
-            $_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
-            $_nameAfterChild->setProduct($_product);
-            echo $_nameAfterChild->toHtml();
-          }
+        $width = $_product->getBreedte();
+        if($width != '' && $width > 0) {
+          // $usps[] = "Breedte: ".($width/10)."cm";
         }
+      }
+      
+      // Diameter
+      $attribute_value = $_product->getData('diameter_mm');
+      if($attribute_value != ''){
+        $usps[] = "Ø {$attribute_value} mm";
+      }
+      
+      // Length
+      $code = "length_mm";
+      $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+      if($attribute_value != '') {
+        $attribute_value /= 10;
+        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        $usps[] = "Lengte: {$attribute_value} cm";
+      }
+      
+      // Quantity
+      $attribute_value = (int) $_product->getData('eenheid');
+      if($attribute_value > 1) {
+        $usps[] = "{$attribute_value} stuks";
+      }
+      
+      /* ------------------------------------- */
+      
+      // Price Block
+      $price_html = str_replace(",00", ",-", $price_html);
+      $price_html = str_replace("€", null, $price_html);
+      
+      // Black friday
+    if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+        $html .= "<span class='bf-banner-list'></span>";
+      } else {
+        // Product label
+        if(isset($productlabel) === true) {
+          $html .= "<span class='lblprolist'>{$productlabel}</span>";
+        }
+      }
+
+      // Energy rating
+      if(isset($energy_rating) === true) {
+        $enclz = null;
+        switch ($energy_rating) {
+          case 'A++++': $enclz = 'enrgclz1';  break;
+          case 'A+++':  $enclz = 'enrgclz2';  break;
+          case 'A++':   $enclz = 'enrgclz3';  break;
+          case 'A+':    $enclz = 'enrgclz4';  break;
+          case 'A':     $enclz = 'enrgclz5';  break;
+          case 'B':     $enclz = 'enrgclz6';  break;
+          default: break;
+        }
+        if(isset($enclz) === true) {
+          $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$energy_rating}'>{$energy_rating}</span>";
+        }
+      }
+      
+      // Product name
+      $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');        
+      ?>
+      <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
+        <?php
+        echo $html;
+        $title = $product_long_name;
         ?>
-        <div class="info" style='min-height: 12em;'>
-          <?php if(isset($tagline) === true) echo "<div class='product-list-tagline'>{$tagline}</div>"; ?>
-          <ul style='margin-bottom:0;'><?php echo $product_info; ?></ul>
-          <?php
-          
-          /* Output */
-          if(sizeof($highlights) > 0) {
-            echo "<ul class='product-list-highlights'>";
-            foreach($highlights as $highlight) {
-              echo "<li>{$highlight}</li>";
+        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image">
+        <?php
+          echo "<img class='lazy trans-opacity' id='product-collection-image-{$_product->getId()}'
+            data-src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
+            alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
+            width='{$displaySize}' height='{$displaySize}' />";
+        ?>
+        </a>
+        <div class="product-info">
+          <div class="info">
+            <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
+            <h2 class='product-name ellipsed ellipsed-2'>
+              <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?> details'><?php echo $product_name; ?></a>
+            </h2>
+            <?php
+            if($this->getChild('name.after')) {
+              $_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
+              foreach ($_nameAfterChildren as $_nameAfterChildName) {
+                $_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
+                $_nameAfterChild->setProduct($_product);
+                echo $_nameAfterChild->toHtml();
+              }
             }
-            echo "</ul>";
-          }
+            
+            if(isset($tagline) === true) {
+              echo "<div class='product-list-tagline'>{$tagline}</div>";
+            }
+            
+            if(sizeof($usps) > 0) {
+              echo "<ul class='product-list-highlights inline-list'>";
+              foreach($usps as $usp) {
+                echo "<li><span class='gray'>{$usp}</span></li>";
+              }
+              echo "</ul>";
+            }
+            
+            // Volume discount tag
+            if(empty($_product->getTierPrice()) === false) {
+              echo "<span class='small' style='line-height: 2em;'>
+                <i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
+            }
+            
+            
+            ?>
+          </div>
+          <?php
+          echo $price_html;
+          // // Lease tag
+          // if(_dhh_debug() && $_product->getData("allowed_to_quotemode") == 1 && $hideQuoteButton === false && $_product->getStockItem()->getIsInStock()) {
+            // $_finalPrice = $_product->getFinalPrice();
+            // if(isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
+              // $lease_rates = Mage::helper("deheerhoreca_util/util")->getLeaseRates($_finalPrice, "daily");
+              // if(empty($lease_rates) === false) {
+                // $min_lease_rate = min($lease_rates);
+                // $min_lease_rate_formatted = number_format($min_lease_rate, 2, ",", ".");
+                // echo "<span class='small float-right' style='line-height: 2em;'><i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Lease vanaf {$min_lease_rate_formatted} p/d</em></span>";
+              // }
+            // }
+          // }
+          // if(0 && $_product->getRatingSummary()) {
+            // echo $this->getReviewsSummaryHtml($_product, 'short');
+          // }
           ?>
+          <?php
+          if($show_actions === true) {
+            ?>
+            <div class="actions">
+              <?php
+              if(!$_product->canConfigure()) {
+                if($_product->isSaleable()) {
+                  // Simple product, sellable
+                  ?>
+                  <div class="float-left">
+                    <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
+                    <?php echo $additional_delivery_messages; ?>
+                  </div>
+                  <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
+                  <?php
+                } else {
+                  // Simple product, not sellable
+                  ?>
+                  <div class="float-left">
+                    <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
+                    <?php echo $additional_delivery_messages; ?>
+                  </div>
+                  <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
+                  <?php
+                }
+              } else {
+                // Configurable product
+                ?>
+                <div class="float-left">
+                  <span class="buyblock-usp" style='line-height: 1.5em;'>Meerdere varianten</span>
+                  <?php echo $additional_delivery_messages; ?>
+                </div>
+                <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
+              <?php } ?>
+            </div>
+          <?php } ?>
         </div>
-        <?php
-        echo $price_html;
-        if(0 && $_product->getRatingSummary()) {
-          echo $this->getReviewsSummaryHtml($_product, 'short');
-        }
-        ?>
-      </div>
-      <?php
-      if(isset($category_info["url"]) === true) {
-        echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
-      }
-    ?>
-    </li>
+      </li>
 
+      <?php
+      if($show_ups_block === true && ($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0) && $_collectionSize > $i) { ?>
+        </ul>
+          <div class="new-tab-contant-text mobile-hide">
+            <div class="col-md-3 new-contant">
+              <p><i class="fa fa-check"></i>Altijd de beste prijs</p>
+              <p><i class="fa fa-check"></i>Advies door professionals</p>
+            </div>
+            <div class="col-md-3 new-contant">
+              <p><i class="fa fa-check"></i>Wij vergelijken de prijzen</p>
+              <p><i class="fa fa-check"></i>Gratis verzending vanaf &euro;150,-</p>
+            </div>
+            <div class="col-md-3 new-contant">
+              <p><i class="fa fa-check"></i>Professionele apparatuur</p>
+              <p><i class="fa fa-check"></i>Snelle levering</p>
+            </div>
+          </div>
+        <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
+        <?php
+      }
+    }
+    ?>
+    </ul>
+    <?php
+    if($show_toolbar === true) {
+      echo "<div class='toolbar-bottom'>{$this->getToolbarHtml()}</div>";
+    }
+    ?>
+  </div>
   <?php
+
+  // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
+  if($this->getChild('after')) {
+    $_afterChildren = $this->getChild('after')->getSortedChildren();
+    foreach ($_afterChildren as $_afterChildName) {
+      $_afterChild = $this->getChild('after')->getChild($_afterChildName);
+      //set product collection on after blocks
+      $_afterChild->setProductCollection($_productCollection);
+      echo $_afterChild->toHtml();
+    }
   }
-  ?>
-  </ul>
-</div>
+}

@@ -25,27 +25,26 @@
  * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
 
-$_quoteQty = $this->getTotalQty();
-if(empty($_quoteQty)) {
-  $_quoteQty = 0;
-}
+$qty = $this->getTotalQty() ?? 0;
 ?>
 <!-- header_miniquote_start -->
-
 <span class="header-miniquote">
-  <a href="<?php echo Mage::getUrl('qquoteadv/index/'); ?>" data-target-element="#header-quote" class="skip-link skip-quote <?php if ($_quoteQty <= 0): ?> no-count<?php endif; ?> top-link" title="Lease en Offerte Winkelwagen">
-    <i class="fa fa-calculator"></i>
-    <span class="label"><?php echo $this->__('Quote'); ?></span>
-    <span class="header__count-badge js-header__cart-articles-count"><?php echo $_quoteQty; ?></span>
+  
+  <a href="<?php echo Mage::getUrl("qquoteadv/index/"); ?>" data-target-element="#header-quote" class="skip-quote <?php if ($qty <= 0): ?> no-count<?php endif; ?> top-link" title="Lease en Offerte Winkelwagen">
+    <i class="fa fa-calculator fa-2x fa-fw"></i>
+    <?php if($qty > 0) { ?>
+      <div class="header__quote-count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></div>
+    <?php } ?>
   </a>
   
   <div id="header-quote" class="block skip-content">
     <?php
       // echo $this->getChildHtml("miniquote_content");
-      echo Mage::app()->getLayout()
-        ->createBlock("qquoteadv/checkout_miniquote_miniquote")
-        ->setTemplate("qquoteadv/checkout/quote/miniquote/miniquoteitems.phtml")
-        ->toHtml();
+      // Disabled for performance
+      // echo Mage::app()->getLayout()
+        // ->createBlock("qquoteadv/checkout_miniquote_miniquote")
+        // ->setTemplate("qquoteadv/checkout/quote/miniquote/miniquoteitems.phtml")
+        // ->toHtml();
     ?>
   </div>
 </span>

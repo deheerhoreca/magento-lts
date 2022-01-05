@@ -47,7 +47,7 @@ $thumb_dimensions = 1.5 * $thumb_size;
     <?php if ($this->hasProductUrl()):?>
       <a href="<?php echo $this->getProductUrl() ?>"><h4 class="product-name"><?php echo $this->escapeHtml($product_name) ?></h4></a>
     <?php else: ?>
-      <?php echo "<h4>".$this->escapeHtml($product_name)."</h4>"; ?>
+      <?php echo "<h4 class='product-name'>".$this->escapeHtml($product_name)."</h4>"; ?>
     <?php endif; ?>
     
     <?php
@@ -210,10 +210,8 @@ $thumb_dimensions = 1.5 * $thumb_size;
   <?php endif; ?>
   <td class="product-cart-actions" data-rwd-label="<?php echo $this->__('Qty'); ?>" width="150">
 		<input type='button' value='-' class='qtyminus' field='quantity' onclick="discresm2(this)" />
-		<input type="text" pattern="\d*(\.\d+)?" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4"
-         data-cart-item-id="<?php echo $this->jsQuoteEscape($_item->getSku()) ?>"
-         title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" maxlength="12" />
-  <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" field='quantity' />
+		<input type="text" pattern="\d*(\.\d+)?" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" data-cart-item-id="<?php echo $this->jsQuoteEscape($_item->getSku()) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" maxlength="12" />
+    <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" field='quantity' />
     <button type="submit" name="update_cart_action" data-cart-item-update value="update_qty" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Update')); ?>" class="button btn-update">
       <i class="fa fa-refresh" aria-hidden="true"></i>
     </button>

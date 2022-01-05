@@ -541,7 +541,8 @@ class Ophirah_Qquoteadv_Block_Adminhtml_Qquoteadv_Edit_Tab_Product extends Mage_
      */
     public function setExtraFieldsBlock()
     {
-        if (Mage::app()->getHelper('qquoteadv/licensechecks')->isAllowedCustomFields()) {
+# DHH CORE HACK
+        if (1 || Mage::app()->getHelper('qquoteadv/licensechecks')->isAllowedCustomFields()) {
             $childBlock = Mage::getSingleton('core/layout')
                 ->createBlock('qquoteadv/adminhtml_qquoteadv_quotedetails_extrafields')
                 ->setTemplate('qquoteadv/details/extra_fields.phtml');

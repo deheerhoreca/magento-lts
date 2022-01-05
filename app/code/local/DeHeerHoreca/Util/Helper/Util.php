@@ -233,6 +233,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       // $image_label = $this->stripTags($product_name, null, true);
     // }
     
+    $brand          = $_product->getAttributeText("manufacturer");
+    $sku_seller     = $_product->getData("sku_seller");
+    
     /* Interpret options */
     $image_size = $options["image_size"] ?? 150;
     $a_target = null;
@@ -240,9 +243,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       $a_target = " target='_blank'";
     }
     $display_product_name = $product_name;
-    if(isset($options["use_short_product_names"]) === true && $options["use_short_product_names"] === true) {
-      $display_product_name = $product_short_name;
-    }
+    // if(isset($options["use_short_product_names"]) === true && $options["use_short_product_names"] === true) {
+      // $display_product_name = $product_short_name;
+    // }
     $skip_actions = $options["skip_actions"] ?? false;
     
     if(empty($options["display"]) === false) {
@@ -282,6 +285,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
       
     $stock_message          = $stock_data["stock_message"];
+    $stock_message_short    = $stock_data["stock_message_short"];
     $stock_class            = $stock_data["txtcltcz"];
     $stock_qty              = $stock_data["stock_qty"];
     $in_stock               = $stock_data["in_stock"];
@@ -308,22 +312,28 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     switch($overall_stock_status) {
       case "in_stock":
-        if($display === "mini") {
-          $stock_message = "Op voorraad";
-        }
+        // if($display === "mini") {
+          // $stock_message = "Op voorraad";
+        // }
         break;
       case "backorder":
         $stock_class = "buyblock-usp";
-        if($display === "mini") {
-          $stock_message = "Reserveren";
-        }
+        // if($display === "mini") {
+          // $stock_message = "Reserveren";
+        // }
         break;
       case "not_sellable":
-        if($display === "mini") {
-          $stock_message = "Voorraad";
-        }
+        // if($display === "mini") {
+          // $stock_message = "Voorraad";
+        // }
       case "eol":
         break;
+    }
+    
+    if($display === "mini") {
+      $display_stock_message = $stock_message_short;
+    } else {
+      $display_stock_message = $stock_message;
     }
     
     $img_url = $product_block->helper('catalog/image')->init($_product, 'small_image')->resize($image_dimensions);
@@ -334,7 +344,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     </a>
     <div class="product-info">
       <div class="info">
-        <h2 class='product-name'>
+        <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
+        <h2 class='product-name ellipsed ellipsed-2'>
           <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $display_product_name; ?></a>
         </h2>
         <?php
@@ -358,15 +369,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         if(empty($product_usps) === false
         && (empty($options["skip_usps"]) || $options["skip_usps"] === false)) {
           $product_usps = array_splice($product_usps, 0, $max_product_usps); // Take max amount
-          echo "<ul class='product-list-highlights'>";
-          $class    = ($display === "mini") ? "" : "green_checkbox_before";
-          $postfix  = ($display === "mini") ? ", " : "";
+          echo "<ul class='product-list-highlights inline-list'>";
           $count = sizeof($product_usps);
           foreach($product_usps as $key => $usp) {
-            if($count > ($key+1)) {
-              $usp .= $postfix;
-            }
-            echo "<li><span class='{$class}' style='position: relative;'></span>{$usp}</li>";
+            echo "<li><span class='gray'>{$usp}</span></li>";
           }
           echo "</ul>";
         }
@@ -382,7 +388,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         ?>
         <div class="actions">
           <div class="float-left" style="padding-top: 5px;">
-            <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+            <span class="<?php echo $stock_class; ?>"><?php echo $display_stock_message; ?></span>
           </div>
           <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
             <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $product_block->getAddToCartUrl($_product) ?>')">
@@ -397,7 +403,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         ?>
         <div class="actions">
           <div class="float-left" style="padding-top: 5px;">
-            <span class="<?php echo $stock_class; ?>"><?php echo $stock_message; ?></span>
+            <span class="<?php echo $stock_class; ?>"><?php echo $display_stock_message; ?></span>
           </div>
         </div>
         <?php
@@ -777,10 +783,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     $calwekdate_min         = $calwekdate_max = null;
     
+    $supplier               = $product->getAttributeText('supplier');
+    
     /* Temporarily adjust levertijd during holidays */
     
     /*
-    $supplier = $product->getAttributeText('supplier');
     if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
       $future = strtotime("1 Jan 2020");
       $timefromdb = time();
@@ -819,10 +826,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       
       // EOL
       
-      $stock_message        = "Niet meer leverbaar";
+      $stock_message        = "Nooit meer leverbaar";
+      $stock_message_short  = "Niet leverbaar";
       $stock_tooltip        = "Dit product is verlopen en helaas niet meer leverbaar.";
       $delivery_text        = "";
-      $txtcltcz             = 'clzsoldout';
+      $txtcltcz             = "clzsoldout";
+      $fa_icon              = "clock-o";
       $backorder_needed     = null;      
       $overall_stock_status = "eol";
       $txtstockdate         = null;
@@ -831,9 +840,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       
       // Not sellable
       
-      $stock_message        = "Niet op voorraad, bel voor alternatieven";
+      $stock_message        = "Niet op voorraad";
+      $stock_message_short  = "Pre-order";
       $delivery_text        = "";
-      $txtcltcz             = 'clzsoldout';
+      $txtcltcz             = "clzsoldout";
+      $fa_icon              = "";
       $backorder_needed     = null;
       $tagline              = null;
       $overall_stock_status = "not_sellable";
@@ -842,10 +853,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         
       // Backorder
       
-      $stock_message        = "Nu te reserveren";
-      $stock_tooltip        = "Momenteel niet op vooraad, maar wel reserveerbaar. U bent dan de eerste die het product krijgt.";
+      $stock_message        = "Pre-order nu!";
+      $stock_message_short  = "Pre-order";
+      $stock_tooltip        = "Momenteel niet op vooraad maar u kunt het pre-orderen. U bent dan de eerste die het product krijgt.";
       $delivery_text        = "Verw. levering: <strong>Op aanvraag</strong>";
-      $txtcltcz             = 'clzinstocktemp';
+      $txtcltcz             = "buyblock-usp fw-normal";
+      $fa_icon              = "fa-times";
       $backorder_needed     =  true;
       $overall_stock_status = "backorder";
       $stock_data["bestelartikel"] = $bestelartikel;
@@ -895,40 +908,39 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       // }
       
       $txtcltcz             = "buyblock-usp";
+      $fa_icon              = "fa-check-circle";
       
       if($manage_stock === false) {
-        
-        // Unmanaged, be careful with overpromising
-        
-        $stock_message        = "Op aanvraag";
-        $txtcltcz             = "buyblock-usp";
-        
-        // If we have an unmanaged product, we cannot really say when it will be available again
-        $levertijd = null;
-        
+        $stock_message        = "Op aanvraag";    // Unmanaged, be careful with overpromising
+        $stock_message_short  = "Op aanvraag";
+        $levertijd            = null;             // If we have an unmanaged product, we cannot really say when it will be available again
+      } elseif(in_array($supplier, ["Bartscher"]) === true) {
+        $stock_message        = "Op voorraad";    // Don't specify stock details for these suppliers
+        $stock_message_short  = "Op voorraad";
       } elseif($stock_qty < 4) {
-        $stock_message        = "Op voorraad";
-        if($context === "listview") {
-          $stock_message        = "Op voorraad";
+        if($context !== "listview") {
+          $stock_message        = "<strong>{$stock_qty}</strong> op voorraad";
         } else {
-          $stock_message        = "Let op: <strong>{$stock_qty}</strong> op voorraad";
+          $stock_message        = "Op voorraad";
         }
+        $stock_message_short  = "Op voorraad";
         $txtstockdate         = null;
       } else {
-        $stock_message        = "Op voorraad";
+        $stock_message        = "Ruim op voorraad";
+        $stock_message_short  = "Op voorraad";
         $txtstockdate         = null;
       }
       
       $backorder_needed     = false;
       $overall_stock_status = "in_stock";
-      
       $stock_data["bestelartikel"] = $bestelartikel;
-      
     }
     
     $stock_data["stock_message"]          = $stock_message;
+    $stock_data["stock_message_short"]    = $stock_message_short;
     $stock_data["stock_tooltip"]          = $stock_tooltip;
     $stock_data["txtcltcz"]               = $txtcltcz;
+    $stock_data["fa_icon"]                = $fa_icon;
     $stock_data["stock_qty"]              = $stock_qty;
     $stock_data["in_stock"]               = $in_stock;
     $stock_data["backorders"]             = $backorders;
@@ -1006,6 +1018,73 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
   public static function cleanCategoryName($category_name) {
     return trim(str_replace(["[V]", "[SKIPMENU]"], null, $category_name));
   }
+  
+  public static function getLeaseRates($price_ex_vat, $time = "daily") {
+    $rates = [];
+    
+    // Using 400 for 500 to be a bit flexible
+    
+        // if(in_range($price_ex_vat, 2500 , 5000  )) $rates["72"] = $price_ex_vat * (1.95 / 100);
+    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["72"] = $price_ex_vat * (1.77 / 100);
+    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["72"] = $price_ex_vat * (1.74 / 100);
+    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["72"] = $price_ex_vat * (1.72 / 100);
+    
+        if(in_range($price_ex_vat, 400  , 5000  )) $rates["60"] = $price_ex_vat * (2.43 / 100);
+    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["60"] = $price_ex_vat * (2.25 / 100);
+    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["60"] = $price_ex_vat * (2.10 / 100);
+    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["60"] = $price_ex_vat * (2.01 / 100);
+    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["60"] = $price_ex_vat * (1.97 / 100);
+
+        // if(in_range($price_ex_vat, 400  , 5000  )) $rates["54"] = $price_ex_vat * (2.55 / 100);
+    // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["54"] = $price_ex_vat * (2.37 / 100);
+    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["54"] = $price_ex_vat * (2.28 / 100);
+    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["54"] = $price_ex_vat * (2.25 / 100);
+    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["54"] = $price_ex_vat * (2.21 / 100);
+    
+        if(in_range($price_ex_vat, 400  , 5000  )) $rates["48"] = $price_ex_vat * (2.76 / 100);
+    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["48"] = $price_ex_vat * (2.57 / 100);
+    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["48"] = $price_ex_vat * (2.49 / 100);
+    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["48"] = $price_ex_vat * (2.43 / 100);
+    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["48"] = $price_ex_vat * (2.40 / 100);
+    
+        // if(in_range($price_ex_vat, 400  , 5000  )) $rates["42"] = $price_ex_vat * (3.03 / 100);
+    // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["42"] = $price_ex_vat * (2.94 / 100);
+    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["42"] = $price_ex_vat * (2.85 / 100);
+    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["42"] = $price_ex_vat * (2.83 / 100);
+    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["42"] = $price_ex_vat * (2.77 / 100);
+    
+        if(in_range($price_ex_vat, 400  , 5000  )) $rates["36"] = $price_ex_vat * (3.40 / 100);
+    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["36"] = $price_ex_vat * (3.29 / 100);
+    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["36"] = $price_ex_vat * (3.10 / 100);
+    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["36"] = $price_ex_vat * (3.07 / 100);
+    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["36"] = $price_ex_vat * (3.02 / 100);
+    
+        // if(in_range($price_ex_vat, 400  , 5000  )) $rates["30"] = $price_ex_vat * (4.05 / 100);
+    // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["30"] = $price_ex_vat * (3.88 / 100);
+    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["30"] = $price_ex_vat * (3.81 / 100);
+    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["30"] = $price_ex_vat * (3.78 / 100);
+    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["30"] = $price_ex_vat * (3.75 / 100);
+    
+        if(in_range($price_ex_vat, 400  , 5000  )) $rates["24"] = $price_ex_vat * (4.75 / 100);
+    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["24"] = $price_ex_vat * (4.61 / 100);
+    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["24"] = $price_ex_vat * (4.51 / 100);
+    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["24"] = $price_ex_vat * (4.35 / 100);
+    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["24"] = $price_ex_vat * (4.32 / 100);
+    
+        if(in_range($price_ex_vat, 400  , 5000  )) $rates["15"] = $price_ex_vat * (7.08 / 100);
+    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["15"] = $price_ex_vat * (7.03 / 100);
+    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["15"] = $price_ex_vat * (7.01 / 100);
+    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["15"] = $price_ex_vat * (6.98 / 100);
+    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["15"] = $price_ex_vat * (6.93 / 100);
+    
+    if($time === "daily") {
+      $rates = array_map( function($val) { return round(($val * 12) / 365, 2); }, $rates);
+      $rates = array_map( function($val) { return max($val, .01); }, $rates); // At least 1 cent per day
+    }
+    
+    return $rates;
+  }
+  
 }
 
 if(function_exists('printr') === false) {
@@ -1053,4 +1132,13 @@ if(function_exists("_dhh_debug") === false) {
     }
     return false;
   }
+}
+
+function in_range($number, $min, $max, $inclusive = false) {
+  if(is_numeric($number) && is_numeric($min) && is_numeric($max)) {
+    return $inclusive
+      ? ($number >= $min && $number <= $max)
+      : ($number >= $min && $number < $max) ;
+  }
+  return false;
 }

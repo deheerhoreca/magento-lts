@@ -61,10 +61,11 @@ Contexts:
 if(function_exists('_fixPrice') === false) {
   function _fixPrice($price, $keep_sign = false) {
     if($keep_sign === false) {
-      $price = str_replace(["€", "&nbsp;"], null, $price);
+      $price = str_replace(["€", "&nbsp;"], null, $price);    // Remove euro symbol
     }
-    $price = str_replace(",00", ",-", $price);
-    $price = preg_replace("/(^\s+)|(\s+$)/us", null, $price); //an utf8 trim()
+    $price = str_replace(",00", ",-", $price);                // Trim zero cents
+    $price = str_replace(".", null, $price);                  // Remove thousand separator
+    $price = preg_replace("/(^\s+)|(\s+$)/us", null, $price); // An utf8 trim()
     return strip_tags(trim($price));
   }
 }
@@ -77,13 +78,13 @@ if(function_exists('_displayMsrp') === false) {
 
 if(function_exists('_displayRegularPriceDuringSpecialPrice') === false) {
   function _displayRegularPriceDuringSpecialPrice($price_formatted) {
-    return "<div class='old-price bit-bigger'><span>Normaal: </span><span class='price strike'><!--sse-->{$price_formatted}<!--/sse--></span></div>";
+    return "<div class='my-2 old-price bit-bigger'><span>Normaal: </span><span class='price strike'><!--sse-->{$price_formatted}<!--/sse--></span></div>";
   }
 }
 
 if(function_exists('_displayDiscount') === false) {
   function _displayDiscount($_discount_abs_formatted, $discount_perc, $id) {
-    return "<div class='discount-amount'><span class='price-label'>Je bespaart&nbsp;</span><span class='price green' id='discount-amount-{$id}'><!--sse-->{$_discount_abs_formatted}<!--/sse--></span></div>";
+    return "<div class='discount-amount'><span class='price-label'>Je bespaart&nbsp;</span><span class='price green strong' id='discount-amount-{$id}'><!--sse-->{$_discount_abs_formatted}<!--/sse--></span></div>";
   }
 }
 
@@ -96,7 +97,7 @@ if(function_exists('_displayPriceDates') === false) {
       setlocale(LC_TIME, "nl_NL");
       $_special_price_to_ts = strtotime($_special_price_to_date);
       $display_date = strftime("%A %e %B", $_special_price_to_ts);
-      return "<div class='special_price_dates'>Geldt t/m <span class=bold>{$display_date}</span></div>";
+      return "<div class='special_price_dates'>Eindigt <span class=bold>{$display_date}</span></div>";
     }
     
     return null;
@@ -276,19 +277,19 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </span>
           <?php
         
-        /* CONTEXT 4 => Used
-        - Listview without special price
-        - Detailview without special price
-        - Related products without special price
+        /* CONTEXT 4 => Used:
+          - Listview without special price
+          - Detailview without special price
+          - Related products without special price
         */
         
         } else {
           $debug_lines[] = "Context: 4";
           
           // MSRP
-          if($_msrp > $_finalPrice && $_discount_pct > 1) {
-            echo _displayMsrp($_msrp_formatted, $_msrpStoreLabel, $_id.$this->getIdSuffix());
-          }
+          // if($_msrp > $_finalPrice && $_discount_pct > 1) {
+            // echo _displayMsrp($_msrp_formatted, $_msrpStoreLabel, $_id.$this->getIdSuffix());
+          // }
           ?>
           <span class="price-excluding-tax not-special">
             <?php if($_product->canConfigure()) echo "<span class='from_price_conf'>Vanaf</span>"; ?>
@@ -312,8 +313,8 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </span>
           <?php
           
-          // DISCOUNT
-          if($_discount < 0) {
+          // SHOW DISCOUNT IF >2%
+          if($_discount_pct > 2) {
             echo _displayDiscount($_discount_abs_formatted, $_discount_pct_formatted, $_id.$this->getIdSuffix());
           }
         }
@@ -571,9 +572,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
         
         if(Mage::app()->getLocale()->isStoreDateInInterval($_store, $_special_price_from_date, $_special_price_to_date)) {
           $debug_lines[] = "Context: 13A";
-          if($_msrp > $_price) {
-            echo _displayRegularPriceDuringSpecialPrice($_price_formatted);
-          }
+          // if($_msrp > $_price) {
+            // echo _displayRegularPriceDuringSpecialPrice($_price_formatted);
+          // }
         } else {
           $debug_lines[] = "Context: 13B";
         }
@@ -608,8 +609,8 @@ if($_product->getAttributeText("eol") !== "Ja") {
         
         echo _displayPriceDates($_store, $_special_price_from_date, $_special_price_to_date);
         
-        // DISCOUNT
-        if($_discount < 0) {
+        // SHOW DISCOUNT IF >2%
+        if($_discount_pct > 2) {
           echo _displayDiscount($_discount_abs_formatted, $_discount_pct_formatted, $_id.$this->getIdSuffix());
         }
       } 

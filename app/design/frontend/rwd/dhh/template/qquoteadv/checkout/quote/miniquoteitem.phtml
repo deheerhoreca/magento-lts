@@ -24,12 +24,11 @@
  * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
  * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
-?>
-<?php
-    /** @var Ophirah_Qquoteadv_Block_Checkout_Miniquote_Item_Miniquoterenderer $this */
-    $_item = $this->getItem();
-    $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
-    $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
+
+/** @var Ophirah_Qquoteadv_Block_Checkout_Miniquote_Item_Miniquoterenderer $this */
+$_item            = $this->getItem();
+$isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
+$canApplyMsrp     = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 ?>
 <li class="item">
     <?php if ($this->hasProductUrl()): ?>

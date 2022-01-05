@@ -3,7 +3,7 @@ $_product             = $this->getProduct();
 $_store               = $_product->getStore();
 $_finalPrice          = $_product->getFinalPrice();
 $_convertedFinalPrice = $_store->roundPrice($_store->convertPrice($_product->getFinalPrice()));
-$buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('In Winkelmandje'));
+$buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('Winkelwagen'));
 
 // We have seen situations where EOL products were saleable due to the way we update stock info
 // Adding another check to make sure
@@ -27,42 +27,10 @@ if($_product->isSaleable() && $_product->getAttributeText("eol") !== "Ja") {
         <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px;"></i>
         <?php echo $buttonTitle_buy; ?>
       </button>
-      <?php
-      
+      <?php      
       // cart2quote
-      echo Mage::app()->getLayout()->createBlock('qquoteadv/qquotebtn')
-           ->setData('product', $_product)->setTemplate('qquoteadv/catalog/product/view/addtoquoteadv.phtml')->toHtml();
-      
+      echo Mage::app()->getLayout()->createBlock('qquoteadv/qquotebtn')->setData('product', $_product)->setTemplate('qquoteadv/catalog/product/view/addtoquoteadv.phtml')->toHtml();      
       echo $this->getChildHtml('', true, true);
-      
-      $mininum_lease_price = 1000;
-      if(0 && isset($_finalPrice) && $_finalPrice >= 450) {
-        ?>
-        
-        <script src ="https://form.jotform.com/static/feedback2.js" type="application/javascript"></script>
-        <script type="application/javascript">
-          var JFL_200152323289044 = new JotformFeedback({
-            formId: '200152323289044',
-            base: 'https://form.jotform.com/',
-            windowTitle: 'Aanvraag lease',
-            background: '#f08324',
-            fontColor: '#FFFFFF',
-            type: 'false',
-            height: 600,
-            width: 700,
-            openOnLoad: false,
-            iframeParameters: {
-              'product': <?php echo json_encode($_product->getName()); ?>
-            },
-          });
-        </script>
-        
-        <button type="button" title="<?php echo $buttonTitle_lease ?>" class="button btn-lease btn lightbox-200152323289044">
-          <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px;"></i>
-          <?php echo $buttonTitle_lease; ?>
-        </button>
-        <?php
-      }
       ?>
     </div>
   </div>

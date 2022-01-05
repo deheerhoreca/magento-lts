@@ -11,6 +11,7 @@ $_helper              = $this->helper("catalog/output");
 $_product             = $this->getProduct();
 $brand_name           = $_product->getAttributeText("manufacturer");
 $brand_id             = $_product->getData("manufacturer");
+$sku                  = $_product->getData("sku");
 $brand_logo           = null;
 $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $brand_link           = "/shop?manufacturer={$brand_id}";
@@ -23,19 +24,19 @@ $billink_minimum      = 10;
 $billink_maximum      = 3500;
 $_taxHelper           = $this->helper("tax");
 
-if(empty($brand_name) === false) {
-  $brand = sanitizeForFilename($brand_name);
-  $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
-  $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
-  if(is_file($brand_logo_file) === true) {
-    $brand_logo = "/".$brand_logo_file;
-  }
-}
+// if(empty($brand_name) === false) {
+  // $brand = sanitizeForFilename($brand_name);
+  // $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
+  // $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
+  // if(is_file($brand_logo_file) === true) {
+    // $brand_logo = "/".$brand_logo_file;
+  // }
+// }
 
-/* Get a list of Category IDs */
+// Get a list of Category IDs
 $categoryIds = $_product->getCategoryIds();
 
-/* Find the category this product belongs to */
+// Find the category this product belongs to
 if(count($categoryIds)) {
   $firstCategoryId = $categoryIds[0];
   $_category = Mage::getModel('catalog/category')->load($firstCategoryId);
@@ -56,17 +57,11 @@ $_price                 = $_product->getPrice(); //Mage::getModel('catalog/produ
 $_finalPrice            = $_product->getFinalPrice();
 $tagline                = $_product->getTagline();
 $supplier_name          = $_product->getAttributeText('supplier');
-$product_description_md = $_product->getDescription();
+$product_description_md = trim($_product->getDescription());
+$product_description    = "";
 
-$additional_buyblock_content = $top_buyblock_content = $delivery_text = $product_description = null;
-
-/* Availability, Stock */
+// Availability, Stock
 $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
-
-if(_dhh_debug()) {
-  printr($stock_data);
-}
-
 $stock_message          = $stock_data["stock_message"];
 $stock_tooltip          = $stock_data["stock_tooltip"];
 $txtcltcz               = $stock_data["txtcltcz"];
@@ -88,53 +83,116 @@ $min_sale_qty           = $stock_data["min_sale_qty"];
 $used_levertijd         = empty($levertijd_tmp_override) ? $levertijd : $levertijd_tmp_override;
 
 $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
-$_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
-$top_buyblock_content   = null;
+$_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_finalPrice, true);
 
-if($_finalPriceInclTax >= $freeshipping_from && $_product->isSaleable() === true) {
-  $top_buyblock_content .= "<div><strong class=green>Gratis</strong> bezorgd</div>";
+// if(_dhh_debug()) {
+// }
+
+/* BUYBLOCK CONTENT */
+
+$buyblock_free_delivery_content = "";
+$buyblock_free_delivery = false;
+
+if($_finalPriceInclTax >= $freeshipping_from && $_product->isSaleable() === true && $overall_stock_status !== "eol") {
+  $buyblock_free_delivery_content .= "<div class='buyblock-usp fw-normal'><strong class=green>Gratis</strong> bezorgd</div>";
+  $buyblock_free_delivery = true;
 }
 
-if($overall_stock_status === "not_sellable"
-|| $overall_stock_status === "backorder"
-|| $manage_stock === false) {
-  if(empty($txtstockdate) === false) {
-    $delivery_text .= "Verwacht: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de meest accurate inschatting die wij van onze fabrikanten hebben doorgekregen. Door omstandigheden kan dit soms wijzigen.</span>";
-  } elseif($manage_stock !== false) {
-    $delivery_text .= "Terug op voorraad: Op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit product komt spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een nabestelling (backorder) plaatsen, of contact met ons opnemen over verwachte levertijden en alternatieven.</span>";
-  }
+// Stock level
+$stock_message_tooltip = "";
+if(empty($stock_tooltip) === false) {
+  $stock_message_tooltip = "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>{$stock_tooltip}</span></span>";
 }
 
+// Delivery time
+$delivery_text = "";
 if($bestelartikel === "Ja") {
-  $additional_buyblock_content .= "<div class='clzinstocktemp'>Bestelartikel</div>";
-}
-
-if($overall_stock_status === "in_stock" && !empty($used_levertijd)) {
-  $delivery_text .= "Verwachte levertijd: <strong>{$used_levertijd}</strong>";
-  $delivery_text .= "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
-}
-
-if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
-  if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
-    $text = "Of betaal achteraf met Billink";
-    $additional_buyblock_content .= "<div class='buyblock-usp'><a data-fancybox data-touch='false' href='#info-billink'>{$text}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i></span></a></div>";
+  $delivery_text .= "Bestelartikel</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit artikel wordt op bestelling gemaakt en geleverd</span>";
+} elseif($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder" || $manage_stock === false) {
+  if(empty($txtstockdate) === false) {
+    $delivery_text .= "Verwacht: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de meest accurate inschatting die wij hebben. Door omstandigheden kan dit soms wijzigen.</span>";
+  } elseif($manage_stock !== false) {
+    $delivery_text .= "Levertijd op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een pre-order plaatsen.</span>";
   }
+} elseif($overall_stock_status === "in_stock" && !empty($used_levertijd)) {
+  $delivery_text .= "&plusmn; {$used_levertijd}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
+}
+if(empty($delivery_text) === false) {
+  $delivery_li = "<li class='my-1'><i class='fa-li fa fa-clock-o'></i>{$delivery_text}</li>";
 }
 
+// MOQ content
+$moq_li = "";
+if(empty($min_sale_qty) !== true && $min_sale_qty > 1) {
+  $moq_li = "<li class='my-1'><i class='fa-li fa fa-bars'></i>Ordergrootte vanaf <strong>{$min_sale_qty}</strong> stuks</li>";
+}
+
+// Qantity step content
+$qs_content = "";
+$qty_increments = $_product->getStockItem()->getQtyIncrements();
+if($qty_increments > 0) {
+  $qs_content = "<li class='my-1'><i class='fa-li fa fa-bars'></i>Wordt verkocht in stappen van <strong>".intval($qty_increments)."</strong> stuks</li>";
+}
+
+// Help content
+$help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
+  <li class=my-1>
+    <i class='fa-li fa fa-question'></i>
+    <a data-fancybox data-type='iframe' data-iframe='{\"preload\":false}' data-width=500 data-height=650 href='https://form.jotform.com/213136047906049?sku={$sku}&product={$productTitle}'>Stel een vraag</a>
+  </li>
+  <li class=my-1><i class='fa-li fa fa-question'></i><a data-fancybox data-touch='false' href='#modal'>Contact opnemen</a></li>
+</ul>";
+
+// Our USPs content
+$our_usps = [
+  "De beste prijzen",
+  "Veilig online winkelen",
+  "Klanten beoordelen ons met een <strong class=orange>9.2/10</strong>",
+  "We zitten klaar voor uw vragen",
+];
+if(empty($our_usps) === false) {
+  $our_usps_content = "<ul class='fa-ul'>";
+  foreach($our_usps as $text) {
+    $our_usps_content .= "<li class='my-1'><i class='fa-li fa fa-check green'></i>{$text}</li>";
+  }
+  $our_usps_content .= "</ul>";
+  $our_usps_content = "<h4 class='black mt-3'>Onze voordelen:</h4>{$our_usps_content}";
+}
+
+// Payment methods content
 if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
+  
+  $payment_methods_texts = [];
+  
+  if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
+    $text = "Betaal <strong>achteraf</strong> met Billink";
+    $payment_methods_texts[] = "<a data-fancybox data-touch='false' href='#info-billink' class='no-decoration'>{$text}</a>";
+  }
+
   if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {    
     if($this->hasOptions()) {
-      $text = "Of betaal in drie termijnen met In3";
+      $text = "Betaal in <strong>3 termijnen</strong> met In3";
     } else {
       $payment = number_format($_finalPrice / 3, 2, ",", ".");
-      $text = "Of betaal 3x {$payment} met In3";
+      $payment = str_replace(",00", ",-", $payment);
+      $text = "<strong>3 termijnen</strong> van €{$payment} zonder rente met In3";
     }
-    $additional_buyblock_content .= "<div class='buyblock-usp'><a data-fancybox data-touch='false' href='#info-in3'>{$text}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i></span></a></div>";
+    $payment_methods_texts[] = "<a data-fancybox data-touch='false' href='#info-in3' class='no-decoration'>{$text}</a>";
+  }
+  
+  if(empty($payment_methods_texts) === false) {
+    $payment_methods_content = "<ul class='fa-ul'>";
+    foreach($payment_methods_texts as $text) {
+      $payment_methods_content .= "<li class='my-1'><i class='fa-li fa fa-info-circle'></i>{$text}</li>";
+    }
+    $payment_methods_content .= "</ul>";
+    $payment_methods_content = "<h4 class='black mt-3'>Betaalbaar voor iedereen!</h4>{$payment_methods_content}";
   }
 }
 
+// Buyblock EOL text
 if($overall_stock_status === "eol") {
-  $eol_text             = null;
+  $eol_text = "Wij helpen u graag met het vinden van een geschikt vervangend product.";
   if(empty($eol_replacement_sku) === false) {
     $replacement_product = Mage::getModel('catalog/product')->loadByAttribute('sku', $eol_replacement_sku);
     if($replacement_product !== false) {
@@ -145,7 +203,7 @@ if($overall_stock_status === "eol") {
   }
 }
 
-/* Product Documents */
+// Product Documents
 $files = Mage::getModel('staempfli_productattachment/file')
   ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
   ->getData();
@@ -592,7 +650,7 @@ if(strtolower($nofrost_method) === 'Automatisch') {
 }
 
 $code = "voltage";
-$text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
+$text = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
 if($text === "400") {
   $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
 }
@@ -613,37 +671,26 @@ if(strlen($product_description) === 0) {
 
 /** PRODUCT LINKS **/
 
-$related_products_block = $this->getChildHtml('related_products');
-$product_additional_data_block = $this->getChildHtml('product_additional_data');
-$alternative_products_block = $this->getChildHtml('upsell_products');
+$related_products_block = $this->getChildHtml("related_products");
+$product_additional_data_block = $this->getChildHtml("product_additional_data");
+$alternative_products_block = $this->getChildHtml("upsell_products");
 if(empty($alternative_products_block) === true) {
   $upsell_products_block = $this->getLayout()->createBlock('awautorelated/blocks')->setBlockId(1)->toHtml();
 }
 
 /** ANCHOR LINKS **/
 
-$anchors["photos"] = "Foto's";
+// $anchors["photos"] = "Foto's";
 if(empty($pvideo) === false)                        $anchors["video"]         = "Productvideo";
-if(strlen($product_description) > 10)               $anchors["description"]   = "Beschrijving";
+// if(strlen($product_description) > 10)               $anchors["description"]   = "Beschrijving";
 if(empty($_crossSellProducts) === false)            $anchors["accessoires"]   = "Accessoires en verbruiksartikelen";
 if(empty($alternative_products_block) === false)    $anchors["alternatives"]  = "Alternatieven";
 if(empty($product_additional_data_block) === false) $anchors["specs"]         = "Specificaties";
 if(count($files) > 0)                               $anchors["documents"]     = "Documenten";
 if(empty($upsell_products_block) === false)         $anchors["upsells"]       = "Bekijk ook";
 if(empty($related_products_block) === false)        $anchors["related"]       = "Gerelateerde producten";
-if(strlen($additional_attributes) > 10)             $anchors["additional"]    = "Extra info van de leverancier";
-if(strlen($htbrand) > 10)                           $anchors["brand"]         = "Over {$brand_name}";
-
-// if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-  // echo "<pre>";
-  // var_dump($stock_data);
-  // echo "</pre>";
-// }
-
-// if($_SERVER["REMOTE_ADDR"] === "185.127.111.251") {
-  // $reflFunc = new ReflectionMethod($this, 'getJsonConfig');
-  // print $reflFunc->getFileName() . ':' . $reflFunc->getStartLine();
-// }
+if(strlen($additional_attributes) > 10)             $anchors["additional"]    = "Extra productinformatie";
+// if(strlen($htbrand) > 10)                           $anchors["brand"]         = "Over {$brand_name}";
 ?>
 <script>var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
@@ -666,16 +713,28 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
     <div class="product-img-box">
       <a class="anchor" id="photos"></a>
       <?php
+        // Product label
         if(empty($shoutout) === false) {
           echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
         }
         
-        /* Energy Label */
+        // Black friday
+        // if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
+          // echo "<span class='bf-banner-detail'></span>";
+        // }
+        
+        // Package quantity
+        $package_quantity = (int) $_product->getData("eenheid");
+        if($package_quantity > 1) {
+          echo "<span class='product-label-right bg-blue bit-bigger'>{$package_quantity} X</span>";
+        }
+        
+        // Energy rating
         if(empty($enclz) === false) {
           echo "<span class='lblenergylabel {$enclz}' title='Energielabel {$enclz}'>{$energy_rating}</span>";
         }
         
-        echo $this->getChildHtml('media');
+        echo $this->getChildHtml("media");
       ?>
     </div>
   </div>
@@ -693,12 +752,8 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
           <div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
             
             <?php
-            echo $this->getChildHtml('alert_urls');
-            echo $this->getChildHtml('other');
-            
-            if(empty($tagline) === false) {
-              echo "<div class='product-detail-tagline'>{$tagline}</div>";
-            }
+            echo $this->getChildHtml("alert_urls");
+            echo $this->getChildHtml("other");
             ?>
             <div class="add-to-cart-wrapper">
               <?php
@@ -716,44 +771,39 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
                       echo $this->getlayout()->createBlock('catalog/product_view')->setTemplate('catalog/product/view/price_clone.phtml')->toHtml();
                       echo "</div>";
                       echo $this->getPriceHtml($_product);
-                      echo $this->getChildHtml('bundle_prices');
+                      echo $this->getChildHtml("bundle_prices");
                       echo $this->getTierPriceHtml();
                     ?>
                   </div>
                   <?php
-                  echo $top_buyblock_content;
-                  echo $this->getChildHtml('addtocart');
-                  echo $this->getChildHtml('addto');
+                  echo $buyblock_free_delivery_content;
+                  echo $this->getChildHtml("addtocart");
+                  echo $this->getChildHtml("addto");
                   ?>
                 </div>
                 
-                <?php
-                // We cannot show stock levels for all variations in the buy block
-                // echo "<div class='{$txtcltcz}'>{$stock_message}</div>";
-                ?>
-                <?php
+                <?php                
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
                   if(empty($eol_text) !== true) {
                     echo "<div class=eol_text>{$eol_text}</div>";
                   }
                 }
-                if(empty($min_sale_qty) !== true && $min_sale_qty > 1) {
-                  echo "<div class='buyblock-usp'><span class='dark-color'>Ordergrootte: vanaf <strong>{$min_sale_qty}</strong> stuks</span></div>";
-                }
                 if(empty($delivery_text) !== true) {
                   echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
                 }
                 
-                echo $additional_buyblock_content;
+                echo $our_usps_content;
+                echo $payment_methods_content;
+                echo $help_content;
                 
-                echo $this->getChildHtml('extra_buttons');
+                echo $this->getChildHtml("extra_buttons");
               }
               
               // All products
               
-              echo $this->getChildHtml('product_type_data');
-              echo $this->getChildHtml('extrahint');
+              echo $this->getChildHtml("product_type_data");
+              echo $this->getChildHtml("extrahint");
               
               // Non-configurable products
               
@@ -763,37 +813,39 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
                   <div class="price-info">
                     <?php
                       echo $this->getPriceHtml($_product);
-                      echo $this->getChildHtml('bundle_prices');
+                      echo $this->getChildHtml("bundle_prices");
                       echo $this->getTierPriceHtml();
                     ?>
                   </div>
                   <?php
-                  echo $top_buyblock_content;
-                  echo $this->getChildHtml('addtocart');
-                  echo $this->getChildHtml('addto');
+                  echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
+                  echo $buyblock_free_delivery_content;
+                  echo "<ul class='fa-ul'>";
+                  if(empty($delivery_li) !== true) {
+                    echo $delivery_li;
+                  }
+                  if(empty($moq_li) !== true) {
+                    echo $moq_li;
+                  }
+                  if(empty($qs_content) !== true) {
+                    echo $qs_content;
+                  }
+                  echo "</ul>";
+                  echo $this->getChildHtml("addtocart");
+                  echo $this->getChildHtml("addto");
                   ?>
                 </div>
                 <?php
-                $stock_message_tooltip = "";
-                if(empty($stock_tooltip) === false) {
-                  $stock_message_tooltip = "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>{$stock_tooltip}</span></span>";
-                }
-                echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
                 if($eol === true) {
                   if(empty($eol_text) !== true) {
                     echo "<div class=eol_text>{$eol_text}</div>";
                   }
                 }
-                if(empty($min_sale_qty) !== true && $min_sale_qty > 1) {
-                  echo "<div class='buyblock-usp'><span class='dark-color'>Ordergrootte: vanaf <strong>{$min_sale_qty}</strong> stuks</span></div>";
-                }
-                if(empty($delivery_text) !== true) {
-                  echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
-                }
                 
-                echo $additional_buyblock_content;
-                
-                echo $this->getChildHtml('extra_buttons');
+                echo $our_usps_content;
+                echo $payment_methods_content;
+                echo $help_content;
+                echo $this->getChildHtml("extra_buttons");
               
               // Non-sellable products
               
@@ -802,25 +854,17 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
                 <div class="add-to-box">
                   <div class="price-info">
                     <?php
-                    echo $this->getChildHtml('addto');
-                    echo $additional_buyblock_content;
+                    echo $this->getChildHtml("addto");
+                    echo $help_content;
                     ?>
                   </div>
                 </div>
                 <?php
-              }
-
+              }              
+              echo $this->getChildHtml("sharing");              
               // if($_product->getFinalPrice() < 150 && strtolower($supplier_name) === "gastronoble") {
                 // echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
               // }
-              
-              ?>
-              <div id="company_usps">
-                <i style="height: 22px; width: 22px; margin-left: 0.2em; font-size: 18px; color: #595959;" class="fa fa-phone fa-fw" title="Bellen"></i>
-                Vragen? <a data-fancybox="" data-touch="false" href="#modal">Contact met Chefstore.nl</a>
-              </div>
-              <?php
-              echo $this->getChildHtml('sharing');
               ?>
             </div>
             
@@ -837,6 +881,7 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
                 echo "</ul>";
                 
                 if(empty($categoryUrl) === false && empty($categoryName) === false) {
+                  $categoryName = str_ireplace("[V] ", null, $categoryName);
                   echo "<small>Of ga naar alle <a href='{$categoryUrl}'>{$categoryName}</a></small>";
                 }
                 ?>
@@ -850,19 +895,18 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
         <?php
         
         // Configurable products
-        
         if($saleable === true && $this->hasOptions()) {
-          echo $this->getChildChildHtml('container2', '', true, true);
+          echo $this->getChildChildHtml("container2", "", true, true);
         }
         ?>
       </div>
     </div>
-  
   </div>
-    
+  
   <div class="proleftdv">
+    <?php  
     
-    <?php /* Product USPs */ ?>
+    /* Product USPs */ ?>    
     <?php
     if(empty($hlstr) === false) {
       ?>
@@ -874,9 +918,11 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
       </div>
       <?php
     }
-    ?>
-
-    <?php
+    
+    /* Product Tagline */
+    if(empty($tagline) === false) {
+      echo "<div class='product-detail-tagline px-2 py-1 my-2'>{$tagline}</div>";
+    }
 
     /* Product Video */
     if(empty($pvideo) === false) {
@@ -918,14 +964,14 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
           ?>
           <div class="crosssell product-collateral category-products">
             <?php
-            echo "<ul class='products-grid products-grid-mini-narrow'>";
-              foreach ($_crossSellProducts as $_product) {
+            echo "<ul class='products-grid products-grid-mini'>";
+              foreach($_crossSellProducts as $_product) {
                 $i++;
                 ?>
                 <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
                   <?php
                   $options = [
-                    "skip_usps"             => true,
+                    "skip_usps"             => false,
                     "skip_info"             => true,
                     "display"               => "mini",
                     "image_size"            => 100,
@@ -1026,7 +1072,7 @@ if(strlen($htbrand) > 10)                           $anchors["brand"]         = 
     <?php
     if(strlen($additional_attributes) > 10) {
       ?>
-      <h2 class="tableftheader"><?php echo $this->__('Extra informatie van de fabrikant');?></h2>
+      <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
         <a class="anchor" id="additional"></a>
         <div class="std"><?php echo $additional_attributes; ?>
@@ -1209,3 +1255,5 @@ function html_table(array $data): string {
     <iframe class="lazy" style="max-width:100%;" width="560" height="315" data-src="https://www.youtube-nocookie.com/embed/9XTdoGzjefY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ></iframe>
   </div>
 </div>
+
+

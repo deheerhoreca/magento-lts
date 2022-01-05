@@ -25,41 +25,67 @@
  * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
 
-if (!Mage::helper('qquoteadv')->isEnabled()) return '';
+if (!Mage::helper("qquoteadv")->isEnabled()) return "";
 
 $_product             = $this->getProduct();
 $hideCartButton       = false;
-$hideQuoteButton      = Mage::helper('qquoteadv')->hideQuoteButton($_product);
-$buttonTitle_lease    = $this->__('Lease Aanvragen');
-$action               = $this->helper('qquoteadv/catalog_product_data')->getAddToQuoteAction($_product->getId());
-$mininum_lease_price  = 450;
+$hideQuoteButton      = Mage::helper("qquoteadv")->hideQuoteButton($_product);
+$action               = $this->helper("qquoteadv/catalog_product_data")->getAddToQuoteAction($_product->getId());
+$mininum_lease_price  = 400;
 $_finalPrice          = $_product->getFinalPrice();
 
-if (Mage::getConfig()->getModuleConfig('Ophirah_Not2Order')->is('active', 'true') && $_product->getData('quotemode_conditions') > 0) {
-  $hideCartButton     = Mage::helper('not2order')->autoHideCartButton($hideQuoteButton);
+if(Mage::getConfig()->getModuleConfig("Ophirah_Not2Order")->is("active", "true") && $_product->getData("quotemode_conditions") > 0) {
+  $hideCartButton = Mage::helper("not2order")->autoHideCartButton($hideQuoteButton);
 }
 
-if($_product->getData('allowed_to_quotemode') == 1 && $hideQuoteButton === false && $_product->getStockItem()->getIsInStock()) {
+if($_product->getData("allowed_to_quotemode") == 1 && $hideQuoteButton === false && $_product->getStockItem()->getIsInStock()) {
   if (!$_product->isGrouped() && (!$_product->isSaleable() || $hideCartButton === true)) {
     ?>
     <div class="qty-wrapper">
-      <label for="qty"><?php echo Mage::helper('catalog')->__('Qty:'); ?></label>
-      <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12"
-        value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>"
-        title="<?php echo Mage::helper('catalog')->__('Qty') ?>" class="input-text qty"/>
+      <label for="qty"><?php echo Mage::helper("catalog")->__("Qty:"); ?></label>
+      <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1); ?>" title="<?php echo Mage::helper("catalog")->__("Qty"); ?>" class="input-text qty"/>
     </div>
-}
-  <?php } ?>
-
-  <button type="button" title="<?php echo Mage::helper('qquoteadv')->__("Add to Quote"); ?>" class="button btn-cart btn-quote button-smaller" onclick="<?php echo $action; ?>">
-    <?php echo Mage::helper('qquoteadv')->__("Add to Quote"); ?>
+  <?php
+  }
+  ?>
+  
+  <button type="button" title="<?php echo Mage::helper("qquoteadv")->__("Add to Quote"); ?>" class="button btn-cart btn-quote button-smaller" onclick="<?php echo $action; ?>">
+    <i class="fa fa-calculator" style="font-size: 1.3em; margin-right: 10px;"></i>
+    <?php echo Mage::helper("qquoteadv")->__("Add to Quote"); ?>
   </button>
-<?php
+  
+  <?php
   if(isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
+    $buttonTitle_lease = "Lease aanvragen";
+    $lease_rates = Mage::helper("deheerhoreca_util/util")->getLeaseRates($_finalPrice, "daily");
+    if(empty($lease_rates) === false) {
+      $min_lease_rate = min($lease_rates);
+      $min_lease_rate_formatted = number_format($min_lease_rate, 2, ",", ".");
+      $buttonTitle_lease = "Leasen vanaf {$min_lease_rate_formatted} euro per dag";
+    }
     ?>
     <button type="button" title="<?php echo $buttonTitle_lease ?>" class="button btn-lease btn button-smaller" onclick="<?php echo $action; ?>">
+      <i class="fa fa-calculator" style="font-size: 1.3em; margin-right: 10px;"></i>
       <?php echo $buttonTitle_lease; ?>
     </button>
     <?php
+    if(sizeof($lease_rates) > 1) {
+      echo "<a id='hide1' href='#hide1' class='hide'><h4 class='center black'>+ Details Leasetarieven&nbsp;</h4></a>";
+      echo "<a id='show1' href='#show1' class='show'><h4 class='center black'>-&nbsp; Details Leasetarieven:</h4></a>";
+      echo "<div class=details>";
+      echo "<table class='text-center table table-bordered'><thead><tr><th scope=row class='py-1'>Maanden:</th>";
+      foreach($lease_rates as $months => $rate) {
+        echo "<th>{$months}</th>";
+      }
+      echo "</tr></thead>";
+      echo "<tbody><tr><th scope=row class='py-1'>€ per dag:</th>";
+      foreach($lease_rates as $months => $rate) {
+        $rate = number_format($rate, 2, ",", ".");
+        echo "<td>{$rate}</td>";
+      }
+      echo "</tr></tbody>";
+      echo "</table>";
+      echo "</div>";
+    }
   }
 }

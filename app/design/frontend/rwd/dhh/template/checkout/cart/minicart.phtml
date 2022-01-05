@@ -4,22 +4,15 @@
  *
  * @see Mage_Checkout_Block_Cart_Sidebar
  */
-$_cartQty = $this->getSummaryCount() ?? 0;
-if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
-  // var_dump($_cartQty);
-}
+$qty = $this->getSummaryCount() ?? 0;
 ?>
-
 <!-- header_minicart_start -->
-<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="askip-link skip-cart top-link <?php if($_cartQty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">
+<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-cart top-link <?php if($qty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">
   <i class="fa fa-shopping-cart fa-2x fa-fw"></i>
-  <?php if($_cartQty > 0) { ?>
-  <div class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0">
-    <?php echo $_cartQty; ?>
-  </div>
+  <?php if($qty > 0) { ?>
+    <div class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></div>
   <?php } ?>
 </a>
-
 <div class="header-minicart">
   <div id="header-cart" class="block-cart skip-content">
     <!-- header_sidebar_start -->

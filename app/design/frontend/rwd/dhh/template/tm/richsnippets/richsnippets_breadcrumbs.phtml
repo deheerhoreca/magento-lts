@@ -32,9 +32,9 @@ if(is_array($crumbs) && sizeof($crumbs) > 0) {
   }
 }
 
-if (Mage::helper('richsnippets')->snippetsEnabled()) {
+if(Mage::helper('richsnippets')->snippetsEnabled()) {
   $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
-  if ($snippetsType == '0') { //if JSON enabled
+  if ($snippetsType == '0') { // if JSON enabled
     $position = 1;
 
     $dataBreadcrumbs = array();
@@ -62,7 +62,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
         $n = sizeof($crumbs);
         $i = 0;
         
-        // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
+        // if(_dhh_debug()) {
           // echo "<pre>";
           // print_r($crumbs);
           // echo "</pre>";
@@ -74,7 +74,12 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
             continue;
           }
           
-          $css_classes = (substr($_crumbName, 0, 8) === "category") ? "category " : null;
+          if($n > 2 && $_crumbName === "product") {
+            continue;
+          }
+          
+          $css_classes = (substr($_crumbName, 0, 8) === "category") ? ["category"] : [];
+          
           $label = $this->htmlEscape($_crumbInfo['label']);
           $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
           $label = trim($label);
@@ -82,23 +87,27 @@ if (Mage::helper('richsnippets')->snippetsEnabled()) {
           $title = $this->htmlEscape($_crumbInfo['title']);
           $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
           $title = trim($title);
-            
-          echo "<li class='{$css_classes}{$_crumbName}'>";
           
-          if($n > 2 && $_crumbName === "product") {
-            continue;
+          if(($_crumbName !== "home" && ($n - $i) > 3) || $_crumbInfo["last"]) {
+            $css_classes[] = "mobile-hide";
+          }
+          
+          $css_classes = implode(" ", $css_classes);
+          
+          echo "<li class='{$css_classes}'>";
+          
+          if($_crumbName !== "home") {
+            echo '<i class="fa fa-angle-left breadcrumb-separator center float-left" aria-hidden="true"></i>';
           }
           
           if($_crumbName === "home") {
-            echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'><i class='fa fa-home'></i></a>";
+            echo "<a title='{$title}' class='button no-transition' href='{$_crumbInfo['link']}' style='padding-left:1px; padding-right:1px;'><i class='fa fa-home'></i></a>";
           } elseif($_crumbInfo['link'] && ($_crumbInfo['last'] !== true || $_product)) {
-            echo "<a title='{$title}' class='button btn-cart' href='{$_crumbInfo['link']}'>{$label}</a>";
+            echo "<a title='{$title}' class='button no-transition' href='{$_crumbInfo['link']}'>{$label}</a>";
           } else {
             echo "<strong>{$label}</strong>";
           }
-          if($i < $n-1) {
-            echo '<i class="fa fa-angle-right breadcrumb-separator" aria-hidden="true"></i>';
-          }
+          
           echo "</li>";
           $i++;
         }

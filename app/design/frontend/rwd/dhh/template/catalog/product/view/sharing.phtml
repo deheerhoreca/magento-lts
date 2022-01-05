@@ -4,8 +4,8 @@ $_product           = $this->getProduct();
 $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
 
 <div class="add-to-cart-sharing">
-  <div style="line-height: 25px;">Deel dit product:</div>
   <ul class="sharing-links">
+    <h4 class='black mt-3'>Delen:</h4>
     <?php
     if($this->canEmailToFriend()) { ?>
       <li>
@@ -20,10 +20,22 @@ $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
     $_productName     = $_helper->productAttribute($_product, $_product->getName(), 'name');
     $_productUrl      = $_product->getProductUrl();
     $wa_url           = Mage::helper("deheerhoreca_util/util")->addParamToUrl($_productUrl, "utm_channel=social&utm_source=whatsapp_share");
+    $fb_url           = Mage::helper("deheerhoreca_util/util")->addParamToUrl($_productUrl, "utm_channel=social&utm_source=facebook_share");
+    $em_url           = Mage::helper("deheerhoreca_util/util")->addParamToUrl($_productUrl, "utm_channel=social&utm_source=email_share");
     ?>
     <li>
-      <a href="https://wa.me/?text=<?php echo urlencode("Gezien op Chefstore.nl: {$wa_url}") ?>" target="_blank" title="<?php echo Mage::helper('core')->quoteEscape($this->__('WhatsApp')) ?>" rel="noreferrer nofollow">
+      <a href="//api.whatsapp.com/send/?phone&text=<?php echo urlencode("Gezien op Chefstore.nl: {$wa_url}") ?>" target="_blank" title="Deel dit via WhatsApp" rel="noreferrer nofollow">
         <i class="fa fa-whatsapp" aria-hidden="true" style="color: #25D366;"></i>
+      </a>
+    </li>
+    <li>
+      <a class="ml-2" href="//www.facebook.com/sharer.php?u=<?php echo $fb_url; ?>" target="_blank" title="Deel dit via Facebook" rel="noreferrer nofollow">
+        <i class="fa fa-facebook black" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li>
+      <a class="ml-2" href="mailto:?subject=<?php echo $_productName; ?>&body=<?php echo urlencode("Gezien op Chefstore.nl: {$em_url}") ?>" target="_blank" title="Deel dit via E-mail" rel="noreferrer nofollow">
+        <i class="fa fa-envelope-o black" aria-hidden="true"></i>
       </a>
     </li>
   </ul>

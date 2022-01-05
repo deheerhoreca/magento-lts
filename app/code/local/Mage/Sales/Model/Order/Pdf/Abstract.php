@@ -977,6 +977,7 @@ abstract class Mage_Sales_Model_Order_Pdf_Abstract extends Varien_Object
                                 }
                                 break;
                         }
+                        /* DHH CORE HACK */ $font = $this->_setFontRegular($page, 10);
                         $page->drawText($part, $feed, $this->y-$top, 'UTF-8');
                         $top += $lineSpacing;
                     }

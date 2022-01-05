@@ -1,45 +1,81 @@
+<div class="footer-wrapper grid-inside" id="footer-wrapper">
+  <div class="footermidwrap blanc">
+    <div class="footer grid">
+      <div class="pb-4 text-center">
+        <div class="pb-2 fw-600">Volg onze socials:</div>
+        <a href="//www.instagram.com/chefstore.nl/" title="Instagram" target="_blank" rel="nofollow noreferrer external">
+        <i class="fa-2x fa fa-instagram" aria-hidden="true"></i></a>
+        <a href="//www.facebook.com/Chefstorenl-233543287886724/" title="Facebook" target="_blank" rel="nofollow noreferrer external">
+        <i style="padding: 0 .5em" class="fa-2x fa fa-facebook-official" aria-hidden="true"></i></a>
+        <a href="//www.linkedin.com/company/chefstore-nl/" title="LinkedIn" target="_blank" rel="nofollow noreferrer external">
+        <i class="fa-2x fa fa-linkedin" aria-hidden="true"></i></a>
+      </div>
+      <div class="col-4-4 column">
+        <div class="col-1-5 mobile-hide">&nbsp;</div>
+        <div class="col-1-5">
+          <h3>Merken</h3>
+          <ul>
+            <li class="pb-1"><a href="/shop?manufacturer=54">CombiSteel</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=1074">Bartscher</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=2753">Gamko</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=1619">Hendi</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=192">EcoFrost</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=310">Buffalo</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=637">KitchenAid</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=162">Saro</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=1736">Unox</a></li>
+            <li class="pb-1"><a class="strong" href="/merken.html">> Alle Merken</a></li>
+          </ul>
+        </div>
+        <div class="col-1-5">
+          <a href="/over"><h3>Over Chefstore.nl</h3></a>
+          <ul>
+            <li class="pb-1"><a href="/blog">Blog</a></li>
+            <li class="pb-1"><a href="/klantenservice">Klantenservice</a></li>
+            <li class="pb-1"><a href="/service">Geef een serviceverzoek door</a></li>
+            <li class="pb-1"><a href="/algemene-voorwaarden">Algemene voorwaarden</a></li>
+            <li class="pb-1"><a href="/privacy-policy">Privacy</a></li>
+            <li class="pb-1"><a href="/linkpartners">Linkpartners</a></li>
+            <li class="pb-1"><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-1-5 mobile-hide center">
+          <h3>Klanten over Chefstore.nl</h3>
+          <a href="//www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer">
+            <img id="kiyoh-image" data-src="/media/wysiwyg/kiyoh.png" alt="Chefstore.nl op Kiyoh" class="small center lazy" height="166" width="188">
+          </a>
+        </div>
+        <div class="col-1-5 mobile-hide">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center py-2"></div>
+  <div class="text-center py-2"><h3 class="blue"><em>Alles voor de Chef</em></h3></div>
+  <div class="text-center py-2">Non-food horeca groothandel voor hotels, restaurants, bedrijfskantines, scholen, catering, gemeentes, grootkeukens en caf&eacute;'s</div>
+  <div class="text-center py-2">
+    <a href="/algemene-voorwaarden">Algemene voorwaarden</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href="/privacy-policy">Privacy</a>
+  </div>
+  <div class="text-center py-2">© 2017 - <?php echo date("Y"); ?> - Chefstore.nl</div>
+  <div class="text-center py-2"></div>
+</div>
+
 <script>
   var lazyLoadInstance = new LazyLoad({
     elements_selector: ".lazy"
   });
-</script>
-
-<?php
-$apm_transaction = Mage::app()->getFrontController()->getAction()->getFullActionName();
-?>
-<div class="footer-wrapper grid-inside" id="footer-wrapper">
-  <div class="footermidwrap">
-    <div class="footer grid">
-      <?php
-        echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_middle_left')->toHtml();
-      ?>
-    </div>
-  </div>
-  <div class="footer grid">
-    <div class="row footer-last-row">
-      <div class="col-1-2">
-        <div class="footer-last-row__item footer__menu-item footer__menu-item--gray">
-          Alle prijzen in euro's inclusief BTW. Gratis verzending vanaf €150,-
-        </div>
-      </div>
-      <div class="col-1-3 footer__column--big-left-pd"></div>
-    </div>
-  </div>
-</div>
-
-<script>
+  
   ;(function(d, s, c) {
     var j = d.createElement(s),
-      t = d.getElementsByTagName(s)[0]
-
+    t = d.getElementsByTagName(s)[0]
     j.src = '//cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js'
     j.onload = function() {elasticApm.init(c)}
     t.parentNode.insertBefore(j, t)
-  })(document, 'script', {    
+  })(document, 'script', {
     serviceName: "chefstore_nl",
-    serverUrl: 'https://rum.chefstore.nl:8200',
+    serverUrl: '//rum.chefstore.nl:8200',
     environment: window.location.host.split(".")[0] == "dev" ? "development" : "production",
-    pageLoadTransactionName: "<?php echo $apm_transaction; ?>"
+    pageLoadTransactionName: "<?php echo Mage::app()->getFrontController()->getAction()->getFullActionName(); ?>"
   })
 </script>
 
@@ -48,9 +84,8 @@ $logoSrc = Mage::getStoreConfig('design/header/logo_src');
 $logoAlt = Mage::getStoreConfig('design/header/logo_alt');
 $imageurl = $this->getSkinUrl($logoSrc);
 ?>
-
 <div id="modal" style="display: none;">
-  <img data-src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" class="lazy center" height=80 width=416 />
+  <img data-src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" class="lazy center" height="40" width="208">
   <h2><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Contact met Chefstore.nl</h2>
   <div style="margin-top: 1em;"><h3>Sales & Advies:</h3>
   <ul class="indented-disc" style="line-height: 1.5em;">
