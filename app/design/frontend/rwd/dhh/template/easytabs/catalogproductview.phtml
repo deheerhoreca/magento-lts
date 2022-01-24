@@ -22,6 +22,8 @@ $in3_minimum          = 100 / 1.21;
 $in3_maximum          = 3000 / 1.21;
 $billink_minimum      = 10;
 $billink_maximum      = 3500;
+$biller_minimum       = 10;
+$biller_maximum       = 5000;
 $_taxHelper           = $this->helper("tax");
 
 // if(empty($brand_name) === false) {
@@ -163,6 +165,11 @@ if(empty($our_usps) === false) {
 if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
   
   $payment_methods_texts = [];
+  
+  if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
+    $text = "Betaal gratis <strong>achteraf</strong> met Biller";
+    $payment_methods_texts[] = "<a data-fancybox data-touch='false' href='#info-biller' class='no-decoration'>{$text}</a>";
+  }
   
   if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
     $text = "Betaal <strong>achteraf</strong> met Billink";
@@ -437,7 +444,7 @@ if($i < $max_highlighted_attributes) {
   $image  = "{$skn}frontend/rwd/dhh/images/volt.svg";
   $title  = "Voltage";
   $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-  if(empty($text) === false) {
+  if(empty($text) === false && strtolower($text) !== "n.v.t.") {
     $highlights[] = [
       "image"   => $image,
       "title"   => $title,
@@ -1220,6 +1227,7 @@ function html_table(array $data): string {
 }
 
 ?>
+<!-- STOCK LIGHTBOX -->
 <div id="info-stock" style="display:none;" class="std">
   <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
   <h2><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Contact met Chefstore.nl</h2>
@@ -1229,21 +1237,36 @@ function html_table(array $data): string {
   <div style="margin-top: 1em;">Daarnaast zijn wij bereikbaar op de chat, zie daarvoor de knop rechtsonderin op onze website.</div>
 </div>
 
+<!-- BILLER LIGHTBOX -->
+<div id="info-biller" style="display:none;" class="std">
+  <img class="lazy" data-src="//biller.ai/wp-content/uploads/2021/07/Group-1-1.png" alt="Biller logo" title="Biller" style="max-width:141px; height:auto;" />
+  <h2>🤩&nbsp;Gratis achteraf betalen met Biller</h2>
+  <h5><i>Voor zakelijke klanten in Nederland</i></h5>
+  <div style="max-width: 600px;">
+    <strong>Met Biller betaal je het volledige bedrag zonder rente binnen 30 dagen.</strong>
+  </div>
+  <div style="max-width: 600px;">
+  <p>Wanneer u hiervoor kiest, zorgt Biller voor het gehele achteraf betalen proces. Het voordeel van Biller is dat u tot 30 dagen na levering kan betalen tot een bedrag van €5.000 inclusief BTW. Biller is speciaal gemaakt voor de zakelijke markt. Biller is nu tijdelijk gratis.</p>
+  <p><strong><u>Let op: Als u gebruik wil maken van Biller, maak dan een Offerte aan</u></strong>.</p>
+  </div>
+</div>
+
+<!-- BILLINK LIGHTBOX -->
 <div id="info-billink" style="display:none;" class="std">
-  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" style="max-width:140px; height:auto;" />
   <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="max-width:140px; height:auto;" />
   <h2>🤩&nbsp;Achteraf betalen met Billink</h2>
-  <h5><i>Voor zakelijk en particulier</i></h5>
+  <h5><i>Voor zakelijke en particuliere klanten</i></h5>
   <div style="max-width: 600px;">
     <strong>Met Billink betaal je het volledige bedrag zonder rente binnen 14 dagen.</strong>
   </div>
   <div style="max-width: 600px;">
-  Bestel nu online, betaal achteraf. Betalen met Billink is heel gemakkelijk. Je bestelt wat je nodig hebt en selecteert tijdens het betaalproces dat je wilt betalen met Billink. Wil je graag een zakelijke bestelling achteraf betalen? Van Billink ontvang je een handige factuur, die je vervolgens binnen 14 dagen betaalt.
+  <p>Bestel nu online, betaal achteraf. Betalen met Billink is heel gemakkelijk. Je bestelt wat je nodig hebt en selecteert tijdens het betaalproces dat je wilt betalen met Billink. Wil je graag een zakelijke bestelling achteraf betalen? Van Billink ontvang je een handige factuur, die je vervolgens binnen 14 dagen betaalt.</p>
+  <p><strong><u>Als u gebruik wil maken van Billink, kies dan Billink als betaalmethode bij het afrekenen.</u></strong>.</p>
   </div>
 </div>
 
+<!-- IN3 LIGHTBOX -->
 <div id="info-in3" style="display:none;" class="std">
-  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
   <img class="lazy center" data-src="/skin/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="max-width:140px; height:auto;" />
   <h2>🤩&nbsp;In 3 keer gespreid betalen zonder rente</h2>
   <h5><i>Voor particulier en VOF/Eenmanszaak (niet voor BV's), tot 3000 euro inclusief BTW. Momenteel alleen in Nederland.</i></h5>

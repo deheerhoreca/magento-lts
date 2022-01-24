@@ -14630,7 +14630,7 @@ div.blogcontainer a {
 .info-box {
   margin: 0 0 15px;
   height: 40em;
-  padding: 1em;
+  padding: 0 1em;
   border: 1px solid #aaa;
   border-radius: 4px;
   line-height: 1.6em;

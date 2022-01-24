@@ -32,7 +32,7 @@ $_productCollection = Mage::getModel("catalog/product")
   ->getCollection()
   ->addAttributeToSelect("*")
   ->addFieldToFilter([["attribute" => "featured", "eq" => true]])
-  ->addOrder("name", "ASC")
+  ->addOrder("popularity", "ASC")
   ->addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
   ->setPageSize(24)
   ->setCurPage(1);
@@ -70,12 +70,13 @@ $parent_categories_ids  = [];
 
 $show_toolbar   = false;
 $_columnCount   = 4;
-$displaySize    = 200;
+$displaySize    = 175;
 $_imgSize       = 1 * $displaySize;
 
 if($_collectionSize > 0) {
 ?>
   <div class="category-products">
+    <span class="h1 center" style="padding-top: 2em;">Populaire Producten</span>
     <?php
     if($show_toolbar === true) {
       echo "<div class='top_toolbar'>{$this->getToolbarHtml()}</div>";

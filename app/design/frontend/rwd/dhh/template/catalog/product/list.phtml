@@ -23,6 +23,9 @@ $have_active_filters          = (bool) empty($active_filters) === false;
 $mininum_lease_price          = 400;
 $show_black_friday            = false;
 
+// These categories are not listed as subcategory tile
+$excluded_category_ids        = [656, 864, 834];
+
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
 
 /*
@@ -174,13 +177,11 @@ if(empty($carct) === false && $amschk !== "amshopby" && empty($appliedFilters) =
   
   if(sizeof($subcategories) > 0) {
     
-    // These categories are not listed as subcategory tile
-    $excluded_category_ids = [656, 864];
-    
     ?>
     <h3>Populaire Categorieën:</h3>
     <ul class="grid-shadow-tiles-text">
     <?php
+    
     // Logic copied to amasty/amshopby/subcategories.phtml
     $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
     

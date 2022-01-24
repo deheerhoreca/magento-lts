@@ -7,6 +7,9 @@
 
 $category_thumbs_dimensions   = 140;
 
+// These categories are not listed as subcategory tile
+$excluded_category_ids        = [656, 864, 834];
+
 /** @var Amasty_Shopby_Block_Subcategories $this */
 /** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
 $subcategories = $this->getSubcategories();
@@ -19,9 +22,6 @@ if(sizeof($subcategories) > 1) {
   echo '<ul class="grid-shadow-tiles-text">';
   
   // Logic copied from catalog/product/list.phtml
-  
-  // These categories are not listed as subcategory tile
-  $excluded_category_ids = [656, 864];
   
   foreach($subcategories as $category) {
     if(in_array($category->getId(), $excluded_category_ids) !== false) {

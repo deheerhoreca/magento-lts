@@ -275,6 +275,18 @@
         deny from all
     </Files>
 
+###########################################
+## DHH
+
+    <Files biller-webhook.jsonl>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files biller-webhook-errors.jsonl>
+        order allow,deny
+        deny from all
+    </Files>
+
 ############################################
 ## If running in cluster environment, uncomment this
 ## http://developer.yahoo.com/performance/rules.html#etags
