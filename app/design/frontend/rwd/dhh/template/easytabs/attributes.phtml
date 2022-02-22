@@ -31,8 +31,9 @@ $attr_remove_decimals = [
   "aantal_borden_korven", "aantal_glas_korven", "aantal_snelheden",
   "aantal_blikjes", "aantal_wasprogrammas", "eenheid", "capacity_wine_bottles",
   "geluidsniveau", "number_of_cooling_zones", "aantal_flessen",
-  "cooking_zones","gross_weight_gram","length_mm","isolatiedikte",
-  "number_of_slots","max_geleiders"
+  "cooking_zones", "gross_weight_gram", "length_mm", "isolatiedikte",
+  "number_of_slots", "max_geleiders", "package_height_mm", "package_width_mm",
+  "package_depth_mm", "shipping_weight_gram",
 ];
 
 /* No zero decimals, with number formatting */
@@ -122,6 +123,11 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
             }
             break;
           
+          case "shipping_weight_gram":
+            $value /= 1000;
+            $postfix = " kg";
+            break;
+            
           case "weight":
             if($value < 3) {
               $value *= 1000;
@@ -162,9 +168,26 @@ if($_additionalgroup = $this->getAdditionalDataCustom()) {
           case "isolatiedikte":
           case "breedte_deur":
           case "length_mm":
+          case "package_height_mm":
+          case "package_width_mm":
+          case "package_depth_mm":
             $postfix = " mm";
             break;
-
+          
+          case "garantie":
+            $supplier = strtolower($_product->getAttributeText("supplier"));
+            if($supplier === "diamond" || $supplier === "virtus") {
+              $postfix = " op onderdelen";
+            }
+            break;
+          
+          case "warranty_remarks":
+            $supplier = strtolower($_product->getAttributeText("supplier"));
+            if($supplier === "combisteel") {
+              $postfix = " <a href='/garantievoorwaarden-combisteel' target='_blank' class='small'>Aanvullende Garantievoorwaarden</a>";
+            }
+            break;
+          
           default:
             $value = $_helper->productAttribute($_product, $value, $code);
         }

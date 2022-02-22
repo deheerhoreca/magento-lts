@@ -16,8 +16,6 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute("last_auto_stock");
     $product->lockAttribute("supplier_description");
     $product->lockAttribute("last_stock_info_date");
-    $product->lockAttribute("bol_commission_perc");
-    $product->lockAttribute("bol_commission_fixed");
     $product->lockAttribute("stock_status");
     $product->lockAttribute("popularity");
     $product->lockAttribute("bol_category_current");

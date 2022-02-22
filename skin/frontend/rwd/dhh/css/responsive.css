@@ -3038,6 +3038,10 @@
     max-width: 210px;
     margin: auto;
   }
+  
+  .fancybox-content {
+    padding: 22px !important;
+  }
 }
 
 @media only screen and (max-width: 420px) {

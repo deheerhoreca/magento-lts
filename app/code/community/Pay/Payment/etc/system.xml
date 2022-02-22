@@ -3,15 +3,14 @@
     <tabs>
         <pay_payment translate="label" module="pay_payment">
             <label>
-                <![CDATA[<img src='http://pay.nl/images/header_logo.gif' style='width:50px;height:50px;' />]]></label>
+                <![CDATA[<img src='https://static.pay.nl/generic/images/50x50/logo.png' />]]></label>
             <sort_order>1</sort_order>
         </pay_payment>
     </tabs>
     <sections>
         <!--        Algemene instellingen-->
         <pay_payment translate="label" module="pay_payment">
-            <label>
-                <![CDATA[<img alt='Pay.nl instellingen' title='Pay.nl instellingen' style='margin-top:3px;margin-bottom:-3px;height:14px;' src='/media/pay_payment/logo.png' />]]></label>
+            <label>PAY. Betaalmethoden</label>
             <tab>sales</tab>
             <sort_order>350</sort_order>
             <show_in_default>1</show_in_default>
@@ -27,7 +26,7 @@
                     <expanded>1</expanded>
                     <fields>
                         <version translate="label">
-                            <label>Pay.nl plugin versie</label>
+                            <label>PAY. plugin versie</label>
                             <frontend_type>select</frontend_type>
                             <frontend_model>Pay_Payment_Block_Adminhtml_Version</frontend_model>
                             <sort_order>10</sort_order>
@@ -164,7 +163,7 @@
                         </page_canceled>
                         <user_language translate="label comment">
                             <label>Gebruikers taal</label>
-                            <comment><![CDATA[De taalcode die naar pay.nl moet worden gestuurd, dit is van invloed op de taal van het betaalscherm en de eventuele email die naar de gebruiker wordt gestuurd door pay (bijvoorbeeld bij bankoverschrijving)]]></comment>
+                            <comment><![CDATA[De taalcode die naar PAY. moet worden gestuurd, dit is van invloed op de taal van het betaalscherm en de eventuele email die naar de gebruiker wordt gestuurd door pay (bijvoorbeeld bij bankoverschrijving)]]></comment>
                             <frontend_type>select</frontend_type>
                             <source_model>pay_payment/source_language</source_model>
                             <sort_order>130</sort_order>
@@ -182,6 +181,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </show_icons>
+                        <icon_size translate="label comment">
+                            <label>Icon size</label>
+                            <comment><![CDATA[Selecteer hoe groot de icoontjes van de betaalmethoden moeten zijn]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_iconsize</source_model>
+                            <sort_order>141</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </icon_size>
                         <show_fee translate="label comment">
                             <label>Betaalkosten weergeven</label>
                             <comment><![CDATA[Kosten voor de betaalmethode weergeven in de checkout]]></comment>
@@ -212,16 +221,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </deduct_tax_fee_invoicing>
-                        <icon_size translate="label comment">
-                            <label>Icon size</label>
-                            <comment><![CDATA[Selecteer hoe groot de icoontjes van de betaalmethoden moeten zijn]]></comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>pay_payment/source_iconsize</source_model>
-                            <sort_order>300</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </icon_size>
                         <text_payment_charge translate="label comment">
                             <label>Text betalingskosten</label>
                             <comment><![CDATA[De text die wordt weergegeven bij de betalingskosten]]></comment>
@@ -231,9 +230,18 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </text_payment_charge>
+                        <exclude_fee_refund translate="label comment">
+                            <label>Betaalkosten niet terugbetalen</label>
+                            <comment>Bij terugbetaling(refund) niet de betaalkosten terugbetalen</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>410</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </exclude_fee_refund>
+
                         <use_backup_api translate="label comment">
                             <label>Gateway</label>
-                            <comment><![CDATA[Gebruik de standard gateway, op <a href='http://status-pay.nl'>status-pay.nl</a> kunt u de status van onze techniek volgen]]></comment>
+                            <comment><![CDATA[Gebruik de standard gateway, op <a href='https://status-pay.nl'>status-pay.nl</a> kunt u de status van onze techniek volgen]]></comment>
                             <frontend_type>select</frontend_type>
                             <source_model>pay_payment/source_gateway</source_model>
                             <sort_order>500</sort_order>
@@ -243,7 +251,7 @@
                             <depends>
                                 <use_backup_api>1</use_backup_api>
                             </depends>
-                            <comment>Vul hier de locatie van de failover gateway in die door pay.nl is verstrekt</comment>
+                            <comment>Vul hier de locatie van de failover gateway in die door PAY. is verstrekt</comment>
                             <label>Failover gateway</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>600</sort_order>
@@ -303,6 +311,16 @@
                             <sort_order>1200</sort_order>
                             <show_in_default>1</show_in_default>
                         </invoice_authorized>
+                        <testipaddress translate="label comment">
+                            <label>Test IP address</label>
+                            <comment>Forces testmode on these IP addresses, separate IP's by comma's for multiple IP's</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </testipaddress>
+
                     </fields>
                 </general>
                 <loaded_payment_methods translate="label" module="pay_payment">
@@ -315,7 +333,7 @@
                     <fields>
                         <test123 translate="label comment">
                             <label>Beschikbaar</label>
-                            <comment>Hierboven ziet u de betaalmethoden die voor uw account bij pay.nl beschikbaar zijn</comment>
+                            <comment>Hierboven ziet u de betaalmethoden die voor uw account bij PAY. beschikbaar zijn</comment>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -1099,6 +1117,315 @@
                         </instructions>
                     </fields>
                 </pay_payment_afterpayem>
+                <pay_payment_afterpayint type="group" translate="label" module="pay_payment">
+                    <label>Afterpay International</label>
+                    <model>pay_payment/Model_Paymentmethod_Afterpayint</model>
+                    <sort_order>1100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label comment">
+                            <label>Actief</label>
+                            <comment>Wilt u deze betaalmethode gebruiken</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_paymentmethod_afterpayint_active</source_model>
+                            <config_path>payment/pay_payment_afterpayint/active</config_path>
+                        </active>
+                        <title translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Titel van de betaalmethode</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/title</config_path>
+                        </title>
+                        <sort_order translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Betaalmethode sorteer volgorde</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/sort_order</config_path>
+                        </sort_order>
+                        <min_order_total translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Minimum bedrag</label>
+                            <comment>Het minimum bedrag waarvoor deze betaalmethode gebruikt mag worden</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/min_order_total</config_path>
+                        </min_order_total>
+                        <max_order_total translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Maximum bedrag</label>
+                            <comment>Het maximum bedrag waarvoor deze betaalmethode gebruikt mag worden</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/max_order_total</config_path>
+                        </max_order_total>
+                        <allowspecific translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Beschikbaarheid per land</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries
+                            </source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/allowspecific</config_path>
+                        </allowspecific>
+                        <specificcountry translate="label comment">
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
+                            <label>Toegestane landen</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Selecteer de landen waarvoor deze betaalmethode beschikbaar is</comment>
+                            <config_path>payment/pay_payment_afterpayint/specificcountry</config_path>
+                        </specificcountry>
+                        <limit_currency translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Valutas blokkeren</label>
+                            <comment>Schakel dit in als u deze betaalmethode wilt blokkeren voor bepaalde valutas</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/limit_currency</config_path>
+                        </limit_currency>
+                        <specificcurrency translate="label comment">
+                            <depends>
+                                <active>1</active>
+                                <limit_currency>1</limit_currency>
+                            </depends>
+                            <label>Toegestane Valuta's</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_currency</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Selecteer de valutas waarvoor deze betaalmethode beschikbaar is</comment>
+                            <config_path>payment/pay_payment_afterpayint/specificcurrency</config_path>
+                        </specificcurrency>
+                        <only_equal_addresses>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Gelijke verzend- en factuuradressen</label>
+                            <comment>Schakel dit in als het verzend en factuuradres gelijk aan elkaar moeten zijn</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/only_equal_addresses</config_path>
+                        </only_equal_addresses>
+                        <limit_shipping translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Verzendmethoden blokkeren</label>
+                            <comment>Schakel dit in als u deze betaalmethode wilt blokkeren voor bepaalde verzendmethoden</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/limit_shipping</config_path>
+                        </limit_shipping>
+                        <disabled_shippingmethods translate="label comment">
+                            <depends>
+                                <active>1</active>
+                                <limit_shipping>1</limit_shipping>
+                            </depends>
+                            <comment>Selecteer de verzendmethoden waarvoor deze betaalmethode NIET beschikbaar is</comment>
+                            <label>Geblokkeerde verzendmethoden</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_allmethods</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/disabled_shippingmethods</config_path>
+                        </disabled_shippingmethods>
+                        <order_status translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Nieuwe order status</label>
+                            <comment>De status die een order moet krijgen bij het toevoegen</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_pendingPayment</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/order_status</config_path>
+                        </order_status>
+                        <order_status_success translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Gelukt order status</label>
+                            <comment>De status die een order moet krijgen na succesvolle betaling</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_processing</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/order_status_success</config_path>
+                        </order_status_success>
+                        <order_status_verify translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Verify order status</label>
+                            <comment>De status die een order moet krijgen wanneer de transactie gecontroleerd moet worden</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_pendingPayment</source_model>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/order_status_verify</config_path>
+                        </order_status_verify>
+                        <order_status_authorized translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Authorized order status</label>
+                            <comment>De status die een order moet krijgen bij een geauthoriseerde betaling</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_processing</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/order_status_authorized</config_path>
+                        </order_status_authorized>
+                        <charge_type translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Extra kosten rekenen</label>
+                            <comment>Geef hier aan of u extra kosten wilt rekenen op basis van een percentage van het totaalbedrag of een vast bedrag</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/system_config_source_chargetype</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/charge_type</config_path>
+                        </charge_type>
+                        <charge_value translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Extra kosten</label>
+                            <comment>Geef hier aan hoeveel extra kosten u wilt rekenen, gebruik een punt voor decimalen, als u geen extra kosten wilt rekenen vult u niets in</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>201</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/charge_value</config_path>
+                        </charge_value>
+                        <charge_tax_class translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Btw voor extra kosten</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>202</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/charge_tax_class</config_path>
+                        </charge_tax_class>
+                        <send_mail translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Bevestigingsmail sturen</label>
+                            <comment>Wanneer wilt u dat de bevestigingsmail wordt verstuurd</comment>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_sendmail</source_model>
+                            <config_path>payment/pay_payment_afterpayint/send_mail</config_path>
+                        </send_mail>
+                        <invoice_email translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Emailen bij factureren</label>
+                            <comment><![CDATA[Een email sturen met de factuur, LET OP: De email wordt alleen gestuurd als je bovenaan bij Algemene instellingen emailen bij factureren aan hebt staan]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/invoice_email</config_path>
+                        </invoice_email>
+                        <instructions translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Instructions</label>
+                            <comment><![CDATA[If you want to show instructions to the user, you can add them here]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>410</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_afterpayint/instructions</config_path>
+                        </instructions>
+                    </fields>
+                </pay_payment_afterpayint>
                 <pay_payment_alipay type="group" translate="label" module="pay_payment">
                     <label>AliPay</label>
                     <model>pay_payment/Model_Paymentmethod_Alipay</model>
@@ -9282,7 +9609,7 @@
                 <pay_payment_multibanco type="group" translate="label" module="pay_payment">
                     <label>Multibanco</label>
                     <model>pay_payment/Model_Paymentmethod_Multibanco</model>
-                    <sort_order>3000</sort_order>
+                    <sort_order>3050</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -10167,7 +10494,7 @@
                 <pay_payment_payconiq type="group" translate="label" module="pay_payment">
                     <label>Payconiq</label>
                     <model>pay_payment/Model_Paymentmethod_Payconiq</model>
-                    <sort_order>3300</sort_order>
+                    <sort_order>3250</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -13720,6 +14047,596 @@
                         </instructions>
                     </fields>
                 </pay_payment_vvvgiftcard>
+                <pay_payment_good4fun type="group" translate="label" module="pay_payment">
+                    <label>Good4Fun</label>
+                    <model>pay_payment/Model_Paymentmethod_Good4fun</model>
+                    <sort_order>4000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Actief</label>
+                            <comment>Wilt u deze betaalmethode gebruiken</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_paymentmethod_good4fun_active</source_model>
+                            <config_path>payment/pay_payment_good4fun/active</config_path>
+                        </active>
+                        <title translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Titel van de betaalmethode</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/title</config_path>
+                        </title>
+                        <sort_order translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Betaalmethode sorteer volgorde</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/sort_order</config_path>
+                        </sort_order>
+                        <min_order_total translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Minimum bedrag</label>
+                            <comment>Het minimum bedrag waarvoor deze betaalmethode gebruikt mag worden</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/min_order_total</config_path>
+                        </min_order_total>
+                        <max_order_total translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Maximum bedrag</label>
+                            <comment>Het maximum bedrag waarvoor deze betaalmethode gebruikt mag worden</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/max_order_total</config_path>
+                        </max_order_total>
+                        <allowspecific translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Beschikbaarheid per land</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries
+                            </source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/allowspecific</config_path>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
+                            <label>Toegestane landen</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Selecteer de landen waarvoor deze betaalmethode beschikbaar is</comment>
+                            <config_path>payment/pay_payment_good4fun/specificcountry</config_path>
+                        </specificcountry>
+                        <limit_currency translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Valutas blokkeren</label>
+                            <comment>Schakel dit in als u deze betaalmethode wilt blokkeren voor bepaalde valutas</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/limit_currency</config_path>
+                        </limit_currency>
+                        <specificcurrency translate="label comment">
+                            <depends>
+                                <active>1</active>
+                                <limit_currency>1</limit_currency>
+                            </depends>
+                            <label>Toegestane Valuta's</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_currency</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Selecteer de valutas waarvoor deze betaalmethode beschikbaar is</comment>
+                            <config_path>payment/pay_payment_good4fun/specificcurrency</config_path>
+                        </specificcurrency>
+                        <limit_shipping translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Verzendmethoden blokkeren</label>
+                            <comment>Schakel dit in als u deze betaalmethode wilt blokkeren voor bepaalde verzendmethoden</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/limit_shipping</config_path>
+                        </limit_shipping>
+                        <disabled_shippingmethods>
+                            <depends>
+                                <active>1</active>
+                                <limit_shipping>1</limit_shipping>
+                            </depends>
+                            <comment>Selecteer de verzendmethoden waarvoor deze betaalmethode NIET beschikbaar is</comment>
+                            <label>Geblokkeerde verzendmethoden</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_allmethods</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/disabled_shippingmethods</config_path>
+                        </disabled_shippingmethods>
+                        <order_status translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Nieuwe order status</label>
+                            <comment>De status die een order moet krijgen bij het toevoegen</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_pendingPayment</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/order_status</config_path>
+                        </order_status>
+                        <order_status_success translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Gelukt order status</label>
+                            <comment>De status die een order moet krijgen na succesvolle betaling</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_processing</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/order_status_success</config_path>
+                        </order_status_success>
+                        <order_status_verify translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Verify order status</label>
+                            <comment>De status die een order moet krijgen wanneer de transactie gecontroleerd moet worden</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_pendingPayment</source_model>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/order_status_verify</config_path>
+                        </order_status_verify>
+                        <order_status_authorized translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Authorized order status</label>
+                            <comment>De status die een order moet krijgen bij een geauthoriseerde betaling</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_processing</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/order_status_authorized</config_path>
+                        </order_status_authorized>
+                        <charge_type translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Extra kosten rekenen</label>
+                            <comment>Geef hier aan of u extra kosten wilt rekenen op basis van een percentage van het totaalbedrag of een vast bedrag</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/system_config_source_chargetype</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/charge_type</config_path>
+                        </charge_type>
+                        <charge_value translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Extra kosten</label>
+                            <comment>Geef hier aan hoeveel extra kosten u wilt rekenen, gebruik een punt voor decimalen, als u geen extra kosten wilt rekenen vult u niets in</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>201</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/charge_value</config_path>
+                        </charge_value>
+                        <charge_tax_class translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Btw voor extra kosten</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>202</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/charge_tax_class</config_path>
+                        </charge_tax_class>
+                        <send_mail translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Bevestigingsmail sturen</label>
+                            <comment>Wanneer wilt u dat de bevestigingsmail wordt verstuurd</comment>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_sendmail</source_model>
+                            <config_path>payment/pay_payment_good4fun/send_mail</config_path>
+                        </send_mail>
+                        <invoice_email translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Emailen bij factureren</label>
+                            <comment><![CDATA[Een email sturen met de factuur, LET OP: De email wordt alleen gestuurd als je bovenaan bij Algemene instellingen emailen bij factureren aan hebt staan]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/invoice_email</config_path>
+                        </invoice_email>
+                        <instructions translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Instructions</label>
+                            <comment><![CDATA[If you want to show instructions to the user, you can add them here]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>410</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_good4fun/instructions</config_path>
+                        </instructions>
+                    </fields>
+                </pay_payment_good4fun>
+                <pay_payment_trustly type="group" translate="label" module="pay_payment">
+                    <label>Trustly</label>
+                    <model>pay_payment/Model_Paymentmethod_Trustly</model>
+                    <sort_order>4000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Actief</label>
+                            <comment>Wilt u deze betaalmethode gebruiken</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_paymentmethod_trustly_active</source_model>
+                            <config_path>payment/pay_payment_trustly/active</config_path>
+                        </active>
+                        <title translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Titel van de betaalmethode</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/title</config_path>
+                        </title>
+                        <sort_order translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Betaalmethode sorteer volgorde</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/sort_order</config_path>
+                        </sort_order>
+                        <min_order_total translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Minimum bedrag</label>
+                            <comment>Het minimum bedrag waarvoor deze betaalmethode gebruikt mag worden</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/min_order_total</config_path>
+                        </min_order_total>
+                        <max_order_total translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Maximum bedrag</label>
+                            <comment>Het maximum bedrag waarvoor deze betaalmethode gebruikt mag worden</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/max_order_total</config_path>
+                        </max_order_total>
+                        <allowspecific translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Beschikbaarheid per land</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries
+                            </source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/allowspecific</config_path>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
+                            <label>Toegestane landen</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Selecteer de landen waarvoor deze betaalmethode beschikbaar is</comment>
+                            <config_path>payment/pay_payment_trustly/specificcountry</config_path>
+                        </specificcountry>
+                        <limit_currency translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Valutas blokkeren</label>
+                            <comment>Schakel dit in als u deze betaalmethode wilt blokkeren voor bepaalde valutas</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/limit_currency</config_path>
+                        </limit_currency>
+                        <specificcurrency translate="label comment">
+                            <depends>
+                                <active>1</active>
+                                <limit_currency>1</limit_currency>
+                            </depends>
+                            <label>Toegestane Valuta's</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_currency</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Selecteer de valutas waarvoor deze betaalmethode beschikbaar is</comment>
+                            <config_path>payment/pay_payment_trustly/specificcurrency</config_path>
+                        </specificcurrency>
+                        <limit_shipping translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Verzendmethoden blokkeren</label>
+                            <comment>Schakel dit in als u deze betaalmethode wilt blokkeren voor bepaalde verzendmethoden</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/limit_shipping</config_path>
+                        </limit_shipping>
+                        <disabled_shippingmethods>
+                            <depends>
+                                <active>1</active>
+                                <limit_shipping>1</limit_shipping>
+                            </depends>
+                            <comment>Selecteer de verzendmethoden waarvoor deze betaalmethode NIET beschikbaar is</comment>
+                            <label>Geblokkeerde verzendmethoden</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_allmethods</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/disabled_shippingmethods</config_path>
+                        </disabled_shippingmethods>
+                        <order_status translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Nieuwe order status</label>
+                            <comment>De status die een order moet krijgen bij het toevoegen</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_pendingPayment</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/order_status</config_path>
+                        </order_status>
+                        <order_status_success translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Gelukt order status</label>
+                            <comment>De status die een order moet krijgen na succesvolle betaling</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_processing</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/order_status_success</config_path>
+                        </order_status_success>
+                        <order_status_verify translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Verify order status</label>
+                            <comment>De status die een order moet krijgen wanneer de transactie gecontroleerd moet worden</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_pendingPayment</source_model>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/order_status_verify</config_path>
+                        </order_status_verify>
+                        <order_status_authorized translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Authorized order status</label>
+                            <comment>De status die een order moet krijgen bij een geauthoriseerde betaling</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_status_processing</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/order_status_authorized</config_path>
+                        </order_status_authorized>
+                        <charge_type translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Extra kosten rekenen</label>
+                            <comment>Geef hier aan of u extra kosten wilt rekenen op basis van een percentage van het totaalbedrag of een vast bedrag</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/system_config_source_chargetype</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/charge_type</config_path>
+                        </charge_type>
+                        <charge_value translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Extra kosten</label>
+                            <comment>Geef hier aan hoeveel extra kosten u wilt rekenen, gebruik een punt voor decimalen, als u geen extra kosten wilt rekenen vult u niets in</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>201</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/charge_value</config_path>
+                        </charge_value>
+                        <charge_tax_class translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Btw voor extra kosten</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>202</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/charge_tax_class</config_path>
+                        </charge_tax_class>
+                        <send_mail translate="label">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Bevestigingsmail sturen</label>
+                            <comment>Wanneer wilt u dat de bevestigingsmail wordt verstuurd</comment>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pay_payment/source_sendmail</source_model>
+                            <config_path>payment/pay_payment_trustly/send_mail</config_path>
+                        </send_mail>
+                        <invoice_email translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Emailen bij factureren</label>
+                            <comment><![CDATA[Een email sturen met de factuur, LET OP: De email wordt alleen gestuurd als je bovenaan bij Algemene instellingen emailen bij factureren aan hebt staan]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/invoice_email</config_path>
+                        </invoice_email>
+                        <instructions translate="label comment">
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                            <label>Instructions</label>
+                            <comment><![CDATA[If you want to show instructions to the user, you can add them here]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>410</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <config_path>payment/pay_payment_trustly/instructions</config_path>
+                        </instructions>
+                    </fields>
+                </pay_payment_trustly>
                 <pay_payment_webshopgiftcard type="group" translate="label" module="pay_payment">
                     <label>Webshopgiftcard</label>
                     <model>pay_payment/Model_Paymentmethod_Webshopgiftcard</model>
@@ -15216,7 +16133,7 @@
                 <totals_sort translate="label">
                     <fields>
                         <payment_charge>
-                            <label>Pay.nl betaalmethode kosten</label>
+                            <label>PAY. betaalmethode kosten</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>

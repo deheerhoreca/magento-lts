@@ -9,15 +9,20 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
     {
         $this->helperData = Mage::helper('pay_payment');
     }
+
     /**
      * Processes the order by transactionId, the data is collected by calling the pay api
      *
-     * @param string $transactionId
-     * @param Mage_Core_Model_Store $store
-     *
-     * @return string|null the new status
+     * @param $transactionId
+     * @param null $store
+     * @param null $action
+     * @return string|void
+     * @throws Mage_Core_Exception
+     * @throws \Paynl\Error\Api
+     * @throws \Paynl\Error\Error
+     * @throws Exception
      */
-    public function processByTransactionId($transactionId, $store = null)
+    public function processByTransactionId($transactionId, $store = null, $action = null)
     {
 
         $payTransaction = $this->helperData->getTransaction($transactionId);
@@ -29,7 +34,7 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
         $extended_logging = Mage::getStoreConfig('pay_payment/general/extended_logging', $store);
         $blockCapture     = $store->getConfig('pay_payment/general/block_capture') == 1;
         if ($extended_logging) {
-            $order->addStatusHistoryComment('Exchange call received from pay.nl');
+            $order->addStatusHistoryComment('Exchange call received from PAY.');
         }
         $this->helperData->loginSDK($store, $payTransaction->getGatewayUrl());
         $transaction     = \Paynl\Transaction::get($transactionId);
@@ -46,25 +51,27 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
         } elseif ($transaction->isBeingVerified()) {
             $status = Pay_Payment_Model_Transaction::STATE_VERIFY;
         } else {
-            $status = Pay_Payment_Model_Transaction::STATE_PENDING;
+            if (!empty($action) && strtolower($action) == 'new_ppt') {
+                throw Mage::exception('Pay_Payment', 'Status is still pending', 101);
+            }
             if ($extended_logging) {
                 $order->addStatusHistoryComment('Status is pending, exiting');
             }
             $order->save();
-            //we gaan geen update doen
+
+            # No update needed
             return;
         }
-        $authTransaction = $order->getPayment()->getAuthorizationTransaction();
-        if ($status == Pay_Payment_Model_Transaction::STATE_SUCCESS &&
-            $authTransaction &&
-            $blockCapture
-        ) {
+
+        $authTransaction = $order->getPayment() ? $order->getPayment()->getAuthorizationTransaction() : false;
+        if ($status == Pay_Payment_Model_Transaction::STATE_SUCCESS && $authTransaction && $blockCapture) {
             if ($extended_logging) {
                 $order->addStatusHistoryComment('Blocking capture because block capture is enabled and an authorize transaction is present.');
             }
             $order->save();
             return $status;
         }
+
         $paidAmount = $transaction->getPaidCurrencyAmount();
         if ($store->getConfig('pay_payment/general/only_base_currency') == 1) {
             $paidAmount = $transaction->getPaidAmount();
@@ -192,7 +199,7 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
                     }
                     if (!$order->canInvoice()) {
                         if ($extended_logging) {
-                            $order->addStatusHistoryComment('Pay.nl cannot create invoice');
+                            $order->addStatusHistoryComment('PAY. cannot create invoice');
                         }
                         $order->save();
                         die('Cannot create an invoice.');
@@ -203,7 +210,7 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
                     $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
                     if (!$invoice->getTotalQty()) {
                         if ($extended_logging) {
-                            $order->addStatusHistoryComment('Pay.nl Cannot create an invoice without products.');
+                            $order->addStatusHistoryComment('PAY. Cannot create an invoice without products.');
                         }
                         $order->save();
                         die('Cannot create an invoice without products.');
@@ -268,7 +275,7 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
             ) {
                 $order->setTotalPaid($order->getGrandTotal());
                 $order->setBaseTotalPaid($order->getBaseGrandTotal());
-                $order->addStatusHistoryComment('Pay.nl - Updated totalPaid, because it seems like the payment was not correctly registered - totalDue ' . $totalDue . ' - totalPaid ' . $totalPaid . ' - paidAmount ' . $paidAmount);
+                $order->addStatusHistoryComment('PAY. - Updated totalPaid, because it seems like the payment was not correctly registered - totalDue ' . $totalDue . ' - totalPaid ' . $totalPaid . ' - paidAmount ' . $paidAmount);
             }
             # If multi payment, reset the paid amount
             if ($payment->getMethod() == 'multipaymentforpos' && $paidAmount == $orderAmount) {
@@ -310,7 +317,7 @@ class Pay_Payment_Helper_Order extends Mage_Core_Helper_Abstract
                 $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
                 if ( ! $invoice->getTotalQty()) {
                     if ($extended_logging) {
-                        $order->addStatusHistoryComment('Pay.nl Cannot create an invoice without products.');
+                        $order->addStatusHistoryComment('PAY. Cannot create an invoice without products.');
                     }
                     $order->save();
                     die('Cannot create an invoice without products.');
