@@ -7,7 +7,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   public function updateProductOnEdit($observer) {
     $event = $observer->getEvent();
     $product = $event->getProduct();
-    $product->lockAttribute("cost");
+    // $product->lockAttribute("cost");
     $product->lockAttribute("price_min");
     $product->lockAttribute("recommended_product");
     $product->lockAttribute("additional_attributes");
