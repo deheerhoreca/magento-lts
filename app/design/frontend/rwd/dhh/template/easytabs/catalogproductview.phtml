@@ -87,8 +87,10 @@ $used_levertijd         = empty($levertijd_tmp_override) ? $levertijd : $leverti
 $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_finalPrice, true);
 
-// if(_dhh_debug()) {
-// }
+// Add +/- symbol unless it's "op aanvraag"
+if(stristr($used_levertijd, "aanvraag") === false) {
+  $used_levertijd = "&plusmn; {$used_levertijd}";
+}
 
 /* BUYBLOCK CONTENT */
 
@@ -117,7 +119,7 @@ if($bestelartikel === "Ja") {
     $delivery_text .= "Levertijd op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een pre-order plaatsen.</span>";
   }
 } elseif($overall_stock_status === "in_stock" && !empty($used_levertijd)) {
-  $delivery_text .= "&plusmn; {$used_levertijd}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
+  $delivery_text .= "{$used_levertijd}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
 }
 if(empty($delivery_text) === false) {
   $delivery_li = "<li class='my-1'><i class='fa-li fa fa-clock-o'></i>{$delivery_text}</li>";
