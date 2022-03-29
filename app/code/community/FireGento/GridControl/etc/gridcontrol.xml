@@ -97,6 +97,16 @@
         <after>eol</after>
       </manufacturer>
       
+      <!-- <supplier> -->
+        <!-- <add> -->
+          <!-- <header>Leverancier</header> -->
+          <!-- <type>options</type> -->
+          <!-- <index>supplier</index> -->
+          <!-- <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options> -->
+        <!-- </add> -->
+        <!-- <after>manufacturer</after> -->
+      <!-- </supplier> -->
+      
       <ean>
         <add>
           <header>EAN</header>
@@ -185,7 +195,7 @@
           <index>supplier</index>
           <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
         </add>
-        <after>bi_supplier_sold_365</after>
+        <after>eol</after>
       </supplier>
 
       <manufacturer>

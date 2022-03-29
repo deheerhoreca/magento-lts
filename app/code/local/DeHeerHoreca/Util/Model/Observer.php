@@ -19,6 +19,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute("stock_status");
     $product->lockAttribute("popularity");
     $product->lockAttribute("bol_category_current");
+    $product->lockAttribute("external_documents_json");
   }
   
   // Also used directly in resave_all_products.php

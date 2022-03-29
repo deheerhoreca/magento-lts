@@ -94,11 +94,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
       
       /* In case of configurable products, we get all the children's attributes as well */
       if($product->getTypeId() === Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
-        // $childIds = Mage::getModel('catalog/product_type_configurable')->getChildrenIds($product->getId());
         $childIds = Mage::getModel('catalog/product_type_configurable')->getChildrenIds($product->getId());
-        // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
-         // print_r($childIds);
-        // }
         $childIds = array_pop($childIds);
         if(empty($childIds) === false) {
           foreach($childIds as $childId) {
@@ -110,6 +106,13 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
       foreach($products as $product) {
 
         $attributes = $product->getAttributes();
+        
+        // if(_dhh_debug()) {
+          // foreach($attributes as $attribute) {
+            // printr($attribute->getAttributeCode());
+            // printr($attribute->getIsVisibleOnFront());
+          // }
+        // }
 
         foreach($attributes as $attribute) {
           
@@ -120,16 +123,8 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
             if($attribute->usesSource()) {
               $option_id = $attribute->setStoreId(0)->getSource()->getOptionId($value);
             }
-                        
-            // Do not display "No" on some attribute types
-            // "No/Nee" is put 
-            // @todo replace boolean attributes with proper dropdowns that include "n.v.t."
-            // if($value === "Nee") {
-              // continue;
-            // }
             
-            if(is_string($value)) {
-              if(strlen($value) && $product->hasData($attribute->getAttributeCode())) {
+            if(is_string($value) && strlen($value) > 0 && $product->hasData($attribute->getAttributeCode())) {
               //if ($attribute->getFrontendInput() == 'price') {
               //$value = Mage::app()->getStore()->convertPrice($value,true);
               //}
@@ -151,8 +146,6 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
               }
 
               $data[$group]['attrid'] = $attribute->getId();
-
-              }
             }
           }
         }
@@ -162,10 +155,6 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
         $groupModel     = Mage::getModel('eav/entity_attribute_group')->load($groupId);
         $group['title'] = $groupModel->getAttributeGroupName();
       }
-      
-      // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET["nofpc"])) {
-        // echo "<pre>";print_r($data);echo "</pre>";
-      // }
 
       return $data;
     }

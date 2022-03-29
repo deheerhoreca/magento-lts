@@ -41,7 +41,7 @@ $subject    = "Biller webhook event: {$event_type} [{$order_id}]";
 $body       = "{$subject}\n\n".print_r($data, true);
 $from_email = "klaas@chefstore.nl";
 $from_name  = "De Heer Horeca Intel";
-$to_email   = "orders@deheerhoreca.nl";
+$to_email   = "loek@deheerhoreca.nl";
 
 $mail = new Zend_Mail();
 $mail->setFrom($from_email, $from_name);

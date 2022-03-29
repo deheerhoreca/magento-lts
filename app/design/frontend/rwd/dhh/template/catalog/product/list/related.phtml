@@ -10,7 +10,7 @@ if($collection->getSize() > 0 ) {
   ?>
   <div id="autorelated-products" class="product-collateral category-products">
     <?php
-    echo "<span class=h3>Gerelateerde Producten</span><hr>";
+    echo "<h2 class='tableftheader'>Gerelateerde Producten</h2>";
     echo "<ul class='products-grid products-grid-mini'>";
     foreach($collection as $_product) {
       if($i === $max_items) break;

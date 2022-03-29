@@ -11,10 +11,9 @@ $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
 $catid                        = null;
 $carct                        = Mage::registry("current_category");
+$category_id                  = $carct->getId();
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
-// $short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104, 3, 544];
-// $short_name_parent_cats       = [];
 $category_thumbs_dimensions   = 140;
 $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
@@ -26,7 +25,12 @@ $show_black_friday            = false;
 // These categories are not listed as subcategory tile
 $excluded_category_ids        = [656, 864, 834];
 
+// Product price block
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
+
+// Optional static block for this category
+$category_block_name          = "category-{$category_id}";
+$category_block_html          = $this->getLayout()->createBlock("cms/block")->setBlockId($category_block_name)->toHtml();
 
 /*
  * Bugfix: Using require_stock_items there was a bug that lead
@@ -227,6 +231,9 @@ if(empty($carct) === false && $amschk !== "amshopby" && empty($appliedFilters) =
     }
   }
 }
+
+// Optional block category-ID is shown below the category tiles
+echo $category_block_html;
 
 /* LIST PRODUCTS */
 
@@ -491,6 +498,8 @@ if($_collectionSize > 0) {
       $attribute_value = $_product->getAttributeText('garantie');
       if($attribute_value === "24 maanden") {
         $usps[] = "24M Garantie";
+      } elseif($attribute_value === "36 maanden") {
+        $usps[] = "36M Garantie";
       }
       
       /* Cooling Zones */
@@ -617,11 +626,6 @@ if($_collectionSize > 0) {
       
       // Product name
       $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
-      // if(in_array($catid, $short_name_cats)) {
-        // $product_name = $_product->getData("name_short");
-      // } elseif(!empty(array_intersect($parent_categories_ids, $short_name_parent_cats))) {
-        // $product_name = $_product->getData("name_short");
-      // }
       ?>
       <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
         <?php

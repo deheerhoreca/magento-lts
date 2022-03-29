@@ -12990,7 +12990,8 @@ body.cms-page-view div#sidebar-nav.block.sidebar-nav-left.codnitiveSidenavLeft {
   padding-top: 10px;
 }
 
-#product-documents-list span {
+#product-documents-list span,
+#product-external-documents-list span {
   padding-top: 10px;
   padding-left: 8px;
 }
@@ -15605,8 +15606,7 @@ div.sooqrSearchContainer div.sqr-results.sqr-grid div.sqr-image img {
   display: block;
 }
 
-
-
+/* BLACK FRIDAY */
 
 .bf-banner-detail,
 .bf-banner-list {
@@ -15628,4 +15628,68 @@ div.sooqrSearchContainer div.sqr-results.sqr-grid div.sqr-image img {
 .bf-banner-list {
   width: 110px;
   height: 80px;
+}
+
+/* NOTIFICATION BOXES -- https://codepen.io/walesmd/pen/ZEEMLg */
+
+.bar-notice {
+  position: relative;
+  margin: 1em 0 1em 1em;
+  background: #F9F9F9;
+  padding: 1em 1em 1em 2em;
+  border-left: 4px solid #DDD;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.125);
+}
+
+.bar-notice:before {
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  left: -17px;
+  background-color: #DDD;
+  color: #FFF;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  font-family: Georgia;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.bar-info {
+  border-color: #3aacd9;
+}
+
+.bar-info:before {
+  content: "i";
+  background-color: #3aacd9;
+}
+
+.bar-success {
+  border-color: #2ECC40;
+}
+
+.bar-success:before {
+  content: "√";
+  background-color: #2ECC40;
+}
+
+.bar-warning {
+  border-color: #FFDC00;
+}
+
+.bar-warning:before {
+  content: "!";
+  background-color: #FFDC00;
+}
+
+.bar-error {
+  border-color: #FF4136;
+}
+
+.bar-error:before {
+  content: "X";
+  background-color: #FF4136;
 }

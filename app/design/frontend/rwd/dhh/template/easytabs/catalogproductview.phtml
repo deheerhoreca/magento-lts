@@ -28,7 +28,7 @@ $_taxHelper           = $this->helper("tax");
 
 // if(empty($brand_name) === false) {
   // $brand = sanitizeForFilename($brand_name);
-  // $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
+  // $htbrand = $this->getLayout()->createBlock("cms/block")->setBlockId($brand)->toHtml();
   // $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
   // if(is_file($brand_logo_file) === true) {
     // $brand_logo = "/".$brand_logo_file;
@@ -41,7 +41,7 @@ $categoryIds = $_product->getCategoryIds();
 // Find the category this product belongs to
 if(count($categoryIds)) {
   $firstCategoryId = $categoryIds[0];
-  $_category = Mage::getModel('catalog/category')->load($firstCategoryId);
+  $_category = Mage::getModel("catalog/category")->load($firstCategoryId);
   $categoryUrl = $_category->getUrl();
   $categoryName = $_category->getName();
 }
@@ -50,15 +50,15 @@ $max_highlighted_attributes = 10;
 
 // Attributes used in multiple places
 $nofrost_method         = $_product->getResource()->getAttribute("ontdooisysteem")->getFrontend()->getValue($_product);
-$energy_rating          = $_product->getResource()->getAttribute('energieklasse')->getFrontend()->getValue($_product);
-$shoutout               = $_product->getResource()->getAttribute('product_label')->getFrontend()->getValue($_product);
-$productTitle           = $_helper->productAttribute($_product, $_product->getName(), 'name');
-$product_title_short    = $_product->getResource()->getAttribute('name_short')->getFrontend()->getValue($_product);
-$pvideo                 = $_product->getResource()->getAttribute('product_video')->getFrontend()->getValue($_product);
-$_price                 = $_product->getPrice(); //Mage::getModel('catalog/product')->load($_product->getId())->getNormalPrice();
+$energy_rating          = $_product->getResource()->getAttribute("energieklasse")->getFrontend()->getValue($_product);
+$shoutout               = $_product->getResource()->getAttribute("product_label")->getFrontend()->getValue($_product);
+$productTitle           = $_helper->productAttribute($_product, $_product->getName(), "name");
+$product_title_short    = $_product->getResource()->getAttribute("name_short")->getFrontend()->getValue($_product);
+$pvideo                 = $_product->getResource()->getAttribute("product_video")->getFrontend()->getValue($_product);
+$_price                 = $_product->getPrice(); //Mage::getModel("catalog/product")->load($_product->getId())->getNormalPrice();
 $_finalPrice            = $_product->getFinalPrice();
 $tagline                = $_product->getTagline();
-$supplier_name          = $_product->getAttributeText('supplier');
+$supplier_name          = $_product->getAttributeText("supplier");
 $product_description_md = trim($_product->getDescription());
 $product_description    = "";
 
@@ -212,24 +212,31 @@ if($overall_stock_status === "eol") {
   }
 }
 
-// Product Documents
-$files = Mage::getModel('staempfli_productattachment/file')
-  ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
-  ->getData();
+// Product Documents (uploaded & external)
+$suppliers_external_docs_preferred = ["Bartscher", "Diamond", "Gastro-Inox", "Gastronoble", "CombiSteel", "EMGA", "Hendi"]; // case-sensitive
 
-/* Energy Label */
-if(strlen($energy_rating) > 0) {
+// @todo something strange is going on -- external_documents_json is not part of the product after loading
+$external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
+
+if(empty($external_documents_json) === true || in_array($supplier_name, $suppliers_external_docs_preferred) === false) {
+  $files = Mage::getModel("staempfli_productattachment/file")
+    ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
+    ->getData();
+  
+  if(empty($files) === false) {
+    $external_documents_json = "";
+  }
+}
+
+// Energy Label -- only certain values are shown as a product label
+if(empty($energy_rating) === false) {
   $enclz = null;
   switch($energy_rating) {
-    // case 'A++++': $enclz = 'enrgclz1';  break;
-    // case 'A+++':  $enclz = 'enrgclz2';  break;
-    // case 'A++':   $enclz = 'enrgclz3';  break;
-    // case 'A+':    $enclz = 'enrgclz4';  break;
-    case 'A':     $enclz = 'enrgclz1';  break;
-    case 'B':     $enclz = 'enrgclz2';  break;
-    case 'C':     $enclz = 'enrgclz3';  break;
-    case 'D':     $enclz = 'enrgclz4';  break;
-    case 'E':     $enclz = 'enrgclz5';  break;
+    case "A":     $enclz = "enrgclz1";  break;
+    case "B":     $enclz = "enrgclz2";  break;
+    case "C":     $enclz = "enrgclz3";  break;
+    case "D":     $enclz = "enrgclz4";  break;
+    case "E":     $enclz = "enrgclz5";  break;
   }
 }
 
@@ -690,16 +697,16 @@ if(empty($alternative_products_block) === true) {
 /** ANCHOR LINKS **/
 
 // $anchors["photos"] = "Foto's";
-if(empty($pvideo) === false)                        $anchors["video"]         = "Productvideo";
-// if(strlen($product_description) > 10)               $anchors["description"]   = "Beschrijving";
-if(empty($_crossSellProducts) === false)            $anchors["accessoires"]   = "Accessoires en verbruiksartikelen";
-if(empty($alternative_products_block) === false)    $anchors["alternatives"]  = "Alternatieven";
-if(empty($product_additional_data_block) === false) $anchors["specs"]         = "Specificaties";
-if(count($files) > 0)                               $anchors["documents"]     = "Documenten";
-if(empty($upsell_products_block) === false)         $anchors["upsells"]       = "Bekijk ook";
-if(empty($related_products_block) === false)        $anchors["related"]       = "Gerelateerde producten";
-if(strlen($additional_attributes) > 10)             $anchors["additional"]    = "Extra productinformatie";
-// if(strlen($htbrand) > 10)                           $anchors["brand"]         = "Over {$brand_name}";
+if(empty($pvideo) === false)                        $anchors["video"]               = "Productvideo";
+if(strlen($product_description) > 10)               $anchors["description"]         = "Productbeschrijving";
+if(empty($_crossSellProducts) === false)            $anchors["accessoires"]         = "Opties & Accessoires";
+if(empty($alternative_products_block) === false)    $anchors["alternatives"]        = "Alternatieven";
+if(empty($product_additional_data_block) === false) $anchors["specs"]               = "Specificaties";
+if(strlen($additional_attributes) > 10)             $anchors["additional"]          = "Extra Productinformatie";
+if(empty($files) === false)                         $anchors["documents"]           = "Documantatie";
+if(empty($external_documents_json) === false)       $anchors["external-documents"]  = "Externe Documentatie";
+if(empty($upsell_products_block) === false)         $anchors["upsells"]             = "Bekijk Ook";
+if(empty($related_products_block) === false)        $anchors["related"]             = "Gerelateerde Producten";
 ?>
 <script>var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
@@ -966,7 +973,7 @@ if(strlen($additional_attributes) > 10)             $anchors["additional"]    = 
       <div class="probottomdv">
         <div class="topproducts_containter">
           <a class="anchor" id="accessoires"></a>
-          <h2 class="tableftheader">Gerelateerde producten en accessoires</h2>
+          <h2 class="tableftheader">Opties & Accessoires</h2>
           <?php
           $_columnCount = 4;
           $i = 0;
@@ -1008,7 +1015,7 @@ if(strlen($additional_attributes) > 10)             $anchors["additional"]    = 
       <?php
     }
 
-    /* Product Specs */
+    /* Product Attributes */
     if(empty($product_additional_data_block) === false) {
       ?>
       <div class="probottomdv">
@@ -1020,29 +1027,96 @@ if(strlen($additional_attributes) > 10)             $anchors["additional"]    = 
       <?php
     }
     ?>
+    
+    <?php /* Additional Product Attributes */ ?>
+    
+    <?php
+    if(strlen($additional_attributes) > 10) {
+      ?>
+      <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
+      <div class="probottomdv content product-specs" id="additional-attributes">
+        <a class="anchor" id="additional"></a>
+        <div class="std"><?php echo $additional_attributes; ?>
+          <dl class="hidden"><dt>Source</dt><dd>https://www.chefstore.nl</dd></dl>
+        </div>
+      </div>
+    <?php
+    }
+    ?>
 
     <?php /* Documents */ ?>
     <?php
-    if(count($files) > 0) {
-      $helper = $this->helper('staempfli_productattachment');
-      $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
+    if(empty($files) === false) {
+      $helper = $this->helper("staempfli_productattachment");
+      $upload_dir = Mage::getBaseUrl("media").$helper::UPLOAD_DIR;
       ?>
       <div class="leftbranddv">
-        <h2 class="tableftheader"><?php echo $this->__('Documenten');?></h2>
+        <h2 class="tableftheader"><?php echo $this->__("Documenten");?></h2>
         <div class="probottomdv" id="product-documents-list">
           <a class="anchor" id="documents"></a>
-          <ul>
-            <li class="tab_list_element">
-              <div id="tab-mediathek" class="tabs_content">
-                <?php
-                  //echo "<pre>";print_r($files);echo "</pre>";
-                  foreach($files as $file) {
-                    $file_name = empty($file['title']) ? $file['filename'] : $file['title'];
-                    echo "<a title='{$file['filename']}' class='document-link' href='{$dir}/{$file['path']}' target='_blank' style='margin-bottom: 10px;'><i class='fa fa-file-{$file['type']}-o fa-2x'></i><span>{$file_name}</span></a>";
-                  }
-                ?>
-              </div>
-            </li>
+          <ul class="fa-ul">
+            <?php
+            foreach($files as $document) {
+              if(empty($document["path"])) {
+                continue;
+              }
+              $url      = "{$upload_dir}/{$document['path']}";
+              $name     = $document["title"]    ?? ($document["filename"] ?? "-");
+              $filetype = $document["type"]     ?? null;
+              switch($filetype) {
+                case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
+                default:      $fa_icon  = "fa-file-o";      break;
+              }
+              echo "<li style='line-height:2.5em;'>";
+              echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}</a>";
+              echo "</li>";
+            }
+            ?>
+          </ul>
+          
+        </div>
+      </div>
+      <?php
+    }
+    ?>
+    
+    <?php /* External Documents */ ?>
+    <?php
+    if(empty($external_documents_json) === false) {
+      $external_documents = json_decode($external_documents_json, true);
+      // printr($external_document);
+      ?>
+      <div class="leftbranddv">
+        <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
+        <div class="probottomdv" id="product-external-documents-list">
+          <a class="anchor" id="external-documents"></a>
+          <ul class="fa-ul">
+            <?php
+            foreach($external_documents as $external_document) {
+              if(empty($external_document["url"])) {
+                continue;
+              }
+              $url      = $external_document["url"];
+              $name     = $external_document["title"]     ?? $external_document["url"];
+              $filetype = $external_document["filetype"]  ?? null;
+              $language = $external_document["language"]      ?? null;
+              switch($filetype) {
+                case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
+                default:      $fa_icon  = "fa-file-o";      break;
+              }
+              if(empty($language) === false) {
+                if(is_scalar($language)) {
+                  $language = " (".strtoupper($language).")";
+                } elseif(is_array($language)) {
+                  $language = array_map("strtoupper", $language);
+                  $language = " (".implode(", ", $language).")";
+                }
+              }
+              echo "<li style='line-height:2.5em;'>";
+              echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>";
+              echo "</li>";
+            }
+            ?>
           </ul>
         </div>
       </div>
@@ -1073,22 +1147,6 @@ if(strlen($additional_attributes) > 10)             $anchors["additional"]    = 
         <?php echo $related_products_block; ?>
       </div>
       <?php
-    }
-    ?>
-    
-    <?php /* Additional Attributes */ ?>
-    
-    <?php
-    if(strlen($additional_attributes) > 10) {
-      ?>
-      <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
-      <div class="probottomdv content product-specs" id="additional-attributes">
-        <a class="anchor" id="additional"></a>
-        <div class="std"><?php echo $additional_attributes; ?>
-          <dl class="hidden"><dt>Source</dt><dd>https://www.chefstore.nl</dd></dl>
-        </div>
-      </div>
-    <?php
     }
     ?>
     

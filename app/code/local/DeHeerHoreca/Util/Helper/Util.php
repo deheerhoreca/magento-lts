@@ -662,6 +662,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $attribute_value = $_product->getAttributeText('garantie');
     if($attribute_value === "24 maanden") {
       $usps[] = "24M Garantie";
+    } elseif($attribute_value === "36 maanden") {
+      $usps[] = "36M Garantie";
     }
     
     /* Cooling Zones */

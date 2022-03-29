@@ -12,37 +12,41 @@
  * @see Mage_Catalog_Block_Category_View
  */
 
-$_helper      = $this->helper('catalog/output');
-$_category    = $this->getCurrentCategory();
-
-$brand_name   = strtolower($_category->getName());
-$brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_logo   = null;
-
-$htbrand      = null;
+$_helper              = $this->helper("catalog/output");
+$_category            = $this->getCurrentCategory();
+$brand_name           = strtolower($_category->getName());
+$brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$brand_logo           = null;
+$htbrand              = null;
+$shopby_block_html    = null;
 
 if(empty($brand_name) === false) {
-  $brand = sanitizeForFilename($brand_name);
-  $htbrand = $this->getLayout()->createBlock('cms/block')->setBlockId($brand)->toHtml();
+  $brand = sanitizeForFilename($brand_name);  
   $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
   if(is_file($brand_logo_file) === true) {
     $brand_logo = "/".$brand_logo_file;
   }
+  
+  // Optional block BRAND is shown above the category tiles
+  $brand_block_name = $brand;
+  $htbrand = $this->getLayout()->createBlock("cms/block")->setBlockId($brand_block_name)->toHtml();
+  
+  // Optional block shopbybrand-BRAND is shown below the category tiles
+  $shopby_block_name = "shopbybrand-{$brand}";
+  $shopby_block_html = $this->getLayout()->createBlock("cms/block")->setBlockId($shopby_block_name)->toHtml();
 }
 
 // Mixed mode = shop by brand
 // Mixed mode = "products and static block"
 if($this->isMixedMode()) {
   
-  $ctdesc_h1 = "Bekijk ons complete ".$_helper->categoryAttribute($_category, $_category->getName(), 'name')." assortiment";
+  $ctdesc_h1 = "Bekijk ons complete ".$_helper->categoryAttribute($_category, $_category->getName(), "name")." assortiment";
   
   echo "<div class='ctdesc'>";
   if(empty($brand_logo) === false) {
-    echo "<img class='float-right' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' />";
+    echo "<img class='float-right' alt='".htmlspecialchars($brand_name)." logo' id='brand_logo_small' src='{$brand_logo}'>";
   }
-  echo "<h1>{$ctdesc_h1}</h1>";
-  echo $htbrand.$this->getCmsBlockHtml();
-  echo "</div>";
+  echo "<h1>{$ctdesc_h1}</h1>{$htbrand}{$this->getCmsBlockHtml()}{$shopby_block_html}</div>";
   define("CTDESC_H1_SENT", true);
 }
 
@@ -55,3 +59,4 @@ if($this->isContentMode()) {
 } else {
   echo $this->getProductListHtml();
 }
+
