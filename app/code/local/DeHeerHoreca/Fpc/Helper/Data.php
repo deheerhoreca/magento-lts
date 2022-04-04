@@ -25,9 +25,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return true;
     }
     
-    /**
-     * Revalidate all currently cached entries
-     */
+    // Revalidate all currently cached entries
     public function revalidateCache() {
       return;
       
@@ -54,7 +52,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     /**
-     * Check url
+     * Get url
      *
      * @return bool
      */
@@ -77,8 +75,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     public function get_cache_url() {
       $url = html_entity_decode(Mage::helper('core/url')->getCurrentUrl());
       
+      // List of query parameters that have no consequences for the rendered HTML
       $ignored_url_query_keys = [
         "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
+        "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
       ];
       $url = Mage::helper("deheerhoreca_fpc/data")->strip_param_from_url($url, $ignored_url_query_keys);
       
