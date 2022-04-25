@@ -1,0 +1,151 @@
+<?php
+/**
+ * Copyright (c) 2011-2020  arvato Finance B.V.
+ *
+ * AfterPay reserves all rights in the Program as delivered. The Program
+ * or any portion thereof may not be reproduced in any form whatsoever without
+ * the written consent of AfterPay.
+ *
+ * Disclaimer:
+ * THIS NOTICE MAY NOT BE REMOVED FROM THE PROGRAM BY ANY USER THEREOF.
+ * THE PROGRAM IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE PROGRAM OR THE USE OR OTHER DEALINGS
+ * IN THE PROGRAM.
+ *
+ * @category    AfterPay
+ * @package     Afterpay_Afterpay
+ * @copyright   Copyright (c) 2011-2020 arvato Finance B.V.
+ */
+/* @var $this Afterpay_Afterpay_Block_Portfolios_Checkout_Installment_Form */
+?>
+<?php $this->setBlockData()?>
+<?php $_code = $this->getMethodCode(); ?>
+<?php $_helper = $this->helper('afterpay');?>
+<?php $isEnterprise = (bool) Mage::getConfig()->getModuleConfig("Enterprise_Enterprise")->version;?>
+
+<div id="payment-errors" class="validation-advice" style="display:none;"></div>
+<fieldset class="form-list">
+    <ul id="payment_form_<?php echo $_code; ?>" style="display:none;">
+        <div class="installment-payment-description">
+            <?php echo $this->getInstallmentDescription() ?>
+            <br/>
+        </div>
+
+        <div class="installment-payment-total-wo-interest">
+            <?php echo $this->__('Total without interest:') ?>
+            <span class="total-value" style="font-weight: bold">
+                <?php echo $this->getGrandTotal() ?>
+            </span>
+        </div>
+        <li>
+            <select id="<?php echo $_code; ?>_installmentplan" class="afterpay_installmentplan" name="payment[<?php echo $_code; ?>][installmentprofile]">
+                <?php foreach($this->getInstallmentOptions() as $option): ?>
+                    <option value='<?php echo $option->getInstallmentProfileNumber() ?>'>
+                        <?php echo $this->__('%s per month in %s installments',
+                            $option->getFormattedInstallmentAmount(),
+                            $option->getNumberOfInstallments())
+                        ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </li>
+
+        <?php foreach ($this->getInstallmentOptions() as $index => $installmentPlan): ?>
+            <div class="installment_plan <?php if($index === 0) echo 'installment_active'?>" id="installment_plan_<?php echo $installmentPlan->getInstallmentProfileNumber() ?>">
+                <ul>
+                    <li><?php echo $this->__('Same amount every month, no surprises') ?></li>
+                    <li><?php echo $this->__('You can pay the total balance at anytime you want') ?></li>
+                    <li><?php echo $this->__('Fix interest rate of: %s', $installmentPlan->getInterestRate()) ?>%</li>
+                    <li><?php echo $this->__('Effective interest rate of: %s', $installmentPlan->getEffectiveInterestRate()) ?>%</li>
+                    <li><?php echo $this->__('Total cost of: %s', $installmentPlan->getFormattedTotalAmount()) ?></li>
+                </ul>
+            </div>
+        <?php endforeach; ?>
+
+        <li>
+            <?php if ($this->showGender()): ?>
+                <div class="field">
+                    <label for="<?php echo $_code; ?>_gender" class = "required"><em>*</em><?php echo $_helper->__('Gender:'); ?></label>
+                    <div class="input-box" id="">
+                        <input type="radio" name="payment[<?php echo $_code; ?>][gender]" value="V" id="<?php echo $_code?>_gender_v" checked="checked">
+                        <label style="float:none" for="<?php echo $_code?>_gender_v"><?php echo $_helper->__('Female'); ?></label>
+                        <input type="radio" name="payment[<?php echo $_code; ?>][gender]" value="M" id="<?php echo $_code?>_gender_m">
+                        <label style="float:none" for="<?php echo $_code?>_gender_m"><?php echo $_helper->__('Male'); ?></label>
+                    </div>
+                </div>
+            <?php endif; # showGender ?>
+            <?php if ($isEnterprise): ?>
+        </li>
+        <li>
+        <?php endif; # $isEnterprise ?>
+        <?php if ($this->showBankcode()): ?>
+            <li>
+                <div class="field">
+                    <label for="<?php echo $_code; ?>_bankcode" class="required"><em>*</em><?php echo $_helper->__('BIC / Swift-Code:'); ?></label>
+                    <div class="input-box">
+                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_bankcode" name="payment[<?php echo $_code; ?>][bankcode]" style="">
+                    </div>
+                </div>
+            </li>
+        <?php endif; #showBankcode ?>
+        <?php if ($this->showBankaccount()): ?>
+            <li>
+                <div class="field">
+                    <label for="<?php echo $_code; ?>_bankaccount" class="required"><em>*</em><?php echo $_helper->__('Bank account number:'); ?></label>
+                    <div class="input-box">
+                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_bankaccount" name="payment[<?php echo $_code; ?>][bankaccount]" style="">
+                    </div>
+                </div>
+            </li>
+        <?php endif; #showBankaccount ?>
+        <?php if ($this->showSsn()): ?>
+            <li>
+                <div class="field">
+                    <label for="<?php echo $_code; ?>_ssn" class="required"><em>*</em><?php echo $_helper->__('Social security number'); ?>:</label>
+                    <div class="input-box">
+                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_ssn" name="payment[<?php echo $_code; ?>][ssn]">
+                    </div>
+                </div>
+            </li>
+        <?php endif;# showSsn ?>
+            <li>
+                <input type="checkbox" class="checkbox required-entry" id="<?php echo $_code; ?>_termsAndConditions" name="payment[<?php echo $_code; ?>][conditions]">
+                <label for="<?php echo $_code; ?>_termsAndConditions" class="required" style="float:none;">
+                    <em>*</em>
+                    <?php echo $_helper->__(
+                        'I have read and accepted the AfterPay %sTerms and Conditions%s.',
+                        $this->paymentConditionsUrl,
+                        $this->anchorClose
+                    );?>
+                </label>
+            </li>
+        <p class="authorization-notice">
+            <?php echo $this->getAuthorizationNotice() ?>
+        </p>
+    </ul>
+</fieldset>
+
+<?php //TODO we don't have layouts for this module so doing js and css inline for now ?>
+<script type="text/javascript">
+    $$(".afterpay_installmentplan").invoke('observe', 'change', function() {
+        var selected_installment = 'installment_plan_' + $(this).getValue();
+        $$('.installment_plan').invoke('removeClassName', 'installment_active');
+        $(selected_installment).addClassName('installment_active');
+    });
+</script>
+<style>
+    .installment_plan {
+        display:none;
+    }
+    .installment_plan.installment_active {
+        display:block;
+    }
+    .installment_plan ul {
+        list-style-type: disc;
+        margin-left: 25px;
+    }
+</style>

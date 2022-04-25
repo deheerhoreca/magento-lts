@@ -1,0 +1,10 @@
+<?php if (Mage::helper('afterpay/checkout')->noConflict()) { ?>
+<script src="<?php echo Mage::getBaseUrl('js') . 'Afterpay/checkout/payovertime.js'; ?>"></script>
+<script>
+//<![CDATA[
+    window.AfterpayM1 = window.AfterpayM1 || {};
+    window.AfterpayM1.redirectMode = "<?php echo $this->getMode() ?>";
+    window.AfterpayM1.saveUrl = "<?php echo $this->getUrl('afterpay/payment/start', array('form_key' => Mage::getSingleton('core/session')->getFormKey())) ?>";
+//]]>
+</script>
+<?php } ?>

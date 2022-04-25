@@ -7,8 +7,7 @@ use Michelf\MarkdownExtra;
 
 $dhh_click_log = [];
 
-class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
-{
+class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /*
    * getFullProductUrl() runs into issues when the url including
@@ -16,23 +15,40 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
    * This function attempts to get the URL fast and easy from core_url_rewrite.
    * It should be fallbacked with $product->getProductUrl()
    */
-  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product) {
-    $resource = Mage::getSingleton('core/resource');
+  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product, $single = true) {
+    $resource       = Mage::getSingleton('core/resource');
     $readConnection = $resource->getConnection('core_read');
-    $tableName = $resource->getTableName('core_url_rewrite');
-    $product_id = (int) $product->getId();
-    $query = "SELECT * FROM `{$tableName}` WHERE product_id = '{$product_id}' AND category_id IS NOT NULL";
-    $results = $readConnection->fetchAll($query);
+    $tableName      = $resource->getTableName('core_url_rewrite');
+    $product_id     = (int) $product->getId();
+    $base_url       = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+    $store_id       = (int) Mage::app()->getStore()->getStoreId();
     
-    if(empty($results[0]["request_path"]) === false) {
-      return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).$results[0]["request_path"];
+    // Return the first URL -- assume we want a category
+    if($single === true) {
+      $query    = "SELECT request_path FROM `{$tableName}` WHERE product_id = '{$product_id}' AND category_id IS NOT NULL";
+      $results  = $readConnection->fetchAll($query);
+      if(empty($results[0]["request_path"]) === false) {
+        return $base_url.$results[0]["request_path"];
+      }
+      return false;
+    }
+    
+    // Return multiple URLs if they exist -- including without category
+    $query    = "SELECT request_path FROM `{$tableName}` WHERE product_id = '{$product_id}' AND store_id = '{$store_id}'";
+    $results  = $readConnection->fetchAll($query);
+    if(empty($results) === false) {
+      $urls     = [];
+      foreach($results as $result) {
+        $urls[] = $base_url.$result["request_path"];
+      }
+      return $urls;
     }
     
     return false;
   }
   
-  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product) {
-    $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product);
+  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product, $single = true) {
+    $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product, $single);
     if($url === false) {
       $url = $product->getProductUrl(); //fallback
     }
@@ -141,7 +157,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     if(sizeof($_productCollection) === 0) return false;
     return $price / sizeof($_productCollection);
   }
-
+  
   public function getBrandsPerCategory($category_id) {
     $max_amount = 6;
     
@@ -176,7 +192,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $output = mb_ereg_replace("([\.]{2,})", '', $string);
     return strtolower($output);
   }
-
+  
   public function markdownToHtmlSafe($string) {
     if(strstr($string, "<!--markdown-->") !== false) {
       $string = trim(str_replace("<!--markdown-->", null, $string));
@@ -188,7 +204,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     }
     return $string;
   }
-
+  
   public function markdownToHtml($string) {
     return Markdown::defaultTransform($string);
   }
@@ -205,20 +221,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     return $url;
   }
-
+  
   public function getProductGridHtml($_product, $product_block, $options = []) {
     
     /*
     $options = [
-      "image_size"              => 150,
-      "display"                 => normal | mini,
-      "skip_info"               => false,
-      "skip_usps"               => false,
-      "skip_actions"            => false,
-      "_blank"                  => false,
-      "use_short_product_names" => false,
-      "show_category_link"      => false,
-      "prefer_rewrite_table"    => false,
+      "image_size"              => 150,           // Image screen size, in pixels
+      "display"                 => normal | mini, // normal|mini
+      "skip_usps"               => false,         // Don't show USPs
+      "skip_actions"            => false,         // Don't show actions/buttons
+      "_blank"                  => false,         // Open in a new window
+      "show_category_link"      => false,         // Show a link to the category
+      "prefer_rewrite_table"    => false,         // Get product URL preferring the rewrite table
+      "use_short_product_names" => false,         // Use brand + MPN instead of product name
     ];
     
     Display usage:
@@ -226,50 +241,39 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     - normal: listview
     */
     
-    $product_name = $image_label = $_product->getData("name");
-    $product_short_name = $_product->getData("name_short");
-    // $image_label = $this->stripTags($_product->getData('small_image_label'), null, true);
-    // if(empty($image_label)) {
-      // $image_label = $this->stripTags($product_name, null, true);
-    // }
+    $product_name             = $_product->getData("name");
+    $image_label              = $product_name;
+    $display_product_name     = $product_name;
+    $product_short_name       = $_product->getData("name_short");
+    $brand                    = $_product->getAttributeText("manufacturer");
+    $sku_seller               = $_product->getData("sku_seller");
     
-    $brand          = $_product->getAttributeText("manufacturer");
-    $sku_seller     = $_product->getData("sku_seller");
+    $display                  = $options["display"]                 ?? "normal";
+    $a_target                 = $options["_blank"]                  ?? null;
+    $image_size               = $options["image_size"]              ?? 150;
+    $skip_usps                = $options["skip_usps"]               ?? false;
+    $skip_actions             = $options["skip_actions"]            ?? false;
+    $show_category_link       = $options["show_category_link"]      ?? false;
+    $prefer_rewrite_table     = $options["prefer_rewrite_table"]    ?? false;
+    $use_short_product_names  = $options["use_short_product_names"] ?? false;
+    $max_product_usps         = ($display === "mini")               ? 4 : 10;
     
-    /* Interpret options */
-    $image_size = $options["image_size"] ?? 150;
-    $a_target = null;
-    if(isset($options["_blank"]) === true && $options["_blank"] === true) {
-      $a_target = " target='_blank'";
-    }
-    $display_product_name = $product_name;
-    // if(isset($options["use_short_product_names"]) === true && $options["use_short_product_names"] === true) {
+    // if($use_short_product_names === true) {
       // $display_product_name = $product_short_name;
     // }
-    $skip_actions = $options["skip_actions"] ?? false;
     
-    if(empty($options["display"]) === false) {
-      $display = $options["display"];
-    } else {
-      $display = "normal";
+    if(empty($a_target) === false) {
+      $a_target = " target='{$a_target}'";
     }
     
-    $max_product_usps = 10;
-    if($display === "mini") {
-      $max_product_usps = 4;
-    }
-    
-    /* Get data */
-    if(empty($options["skip_info"]) || $options["skip_info"] === false) {
-      $product_info = Mage::helper("deheerhoreca_util/util")->getProductInfo($_product);
-    }
-    if(empty($options["skip_usps"]) || $options["skip_usps"] === false) {
+    // Get data
+    if($skip_usps !== true) {
       $product_usps = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product);
     }
-    if(isset($options["show_category_link"]) === true && $options["show_category_link"] === true) {
+    if($show_category_link === true) {
       $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
     }
-    if(isset($options["prefer_rewrite_table"]) === true && $options["prefer_rewrite_table"] === true) {
+    if($prefer_rewrite_table === true) {
       $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
     } else {
       $product_url = $_product->getProductUrl();
@@ -283,7 +287,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $price_html             = str_replace("€", null, $price_html);
     
     $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
-      
     $stock_message          = $stock_data["stock_message"];
     $stock_message_short    = $stock_data["stock_message_short"];
     $stock_class            = $stock_data["txtcltcz"];
@@ -306,7 +309,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     
     // if(_dhh_debug()) {
       // echo "<pre>";
-      // printr($stock_data);
+      // var_dump($stock_data);
       // echo "</pre>";
     // }
     
@@ -339,14 +342,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $img_url = $product_block->helper('catalog/image')->init($_product, 'small_image')->resize($image_dimensions);
     
     ?>
-    <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target; ?>>
+    <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target;?>>
       <img class="lazy center" id="product-collection-image-<?php echo $_product->getId(); ?>" data-src="<?php echo $img_url; ?>" alt="<?php echo $image_label; ?>" width="<?php echo $image_size; ?>" height="<?php echo $image_size; ?>" />
     </a>
     <div class="product-info">
       <div class="info">
         <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
         <h2 class='product-name ellipsed ellipsed-2'>
-          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $display_product_name; ?></a>
+          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target;?>><?php echo $display_product_name; ?></a>
         </h2>
         <?php
         if(isset($tagline) === true) {
@@ -418,74 +421,28 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     <?php
   }
   
+  // Get the minimum list of attributes to display something
+  public function getProductAttributes(string $which): array {
+    if($which === "listview") {
+      return ["sku", "sku_seller", "manufacturer", "supplier", "name", "name_short", "breedte", "hoogte", "diepte", "size", "uitvoering",
+              "type_koeling", "aantal_blikjes", "aantal_flessen", "capacity_wine_bottles", "voorraadbunker_kg", "icecube_type",
+              "ijs_productie", "custom_highlights", "volume_net_liter", "inhoud_liters", "total_power_watt", "vermogen",
+              "vermogen_kw", "aantal_m3_uur", "garantie", "number_of_cooling_zones", "cooking_zones", "aftap", "afsluitbaar",
+              "motor", "isolatiedikte", "diameter_mm", "length_mm", "eenheid", "tagline", "small_image", "material_group",
+              "price", "special_price",
+      ];
+    }
+    
+    return [];
+  }
+  
+  // @deprecated
   public function getProductInfo($_product, $options = []) {
-    
-    $category_id = $options["category_id"] ?? null;
-    
-    $product_info = [];
-            
-    // $width = $attribute_value = $_product->getBreedte();
-    // $height = $attribute_value = $_product->getHoogte();
-    // $depth = $attribute_value = $_product->getDiepte();
-    
-    // $width = $width + 0;
-    // $height = $height + 0;
-    // $depth = $depth + 0;
-    
-    // $width /= 10;
-    // $height /= 10;
-    // $depth /= 10;
-    
-    // if($width > 10) $width = round($width);
-    // if($depth > 10) $depth = round($depth);
-    // if($height > 10) $height = round($height);
-    
-    // if($width > 0 && $height > 0 && $depth > 0) {
-      // $product_info[] = "B: {$width}cm D: {$depth}cm H: {$height}cm";
-    // } else {
-      // $attribute_value = $_product->getBreedte();
-      // if($attribute_value != '' && $attribute_value > 0) {
-        // $product_info[] = "Breedte: ".($attribute_value/10)."cm";
-      // }
-    // }
-
-    // if($category_id === 72) {
-      // $attribute_value = $_product->getInhoudAantalGn();
-      // if($attribute_value !='') {
-        // $product_info[] = "{$attribute_value} x {$gnvalue}";
-      // }
-    // }
-    
-    // $attribute_value = (int) $_product->getData('eenheid');
-    // if($attribute_value > 1) {
-      // $product_info[] = "{$attribute_value} stuks";
-    // }
-    
-    // $attribute_value = $_product->getAttributeText('size');
-    // if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
-      // $product_info[] = "Maat: {$attribute_value}";
-    // }
-    
-    // if($display === "normal") {
-      // $attribute_value = $_product->getData('materiaal');
-      // if(strlen($attribute_value) > 0) {
-        // $product_info[] = "{$attribute_value}";
-      // }
-    // }
-    
-    // $code = "uitvoering";
-    // $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-    // if(is_array($attribute_value) === true) {
-      // $attribute_value = implode(", ", $attribute_value);
-    // }
-    // if(strlen($attribute_value) > 0) {
-      // $product_info[] = "Uitvoering: {$attribute_value}";
-    // }
-    
-    return $product_info;
+    return [];
   }
   
   // Sync with list.phtml
+  // NOTICE: Add used attributes to getProductAttributes()
   public function getProductUsps($_product, $options = []) {
     
     $parent_categories_ids = $options["parent_categories_ids"] ?? [];
@@ -653,7 +610,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     unset($power_usp_done);
     
     /* M3/hour capacity */
-    $attribute_value = $_product->getAantalM3Uur();
+    $attribute_value = $_product->getData("aantal_m3_uur");
     if(strlen($attribute_value) > 0) {
       $usps[] = round($attribute_value, 2)." m3/UUR";
     }
@@ -753,7 +710,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
   }
   
   public function getStockInfo($product, $context = null) {
-    $stock_data = [];
+    $stock_data             = [];
         
     /* Availability, Stock */
     $stockitem              = $product->getStockItem();
@@ -806,7 +763,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
 
     /* Delivery time text */
     
-    $txtstockdate = null;
+    $txtstockdate = $interval = null;
     $real_txtstockdate = $product->getData("txtstockdate");
     if(empty($real_txtstockdate) === false
     // && ($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder" || $manage_stock === false)
@@ -816,7 +773,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
         $now        = new DateTime("now");
         $interval   = $now->diff($datetime1)->format("%a");
         
-        if($datetime1 > $now && $interval < 90) {        
+        // Only show future date if within 4 months
+        if($datetime1 > $now && $interval <= (365/3)) {
           $txtstockdate = date("d-m-Y", strtotime($real_txtstockdate));
         }
       }
@@ -872,6 +830,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
       // Date calculation is disabled      
       // If enabled some day, levertijd_tmp_override should be added here as well
       
+      // @todo add support for "1 werkdag"
       // if($levertijd === '2-3 weken') {
         // $nmwek_min = 10;
         // $nmwek_max = 15;
@@ -953,6 +912,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract
     $stock_data["extra_delivery_time"]    = $extra_delivery_time;
     $stock_data["overall_stock_status"]   = $overall_stock_status;
     $stock_data["txtstockdate"]           = $txtstockdate;
+    $stock_data["stock_date_days_left"]   = $interval;
     $stock_data["real_txtstockdate"]      = $real_txtstockdate;
     // $stock_data["calwekdate_min"]         = $calwekdate_min;
     // $stock_data["calwekdate_max"]         = $calwekdate_max;

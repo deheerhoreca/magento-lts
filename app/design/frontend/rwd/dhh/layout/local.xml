@@ -53,8 +53,14 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
     </reference>
   </default>
   
+  <catalog_category_view>
+    <reference name="head">
+      <action method="addItem"><type>skin_css</type><name>css/catalog_category_view.css</name></action>
+    </reference>
+  </catalog_category_view>
+  
   <catalog_product_view>
-    <reference name="head"> 
+    <reference name="head">
       <action method="removeItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar.js</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
@@ -68,7 +74,8 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
   
   <catalog_product_view translate="label">
     <reference name="head">
-        <action method="removeItem"><type>skin_js</type><name>js/lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js</name></action>
+      <action method="removeItem"><type>skin_js</type><name>js/lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js</name></action>
+      <action method="addItem"><type>skin_css</type><name>css/catalog_product_view.css</name></action>
     </reference>
   </catalog_product_view>
   

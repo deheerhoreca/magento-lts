@@ -6,26 +6,22 @@
 // After editing, refresh Blocks Cache (and FPC)
 
 $html                     = '';
-
 $children                 = $menuTree->getChildren();
 $parentLevel              = $menuTree->getLevel();
 $childLevel               = is_null($parentLevel) ? 0 : $parentLevel + 1;
-
 $counter                  = 1;
 $topLeveChildrenCount     = (int) $children->count();
-
 $parentPositionClass      = $menuTree->getPositionClass();
 $itemPositionClassPrefix  = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
-
-$base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+$base_url                 = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 
 foreach($children as $child) {
   
   if($childLevel > 2) return;
   
   $child->setLevel($childLevel);
-  $child->setIsFirst($counter === 1);
-  $child->setIsLast($counter === $topLeveChildrenCount);
+  // $child->setIsFirst($counter === 1);
+  // $child->setIsLast($counter === $topLeveChildrenCount);
   $child->setPositionClass($itemPositionClassPrefix . $counter);
   
   $url = str_replace($base_url, "/", $child->getUrl());

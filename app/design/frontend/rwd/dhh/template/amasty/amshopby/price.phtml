@@ -40,13 +40,14 @@ if (count($this->getItems()) == 1){
         $show = false;
     }
 }
+// DHH CORE HACK FORCING NOFOLLOW
 ?>
 <?php if (Amasty_Shopby_Model_Catalog_Layer_Filter_Price::DT_DEFAULT == $this->getDisplayType() && $show): ?>
     <?php foreach ($this->getItems() as $_item):?>
         <?php $dataConfig = $_item->getUrlAttributeOptionConfigAsJson(); ?>
         <li>
             <?php if ($_item->getCount() > 0): ?>
-                <a class="<?php echo $prefix?> amshopby-attr" href="<?php echo $this->urlEscape($_item->getUrl()) ?>" data-config='<?php echo $dataConfig ?> ' <?php if ($this->getSeoRel()) echo ' rel="nofollow"' ?>>
+                <a rel="nofollow" class="<?php echo $prefix?> amshopby-attr" href="<?php echo $this->urlEscape($_item->getUrl()) ?>" data-config='<?php echo $dataConfig ?> ' <?php if ($this->getSeoRel()) echo ' rel="nofollow"' ?>>
                     <?php echo $_item->getLabel() ?><?php if (!$hideCounts):?>&nbsp;<span class="count">(<?php echo $_item->getCount() ?>)</span><?php endif;?>
                 </a>
             <?php endif; ?>

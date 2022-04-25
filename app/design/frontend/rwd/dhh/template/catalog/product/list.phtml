@@ -6,7 +6,8 @@
  */
 /* @var $this Mage_Catalog_Block_Product_List */
 
-$_productCollection           = $this->getLoadedProductCollection();
+Varien_Profiler::start('DHH_PrepareProductList');
+
 $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
 $catid                        = null;
@@ -15,15 +16,16 @@ $category_id                  = $carct->getId();
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
 $category_thumbs_dimensions   = 140;
-$parent_categories_ids        = [];
+// $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $have_active_filters          = (bool) empty($active_filters) === false;
 $mininum_lease_price          = 400;
 $show_black_friday            = false;
-
-// These categories are not listed as subcategory tile
-$excluded_category_ids        = [656, 864, 834];
+$media_path                   = Mage::getBaseDir("media");
+$current_page_nr              = Mage::app()->getRequest()->getParam("p");
+$on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
+$excluded_category_ids        = [656, 864, 834];              // These categories are not listed as subcategory tile
 
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
@@ -31,6 +33,11 @@ $excluded_category_ids        = [656, 864, 834];
 // Optional static block for this category
 $category_block_name          = "category-{$category_id}";
 $category_block_html          = $this->getLayout()->createBlock("cms/block")->setBlockId($category_block_name)->toHtml();
+
+Varien_Profiler::stop('DHH_PrepareProductList');
+
+Varien_Profiler::start('DHH_ReloadProductCollection');
+$_productCollection           = $this->getLoadedProductCollection();
 
 /*
  * Bugfix: Using require_stock_items there was a bug that lead
@@ -51,9 +58,9 @@ Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection
  */
 
 $currentOrder = $this->getChild("toolbar")->getCurrentOrder();
-$currentDirection = $this->getChild("toolbar")->getCurrentDirection();
 
 if($currentOrder === "position" || $currentOrder === "popularity") {
+  $currentDirection = $this->getChild("toolbar")->getCurrentDirection();
   $query = $_productCollection->getSelect()->__toString();
   if(strstr($query, "tagline") !== false) { // if somehow this field is not there
     $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
@@ -66,48 +73,32 @@ if($currentOrder === "position" || $currentOrder === "popularity") {
   }
 }
 
-$_collectionSize = $_productCollection->count();
+Varien_Profiler::stop('DHH_ReloadProductCollection');
 
 /* CATEGORY HEADER & SEO */
 
-$current_page_nr = Mage::app()->getRequest()->getParam("p");
-$on_first_page = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
-
 if($carct && ($category === "category")) {
-  $parent_categories  = $carct->getParentCategories();
-  $catid              = (int) $carct->getId();
-  $category_name      = $carct->getName();
-  $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+  $catid                = (int) $carct->getId();
+  $category_name        = $carct->getName();
+  $category_name        = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+  $category_name_lwr    = strtolower($category_name);
   
-  // Do not display description when filtering
+  // Assemble category description
   if($have_active_filters === true || $on_first_page === false) {
     $category_desc      = "";
   } else {
     $category_desc      = $carct->getDescription();
   }
-
   if(strlen($category_desc) < 5) {
     $category_desc      = "<h1>{$category_name}</h1>";
   }
-  $category_name_lwr  = strtolower($category_name);
-  
-  foreach($parent_categories as $parent) {
-    $parent_categories_ids[] = (int) $parent->getEntityId();
-  }
-  $parent_categories_ids[] = $catid;
-  
   // In case of shop-by-brand, do not show another H1
   if(defined("CTDESC_H1_SENT") === true) {
     $category_desc = str_ireplace("h1>", "h2>", $category_desc);
   }
   
-  echo "<div class='ctdesc std' id='ctdesc'>";
   if(empty($category_desc) === false) {
-    
-    /* Augment category description */
-    
-    if(strpos($category_desc, "<!--no_auto_desc-->") === false) {
-      
+    if(strpos($category_desc, "<!--no_auto_desc-->") === false) {      
       $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
       if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
         $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
@@ -136,9 +127,12 @@ if($carct && ($category === "category")) {
         }
       }
     }
+  }
+  
+  if(empty($category_desc) === false) {
     
-    /* Optionally cut off description and show a 'More' button */
-    
+    echo "<div class='ctdesc std' id='ctdesc'>";
+    // Optionally cut off description and show a 'More' button    
     if(strpos($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
@@ -159,15 +153,15 @@ if($carct && ($category === "category")) {
               jQuery('#ctdesc .full').removeClass('full');
               jQuery('#cat-btn-arrow').addClass('fa-arrow-down');
               jQuery('#cat-btn-arrow').removeClass('fa-arrow-up');
-              jQuery('#toggle-cat-text span').html('Lees meer');
+              jQuery('#toggle-cat-text span').html('Meer');
             }
           });
         });
       </script>
       <?php
     }
+    echo "</div>";
   }
-  echo "</div>";
 }
 
 /* SUBCATEGORIES */
@@ -175,34 +169,44 @@ if($carct && ($category === "category")) {
 $appliedFilters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 
 if(empty($carct) === false && $amschk !== "amshopby" && empty($appliedFilters) === true) {
-
-  $media_path       = Mage::getBaseDir("media");
-  $subcategories    = Mage::getModel("catalog/category")->getCategories($carct->getId(), 0, true);
   
-  if(sizeof($subcategories) > 0) {
+  // Slow
+  $subcategories = Mage::getModel("catalog/category")->getCategories($carct->getId(), 0, true);
+  
+  $subcategories = $carct->getCollection()
+    ->addIdFilter($carct->getChildren())
+    ->addAttributeToFilter("is_active", 1)
+    ->addAttributeToSelect("url_key")
+    ->addAttributeToSelect("name")
+    ->addAttributeToSelect("all_children")
+    ->addAttributeToSelect("is_anchor")
+    ->setOrder("position", Varien_Db_Select::SQL_ASC)
+    ->joinUrlRewrite();
+  $subcategories->addAttributeToSelect("image");
+  
+  if($subcategories->getFirstItem()) {
     
-    ?>
-    <h3>Populaire Categorieën:</h3>
-    <ul class="grid-shadow-tiles-text">
-    <?php
+    echo "<ul class='grid-shadow-tiles-text'>";
     
     // Logic copied to amasty/amshopby/subcategories.phtml
     $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
     
-    foreach($subcategories as $category) {
-      if(in_array($category->getId(), $excluded_category_ids) !== false) {
+    foreach($subcategories as $subcategory) {
+      if(in_array($subcategory->getId(), $excluded_category_ids) !== false) {
         continue;
       }
-      $haschild         = true;
-      $category         = Mage::getModel("catalog/category")->load($category->getId());
-      $category_name    = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category->getName());
-      $image            = $category->getImage();
-      $img_path         = "{$media_path}/catalog/category/{$image}";
-      $resized_img_name = $category_thumbs_dimensions."_{$category->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
-      $resized_img_path = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
-      $resized_img_url  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
+      $haschild           = true;
+      // Slow: $subcategory         = Mage::getModel("catalog/category")->load($subcategory->getId());
+      $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
+      $category_name_safe = htmlspecialchars($category_name);
+      $image              = $subcategory->getImage();
+      $category_url       = $subcategory->getUrl();
+      $img_path           = "{$media_path}/catalog/category/{$image}";
+      $resized_img_name   = $category_thumbs_dimensions."_{$subcategory->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
+      $resized_img_path   = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
+      $resized_img_url    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
       
-      if(empty($image) === false && is_file($resized_img_path) !== true && is_file($img_path) === true) {
+      if(is_file($resized_img_path) === false && is_file($img_path) === true) {
         $imageObj = new Varien_Image($img_path);
         $imageObj->constrainOnly(true);
         $imageObj->keepAspectRatio(true);
@@ -211,19 +215,12 @@ if(empty($carct) === false && $amschk !== "amshopby" && empty($appliedFilters) =
         $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
         $imageObj->save($resized_img_path);
       }
-      ?>
-      <li style='max-width: 180px;'>
-        <a href="<?php echo $category->getUrl() ?>" title='<?php echo $category_name; ?>'>
-          <?php
-          if(empty($image) === false) {
-            echo "<img class='lazy trans-opacity' data-src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' 
-            height='{$category_thumbs_dimensions}' width='{$category_thumbs_dimensions}'>";
-          }
-          ?>
-          <strong><?php echo $category_name; ?></strong>
-        </a>
-      </li>
-      <?php
+      echo "<li style='max-width: 180px;'><a href='{$category_url}' title='{$category_name_safe}'>";
+      if(empty($image) === false) {
+        echo "<img class='lazy trans-opacity' data-src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' 
+        height='{$category_thumbs_dimensions}' width='{$category_thumbs_dimensions}'>";
+      }
+      echo "<strong>{$category_name}</strong></a></li>";
     }
     echo "</ul>";
     if($haschild === true) {
@@ -242,7 +239,7 @@ $_columnCount   = 4;
 $displaySize    = 200;
 $_imgSize       = 1 * $displaySize;
     
-if($_collectionSize > 0) {
+if($_productCollection->getFirstItem()) {
 ?>
   <div class="category-products">
     <?php
@@ -680,21 +677,6 @@ if($_collectionSize > 0) {
           </div>
           <?php
           echo $price_html;
-          // // Lease tag
-          // if(_dhh_debug() && $_product->getData("allowed_to_quotemode") == 1 && $hideQuoteButton === false && $_product->getStockItem()->getIsInStock()) {
-            // $_finalPrice = $_product->getFinalPrice();
-            // if(isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
-              // $lease_rates = Mage::helper("deheerhoreca_util/util")->getLeaseRates($_finalPrice, "daily");
-              // if(empty($lease_rates) === false) {
-                // $min_lease_rate = min($lease_rates);
-                // $min_lease_rate_formatted = number_format($min_lease_rate, 2, ",", ".");
-                // echo "<span class='small float-right' style='line-height: 2em;'><i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Lease vanaf {$min_lease_rate_formatted} p/d</em></span>";
-              // }
-            // }
-          // }
-          // if(0 && $_product->getRatingSummary()) {
-            // echo $this->getReviewsSummaryHtml($_product, 'short');
-          // }
           ?>
           <div class="actions">
             <?php
@@ -732,7 +714,7 @@ if($_collectionSize > 0) {
       </li>
 
       <?php
-      if(($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0) AND $_collectionSize > $i) { ?>
+      if(($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0)) { ?>
         </ul>
           <div class="new-tab-contant-text mobile-hide">
             <div class="col-md-3 new-contant">

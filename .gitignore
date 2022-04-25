@@ -94,3 +94,6 @@ index.php.sample
 # Biller webhook
 biller-webhook-errors.jsonl
 biller-webhook.jsonl
+
+nohup.out
+nohup*.out

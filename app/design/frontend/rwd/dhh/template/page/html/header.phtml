@@ -2,40 +2,25 @@
 /**
  * @var Mage_Page_Block_Html_Header $this
  */
-//echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top')->toHtml();
+//echo $this->getLayout()->createBlock("cms/block")->setBlockId("header_top")->toHtml();
 
-if(Mage::getSingleton('customer/session')->isLoggedIn()) {
-  $account_url = $this->helper('customer')->getAccountUrl();
+if(Mage::getSingleton("customer/session")->isLoggedIn()) {
+  $account_url = $this->helper("customer")->getAccountUrl();
 } else {
-  $account_url = Mage::getUrl('customer/account/login');
+  $account_url = Mage::getUrl("customer/account/login");
 }
 ?>
-<header id="header" class="asdf page-header header grid-inside scrlng">
+<header id="header" class="page-header header grid-inside scrlng">
   <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
       <div class="skip-links headerrightcontents">
-        <div>
-          <a class="main-logo" href="<?php echo $this->getUrl('') ?>">
-            <img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" height="40" width="208">
-          </a>
-        </div>
-        <div id="header-search" class="skip-content">
-          <?php echo $this->getChildHtml('topSearch') ?>
-        </div>
+        <a class="main-logo" href="/"><img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" height="40" width="208"></a>
+        <div id="header-search" ><?php echo $this->getChildHtml("topSearch") ?></div>
         <div class="account-cart-wrapper">
-          
-          <span id="header-kiyoh" class="white" style="display:inline;width:125px;">_</span>
-          
-          <span>
-            <a data-fancybox data-touch="false" href="#modal" class="btn btn-primary toplink-phone skip-phone top-link"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a>
-          </span>
-          <span>
-            <a href="<?php echo Mage::getUrl('customer/account'); ?>" class="skip-account top-link" title="Account">
-              <i class="fa fa-user-circle fa-2x fa-fw"></i>
-            </a>
-          </span>
-          <span><?php echo $this->getChildHtml('miniquote_head'); ?></span>
-          <span><?php echo $this->getChildHtml('minicart_head'); ?></span>
+          <span class="ms-2"><a data-fancybox data-type="iframe" href="/media/static/contact.php" class="fancybox btn btn-primary toplink-phone skip-phone top-link"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
+          <span class="ms-2"><a href="<?php echo Mage::getUrl("customer/account"); ?>" class="skip-account top-link" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
+          <span class="ms-2"><?php echo $this->getChildHtml("miniquote_head"); ?></span>
+          <span class="ms-2"><?php echo $this->getChildHtml("minicart_head"); ?></span>
         </div>
       </div>
     </div>
@@ -66,17 +51,19 @@ if(Mage::getSingleton('customer/session')->isLoggedIn()) {
     case "qquoteadv_index_index":
     default:
       // $top_messages["left"]   = "<a href='/shop?manufacturer=2753'>Nieuw in het assortiment: <strong>Gamko</strong></a>";
-      $top_messages["left"]   = "Achteraf betalen met <a href='/qquoteadv/index/'><strong>Biller</strong></a>, <strong>AfterPay</strong>, <strong>In3</strong></a>";
-      $top_messages["center"] = "<a href='/promoties.html'>Maart <strong>Aanbiedingen</strong></a>";
+      // $top_messages["left"]   = "Achteraf betalen met <a href='/qquoteadv/index/'><strong>Biller</strong></a>, <strong>AfterPay</strong>, <strong>In3</strong></a>";
+      $top_messages["left"]   = "5% korting op Gastro-Inox met code <strong>GASTROINOX5</strong>";
+      $top_messages["center"] = "<a href='/promoties.html'>April <strong>Aanbiedingen</strong></a>";
       $top_messages["right"]  = "<a href='/qquoteadv/index/'>Maak een <strong>offerte</strong> voor lease of koop</a>";
       break;
   }
   ?>
   <div class="clzinfopagetop">
     <div class="pageinfotpinner">
-      <span style="width:33%;" class="mobile-hide align-left float-left"><?php echo $top_messages["left"]; ?></span>
-      <span style="width:33%;" class="align-center"><?php echo $top_messages["center"]; ?></span>
-      <span style="width:33%;" class="mobile-hide align-right float-right"><?php echo $top_messages["right"]; ?></span></div>
+      <span class="d-none d-xl-block align-left float-left"><?php echo $top_messages["left"]; ?></span>
+      <span class="align-center"><?php echo $top_messages["center"]; ?></span>
+      <span style="width:33%;" class="d-none d-xl-block align-right float-right"><?php echo $top_messages["right"]; ?></span>
+    </div>
   </div>
   <?php
   

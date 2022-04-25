@@ -25,9 +25,13 @@ if($helper->isProductShortEnabled()) {
   $productDescription = htmlentities(strip_tags($product->getDescription()));
 }
 
+// Fallback for when there is no description
 if(strlen($productDescription) < 10) {
   $productDescription = htmlentities($product->getName());
 }
+
+// Remove newlines, trim, limit to 200 chars
+$productDescription = substr(trim(preg_replace('/\s\s+/', ';', $productDescription)), 0, 200);
 
 $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
 

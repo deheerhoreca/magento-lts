@@ -26,13 +26,14 @@ switch ($this->getDisplayType()){
     }
     foreach ($this->getItemsAsArray() as $item) {
       if(strtolower($item['label']) !== "n.v.t.") {
+        // DHH CORE HACK: FORCE NOFOLLOW
         echo
           '<li'.
           (isset($item['style']) ? ' '.$item['style'] : '') .
           (isset($item['default_sort']) ? ' data-default_sort="' . $item['default_sort'] . '"': '') .
           (isset($item['featured_sort']) ? ' data-featured_sort="' . $item['featured_sort'] . '"': '') .
           ' data-text="' . htmlspecialchars($item['label']) . '"> ' .
-          '<a class="'.$item['css'].'"' . $item['rel'] . ' href="'.$item['url'].'" data-config=\''.$item['data-config'].'\' title="'. $item['label'] .'">'. $item['label'] . $item['count'] . '</a></li>';
+          '<a class="'.$item['css'].'"' . $item['rel'] . ' href="'.$item['url'].'" data-config=\''.$item['data-config'].'\' title="'. $item['label'] .'" rel="nofollow">'. $item['label'] . $item['count'] . '</a></li>'.PHP_EOL;
       }
     }
   break;

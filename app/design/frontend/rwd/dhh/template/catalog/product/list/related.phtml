@@ -5,10 +5,10 @@ $_columnCount = 5;
 $i            = 0;
 $max_items    = $_columnCount;
 
-if($collection->getSize() > 0 ) {
+if($collection->count()) {
   Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
   ?>
-  <div id="autorelated-products" class="product-collateral category-products">
+  <div id="related-products" class="product-collateral category-products">
     <?php
     echo "<h2 class='tableftheader'>Gerelateerde Producten</h2>";
     echo "<ul class='products-grid products-grid-mini'>";

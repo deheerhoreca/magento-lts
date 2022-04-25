@@ -358,7 +358,7 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
 # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
 <filesMatch ".(jpg|jpeg|png|gif|ico|svg|webp|css|js|webp)$">
   Header unset Etag
-  Header set Cache-Control "max-age=60, public"
+  Header set Cache-Control "max-age=300, public"
 </filesMatch>
 <FilesMatch "\.(html|htm)$">
   Header unset Etag
@@ -366,6 +366,7 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
 </FilesMatch>
 
 # Insert preconnect/dns fetch headers here, where they are supported the most
+# This is on top of the preload headers by mod_pagespeed
 <FilesMatch "(?<!\.css|\.js|\.jpg|\.jpeg|\.png|\.gif|\.ico|\.svg|\.webp)$">
   Header add Link "<https://v2.zopim.com>;rel=preconnect"
   Header add Link "<https://ajax.cloudflare.com>;rel=preconnect; crossorigin"

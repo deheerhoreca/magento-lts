@@ -9,12 +9,13 @@ $qty = $this->getSummaryCount() ?? 0;
 <!-- header_minicart_start -->
 <a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-cart top-link <?php if($qty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">
   <i class="fa fa-shopping-cart fa-2x fa-fw"></i>
-  <?php if($qty > 0) { ?>
-    <div class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></div>
+  <?php if($qty > 0) {
+    /* This used to be a div (not allowed in HTML validator) */ ?>
+    <span class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></span>
   <?php } ?>
 </a>
-<div class="header-minicart">
-  <div id="header-cart" class="block-cart skip-content">
+<span class="header-minicart"><? /* This used to be a div (not allowed in HTML validator) */ ?>
+  <span id="header-cart" class="block-cart skip-content"><? /* This used to be a div (not allowed in HTML validator) */ ?>
     <!-- header_sidebar_start -->
     <?php
     // Disabled for performance
@@ -22,6 +23,6 @@ $qty = $this->getSummaryCount() ?? 0;
     // echo Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
     ?>
     <!-- header_sidebar_end -->
-  </div>
-</div>
+  </span><? /* This used to be a div (not allowed in HTML validator) */ ?>
+</span><? /* This used to be a div (not allowed in HTML validator) */ ?>
 <!-- header_minicart_end -->

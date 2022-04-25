@@ -25,11 +25,11 @@ $queries[] = "DELETE FROM index_event WHERE created_at < NOW() - INTERVAL 365 DA
 
 $queries[] = "OPTIMIZE TABLE `index_event`";
 
-require_once __DIR__.'/../app/Mage.php';
-Mage::app('default');
+require_once __DIR__."/../app/Mage.php";
+Mage::app("default");
 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
-$write_db = Mage::getSingleton('core/resource')->getConnection('core_write');
+$write_db = Mage::getSingleton("core/resource")->getConnection("core_write");
 
 foreach($queries as $query) {
   echo $query.PHP_EOL;

@@ -70,8 +70,8 @@ if($_product->getData("allowed_to_quotemode") == 1 && $hideQuoteButton === false
     </button>
     <?php
     if(sizeof($lease_rates) > 1) {
-      echo "<a id='hide1' href='#hide1' class='hide'><h4 class='center black'>+ Details Leasetarieven&nbsp;</h4></a>";
-      echo "<a id='show1' href='#show1' class='show'><h4 class='center black'>-&nbsp; Details Leasetarieven:</h4></a>";
+      echo "<a id='hide1' href='#hide1' class='hide'><span class='h4 center black'>+ Details Leasetarieven:</span></a>";
+      echo "<a id='show1' href='#show1' class='show'><span class='center black'>-&nbsp; Details Leasetarieven:</span></a>";
       echo "<div class=details>";
       echo "<table class='text-center table table-bordered'><thead><tr><th scope=row class='py-1'>Maanden:</th>";
       foreach($lease_rates as $months => $rate) {

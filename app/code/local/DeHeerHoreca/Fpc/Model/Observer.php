@@ -1,18 +1,25 @@
 <?php
 
-if($_SERVER['REQUEST_METHOD'] === 'GET') {
-  define('DHH_FPC_DEBUG', false);
+// Cannot use _dhh_debug() due to the ?nofpc requirement
+if($_SERVER["REQUEST_METHOD"] === "GET"
+&& isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], ["185.127.111.252", "87.210.61.235"])
+) {
+  define("DHH_FPC_DEBUG", false); // Set to true to enable logging
 } else {
-  define('DHH_FPC_DEBUG', false);
+  define("DHH_FPC_DEBUG", false); // Should always be false
 }
 
-if(substr($_SERVER['HTTP_HOST'], 0, 3) === "dev") {
+if(substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
   define("DHH_FPC_ENABLED", false);
 } else {
   define("DHH_FPC_ENABLED", true);
 }
 
-const FPC_LOG = "./var/log/fpc.json";
+if(DHH_FPC_DEBUG === true) {
+  $verb = $_SERVER["REQUEST_METHOD"] ?? null;
+  DeHeerHoreca_Fpc_Helper_Data::log("---------------------------------------------------------------------");
+  DeHeerHoreca_Fpc_Helper_Data::log("{$verb} ".Mage::helper("core/url")->getCurrentUrl());
+}
 
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
@@ -34,7 +41,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         flush();
         Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "HIT");
         // To allow for closing actions (AoE Profiler is one)
-        Mage::dispatchEvent('controller_front_send_response_after');
+        Mage::dispatchEvent("controller_front_send_response_after");
         exit;
       }
     }
@@ -49,20 +56,17 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     /* catalog_product_view */
     $patterns[] = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
-    // $result  = shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
     
     /* catalog_category_view */
     $category_ids = $product->getCategoryIds();
     if(empty($category_ids) === false && is_array($category_ids) === true) {
       foreach($category_ids as $category_id) {
         $patterns[] = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-        // $result  = shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
       }
     }
     
-    $result = clean_fpc($patterns, true);
-    
-    Mage::getSingleton('core/session')->addSuccess("FPC patterns cleared: ".print_r($result, true));
+    $result = clean_fpc_pattern($patterns, false);    
+    // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
     
     return true;
   }
@@ -76,29 +80,40 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     
     $pattern = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-    $result  = clean_fpc($pattern, true);
-    // $result  = shell_exec("redis-cli --scan --pattern {$pattern} | xargs -I% redis-cli unlink \"%\"");
-    
-    Mage::getSingleton('core/session')->addSuccess("FPC patterns cleared: ".print_r($result, true));
+    $result  = clean_fpc_pattern($pattern, false);
+    // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
     
     return true;
   }
-  
 }
 
-// @todo add option to unlink or delete
-// @todo add higher level options
-// Sync with intel's version
+function clean_fpc_pattern_result_to_string($result) {
+  $outputs = [];
+  $result = (array) $result;
+  foreach($result as $pattern => $return) {
+    $outputs[] = "{$pattern}: {$return}";
+  }
+  
+  return implode(", ", $outputs);
+}
+
+// @deprecated function name
 function clean_fpc($patterns, $nowait = false) {
+  return clean_fpc_pattern($patterns, $nowait);
+}
+
+// Sync:
+// deheerhoreca-magento/app/code/local/DeHeerHoreca/Fpc/Model/Observer.php
+// deheerhoreca-intel/lib/intel.inc.php
+function clean_fpc_pattern($patterns, $nowait = false) {
   $patterns = (array) $patterns;
-  $patterns = array_unique($patterns);
   $result = [];
   foreach($patterns as $pattern) {
     
-    // if(strlen($pattern) < 5) {
+    if(strlen($pattern) < 5) {
       // logger("Refusing to clear FPC cache pattern with less than 5 characters: {$pattern}", "ERROR");
-      // continue;
-    // }
+      continue;
+    }
     
     // logger("Cleaning FPC pattern: {$pattern}", "VERBOSE");
     
@@ -112,14 +127,15 @@ function clean_fpc($patterns, $nowait = false) {
     // Optionally dont wait for output:
     if($nowait === true) {
       $cmd .= " > /dev/null 2>&1 &";
-      usleep(50 * 1000); // In batch, we might loose connection to Redis if we add too many connections, so wait 50ms
+      msleep(100); // In batch, we might loose connection to Redis if we add too many connections, so wait a bit
+      if(exec($cmd) !== false) {
+        $result[$pattern] = "OK";
+      } else {
+        $result[$pattern] = "NOK";
+      }
+    } else {
+      $result[$pattern] = shell_exec($cmd);
     }
-    
-    // if(VERY_VERBOSE) {
-      // printr($cmd);
-    // }
-    
-    $result[$pattern]  = shell_exec($cmd);
     
     // if(DRYRUN === false) {
       // [$return, $output, $result_code] = safe_exec_full_output($cmd);
@@ -134,5 +150,13 @@ function clean_fpc($patterns, $nowait = false) {
     // }
   }
   
+  if(sizeof($result) === 1) {
+    $result = array_pop($result);
+  }
+  
   return $result;
+}
+
+function msleep(int $time): void {
+  usleep($time * 1000);
 }

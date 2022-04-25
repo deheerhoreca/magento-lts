@@ -18,19 +18,17 @@ $mininum_lease_price          = 400;
 $show_ups_block               = false;
 $show_black_friday            = false;
 $show_actions                 = false;
-
-// some helpers
 $_helper                      = $this->helper("catalog/output");
 $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
-
 $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
+$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview");
 
 // get all products that are marked as featured
 $_productCollection = Mage::getModel("catalog/product")
   ->getCollection()
-  ->addAttributeToSelect("*")
+  ->addAttributeToSelect($attributes)
   ->addFieldToFilter([["attribute" => "featured", "eq" => true]])
   ->addOrder("popularity", "ASC")
   ->addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)

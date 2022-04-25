@@ -38,10 +38,12 @@ $data = [
 $event_type = $data["payload"]["event_type"] ?? "unknown_event";
 $order_id   = $data["payload"]["payload"]["order_id"] ?? "unknown_order_id";
 $subject    = "Biller webhook event: {$event_type} [{$order_id}]";
-$body       = "{$subject}\n\n".print_r($data, true);
-$from_email = "klaas@chefstore.nl";
+$from_email = "noreply@chefstore.nl";
 $from_name  = "De Heer Horeca Intel";
-$to_email   = "loek@deheerhoreca.nl";
+$to_email   = "sales@deheerhoreca.nl";
+$body       = $subject;
+$body      .= "\n\nEr is een order geupdate in Biller: https://seller.biller.ai/#/orders/{$order_id}/show";
+$body      .= "\n\n".print_r($data, true);
 
 $mail = new Zend_Mail();
 $mail->setFrom($from_email, $from_name);

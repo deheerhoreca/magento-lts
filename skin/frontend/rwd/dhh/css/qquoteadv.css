@@ -115,7 +115,7 @@ ol.c2q li.section {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url('../images/qquoteadv/qquoteadv-select-background.png') #fff right 10px center no-repeat;
+  background: url('../../../base/default/images/qquoteadv/qquoteadv-select-background.png') #fff right 10px center no-repeat;
   background-size: 9px 5px;
   border-radius: 2px;
   padding: 0 8px;
@@ -765,7 +765,7 @@ a.link {
 }
 
 .quantity-container .btn-qty, .add-row-tier .btn-qty {
-  background-image: url("../images/qquoteadv/close-button.png");
+  background-image: url("../../../base/default/images/qquoteadv/close-button.png");
   background-position: 0;
   background-size: 14px 14px;
   display: inline-block;
@@ -1476,7 +1476,7 @@ a.link {
 #lightbox2 .messages .success-msg li:before {
   content: '';
   position: absolute;
-  background-image: url("../images/qquoteadv/okSign.png");
+  background-image: url("../../../base/default/images/qquoteadv/okSign.png");
   background-size: 100%;
   border: none;
   width: 20px;
@@ -1494,7 +1494,7 @@ a.link {
 #lightbox2 .messages .error-msg li:before {
   content: '';
   position: absolute;
-  background-image: url("../images/qquoteadv/errorSign.png");
+  background-image: url("../../../base/default/images/qquoteadv/errorSign.png");
   background-size: 100%;
   border: none;
   width: 20px;
@@ -1739,7 +1739,7 @@ a.link {
 }
 
 #filesOnQuoteView .address-details a {
-  background-image: url("../images/qquoteadv/attachment_icon.png");
+  background-image: url("../../../base/default/images/qquoteadv/attachment_icon.png");
   background-repeat: no-repeat;
   padding-left: 20px;
 }

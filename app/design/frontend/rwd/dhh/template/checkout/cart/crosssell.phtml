@@ -6,12 +6,13 @@
  */
 
 $_columnCount = 5;
-$i = 0;
+$i            = 0;
+$store        = Mage::app()->getStore();
 
 if($this->getItemCount()) { ?>
 <div class="crosssell product-collateral category-products">
   <?php
-  echo "<span class=h3>".$this->__('Based on your selection, you may be interested in the following items:')."</span><hr>";
+  echo "<span class=h3>".$this->__("Based on your selection, you may be interested in the following items:")."</span><hr>";
   echo "<ul class='products-grid products-grid-mini'>";
   foreach ($this->getItems() as $_product) {
     $i++;
@@ -32,40 +33,47 @@ if($this->getItemCount()) { ?>
 </ul></div>
 <?php }
 
-/* Bargains */
+// Bargains
 
 $i = 0;
 
 $supplier_ids = getCartSupplierIDs();
 $product_ids  = getCartProductIDs();
+$attributes   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview");
 
-$collection = Mage::getModel('catalog/product')
-  ->getCollection()
-  ->addAttributeToSelect('*')
-  ->addFieldToFilter([['attribute' => 'bargain', 'eq' => '1']])
-  ->addAttributeToFilter('supplier', ['in' => $supplier_ids])
-  ->addAttributeToFilter('entity_id', ['nin' => $product_ids])
-  ->addAttributeToFilter('status', ['eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
-  ->addOrder('name', 'ASC')
-  ->setPageSize(10)
+// NOTICE: Flat table feature seems to be disabled in the cart altogether
+
+$collection   = Mage::getResourceModel("catalog/product_collection")
+  ->addAttributeToSelect($attributes)
+  // ->addFieldToFilter([["attribute" => "bargain", "eq" => "1"]])    // testing without bargain
+  ->addAttributeToFilter("supplier", ["in" => $supplier_ids])
+  ->addAttributeToFilter("entity_id", ["nin" => $product_ids])
+  ->addAttributeToFilter("eol", ["nin" => "2075"])
+  ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
+  ->addAttributeToFilter("price", ["from" => 10, "to" => 150])
+  ->addAttributeToFilter("small_image", ["notnull" => true])          // Do not suggest products without image
+  ->addOrder("popularity", "ASC")
+  ->setPageSize(12)
   ->setCurPage(1)
-  ->load();
+  ->setFlag("require_stock_items", true)
+  // ->setStore($store)
+  // ->addStoreFilter($store)
+  ;
 
-//echo $collection->getSelect()->__toString();
+// Only show in stock SKUs
+Mage::getSingleton("cataloginventory/stock")->addInStockFilterToCollection($collection);
 
-if($collection->getSize() > 0) { ?>
-<div class="crosssell product-collateral category-products">
-  <?php
-  echo "<span class=h2>".$this->__('Hardlopers:')."</span><hr>";
-  echo "<ul class='products-grid products-grid-mini'>";
-  foreach ($collection->getItems() as $_product) {
+if($collection->getFirstItem()) {
+  echo '<div class="crosssell product-collateral category-products">';
+  echo "<span class=h2>".$this->__("Hardlopers:")."</span><hr>";
+  echo "<ul class='products-grid products-grid-mini products-grid-mini-wide'>";
+  foreach($collection->getItems() as $_product) {
     $i++;
     ?>
     <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
       <?php
       $options = [
-        "skip_usps"     => true,
-        "skip_info"     => true,
+        "skip_usps"     => false,
         "display"       => "mini",
         "image_size"    => 125,
         "_blank"        => true,
@@ -78,23 +86,20 @@ if($collection->getSize() > 0) { ?>
 <?php }
 
 function getCartSupplierIDs() {
-  $quote = Mage::helper('checkout/cart')->getCart()->getQuote();
+  $quote = Mage::helper("checkout/cart")->getCart()->getQuote();
   $suppliers = [];
   foreach($quote->getAllItems() as $item) {
-    $suppliers[] = $item->getProduct()->getData('supplier');
-    if($_SERVER["REMOTE_ADDR"] === "5.132.21.238" && isset($_GET['nofpc'])) {
-      // printr($item->getProduct()->debug());
-    }
+    $suppliers[] = $item->getProduct()->getData("supplier");
   }
 
   return array_unique($suppliers);
 }
 
 function getCartProductIDs() {
-  $quote = Mage::helper('checkout/cart')->getCart()->getQuote();
+  $quote = Mage::helper("checkout/cart")->getCart()->getQuote();
   $array = [];
   foreach($quote->getAllItems() as $item) {
-    $array[] = $item->getProduct()->getData('entity_id');
+    $array[] = $item->getProduct()->getData("entity_id");
   }
 
   return array_unique($array);

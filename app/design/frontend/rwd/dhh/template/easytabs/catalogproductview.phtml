@@ -6,37 +6,26 @@
  * @see Mage_Review_Block_Product_View
  */
 
-$htbrand              = $brand = null;
-$_helper              = $this->helper("catalog/output");
-$_product             = $this->getProduct();
-$brand_name           = $_product->getAttributeText("manufacturer");
-$brand_id             = $_product->getData("manufacturer");
-$sku                  = $_product->getData("sku");
-$brand_logo           = null;
-$brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_link           = "/shop?manufacturer={$brand_id}";
-$_store               = $_product->getStore();
-$skn                  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
-$anchors              = [];
-$in3_minimum          = 100 / 1.21;
-$in3_maximum          = 3000 / 1.21;
-$billink_minimum      = 10;
-$billink_maximum      = 3500;
-$biller_minimum       = 10;
-$biller_maximum       = 5000;
-$_taxHelper           = $this->helper("tax");
-
-// if(empty($brand_name) === false) {
-  // $brand = sanitizeForFilename($brand_name);
-  // $htbrand = $this->getLayout()->createBlock("cms/block")->setBlockId($brand)->toHtml();
-  // $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
-  // if(is_file($brand_logo_file) === true) {
-    // $brand_logo = "/".$brand_logo_file;
-  // }
-// }
-
-// Get a list of Category IDs
-$categoryIds = $_product->getCategoryIds();
+$htbrand                = $brand = null;
+$_helper                = $this->helper("catalog/output");
+$_product               = $this->getProduct();
+$brand_name             = $_product->getAttributeText("manufacturer");
+$brand_id               = $_product->getData("manufacturer");
+$sku                    = $_product->getData("sku");
+$brand_logo             = null;
+$brand_slug             = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$brand_link             = "/shop?manufacturer={$brand_id}";
+$_store                 = $_product->getStore();
+$skn                    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
+$anchors                = [];
+$in3_minimum            = 100 / 1.21;
+$in3_maximum            = 3000 / 1.21;
+$billink_minimum        = 10;
+$billink_maximum        = 3500;
+$biller_minimum         = 10;
+$biller_maximum         = 5000;
+$_taxHelper             = $this->helper("tax");
+$categoryIds            = $_product->getCategoryIds();
 
 // Find the category this product belongs to
 if(count($categoryIds)) {
@@ -82,14 +71,20 @@ $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
 $bestelartikel          = $stock_data["bestelartikel"];
 $min_sale_qty           = $stock_data["min_sale_qty"];
 
+// Fulfilment, Financials
 $used_levertijd         = empty($levertijd_tmp_override) ? $levertijd : $levertijd_tmp_override;
-
 $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_finalPrice, true);
 
 // Add +/- symbol unless it's "op aanvraag"
-if(stristr($used_levertijd, "aanvraag") === false) {
+if(stristr($used_levertijd, "aanvraag") === false && $used_levertijd !== "1 werkdag" && empty($used_levertijd) === false) {
   $used_levertijd = "&plusmn; {$used_levertijd}";
+}
+
+if($used_levertijd === "1 werkdag") {
+  $delivery_time_tooltip = "Op werkdagen voor 15:00 besteld, de volgende werkdag bezorgd. Het is in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.";
+} else {
+  $delivery_time_tooltip = "We doen er alles aan om dit artikel op tijd te bezorgen. Het is in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.";
 }
 
 /* BUYBLOCK CONTENT */
@@ -119,7 +114,7 @@ if($bestelartikel === "Ja") {
     $delivery_text .= "Levertijd op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een pre-order plaatsen.</span>";
   }
 } elseif($overall_stock_status === "in_stock" && !empty($used_levertijd)) {
-  $delivery_text .= "{$used_levertijd}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>Levertijden variëren per product, merk en aantal. We doen er alles aan om dit artikel op tijd te bezorgen. Het is echter in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.</span></span>";
+  $delivery_text .= "{$used_levertijd}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>{$delivery_time_tooltip}</span></span>";
 }
 if(empty($delivery_text) === false) {
   $delivery_li = "<li class='my-1'><i class='fa-li fa fa-clock-o'></i>{$delivery_text}</li>";
@@ -142,9 +137,12 @@ if($qty_increments > 0) {
 $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
   <li class=my-1>
     <i class='fa-li fa fa-question'></i>
-    <a data-fancybox data-type='iframe' data-iframe='{\"preload\":false}' data-width=500 data-height=650 href='https://form.jotform.com/213136047906049?sku={$sku}&product={$productTitle}'>Stel een vraag</a>
+    <a data-fancybox data-type='iframe' data-iframe='{\"preload\":false}' data-width=500 data-height=650 href='https://form.jotform.com/213136047906049?sku=".urlencode($sku)."&product=".urlencode($productTitle)."'>Stel een vraag</a>
   </li>
-  <li class=my-1><i class='fa-li fa fa-question'></i><a data-fancybox data-touch='false' href='#modal'>Contact opnemen</a></li>
+  <li class=my-1>
+    <i class='fa-li fa fa-phone' title='Bellen'></i>
+    <a data-fancybox data-type='iframe' href='/media/static/contact.php'>Contact opnemen</a></i>
+  </li>
 </ul>";
 
 // Our USPs content
@@ -170,12 +168,12 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
   
   if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
     $text = "Betaal gratis <strong>achteraf</strong> met Biller";
-    $payment_methods_texts[] = "<a data-fancybox data-touch='false' href='#info-biller' class='no-decoration'>{$text}</a>";
+    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/biller.php'>{$text}</a>";
   }
   
   if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
     $text = "Betaal <strong>achteraf</strong> met Billink of AfterPay";
-    $payment_methods_texts[] = "<a data-fancybox data-touch='false' href='#info-billink' class='no-decoration'>{$text}</a>";
+    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/billink.php'>{$text}</a>";
   }
 
   if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {    
@@ -186,7 +184,7 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
       $payment = str_replace(",00", ",-", $payment);
       $text = "<strong>3 termijnen</strong> van €{$payment} zonder rente met In3";
     }
-    $payment_methods_texts[] = "<a data-fancybox data-touch='false' href='#info-in3' class='no-decoration'>{$text}</a>";
+    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/in3.php'>{$text}</a>";
   }
   
   if(empty($payment_methods_texts) === false) {
@@ -213,19 +211,24 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["Bartscher", "Diamond", "Gastro-Inox", "Gastronoble", "CombiSteel", "EMGA", "Hendi"]; // case-sensitive
+$suppliers_external_docs_preferred = ["Bartscher", "Diamond", "Domest", "Gastro-Inox", "Gastronoble", "EMGA", "Hendi", "Scancool"]; // case-sensitive
+$suppliers_external_docs_blocked = ["CombiSteel"]; // case-sensitive
 
-// @todo something strange is going on -- external_documents_json is not part of the product after loading
-$external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
+if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
+  // @todo something strange is going on -- external_documents_json is not part of the product after loading
+  $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-if(empty($external_documents_json) === true || in_array($supplier_name, $suppliers_external_docs_preferred) === false) {
-  $files = Mage::getModel("staempfli_productattachment/file")
-    ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
-    ->getData();
-  
-  if(empty($files) === false) {
-    $external_documents_json = "";
+  if(empty($external_documents_json) === true || in_array($supplier_name, $suppliers_external_docs_preferred) === false) {
+    $files = Mage::getModel("staempfli_productattachment/file")
+      ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
+      ->getData();
+    
+    if(empty($files) === false) {
+      $external_documents_json = "";
+    }
   }
+} else {
+  $external_documents_json = "";
 }
 
 // Energy Label -- only certain values are shown as a product label
@@ -677,9 +680,9 @@ if($attribute_valuekoelmiddel === "R290") {
   $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
 }
 
-if(empty($_crossSellProducts) === false) {
-  $product_description .= "<p class='py-2'>De {$product_title_short} heeft één of meer door de leverancier <a href='#accessoires'>geselecteerde accessoires en/of verbruiksproducten.</a></p>";
-}
+// if(empty($_crossSellProducts) === false) {
+  // $product_description .= "<p class='py-2'>De {$product_title_short} heeft één of meer door de leverancier <a href='#accessoires'>geselecteerde accessoires en/of verbruiksproducten.</a></p>";
+// }
 
 if(strlen($product_description) === 0) {
   $product_description = "&nbsp;";
@@ -707,12 +710,23 @@ if(empty($files) === false)                         $anchors["documents"]       
 if(empty($external_documents_json) === false)       $anchors["external-documents"]  = "Externe Documentatie";
 if(empty($upsell_products_block) === false)         $anchors["upsells"]             = "Bekijk Ook";
 if(empty($related_products_block) === false)        $anchors["related"]             = "Gerelateerde Producten";
+
+/** CALCULATED/DERIVED FIELDS **/
+
+// If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
+if($stock_data["overall_stock_status"] === "backorder"
+&& empty($stock_data["stock_date_days_left"]) === false
+&& $stock_data["stock_date_days_left"] >= 7
+&& empty($shoutout) === true) {
+  $shoutout = "Alternatieven beschikbaar";
+}
+
+/** START RENDERING **/
+
 ?>
 <script>var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
-
-  <!-- <div class="hide-until-m" style="padding-top: 10px;"></div> -->
   
   <?php /* PRODUCT IMAGES */ ?>
   
@@ -727,7 +741,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
   </div>
   
     <div class="product-img-box">
-      <a class="anchor" id="photos"></a>
+      <span class="anchor" id="photos"></span>
       <?php
         // Product label
         if(empty($shoutout) === false) {
@@ -765,7 +779,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
           <?php echo $this->getBlockHtml('formkey') ?>
           <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
           <input type="hidden" name="related_product" id="related-products-field" value="" />
-          <div class="prodetailtopright clztype<?php echo $_product->getTypeId();?>">
+          <div class="prodetailtopright">
             
             <?php
             echo $this->getChildHtml("alert_urls");
@@ -927,7 +941,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
     if(empty($hlstr) === false) {
       ?>
       <div class="my-3 py-1 pt-1 product-highlight-box">
-        <a class="anchor" id="highlights"></a>
+        <span class="anchor" id="highlights"></span>
         <div class="content center">
           <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
         </div>
@@ -948,9 +962,9 @@ if(empty($related_products_block) === false)        $anchors["related"]         
       }
       ?>
       <div class="py-1">
-        <a class="anchor" id="video"></a>
+        <span class="anchor" id="video"></span>
         <div class="content center">
-          <iframe class="lazy" width="534" height="300" data-src="<?php echo $pvideo; ?>" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style='border:0;max-width:100%;' frameborder="0"></iframe>
+          <iframe class="lazy" width="534" height="300" data-src="<?php echo $pvideo; ?>" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style='border:0;max-width:100%;'></iframe>
         </div>
       </div>
       <?php
@@ -960,19 +974,17 @@ if(empty($related_products_block) === false)        $anchors["related"]         
     if(strlen($product_description) > 10) {
       ?>
       <div class="py-1 std justify" id="product-detail-description">
-        <a class="anchor" id="description"></a>
+        <span class="anchor" id="description"></span>
         <?php echo $product_description; ?>
       </div>
       <?php
     }
-    ?>
 
-    <?php /* Cross Sell Products */ ?>
-
-    <?php if(empty($_crossSellProducts) === false) { ?>
+    /* Cross Sell Products */
+    if(empty($_crossSellProducts) === false) { ?>
       <div class="probottomdv">
         <div class="topproducts_containter">
-          <a class="anchor" id="accessoires"></a>
+          <span class="anchor" id="accessoires"></span>
           <h2 class="tableftheader">Opties & Accessoires</h2>
           <?php
           $_columnCount = 4;
@@ -1008,34 +1020,31 @@ if(empty($related_products_block) === false)        $anchors["related"]         
     /* Alternatives */
     if(empty($alternative_products_block) === false) {
       ?>
-      <a class="anchor" id="alternatives"></a>
+      <span class="anchor" id="alternatives"></span>
       <div class="probottomdv">
         <?php echo $alternative_products_block; ?>
       </div>
       <?php
     }
-
+    
     /* Product Attributes */
     if(empty($product_additional_data_block) === false) {
       ?>
       <div class="probottomdv">
-        <a class="anchor" id="specs"></a>
+        <span class="anchor" id="specs"></span>
         <div id="product_additional_data">
           <?php echo $product_additional_data_block ?>
         </div>
       </div>
       <?php
     }
-    ?>
     
-    <?php /* Additional Product Attributes */ ?>
-    
-    <?php
+    /* Additional Product Attributes */
     if(strlen($additional_attributes) > 10) {
       ?>
       <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
-        <a class="anchor" id="additional"></a>
+        <span class="anchor" id="additional"></span>
         <div class="std"><?php echo $additional_attributes; ?>
           <dl class="hidden"><dt>Source</dt><dd>https://www.chefstore.nl</dd></dl>
         </div>
@@ -1053,7 +1062,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
       <div class="leftbranddv">
         <h2 class="tableftheader"><?php echo $this->__("Documenten");?></h2>
         <div class="probottomdv" id="product-documents-list">
-          <a class="anchor" id="documents"></a>
+          <span class="anchor" id="documents"></span>
           <ul class="fa-ul">
             <?php
             foreach($files as $document) {
@@ -1089,7 +1098,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
       <div class="leftbranddv">
         <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
         <div class="probottomdv" id="product-external-documents-list">
-          <a class="anchor" id="external-documents"></a>
+          <span class="anchor" id="external-documents"></span>
           <ul class="fa-ul">
             <?php
             foreach($external_documents as $external_document) {
@@ -1129,7 +1138,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
     <?php
     if(empty($upsell_products_block) === false) {
       ?>
-      <a class="anchor" id="upsells"></a>
+      <span class="anchor" id="upsells"></span>
       <div class="probottomdv">
         <?php echo $upsell_products_block; ?>
       </div>
@@ -1142,8 +1151,8 @@ if(empty($related_products_block) === false)        $anchors["related"]         
     <?php
     if(empty($related_products_block) === false) {
       ?>
-      <a class="anchor" id="related"></a>
-      <div class="probottomdv" id="related">
+      <span class="anchor" id="related"></span>
+      <div class="probottomdv">
         <?php echo $related_products_block; ?>
       </div>
       <?php
@@ -1156,7 +1165,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
       <?php
       if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
         ?>
-        <a class="anchor" id="brand"></a>
+        <span class="anchor" id="brand"></span>
         <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>
         <div class="brand std justify"><?php echo $htbrand; ?></div>
         <?php
@@ -1285,71 +1294,3 @@ function html_table(array $data): string {
   }
   return "<table class='table table-striped table-border'><thead>{$head}</thead><tbody>" . implode('', $rows) . "</tbody></table>";
 }
-
-?>
-<!-- STOCK LIGHTBOX -->
-<div id="info-stock" style="display:none;" class="std">
-  <img src="<?php echo $imageurl ?>" alt="<?php echo $logoAlt; ?>" title="<?php echo $logoAlt; ?>" />
-  <h2><i class="fa fa-phone fa-1x" aria-hidden="true"></i>&nbsp;Contact met Chefstore.nl</h2>
-  <div style="margin-top: 1em;"><strong>Sales & Advies: <a href="tel:+31850441003" title="Bel ons">+31 85 0441003</a></strong><small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small>.</div>
-  <div style="margin-top: 1em;"><strong>Klantenservice:</strong> Stuur een mail naar <a href="mailto:service@chefstore.nl" title="Klantenservice">service@chefstore.nl</a> of <a href="/service">vul direct een Serviceverzoek in</a>.</div>
-  <div style="margin-top: 1em;">U kunt ook een verzoek indienen om door ons gebeld te worden, klik daarvoor <a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">hier</a>.</div>
-  <div style="margin-top: 1em;">Daarnaast zijn wij bereikbaar op de chat, zie daarvoor de knop rechtsonderin op onze website.</div>
-</div>
-
-<!-- BILLER LIGHTBOX -->
-<div id="info-biller" style="display:none;" class="std">
-  <img class="lazy" data-src="//biller.ai/wp-content/uploads/2021/07/Group-1-1.png" alt="Biller logo" title="Biller" style="max-width:141px; height:auto; float:right; margin-top: .5em;" />
-  <h2>🤩&nbsp;Gratis achteraf betalen met Biller</h2>
-  <h5><i>Voor zakelijke klanten in Nederland en België</i></h5>
-  <h4>Maximaal €5000 (zakelijk), incl. BTW</h4>
-  <div style="max-width: 600px;">
-    <strong>Met Biller betaal je het volledige bedrag zonder rente binnen 30 dagen.</strong>
-  </div>
-  <div style="max-width: 600px;">
-  <p>Wanneer u hiervoor kiest, zorgt Biller voor het gehele achteraf betalen proces. Het voordeel van Biller is dat u tot 30 dagen na levering kan betalen tot een bedrag van €5.000 inclusief BTW. Biller is speciaal gemaakt voor de zakelijke markt. Biller is nu tijdelijk gratis.</p>
-  <p><strong><u>Let op: Als u gebruik wil maken van Biller, maak dan een Offerte aan</u></strong>.</p>
-  </div>
-</div>
-
-<!-- BILLINK + AFTERPAY LIGHTBOX -->
-<div id="info-billink" style="display:none;" class="std">
-  <div>
-    <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="max-width:140px; height:auto; float:right; margin-top: .5em;" />
-    <h2>🤩 Achteraf betalen met Billink</h2>
-    <h5><i>In Nederland voor zakelijke en particuliere klanten</i></h5>
-    <h4>Maximaal €3500 (zakelijk), €750 (particulier), incl. BTW</h4>
-    <div style="max-width: 600px;">
-      <strong>Met Billink betaal je het volledige bedrag zonder rente binnen 14 dagen.</strong>
-    </div>
-    <div style="max-width: 600px;">
-      <p>Bestel nu online, betaal achteraf. Betalen met Billink is heel gemakkelijk. Je bestelt wat je nodig hebt en selecteert tijdens het betaalproces dat je wilt betalen met Billink. Wil je graag een zakelijke bestelling achteraf betalen? Van Billink ontvang je een handige factuur, die je vervolgens binnen 14 dagen betaalt.</p>
-    </div>
-  </div>
-  
-  <div style="padding-top:1em;">
-    <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/afterpay_logo.png" alt="AfterPay logo" title="AfterPay" style="max-width:140px; height:auto; float:right; margin-top: .5em;" />
-    <h2>🤩 Achteraf betalen met AfterPay</h2>
-    <h5><i>Voor zakelijke en particuliere klanten in Nederland en België</i></h5>
-    <h4>Maximaal €1000 (zakelijk NL), €2500 (particulier NL), €1250 (België), incl. BTW</h4>
-    <div style="max-width: 600px;">
-      <strong>Met AfterPay betaal je het volledige bedrag zonder rente binnen 14 dagen.</strong>
-    </div>
-    <div style="max-width: 600px;">
-      <p>Met AfterPay shop je eerst en betaal je later. Plaats je bestelling en kijk uit naar het thuis ontvangen. Bekijk, voel en probeer alles en betaal pas later. Met simpele retouren en flexibele betaalopties voor gemak en meer vrijheid. Geen verborgen kosten, geen stress.</p>
-      <p><strong><u>Als u gebruik wil maken van Billink of AfterPay, kies dan die betaalmethode bij het afrekenen.</u></strong>.</p>
-    </div>
-  </div>
-</div>
-
-<!-- IN3 LIGHTBOX -->
-<div id="info-in3" style="display:none;" class="std">
-  <img class="lazy" data-src="/skin/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="max-width:120px; height:auto; float:right; margin-top: .5em;" />
-  <h2>🤩 In 3 keer gespreid betalen zonder rente</h2>
-  <h5><i>In Nederland voor particulier en VOF/Eenmanszaak (niet voor BV's), tot 3000 euro inclusief BTW.</i></h5>
-  <div style="margin-top: 20px;"  class="center">
-    <iframe class="lazy" style="max-width:100%;" width="560" height="315" data-src="https://www.youtube-nocookie.com/embed/9XTdoGzjefY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ></iframe>
-  </div>
-</div>
-
-

@@ -32,21 +32,21 @@ $qty = $this->getTotalQty() ?? 0;
   
   <a href="<?php echo Mage::getUrl("qquoteadv/index/"); ?>" data-target-element="#header-quote" class="skip-quote <?php if ($qty <= 0): ?> no-count<?php endif; ?> top-link" title="Lease en Offerte Winkelwagen">
     <i class="fa fa-calculator fa-2x fa-fw"></i>
-    <?php if($qty > 0) { ?>
-      <div class="header__quote-count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></div>
+    <?php if($qty > 0) {
+      /* This used to be a div (not allowed in HTML validator) */ ?>
+      <span class="header__quote-count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></span>
     <?php } ?>
   </a>
-  
-  <div id="header-quote" class="block skip-content">
-    <?php
+  <?php /* This used to be a div (not allowed in HTML validator) */
+  // <span id="header-quote" class="block skip-content">
       // echo $this->getChildHtml("miniquote_content");
       // Disabled for performance
       // echo Mage::app()->getLayout()
         // ->createBlock("qquoteadv/checkout_miniquote_miniquote")
         // ->setTemplate("qquoteadv/checkout/quote/miniquote/miniquoteitems.phtml")
         // ->toHtml();
-    ?>
-  </div>
+  // </span>
+  ?>
 </span>
 
 <!-- header_miniquote_end -->

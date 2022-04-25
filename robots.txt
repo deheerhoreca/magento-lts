@@ -186,7 +186,16 @@ User-agent: SemrushBot-CT
 User-agent: SemrushBot-BM
 Disallow: /
 
+User-agent: bingbot
+User-agent: msnbot
+User-agent: msnbot-media
+User-agent: Googlebot
+User-agent: AdsBot-Google-Mobile
+User-agent: AdsBot-Google
+Crawl-delay: 1
+
 User-agent: *
 Disallow: /catalogsearch/
 Disallow: /cdn-cgi/*
 Disallow: /no-route
+

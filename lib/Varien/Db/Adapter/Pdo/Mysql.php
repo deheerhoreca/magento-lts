@@ -1398,6 +1398,9 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      */
     protected function _debugTimer()
     {
+      // if(isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] === "185.127.111.252") {
+        // $this->_debug = true;
+      // }
         if ($this->_debug) {
             $this->_debugTimer = microtime(true);
         }
@@ -1416,9 +1419,14 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      */
     protected function _debugStat($type, $sql, $bind = array(), $result = null)
     {
+      // if(isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] === "185.127.111.252") {
+        // $this->_debug = true;
+      // }
         if (!$this->_debug) {
             return $this;
         }
+        
+        // if(strpos($sql, "aoe_profiler_run")) return $this;
 
         $code = '## ' . getmypid() . ' ## ';
         $nl   = "\n";

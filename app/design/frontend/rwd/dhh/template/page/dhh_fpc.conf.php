@@ -1,6 +1,6 @@
 <?php
 
-
+// @removeme
 
 /*
 - 1column.phtml:

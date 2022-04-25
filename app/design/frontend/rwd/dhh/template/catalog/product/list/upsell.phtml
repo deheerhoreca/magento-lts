@@ -1,16 +1,16 @@
 <?php
 $collection = $this->getItemCollection();
 
-$_columnCount = 3;
+$_columnCount = 4;
 $i            = 0;
 $max_items    = $_columnCount;
 
-if($collection->getSize() > 0 ) {
+if($collection->count()) {
   Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
   ?>
-  <div id="autorelated-products" class="product-collateral category-products">
+  <div id="upsell-products" class="product-collateral category-products">
     <?php
-    echo "<span class=h3>Alternatieven</span><hr>";
+    echo "<h2 class='tableftheader'>Alternatieven</h2>";
     echo "<ul class='products-grid products-grid-mini'>";
     foreach($collection as $_product) {
       if($i === $max_items) break;

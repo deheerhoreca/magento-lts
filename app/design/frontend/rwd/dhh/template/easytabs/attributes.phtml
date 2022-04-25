@@ -257,7 +257,7 @@ if($attributes !== []) {
       if(empty($attr["tooltip"]) === false) {
         $tooltip = "<span class='tooltip-wrapper'><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg has-tooltip' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>{$attr["tooltip"]}</span></span></span>";
       }
-      echo "<dl><dt>{$tooltip}{$attr["label"]}</dt><dd>{$attr["value"]}</dd></dl>";
+      echo "<dl><dt>{$tooltip}{$attr["label"]}</dt><dd>{$attr["value"]}</dd></dl>".PHP_EOL;
     }
   }
   echo "</div>";
