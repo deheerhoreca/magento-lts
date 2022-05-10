@@ -114,7 +114,18 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       if($cache_key_prefix === "catalog_product_view") {
         $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-        $cache_key_prefix .= "-".$id;
+        $supplier = "";
+        // This is bit too heavy unfortunately
+        // $rm = Mage::getResourceModel("catalog/product");
+        // $value = $rm->getAttributeRawValue($id, "supplier", Mage::app()->getStore()->getStoreId());
+        // $collection = Mage::getResourceModel('catalog/product_collection')->addAttributeToSelect("supplier")->addIdFilter($id);
+        // $value = $collection->getColumnValues("supplier");
+        // if(empty($value) === false) {
+          // $supplier = array_pop($value);
+        // } else {
+          // $supplier = "-nosupplier";
+        // }
+        $cache_key_prefix .= "{$supplier}-{$id}";
       } elseif($cache_key_prefix === "catalog_category_view") {
         $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
         $cache_key_prefix .= "-".$id;
@@ -232,21 +243,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // Formkey (CSRF protection)
       
       if($skip_formkey === false) {
-        Varien_Profiler::start('DHH::FPC::Holepunch::formkey');
+        Varien_Profiler::start("DHH::FPC::Holepunch::formkey");
         $search = "<!-- fpc form_key_placeholder -->";
         $formKey = Mage::getSingleton("core/session")->getFormKey();
         if(empty($formKey) === false) {
           $html = str_replace($search, $formKey, $html, $count);
           self::log("Replaced {$search} {$count} times");
         }
-        Varien_Profiler::stop('DHH::FPC::Holepunch::formkey');
+        Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
       }
       
       if($replace_blocks === true) {
         
         // The sidebar, is PART OF the minicart
         
-        Varien_Profiler::start('DHH::FPC::Holepunch::minicart');
+        Varien_Profiler::start("DHH::FPC::Holepunch::minicart");
         $minicart_html = Mage::app()
           ->getLayout()
           ->createBlock("checkout/cart_minicart")
@@ -263,11 +274,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $search = "<!-- header_minicart_here -->";
         $html = str_replace($search, $minicart_html, $html, $count);
         self::log("Replaced {$search} {$count} times");
-        Varien_Profiler::stop('DHH::FPC::Holepunch::minicart');
+        Varien_Profiler::stop("DHH::FPC::Holepunch::minicart");
         
         // core_messages
         
-        Varien_Profiler::start('DHH::FPC::Holepunch::messages_html');
+        Varien_Profiler::start("DHH::FPC::Holepunch::messages_html");
         $messages_html .= Mage::app()
           ->getLayout()
           ->createBlock("core/messages")
@@ -276,11 +287,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $search = "<!-- core_messages_here -->";
         $html = str_replace($search, $messages_html, $html, $count);
         self::log("Replaced {$search} {$count} times");
-        Varien_Profiler::stop('DHH::FPC::Holepunch::messages_html');
+        Varien_Profiler::stop("DHH::FPC::Holepunch::messages_html");
         
         // miniquote
         
-        Varien_Profiler::start('DHH::FPC::Holepunch::miniquote_html');
+        Varien_Profiler::start("DHH::FPC::Holepunch::miniquote_html");
         $miniquote_html = Mage::app()
           ->getLayout()
           ->createBlock("qquoteadv/checkout_miniquote_miniquote")
@@ -289,19 +300,19 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $search = "<!-- header_miniquote_here -->";
         $html = str_replace($search, $miniquote_html, $html, $count);
         self::log("Replaced {$search} {$count} times");
-        Varien_Profiler::stop('DHH::FPC::Holepunch::miniquote_html');
+        Varien_Profiler::stop("DHH::FPC::Holepunch::miniquote_html");
         
         // // Breadcrumbs block -- only for catalog_product_view
         // Seems impossible: the current product object is not available at this point
         
         // if(DHH_FPC_DEBUG === true) {
-          // Varien_Profiler::start('DHH::FPC::Holepunch::breadcrumbs_html');
+          // Varien_Profiler::start("DHH::FPC::Holepunch::breadcrumbs_html");
           // if(Mage::app()->getFrontController()->getAction()->getFullActionName() === "catalog_product_view") {
             // $breadcrumbs_html = Mage::app()->getLayout()->getBlock("breadcrumbs");
             // $breadcrumbs_html = Mage::app()
               // ->getLayout()
-              // ->createBlock('richsnippets/product')
-              // ->setTemplate('tm/richsnippets/richsnippets_view.phtml')
+              // ->createBlock("richsnippets/product")
+              // ->setTemplate("tm/richsnippets/richsnippets_view.phtml")
               // ->toHtml();
               
               
@@ -318,7 +329,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
             // self::log($breadcrumbs_html);
             // self::log("Replaced {$search} {$count} times (".strlen($breadcrumbs_html)." chars)");
           // }
-          // Varien_Profiler::stop('DHH::FPC::Holepunch::breadcrumbs_html');
+          // Varien_Profiler::stop("DHH::FPC::Holepunch::breadcrumbs_html");
         // }
         
         // Mage::getSingleton("core/session")->addNotice(Mage::helper("core")->__("Notice ".date("c")));

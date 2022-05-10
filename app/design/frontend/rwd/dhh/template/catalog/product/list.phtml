@@ -36,9 +36,6 @@ $category_block_html          = $this->getLayout()->createBlock("cms/block")->se
 
 Varien_Profiler::stop('DHH_PrepareProductList');
 
-Varien_Profiler::start('DHH_ReloadProductCollection');
-$_productCollection           = $this->getLoadedProductCollection();
-
 /*
  * Bugfix: Using require_stock_items there was a bug that lead
  * to wrong stock info on listview during flat index rebuild.
@@ -49,31 +46,33 @@ $_productCollection           = $this->getLoadedProductCollection();
  *
  * We now use both as an experiment...
  */
+Varien_Profiler::start('DHH_ReAddStockItems');
+$_productCollection = $this->getLoadedProductCollection();
 $_productCollection->setFlag("require_stock_items", true);
 Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
+Varien_Profiler::stop('DHH_ReAddStockItems');
 
-/*
- * If the sorting is by position, put the recommended products on top
- * http://www.rob-st.com/2016/11/29/sort-magento-category-multiple-values-keep-newest-products-top/
- */
-
-$currentOrder = $this->getChild("toolbar")->getCurrentOrder();
-
-if($currentOrder === "position" || $currentOrder === "popularity") {
-  $currentDirection = $this->getChild("toolbar")->getCurrentDirection();
-  $query = $_productCollection->getSelect()->__toString();
-  if(strstr($query, "tagline") !== false) { // if somehow this field is not there
-    $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
-    $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
-    $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
-    $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);     
-    // Collection was loaded already...reloading...(yeah I know)
-    $_productCollection->clear();
-    $_productCollection->load();
-  }
-}
-
-Varien_Profiler::stop('DHH_ReloadProductCollection');
+// If the sorting is by position, put the recommended products on top
+// http://www.rob-st.com/2016/11/29/sort-magento-category-multiple-values-keep-newest-products-top/
+// Superseeded by increasing the popularity field
+// if(!_dhh_debug()) {
+  // Varien_Profiler::start('DHH_ReloadProductCollection');
+  // $currentOrder = $this->getChild("toolbar")->getCurrentOrder();
+  // if($currentOrder === "position" || $currentOrder === "popularity") {
+    // $currentDirection = $this->getChild("toolbar")->getCurrentDirection();
+    // $query = $_productCollection->getSelect()->__toString();
+    // if(strstr($query, "tagline") !== false) { // if somehow this field is not there
+      // $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
+      // $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
+      // $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
+      // $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);     
+      // // Collection was loaded already...reloading...(yeah I know)
+      // $_productCollection->clear();
+      // $_productCollection->load();
+    // }
+  // }
+  // Varien_Profiler::stop('DHH_ReloadProductCollection');
+// }
 
 /* CATEGORY HEADER & SEO */
 

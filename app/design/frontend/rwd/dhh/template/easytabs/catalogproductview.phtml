@@ -211,8 +211,8 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["Bartscher", "Diamond", "Domest", "Gastro-Inox", "Gastronoble", "EMGA", "Hendi", "Scancool"]; // case-sensitive
-$suppliers_external_docs_blocked = ["CombiSteel"]; // case-sensitive
+$suppliers_external_docs_preferred = ["Bartscher", "CombiSteel", "Diamond", "Domest", "Gastro-Inox", "Gastronoble", "EMGA", "Hendi", "Scancool"]; // case-sensitive
+$suppliers_external_docs_blocked = []; // case-sensitive
 
 if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
@@ -1101,14 +1101,19 @@ if($stock_data["overall_stock_status"] === "backorder"
           <span class="anchor" id="external-documents"></span>
           <ul class="fa-ul">
             <?php
+            $method = "aes128";
+            $iv = str_repeat("a", openssl_cipher_iv_length($method));
+            
             foreach($external_documents as $external_document) {
               if(empty($external_document["url"])) {
                 continue;
               }
-              $url      = $external_document["url"];
-              $name     = $external_document["title"]     ?? $external_document["url"];
-              $filetype = $external_document["filetype"]  ?? null;
-              $language = $external_document["language"]      ?? null;
+              $url            = $external_document["url"];
+              $url_encrypted  = "/file.php?id=".base64_encode(openssl_encrypt($url, $method, "wijdelengeenurls", 0, $iv));
+              // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
+              $name           = $external_document["title"]     ?? $external_document["url"];
+              $filetype       = $external_document["filetype"]  ?? null;
+              $language       = $external_document["language"]      ?? null;
               switch($filetype) {
                 case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
                 default:      $fa_icon  = "fa-file-o";      break;
@@ -1122,7 +1127,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                 }
               }
               echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>";
+              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
               echo "</li>";
             }
             ?>

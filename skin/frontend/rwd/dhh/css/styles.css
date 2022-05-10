@@ -10029,14 +10029,6 @@ section.cms .ico-pinterest {
   z-index: 2;
 }
 
-.marker--active .marker__content {
-  z-index: 3;
-  opacity: 1;
-  -webkit-transform: scale(1);
-  -ms-transform: scale(1);
-  transform: scale(1);
-}
-
 .marker__btn {
   position: relative;
   z-index: 1;
@@ -10089,29 +10081,6 @@ section.cms .ico-pinterest {
 
 .marker__btn--white:after {
   border-color: #fff;
-}
-
-.marker__content {
-  position: absolute;
-  top: -40px;
-  left: 50%;
-  display: block;
-  margin-left: -110px;
-  width: 220px;
-  opacity: 0;
-  -webkit-transition: opacity .3s ease, -webkit-transform .3s ease;
-  transition: transform .3s ease, opacity .3s ease;
-  transition: transform .3s ease, opacity .3s ease, -webkit-transform .3s ease;
-  -webkit-transform: scale(0);
-  -ms-transform: scale(0);
-  transform: scale(0);
-  -webkit-transform-origin: 50% 44px;
-  -ms-transform-origin: 50% 44px;
-  transform-origin: 50% 44px;
-}
-
-.marker__content .product {
-  border-bottom: 0;
 }
 
 .figure__caption {
@@ -13598,17 +13567,18 @@ i.breadcrumb-separator {
 .clzinfopagetop,
 .clzinfopagetop a {
   color: #f3f3f3;
-  text-decoration: none;
 }
 
 .clzinfopagetop a {
   padding: 2px;
   border: 1px solid transparent;
   border-radius: 2px;
+  text-decoration: underline;
+  text-decoration-color: #fff;
 }
 
 .clzinfopagetop a:hover {
-  text-decoration: none;
+  /* text-decoration: none; */
   border: 1px solid #f3f3f3;
 }
 

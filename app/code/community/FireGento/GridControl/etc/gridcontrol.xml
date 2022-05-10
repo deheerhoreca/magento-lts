@@ -233,6 +233,32 @@
       
     </sales_order_grid>
     
+    <!-- Product Sub Grids in Admin -->
+    
+    <cross_sell_product_grid>
+      
+      <sku>
+        <after>entity_id</after>
+      </sku>
+      
+    </cross_sell_product_grid>
+    
+    <related_product_grid>
+      
+      <sku>
+        <after>entity_id</after>
+      </sku>
+      
+    </related_product_grid>
+    
+    <up_sell_product_grid>
+      
+      <sku>
+        <after>entity_id</after>
+      </sku>
+      
+    </up_sell_product_grid>
+    
     <!-- Attribute Grid -->
     
     <attributeGrid>
