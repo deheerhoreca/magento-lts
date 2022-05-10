@@ -48,6 +48,15 @@ class Dealer4dealer_Xcore_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * @return bool
+     */
+    public function isD4DAgent()
+    {
+        return Mage::helper('core/http')->getHttpUserAgent() === 'xCore/Dealer4Dealer';
+
+    }
+
+    /**
      * @param null|int $storeId
      * @return array
      */
@@ -64,11 +73,20 @@ class Dealer4dealer_Xcore_Helper_Data extends Mage_Core_Helper_Abstract
     public function getMappingData($sysconKey, $storeId = null)
     {
         $mapping = Mage::getStoreConfig($sysconKey, $storeId);
-        if ($mapping) {
-            $mapping = unserialize($mapping);
-            return array_values((array)$mapping); // cast to array and strip any keys
+        if (! $mapping) {
+            return [];
         }
 
+        try {
+            $mapping = Mage::helper('core/unserializeArray')
+                ->unserialize($mapping);
+
+            return $mapping;
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
+        // Something went wrong unserializing
         return [];
     }
 
