@@ -125,10 +125,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         // } else {
           // $supplier = "-nosupplier";
         // }
-        $cache_key_prefix .= "{$supplier}-{$id}";
+        $cache_key_prefix .= "{$supplier}_{$id}";
       } elseif($cache_key_prefix === "catalog_category_view") {
         $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-        $cache_key_prefix .= "-".$id;
+        $cache_key_prefix .= "_".$id;
       }
       
       return $cache_key_prefix;

@@ -211,14 +211,14 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["Bartscher", "CombiSteel", "Diamond", "Domest", "Gastro-Inox", "Gastronoble", "EMGA", "Hendi", "Scancool"]; // case-sensitive
+$suppliers_external_docs_preferred = ["bartscher", "combiSteel", "diamond", "domest", "gastro-Inox", "gastronoble", "emga", "hendi", "saro", "scancool"];
 $suppliers_external_docs_blocked = []; // case-sensitive
 
 if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
   $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-  if(empty($external_documents_json) === true || in_array($supplier_name, $suppliers_external_docs_preferred) === false) {
+  if(empty($external_documents_json) === true || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();

@@ -32,9 +32,13 @@ class Geissweb_InvoiceAutoSend_Model_System_Config_Activepm {
             // DHH CORE HACK
             // if($paymentModel->canUseCheckout() == true)
             // {
+            // $postfix = "";
+            // if($paymentModel->canUseCheckout() !== true) {
+              // $postfix = " (disabled)";
+            // }
                 $methods[$paymentCode] = array(
-                    'label'   => $paymentTitle,
-                    'value' => $paymentCode,
+                  'label' => $paymentTitle.$postfix,
+                  'value' => $paymentCode,
                 );
             // }
         }

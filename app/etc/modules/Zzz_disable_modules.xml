@@ -81,10 +81,17 @@
         <Anowave_Ecosc>
           <active>false</active>
         </Anowave_Ecosc>
+        
+        <!-- Seems unneeded since we have Geissweb -->
+        <Plumrocket_AutoInvoice>
+          <active>false</active>
+        </Plumrocket_AutoInvoice>
+        
         <!-- Disabling causes issues with opening existing old orders -->
         <Shopworks_Billink>
           <active>true</active>
         </Shopworks_Billink>
+        
         <!-- Unneeded and causes issues with Rewrites -->
         <!-- If ever enabled again, the rewrite issue needs to be re-implemented (Amasty tool) -->
         <Ebizmarts_MailChimp>
