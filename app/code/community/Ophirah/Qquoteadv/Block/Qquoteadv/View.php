@@ -210,12 +210,13 @@ class Ophirah_Qquoteadv_Block_Qquoteadv_View extends Ophirah_Qquoteadv_Block_Qqu
      */
     public function isStatusToDisabled($status)
     {
-        if ($status == Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED
-            || $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_BEGIN
+        if (
+               // $status == Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED || // DHH CORE HACK
+               $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_BEGIN
             || $status == Ophirah_Qquoteadv_Model_Status::STATUS_REQUEST
             || $status == Ophirah_Qquoteadv_Model_Status::STATUS_DENIED
-            || $status == Ophirah_Qquoteadv_Model_Status::STATUS_REQUEST_EXPIRED
-            || $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_EXPIRED
+            // || $status == Ophirah_Qquoteadv_Model_Status::STATUS_REQUEST_EXPIRED // DHH CORE HACK
+            // || $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_EXPIRED // DHH CORE HACK
             || $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED
             || $status == Ophirah_Qquoteadv_Model_Status::STATUS_PRINT_ONLY
 
@@ -270,6 +271,9 @@ class Ophirah_Qquoteadv_Block_Qquoteadv_View extends Ophirah_Qquoteadv_Block_Qqu
             case Ophirah_Qquoteadv_Model_Status::STATUS_AUTO_PROPOSAL:
             case Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_ACTION_OWNER:
             case Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_ACTION_CUSTOMER:
+            case Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_EXPIRED: // DHH CORE HACK
+            case Ophirah_Qquoteadv_Model_Status::STATUS_REQUEST_EXPIRED:  // DHH CORE HACK
+            case Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED:  // DHH CORE HACK
                 $allow = true;
                 break;
             case Ophirah_Qquoteadv_Model_Status::STATUS_CONFIRMED:

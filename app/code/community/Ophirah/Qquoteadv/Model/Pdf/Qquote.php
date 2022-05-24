@@ -2171,7 +2171,7 @@ class Ophirah_Qquoteadv_Model_Pdf_Qquote extends Mage_Sales_Model_Order_Pdf_Abst
         $this->_setFontBold($page, $this->fontSizeBold);
 
         //add QUOTATION
-        $page->drawText(trim(strip_tags("QUOTATION")), $x, $y, 'UTF-8');
+        $page->drawText(trim(strip_tags(Mage::helper('qquoteadv')->__('OFFERTE'))), $x, $y, 'UTF-8'); // DHH CORE HACK
         $y -= $this->fontSizeBold;
 
         //add some space below

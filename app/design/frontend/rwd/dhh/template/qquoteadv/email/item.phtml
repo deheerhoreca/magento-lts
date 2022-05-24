@@ -24,11 +24,10 @@
  * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
  * @license   https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
-?>
-<?php $item = $this->getItem(); ?>
-<?php $product = Mage::getModel('catalog/product')->load($item->getProductId()); ?>
 
-<?php
+$item = $this->getItem();
+$product = Mage::getModel('catalog/product')->load($item->getProductId());
+
 //helpers
 /** @var \Ophirah_Qquoteadv_Helper_Data $quoteadvHelper */
 $quoteadvHelper = Mage::helper('qquoteadv');
@@ -58,6 +57,8 @@ $itemPriceReplace = ' ';
 $rowTotalReplace = '--';
 $thumb_url = $this->helper('catalog/image')->init($product, 'small_image')->resize(75);
 
+$msrp = $product->getMsrp();
+
 if (Mage::getModel('customproducts/customproduct')->isCustomProduct($item->getProductId())): ?>
   <?php echo $this->getLayout()->getBlock('qquoteadv_item_customproducts')->setProduct($product)->setItem($item)->toHtml(); ?>
 <?php elseif ($product->getTypeId() == 'bundle' || $product->getTypeId() == 'configurable' || $product->getTypeId() == 'simple' || $product->getTypeId() == 'virtual'): ?>
@@ -76,6 +77,9 @@ if (Mage::getModel('customproducts/customproduct')->isCustomProduct($item->getPr
         if ($_unit->getProductId() == $product->getId()) {
           echo $this->getItemHtml($_unit);
         }
+      }
+      if(empty($msrp) === false) {
+        echo "<br><br><em>Adviesprijs: ".$coreHelper->formatPrice($msrp, true, false)."</em>";
       }
       ?>
     </td>
