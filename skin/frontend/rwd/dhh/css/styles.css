@@ -130,6 +130,10 @@ textarea {
   vertical-align: top;
 }
 
+form input[type="email"] {
+  text-transform: lowercase;
+}
+
 hr {
   border: 0;
   border-top: 1px solid #dedede;
@@ -14457,21 +14461,21 @@ div.sooqrSearchContainer {
 }
 
 .bar-info {
-  border-color: #3aacd9;
+  border-color: #2a71db;
 }
 
 .bar-info:before {
   content: "i";
-  background-color: #3aacd9;
+  background-color: #2a71db;
 }
 
 .bar-success {
-  border-color: #2ECC40;
+  border-color: #17a249;
 }
 
 .bar-success:before {
   content: "√";
-  background-color: #2ECC40;
+  background-color: #17a249;
 }
 
 .bar-warning {

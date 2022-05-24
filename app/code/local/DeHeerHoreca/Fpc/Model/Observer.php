@@ -97,11 +97,6 @@ function clean_fpc_pattern_result_to_string($result) {
   return implode(", ", $outputs);
 }
 
-// @deprecated function name
-function clean_fpc($patterns, $nowait = false) {
-  return clean_fpc_pattern($patterns, $nowait);
-}
-
 // Sync:
 // deheerhoreca-magento/app/code/local/DeHeerHoreca/Fpc/Model/Observer.php
 // deheerhoreca-intel/lib/intel.inc.php

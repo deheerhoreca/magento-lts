@@ -1,10 +1,8 @@
 <?php
-$_item = $this->getItem();
-
-// $_product = $this->getProduct();
-$_product = $_item->getProduct();
-$product_long_name = $_product->getName();
-$product_name = (strlen($_product->getNameShort()) > 0) ? $_product->getNameShort() : $product_long_name;
+$_item                  = $this->getItem();
+$_product               = $_item->getProduct();
+$product_long_name      = $_product->getName();
+$product_name           = (strlen($_product->getNameShort()) > 0) ? $_product->getNameShort() : $product_long_name;
 $show_product_long_name = (bool) (strlen($_product->getNameShort()) > 0);
 
 $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
