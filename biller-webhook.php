@@ -42,7 +42,7 @@ $from_email = "noreply@chefstore.nl";
 $from_name  = "De Heer Horeca Intel";
 $to_email   = "sales@deheerhoreca.nl";
 $body       = $subject;
-$body      .= "\n\nEr is een order geupdate in Biller: https://seller.biller.ai/#/orders/{$order_id}/show";
+$body      .= "\n\nEr is een order geupdate in Biller: https://seller.biller.ai/orders/{$order_id}";
 $body      .= "\n\n".print_r($data, true);
 
 $mail = new Zend_Mail();
