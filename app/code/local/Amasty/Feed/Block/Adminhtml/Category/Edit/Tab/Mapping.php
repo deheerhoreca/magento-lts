@@ -1,10 +1,4 @@
 <?php
-/**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
-
 class Amasty_Feed_Block_Adminhtml_Category_Edit_Tab_Mapping
     extends Mage_Adminhtml_Block_Catalog_Category_Abstract
     implements Varien_Data_Form_Element_Renderer_Interface

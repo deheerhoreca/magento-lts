@@ -1,10 +1,4 @@
 <?php
-/**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
-
 class Amasty_Feed_Model_Google_Abstract extends Varien_Object
 {
 //    const TYPE_ATTRIBUTE = 'attribute';

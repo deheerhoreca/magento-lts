@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2008-2012 Amasty (http://www.amasty.com)
  * @package Amasty_Feed
  */
 class Amasty_Feed_Block_Adminhtml_Google_Edit_Tab_Delivery extends Mage_Adminhtml_Block_Widget_Form

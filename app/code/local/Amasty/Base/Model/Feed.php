@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Base
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Amasty_Base
+*/
 
 
 class Amasty_Base_Model_Feed extends Mage_AdminNotification_Model_Feed
@@ -241,7 +241,7 @@ class Amasty_Base_Model_Feed extends Mage_AdminNotification_Model_Feed
     public function getFeedUrl()
     {
         if (is_null($this->_feedUrl)) {
-            $this->_feedUrl = (Mage::getStoreConfigFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://')
+            $this->_feedUrl = (Mage::getStoreConfigFlag(parent::XML_USE_HTTPS_PATH) ? 'https://' : 'http://')
                 . self::URL_NEWS;
         }
         return $this->_feedUrl;

@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2008-2012 Amasty (http://www.amasty.com)
+* @package Amasty_Feed
+*/
 class Amasty_Feed_Block_Adminhtml_Category extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
     public function __construct()

@@ -1,10 +1,4 @@
 <?php
-/**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
-
 class Amasty_Feed_Block_Adminhtml_Control extends Mage_Core_Block_Template
 {
     public static $_OTHER_CONDITION_CATEGORY = 'category';

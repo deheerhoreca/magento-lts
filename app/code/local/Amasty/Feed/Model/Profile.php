@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */  
+* @author Amasty Team
+* @copyright Copyright (c) 2008-2012 Amasty (http://www.amasty.com)
+* @package Amasty_Feed
+*/  
 class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
 {
 
@@ -42,6 +42,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
     
     protected $_productGallery;
     protected $_productUrls;
+    protected $_productGroupPrice;
     
     protected $_productParentData;
     protected $_productChildData;
@@ -318,6 +319,8 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
 
         } else if (isset($productData[$code])){
             $ret = $productData[$code];
+        } elseif ($code == 'group_price') {
+            $ret = $this->_getGroupPrice($productData);
         }
         
         return $ret;
@@ -345,18 +348,12 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
                         . 'amfeed/images/' . $this->getId() . '.jpg';
                 } else {
                     if ($value && $value != "no_selection") {
-                        #DHH CORE HACK
-                        #$value = str_replace('https://', 'http://', $mediaConfig->getMediaUrl($value));
-                        $value = $mediaConfig->getMediaUrl($value);
+                        // DHH CORE HACK
+                        // $value = str_replace('https://', 'http://', $mediaConfig->getMediaUrl($value));
                     } else {
                         $value = '';
                     }
                 }
-        }
-        
-        /* DHH CORE HACK */
-        if($code === "energieklasse" && stristr($value, "Geen") !== false) {
-          $value = null;
         }
 
         return $value;
@@ -372,21 +369,6 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
                 $value = $this->_modifyAttribute($attributeValue, $fields['attr'][$idx]);
                 break;
             case "custom_field":
-                /* DHH CORE HACK */
-                // if($fields['custom'][$idx] === "category_chain_placeholder") {
-                  // $_product = $product = Mage::getModel('catalog/product')->load($productData["entity_id"]);
-                  // $categories = $_product->getCategoryCollection()->addAttributeToSelect('name');
-
-                  // $category_chain = [];
-                  // foreach($categories as $category) {
-                    // $category_chain[] = $category->getName();
-                  // }
-                  
-                  // $value = implode(" &gt; ", $category_chain);
-                  
-                  // break;
-                // }
-                /* END DHH CORE HACK */
                 $customField = $this->getCustomField($fields['custom'][$idx]);
                 
                 if ($customField){
@@ -453,6 +435,11 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         }
 
         return $ret;
+    }
+    
+    protected function _getGroupPrice($productData)
+    {
+        return $this->_productGroupPrice[$productData['entity_id']];
     }
     
     protected function _modifyValue(&$value, $fields, $idx){
@@ -750,7 +737,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         }
         
         if (count($this->_resultData) < $this->getStepSize()){
-            @rename($this->getMainPath() . $this->getExportKey(), $this->getMainPath());
+            @rename($this->getMainPath() . $this->getExportKey(), $this->getMainPath() . $this->getFileExt());
             
             $this->setExportKey(NULL);
             $this->setExportStep(NULL);
@@ -851,6 +838,17 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         
         foreach($urlProductParentData as $productId => $url){
             $this->_productUrls[$productId] = $url;
+        }
+    }
+
+    protected function _prepareGroupPrice()
+    {
+        $fields = $this->_getFields();
+
+        if (in_array('group_price', $fields['attr'])) {
+            foreach ($this->getProductCollection() as $product) {
+                $this->_productGroupPrice[$product->getId()] = $this->_prepareProductGroupPrice($product);
+            }
         }
     }
     
@@ -957,6 +955,8 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         $this->_prepareCategories();
         
         $this->_prepareUrls();
+
+        $this->_prepareGroupPrice();
         
         $this->_generateData();
         
@@ -1188,7 +1188,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
     {
         if ($id = $this->getId()) {
             $temp = Mage::getModel('amfeed/profile')->load($id);
-            $tempPath = Mage::helper('amfeed')->getDownloadPath('feeds', $temp->getRealFilename());
+            $tempPath = Mage::helper('amfeed')->getDownloadPath('feeds', $temp->getRealFilename() . $this->getFileExt());
             if (file_exists($tempPath)) {
                 $deleted = false;
                 if (($temp->getType() != $this->getType())) {
@@ -1376,7 +1376,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
 
     public function getRealFilename()
     {
-        return 'export_' . $this->getId();
+        return $this->getFilename();
     }
 
     public function getOutputFilename()
@@ -1406,7 +1406,7 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
 
     public function compress()
     {
-        $filename = $this->getRealFilename();
+        $filename = $this->getRealFilename() . $this->getFileExt();
         $outputFilename = $filename;
         $compressor = null;
 
@@ -1440,5 +1440,36 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
         }
 
         return $outputFilename;
+    }
+
+    protected function _prepareProductGroupPrice($product)
+    {
+        $websiteId = Mage::app()->getStore()->getWebsiteId();
+        $groupPrices = $product->getData('group_price');
+        $matchedPrices = array();
+
+        if (is_null($groupPrices)) {
+            $attribute = $product->getResource()->getAttribute('group_price');
+
+            if ($attribute) {
+                $attribute->getBackend()->afterLoad($product);
+                $groupPrices = $product->getData('group_price');
+            }
+        }
+
+        if (is_null($groupPrices) || !is_array($groupPrices)) {
+            return $product->getPrice();
+        }
+
+        foreach ($groupPrices as $groupPrice) {
+            if ($groupPrice['website_id'] == $websiteId
+                || ($groupPrice['website_id'] == 0
+                    && !isset($matchedPrices[$groupPrice['cust_group']]))
+            ) {
+                $matchedPrices[$groupPrice['cust_group']] = $groupPrice['website_price'];
+            }
+        }
+
+        return implode(',', $matchedPrices);
     }
 }

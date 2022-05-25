@@ -1,10 +1,4 @@
 <?php
-/**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
-
 
 class Amasty_Feed_Model_Attribute_Compound_Abstract extends Varien_Object
 {
@@ -103,23 +97,26 @@ class Amasty_Feed_Model_Attribute_Compound_Abstract extends Varien_Object
      */
     protected function _getCategoryIds($productData)
     {
-        $result = array();
+        $matchedIds = array();
         /** @var Mage_Catalog_Model_Resource_Category_Collection $categoryCollection */
         $categoryCollection = Mage::getResourceModel('catalog/category_collection')->addIsActiveFilter();
         $categoryIds = isset($productData['category_ids']) ?
             $productData['category_ids'] : null;
 
         if ($categoryIds) {
-            $result = explode(',', $categoryIds);
-            $categoryCollection->addIdFilter($categoryIds);
+            $categoryIds = explode(',', $categoryIds);
+            $categoryCollection->addIdFilter($categoryIds)->addOrderField('path');
         }
 
-        $matchedIds = $categoryCollection->getAllIds();
-        if (is_array($matchedIds) && $matchedIds) {
-            $result = $matchedIds;
+        $matchedCategories = $categoryCollection->getData();
+
+        if (is_array($matchedCategories) && $matchedCategories) {
+            foreach ($matchedCategories as $categoryData) {
+                $matchedIds[] = $categoryData['entity_id'];
+            }
         }
 
-        return $result;
+        return $matchedIds;
     }
 
     protected function _getCategoryName($categoryId)

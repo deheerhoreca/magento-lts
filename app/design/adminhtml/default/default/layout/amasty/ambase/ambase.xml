@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Base
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Amasty_Base
+*/
 -->
 <layout>
     <adminhtml_system_config_edit>
@@ -15,6 +15,10 @@
             <action method="addJs">
                 <name>amasty/ambase/store.js</name>
             </action>
+        </reference>
+
+        <reference name="content">
+            <block type="ambase/adminhtml_notifications" name="amasty.update.notifications" as="amasty.update.notifications" template="amasty/ambase/notifications.phtml"></block>
         </reference>
     </adminhtml_system_config_edit>
 

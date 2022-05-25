@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Base
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Amasty_Base
+*/
 
 
 class Amasty_Base_Helper_Data extends Mage_Core_Helper_Abstract
@@ -248,6 +248,6 @@ class Amasty_Base_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
 
-        return \Amasty_Base_Helper_String::unserialize($string);
+        return Amasty_Base_Helper_String::unserialize($string);
     }
 }

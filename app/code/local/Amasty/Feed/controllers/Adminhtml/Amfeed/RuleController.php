@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
+* @author Amasty Team
+* @copyright Amasty
+* @package Amasty_Acart
+*/
 class Amasty_Feed_Adminhtml_Amfeed_RuleController extends Amasty_Feed_Controller_Abstract
 {
     

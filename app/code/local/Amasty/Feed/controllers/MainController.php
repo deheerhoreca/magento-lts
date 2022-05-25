@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Feed
- */
+* @author Amasty Team
+* @copyright Amasty
+* @package Amasty_Feed
+*/
 class Amasty_Feed_MainController extends Mage_Core_Controller_Front_Action
 {
     /**
