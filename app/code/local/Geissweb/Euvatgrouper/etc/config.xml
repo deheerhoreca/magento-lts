@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Geissweb_Euvatgrouper>
-            <version>1.8.6</version>
+            <version>1.9.4</version>
         </Geissweb_Euvatgrouper>
     </modules>
     <global>
@@ -296,8 +296,10 @@
                 <force_general_on_vat>0</force_general_on_vat>
             </group_assignment>
             <integration>
+                <validate_vatid>1</validate_vatid>
                 <auto_set_country>0</auto_set_country>
                 <auto_set_country_customer_confirm>0</auto_set_country_customer_confirm>
+                <require_valid_number_to_checkout>0</require_valid_number_to_checkout>
             </integration>
         </euvatgrouper>
     </default>

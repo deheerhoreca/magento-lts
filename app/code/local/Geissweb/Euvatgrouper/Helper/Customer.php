@@ -110,24 +110,23 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
         if($this->_debug) Mage::log("[EUVAT] Validation Data: ".var_export($vatdata,true), null, 'euvatenhanced.log');
 		$shopCc = $this->getMerchantCountryId();
 
-        if(is_array($vatdata) && isset($vatdata['country_id']))
-        {
+        if(is_array($vatdata) && isset($vatdata['country_id'])) {
             $customerCc = $vatdata['country_id'];
             if($this->_debug) Mage::log("[EUVAT] Getting customer group for VAT country: $customerCc VatdataCC[".$vatdata['country_id']."] (ShopCC: $shopCc)", null, 'euvatenhanced.log');
-
         } else {
             $customerCc = $this->getBillingCountry(Mage::getSingleton('customer/session')->getCustomer(), $customerCc);
             if ($this->_debug) Mage::log("[EUVAT] Getting customer group for billing country: $customerCc  (ShopCC: $shopCc)", null, 'euvatenhanced.log');
         }
-
         // Fix Greece
         if($customerCc == "EL") $customerCc = "GR";
-
         $customerCc = strtoupper($customerCc);
 
 		// Check the validation data and return best fitting group
-		if (is_array($vatdata) && isset($vatdata['vat_is_valid']) && isset($vatdata['vat_id']) && $vatdata['vat_id'] != '')
-		{
+		if (is_array($vatdata)
+            && isset($vatdata['vat_is_valid'])
+            && isset($vatdata['vat_id'])
+            && $vatdata['vat_id'] != ''
+        ) {
 			if ($vatdata['vat_is_valid'] == true
                 && $vatdata['vat_request_success'] == true
                 && $shopCc != $customerCc

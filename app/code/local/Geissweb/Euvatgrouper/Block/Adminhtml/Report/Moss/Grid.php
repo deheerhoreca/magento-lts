@@ -80,6 +80,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Moss_Grid extends Mage_Adminh
 
 	protected function _prepareCollection()
 	{
+	    /** @var Mage_Sales_Model_Entity_Order_Collection $ordersCollection */
 		$ordersCollection = Mage::getModel('sales/order')->getCollection()
 			->addAttributeToSelect('*')
 			->addFieldToFilter(array('status', 'status'),
@@ -144,7 +145,7 @@ class Geissweb_Euvatgrouper_Block_Adminhtml_Report_Moss_Grid extends Mage_Adminh
         //$ordersCollection->load();
 
 		$byCountry = array();
-		foreach($ordersCollection as $order)
+		foreach($ordersCollection->getItems() as $order)
 		{
 			if(array_key_exists($order->getCountryId(), $byCountry))
 			{

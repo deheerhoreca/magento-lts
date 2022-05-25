@@ -26,8 +26,8 @@ $installer->startSetup();
 $table_sales_quote_address = $this->getTable('sales/quote_address');
 $table_sales_order_address = $this->getTable('sales/order_address');
 
-$data = array('type'=>Varien_Db_Ddl_Table::TYPE_TEXT,'length'=>255,'nullable'=> true,'comment'=>'Trader Name');
-$data2 = array('type'=>Varien_Db_Ddl_Table::TYPE_TEXT,'length'=>255,'nullable'=> true,'comment'=>'Trader Address');
+$data  = ['type' => Varien_Db_Ddl_Table::TYPE_TEXT,'length' => 255,'nullable' => true,'comment' => 'Trader Name'];
+$data2 = ['type' => Varien_Db_Ddl_Table::TYPE_TEXT,'length' => 255,'nullable' => true,'comment' => 'Trader Address'];
 
 $installer->getConnection()->addColumn($table_sales_quote_address, 'vat_trader_name', $data);
 $installer->getConnection()->addColumn($table_sales_quote_address, 'vat_trader_address', $data2);

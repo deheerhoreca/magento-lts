@@ -575,12 +575,16 @@ var handleOSC = function(result)
                 && typeof(checkout) === 'object'
             ){
                 setTimeout(function(){
-                    queue.add_function(function(){
-                        checkout.update(checkout.urls.billing_address, JSON.stringify(['billing','shipping']));
-                    });
-                    //queue.add_function(function(){
-                    //    checkout.update(checkout.urls.shipping_address, JSON.stringify(['shipping']));
-                    //});
+                    var sameAsBilling = $('shipping:same_as_billing');
+                    if (!sameAsBilling || (sameAsBilling && sameAsBilling.checked)) {
+                        queue.add_function(function () {
+                            checkout.update(checkout.urls.billing_address);
+                        });
+                    } else {
+                        queue.add_function(function () {
+                            checkout.update(checkout.urls.shipping_address);
+                        });
+                    }
                     queue.add_function(function(){
                         checkout.update(checkout.urls.shopping_cart);
                     });

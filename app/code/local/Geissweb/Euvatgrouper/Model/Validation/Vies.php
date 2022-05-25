@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -21,8 +22,15 @@
 
 class Geissweb_Euvatgrouper_Model_Validation_Vies extends Geissweb_Euvatgrouper_Model_Validation_Abstract
 {
-    var $service_url = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
-    var $vies_params = array();
+    /**
+     * @var string
+     */
+    public $service_url = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+
+    /**
+     * @var array
+     */
+    public $vies_params = [];
 
     /**
      * Connects to EU VIES
@@ -30,150 +38,169 @@ class Geissweb_Euvatgrouper_Model_Validation_Vies extends Geissweb_Euvatgrouper_
     public function __construct()
     {
         parent::__construct();
-
-	    $this->_response = new stdClass();
+        $this->_response = new stdClass();
 
         try {
-
-			if(Mage::helper('euvatgrouper')->isIPv6Mode())
-			{
-				$opts = array('socket' => array('bindto' => Mage::helper('euvatgrouper')->getIPv4ToBindOn().':0'));
-				$context = stream_context_create($opts);
-				$this->setClient(new SoapClient($this->service_url, array(
-					'exceptions' 	=> 0,
-					'trace' 		=> false,
-					'cache_wsdl' 	=> WSDL_CACHE_MEMORY,
-					'soap_version' 	=> SOAP_1_1,
-					'user_agent' 	=> 'Magento Webshop',
-					'stream_context'=> $context
-					)
-				));
-
-			} else {
-
-				$this->setClient(new SoapClient($this->service_url, array(
-					'soap_version'	=> SOAP_1_1,
-					'user_agent' 	=> 'Magento Webshop',
-					'cache_wsdl'	=> WSDL_CACHE_MEMORY
-					)
-				));
-			}
+            if (Mage::helper('euvatgrouper')->isIPv6Mode()) {
+                $opts    = ['socket' => ['bindto' => Mage::helper('euvatgrouper')->getIPv4ToBindOn() . ':0']];
+                $context = stream_context_create($opts);
+                $this->setClient(
+                    new SoapClient(
+                        $this->service_url,
+                        [
+                        'exceptions'    => true,
+                        'trace'         => false,
+                        'cache_wsdl'    => WSDL_CACHE_MEMORY,
+                        'soap_version'  => SOAP_1_1,
+                        'user_agent'    => 'Magento Webshop',
+                        'stream_context' => $context
+                        ]
+                    )
+                );
+            } else {
+                $this->setClient(
+                    new SoapClient(
+                        $this->service_url,
+                        [
+                        'exceptions'    => true,
+                        'soap_version'  => SOAP_1_1,
+                        'user_agent'    => 'Magento Webshop',
+                        'cache_wsdl'    => WSDL_CACHE_MEMORY
+                        ]
+                    )
+                );
+            }
 
             $this->_response->shop_cc = $this->getShopCc();
-
-
         } catch (SoapFault $s) {
-			Mage::logException($s);
+            Mage::logException($s);
         }
-
     }
 
-	/**
-	 * Validate
-	 * @throws Varien_Exception
-	 */
+    /**
+     * Validate
+     * @return void
+     * @throws Varien_Exception
+     * @throws SoapFault
+     */
     public function validate()
     {
         try {
+            $userNrClean = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getUserNr());
+            $shopNrClean = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getShopNr());
 
-            if($this->getShopCc() != 'EU')
-            {
-                $this->vies_params = array(
+            if(!$this->isNumberValidateable($this->getUserCc(), $userNrClean)) {
+                throw new SoapFault('SOAP-ENV:Server', 'INVALID_INPUT');
+            }
+            if(!$this->isNumberValidateable($this->getShopCc(), $shopNrClean)) {
+                throw new SoapFault('SOAP-ENV:Server', 'INVALID_INPUT');
+            }
+
+            if ($this->getShopCc() != 'EU' && $this->getShopCc() != 'GB') {
+                $this->vies_params = [
                     'countryCode' => $this->getUserCc(),
-                    'vatNumber' => Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getUserNr()),
+                    'vatNumber' => $userNrClean,
                     'requesterCountryCode' => $this->getShopCc(),
-                    'requesterVatNumber' => Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getShopNr()),
-                );
-	            if($this->getClient() == null) {
-		            throw new SoapFault('SOAP-ENV:Server', 'SERVICE_UNAVAILABLE');
-	            }
-                $this->_response = $this->getClient()->checkVatApprox($this->vies_params);
+                    'requesterVatNumber' => $shopNrClean,
+                ];
+                if ($this->getClient() == null) {
+                    throw new SoapFault('SOAP-ENV:Server', 'SERVICE_UNAVAILABLE');
+                }
 
+                $this->_response = $this->getClient()->checkVatApprox($this->vies_params);
             } else {
-                $this->vies_params = array(
+                $this->vies_params = [
                     'countryCode' => $this->getUserCc(),
-                    'vatNumber' => Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getUserNr()),
-                );
-	            if($this->getClient() == null) {
-		            throw new SoapFault('SOAP-ENV:Server', 'SERVICE_UNAVAILABLE');
-	            }
+                    'vatNumber' => $userNrClean,
+                ];
+                if ($this->getClient() == null) {
+                    throw new SoapFault('SOAP-ENV:Server', 'SERVICE_UNAVAILABLE');
+                }
+
                 $this->_response = $this->getClient()->checkVat($this->vies_params);
             }
 
             // Set additional data for the result object
-	        $this->_response->shop_cc = $this->getShopCc();
-	        $this->_response->user_cc = $this->getUserCc();
-	        $this->_response->user_nr = $this->getUserNr();
-	        $this->_response->address_type = $this->getAddressType();
-	        $this->_response->vat_request_success = true;
+            $this->_response->shop_cc             = $this->getShopCc();
+            $this->_response->user_cc             = $this->getUserCc();
+            $this->_response->user_nr             = $this->getUserNr();
+            $this->_response->address_type        = $this->getAddressType();
+            $this->_response->vat_request_success = true;
+            $this->_response->valid               = (bool)$this->_response->valid;
+
+            // For offline testing
+            //throw new SoapFault('500', 'MS_MAX_CONCURRENT_REQ');
 
             // Get proper result object
             $this->setResult(
-            	Mage::getSingleton('euvatgrouper/validation_result')->setViesData(
-            		$this->_response,
-		            $this->getUserCc().$this->getUserNr())
+                Mage::getSingleton('euvatgrouper/validation_result')->setViesData(
+                    $this->_response,
+                    $this->getUserCc() . $this->getUserNr()
+                )
             );
 
-            Mage::dispatchEvent('vat_check_after', array(
-                'result' 	 => $this->getResult(),
-                'address_id' => $this->getAddressId()
-            ));
-
-
-
-        } catch(SoapFault $e) {
-
-	        $this->_response->shop_cc = $this->getShopCc();
-	        $this->_response->user_cc = $this->getUserCc();
-	        $this->_response->user_nr = $this->getUserNr();
-	        $this->_response->address_type = $this->getAddressType();
+            Mage::dispatchEvent(
+                'vat_check_after',
+                [
+                    'result'     => $this->getResult(),
+                    'address_id' => $this->getAddressId()
+                ]
+            );
+        } catch (SoapFault $e) {
+            $this->_response->shop_cc             = $this->getShopCc();
+            $this->_response->user_cc             = $this->getUserCc();
+            $this->_response->user_nr             = $userNrClean;
+            $this->_response->address_type        = $this->getAddressType();
             $this->_response->vat_request_success = false;
-            $this->_response->traderName = '';
-            $this->_response->traderCompanyType = '';
-            $this->_response->traderAddress = '';
-            $this->_response->valid = false;
-            $this->_response->faultstring = $e->getMessage();
-	        $this->_response->requestIdentifier = "OFFLINE (".$e->getMessage().")";
+            $this->_response->traderName          = '';
+            $this->_response->traderCompanyType   = '';
+            $this->_response->traderAddress       = '';
+            $this->_response->valid               = false;
+            $this->_response->faultstring         = $e->getMessage();
+            $this->_response->requestIdentifier   = "OFFLINE (" . $e->getMessage() . ")";
 
-            switch($e->getMessage())
-            {
-                case 'MS_UNAVAILABLE':
+            switch ($e->getMessage()) {
+                case 'MS_UNAVAILABLE': // The application at the Member State
+                    // is not replying or not available.
                 case 'SERVICE_UNAVAILABLE':
                 case 'SERVER_BUSY':
-                case 'TIMEOUT':
-                    if(Mage::helper('euvatgrouper')->getOfflineValidate()
-                       && isset($this->vies_params['countryCode'], $this->vies_params['vatNumber'])
-                    ) {
-                        if($this->isSyntaxValid($this->vies_params['vatNumber'], $this->vies_params['countryCode']))
-                        {
-                            $this->_response->valid = true;
-                            $this->_response->requestIdentifier = "OFFLINE (".$e->getMessage().")";
+                case 'TIMEOUT': // The application did not receive a reply
+                // within the allocated time period, try again later.
+                case 'MS_MAX_CONCURRENT_REQ': // the maximum number of
+                // concurrent requests for this Member State has been reached.
+                case 'MS_MAX_CONCURRENT_REQ_TIME':
+                case 'GLOBAL_MAX_CONCURRENT_REQ': // The maximum number of
+                // concurrent requests has been reached.
+                case 'GLOBAL_MAX_CONCURRENT_REQ_TIME':
+                    if (Mage::helper('euvatgrouper')->getOfflineValidate()) {
+                        if ($this->isSyntaxValid($this->_response->user_nr, $this->_response->user_cc)) {
+                            $this->_response->valid             = true;
+                            $this->_response->requestIdentifier = "OFFLINE (" . $e->getMessage() . ")";
                         }
                     }
-                break;
-
-	            case 'Invalid_input':
-		            $this->_response->vat_request_success = true;
-		            $this->_response->requestIdentifier = "";
-	            	break;
+                    break;
+                case 'Invalid Requester member state':
+                case 'Invalid_input':
+                case 'INVALID_INPUT': // Wrong number or country code
+                    $this->_response->vat_request_success = true;
+                    $this->_response->requestIdentifier   = "";
+                    break;
 
                 default:
-                break;
+                    break;
             }
 
             $this->setResult(
-            	Mage::getSingleton('euvatgrouper/validation_result')->setViesData(
-            		$this->_response, $this->getUserCc().$this->getUserNr()
-	            )
+                Mage::getSingleton('euvatgrouper/validation_result')->setViesData(
+                    $this->_response,
+                    $this->getUserCc() . $this->getUserNr()
+                )
             );
 
-            Mage::dispatchEvent('vat_check_after', array(
-                'result' 	 => $this->getResult(),
+            Mage::dispatchEvent('vat_check_after', [
+                'result'     => $this->getResult(),
                 'address_id' => $this->getAddressId()
-            ));
-
+            ]);
         }
-
     }
-
 }

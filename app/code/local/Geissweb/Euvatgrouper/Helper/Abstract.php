@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -23,43 +24,43 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
     /**
      * @var bool
      */
-	protected $_debug;
+    protected $_debug;
 
-	/**
-	 * @var int
-	 */
+    /**
+     * @var int
+     */
     public $_storeId;
 
-	/**
-	 * Geissweb_Euvatgrouper_Helper_Abstract constructor.
-	 */
-	public function __construct()
-	{
-		try {
-			$this->_storeId = (int)Mage::app()->getStore()->getId();
-			$this->_debug = (bool)Mage::getStoreConfig('euvatgrouper/extension_info/debug_mode', $this->_storeId);
-		} catch(Exception $e) {
-			Mage::logException($e);
-		}
-	}
+    /**
+     * Geissweb_Euvatgrouper_Helper_Abstract constructor.
+     */
+    public function __construct()
+    {
+        try {
+            $this->_storeId = (int)Mage::app()->getStore()->getId();
+            $this->_debug   = (bool)Mage::getStoreConfig('euvatgrouper/extension_info/debug_mode', $this->_storeId);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
 
-	/**
-	 * Returns whether debug mode is turned on
-	 * @return bool
-	 */
-	public function isDebugMode()
-	{
-		return $this->_debug;
-	}
+    /**
+     * Returns whether debug mode is turned on
+     * @return bool
+     */
+    public function isDebugMode()
+    {
+        return $this->_debug;
+    }
 
-	/**
-	 * Gets a list of all current EU member states
-	 * @return array
-	 */
-	public function getEuCountries()
-	{
-		return explode(",", Mage::getStoreConfig('general/country/eu_countries', $this->_storeId));
-	}
+    /**
+     * Gets a list of all current EU member states
+     * @return array
+     */
+    public function getEuCountries()
+    {
+        return explode(",", Mage::getStoreConfig('general/country/eu_countries', $this->_storeId));
+    }
 
     /**
      * Used in Setup
@@ -67,94 +68,115 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getEuCountriesOptionArray()
     {
-	    return Mage::getResourceModel('directory/country_collection')
+        return Mage::getResourceModel('directory/country_collection')
             ->addCountryCodeFilter($this->getEuCountries(), 'iso2')
             ->loadData()
             ->toOptionArray($this->__('--- Please Select ---'));
     }
 
-	/**
-	 * Gets the CC from system config
-	 * @return string
-	 */
-	public function getMerchantCountryId()
-	{
+    /**
+     * Gets the CC from system config
+     * @return string
+     */
+    public function getMerchantCountryId()
+    {
         return $this->getStoreCountryCode();
         /*
-		if(Mage::getStoreConfig('general/store_information/merchant_country') != '')
-		{
-			return strtoupper(Mage::getStoreConfig('general/store_information/merchant_country'));
-		} else {
-			return $this->getStoreCountryCode();
-		}
+        if(Mage::getStoreConfig('general/store_information/merchant_country') != '')
+        {
+            return strtoupper(Mage::getStoreConfig('general/store_information/merchant_country'));
+        } else {
+            return $this->getStoreCountryCode();
+        }
         */
-	}
+    }
 
 
-	/**
-	 * @param $cc : 2-letter country code
-	 * @return bool
-	 */
-	public function isEuCountry($cc)
-	{
-		if($cc == 'EL') $cc = 'GR';
-		if (in_array($cc, $this->getEuCountries()))
-			return true;
-		return false;
-	}
+    /**
+     * @param $cc : 2-letter country code
+     * @return bool
+     */
+    public function isEuCountry($cc)
+    {
+        if ($cc == 'EL') {
+            $cc = 'GR';
+        }
+
+        if (in_array($cc, $this->getEuCountries())) {
+            return true;
+        }
+
+        return false;
+    }
 
 
-	/**
-	 * @param null $vatid
-	 *
-	 * @return bool|null|string
-	 */
-	public function cleanCustomerVatId($vatid=NULL)
-	{
-		if($vatid != NULL)
-		{
-			$vatid = trim(str_replace(array(" ", ".", ",", "-", "|", "/"), "", $vatid));
-			return strtoupper($vatid);
-		}
-		return false;
-	}
+    /**
+     * @param null $vatid
+     *
+     * @return bool|null|string
+     */
+    public function cleanCustomerVatId($vatid = null)
+    {
+        if ($vatid != null) {
+            $vatid = trim(str_replace([" ", ".", ",", "-", "|", "/"], "", $vatid));
+            return strtoupper($vatid);
+        }
 
-	/**
-	 * Return country code of a VAT number
-	 * @param $vatId
-	 * @return string
-	 */
-	public function getVatIdCc($vatId)
-	{
-		$vatId = substr($vatId, 0, 2);
-		switch($vatId) {
-			case 'EL':
-				$vatId = 'GR';
-				break;
-			default:
-				break;
-		}
-		return strtoupper($vatId);
-	}
+        return false;
+    }
 
+    /**
+     * Return country code of a VAT number
+     * @param $vatId
+     * @return string
+     */
+    public function getVatIdCc($vatId)
+    {
+        $vatId = substr($vatId, 0, 2);
+        switch ($vatId) {
+            case 'EL':
+                $vatId = 'GR';
+                break;
+            default:
+                break;
+        }
 
-	/**
-	 * Gets the groups which shall be excluded from group assignment feature
-	 * @return array
-	 */
-	public function getExcludedGroups()
-	{
-		return explode(",", Mage::getStoreConfig('euvatgrouper/group_assignment/excluded_groups', $this->_storeId));
-	}
+        return strtoupper($vatId);
+    }
 
-	/**
-	 * Gets the groups which shall be excluded from Euvatgrouper tax calculation
-	 * @return array
-	 */
-	public function getExcludedTaxGroups()
-	{
-		return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/excluded_groups_taxcalc', $this->_storeId));
-	}
+    /**
+     * @return bool
+     */
+    public function isUkVatThresholdEnabled()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/brexit/enable_threshold', $this->_storeId);
+    }
+
+    /**
+     * @return float
+     */
+    public function getUkVatThresholdValue()
+    {
+        return (float)Mage::getStoreConfig('euvatgrouper/brexit/threshold_value', $this->_storeId);
+    }
+
+    /**
+     * Gets the groups which shall be excluded from group assignment feature
+     * @return array
+     */
+    public function getExcludedGroups()
+    {
+        return explode(",", Mage::getStoreConfig('euvatgrouper/group_assignment/excluded_groups', $this->_storeId));
+    }
+
+    /**
+     * Gets the groups which shall be excluded from Euvatgrouper tax calculation
+     * @return array
+     */
+    public function getExcludedTaxGroups()
+    {
+        return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/excluded_groups_taxcalc', $this->_storeId));
+    }
 
     /**
      * Gets the groups which should follow regular Magento tax calculation
@@ -165,41 +187,41 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
         return explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/regular_tax_groups', $this->_storeId));
     }
 
-	/**
-	 * Gets the group ID
-	 * @return int
-	 */
-	public function getValidEuVatGroupId()
-	{
-		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group', $this->_storeId);
-	}
+    /**
+     * Gets the group ID
+     * @return int
+     */
+    public function getValidEuVatGroupId()
+    {
+        return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group', $this->_storeId);
+    }
 
-	/**
-	 * Gets the group ID
-	 * @return int
-	 */
-	public function getSameCountryGroupId()
-	{
-		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_same_cc', $this->_storeId);
-	}
+    /**
+     * Gets the group ID
+     * @return int
+     */
+    public function getSameCountryGroupId()
+    {
+        return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_same_cc', $this->_storeId);
+    }
 
-	/**
-	 * Gets the group ID
-	 * @return int
-	 */
-	public function getOutsideEuGroupId()
-	{
-		return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_outside', $this->_storeId);
-	}
+    /**
+     * Gets the group ID
+     * @return int
+     */
+    public function getOutsideEuGroupId()
+    {
+        return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_outside', $this->_storeId);
+    }
 
-	/**
-	 * Gets the group ID
-	 * @return int
-	 */
-	public function getDefaultGroupId()
-	{
-		return (int)Mage::getStoreConfig('customer/create_account/default_group', $this->_storeId);
-	}
+    /**
+     * Gets the group ID
+     * @return int
+     */
+    public function getDefaultGroupId()
+    {
+        return (int)Mage::getStoreConfig('customer/create_account/default_group', $this->_storeId);
+    }
 
     /**
      * Gets the group ID
@@ -207,7 +229,7 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
      */
     public function getInvalidGroupId()
     {
-       return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_invalid', $this->_storeId);
+        return (int)Mage::getStoreConfig('euvatgrouper/group_assignment/target_group_invalid', $this->_storeId);
     }
 
     /**
@@ -220,65 +242,68 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
     }
 
 
-	/**
-	 * Gets the tax class ID for a given group ID
-	 *
-	 * @param $group_id
-	 * @return int
-	 */
-	public function getTaxClassIdForGroup($group_id)
-	{
-		return (int)Mage::getSingleton('customer/group')->load($group_id)->getTaxClassId();
-	}
+    /**
+     * Gets the tax class ID for a given group ID
+     *
+     * @param $group_id
+     * @return int
+     */
+    public function getTaxClassIdForGroup($group_id)
+    {
+        return (int)Mage::getSingleton('customer/group')->load($group_id)->getTaxClassId();
+    }
 
-	/**
-	 * Gets the tax class ID for VAT exempt customers
-	 * @return int
-	 */
-	public function getTaxExemptClassId() {
-		return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_excluding', $this->_storeId);
-	}
-
-	/**
-	 * Gets the tax class ID for VAT customers
-	 * @return int
-	 */
-	public function getTaxIncludingClassId() {
-		return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including', $this->_storeId);
-	}
+    /**
+     * Gets the tax class ID for VAT exempt customers
+     * @return int
+     */
+    public function getTaxExemptClassId()
+    {
+        return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_excluding', $this->_storeId);
+    }
 
     /**
      * Gets the tax class ID for VAT customers
      * @return int
      */
-    public function getTaxIncludingClassIdBusiness() {
+    public function getTaxIncludingClassId()
+    {
+        return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including', $this->_storeId);
+    }
+
+    /**
+     * Gets the tax class ID for VAT customers
+     * @return int
+     */
+    public function getTaxIncludingClassIdBusiness()
+    {
         return (int)Mage::getStoreConfig('euvatgrouper/vat_settings/tax_class_including_business', $this->_storeId);
     }
 
-	/**
-	 * Gets the default country from Store Config
-	 * @return bool
-	 */
-	public function getOfflineValidate()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/offline_validation', $this->_storeId);
-	}
+    /**
+     * Gets the default country from Store Config
+     * @return bool
+     */
+    public function getOfflineValidate()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/offline_validation', $this->_storeId);
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isModifyOrderGroup()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_order_group', $this->_storeId);
-	}
+    /**
+     * @return bool
+     */
+    public function isModifyOrderGroup()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_order_group', $this->_storeId);
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isModifyGroupOnError()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_error', $this->_storeId);
-	}
+    /**
+     * @return bool
+     */
+    public function isModifyGroupOnError()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/modify_group_on_error', $this->_storeId);
+    }
 
     /**
      * @return bool
@@ -312,41 +337,41 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
         return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/sync_customer_group_with_order_group', $this->_storeId);
     }
 
-	/**
-	 * Gets the default country from Store Config
-	 * @return bool
-	 */
-	public function getAccountingFix()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/force_general_on_vat', $this->_storeId);
-	}
+    /**
+     * Gets the default country from Store Config
+     * @return bool
+     */
+    public function getAccountingFix()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/group_assignment/force_general_on_vat', $this->_storeId);
+    }
 
-	/**
-	 * Gets the default country from Store Config
-	 * @return bool
-	 */
-	public function getStoreCountryCode()
-	{
-		return Mage::getStoreConfig('general/country/default', $this->_storeId);
-	}
+    /**
+     * Gets the default country from Store Config
+     * @return bool
+     */
+    public function getStoreCountryCode()
+    {
+        return Mage::getStoreConfig('general/country/default', $this->_storeId);
+    }
 
-	/**
-	 * Determines if the validation of VAT-IDs is enabled
-	 * @return int
-	 */
-	public function isModuleActive()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/validate_vatid', $this->_storeId);
-	}
+    /**
+     * Determines if the validation of VAT-IDs is enabled
+     * @return int
+     */
+    public function isModuleActive()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/validate_vatid', $this->_storeId);
+    }
 
-	/**
-	 * Gets the full store VAT-ID
-	 * @return int
-	 */
-	public function getShopVatId()
-	{
-		return Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_storeId);
-	}
+    /**
+     * Gets the full store VAT-ID
+     * @return int
+     */
+    public function getShopVatId()
+    {
+        return Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_storeId);
+    }
 
     /**
      * Gets the CC from VAT-ID
@@ -357,99 +382,100 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
         return strtoupper(substr(Mage::getStoreConfig('euvatgrouper/vat_settings/own_vatid', $this->_storeId), 0, 2));
     }
 
-	/**
-	 * Gets the mail sender address
-	 * @return int
-	 */
-	public function doSendValidationMail()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/email_settings/send_mail', $this->_storeId);
-	}
+    /**
+     * Gets the mail sender address
+     * @return int
+     */
+    public function doSendValidationMail()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/email_settings/send_mail', $this->_storeId);
+    }
 
 
-	/**
-	 * Gets the mail sender address
-	 * @return int
-	 */
-	public function getMailSender()
-	{
-		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_sender', $this->_storeId);
-	}
+    /**
+     * Gets the mail sender address
+     * @return int
+     */
+    public function getMailSender()
+    {
+        return Mage::getStoreConfig('euvatgrouper/email_settings/mail_sender', $this->_storeId);
+    }
 
-	/**
-	 * Gets the mail recipient address
-	 * @return int
-	 */
-	public function getMailRecipient()
-	{
-		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_recipient', $this->_storeId);
-	}
+    /**
+     * Gets the mail recipient address
+     * @return int
+     */
+    public function getMailRecipient()
+    {
+        return Mage::getStoreConfig('euvatgrouper/email_settings/mail_recipient', $this->_storeId);
+    }
 
-	/**
-	 * Gets the mail template
-	 * @return int
-	 */
-	public function getMailTemplate()
-	{
-		return Mage::getStoreConfig('euvatgrouper/email_settings/mail_template', $this->_storeId);
-	}
+    /**
+     * Gets the mail template
+     * @return int
+     */
+    public function getMailTemplate()
+    {
+        return Mage::getStoreConfig('euvatgrouper/email_settings/mail_template', $this->_storeId);
+    }
 
-	/**
-	 * Returns whether debug mode is turned on
-	 * @return bool
-	 */
-	public function isIPv6Mode()
-	{
-		return Mage::getStoreConfig('euvatgrouper/extension_info/ipv6_mode', $this->_storeId);
-	}
-	/**
-	 * Returns the IPv4 address to bind on
-	 * @return bool
-	 */
-	public function getIPv4ToBindOn()
-	{
-		return Mage::getStoreConfig('euvatgrouper/extension_info/ipv4_addr', $this->_storeId);
-	}
+    /**
+     * Returns whether debug mode is turned on
+     * @return bool
+     */
+    public function isIPv6Mode()
+    {
+        return Mage::getStoreConfig('euvatgrouper/extension_info/ipv6_mode', $this->_storeId);
+    }
+    /**
+     * Returns the IPv4 address to bind on
+     * @return bool
+     */
+    public function getIPv4ToBindOn()
+    {
+        return Mage::getStoreConfig('euvatgrouper/extension_info/ipv4_addr', $this->_storeId);
+    }
 
-	/**
-	 * Should Cross-Border-Trade be disabled for EU B2B customers
-	 * @return int
-	 */
-	public function getDisableCbtForEuBusiness()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_eub2b', $this->_storeId);
-	}
+    /**
+     * Should Cross-Border-Trade be disabled for EU B2B customers
+     * @return int
+     */
+    public function getDisableCbtForEuBusiness()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_eub2b', $this->_storeId);
+    }
 
-	/**
-	 * Should Cross-Border-Trade be disabled for customers from out of Europe
-	 * @return int
-	 */
-	public function getDisableCbtForOutOfEurope()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_noneu', $this->_storeId);
-	}
+    /**
+     * Should Cross-Border-Trade be disabled for customers from out of Europe
+     * @return int
+     */
+    public function getDisableCbtForOutOfEurope()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/vat_settings/disable_cbt_noneu', $this->_storeId);
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isCbtEnabled()
-	{
-		return (bool)Mage::getStoreConfig('tax/calculation/cross_border_trade_enabled', $this->_storeId);
-	}
+    /**
+     * @return bool
+     */
+    public function isCbtEnabled()
+    {
+        return (bool)Mage::getStoreConfig('tax/calculation/cross_border_trade_enabled', $this->_storeId);
+    }
 
-	/**
-	 * @param $countryCode
-	 *
-	 * @return bool
-	 */
-	public function isThresholdCountry($countryCode)
-	{
-		$countriesConfigured = explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/threshold_countries', $this->_storeId));
-		if(in_array($countryCode, $countriesConfigured)) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * @param $countryCode
+     *
+     * @return bool
+     */
+    public function isThresholdCountry($countryCode)
+    {
+        $countriesConfigured = explode(",", Mage::getStoreConfig('euvatgrouper/vat_settings/threshold_countries', $this->_storeId));
+        if (in_array($countryCode, $countriesConfigured)) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Check if a valid VAT number is required to checkout
@@ -460,61 +486,64 @@ class Geissweb_Euvatgrouper_Helper_Abstract extends Mage_Core_Helper_Abstract
         return (int)Mage::getStoreConfig('euvatgrouper/integration/require_valid_number_to_checkout', $this->_storeId);
     }
 
-	/**
-	 * Checks if the current scope is adminhtml
-	 * @return bool
-	 */
-	public function isAdmin()
-	{
-		if(Mage::app()->getStore()->isAdmin())
-			return true;
+    /**
+     * Checks if the current scope is adminhtml
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        if (Mage::app()->getStore()->isAdmin()) {
+            return true;
+        }
 
-		if(Mage::getDesign()->getArea() == 'adminhtml')
-			return true;
+        if (Mage::getDesign()->getArea() == 'adminhtml') {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Get Tax based on setting
-	 * @return mixed (billing|shipping|origin)
-	 */
-	public function getVatBasedOn()
-	{
-		return Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, $this->_storeId);
-	}
+    /**
+     * Get Tax based on setting
+     * @return mixed (billing|shipping|origin)
+     */
+    public function getVatBasedOn()
+    {
+        return Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, $this->_storeId);
+    }
 
-	/**
-	 * @return bool
-	 */
+    /**
+     * @return bool
+     */
     public function getIsTakeoverVatToAccount()
     {
         return (bool)Mage::getStoreConfig('euvatgrouper/integration/takeover_vat_to_account', $this->_storeId);
     }
 
-	/**
-	 * @return bool
-	 */
-	public function getUseMossBasedOnVatNumber()
-	{
-		return (bool)Mage::getStoreConfig('euvatgrouper/moss_settings/use_moss_based_on_vat_number', $this->_storeId);
-	}
+    /**
+     * @return bool
+     */
+    public function getUseMossBasedOnVatNumber()
+    {
+        return (bool)Mage::getStoreConfig('euvatgrouper/moss_settings/use_moss_based_on_vat_number', $this->_storeId);
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getMossProductsClassId()
-	{
-		return (int)Mage::getStoreConfig('euvatgrouper/moss_settings/digital_products_class_id', $this->_storeId);
-	}
-	/**
-	 * @return bool
-	 */
+    /**
+     * @return int
+     */
+    public function getMossProductsClassId()
+    {
+        return (int)Mage::getStoreConfig('euvatgrouper/moss_settings/digital_products_class_id', $this->_storeId);
+    }
+    /**
+     * @return bool
+     */
     public function getLicenseStatus()
     {
         $key = Mage::getStoreConfig('euvatgrouper/extension_info/license_key', $this->_storeId);
-        if($key=='')
+        if ($key == '') {
             return false;
+        }
 
         return true;
     }

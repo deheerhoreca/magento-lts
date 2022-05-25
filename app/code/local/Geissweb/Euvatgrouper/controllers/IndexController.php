@@ -22,63 +22,68 @@
 class Geissweb_Euvatgrouper_IndexController extends Mage_Core_Controller_Front_Action
 {
 
+    /**
+     * Executes validation
+     * @return string
+     */
     public function indexAction()
     {
-		$do_validation = false;
-		$customer_vat_id = false;
-		$validator = Mage::getSingleton("euvatgrouper/validation_vies");
+        $do_validation   = false;
+        $customer_vat_id = false;
+        /** @var Geissweb_Euvatgrouper_Model_Validation_Vies $validator */
+        $validator = Mage::getSingleton("euvatgrouper/validation_vies");
 
-		$address_type = $this->getRequest()->getParam('address_type');
-		if(!$address_type || $address_type == '') $address_type = 'billing';
-		$validator->setAddressType($address_type);
-
-		$address_id = $this->getRequest()->getParam('address_id');
-		$validator->setAddressId($address_id);
-
-        if ($this->getRequest()->getParam('taxvat') != "") {
-            $customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('taxvat'));
-
-        } elseif (is_array($this->getRequest()->getParam('billing'))) {
-            $param = $this->getRequest()->getParam('billing');
-            $customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($param['taxvat']);
+        $address_type = $this->getRequest()->getParam('address_type');
+        if (!$address_type || $address_type == '') {
+            $address_type = 'billing';
         }
 
-        if($customer_vat_id != false)
-        {
+        $validator->setAddressType($address_type);
+
+        $address_id = $this->getRequest()->getParam('address_id');
+        $validator->setAddressId($address_id);
+
+        if ($this->getRequest()->getParam('taxvat') != "") {
+            $customer_vat_id = Mage::helper('euvatgrouper')
+                ->cleanCustomerVatId($this->getRequest()->getParam('taxvat'));
+        } elseif (is_array($this->getRequest()->getParam('billing'))) {
+            $param           = $this->getRequest()->getParam('billing');
+            $customer_vat_id = Mage::helper('euvatgrouper')
+                ->cleanCustomerVatId($param['taxvat']);
+        }
+
+        if ($customer_vat_id != false) {
             $validator->setUserTaxvat($customer_vat_id);
             $do_validation = true;
         }
 
         try {
-	        if ($do_validation)
-	        {
-		        $validator->setUserCc(strtoupper(substr($validator->getUserTaxvat(), 0, 2)));
-		        $validator->setUserNr(substr($validator->getUserTaxvat(), 2));
+            if ($do_validation) {
+                $validator->setUserCc(strtoupper(substr($validator->getUserTaxvat(), 0, 2)));
+                $validator->setUserNr(substr($validator->getUserTaxvat(), 2));
+                $validator->validate();
+                $result = $validator->getResult();
 
-		        $validator->validate();
-		        $result = $validator->getResult();
-		        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+            }
 
-	        }
-
-	        if($this->getRequest()->getParam('vatid') == "removed")
-	        {
-		        $result = Mage::helper('euvatgrouper')->assignDefault($address_id, $address_type);
-		        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-	        }
-        } catch(Exception $e) {
-        	Mage::logException($e);
+            if ($this->getRequest()->getParam('vatid') == "removed") {
+                $result = Mage::helper('euvatgrouper')->assignDefault($address_id, $address_type);
+                $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+            }
+        } catch (Exception $e) {
+            Mage::logException($e);
         }
-
-
-
     }
 
-	public function getLoaderSrcAction()
-	{
-		$skin_path = $this->getLayout()->createBlock('core/text')->getSkinUrl('images/opc-ajax-loader.gif', array('_secure'=>true));
-		$this->getResponse()->setBody(Mage::helper('core')->jsonEncode( $skin_path ));
-	}
-
+    /**
+     * Returns URL to the loading animation
+     * @return string
+     */
+    public function getLoaderSrcAction()
+    {
+        $skin_path = $this->getLayout()->createBlock('core/text')
+                                       ->getSkinUrl('images/opc-ajax-loader.gif', ['_secure' => true]);
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($skin_path));
+    }
 }
-?>

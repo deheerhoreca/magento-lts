@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -19,21 +20,22 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
-class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Abstract {
+class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Abstract
+{
 
     /**
      * @return array
      */
     public function getNewProductTaxClasses()
     {
-        return array(
+        return [
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_PRODUCTS_STANDART => $this->__('Products with standard VAT rate'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_PRODUCTS_REDUCED => $this->__('Products with reduced VAT rate'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_PRODUCTS_SHIPPING_STANDART => $this->__('Shipping with standard VAT rate'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_PRODUCTS_SHIPPING_REDUCED => $this->__('Shipping with reduced VAT rate'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_PRODUCTS_DIGITAL => $this->__('Digital products and services'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_PRODUCTS_NON_TAXABLE => $this->__('Non-Taxable Products'),
-        );
+        ];
     }
 
     /**
@@ -41,11 +43,11 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
      */
     public function getNewCustomerTaxClasses()
     {
-        return array(
+        return [
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_CONSUMER => $this->__('Consumers incl. VAT'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_BUSINESS_DOMESTIC => $this->__('Businesses incl. VAT'),
             Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_BUSINESS_EU => $this->__('Businesses excl. VAT')
-        );
+        ];
     }
 
     /**
@@ -53,15 +55,15 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
      */
     public function getTaxClassesInsertArray()
     {
-        $insert = array();
-        foreach($this->getNewProductTaxClasses() as $key=>$class)
-        {
-            $insert[] = array('class_id'=>$key, 'class_name'=>$class, 'class_type'=>Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT);
+        $insert = [];
+        foreach ($this->getNewProductTaxClasses() as $key => $class) {
+            $insert[] = ['class_id' => $key, 'class_name' => $class, 'class_type' => Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT];
         }
-        foreach($this->getNewCustomerTaxClasses() as $key=>$class)
-        {
-            $insert[] = array('class_id'=>$key, 'class_name'=>$class, 'class_type'=>Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER);
+
+        foreach ($this->getNewCustomerTaxClasses() as $key => $class) {
+            $insert[] = ['class_id' => $key, 'class_name' => $class, 'class_type' => Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER];
         }
+
         return $insert;
     }
 
@@ -72,7 +74,7 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
      */
     public function getStandardRates()
     {
-        return array(
+        return [
             'AT' => 20,
             'BE' => 21,
             'BG' => 20,
@@ -101,57 +103,53 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
             'SE' => 25,
             'SK' => 20,
             'SI' => 22,
-        );
+        ];
     }
 
     /**
      * "Compiles" an array with tax rates to be inserted into the database
      *
      * @param      $baseCc
-     * @param bool $withDigital
-     * @param bool $withReduced
-     * @param null $reducedRate
+     * @param bool   $withDigital
+     * @param bool   $withReduced
+     * @param null   $reducedRate
      *
      * @return array
      */
-    public function getTaxRatesInsertArray($baseCc, $withDigital=false, $withReduced=false, $reducedRate=null)
+    public function getTaxRatesInsertArray($baseCc, $withDigital = false, $withReduced = false, $reducedRate = null)
     {
         $standardRates = $this->getStandardRates();
-        $standardRate = (float)$standardRates[$baseCc];
-        $insertRates = array();
+        $standardRate  = (float)$standardRates[$baseCc];
+        $insertRates   = [];
 
-        foreach($standardRates as $cC => $rate)
-        {
-            $insertRates[] = array(
-                'tax_country_id'=> $cC,
-                'code' => $cC. Mage::helper('euvatgrouper')->__(" standard VAT"),
+        foreach ($standardRates as $cC => $rate) {
+            $insertRates[] = [
+                'tax_country_id' => $cC,
+                'code' => $cC . Mage::helper('euvatgrouper')->__(" standard VAT"),
                 'rate' => (float)$standardRate
-            );
+            ];
 
-            if($withReduced && !is_null($reducedRate))
-            {
-                $insertRates[] = array(
-                    'tax_country_id'=> $cC,
-                    'code' => $cC. Mage::helper('euvatgrouper')->__(" reduced VAT"),
+            if ($withReduced && !is_null($reducedRate)) {
+                $insertRates[] = [
+                    'tax_country_id' => $cC,
+                    'code' => $cC . Mage::helper('euvatgrouper')->__(" reduced VAT"),
                     'rate' => (float)$reducedRate
-                );
+                ];
             }
 
-            if($withDigital)
-            {
-                $insertRates[] = array(
-                    'tax_country_id'=> $cC,
-                    'code' => $cC. Mage::helper('euvatgrouper')->__(" digital VAT"),
+            if ($withDigital) {
+                $insertRates[] = [
+                    'tax_country_id' => $cC,
+                    'code' => $cC . Mage::helper('euvatgrouper')->__(" digital VAT"),
                     'rate' => (float)$rate
-                );
+                ];
             }
 
-            $insertRates[] = array(
-                'tax_country_id'=> $cC,
-                'code' => $cC. Mage::helper('euvatgrouper')->__(" VAT exempt"),
+            $insertRates[] = [
+                'tax_country_id' => $cC,
+                'code' => $cC . Mage::helper('euvatgrouper')->__(" VAT exempt"),
                 'rate' => 0.0000
-            );
-
+            ];
         }
 
         return $insertRates;
@@ -160,17 +158,16 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
     /**
      * "Compiles" import array for store config value changes
      *
-     * @param      $baseCc
-     * @param      $key
-     * @param      $vatId
-     *
-     * @param bool $withRules
+     * @param string $baseCc
+     * @param string $key
+     * @param string $vatId
+     * @param bool   $withRules
      *
      * @return array
      */
-    public function getStoreConfigValues($baseCc, $key, $vatId, $withRules=false)
+    public function getStoreConfigValues($baseCc, $key, $vatId, $withRules = false)
     {
-        $config = array(
+        $config = [
             'general/country/default'           => $baseCc,
             'tax/classes/shipping_tax_class'    => 3,
             'tax/calculation/based_on'          => 'shipping',
@@ -181,13 +178,12 @@ class Geissweb_Euvatgrouper_Helper_Setup extends Geissweb_Euvatgrouper_Helper_Ab
             'customer/address/taxvat_show'      => 0,
             'euvatgrouper/extension_info/license_key' => $key,
             'euvatgrouper/vat_settings/own_vatid' => $this->cleanCustomerVatId($vatId),
-        );
+        ];
 
-        if($withRules == '1')
-        {
-            $config['euvatgrouper/vat_settings/tax_class_including'] = Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_CONSUMER;
+        if ($withRules == '1') {
+            $config['euvatgrouper/vat_settings/tax_class_including']          = Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_CONSUMER;
             $config['euvatgrouper/vat_settings/tax_class_including_business'] = Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_BUSINESS_DOMESTIC;
-            $config['euvatgrouper/vat_settings/tax_class_excluding'] = Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_BUSINESS_EU;
+            $config['euvatgrouper/vat_settings/tax_class_excluding']          = Geissweb_Euvatgrouper_Model_Setup_Tax::TC_CUSTOMER_BUSINESS_EU;
         }
 
         return $config;

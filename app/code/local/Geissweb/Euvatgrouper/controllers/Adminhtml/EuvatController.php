@@ -19,180 +19,163 @@
  * @license     https://www.geissweb.de/eula/ GEISSWEB End User License Agreement
  */
 
-class Geissweb_Euvatgrouper_Adminhtml_EuvatController extends Mage_Adminhtml_Controller_Action
-{
+class Geissweb_Euvatgrouper_Adminhtml_EuvatController extends Mage_Adminhtml_Controller_Action {
 
-	/**
-	 * Mass validate customers VAT numbers in "taxvat" field
-	 */
-	public function validateAccountAction()
-	{
-		$customerIds = $this->getRequest()->getParam('customer');
-		$validated = 0;
+    /**
+     * Mass validate customers VAT numbers in "taxvat" field
+     */
+    public function validateAccountAction()
+    {
+        $customerIds = $this->getRequest()->getParam('customer');
+        $validated   = 0;
 
-		if(!is_array($customerIds))
-		{
-			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__('VAT validation was cancelled.'));
+        if (!is_array($customerIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__('VAT validation was cancelled.'));
 
-		} else {
+        } else {
 
-			try {
+            try {
+                $validator = Mage::getSingleton('euvatgrouper/validation_vies');
+                if (!$validator->isServiceOnline()) {
+                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__('EU VIES Service is offline.') . ' ' . Mage::helper('euvatgrouper')->__('VAT validation was cancelled.'));
+                }
 
-				$validator = Mage::getSingleton('euvatgrouper/validation_vies');
-				if(!$validator->isServiceOnline()) {
-					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__('EU VIES Service is offline.').' '.Mage::helper('euvatgrouper')->__('VAT validation was cancelled.'));
-				}
+                foreach ($customerIds as $customerId) {
+                    $customer        = Mage::getModel('customer/customer')->load($customerId);
+                    $oldGroupId      = $customer->getGroupId();
+                    $oldGroupName    = Mage::getModel('customer/group')->load($customer->getGroupId())->getCode();
+                    $defaultBilling  = $customer->getDefaultBillingAddress();
+                    $defaultShipping = $customer->getDefaultShippingAddress();
+                    //We need default addresses to save validation data
+                    if (!$defaultBilling instanceof Mage_Customer_Model_Address || !$defaultShipping instanceof Mage_Customer_Model_Address) {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("Customer ID $customerId has no default addresses."));
+                        continue;
+                    }
+                    $taxvat = $customer->getTaxvat();
+                    //We need a VAT number
+                    if (empty($taxvat)) {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("Customer ID $customerId has no VAT number in taxvat field."));
+                        continue;
+                    } else {
+                        $oldVatNumber = Mage::helper('euvatgrouper')->cleanCustomerVatId($taxvat);
+                        $oldCc        = Mage::helper('euvatgrouper')->getCc($oldVatNumber);
+                        $oldNumber    = Mage::helper('euvatgrouper')->getNumber($oldVatNumber);
+                        //Check if this is really a VAT number
+                        if (ctype_alpha($oldCc) && ctype_alnum($oldNumber)) {
+                            if (strstr($oldNumber, $oldCc)) { //Fixes double country within number
+                                $oldNumber = str_replace($oldCc, '', $oldNumber);
+                            }
+                        } elseif (!ctype_alpha($oldCc) && ctype_alnum($oldNumber)) { //Get country information from address
+                            $oldCc     = $defaultBilling->getCountry();
+                            $oldNumber = Mage::helper('euvatgrouper')->cleanCustomerVatId($taxvat);
+                        } else {
+                            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("VAT Number ($oldVatNumber) of customer ID $customerId can not be processed."));
+                            continue;
+                        }
 
-				foreach($customerIds as $customerId)
-				{
-					$customer = Mage::getModel('customer/customer')->load($customerId);
-					$oldGroupId = $customer->getGroupId();
-					$oldGroupName = Mage::getModel('customer/group')->load($customer->getGroupId())->getCode();
-					$defaultBilling = $customer->getDefaultBillingAddress();
-					$defaultShipping = $customer->getDefaultShippingAddress();
+                        //Skip non EU countries
+                        if (!Mage::helper('euvatgrouper')->isEuCountry($oldCc)) {
+                            Mage::getSingleton('adminhtml/session')->addError(
+                                Mage::helper('euvatgrouper')->__("VAT Number ($oldVatNumber) of customer ID $customerId can not be processed, as it is not an EU country.")
+                            );
+                            continue;
+                        }
+                    }
 
-					//We need default addresses to save validation data
-					if(!$defaultBilling instanceof Mage_Customer_Model_Address || !$defaultShipping instanceof Mage_Customer_Model_Address) {
-						Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("Customer ID $customerId has no default addresses."));
-						continue;
-					}
+                    $validator->setUserCc($oldCc);
+                    $validator->setUserNr($oldNumber);
+                    $validator->setIsCronValidation(true);
+                    $validator->setAddressId($defaultBilling->getId());
+                    $validator->setAddressType($defaultBilling->getAddressType());
+                    $validator->validate();
+                    $result = $validator->getResult();
+                    $validated++;
 
-					$taxvat = $customer->getTaxvat();
+                    //Group change only when request was successful
+                    if ($result->getVatRequestSuccess() == false) {
+                        $newGroupId = Mage::helper('euvatgrouper/customer')
+                                          ->getCustomerGroupForAccount($result->getData());
+                        if ($oldGroupId != $newGroupId
+                            && !in_array($oldGroupId, Mage::helper('euvatgrouper/customer')->getExcludedGroups())
+                        ) {
+                            $newGroupName = Mage::getModel('customer/group')->load($newGroupId)->getCode();
+                            $customer->setGroupId($newGroupId);
+                            Mage::getSingleton('adminhtml/session')->addNotice('Group changed',
+                                $this->__('Moved customer '.$customer->getId().' from '.$oldGroupName.' to '.$newGroupName)
+                            );
+                        }
+                    }
 
-					//We need a VAT number
-					if(empty($taxvat)) {
-						Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("Customer ID $customerId has no VAT number in taxvat field."));
-						continue;
-					} else {
-						$oldVatNumber = Mage::helper('euvatgrouper')->cleanCustomerVatId($taxvat);
-						$oldCc = Mage::helper('euvatgrouper')->getCc($oldVatNumber);
-						$oldNumber = Mage::helper('euvatgrouper')->getNumber($oldVatNumber);
-						//Check if this is really a VAT number
-						if(ctype_alpha($oldCc) && ctype_alnum($oldNumber)) {
-							if ( strstr( $oldNumber, $oldCc ) ) { //Fixes double country within number
-								$oldNumber = str_replace( $oldCc, '', $oldNumber );
-							}
-						} elseif(!ctype_alpha($oldCc) && ctype_alnum($oldNumber)) { //Get country information from address
-							$oldCc = $defaultBilling->getCountry();
-							$oldNumber = Mage::helper('euvatgrouper')->cleanCustomerVatId($taxvat);
-						} else {
-							Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("VAT Number ($oldVatNumber) of customer ID $customerId can not be processed."));
-							continue;
-						}
+                    Mage::helper('euvatgrouper')->setValidationResultOnAddress($result, $defaultBilling);
+                    Mage::helper('euvatgrouper')->setValidationResultOnAddress($result, $defaultShipping);
+                    $customer->save();
 
-						//Skip non EU countries
-						if(!Mage::helper('euvatgrouper')->isEuCountry($oldCc)) {
-							Mage::getSingleton('adminhtml/session')->addError(Mage::helper('euvatgrouper')->__("VAT Number ($oldVatNumber) of customer ID $customerId can not be processed, as it is not an EU country."));
-							continue;
-						}
-					}
+                }//endforeach
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('euvatgrouper')->__('Successfully validated ' . $validated . '/' . count($customerIds) . ' customers.'));
 
-					$validator->setUserCc($oldCc);
-					$validator->setUserNr($oldNumber);
-					$validator->setIsCronValidation(true);
-					$validator->setAddressId($defaultBilling->getId());
-					$validator->setAddressType($defaultBilling->getAddressType());
-					$validator->validate();
-					$result = $validator->getResult();
-					$validated++;
+            } catch(Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                Mage::logException($e);
+            }
+        }
 
-					//Group change only when request was successful
-					if($result->getVatRequestSuccess() == true)
-					{
-						$newGroupId = Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount($result->getData());
-						if($oldGroupId != $newGroupId && !in_array($oldGroupId, Mage::helper('euvatgrouper/customer')->getExcludedGroups()))
-						{
-							$newGroupName = Mage::getModel('customer/group')->load($newGroupId)->getCode();
-							$customer->setGroupId($newGroupId);
-							Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('euvatgrouper')->__('Moved customer '.$customer->getId().' from '.$oldGroupName.' to '.$newGroupName));
-						}
-					}
+        $this->_redirectReferer();
+    }
 
-					$defBilling = Mage::helper('euvatgrouper')->setValidationResultOnAddress($result, $defaultBilling);
-					$defShipping = Mage::helper('euvatgrouper')->setValidationResultOnAddress($result, $defaultShipping);
-					$customer->save();
+    /**
+     * Regular admin validation
+     */
+    public function validateSingleAddressAction()
+    {
+        $do_validation   = false;
+        $customer_vat_id = false;
+        $validator       = Mage::getSingleton("euvatgrouper/validation_vies");
+        $op_mode         = $this->getRequest()->getParam('op_mode');
+        $validator->setOpMode($op_mode);
 
-				}//endforeach
+        $address_type = $this->getRequest()->getParam('address_type');
+        if (!$address_type || $address_type == '') {
+            $address_type = 'billing';
+        }
+        $validator->setAddressType($address_type);
 
-				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('euvatgrouper')->__('Successfully validated '.$validated.'/'.count($customerIds).' customers.'));
+        $address_id = $this->getRequest()->getParam('address_id');
+        $validator->setAddressId($address_id);
 
-			} catch(Exception $e) {
-				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-				Mage::logException($e);
-			}
-		}
+        if ($this->getRequest()->getParam('vat') != "") {
+            $customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('vat'));
 
-		$this->_redirectReferer();
-	}
+        } elseif ($this->getRequest()->getParam('vat_id') != "") {
+            $customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('vat_id'));
 
-	/**
-	 * Regular admin validation
-	 */
-	public function validateSingleAddressAction()
-	{
-		$do_validation = false;
-		$customer_vat_id = false;
-		$validator = Mage::getSingleton("euvatgrouper/validation_vies");
-		$op_mode = $this->getRequest()->getParam('op_mode');
-		$validator->setOpMode($op_mode);
+        } elseif ($this->getRequest()->getParam('taxvat') != "") {
+            $customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('taxvat'));
 
-		$address_type = $this->getRequest()->getParam('address_type');
-		if(!$address_type || $address_type == '') $address_type = 'billing';
-		$validator->setAddressType($address_type);
+        } elseif (is_array($this->getRequest()->getParam('billing'))) {
+            $param           = $this->getRequest()->getParam('billing');
+            $customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($param['vat_id']);
+        }
 
-		$address_id = $this->getRequest()->getParam('address_id');
-		$validator->setAddressId($address_id);
+        if ($customer_vat_id != false) {
+            $validator->setUserTaxvat($customer_vat_id);
+            $do_validation = true;
+        }
 
-		if ($this->getRequest()->getParam('vat') != "")
-		{
-			$customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('vat'));
+        if ($do_validation) {
+            $validator->setUserCc(strtoupper(substr($validator->getUserTaxvat(), 0, 2)));
+            $validator->setUserNr(substr($validator->getUserTaxvat(), 2));
+            $validator->validate();
+            $result = $validator->getResult();
+            $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+        }
 
-		} elseif ($this->getRequest()->getParam('vat_id') != "") {
-			$customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('vat_id'));
-
-		} elseif ($this->getRequest()->getParam('taxvat') != "") {
-			$customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($this->getRequest()->getParam('taxvat'));
-
-		} elseif (is_array($this->getRequest()->getParam('billing'))) {
-
-			$param = $this->getRequest()->getParam('billing');
-			$customer_vat_id = Mage::helper('euvatgrouper')->cleanCustomerVatId($param['vat_id']);
-		}
-
-		if($customer_vat_id != false) {
-			$validator->setUserTaxvat($customer_vat_id);
-			$do_validation = true;
-		}
-
-		if ($do_validation)
-		{
-			$validator->setUserCc(strtoupper(substr($validator->getUserTaxvat(), 0, 2)));
-			$validator->setUserNr(substr($validator->getUserTaxvat(), 2));
-
-			/*
-			try {
-				$validator->validate();
-				$result = $validator->getResult();
-				$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-			} catch(SoapFault $e) {
-				$result = new stdClass();
-				$result->faultstring = strtoupper($e->getMessage());
-				$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-			}
-			*/
-			$validator->validate();
-			$result = $validator->getResult();
-			$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-		}
-
-	}
+    }
 
     /**
      * @return bool
      */
-    public function _isAllowed()
-    {
-	    return Mage::getSingleton('admin/session')->isAllowed('sales/validate_vat_number');
+    public function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('sales/validate_vat_number');
     }
 
 }

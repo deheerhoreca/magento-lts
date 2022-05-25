@@ -24,73 +24,94 @@
  */
 class Geissweb_Euvatgrouper_Model_Validation_Result extends Varien_Object
 {
+    /** @var Geissweb_Euvatgrouper_Helper_Data|Mage_Core_Helper_Abstract $helper */
+    public $helper;
 
-	/**
-	 * @param      $response
-	 * @param null $vat_id
-	 *
-	 * @return $this
-	 * @throws Varien_Exception
-	 */
-	public function setViesData($response, $vat_id=null)
-	{
-		if(is_object($response))
-		{
-			if(!property_exists($response, 'shop_cc')) $response->shop_cc = Mage::helper('euvatgrouper')->getShopVatCc();
-			if(!property_exists($response, 'user_nr') && !is_null($vat_id)) $response->user_nr = $vat_id;
-			if(!property_exists($response, 'user_cc') && !is_null($vat_id)) $response->user_cc = substr($vat_id,0,2);
-			if(!property_exists($response, 'requestDate')) $response->requestDate = date("Y-m-d H:i:s", time());
-            if(property_exists($response, 'faultstring')) $this->setFaultstring($response->faultstring);
+    /** @var Geissweb_Euvatgrouper_Helper_Customer|Mage_Core_Helper_Abstract $helperCustomer */
+    public $helperCustomer;
 
-			$this->setShopCc($response->shop_cc);
-			$this->setUserNr(Mage::helper('euvatgrouper')->cleanCustomerVatId($response->user_nr));
-			$this->setVatId(Mage::helper('euvatgrouper')->cleanCustomerVatId($response->user_cc.$response->user_nr));
-			$this->setUserCc($response->user_cc);
-			$this->setCountryId(Mage::helper('euvatgrouper')->getVatIdCc($response->user_cc));
+    /**
+     * Constructor
+     * (By default is looking for first argument as array and assignes it as object attributes)
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-			// Customer address data
-			$this->setAddressType($response->address_type);
+        $this->helper = Mage::helper('euvatgrouper/data');
+        $this->helperCustomer = Mage::helper('euvatgrouper/customer');
+    }
 
-			$this->setVatTraderName( (property_exists($response, 'traderName')) ? $response->traderName : null );
-			$this->setVatTraderCompanyType( (property_exists($response, 'traderCompanyType')) ? $response->traderCompanyType : null );
-			$this->setVatTraderAddress( (property_exists($response, 'traderAddress')) ? $response->traderAddress : null );
+    /**
+     * @param      $response
+     * @param null $vat_id
+     *
+     * @return $this
+     */
+    public function setViesData($response, $vat_id=null)
+    {
+        if (is_object($response)) {
+            if (!property_exists($response, 'shop_cc')) {
+                $response->shop_cc = $this->helper->getShopVatCc();
+            }
+            if (!property_exists($response, 'user_nr') && !is_null($vat_id)) {
+                $response->user_nr = $vat_id;
+            }
+            if (!property_exists($response, 'user_cc') && !is_null($vat_id)) {
+                $response->user_cc = substr($vat_id, 0, 2);
+            }
+            if (!property_exists($response, 'requestDate')) {
+                $response->requestDate = date("Y-m-d H:i:s", time());
+            }
 
-			$this->setVatRequestDate($response->requestDate);
-			$this->setVatRequestId( (property_exists($response, 'requestIdentifier')) ? $response->requestIdentifier : null );
+            if (property_exists($response, 'faultstring')) {
+                $this->setFaultstring($response->faultstring);
+            }
 
-			$this->setVatRequestSuccess( $response->vat_request_success );
+            $this->setShopCc($response->shop_cc);
+            $this->setUserNr($this->helper->cleanCustomerVatId($response->user_nr));
+            $this->setVatId($this->helper->cleanCustomerVatId($response->user_cc.$response->user_nr));
+            $this->setUserCc($response->user_cc);
+            $this->setCountryId($this->helper->getVatIdCc($response->user_cc));
 
-			// Used for Javascript output
-			if ($response->valid == 'true')
-			{
-				$this->setValid(true);
+            // Customer address data
+            $this->setAddressType($response->address_type);
 
-				if ($response->user_cc != $response->shop_cc) {
-					$this->setVatIsValid(true);
-					$this->setIsVatFree(true);
+            $this->setVatTraderName((property_exists($response, 'traderName')) ? $response->traderName : null);
+            $this->setVatTraderCompanyType((property_exists($response, 'traderCompanyType')) ? $response->traderCompanyType : null);
+            $this->setVatTraderAddress((property_exists($response, 'traderAddress')) ? $response->traderAddress : null);
 
-				} elseif ($response->user_cc == $response->shop_cc) {
-					$this->setVatIsValid(true);
-					$this->setIsVatFree(false);
+            $this->setVatRequestDate($response->requestDate);
+            $this->setVatRequestId((property_exists($response, 'requestIdentifier')) ? $response->requestIdentifier : null);
 
-				} else {
-					$this->setVatIsValid(false);
-					$this->setIsVatFree(false);
-				}
-			} else {
-				$this->setValid(false);
-				$this->setVatIsValid(false);
-				$this->setIsVatFree(false);
-			}
+            $this->setVatRequestSuccess($response->vat_request_success);
 
-			$this->setGroup(
-				Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount((array)$this->getData(), $response->user_cc)
-			);
+            // Used for Javascript output
+            if ($response->valid == true) {
+                $this->setValid(true);
+                if ($response->user_cc != $response->shop_cc) {
+                    $this->setVatIsValid(true);
+                    $this->setIsVatFree(true);
+                } elseif ($response->user_cc == $response->shop_cc) {
+                    $this->setVatIsValid(true);
+                    $this->setIsVatFree(false);
+                } else {
+                    $this->setVatIsValid(false);
+                    $this->setIsVatFree(false);
+                }
+            } else {
+                $this->setValid(false);
+                $this->setVatIsValid(false);
+                $this->setIsVatFree(false);
+            }
 
-			return $this;
-		}
+            $this->setGroup(
+                $this->helperCustomer->getCustomerGroupForAccount((array)$this->getData(), $response->user_cc)
+            );
 
-		return $response;
-	}
+            return $this;
+        }
 
+        return $response;
+    }
 }

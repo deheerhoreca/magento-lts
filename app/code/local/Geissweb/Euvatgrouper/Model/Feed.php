@@ -28,28 +28,29 @@ class Geissweb_Euvatgrouper_Model_Feed extends Mage_AdminNotification_Model_Feed
      */
     public function checkUpdate()
     {
-        if ((($this->getFrequency()*15) + $this->getLastUpdate()) > time()) {
+        if ((($this->getFrequency() * 15) + $this->getLastUpdate()) > time()) {
             return $this;
         }
 
-        $feedData = array();
-        $feedXml = $this->getUpdateFeedData();
+        $feedData = [];
+        $feedXml  = $this->getUpdateFeedData();
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
-                $feedData[] = array(
+                $feedData[] = [
                     'severity'      => (int)$item->severity,
                     'date_added'    => $this->getDate((string)$item->pubDate),
                     'title'         => (string)$item->title,
                     'description'   => (string)$item->description,
                     'url'           => (string)$item->link,
-                );
+                ];
             }
 
             if ($feedData) {
                 Mage::getModel('adminnotification/inbox')->parse(array_reverse($feedData));
             }
         }
+
         $this->setLastUpdate();
 
         return $this;
@@ -64,61 +65,61 @@ class Geissweb_Euvatgrouper_Model_Feed extends Mage_AdminNotification_Model_Feed
     {
         try {
             $curl = new Varien_Http_Adapter_Curl();
-            $curl->setConfig(array(
+            $curl->setConfig(
+                [
                 'timeout'   => 8
-            ));
+                ]
+            );
             $curl->write(Zend_Http_Client::GET, $this->getUpdateFeedUrl(), '1.0');
             $data = $curl->read();
             if ($data === false) {
                 return false;
             }
+
             $data = preg_split('/^\r?$/m', $data, 2);
             $data = trim($data[1]);
             $curl->close();
 
-	        libxml_use_internal_errors(true);
-	        $doc = simplexml_load_string($data);
-	        if ($doc != false) {
-		        $xml  = new SimpleXMLElement($data);
-		        return $xml;
-
-	        } else {
-		        $errors = libxml_get_errors();
-		        libxml_clear_errors();
-	        }
-
+            libxml_use_internal_errors(true);
+            $doc = simplexml_load_string($data);
+            if ($doc != false) {
+                $xml = new SimpleXMLElement($data);
+                return $xml;
+            } else {
+                $errors = libxml_get_errors();
+                libxml_clear_errors();
+            }
         } catch (Exception $e) {
             return false;
         }
-
     }
 
-	/**
-	 * Retrieve feed url
-	 * @return string
-	 */
-	public function getUpdateFeedUrl()
-	{
-		if (is_null($this->_feedUrl)) {
-			$this->_feedUrl = 'https://www.geissweb.de/feeds/extensionupdates.php'.($this->getExtraParams());
-		}
-		return $this->_feedUrl;
-	}
+    /**
+     * Retrieve feed url
+     * @return string
+     */
+    public function getUpdateFeedUrl()
+    {
+        if (is_null($this->_feedUrl)) {
+            $this->_feedUrl = 'https://www.geissweb.de/feeds/extensionupdates.php' . ($this->getExtraParams());
+        }
 
-	/**
-	 * Used for support and licensing
-	 * Please do not remove this function, we will only use this for internal statistics and we use it strictly
+        return $this->_feedUrl;
+    }
+
+    /**
+     * Used for support and licensing
+     * Please do not remove this function, we will only use this for internal statistics and we use it strictly
      * confidential.
-	 *
-	 * We thank you for your support!
-	 */
+     *
+     * We thank you for your support!
+     */
     public function getExtraParams()
     {
-		$params = "?magev=".base64_encode(Mage::getVersion());
-        $params .= "&srv=".base64_encode($_SERVER['SERVER_NAME']);
-		$params .= "&modv=".base64_encode(Mage::getConfig()->getNode('modules/Geissweb_Euvatgrouper')->version);
-		$params .= "&lic=".base64_encode(Mage::getStoreConfig('euvatgrouper/extension_info/license_key', Mage::app()->getStore()->getId()));
-		return $params;
+        $params  = "?magev=" . base64_encode(Mage::getVersion());
+        $params .= "&srv=" . base64_encode($_SERVER['SERVER_NAME']);
+        $params .= "&modv=" . base64_encode(Mage::getConfig()->getNode('modules/Geissweb_Euvatgrouper')->version);
+        $params .= "&lic=" . base64_encode(Mage::getStoreConfig('euvatgrouper/extension_info/license_key', Mage::app()->getStore()->getId()));
+        return $params;
     }
-
 }

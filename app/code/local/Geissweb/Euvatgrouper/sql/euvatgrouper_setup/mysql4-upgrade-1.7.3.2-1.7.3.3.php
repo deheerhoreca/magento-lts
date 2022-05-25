@@ -23,14 +23,12 @@
 $installer = $this;
 $installer->startSetup();
 
-if (version_compare(Mage::getVersion(), '1.4.2', '>='))
-{
-    $attributes = array('vat_trader_name', 'vat_trader_address');
-    foreach($attributes as $attribute)
-    {
+if (version_compare(Mage::getVersion(), '1.4.2', '>=')) {
+    $attributes = ['vat_trader_name', 'vat_trader_address'];
+    foreach ($attributes as $attribute) {
         $attrib = Mage::getSingleton('eav/config')->getAttribute('customer_address', $attribute);
-        if($attrib instanceof Mage_Eav_Model_Entity_Attribute_Abstract) {
-            $attrib->setData('used_in_forms', array('adminhtml_customer', 'adminhtml_checkout'));
+        if ($attrib instanceof Mage_Eav_Model_Entity_Attribute_Abstract) {
+            $attrib->setData('used_in_forms', ['adminhtml_customer', 'adminhtml_checkout']);
             $attrib->save();
         }
     }

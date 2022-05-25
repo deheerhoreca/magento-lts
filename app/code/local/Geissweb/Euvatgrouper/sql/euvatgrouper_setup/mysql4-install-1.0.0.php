@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -24,84 +25,94 @@ $installer = $this;
 /* @var $installer Mage_Customer_Model_Entity_Setup */
 $installer->startSetup();
 
-$customer = Mage::getModel('customer/customer');
+$customer         = Mage::getModel('customer/customer');
 $attribute_set_id = $customer->getResource()->getEntityType()->getDefaultAttributeSetId();
 
 
 
-$installer->addAttribute('customer', 'last_vat_validation_date', array(
-	'label'		=> 'Date of last VAT validation',
-	'type'		=> 'datetime',
-	'input'		=> 'date',
-	'visible'	=> true,
-	'backend' 	=> 'eav/entity_attribute_backend_datetime',
-	'frontend'	=> 'eav/entity_attribute_frontend_datetime',
-	'required'	=> false,
-	'user_defined'	=> true,
-	'default'	=> false,
-	'sort_order'	=> 12
-));
-if (version_compare(Mage::getVersion(), '1.6.0', '<='))
-{
+$installer->addAttribute(
+    'customer',
+    'last_vat_validation_date',
+    [
+    'label'     => 'Date of last VAT validation',
+    'type'      => 'datetime',
+    'input'     => 'date',
+    'visible'   => true,
+    'backend'   => 'eav/entity_attribute_backend_datetime',
+    'frontend'  => 'eav/entity_attribute_frontend_datetime',
+    'required'  => false,
+    'user_defined'  => true,
+    'default'   => false,
+    'sort_order'    => 12
+    ]
+);
+if (version_compare(Mage::getVersion(), '1.6.0', '<=')) {
       $installer->addAttributeToSet('customer', $attribute_set_id, 'General', 'last_vat_validation_date');
 }
-if (version_compare(Mage::getVersion(), '1.4.2', '>='))
-{
-    Mage::getSingleton('eav/config')->getAttribute('customer', 'last_vat_validation_date')
-	->setData('used_in_forms', array('customer_account_edit', 'customer_account_create', 'adminhtml_customer', 'checkout_register'))
-	->save();
+
+if (version_compare(Mage::getVersion(), '1.4.2', '>=')) {
+    Mage::getSingleton('eav/config')
+        ->getAttribute('customer', 'last_vat_validation_date')
+        ->setData('used_in_forms', ['customer_account_edit', 'customer_account_create', 'adminhtml_customer', 'checkout_register'])
+        ->save();
 }
 
 
 
 
-$installer->addAttribute('customer', 'vat_validation_result', array(
-	'label'		=> 'VAT-ID is valid',
-	'type'		=> 'int',
-	'input'		=> 'select',
-	'visible'	=> true,
-	'backend'	=> NULL,
-	'source'	=> 'eav/entity_attribute_source_boolean',
-	'required'	=> false,
-	'user_defined'	=> true,
-	'default'	=> false,
-	'sort_order'	=> 13
-));
-if (version_compare(Mage::getVersion(), '1.6.0', '<='))
-{
+$installer->addAttribute(
+    'customer',
+    'vat_validation_result',
+    [
+    'label'     => 'VAT-ID is valid',
+    'type'      => 'int',
+    'input'     => 'select',
+    'visible'   => true,
+    'backend'   => null,
+    'source'    => 'eav/entity_attribute_source_boolean',
+    'required'  => false,
+    'user_defined'  => true,
+    'default'   => false,
+    'sort_order'    => 13
+    ]
+);
+if (version_compare(Mage::getVersion(), '1.6.0', '<=')) {
       $installer->addAttributeToSet('customer', $attribute_set_id, 'General', 'vat_validation_result');
 }
-if (version_compare(Mage::getVersion(), '1.4.2', '>='))
-{
-    Mage::getSingleton('eav/config')->getAttribute('customer', 'vat_validation_result')
-	->setData('used_in_forms', array('customer_account_edit', 'customer_account_create', 'adminhtml_customer', 'checkout_register'))
-	->save();
+
+if (version_compare(Mage::getVersion(), '1.4.2', '>=')) {
+    Mage::getSingleton('eav/config')
+        ->getAttribute('customer', 'vat_validation_result')
+        ->setData('used_in_forms', ['customer_account_edit', 'customer_account_create', 'adminhtml_customer', 'checkout_register'])
+        ->save();
 }
 
 
 
-
-
-$installer->addAttribute('customer', 'vies_result_data', array(
-	'label'		=> 'VIES result data log',
-	'type'		=> 'text',
-	'input'		=> 'textarea',
-	'visible'	=> true,
-	'backend'	=> NULL,
-	'required'	=> false,
-	'user_defined'	=> true,
-	'default'	=> false,
-	'sort_order'	=> 14
-));
-if (version_compare(Mage::getVersion(), '1.6.0', '<='))
-{
+$installer->addAttribute(
+    'customer',
+    'vies_result_data',
+    [
+    'label'     => 'VIES result data log',
+    'type'      => 'text',
+    'input'     => 'textarea',
+    'visible'   => true,
+    'backend'   => null,
+    'required'  => false,
+    'user_defined'  => true,
+    'default'   => false,
+    'sort_order'    => 14
+    ]
+);
+if (version_compare(Mage::getVersion(), '1.6.0', '<=')) {
       $installer->addAttributeToSet('customer', $attribute_set_id, 'General', 'vies_result_data');
 }
-if (version_compare(Mage::getVersion(), '1.4.2', '>='))
-{
-    Mage::getSingleton('eav/config')->getAttribute('customer', 'vies_result_data')
-	->setData('used_in_forms', array('customer_account_edit', 'customer_account_create', 'adminhtml_customer', 'checkout_register'))
-	->save();
+
+if (version_compare(Mage::getVersion(), '1.4.2', '>=')) {
+    Mage::getSingleton('eav/config')
+        ->getAttribute('customer', 'vies_result_data')
+        ->setData('used_in_forms', ['customer_account_edit', 'customer_account_create', 'adminhtml_customer', 'checkout_register'])
+        ->save();
 }
 
 $installer->endSetup();

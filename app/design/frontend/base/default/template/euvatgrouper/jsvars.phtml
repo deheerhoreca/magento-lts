@@ -27,17 +27,26 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
 	$isSecure = true;
 }
-$params = $isSecure ? array('_secure'=>true) : array();
+$params = $isSecure ? array('_secure'=>true,'_nosid'=>true) : array();
+$storeId = Mage::app()->getStore()->getId();
+
+if(Mage::getStoreConfig('euvatgrouper/vat_settings/validate_vatid', $storeId) == 1
+    && Mage::getStoreConfig('euvatgrouper/integration/validate_vatid', $storeId) == 1
+) {
+    $isFieldValidationEnabled = 1;
+} else {
+    $isFieldValidationEnabled = 0;
+}
 ?>
 <script type="text/javascript">
 //<![CDATA[
-var gw_vat_validation_enabled = <?php echo (Mage::getStoreConfig('euvatgrouper/vat_settings/validate_vatid', Mage::app()->getStore()->getId()));?>;
-var gw_vat_check_url = '<?php echo Mage::getUrl('', $params); ?>vatcheck/';
-var gw_loader_src = '<?php echo $this->getLayout()->createBlock('core/text')->getSkinUrl('images/opc-ajax-loader.gif', array('_secure'=>true));?>';
-var gw_osc_integration = '<?php echo Mage::getStoreConfig('euvatgrouper/integration/osc_integration', Mage::app()->getStore()->getId());?>';
-var gw_auto_set_country = <?php echo Mage::getStoreConfig('euvatgrouper/integration/auto_set_country', Mage::app()->getStore()->getId());?>;
-var gw_auto_set_country_customer_confirm = <?php echo Mage::getStoreConfig('euvatgrouper/integration/auto_set_country_customer_confirm', Mage::app()->getStore()->getId());?>;
-var gw_require_valid_vat = <?php echo Mage::getStoreConfig('euvatgrouper/integration/require_valid_number_to_checkout', Mage::app()->getStore()->getId());?>;
+var gw_vat_validation_enabled = <?php echo $isFieldValidationEnabled?>;
+var gw_vat_check_url = '<?php echo Mage::getUrl('vatcheck', $params); ?>';
+var gw_loader_src = '<?php echo $this->getLayout()->createBlock('core/text')->getSkinUrl('images/opc-ajax-loader.gif', $params);?>';
+var gw_osc_integration = '<?php echo Mage::getStoreConfig('euvatgrouper/integration/osc_integration', $storeId);?>';
+var gw_auto_set_country = <?php echo Mage::getStoreConfig('euvatgrouper/integration/auto_set_country', $storeId);?>;
+var gw_auto_set_country_customer_confirm = <?php echo Mage::getStoreConfig('euvatgrouper/integration/auto_set_country_customer_confirm', $storeId);?>;
+var gw_require_valid_vat = <?php echo Mage::getStoreConfig('euvatgrouper/integration/require_valid_number_to_checkout', $storeId);?>;
 <?php if(Mage::getStoreConfig('onestepcheckout/ajax_update/enable_ajax_save_billing')==true):?>
 var gw_idev_url_save_billing = '<?php echo Mage::getUrl('onestepcheckout/ajax/save_billing',$params); ?>';
 var gw_idev_url_set_methods = '<?php echo Mage::getUrl('onestepcheckout/ajax/set_methods_separate',$params); ?>';

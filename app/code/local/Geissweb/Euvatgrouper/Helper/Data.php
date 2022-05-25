@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -21,74 +22,80 @@
 
 class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abstract
 {
-	/**
-	 * @param $taxClassId
-	 *
-	 * @return mixed
-	 */
-	public function getClassName($taxClassId)
-	{
-		return Mage::getModel('tax/class')->load($taxClassId)->getClassName();
-	}
+    /**
+     * @param int $taxClassId
+     *
+     * @return mixed
+     */
+    public function getClassName($taxClassId)
+    {
+        return Mage::getModel('tax/class')->load($taxClassId)->getClassName();
+    }
 
-	/**
-	 * @param null $lastVatRequestDate
-	 *
-	 * @return bool
-	 * @throws Exception
-	 */
-    public function isValidationOnEachLogin($lastVatRequestDate=null)
+    /**
+     * @param null $lastVatRequestDate
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function isValidationOnEachLogin($lastVatRequestDate = null)
     {
         $doValidation = false;
 
-        if(!is_null($lastVatRequestDate) && $lastVatRequestDate != '' && $this->isAutovalidationEnabled())
-        {
+        if (!is_null($lastVatRequestDate) && $lastVatRequestDate != '' && $this->isAutovalidationEnabled()) {
             $lastDate = new DateTime(substr($lastVatRequestDate, 0, 10));
-            $now = new DateTime('NOW');
-            $diff = $now->diff($lastDate);
+            $now      = new DateTime('NOW');
+            $diff     = $now->diff($lastDate);
 
-            switch($this->getAutovalidationPeriod())
-            {
+            switch ($this->getAutovalidationPeriod()) {
                 case Geissweb_Euvatgrouper_Model_System_Config_Source_Validationperiod::EVERY_LOGIN:
                     $doValidation = true;
                     break;
 
                 case Geissweb_Euvatgrouper_Model_System_Config_Source_Validationperiod::EVERY_MONTH:
-                    if($diff->m >= 1)
+                    if ($diff->m >= 1) {
                         $doValidation = true;
+                    }
                     break;
 
                 case Geissweb_Euvatgrouper_Model_System_Config_Source_Validationperiod::EVERY_SIX_MONTHS:
-                    if($diff->m >= 6)
+                    if ($diff->m >= 6) {
                         $doValidation = true;
+                    }
                     break;
 
                 case Geissweb_Euvatgrouper_Model_System_Config_Source_Validationperiod::EVERY_THREE_MONTHS:
-                    if($diff->m >= 3)
+                    if ($diff->m >= 3) {
                         $doValidation = true;
+                    }
                     break;
 
                 case Geissweb_Euvatgrouper_Model_System_Config_Source_Validationperiod::EVERY_YEAR:
-                    if($diff->m >= 12)
+                    if ($diff->m >= 12) {
                         $doValidation = true;
+                    }
                     break;
 
-                default:$doValidation = false;break;
+                default:
+                    $doValidation = false;
+                    break;
             }
-
         }
+
         return $doValidation;
     }
 
-	/**
-	 * @param $vatNumber
-	 * @param $address
-	 *
-	 * @return mixed
-	 */
+    /**
+     * @param $vatNumber
+     * @param $address
+     *
+     * @return mixed
+     */
     public function quickValidate($vatNumber, $address)
     {
-        if($vatNumber == '' || !is_object($address)) return;
+        if ($vatNumber == '' || !is_object($address)) {
+            return;
+        }
 
         $vatNumber = $this->cleanCustomerVatId($vatNumber);
 
@@ -103,305 +110,322 @@ class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abs
         $result = $validator->getResult();
 
         return $this->setValidationResultOnAddress($result, $address);
-
     }
 
-	/**
-	 * @param      $billingAddress
-	 * @param      $shippingAddress
-	 *
-	 * @param bool $forAdminArea
-	 *
-	 * @return bool|object
-	 */
-    public function getVatBasedOnAddress($billingAddress, $shippingAddress, $forAdminArea=false)
+    /**
+     * @param      $billingAddress
+     * @param      $shippingAddress
+     *
+     * @param bool            $forAdminArea
+     *
+     * @return bool|object
+     */
+    public function getVatBasedOnAddress($billingAddress, $shippingAddress, $forAdminArea = false)
     {
-	    try {
-		    $vatBasedOn = Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON, Mage::app()->getStore()->getId());
-		    $basedOnAddress = ($vatBasedOn == 'shipping') ? $shippingAddress : $billingAddress;
-		    if(!$forAdminArea) {
-			    $quote = Mage::getSingleton('checkout/session')->getQuote();
-			    if(is_object($quote)) {
-				    if($quote->isVirtual() || ($quote->getItemVirtualQty() == $quote->getItemsCount()) ) {
-					    $basedOnAddress = $billingAddress;
-				    }
-			    }
-		    }
-		    return $basedOnAddress;
-	    } catch(Mage_Core_Model_Store_Exception $e) {
-	    	Mage::logException($e);
-	    }
-	    return false;
+        try {
+            $vatBasedOn = Mage::getStoreConfig(
+                Mage_Tax_Model_Config::CONFIG_XML_PATH_BASED_ON,
+                Mage::app()->getStore()->getId()
+            );
+            $basedOnAddress = ($vatBasedOn == 'shipping') ? $shippingAddress : $billingAddress;
+            if (!$forAdminArea) {
+                $quote = Mage::getSingleton('checkout/session')->getQuote();
+                if (is_object($quote)) {
+                    if ($quote->isVirtual() || ($quote->getItemVirtualQty() == $quote->getItemsCount())) {
+                        $basedOnAddress = $billingAddress;
+                    }
+                }
+            }
+
+            return $basedOnAddress;
+        } catch (Mage_Core_Model_Store_Exception $e) {
+            Mage::logException($e);
+        }
+
+        return false;
     }
 
-	/**
-	 * @param $request
-	 * @param $quote
-	 *
-	 * @return bool|Mage_Sales_Model_Quote_Address
-	 */
-	public function getCurrentMultiShippingAddress($request, $quote)
-	{
-    	/** @var Mage_Sales_Model_Quote $quote */
-    	$addresses = $quote->getAllShippingAddresses();
-		foreach ($addresses as $address) {
-			/** @var Mage_Sales_Model_Quote_Address $address */
-			if( $request->getCountryId() == $address->getCountryId()
-				&& $request->getPostcode() == $address->getPostcode()
-				&& $request->getRegionId() == $address->getRegionId()
-			) {
-				return $address;
-			}
-		}
+    /**
+     * @param $request
+     * @param $quote
+     *
+     * @return bool|Mage_Sales_Model_Quote_Address
+     */
+    public function getCurrentMultiShippingAddress($request, $quote)
+    {
+        /** @var Mage_Sales_Model_Quote $quote */
+        $addresses = $quote->getAllShippingAddresses();
+        foreach ($addresses as $address) {
+            /** @var Mage_Sales_Model_Quote_Address $address */
+            if (
+                $request->getCountryId() == $address->getCountryId()
+                && $request->getPostcode() == $address->getPostcode()
+                && $request->getRegionId() == $address->getRegionId()
+            ) {
+                return $address;
+            }
+        }
 
-		return false;
+        return false;
     }
 
-	/**
-	 * @param $vatNumber
-	 *
-	 * @return bool
-	 */
-	public function isVatNumberContainsCc( $vatNumber )
-	{
-		$cc = $this->getCc($vatNumber);
+    /**
+     * @param $vatNumber
+     *
+     * @return bool
+     */
+    public function isVatNumberContainsCc($vatNumber)
+    {
+        $cc = $this->getCc($vatNumber);
 
-		if(ctype_alpha($cc)) {
-			return true;
-		}
+        if (ctype_alpha($cc)) {
+            return true;
+        }
 
-		return false;
+        return false;
     }
 
-	/**
-	 * Check if countries are matching
-	 * @param $vatNumber
-	 * @param $addressCountry
-	 *
-	 * @return bool
-	 */
-	public function isCountryMatch( $vatNumber, $addressCountry )
-	{
-		$vatCc = $this->getCc($vatNumber);
-		if($vatCc == $addressCountry) {
-			return true;
-		}
+    /**
+     * Check if countries are matching
+     * @param $vatNumber
+     * @param $addressCountry
+     *
+     * @return bool
+     */
+    public function isCountryMatch($vatNumber, $addressCountry)
+    {
+        $vatCc = $this->getCc($vatNumber);
+        if ($vatCc == $addressCountry) {
+            return true;
+        }
 
-		return false;
+        return false;
     }
 
-	/**
-	 * Extract Country Code from string
-	 *
-	 * @param $value
-	 *
-	 * @return string
-	 */
-	public function getCc( $value )
-	{
-		return substr($value, 0, 2);
+    /**
+     * Extract Country Code from string
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    public function getCc($value)
+    {
+        return substr($value, 0, 2);
     }
 
-	/**
-	 * Extract Number without country code
-	 *
-	 * @param $value
-	 * @return string
-	 */
-	public function getNumber( $value )
-	{
-		return substr($value, 2);
-	}
+    /**
+     * Extract Number without country code
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNumber($value)
+    {
+        return substr($value, 2);
+    }
 
-	/**
-	 * Clears VAT info from address
-	 *
-	 * @param $address
-	 *
-	 * @return mixed
-	 */
-	public function clearVatInfoFromAddress($address)
-	{
-		$address->setVatId(null)
-			->setVatIsValid(null)
-			->setVatRequestId(null)
-			->setVatRequestDate(null)
-			->setVatRequestSuccess(null)
-			->setVatTraderName(null)
-			->setVatTraderAddress(null)
-			->setVatTraderCompanyType(null);
-		return $address;
-	}
+    /**
+     * Clears VAT info from address
+     *
+     * @param $address
+     *
+     * @return mixed
+     */
+    public function clearVatInfoFromAddress($address)
+    {
+        $address->setVatId(null)
+            ->setVatIsValid(null)
+            ->setVatRequestId(null)
+            ->setVatRequestDate(null)
+            ->setVatRequestSuccess(null)
+            ->setVatTraderName(null)
+            ->setVatTraderAddress(null)
+            ->setVatTraderCompanyType(null);
+        return $address;
+    }
 
-	/**
-	 * Set the user to the default user group
-	 *
-	 * @param int    $address_id
-	 * @param string $address_type
-	 *
-	 * @return Geissweb_Euvatgrouper_Model_Validation_Result
-	 */
-	public function assignDefault($address_id=0, $address_type='billing')
-	{
-		$result = Mage::getSingleton('euvatgrouper/validation_result');
-		$result->setShopCc($this->getShopVatCc());
-		$result->setUserNr(null);
-		$result->setUserCc(null);
+    /**
+     * Set the user to the default user group
+     *
+     * @param int    $address_id
+     * @param string $address_type
+     *
+     * @return Geissweb_Euvatgrouper_Model_Validation_Result
+     */
+    public function assignDefault($address_id = 0, $address_type = 'billing')
+    {
+        $result = Mage::getSingleton('euvatgrouper/validation_result');
+        $result->setShopCc($this->getShopVatCc());
+        $result->setUserNr(null);
+        $result->setUserCc(null);
 
-		$result->setCountryId(null);
+        $result->setCountryId(null);
 
-		$result->setAddressType($address_type);
-		$result->setTraderName(null);
-		$result->setTraderCompanyType(null);
-		$result->setTraderAddress(null);
-		$result->setRequestDate(null);
-		$result->setRequestIdentifier(null);
-		$result->setVatRequestSuccess(null);
-		$result->setValid(null);
-		$result->setVatIsValid(null);
-		$result->setIsVatFree(null);
-		$result->setVatIdRemoved(true);
+        $result->setAddressType($address_type);
+        $result->setTraderName(null);
+        $result->setTraderCompanyType(null);
+        $result->setTraderAddress(null);
+        $result->setRequestDate(null);
+        $result->setRequestIdentifier(null);
+        $result->setVatRequestSuccess(null);
+        $result->setValid(null);
+        $result->setVatIsValid(null);
+        $result->setIsVatFree(null);
+        $result->setVatIdRemoved(true);
 
-		//Save updated validation data to customer's address
-		Mage::dispatchEvent('vat_check_after', array(
-			'result' 			=> $result,
-			'address_id' 		=> $address_id
-		));
+        //Save updated validation data to customer's address
+        Mage::dispatchEvent(
+            'vat_check_after',
+            [
+            'result'            => $result,
+            'address_id'        => $address_id
+            ]
+        );
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * Compares two addresses if they are the same
-	 * @param null $billing_address
-	 * @param null $shipping_address
-	 *
-	 * @return bool
-	 */
-	public function isSameAddress($billing_address=null, $shipping_address=null)
-	{
-		/** @var $billing_address Mage_Sales_Model_Quote_Address */
-		/** @var $shipping_address Mage_Sales_Model_Quote_Address */
-		if(!is_null($billing_address) && !is_null($shipping_address))
-		{
-			$billingSerial = serialize(array(
-				'postcode'  => $billing_address->getPostcode(),
-				'city'      => $billing_address->getCity(),
-				'region'	=> $billing_address->getRegion(),
-				'country'	=> $billing_address->getCountryId(),
-			));
+    /**
+     * Compares two addresses if they are the same
+     * @param null $billing_address
+     * @param null $shipping_address
+     *
+     * @return bool
+     */
+    public function isSameAddress($billing_address = null, $shipping_address = null)
+    {
+        /** @var $billing_address Mage_Sales_Model_Quote_Address */
+        /** @var $shipping_address Mage_Sales_Model_Quote_Address */
+        if (!is_null($billing_address) && !is_null($shipping_address)) {
+            $billingSerial = serialize(
+                [
+                'postcode'  => $billing_address->getPostcode(),
+                'city'      => $billing_address->getCity(),
+                'region'    => $billing_address->getRegion(),
+                'country'   => $billing_address->getCountryId(),
+                ]
+            );
 
-			$shippingSerial = serialize(array(
-				'postcode'  => $shipping_address->getPostcode(),
-				'city'      => $shipping_address->getCity(),
-				'region'	=> $shipping_address->getRegion(),
-				'country'	=> $shipping_address->getCountryId(),
-			));
+            $shippingSerial = serialize(
+                [
+                'postcode'  => $shipping_address->getPostcode(),
+                'city'      => $shipping_address->getCity(),
+                'region'    => $shipping_address->getRegion(),
+                'country'   => $shipping_address->getCountryId(),
+                ]
+            );
 
-			if (strcmp($billingSerial, $shippingSerial) != 0) {
-				return false;
-			}
+            if (strcmp($billingSerial, $shippingSerial) != 0) {
+                return false;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
-	/**
-	 * Adds VAT validation result data on a address (or object)
-	 * @param $result "Validation result"
-	 * @param $address "Address or object"
-	 *
-	 * @return mixed
-	 */
-	public function setValidationResultOnAddress($result, $address)
-	{
-		if(is_object($result) && is_object($address))
-		{
-            $vatIdCc = $this->getVatIdCc($result->getVatId());
+    /**
+     * Adds VAT validation result data on a address (or object)
+     * @param $result "Validation result"
+     * @param $address "Address or object"
+     *
+     * @return mixed
+     */
+    public function setValidationResultOnAddress($result, $address)
+    {
+        if (is_object($result) && is_object($address)) {
+            $vatIdCc    = $this->getVatIdCc($result->getVatId());
             $cleanVatId = $this->cleanCustomerVatId($result->getVatId());
 
-			$address->setVatId($cleanVatId)
-				->setVatIsValid((bool)$result->getVatIsValid())
-				->setVatRequestId((string)$result->getVatRequestId())
-				->setVatRequestDate((string)$result->getVatRequestDate())
-				->setVatRequestSuccess((bool)$result->getVatRequestSuccess())
-				->setVatTraderName((string)$result->getVatTraderName())
-				->setVatTraderAddress((string)$result->getVatTraderAddress())
-				->setVatTraderCompanyType((string)$result->getVatTraderCompanyType());
+            $address->setVatId($cleanVatId)
+                ->setVatIsValid((bool)$result->getVatIsValid())
+                ->setVatRequestId((string)$result->getVatRequestId())
+                ->setVatRequestDate((string)$result->getVatRequestDate())
+                ->setVatRequestSuccess((bool)$result->getVatRequestSuccess())
+                ->setVatTraderName((string)$result->getVatTraderName())
+                ->setVatTraderAddress((string)$result->getVatTraderAddress())
+                ->setVatTraderCompanyType((string)$result->getVatTraderCompanyType());
 
             //TODO
-            if($vatIdCc != '' && strlen($vatIdCc) >= 2 && $address->getCountryId() == '')
+            if ($vatIdCc != '' && strlen($vatIdCc) >= 2 && $address->getCountryId() == '') {
                 $address->setCountryId($vatIdCc);
+            }
 
-			if($this->_debug) Mage::log('Added validation data on address (ID:'.$address->getId().') (VATID:'.$cleanVatId.')', null, 'euvatenhanced.log');
-			return $address;
-		}
-		if($this->_debug) Mage::log('No result added on address.', null, 'euvatenhanced.log');
-		return $address;
-	}
+            if ($this->_debug) {
+                Mage::log('Added validation data on address (ID:' . $address->getId() . ') (VATID:' . $cleanVatId . ')', null, 'euvatenhanced.log');
+            }
 
-	/**
-	 * Evaluates if the given (quote) address has relevant address data set, or is a plain address object
-	 * @param $address
-	 * @return bool
-	 */
-	public function isPlainAddress($address)
-	{
-		if(is_object($address))
-		{
-			$countryId = $address->getCountryId();
-			$vatId = $address->getVatId();
+            return $address;
+        }
 
-			if(empty($countryId) && empty($vatId)) {
-				return true;
-			}
-		}
+        if ($this->_debug) {
+            Mage::log('No result added on address.', null, 'euvatenhanced.log');
+        }
 
-		return false;
-	}
+        return $address;
+    }
 
-	/**
-	 * Evaluates if the given (quote) address has relevant address data set, or is a plain address object
-	 * @param $address
-	 * @return bool
-	 */
-	public function isPlainQuote($address)
-	{
-		/**@var $address Mage_Sales_Model_Quote_Address */
-		if(is_object($address))
-		{
-			$street = $address->getStreet1();
-			$city = $address->getCity();
-			$postcode = $address->getPostcode();
+    /**
+     * Evaluates if the given (quote) address has relevant address data set, or is a plain address object
+     * @param $address
+     * @return bool
+     */
+    public function isPlainAddress($address)
+    {
+        if (is_object($address)) {
+            $countryId = $address->getCountryId();
+            $vatId     = $address->getVatId();
 
-			if(empty($street) && empty($city) && empty($postcode)) {
-				return true;
-			}
-		}
+            if (empty($countryId) && empty($vatId)) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * To show only relevant data in debug messages
-	 * @param $data
-	 *
-	 * @return array
-	 */
-	public function debugAddress($data) {
-		return array(
-			'address_id' => isset($data['address_id']) ? $data['address_id'] : '(not set)',
-			'address_type' => isset($data['address_type']) ? $data['address_type'] : '(not set)',
-			'country_id' => isset($data['country_id']) ? $data['country_id'] : '(not set)',
-			'vat_id' => isset($data['vat_id']) ? $data['vat_id'] : '(not set)',
-			'vat_is_valid' => isset($data['vat_is_valid']) ? $data['vat_is_valid'] : '(not set)',
-			'vat_request_id' => isset($data['vat_request_id']) ? $data['vat_request_id'] : '(not set)',
-			'vat_request_date' => isset($data['vat_request_date']) ? $data['vat_request_date'] : '(not set)',
-			'vat_trader_name' => isset($data['vat_trader_name']) ? $data['vat_trader_name'] : '(not set)',
-			'vat_trader_address' => isset($data['vat_trader_address']) ? $data['vat_trader_address'] : '(not set)',
-		);
-	}
+    /**
+     * Evaluates if the given (quote) address has relevant address data set, or is a plain address object
+     * @param $address
+     * @return bool
+     */
+    public function isPlainQuote($address)
+    {
+        /**@var $address Mage_Sales_Model_Quote_Address */
+        if (is_object($address)) {
+            $street   = $address->getStreet1();
+            $city     = $address->getCity();
+            $postcode = $address->getPostcode();
+
+            if (empty($street) && empty($city) && empty($postcode)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * To show only relevant data in debug messages
+     * @param $data
+     *
+     * @return array
+     */
+    public function debugAddress($data)
+    {
+        return [
+            'address_id' => isset($data['address_id']) ? $data['address_id'] : '(not set)',
+            'address_type' => isset($data['address_type']) ? $data['address_type'] : '(not set)',
+            'country_id' => isset($data['country_id']) ? $data['country_id'] : '(not set)',
+            'vat_id' => isset($data['vat_id']) ? $data['vat_id'] : '(not set)',
+            'vat_is_valid' => isset($data['vat_is_valid']) ? $data['vat_is_valid'] : '(not set)',
+            'vat_request_id' => isset($data['vat_request_id']) ? $data['vat_request_id'] : '(not set)',
+            'vat_request_date' => isset($data['vat_request_date']) ? $data['vat_request_date'] : '(not set)',
+            'vat_trader_name' => isset($data['vat_trader_name']) ? $data['vat_trader_name'] : '(not set)',
+            'vat_trader_address' => isset($data['vat_trader_address']) ? $data['vat_trader_address'] : '(not set)',
+        ];
+    }
 }
