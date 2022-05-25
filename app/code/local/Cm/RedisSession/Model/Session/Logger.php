@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /*
 ==New BSD License==
 
@@ -16,7 +15,7 @@ modification, are permitted provided that the following conditions are met:
       documentation and/or other materials provided with the distribution.
     * The name of Colin Mollenhour may not be used to endorse or promote products
       derived from this software without specific prior written permission.
-    * The module name must remain Cm_RedisSession.
+    * Redistributions in any form must not change the Cm_RedisSession namespace.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -29,12 +28,42 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
--->
-<config>
-  <modules>
-    <Cm_RedisSession>
-      <active>true</active>
-      <codePool>local</codePool>
-    </Cm_RedisSession>
-  </modules>
-</config>
+
+class Cm_RedisSession_Model_Session_Logger implements \Cm\RedisSession\Handler\LoggerInterface
+{
+    /** Log file */
+    const LOG_FILE = 'redis_session.log';
+
+    /**
+     * Minimum severity level of events to log
+     *
+     * @var int
+     */
+    private $logLevel;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function log($message, $level)
+    {
+        if ($level <= $this->logLevel) {
+            Mage::log($message, $level, self::LOG_FILE);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function logException(\Exception $e)
+    {
+        Mage::logException($e);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLogLevel($level)
+    {
+        $this->logLevel = $level;
+    }
+}

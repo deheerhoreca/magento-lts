@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php PHP_SAPI == 'cli' or die('CLI only.');
 /*
 ==New BSD License==
 
@@ -16,7 +15,6 @@ modification, are permitted provided that the following conditions are met:
       documentation and/or other materials provided with the distribution.
     * The name of Colin Mollenhour may not be used to endorse or promote products
       derived from this software without specific prior written permission.
-    * The module name must remain Cm_RedisSession.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -29,12 +27,18 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
--->
-<config>
-  <modules>
-    <Cm_RedisSession>
-      <active>true</active>
-      <codePool>local</codePool>
-    </Cm_RedisSession>
-  </modules>
-</config>
+
+require 'app/Mage.php';
+Mage::app();
+
+if (empty($argv[1])) {
+  die('Must specify session id.');
+}
+$sessionId = $argv[1];
+
+$redisSession = new \Cm_RedisSession_Model_Session_Handler();
+$sessionData = $redisSession->inspectSession($sessionId);
+$data = $sessionData['data'];
+unset($sessionData['data']);
+var_dump($sessionData);
+echo "DATA:\n$data\n";
