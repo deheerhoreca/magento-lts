@@ -33,7 +33,8 @@
 ?>
 <?php
 /**
- * @see Mollie_Mpm_Block_Payment_Info_Paymentlink
+ * @see Mollie_Mpm_Block_Payment_Info_Base
+ * @var Mollie_Mpm_Block_Payment_Info_Base $this
  */
 $status = $this->getPaymentStatus();
 ?>
@@ -43,6 +44,9 @@ $status = $this->getPaymentStatus();
                 <img src="<?= $img ?>"/>
             <?php endif; ?>
             <?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>
+            <?php if ($cardlabel = $this->getcardLabel()): ?>
+                (<?php echo $this->escapeHtml($cardlabel) ?>)
+            <?php endif; ?>
         </p>
         <table class="form-list">
             <?php if ($checkoutType = $this->getCheckoutType()): ?>
@@ -73,6 +77,32 @@ $status = $this->getPaymentStatus();
                         <?php endif; ?>
                     </td>
                 </tr>
+            <?php endif; ?>
+            <?php if (Mage::getStoreConfig('payment/mollie/transaction_details') == 1): ?>
+                <?php if ($issuer = $this->getIssuer()): ?>
+                    <tr>
+                        <td class="label"><?= __('Issuer'); ?></td>
+                        <td class="value"> <?=$issuer; ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($consumerName = $this->getConsumerName()): ?>
+                    <tr>
+                        <td class="label"><?= __('Consumer name'); ?></td>
+                        <td class="value"> <?=$consumerName; ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($iban = $this->getIban()): ?>
+                    <tr>
+                        <td class="label"><?= __('IBAN'); ?></td>
+                        <td class="value"> <?=$iban; ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($bic = $this->getBic()): ?>
+                    <tr>
+                        <td class="label"><?= __('BIC'); ?></td>
+                        <td class="value"> <?=$bic; ?></td>
+                    </tr>
+                <?php endif; ?>
             <?php endif; ?>
         </table>
     </div>

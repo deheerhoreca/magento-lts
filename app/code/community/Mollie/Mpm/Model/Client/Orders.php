@@ -110,6 +110,10 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
             $orderData['payment']['dueDate'] = $this->mollieHelper->getBanktransferDueDate($storeId);
         }
 
+        if ($method == 'creditcard' && isset($additionalData['card_token'])) {
+            $orderData['payment']['cardToken'] = $additionalData['card_token'];
+        }
+
         if (isset($additionalData['limited_methods'])) {
             $orderData['method'] = $additionalData['limited_methods'];
         }
@@ -198,6 +202,11 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
 
         $this->orderLines->updateOrderLinesByWebhook($mollieOrder->lines, $mollieOrder->isPaid());
 
+        if ($mollieOrder->_embedded->payments && isset($mollieOrder->_embedded->payments[0]->details)) {
+            $details = $mollieOrder->_embedded->payments[0]->details;
+            $order->getPayment()->setAdditionalInformation('details', json_encode($details))->save();
+        }
+
         /**
          * Check if last payment was canceled, failed or expired and redirect customer to cart for retry.
          */
@@ -257,9 +266,13 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                             $invoice = $order->prepareInvoice();
                             $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
                             $invoice->setTransactionId($transactionId);
-                            $invoice->register();
 
-                            $invoice->setState($this->mollieHelper->getInvoiceMomentPaidStatus($order));
+                            $invoiceStatus = $this->mollieHelper->getInvoiceMomentPaidStatus($order);
+                            if ($invoiceStatus == \Mage_Sales_Model_Order_Invoice::STATE_PAID) {
+                                $invoice->register();
+                            }
+
+                            $invoice->setState($invoiceStatus);
 
                             Mage::getModel('core/resource_transaction')
                                 ->addObject($invoice)
@@ -285,7 +298,7 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                 /** @var Mage_Sales_Model_Order_Invoice $invoice */
                 $invoice = isset($invoice) ? $invoice : $payment->getCreatedInvoice();
                 $sendInvoice = $this->mollieHelper->sendInvoice($storeId) &&
-                    $this->mollieHelper->getInvoiceMoment($order) == \Mollie_Mpm_Model_Adminhtml_System_Config_Source_InvoiceMoment::ON_AUTHORIZE_PAID_BEFORE_SHIPMENT;
+                    $this->mollieHelper->getInvoiceMoment($order) == \Mollie_Mpm_Model_Adminhtml_System_Config_Source_InvoiceMoment::ON_AUTHORIZE_PAID_AFTER_SHIPMENT;
 
                 if (!$order->getEmailSent()) {
                     try {
@@ -522,6 +535,17 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                 $payment->setTransactionId($transactionId);
                 $payment->registerCaptureNotification($captureAmount, true);
 
+                // Set the tax_invoiced and base_tax_invoiced. Normally this is done by calling $invoice->register(),
+                // but because the invoice is already exists this does not work. So, set it manually.
+                $order->setTaxInvoiced($order->getTaxInvoiced() + $invoice->getTaxAmount());
+                $order->setBaseTaxInvoiced($order->getBaseTaxInvoiced() + $invoice->getBaseTaxAmount());
+
+                foreach ($invoice->getAllItems() as $item) {
+                    if ($item->getQty() > 0) {
+                        $item->register();
+                    }
+                }
+
                 $order->save();
                 $sendInvoice = $this->mollieHelper->sendInvoice($order->getStoreId());
                 if ($invoice && !$invoice->getEmailSent() && $sendInvoice) {
@@ -654,6 +678,13 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
             $mollieOrder = $mollieApi->orders->get($order->getMollieTransactionId(), ['embed' => 'payments']);
             $payments = $mollieOrder->_embedded->payments;
 
+            $return = false;
+            $refundAmount = $creditmemo->getAdjustment();
+            if ($creditmemo->getAdjustment() < 0.0) {
+                $return = true;
+                $refundAmount = $creditmemo->getBaseGrandTotal();
+            }
+
             try {
                 $payment = new Payment($mollieApi);
                 $payment->id = current($payments)->id;
@@ -662,11 +693,15 @@ class Mollie_Mpm_Model_Client_Orders extends Mage_Payment_Model_Method_Abstract
                     'amount' => [
                         'currency' => $order->getOrderCurrencyCode(),
                         'value' => $this->mollieHelper->formatCurrencyValue(
-                            $creditmemo->getAdjustment(),
+                            $refundAmount,
                             $order->getOrderCurrencyCode()
                         ),
                     ]
                 ]);
+
+                if ($return) {
+                    return $this;
+                }
             } catch (\Exception $exception) {
                 $this->mollieHelper->addTolog('error', $exception->getMessage());
                 Mage::throwException($exception->getMessage());
