@@ -310,7 +310,7 @@ if($_productCollection->getFirstItem()) {
       $brand          = $_product->getAttributeText("manufacturer");
       $sku_seller     = $_product->getData("sku_seller");
       $energy_rating  = $_product->getAttributeText("energieklasse");
-      $productlabel   = $_product->getProductLabel();
+      $productlabel   = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
       $gnvalue        = $_product->getAttributeText("gn_capacity"); // can be an array if multiselect
       if(empty($gnvalue)) {
         $gnvalue        = $_product->getAttributeText("gn"); // can be an array if multiselect
@@ -319,7 +319,7 @@ if($_productCollection->getFirstItem()) {
       
       /* Listview USPs */
       
-      $usps = [];
+      $usps           = [];
       
       // Size
       $attribute_value = $_product->getAttributeText("size");

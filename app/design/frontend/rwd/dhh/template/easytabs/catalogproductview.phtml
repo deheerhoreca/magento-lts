@@ -40,7 +40,7 @@ $max_highlighted_attributes = 10;
 // Attributes used in multiple places
 $nofrost_method         = $_product->getResource()->getAttribute("ontdooisysteem")->getFrontend()->getValue($_product);
 $energy_rating          = $_product->getResource()->getAttribute("energieklasse")->getFrontend()->getValue($_product);
-$shoutout               = $_product->getResource()->getAttribute("product_label")->getFrontend()->getValue($_product);
+$productlabel           = $_product->getResource()->getAttribute("product_label")->getFrontend()->getValue($_product);
 $productTitle           = $_helper->productAttribute($_product, $_product->getName(), "name");
 $product_title_short    = $_product->getResource()->getAttribute("name_short")->getFrontend()->getValue($_product);
 $pvideo                 = $_product->getResource()->getAttribute("product_video")->getFrontend()->getValue($_product);
@@ -711,14 +711,16 @@ if(empty($external_documents_json) === false)       $anchors["external-documents
 if(empty($upsell_products_block) === false)         $anchors["upsells"]             = "Bekijk Ook";
 if(empty($related_products_block) === false)        $anchors["related"]             = "Gerelateerde Producten";
 
+$productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "detail");
+
 /** CALCULATED/DERIVED FIELDS **/
 
 // If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
 if($stock_data["overall_stock_status"] === "backorder"
 && empty($stock_data["stock_date_days_left"]) === false
 && $stock_data["stock_date_days_left"] >= 7
-&& empty($shoutout) === true) {
-  $shoutout = "Alternatieven beschikbaar";
+&& empty($productlabel) === true) {
+  $productlabel = "Alternatieven beschikbaar";
 }
 
 /** START RENDERING **/
@@ -744,8 +746,8 @@ if($stock_data["overall_stock_status"] === "backorder"
       <span class="anchor" id="photos"></span>
       <?php
         // Product label
-        if(empty($shoutout) === false) {
-          echo "<span class='lblprolistviewpg'>{$shoutout}</span>";
+        if(empty($productlabel) === false) {
+          echo "<span class='lblprolistviewpg'>{$productlabel}</span>";
         }
         
         // Black friday

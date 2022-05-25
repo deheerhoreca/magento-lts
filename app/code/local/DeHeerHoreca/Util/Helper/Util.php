@@ -1047,6 +1047,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $rates;
   }
   
+  public static function auto_productlabel($_product, $context) {
+    if(empty($_product->getProductLabel()) === false) {
+      return $_product->getProductLabel();
+    }
+    if($_product->getAttributeText("supplier") === "Gastronoble") {
+      if($context === "detail") {
+        return "+5% Extra Korting met code <span style='font-family: sans-serif;'><strong>GASTRONOBLE5</strong></span>";
+      } else {
+        return "+5% Extra Korting";
+      }
+    }
+  }
+  
 }
 
 if(function_exists('printr') === false) {

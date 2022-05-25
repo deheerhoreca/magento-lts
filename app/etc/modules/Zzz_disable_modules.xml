@@ -82,10 +82,35 @@
           <active>false</active>
         </Anowave_Ecosc>
         
+        <!-- Not used anymore -->
+        <Codnitive_Sidenav>
+          <active>false</active>
+        </Codnitive_Sidenav>
+        <DPD_Connect>
+          <active>false</active>
+        </DPD_Connect>
+        <Psc_Paysafecash>
+          <active>false</active>
+        </Psc_Paysafecash>
+        <TM_OrderAttachment>
+          <active>false</active>
+        </TM_OrderAttachment>
+        <TM_Geoip>
+          <active>false</active>
+        </TM_Geoip>
+        
+        <!-- Does not work (anymore) -->
+        <TM_AddressAutocomplete>
+          <active>false</active>
+        </TM_AddressAutocomplete>
+        
         <!-- Seems unneeded since we have Geissweb -->
         <Plumrocket_AutoInvoice>
           <active>false</active>
         </Plumrocket_AutoInvoice>
+        <Plumrocket_Base>
+          <active>false</active>
+        </Plumrocket_Base>
         
         <!-- Disabling causes issues with opening existing old orders -->
         <Shopworks_Billink>
