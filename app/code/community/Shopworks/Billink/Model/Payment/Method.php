@@ -53,7 +53,11 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
     /**
      * Can refund online?
      */
-    protected $_canRefund = false;
+    protected $_canRefund = true;
+    /**
+     * Can partial refund online?
+     */
+    protected $_canRefundInvoicePartial = true;
     /**
      * Can void transactions online?
      */
@@ -113,7 +117,7 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
         $this->_logger = Mage::helper('billink/Logger');
         $this->_addressComparer = Mage::helper('billink/AddressComparer');
         $this->_taxConfig = Mage::getModel('tax/config');
-		$this->_totalCalculator = Mage::getModel('billink/OrderTotalCalculator');
+        $this->_totalCalculator = Mage::getModel('billink/OrderTotalCalculator');
         $this->_billinkConfigHelper = Mage::helper('billink/Config');
     }
 
@@ -228,16 +232,22 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
         $validateRequestInput->type = $session->getData(self::CUSTOMER_TYPE_SESSION_INDEX);
 
         //Billing address
+        $validateRequestInput->streetName = $session->getData(self::STREET_SESSION_INDEX);
         $validateRequestInput->postalCode = $address->getPostcode();
         $validateRequestInput->houseNumber = $session->getData(self::HOUSENUMBER_SESSION_INDEX);
         $validateRequestInput->houseExtension = $session->getData(self::HOUSENUMBER_EXTENSION_SESSION_INDEX);
+        $validateRequestInput->city = $address->getCity();
+        $validateRequestInput->countryCode = $address->getCountryId();
 
         //Shipping address
         if(!is_null($shippingAddress) && !$shippingAddress->getSameAsBilling())
         {
+            $validateRequestInput->deliveryAddressStreetName = $session->getData(self::DELIVERY_ADDRESS_STREET_SESSION_INDEX);
             $validateRequestInput->deliveryAddressPostalCode = $shippingAddress->getPostcode();
             $validateRequestInput->deliveryAddressHouseNumber = $session->getData(self::DELIVERY_ADDRESS_HOUSENUMBER_SESSION_INDEX);
             $validateRequestInput->deliveryAddressHouseExtension = $session->getData(self::DELIVERY_ADDRESS_HOUSENUMBER_EXTENSION_SESSION_INDEX);
+            $validateRequestInput->deliveryAddressCity= $shippingAddress->getCity();
+            $validateRequestInput->deliveryCountryCode = $shippingAddress->getCountryId();
         }
 
         //Apply test settings
@@ -252,7 +262,7 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
         {
             if (!$this->_addressComparer->areEqual($address, $shippingAddress))
             {
-                $this->_logger->log('Devlivery address and shipping address are not equal', Zend_Log::ALERT);
+                $this->_logger->log('Delivery address and shipping address are not equal', Zend_Log::ALERT);
                 throw new Mage_Payment_Exception('Het verzendadres and het factuur adres mogen niet verschillend zijn');
             }
         }
@@ -321,6 +331,67 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
     {
         $this->_logger->log('payment->getOrderPlaceRedirectUrl', Zend_Log::INFO);
         $this->createPayment();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canRefund()
+    {
+        if ($this->_canRefund) {
+            // No transaction ID used, but required for online refunds
+            $creditmemo = Mage::registry('current_creditmemo');
+            if ($creditmemo && !$creditmemo->getInvoice()->getTransactionId()) {
+                $creditmemo->getInvoice()->setTransactionId(true);
+            }
+        }
+
+        return parent::canRefund();
+    }
+    /**
+     * Refund specified amount for payment
+     *
+     * @param Mage_Sales_Model_Order_Payment $payment
+     * @param float $amount
+     *
+     * @return Shopworks_Billink_Model_Payment_Method
+     */
+    public function refund(Varien_Object $payment, $amount)
+    {
+        parent::refund($payment, $amount);
+
+        $order = $payment->getOrder();
+
+        if ($amount <= 0) {
+            Mage::throwException(Mage::helper('billink')->__('Invalid amount for refund.'));
+        }
+
+        $service = $this->_helper->getService($order->getStoreId());
+        $response = $service->requestCredit($order->getIncrementId(), $amount);
+
+        if ($response->hasError()) {
+            $this->throwPaymentException($this->_translateBillinkMessage($response->getCode(), 'credit'));
+        }
+        $shouldCloseCaptureTransaction = $order->canCreditmemo() ? 0 : 1;
+
+        $payment
+            ->setIsTransactionClosed(1)
+            ->setShouldCloseParentTransaction($shouldCloseCaptureTransaction);
+
+        return $this;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Order_Creditmemo $creditmemo
+     * @param Mage_Sales_Model_Order_Payment    $payment
+     *
+     * @return $this|Shopworks_Billink_Model_Payment_Method
+     */
+    public function processCreditmemo($creditmemo, $payment)
+    {
+        $payment->setSkipTransactionCreation(true);
+
+        return $this;
     }
 
     /**
@@ -467,7 +538,7 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
                 if($applyDiscountOnPriceInclTax)
                 {
                     $discountPriceType = Shopworks_Billink_Model_Service_Order_Input_Item::PRICE_INCL_TAX;
-                    $discountTax = 0;   //Do not charge tax over the discount
+                    $discountTax = $item->getTaxPercent();
                 }
                 else
                 {
@@ -611,7 +682,7 @@ class Shopworks_Billink_Model_Payment_Method extends Mage_Payment_Model_Method_A
      */
     private function _translateBillinkMessage($code, $service)
     {
-        $messageId = 'billink_' . $service . '_error_code_' . $code;
+        $messageId = strtolower('billink_' . $service . '_error_code_' . $code);
         $message = $this->_translate($messageId);
         $isNoTranslationForMessage = $message == $messageId;
 

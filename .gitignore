@@ -97,3 +97,4 @@ biller-webhook.jsonl
 
 nohup.out
 nohup*.out
+*desktop.ini

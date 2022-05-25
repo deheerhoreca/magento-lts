@@ -70,17 +70,23 @@ class Shopworks_Billink_Model_Service
             'FIRSTNAME' => $input->firstName,
             'LASTNAME' => $input->lastName,
             'INITIALS' => $input->initials,
+            'STREET' => $input->streetName,
             'HOUSENUMBER' => $input->houseNumber,
             'HOUSEEXTENSION' => $input->houseExtension,
             'POSTALCODE' => $input->postalCode,
+            'CITY' => $input->city,
+            'COUNTRYCODE' => $input->countryCode,
             'PHONENUMBER' => $input->phoneNumber,
             'BIRTHDATE' => $input->birthDate,
             'EMAIL' => $input->email,
             'ORDERAMOUNT' => $input->orderAmount,
             'BACKDOOR' => $input->backdoor,
+            'DELIVERY_STREET' => $input->deliveryAddressStreetName,
             'DELIVERY_HOUSENUMBER' => $input->deliveryAddressHouseNumber,
             'DELIVERY_HOUSEEXTENSION' => $input->deliveryAddressHouseExtension,
             'DELIVERY_POSTALCODE' => $input->deliveryAddressPostalCode,
+            'DELIVERY_CITY' => $input->deliveryAddressCity,
+            'DELIVERYCOUNTRYCODE' => $input->deliveryCountryCode,
             'IP' => $_SERVER['REMOTE_ADDR']
         );
 
@@ -226,6 +232,69 @@ class Shopworks_Billink_Model_Service
         $responseObj = $this->_processStartWorkflowResult($response);
 
         return $responseObj;
+    }
+
+    public function requestCredit($magentoOrderIncrementId, $creditAmount)
+    {
+        //make xml
+        $xmlNodes = array(
+            'ACTION' => 'Credit',
+            'INVOICES' => array(
+                array(
+                    'ITEM' => array(
+                        'INVOICENUMBER' => $magentoOrderIncrementId,
+                        'CREDITAMOUNT' => $creditAmount
+                    )
+                )
+            )
+        );
+
+        $xmlNodes = $this->_addConfigSettings($xmlNodes);
+
+        $response = $this->_makeRequest('credit', $xmlNodes);
+
+        return $this->_processCreditResponse($response);
+
+    }
+
+    private function _processCreditResponse($responseXml) {
+
+        /** @var Shopworks_Billink_Model_Service_Credit_Result $response */
+        $response = Mage::getModel("billink/service_credit_result");
+
+        $xmlObj = new Varien_Simplexml_Config();
+        $xmlObj->loadString($responseXml);
+
+        $result = $xmlObj->getNode('RESULT')->__toString();
+
+        switch($result)
+        {
+            //Error result
+            case 'ERROR' :
+                $code = $xmlObj->getNode('ERROR/CODE')->__toString();
+                $description = $xmlObj->getNode('ERROR/DESCRIPTION')->__toString();
+                $response->setError($code, $description);
+                $this->_logger->log($description . '('.$code.')', Zend_Log::ERR);
+                break;
+            //Succesfull result
+            case 'MSG' :
+                $code = $xmlObj->getNode('MSG/STATUSES/ITEM/CODE')->__toString();
+                $msg = $xmlObj->getNode('MSG/STATUSES/ITEM/MESSAGE')->__toString();
+                if($code == '200')
+                {
+                    $response->setSuccess($msg);
+                }
+                else
+                {
+                    $response->setError($code, $msg);
+                }
+                break;
+            //Unexpected result (should never happen of course)
+            default:
+                throw new Exception('Unexpected result from service');
+        }
+
+        return $response;
     }
 
     /**

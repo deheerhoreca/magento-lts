@@ -20,14 +20,20 @@ class Shopworks_Billink_Model_Service_Check_Input
     public $type;
 
     //Billing address
+    public $streetName;
     public $houseNumber;
     public $houseExtension;
     public $postalCode;
+    public $city;
+    public $countryCode;
 
     //Delivery address (optional)
+    public $deliveryAddressStreetName;
     public $deliveryAddressHouseNumber;
     public $deliveryAddressHouseExtension;
     public $deliveryAddressPostalCode;
+    public $deliveryAddressCity;
+    public $deliveryCountryCode;
 
     /**
      * @var string

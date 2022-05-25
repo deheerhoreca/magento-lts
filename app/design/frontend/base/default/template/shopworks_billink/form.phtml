@@ -15,11 +15,9 @@ $_code = $this->getMethodCode();
     </script>
 
 <?php } ?>
-
-
     <?php if($this->disableBillinkPaymentOption()) { ?>
         <p class="notice-msg">
-            De Billink betaal optie kan niet worden gekozen omdat het verzendadres afwijkt van het factuuradres.
+            <?php echo $this->__('De Billink betaal optie kan niet worden gekozen omdat het verzendadres afwijkt van het factuuradres.');?>
         </p>
     <?php } ?>
 
@@ -44,35 +42,35 @@ $_code = $this->getMethodCode();
             <?php
             //Birthday fields
             ?>
-            <label for="billink_dob:day" class="required"><?php echo Mage::helper('billink')->__('Geboortedatum'); ?>
+            <label for="billink_dob:day" class="required"><?php echo $this->__('Geboortedatum'); ?>
                 <em>*</em></label>
 
             <div class="input-box customer-dob">
                 <div class="dob-day">
-                    <label for="billink_dob:day" class="required"><?php echo Mage::helper('billink')->__('Dag'); ?>
+                    <label for="billink_dob:day" class="required"><?php echo $this->__('Dag'); ?>
                         <em>*</em></label>
                     <select id="billink_dob:day" name="payment[billink_dob_day]" class="input-text required-entry">
                     </select>
                 </div>
                 <div class="dob-month">
-                    <label for="billink_dob:month" class="required"><?php echo Mage::helper('billink')->__('Maand'); ?><em>*</em></label>
+                    <label for="billink_dob:month" class="required"><?php echo $this->__('Maand'); ?><em>*</em></label>
                     <select id="billink_dob:month" name="payment[billink_dob_month]" class="input-text required-entry">
-                        <option value="1"><?php echo Mage::helper('billink')->__('jan'); ?></option>
-                        <option value="2"><?php echo Mage::helper('billink')->__('feb'); ?></option>
-                        <option value="3"><?php echo Mage::helper('billink')->__('mrt'); ?></option>
-                        <option value="4"><?php echo Mage::helper('billink')->__('apr'); ?></option>
-                        <option value="5"><?php echo Mage::helper('billink')->__('mei'); ?></option>
-                        <option value="6"><?php echo Mage::helper('billink')->__('jun'); ?></option>
-                        <option value="7"><?php echo Mage::helper('billink')->__('jul'); ?></option>
-                        <option value="8"><?php echo Mage::helper('billink')->__('aug'); ?></option>
-                        <option value="9"><?php echo Mage::helper('billink')->__('sep'); ?></option>
-                        <option value="10"><?php echo Mage::helper('billink')->__('okt'); ?></option>
-                        <option value="11"><?php echo Mage::helper('billink')->__('nov'); ?></option>
-                        <option value="12"><?php echo Mage::helper('billink')->__('dec'); ?></option>
+                        <option value="1"><?php echo $this->__('jan'); ?></option>
+                        <option value="2"><?php echo $this->__('feb'); ?></option>
+                        <option value="3"><?php echo $this->__('mrt'); ?></option>
+                        <option value="4"><?php echo $this->__('apr'); ?></option>
+                        <option value="5"><?php echo $this->__('mei'); ?></option>
+                        <option value="6"><?php echo $this->__('jun'); ?></option>
+                        <option value="7"><?php echo $this->__('jul'); ?></option>
+                        <option value="8"><?php echo $this->__('aug'); ?></option>
+                        <option value="9"><?php echo $this->__('sep'); ?></option>
+                        <option value="10"><?php echo $this->__('okt'); ?></option>
+                        <option value="11"><?php echo $this->__('nov'); ?></option>
+                        <option value="12"><?php echo $this->__('dec'); ?></option>
                     </select>
                 </div>
                 <div class="dob-year">
-                    <label for="billink_dob:year" class="required"><?php echo Mage::helper('billink')->__('Jaar'); ?>
+                    <label for="billink_dob:year" class="required"><?php echo $this->__('Jaar'); ?>
                         <em>*</em></label>
                     <select id="billink_dob:year" name="payment[billink_dob_year]" class="input-text required-entry">
                         <?php for($i = ((int)date('Y') - 10); $i > 1900; $i--){ ?>
@@ -147,7 +145,7 @@ $_code = $this->getMethodCode();
             <li id="billink-delivery-address-fields">
 
                 <p>
-                    <b>Afleveradres</b>
+                    <b><?php echo $this->__('Afleveradres');?></b>
                 </p>
 
                 <ul>
