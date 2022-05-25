@@ -18,17 +18,17 @@
  * @copyright 	Copyright (c) 2017 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
-
+ 
 class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Block_Catalog_Category_Tab_Product
 {
 	public function __construct()
     {
         parent::__construct();
-
+        
         $this->setDefaultSort('position');
         $this->setDefaultDir('ASC');
     }
-
+    
     protected function _prepareCollection()
     {
     	if ($this->getCategory()->getId()) {
@@ -41,9 +41,9 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
     	->addStoreFilter($this->getRequest()->getParam('store'))
     	->joinField('position','catalog/category_product','position','product_id=entity_id','category_id='.(int) $this->getRequest()->getParam('id', 0),'left')
     	->joinField('qty','cataloginventory/stock_item','qty','product_id=entity_id','{{table}}.stock_id=1','left');
-
+    	
     	$this->setCollection($collection);
-
+    
     	if ($this->getCategory()->getProductsReadonly()) {
     		$productIds = $this->_getSelectedProducts();
     		if (empty($productIds)) {
@@ -51,21 +51,21 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
     		}
     		$this->getCollection()->addFieldToFilter('entity_id', array('in'=>$productIds));
     	}
-
+    	
     	return Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();
     }
-
+    
 	protected function _prepareColumns()
 	{
 		parent::_prepareColumns();
-
+		
 		$this->addColumn('qty', array(
 			'header'    => Mage::helper('sales')->__('Stock Level'),
 			'width'     => '20',
 			'type'      => 'number',
 			'index'     => 'qty'
 		));
-
+		
 		$this->addColumn('arrange', array
 		(
 			'header'    => Mage::helper('catalog')->__('Sort'),
@@ -75,7 +75,7 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
 			'index'     => 'arrange',
 			'renderer'  => 'sort/drag'
         ));
-
+		
 		$this->addColumnAfter('image', array
 		(
 			'header'    => Mage::helper('catalog')->__('Image'),
@@ -87,7 +87,7 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
 	}
 
 	protected function _preparePage()
-    {
+    {	
     	if (!Mage::helper('sort')->isLimitApplied())
     	{
     		$this->getCollection()->setCurPage(1);
@@ -95,12 +95,14 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
     	}
     	else return parent::_preparePage();
     }
-
-/* DHH
-/* Needs to be disabled to prevent fatal error in Admin -> Manage categories
-	public function getRowUrl()
-	{
-		return null;
-	}
-*/
+	
+  /*
+    DHH CORE HACK
+    Needs to be disabled to prevent fatal error in Admin -> Manage categories
+    
+    public function getRowUrl()
+    {
+      return null;
+    }
+  */
 }
