@@ -166,14 +166,14 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
   
   $payment_methods_texts = [];
   
-  if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
-    $text = "Betaal gratis <strong>achteraf</strong> met Biller";
-    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/biller.php'>{$text}</a>";
-  }
+  // if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
+    // $text = "Betaal <strong>achteraf</strong> met Biller";
+    // $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/biller.php'>{$text}</a>";
+  // }
   
   if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
-    $text = "Betaal <strong>achteraf</strong> met Billink of AfterPay";
-    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/billink.php'>{$text}</a>";
+    $text = "Betaal achteraf met Biller, Billink of AfterPay";
+    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/bnpl.php'>{$text}</a>";
   }
 
   if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {    
@@ -182,7 +182,7 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
     } else {
       $payment = number_format($_finalPrice / 3, 2, ",", ".");
       $payment = str_replace(",00", ",-", $payment);
-      $text = "<strong>3 termijnen</strong> van €{$payment} zonder rente met In3";
+      $text = "Of 3x €{$payment} met In3";
     }
     $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/in3.php'>{$text}</a>";
   }
@@ -192,6 +192,7 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
     foreach($payment_methods_texts as $text) {
       $payment_methods_content .= "<li class='my-1'><i class='fa-li fa fa-info-circle'></i>{$text}</li>";
     }
+    $payment_methods_content .= "<li class='my-1'><i class='fa-li fa fa-info-circle'></i><a target='_blank' href='/tips-achteraf-betalen'>Lees alles over achteraf betalen</a></li>";
     $payment_methods_content .= "</ul>";
     $payment_methods_content = "<h4 class='black mt-3'>Betaalbaar voor iedereen!</h4>{$payment_methods_content}";
   }

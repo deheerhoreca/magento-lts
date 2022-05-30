@@ -76,6 +76,8 @@ acquire_lock () {
 
 
 # Location of the php binary
+# DHH CORE HACK
+source /etc/profile.d/change_php.sh
 PHP_BIN=$(which php || true)
 if [ -z "${PHP_BIN}" ]; then
     echo "Could not find a binary for php" 1>&2
