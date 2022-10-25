@@ -65,16 +65,16 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         );
 
         $lines[0][] = array(
-            'text'  => Mage::helper('sales')->__('Qty'),
-            'feed'  => 465,
+            'text'  => Mage::helper('sales')->__('Price'),
+            'feed'  => 430,
             'align' => 'right',
             'font'  => 'bold',
         );
 
         $lines[0][] = array(
-            'text'  => Mage::helper('sales')->__('Price'),
-            'feed'  => 390,
-            'align' => 'right',
+            'text'  => Mage::helper('sales')->__('Qty'),
+            'feed'  => 465,
+            'align' => 'center',
             'font'  => 'bold',
         );
 
@@ -150,10 +150,13 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             
             if(intval($invoice->getStoreId()) === 4) {
               $page->drawText("De factuur is reeds betaald via bol.com", 200, $top-20, 'UTF-8');
-            } else {            
-              $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen", 200, $top-20, 'UTF-8');
-              $page->drawText("over te maken onder vermelding van het factuurnummer", 200, $top-30, 'UTF-8');
-              $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 200, $top-45, 'UTF-8');
+            } else {
+              $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen", 200, $top-10, 'UTF-8');
+              $page->drawText("over te maken onder vermelding van het factuurnummer", 200, $top-20, 'UTF-8');
+              $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 200, $top-35, 'UTF-8');
+              if($order->getShippingAddress()->getCountryId() === "BE") {
+                $page->drawText("Zakelijke leveringen in België: Domestic charge, BTW verlegd", 200, $top-48, 'UTF-8');
+              }
             }
             
             /* Add table */

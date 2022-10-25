@@ -6,16 +6,20 @@
  */
 
 // Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
-$_helper              = $this->helper('catalog/output');
+$_helper              = $this->helper("catalog/output");
 $_product             = $this->getProduct();
 
 // Tooltips
 $attr_tooltips = [
-  "koeltemperatuur"     => "De koeltemperatuur in de kast kan variëren. Factoren die van invloed zijn op de koeltemperatuur zijn onder andere: type koeling, omgevingstemperatuur, open-frequentie, ventilatie rondom het apparaat, en de koelcyclus.",
-  "aantal_blikjes"     => "Het exacte aantal kan iets variëren met de exacte grootte",
+  "koeltemperatuur"     => "De behaalde temperatuur kan variëren. Factoren die van invloed zijn, zijn onder andere: koelmethode, omgevingstemperatuur, open-frequentie, ventilatie rondom het apparaat, de klimaatklasse, en de koelcyclus",
+  "aantal_blikjes"      => "Het exacte aantal kan iets variëren met de exacte grootte",
+  "deur_omkeerbaar"     => "Indien de draairichting van de deur wordt omgedraaid is het slot niet altijd meer bruikbaar en zijn eventuele afbeeldingen op de deur omgekeerd.",
+  "temp_range_from_c"   => "De behaalde temperatuur kan iets variëren, afhankelijk van omgevingsfactoren.",
 ];
+$attr_tooltips["vriestemperatuur"]      = $attr_tooltips["koeltemperatuur"];
 $attr_tooltips["aantal_flessen"]        = $attr_tooltips["aantal_blikjes"];
 $attr_tooltips["capacity_wine_bottles"] = $attr_tooltips["aantal_blikjes"];
+$attr_tooltips["temp_range_to_c"]       = $attr_tooltips["temp_range_from_c"];
 
 // No decimals, with number formatting
 $attr_remove_decimals = [
@@ -24,20 +28,20 @@ $attr_remove_decimals = [
   "grill_output_watt", "aantal_m3_uur", "aantal_deuren", "aantal_roosters", 
   "aantal_kippen", "aantal_kuipen", "aantal_platen", "aantal_borden",
   "aantal_bakken", "aantal_zetsystemen", "aantal_manden", "aantal_pizzas",
-  "aantal_elementen", "aantal_etages", "aantal_filters", "aantal_branders",
+  "aantal_elementen", "aantal_etages", "aantal_filters",
   "aantal_borden_korven", "aantal_glas_korven", "aantal_snelheden",
   "aantal_blikjes", "aantal_wasprogrammas", "eenheid", "capacity_wine_bottles",
   "geluidsniveau", "number_of_cooling_zones", "aantal_flessen",
   "cooking_zones", "gross_weight_gram", "length_mm", "isolatiedikte",
   "number_of_slots", "max_geleiders", "package_height_mm", "package_width_mm",
-  "package_depth_mm", "shipping_weight_gram",
+  "package_depth_mm", "shipping_weight_gram", "temp_range_from_c", "temp_range_to_c",
 ];
 
 // No zero decimals, with number formatting
 $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "inhoud_wastank_liter", "vermogen_boiler", "weight", "volume_freezer_liter",
   "volume_refrigerator_liter","volume_net_liter", "ijs_productie", "ijs_bunker",
-  "annual_energy_consumption_kwh","gross_weight_kg",
+  "annual_energy_consumption_kwh",
 ];
 
 // Do not show these values
@@ -49,19 +53,37 @@ $skipped_attributes   = [];
 // Do not show these attribute_codes
 $hidden_attributes    = ["external_documents_json"];
 
+// Track to-be-deleted attributes
+$delete_these         = [];
+
+// Main attribute output array
 $attributes           = [];
 
 if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
   $attr_remove_decimals = array_flip($attr_remove_decimals);
   $attr_trim_decimals   = array_flip($attr_trim_decimals);
   
-  // if(_dhh_debug()) printr($_additionalgroup);
+  // Optionally delete other attributes if certain ones are filled
+  foreach($_additionalgroup as $_additional) {    
+    foreach($_additional["items"] as $_data) {
+      switch($_data["code"]) {
+        case "gn_capacity":                 $delete_these[] = "inhoud_aantal_gn";         break;
+        case "energy_efficiency_class_a_g": $delete_these[] = "energieklasse";            break;
+        
+        case "temp_range_from_c":
+        case "temp_range_to_c":
+          $delete_these[] = "koeltemperatuur";
+          $delete_these[] = "vriestemperatuur";
+          break;
+      }
+    }
+  }
   
   foreach($_additionalgroup as $_additional) {
     
-    foreach($_additional['items'] as $_data) {
-      $values         = $_data['value'];
-      $code           = $_data['code'];
+    foreach($_additional["items"] as $_data) {
+      $values         = $_data["value"];
+      $code           = $_data["code"];
       $output_values  = [];
       $link           = null;
       
@@ -93,14 +115,66 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             if(empty($_data["option_id"]) === false) {
               $link = "/shop?{$_data["code"]}={$_data["option_id"]}";
             }
+            break;
         }
         
-        $label = $this->htmlEscape($this->__($_data['label']));
-        $postfix = null;
+        $label = $this->htmlEscape($this->__($_data["label"]));
+        $prefix  = "";
+        $postfix = "";
         
         /* Processing individual attributes */
        
         switch($code) {
+          
+          // "°C" postfix
+          case "temp_range_from_c":
+          case "temp_range_to_c":
+            if($value > 0) {
+              $prefix = "+";
+            }
+            $postfix = " °C";
+            break;
+          
+          // "kg" postfix
+          case "voorraadbunker_kg":
+          case "ijs_productie":
+          case "ijs_bunker":
+            $postfix = " kg";
+            break;
+          
+          // "liter" postfix
+          case "inhoud_liters":
+          case "volume_net_liter":
+          case "volume_freezer_liter":
+          case "volume_refrigerator_liter":
+            $postfix = " liter";
+            break;
+          
+          // "m3" postfix"
+          case "inhoud_m3":
+            $postfix = " m³";
+            break;
+          
+          // "mm" postfix
+          case "hoogte":
+          case "breedte":
+          case "diepte":
+          case "diameter":
+          case "hoogte_intern":
+          case "breedte_intern":
+          case "diepte_intern":
+          case "insulation_thickness_mm":
+          case "isolatiedikte":
+          case "breedte_deur":
+          case "length_mm":
+          case "package_height_mm":
+          case "package_width_mm":
+          case "package_depth_mm":
+            $postfix = " mm";
+            break;
+          
+          // Other
+          
           case "vermogen_kw":
           case "vermogen":
             if($value < 5) {
@@ -122,12 +196,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
               $postfix = " Watt";
             }
             break;
-          
-          case "shipping_weight_gram":
-            $value /= 1000;
-            $postfix = " kg";
-            break;
             
+          case "shipping_weight_gram":
           case "weight":
             if($value < 3) {
               $value *= 1000;
@@ -135,49 +205,6 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             } else {
               $value = number_format($value, 2, ",", ".");
               $postfix = " kg";
-            }
-            break;
-          
-          // "kg" postfix
-          case "voorraadbunker_kg":
-          case "ijs_productie":
-          case "ijs_bunker":
-          case "gross_weight_kg":
-            $postfix = " kg";
-            break;
-          
-          case "inhoud_liters":
-          case "volume_net_liter":
-          case "volume_freezer_liter":
-          case "volume_refrigerator_liter":
-            $postfix = " liter";
-            break;
-          
-          case "inhoud_m3":
-            $postfix = " m³";
-            break;
-          
-          case "hoogte":
-          case "breedte":
-          case "diepte":
-          case "diameter":
-          case "hoogte_intern":
-          case "breedte_intern":
-          case "diepte_intern":
-          case "insulation_thickness_mm":
-          case "isolatiedikte":
-          case "breedte_deur":
-          case "length_mm":
-          case "package_height_mm":
-          case "package_width_mm":
-          case "package_depth_mm":
-            $postfix = " mm";
-            break;
-          
-          case "garantie":
-            $supplier = strtolower($_product->getAttributeText("supplier"));
-            if($supplier === "diamond" || $supplier === "virtus") {
-              $postfix = " op onderdelen";
             }
             break;
           
@@ -197,8 +224,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
         }
         
         if(isset($attr_trim_decimals[$code])) {
-          $value = number_format($value, 2, ",", ".");
-          $value = str_replace(",00", null, $value);
+          $value = Mage::helper("deheerhoreca_util/util")->trim_decimals($value);
         }
       
         /* Post-processing individual attributes */
@@ -216,9 +242,9 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
         }
         
         if(empty($link) === false) {
-          $output_values[] = "<a href='{$link}'>{$value}{$postfix}</a>";
+          $output_values[] = "<a href='{$link}'>{$prefix}{$value}{$postfix}</a>";
         } else {
-          $output_values[] = "{$value}{$postfix}";
+          $output_values[] = "{$prefix}{$value}{$postfix}";
         }
       }
       
@@ -230,8 +256,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
         $tooltip = $attr_tooltips[$code];
       }
       
-      if(empty($_output_value) === false) {
-        $attributes[$this->__($_additional['title'])][$code] = [
+      if(empty($_output_value) === false && in_array($code, $delete_these) === false) {
+        $attributes[$this->__($_additional["title"])][$code] = [
           "label"     => $label,
           "value"     => $_output_value,
           "tooltip"   => $tooltip,
@@ -243,13 +269,13 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
 
 // if(_dhh_debug()) {
   // echo "<pre>";
-  // // print_r($_additionalgroup);
+  // print_r($delete_these);
   // print_r($attributes);
   // echo "</pre>";
 // }
 
 if($attributes !== []) {
-  echo '<div class="box-collateral box-additional bxgroupifo product-specs">';
+  echo "<div class='box-collateral box-additional bxgroupifo product-specs'>";
   foreach($attributes as $group => $subattributes) {
     echo "<span class='clzattrgname'>{$this->__($group)}</span>";
     foreach($subattributes as $key => $attr) {

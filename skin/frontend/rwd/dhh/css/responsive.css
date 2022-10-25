@@ -3035,7 +3035,7 @@
   .products-list .product-shop .price-box .special-price {
     padding-left: 0;
   }
-
+  
   .products-list .product-shop .product-primary,
   .products-list .product-shop .product-secondary,
   .products-list .product-shop .desc {
@@ -3051,20 +3051,16 @@
   .product-view .product-shop .price-box .price-including-tax .label {
     font-size: 15px;
   }
-
+  
   .product-view .product-shop .price-box .price-excluding-tax .price,
   .product-view .product-shop .price-box .price-including-tax .price {
     font-size: 18px;
   }
-
+  
   .products-grid .product-image img {
     max-height: 210px;
     max-width: 210px;
     margin: auto;
-  }
-  
-  .fancybox-content {
-    padding: 22px !important;
   }
 }
 
@@ -3080,7 +3076,7 @@
     margin-left: 5px;
     margin-right: 5px;
   }
-
+  
   .footer .links {
     width: 22.65625%;
     padding-right: 0;

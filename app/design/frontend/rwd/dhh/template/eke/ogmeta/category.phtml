@@ -1,38 +1,60 @@
 <?php
-$helper = Mage::helper("eke_ogmeta");
-if (!$helper->isOgMetaEnabled()) {
+
+$cache_key = "aeke_ogmeta_category_".Mage::getModel("catalog/layer")->getCurrentCategory()->getId();
+$cached = Mage::app()->loadCache($cache_key);
+
+if(empty($cached) === false) {
+  echo unserialize($cached);
+} else {
+
+  // ------------ START REGULAR FLOW
+  $helper = Mage::helper("eke_ogmeta");
+  if(!$helper->isOgMetaEnabled()) {
     return;
+  }
+
+  // DHH CORE HACK: we can do better than this...
+  $categoryImage = Mage::getModel("catalog/layer")->getCurrentCategory()->getImage();
+  $image = Mage::getBaseUrl("media")."catalog/category/".$categoryImage;
+
+  if(strlen($categoryImage) < 1) {
+    $image = $helper->getOgImage();
+  }
+  $siteName = $helper->getSiteName();
+
+  // DHH CORE HACK: we must supress errors since the image might not exist
+  try {
+    $imageAttr = getimagesize($image);
+  } catch(Exception $e) {
+    Mage::log("Failed to getimagesize({$image})", null, "exception.log", true);
+    $imageAttr = [];
+  }
+
+  $html = "";
+  $html .= '<meta property="og:title" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
+  $html .= '<meta property="og:site_name" content="'.$siteName.'">'.PHP_EOL;
+  $html .= '<meta property="og:type" content="product.group">'.PHP_EOL;
+  $html .= '<meta property="og:url" content="'.$this->helper("core/url")->getCurrentUrl().'">'.PHP_EOL;
+  $html .= '<meta property="og:description" content="'.$this->getLayout()->getBlock("head")->getDescription().'">'.PHP_EOL;
+  $html .= '<meta property="og:image" content="'.$image.'">'.PHP_EOL;
+  if($imageAttr["mime"]) {
+    $html .= '<meta property="og:image:type" content="'.$imageAttr["mime"].'">'.PHP_EOL;
+  }
+  if($imageAttr[0]) {
+    $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">'.PHP_EOL;
+  }
+  if($imageAttr[1]) {
+    $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
+  }
+  $html .= '<meta property="og:image:alt" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
+  if ($helper->getFacebookAppId()) {
+    $html .= '<meta property="fb:app_id" content="'.$helper->getFacebookAppId().'">'.PHP_EOL;
+  }
+    $html .= '<meta name="twitter:card" content="summary">'.PHP_EOL;
+  // ------------ STOP REGULAR FLOW
+  
+  echo $html;
+
+  // Store in Magento cache
+  Mage::app()->saveCache(serialize($html), $cache_key, ["eke_ogmeta_category"], 86400);
 }
-
-// DHH CORE HACK: we can do better than this...
-$categoryImage = Mage::getModel('catalog/layer')->getCurrentCategory()->getImage();
-$image = Mage::getBaseUrl('media').'catalog/category/'.$categoryImage;
-
-if(strlen($categoryImage) < 1) {
-  $image = $helper->getOgImage();
-}
-$siteName = $helper->getSiteName();
-
-/*
- * DHH CORE HACK: we must supress errors since the image might not exist
- */
-//$imageAttr = getimagesize($image);
-$imageAttr = @getimagesize($image);
-
-?>
-
-<!-- OG META Data -->
-<meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
-<meta property="og:site_name" content="<?php echo $siteName; ?>" />
-<meta property="og:type" content="product.group" />
-<meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" />
-<meta property="og:description" content="<?php echo $this->getLayout()->getBlock('head')->getDescription(); ?>" />
-<meta property="og:image" content="<?php echo $image; ?>" />
-<meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>" />
-<meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>" />
-<meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>" />
-<meta property="og:image:alt" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
-<?php if ($helper->getFacebookAppId()) { ?>
-<meta property="fb:app_id" content="<?php echo $helper->getFacebookAppId(); ?>"/>
-<?php } ?>
-<meta name="twitter:card" content="summary" />

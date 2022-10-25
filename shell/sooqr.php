@@ -18,6 +18,9 @@
  * @license       http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+// DHH CORE HACK
+set_time_limit(7200);
+
 require_once 'abstract.php';
 
 class Sooqr_Shell_GenerateFeed extends Mage_Shell_Abstract

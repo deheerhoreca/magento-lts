@@ -111,9 +111,11 @@
     
     # Fuck off competitors
     # gastrodeals.nl:
-    RewriteCond %{HTTP:CF-Connecting-IP} ^83\.217\.93\.24
-    
+    RewriteCond %{HTTP:CF-CONNECTING-IP} 83.217.93.24
     RewriteRule .* https://www.intertoys.nl [R=302,L]
+    # Unknown:
+    RewriteCond %{HTTP:CF-CONNECTING-IP} 5.159.34.104
+    RewriteRule .* https://www.pornhub.com [R=302,L]
 
     # Remove trailing slash from non-filepath urls
     # https://gist.github.com/evgv/e7e84e84c46e027c3fff7396a13b3a43
@@ -356,7 +358,7 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
 
 # Remember, cache control is about how long mod_pagespeed will cache assets.
 # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
-<filesMatch ".(jpg|jpeg|png|gif|ico|svg|webp|css|js|webp)$">
+<filesMatch ".(jpg|jpeg|png|gif|ico|svg|webp|css|js)$">
   Header unset Etag
   Header set Cache-Control "max-age=300, public"
 </filesMatch>
@@ -378,6 +380,7 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
   Header add Link "<https://static.zdassets.com>;rel=preconnect; crossorigin"
   Header add Link "<https://www.google-analytics.com>;rel=preconnect; crossorigin"
   Header add Link "<https://ssl.google-analytics.com>;rel=preconnect; crossorigin"
+  Header add Link "<https://www.googletagmanager.com>;rel=preconnect; crossorigin"
   Header add Link "<https://rum.chefstore.nl:8200>;rel=preconnect;"
 </FilesMatch>
 
@@ -387,3 +390,7 @@ RewriteCond %{THE_REQUEST} ^.*/index.php
 RewriteRule ^(.*)index.php$ /$1 [R=301,L]
 
 RedirectMatch 404 /\.git
+
+<IfModule mod_php7.c>
+    php_value suhosin.session.encrypt=off
+</IfModule>

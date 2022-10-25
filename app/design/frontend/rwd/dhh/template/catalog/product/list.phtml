@@ -13,6 +13,8 @@ $category                     = $this->getRequest()->getControllerName();
 $catid                        = null;
 $carct                        = Mage::registry("current_category");
 $category_id                  = $carct->getId();
+$category_desc                = $carct->getDescription();
+$orig_category_desc           = $category_desc;
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
 $category_thumbs_dimensions   = 140;
@@ -25,7 +27,12 @@ $show_black_friday            = false;
 $media_path                   = Mage::getBaseDir("media");
 $current_page_nr              = Mage::app()->getRequest()->getParam("p");
 $on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
-$excluded_category_ids        = [656, 864, 834];              // These categories are not listed as subcategory tile
+$excluded_category_ids        = [656, 864, 834, 828];              // These categories are not listed as subcategory tile
+$show_toolbar                 = true;
+$_columnCount                 = 4;
+$displaySize                  = 200;
+$_imgSize                     = 1 * $displaySize;
+$show_products                = (strpos($category_desc, "<!--no_products-->") === false);
 
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
@@ -36,43 +43,45 @@ $category_block_html          = $this->getLayout()->createBlock("cms/block")->se
 
 Varien_Profiler::stop('DHH_PrepareProductList');
 
-/*
- * Bugfix: Using require_stock_items there was a bug that lead
- * to wrong stock info on listview during flat index rebuild.
- * addItemsToProducts() seems to add stock data correctly even during a reindex
- *
- * However, with addItemsToProducts() we are missing essential stock data like
- * manage_stock, leading to wrong results.
- *
- * We now use both as an experiment...
- */
-Varien_Profiler::start('DHH_ReAddStockItems');
-$_productCollection = $this->getLoadedProductCollection();
-$_productCollection->setFlag("require_stock_items", true);
-Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
-Varien_Profiler::stop('DHH_ReAddStockItems');
+if($show_products === true) {
+  /*
+   * Bugfix: Using require_stock_items there was a bug that lead
+   * to wrong stock info on listview during flat index rebuild.
+   * addItemsToProducts() seems to add stock data correctly even during a reindex
+   *
+   * However, with addItemsToProducts() we are missing essential stock data like
+   * manage_stock, leading to wrong results.
+   *
+   * We now use both as an experiment...
+   */
+  Varien_Profiler::start('DHH_ReAddStockItems');
+  $_productCollection = $this->getLoadedProductCollection();
+  $_productCollection->setFlag("require_stock_items", true);
+  Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
+  Varien_Profiler::stop('DHH_ReAddStockItems');
 
-// If the sorting is by position, put the recommended products on top
-// http://www.rob-st.com/2016/11/29/sort-magento-category-multiple-values-keep-newest-products-top/
-// Superseeded by increasing the popularity field
-// if(!_dhh_debug()) {
-  // Varien_Profiler::start('DHH_ReloadProductCollection');
-  // $currentOrder = $this->getChild("toolbar")->getCurrentOrder();
-  // if($currentOrder === "position" || $currentOrder === "popularity") {
-    // $currentDirection = $this->getChild("toolbar")->getCurrentDirection();
-    // $query = $_productCollection->getSelect()->__toString();
-    // if(strstr($query, "tagline") !== false) { // if somehow this field is not there
-      // $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
-      // $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
-      // $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
-      // $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);     
-      // // Collection was loaded already...reloading...(yeah I know)
-      // $_productCollection->clear();
-      // $_productCollection->load();
+  // If the sorting is by position, put the recommended products on top
+  // http://www.rob-st.com/2016/11/29/sort-magento-category-multiple-values-keep-newest-products-top/
+  // Superseeded by increasing the popularity field
+  // if(!_dhh_debug()) {
+    // Varien_Profiler::start('DHH_ReloadProductCollection');
+    // $currentOrder = $this->getChild("toolbar")->getCurrentOrder();
+    // if($currentOrder === "position" || $currentOrder === "popularity") {
+      // $currentDirection = $this->getChild("toolbar")->getCurrentDirection();
+      // $query = $_productCollection->getSelect()->__toString();
+      // if(strstr($query, "tagline") !== false) { // if somehow this field is not there
+        // $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
+        // $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
+        // $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
+        // $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);     
+        // // Collection was loaded already...reloading...(yeah I know)
+        // $_productCollection->clear();
+        // $_productCollection->load();
+      // }
     // }
+    // Varien_Profiler::stop('DHH_ReloadProductCollection');
   // }
-  // Varien_Profiler::stop('DHH_ReloadProductCollection');
-// }
+}
 
 /* CATEGORY HEADER & SEO */
 
@@ -81,12 +90,11 @@ if($carct && ($category === "category")) {
   $category_name        = $carct->getName();
   $category_name        = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   $category_name_lwr    = strtolower($category_name);
+  $orig_category_desc   = $carct->getDescription();
   
   // Assemble category description
   if($have_active_filters === true || $on_first_page === false) {
     $category_desc      = "";
-  } else {
-    $category_desc      = $carct->getDescription();
   }
   if(strlen($category_desc) < 5) {
     $category_desc      = "<h1>{$category_name}</h1>";
@@ -119,7 +127,8 @@ if($carct && ($category === "category")) {
       }
       
       if($on_first_page === true && $have_active_filters === false) {
-        if(Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
+        if(empty($_productCollection) === false
+        && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
           $category_desc .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
         } else {
           $category_desc .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
@@ -166,8 +175,8 @@ if($carct && ($category === "category")) {
 /* SUBCATEGORIES */
 
 $appliedFilters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
-
-if(empty($carct) === false && $amschk !== "amshopby" && empty($appliedFilters) === true) {
+if(empty($carct) === false && $amschk !== "amshopby"
+&& empty($appliedFilters) === true && strpos($orig_category_desc, "<!--no_cat_tiles-->") === false) {
   
   // Slow
   $subcategories = Mage::getModel("catalog/category")->getCategories($carct->getId(), 0, true);
@@ -191,9 +200,12 @@ if(empty($carct) === false && $amschk !== "amshopby" && empty($appliedFilters) =
     $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
     
     foreach($subcategories as $subcategory) {
-      if(in_array($subcategory->getId(), $excluded_category_ids) !== false) {
+      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
         continue;
       }
+      // if(_dhh_debug()) {
+        // var_dump($subcategory->getId());
+      // }
       $haschild           = true;
       // Slow: $subcategory         = Mage::getModel("catalog/category")->load($subcategory->getId());
       $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
@@ -233,15 +245,8 @@ echo $category_block_html;
 
 /* LIST PRODUCTS */
 
-$show_toolbar   = true;
-$_columnCount   = 4;
-$displaySize    = 200;
-$_imgSize       = 1 * $displaySize;
-    
-if($_productCollection->getFirstItem()) {
-?>
-  <div class="category-products">
-    <?php
+if($show_products === true && $_productCollection->getFirstItem()) {
+  echo "<div class='category-products'>";
     if($show_toolbar === true) {
       echo "<div class='top_toolbar'>{$this->getToolbarHtml()}</div>";
     }
@@ -307,316 +312,49 @@ if($_productCollection->getFirstItem()) {
           break;
       }
       
-      $brand          = $_product->getAttributeText("manufacturer");
-      $sku_seller     = $_product->getData("sku_seller");
-      $energy_rating  = $_product->getAttributeText("energieklasse");
-      $productlabel   = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
-      $gnvalue        = $_product->getAttributeText("gn_capacity"); // can be an array if multiselect
-      if(empty($gnvalue)) {
-        $gnvalue        = $_product->getAttributeText("gn"); // can be an array if multiselect
-      }
-      $tagline        = $_product->getTagline();
+      $brand            = _get_product_attribute($_product, "manufacturer");
+      $sku_seller       = _get_product_attribute($_product, "sku_seller");
+      $tagline          = _get_product_attribute($_product, "tagline");
       
-      /* Listview USPs */
-      
-      $usps           = [];
-      
-      // Size
-      $attribute_value = $_product->getAttributeText("size");
-      if(is_scalar($attribute_value) && strlen($attribute_value) > 0) {
-        $usps[] = "Maat: {$attribute_value}";
-      }
-      
-      // Material
-      $attribute_value = $_product->getResource()->getAttribute("material_group")->getFrontend()->getValue($_product);
-      if(strlen($attribute_value) > 0) {
-        foreach(explode(",", $attribute_value) as $value) {
-          $value = str_ireplace(["(Roestvast staal)"], null, $value);
-          $usps[] = trim($value);
-        }
-      }
-      
-      // Uitvoering
-      $attribute_value = $_product->getAttributeText('uitvoering');
-      if(is_array($attribute_value) === true) {
-        $attribute_value = implode(", ", $attribute_value);
-      }
-      if(is_scalar($attribute_value) === true && strlen($attribute_value) > 0) {
-        $usps[] = $attribute_value;
-      }
-      
-      $attribute_value = $_product->getAttributeText('type_koeling');
-      if(empty($attribute_value) === false && $attribute_value !== "N.v.t.") {
-        $usps[] = $attribute_value;
-      }
-      
-      // Blikjes
-      $attribute_value = (int) $_product->getData("aantal_blikjes");
-      if($attribute_value > 0) {
-        $usps[] = "{$attribute_value}x 33cl";
-      }
-      
-      // Flessen
-      $attribute_value = (int) $_product->getData("aantal_flessen");
-      if($attribute_value > 0) {
-        $usps[] = "{$attribute_value} flessen";
-      }
-      
-      // Capacity: Wine Bottles
-      $attribute_value = (int) $_product->getData("capacity_wine_bottles");
-      if($attribute_value > 0) {
-        $usps[] = "{$attribute_value} flessen";
-      }
-      
-      // voorraadbunker_kg
-      $attribute_value = (int) $_product->getData("voorraadbunker_kg");
-      if($attribute_value > 0) {
-        $usps[] = "{$attribute_value} kg Bunker";
-      }
-      
-      // icecube_type
-      $attribute_value = $_product->getAttributeText('icecube_type');
-      if(empty($attribute_value) === false && $attribute_value !== "N.v.t.") {
-        $usps[] = $attribute_value;
-      }
-      
-      // ijs_productie
-      $attribute_value = (int) $_product->getData("ijs_productie");
-      if($attribute_value > 0) {
-        $usps[] = "{$attribute_value} kg/24u";
-      }
-      
-      /* GN maat if not in a GN category */
-      if(empty($gnvalue) === false
-      && empty($category_name) === false
-      && strstr($category_name, "GN") === false) {
-          if(is_array($gnvalue)) {
-            $gnvalue = implode(" ", $gnvalue);
-          }
-          $gnvalue = str_ireplace("n.v.t.", null, $gnvalue);
-          if(empty($gnvalue) === false) {
-            $usps[] = "{$gnvalue}";
-          }
-      }
-      
-      /* Custom highlights */
-      $attribute_value = $_product->getData("custom_highlights");
-      $parts = explode(",", $attribute_value);
-      if(sizeof($parts) > 0) {
-        foreach($parts as $part) {
-          $part = trim($part);
-          if(strlen($part) > 0) {
-            $usps[] = trim($part);
-          }
-        }
-      }            
-      
-      /* Volumes */
-      $volume_usp_done = false;
-      $attribute_value = $_product->getData("volume_net_liter");
-      if($volume_usp_done === false && strlen($attribute_value) > 0) {
-        if($attribute_value > 2000) {
-          $usps[] = "Netto ".round($attribute_value / 1000, 2)." m<sup>3</sup>";
-        } else {
-          $usps[] = "Netto ".round($attribute_value, 2)." liter";
-        }
-        $volume_usp_done = true;
-      }
-      $attribute_value = $_product->getData("inhoud_liters");
-      if($volume_usp_done === false && strlen($attribute_value) > 0) {
-        $usps[] = round($attribute_value, 2)." liter";
-        $volume_usp_done = true;
-      }
-      unset($volume_usp_done);
-      
-      /* Powers */
-      $power_usp_done = false;
-      $attribute_value = $_product->getData("total_power_watt");
-      
-      if(empty($attribute_value) === false) {
-        if($attribute_value  >= 5000) {
-          $attribute_value   /= 1000;
-          $attribute_value    = number_format($attribute_value, 2, ",", ".");
-          if($attribute_value > 0) {
-            $usps[] = "{$attribute_value}kW";
-          }
-        } else {
-          $attribute_value = (int) number_format($attribute_value, 0, ",", "");
-          if($attribute_value > 0) {
-            $usps[] = "{$attribute_value}W";
-          }
-        }
-        $power_usp_done = true;
-      }
-      if($power_usp_done !== true) {
-        $attribute_value = $_product->getData("vermogen");
-        if(empty($attribute_value) === false) {
-          if($attribute_value < 3) {
-            $attribute_value *= 1000;
-            if($attribute_value > 0) {
-              $usps[] = "{$attribute_value}W";
-            }
-          } else {
-            //$attribute_value = str_replace(".", null, $attribute_value);
-            //$attribute_value = str_replace(",", ".", $attribute_value);
-            $attribute_value = number_format($attribute_value, 1, ",", ".");
-            $attribute_value = str_replace(",0", null, $attribute_value);
-            if($attribute_value > 0) {
-              $usps[] = "{$attribute_value}kW";
-            }
-          }
-        }
-      }
-      $attribute_value = $_product->getData("vermogen_kw");
-      if($power_usp_done !== true && empty($attribute_value) === false) {
-        if($attribute_value < 3) {
-          $attribute_value *= 1000;
-          if($attribute_value > 0) {
-            $usps[] = "{$attribute_value}W";
-          }
-        } else {
-          $attribute_value = number_format($attribute_value, 1, ",", ".");
-          $attribute_value = str_replace(",0", null, $attribute_value);
-          if($attribute_value > 0) {
-            $usps[] = "{$attribute_value}kW";
-          }
-        }
-      }
-      unset($power_usp_done);
-      
-      /* M3/hour capacity */
-      $attribute_value = $_product->getAantalM3Uur();
-      if(strlen($attribute_value) > 0) {
-        $usps[] = round($attribute_value, 2)." m3/UUR";
-      }
-      
-      /* Warranty */
-      $attribute_value = $_product->getAttributeText('garantie');
-      if($attribute_value === "24 maanden") {
-        $usps[] = "24M Garantie";
-      } elseif($attribute_value === "36 maanden") {
-        $usps[] = "36M Garantie";
-      }
-      
-      /* Cooling Zones */
-      $attribute_code = "number_of_cooling_zones";
-      $attribute_value = (int) $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
-      if($attribute_value === 2) {
-        $usps[] = "Dual-Zone";
-      } elseif($attribute_value === 3) {
-        $usps[] = "Triple-Zone";
-      } elseif($attribute_value > 3) {
-        $usps[] = "{$attribute_value} Zones";
-      }
-      
-      /* Cooking Zones */
-      $attribute_value = $_product->getCookingZones();
-      if(strlen($attribute_value) > 0 && (double) $attribute_value > 1) {
-        $usps[] = round($attribute_value, 2)." Zones";
-      }
-      
-      /* Aftap */
-      $attribute_value = $_product->getAttributeText('aftap');
-      if($attribute_value === "Ja") {
-        $usps[] = "Met Aftap";
-      }
-      
-      /* Afsluitbaar */
-      $attribute_value = $_product->getAttributeText("afsluitbaar");
-      if($attribute_value === "Ja") {
-        $usps[] = "Afsluitbaar";
-      }
-      
-      /* Motor */
-      $attribute_value = $_product->getAttributeText("motor");
-      if($attribute_value === "Ja") {
-        $usps[] = "Incl. motor";
-      }
-      
-      /* Insulation thickness */
-      $attribute_value = $_product->getAttributeText("isolatiedikte");
-      if(is_array($attribute_value)) {
-        $attribute_value = implode(", ", $attribute_value);
-      }
-      if(strlen($attribute_value) > 0) {
-        $usps[] = "{$attribute_value} mm";
-      }
-      
-      // Dimensions
-      $width          = ($_product->getBreedte() + 0) / 10;
-      $height         = ($_product->getHoogte()  + 0) / 10;
-      $depth          = ($_product->getDiepte()  + 0) / 10;
-      
-      if($width  > 10) $width  = round($width);
-      if($depth  > 10) $depth  = round($depth);
-      if($height > 10) $height = round($height);
-      
-      if($width > 0 && $height > 0 && $depth > 0) {
-        $usps[] = "(B){$width} x (D){$depth} x (H){$height}cm";
-      } else {
-        $width = $_product->getBreedte();
-        if($width != '' && $width > 0) {
-          // $usps[] = "Breedte: ".($width/10)."cm";
-        }
-      }
-      
-      // Diameter
-      $attribute_value = $_product->getData('diameter_mm');
-      if($attribute_value != ''){
-        $usps[] = "Ø {$attribute_value} mm";
-      }
-      
-      // Length
-      $code = "length_mm";
-      $attribute_value = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-      if($attribute_value != '') {
-        $attribute_value /= 10;
-        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-        $usps[] = "Lengte: {$attribute_value} cm";
-      }
-      
-      // Quantity
-      $attribute_value = (int) $_product->getData('eenheid');
-      if($attribute_value > 1) {
-        $usps[] = "{$attribute_value} stuks";
-      }
-      
-      /* ------------------------------------- */
+      $usp_options      = [
+        "context"         => "listview",
+        "category_name"   => $category_name,
+      ];
+      $usps             = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
       
       // Price Block
-      $price_html = str_replace(",00", ",-", $price_html);
-      $price_html = str_replace("€", null, $price_html);
+      $price_html       = str_replace(",00", ",-", $price_html);
+      $price_html       = str_replace("€", null, $price_html);
       
       // Black friday
       if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
         $html .= "<span class='bf-banner-list'></span>";
       } else {
         // Product label
+        $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
         if(isset($productlabel) === true) {
           $html .= "<span class='lblprolist'>{$productlabel}</span>";
         }
       }
       
       // Package quantity
-      $package_quantity = (int) $_product->getData("eenheid");
-      if($package_quantity > 1) {
-        $html .= "<span class='product-label-right white bg-blue border-blue border-1'>{$package_quantity} X</span>";
+      $value = intval(_get_product_attribute($_product, "eenheid"));
+      if($value > 1) {
+        $html .= "<span class='product-label-right white bg-blue border-blue border-1'>{$value} X</span>";
       }
 
       // Energy rating
-      if(isset($energy_rating) === true) {
+      $value = _get_product_attribute($_product, "energy_efficiency_class_a_g");
+      if(empty($value) === false) {
         $enclz = null;
-        switch ($energy_rating) {
-          case 'A++++': $enclz = 'enrgclz1';  break;
-          case 'A+++':  $enclz = 'enrgclz2';  break;
-          case 'A++':   $enclz = 'enrgclz3';  break;
-          case 'A+':    $enclz = 'enrgclz4';  break;
-          case 'A':     $enclz = 'enrgclz5';  break;
-          case 'B':     $enclz = 'enrgclz6';  break;
-          default: break;
+        switch ($value) {
+          case 'A':     $enclz = 'enrgclz1';  break;
+          case 'B':     $enclz = 'enrgclz2';  break;
+          case 'C':     $enclz = 'enrgclz3';  break;
+          case 'D':     $enclz = 'enrgclz4';  break;
         }
-        if(isset($enclz) === true) {
-          $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$energy_rating}'>{$energy_rating}</span>";
+        if($enclz !== null) {
+          $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
         }
       }
       
@@ -656,11 +394,10 @@ if($_productCollection->getFirstItem()) {
               echo "<div class='product-list-tagline'>{$tagline}</div>";
             }
             
-            if(sizeof($usps) > 0) {
+            if(empty($usps) === false) {
               echo "<ul class='product-list-highlights inline-list'>";
               foreach($usps as $usp) {
-                // echo "<li><span class='green_checkbox_before' style='position: relative;'></span>{$usp}</li>";
-                echo "<li><span class='gray'>{$usp}</span></li>";
+                echo "<li>{$usp}</li>";
               }
               echo "</ul>";
             }
@@ -670,8 +407,6 @@ if($_productCollection->getFirstItem()) {
               echo "<span class='small' style='line-height: 2em;'>
                 <i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
             }
-            
-            
             ?>
           </div>
           <?php
@@ -744,7 +479,7 @@ if($_productCollection->getFirstItem()) {
   <?php
 
   // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
-  if($this->getChild('after')) {
+  if($this->getChild("after")) {
     $_afterChildren = $this->getChild('after')->getSortedChildren();
     foreach ($_afterChildren as $_afterChildName) {
       $_afterChild = $this->getChild('after')->getChild($_afterChildName);

@@ -143,7 +143,7 @@
 "YYYY","JJJJ"
 "Bank account number:","Bankrekening nummer:"
 "Company name:","Bedrijfsnaam:"
-"Coc number:","KvK nummer:"
+"Coc number:","KvK nummer (NL) of BTW nummer (BE):"
 "E-mail:","E-mail:"
 "Phone number", "Telefoonnummer"
 "Unable to capture this invoice","Niet mogelijk om deze factuur te capturen"

@@ -1,80 +1,96 @@
 <?php
-$helper = Mage::helper("eke_ogmeta");
 
-if(!$helper->isOgMetaEnabled()) {
-  return;
-}
+$product    = Mage::registry("current_product");
+$cache_key  = "eke_ogmeta_product_".$product->getId();
+$cached     = Mage::app()->loadCache($cache_key);
 
-$siteName = $helper->getSiteName();
-$product = Mage::registry('current_product');
-$imageFile = 'media/catalog/product' . $product->getSmallImage();
+// if(_dhh_debug()) {
+  // printr("key: {$cache_key}");
+// }
 
-if(strlen($product->getSmallImage()) < 1) {
-  $imageFile = $helper->getOgImage();
-}
-
-$imageAttr = ["mime" => null, 0 => null, 1 => null];
-if(is_file($imageFile) === true) {
-  @$imageAttr = getimagesize($imageFile);
-}
-$productVideo = $product->getResource()->getAttribute('product_video')->getFrontend()->getValue($product);
-
-if($helper->isProductShortEnabled()) {
-  $productDescription = htmlentities(strip_tags($product->getShortDescription()));
+if(empty($cached) === false) {
+  echo unserialize($cached);
 } else {
-  $productDescription = htmlentities(strip_tags($product->getDescription()));
+
+  // ------------ START REGULAR FLOW
+  $helper = Mage::helper("eke_ogmeta");
+
+  if(!$helper->isOgMetaEnabled()) {
+    return;
+  }
+
+  $siteName = $helper->getSiteName();  
+  $imageFile = "media/catalog/product".$product->getSmallImage();
+
+  if(strlen($product->getSmallImage()) < 1) {
+    $imageFile = $helper->getOgImage();
+  }
+
+  $imageAttr = ["mime" => null, 0 => null, 1 => null];
+  if(is_file($imageFile) === true) {
+    @$imageAttr = getimagesize($imageFile);
+  }
+  $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);
+
+  if($helper->isProductShortEnabled()) {
+    $productDescription = htmlentities(strip_tags($product->getShortDescription()));
+  } else {
+    $productDescription = htmlentities(strip_tags($product->getDescription()));
+  }
+
+  // Fallback for when there is no description
+  if(strlen($productDescription) < 10) {
+    $productDescription = htmlentities($product->getName());
+  }
+
+  // Remove newlines, trim, limit to 200 chars
+  $productDescription   = substr(trim(preg_replace("/\s\s+/", ";", $productDescription)), 0, 200);
+  $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
+  $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product, $_helper);
+  $overall_stock_status = $stock_data["overall_stock_status"];
+
+  $availability = null;
+  switch($overall_stock_status) {
+    case "in_stock":
+      $availability = "instock";
+      break;
+    case "backorder":
+      $availability = "backorder";
+      break;
+    case "not_sellable":
+      $availability = "out of stock";
+      break;
+    case "eol":
+      $availability = "discontinued";
+      break;
+  }
+  
+  $html = PHP_EOL;
+  $html .= '<meta property="og:title" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
+  $html .= '<meta property="og:site_name" content="'.$siteName.'">'.PHP_EOL;
+  $html .= '<meta property="og:type" content="product">'.PHP_EOL;
+  $html .= '<meta property="og:availability" content="'.$availability.'">'.PHP_EOL;
+  $html .= '<meta property="og:url" content="'.$product_url.'">'.PHP_EOL;
+  $html .= '<meta property="og:image" content="'.$product->getImageUrl().'">'.PHP_EOL;
+  $html .= '<meta property="og:image:type" content="'.$imageAttr['mime'].'">'.PHP_EOL;
+  $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">'.PHP_EOL;
+  $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
+  $html .= '<meta property="og:image:alt" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
+  $html .= '<meta property="og:description" content="'.$productDescription.'">'.PHP_EOL;
+  if($helper->getFacebookAppId()) {
+    $html .= '<meta property="fb:app_id" content="'.$helper->getFacebookAppId().'">'.PHP_EOL;
+  }
+  $html .= '<meta property="og:price:amount" content="'.Mage::registry("product")->getFinalPrice().'">'.PHP_EOL;
+  $html .= '<meta property="og:price:currency" content="'.Mage::app()->getStore()->getCurrentCurrencyCode().'">'.PHP_EOL;
+  if(empty($productVideo) === false) {
+    $productVideo = Mage::helper("deheerhoreca_util/util")->build_product_video_url($productVideo);
+    $html .= "<meta property='og:video' content='{$productVideo}'>".PHP_EOL;
+  }
+  
+  // ------------ STOP REGULAR FLOW
+  
+  echo $html;
+
+  // Store in Magento cache
+  Mage::app()->saveCache(serialize($html), $cache_key, ["eke_ogmeta_product"], 10);
 }
-
-// Fallback for when there is no description
-if(strlen($productDescription) < 10) {
-  $productDescription = htmlentities($product->getName());
-}
-
-// Remove newlines, trim, limit to 200 chars
-$productDescription = substr(trim(preg_replace('/\s\s+/', ';', $productDescription)), 0, 200);
-
-$product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
-
-$stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product, $_helper);
-$overall_stock_status = $stock_data["overall_stock_status"];
-
-$availability = null;
-switch($overall_stock_status) {
-  case "in_stock":
-    $availability = "instock";
-    break;
-  case "backorder":
-    $availability = "backorder";
-    break;
-  case "not_sellable":
-    $availability = "out of stock";
-    break;
-  case "eol":
-    $availability = "discontinued";
-    break;
-}
-?>
-
-<!-- OG META Product Data -->
-<meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
-<meta property="og:site_name" content="<?php echo $siteName; ?>" />
-<meta property="og:type" content="product" />
-<meta property="og:availability" content="<?php echo $availability; ?>" />
-<meta property="og:url" content="<?php echo $product_url; ?>" />
-<meta property="og:image" content="<?php echo $product->getImageUrl(); ?>" />
-<meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>" />
-<meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>" />
-<meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>" />
-<meta property="og:image:alt" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
-<meta property="og:description" content="<?php echo $productDescription; ?>" />
-<?php if ($helper->getFacebookAppId()) { ?>
-<meta property="fb:app_id" content="<?php echo $helper->getFacebookAppId(); ?>"/>
-<?php } ?>
-<meta property="og:price:amount" content="<?php echo Mage::registry('product')->getFinalPrice() ?>" />
-<meta property="og:price:currency" content="<?php echo Mage::app()->getStore()->getCurrentCurrencyCode(); ?>" />
-<meta name="twitter:card" content="summary_large_image" />
-<?php
-if(empty($productVideo) === false) {
-  echo "<meta property='og:video' content='{$productVideo}' />";
-}
-

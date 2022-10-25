@@ -20,7 +20,7 @@ if(count($_tierPrices) > 0) {
   echo "<div class='tier-pricing-container'>";
   echo "<strong>Volumekorting:</strong>&nbsp;<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i><span class='tooltiptext clztoptoolc'>U kunt het gewenste aantal aangeven bij het afrekenen. De korting wordt automatisch verrekend.</span></span>";
   $class = $this->getInGrouped() ? 'tier-prices-grouped product-pricing-grouped' : 'tier-prices product-pricing';
-  echo "<ul class='{$class}'>";
+  echo "<ul class='{$class} indented-disc'>";
   
   if($this->getInGrouped()) {
     $_tierPrices = $this->getTierPrices($_product);

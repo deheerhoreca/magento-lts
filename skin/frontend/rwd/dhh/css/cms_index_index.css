@@ -13,8 +13,12 @@
 .fp-banner {
   transition: opacity .2s, visibility .2s;
   opacity: 1;
-  justify-content: space-between;
+  justify-content: center;
   display: flex;
+}
+
+.fp-main-side-banner {
+  padding-left: 1em;
 }
 
 /* .fp-main-banner:hover { */

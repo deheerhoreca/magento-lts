@@ -64,7 +64,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         
         $lines[0][] = array(
             'text'  => Mage::helper('sales')->__('Price'),
-            'feed'  => 395,
+            'feed'  => 410,
             'align' => 'right'
         );
 

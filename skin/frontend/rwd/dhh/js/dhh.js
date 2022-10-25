@@ -83,3 +83,11 @@ $j(document).ready(function() {
   window.addEventListener('scroll', checkScroll, { passive: true });
 
 });
+
+document.addEventListener('copy', (event) => {
+  if(document.getSelection().toString().length > 100) {
+    const pagelink = `\nBekijk het op: ${document.location.href}`;
+    event.clipboardData.setData('text/plain', document.getSelection() + pagelink);
+    event.preventDefault();
+  }
+});

@@ -373,9 +373,9 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 .form-list td.scope-label,
 .form-list td.use-default       { border:0 !important; padding-top:5px !important; padding-bottom:5px !important; padding-left:5px !important; background:0 !important; }
 .form-list td.hidden            { border:0 !important; padding:0 !important; background:0 !important; }
-.form-list td.label             { width:200px; }
+.form-list td.label             { width:180px; }
 .form-list td.use-default label { display:inline-block; vertical-align:middle; padding:0 3px; }
-.form-list td.label label       { display:block; width:185px; padding-right:15px; padding-top:1px; }
+.form-list td.label label       { display:block; padding-right:15px; padding-top:1px; }
 .form-list td.value input.input-text,
 .form-list td.value textarea    { width:274px; }
 .form-list td.value textarea    { height:15em; }
@@ -590,7 +590,7 @@ div.main-col-inner { float:left; /* Fixes some inner clears in the liquid main-c
 .logo                                   { float:left; margin:5px 20px 5px 27px; height:43px; width:275px; }
 .header-top                             { border-bottom:1px solid #5F767F; }
 
-#page-help-link { visibility: hidden; }
+#page-help-link { display: none; }
 
 /* Header right */
 .header-right                           { padding:10px 25px 0 15px; font-size:.95em; color:#fff; }

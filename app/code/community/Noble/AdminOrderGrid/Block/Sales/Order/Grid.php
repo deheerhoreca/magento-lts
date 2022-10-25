@@ -39,11 +39,11 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 		$paymentFields = array();
 		
 		if(Mage::getStoreConfig('noble/extended_columns/shipping_method')) {
-			$orderFields["shipping_method"] = "shipping_method";
+			$orderFields["shipping_method"] = "tm_field5"; // DHH CORE HACK
 		}
 		
 		if(Mage::getStoreConfig('noble/extended_columns/shipping_description')) {
-			$orderFields["shipping_description"] = "shipping_description";
+			$orderFields["shipping_description"] = "tm_field4"; // DHH CORE HACK
 		}
 		
 		if(Mage::getStoreConfig('noble/extended_columns/customer_email')) {
@@ -59,7 +59,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 		}
 		
 		if(Mage::getStoreConfig('noble/extended_columns/customer_group')) {
-			$orderFields["customer_group_id"] = "customer_group_id";
+			$orderFields["state"] = "state"; // DHH CORE HACK
 		}
 		
 		if(Mage::getStoreConfig('noble/extended_columns/subtotal')) {
@@ -228,24 +228,25 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 		}
 		
 		if(Mage::getStoreConfig('noble/extended_columns/customer_group')) {
-			$this->addColumn('customer_group_id', array(
-				'header'    =>  Mage::helper('customer')->__('Customer Group'),
-				'width'     =>  '100',
-				'index'     =>  'customer_group_id',
-				'type'      =>  'options',
-				'options'   =>  $this->getCustomerGroupOptions(),
-				'renderer' => 'Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_CustomerGroup'
+			$this->addColumn('state', array(
+				'header'    => "Order Staat", // DHH CORE HACK
+				'width'     => '70px',
+				'index'     => 'state',
+				'type'      => 'options',
+				'options'   => Mage::getSingleton('sales/order_config')->getStates(),
+				'filter_index' => 'sfo.state'
+				// 'renderer' => 'Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_CustomerGroup' // DHH CORE HACK
 			));
 		}
 		
 		if(Mage::getStoreConfig('noble/extended_columns/shipping_method')) {
 			$this->addColumn('shipping_method', array(
-				'header' => $this->__('Shipping method'),
+				'header' => $this->__('Tags'), // DHH CORE HACK
 				'index' => 'shipping_method',
 				'filter_index' => 'sfo.shipping_method', 
-				'type' => 'options',
-				'options' => $this->getShippingMethodOptions(),
-				'renderer' => 'Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Shippingmethod'
+				// 'type' => 'options',
+				// 'options' => $this->getShippingMethodOptions(),
+				// 'renderer' => 'Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Shippingmethod'
 			));
 		}
 		

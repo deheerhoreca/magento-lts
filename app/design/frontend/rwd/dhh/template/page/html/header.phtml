@@ -17,8 +17,8 @@ if(Mage::getSingleton("customer/session")->isLoggedIn()) {
         <a class="main-logo" href="/"><img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" height="40" width="208"></a>
         <div id="header-search" ><?php echo $this->getChildHtml("topSearch") ?></div>
         <div class="account-cart-wrapper">
-          <span class="ms-2"><a data-fancybox data-type="iframe" href="/media/static/contact.php" class="fancybox btn btn-primary toplink-phone skip-phone top-link"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
-          <span class="ms-2"><a href="<?php echo Mage::getUrl("customer/account"); ?>" class="skip-account top-link" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
+          <span class="ms-2"><a class="glightbox4 btn btn-primary toplink-phone skip-phone top-link" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
+          <span class="ms-2"><a class="skip-account top-link" href="<?php echo Mage::getUrl("customer/account"); ?>" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
           <span class="ms-2"><?php echo $this->getChildHtml("miniquote_head"); ?></span>
           <span class="ms-2"><?php echo $this->getChildHtml("minicart_head"); ?></span>
         </div>
@@ -52,7 +52,7 @@ if(Mage::getSingleton("customer/session")->isLoggedIn()) {
     default:
       // $top_messages["left"]   = "<a href='/shop?manufacturer=2753'>Nieuw in het assortiment: <strong>Gamko</strong></a>";
       // $top_messages["left"]   = "Achteraf betalen met <a href='/qquoteadv/index/'><strong>Biller</strong></a>, <strong>AfterPay</strong>, <strong>In3</strong></a>";
-      $top_messages["left"]   = "5% korting op Gastronoble met code <strong>GASTRONOBLE5</strong>";
+      $top_messages["left"]   = "Uitleg <a href='/tips-achteraf-betalen'><strong>achteraf betalen</strong></a>";
       $top_messages["center"] = "<a href='/promoties.html'><strong>SALE</strong></a>";
       $top_messages["right"]  = "<a href='/qquoteadv/index/'>Maak een <strong>offerte</strong> voor lease of koop</a>";
       break;
@@ -65,8 +65,5 @@ if(Mage::getSingleton("customer/session")->isLoggedIn()) {
       <span style="width:33%;" class="d-none d-xl-block align-right float-right"><?php echo $top_messages["right"]; ?></span>
     </div>
   </div>
-  <?php
-  
-  echo $this->getChildHtml("topContainer");
-  ?>
+  <?php echo $this->getChildHtml("topContainer"); ?>
 </header>

@@ -38,17 +38,19 @@ if(count($categoryIds)) {
 $max_highlighted_attributes = 10;
 
 // Attributes used in multiple places
-$nofrost_method         = $_product->getResource()->getAttribute("ontdooisysteem")->getFrontend()->getValue($_product);
-$energy_rating          = $_product->getResource()->getAttribute("energieklasse")->getFrontend()->getValue($_product);
-$productlabel           = $_product->getResource()->getAttribute("product_label")->getFrontend()->getValue($_product);
+$productlabel           = _get_product_attribute($_product, "product_label");
+$nofrost_method         = _get_product_attribute($_product, "ontdooisysteem");
+$energy_rating          = _get_product_attribute($_product, "energy_efficiency_class_a_g");
+
 $productTitle           = $_helper->productAttribute($_product, $_product->getName(), "name");
-$product_title_short    = $_product->getResource()->getAttribute("name_short")->getFrontend()->getValue($_product);
-$pvideo                 = $_product->getResource()->getAttribute("product_video")->getFrontend()->getValue($_product);
-$_price                 = $_product->getPrice(); //Mage::getModel("catalog/product")->load($_product->getId())->getNormalPrice();
+$subdescription         = _get_product_attribute($_product, "sub_description");
+$product_title_short    = _get_product_attribute($_product, "name_short");
+$pvideo                 = _get_product_attribute($_product, "product_video");
+$tagline                = _get_product_attribute($_product, "tagline");
+$supplier_name          = _get_product_attribute($_product, "supplier");
+$_price                 = $_product->getPrice(); // @todo is this used?
 $_finalPrice            = $_product->getFinalPrice();
-$tagline                = $_product->getTagline();
-$supplier_name          = $_product->getAttributeText("supplier");
-$product_description_md = trim($_product->getDescription());
+$product_description_md = trim(_get_product_attribute($_product, "description"));
 $product_description    = "";
 
 // Availability, Stock
@@ -111,7 +113,7 @@ if($bestelartikel === "Ja") {
   if(empty($txtstockdate) === false) {
     $delivery_text .= "Verwacht: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de meest accurate inschatting die wij hebben. Door omstandigheden kan dit soms wijzigen.</span>";
   } elseif($manage_stock !== false) {
-    $delivery_text .= "Levertijd op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een pre-order plaatsen.</span>";
+    $delivery_text .= "Levertijd op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een pre-order plaatsen om het product zo snel mogelijk te krijgen.</span>";
   }
 } elseif($overall_stock_status === "in_stock" && !empty($used_levertijd)) {
   $delivery_text .= "{$used_levertijd}<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext clztoptoolc'>{$delivery_time_tooltip}</span></span>";
@@ -137,11 +139,11 @@ if($qty_increments > 0) {
 $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
   <li class=my-1>
     <i class='fa-li fa fa-question'></i>
-    <a data-fancybox data-type='iframe' data-iframe='{\"preload\":false}' data-width=500 data-height=650 href='https://form.jotform.com/213136047906049?sku=".urlencode($sku)."&product=".urlencode($productTitle)."'>Stel een vraag</a>
+    <a class='glightbox4' data-gallery=q data-glightbox='effect:fade; width:600px;' href='//form.jotform.com/213136047906049?sku=".urlencode($sku)."&product=".urlencode($productTitle)."'>Stel een vraag</a>
   </li>
   <li class=my-1>
     <i class='fa-li fa fa-phone' title='Bellen'></i>
-    <a data-fancybox data-type='iframe' href='/media/static/contact.php'>Contact opnemen</a></i>
+    <a class='glightbox4' data-gallery=c data-glightbox='effect:fade; width:600px;' href='/media/static/contact.php'>Contact opnemen</a></i>
   </li>
 </ul>";
 
@@ -166,14 +168,9 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
   
   $payment_methods_texts = [];
   
-  // if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
-    // $text = "Betaal <strong>achteraf</strong> met Biller";
-    // $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/biller.php'>{$text}</a>";
-  // }
-  
   if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
     $text = "Betaal achteraf met Biller, Billink of AfterPay";
-    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/bnpl.php'>{$text}</a>";
+    $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/bnpl.php'>{$text}</a>";
   }
 
   if($_finalPrice >= $in3_minimum && $_finalPrice <= $in3_maximum) {    
@@ -184,7 +181,7 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
       $payment = str_replace(",00", ",-", $payment);
       $text = "Of 3x €{$payment} met In3";
     }
-    $payment_methods_texts[] = "<a data-fancybox data-type='iframe' href='/media/static/in3.php'>{$text}</a>";
+    $payment_methods_texts[] = "<a class='glightbox4' data-gallery=in3 data-glightbox='effect:fade; width:600px;' href='/media/static/in3.php'>{$text}</a>";
   }
   
   if(empty($payment_methods_texts) === false) {
@@ -212,7 +209,7 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["bartscher", "combiSteel", "diamond", "domest", "gastro-Inox", "gastronoble", "emga", "hendi", "saro", "scancool"];
+$suppliers_external_docs_preferred = ["bartscher", "combisteel", "diamond", "domest", "gastro-inox", "gastronoble", "emga", "hendi", "saro", "scancool", "veba"];
 $suppliers_external_docs_blocked = []; // case-sensitive
 
 if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
@@ -703,13 +700,13 @@ if(empty($alternative_products_block) === true) {
 // $anchors["photos"] = "Foto's";
 if(empty($pvideo) === false)                        $anchors["video"]               = "Productvideo";
 if(strlen($product_description) > 10)               $anchors["description"]         = "Productbeschrijving";
-if(empty($_crossSellProducts) === false)            $anchors["accessoires"]         = "Opties & Accessoires";
+if(empty($_crossSellProducts) === false)            $anchors["accessoires"]         = "Vaak samen gekocht";
 if(empty($alternative_products_block) === false)    $anchors["alternatives"]        = "Alternatieven";
 if(empty($product_additional_data_block) === false) $anchors["specs"]               = "Specificaties";
 if(strlen($additional_attributes) > 10)             $anchors["additional"]          = "Extra Productinformatie";
 if(empty($files) === false)                         $anchors["documents"]           = "Documantatie";
 if(empty($external_documents_json) === false)       $anchors["external-documents"]  = "Externe Documentatie";
-if(empty($upsell_products_block) === false)         $anchors["upsells"]             = "Bekijk Ook";
+if(empty($upsell_products_block) === false)         $anchors["upsells"]             = "Bekijk ook eens";
 if(empty($related_products_block) === false)        $anchors["related"]             = "Gerelateerde Producten";
 
 $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "detail");
@@ -718,9 +715,9 @@ $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_prod
 
 // If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
 if($stock_data["overall_stock_status"] === "backorder"
-&& empty($stock_data["stock_date_days_left"]) === false
-&& $stock_data["stock_date_days_left"] >= 7
-&& empty($productlabel) === true) {
+&& (empty($stock_data["stock_date_days_left"]) === true || $stock_data["stock_date_days_left"] >= 7)
+&& empty($productlabel) === true
+&& empty($alternative_products_block) === false) {
   $productlabel = "Alternatieven beschikbaar";
 }
 
@@ -790,6 +787,10 @@ if($stock_data["overall_stock_status"] === "backorder"
             ?>
             <div class="add-to-cart-wrapper">
               <?php
+              
+              // if(empty($subdescription) === false && strlen($subdescription) > 20 && strlen($subdescription) < 300) {
+                // echo "<div class='float-left py-2' style='margin-right:2em;'>{$subdescription}</div>";
+              // }
               
               // Configurable products
               
@@ -959,10 +960,7 @@ if($stock_data["overall_stock_status"] === "backorder"
 
     /* Product Video */
     if(empty($pvideo) === false) {
-      if(strstr("http", $pvideo) === false) {
-        // Best way is to just store the youtube ID and build the URL
-        $pvideo = "https://www.youtube-nocookie.com/embed/{$pvideo}?modestbranding=1&origin=https://www.chefstore.nl&loop=1&rel=1&hl=nl&controls=1";
-      }
+      $pvideo = Mage::helper("deheerhoreca_util/util")->build_product_video_url($pvideo);
       ?>
       <div class="py-1">
         <span class="anchor" id="video"></span>
@@ -974,6 +972,11 @@ if($stock_data["overall_stock_status"] === "backorder"
     }
 
     /* Product Description */
+    
+    if(empty($subdescription) === false && strlen($subdescription) > 20 && strlen($subdescription) < 200) {
+      echo "<div class='std p-2 my-2 fw-600' style='background-color:#e0f6ff; border-radius:5px;'>{$subdescription}</div>";
+    }
+    
     if(strlen($product_description) > 10) {
       ?>
       <div class="py-1 std justify" id="product-detail-description">
@@ -988,7 +991,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       <div class="probottomdv">
         <div class="topproducts_containter">
           <span class="anchor" id="accessoires"></span>
-          <h2 class="tableftheader">Opties & Accessoires</h2>
+          <h2 class="tableftheader">Vaak samen gekocht</h2>
           <?php
           $_columnCount = 4;
           $i = 0;
@@ -1048,9 +1051,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
         <span class="anchor" id="additional"></span>
-        <div class="std"><?php echo $additional_attributes; ?>
-          <dl class="hidden"><dt>Source</dt><dd>https://www.chefstore.nl</dd></dl>
-        </div>
+        <div class="std"><?php echo $additional_attributes; ?></div>
       </div>
     <?php
     }
@@ -1130,7 +1131,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                 }
               }
               echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
               echo "</li>";
             }
             ?>

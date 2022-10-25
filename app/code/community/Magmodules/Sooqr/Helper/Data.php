@@ -11,7 +11,7 @@
  * obtain it through the world-wide-web, please send an email
  * to info@magmodules.eu so we can send you a copy immediately.
  *
- * @category      Magmodules
+ * @category      Magmodulesfg
  * @package       Magmodules_Sooqr
  * @author        Magmodules <info@magmodules.eu>
  * @copyright     Copyright (c) 2019 (http://www.magmodules.eu)
@@ -891,7 +891,13 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
                 break;
             default:
                 if (isset($product[$source])) {
-                    $value = $product[$source];
+                  // DHH CORE HACK -- REMOVE XML INCOMPATIBLE STUFF
+                  $value = $product[$source];
+                  // $value = htmlspecialchars($value, ENT_XML1);                  
+                  $value = str_replace(["^", "\u005E", "\u005e"], " ", $value); // U+005E
+                  // @see https://stackoverflow.com/questions/12229572/php-generated-xml-shows-invalid-char-value-27-message
+                  $value = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value);
+                  // var_dump($value);
                 }
                 break;
         }

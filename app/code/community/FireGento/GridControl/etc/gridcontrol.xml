@@ -66,26 +66,6 @@
         <after>status</after>
       </eol>
 
-      <!-- <bi_supplier_sold_365> -->
-        <!-- <add> -->
-          <!-- <header>Supplier365</header> -->
-          <!-- <size>5</size> -->
-          <!-- <type>number</type> -->
-          <!-- <index>bi_supplier_sold_365</index> -->
-        <!-- </add> -->
-        <!-- <after>eol</after> -->
-      <!-- </bi_supplier_sold_365> -->
-
-      <!-- <bi_dhh_sold_365> -->
-        <!-- <add> -->
-          <!-- <header>Sold365</header> -->
-          <!-- <size>5</size> -->
-          <!-- <type>number</type> -->
-          <!-- <index>bi_dhh_sold_365</index> -->
-        <!-- </add> -->
-        <!-- <after>bi_supplier_sold_365</after> -->
-      <!-- </bi_dhh_sold_365> -->
-
       <manufacturer>
         <add>
           <header>Merk</header>
@@ -178,16 +158,6 @@
         <after>status</after>
       </eol>
       
-      <!-- <bi_supplier_sold_365> -->
-        <!-- <add> -->
-          <!-- <header>SuppSold365</header> -->
-          <!-- <type>number</type> -->
-          <!-- <index>bi_supplier_sold_365</index> -->
-          <!-- <width>4</width> -->
-        <!-- </add> -->
-        <!-- <after>eol</after> -->
-      <!-- </bi_supplier_sold_365> -->
-      
       <supplier>
         <add>
           <header>Leverancier</header>
@@ -221,15 +191,10 @@
     <!-- Orders Grid -->
 
     <sales_order_grid>
-      <!-- <store_id> -->
-        <!-- <remove/> -->
-      <!-- </store_id> -->
-      <base_grand_total>
+      
+      <store_id>
         <remove/>
-      </base_grand_total>
-      <action>
-        <remove/>
-      </action>
+      </store_id>
       
     </sales_order_grid>
     
@@ -316,12 +281,12 @@
         <after>is_global</after>
       </is_html_allowed_on_front>
       
-      <is_used_for_price_rules>
+      <is_used_for_promo_rules>
         <add>
           <align>center</align>
-          <header>PriceRules</header>
+          <header>PromoRules</header>
           <type>options</type>
-          <index>is_used_for_price_rules</index>
+          <index>is_used_for_promo_rules</index>
           <options>
             <option_1>
               <key>1</key>
@@ -334,7 +299,7 @@
           </options>
         </add>
         <after>is_global</after>
-      </is_used_for_price_rules>
+      </is_used_for_promo_rules>
       
       <is_visible_in_advanced_search>
         <add>
@@ -355,6 +320,26 @@
         </add>
         <after>is_global</after>
       </is_visible_in_advanced_search>
+      
+      <used_in_product_listing>
+        <add>
+          <align>center</align>
+          <header>InCategory</header>
+          <type>options</type>
+          <index>used_in_product_listing</index>
+          <options>
+            <option_1>
+              <key>1</key>
+              <value>Ja</value>
+            </option_1>
+            <option_0>
+              <key>0</key>
+              <value>Nee</value>
+            </option_0>
+          </options>
+        </add>
+        <after>is_global</after>
+      </used_in_product_listing>
     
     </attributeGrid>
     

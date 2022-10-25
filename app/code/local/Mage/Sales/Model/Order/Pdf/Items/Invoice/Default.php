@@ -64,8 +64,9 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
         // draw item Prices
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
-        $feedPrice = 400;
-        $feedSubtotal = $feedPrice + 160;
+        $feedPrice = 430;
+        $feedQty = $feedPrice + 45;
+        $feedSubtotal = $feedPrice + 130;
         foreach ($prices as $priceData){
             if (isset($priceData['label'])) {
                 // draw Price label
@@ -100,8 +101,8 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
         // draw QTY
         $lines[0][] = array(
             'text'  => $item->getQty() * 1,
-            'feed'  => 465,
-            'align' => 'right'
+            'feed'  => $feedQty,
+            'align' => 'center'
         );
         
         // custom options

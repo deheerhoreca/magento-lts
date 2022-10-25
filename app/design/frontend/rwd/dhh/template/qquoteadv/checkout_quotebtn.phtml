@@ -58,8 +58,8 @@ if(count($productNames) > 0) {
   $action = 'initMsg();';
 }
 
-$btn = '<span id="quotebtnandinfo"><button data-fancybox="" data-touch="false" href="#copy-to-quote-msg" id="c2qBtn" onclick="%s" class="button2 btn-update" type="button"><span><span>%s</span></span></button><a data-fancybox="" data-touch="false" href="#quote-copy-info"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i></a>
-    <div id="quote-copy-info" style="display: none;" class="">
+$btn = '<span id="quotebtnandinfo"><a class="btn glightbox4" href="#copy-to-quote-msg" id="c2qBtn" onclick="%s" class="button2 btn-update" type="button"><span><span>%s</span></span></a><a class="glightbox4" href="#quote-copy-info"> <i class="fa fa-info-circle fa-lg" aria-hidden="true"></i></a>
+    <div id="quote-copy-info" style="display: none;" class="center">
       <h2>Kopieer naar offerte of lease aanvraag</h2>Deze knop kopieert de producten in je Winkelwagen naar de Offerte/Lease Winkelwagen.
     </div></span>';
 
@@ -128,7 +128,7 @@ if(Mage::helper('qquoteadv')->isActiveConfirmMode()) {
     <?php endif ?>
 
     <div style="float:right; padding-right:50px; margin-bottom: 20px; margin-top: 20px;">
-      <button type="button" class="button-smaller button btn-update" data-fancybox-close title="<?php echo Mage::helper('sales')->__('Cancel') ?>">
+      <button type="button" class="button-smaller button btn-update" title="<?php echo Mage::helper('sales')->__('Cancel') ?>">
         <span><span><?php echo Mage::helper('sales')->__('Cancel') ?></span></span></button>
       <button type="button" class="button-smaller button btn-update" onclick="$('switchmode').submit();"
           title="<?php echo Mage::helper('sales')->__('Continue') ?>">

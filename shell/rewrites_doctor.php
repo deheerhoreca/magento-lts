@@ -2,12 +2,13 @@
 
 // @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
 
+// Normal flow:
 // php shell/rewrites_doctor.php update_keys
 // php shell/indexer.php --reindex catalog_url
-// For STORE_ID = 1: php shell/rewrites_doctor.php --remove_rewrites 10
-// For STORE_ID = 4: php shell/rewrites_doctor.php --remove_rewrites 1 (not an actual site)
+// For STORE_ID = 1: php shell/rewrites_doctor.php --remove_rewrites 10 --store 1
+// For STORE_ID = 4: php shell/rewrites_doctor.php --remove_rewrites 1 --store 4
 
-const DRYRUN = false;
+const DRYRUN = true;
 
 require_once "abstract.php";
 
@@ -15,11 +16,14 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   
   const PAGE_SIZE = 1000;
   const LOG_MESSAGE_ROWS = 100;
-  const STORE_ID = 1;
   const MAX_SLUG_LENGTH = 60;
   
   public function run() {
     if($left = $this->getArg("remove_rewrites")) {
+      define(STORE_ID, $this->getArg("store"));
+      if(empty(STORE_ID)) {
+        die("use --store X");
+      }
       $this->clearExtraRewrites($left);
     } elseif($this->getArg("update_keys")) {
       $this->updateDuplicatedKeys();
@@ -125,25 +129,25 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
    * @var $left
    */
   public function clearExtraRewrites($left) {
-    echo "Store ID = ".self::STORE_ID.PHP_EOL;
+    echo "Store ID = ".STORE_ID.PHP_EOL;
     
-    switch(self::STORE_ID) {
+    switch(STORE_ID) {
       case 1:
         $limit = 10;
         if($left < $limit) {
-          echo "Refusing to run on store ID ".self::STORE_ID." with less than {$limit} rewrites left".PHP_EOL;
+          echo "Refusing to run on store ID ".STORE_ID." with less than {$limit} rewrites left".PHP_EOL;
           return false;
         }
         break;
       case 4:
-        $limit = 2;
+        $limit = 1;
         if($left < $limit) {
-          echo "Refusing to run on store ID ".self::STORE_ID." with less than {$limit} rewrites left".PHP_EOL;
+          echo "Refusing to run on store ID ".STORE_ID." with less than {$limit} rewrites left".PHP_EOL;
           return false;
         }
         break;
       default:
-        echo "Refusing to run on store ID ".self::STORE_ID.PHP_EOL;
+        echo "Refusing to run on store ID ".STORE_ID.PHP_EOL;
         return false;
     }
     
@@ -171,7 +175,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
         $urlRewritesCollection = Mage::getModel("core/url_rewrite")->getCollection()
           ->addFieldToFilter("product_id", array("eq" => $id))
           ->addFieldToFilter("is_system", array("eq" => "0"))
-          ->addFieldToFilter("store_id", array("eq" => self::STORE_ID))
+          ->addFieldToFilter("store_id", array("eq" => STORE_ID))
           ->setOrder("url_rewrite_id", "DESC")
         ;
         $urlRewritesCollection->getSelect()->limit(null, $left);
@@ -234,7 +238,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     $resource = Mage::getSingleton('core/resource');
     $writeConnection = $resource->getConnection('core_write');
     $table = $resource->getTableName('core_url_rewrite');
-    $new_table = $resource->getTableName('core_url_rewrite')."_".self::STORE_ID."_".date("Ymd_H");
+    $new_table = $resource->getTableName('core_url_rewrite')."_".STORE_ID."_".date("Ymd_H");
     
     if(empty($writeConnection->fetchAll("SHOW TABLES LIKE '{$new_table}'")) === false) {
       echo "Backup table {$new_table} already exists, quiting...".PHP_EOL;
@@ -242,7 +246,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     }
     
     $query1 = "CREATE TABLE `{$new_table}` LIKE `{$table}`;";
-    $query2 = "INSERT INTO `{$new_table}` SELECT * FROM `{$table}` WHERE store_id = '".self::STORE_ID."';";
+    $query2 = "INSERT INTO `{$new_table}` SELECT * FROM `{$table}` WHERE store_id = '".STORE_ID."';";
     echo $query1.PHP_EOL;
     if(DRYRUN === false) {
       $result = $writeConnection->query($query1);

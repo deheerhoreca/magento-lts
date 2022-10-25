@@ -418,7 +418,7 @@
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>Veilig achteraf betalen (eenmalige machtiging)</portfolio_label>
+                <portfolio_label>AfterPay - Veilig achteraf betalen (eenmalige machtiging)</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -465,7 +465,7 @@
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -489,7 +489,7 @@
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -513,7 +513,7 @@
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>1</portfolio_showssn>
-                <portfolio_label>Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -536,7 +536,7 @@
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>benl</portfolio_country>
@@ -560,7 +560,7 @@
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>benl</portfolio_country>

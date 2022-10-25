@@ -1,5 +1,7 @@
 <?php
 
+// @todo find out if this file is being used
+
 $show_toolbar     = false;
 $_columnCount     = 4;
 $displaySize      = 200;
@@ -69,13 +71,6 @@ if(0) {
         ?>
         <div class="product-info">
           <div class="info">
-          <?php
-          //$attribute = $_product->getResource()->getAttribute('short_description');
-           // if($attribute)
-           // {
-            //    echo $attribute ->getFrontend()->getValue($_product);
-          //   }
-          ?>
           <ul>
             <?php
             $cats = $_product->getCategoryIds();
@@ -90,54 +85,6 @@ if(0) {
               echo '<li>'.$attribute_value.'</li>';
             } else {
               echo '<li>&nbsp;</li>';
-            }
-
-            if($catid != 72) {
-              $attribute_value = $_product->getAttributeText('type_koeling');
-              //$attribute_value = $attribute ->getFrontend()->getValue($_product);
-              if($attribute_value!=''){
-                echo '<li>Koelmethode: '.$attribute_value.'</li>';
-              }
-
-              /*
-              $attribute_value = $_product->getAttributeText('aantal_deuren');
-              //$attribute_value = $attribute ->getFrontend()->getValue($_product);
-              if($attribute_value!=''){
-                echo '<li>'.$attribute_value.'-deurs</li>';
-              }
-              */
-
-              /*
-              $attribute_value = $garentiim = $_product->getAttributeText('garantie');
-              $attribute_value = $garentiim = $attribute ->getFrontend()->getValue($_product);
-              if($attribute_value!=''){
-                echo '<li>Garantie: '.$attribute_value.'</li>';
-              }
-              */
-
-              $attribute_value = $_product->getInhoudLiters();
-              //$attribute_value = $attribute ->getFrontend()->getValue($_product);
-              if($attribute_value!=''){
-                echo '<li>Inhoud: '.(round($attribute_value,2)).' liter</li><br />';
-              }
-
-              $attribute_value = $_product->getBreedte();
-              //$attribute_value = $attribute ->getFrontend()->getValue($_product);
-              if($attribute_value!=''){
-                echo '<li>'.($attribute_value/10).'cm breed</li><br />';
-              }
-            }
-
-            if($catid==72){
-              $attribute_value = $_product->getBreedte();
-              if($attribute_value!=''){
-                echo '<li>'.($attribute_value/10).'cm breed</li><br />';
-              }
-
-              $attribute_value = $_product->getInhoudAantalGn();
-              if($attribute_value!=''){
-                echo '<li>'.$attribute_value.' x '.$gnvalue.' GN</li><br />';
-              }
             }
             ?>
            </ul>

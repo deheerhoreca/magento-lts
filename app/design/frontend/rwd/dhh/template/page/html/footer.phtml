@@ -62,6 +62,12 @@
 </div>
 
 <script>
-var lazyLoadInstance = new LazyLoad({elements_selector: ".lazy"});
-!function(e,n,t){var r=e.createElement(n),i=e.getElementsByTagName(n)[0];r.src="//cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js",r.onload=function(){elasticApm.init(t)},i.parentNode.insertBefore(r,i)}(document,"script",{serviceName:"chefstore_nl",serverUrl:"//rum.chefstore.nl:8200",environment:"production"});
+  var lazyLoadInstance = new LazyLoad({elements_selector: ".lazy"});
+
+  !function(e,n,t){var r=e.createElement(n),i=e.getElementsByTagName(n)[0];r.src="//cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js",r.onload=function(){elasticApm.init(t)},i.parentNode.insertBefore(r,i)}(document,"script",{serviceName:"chefstore_nl",serverUrl:"//rum.chefstore.nl:8200",environment:"production"});
+
+  const lightbox = GLightbox({touchNavigation: true});
+  var lightboxInlineIframe = GLightbox({
+    selector: '.glightbox4', touchNavigation: false, keyboardNavigation: false, preload: false
+  });
 </script>

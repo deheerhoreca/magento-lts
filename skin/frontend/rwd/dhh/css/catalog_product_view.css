@@ -12,3 +12,17 @@
     width: 350px;
   }
 }
+
+.productdetail__discount {
+  padding: 0.1875rem 0.5rem;
+  background: #feee17;
+  color: #cc0000;
+  font-size: 1em;
+  border-radius: 5px;
+  line-height: 1.2em;
+  display: none;
+}
+
+.product-shop .productdetail__discount {
+  display: table;
+}

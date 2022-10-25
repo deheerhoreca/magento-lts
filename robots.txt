@@ -184,6 +184,7 @@ User-agent: SemrushBot-SI
 User-agent: SemrushBot-SWA
 User-agent: SemrushBot-CT
 User-agent: SemrushBot-BM
+User-agent: DnBCrawler-Analytics
 Disallow: /
 
 User-agent: bingbot
@@ -198,4 +199,3 @@ User-agent: *
 Disallow: /catalogsearch/
 Disallow: /cdn-cgi/*
 Disallow: /no-route
-
