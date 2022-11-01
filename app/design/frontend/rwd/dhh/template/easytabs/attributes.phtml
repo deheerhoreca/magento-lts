@@ -44,6 +44,8 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "annual_energy_consumption_kwh",
 ];
 
+$attr_hide_zero       = array_merge($attr_trim_decimals, $attr_remove_decimals);
+
 // Do not show these values
 $value_skip           = ["N.v.t.", "n.v.t.", "Geen / n.v.t."];
 
@@ -62,6 +64,7 @@ $attributes           = [];
 if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
   $attr_remove_decimals = array_flip($attr_remove_decimals);
   $attr_trim_decimals   = array_flip($attr_trim_decimals);
+  $attr_hide_zero       = array_flip($attr_hide_zero);
   
   // Optionally delete other attributes if certain ones are filled
   foreach($_additionalgroup as $_additional) {    
@@ -217,6 +220,10 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           
           default:
             $value = $_helper->productAttribute($_product, $value, $code);
+        }
+        
+        if(isset($attr_hide_zero[$code]) && $value == 0) {
+          continue;
         }
         
         if(isset($attr_remove_decimals[$code])) {

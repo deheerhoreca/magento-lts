@@ -346,14 +346,14 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       // Energy rating
       $value = _get_product_attribute($_product, "energy_efficiency_class_a_g");
       if(empty($value) === false) {
-        $enclz = null;
+        $enclz = "";
         switch ($value) {
-          case 'A':     $enclz = 'enrgclz1';  break;
-          case 'B':     $enclz = 'enrgclz2';  break;
-          case 'C':     $enclz = 'enrgclz3';  break;
-          case 'D':     $enclz = 'enrgclz4';  break;
+          case "A":     $enclz = "enrgclz1";  break;
+          case "B":     $enclz = "enrgclz2";  break;
+          case "C":     $enclz = "enrgclz3";  break;
+          case "D":     $enclz = "enrgclz4";  break;
         }
-        if($enclz !== null) {
+        if($enclz !== "") {
           $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
         }
       }

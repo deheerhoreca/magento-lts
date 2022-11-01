@@ -98,3 +98,6 @@ biller-webhook.jsonl
 nohup.out
 nohup*.out
 *desktop.ini
+algolia_*.json
+_maintenance.flag
+maintenance.flag

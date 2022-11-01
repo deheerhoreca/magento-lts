@@ -3575,6 +3575,8 @@ button.btn {
   background-color: #17a249 !important;
 }
 
+/* EU Energy Labels */
+
 .lblenergylabel {
   position: absolute;
   top: 15em;
@@ -3623,74 +3625,44 @@ div.category-products li span.lblenergylabel::after {
 }
 
 .lblenergylabel.enrgclz1 {
-  background-color: #1a8d41;
+  background-color: #01a550;
 }
 
 .lblenergylabel.enrgclz1:after {
-  border-right-color: #1a8d41;
+  border-right-color: #01a550;
 }
 
-.lblenergylabel.enrgclz2,
-.lblenergylabel.enrgclz3,
+.lblenergylabel.enrgclz2 {
+  background-color: #4cb748;
+}
+
+.lblenergylabel.enrgclz2:after {
+  border-right-color: #4cb748;
+}
+
+.lblenergylabel.enrgclz3 {
+  background-color: #bdd62e;
+}
+
+.lblenergylabel.enrgclz3:after {
+  border-right-color: #bdd62e;
+}
+
 .lblenergylabel.enrgclz4,
-.lblenergylabel.enrgclz5 {
-  background-color: #1b8e43;
-}
-
-.lblenergylabel.enrgclz2:after,
-.lblenergylabel.enrgclz3:after,
-.lblenergylabel.enrgclz4:after,
-.lblenergylabel.enrgclz5:after {
-  border-right-color: #1b8e43;
-}
-
-.lblenergylabel.enrgclz6 {
-  background-color: #4aa847;
-}
-
-.lblenergylabel.enrgclz6:after {
-  border-right-color: #4aa847;
-}
-
+.lblenergylabel.enrgclz5,
+.lblenergylabel.enrgclz6,
 .lblenergylabel.enrgclz7 {
-  background-color: #9dba3a;
+  background-color: #fef104;
 }
 
+.lblenergylabel.enrgclz4:after,
+.lblenergylabel.enrgclz5:after,
+.lblenergylabel.enrgclz6:after,
 .lblenergylabel.enrgclz7:after {
-  border-right-color: #9dba3a;
+  border-right-color: #fef104;
 }
 
-.lblenergylabel.enrgclz8 {
-  background-color: #faec0d;
-}
-
-.lblenergylabel.enrgclz8:after {
-  border-right-color: #faec0d;
-}
-
-.lblenergylabel.enrgclz9 {
-  background-color: #eb9d21;
-}
-
-.lblenergylabel.enrgclz9:after {
-  border-right-color: #eb9d21;
-}
-
-.lblenergylabel.enrgclz10 {
-  background-color: #ed6527;
-}
-
-.lblenergylabel.enrgclz10:after {
-  border-right-color: #ed6527;
-}
-
-.lblenergylabel.enrgclz11 {
-  background-color: #db372d;
-}
-
-.lblenergylabel.enrgclz11:after {
-  border-right-color: #db372d;
-}
+/* Product Grid */
 
 .products-grid .product-image {
   width: 100%;
