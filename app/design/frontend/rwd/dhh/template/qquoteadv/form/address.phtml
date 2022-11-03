@@ -169,7 +169,7 @@ $customerForCustomerIsEnabled = Mage::helper('qquoteadv')->customerForCustomerIs
       <td class="p5">
         <?php
         if($parent->getCompanySettings() != 0): ?>
-          <label for="<?php echo $this->getAddedFieldName(); ?>:company"><?php echo Mage::helper('sales')->__('Organisation'); ?></label>
+          <label for="<?php echo $this->getAddedFieldName(); ?>:company"><?php echo Mage::helper('sales')->__('Company'); ?></label>
           <?php echo $this->getFieldRequiredSpan($parent->getCompanySettings()); ?>
           <input type='text' autocomplete="organization"
                value="<?php echo $parent->getValue('company', $formType) ?>"
