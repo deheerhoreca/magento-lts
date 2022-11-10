@@ -20,8 +20,8 @@ $skn                    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN)
 $anchors                = [];
 $in3_minimum            = 100 / 1.21;
 $in3_maximum            = 3000 / 1.21;
-$billink_minimum        = 10;
-$billink_maximum        = 3500;
+// $billink_minimum        = 10;
+// $billink_maximum        = 3500;
 $biller_minimum         = 10;
 $biller_maximum         = 5000;
 $_taxHelper             = $this->helper("tax");
@@ -168,8 +168,8 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
   
   $payment_methods_texts = [];
   
-  if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
-    $text = "Betaal achteraf met Biller, Billink of AfterPay";
+  if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
+    $text = "Betaal achteraf met Biller of Riverty (AfterPay)";
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/bnpl.php'>{$text}</a>";
   }
 
