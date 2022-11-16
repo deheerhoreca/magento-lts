@@ -35,14 +35,19 @@ $attr_remove_decimals = [
   "cooking_zones", "gross_weight_gram", "length_mm", "isolatiedikte",
   "number_of_slots", "max_geleiders", "package_height_mm", "package_width_mm",
   "package_depth_mm", "shipping_weight_gram", "temp_range_from_c", "temp_range_to_c",
+  "thickness_mm",
 ];
 
 // No zero decimals, with number formatting
 $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "inhoud_wastank_liter", "vermogen_boiler", "weight", "volume_freezer_liter",
   "volume_refrigerator_liter","volume_net_liter", "ijs_productie", "ijs_bunker",
-  "annual_energy_consumption_kwh",
+  "annual_energy_consumption_kwh", "capaciteit_boiler", "laadhoogte", "weight_fabric",
+  "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus",
 ];
+
+// Allow to show "No" values for these attributes
+$attr_show_no         = ["microwave_safe", "oven_safe", "dishwasher_safe"];
 
 $attr_hide_zero       = array_merge($attr_trim_decimals, $attr_remove_decimals);
 
@@ -92,11 +97,11 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
       
       foreach($values as $value) {
       
-        if(empty($value) || in_array($value, $value_skip, true)) {
+        if(strlen($value) < 1 || in_array($value, $value_skip, true)) {
           continue;
         }
         
-        if(empty($code) || in_array($code, $hidden_attributes, true)) {
+        if(strlen($code) < 1 || in_array($code, $hidden_attributes, true)) {
           continue;
         }
         
@@ -132,6 +137,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           // "°C" postfix
           case "temp_range_from_c":
           case "temp_range_to_c":
+          case "temp_resistance_from":
+          case "temp_resistance_to":
             if($value > 0) {
               $prefix = "+";
             }
@@ -166,6 +173,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "hoogte_intern":
           case "breedte_intern":
           case "diepte_intern":
+          case "thickness_mm":
           case "insulation_thickness_mm":
           case "isolatiedikte":
           case "breedte_deur":
@@ -206,7 +214,6 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
               $value *= 1000;
               $postfix = " g";
             } else {
-              $value = number_format($value, 2, ",", ".");
               $postfix = " kg";
             }
             break;
@@ -244,7 +251,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
         }
         
         /* Post-processing all attributes */
-        if($value === "Nee") {
+        if($value === "Nee" && in_array($code, $attr_show_no, true) === false) {
           $value = "-";
         }
         
@@ -263,7 +270,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
         $tooltip = $attr_tooltips[$code];
       }
       
-      if(empty($_output_value) === false && in_array($code, $delete_these) === false) {
+      if(strlen($_output_value) > 0 && in_array($code, $delete_these, true) === false) {
         $attributes[$this->__($_additional["title"])][$code] = [
           "label"     => $label,
           "value"     => $_output_value,
