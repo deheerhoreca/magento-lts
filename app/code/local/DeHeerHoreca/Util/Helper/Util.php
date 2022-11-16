@@ -1372,7 +1372,7 @@ if(function_exists("sanitizeForFilename") === false) {
 if(function_exists("_dhh_debug") === false) {
   function _dhh_debug() {
     if(isset($_SERVER["REMOTE_ADDR"])
-    && in_array($_SERVER["REMOTE_ADDR"], ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235"])
+    && in_array($_SERVER["REMOTE_ADDR"], ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227"])
     && isset($_GET['nofpc'])) {
       return true;
     }
