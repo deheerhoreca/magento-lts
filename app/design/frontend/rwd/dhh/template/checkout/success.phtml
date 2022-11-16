@@ -1,22 +1,8 @@
 <?php
 # KEEP IN SYNC:
-# - app/design/frontend/rwd/dhh/template/paysafecash/success.phtml
+# - app/design/frontend/rwd/dhh/template/paysafecash/success.phtml @deprecated
 # - app/design/frontend/rwd/dhh/template/checkout/success.phtml
 ?>
-
-<?php /* Bing Conversion tracking */ ?>
-<?php
-$order_id = Mage::getSingleton('checkout/session')->getLastOrderId();
-$order    = Mage::getModel('sales/order')->load($order_id);
-$total    = $order->getGrandTotal() / 1.21; // VAT
-?>
-<script>
-  window.uetq = window.uetq || [];  
-  window.uetq.push('event', '', {'revenue_value': GetBingRevenueValue(), 'currency': 'EUR'});    
-</script>
-<script>
-  function GetBingRevenueValue() { return <?php echo $total; ?>; }
-</script>
 
 <style>
 @media screen and (min-width: 1200.1px) {
@@ -79,10 +65,23 @@ $total    = $order->getGrandTotal() / 1.21; // VAT
   ccConVal = 0;
   var script = document.createElement("script");
   script.async = true;
-  script.type = "text/javascript";
   var target = 'https://www.clickcease.com/monitor/cccontrack.js';
   script.src = target; var elem = document.head; elem.appendChild(script);
 </script>
 <noscript>
-  <a href="https://www.clickcease.com" rel="nofollow"><img src="https://monitor.clickcease.com/conversions/conversions.aspx?value=0" alt="ClickCease"/></a>
+  <a href="//www.clickcease.com" rel="nofollow"><img src="//monitor.clickcease.com/conversions/conversions.aspx?value=0" alt="ClickCease"/></a>
 </noscript>
+
+<?php /* Bing Conversion tracking */
+$order_id = $this->getOrderId();
+$order    = Mage::getModel("sales/order")->loadByIncrementId($order_id);
+$total    = $order->getGrandTotal();
+$total   /= 1.21;
+?>
+<script>
+  window.uetq = window.uetq || [];  
+  window.uetq.push('event', '', {'revenue_value': GetBingRevenueValue(), 'currency': 'EUR'});    
+</script>
+<script>
+  function GetBingRevenueValue() { return <?php echo $total; ?>; }
+</script>
