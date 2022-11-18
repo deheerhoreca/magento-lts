@@ -393,4 +393,5 @@ RedirectMatch 404 /\.git
 
 <IfModule mod_php7.c>
     php_value suhosin.session.encrypt=off
+    php_value elastic_apm.service_name "chefstore_nl"
 </IfModule>
