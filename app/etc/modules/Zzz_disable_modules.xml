@@ -122,5 +122,9 @@
         <Ebizmarts_MailChimp>
           <active>false</active>
         </Ebizmarts_MailChimp>
+        
+        <Algolia_Algoliasearch>
+          <active>false</active>
+        </Algolia_Algoliasearch>
     </modules>
 </config>
