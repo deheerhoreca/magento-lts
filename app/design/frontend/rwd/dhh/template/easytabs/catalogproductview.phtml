@@ -26,6 +26,7 @@ $biller_minimum         = 10;
 $biller_maximum         = 5000;
 $_taxHelper             = $this->helper("tax");
 $categoryIds            = $_product->getCategoryIds();
+$show_black_friday      = false;
 
 // Find the category this product belongs to
 if(count($categoryIds)) {
@@ -151,7 +152,7 @@ $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
 $our_usps = [
   "De beste prijzen",
   "Veilig online winkelen",
-  "Klanten beoordelen ons met een <strong class=orange>9.2/10</strong>",
+  "Klanten beoordelen ons met een <strong class=orange>9.4</strong>",
   "We zitten klaar voor uw vragen",
 ];
 if(empty($our_usps) === false) {
@@ -749,9 +750,9 @@ if($stock_data["overall_stock_status"] === "backorder"
         }
         
         // Black friday
-        // if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
-          // echo "<span class='bf-banner-detail'></span>";
-        // }
+        if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+          echo "<span class='bf-banner-detail'></span>";
+        }
         
         // Package quantity
         $package_quantity = (int) $_product->getData("eenheid");
