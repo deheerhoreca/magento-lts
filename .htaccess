@@ -395,3 +395,5 @@ RedirectMatch 404 /\.git
     php_value suhosin.session.encrypt=off
     php_value elastic_apm.service_name "chefstore_nl"
 </IfModule>
+
+Redirect /hallochef /promoties.html

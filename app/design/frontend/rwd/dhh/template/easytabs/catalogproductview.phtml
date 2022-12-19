@@ -757,7 +757,7 @@ if($stock_data["overall_stock_status"] === "backorder"
         // Package quantity
         $package_quantity = (int) $_product->getData("eenheid");
         if($package_quantity > 1) {
-          echo "<span class='product-label-right bg-blue bit-bigger'>{$package_quantity} X</span>";
+          echo "<span class='product-label-right bg-blue bit-bigger'>{$package_quantity}x</span>";
         }
         
         // Energy rating

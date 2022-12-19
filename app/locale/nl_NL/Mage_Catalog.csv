@@ -122,7 +122,7 @@
 "Buy %1$s for","%1$s voor"
 "Buy %1$s for %2$s","%1 voor %2$s"
 "Buy %1$s for %2$s (%3$s incl. tax) each","%1$s stuks: %2$s excl. BTW"
-"Buy %1$s for %2$s each","%1$s voor %2$s per stuk."
+"Buy %1$s for %2$s each","%1$s %2$s per stuk"
 "Cache Lifetime (Seconds)","Cache Lifetime (in seconden)"
 "Cache refresh needed.","Cache vernieuwen noodzakelijk"
 "Can be Divided into Multiple Boxes for Shipping","Kan opgedeeld worden in meerdere dozen voor verzending"

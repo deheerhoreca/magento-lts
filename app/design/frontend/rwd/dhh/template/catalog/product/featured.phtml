@@ -33,7 +33,8 @@ $_productCollection = Mage::getModel("catalog/product")
   ->addOrder("popularity", "ASC")
   ->addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
   ->setPageSize(24)
-  ->setCurPage(1);
+  ->setCurPage(1)
+  ->addFinalPrice(); // Necessary to respect sale price end date
 
 /*
  * Bugfix: Using require_stock_items there was a bug that lead

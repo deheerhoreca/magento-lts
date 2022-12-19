@@ -28,22 +28,29 @@ if(count($_tierPrices) > 0) {
   
   Mage::helper('weee')->processTierPrices($_product, $_tierPrices);
   
+  $pq_text = "x";
+  // if(empty(_get_product_attribute($_product, "eenheid")) === false) {
+    // $pq_text = "x".intval(_get_product_attribute($_product, "eenheid"));
+  // }
+  
   foreach ($_tierPrices as $_index => $_price) {
+    
+    $price_qty = $_price["price_qty"].$pq_text;
     
     echo "<li class='tier-price tier-{$_index}'>";
     
     if($_catalogHelper->canApplyMsrp($_product)) {
       if($this->getInGrouped()) {
-        echo $this->__('Buy %1$s for', $_price['price_qty']);
+        echo $this->__('Buy %1$s for', $price_qty);
       } else {
-        echo $this->__('Buy %1$s', $_price['price_qty']);
+        echo $this->__('Buy %1$s', $price_qty);
       }
     } else {
       if($this->helper('tax')->displayBothPrices()) {
         if(Mage::helper('weee')->typeOfDisplay($_product, 0)) {
-          echo $this->__('Buy %1$s for %2$s (%3$s incl. tax) each', $_price['price_qty'], $_price['formated_price_incl_weee_only'], $_price['formated_price_incl_weee']);
+          echo $this->__('Buy %1$s for %2$s each', $price_qty, $_price['formated_price_incl_weee_only'], $_price['formated_price_incl_weee']);
         } elseif(Mage::helper('weee')->typeOfDisplay($_product, 1)) {
-          echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee_only']);
+          echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_weee_only']);
           if($_weeeTaxAttributes) {
             echo "(<small>";
             echo $this->__('%1$s incl tax.', $_price['formated_price_incl_weee']);
@@ -57,7 +64,7 @@ if(count($_tierPrices) > 0) {
           }
           echo $this->__('each');
         } elseif(Mage::helper('weee')->typeOfDisplay($_product, 4)) {
-          echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee_only']);
+          echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_weee_only']);
           if($_weeeTaxAttributes) {
             echo "(<small>";
             echo $this->__('%1$s incl tax.', $_price['formated_price_incl_weee']);
@@ -71,7 +78,7 @@ if(count($_tierPrices) > 0) {
           }
           echo $this->__('each');
         } elseif(Mage::helper('weee')->typeOfDisplay($_product, 2)) {
-          echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price']);
+          echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price']);
           if($_weeeTaxAttributes) {
             echo "(<small>";
             foreach($_weeeTaxAttributes as $_attribute) {
@@ -83,14 +90,14 @@ if(count($_tierPrices) > 0) {
           }
           echo $this->__('each');
         } else {
-          echo $this->__('Buy %1$s for %2$s (%3$s incl. tax) each', $_price['price_qty'], $_price['formated_price'], $_price['formated_price_incl_tax']);
+          echo $this->__('Buy %1$s for %2$s each', $price_qty, $_price['formated_price'], $_price['formated_price_incl_tax']);
         }
       } else {
         if($this->helper('tax')->displayPriceIncludingTax()) {
           if(Mage::helper('weee')->typeOfDisplay($_product, 0)) {
-            echo $this->__('Buy %1$s for %2$s each', $_price['price_qty'], $_price['formated_price_incl_weee']);
+            echo $this->__('Buy %1$s for %2$s each', $price_qty, $_price['formated_price_incl_weee']);
           } elseif(Mage::helper('weee')->typeOfDisplay($_product, 1)) {
-            echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee']);
+            echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_weee']);
             if($_weeeTaxAttributes) {
               echo "(<small>";
               $separator = '';
@@ -104,7 +111,7 @@ if(count($_tierPrices) > 0) {
             }
             echo $this->__('each');
           } elseif(Mage::helper('weee')->typeOfDisplay($_product, 4)) {
-            echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee']);
+            echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_weee']);
             if($_weeeTaxAttributes) {
               echo "(<small>";
               $separator = '';
@@ -118,7 +125,7 @@ if(count($_tierPrices) > 0) {
             }
             echo $this->__('each');
           } elseif(Mage::helper('weee')->typeOfDisplay($_product, 2)) {
-            echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_tax']);
+            echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_tax']);
             if($_weeeTaxAttributes) {
               echo "(<small>";
               foreach($_weeeTaxAttributes as $_attribute) {
@@ -130,13 +137,13 @@ if(count($_tierPrices) > 0) {
             }
             echo $this->__('each');
           } else {
-            echo $this->__('Buy %1$s for %2$s each', $_price['price_qty'], $_price['formated_price_incl_tax']);
+            echo $this->__('Buy %1$s for %2$s each', $price_qty, $_price['formated_price_incl_tax']);
           }
         } else {
           if(Mage::helper('weee')->typeOfDisplay($_product, 0)) {
-            echo $this->__('Buy %1$s for %2$s each', $_price['price_qty'], $_price['formated_price_incl_weee_only']);
+            echo $this->__('Buy %1$s for %2$s each', $price_qty, $_price['formated_price_incl_weee_only']);
           } elseif(Mage::helper('weee')->typeOfDisplay($_product, 1)) {
-            echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee_only']);
+            echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_weee_only']);
             if($_weeeTaxAttributes) {
               echo "(<small>";
               $separator = '';
@@ -150,7 +157,7 @@ if(count($_tierPrices) > 0) {
             }
             echo $this->__('each');
           } elseif(Mage::helper('weee')->typeOfDisplay($_product, 4)) {
-            echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee_only']);
+            echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price_incl_weee_only']);
             if($_weeeTaxAttributes) {
               echo "(<small>";
               $separator = '';
@@ -164,7 +171,7 @@ if(count($_tierPrices) > 0) {
             }
             echo $this->__('each');
           } elseif(Mage::helper('weee')->typeOfDisplay($_product, 2)) {
-            echo $this->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price']);
+            echo $this->__('Buy %1$s for %2$s', $price_qty, $_price['formated_price']);
             if($_weeeTaxAttributes) {
               echo "(<small>";
               foreach($_weeeTaxAttributes as $_attribute) {
@@ -176,7 +183,7 @@ if(count($_tierPrices) > 0) {
             }
             echo $this->__('each');
           } else {
-            echo $this->__('Buy %1$s for %2$s each', $_price['price_qty'], $_price['formated_price']);
+            echo $this->__('Buy %1$s for %2$s each', $price_qty, $_price['formated_price']);
           }
         } // displayPriceIncludingTax
       } // displayBothPrices
@@ -185,7 +192,7 @@ if(count($_tierPrices) > 0) {
     if(!$this->getInGrouped()) {
       if(($_product->getPrice() == $_product->getFinalPrice() && $_product->getPrice() > $_price['price'])
       || ($_product->getPrice() != $_product->getFinalPrice() &&  $_product->getFinalPrice() > $_price['price'])) {
-        echo " = <strong class='benefit'><span class='percent tier-{$_index}'>{$_price['savePercent']}% extra korting</span>";
+        echo " <strong class='benefit'><span class='percent tier-{$_index}'>{$_price['savePercent']}% extra korting</span>";
       }
       echo "</strong>";
     }
@@ -201,7 +208,7 @@ if(count($_tierPrices) > 0) {
       if(!$this->getInGrouped()) { ?>
         var newLink = {
           url: "<?php echo $addToCartUrl; ?>",
-          qty: "<?php echo $_price['price_qty']?>"
+          qty: "<?php echo $price_qty?>"
         };
         <?php
       } else {
@@ -230,6 +237,6 @@ if(count($_tierPrices) > 0) {
     echo "</li>";
   }
   echo "</ul></div>";
-  echo "<span class='small float-right'><em>* Korting wordt automatisch verrekend</em></span>";
+  echo "<span class='small float-right'><em>* Excl. BTW. Korting wordt automatisch verrekend</em></span>";
   echo "</div>";
 }

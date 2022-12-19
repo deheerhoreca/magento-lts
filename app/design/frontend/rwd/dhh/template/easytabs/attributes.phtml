@@ -47,7 +47,7 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
 ];
 
 // Allow to show "No" values for these attributes
-$attr_show_no         = ["microwave_safe", "oven_safe", "dishwasher_safe"];
+$attr_show_no         = ["microwave_safe", "oven_safe", "dishwasher_safe", "assembly_required"];
 
 $attr_hide_zero       = array_merge($attr_trim_decimals, $attr_remove_decimals);
 
@@ -181,6 +181,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "package_height_mm":
           case "package_width_mm":
           case "package_depth_mm":
+          case "hoogte_borden_max":
             $postfix = " mm";
             break;
           

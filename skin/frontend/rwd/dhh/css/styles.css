@@ -1931,10 +1931,11 @@ body.catalog-product-view .price-box .price-excluding-tax {
 }
 
 .tier-pricing-outer-container {
-   margin-bottom: 2em;
-   border: 1px solid #d1d9e0;
-   border-radius: 5px;
-   padding-left: 5px;
+  margin-bottom: 2em;
+  border: 1px solid #d1d9e0;
+  border-radius: 5px;
+  padding-left: 5px;
+  margin-top: 0.5em;
 }
 
 .product-pricing,
@@ -13774,7 +13775,7 @@ div.category-products ul.products-grid li.item .product-info {
 div.category-products ul.products-grid li.item .info {
   display: inline-block;
   margin-bottom: 3px;
-  min-height: 12.5em;
+  min-height: 11.5em;
   width: 100%;
   overflow: hidden;
 }
@@ -13822,7 +13823,7 @@ body.catalog-category-view div.category-products ul.products-grid li.item {
 }
 
 div.category-products ul.products-grid li.item {
-  min-height: 30em;
+  min-height: 32em;
 }
 
 ul.products-grid-mini>li,
