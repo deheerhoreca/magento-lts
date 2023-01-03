@@ -43,13 +43,15 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "inhoud_wastank_liter", "vermogen_boiler", "weight", "volume_freezer_liter",
   "volume_refrigerator_liter","volume_net_liter", "ijs_productie", "ijs_bunker",
   "annual_energy_consumption_kwh", "capaciteit_boiler", "laadhoogte", "weight_fabric",
-  "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus",
+  "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus", "temp_resistance_from",
+  "temp_resistance_to",
 ];
 
 // Allow to show "No" values for these attributes
 $attr_show_no         = ["microwave_safe", "oven_safe", "dishwasher_safe", "assembly_required"];
 
-$attr_hide_zero       = array_merge($attr_trim_decimals, $attr_remove_decimals);
+$attr_show_zero       = ["temp_range_from_c", "temp_range_to_c"];
+$attr_hide_zero       = array_diff(array_merge($attr_trim_decimals, $attr_remove_decimals), $attr_show_zero);
 
 // Do not show these values
 $value_skip           = ["N.v.t.", "n.v.t.", "Geen / n.v.t."];
@@ -139,7 +141,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "temp_range_to_c":
           case "temp_resistance_from":
           case "temp_resistance_to":
-            if($value > 0) {
+            if($value >= 0) {
               $prefix = "+";
             }
             $postfix = " °C";
@@ -213,7 +215,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "weight":
             if($value < 3) {
               $value *= 1000;
-              $postfix = " g";
+              $postfix = " gr";
             } else {
               $postfix = " kg";
             }

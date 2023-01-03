@@ -191,6 +191,14 @@
     <!-- Orders Grid -->
 
     <sales_order_grid>
+    
+      <massaction>
+        <updateColumn>
+          <width>10px</width>
+          <filter>false</filter>
+          <sortable>false</sortable>
+        </updateColumn>
+      </massaction>
       
       <store_id>
         <remove/>

@@ -243,7 +243,8 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 			$this->addColumn('shipping_method', array(
 				'header' => $this->__('Tags'), // DHH CORE HACK
 				'index' => 'shipping_method',
-				'filter_index' => 'sfo.shipping_method', 
+				// 'filter_index' => 'sfo.shipping_method', 
+				'filter_index' => 'sfo.tm_field5', // DHH CORE HACK
 				// 'type' => 'options',
 				// 'options' => $this->getShippingMethodOptions(),
 				// 'renderer' => 'Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Shippingmethod'
