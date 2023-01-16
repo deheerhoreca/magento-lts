@@ -40,7 +40,7 @@ class Mage_Adminhtml_Model_Search_Order extends Varien_Object
      */
     public function load()
     {
-        $arr = array();
+        $arr = [];
 
         if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
             $this->setResults($arr);
@@ -49,33 +49,38 @@ class Mage_Adminhtml_Model_Search_Order extends Varien_Object
 
         $query = $this->getQuery();
         //TODO: add full name logic
-        $collection = Mage::getResourceModel('sales/order_collection')
-            ->addAttributeToSelect('*')
-            ->addAttributeToSearchFilter(array(
-                array('attribute' => 'increment_id',       'like'=>$query.'%'),
-                array('attribute' => 'billing_firstname',  'like'=>$query.'%'),
-                array('attribute' => 'billing_lastname',   'like'=>$query.'%'),
-                array('attribute' => 'billing_telephone',  'like'=>$query.'%'),
-                array('attribute' => 'billing_postcode',   'like'=>$query.'%'),
+        $collection = Mage::getResourceModel("sales/order_collection")
+            // DHH CORE HACK -- Limiting fields
+            // ->addAttributeToSelect("*")
+            ->addAttributeToSelect("increment_id")
+            ->addAttributeToSelect("entity_id")
+            // ->addAddressFields()
+            ->addAttributeToFilter("increment_id", ["like" => "%{$query}%"])
+            // ->addAttributeToSearchFilter([
+                // ["attribute" => "increment_id",       "like" => "{$query}%"],
+                // ["attribute" => "billing_firstname",  "like"=>$query."%"],
+                // ["attribute" => "billing_lastname",   "like"=>$query."%"],
+                // ["attribute" => "billing_telephone",  "like"=>$query."%"],
+                // ["attribute" => "billing_postcode",   "like"=>$query."%"],
 
-                array('attribute' => 'shipping_firstname', 'like'=>$query.'%'),
-                array('attribute' => 'shipping_lastname',  'like'=>$query.'%'),
-                array('attribute' => 'shipping_telephone', 'like'=>$query.'%'),
-                array('attribute' => 'shipping_postcode',  'like'=>$query.'%'),
-            ))
+                // ["attribute" => "shipping_firstname", "like"=>$query."%"],
+                // ["attribute" => "shipping_lastname",  "like"=>$query."%"],
+                // ["attribute" => "shipping_telephone", "like"=>$query."%"],
+                // ["attribute" => "shipping_postcode",  "like"=>$query."%"],
+            // ])
             ->setCurPage($this->getStart())
             ->setPageSize($this->getLimit())
             ->load();
 
         foreach ($collection as $order) {
-            $arr[] = array(
+            $arr[] = [
                 'id'                => 'order/1/'.$order->getId(),
                 'type'              => Mage::helper('adminhtml')->__('Order'),
                 'name'              => Mage::helper('adminhtml')->__('Order #%s', $order->getIncrementId()),
                 'description'       => $order->getBillingFirstname().' '.$order->getBillingLastname(),
                 'form_panel_title'  => Mage::helper('adminhtml')->__('Order #%s (%s)', $order->getIncrementId(), $order->getBillingFirstname().' '.$order->getBillingLastname()),
-                'url' => Mage::helper('adminhtml')->getUrl('*/sales_order/view', array('order_id'=>$order->getId())),
-            );
+                'url'               => Mage::helper('adminhtml')->getUrl('*/sales_order/view', ['order_id'=>$order->getId()]),
+            ];
         }
 
         $this->setResults($arr);

@@ -47,13 +47,28 @@ class Mage_Adminhtml_Model_Search_Catalog extends Varien_Object
             return $this;
         }
 
-        $collection = Mage::helper('catalogsearch')->getQuery()->getSearchCollection()
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('description')
-            ->addSearchFilter($this->getQuery())
-            ->setCurPage($this->getStart())
-            ->setPageSize($this->getLimit())
-            ->load();
+        // DHH CORE HACK -- Limiting fields, using other collection
+        $query = $this->getQuery();
+        $collection = Mage::getResourceModel("catalog/product_collection")
+          ->addAttributeToSelect("entity_id")
+          ->addAttributeToSelect("name")
+          ->addAttributeToSelect("description")
+          ->addAttributeToFilter("sku", ["like" => "%{$query}%"])
+          ->setCurPage($this->getStart())
+          ->setPageSize($this->getLimit())
+          ->load()
+        ;
+        
+        // $collection = Mage::helper('catalogsearch')
+            // ->getQuery()
+            // ->getSearchCollection()
+            // ->addAttributeToSelect('name')
+            // ->addAttributeToSelect('description')
+            // ->addSearchFilter($this->getQuery())
+            // // ->addAttributeToFilter("sku", ["like" => "%{$query}%"])
+            // ->setCurPage($this->getStart())
+            // ->setPageSize($this->getLimit())
+            // ->load();
 
         foreach ($collection as $product) {
             $description = strip_tags($product->getDescription());
