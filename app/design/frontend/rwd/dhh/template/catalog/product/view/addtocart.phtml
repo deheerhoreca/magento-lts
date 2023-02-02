@@ -8,31 +8,26 @@ $buttonTitle_buy      = Mage::helper('core')->quoteEscape($this->__('Winkelwagen
 // We have seen situations where EOL products were saleable due to the way we update stock info
 // Adding another check to make sure
 if($_product->isSaleable() && $_product->getAttributeText("eol") !== "Ja") {
-  ?>
-  <div class="add-to-cart">
-    <?php
-    
-    /* Grouped Products */
-    if(0 && !$_product->isGrouped()) {
-      ?>
-      <div class="qty-wrapper" style="display: none;">
-        <label for="qty"><?php echo $this->__('Qty:') ?></label>
-        <input type="text" pattern="\d*(\.\d+)?" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
-      </div>
-      <?php
-    }
-    ?>
-    <div class="add-to-cart-buttons">
-      <button type="button" title="<?php echo $buttonTitle_buy ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)">
-        <i class="fa fa-shopping-cart" style="font-size: 1.3em; margin-right: 10px;"></i>
-        <?php echo $buttonTitle_buy; ?>
-      </button>
-      <?php      
-      // cart2quote
-      echo Mage::app()->getLayout()->createBlock('qquoteadv/qquotebtn')->setData('product', $_product)->setTemplate('qquoteadv/catalog/product/view/addtoquoteadv.phtml')->toHtml();      
-      echo $this->getChildHtml('', true, true);
-      ?>
-    </div>
-  </div>
-  <?php
+  $buy_btn_html = "<button type='button' title='{$buttonTitle_buy}' class='button btn-cart' onclick='productAddToCartForm.submit(this)'><i class='fa fa-shopping-cart' style='font-size: 1.3em; margin-right: 10px;'></i>{$buttonTitle_buy}</button>";
 }
+
+/* Quantity form -- disabled */
+if(0 && !$_product->isGrouped()) {
+  $default_qty = $this->getProductDefaultQty() * 1;
+  $label = $this->__('Qty:');
+  $title = Mage::helper('core')->quoteEscape($label);
+  $qty_html = "<div class='qty-wrapper'><label for='qty'>{$label}</label><input type='text' pattern='\d*(\.\d+)?' name='qty' id='qty' maxlength=12 value='{$default_qty}' title='{$title}' class='input-text qty'></div>";
+}
+
+// Quote button
+$quote_btn_html = Mage::app()->getLayout()->createBlock('qquoteadv/qquotebtn')->setData('product', $_product)->setTemplate('qquoteadv/catalog/product/view/addtoquoteadv.phtml')->toHtml();
+
+?>
+<div class="add-to-cart">
+  <?php if(isset($qty_html)) echo $qty_html; ?>
+  <div class="add-to-cart-buttons">
+    <?php if(isset($buy_btn_html)) echo $buy_btn_html; ?>
+    <?php if(isset($quote_btn_html)) echo $quote_btn_html; ?>
+    <?php echo $this->getChildHtml('', true, true); ?>
+  </div>
+</div>

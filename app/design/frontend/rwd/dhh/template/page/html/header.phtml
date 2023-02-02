@@ -4,17 +4,19 @@
  */
 //echo $this->getLayout()->createBlock("cms/block")->setBlockId("header_top")->toHtml();
 
-if(Mage::getSingleton("customer/session")->isLoggedIn()) {
-  $account_url = $this->helper("customer")->getAccountUrl();
-} else {
-  $account_url = Mage::getUrl("customer/account/login");
-}
+// if(Mage::getSingleton("customer/session")->isLoggedIn()) {
+  // $account_url = $this->helper("customer")->getAccountUrl();
+// } else {
+  // $account_url = Mage::getUrl("customer/account/login");
+// }
 ?>
 <header id="header" class="page-header header grid-inside scrlng">
   <div id="page-header-container" class="page-header-container grid-old">
     <div class="header__inside">
       <div class="skip-links headerrightcontents">
-        <a class="main-logo" href="/"><img id="main-logo" src="<?php echo $this->getLogoSrcSmall(); ?>" alt="<?php echo $this->getLogoAlt() ?>" title="<?php echo $this->getLogoAlt() ?>" height="40" width="208"></a>
+        <a class="main-logo" href="/">
+          <img id="main-logo" src="skin/frontend/rwd/dhh/images/logo-chefstore.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208">
+        </a>
         <div id="header-search" ><?php echo $this->getChildHtml("topSearch") ?></div>
         <div class="account-cart-wrapper">
           <span class="ms-2"><a class="glightbox4 btn btn-primary toplink-phone skip-phone top-link" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
@@ -29,41 +31,8 @@ if(Mage::getSingleton("customer/session")->isLoggedIn()) {
   <div id="header-nav" class="skip-content">
     <?php echo $this->getChildHtml("topMenu") ?>
   </div>
-  <?php
-  
-  // echo $this->getLayout()->createBlock("cms/block")->setBlockId("header_top")->toHtml();
-  
-  // Action-specific marketing messages
-  $action = Mage::app()->getFrontController()->getAction()->getFullActionName();
-  
-  $top_messages = [
-    "left"        => null,
-    "center"      => null,
-    "right"       => null,
-  ];
-  
-  switch($action) {
-    case "catalog_product_view":
-    case "catalog_category_view":
-    case "firecheckout_index_index":
-    case "checkout_cart_index":
-    case "cms_index_index":
-    case "qquoteadv_index_index":
-    default:
-      // $top_messages["left"]   = "<a href='/shop?manufacturer=2753'>Nieuw in het assortiment: <strong>Gamko</strong></a>";
-      // $top_messages["left"]   = "Achteraf betalen met <a href='/qquoteadv/index/'><strong>Biller</strong></a>, <strong>AfterPay</strong>, <strong>In3</strong></a>";
-      $top_messages["left"]   = "Uitleg <a href='/tips-achteraf-betalen'><strong>achteraf betalen</strong></a>";
-      $top_messages["center"] = "<a href='/promoties.html'><strong>SALE</strong></a>";
-      $top_messages["right"]  = "<a href='/qquoteadv/index/'>Maak een <strong>offerte</strong> voor lease of koop</a>";
-      break;
-  }
-  ?>
   <div class="clzinfopagetop">
-    <div class="pageinfotpinner">
-      <span class="d-none d-xl-block align-left float-left"><?php echo $top_messages["left"]; ?></span>
-      <span class="align-center"><?php echo $top_messages["center"]; ?></span>
-      <span style="width:33%;" class="d-none d-xl-block align-right float-right"><?php echo $top_messages["right"]; ?></span>
-    </div>
+    <div class="pageinfotpinner animate" id="topbar"></div>
   </div>
   <?php echo $this->getChildHtml("topContainer"); ?>
 </header>

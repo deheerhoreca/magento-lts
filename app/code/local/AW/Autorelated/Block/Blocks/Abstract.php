@@ -39,14 +39,20 @@ abstract class AW_Autorelated_Block_Blocks_Abstract extends Mage_Core_Block_Temp
     {
         if ($this->_collection === null) {
             $this->_collection = Mage::getModel('awautorelated/product_collection');
-            $this->_collection->addAttributeToSelect('*');
+            // DHH CORE HACK -- Narrow down attributes
+            $this->_collection->addAttributeToSelect(DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview"));
+            // ORIGINAL CODE:
+            // $this->_collection->addAttributeToSelect('*');
+            // END DHH CORE HACK
 
-            $_visibility = array(
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
-            );
-
-            $this->_collection
+            // DHH CORE HACK -- These filters are implied in Flat tables
+            $catalogProductFlatHelper = Mage::helper('catalog/product_flat');
+            if(!$catalogProductFlatHelper || $catalogProductFlatHelper->isEnabled() !== true) {
+              $_visibility = array(
+                  Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+                  Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
+              );
+              $this->_collection
                 ->addAttributeToFilter('visibility', $_visibility)
                 ->addAttributeToFilter('status',
                     array(
@@ -54,25 +60,47 @@ abstract class AW_Autorelated_Block_Blocks_Abstract extends Mage_Core_Block_Temp
                     )
                 )
             ;
-
-            if (!$this->_getShowOutOfStock()) {
-                Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($this->_collection);
-                $this->_collection
-                    ->getSelect()
-                    ->join(
-                        array(
-                             'inv_stock_status' => $this->_collection->getTable('cataloginventory/stock_status')
-                        ),
-                        'inv_stock_status.product_id = e.entity_id AND inv_stock_status.stock_status = 1',
-                        array()
-                    )
-                ;
             }
+
+            // ORIGINAL CODE:
+            // $_visibility = array(
+                // Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+                // Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
+            // );
+            // $this->_collection
+                // ->addAttributeToFilter('visibility', $_visibility)
+                // ->addAttributeToFilter('status',
+                    // array(
+                         // 'in' => Mage::getSingleton("catalog/product_status")->getVisibleStatusIds()
+                    // )
+                // )
+            // ;
+            // END DHH CORE HACK
+
+            // DHH CORE HACK -- Simpler way to get probably-in-stock products
+            if (!$this->_getShowOutOfStock()) {
+              $this->_collection->addAttributeToFilter("stock_status", 2746);
+            }
+            // ORIGINAL CODE:
+            // if (!$this->_getShowOutOfStock()) {
+                // Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($this->_collection);
+                // $this->_collection
+                    // ->getSelect()
+                    // ->join(
+                        // array(
+                             // 'inv_stock_status' => $this->_collection->getTable('cataloginventory/stock_status')
+                        // ),
+                        // 'inv_stock_status.product_id = e.entity_id AND inv_stock_status.stock_status = 1',
+                        // array()
+                    // )
+                // ;
+            // }
+            // END DHH CORE HACK
 
             $this->_collection
                 ->addStoreFilter($this->_getStoreId())
                 ->joinCategoriesByProduct()
-                ->groupByAttribute('entity_id')
+                // DHH CORE HACK ->groupByAttribute('entity_id')
             ;
         }
         return $this->_collection;
@@ -112,7 +140,11 @@ abstract class AW_Autorelated_Block_Blocks_Abstract extends Mage_Core_Block_Temp
         }
 
         $this->_collection
-            ->addAttributeToSelect('*')
+            // DHH CORE HACK -- Narrow down attributes
+            ->addAttributeToSelect(DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview"))
+            // ORIGINAL CODE:
+            // ->addAttributeToSelect('*')
+            // END DHH CORE HACK
             ->addFilterByIds($ids)
             ->setStoreId($this->_getStoreId())
         ;
@@ -147,7 +179,7 @@ abstract class AW_Autorelated_Block_Blocks_Abstract extends Mage_Core_Block_Temp
         if ($this->_collection instanceof AW_Autorelated_Model_Product_Collection) {
             $this->_collection->setStoreId($this->_getStoreId())
                 ->addMinimalPrice()
-                ->groupByAttribute('entity_id')
+                // DHH CORE HACK   ->groupByAttribute('entity_id')
                 ->addUrlRewrite();
 
             if ($this->_getShowOutOfStock() && !Mage::helper('cataloginventory')->isShowOutOfStock()) {

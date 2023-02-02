@@ -597,7 +597,7 @@ div.main-col-inner { float:left; /* Fixes some inner clears in the liquid main-c
 .header-right a, .header-right a:hover  { color:#fcce77; }
 .header-right .separator                { color:#999; }
 .header-right fieldset                  { display:inline; padding-left:10px; }
-.header-right fieldset input.input-text { width:18em; }
+.header-right fieldset input.input-text { width:50em; }
 .header-right .super {
     float:right;
     line-height:1.8em;

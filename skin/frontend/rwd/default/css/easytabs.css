@@ -1,13 +1,16 @@
 /********************** Tabs */
-.tabs { margin: 15px 0px; overflow:hidden;  zoom: 1;}
 
+.tabs {
+  margin: 15px 0px;
+  overflow:hidden;
+  zoom: 1;
+}
 
 .tabs {
   background: #ffffff none repeat scroll 0 0;
   border-bottom: 1px solid #e2e4e4 !important;
   margin-bottom: 10px;
 }
-
 
 .tabs li {
   float: left;
@@ -16,34 +19,78 @@
   padding-bottom: 6px;
 }
 
-
-.tabs li.first          { border-left:0; }
-.tabs li.last           { border-right:0; }
-.tabs a                 { display:block; padding:6px 10px; color:#444; text-decoration: none;}
-.tabs a:hover           { text-decoration:none; color:#444; ; text-decoration: none;}
-.tabs li.active a,
-.tabs li.active a:hover { background:#fff;  font-weight:bold; color:#fff; }
-
-.product-collateral .tabs li.active a{
-	border-bottom: 4px solid #28aadd;
-color: #2c3638;
-text-decoration: none;
-}
-.product-collateral .tabs li a{
-display: inline-block;
-font-size: 16px;
-font-weight: 700;
-margin: 0 20px 0 10px;
-padding: 13px 0;
-text-decoration: underline;
-font-weight: 700;
-color: #565d60;
-outline: none;
+.tabs li.first {
+  border-left:0;
 }
 
+.tabs li.last {
+  border-right:0;
+}
 
-#product_tabs_tags_tabbed_contents.input-box input	{ width: 300px; }
-#product_tabs_tags_tabbed_contents .input-box	{ width: 300px; float:left; margin-right: 10px;}
-#product_tabs_related_tabbed_contents li	{ float:left; margin-right: 10px;}
-#product_tabs_related_tabbed_contents ol	{ clear: both;}
-.product-collateral:after { content:"."; display:block; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; zoom: 1}
+.tabs a {
+  display:block;
+  padding:6px 10px;
+  color:#444;
+  text-decoration: none;
+}
+
+.tabs a:hover {
+  text-decoration:none;
+  color:#444;
+  ;
+  text-decoration: none;
+}
+
+.tabs li.active a,.tabs li.active a:hover {
+  background:#fff;
+  font-weight:bold;
+  color:#fff;
+}
+
+.product-collateral.tabs li.active a{
+  border-bottom: 4px solid #28aadd;
+  color: #2c3638;
+  text-decoration: none;
+}
+
+.product-collateral.tabs li a{
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 20px 0 10px;
+  padding: 13px 0;
+  text-decoration: underline;
+  font-weight: 700;
+  color: #565d60;
+  outline: none;
+}
+
+ #product_tabs_tags_tabbed_contents.input-box input {
+  width: 300px;
+}
+
+ #product_tabs_tags_tabbed_contents.input-box {
+  width: 300px;
+  float:left;
+  margin-right: 10px;
+}
+
+ #product_tabs_related_tabbed_contents li {
+  float:left;
+  margin-right: 10px;
+}
+
+ #product_tabs_related_tabbed_contents ol {
+  clear: both;
+}
+
+.product-collateral:after {
+  content:".";
+  display:block;
+  clear:both;
+  font-size:0;
+  line-height:0;
+  height:0;
+  overflow:hidden;
+  zoom: 1
+}

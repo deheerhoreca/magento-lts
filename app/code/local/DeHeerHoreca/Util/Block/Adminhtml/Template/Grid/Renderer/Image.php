@@ -9,9 +9,9 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
     {       
       $val = $row->getData($this->getColumn()->getId());
       $out = "-";
-      if($val !== "no_selection") {
+      if(strlen($val) > 0 && $val !== "no_selection") {
         $url = Mage::getBaseUrl("media")."catalog/product{$val}";
-        $out = "<img src='{$url}' style='width: 50px; height: 50px;'>";
+        $out = "<img src='{$url}' style='width: 60px; height: 60px;'>";
       }
       return $out;
     }

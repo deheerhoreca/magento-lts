@@ -69,6 +69,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="removeItem"><type>skin_js</type><name>js/minicart.js</name></action>
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
       <action method="removeItem"><type>skin_css</type><name>css/tm/richsnippets.css</name></action>
+      <action method="removeItem"><type>skin_css</type><name>css/easytabs.css</name></action>
     </reference>
   </catalog_product_view>
   

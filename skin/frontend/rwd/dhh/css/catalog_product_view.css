@@ -26,3 +26,33 @@
 .product-shop .productdetail__discount {
   display: table;
 }
+
+/* PRODUCT USPS */
+
+.product-highlights li img {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  fill: #000;
+}
+
+.product-highlights li {
+  text-align: center;
+  min-width: 6.5em;
+  display: inline-block;
+}
+
+.product-highlights li span {
+  display: block;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 600;
+  font-size: .9em;
+}
+
+.product-highlights li .value {
+  height: 35px;
+}

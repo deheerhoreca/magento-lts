@@ -35,7 +35,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       foreach($cache as $className => $path) {
         Varien_Autoload::getFullPath($className);
       }
-      Mage::log("Revalidated ".count($cache)." classes", null, "fpc.log", true);
+      self::log("Revalidated ".count($cache)." classes");
     }
     
     /**
@@ -69,8 +69,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Cleans the cached URL by removing URL parameters that do not affect the payload
     // Otherwise we would cache index.html?sqr=x separately from index.html
-    public function get_cache_url() {
-      $url = html_entity_decode(Mage::helper("core/url")->getCurrentUrl());
+    // Optionally takes a URL for debug/dev
+    public function get_cache_url(string $url = "") {
+      if($url === "") {
+        $url = html_entity_decode(Mage::helper("core/url")->getCurrentUrl());
+      }
       
       // List of query parameters that have no consequences for the rendered HTML
       $ignored_url_query_keys = [
@@ -80,26 +83,33 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       ];
       $url = self::strip_param_from_url($url, $ignored_url_query_keys);
       
+      // Remove things that can be ignored safely
+      $url = rtrim($url, "&?/");
+      
       return $url;
     }
     
     // @see https://stackoverflow.com/questions/4937478/strip-off-url-parameter-with-php
-    public function strip_param_from_url($url, $params) {
+    public function strip_param_from_url($url, $params, $sort = true) {
       $url        = strtok($url, "#");            // Remove the fragment
       $base_url   = strtok($url, "?");            // Get the base url
       
-      if($base_url === $url) {              // Shortcut if there are no parameters
+      if($base_url === $url) {                    // Shortcut if there are no parameters
         return $url;
       }
       
       $parsed_url = parse_url($url);              // Parse it
-      $query      = $parsed_url["query"];              // Get the query string
-      parse_str($query, $parameters);            // Convert Parameters into array
+      $query      = $parsed_url["query"];         // Get the query string
+      parse_str($query, $parameters);             // Convert Parameters into array
       
       foreach($params as $param) {
         if(isset($parameters[$param])) {
           unset($parameters[$param]);             // Delete the one you want
         }
+      }
+      
+      if($sort) {
+        ksort($parameters);                       // Sort remaining params
       }
       
       $new_query = http_build_query($parameters); // Rebuilt query string
@@ -115,16 +125,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       if($cache_key_prefix === "catalog_product_view") {
         $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
         $supplier = "";
-        // This is bit too heavy unfortunately
-        // $rm = Mage::getResourceModel("catalog/product");
-        // $value = $rm->getAttributeRawValue($id, "supplier", Mage::app()->getStore()->getStoreId());
-        // $collection = Mage::getResourceModel('catalog/product_collection')->addAttributeToSelect("supplier")->addIdFilter($id);
-        // $value = $collection->getColumnValues("supplier");
-        // if(empty($value) === false) {
-          // $supplier = array_pop($value);
-        // } else {
-          // $supplier = "-nosupplier";
-        // }
+        // $supplier = Mage::getResourceModel("catalog/product")->getAttributeRawValue($id, "supplier_product_url", Mage::app()->getStore()->getStoreId());
         $cache_key_prefix .= "{$supplier}_{$id}";
       } elseif($cache_key_prefix === "catalog_category_view") {
         $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
@@ -136,19 +137,33 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Determine of the current request is anonymous or logged in
     public function is_request_anonymous(): bool {
-      if(Mage::helper("checkout/cart")->getItemsCount() > 0 || Mage::getSingleton("customer/session")->isLoggedIn()) {
+      
+      // No cookie? No login
+      if(isset($_SERVER["HTTP_COOKIE"]) && $_SERVER["HTTP_COOKIE"] === NULL) {
         self::log("Request is not anonymous");
         return false;
       }
       
-      if(DHH_FPC_DEBUG === true) {
-        self::log("Request is anonymous");
+      // More expensive checks
+      if(Mage::helper("checkout/cart")->getItemsCount() > 0 || Mage::getSingleton("customer/session")->isLoggedIn()) {
+        self::log("Request is not anonymous");
+        return false;
       }
       
       return true;
     }
     
     public function is_read_cache_enabled($non_anonymous_okay = false) {
+      
+      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
+      // $dhh_ips = ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
+      // if(isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], $dhh_ips, true) && isset($_GET['nofpc'])) {
+        // echo "<pre>";
+        // var_dump($_SERVER["HTTP_COOKIE"]);
+        // var_dump($_COOKIE);
+        // echo "</pre>";
+      // }
       
       // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
       if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"])) {
@@ -184,23 +199,30 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       }
       
       self::log("Read cache enabled");
+      
+      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
       return true;
     }
     
     public function is_write_cache_enabled($non_anonymous_okay = false) {
       
+      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
+      $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
+      
       if(DHH_FPC_ENABLED === false
         || $_SERVER["REQUEST_METHOD"] !== "GET"
         || isset($_GET["nofpc"]) === true
-        || in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(), 
-             ["cms_index_noRoute"])
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "checkout")
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "customer")
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "api")
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "mpm")
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "manage")
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "sales")
-        || strstr(Mage::app()->getFrontController()->getAction()->getFullActionName(), "qquoteadv")        
+        || isset($_GET["is_ajax"]) === true
+        || in_array($_action, ["cms_index_noRoute"])
+        || strstr($_action, "checkout")
+        || strstr($_action, "customer")
+        || strstr($_action, "api")
+        || strstr($_action, "mpm")
+        || strstr($_action, "manage")
+        || strstr($_action, "sales")
+        || strstr($_action, "qquoteadv")        
       ) {
         self::log("Write cache disabled (request excluded from caching)");
         return false;
@@ -211,26 +233,36 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
       }
       
-      self::log("Write cache enabled");      
+      self::log("Write cache enabled");
+      
+      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
       return true;
     }
     
-    public function get_cache_key($cache_key_prefix = null) {
-      $cache_key_url = Mage::helper("deheerhoreca_fpc/data")->get_cache_url();
+    // Optionally takes a URL for debug/dev
+    public function get_cache_key($cache_key_prefix = null, string $url = "") {
+      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
+      $cache_key_url = Mage::helper("deheerhoreca_fpc/data")->get_cache_url($url);
       if(empty($cache_key_prefix) === true) {
         $cache_key_prefix = Mage::helper("deheerhoreca_fpc/data")->get_cache_prefix();
       }
       $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
       $_cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
       if(DHH_FPC_DEBUG === true) {
-        Mage::log("Cache URL: {$cache_key_url}", null, "fpc.log", true);
-        Mage::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}", null, "fpc.log", true);
+        self::log("Cache URL: {$cache_key_url}");
+        self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}");
       }
+      
+      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
       return $_cacheKey;
     }
     
-    public function get_cached_html($key, $skip_formkey = false, $replace_blocks = true) {
+    public function get_cached_html($key, $holepunch_formkey = true, $holepunch_blocks = true) {
+      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
       $html = Mage::app()->getCache()->load($key);
       
       if(empty($html) === true) {
@@ -238,11 +270,15 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return null;
       }
       
+      if(DHH_FPC_DEBUG === true) {
+        $size_raw_key = strlen($html);
+      }
+      
       /* Hole punching */
       
       // Formkey (CSRF protection)
       
-      if($skip_formkey === false) {
+      if($holepunch_formkey === true) {
         Varien_Profiler::start("DHH::FPC::Holepunch::formkey");
         $search = "<!-- fpc form_key_placeholder -->";
         $formKey = Mage::getSingleton("core/session")->getFormKey();
@@ -253,7 +289,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
       }
       
-      if($replace_blocks === true) {
+      if($holepunch_blocks === true) {
         
         // The sidebar, is PART OF the minicart
         
@@ -334,56 +370,149 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         
         // Mage::getSingleton("core/session")->addNotice(Mage::helper("core")->__("Notice ".date("c")));
         // Mage::getSingleton("core/session")->addSuccess(Mage::helper("core")->__("Notice ".date("c")));
+        
+        // nav
+        Varien_Profiler::start("DHH::FPC::Holepunch::nav");
+        $nav_html = $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
+        $search = "<!-- nav_here -->";
+        $html = str_replace($search, $nav_html, $html, $count);
+        self::log("Replaced {$search} {$count} times");
+        Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
       }
       
-      self::log("Cache HIT: {$key}");
+      if(DHH_FPC_DEBUG === true) {
+        $size = strlen($html);
+        self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
+      }
+      
+      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
       return $html;
     }
     
-    public function save_cached_html($key, $html, $replace_formkey = true, $replace_blocks = true) {
-
+    public function save_cached_html($key, $html, $holepunch_formkey = true, $holepunch_blocks = true) {
+      
+      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
+      // Minify -- Minifying after the holepunching breaks the btn-cart buttons in the listview
+      $html = str_replace(["value=\"https://www.chefstore.nl/"], "value=\"/", $html);
+      $html = str_replace(["src=\"https://www.chefstore.nl/"], "src=\"/", $html);
+      $html = str_replace(["src='https://www.chefstore.nl/"], "src='/", $html);
+      $html = str_replace(["href=\"https://www.chefstore.nl/"], "href=\"/", $html);
+      $html = str_replace(["setLocation('https://www.chefstore.nl/"], "setLocation('/", $html);
+      $html = str_replace(["href='https://www.chefstore.nl/"], "href='/", $html);
+      $html = str_replace([" type=\"text/javascript\""], "", $html);
+      
+      // HTML minifier broken:
+      // /koelingen/vrieskasten/glasdeurvriezers/vrieskast-1530-l-3-glasdeuren-zwart-lichtbak-combisteel-7455-2435.html
+      // https://www.chefstore.nl/service
+      // $bytes_pre = strlen($html);
+      // $options = [
+        // "collapse_whitespace" => false,
+        // "disable_comments"    => true,
+      // ];
+      // try {
+        // $minifier = new TinyHtmlMinifier($options);
+        // $html = $minifier->minify($html);
+        // $bytes_post = strlen($html);
+        // self::log("Minifier OK: {$bytes_pre} => {$bytes_post} bytes");
+      // } catch(Exception $e) {
+        // self::log("Minifier exception: {$e->getMessage()}");
+      // }
+      
       // Handle form_key (CSRF protection)
-      if($replace_formkey === true) {
+      if($holepunch_formkey === true) {
         $formKey = Mage::getSingleton("core/session")->getFormKey();
         if($formKey) {
           $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
-          $html = str_replace($formKey, $formKeyPlaceholder, $html);
+          $html = str_replace($formKey, $formKeyPlaceholder, $html, $count);
+          self::log("Replaced form_key {$count} times");
         }
       }
       
-      if($replace_blocks === true) {
+      if($holepunch_blocks === true) {
         $html = self::replace_between($html, "<!-- header_minicart_start -->", "<!-- header_minicart_end -->", "<!-- header_minicart_here -->");
         $html = self::replace_between($html, "<!-- header_miniquote_start -->", "<!-- header_miniquote_end -->", "<!-- header_miniquote_here -->");
         $html = self::replace_between($html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", "<!-- header_sidebar_here -->");
         $html = self::replace_between($html, "<!-- core_messages_start -->", "<!-- core_messages_end -->", "<!-- core_messages_here -->");
         // $html = self::replace_between($html, "<!-- breadcrumbs_start -->", "<!-- breadcrumbs_end -->", "<!-- breadcrumbs_here -->");
+        $html = self::replace_between($html, "<!-- nav_start -->", "<!-- nav_end -->", "<!-- nav_here -->");
       }
       
+      
+      
+      // @todo Build JSON object
+      // $data = [
+        // "ts"        => time(),
+        // "html"      => $html,
+      // ];
+      // $json = json_encode($data);
+      
+      // Store in cache
       if(Mage::app()->getCache()->save($html, $key, ["quickndirtyfpc"], 7 * 86400)) {
         self::log("Cache: SAVED {$key}, ".strlen($html)." chars");
         return true;
       }
       
+      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
       return false;
     }
     
+    // public function replace_between($str, $needle_start, $needle_end, $replacement) {
+      
+      // if($pos_start = strpos($str, $needle_start) === false) {
+        // self::log(__METHOD__.": {$needle_start} not found!");
+        // self::log($str);
+        // return $str;
+      // }
+      // $start = $pos_start === false ? 0 : $pos_start;
+      
+      // if($pos_end = strpos($str, $needle_end, $start) === false) {
+        // if(DHH_FPC_DEBUG === true) {
+          // self::log(__METHOD__.": {$needle_start} not found!");
+          // self::log($str);
+        // }
+        // return $str;
+      // }
+      // $end = $pos_end === false ? strlen($str) : $pos_end + strlen($needle_end);
+      
+      // // $pos = strpos($str, $needle_start);
+      // // $start = $pos === false ? 0 : $pos;
+
+      // // $pos = strpos($str, $needle_end, $start);
+      // // $end = $pos === false ? strlen($str) : $pos + strlen($needle_end);
+      
+      // self::log(__METHOD__.": ".htmlentities($needle_start).":: Start = {$start}, End = {$end}");
+
+      // return substr_replace($str, $replacement, $start, $end - $start);
+    // }
+    
     public function replace_between($str, $needle_start, $needle_end, $replacement) {
       
-      if(strstr($str, $needle_start) === false) return $str;
-      if(strstr($str, $needle_end) === false) return $str;
+      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
       
-      $pos = strpos($str, $needle_start);
-      $start = $pos === false ? 0 : $pos;
-
-      $pos = strpos($str, $needle_end, $start);
-      $end = $pos === false ? strlen($str) : $pos + strlen($needle_end);
-      
-      if(DHH_FPC_DEBUG === true) {
-        Mage::log(__METHOD__.": ".htmlentities($needle_start).":: Start = {$start}, End = {$end}", null, "fpc.log", true);
+      $pos_start  = strpos($str, $needle_start);
+      if($pos_start === false) {
+        self::log(__METHOD__.": {$needle_start} not found!");
+        return $str;
       }
-
+      
+      $start      = $pos_start === false ? 0 : $pos_start;
+      $pos_end    = strpos($str, $needle_end, $start);
+      
+      if($pos_end === false) {
+        self::log(__METHOD__.": {$needle_end} not found!");
+        return $str;
+      }
+      
+      $end        = $pos_end === false ? strlen($str) : $pos_end + strlen($needle_end);
+      
+      self::log(__METHOD__.": ".htmlentities($needle_start).":: Start = {$start}, End = {$end}");
+      
       return substr_replace($str, $replacement, $start, $end - $start);
+      
+      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
     }
     
     static function log($msg): void {
@@ -400,7 +529,7 @@ if(function_exists("printr") === false) {
       return;
     }
     if(php_sapi_name() !== "cli") {
-      $ret .= "<pre>";
+      $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
     }
     $ret .= print_r($expr, true);
     if(php_sapi_name() !== "cli") {
@@ -413,4 +542,289 @@ if(function_exists("printr") === false) {
     }
     echo $ret;
   }
+}
+
+
+// @see https://github.com/jenstornell/tiny-html-minifier/blob/master/src/TinyHtmlMinifier.php
+// "Latest commit 5bea148 on Jun 25, 2019"
+class TinyHtmlMinifier
+{
+    private $options;
+    private $output;
+    private $build;
+    private $skip;
+    private $skipName;
+    private $head;
+    private $elements;
+
+    public function __construct(array $options)
+    {
+        $this->options = $options;
+        $this->output = '';
+        $this->build = [];
+        $this->skip = 0;
+        $this->skipName = '';
+        $this->head = false;
+        $this->elements = [
+            'skip' => [
+                'code',
+                'pre',
+                'script',
+                'textarea',
+            ],
+            'inline' => [
+                'a',
+                'abbr',
+                'acronym',
+                'b',
+                'bdo',
+                'big',
+                'br',
+                'cite',
+                'code',
+                'dfn',
+                'em',
+                'i',
+                'img',
+                'kbd',
+                'map',
+                'object',
+                'samp',
+                'small',
+                'span',
+                'strong',
+                'sub',
+                'sup',
+                'tt',
+                'var',
+                'q',
+            ],
+            'hard' => [
+                '!doctype',
+                'body',
+                'html',
+            ]
+        ];
+    }
+
+    // Run minifier
+    public function minify(string $html) : string
+    {
+        if (!isset($this->options['disable_comments']) ||
+            !$this->options['disable_comments']) {
+            $html = $this->removeComments($html);
+        }
+
+        $rest = $html;
+
+        while (!empty($rest)) {
+            $parts = explode('<', $rest, 2);
+            $this->walk($parts[0]);
+            $rest = (isset($parts[1])) ? $parts[1] : '';
+        }
+
+        return $this->output;
+    }
+
+    // Walk trough html
+    private function walk(&$part)
+    {
+        $tag_parts = explode('>', $part);
+        $tag_content = $tag_parts[0];
+
+        if (!empty($tag_content)) {
+            $name = $this->findName($tag_content);
+            $element = $this->toElement($tag_content, $part, $name);
+            $type = $this->toType($element);
+
+            if ($name == 'head') {
+                $this->head = $type === 'open';
+            }
+
+            $this->build[] = [
+                'name' => $name,
+                'content' => $element,
+                'type' => $type
+            ];
+
+            $this->setSkip($name, $type);
+
+            if (!empty($tag_content)) {
+                $content = (isset($tag_parts[1])) ? $tag_parts[1] : '';
+                if ($content !== '') {
+                    $this->build[] = [
+                        'content' => $this->compact($content, $name, $element),
+                        'type' => 'content'
+                    ];
+                }
+            }
+
+            $this->buildHtml();
+        }
+    }
+
+    // Remove comments
+    private function removeComments($content = '')
+    {
+        return preg_replace('/(?=<!--)([\s\S]*?)-->/', '', $content);
+    }
+
+    // Check if string contains string
+    private function contains($needle, $haystack)
+    {
+        return strpos($haystack, $needle) !== false;
+    }
+
+    // Return type of element
+    private function toType($element)
+    {
+        return (substr($element, 1, 1) == '/') ? 'close' : 'open';
+    }
+
+    // Create element
+    private function toElement($element, $noll, $name)
+    {
+        $element = $this->stripWhitespace($element);
+        $element = $this->addChevrons($element, $noll);
+        $element = $this->removeSelfSlash($element);
+        $element = $this->removeMeta($element, $name);
+        return $element;
+    }
+
+    // Remove unneeded element meta
+    private function removeMeta($element, $name)
+    {
+        if ($name == 'style') {
+            $element = str_replace(
+                [
+                    ' type="text/css"',
+                    "' type='text/css'"
+                ],
+                ['', ''],
+                $element
+            );
+        } elseif ($name == 'script') {
+            $element = str_replace(
+                [
+                    ' type="text/javascript"',
+                    " type='text/javascript'"
+                ],
+                ['', ''],
+                $element
+            );
+        }
+        return $element;
+    }
+
+    // Strip whitespace from element
+    private function stripWhitespace($element)
+    {
+        if ($this->skip == 0) {
+            $element = preg_replace('/\s+/', ' ', $element);
+        }
+        return trim($element);
+    }
+
+    // Add chevrons around element
+    private function addChevrons($element, $noll)
+    {
+        if (empty($element)) {
+            return $element;
+        }
+        $char = ($this->contains('>', $noll)) ? '>' : '';
+        $element = '<' . $element . $char;
+        return $element;
+    }
+
+    // Remove unneeded self slash
+    private function removeSelfSlash($element)
+    {
+        if (substr($element, -3) == ' />') {
+            $element = substr($element, 0, -3) . '>';
+        }
+        return $element;
+    }
+
+    // Compact content
+    private function compact($content, $name, $element)
+    {
+        if ($this->skip != 0) {
+            $name = $this->skipName;
+        } else {
+            $content = preg_replace('/\s+/', ' ', $content);
+        }
+
+        if (in_array($name, $this->elements['skip'])) {
+            return $content;
+        } elseif (in_array($name, $this->elements['hard']) ||
+            $this->head) {
+            return $this->minifyHard($content);
+        } else {
+            return $this->minifyKeepSpaces($content);
+        }
+    }
+
+    // Build html
+    private function buildHtml()
+    {
+        foreach ($this->build as $build) {
+
+            if (!empty($this->options['collapse_whitespace'])) {
+
+                if (strlen(trim($build['content'])) == 0)
+                    continue;
+
+                elseif ($build['type'] != 'content' && !in_array($build['name'], $this->elements['inline']))
+                    trim($build['content']);
+
+            }
+
+            $this->output .= $build['content'];
+        }
+
+        $this->build = [];
+    }
+
+    // Find name by part
+    private function findName($part)
+    {
+        $name_cut = explode(" ", $part, 2)[0];
+        $name_cut = explode(">", $name_cut, 2)[0];
+        $name_cut = explode("\n", $name_cut, 2)[0];
+        $name_cut = preg_replace('/\s+/', '', $name_cut);
+        $name_cut = strtolower(str_replace('/', '', $name_cut));
+        return $name_cut;
+    }
+
+    // Set skip if elements are blocked from minification
+    private function setSkip($name, $type)
+    {
+        foreach ($this->elements['skip'] as $element) {
+            if ($element == $name && $this->skip == 0) {
+                $this->skipName = $name;
+            }
+        }
+        if (in_array($name, $this->elements['skip'])) {
+            if ($type == 'open') {
+                $this->skip++;
+            }
+            if ($type == 'close') {
+                $this->skip--;
+            }
+        }
+    }
+
+    // Minify all, even spaces between elements
+    private function minifyHard($element)
+    {
+        $element = preg_replace('!\s+!', ' ', $element);
+        $element = trim($element);
+        return trim($element);
+    }
+
+    // Strip but keep one space
+    private function minifyKeepSpaces($element)
+    {
+        return preg_replace('!\s+!', ' ', $element);
+    }
 }

@@ -40,7 +40,7 @@ class Mage_Adminhtml_Model_Search_Customer extends Varien_Object
      */
     public function load()
     {
-        $arr = array();
+        $arr = [];
         
         // DHH CORE HACK
         $this->setResults($arr);
@@ -54,9 +54,10 @@ class Mage_Adminhtml_Model_Search_Customer extends Varien_Object
             ->addNameToSelect()
             ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left')
             ->addAttributeToFilter(array(
-                array('attribute'=>'firstname', 'like' => $this->getQuery().'%'),
-                array('attribute'=>'lastname', 'like'  => $this->getQuery().'%'),
-                array('attribute'=>'company', 'like'   => $this->getQuery().'%'),
+                array('attribute'=>'firstname', 'like'  => $this->getQuery().'%'),
+                array('attribute'=>'lastname', 'like'   => $this->getQuery().'%'),
+                array('attribute'=>'company', 'like'    => $this->getQuery().'%'),
+                array('attribute'=>'email', 'like'      => $this->getQuery().'%'),
             ))
             ->setPage(1, 10)
             ->load();
@@ -67,7 +68,7 @@ class Mage_Adminhtml_Model_Search_Customer extends Varien_Object
                 'type'          => Mage::helper('adminhtml')->__('Customer'),
                 'name'          => $customer->getName(),
                 'description'   => $customer->getCompany(),
-                'url' => Mage::helper('adminhtml')->getUrl('*/customer/edit', array('id'=>$customer->getId())),
+                'url'           => Mage::helper('adminhtml')->getUrl('*/customer/edit', array('id'=>$customer->getId())),
             );
         }
 

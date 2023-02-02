@@ -5,7 +5,7 @@
  * @see Mage_Checkout_Block_Cart_Crosssell
  */
 
-$_columnCount = 5;
+$_columnCount = 4;
 $i            = 0;
 $store        = Mage::app()->getStore();
 
@@ -35,39 +35,61 @@ if($this->getItemCount()) { ?>
 
 // Bargains
 
-$i = 0;
+// NOTICE: Flat table feature are be disabled in the cart altogether
+// @see Mage_Catalog_Helper_Product_Flat->_forceFlatStatus
+
+// if(_dhh_debug()) {
+  // $productFlatHelper = Mage::helper('catalog/product_flat');
+  // var_dump("<br>\$productFlatHelper->isFlatCollectionDisabled(): ".$productFlatHelper->isFlatCollectionDisabled());
+  // // $productFlatHelper->resetFlatCollection();
+  // // var_dump("<br>\$productFlatHelper->isFlatCollectionDisabled(): ".$productFlatHelper->isFlatCollectionDisabled());
+  // // $productFlatHelper->disableFlatCollection();
+  // // var_dump("<br>\$productFlatHelper->isFlatCollectionDisabled(): ".$productFlatHelper->isFlatCollectionDisabled());
+  // $productFlatHelper->enableFlatCollection(true);
+  // var_dump("<br>\$productFlatHelper->isFlatCollectionDisabled(): ".$productFlatHelper->isFlatCollectionDisabled());
+// }
 
 $supplier_ids = getCartSupplierIDs();
 $product_ids  = getCartProductIDs();
 $attributes   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview");
-
-// NOTICE: Flat table feature seems to be disabled in the cart altogether
-
-$collection   = Mage::getResourceModel("catalog/product_collection")
+$_products    = Mage::getModel("catalog/product")
+  ->getCollection()
   ->addAttributeToSelect($attributes)
   // ->addFieldToFilter([["attribute" => "bargain", "eq" => "1"]])    // testing without bargain
   ->addAttributeToFilter("supplier", ["in" => $supplier_ids])
   ->addAttributeToFilter("entity_id", ["nin" => $product_ids])
   ->addAttributeToFilter("eol", ["nin" => "2075"])
   ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
-  ->addAttributeToFilter("price", ["from" => 10, "to" => 150])
+  ->addAttributeToFilter("price", ["from" => 10, "to" => 200])
   ->addAttributeToFilter("small_image", ["notnull" => true])          // Do not suggest products without image
+  ->setFlag("require_stock_items", true)
+  ->addAttributeToFilter("stock_status", ["eq" => "2746"])            // Cheaper way to get probably in-stock items
   ->addOrder("popularity", "ASC")
   ->setPageSize(12)
   ->setCurPage(1)
-  ->setFlag("require_stock_items", true)
-  // ->setStore($store)
-  // ->addStoreFilter($store)
+  ->setStore($store)
+  ->addStoreFilter($store)
   ;
 
 // Only show in stock SKUs
-Mage::getSingleton("cataloginventory/stock")->addInStockFilterToCollection($collection);
+// Expensive way to get probably in-stock items
+// Mage::getSingleton("cataloginventory/stock")->addInStockFilterToCollection($_products);
 
-if($collection->getFirstItem()) {
+// if(_dhh_debug()) {
+  // var_dump("<br>\$_products->isEnabledFlat(): ".$_products->isEnabledFlat());
+  // $_products->load();
+  // printr(_dhh_getselect($_products));
+  // var_dump($productFlatHelper->isFlatCollectionDisabled());
+  // $productFlatHelper->resetFlatCollection();
+  // var_dump($productFlatHelper->isFlatCollectionDisabled());
+// }
+
+$i = 0;
+if($_products->getFirstItem()) {
   echo '<div class="crosssell product-collateral category-products">';
   echo "<span class=h2>".$this->__("Hardlopers:")."</span><hr>";
   echo "<ul class='products-grid products-grid-mini products-grid-mini-wide'>";
-  foreach($collection->getItems() as $_product) {
+  foreach($_products->getItems() as $_product) {
     $i++;
     ?>
     <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">

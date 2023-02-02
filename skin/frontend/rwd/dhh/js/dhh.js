@@ -91,3 +91,38 @@ document.addEventListener('copy', (event) => {
     event.preventDefault();
   }
 });
+
+var kiyoh_score = 9.7;
+
+window.onload = (event) => {
+  let topbar = `
+    <span class='d-none d-xl-block align-left float-left'>
+      <a href='//kiyoh.com/reviews/1044049/chefstore?from=widget&amp;lang=nl' alt='Reviews Chefstore.nl' title='Reviews Chefstore.nl' target='_blank' rel='noreferrer nofollow noopener'>TROTS op onze score van <strong>9.7</strong></a>
+    </span>
+    <span class='align-center'>
+      <a href='/promoties.html'><strong>SALE</strong></a>
+    </span>
+    <span style='width:33%' class='d-none d-xl-block align-right float-right'>
+      <a href='/qquoteadv/index/'>Maak een <strong>offerte</strong> voor lease of koop</a>
+    </span>
+  `;
+  if(document.getElementById('topbar') !== null) document.getElementById('topbar').innerHTML = topbar;
+};
+
+jQuery(document).ready(function(){
+  jQuery(document).on('click', '#toggle-cat-text', function(){
+    if(jQuery('#cat-text').hasClass("short")) {
+      jQuery('#ctdesc .short').addClass('full');
+      jQuery('#ctdesc .short').removeClass('short');
+      jQuery('#cat-btn-arrow').addClass('fa-arrow-up');
+      jQuery('#cat-btn-arrow').removeClass('fa-arrow-down');
+      jQuery('#toggle-cat-text span').html('Minder');
+    } else {
+      jQuery('#ctdesc .full').addClass('short');
+      jQuery('#ctdesc .full').removeClass('full');
+      jQuery('#cat-btn-arrow').addClass('fa-arrow-down');
+      jQuery('#cat-btn-arrow').removeClass('fa-arrow-up');
+      jQuery('#toggle-cat-text span').html('Meer');
+    }
+  });
+});

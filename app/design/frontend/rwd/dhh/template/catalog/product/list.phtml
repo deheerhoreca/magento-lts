@@ -27,7 +27,6 @@ $show_black_friday            = false;
 $media_path                   = Mage::getBaseDir("media");
 $current_page_nr              = Mage::app()->getRequest()->getParam("p");
 $on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
-$excluded_category_ids        = [656, 864, 834, 828];              // These categories are not listed as subcategory tile
 $show_toolbar                 = true;
 $_columnCount                 = 4;
 $displaySize                  = 200;
@@ -37,9 +36,9 @@ $show_products                = (strpos($category_desc, "<!--no_products-->") ==
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
 
-// Optional static block for this category
-$category_block_name          = "category-{$category_id}";
-$category_block_html          = $this->getLayout()->createBlock("cms/block")->setBlockId($category_block_name)->toHtml();
+// Optional static blocks for this category
+$category_block_top_html      = $this->getLayout()->createBlock("cms/block")->setBlockId("category-{$category_id}-top")->toHtml();
+$category_block_bottom_html   = $this->getLayout()->createBlock("cms/block")->setBlockId("category-{$category_id}-bottom")->toHtml();
 
 Varien_Profiler::stop('DHH_PrepareProductList');
 
@@ -53,34 +52,14 @@ if($show_products === true) {
    * manage_stock, leading to wrong results.
    *
    * We now use both as an experiment...
+   *
+   * DHH_ReAddStockItems profiles to single-digit ms delay
    */
   Varien_Profiler::start('DHH_ReAddStockItems');
   $_productCollection = $this->getLoadedProductCollection();
   $_productCollection->setFlag("require_stock_items", true);
   Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
   Varien_Profiler::stop('DHH_ReAddStockItems');
-
-  // If the sorting is by position, put the recommended products on top
-  // http://www.rob-st.com/2016/11/29/sort-magento-category-multiple-values-keep-newest-products-top/
-  // Superseeded by increasing the popularity field
-  // if(!_dhh_debug()) {
-    // Varien_Profiler::start('DHH_ReloadProductCollection');
-    // $currentOrder = $this->getChild("toolbar")->getCurrentOrder();
-    // if($currentOrder === "position" || $currentOrder === "popularity") {
-      // $currentDirection = $this->getChild("toolbar")->getCurrentDirection();
-      // $query = $_productCollection->getSelect()->__toString();
-      // if(strstr($query, "tagline") !== false) { // if somehow this field is not there
-        // $sortByRcm  = "IF(e.tagline = '' OR e.tagline IS NULL, 1, 0) ASC";
-        // $_productCollection->getSelect()->reset(Zend_Db_Select::ORDER);
-        // $_productCollection->getSelect()->order(new Zend_Db_Expr($sortByRcm));
-        // $_productCollection->getSelect()->order($currentOrder.' '.$currentDirection);     
-        // // Collection was loaded already...reloading...(yeah I know)
-        // $_productCollection->clear();
-        // $_productCollection->load();
-      // }
-    // }
-    // Varien_Profiler::stop('DHH_ReloadProductCollection');
-  // }
 }
 
 /* CATEGORY HEADER & SEO */
@@ -96,6 +75,7 @@ if($carct && ($category === "category")) {
   if($have_active_filters === true || $on_first_page === false) {
     $category_desc      = "";
   }
+  // Create a H1 if the description is empty
   if(strlen($category_desc) < 5) {
     $category_desc      = "<h1>{$category_name}</h1>";
   }
@@ -104,69 +84,51 @@ if($carct && ($category === "category")) {
     $category_desc = str_ireplace("h1>", "h2>", $category_desc);
   }
   
-  if(empty($category_desc) === false) {
-    if(strpos($category_desc, "<!--no_auto_desc-->") === false) {      
-      $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
-      if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
-        $category_desc .= "<p>Chefstore.nl verkoopt o.a. ";
-        $n = sizeof($manufacturers);
-        $i = 0;
-        foreach($manufacturers as $manufacturer) {
-          if(strlen($manufacturer) < 3) continue;
-          $category_desc .= "{$manufacturer} {$category_name_lwr}";
-          $i++;
-          if($i === $n-1) {
-            $category_desc .= " en ";
-          } elseif($i < $n) {
-            $category_desc .= ", ";
-          } else {
-            $category_desc .= ".";
-          }
-        }
-        $category_desc .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
-      }
-      
-      if($on_first_page === true && $have_active_filters === false) {
-        if(empty($_productCollection) === false
-        && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
-          $category_desc .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+  // Add category boilerplate to bottom
+  if(strpos($category_desc, "<!--no_auto_desc-->") === false) {      
+    $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
+    if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
+      $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
+      $n = sizeof($manufacturers);
+      $i = 0;
+      foreach($manufacturers as $manufacturer) {
+        if(strlen($manufacturer) < 3) continue;
+        $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
+        $i++;
+        if($i === $n-1) {
+          $category_block_bottom_html .= " en ";
+        } elseif($i < $n) {
+          $category_block_bottom_html .= ", ";
         } else {
-          $category_desc .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+          $category_block_bottom_html .= ".";
         }
+      }
+      $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
+    }
+    
+    if($on_first_page === true && $have_active_filters === false) {
+      if(empty($_productCollection) === false
+      && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
+        $category_block_bottom_html .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+      } else {
+        $category_block_bottom_html .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
       }
     }
   }
   
+  // Add a H1 if there isn't one
+  if(stripos($category_desc, "<h1>") === false) {
+    $category_desc      = "<h1>{$category_name}</h1>{$category_desc}";
+  }
+  
   if(empty($category_desc) === false) {
-    
     echo "<div class='ctdesc std' id='ctdesc'>";
-    // Optionally cut off description and show a 'More' button    
+    // Optionally cut off description and show a 'More' button
     if(strpos($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";
-      ?>
-      <button id="toggle-cat-text"><i id="cat-btn-arrow" class="fa fa-arrow-down" aria-hidden="true"></i>&nbsp;<span>Lees meer</span></button>
-      <script>
-        jQuery(document).ready(function(){
-          jQuery(document).on('click', '#toggle-cat-text', function(){
-            if(jQuery('#cat-text').hasClass("short")) {
-              jQuery('#ctdesc .short').addClass('full');
-              jQuery('#ctdesc .short').removeClass('short');
-              jQuery('#cat-btn-arrow').addClass('fa-arrow-up');
-              jQuery('#cat-btn-arrow').removeClass('fa-arrow-down');
-              jQuery('#toggle-cat-text span').html('Minder');
-            } else {
-              jQuery('#ctdesc .full').addClass('short');
-              jQuery('#ctdesc .full').removeClass('full');
-              jQuery('#cat-btn-arrow').addClass('fa-arrow-down');
-              jQuery('#cat-btn-arrow').removeClass('fa-arrow-up');
-              jQuery('#toggle-cat-text span').html('Meer');
-            }
-          });
-        });
-      </script>
-      <?php
+      echo "<button id='toggle-cat-text'><i id='cat-btn-arrow' class='fa fa-arrow-down' aria-hidden='true'></i>&nbsp;<span>Lees meer</span></button>";
     }
     echo "</div>";
   }
@@ -174,7 +136,18 @@ if($carct && ($category === "category")) {
 
 /* SUBCATEGORIES */
 
-$appliedFilters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
+$forwarded_filters  = ["brand", "brand_series"];
+$active_filters     = Mage::getSingleton("catalog/layer")->getState()->getFilters();
+$show_sub_tiles     = true;
+// if(_dhh_debug()) { }
+
+foreach($active_filters as $active_filter) {
+  $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
+  if(in_array($attribute_code, $forwarded_filters, true) === false) {
+    $show_sub_tiles = false;
+  }
+}
+
 if(empty($carct) === false && $amschk !== "amshopby"
 && empty($appliedFilters) === true && strpos($orig_category_desc, "<!--no_cat_tiles-->") === false) {
   
@@ -183,16 +156,31 @@ if(empty($carct) === false && $amschk !== "amshopby"
   
   $subcategories = $carct->getCollection()
     ->addIdFilter($carct->getChildren())
-    ->addAttributeToFilter("is_active", 1)
     ->addAttributeToSelect("url_key")
     ->addAttributeToSelect("name")
     ->addAttributeToSelect("all_children")
     ->addAttributeToSelect("is_anchor")
+    ->addAttributeToFilter("is_active", 1)
     ->setOrder("position", Varien_Db_Select::SQL_ASC)
     ->joinUrlRewrite();
   $subcategories->addAttributeToSelect("image");
   
   if($subcategories->getFirstItem()) {
+    
+    // Copy a selection of filters to the new category, if they exist
+    // @todo should use the real methods of building the url instead
+    if(_dhh_debug()) {
+      $params = [];
+      parse_str($queryString, $params);
+      foreach($forwarded_filters as $forwarded_filter) {
+        if(isset($_GET[$forwarded_filter]) === true && strlen($_GET[$forwarded_filter]) > 0) {
+          $queryString = http_build_query($params);
+        }
+      }
+      if ($queryString) {
+        $category_url = "{$category_url}?{$queryString}";
+      }
+    }
     
     echo "<ul class='grid-shadow-tiles-text'>";
     
@@ -200,14 +188,10 @@ if(empty($carct) === false && $amschk !== "amshopby"
     $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
     
     foreach($subcategories as $subcategory) {
-      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
+      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) === true) {
         continue;
       }
-      // if(_dhh_debug()) {
-        // var_dump($subcategory->getId());
-      // }
       $haschild           = true;
-      // Slow: $subcategory         = Mage::getModel("catalog/category")->load($subcategory->getId());
       $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
       $category_name_safe = htmlspecialchars($category_name);
       $image              = $subcategory->getImage();
@@ -226,7 +210,8 @@ if(empty($carct) === false && $amschk !== "amshopby"
         $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
         $imageObj->save($resized_img_path);
       }
-      echo "<li style='max-width: 180px;'><a href='{$category_url}' title='{$category_name_safe}'>";
+      echo "<li style='max-width: 180px;'>";
+      echo "<a href='{$category_url}' title='{$category_name_safe}'>";
       if(empty($image) === false) {
         echo "<img class='lazy trans-opacity' data-src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' 
         height='{$category_thumbs_dimensions}' width='{$category_thumbs_dimensions}'>";
@@ -241,14 +226,16 @@ if(empty($carct) === false && $amschk !== "amshopby"
 }
 
 // Optional block category-ID is shown below the category tiles
-echo $category_block_html;
+echo $category_block_top_html;
 
 /* LIST PRODUCTS */
 
 if($show_products === true && $_productCollection->getFirstItem()) {
   echo "<div class='category-products'>";
     if($show_toolbar === true) {
-      echo "<div class='top_toolbar'>{$this->getToolbarHtml()}</div>";
+      $toolbar_html = $this->getToolbarHtml();
+      echo "<div class='top_toolbar'>{$toolbar_html}</div>";
+      define("DHH_SORTING_BLOCK_PRINTED", true);
     }
     echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     $i = 0;
@@ -280,7 +267,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       //$price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
       $finalPrice           = (float) $_product->getFinalPrice();
       
-      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, "listview");
+      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["context" => "listview"]);
       
       $stock_message        = $stock_data["stock_message"];
       $stock_class          = $stock_data["txtcltcz"];
@@ -312,9 +299,12 @@ if($show_products === true && $_productCollection->getFirstItem()) {
           break;
       }
       
-      $brand            = _get_product_attribute($_product, "manufacturer");
-      $sku_seller       = _get_product_attribute($_product, "sku_seller");
-      $tagline          = _get_product_attribute($_product, "tagline");
+      $brand              = _get_product_attribute($_product, "manufacturer");
+      $sku_seller_or_mpn  = _get_product_attribute($_product, "mpn");
+      if(empty($sku_seller_or_mpn)) {
+        $sku_seller_or_mpn  = _get_product_attribute($_product, "sku_seller");
+      }
+      $tagline            = _get_product_attribute($_product, "tagline");
       
       $usp_options      = [
         "context"         => "listview",
@@ -324,7 +314,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       
       // Price Block
       $price_html       = str_replace(",00", ",-", $price_html);
-      $price_html       = str_replace("€", null, $price_html);
+      $price_html       = str_replace("€", "", $price_html);
       
       // Black friday
       if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
@@ -376,7 +366,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         </a>
         <div class="product-info">
           <div class="info">
-            <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
+            <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller_or_mpn}</span>"; ?></span>
             <h2 class="product-name ellipsed ellipsed-2">
               <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?> details'><?php echo $product_name; ?></a>
             </h2>
@@ -467,12 +457,17 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
         <?php
       }
-    }
+    }    
     ?>
     </ul>
     <?php
     if($show_toolbar === true) {
-      echo "<div class='toolbar-bottom'>{$this->getToolbarHtml()}</div>";
+      echo "<div class='toolbar-bottom pb-4'>{$toolbar_html}</div>";
+    }
+    
+    // Optional block category-ID is shown below the category tiles
+    if(empty($category_block_bottom_html) === false) {
+      echo "<div class='ctdesc'>{$category_block_bottom_html}</div>";
     }
     ?>
   </div>

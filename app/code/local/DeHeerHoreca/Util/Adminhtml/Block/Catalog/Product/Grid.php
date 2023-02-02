@@ -7,7 +7,7 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
           "header"    => "",
           "align"     => "center",
           "index"     => "image",
-          "width"     => "40",
+          "width"     => "60px",
           "filter"    => false,
           "sort"      => false,
           "renderer"  => "DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image"

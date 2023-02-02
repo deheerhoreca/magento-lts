@@ -26,8 +26,17 @@
 
 $_item = $this->getItem();
 $this->setPriceDataObject($_item);
-$_product = Mage::getModel('catalog/product')->load($_item->getProductId());
-$_imageUrl = $this->helper('catalog/image')->init($_product, 'small_image')->resize(120, 120);
+
+// Needed because some attributes are not part of the product yet...
+// @todo make it faster
+$_product = Mage::getResourceModel("catalog/product_collection")
+  ->addAttributeToSelect(["ean13"])
+  ->addAttributeToSelect(["small_image"])
+  ->addAttributeToFilter("entity_id", $_item->getProductId())
+  ->setPageSize(1)
+  ->setCurPage(1)
+  ->getFirstItem();
+$_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->resize(60, 60);
 ?>
 <tr<?php if (!$this->canDisplayGiftmessage()): ?> class="border"<?php endif; ?>>
     <td class='a-center'>
@@ -43,22 +52,24 @@ $_imageUrl = $this->helper('catalog/image')->init($_product, 'small_image')->res
         <?php if ($this->canDisplayContainer()): ?>
         </div>
         <?php endif ?>
-        <?php // DHH CORE HACK ?>
-        <a target="_blank" rel="external" href="<?php echo $_product->getProductUrl();?>">Chefstore.nl</a> - 
-        <a target="_blank" rel="external" href="https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier=<?php echo $_product->getSku()?>">Intel</a> -
-        <a target="_blank" href="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/catalog_product/edit', ['id' => $_product->getId()])?>">Admin</a>
-        <?php if(empty($_product->getEan()) === false) {
-          ?>
-          <?php $ean13 = sprintf("%013d", ltrim($_product->getEan(), "0")); ?>
-           - <a refl="external noreferrer" target="_blank" href="https://www.bol.com/nl/s/?searchtext=<?php echo $ean13; ?>">Bol.com</a>
-          <?php
+        <?php // DHH CORE HACK
+        $chefstore_product_url  = Mage::helper("deheerhoreca_util/util")->get_url("tool_cs_product", $_item->getSku());
+        $intel_product_url      = Mage::helper("deheerhoreca_util/util")->get_url("tool_intel_product", $_item->getSku());
+        $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tool_mage_product", $_item->getSku());
+        if(empty($_product->getEan13()) === false) {
+          $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_item->getEan13());
         }
-        if(empty($_product->getData("supplier_product_url")) === false) {
-          ?>
-           - <a refl="external noreferrer" target="_blank" href="<?php echo $_product->getData("supplier_product_url"); ?>">Supplier</a>
-          <?php
+        $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tool_supplier_product", $_item->getSku());
+        ?>
+        <a target="_blank" rel="external" href="<?php echo $chefstore_product_url; ?>">Chefstore.nl</a> - 
+        <a target="_blank" rel="external" href="<?php echo $intel_product_url; ?>">Intel</a> -
+        <a target="_blank" rel="external" href="<?php echo $mage_product_url; ?>">Mage</a> -
+        <?php
+        if(isset($bol_search_product)) {
+          echo "<a target='_blank' rel='external' href='{$bol_search_product}'>Bol.com</a> -";
         }
         ?>
+        <a target="_blank" rel="external" href="<?php echo $tool_supplier_product; ?>">Supplier</a>
     </td>
     <td class="a-center"><?php echo $_item->getStatus() ?></td>
     <td class="a-left"><?php print_r($_product->getAttributeText("supplier")); ?></td>

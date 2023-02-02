@@ -302,17 +302,18 @@ if($_product->getAttributeText("eol") !== "Ja") {
           }
           ?>
           <span class="price-excluding-tax not-special">
-            <?php if($_product->canConfigure()) echo "<span class='from_price_conf'>Vanaf</span>"; ?>
+            <?php
+            if($_product->canConfigure()) {
+              echo "<span class='from_price_conf'>Vanaf</span>";
+            }
+            if($_finalPrice == $_price) {
+              $tmp = $_price_formatted;
+            } else {
+              $tmp = $_finalPrice_formatted;
+            }
+            ?>
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
-              <?php
-              if($_finalPrice == $_price) {
-                echo $_price_formatted;
-              } else {
-                echo $_finalPrice_formatted;
-              }
-              ?>
-            </span>
+            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>"><!--sse--><?php echo $tmp; ?><!--/sse--></span>
           </span>
           
           <?php
@@ -614,9 +615,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <div class="special-price">
             <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
-            <span class="price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>"><!--sse-->
             <?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?>
-            </span>
+            <!--/sse--></span>
           </div>
         <?php
         }

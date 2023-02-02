@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
+
+<!---
+- Use <filter>0</filter>, not true/false
+-->
+
 <gridcontrol>
   <grids>
     
@@ -243,6 +248,7 @@
           <type>text</type>
           <index>attribute_id</index>
           <width>50</width>
+          <filter>0</filter>
         </add>
         <after>attribute_code</after>
       </attribute_id>

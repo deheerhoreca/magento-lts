@@ -6,7 +6,7 @@ use Michelf\Markdown;
 use Michelf\MarkdownExtra;
 
 // These categories are not listed as subcategory tile in listviews
-const EXCLUDED_CATEGORY_IDS       = [656, 864, 834, 828];
+const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
 
 $dhh_click_log = [];
 
@@ -165,11 +165,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public function getBrandsPerCategory($category_id) {
     $max_amount = 6;
     
-    $products = Mage::getModel('catalog/category')->load($category_id)
+    $products = Mage::getModel("catalog/category")->load($category_id)
       ->getProductCollection()
-      ->addAttributeToSelect('manufacturer')   // add all attributes - optional
-      ->addAttributeToFilter('status', 1)      // enabled
-      ->addAttributeToFilter('visibility', 4); //visibility in catalog,search
+      ->addAttributeToSelect("manufacturer")   // add all attributes - optional
+      ->addAttributeToFilter("status", 1)      // enabled
+      ->addAttributeToFilter("visibility", 4); // visibility in catalog,search
     
     $manufacturers = [];
     foreach($products as $product) {
@@ -231,13 +231,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     /*
     $options = [
       "image_size"              => 150,           // Image screen size, in pixels
-      "display"                 => normal | mini, // normal|mini
+      "display"                 => normal|mini,   // normal|mini
       "skip_usps"               => false,         // Don't show USPs
       "skip_actions"            => false,         // Don't show actions/buttons
       "_blank"                  => false,         // Open in a new window
       "show_category_link"      => false,         // Show a link to the category
       "prefer_rewrite_table"    => false,         // Get product URL preferring the rewrite table
-      "use_short_product_names" => false,         // Use brand + MPN instead of product name
+      "use_short_product_names" => false,         // Use brand + MPN instead of product name @deprecated
     ];
     
     Display usage:
@@ -295,8 +295,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_message          = $stock_data["stock_message"];
     $stock_message_short    = $stock_data["stock_message_short"];
     $stock_class            = $stock_data["txtcltcz"];
-    $stock_qty              = $stock_data["stock_qty"];
+    
+    // @todo below variables are not used/needed, simplify
     $in_stock               = $stock_data["in_stock"];
+    $stock_qty              = $stock_data["stock_qty"];
     $backorders             = $stock_data["backorders"];
     $saleable               = $stock_data["saleable"];
     $eol                    = $stock_data["eol"];
@@ -309,8 +311,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $calwekdate_max         = $stock_data["calwekdate_max"];
     $levertijd              = $stock_data["levertijd"];
     $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
-    
-    $additional_delivery_messages = null;
     
     // if(_dhh_debug()) {
       // echo "<pre>";
@@ -936,7 +936,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $usps; 
   }
   
-  public function getStockInfo($product, $context = null) {
+  public function getStockInfo($product, array $options = []) {
+    $fastmode               = $options["fastmode"]            ?? false;
+    $context                = $options["context"]             ?? null;
+    
     $stock_data             = [];
         
     /* Availability, Stock */
@@ -1028,7 +1031,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // Not sellable
       
       $stock_message        = "Niet op voorraad";
-      $stock_message_short  = "Pre-order";
+      $stock_message_short  = "Geen voorraad";
       $delivery_text        = "";
       $txtcltcz             = "clzsoldout";
       $fa_icon              = "";
@@ -1220,49 +1223,49 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["72"] = $price_ex_vat * (1.74 / 100);
     // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["72"] = $price_ex_vat * (1.72 / 100);
     
-        if(in_range($price_ex_vat, 400  , 5000  )) $rates["60"] = $price_ex_vat * (2.43 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates["60"] = $price_ex_vat * (2.43 / 100);
     elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["60"] = $price_ex_vat * (2.25 / 100);
     elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["60"] = $price_ex_vat * (2.10 / 100);
     elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["60"] = $price_ex_vat * (2.01 / 100);
     elseif(in_range($price_ex_vat, 25000, 150000)) $rates["60"] = $price_ex_vat * (1.97 / 100);
 
-        // if(in_range($price_ex_vat, 400  , 5000  )) $rates["54"] = $price_ex_vat * (2.55 / 100);
+        // if(in_range($price_ex_vat, 400  , 2500  )) $rates["54"] = $price_ex_vat * (2.55 / 100);
     // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["54"] = $price_ex_vat * (2.37 / 100);
     // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["54"] = $price_ex_vat * (2.28 / 100);
     // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["54"] = $price_ex_vat * (2.25 / 100);
     // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["54"] = $price_ex_vat * (2.21 / 100);
     
-        if(in_range($price_ex_vat, 400  , 5000  )) $rates["48"] = $price_ex_vat * (2.76 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates["48"] = $price_ex_vat * (2.76 / 100);
     elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["48"] = $price_ex_vat * (2.57 / 100);
     elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["48"] = $price_ex_vat * (2.49 / 100);
     elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["48"] = $price_ex_vat * (2.43 / 100);
     elseif(in_range($price_ex_vat, 25000, 150000)) $rates["48"] = $price_ex_vat * (2.40 / 100);
     
-        // if(in_range($price_ex_vat, 400  , 5000  )) $rates["42"] = $price_ex_vat * (3.03 / 100);
+        // if(in_range($price_ex_vat, 400  , 2500  )) $rates["42"] = $price_ex_vat * (3.03 / 100);
     // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["42"] = $price_ex_vat * (2.94 / 100);
     // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["42"] = $price_ex_vat * (2.85 / 100);
     // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["42"] = $price_ex_vat * (2.83 / 100);
     // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["42"] = $price_ex_vat * (2.77 / 100);
     
-        if(in_range($price_ex_vat, 400  , 5000  )) $rates["36"] = $price_ex_vat * (3.40 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates["36"] = $price_ex_vat * (3.40 / 100);
     elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["36"] = $price_ex_vat * (3.29 / 100);
     elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["36"] = $price_ex_vat * (3.10 / 100);
     elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["36"] = $price_ex_vat * (3.07 / 100);
     elseif(in_range($price_ex_vat, 25000, 150000)) $rates["36"] = $price_ex_vat * (3.02 / 100);
     
-        // if(in_range($price_ex_vat, 400  , 5000  )) $rates["30"] = $price_ex_vat * (4.05 / 100);
+        // if(in_range($price_ex_vat, 400  , 2500  )) $rates["30"] = $price_ex_vat * (4.05 / 100);
     // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["30"] = $price_ex_vat * (3.88 / 100);
     // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["30"] = $price_ex_vat * (3.81 / 100);
     // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["30"] = $price_ex_vat * (3.78 / 100);
     // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["30"] = $price_ex_vat * (3.75 / 100);
     
-        if(in_range($price_ex_vat, 400  , 5000  )) $rates["24"] = $price_ex_vat * (4.75 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates["24"] = $price_ex_vat * (4.75 / 100);
     elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["24"] = $price_ex_vat * (4.61 / 100);
     elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["24"] = $price_ex_vat * (4.51 / 100);
     elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["24"] = $price_ex_vat * (4.35 / 100);
     elseif(in_range($price_ex_vat, 25000, 150000)) $rates["24"] = $price_ex_vat * (4.32 / 100);
     
-        if(in_range($price_ex_vat, 400  , 5000  )) $rates["15"] = $price_ex_vat * (7.08 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates["15"] = $price_ex_vat * (7.08 / 100);
     elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["15"] = $price_ex_vat * (7.03 / 100);
     elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["15"] = $price_ex_vat * (7.01 / 100);
     elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["15"] = $price_ex_vat * (6.98 / 100);
@@ -1293,7 +1296,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public static function build_product_video_url($string) {
     if(strstr("http", $string) === false) {
       // Best way is to just store the youtube ID and build the URL
-      $string = "//www.youtube-nocookie.com/embed/{$string}?modestbranding=1&origin=https://www.chefstore.nl&loop=1&rel=1&hl=nl&controls=1";
+      $string = "//www.youtube-nocookie.com/embed/{$string}?modestbranding=1&loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
     }
     
     return $string;
@@ -1309,6 +1312,29 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     return $comment;
   }
+  
+  // Centralize building DHH URLs
+  public static function get_url(string $which, $id = "") {
+    if(empty($id) === false) {
+      $id = urlencode($id);
+    }
+    switch($which) {
+      case "tool_mage_order":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento1_order_id&q={$id}";
+      case "tool_mage_product":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento_product_sku&q={$id}";
+      case "tool_cs_product":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=chefstore_product_sku&q={$id}";
+      case "tool_supplier_product":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=supplier_product_sku&q={$id}";
+      case "tool_intel_product":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier={$id}";
+      case "bol_search_product":
+        return "https://www.bol.com/nl/s/?searchtext={$id}";
+    }
+    
+    return null;
+  }  
 }
 
 if(function_exists('_get_product_attribute') === false) {
@@ -1340,7 +1366,7 @@ if(function_exists('printr') === false) {
       return;
     }
     if(php_sapi_name() !== "cli") {
-      $ret .= "<pre>";
+      $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
     }
     $ret .= print_r($expr, true);
     if(php_sapi_name() !== "cli") {
@@ -1371,13 +1397,17 @@ if(function_exists("sanitizeForFilename") === false) {
 
 if(function_exists("_dhh_debug") === false) {
   function _dhh_debug() {
-    if(isset($_SERVER["REMOTE_ADDR"])
-    && in_array($_SERVER["REMOTE_ADDR"], ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227"])
-    && isset($_GET['nofpc'])) {
+    if(isset($_GET['nofpc'])
+    && isset($_SERVER["REMOTE_ADDR"])
+    && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips())) {
       return true;
     }
     return false;
   }
+}
+
+function _dhh_getselect($collection) {
+  return $collection->getSelect()->__toString();
 }
 
 function in_range($number, $min, $max, $inclusive = false) {
@@ -1387,4 +1417,25 @@ function in_range($number, $min, $max, $inclusive = false) {
       : ($number >= $min && $number < $max) ;
   }
   return false;
+}
+
+// Also declared in intel
+if(function_exists("_getAlternativeEans") === false) {
+  function _getAlternativeEans($ean) {
+    $eans = (array) $ean;
+    if(strlen($ean) === 13) {
+      $eans[] = sprintf("%014d", $ean);
+    }
+    if(substr($ean, 0, 1) === "0") {
+      $eans[] = substr($ean, 1);
+    }
+    if(substr($ean, 0, 2) === "00") {
+      $eans[] = substr($ean, 2);
+    }
+    if(substr($ean, 0, 3) === "000") {
+      $eans[] = substr($ean, 3);
+    }
+    
+    return $eans;
+  }
 }

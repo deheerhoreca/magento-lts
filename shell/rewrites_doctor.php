@@ -1,10 +1,12 @@
 <?php
 
+// use dekor\ArrayToTextTable;
+
 // @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
 
 // Normal flow:
-// php shell/rewrites_doctor.php update_keys
-// php shell/indexer.php --reindex catalog_url
+// php shell/rewrites_doctor.php update_keys (1-5 min)
+// php shell/indexer.php --reindex catalog_url (5-10 min)
 // For STORE_ID = 1: php shell/rewrites_doctor.php --remove_rewrites 10 --store 1
 // For STORE_ID = 4: php shell/rewrites_doctor.php --remove_rewrites 1 --store 4
 
@@ -38,11 +40,13 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
    * Update duplicated url keys by adding product SKU to the duplicated key
    */
   public function updateDuplicatedKeys() {
+    
+    $debug_data = [];
+    
     try {
       $counter = 0;
-      $logMessage = "";
       $start = time();
-      $storeId = Mage::app()->getStore()->getId() . PHP_EOL;
+      $storeId = Mage::app()->getStore()->getId().PHP_EOL;
 
       //url key attriubte load for further use
       
@@ -57,44 +61,57 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       $duplicatesCollection = Mage::getModel("catalog/product")->getCollection();
       $duplicatesCollection->getSelect()
         ->joinLeft(
-          array("url_key" => $urlKeyAttributeTable . "_" . $urlKeyAttribute->getBackendType()),
+          ["url_key" => $urlKeyAttributeTable . "_" . $urlKeyAttribute->getBackendType()],
           "e.entity_id" . " = url_key.entity_id AND url_key.attribute_id = " . $urlKeyAttribute->getAttributeId() . " AND url_key.store_id = " . $storeId,
-          array($urlKeyAttribute->getAttributeCode() => "url_key.value")
+          [$urlKeyAttribute->getAttributeCode() => "url_key.value"]
         )
-        ->columns(array("duplicates_calculated" => new Zend_Db_Expr ("COUNT(`url_key`.`value`)")))
+        ->columns(["duplicates_calculated" => new Zend_Db_Expr("COUNT(`url_key`.`value`)")])
         ->group("url_key.value")
         ->order("duplicates_calculated DESC")
       ;
 
       foreach($duplicatesCollection as $item) {
         if($item->getData("duplicates_calculated") > 1) {
-          //loading product ids with duplicated url keys
+          // Loading product ids with duplicated url keys
           $duplicatedUrlKey = $item->getData("url_key");
           $productCollection = Mage::getModel("catalog/product")->getCollection()
             ->addAttributeToSelect("url_key")
+            ->addAttributeToSelect("sku")
             ->addAttributeToFilter("url_key", array("eq" => $duplicatedUrlKey))
           ;
           $ids = $productCollection->getAllIds();
+          $skus = $productCollection->getColumnValues("sku");
+          
+          echo "SKUs [".implode(", ", $skus)."] share the same URK key: {$duplicatedUrlKey}".PHP_EOL;
 
-          foreach($ids as $id){
+          foreach($ids as $id) {
             try {
-              //update product url key
+              // update product url key
               $product = Mage::getModel("catalog/product")->load($id);
               $sku = $product->getData("sku");
               $urlKey = $product->getData("url_key");
-              $new_key = $this->slug($urlKey, $sku);
-              $product->setData("url_key", $new_key);
-              if(DRYRUN === false) {
-                // $product->getResource()->saveAttribute($dataobject, "url_key");
-                $product->save();
+              $name = $product->getData("name");
+              $new_key = $this->slug($name, $sku);
+              if(0 && $urlKey === $new_key) {
+                $message = "{$sku} [{$product->getId()}] url_key {$urlKey} is the same as {$product->getData("url_key")}".PHP_EOL;
+              } else {
+                $product->setData("url_key", $new_key);
+                if(DRYRUN === false) {
+                  // $product->getResource()->saveAttribute($dataobject, "url_key");
+                  if(!$product->save()) {
+                    echo "Error: Failed to save {$product->getSku()}".PHP_EOL;
+                  }
+                }
+                $counter++;
+                $message = "{$sku} [{$product->getId()}] url_key was changed from {$urlKey} to {$product->getData("url_key")}".PHP_EOL;
+                $debug_data[] = [
+                  "sku"           => $sku,
+                  "old_url_key"   => $urlKey,
+                  "new_url_key"   => $product->getData("url_key"),
+                ];
               }
-              $counter++;
-              $message = "ProductID {$product->getId()} '{$product->getNameShort()}' url_key was changed from {$urlKey} to {$product->getData("url_key")}".PHP_EOL;
-              $logMessage .= $message;
-              //log will be update with the packs of messages
               if($counter % self::LOG_MESSAGE_ROWS == 0) {
-                Mage::log($logMessage, null, "atwix_rewrites_doctor.log", true);
-                $logMessage = "";
+                Mage::log($message, null, "atwix_rewrites_doctor.log", true);
               }
               echo $message;
             } catch (Exception $e) {
@@ -121,6 +138,9 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       echo $e->getMessage() . PHP_EOL;
       Mage::log($e->getMessage(), null, "atwix_rewrites_doctor.log", true);
     }
+    
+    // echo (new ArrayToTextTable($debug_data))->render().PHP_EOL;
+    // print_r($debug_data);
   }
   
   /**
@@ -129,6 +149,9 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
    * @var $left
    */
   public function clearExtraRewrites($left) {
+    
+    $debug_data = [];
+    
     echo "Store ID = ".STORE_ID.PHP_EOL;
     
     switch(STORE_ID) {
@@ -151,8 +174,8 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
         return false;
     }
     
-    $result = $this->backupTable();    
-    if($result !== true) {
+    $backup_table = $this->backupTable();    
+    if($result === false) {
       echo "Error while backing up table, quiting...".PHP_EOL;
       return false;
     }
@@ -164,18 +187,22 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       // $productCollection->setPageSize(self::PAGE_SIZE);
       // $pages = $productCollection->getLastPageNumber();
       // $currentPage = 1;
-      $counter = 0;
+      $counter_deleted = 0;
+      $counter_total = 0;
+      
+      // @todo add count query
       
       // $productCollection->setCurPage($currentPage);
       $productCollection->load();
       $ids = $productCollection->getAllIds();
-      echo "Doing ".sizeof($ids)." IDs...".PHP_EOL;
+      $counter_skus = sizeof($ids);
+      echo "Doing {$counter_skus} SKUs...".PHP_EOL;
       foreach($ids as $id) {
         // Get rewrites collection for current product id
         $urlRewritesCollection = Mage::getModel("core/url_rewrite")->getCollection()
-          ->addFieldToFilter("product_id", array("eq" => $id))
-          ->addFieldToFilter("is_system", array("eq" => "0"))
-          ->addFieldToFilter("store_id", array("eq" => STORE_ID))
+          ->addFieldToFilter("product_id",  ["eq" => $id])
+          ->addFieldToFilter("is_system",   ["eq" => "0"])
+          ->addFieldToFilter("store_id",    ["eq" => STORE_ID])
           ->setOrder("url_rewrite_id", "DESC")
         ;
         $urlRewritesCollection->getSelect()->limit(null, $left);
@@ -187,24 +214,31 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
             if(DRYRUN === false) {
               $urlRewrite->delete();
             }
-            $msg = "Deleted: {$urlRewrite->getStoreId()}, {$urlRewrite->getUrlRewriteId()}, {$urlRewrite->getProductId()}";
+            $msg = "Deleted: store_id {$urlRewrite->getStoreId()}, rewrite_id {$urlRewrite->getUrlRewriteId()}, product_id {$urlRewrite->getProductId()}";
             echo $msg.PHP_EOL;
             Mage::log($msg, null, "atwix_rewrites_doctor.log", true);
-            $counter++;
+            $counter_deleted++;
           } catch(Exception $e) {
-            echo "An error was occurred: " . $e->getMessage() . PHP_EOL;
+            echo "An error was occurred: ".$e->getMessage().PHP_EOL;
             Mage::log($e->getMessage(), null, "atwix_rewrites_doctor.log", true);
           }
         }
       }
     } catch (Exception $e) {
-      echo "An error was occurred: " . $e->getMessage() . PHP_EOL;
+      echo "An error was occurred: ".$e->getMessage().PHP_EOL;
       Mage::log($e->getMessage(), null, "atwix_rewrites_doctor.log", true);
     }
     
-    $message = "Total URL rewrites deleted: {$counter}, time spent: ".$this->timeSpent($start, time());
+    if($counter_total > 0) {
+      $pct_deleted = number_format(($counter_deleted / $counter_total * 100), 2);
+    } else {
+      $pct_deleted = 0;
+    }
+    $message = "Total URL rewrites deleted: {$counter_deleted}/{$counter_total} ({$pct_deleted}%), total number of SKUs: {$counter_skus}, time spent: ".$this->timeSpent($start, time());
     echo $message.PHP_EOL;
     Mage::log($message, null, "atwix_rewrites_doctor.log", true);
+    
+    echo "Notice: If everything looks OK, you should remove the backup table \"{$backup_table}\"".PHP_EOL;
   }
   
   public function timeSpent($start, $end) {
@@ -226,8 +260,8 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     \n Usage:  php -f fix_attributes -- [options]
     \n
     \n  --remove_rewrites number  Remove old product rewrites, leaving the 'number' of last ones
-    \n  update_keys         Update duplicated product keys
-    \n  remove_sku_spaces       Remove space from all product SKU's if they are present
+    \n  update_keys               Update duplicated product keys
+    \n  remove_sku_spaces         Remove space from all product SKU's if they are present
     \n
     \n  help            This help
     \n
@@ -257,15 +291,25 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     }
     echo "Copied {$table} to {$new_table}".PHP_EOL;
     
-    return true;
+    return $new_table;
   }
   
   // Translate a product name and a SKU, and creates an URL slug without special characters and limited in length
   private function slug($name, $sku) {
-    $sku = strtolower(trim(preg_replace("~[^0-9a-z]+~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
+    // Don't remove + signs, unique SKUs will collide
+    $name = str_replace("+", "plus", $name);
+    $sku = str_replace("+", "plus", $sku);
+    
+    $sku = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
     $sku = strtolower(str_replace(" ", "-", $sku));
+    $name = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
+    $name = strtolower(str_replace(" ", "-", $name));
     $name = substr($name, 0, (self::MAX_SLUG_LENGTH - strlen($sku)));
-    $string = "{$name}-{$sku}";
+    $name = str_replace($sku, "", $name);
+    $parts[] = $name;
+    $parts[] = $sku;
+    $parts = array_filter($parts);
+    $string = implode("-", $parts);
     return $string;
   }
 }

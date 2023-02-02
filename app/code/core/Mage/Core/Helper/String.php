@@ -83,6 +83,11 @@ class Mage_Core_Helper_String extends Mage_Core_Helper_Abstract
      */
     public function strlen($string)
     {
+        // DHH CORE HACK -- Prevent errors
+        if(is_scalar($string) === false) {
+          //print_r($string);
+          return 0;
+        }
         return iconv_strlen($string, self::ICONV_CHARSET);
     }
 

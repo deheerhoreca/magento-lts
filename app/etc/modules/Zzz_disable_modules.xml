@@ -127,6 +127,11 @@
           <active>false</active>
         </Algolia_Algoliasearch>
         
+        <!-- Needed for Configurable Products only, disabling leads to errors needs investigation -->
+        <Mage_ConfigurableSwatches>
+          <active>true</active>
+        </Mage_ConfigurableSwatches>
+        
         <!-- Don't disable, it's needed by cart2quote without listing it as a dependency -->
         <Mage_Tag>
           <active>true</active>

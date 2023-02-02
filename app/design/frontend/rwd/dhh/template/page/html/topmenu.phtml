@@ -1,12 +1,13 @@
 <?php
 
-// $_cacheKey = "FPC-cms_block-topmenu";
+$_cacheKey = "FPC_cms_block_topmenu";
+$_cacheKey = DHH_FPC_NAV_KEY;
 
 // // $static_file = "./media/static/topmenu.html";
 
 // // Outqualification
-// $write_cache = true;
-// $read_cache = true;
+$write_cache = true;
+$read_cache = false;
 
 // if(isset($_GET['nofpc'])) {
   // $write_cache = false;
@@ -16,12 +17,12 @@
   // $write_cache = true;
   // $read_cache = false;
 // }
-// if(DHH_FPC_ENABLED === false) {
-  // $write_cache = false;
-  // $read_cache = false;
-// }
+if(DHH_FPC_ENABLED === false) {
+  $write_cache = false;
+  $read_cache = false;
+}
 
-// $_html = null;
+$_html = null;
 
 // // print_r("Cache Key: {$_cacheKey}");
 
@@ -31,15 +32,15 @@
   // // print_r("<br />Menu cache: NO CACHE");
 // }
 
-// if(strlen($_html) > 0 === false) {
+if(strlen($_html) > 0 === false) {
   $_html = $this->getHtml('level-top');
-  // // print_r("<br />Menu cache: MISS");
-  // if($write_cache === true) {
-    // Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], 86400);
-  // }
-// } else {
-  // // print_r("<br />Menu cache: HIT");
-// }
+  // print_r("<br />Menu cache: MISS");
+  if($write_cache === true) {
+    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], 86400);
+  }
+} else {
+  // print_r("<br />Menu cache: HIT");
+}
 
 ?>
 <nav id="nav" class="grid-old navhdwrap">
@@ -48,9 +49,11 @@
     <span class="label">Menu</span>
   </a>
   <ol id="top-nav" class="nav-primary" style="float: left;">
+    <!-- nav_start -->
     <?php
     echo $_html;
     ?>
+    <!-- nav_end -->
   </ol>
 </nav>
 

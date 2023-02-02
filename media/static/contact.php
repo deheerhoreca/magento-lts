@@ -14,10 +14,10 @@
         <li><a href="tel:+31850441003" title="Bel ons"><strong>+31 85 0441003</strong></a><small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small></li>
         <li>Stuur een mail naar <a href="mailto:sales@chefstore.nl" title="Sales">sales@chefstore.nl</a></li>
         <li>Chat met ons via de knop die rechts onderin uw scherm zit<small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small></li>
-        <li><a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">Bel-mij-terug formulier</a></li>
+        <li><a rel="nofollow noreferrer" href="//form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">Bel-mij-terug formulier</a></li>
       </ul>
-      <div style="margin-top: 1em;"><h3>Klantenservice:</h3> Stuur een mail naar <a href="mailto:service@chefstore.nl" title="Klantenservice">service@chefstore.nl</a> of <a href="/service">vul direct een Serviceverzoek in</a>.</div>
-      <div style="margin-top: 1em;">U kunt ook een verzoek indienen om door ons gebeld te worden, klik daarvoor <a rel="nofollow noreferrer" href="https://form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">hier</a>.</div>
+      <div style="margin-top: 1em;"><h3>Klantenservice:</h3> Stuur een mail naar <a href="mailto:service@chefstore.nl" title="Klantenservice">service@chefstore.nl</a> of <a href="/service" target="_blank">vul direct een Serviceverzoek in</a>.</div>
+      <div style="margin-top: 1em;">U kunt ook een verzoek indienen om door ons gebeld te worden, klik daarvoor <a rel="nofollow noreferrer noopener" href="//form.jotform.com/200604056344041" target="_blank" title="Wij bellen u">hier</a>.</div>
       <div style="margin-top: 1em;">Daarnaast zijn wij bereikbaar op de chat, zie daarvoor de knop rechtsonderin op onze website.</div>
     </div>
   </body>

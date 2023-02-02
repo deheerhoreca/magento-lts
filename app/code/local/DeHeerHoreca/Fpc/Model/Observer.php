@@ -1,12 +1,16 @@
 <?php
 
+function _dhh_ips() {
+  return ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
+}
+
 // Cannot use _dhh_debug() due to the ?nofpc requirement
 if($_SERVER["REQUEST_METHOD"] === "GET"
-&& isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], ["185.127.111.252", "87.210.61.235"])
+&& isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
 ) {
   define("DHH_FPC_DEBUG", false); // Set to true to enable logging
 } else {
-  define("DHH_FPC_DEBUG", false); // Should always be false
+  define("DHH_FPC_DEBUG", false); // Should always be false unless wired in
 }
 
 if(substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
@@ -14,6 +18,8 @@ if(substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
 } else {
   define("DHH_FPC_ENABLED", true);
 }
+
+const DHH_FPC_NAV_KEY = "FPC_cms_block_topmenu";
 
 if(DHH_FPC_DEBUG === true) {
   $verb = $_SERVER["REQUEST_METHOD"] ?? null;
@@ -24,7 +30,9 @@ if(DHH_FPC_DEBUG === true) {
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   public function ServeCachedHTML($observer) {
-
+    
+    Varien_Profiler::start("DHH::FPC::ServeCachedHTML");
+    
     $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
     $read_cache = Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true);
     
@@ -34,7 +42,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     
     $key = Mage::helper("deheerhoreca_fpc/data")->get_cache_key();
-    $html = Mage::helper("deheerhoreca_fpc/data")->get_cached_html($key, false, true);
+    $html = Mage::helper("deheerhoreca_fpc/data")->get_cached_html($key, true, true);
 
     if(empty($html) === false) {
      if(print($html)) {
@@ -47,6 +55,8 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     
     Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "MISS");
+    
+    Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
   }
   
   public function clearProductCache($observer) {

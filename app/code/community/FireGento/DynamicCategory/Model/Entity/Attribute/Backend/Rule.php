@@ -40,7 +40,12 @@ class FireGento_DynamicCategory_Model_Entity_Attribute_Backend_Rule
         parent::afterLoad($object);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
-        $object->setData($attrCode, unserialize($object->getData($attrCode)));
+        // DHH CORE HACK
+        try {
+          $object->setData($attrCode, unserialize($object->getData($attrCode)));
+        } catch(Exception $e) {
+          Mage::log("Failed to unserialize dynamic category rule of ID {$object->getId()}: {$e->getMessage()}", NULL, "exception.log", true);
+        }
 
         return $this;
     }

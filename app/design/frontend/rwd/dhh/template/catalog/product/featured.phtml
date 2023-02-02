@@ -97,7 +97,7 @@ if($_collectionSize > 0) {
       $price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
       $finalPrice           = (float) $_product->getFinalPrice();
       
-      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, "listview");
+      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["context" => "listview"]);
       
       $stock_message        = $stock_data["stock_message"];
       $stock_class          = $stock_data["txtcltcz"];

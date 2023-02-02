@@ -12,51 +12,81 @@
  * @see Mage_Catalog_Block_Category_View
  */
 
-$_helper              = $this->helper("catalog/output");
-$_category            = $this->getCurrentCategory();
-$brand_name           = strtolower($_category->getName());
-$brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_logo           = null;
-$htbrand              = null;
-$shopby_block_html    = null;
-
-if(empty($brand_name) === false) {
-  $brand = sanitizeForFilename($brand_name);  
-  $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
-  if(is_file($brand_logo_file) === true) {
-    $brand_logo = "/".$brand_logo_file;
-  }
-  
-  // Optional block BRAND is shown above the category tiles
-  $brand_block_name = $brand;
-  $htbrand = $this->getLayout()->createBlock("cms/block")->setBlockId($brand_block_name)->toHtml();
-  
-  // Optional block shopbybrand-BRAND is shown below the category tiles
-  $shopby_block_name = "shopbybrand-{$brand}";
-  $shopby_block_html = $this->getLayout()->createBlock("cms/block")->setBlockId($shopby_block_name)->toHtml();
-}
-
 // Mixed mode = shop by brand
 // Mixed mode = "products and static block"
 if($this->isMixedMode()) {
   
-  $ctdesc_h1 = "Bekijk ons complete ".$_helper->categoryAttribute($_category, $_category->getName(), "name")." assortiment";
+  $_helper              = $this->helper("catalog/output");
+  $_category            = $this->getCurrentCategory();
+  $brand_name           = strtolower($_category->getName());
+  $shopby_block_html    = null;
   
-  echo "<div class='ctdesc'>";
-  if(empty($brand_logo) === false) {
-    echo "<img class='float-right' alt='".htmlspecialchars($brand_name)." logo' id='brand_logo_small' src='{$brand_logo}'>";
+  if(empty($brand_name) === false) {
+    $brand                = sanitizeForFilename($brand_name);  
+    $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+    $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
+    if(is_file($brand_logo_file) === true) {
+      $brand_logo         = "/".$brand_logo_file;
+    }
+    
+    // Optional block BRAND is shown above the category tiles
+    $brand_block_name     = $brand;
+    $brand_block_html     = $this->getLayout()->createBlock("cms/block")->setBlockId($brand_block_name)->toHtml();
+    
+    // Optional block shopbybrand-BRAND is shown below the category tiles
+    $extra_block_name     = "shopbybrand-{$brand}";
   }
-  echo "<h1>{$ctdesc_h1}</h1>{$htbrand}{$this->getCmsBlockHtml()}{$shopby_block_html}</div>";
+  
+  $brand_name           = $_helper->categoryAttribute($_category, $_category->getName(), "name");
+  $ctdesc_h1            = "Bekijk ons <span class='orange'>{$brand_name}</span> assortiment";
+}
+
+// Shop by brand series
+elseif(isset($_GET["brand_series"]) && is_numeric($_GET["brand_series"])) {
+  $singleton_prod = Mage::getSingleton('catalog/product')
+    ->setStoreId(Mage::app()->getStore()->getId())
+    ->setData("brand_series", $_GET["brand_series"]); 
+  $brand_series_name = $singleton_prod->getAttributeText("brand_series");
+  $ctdesc_h1 = "Bekijk ons <span class='orange'>{$brand_series_name}</span> assortiment";
+  
+  // Guess the brand and try to find a logo
+  if(empty($brand_series_name) === false) {
+    $brand_name           = strtok($brand_series_name, " ");
+    if(empty($brand_name) === false) {
+      $brand                = sanitizeForFilename($brand_name);  
+      $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+      $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
+      if(is_file($brand_logo_file) === true) {
+        $brand_logo         = "/".$brand_logo_file;
+      }
+    }
+  }
+  
+  // Optional block BRAND_SERIES is shown above the category tiles
+  $extra_block_name = "brand_series_{$brand_series}";
+}
+
+// Display some HTML if we have it
+$extra_block_html = "";
+if(empty($extra_block_name) === false) {
+  $extra_block_html = $this->getLayout()->createBlock("cms/block")->setBlockId($extra_block_name)->toHtml();
+}
+echo "<div class='ctdesc std'>";
+if(empty($brand_logo) === false) {
+  echo "<img class='float-right' alt='".htmlspecialchars($brand_name)." logo' id='brand_logo_small' src='{$brand_logo}'>";
+}
+if(empty($ctdesc_h1) === false) {
+  echo "<div id='cat-text'>";
+  echo "<h1>{$ctdesc_h1}</h1>{$brand_block_html}{$this->getCmsBlockHtml()}{$extra_block_html}";
+  echo "</div>";
   define("CTDESC_H1_SENT", true);
 }
+echo "</div>";
 
 echo $this->getMessagesBlock()->toHtml();
 
 if($this->isContentMode()) {
   echo $this->getCmsBlockHtml();
-} elseif($this->isMixedMode()) {
-  echo $this->getProductListHtml();
 } else {
   echo $this->getProductListHtml();
 }
-

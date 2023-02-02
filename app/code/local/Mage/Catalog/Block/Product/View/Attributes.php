@@ -86,76 +86,103 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
   
     // DHH CORE HACK
     // Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
-
     public function getAdditionalDataCustom(array $excludeAttr = []) {
+      
+      Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_PREPROCESS_ATTRIBUTES_getAdditionalDataCustom");
+      
       $data       = [];
       $product    = $this->getProduct();
       $products   = [$product];
       
       /* In case of configurable products, we get all the children's attributes as well */
       if($product->getTypeId() === Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
-        $childIds = Mage::getModel('catalog/product_type_configurable')->getChildrenIds($product->getId());
+        $childIds = Mage::getModel("catalog/product_type_configurable")->getChildrenIds($product->getId());
         $childIds = array_pop($childIds);
         if(empty($childIds) === false) {
           foreach($childIds as $childId) {
-            $products[] = Mage::getModel('catalog/product')->load($childId);
+            // @todo improve performance
+            $products[] = Mage::getModel("catalog/product")->load($childId);
           }
         }
       }
             
       foreach($products as $product) {
-
+        
         $attributes = $product->getAttributes();
         
-        // if(_dhh_debug()) {
-          // foreach($attributes as $attribute) {
-            // printr($attribute->getAttributeCode());
-            // printr($attribute->getIsVisibleOnFront());
-          // }
-        // }
-
         foreach($attributes as $attribute) {
           
-          if($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
-            
+          $attribute_code = $attribute->getAttributeCode();
+          
+          if(in_array($attribute_code, $excludeAttr, true) === false
+          && $product->hasData($attribute_code)
+          && $product->getDAta($attribute_code) !== null
+          && $attribute->getIsVisibleOnFront()) {
+            Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_PREPROCESS_ATTRIBUTES_getAdditionalDataCustom_".$attribute_code);
             $value = $attribute->getFrontend()->getValue($product);
-            $option_id = null;
-            if($attribute->usesSource()) {
-              $option_id = $attribute->setStoreId(0)->getSource()->getOptionId($value);
-            }
             
-            if(is_string($value) && strlen($value) > 0 && $product->hasData($attribute->getAttributeCode())) {
-              //if ($attribute->getFrontendInput() == 'price') {
+            // if(_dhh_debug()) {
+              // echo "<pre>";
+              // var_dump($attribute_code);
+              // var_dump($product->getData($attribute_code));
+              // var_dump($value);
+              // echo "</pre>";
+            // }
+            
+            if(is_string($value) && strlen($value) > 0
+            /* && $product->hasData($attribute_code) */) {
+              
+              $option_id = null;
+              if($attribute->usesSource()) {
+                $option_id = $product->getData($attribute_code);
+              }
+              
+              //if ($attribute->getFrontendInput() == "price") {
               //$value = Mage::app()->getStore()->convertPrice($value,true);
               //}
-
+              
               $group = 0;
-              if($tmp = $attribute->getData('attribute_group_id') ) {
+              if($tmp = $attribute->getData("attribute_group_id") ) {
                 $group = $tmp;
               }
               
-              if(isset($data[$group]['items'][$attribute->getAttributeCode()])) {
-                $data[$group]['items'][$attribute->getAttributeCode()]["value"][] = $value;
+              if(isset($data[$group]["items"][$attribute_code])) {
+                $data[$group]["items"][$attribute_code]["value"][] = $value;
               } else {
-                $data[$group]['items'][$attribute->getAttributeCode()] = [
-                  'label'     => $attribute->getStoreLabel(),
-                  'value'     => [$value],
-                  'code'      => $attribute->getAttributeCode(),
-                  'option_id' => $option_id,
+                $data[$group]["items"][$attribute_code] = [
+                  "label"     => $attribute->getStoreLabel(),
+                  "value"     => [$value],
+                  "code"      => $attribute_code,
+                  "option_id" => $option_id,
                 ];
               }
-
-              $data[$group]['attrid'] = $attribute->getId();
+              
+              $data[$group]["attrid"] = $attribute->getId();
             }
           }
+          Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_PREPROCESS_ATTRIBUTES_getAdditionalDataCustom_".$attribute_code);
         }
       }
-
-      foreach($data AS $groupId => &$group) {
-        $groupModel     = Mage::getModel('eav/entity_attribute_group')->load($groupId);
-        $group['title'] = $groupModel->getAttributeGroupName();
+      
+      $_entity_attribute_groups = Mage::getModel("eav/entity_attribute_group")
+        ->getCollection()
+        ->addFieldToSelect("attribute_group_id")
+        ->addFieldToSelect("attribute_group_name")
+        ->load();
+      foreach($_entity_attribute_groups as $_entity_attribute_group) {
+        $GLOBALS["eav_group_cache"][$_entity_attribute_group->getId()] = $_entity_attribute_group->getAttributeGroupName();
       }
-
+      // if(_dhh_debug()) {
+        // print_r($GLOBALS["eav_group_cache"]);
+      // }
+      foreach($data as $groupId => &$group) {
+        if(isset($GLOBALS["eav_group_cache"][$groupId])) {
+          $group["title"] = $GLOBALS["eav_group_cache"][$groupId];
+        }
+      }
+      
+      Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_PREPROCESS_ATTRIBUTES_getAdditionalDataCustom");
+      
       return $data;
     }
     // DHH END

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="532" height="488.36" viewBox="0 0 532 488.36">
+  <defs>
+    <filter id="Path_780" x="0" y="0" width="532" height="473.144" filterUnits="userSpaceOnUse">
+      <feOffset dx="4" dy="8" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="_9.7" x="169.5" y="162.232" width="198" height="173" filterUnits="userSpaceOnUse">
+      <feOffset dx="6" dy="6" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_845" data-name="Group 845" transform="translate(-17322 9387.68)">
+    <g transform="matrix(1, 0, 0, 1, 17322, -9387.68)" filter="url(#Path_780)">
+      <path id="Path_780-2" data-name="Path 780" d="M254,0C394.28,0,508,113.72,508,254c0,48.256-66.039,58.228-89.5,96.8-26.724,43.944-47.505,74.571-80.021,92.128-21.236,11.467-47.763,0-84.481,0-29.678,0-56.3,12.079-80.518,2.553-45.607-17.935-81.97-51.539-112.093-94.681C32.662,309.659,0,308.008,0,254s63.813-78.417,92.636-119.7C138.458,68.674,167.728,0,254,0Z" transform="translate(8 4)" fill="#164050"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 17322, -9387.68)" filter="url(#_9.7)">
+      <text id="_9.7-2" data-name="9.7" transform="translate(172.5 286.23)" fill="#fff" font-size="123" font-family="Neue Haas Grotesk Text Pro" font-weight="700"><tspan x="0" y="0">9.7</tspan></text>
+    </g>
+    <path id="Icon_awesome-star" data-name="Icon awesome-star" d="M25.3,1.778,18.772,15,4.178,17.132A3.2,3.2,0,0,0,2.41,22.586L12.969,32.874l-2.5,14.534a3.2,3.2,0,0,0,4.635,3.366l13.056-6.862,13.056,6.862a3.2,3.2,0,0,0,4.635-3.366l-2.5-14.534L53.914,22.586a3.2,3.2,0,0,0-1.768-5.454L37.552,15,31.029,1.778a3.2,3.2,0,0,0-5.734,0Z" transform="translate(17428.617 -8950.469)" fill="#fed308"/>
+    <path id="Icon_awesome-star-2" data-name="Icon awesome-star" d="M25.3,1.778,18.772,15,4.178,17.132A3.2,3.2,0,0,0,2.41,22.586L12.969,32.874l-2.5,14.534a3.2,3.2,0,0,0,4.635,3.366l13.056-6.862,13.056,6.862a3.2,3.2,0,0,0,4.635-3.366l-2.5-14.534L53.914,22.586a3.2,3.2,0,0,0-1.768-5.454L37.552,15,31.029,1.778a3.2,3.2,0,0,0-5.734,0Z" transform="translate(17494.617 -8950.469)" fill="#fed308"/>
+    <path id="Icon_awesome-star-3" data-name="Icon awesome-star" d="M25.3,1.778,18.772,15,4.178,17.132A3.2,3.2,0,0,0,2.41,22.586L12.969,32.874l-2.5,14.534a3.2,3.2,0,0,0,4.635,3.366l13.056-6.862,13.056,6.862a3.2,3.2,0,0,0,4.635-3.366l-2.5-14.534L53.914,22.586a3.2,3.2,0,0,0-1.768-5.454L37.552,15,31.029,1.778a3.2,3.2,0,0,0-5.734,0Z" transform="translate(17558.617 -8951.469)" fill="#fed308"/>
+    <path id="Icon_awesome-star-4" data-name="Icon awesome-star" d="M25.3,1.778,18.772,15,4.178,17.132A3.2,3.2,0,0,0,2.41,22.586L12.969,32.874l-2.5,14.534a3.2,3.2,0,0,0,4.635,3.366l13.056-6.862,13.056,6.862a3.2,3.2,0,0,0,4.635-3.366l-2.5-14.534L53.914,22.586a3.2,3.2,0,0,0-1.768-5.454L37.552,15,31.029,1.778a3.2,3.2,0,0,0-5.734,0Z" transform="translate(17622.617 -8950.469)" fill="#fed308"/>
+    <path id="Icon_awesome-star-5" data-name="Icon awesome-star" d="M25.3,1.778,18.772,15,4.178,17.132A3.2,3.2,0,0,0,2.41,22.586L12.969,32.874l-2.5,14.534a3.2,3.2,0,0,0,4.635,3.366l13.056-6.862,13.056,6.862a3.2,3.2,0,0,0,4.635-3.366l-2.5-14.534L53.914,22.586a3.2,3.2,0,0,0-1.768-5.454L37.552,15,31.029,1.778a3.2,3.2,0,0,0-5.734,0Z" transform="translate(17687.617 -8950.469)" fill="#fed308"/>
+    <g id="Group_844" data-name="Group 844" transform="translate(17454.318 -9433.609)">
+      <text id="B" transform="matrix(0.901, -0.433, 0.433, 0.901, 72.25, 120.035)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">B</tspan></text>
+      <text id="E" transform="matrix(0.942, -0.337, 0.337, 0.942, 86.754, 113.19)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">E</tspan></text>
+      <text id="D" transform="matrix(0.971, -0.238, 0.238, 0.971, 98.175, 109.014)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">D</tspan></text>
+      <text id="A" transform="matrix(0.991, -0.131, 0.131, 0.991, 113.718, 105.255)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">A</tspan></text>
+      <text id="N" transform="matrix(1, -0.027, 0.027, 1, 128.358, 103.318)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">N</tspan></text>
+      <text id="K" transform="matrix(0.997, 0.077, -0.077, 0.997, 144.11, 102.925)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">K</tspan></text>
+      <text id="T" transform="matrix(0.986, 0.168, -0.168, 0.986, 159.716, 104.193)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">T</tspan></text>
+      <text id="_" data-name=" " transform="matrix(0.974, 0.225, -0.225, 0.974, 173.169, 106.619)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0"> </tspan></text>
+      <text id="V" transform="matrix(0.958, 0.285, -0.285, 0.958, 178.609, 107.735)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">V</tspan></text>
+      <text id="O" transform="matrix(0.929, 0.37, -0.37, 0.929, 193.28, 112.112)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">O</tspan></text>
+      <text id="O-2" data-name="O" transform="matrix(0.893, 0.451, -0.451, 0.893, 208.103, 118.042)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">O</tspan></text>
+      <text id="R" transform="matrix(0.851, 0.525, -0.525, 0.851, 222.343, 125.262)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">R</tspan></text>
+      <text id="_2" data-name=" " transform="matrix(0.82, 0.572, -0.572, 0.82, 235.81, 133.764)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0"> </tspan></text>
+      <text id="D-2" data-name="D" transform="matrix(0.786, 0.618, -0.618, 0.786, 240.463, 136.847)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">D</tspan></text>
+      <text id="E-2" data-name="E" transform="matrix(0.739, 0.673, -0.673, 0.739, 253.159, 146.939)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">E</tspan></text>
+      <text id="_3" data-name=" " transform="matrix(0.708, 0.706, -0.706, 0.708, 262.309, 155.395)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0"> </tspan></text>
+      <text id="B-2" data-name="B" transform="matrix(0.669, 0.744, -0.744, 0.669, 266.378, 159.27)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">B</tspan></text>
+      <text id="E-3" data-name="E" transform="matrix(0.615, 0.788, -0.788, 0.615, 277.153, 171.378)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">E</tspan></text>
+      <text id="O-3" data-name="O" transform="matrix(0.567, 0.824, -0.824, 0.567, 284.715, 181.099)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">O</tspan></text>
+      <text id="O-4" data-name="O" transform="matrix(0.495, 0.869, -0.869, 0.495, 293.759, 194.379)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">O</tspan></text>
+      <text id="R-2" data-name="R" transform="matrix(0.426, 0.905, -0.905, 0.426, 301.666, 208.303)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">R</tspan></text>
+      <text id="D-3" data-name="D" transform="matrix(0.353, 0.936, -0.936, 0.353, 308.385, 222.59)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">D</tspan></text>
+      <text id="E-4" data-name="E" transform="matrix(0.284, 0.959, -0.959, 0.284, 314.029, 237.806)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">E</tspan></text>
+      <text id="L" transform="matrix(0.225, 0.974, -0.974, 0.225, 317.517, 249.68)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">L</tspan></text>
+      <text id="I" transform="matrix(0.173, 0.985, -0.985, 0.173, 320.044, 260.839)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">I</tspan></text>
+      <text id="N-2" data-name="N" transform="matrix(0.108, 0.994, -0.994, 0.108, 321.655, 269.404)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">N</tspan></text>
+      <text id="G" transform="matrix(0.021, 1, -1, 0.021, 323.355, 285.135)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">G</tspan></text>
+      <text id="E-5" data-name="E" transform="matrix(-0.06, 0.998, -0.998, -0.06, 323.599, 301.278)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">E</tspan></text>
+      <text id="N-3" data-name="N" transform="matrix(-0.141, 0.99, -0.99, -0.141, 322.928, 313.528)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">N</tspan></text>
+      <text id="_4" data-name="!" transform="matrix(-0.213, 0.977, -0.977, -0.213, 320.531, 329.235)" fill="#fff" font-size="28.542" font-family="Impact"><tspan x="0" y="0">!</tspan></text>
+    </g>
+    <g id="kv_shape" transform="translate(17417.773 -9316.121)">
+      <path id="Path_783" data-name="Path 783" d="M116.222,58.683,89.605,7.9A166.038,166.038,0,0,0,3.8,124.175l57.787,10.507A104.587,104.587,0,0,1,116.222,58.683Z" transform="translate(5.505 13.271)" fill="#ffc808"/>
+      <path id="Path_784" data-name="Path 784" d="M62.288,67.817a81.122,81.122,0,0,1,1.4-16.11L5.9,41.2A185.233,185.233,0,0,0,3.1,69.218a178.67,178.67,0,0,0,4.2,38.875L65.79,94.784A100.01,100.01,0,0,1,62.288,67.817Z" transform="translate(3.753 96.596)" fill="#f58b1f"/>
+      <path id="Path_785" data-name="Path 785" d="M62.688,56.4,4.2,69.709a170.026,170.026,0,0,0,20.663,50.082L76.7,87.57A109.016,109.016,0,0,1,62.688,56.4Z" transform="translate(6.506 134.63)" fill="#f99d1c"/>
+      <path id="Path_786" data-name="Path 786" d="M83.2,65.3,31.369,97.521a179.4,179.4,0,0,0,27.318,33.622A433.529,433.529,0,0,1,1.6,144.1c1.051,1.051,33.271,23.115,84.054,33.622l38.875-75.649A115.916,115.916,0,0,1,83.2,65.3Z" transform="translate(0 156.9)" fill="#ef3b24"/>
+      <path id="Path_787" data-name="Path 787" d="M110.1,86.107A103.6,103.6,0,0,1,64.575,75.6L25.7,151.6a261.88,261.88,0,0,0,85.805,3.5V86.107Z" transform="translate(60.304 182.674)" fill="#f26922"/>
+      <path id="Path_788" data-name="Path 788" d="M50.1,89.109V158.1a265.635,265.635,0,0,0,46.58-10.157h0a158.916,158.916,0,0,0,39.926-18.212L102.634,74.4A101.05,101.05,0,0,1,50.1,89.109Z" transform="translate(121.359 179.671)" fill="#7fc042"/>
+      <path id="Path_789" data-name="Path 789" d="M115.632,71.57A104.454,104.454,0,0,1,65.2,160.878l33.972,55.336a166.236,166.236,0,0,0,56.736-59.888h0a167.775,167.775,0,0,0,21.364-79.851,181.9,181.9,0,0,0-3.5-36.774L113.881,52.658A115.126,115.126,0,0,1,115.632,71.57Z" transform="translate(159.143 92.843)" fill="#c6d22d"/>
+      <path id="Path_790" data-name="Path 790" d="M106.75,2.609A164.152,164.152,0,0,0,28.3,21.171L54.917,71.954a104.595,104.595,0,0,1,151.3,73.547L266.1,132.543C250.343,59,185.2,3.66,106.75,2.609Z" transform="translate(66.81 0)" fill="#e9e015"/>
+    </g>
+  </g>
+</svg>

@@ -185,6 +185,7 @@ User-agent: SemrushBot-SWA
 User-agent: SemrushBot-CT
 User-agent: SemrushBot-BM
 User-agent: DnBCrawler-Analytics
+User-agent: DataForSEO
 Disallow: /
 
 User-agent: bingbot

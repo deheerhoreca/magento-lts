@@ -7,6 +7,9 @@ $i            = 0;
 $max_items    = $_columnCount;
 
 if(empty($collection) === false) {
+  // if(_dhh_debug()) {
+    // printr(_dhh_getselect($this->_collection));
+  // }
   Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
   ?>
   <div id="autorelated-products" class="product-collateral category-products">

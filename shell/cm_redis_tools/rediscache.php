@@ -38,5 +38,3 @@ foreach($tags as $tag)
 }
 
 print "Tags count: $tags_count, empty tags count: $empty_tags_count, slowttl=$slowttl\n";
-
-?>

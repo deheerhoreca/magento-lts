@@ -6,43 +6,46 @@
  * @see Mage_Review_Block_Product_View
  */
 
-$htbrand                = $brand = null;
-$_helper                = $this->helper("catalog/output");
-$_product               = $this->getProduct();
-$brand_name             = $_product->getAttributeText("manufacturer");
-$brand_id               = $_product->getData("manufacturer");
-$sku                    = $_product->getData("sku");
-$brand_logo             = null;
-$brand_slug             = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_link             = "/shop?manufacturer={$brand_id}";
-$_store                 = $_product->getStore();
-$skn                    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
-$anchors                = [];
-$in3_minimum            = 100 / 1.21;
-$in3_maximum            = 3000 / 1.21;
-// $billink_minimum        = 10;
-// $billink_maximum        = 3500;
-$biller_minimum         = 10;
-$biller_maximum         = 5000;
-$_taxHelper             = $this->helper("tax");
-$categoryIds            = $_product->getCategoryIds();
-$show_black_friday      = false;
+$_product                   = $this->getProduct();
+$_helper                    = $this->helper("catalog/output");
+$sku                        = _get_product_attribute($_product, "sku");
+$_store                     = $_product->getStore();
+$_taxHelper                 = $this->helper("tax");
+$categoryIds                = $_product->getCategoryIds();
+$skin                       = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
+
+$brand_name                 = _get_product_attribute($_product, "manufacturer");
+$brand_id                   = $_product->getData("manufacturer");
+$brand_logo                 = "";
+$brand_slug                 = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+$brand_link                 = "/shop?manufacturer={$brand_id}";
+$anchors                    = [];
+$in3_minimum                = 100 / 1.21;
+$in3_maximum                = 3000 / 1.21;
+// $billink_minimum           = 10;
+// $billink_maximum           = 3500;
+$biller_minimum             = 10;
+$biller_maximum             = 5000;
+$show_black_friday          = false;
+$javascripts                = [];
+$brand_block_name           = "";
+$brand                      = "";
+$max_highlighted_attributes = 10;
 
 // Find the category this product belongs to
-if(count($categoryIds)) {
-  $firstCategoryId = $categoryIds[0];
-  $_category = Mage::getModel("catalog/category")->load($firstCategoryId);
-  $categoryUrl = $_category->getUrl();
-  $categoryName = $_category->getName();
+// @todo is this expensive?
+if(empty($categoryIds) === false) {
+  $_category              = Mage::getModel("catalog/category")->load($categoryIds[0]);
+  $categoryUrl            = $_category->getUrl();
+  $categoryName           = $_category->getName();
 }
-
-$max_highlighted_attributes = 10;
 
 // Attributes used in multiple places
 $productlabel           = _get_product_attribute($_product, "product_label");
 $nofrost_method         = _get_product_attribute($_product, "ontdooisysteem");
 $energy_rating          = _get_product_attribute($_product, "energy_efficiency_class_a_g");
-
+$refrigerant            = _get_product_attribute($_product, "refrigerant");
+$voltage                = _get_product_attribute($_product, "voltage");
 $productTitle           = $_helper->productAttribute($_product, $_product->getName(), "name");
 $subdescription         = _get_product_attribute($_product, "sub_description");
 $product_title_short    = _get_product_attribute($_product, "name_short");
@@ -79,11 +82,10 @@ $used_levertijd         = empty($levertijd_tmp_override) ? $levertijd : $leverti
 $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_finalPrice, true);
 
-// Add +/- symbol unless it's "op aanvraag"
+// Add +/- symbol to delivery time unless it's "op aanvraag"
 if(stristr($used_levertijd, "aanvraag") === false && $used_levertijd !== "1 werkdag" && empty($used_levertijd) === false) {
   $used_levertijd = "&plusmn; {$used_levertijd}";
 }
-
 if($used_levertijd === "1 werkdag") {
   $delivery_time_tooltip = "Op werkdagen voor 15:00 besteld, de volgende werkdag bezorgd. Het is in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.";
 } else {
@@ -152,9 +154,10 @@ $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
 $our_usps = [
   "De beste prijzen",
   "Veilig online winkelen",
-  "Klanten beoordelen ons met een <strong class=orange>9.4</strong>",
+  "Klanten beoordelen ons met een <strong class=orange id=kiyoh_score></strong>",
   "We zitten klaar voor uw vragen",
 ];
+$javascripts[] = "document.getElementById('kiyoh_score').innerHTML = kiyoh_score;";
 if(empty($our_usps) === false) {
   $our_usps_content = "<ul class='fa-ul'>";
   foreach($our_usps as $text) {
@@ -198,15 +201,22 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
 
 // Buyblock EOL text
 if($overall_stock_status === "eol") {
+  $profiler_key = "DHH_PRODUCT_DETAILVIEW_GET_EOL_REPLACEMENT_SKU";
+  Varien_Profiler::start($profiler_key);
   $eol_text = "Wij helpen u graag met het vinden van een geschikt vervangend product.";
   if(empty($eol_replacement_sku) === false) {
-    $replacement_product = Mage::getModel('catalog/product')->loadByAttribute('sku', $eol_replacement_sku);
-    if($replacement_product !== false) {
-      $name             = $_helper->productAttribute($replacement_product, $replacement_product->getName(), 'name');
-      $url              = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($replacement_product);
-      $eol_text         = "<strong>Kijkt u naar het vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
+    $_replacement_product = Mage::getResourceModel("catalog/product_collection")
+      ->addFieldToFilter("sku", $eol_replacement_sku)
+      ->addAttributeToSelect(["name"])
+      ->setPageSize(1)
+      ->getFirstItem();
+    if($_replacement_product !== false) {
+      $name         = _get_product_attribute($_replacement_product, "name");
+      $url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_replacement_product);
+      $eol_text     = "<strong>Kijkt u naar het vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
     }
   }
+  Varien_Profiler::stop($profiler_key);
 }
 
 // Product Documents (uploaded & external)
@@ -242,26 +252,30 @@ if(empty($energy_rating) === false) {
   }
 }
 
-// Product USPs
-$highlights = [];
-$i = 0;
+/* Product USP icons */
 
+$highlights = [];
+$i          = 0;
+
+// Combined dimensions
 $dimension_pair_set = false;
 if($i < $max_highlighted_attributes) {
-  $id = "dimensions";
-  $attribute_names = ["breedte", "diepte", "hoogte"];
-  $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-  $title = "Afmetingen (b x d x h)";
-  $name  = "Afmetingen";
-  foreach($attribute_names as $attribute_name) {
-    $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-    if(empty($values[$attribute_name]) === false) {
-      $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
+  
+  // Try Width + Depth + Height
+  $codes  = ["breedte", "diepte", "hoogte"];
+  $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
+  $title  = "Afmetingen (BxDxH)";
+  $name   = "Afmetingen";
+  $values = [];
+  foreach($codes as $code) {
+    $values[$code] = _get_product_attribute($_product, $code);
+    if(empty($values[$code]) === false) {
+      $values[$code] = (int) ($values[$code] / 10);
     } else {
-      unset($values[$attribute_name]);
+      unset($values[$code]);
     }
   }
-  if(sizeof($values) === sizeof($attribute_names)) {
+  if(sizeof($values) === sizeof($codes)) {
     $text = implode("x", $values)." cm";
     $highlights[] = [
       "image" => $image,
@@ -272,36 +286,64 @@ if($i < $max_highlighted_attributes) {
     $i++;
     $dimension_pair_set = true;
   }
-}
-
-if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
-  $attribute_names = ["breedte", "hoogte"];
-  $image = "{$skn}frontend/rwd/dhh/images/measurement.svg";
-  $title = "Afmetingen (b x l)";
-  foreach($attribute_names as $attribute_name) {
-    $values[$attribute_name] = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-    if(empty($values[$attribute_name]) === false) {
-      $values[$attribute_name] = (int) ($values[$attribute_name] / 10);
-    } else {
-      unset($values[$attribute_name]);
+  
+  // Try Width + Height
+  if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
+    $codes  = ["breedte", "hoogte"];
+    $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
+    $title  = "Afmetingen (BxL)";
+    $values = [];
+    foreach($codes as $code) {
+      $values[$code] = _get_product_attribute($_product, $code);
+      if(empty($values[$code]) === false) {
+        $values[$code] = (int) ($values[$code] / 10);
+      } else {
+        unset($values[$code]);
+      }
+    }
+    if(sizeof($values) === sizeof($codes)) {
+      $text = implode("x", $values)." cm";
+      $highlights[] = [
+        "image" => $image,
+        "title" => $title,
+        "text"  => $text,
+      ];
+      $i++;
     }
   }
-  if(sizeof($values) === sizeof($attribute_names)) {
-    $text = implode("x", $values)." cm";
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
+  
+  // Try Width + Depth
+  if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
+    $codes  = ["breedte", "diepte"];
+    $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
+    $title  = "Afmetingen (BxD)";
+    $values = [];
+    foreach($codes as $code) {
+      $values[$code] = _get_product_attribute($_product, $code);
+      if(empty($values[$code]) === false) {
+        $values[$code] = (int) ($values[$code] / 10);
+      } else {
+        unset($values[$code]);
+      }
+    }
+    if(sizeof($values) === sizeof($codes)) {
+      $text = implode("x", $values)." cm";
+      $highlights[] = [
+        "image" => $image,
+        "title" => $title,
+        "text"  => $text,
+      ];
+      $i++;
+    }
   }
 }
 
+// Diameter
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "diameter";
-  $image = "{$skn}frontend/rwd/dhh/images/diameter.svg";
-  $title = "Diameter";
-  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "diameter";
+  $image  = "{$skin}frontend/rwd/dhh/images/diameter.svg";
+  $title  = "Diameter";
+  $text   = (int) $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
   if(empty($text) === false) {
     $highlights[] = [
       "image" => $image,
@@ -312,105 +354,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Warranty
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "afsluitbaar";
-  $image = "{$skn}frontend/rwd/dhh/images/key.svg";
-  $title = "Afsluitbaar";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if($text === "Ja") {
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-      "name"  => $title,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $attribute_name = "size";
-  $image = "{$skn}frontend/rwd/dhh/images/size.svg";
-  $title = "Maat";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if($text === "Ja") {
-    $text = "Afsluitbaar";
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $attribute_name = "type_koeling";
-  $image = "{$skn}frontend/rwd/dhh/images/forced_cooling.svg";
-  $title = "Koelmethode";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if($text === "Geforceerd" OR $text === "Recirculatie" OR $text === "Statisch met ventilator") {
-    $text = "{$text}";
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $attribute_name = "inhoud_liters";
-  $image = "{$skn}frontend/rwd/dhh/images/liters.svg";
-  $title = "Inhoud";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if(empty($text) === false) {
-    $text = round($text, 2)." liter";
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $image = "{$skn}frontend/rwd/dhh/images/freezer.svg";
-  $title = "Ontdooisysteem";
-  if($nofrost_method === "Automatisch") {
-    $nofrost_method = "Auto defrost";
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $attribute_name = "aantal_roosters";
-  $image = "{$skn}frontend/rwd/dhh/images/shelf.svg";
-  $title = "Roosters";
-  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if(empty($text) === false) {
-    $text = "{$text}";
-    $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $attribute_name = "garantie";
-  $image = "{$skn}frontend/rwd/dhh/images/guarantee.svg";
-  $title = "Garantie";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "garantie";
+  $image  = "{$skin}frontend/rwd/dhh/images/usps/guarantee.svg";
+  $title  = "Garantie";
+  $text   =  _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== "12 maanden") {
     $text = "{$text}";
     $highlights[] = [
@@ -422,11 +371,132 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Made in Europe
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "vermogen";
-  $image = "{$skn}frontend/rwd/dhh/images/watt.svg";
+  $code         = "made_in_country_2code";
+  $image        = "{$skin}frontend/rwd/dhh/images/usps/made_in_europe3.svg";
+  $title        = "Made In";
+  $value        = _get_product_attribute($_product, $code);
+  $eu_countries = ["België", "Bulgarije", "Tsjechië", "Duitsland", "Denemarken",
+    "Spanje", "Europese Unie", "Frankrijk", "Groot Brittanië", "Griekenland", 
+    "Kroatië", "Hongarije", "Italië", "Litouwen", "Nederland", "Polen", "Portugal", "Malta",
+    "Zweden", "Slovenië", "Slowakije", "Litouwen", "Oostenrijk", "Roemenië", "Cyprus",
+    "Ierland", "Estland", "Finland",
+  ];
+  if(in_array($value, $eu_countries, true)) {
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $value,
+      "name"  => $title,
+    ];
+    $i++;
+  }
+}
+
+// Lockable
+if($i < $max_highlighted_attributes) {
+  $code   = "afsluitbaar";
+  $image  = "{$skin}frontend/rwd/dhh/images/key.svg";
+  $title  = "Afsluitbaar";
+  $text   = _get_product_attribute($_product, $code);
+  if($text === "Ja") {
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+      "name"  => $title,
+    ];
+    $i++;
+  }
+}
+
+// Size
+if($i < $max_highlighted_attributes) {
+  $code   = "size";
+  $image  = "{$skin}frontend/rwd/dhh/images/size.svg";
+  $title  = "Maat";
+  $text   = _get_product_attribute($_product, $code);
+  if($text === "Ja") {
+    $text = "Afsluitbaar";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+// Cooling method
+if($i < $max_highlighted_attributes) {
+  $code   = "type_koeling";
+  $image  = "{$skin}frontend/rwd/dhh/images/forced_cooling.svg";
+  $title  = "Koelmethode";
+  $text   = _get_product_attribute($_product, $code);
+  if($text === "Geforceerd" OR $text === "Recirculatie" OR $text === "Statisch met ventilator") {
+    $text = "{$text}";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+// Contents
+if($i < $max_highlighted_attributes) {
+  $code   = "inhoud_liters";
+  $image  = "{$skin}frontend/rwd/dhh/images/liters.svg";
+  $title  = "Inhoud";
+  $text   = _get_product_attribute($_product, $code);
+  if(empty($text) === false) {
+    $text = round($text, 2)." liter";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+// Auto defrost
+if($i < $max_highlighted_attributes) {
+  if($nofrost_method === "Auto Defrost") {
+    $highlights[] = [
+      "image" => "{$skin}frontend/rwd/dhh/images/freezer.svg",
+      "title" => "Ontdooisysteem",
+      "text"  => $nofrost_method,
+    ];
+    $i++;
+  }
+}
+
+// Number of shelves
+if($i < $max_highlighted_attributes) {
+  $code = "aantal_roosters";
+  $image = "{$skin}frontend/rwd/dhh/images/shelf.svg";
+  $title = "Roosters";
+  $text = (int) _get_product_attribute($_product, $code);
+  if(empty($text) === false) {
+    $text = "{$text}";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+// Power (electrical)
+if($i < $max_highlighted_attributes) {
+  $code = "vermogen";
+  $text = (int) _get_product_attribute($_product, $code);
+  $image = "{$skin}frontend/rwd/dhh/images/watt.svg";
   $title = "Vermogen";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
   if(empty($text) === false) {
     if(ctype_alnum($text) || is_numeric($text)) {
       $text = str_replace(",", ".", $text);
@@ -442,21 +512,6 @@ if($i < $max_highlighted_attributes) {
       // For non-numbers like "2 x 3"
     }
     $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
-    ];
-    $i++;
-  }
-}
-
-if($i < $max_highlighted_attributes) {
-  $code   = "voltage";
-  $image  = "{$skn}frontend/rwd/dhh/images/volt.svg";
-  $title  = "Voltage";
-  $text   = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-  if(empty($text) === false && strtolower($text) !== "n.v.t.") {
-    $highlights[] = [
       "image"   => $image,
       "title"   => $title,
       "text"    => $text,
@@ -465,27 +520,33 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Voltage
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "aantal_omwentelingen_minuut";
-  $image = "{$skn}frontend/rwd/dhh/images/rpm.svg";
-  $title = "RPM";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
-  if(empty($text) === false) {
-    $text = "{$text}";
+  $code   = "voltage";
+  $value  = $voltage;
+  $image  = "{$skin}frontend/rwd/dhh/images/volt.svg";
+  $name   = "Voltage";
+  $title  = "Voltage";
+  if(is_scalar($value) && (stripos($value, "400") !== false)) {
+    $title = "Let op: 400 volt";
+  }
+  if(empty($value) === false && strtolower($value) !== "n.v.t.") {
     $highlights[] = [
-      "image" => $image,
-      "title" => $title,
-      "text"  => $text,
+      "image"   => $image,
+      "name"    => $name,
+      "title"   => $title,
+      "text"    => $value,
     ];
     $i++;
   }
 }
 
+// Power (gas)
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "vermogen_kw";
-  $image = "{$skn}frontend/rwd/dhh/images/flame.svg";
-  $title = "Vermogen (gas)";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code = "vermogen_kw";
+  $image  = "{$skin}frontend/rwd/dhh/images/flame.svg";
+  $title  = "Vermogen (gas)";
+  $text   = _get_product_attribute($_product, $code);
   if(empty($text) === false) {
     $text = number_format($text, 1, ",", ".");
     $text = str_replace(",0", null, $text);
@@ -501,11 +562,29 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// RPM
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "geluidsniveau";
-  $image = "{$skn}frontend/rwd/dhh/images/quiet.svg";
-  $title = "Stil apparaat";
-  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "aantal_omwentelingen_minuut";
+  $image  = "{$skin}frontend/rwd/dhh/images/rpm.svg";
+  $title  = "RPM";
+  $text   = _get_product_attribute($_product, $code);
+  if(empty($text) === false) {
+    $text = "{$text}";
+    $highlights[] = [
+      "image" => $image,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+// Sound level
+if($i < $max_highlighted_attributes) {
+  $code   = "geluidsniveau";
+  $image  = "{$skin}frontend/rwd/dhh/images/quiet.svg";
+  $title  = "Stil apparaat";
+  $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text < 50) {
     $text = "{$text} dB";
     $highlights[] = [
@@ -517,11 +596,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Lighting
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "verlichting";
-  $image = "{$skn}frontend/rwd/dhh/images/light.svg";
-  $title = "Verlichting";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "verlichting";
+  $image  = "{$skin}frontend/rwd/dhh/images/light.svg";
+  $title  = "Verlichting";
+  $text   = _get_product_attribute($_product, $code);
   if(empty($text) === false && $text === "Ja") {
     $highlights[] = [
       "image" => $image,
@@ -533,11 +613,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Capacity bottles
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "aantal_flessen";
-  $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
-  $title = "Flesjes";
-  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "aantal_flessen";
+  $image  = "{$skin}frontend/rwd/dhh/images/wine.svg";
+  $title  = "Flesjes";
+  $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== "Nee") {
     $text = "{$text} X";
     $highlights[] = [
@@ -549,11 +630,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Capacity wine bottles
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "capacity_wine_bottles";
-  $image = "{$skn}frontend/rwd/dhh/images/wine.svg";
-  $title = "Aantal 75cl Wijnflessen";
-  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "capacity_wine_bottles";
+  $image  = "{$skin}frontend/rwd/dhh/images/wine.svg";
+  $title  = "Aantal 75cl Wijnflessen";
+  $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== "Nee") {
     $text = "{$text} x 75cl.";
     $highlights[] = [
@@ -565,11 +647,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Capacity cooking zones
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "cooking_zones";
-  $image = "{$skn}frontend/rwd/dhh/images/stove.svg";
-  $title = "Kookzones";
-  $text = (int) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "cooking_zones";
+  $image  = "{$skin}frontend/rwd/dhh/images/stove.svg";
+  $title  = "Kookzones";
+  $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== "Nee") {
     $text = "{$text} X";
     $highlights[] = [
@@ -581,11 +664,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Double glass
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "glas";
-  $image = "{$skn}frontend/rwd/dhh/images/doubleglass.svg";
-  $title = "Dubbel glas";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "glas";
+  $image  = "{$skin}frontend/rwd/dhh/images/doubleglass.svg";
+  $title  = "Dubbelglas";
+  $text   = _get_product_attribute($_product, $code);
   if($text === "dubbel glas") {
     $highlights[] = [
       "image" => $image,
@@ -596,11 +680,12 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Refrigerant
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "refrigerant";
-  $image = "{$skn}frontend/rwd/dhh/images/refrigerant.svg";
-  $title = "Koelmiddel";
-  $text = $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "refrigerant";
+  $image  = "{$skin}frontend/rwd/dhh/images/refrigerant.svg";
+  $title  = "Koelmiddel";
+  $text   = $refrigerant;
   if(empty($text ) === false) {
     $highlights[] = [
       "image" => $image,
@@ -611,11 +696,31 @@ if($i < $max_highlighted_attributes) {
   }
 }
 
+// Pallet transport
 if($i < $max_highlighted_attributes) {
-  $attribute_name = "eenheid";
-  $image = "{$skn}frontend/rwd/dhh/images/amount.svg";
-  $title = "Verpakkingseenheid";
-  $text = (double) $_product->getResource()->getAttribute($attribute_name)->getFrontend()->getValue($_product);
+  $code   = "transport_type";
+  $image  = "{$skin}frontend/rwd/dhh/images/usps/truck.svg";
+  $name   = "Levering";
+  $title  = "Wordt geleverd met een vrachtwagen";
+  $value  = _get_product_attribute($_product, $code);
+  $text   = "Palletvervoer";
+  if($value === "Palletvervoer") {
+    $highlights[] = [
+      "image" => $image,
+      "name"  => $name,
+      "title" => $title,
+      "text"  => $text,
+    ];
+    $i++;
+  }
+}
+
+// Product quantity
+if($i < $max_highlighted_attributes) {
+  $code   = "eenheid";
+  $image  = "{$skin}frontend/rwd/dhh/images/amount.svg";
+  $title  = "Aantal";
+  $text   = (double) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text > 1) {
     $highlights[] = [
       "image" => $image,
@@ -629,28 +734,27 @@ if($i < $max_highlighted_attributes) {
 $hlstr = null;
 foreach($highlights as $key => $highlight) {
   $name = $highlight["name"] ?? $highlight["title"];
-  $hlstr .= "<li><span class='key small gray mb-1'>{$name}:</span><img class='lazy no-transition' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span class='value'>{$highlight["text"]}</span></li>";
+  if(empty($name) === false) $name .= ":";
+  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='lazy no-transition' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span class='value'>{$highlight["text"]}</span></li>";
 }
 
-/* Impossible to influence the cross sell query, so filtering out EOLs afterwards */
-$_crossSellProducts = $_product->getCrossSellProducts();
-foreach($_crossSellProducts as $key => $_crossSellProduct) {
-  // print_r($_crossSellProduct->getId());
-  
-  $cross_sell_product = Mage::getModel('catalog/product')->load($_crossSellProduct->getId());
-  if($cross_sell_product->getAttributeText("eol") === "Ja") {
-    unset($_crossSellProducts[$key]);
-  } else {
-    $_crossSellProducts[$key] = $cross_sell_product;
-  }
+// Retrieve cross sell product collection
+Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_GET_CROSSSELL_SKUS");
+$cross_sell_ids = $_product->getCrossSellProductIds();
+if(sizeof($cross_sell_ids) > 0) {
+  $_crossSellProducts = Mage::getResourceModel("catalog/product_collection")
+   ->addAttributeToFilter("entity_id", ["in" => $cross_sell_ids])
+   ->addAttributeToFilter("eol", ["neq" => 2075])
+   ->addAttributeToSelect(DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview"))
+   ->setOrder("popularity", "ASC");
 }
+Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_GET_CROSSSELL_SKUS");
 
-$additional_attributes = $_product->getData("additional_attributes");
-$additional_attributes = Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($additional_attributes);
+$additional_attributes = Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($_product->getData("additional_attributes"));
 
-/** PRODUCT DESCRIPTION **/
+/* PRODUCT DESCRIPTION */
 
-/* Configurable products only */
+// Configurable products: Print attribute/stock table
 if($saleable === true && $this->hasOptions()) {
   $product_description .= "<h3>Varianten</h3>";
   $product_description .= "<p class='py-0'>De {$product_title_short} kent meerdere varianten. Configureer het product eenvoudig voordat je het koopt.</p>";
@@ -663,42 +767,29 @@ if(strlen($product_description_md) > 0) {
   $product_description .= $_product->getResource()->getAttribute("supplier_description")->getFrontend()->getValue($_product);
 }
 
-if(strtolower($nofrost_method) === 'Automatisch') {
-  $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_ontdooisysteem_automatisch')->toHtml().'</div>';
+// Add specific blocks to the description based on attributes
+if($refrigerant === "R290" || $refrigerant === "R290a") {
+  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r290")->toHtml()."</div>";
 }
-
-$code = "voltage";
-$text = $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
-if($text === "400") {
-  $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_aansluitspanning_400')->toHtml().'</div>';
+if($refrigerant === "R600" || $refrigerant === "R600a" || $refrigerant === "R660a") {
+  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r600")->toHtml()."</div>";
 }
-
-$attributekoelmiddel = $_product->getResource()->getAttribute('refrigerant');
-$attribute_valuekoelmiddel = $attributekoelmiddel->getFrontend()->getValue($_product);
-if($attribute_valuekoelmiddel === "R290") {
-  $product_description .= '<div class="std">'.$this->getLayout()->createBlock('cms/block')->setBlockId('productpage_koelmiddel_r290')->toHtml().'</div>';
-}
-
-// if(empty($_crossSellProducts) === false) {
-  // $product_description .= "<p class='py-2'>De {$product_title_short} heeft één of meer door de leverancier <a href='#accessoires'>geselecteerde accessoires en/of verbruiksproducten.</a></p>";
-// }
 
 if(strlen($product_description) === 0) {
   $product_description = "&nbsp;";
 }
 
-/** PRODUCT LINKS **/
+/* PRODUCT LINKS */
 
-$related_products_block = $this->getChildHtml("related_products");
-$product_additional_data_block = $this->getChildHtml("product_additional_data");
-$alternative_products_block = $this->getChildHtml("upsell_products");
-if(empty($alternative_products_block) === true) {
-  $upsell_products_block = $this->getLayout()->createBlock('awautorelated/blocks')->setBlockId(1)->toHtml();
+$related_products_block         = $this->getChildHtml("related_products");
+$product_additional_data_block  = $this->getChildHtml("product_additional_data");
+$alternative_products_block     = $this->getChildHtml("upsell_products");
+if(empty($alternative_products_block) && empty($related_products_block)) {
+  $upsell_products_block = $this->getLayout()->createBlock("awautorelated/blocks")->setBlockId(1)->toHtml();
 }
 
-/** ANCHOR LINKS **/
+/* ANCHOR LINKS */
 
-// $anchors["photos"] = "Foto's";
 if(empty($pvideo) === false)                        $anchors["video"]               = "Productvideo";
 if(strlen($product_description) > 10)               $anchors["description"]         = "Productbeschrijving";
 if(empty($_crossSellProducts) === false)            $anchors["accessoires"]         = "Vaak samen gekocht";
@@ -712,7 +803,7 @@ if(empty($related_products_block) === false)        $anchors["related"]         
 
 $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "detail");
 
-/** CALCULATED/DERIVED FIELDS **/
+/* CALCULATED/DERIVED FIELDS */
 
 // If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
 if($stock_data["overall_stock_status"] === "backorder"
@@ -722,7 +813,7 @@ if($stock_data["overall_stock_status"] === "backorder"
   $productlabel = "Alternatieven beschikbaar";
 }
 
-/** START RENDERING **/
+/* START RENDERING */
 
 ?>
 <script>var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
@@ -776,8 +867,8 @@ if($stock_data["overall_stock_status"] === "backorder"
         
         <?php /* Add to Cart Block */ ?>
         
-        <form action="<?php echo $this->getSubmitUrl($_product, array('_secure' => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-          <?php echo $this->getBlockHtml('formkey') ?>
+        <form action="<?php echo $this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+          <?php echo $this->getBlockHtml("formkey") ?>
           <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
           <input type="hidden" name="related_product" id="related-products-field" value="" />
           <div class="prodetailtopright">
@@ -945,11 +1036,9 @@ if($stock_data["overall_stock_status"] === "backorder"
     <?php
     if(empty($hlstr) === false) {
       ?>
-      <div class="my-3 py-1 pt-1 product-highlight-box">
+      <div class="my-3 py-1 pt-1 product-highlight-box center">
         <span class="anchor" id="highlights"></span>
-        <div class="content center">
-          <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
-        </div>
+        <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
       </div>
       <?php
     }
@@ -960,13 +1049,17 @@ if($stock_data["overall_stock_status"] === "backorder"
     }
 
     /* Product Video */
-    if(empty($pvideo) === false) {
-      $pvideo = Mage::helper("deheerhoreca_util/util")->build_product_video_url($pvideo);
-      ?>
+    if(empty($pvideo) === false) { ?>
       <div class="py-1">
         <span class="anchor" id="video"></span>
         <div class="content center">
-          <iframe class="lazy" width="534" height="300" data-src="<?php echo $pvideo; ?>" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style='border:0;max-width:100%;'></iframe>
+          <?php
+          $pvideos = explode(";", $pvideo);
+          foreach($pvideos as $video_key) {
+            $yt_url = Mage::helper("deheerhoreca_util/util")->build_product_video_url($pvideo);
+            echo "<iframe class='lazy' width='534' height='300' data-src='{$yt_url}' allow='accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture' allowfullscreen style='border:0;max-width:100%;' frameborder='0'></iframe>";
+          }
+          ?>
         </div>
       </div>
       <?php
@@ -993,6 +1086,7 @@ if($stock_data["overall_stock_status"] === "backorder"
         <div class="topproducts_containter">
           <span class="anchor" id="accessoires"></span>
           <h2 class="tableftheader">Vaak samen gekocht</h2>
+          <div>Deze combinaties worden aangeraden door de fabrikant, dus dat zit goed!</div>
           <?php
           $_columnCount = 4;
           $i = 0;
@@ -1096,7 +1190,7 @@ if($stock_data["overall_stock_status"] === "backorder"
     
     <?php /* External Documents */ ?>
     <?php
-    if(empty($external_documents_json) === false) {
+    if(empty($external_documents_json) === false && $external_documents_json !== "[]") {
       $external_documents = json_decode($external_documents_json, true);
       // printr($external_document);
       ?>
@@ -1171,13 +1265,13 @@ if($stock_data["overall_stock_status"] === "backorder"
     
     <?php /* Brand Logo & Text */ ?>
       
-    <div class="probottomdv" id="product-brand-text">
-      <?php
-      if(strlen($htbrand) > 10) { //sometimes it's just &nbsp;
+    <?php
+      if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
         ?>
+        <div class="probottomdv" id="product-brand-text">
         <span class="anchor" id="brand"></span>
         <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>
-        <div class="brand std justify"><?php echo $htbrand; ?></div>
+        <div class="brand std justify"><?php echo $brand_block_name; ?></div>
         <?php
       }
       if(empty($brand_logo) === false) {
@@ -1185,8 +1279,8 @@ if($stock_data["overall_stock_status"] === "backorder"
         echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
         echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
       }
+      echo "</div>";
       ?>
-    </div>
   </div>
 </div>
 
@@ -1239,6 +1333,13 @@ if($stock_data["overall_stock_status"] === "backorder"
     }
   }.bind(productAddToCartForm);
   //]]>
+  <?php
+  if($javascripts !== []) {
+    foreach($javascripts as $javascript_statement) {
+      echo $javascript_statement.PHP_EOL.PHP_EOL;
+    }
+  }
+  ?>
 </script>
 
 <?php
@@ -1249,15 +1350,6 @@ if(function_exists("sanitizeForFilename") === false) {
     return strtolower($output);
   }
 }
-
-
-/*
-if($_SERVER["REMOTE_ADDR"] === "185.127.111.251") {
-  echo "<pre>";
-  var_dump($used_conf_attributes);
-  echo "</pre>";
-}
-*/
 
 function _print_configurable_table($_product) {
   $children = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $_product);

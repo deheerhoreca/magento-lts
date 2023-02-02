@@ -1,7 +1,6 @@
-<?php
-$page_title = $this->getTitle();
-$page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($page_title);
-?><meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>">
+<?php $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->getTitle());?>
+<base href="https://www.chefstore.nl">
+<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>">
 <title><?php echo $page_title; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7">
 <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>">
@@ -28,23 +27,25 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($page_ti
 <meta name="msapplication-square150x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-150x150.png">
 <meta name="msapplication-wide310x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x150.png">
 <meta name="msapplication-square310x310logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x310.png">  
-<script src="//cdn.jsdelivr.net/npm/vanilla-lazyload@17.7.0/dist/lazyload.min.js" crossorigin="anonymous"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js"></script>
-<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script> -->
-<script src="//cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
-<!-- 2 libs for amshopby` --><script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.13.0/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.8.3/lazyload.min.js" integrity="sha512-PYqZh14FSExDb67jbM60M4ri5A/Bn/xOiM1ihfPx7c1d8XywMmn2M7+Z4i+v9RF9dlzRYzqk7sXamAHKZjfyFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js" integrity="sha512-C4LuwXQtQOF1iTRy3zwClYLsLgFLlG8nCV5dCxDjPcWsyFelQXzi3efHRjptsOzbHwwnXC3ZU+sWUh1gmxaTBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.js" integrity="sha512-tFQQEtUF7MH7RfTK9J8NNGj+NsBv5N12XtOm8ZR/JgcTm4fuMNh5ipwpwgYjUJheikSNDlSXXCb+cVZLQyemRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js" integrity="sha512-X0qkS1666/WH6PX1gp5piXLWt7D9zEjf5dRB8RDjUk22+1svCaQQ8CO9MRUItudZ7Gnc/BaCRrfYjD9xHUJh1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<?php /* <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script> --> */ ?>
+<script src="//cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js" integrity="sha512-S/H9RQ6govCzeA7F9D0m8NGfsGf0/HjJEiLEfWGaMCjFzavo+DkRbYtZLSO+X6cZsIKQ6JvV/7Y9YMaYnSGnAA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<?php /*  2 libs for amshopby` */?>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <?php
 echo $this->getCssJsHtml();
 echo $this->getChildHtml();
-# https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
+# //fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
 echo $this->helper("core/js")->getTranslatorScript();
 echo $this->getIncludes();
 ?>
-<!-- because this allows control of font-display -->
+<?php /* Because this allows control of font-display */ ?>
 <link as="font" href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="preload" as="font" href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" crossorigin="anonymous">
-<!-- <link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet" crossorigin="anonymous"> -->
-<link href="//cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet" crossorigin="anonymous">
+<?php /* <link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet" crossorigin="anonymous"> */ ?>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" integrity="sha512-T+KoG3fbDoSnlgEXFQqwcTC9AdkFIxhBlmoaFqYaIjq2ShhNwNao9AKaLUPMfwiBPL0ScxAtc+UYbHAgvd+sjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />

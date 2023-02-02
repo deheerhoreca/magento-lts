@@ -8,13 +8,8 @@
 $limits = $this->getAvailableLimit();
 
 if($this->getCollection()->getSize()) {
-  $size_human = $this->getCollection()->getSize();
-  if($size_human > 1000) {
-    $size_human = "Meer dan 1000";
-  }
-  ?>
-  <div class="toolbar">
-  <?php if($this->isExpanded()) { ?>
+  echo "<div class='toolbar'>";
+  if($this->isExpanded() && defined("DHH_SORTING_BLOCK_PRINTED") === false) { ?>
     <div class="sorter">
       <div class="sort-by">
         <label><?php echo $this->__("Sort By") ?></label>
@@ -34,21 +29,22 @@ if($this->getCollection()->getSize()) {
         <?php endif; ?>
       </div>
     </div>
-  <?php } ?>
+    <?php
+  }
   
-  <div class="sorter">
-    <p><strong><?php echo $size_human; ?></strong> producten om uit te kiezen</p>
-  </div>
-  
+  if(defined("DHH_SORTING_BLOCK_PRINTED") === false) {
+    $size_human = $this->getCollection()->getSize();
+    if($size_human > 1000) {
+      $size_human = "Meer dan 1000";
+    }
+    echo "<div class='sorter'><p><strong>{$size_human}</strong> producten om uit te kiezen</p></div>";
+  }
+  ?>
   <div class="pager">  
     <div class="count-container">
       <?php if($this->getLastPageNum()>1): ?>
         <p class="amount amount--has-pages">
           <?php echo $this->__("%s-%s of %s", $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-        </p>
-      <?php else: ?>
-        <p class="amount amount--no-pages">
-          <strong><?php echo $this->__("%s Item(s)", $this->getTotalNum()) ?></strong>
         </p>
       <?php endif; ?>
 

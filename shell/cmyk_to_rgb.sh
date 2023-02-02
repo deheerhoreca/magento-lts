@@ -10,7 +10,7 @@ for f in ${pattern}
     then
       echo Convert ${type} ${f}
       # convert $f -colorspace RGB ./$
-      convert  $f -colorspace CMYK -colorspace RGB $f # uncomment this line and comment previous line if previous line is not working.
+      convert $f -colorspace CMYK -colorspace RGB $f # uncomment this line and comment previous line if previous line is not working.
     else
       echo ${type} ${f}
     fi

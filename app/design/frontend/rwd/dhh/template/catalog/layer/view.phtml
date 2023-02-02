@@ -5,31 +5,60 @@
  * @see Mage_Catalog_Block_Layer_View
  */
 
-if($this->canShowBlock()): ?>
-<?php $filters = Mage::getSingleton("catalog/layer")->getState()->getFilters(); ?>
-<div class="block block-layered-nav<?php if (!$this->getLayer()->getState()->getFilters()): ?> block-layered-nav--no-filters<?php endif; ?>">
-  <?php if(empty($filters) !== true) { ?>
-    <div class="block-title">
-      <strong><span>Huidige filters:</span></strong>
-    </div>
-  <?php
+if($this->canShowBlock()) {
+  $filters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
+  $classes = "block block-layered-nav";
+  if(!$filters) {
+    $classes .= " block-layered-nav--no-filters";
   }
-  ?>
-  <div class="block-content toggle-content">
-    <?php echo $this->getStateHtml(); ?>    
-    <?php if($this->canShowOptions()): ?>
-      <p class="block-subtitle block-subtitle--filter"><?php echo $this->__('Filter') ?></p>
-      <dl id="narrow-by-list">
-        <?php $_filters = $this->getFilters() ?>
-        <?php foreach ($_filters as $_filter): ?>
-        <?php if($_filter->getItemsCount()): ?>
-          <dt><?php echo $this->__($_filter->getName()) ?></dt>
-          <dd><?php echo $_filter->getHtml() ?></dd>
-        <?php endif; ?>
-        <?php endforeach; ?>
-      </dl>
-      <script>decorateDataList('narrow-by-list')</script>
-    <?php endif; ?>
+  echo "<div class='{$classes}'>";
+    if(empty($filters) !== true) {
+      echo "<div class='block-title'><strong><span>Huidige filters:</span></strong></div>";
+    }
+    ?>
+    <div class="block-content toggle-content">
+      <?php
+      echo $this->getStateHtml();  
+      if($this->canShowOptions()) {
+        ?>
+        <p class="block-subtitle block-subtitle--filter"><?php echo $this->__("Filter") ?></p>
+        <dl id="narrow-by-list">
+          <?php
+          $_filters = $this->getFilters();
+          foreach($_filters as $_filter) {
+            $sys_name = $_filter->getName();
+            Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
+            if($_filter->getItemsCount()) {
+              $name = $this->__($sys_name);
+              
+              // Special handling of Category filter
+              if($name === "Categorie") {                
+                // Don't display this filter if there are no subcategories
+                $name = "Verder verfijnen"; // DHH
+                $items = $_filter->getItems();
+                $good_to_go = false;
+                foreach($items as $item) {
+                  if($item->getLevel() > 1) {
+                    $good_to_go = true;
+                    break;
+                  }
+                }
+                if($good_to_go === false) {
+                  continue;
+                }
+              }
+              echo "<dt>{$name}</dt>".PHP_EOL;
+              echo "<dd>{$_filter->getHtml()}</dd>".PHP_EOL;
+            }
+            Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
+          }
+          ?>
+        </dl>
+        <script>decorateDataList("narrow-by-list")</script>
+      <?php
+      }
+      ?>
+    </div>
   </div>
-</div>
-<?php endif; ?>
+<?php
+}

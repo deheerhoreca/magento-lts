@@ -133,6 +133,8 @@ class AW_Autorelated_Adminhtml_Awautorelated_BlocksgridController extends Mage_A
             Mage::getSingleton('adminhtml/session')->addError($this->__('Please select item(s)'));
         } else {
             try {
+                // DHH CORE HACK -- @see https://www.alterweb.nl/techtalk/aheadworks-autorelated-security-issue
+                $blocksId = array_filter($blocksId, 'is_numeric');
                 $db = Mage::getSingleton('core/resource')->getConnection('core_write');
                 $db->query(
                     'UPDATE `' . Mage::getSingleton('core/resource')->getTableName('awautorelated/blocks')

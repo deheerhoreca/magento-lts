@@ -544,13 +544,6 @@
     margin-top: -3px;
   }
   
-  #narrow-by-list,
-  #narrow-by-list2 {
-    padding: 10px;
-    border: 1px solid #cccccc;
-    border-top: 0;
-  }
-  
   .block-layered-nav dl ol>li>a,
   .block-layered-nav dl ol>li>span {
     padding: 7px;
@@ -1070,6 +1063,18 @@
   
   .products-grid-mini-wide div.product-info {
     min-height: 210px !important;
+  }
+  
+  .animate {
+    animation-duration: 0.2s;
+    animation-name: animate-fade;
+    animation-delay: 0.1s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes animate-fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
   }
 }
 
