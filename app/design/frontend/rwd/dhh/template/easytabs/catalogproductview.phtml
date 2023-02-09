@@ -22,10 +22,16 @@ $brand_link                 = "/shop?manufacturer={$brand_id}";
 $anchors                    = [];
 $in3_minimum                = 100 / 1.21;
 $in3_maximum                = 3000 / 1.21;
-// $billink_minimum           = 10;
-// $billink_maximum           = 3500;
+$billink_minimum            = 10;
+$billink_maximum            = 3500;
 $biller_minimum             = 10;
 $biller_maximum             = 5000;
+$mondu_pl_minimum           = 500;
+$mondu_pl_maximum           = 10000;
+$mondu_lease_minimum        = 750;
+$mondu_lease_maximum        = 20000;
+$grenke_lease_minimum       = 1000;
+$grenke_lease_maximum       = 10000;
 $show_black_friday          = false;
 $javascripts                = [];
 $brand_block_name           = "";
@@ -146,7 +152,7 @@ $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
   </li>
   <li class=my-1>
     <i class='fa-li fa fa-phone' title='Bellen'></i>
-    <a class='glightbox4' data-gallery=c data-glightbox='effect:fade; width:600px;' href='/media/static/contact.php'>Contact opnemen</a></i>
+    <a class='glightbox4' data-gallery=c data-glightbox='effect:fade; width:600px;' href='/media/static/contact.php'>Contact opnemen</a>
   </li>
 </ul>";
 
@@ -170,10 +176,27 @@ if(empty($our_usps) === false) {
 // Payment methods content
 if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
   
-  $payment_methods_texts = [];
+  $payment_methods_texts  = [];
   
+  // Lease
+  if($_finalPrice >= $mondu_lease_minimum || $_finalPrice >= $grenke_lease_minimum) {
+    $text = "Leasen tegen scherpe tarieven";
+    $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/lease.php'>{$text}</a>";
+  }
+  
+  // BNPL
+  $bnpl_payment_methods   = [];  
+  if($_finalPrice >= $mondu_pl_minimum && $_finalPrice <= $mondu_pl_maximum) {
+    $bnpl_payment_methods[] = "Mondu";
+  }  
   if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
-    $text = "Betaal achteraf met Biller of Riverty (AfterPay)";
+    $bnpl_payment_methods[] = "Biller";
+  }  
+  if($_finalPrice >= $billink_minimum && $_finalPrice <= $billink_maximum) {
+    $bnpl_payment_methods[] = "Billink";
+  }
+  if($bnpl_payment_methods !== []) {
+    $text = "Betaal achteraf met ".implode(", ", $bnpl_payment_methods);
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/bnpl.php'>{$text}</a>";
   }
 
@@ -183,7 +206,7 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
     } else {
       $payment = number_format($_finalPrice / 3, 2, ",", ".");
       $payment = str_replace(",00", ",-", $payment);
-      $text = "Of 3x €{$payment} met In3";
+      $text = "Betaal in 3 termijnen van €{$payment} met In3";
     }
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=in3 data-glightbox='effect:fade; width:600px;' href='/media/static/in3.php'>{$text}</a>";
   }
@@ -496,7 +519,7 @@ if($i < $max_highlighted_attributes) {
   $code = "vermogen";
   $text = (int) _get_product_attribute($_product, $code);
   $image = "{$skin}frontend/rwd/dhh/images/watt.svg";
-  $title = "Vermogen";
+  $title = "Vermogen (ELEK)";
   if(empty($text) === false) {
     if(ctype_alnum($text) || is_numeric($text)) {
       $text = str_replace(",", ".", $text);
@@ -543,11 +566,11 @@ if($i < $max_highlighted_attributes) {
 
 // Power (gas)
 if($i < $max_highlighted_attributes) {
-  $code = "vermogen_kw";
+  $code   = "vermogen_kw";
   $image  = "{$skin}frontend/rwd/dhh/images/flame.svg";
-  $title  = "Vermogen (gas)";
-  $text   = _get_product_attribute($_product, $code);
-  if(empty($text) === false) {
+  $title  = "Vermogen (GAS)";
+  $text   = (float) _get_product_attribute($_product, $code);
+  if($text > 0) {
     $text = number_format($text, 1, ",", ".");
     $text = str_replace(",0", null, $text);
     if(strstr(strtolower($text), "V") === false) {
@@ -735,7 +758,7 @@ $hlstr = null;
 foreach($highlights as $key => $highlight) {
   $name = $highlight["name"] ?? $highlight["title"];
   if(empty($name) === false) $name .= ":";
-  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='lazy no-transition' id='hl-{$key}' data-src='{$highlight["image"]}' title='{$highlight["title"]}' /><span class='value'>{$highlight["text"]}</span></li>";
+  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' loading=lazy width=40 height=40><span class='value'>{$highlight["text"]}</span></li>".PHP_EOL;
 }
 
 // Retrieve cross sell product collection
@@ -1057,7 +1080,7 @@ if($stock_data["overall_stock_status"] === "backorder"
           $pvideos = explode(";", $pvideo);
           foreach($pvideos as $video_key) {
             $yt_url = Mage::helper("deheerhoreca_util/util")->build_product_video_url($pvideo);
-            echo "<iframe class='lazy' width='534' height='300' data-src='{$yt_url}' allow='accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture' allowfullscreen style='border:0;max-width:100%;' frameborder='0'></iframe>";
+            echo "<iframe loading=lazy width='534' height='300' src='{$yt_url}' allow='accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture' allowfullscreen style='border:0;max-width:100%;' frameborder='0'></iframe>";
           }
           ?>
         </div>
@@ -1158,31 +1181,28 @@ if($stock_data["overall_stock_status"] === "backorder"
       $helper = $this->helper("staempfli_productattachment");
       $upload_dir = Mage::getBaseUrl("media").$helper::UPLOAD_DIR;
       ?>
-      <div class="leftbranddv">
-        <h2 class="tableftheader"><?php echo $this->__("Documenten");?></h2>
-        <div class="probottomdv" id="product-documents-list">
-          <span class="anchor" id="documents"></span>
-          <ul class="fa-ul">
-            <?php
-            foreach($files as $document) {
-              if(empty($document["path"])) {
-                continue;
-              }
-              $url      = "{$upload_dir}/{$document['path']}";
-              $name     = $document["title"]    ?? ($document["filename"] ?? "-");
-              $filetype = $document["type"]     ?? null;
-              switch($filetype) {
-                case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
-                default:      $fa_icon  = "fa-file-o";      break;
-              }
-              echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}</a>";
-              echo "</li>";
+      <h2 class="tableftheader"><?php echo $this->__("Documenten");?></h2>
+      <div class="probottomdv" id="product-documents-list">
+        <span class="anchor" id="documents"></span>
+        <ul class="fa-ul">
+          <?php
+          foreach($files as $document) {
+            if(empty($document["path"])) {
+              continue;
             }
-            ?>
-          </ul>
-          
-        </div>
+            $url      = "{$upload_dir}/{$document['path']}";
+            $name     = $document["title"]    ?? ($document["filename"] ?? "-");
+            $filetype = $document["type"]     ?? null;
+            switch($filetype) {
+              case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
+              default:      $fa_icon  = "fa-file-o";      break;
+            }
+            echo "<li style='line-height:2.5em;'>";
+            echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}</a>";
+            echo "</li>";
+          }
+          ?>
+        </ul>
       </div>
       <?php
     }
@@ -1194,44 +1214,42 @@ if($stock_data["overall_stock_status"] === "backorder"
       $external_documents = json_decode($external_documents_json, true);
       // printr($external_document);
       ?>
-      <div class="leftbranddv">
-        <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
-        <div class="probottomdv" id="product-external-documents-list">
-          <span class="anchor" id="external-documents"></span>
-          <ul class="fa-ul">
-            <?php
-            $method = "aes128";
-            $iv = str_repeat("a", openssl_cipher_iv_length($method));
-            
-            foreach($external_documents as $external_document) {
-              if(empty($external_document["url"])) {
-                continue;
-              }
-              $url            = $external_document["url"];
-              $url_encrypted  = "/file.php?id=".base64_encode(openssl_encrypt($url, $method, "wijdelengeenurls", 0, $iv));
-              // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
-              $name           = $external_document["title"]     ?? $external_document["url"];
-              $filetype       = $external_document["filetype"]  ?? null;
-              $language       = $external_document["language"]      ?? null;
-              switch($filetype) {
-                case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
-                default:      $fa_icon  = "fa-file-o";      break;
-              }
-              if(empty($language) === false) {
-                if(is_scalar($language)) {
-                  $language = " (".strtoupper($language).")";
-                } elseif(is_array($language)) {
-                  $language = array_map("strtoupper", $language);
-                  $language = " (".implode(", ", $language).")";
-                }
-              }
-              echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
-              echo "</li>";
+      <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
+      <div class="probottomdv" id="product-external-documents-list">
+        <span class="anchor" id="external-documents"></span>
+        <ul class="fa-ul">
+          <?php
+          $method = "aes128";
+          $iv = str_repeat("a", openssl_cipher_iv_length($method));
+          
+          foreach($external_documents as $external_document) {
+            if(empty($external_document["url"])) {
+              continue;
             }
-            ?>
-          </ul>
-        </div>
+            $url            = $external_document["url"];
+            $url_encrypted  = "/view.php?id=".base64_encode(openssl_encrypt($url, $method, "wijdelengeenurls", 0, $iv));
+            // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
+            $name           = $external_document["title"]     ?? $external_document["url"];
+            $filetype       = $external_document["filetype"]  ?? null;
+            $language       = $external_document["language"]      ?? null;
+            switch($filetype) {
+              case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
+              default:      $fa_icon  = "fa-file-o";      break;
+            }
+            if(empty($language) === false) {
+              if(is_scalar($language)) {
+                $language = " (".strtoupper($language).")";
+              } elseif(is_array($language)) {
+                $language = array_map("strtoupper", $language);
+                $language = " (".implode(", ", $language).")";
+              }
+            }
+            echo "<li style='line-height:2.5em;'>";
+            echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+            echo "</li>";
+          }
+          ?>
+        </ul>
       </div>
       <?php
     }
@@ -1277,7 +1295,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       if(empty($brand_logo) === false) {
         echo "<div class='center'>";
         echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
-        echo "<img class='lazy' alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' /></a></div>";
+        echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' loading=lazy></a></div>";
       }
       echo "</div>";
       ?>

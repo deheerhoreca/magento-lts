@@ -206,7 +206,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
 
             // static and skin css
             $html .= $this->_prepareStaticAndSkinElements(
-                '<link rel="stylesheet" type="text/css" href="%s"%s />'."\n",
+                '<link rel="stylesheet" href="%s"%s>' . PHP_EOL,
                 empty($items['js_css']) ? array() : $items['js_css'],
                 empty($items['skin_css']) ? array() : $items['skin_css'],
                 $shouldMergeCss ? array(Mage::getDesign(), 'getMergedCssUrl') : null
@@ -214,7 +214,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
 
             // static and skin javascripts
             $html .= $this->_prepareStaticAndSkinElements(
-                '<script type="text/javascript" src="%s"%s></script>' . "\n",
+                '<script src="%s"%s></script>' . PHP_EOL,
                 empty($items['js']) ? array() : $items['js'],
                 empty($items['skin_js']) ? array() : $items['skin_js'],
                 $shouldMergeJs ? array(Mage::getDesign(), 'getMergedJsUrl') : null
@@ -222,15 +222,15 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
 
             // other stuff
             if (!empty($items['other'])) {
-                $html .= $this->_prepareOtherHtmlHeadElements($items['other']) . "\n";
+                $html .= $this->_prepareOtherHtmlHeadElements($items['other']) . PHP_EOL;
             }
 
             if (!empty($if)) {
                 // close !IE conditional comments correctly
                 if (strpos($if, "><!-->") !== false) {
-                    $html .= '<!--<![endif]-->' . "\n";
+                    $html .= '<!--<![endif]-->' . PHP_EOL;
                 } else {
-                    $html .= '<![endif]-->' . "\n";
+                    $html .= '<![endif]-->' . PHP_EOL;
                 }
             }
         }

@@ -176,7 +176,9 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Category extends Amasty_Shopby_Mo
 
         if ($items === null) {
             $startCategory = $this->getStartCategory();
-            $recursive = $this->displayType == self::DT_WSUBCAT || $this->displayType == self::DT_STATIC2LVL;
+            // $recursive = $this->displayType == self::DT_WSUBCAT || $this->displayType == self::DT_STATIC2LVL;
+            // DHH CORE HACK -- Just getting 1 level down for performance
+            $recursive = false;
 
             $level = $this->displayType == self::DT_WSUBCAT ? 1 : 0;
             $items = $this->getChildrenData($startCategory, $recursive, $level);
@@ -278,7 +280,8 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Category extends Amasty_Shopby_Mo
         $categories->addAttributeToFilter('is_active', 1);
         $categories->setOrder('position', 'asc');
 
-        $this->addCounts($categories);
+        // DHH CORE HACK: Too expensive
+        // $this->addCounts($categories);
         return $categories;
     }
 

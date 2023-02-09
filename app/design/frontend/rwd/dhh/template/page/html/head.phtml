@@ -1,12 +1,53 @@
-<?php $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->getTitle());?>
+<?php
+/*
+- @see https://speakerdeck.com/csswizardry/get-your-head-straight
+- @see https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
+- /js/ext-translator.js has to be updated manually and loaded after getCssJsHtml()!
+*/
+$page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->getTitle());
+?>
 <base href="https://www.chefstore.nl">
-<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>">
 <title><?php echo $page_title; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7">
+<?php /* Non-synchronous JS */ ?>
+<script>
+  var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-107353431-1"]),_gaq.push(["_trackPageview"]),function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//ssl.google-analytics.com/ga.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(t,a)}();</script>
+<script async src="//www.googletagmanager.com/gtag/js?id=G-SRTM9M2FM3"></script>
+<script>
+  function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-SRTM9M2FM3");
+  (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"20122079"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");
+  window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");$.src="//v2.zopim.com/?5GFYzGgeADrvMUAoHWiZPPglkc93U381";z.t=+new Date;$.type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+  !function(e,t,n,a,c,o,s){e.fbq||(c=e.fbq=function(){c.callMethod?c.callMethod.apply(c,arguments):c.queue.push(arguments)},e._fbq||(e._fbq=c),c.push=c,c.loaded=!0,c.version="2.0",c.queue=[],(o=t.createElement(n)).async=!0,o.src=a,(s=t.getElementsByTagName(n)[0]).parentNode.insertBefore(o,s))}(window,document,"script","//connect.facebook.net/en_US/fbevents.js"),fbq("init","808630443401252"),fbq("track","PageView");
+</script>
+<link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/skin/frontend/rwd/dhh/css/ext-glightbox.min.css" media="print" onload="this.media='all'">
+<script src="/js/ext-jquery.min.js"></script>
+<script src="/js/ext-prototype.min.js"></script>
+<script src="/js/ext-scriptaculous-builder.min.js"></script>
+<script src="/js/ext-scriptaculous-effects.min.js"></script>
+<script src="/js/ext-jquery-ui.min.js"></script>
+<script src="/js/ext-jquery.ui.touch-punch.min.js"></script>
+<script src="/js/ext-glightbox.min.js"></script>
+<?php /*<script src="/js/ext-lazyload.min.js"></script> */ ?>
+<script src="/js/ext-cookie-script.js" defer></script>
+<?php
+echo $this->getCssJsHtml();
+echo $this->getChildHtml();
+// echo $this->helper("core/js")->getTranslatorScript();
+?><script src="/js/ext-translator.js" defer></script><?php
+echo $this->getIncludes();
+?>
 <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>">
 <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>">
 <meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>">
-<meta name="theme-color" content="#fff">  
+<meta name="theme-color" content="#fff">
+<meta name="application-name" content="Chefstore.nl">
+<meta name="msapplication-TileColor" content="#fff">
+<meta name="msapplication-TileImage" content="/skin/frontend/rwd/dhh/images/favicons/mstile-144x144.png">
+<meta name="msapplication-square70x70logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-70x70.png">
+<meta name="msapplication-square150x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-150x150.png">
+<meta name="msapplication-wide310x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x150.png">
+<meta name="msapplication-square310x310logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x310.png">
 <link rel="apple-touch-icon" sizes="57x57" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="114x114" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-114x114.png">
 <link rel="apple-touch-icon" sizes="72x72" href="/skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-72x72.png">
@@ -20,32 +61,3 @@
 <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-16x16.png" sizes="16x16">
 <link rel="icon" type="image/png" href="/skin/frontend/rwd/dhh/images/favicons/favicon-128.png" sizes="128x128">
-<meta name="application-name" content="Chefstore.nl"/>
-<meta name="msapplication-TileColor" content="#fff">
-<meta name="msapplication-TileImage" content="/skin/frontend/rwd/dhh/images/favicons/mstile-144x144.png">
-<meta name="msapplication-square70x70logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-70x70.png">
-<meta name="msapplication-square150x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-150x150.png">
-<meta name="msapplication-wide310x150logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x150.png">
-<meta name="msapplication-square310x310logo" content="/skin/frontend/rwd/dhh/images/favicons/mstile-310x310.png">  
-<script src="//cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.8.3/lazyload.min.js" integrity="sha512-PYqZh14FSExDb67jbM60M4ri5A/Bn/xOiM1ihfPx7c1d8XywMmn2M7+Z4i+v9RF9dlzRYzqk7sXamAHKZjfyFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js" integrity="sha512-C4LuwXQtQOF1iTRy3zwClYLsLgFLlG8nCV5dCxDjPcWsyFelQXzi3efHRjptsOzbHwwnXC3ZU+sWUh1gmxaTBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.js" integrity="sha512-tFQQEtUF7MH7RfTK9J8NNGj+NsBv5N12XtOm8ZR/JgcTm4fuMNh5ipwpwgYjUJheikSNDlSXXCb+cVZLQyemRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js" integrity="sha512-X0qkS1666/WH6PX1gp5piXLWt7D9zEjf5dRB8RDjUk22+1svCaQQ8CO9MRUItudZ7Gnc/BaCRrfYjD9xHUJh1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<?php /* <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script> --> */ ?>
-<script src="//cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js" integrity="sha512-S/H9RQ6govCzeA7F9D0m8NGfsGf0/HjJEiLEfWGaMCjFzavo+DkRbYtZLSO+X6cZsIKQ6JvV/7Y9YMaYnSGnAA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<?php /*  2 libs for amshopby` */?>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<?php
-echo $this->getCssJsHtml();
-echo $this->getChildHtml();
-# //fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
-echo $this->helper("core/js")->getTranslatorScript();
-echo $this->getIncludes();
-?>
-<?php /* Because this allows control of font-display */ ?>
-<link as="font" href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous">
-<link rel="preload" as="font" href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" crossorigin="anonymous">
-<?php /* <link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet" crossorigin="anonymous"> */ ?>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" integrity="sha512-T+KoG3fbDoSnlgEXFQqwcTC9AdkFIxhBlmoaFqYaIjq2ShhNwNao9AKaLUPMfwiBPL0ScxAtc+UYbHAgvd+sjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />

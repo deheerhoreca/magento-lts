@@ -57,7 +57,7 @@ Contexts:
         - Detailview with special price
         - Related products with special price
   
-  - Context: 14   => Optional minimal price
+  - Context: 14   => Optional minimal price, used in case of volume discount
 - Grouped Products:
   - Context: 15   => Grouped products
 */
@@ -653,10 +653,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
       <?php
       if($this->getUseLinkForAsLowAs()) {
         echo "</a>";
+      } else {
+        echo "</span>";
       }
-      ?>
-        </span>
-      <?php
     }
     ?>
     </div>

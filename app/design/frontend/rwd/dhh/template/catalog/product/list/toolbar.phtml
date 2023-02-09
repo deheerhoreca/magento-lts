@@ -42,12 +42,6 @@ if($this->getCollection()->getSize()) {
   ?>
   <div class="pager">  
     <div class="count-container">
-      <?php if($this->getLastPageNum()>1): ?>
-        <p class="amount amount--has-pages">
-          <?php echo $this->__("%s-%s of %s", $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-        </p>
-      <?php endif; ?>
-
       <?php if(sizeof($limits) > 1) { ?>
         <div class="limiter">
           <label><?php echo $this->__("Toon") ?></label>
@@ -61,7 +55,14 @@ if($this->getCollection()->getSize()) {
         </div>
       <?php } ?>
     </div>
-    <?php echo $this->getPagerHtml() ?>
+    <?php
+    // @todo fix upstream
+    $pager_html = $this->getPagerHtml();
+    // $pager_html = str_replace("?p=1&", "?", $pager_html); // Remove ?p=1 for FPC
+    $pager_html = str_replace("?p=1\"", "\"", $pager_html); // Remove ?p=1 for FPC
+    // $pager_html = str_replace("&p=1", "", $pager_html); // Remove &p=1 for FPC
+    echo $pager_html;
+    ?>
   </div>
 </div>
 <?php

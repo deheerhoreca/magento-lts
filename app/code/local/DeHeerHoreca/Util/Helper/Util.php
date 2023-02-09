@@ -348,7 +348,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     ?>
     <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target;?>>
-      <img class="lazy center" id="product-collection-image-<?php echo $_product->getId(); ?>" data-src="<?php echo $img_url; ?>" alt="<?php echo $image_label; ?>" width="<?php echo $image_size; ?>" height="<?php echo $image_size; ?>" />
+      <img loading=lazy class="center" id="product-collection-image-<?php echo $_product->getId(); ?>" src="<?php echo $img_url; ?>" alt="<?php echo $image_label; ?>" width="<?php echo $image_size; ?>" height="<?php echo $image_size; ?>">
     </a>
     <div class="product-info">
       <div class="info">
@@ -1218,58 +1218,35 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     // Using 400 for 500 to be a bit flexible
     
-        // if(in_range($price_ex_vat, 2500 , 5000  )) $rates["72"] = $price_ex_vat * (1.95 / 100);
-    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["72"] = $price_ex_vat * (1.77 / 100);
-    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["72"] = $price_ex_vat * (1.74 / 100);
-    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["72"] = $price_ex_vat * (1.72 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates[15] = $price_ex_vat * (7.73 / 100);
+    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[15] = $price_ex_vat * (7.60 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[15] = $price_ex_vat * (7.53 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[15] = $price_ex_vat * (7.45 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[15] = $price_ex_vat * (7.40 / 100);
     
-        if(in_range($price_ex_vat, 400  , 2500  )) $rates["60"] = $price_ex_vat * (2.43 / 100);
-    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["60"] = $price_ex_vat * (2.25 / 100);
-    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["60"] = $price_ex_vat * (2.10 / 100);
-    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["60"] = $price_ex_vat * (2.01 / 100);
-    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["60"] = $price_ex_vat * (1.97 / 100);
-
-        // if(in_range($price_ex_vat, 400  , 2500  )) $rates["54"] = $price_ex_vat * (2.55 / 100);
-    // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["54"] = $price_ex_vat * (2.37 / 100);
-    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["54"] = $price_ex_vat * (2.28 / 100);
-    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["54"] = $price_ex_vat * (2.25 / 100);
-    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["54"] = $price_ex_vat * (2.21 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates[24] = $price_ex_vat * (4.99 / 100);
+    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[24] = $price_ex_vat * (4.89 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[24] = $price_ex_vat * (4.78 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[24] = $price_ex_vat * (4.68 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[24] = $price_ex_vat * (4.63 / 100);
     
-        if(in_range($price_ex_vat, 400  , 2500  )) $rates["48"] = $price_ex_vat * (2.76 / 100);
-    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["48"] = $price_ex_vat * (2.57 / 100);
-    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["48"] = $price_ex_vat * (2.49 / 100);
-    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["48"] = $price_ex_vat * (2.43 / 100);
-    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["48"] = $price_ex_vat * (2.40 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates[36] = $price_ex_vat * (3.46 / 100);
+    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[36] = $price_ex_vat * (3.36 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[36] = $price_ex_vat * (3.27 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[36] = $price_ex_vat * (3.23 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[36] = $price_ex_vat * (3.20 / 100);
     
-        // if(in_range($price_ex_vat, 400  , 2500  )) $rates["42"] = $price_ex_vat * (3.03 / 100);
-    // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["42"] = $price_ex_vat * (2.94 / 100);
-    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["42"] = $price_ex_vat * (2.85 / 100);
-    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["42"] = $price_ex_vat * (2.83 / 100);
-    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["42"] = $price_ex_vat * (2.77 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates[48] = $price_ex_vat * (2.76 / 100);
+    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[48] = $price_ex_vat * (2.57 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[48] = $price_ex_vat * (2.55 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[48] = $price_ex_vat * (2.49 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[48] = $price_ex_vat * (2.46 / 100);
     
-        if(in_range($price_ex_vat, 400  , 2500  )) $rates["36"] = $price_ex_vat * (3.40 / 100);
-    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["36"] = $price_ex_vat * (3.29 / 100);
-    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["36"] = $price_ex_vat * (3.10 / 100);
-    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["36"] = $price_ex_vat * (3.07 / 100);
-    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["36"] = $price_ex_vat * (3.02 / 100);
-    
-        // if(in_range($price_ex_vat, 400  , 2500  )) $rates["30"] = $price_ex_vat * (4.05 / 100);
-    // elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["30"] = $price_ex_vat * (3.88 / 100);
-    // elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["30"] = $price_ex_vat * (3.81 / 100);
-    // elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["30"] = $price_ex_vat * (3.78 / 100);
-    // elseif(in_range($price_ex_vat, 25000, 150000)) $rates["30"] = $price_ex_vat * (3.75 / 100);
-    
-        if(in_range($price_ex_vat, 400  , 2500  )) $rates["24"] = $price_ex_vat * (4.75 / 100);
-    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["24"] = $price_ex_vat * (4.61 / 100);
-    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["24"] = $price_ex_vat * (4.51 / 100);
-    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["24"] = $price_ex_vat * (4.35 / 100);
-    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["24"] = $price_ex_vat * (4.32 / 100);
-    
-        if(in_range($price_ex_vat, 400  , 2500  )) $rates["15"] = $price_ex_vat * (7.08 / 100);
-    elseif(in_range($price_ex_vat, 2500 , 5000  )) $rates["15"] = $price_ex_vat * (7.03 / 100);
-    elseif(in_range($price_ex_vat, 5000 , 12500 )) $rates["15"] = $price_ex_vat * (7.01 / 100);
-    elseif(in_range($price_ex_vat, 12500, 25000 )) $rates["15"] = $price_ex_vat * (6.98 / 100);
-    elseif(in_range($price_ex_vat, 25000, 150000)) $rates["15"] = $price_ex_vat * (6.93 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates[60] = $price_ex_vat * (2.43 / 100);
+    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[60] = $price_ex_vat * (2.25 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[60] = $price_ex_vat * (2.15 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[60] = $price_ex_vat * (2.06 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[60] = $price_ex_vat * (2.02 / 100);
     
     if($time === "daily") {
       $rates = array_map( function($val) { return round(($val * 12) / 365, 2); }, $rates);

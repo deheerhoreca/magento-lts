@@ -16,10 +16,8 @@
 // Mixed mode = "products and static block"
 if($this->isMixedMode()) {
   
-  $_helper              = $this->helper("catalog/output");
   $_category            = $this->getCurrentCategory();
   $brand_name           = strtolower($_category->getName());
-  $shopby_block_html    = null;
   
   if(empty($brand_name) === false) {
     $brand                = sanitizeForFilename($brand_name);  
@@ -37,8 +35,30 @@ if($this->isMixedMode()) {
     $extra_block_name     = "shopbybrand-{$brand}";
   }
   
-  $brand_name           = $_helper->categoryAttribute($_category, $_category->getName(), "name");
+  $brand_name           = $this->helper("catalog/output")->categoryAttribute($_category, $_category->getName(), "name");
   $ctdesc_h1            = "Bekijk ons <span class='orange'>{$brand_name}</span> assortiment";
+}
+
+// Shop by brand series
+elseif(isset($_GET["manufacturer"]) && is_numeric($_GET["manufacturer"])) {
+  $singleton_prod = Mage::getSingleton('catalog/product')
+    ->setStoreId(Mage::app()->getStore()->getId())
+    ->setData("manufacturer", $_GET["manufacturer"]); 
+  $value = $singleton_prod->getAttributeText("manufacturer");
+  $ctdesc_h1 = "Bekijk ons <span class='orange'>{$value}</span> assortiment";
+  
+  // Guess the brand and try to find a logo
+  if(empty($value) === false) {
+    $brand                = sanitizeForFilename($value);  
+    $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+    $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
+    if(is_file($brand_logo_file) === true) {
+      $brand_logo         = "/".$brand_logo_file;
+    }
+  }
+  
+  // Optional block BRAND_SERIES is shown above the category tiles
+  $extra_block_name = "brand_series_{$brand_series}";
 }
 
 // Shop by brand series
@@ -46,12 +66,12 @@ elseif(isset($_GET["brand_series"]) && is_numeric($_GET["brand_series"])) {
   $singleton_prod = Mage::getSingleton('catalog/product')
     ->setStoreId(Mage::app()->getStore()->getId())
     ->setData("brand_series", $_GET["brand_series"]); 
-  $brand_series_name = $singleton_prod->getAttributeText("brand_series");
-  $ctdesc_h1 = "Bekijk ons <span class='orange'>{$brand_series_name}</span> assortiment";
+  $value = $singleton_prod->getAttributeText("brand_series");
+  $ctdesc_h1 = "Bekijk ons <span class='orange'>{$value}</span> assortiment";
   
   // Guess the brand and try to find a logo
-  if(empty($brand_series_name) === false) {
-    $brand_name           = strtok($brand_series_name, " ");
+  if(empty($value) === false) {
+    $brand_name           = strtok($value, " ");
     if(empty($brand_name) === false) {
       $brand                = sanitizeForFilename($brand_name);  
       $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);

@@ -7,7 +7,8 @@
 
 $_displayType         = $this->getDisplayType();
 $_multiselectEnabled  = Mage::helper('amshopby')->getCategoriesMultiselectMode();
-$_showCount           = !$this->getData('hide_counts');
+// $_showCount           = !$this->getData('hide_counts');
+$_showCount           = false; // Too expensive
 $_maxOptions          = max(0, Mage::getStoreConfig('amshopby/category_filter/categories_max_options'));
 
 if(Amasty_Shopby_Model_Catalog_Layer_Filter_Category::DT_ADVANCED != $_displayType) {
@@ -43,7 +44,6 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
     if($count > 1000) {
       $count = "1000+";
     }
-    $count = "";
     $label = trim(str_replace("[V]", "", $_item->getLabel())); // DHH
     $title = $label;
     if(strlen($label) > 29) {

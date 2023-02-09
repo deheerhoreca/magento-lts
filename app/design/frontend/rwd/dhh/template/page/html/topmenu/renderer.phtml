@@ -36,12 +36,12 @@ foreach($children as $child) {
   $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   
   if($childLevel < 2) $html .= "<li {$this->_getRenderedMenuItemAttributes($child)}>";
-  $html .= "<a title=\"{$category_name}\" href='{$url}' class='{$outermostClassCode}{$has_children_class}'>{$category_name}</a>";
+  $html .= "<a title=\"{$category_name}\" href='{$url}' >{$category_name}</a>";
 
   if($_hasChildren) {
-    if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";
+    if($childLevel < 1) $html .= PHP_EOL."<ul class='level{$childLevel}'>";
     $html .= $this->render($child, $childrenWrapClass);
-    if($childLevel < 1) $html .= "</ul>";
+    if($childLevel < 1) $html .= PHP_EOL."</ul>";
   }
 
   if($childLevel < 2) $html .= "</li>";

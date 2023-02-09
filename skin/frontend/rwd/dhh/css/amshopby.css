@@ -249,6 +249,7 @@ div.block-layered-nav dd a {
 .amshopby-slider-price-range {
   text-align: center;
   font-size: 0.9em;
+  visibility: hidden;
 }
 
 .amshopby-tooltip-img {

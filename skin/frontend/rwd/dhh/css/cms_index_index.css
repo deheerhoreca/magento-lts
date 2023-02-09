@@ -189,3 +189,13 @@ ul#brands li:last-child {
     padding: 0 !important;
   }
 }
+
+/** FEATURED PRODUCT BLOCK **/
+
+/* Overrides .std */
+.category-products {
+  line-height: 1.3em;
+}
+.category-products ul {
+  margin-bottom: 0;
+}

@@ -6,19 +6,16 @@
  */
 
 if($this->canShowBlock()) {
-  $filters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
   $classes = "block block-layered-nav";
-  if(!$filters) {
-    $classes .= " block-layered-nav--no-filters";
-  }
+  // $filters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
+  // if(!$filters) {
+    // $classes .= " block-layered-nav--no-filters";
+  // }
   echo "<div class='{$classes}'>";
-    if(empty($filters) !== true) {
-      echo "<div class='block-title'><strong><span>Huidige filters:</span></strong></div>";
-    }
     ?>
     <div class="block-content toggle-content">
       <?php
-      echo $this->getStateHtml();  
+      echo $this->getStateHtml();
       if($this->canShowOptions()) {
         ?>
         <p class="block-subtitle block-subtitle--filter"><?php echo $this->__("Filter") ?></p>

@@ -32,7 +32,7 @@ $catalogSearchHelper = $this->helper('catalogsearch');
 ?>
 <form id="search_mini_form" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get">
   <div class="input-box">
-    <input id="search" aria-labelledby="search-lbl" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text required-entry" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>"/>
+    <input id="search" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text required-entry" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>">
   </div>
   <?php if ($this->multiSearch()): ?>
     <script type="text/javascript">

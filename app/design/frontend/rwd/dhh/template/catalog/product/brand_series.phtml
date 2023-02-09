@@ -1,0 +1,137 @@
+<?php
+$attribute_code = "brand_series";
+$_attribute     = Mage::getSingleton("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attribute_code);
+$manufacturers  = $_attribute->getSource()->getAllOptions(false);
+$ignored_values = ["N.v.t."];
+$counts         = count_skus_per_attribute($attribute_code);
+
+usort($manufacturers, function($a, $b) {
+  return $a['label'] <=> $b['label'];
+});
+?>
+<style>
+  #manufacturer_list li>a,.smart-banner__icon {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  #manufacturer_list li {
+    float: left;
+    margin-right: 1.1%;
+    margin-left: 0;
+    margin-top: 3em;
+    padding: 5px;
+    width: 19.1%;
+    height: 100px;
+    text-align: center;
+  }
+
+  #manufacturer_list li img,
+  #manufacturer_list li div.image-placeholder  {
+    max-height: 60px;
+    width: auto;
+    vertical-align: middle;
+    margin: auto;
+  }
+
+  #manufacturer_list li:nth-child(5n) {
+    margin-right: 0;
+  }
+
+  #manufacturer_list li>a {
+    display: block;
+    text-align: center;
+  }
+  
+  .image-placeholder {
+    background-color: #f9f9f9;
+    display: flex;
+    height: 60px;
+    width: 171px;
+    border-radius: 5px;
+  }
+</style>
+<ul id="manufacturer_list">
+  <?php
+  foreach($manufacturers as $manufacturer) {
+    
+    $label        = $manufacturer['label'];
+    
+    if(in_array($label, $ignored_values, true) === true) {
+      continue;
+    }
+    
+    if(isset($counts[$manufacturer["value"]])) {
+      $n = $counts[$manufacturer["value"]];
+    } elseif(sizeof($counts) > 0) {
+      $n = 0;
+    } else {
+      $n = countProductsPerBrand($manufacturer["value"]);
+    }
+    
+    if($n < 1) {
+      continue;
+    }
+    
+    $brand_logo   = "";
+    $brand_name   = strtok($label, " "); // Best effort
+    $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+    $brand_id     = $manufacturer["value"];
+    $shop_link    = "/shop?{$attribute_code}={$brand_id}";
+    $label_enc    = htmlspecialchars($label);
+    
+    if(empty($brand_name) === false) {
+      $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
+      if(is_file($brand_logo_file) === true) {
+        $brand_logo = "/".$brand_logo_file;
+      }
+    }
+    
+        if($brand_logo !== "") {
+      ?>
+      <li class="scale-3">
+        <a href="<?php echo $shop_link; ?>">
+          <img loading="lazy" src="<?php echo $brand_logo ?>" alt="<?php echo $label_enc ?>" title="<?php echo $label_enc ?>">
+          <div class=strong><?php echo $label ?></div>
+        </a>
+      </li>
+      <?php
+    } else {
+      ?>
+      <li class="scale-3">
+        <a href="<?php echo $shop_link; ?>">
+          <div class="image-placeholder"></div>
+          <div class=strong><?php echo $label ?></div>
+        </a>
+      </li>
+      <?php
+    }
+  }
+  ?>
+</ul>
+<?php
+
+function count_skus_per_attribute($attribute_code) {
+  $query = "SELECT {$attribute_code}, count(*) as n FROM `catalog_product_flat_1` WHERE eol_value != 'Ja' GROUP BY {$attribute_code} order by n DESC";
+  $resource = Mage::getSingleton('core/resource');
+  $readConnection = $resource->getConnection('core_read');
+  $results = $readConnection->fetchAll($query);
+  
+  $counts = [];
+  foreach($results as $result) {
+    $counts[$result[$attribute_code]] = (int) $result["n"];
+  }
+  
+  return $counts;
+}
+
+function countProductsPerBrand($brand_id) {
+  global $attribute_code;
+  try {
+    $collection = Mage::getModel("catalog/product")->getCollection();
+    $_productCollection = $collection->addAttributeToFilter($attribute_code, $brand_id)->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]);
+    return $_productCollection->getSize();
+  } catch (Exception $e) {
+    return "error";
+  }
+}

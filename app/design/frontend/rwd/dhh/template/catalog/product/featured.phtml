@@ -54,33 +54,16 @@ $_collectionSize        = $_productCollection->count();
 $productBlock           = $this->getLayout()->createBlock('catalog/product_price');
 $parent_categories_ids  = [];
 
-?>
-<style>
-  /* Overrides .std */
-  .category-products {
-    line-height: 1.3em;
-  }
-  
-  .category-products ul {
-    margin-bottom: 0;
-  }
-</style>
-<?php
-
-$show_toolbar   = false;
-$_columnCount   = 4;
-$displaySize    = 175;
-$_imgSize       = 1 * $displaySize;
+$_columnCount           = 4;
+$displaySize            = 175;
+$_imgSize               = 1 * $displaySize;
 
 if($_collectionSize > 0) {
 ?>
   <div class="category-products">
     <span class="h1 center" style="padding-top: 2em;">Populaire Producten</span>
     <?php
-    if($show_toolbar === true) {
-      echo "<div class='top_toolbar'>{$this->getToolbarHtml()}</div>";
-    }
-    echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
+   echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     $i = 0;
     foreach($_productCollection as $_product) {
       $i++;
@@ -118,12 +101,12 @@ if($_collectionSize > 0) {
       switch($overall_stock_status) {
         case "in_stock":
           if($finalPrice >= $freeshipping_from) {
-            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+            $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
           }
           break;
         case "backorder":
           if($finalPrice >= $freeshipping_from) {
-            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+            $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
           }
           $stock_class = "buyblock-usp";
           break;
@@ -185,10 +168,10 @@ if($_collectionSize > 0) {
         ?>
         <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image">
         <?php
-          echo "<img class='lazy trans-opacity' id='product-collection-image-{$_product->getId()}'
-            data-src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
+          echo "<img loading='lazy' class='trans-opacity' id='product-collection-image-{$_product->getId()}'
+            src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
             alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
-            width='{$displaySize}' height='{$displaySize}' />";
+            width='{$displaySize}' height='{$displaySize}'>";
         ?>
         </a>
         <div class="product-info">
@@ -291,11 +274,6 @@ if($_collectionSize > 0) {
     }
     ?>
     </ul>
-    <?php
-    if($show_toolbar === true) {
-      echo "<div class='toolbar-bottom'>{$this->getToolbarHtml()}</div>";
-    }
-    ?>
   </div>
   <?php
 

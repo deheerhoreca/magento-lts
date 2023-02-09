@@ -137,22 +137,26 @@ if($carct && ($category === "category")) {
 /* SUBCATEGORIES */
 
 $forwarded_filters  = ["brand", "brand_series"];
-$active_filters     = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $show_sub_tiles     = true;
-// if(_dhh_debug()) { }
 
-foreach($active_filters as $active_filter) {
-  $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
-  if(in_array($attribute_code, $forwarded_filters, true) === false) {
-    $show_sub_tiles = false;
+// Hide subcategories if filters are active, except for some attributes where we forward them to the subcategory
+if($have_active_filters === true) {
+  foreach($active_filters as $active_filter) {
+    $show_sub_tiles = true;
+    $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
+    if(in_array($attribute_code, $forwarded_filters, true) === false) {
+      $show_sub_tiles = false;
+      break;
+    }
   }
 }
 
-if(empty($carct) === false && $amschk !== "amshopby"
-&& empty($appliedFilters) === true && strpos($orig_category_desc, "<!--no_cat_tiles-->") === false) {
+if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== false
+&& empty($appliedFilters) === true
+&& strpos($orig_category_desc, "<!--no_cat_tiles-->") === false) {
   
-  // Slow
-  $subcategories = Mage::getModel("catalog/category")->getCategories($carct->getId(), 0, true);
+  // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
+  // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);
   
   $subcategories = $carct->getCollection()
     ->addIdFilter($carct->getChildren())
@@ -160,27 +164,28 @@ if(empty($carct) === false && $amschk !== "amshopby"
     ->addAttributeToSelect("name")
     ->addAttributeToSelect("all_children")
     ->addAttributeToSelect("is_anchor")
+    ->addAttributeToSelect("image")
     ->addAttributeToFilter("is_active", 1)
     ->setOrder("position", Varien_Db_Select::SQL_ASC)
     ->joinUrlRewrite();
-  $subcategories->addAttributeToSelect("image");
+  // $subcategories->addAttributeToSelect("image");
   
-  if($subcategories->getFirstItem()) {
+  if($subcategories->count() > 1) {
     
     // Copy a selection of filters to the new category, if they exist
     // @todo should use the real methods of building the url instead
-    if(_dhh_debug()) {
-      $params = [];
-      parse_str($queryString, $params);
-      foreach($forwarded_filters as $forwarded_filter) {
-        if(isset($_GET[$forwarded_filter]) === true && strlen($_GET[$forwarded_filter]) > 0) {
-          $queryString = http_build_query($params);
-        }
-      }
-      if ($queryString) {
-        $category_url = "{$category_url}?{$queryString}";
-      }
-    }
+    // if(_dhh_debug()) {
+      // $params = [];
+      // parse_str($queryString, $params);
+      // foreach($forwarded_filters as $forwarded_filter) {
+        // if(isset($_GET[$forwarded_filter]) === true && strlen($_GET[$forwarded_filter]) > 0) {
+          // $queryString = http_build_query($params);
+        // }
+      // }
+      // if ($queryString) {
+        // $category_url = "{$category_url}?{$queryString}";
+      // }
+    // }
     
     echo "<ul class='grid-shadow-tiles-text'>";
     
@@ -188,9 +193,6 @@ if(empty($carct) === false && $amschk !== "amshopby"
     $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
     
     foreach($subcategories as $subcategory) {
-      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) === true) {
-        continue;
-      }
       $haschild           = true;
       $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
       $category_name_safe = htmlspecialchars($category_name);
@@ -213,8 +215,7 @@ if(empty($carct) === false && $amschk !== "amshopby"
       echo "<li style='max-width: 180px;'>";
       echo "<a href='{$category_url}' title='{$category_name_safe}'>";
       if(empty($image) === false) {
-        echo "<img class='lazy trans-opacity' data-src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' 
-        height='{$category_thumbs_dimensions}' width='{$category_thumbs_dimensions}'>";
+        echo "<img class='trans-opacity' src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' loading=lazy height='{$category_thumbs_dimensions}' width='{$category_thumbs_dimensions}'>";
       }
       echo "<strong>{$category_name}</strong></a></li>";
     }
@@ -288,12 +289,12 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       switch($overall_stock_status) {
         case "in_stock":
           if($finalPrice >= $freeshipping_from) {
-            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+            $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
           }
           break;
         case "backorder":
           if($finalPrice >= $freeshipping_from) {
-            $additional_delivery_messages .= "<br /><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
+            $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
           }
           $stock_class = "buyblock-usp";
           break;
@@ -358,10 +359,10 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         ?>
         <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image">
         <?php
-          echo "<img class='lazy trans-opacity' id='product-collection-image-{$_product->getId()}'
-            data-src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
+          echo "<img class='trans-opacity' id='product-collection-image-{$_product->getId()}'
+            src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
             alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
-            width='{$displaySize}' height='{$displaySize}' />";
+            width='{$displaySize}' height='{$displaySize}' loading=lazy>";
         ?>
         </a>
         <div class="product-info">

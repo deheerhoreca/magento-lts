@@ -74,12 +74,12 @@ if($_product->getData("allowed_to_quotemode") == 1 && $hideQuoteButton === false
     if(sizeof($lease_rates) > 1) {
       echo "<a class='hide' href=\"javascript:$('lease_details').show();\"><span class='h4 center black'>+ Details Leasetarieven:</span></a>";
       echo "<div id='lease_details' style='display:none;'>";
-      echo "<table class='text-center table table-bordered'><thead><tr><th scope=row class='py-1'>Maanden:</th>";
+      echo "<table class='text-center table table-bordered'><thead><tr><th scope=row>Maanden:</th>";
       foreach($lease_rates as $months => $rate) {
         echo "<th>{$months}</th>";
       }
       echo "</tr></thead>";
-      echo "<tbody><tr><th scope=row class='py-1'>€ per dag:</th>";
+      echo "<tbody><tr><th scope=row>€ per dag:</th>";
       foreach($lease_rates as $months => $rate) {
         $rate = number_format($rate, 2, ",", ".");
         echo "<td>{$rate}</td>";

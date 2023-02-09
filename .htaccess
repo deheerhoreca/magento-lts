@@ -330,16 +330,22 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff)$)[^\.]+?$">
   Header add Link "<https://v2.zopim.com>;rel=preconnect"
-  Header add Link "<https://ajax.cloudflare.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://cdn.jsdelivr.net>;rel=preconnect; crossorigin"
-  Header add Link "<https://stats.g.doubleclick.net>;rel=preconnect; crossorigin"
-  Header add Link "<https://cdnjs.cloudflare.com>;rel=preconnect"
+#  Header add Link "<https://ajax.cloudflare.com>;rel=preconnect; crossorigin"
+#  Header add Link "<https://cdn.jsdelivr.net>;rel=preconnect; crossorigin"
+#  Header add Link "<https://cdnjs.cloudflare.com>;rel=preconnect"
   Header add Link "<https://static.sooqr.com>;rel=preconnect; crossorigin"
   Header add Link "<https://dynamic.sooqr.com>;rel=preconnect; crossorigin"
   Header add Link "<https://static.zdassets.com>;rel=preconnect; crossorigin"
+  Header add Link "<https://ekr.zdassets.com>;rel=preconnect; crossorigin"
   Header add Link "<https://www.google-analytics.com>;rel=preconnect; crossorigin"
   Header add Link "<https://ssl.google-analytics.com>;rel=preconnect; crossorigin"
+  Header add Link "<https://region1.google-analytics.com>;rel=preconnect; crossorigin"
   Header add Link "<https://www.googletagmanager.com>;rel=preconnect; crossorigin"
+  Header add Link "<https://stats.g.doubleclick.net>;rel=preconnect; crossorigin"
+  Header add Link "<https://www.google.com>;rel=preconnect; crossorigin"
+  Header add Link "<https://www.google.nl>;rel=preconnect; crossorigin"
+  Header add Link "<https://bat.bing.com>;rel=preconnect; crossorigin"
+  Header add Link "<https://connect.facebook.net>;rel=preconnect; crossorigin"
   Header add Link "<https://rum.chefstore.nl:8200>;rel=preconnect;"
 </FilesMatch>
 
@@ -362,10 +368,6 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
   </IfModule>
 </IfModule>
 
-<IfModule mod_headers.c>
-  Header set X-XSS-Protection "1; mode=block"
-</IfModule>
-
 <IfModule mod_rewrite.c>
   ############################################
   ## rewrite files for magento cachebuster
@@ -374,29 +376,63 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
   RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
 </IfModule>
 
-# Remember, cache control is about how long mod_pagespeed will cache assets.
-# Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
-<filesMatch ".(jpg|jpeg|png|gif|ico|svg|webp|css|js)$">
-  Header unset Etag
-  Header set Cache-Control "max-age=300, public"
-</filesMatch>
-<FilesMatch "\.(html|htm|php)$">
-  Header unset Etag
-  Header set Cache-control "max-age=0, no-cache"
-</FilesMatch>
+# Modify more caching headers
+<IfModule mod_headers.c>
+  
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # Any caching headers set on HTML are ignored, and all HTML is served
+  # uncacheable.  PageSpeed rewrites HTML files each time they are served.  The
+  # first time mod_pagespeed sees an HTML file, it generally won't optimize it
+  # fully.  It will optimize better after the second view.  Caching defeats this
+  # behavior.
 
-
+  # Images, styles, and JavaScript are all cache-extended for
+  # a year by rewriting URLs to include a content hash.  mod_pagespeed
+  # can only do this if the resources are cacheable in the first place.
+  # The origin caching policy, set here to 10 minutes, dictates how
+  # frequently mod_pagespeed must re-read the content files and recompute
+  # the content-hash.  As long as the content doesn't actually change,
+  # the content-hash will remain the same, and the resources stored
+  # in browser caches will stay relevant.
+  
+  # Add "immutable" to hashed pagespeed resources
+  # Remember, cache control is about how long mod_pagespeed will cache assets.
+  # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
+  # <FilesMatch "pagespeed">
+  #   # Etag is done by the hash in the filename
+  #   Header unset Etag
+  #   Header set Cache-Control "public, max-age=300, proxy-revalidate"
+  #   Header set x-bier "tijd"
+  # </FilesMatch>
+  
+  # Remember, cache control is about how long mod_pagespeed will cache assets.
+  # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
+  <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp|css|js)$">
+    Header unset Etag
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+  
+  <FilesMatch "\.(html|htm|php)$">
+    Header unset Etag
+    Header set Cache-control "max-age=0, no-cache"
+  </FilesMatch>
+</IfModule>
 
 # Do not listen to /index.php? requests, redirect them
 RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
 RewriteCond %{THE_REQUEST} ^.*/index.php
 RewriteRule ^(.*)index.php$ /$1 [R=301,L]
 
+# Redirects file.php to view.php
+RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
+
 <IfModule mod_php7.c>
     php_value suhosin.session.encrypt=off
     php_value elastic_apm.service_name "chefstore_nl"
 </IfModule>
 
+# Landing URL from flyers
 Redirect /hallochef /promoties.html
 
 ServerSignature Off

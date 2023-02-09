@@ -395,13 +395,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
       
       // Minify -- Minifying after the holepunching breaks the btn-cart buttons in the listview
-      $html = str_replace(["value=\"https://www.chefstore.nl/"], "value=\"/", $html);
-      $html = str_replace(["src=\"https://www.chefstore.nl/"], "src=\"/", $html);
-      $html = str_replace(["src='https://www.chefstore.nl/"], "src='/", $html);
-      $html = str_replace(["href=\"https://www.chefstore.nl/"], "href=\"/", $html);
-      $html = str_replace(["setLocation('https://www.chefstore.nl/"], "setLocation('/", $html);
-      $html = str_replace(["href='https://www.chefstore.nl/"], "href='/", $html);
-      $html = str_replace([" type=\"text/javascript\""], "", $html);
+      $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", $html); // Prevent canonical URL shortening
+      $html = str_replace("value=\"https://www.chefstore.nl/", "value=\"/", $html);
+      $html = str_replace("src=\"https://www.chefstore.nl/", "src=\"/", $html);
+      $html = str_replace("src='https://www.chefstore.nl/", "src='/", $html);
+      $html = str_replace("href=\"https://www.chefstore.nl/", "href=\"/", $html);
+      $html = str_replace("setLocation('https://www.chefstore.nl/", "setLocation('/", $html);
+      $html = str_replace("href='https://www.chefstore.nl/", "href='/", $html);
+      $html = str_replace(" type=\"text/javascript\"", "", $html);
+      $html = str_replace("<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", "<link rel=\"canonical\" href=\"https://www.chefstore.nl", $html);
+      $html = str_replace(" />", ">", $html);
       
       // HTML minifier broken:
       // /koelingen/vrieskasten/glasdeurvriezers/vrieskast-1530-l-3-glasdeuren-zwart-lichtbak-combisteel-7455-2435.html

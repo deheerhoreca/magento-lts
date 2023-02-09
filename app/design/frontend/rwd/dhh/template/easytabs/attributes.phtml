@@ -44,7 +44,7 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "annual_energy_consumption_kwh", "capaciteit_boiler", "laadhoogte", "weight_fabric",
   "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus", "temp_resistance_from",
   "temp_resistance_to", "guide_set_distance_mm", "inhoud_vetpan_liter", "max_load_per_shelf_kg",
-  "gross_weight_gram",
+  "gross_weight_gram", "amps",
 ];
 
 // Allow to show "No" values for these attributes
@@ -205,6 +205,11 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           // "Liter per Cyclus" postfix
           case "water_verbruik":
             $postfix = " Liter per Cyclus";
+            break;
+          
+          // " A"
+          case "amps":
+            $postfix = " A";
             break;
           
           // Other

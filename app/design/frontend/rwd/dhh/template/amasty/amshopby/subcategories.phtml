@@ -11,11 +11,28 @@ $category_thumbs_dimensions   = 140;
 /** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
 $subcategories = $this->getSubcategories();
 
-$media_url = Mage::getBaseUrl('media');
-$media_path = Mage::getBaseDir('media');
 echo '<div style="clear: both;"></div>';
 
+// require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
+
+// $carct = Mage::registry("current_category");
+// // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);
+// $allowed_children = $carct->getChildren();
+// $subcategories = $carct->getCollection()
+  // ->addIdFilter($allowed_children)
+  // ->addAttributeToSelect("url_key")
+  // ->addAttributeToSelect("name")
+  // ->addAttributeToSelect("all_children")
+  // ->addAttributeToSelect("is_anchor")
+  // ->addAttributeToSelect("image")
+  // ->addAttributeToFilter("is_active", 1)
+  // ->setOrder("position", Varien_Db_Select::SQL_ASC)
+  // ->joinUrlRewrite();
+// // $subcategories->addAttributeToSelect("image");
+
 if(sizeof($subcategories) > 1) {
+  $media_path = Mage::getBaseDir('media');
+  
   echo '<ul class="grid-shadow-tiles-text">';
   
   // Logic copied from catalog/product/list.phtml
@@ -47,8 +64,7 @@ if(sizeof($subcategories) > 1) {
       <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
         <?php
         if(empty($image) === false) {
-          echo "<img class='lazy' data-src='{$resized_img_url}' alt='{$categoryName}' title='{$categoryName}' 
-          height='".($category_thumbs_dimensions*2)."' width='".($category_thumbs_dimensions*2)."' />";
+          echo "<img loading=lazy src='{$resized_img_url}' alt='{$categoryName}' title='{$categoryName}' height='".($category_thumbs_dimensions*2)."' width='".($category_thumbs_dimensions*2)."'>";
         }
         ?>
         <strong><?php echo $categoryName; ?></strong>

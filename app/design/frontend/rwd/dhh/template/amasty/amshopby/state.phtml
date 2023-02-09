@@ -4,30 +4,34 @@
  * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
-?>
-<?php $_filters = $this->getActiveFilters() ?>
-<?php $_removeTxt = Mage::helper('catalog')->__('Remove This Item') ?>
-<?php if (!empty($_filters)): ?>
-  <ul>
-    <?php foreach ($_filters as $_filter):?>
-      <li>
-        <?php if ($_filter->hasData('children')): ?>
-          <?php foreach ($_filter->getData('children') as $child): ?>
-            <span class="multiselect-child">
-              <?php echo $child['label']  ?>
-              <a href="<?php echo $child['url'] ?>" class="btn-remove-inline" title="<?php echo $_removeTxt ?>"></a>
-              <span class="label strong"><?php echo Mage::helper('catalog')->__($_filter->getName()) ?>:</span>
-            </span>
-          <?php endforeach ?>
-        <?php else: ?>
-          <a href="<?php echo $_filter->getRemoveUrl() ?>" class="btn-remove" title="<?php echo $_removeTxt ?>"></a>
-          <span class="label strong"><?php echo Mage::helper('catalog')->__($_filter->getName()) ?>:</span>
-          <?php echo $_filter->getLabel() ?>
-        <?php endif ?>
-      </li>
-    <?php endforeach; ?>
-  </ul>
-  <div class="actions">
-    <a href="<?php echo $this->getParentBlock()->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a>
-  </div>
-<?php endif; ?>
+$_filters = $this->getActiveFilters();
+if(!empty($_filters)) {
+  $_removeTxt = Mage::helper('catalog')->__('Remove This Item');
+  echo "<div class='amshopby-active-filters'>";
+  echo "<div class='block-title'><span class='h2 strong blue'>Huidige filters</span></div>";
+  echo "<ul>";
+  foreach($_filters as $_filter) {
+    if($_filter->hasData('children')) {
+      $value = [];
+      foreach($_filter->getData('children') as $child) {
+        $value[] = $child['label'];
+      }
+    } else {
+      $value = (array) $_filter->getLabel();
+    }
+    $label = Mage::helper('catalog')->__($_filter->getName());
+    // var_dump($label);
+    echo "<li class='mb-3'>";
+    echo "<a href='{$_filter->getRemoveUrl()}' class='btn-remove' title='{$_removeTxt}'></a>";
+    echo "<span class='label strong me-1'>{$label}:</span>";
+    if(is_array($value)) {
+      echo "<ul class='indented-disc'><li>".implode("</li><li>", $value)."</li></ul>";
+    } else {
+      echo $value;
+    }
+    echo "</li>";
+  }
+  echo "</ul>";
+  echo "<div class='actions'><a class='float-left' href='{$this->getParentBlock()->getClearUrl()}'>Filters verwijderen</a></div>";
+  echo "</div>";
+}
