@@ -54,7 +54,7 @@ if($show && Amasty_Shopby_Model_Catalog_Layer_Filter_Price::DT_DEFAULT == $this-
       echo "<li>";
       $dataConfig = $_item->getUrlAttributeOptionConfigAsJson();
       $url = $this->urlEscape($_item->getUrl());
-      echo "<a rel='nofollow' class='{$prefix} amshopby-attr' href='{$url}' data-config='{$dataConfig}'{$rel}>";
+      echo "<a rel='nofollow' class='{$prefix} amshopby-attr' href='{$url}' data-config='{$dataConfig}'>";
       echo $_item->getLabel();
       if(!$hideCounts) {
         echo "<span class='count'>({$count})</span>";

@@ -307,8 +307,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $extra_delivery_time    = $stock_data["extra_delivery_time"];
     $overall_stock_status   = $stock_data["overall_stock_status"];
     $txtstockdate           = $stock_data["txtstockdate"];
-    $calwekdate_min         = $stock_data["calwekdate_min"];
-    $calwekdate_max         = $stock_data["calwekdate_max"];
+    // $calwekdate_min         = $stock_data["calwekdate_min"];
+    // $calwekdate_max         = $stock_data["calwekdate_max"];
     $levertijd              = $stock_data["levertijd"];
     $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
     
@@ -970,7 +970,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $levertijd_tmp_override = $product->getAttributeText("levertijd_tmp_override");
     $bestelartikel          = $product->getAttributeText("bestelartikel");
     
-    $calwekdate_min         = $calwekdate_max = null;
+    // $calwekdate_min         = $calwekdate_max = null;
     
     $supplier               = $product->getAttributeText('supplier');
     

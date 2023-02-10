@@ -118,8 +118,7 @@ if($_collectionSize > 0) {
       
       $usp_options      = [
         "context"         => "featured",
-        "category_name"   => $category_name,
-      ];      
+      ];
       $usps             = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 6);
       
       // Price Block
