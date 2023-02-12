@@ -2,9 +2,8 @@
 /**
 * @author Amasty Team
 * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Amasty_Base
+* @package Magento 1 Base Package
 */
-
 
 /**
  * Class for security unserialize string (not support object)

@@ -2,9 +2,8 @@
 /**
 * @author Amasty Team
 * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Amasty_Base
+* @package Magento 1 Base Package
 */
-
 
 class Amasty_Base_Block_Adminhtml_Notification_Grid_Renderer_Notice
     extends Mage_Adminhtml_Block_Notification_Grid_Renderer_Notice

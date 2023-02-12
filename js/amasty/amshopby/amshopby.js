@@ -8,9 +8,13 @@ if (typeof bp == 'undefined') {
     };
 }
 
-function amshopby_start(){
+function amshopby_start () {
     $$('.block-layered-nav .form-button').each(function (e){
         e.observe('click', amshopby_price_click_callback);
+    });
+
+    $$('.amshopby-attr, .amshopby-attr-selected').each(function (e){
+        e.observe('click', amshopby_check_multiselect);
     });
 
     $$('.block-layered-nav .input-text').each(function (e){
@@ -49,6 +53,14 @@ function amshopby_start(){
         var param = item.value.split(',');
         amshopby_slider(param[0], param[1], param[2], param[3], param[4], param[5], item);
     });
+}
+
+function amshopby_check_multiselect(evt, element) {
+    if( typeof evt == 'object' && !element){
+        element = Event.element(evt);
+    }
+    element.toggleClassName('amshopby-attr');
+    element.toggleClassName('amshopby-attr-selected');
 }
 
 function amshopby_price_click_callback(evt, element) {

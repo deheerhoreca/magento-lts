@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */ 
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/ 
 class Amasty_Shopby_Model_Mysql4_CatalogIndex_Data_Configurable extends Mage_CatalogIndex_Model_Mysql4_Data_Configurable 
 {
     public function fetchLinkInformation($store, $table, $idField, $whereField, $id, $additionalWheres = array()) 

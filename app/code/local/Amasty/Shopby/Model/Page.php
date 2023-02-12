@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 
 /**
  * @method Amasty_Shopby_Model_Page setCond($serializedCond)
@@ -140,7 +140,6 @@ class Amasty_Shopby_Model_Page extends Mage_Core_Model_Abstract
         }
 
         $values = array();
-        usort($options, function($a, $b) { return $a['label'] <=> $b['label']; });
         foreach ($options as $option) {
             if ('select' == $frontendInput) {
                 $values[$option['value']] = $option['label'];

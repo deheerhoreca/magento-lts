@@ -1,10 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
-
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 
 class Amasty_Shopby_Block_Adminhtml_Filter_Renderer_Position extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Number
 {

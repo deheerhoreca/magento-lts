@@ -44,7 +44,7 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
     if($count > 1000) {
       $count = "1000+";
     }
-    $label = trim(str_replace("[V]", "", $_item->getLabel())); // DHH
+    $label = trim(str_replace("[V]", "", $_item->getLabel())); // DHH CORE HACK
     $title = $label;
     if(strlen($label) > 29) {
       $label = substr($label, 0, 27)."..";
