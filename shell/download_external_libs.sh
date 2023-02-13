@@ -15,11 +15,14 @@ wget https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js -O 
 wget https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.min.js -O ../js/ext-scriptaculous-builder.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js -O ../js/ext-scriptaculous-effects.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js -O ../js/ext-glightbox.min.js
-wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ../js/elastic-apm-rum.umd.min.js.map
-wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js -O ../js/ext-elastic-apm-rum.umd.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/lite-youtube-embed/0.2.0/lite-yt-embed.min.js -O ../js/ext-lite-yt-embed.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js -O ../js/ext-jquery.ui.touch-punch.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js -O ../js/ext-jquery-ui.min.js
+
+# These need versioning outside of mod_pagespeed:extend_cache
+wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ../js/elastic-apm-rum.umd.min.js.map
+wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js -O ../js/ext-elastic-apm-rum.umd.min.js
+wget https://tr.datatrics.com -O ../js/ext-datatrics-1.min.js
 
 # Old style
 

@@ -267,6 +267,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       if(empty($html) === true) {
         self::log("Cache MISS: {$key}");
+        if(!headers_sent()) header("Server-Timing: miss");
         return null;
       }
       
@@ -371,19 +372,28 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         // Mage::getSingleton("core/session")->addNotice(Mage::helper("core")->__("Notice ".date("c")));
         // Mage::getSingleton("core/session")->addSuccess(Mage::helper("core")->__("Notice ".date("c")));
         
-        // nav
+        // Main nav
         Varien_Profiler::start("DHH::FPC::Holepunch::nav");
         $nav_html = $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
         $search = "<!-- nav_here -->";
         $html = str_replace($search, $nav_html, $html, $count);
         self::log("Replaced {$search} {$count} times");
         Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
+        
+        // Footer
+        Varien_Profiler::start("DHH::FPC::Holepunch::footer");
+        $nav_html = $_html = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
+        $search = "<!-- footer_here -->";
+        $html = str_replace($search, $nav_html, $html, $count);
+        self::log("Replaced {$search} {$count} times");
+        Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
       }
       
       if(DHH_FPC_DEBUG === true) {
         $size = strlen($html);
         self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
       }
+      if(!headers_sent()) header("Server-Timing: hit");
       
       Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
@@ -440,9 +450,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $html = self::replace_between($html, "<!-- core_messages_start -->", "<!-- core_messages_end -->", "<!-- core_messages_here -->");
         // $html = self::replace_between($html, "<!-- breadcrumbs_start -->", "<!-- breadcrumbs_end -->", "<!-- breadcrumbs_here -->");
         $html = self::replace_between($html, "<!-- nav_start -->", "<!-- nav_end -->", "<!-- nav_here -->");
+        $html = self::replace_between($html, "<!-- footer_start -->", "<!-- footer_end -->", "<!-- footer_here -->");
       }
-      
-      
       
       // @todo Build JSON object
       // $data = [
@@ -454,6 +463,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // Store in cache
       if(Mage::app()->getCache()->save($html, $key, ["quickndirtyfpc"], 7 * 86400)) {
         self::log("Cache: SAVED {$key}, ".strlen($html)." chars");
+        if(!headers_sent()) header("Server-Timing: saved");
         return true;
       }
       

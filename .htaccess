@@ -329,24 +329,10 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff)$)[^\.]+?$">
-  Header add Link "<https://v2.zopim.com>;rel=preconnect"
-#  Header add Link "<https://ajax.cloudflare.com>;rel=preconnect; crossorigin"
-#  Header add Link "<https://cdn.jsdelivr.net>;rel=preconnect; crossorigin"
-#  Header add Link "<https://cdnjs.cloudflare.com>;rel=preconnect"
-  Header add Link "<https://static.sooqr.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://dynamic.sooqr.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://static.zdassets.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://ekr.zdassets.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://www.google-analytics.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://ssl.google-analytics.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://region1.google-analytics.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://www.googletagmanager.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://stats.g.doubleclick.net>;rel=preconnect; crossorigin"
-  Header add Link "<https://www.google.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://www.google.nl>;rel=preconnect; crossorigin"
-  Header add Link "<https://bat.bing.com>;rel=preconnect; crossorigin"
-  Header add Link "<https://connect.facebook.net>;rel=preconnect; crossorigin"
-  Header add Link "<https://rum.chefstore.nl:8200>;rel=preconnect;"
+#  Header add Link "<//ajax.cloudflare.com>;rel=preconnect; crossorigin"
+#  Header add Link "<//cdn.jsdelivr.net>;rel=preconnect; crossorigin"
+#  Header add Link "<//cdnjs.cloudflare.com>;rel=preconnect"
+  Header add Link "<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.google-analytics.com>;rel=preconnect; crossorigin,<//ssl.google-analytics.com>;rel=preconnect; crossorigin,<//region1.google-analytics.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//stats.g.doubleclick.net>;rel=preconnect; crossorigin,<//www.google.com>;rel=preconnect; crossorigin,<//www.google.nl>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
 </FilesMatch>
 
 <IfModule mod_deflate.c>

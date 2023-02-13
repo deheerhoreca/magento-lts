@@ -20,6 +20,7 @@ if(substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
 }
 
 const DHH_FPC_NAV_KEY = "FPC_cms_block_topmenu";
+const DHH_FPC_FOOTER_KEY = "FPC_cms_block_footer";
 
 if(DHH_FPC_DEBUG === true) {
   $verb = $_SERVER["REQUEST_METHOD"] ?? null;

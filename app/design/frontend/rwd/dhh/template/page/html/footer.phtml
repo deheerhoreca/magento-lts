@@ -1,16 +1,19 @@
+<!-- footer_start -->
+<?php
+$html = <<<EOT
 <noscript><img height="1" width="1" style="display:none" src="//www.facebook.com/tr?id=808630443401252&ev=PageView&noscript=1" alt="fb"></noscript>
 <div class="footer-wrapper grid-inside " id="footer-wrapper">
   <div class="footermidwrap blanc">
     <div class="footer grid">
       <div class="pb-4 text-center">
         <a href="//www.instagram.com/chefstore.nl/" title="Instagram" target="_blank" rel="nofollow noreferrer noopener">
-        <i class="fa-2x fa fa-instagram" aria-hidden="true"></i></a>
+        <i class="fa-3x fa fa-instagram" aria-hidden="true"></i></a>
         <a href="//www.facebook.com/Chefstorenl-233543287886724/" title="Facebook" target="_blank" rel="nofollow noreferrer noopener">
-        <i style="padding: 0 .5em" class="fa-2x fa fa-facebook-official" aria-hidden="true"></i></a>
+        <i style="padding: 0 .5em" class="fa-3x fa fa-facebook-official" aria-hidden="true"></i></a>
         <a href="//www.linkedin.com/company/chefstore-nl/" title="LinkedIn" target="_blank" rel="nofollow noreferrer noopener">
-        <i class="fa-2x fa fa-linkedin" aria-hidden="true"></i></a>
+        <i class="fa-3x fa fa-linkedin" aria-hidden="true"></i></a>
       </div>
-      <div class="col-3-3 column">
+      <div class="column">
         <div class="col-1-4">
           <h3>Merken</h3>
           <ul>
@@ -64,7 +67,7 @@
       </div>
     </div>
   </div>
-  <div class="pt-4"><img class="center" src="skin/frontend/rwd/dhh/images/logo-chefstore.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy"></div>
+  <div class="pt-4"><img class="center" src="/skin/frontend/rwd/dhh/images/logo-chefstore.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy"></div>
   <div class="text-center py-1 h3 blue"><em>Alles voor de Chef</em></div>
   <div class="text-center py-3">Non-food horeca groothandel voor hotels, restaurants, bedrijfskantines, scholen, catering, gemeentes, grootkeukens en caf&eacute;'s</div>
   <div class="text-center py-2">
@@ -74,11 +77,47 @@
   <div class="text-center pt-2 pb-5">© 2017 - <?php echo date("Y"); ?> - Chefstore.nl</div>
 </div>
 
-<script>
-  //var lazyLoadInstance = new LazyLoad({elements_selector: ".lazy", use_native: true});
-  !function(e,n,t){var r=e.createElement(n),i=e.getElementsByTagName(n)[0];r.src="/js/ext-elastic-apm-rum.umd.min.js",r.onload=function(){elasticApm.init(t)},i.parentNode.insertBefore(r,i)}(document,"script",{serviceName:"chefstore_nl",serverUrl:"//rum.chefstore.nl:8200",environment:"production"});
+<script>  
   const lightbox = GLightbox({touchNavigation: true});
   var lightboxInlineIframe = GLightbox({
     selector: '.glightbox4', touchNavigation: false, keyboardNavigation: false, preload: false
   });
+  
+  var _paq = _paq || [];
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://tr.datatrics.com/";
+    _paq.push(["setTrackerUrl", "//tr.datatrics.com/"]);
+    _paq.push(["setProjectId", "404040881"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+    g.type="text/javascript";
+    g.defer=true; g.async=true; g.src='/js/ext-datatrics-1.min.js'; s.parentNode.insertBefore(g,s);
+  })();
+  
+  ;(function(d, s, c) {
+    var j = d.createElement(s),
+      t = d.getElementsByTagName(s)[0]
+
+    j.src = '/js/ext-elastic-apm-rum.umd.min.js'
+    j.onload = function() {elasticApm.init(c)}
+    t.parentNode.insertBefore(j, t)
+  })(document, 'script', {serviceName: 'chefstore_nl', serverUrl: '//rum.chefstore.nl:8200', environment: 'production'})
 </script>
+EOT;
+echo $html;
+
+if(strlen($html) > 0) {
+  $write_cache = true;
+  // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true) === true) {
+    // @todo when block mode is available on is_write_cache_enabled()
+  // }
+  if(DHH_FPC_ENABLED === false) {
+    $write_cache = false;
+  }
+  if($write_cache === true) {
+    Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, ["quickndirtyfpc"], 86400);
+  }
+}
+?>
+<!-- footer_end -->
