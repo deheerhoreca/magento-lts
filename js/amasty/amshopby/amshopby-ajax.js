@@ -424,11 +424,11 @@ function amshopby_external(){
     if (typeof amconfAddButtonEvent != 'undefined') {
         amconfAddButtonEvent();
     }
-    
-    // DHH CORE HACK
-    if (typeof lazyLoadInstance != 'undefined') {
-      lazyLoadInstance.update();
-    }
+
+    // DHH CORE HACK -- deprecated
+    // if (typeof lazyLoadInstance != 'undefined') {
+      // lazyLoadInstance.update();
+    // }
 }
 
 function amshopby_external_rwd() {

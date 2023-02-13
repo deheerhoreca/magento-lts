@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 
 class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_Action
 {
@@ -106,10 +106,15 @@ class Amasty_Shopby_Amshopby_FilterController extends Mage_Adminhtml_Controller_
         foreach ($classes as $type => $names) {
             foreach ($names as $name) {
                 $name = Mage::getConfig()->getGroupedClassName($type, $name);
+
                 if (substr($name, 0, 6) != 'Amasty') {
-                    $msg = $this->__('There is a conflict(s) with some other extension: class %s. If the module works incorrect, consider our <a href="http://amasty.com/installation-service.html">Installation Service</a>.', $name);
-                    $this->_getSession()->addNotice($msg);
-                    break(2);
+                    $parentClassName = get_parent_class($name);
+
+                    if (false === strpos($parentClassName, 'Amasty')) {
+                        $msg = $this->__('There is a conflict(s) with some other extension: class %s. If the module works incorrect, consider our <a href="http://amasty.com/installation-service.html">Installation Service</a>.', $name);
+                        $this->_getSession()->addNotice($msg);
+                        break(2);
+                    }
                 }
             }
         }

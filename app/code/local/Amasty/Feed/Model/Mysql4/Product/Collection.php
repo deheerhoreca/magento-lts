@@ -1,3 +1,4 @@
+
 <?php
 /**
 * @author Amasty Team
@@ -211,7 +212,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
     
     public function joinCategories(){
         if (!$this->_checkJoin('category_id')){
-            // DHH CORE HACK
+            // DHH CORE HACK -- Make sure dynamic category IDs don't make it into the feeds
             // $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', null, 'left');
             $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', "(dynamic=0)", 'left');
             

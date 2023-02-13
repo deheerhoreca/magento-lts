@@ -1,10 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
-
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 abstract class Amasty_Shopby_Helper_Layer_View_Strategy_Modeled extends Amasty_Shopby_Helper_Layer_View_Strategy_Abstract
 {
     /** @var  Mage_Catalog_Model_Resource_Eav_Attribute */

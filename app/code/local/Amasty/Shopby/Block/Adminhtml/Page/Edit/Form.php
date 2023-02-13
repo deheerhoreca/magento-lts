@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 class Amasty_Shopby_Block_Adminhtml_Page_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
     protected function _prepareLayout()
@@ -67,7 +67,7 @@ class Amasty_Shopby_Block_Adminhtml_Page_Edit_Form extends Mage_Adminhtml_Block_
               'note'      => $hlp->__("It's not the page URL. It's HTML tag as per https://support.google.com/webmasters/answer/139394") 
             ));
 
-            $cmsBlocks = Mage::getResourceModel('cms/block_collection')->setOrder('title', 'ASC')->load()->toOptionArray();
+            $cmsBlocks = Mage::getResourceModel('cms/block_collection')->load()->toOptionArray();
             array_unshift($cmsBlocks, array('value' => null, 'label' => $this->__('Please select a static block ...')));
             $fldInfo = $form->addFieldset('info', array('legend'=> $hlp->__('Page Text')));
             $fldInfo->addField(

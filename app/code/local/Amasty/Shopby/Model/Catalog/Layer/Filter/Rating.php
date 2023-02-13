@@ -1,9 +1,9 @@
 <?php
  /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 
 class Amasty_Shopby_Model_Catalog_Layer_Filter_Rating extends Mage_Catalog_Model_Layer_Filter_Abstract
 {
