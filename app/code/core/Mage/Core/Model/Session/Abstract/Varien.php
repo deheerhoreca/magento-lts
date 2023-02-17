@@ -149,7 +149,11 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             session_cache_limiter((string)$sessionCacheLimiter);
         }
 
-        session_start();
+        if(!headers_sent()) {
+            session_start();
+        } else {
+            Mage::log('Failed to start session, headers already sent. URL: '.Mage::helper('core/url')->getCurrentUrl(), null, 'exception.log', true);
+        }
 
         Mage::dispatchEvent('session_before_renew_cookie', ['cookie' => $cookie]);
 
