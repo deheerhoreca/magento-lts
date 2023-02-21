@@ -215,7 +215,7 @@ class Mage_Api2_Model_Server
         $globalAcl = Mage::getModel('api2/acl_global');
 
         if (!$globalAcl->isAllowed($apiUser, $request->getResourceType(), $request->getOperation())) {
-            throw new Mage_Api2_Exception('Access denied', self::HTTP_FORBIDDEN);
+            throw new Mage_Api2_Exception('Access denied for '.$apiUser->getUserId().' to '.$request->getResourceType(), self::HTTP_FORBIDDEN);
         }
         return $this;
     }

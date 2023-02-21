@@ -141,5 +141,10 @@
         <Magmodules_Kiyoh>
           <active>false</active>
         </Magmodules_Kiyoh>
+        
+        <!-- Causes SQL errors with shipments and increment_last_id -->
+        <Fooman_SameOrderInvoiceNumber>
+          <active>false</active>
+        </Fooman_SameOrderInvoiceNumber>
     </modules>
 </config>
