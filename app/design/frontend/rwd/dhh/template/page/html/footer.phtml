@@ -74,7 +74,7 @@ $html = <<<EOT
     <a href="/algemene-voorwaarden">Algemene voorwaarden</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a href="/privacy-policy">Privacy</a>
   </div>
-  <div class="text-center pt-2 pb-5">© 2017 - <?php echo date("Y"); ?> - Chefstore.nl</div>
+  <div class="text-center pt-2 pb-5">© 2017 - 2023 Chefstore.nl</div>
 </div>
 
 <script>  
@@ -83,41 +83,38 @@ $html = <<<EOT
     selector: '.glightbox4', touchNavigation: false, keyboardNavigation: false, preload: false
   });
   
-  var _paq = _paq || [];
-  _paq.push(["trackPageView"]);
-  _paq.push(["enableLinkTracking"]);
-  (function() {
-    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://tr.datatrics.com/";
-    _paq.push(["setTrackerUrl", "//tr.datatrics.com/"]);
-    _paq.push(["setProjectId", "404040881"]);
-    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
-    g.type="text/javascript";
-    g.defer=true; g.async=true; g.src='/js/ext-datatrics-1.min.js'; s.parentNode.insertBefore(g,s);
-  })();
+  if(window.location.hostname == "www.chefstore.nl") {
+    var _paq = _paq || [];
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function() {
+      var u=(("https:" == document.location.protocol) ? "https" : "http") + "://tr.datatrics.com/";
+      _paq.push(["setTrackerUrl", "//tr.datatrics.com/"]);
+      _paq.push(["setProjectId", "404040881"]);
+      var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+      g.defer=true; g.async=true; g.src=u; s.parentNode.insertBefore(g,s);
+    })();
+  }
   
+  if(window.location.hostname == "www.chefstore.nl") {
+    var apm_env = "production";
+  } else {
+    var apm_env = "development";
+  }
   ;(function(d, s, c) {
     var j = d.createElement(s),
       t = d.getElementsByTagName(s)[0]
-
+    
     j.src = '/js/ext-elastic-apm-rum.umd.min.js'
     j.onload = function() {elasticApm.init(c)}
     t.parentNode.insertBefore(j, t)
-  })(document, 'script', {serviceName: 'chefstore_nl', serverUrl: '//rum.chefstore.nl:8200', environment: 'production'})
+  })(document, 'script', {serviceName: 'chefstore_nl', serverUrl: '//rum.chefstore.nl:8200', environment: apm_env, pageLoadTransactionName: apm_transaction})
 </script>
 EOT;
 echo $html;
 
-if(strlen($html) > 0) {
-  $write_cache = true;
-  // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true) === true) {
-    // @todo when block mode is available on is_write_cache_enabled()
-  // }
-  if(DHH_FPC_ENABLED === false) {
-    $write_cache = false;
-  }
-  if($write_cache === true) {
-    Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, ["quickndirtyfpc"], 86400);
-  }
+if(empty($html) === false && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true) === true) {
+  Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, ["quickndirtyfpc"], 86400);
 }
 ?>
 <!-- footer_end -->
