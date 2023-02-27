@@ -1,6 +1,11 @@
 <?php
 
-/* DHH */
+/* DHH PREP */
+
+// If a watermarked image exists, we inject it at the very end, keeping all logic intact
+
+const WATERMARKED_DIR = "haha/";
+const FILENAME_SECRET = "sterfmetjescraper";
 
 // Logic exists in multiple places!
 // Allows for arbitrary number of dashes in the SKU
@@ -66,10 +71,7 @@ function _get_watermarked_image_filename($optimized_image) {
   return $wm_path;
 }
 
-// If a watermarked image exists, we inject it at the very end, keeping all logic intact
-
-const WATERMARKED_DIR = "haha/";
-const FILENAME_SECRET = "sterfmetjescraper";
+/* END DHH PREP */
 
 /* @var $this Mage_Catalog_Block_Product_View_Media */
 
@@ -191,10 +193,8 @@ $scriptHTML = '';
 
 foreach($productImages as &$productImage) {
 
-    //if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
     if(isset($imageFileOverride[$productImage['image-file']])) {
       $bigImage = $imageHelper->init($productModel, 'image', $imageFileOverride[$productImage['image-file']])->__toString();
-    //}
     } else {
       $bigImage = $imageHelper->init($productModel, 'image', $productImage['image-file'])->__toString();
     }
@@ -219,16 +219,18 @@ foreach($productImages as &$productImage) {
     }
 
     $aHtml = $tool->getSelectorTemplate(array(
-        'id' => $productId,
-        'group' => 'product-page',
-        'img' => $bigImage,
-        'img2x' => $bigImage,
-        'medium' => $mediumImage,
-        // 'medium2x' => $mediumImage2x,
-        'thumb' => $thumbImage,
-        // 'thumb2x' => $thumbImage2x,
-        'alt' => $productImage['alt'],
-        'title' => $productImage['title'],
+        'id'        => $productId,
+        'group'     => 'product-page',
+        'img'       => $bigImage,
+        'img2x'     => $bigImage,
+        'medium'    => $mediumImage,
+        // 'medium2x'  => $mediumImage2x,
+        'thumb'     => $thumbImage,
+        // 'thumb2x'   => $thumbImage2x,
+        'alt'       => $productImage['alt'],
+        'title'     => $productImage['title'],
+        "width"     => 60,
+        "height"    => 60,
     ));
     $aHtml = str_replace('<a ', '<a on'.$eventName.'="magicToolboxOnChangeSelector(this);" ', $aHtml);
     if($ignoreMagentoCSSclass) {
@@ -541,12 +543,12 @@ $labeledImageUrls = $mtDataHelper->getUsedLabeledImageUrls($productModel, true);
 $scriptHTML .= 'mtLabeledImageUrls = '.Mage::helper('core')->jsonEncode($labeledImageUrls).';';
 
 if($scriptHTML) {
-    echo '<script type="text/javascript">'.$scriptHTML.'</script>';
+    echo '<script>'.$scriptHTML.'</script>';
 }
 
 echo '<img id="image" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="placeholder" class="invisible" />';
 
 //NOTE: small fix for amconf extension
 if(preg_match('/amconf\/ajax\/index\//ims', $_SERVER['REQUEST_URI'])) {
-    echo '<script type="text/javascript">MagicZoom.start();magicToolboxPrepareOptions();</script>';
+    echo '<script>MagicZoom.start();magicToolboxPrepareOptions();</script>';
 }

@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+body.faq-index-index div.page div.main-container.col3-layout div.main div.col-wrapper {
+  width: 100%;
+}
+
+body.faq-index-index div.page .main-container.col3-layout {
+  padding-top: 25px;
+}
+
+dl.faq-items dt.active {
+  font-weight: 700!important;
+}
+
+body.faq-index-index dl.faq-items dd {
+  padding: 5px 5px 10px;
+}
+
+dl.faq-items dt {
+  margin-bottom: 10px;
+  padding: 8px 8px 8px 30px;
+  border-radius: 4px;
+  background-color: #cfcfcf;
+  background-image: url(../images/toggle-plus.png);
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  color: #333;
+  text-transform: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+dl.faq-items dt:hover {
+  color: #eee!important;
+}
+
+dl.faq-items dt.active {
+  background-image: url(../images/toggle-minus.png)!important;
+  background-position: 10px center;
+  background-repeat: no-repeat;
+}

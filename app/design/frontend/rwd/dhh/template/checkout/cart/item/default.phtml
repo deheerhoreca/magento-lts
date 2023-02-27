@@ -9,14 +9,10 @@ $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($
 $overall_stock_status   = $stock_data["overall_stock_status"];
 $manage_stock           = $stock_data["manage_stock"];
 
-// if(_dhh_debug()) {
-  // printr($stock_data);
-// }
-
-$isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
-$canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
-$thumb_size = 90;
-$thumb_dimensions = 1.5 * $thumb_size;
+$isVisibleProduct       = $_item->getProduct()->isVisibleInSiteVisibility();
+$canApplyMsrp           = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
+$thumb_size             = 90;
+$thumb_dimensions       = 1.5 * $thumb_size;
 ?>
 <tr>
   <td class="product-cart-image">
@@ -43,7 +39,7 @@ $thumb_dimensions = 1.5 * $thumb_size;
 
   <td class="product-cart-info">
     <?php if ($this->hasProductUrl()):?>
-      <a href="<?php echo $this->getProductUrl() ?>"><h4 class="product-name"><?php echo $this->escapeHtml($product_name) ?></h4></a>
+      <a href="<?php echo $this->getProductUrl() ?>" target="_blank"><h4 class="product-name"><?php echo $this->escapeHtml($product_name) ?></h4></a>
     <?php else: ?>
       <?php echo "<h4 class='product-name'>".$this->escapeHtml($product_name)."</h4>"; ?>
     <?php endif; ?>
@@ -113,7 +109,7 @@ $thumb_dimensions = 1.5 * $thumb_size;
         <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
         <a id="<?php echo $helpLinkId ?>" href="#" class="map-help-link"><?php echo $this->__("What's this?"); ?></a>
 
-        <script type="text/javascript">
+        <script>
           Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo $this->__("What&#39;s this?") ?>");
         </script>
 

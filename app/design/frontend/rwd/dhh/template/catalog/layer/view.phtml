@@ -17,42 +17,44 @@ if($this->canShowBlock()) {
       <?php
       echo $this->getStateHtml();
       if($this->canShowOptions()) {
+//        <div class="amshopby-all-filters">
         ?>
-        <p class="block-subtitle block-subtitle--filter"><?php echo $this->__("Filter") ?></p>
-        <dl id="narrow-by-list">
-          <?php
-          $_filters = $this->getFilters();
-          foreach($_filters as $_filter) {
-            $sys_name = $_filter->getName();
-            Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
-            if($_filter->getItemsCount()) {
-              $name = $this->__($sys_name);
-              
-              // Special handling of Category filter
-              if($name === "Categorie") {                
-                // Don't display this filter if there are no subcategories
-                $name = "Verder verfijnen"; // DHH
-                $items = $_filter->getItems();
-                $good_to_go = false;
-                foreach($items as $item) {
-                  if($item->getLevel() > 1) {
-                    $good_to_go = true;
-                    break;
+          <div class="block-title block-subtitle block-subtitle--filter "><span class="h2 strong orange underline-orange center">Filteren</span></div>
+          <dl id="narrow-by-list">
+            <?php
+            $_filters = $this->getFilters();
+            foreach($_filters as $_filter) {
+              $sys_name = $_filter->getName();
+              Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
+              if($_filter->getItemsCount()) {
+                $name = $this->__($sys_name);
+                
+                // Special handling of Category filter
+                if($name === "Categorie") {                
+                  // Don't display this filter if there are no subcategories
+                  $name = "Categorie"; // DHH
+                  $items = $_filter->getItems();
+                  $good_to_go = false;
+                  foreach($items as $item) {
+                    if($item->getLevel() > 1) {
+                      $good_to_go = true;
+                      break;
+                    }
+                  }
+                  if($good_to_go === false) {
+                    continue;
                   }
                 }
-                if($good_to_go === false) {
-                  continue;
-                }
+                echo "<dt>{$name}</dt>".PHP_EOL;
+                echo "<dd>{$_filter->getHtml()}</dd>".PHP_EOL;
               }
-              echo "<dt>{$name}</dt>".PHP_EOL;
-              echo "<dd>{$_filter->getHtml()}</dd>".PHP_EOL;
+              Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
             }
-            Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
-          }
-          ?>
-        </dl>
-        <script>decorateDataList("narrow-by-list")</script>
+            ?>
+          </dl>
+          <?php /* <script>decorateDataList("narrow-by-list")</script> */ ?>
       <?php
+        // </div>
       }
       ?>
     </div>

@@ -1886,3 +1886,15 @@ div#payment-method.firecheckout-section #checkout-payment-method-load .sp-method
 .firecheckout-set div.col-2 div.col2-set div.col-1 div#checkout-additional.firecheckout-section div.block-content ul.form-list.form-checkoutfields {
   display: none !important;
 }
+
+#checkout-header {
+  margin: 0 auto;
+  padding: 8px 0 6px;
+  width: 1170px;
+}
+
+#checkout-header::after {
+  display: table;
+  clear: both;
+  content: "";
+}

@@ -25,32 +25,33 @@
  */
 ?>
 <style>
-#checkout-header, .checkout-area-box{
-	display: block;
-}
-#checkoutSteps{
-	position: relative;
-}
-.step-title{
-	display: none !important;
-}
-.clzloginshow{
-	display: block !important;
-}
+  #checkout-header, .checkout-area-box{
+    display: block;
+  }
 
+  #checkoutSteps{
+    position: relative;
+  }
 
+  .step-title{
+    display: none !important;
+  }
 
-.checkout-steps a {
-  text-decoration: none;
-}
+  .clzloginshow{
+    display: block !important;
+  }
 
-.stpactive .checkout-number {
-  background-color: #3399cc !important;
-}
+  .checkout-steps a {
+    text-decoration: none;
+  }
 
-.stpactive em{
-  color: #3399cc !important;;
-}
+  .stpactive .checkout-number {
+    background-color: #3399cc !important;
+  }
+
+  .stpactive em{
+    color: #3399cc !important;;
+  }
 </style>
 
 <ul class="checkout-steps">
@@ -94,9 +95,9 @@
 <div class="page-title">
     <h1><?php echo $this->__('Checkout') ?></h1>
 </div>
-<script type="text/javascript" src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout_rwd.js') ?>"></script>
+<script src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
+<script src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
+<script src="<?php echo $this->getSkinUrl('js/opcheckout_rwd.js') ?>"></script>
 <ol class="opc opc-firststep-<?php echo $this->getActiveStep() ?> <?php 
 $logged=Mage::getSingleton('customer/session')->isLoggedIn();
     if(! $logged){
@@ -118,7 +119,7 @@ $logged=Mage::getSingleton('customer/session')->isLoggedIn();
     </li>
 <?php endforeach ?>
 </ol>
-<script type="text/javascript">
+<script>
 
     var accordion = new Accordion('checkoutSteps', '.step-title', true);
     <?php if($this->getActiveStep()): ?>

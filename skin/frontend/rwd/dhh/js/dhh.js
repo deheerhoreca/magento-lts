@@ -30,59 +30,59 @@ function increasem2(gb) {
   }
 }
 
-$j(document).ready(function() {
+// Add listener to hide the header on scrolldown
+// $j(document).ready(function() {
 
-  var doc = document.documentElement;
-  var w = window;
+  // var doc = document.documentElement;
+  // var w = window;
 
-  var prevScroll = w.scrollY || doc.scrollTop;
-  var curScroll;
-  var direction = 0;
-  var prevDirection = 0;
+  // var prevScroll = w.scrollY || doc.scrollTop;
+  // var curScroll;
+  // var direction = 0;
+  // var prevDirection = 0;
 
-  var header = document.getElementById('header');
+  // var header = document.getElementById('header');
 
-  var checkScroll = function() {
+  // var checkScroll = function() {
 
-    /*
-    ** Find the direction of scroll
-    ** 0 - initial, 1 - up, 2 - down
-    */
+    // /*
+    // ** Find the direction of scroll
+    // ** 0 - initial, 1 - up, 2 - down
+    // */
 
-    curScroll = w.scrollY || doc.scrollTop;
-    if (curScroll > prevScroll) { 
-      //scrolled up
-      direction = 2;
-    }
-    else if (curScroll < prevScroll) { 
-      //scrolled down
-      direction = 1;
-    }
+    // curScroll = w.scrollY || doc.scrollTop;
+    // if (curScroll > prevScroll) { 
+      // //scrolled up
+      // direction = 2;
+    // }
+    // else if (curScroll < prevScroll) { 
+      // //scrolled down
+      // direction = 1;
+    // }
 
-    if (direction !== prevDirection) {
-      toggleHeader(direction, curScroll);
-    }
+    // if (direction !== prevDirection) {
+      // toggleHeader(direction, curScroll);
+    // }
     
-    prevScroll = curScroll;
-  };
+    // prevScroll = curScroll;
+  // };
 
-  var toggleHeader = function(direction, curScroll) {
-    if (direction === 2 && curScroll > 150) { 
+  // var toggleHeader = function(direction, curScroll) {
+    // if (direction === 2 && curScroll > 150) { 
       
-      //replace 52 with the height of your header in px
+      // //replace 52 with the height of your header in px
 
-      header.classList.add('hide');
-      prevDirection = direction;
-    }
-    else if (direction === 1) {
-      header.classList.remove('hide');
-      prevDirection = direction;
-    }
-  };
+      // header.classList.add('hide');
+      // prevDirection = direction;
+    // }
+    // else if (direction === 1) {
+      // header.classList.remove('hide');
+      // prevDirection = direction;
+    // }
+  // };
   
-  window.addEventListener('scroll', checkScroll, { passive: true });
-
-});
+  // window.addEventListener('scroll', checkScroll, { passive: true });
+// });
 
 document.addEventListener('copy', (event) => {
   if(document.getSelection().toString().length > 100) {
@@ -93,21 +93,6 @@ document.addEventListener('copy', (event) => {
 });
 
 var kiyoh_score = 9.7;
-
-window.onload = (event) => {
-  let topbar = `
-    <span class='d-none d-xl-block align-left float-left'>
-      <a href='//kiyoh.com/reviews/1044049/chefstore?from=widget&amp;lang=nl' alt='Reviews Chefstore.nl' title='Reviews Chefstore.nl' target='_blank' rel='noreferrer nofollow noopener'>TROTS op onze score van <strong>9.7</strong></a>
-    </span>
-    <span class='align-center'>
-      <a href='/promoties.html'><strong>SALE</strong></a>
-    </span>
-    <span style='width:33%' class='d-none d-xl-block align-right float-right'>
-      <a href='/qquoteadv/index/'>Maak een <strong>offerte</strong> voor lease of koop</a>
-    </span>
-  `;
-  if(document.getElementById('topbar') !== null) document.getElementById('topbar').innerHTML = topbar;
-};
 
 jQuery(document).ready(function(){
   jQuery(document).on('click', '#toggle-cat-text', function(){

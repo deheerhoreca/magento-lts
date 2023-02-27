@@ -212,6 +212,11 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             $postfix = " A";
             break;
           
+          // " kWh/jaar"
+          case "annual_energy_consumption_kwh":
+            $postfix = " kWh/jaar";
+            break;
+          
           // Other
           
           case "vermogen_kw":
@@ -323,7 +328,7 @@ Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_ECHO_ATTRIBUTES");
 if($attributes !== []) {
   echo "<div class='box-collateral box-additional bxgroupifo product-specs'>";
   foreach($attributes as $group => $subattributes) {
-    echo "<span class='clzattrgname'>{$this->__($group)}</span>";
+    echo "<h3 class='clzattrgname'>{$this->__($group)}</h3>";
     foreach($subattributes as $key => $attr) {
       $tooltip = "";
       if(empty($attr["tooltip"]) === false) {

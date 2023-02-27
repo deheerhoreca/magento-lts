@@ -70,7 +70,6 @@ if($_quoteadv && count($collection) > 0):
         <ul id="order-info-tabs">
           <li class="current first last"><?php echo $this->__("Quote Information"); ?></li>
         </ul>
-        <script>decorateGeneric($('order-info-tabs').select('LI'), ['first', 'last']);</script>
       </dd>
     </dl>
     <p class="order-date"><?php echo $this->__('Quotation Date: %s', $this->formatDate($_quoteadv->getCreatedAt(), 'long')) ?></p>
@@ -186,7 +185,7 @@ if($_quoteadv && count($collection) > 0):
         action='<?php echo $this->getUrl('qquoteadv/view/confirm', ['_secure' => Mage::app()->getStore()->isCurrentlySecure()]) ?>'>
       <input type="hidden" name="id" id="id" value="<?php echo $_quoteadv->getId(); ?>">
 
-      <table cellpadding="4px" class="data-table linearize-table-large" id="my-quotes-table">
+      <table cellpadding="4px" class="data-table" id="my-quotes-table">
         <col width="30"/>
         <col width="75"/>
         <col width="160"/>
@@ -400,7 +399,7 @@ if($_quoteadv && count($collection) > 0):
         </tfoot>
       </table>
       
-      <table class="data-table linearize-table-large">
+      <table class="data-table">
         <tbody>
         <tr>
           <td colspan="7" align="left">
@@ -453,7 +452,6 @@ if($_quoteadv && count($collection) > 0):
         </tbody>
       </table>
       
-      <script>decorateTable('my-quotes-table', {'tbody': ['odd', 'even'], 'tbody tr': ['first', 'last']})</script>
       <input type="hidden" id="remove_item_id" name="remove_item_id" value=""/>
       <input type="hidden" id="update_item_id" name="update_item[itemId]" value=""/>
       <input type="hidden" id="update_item_qty" name="update_item[itemQty]" value=""/>

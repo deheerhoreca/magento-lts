@@ -32,11 +32,12 @@
 // If these are changed, they must also be updated in _var.scss
 
 var bp = {
-    xsmall: 479,
-    small: 599,
-    medium: 1199,
-    large: 1199,
-    xlarge: 1199
+    xsmall: 575,
+    small: 575,
+    medium: 767,
+    large: 991,
+    xlarge: 1199,
+    xxlarge: 1399
 };
 
 // ==============================================
@@ -318,7 +319,7 @@ var MenuManager = {
      * @returns {boolean}
      */
     useSmallScreenBehavior: function() {
-        return Modernizr.mq("screen and (max-width:" + bp.medium + "px)");
+        return Modernizr.mq("screen and (max-width:" + bp.xlarge + "px)");
     },
 
     /**
@@ -772,20 +773,20 @@ $j(document).ready(function () {
 
     // In order to display the language switcher next to the logo, we are moving the content at different viewports,
     // rather than having duplicate markup or changing the design
-    enquire.register('(max-width: ' + bp.medium + 'px)', {
-        match: function () {
-            $j('.page-header-container .store-language-container').prepend($j('.form-language'));
-        },
-        unmatch: function () {
-            $j('.header-language-container .store-language-container').prepend($j('.form-language'));
-        }
-    });
+    // enquire.register('(max-width: ' + bp.xlarge + 'px)', {
+        // match: function () {
+            // $j('.page-header-container .store-language-container').prepend($j('.form-language'));
+        // },
+        // unmatch: function () {
+            // $j('.header-language-container .store-language-container').prepend($j('.form-language'));
+        // }
+    // });
 
     // ==============================================
     // Enquire JS
     // ==============================================
 
-    enquire.register('screen and (min-width: ' + (bp.medium + 1) + 'px)', {
+    enquire.register('screen and (min-width: ' + (bp.xlarge + 1) + 'px)', {
         match: function () {
             $j('.menu-active').removeClass('menu-active');
             $j('.sub-menu-active').removeClass('sub-menu-active');
@@ -954,7 +955,7 @@ $j(document).ready(function () {
     // (since other blocks can be inserted into left_first), it creates simpler code to move the entire
     // .col-left-first block, so that is the approach we're taking
     if ($j('.col-left-first > .block').length && $j('div.category-products').length) {
-        enquire.register('screen and (max-width: ' + bp.medium + 'px)', {
+        enquire.register('screen and (max-width: ' + bp.xlarge + 'px)', {
             match: function () {
                 $j('.col-left-first').insertBefore($j('div.category-products'));
             },
@@ -992,7 +993,7 @@ $j(document).ready(function () {
     // Block collapsing (on smaller viewports)
     // ==============================================
 
-    enquire.register('(max-width: ' + bp.medium + 'px)', {
+    enquire.register('(max-width: ' + bp.xlarge + 'px)', {
         setup: function () {
             this.toggleElements = $j(
                 // This selects the menu on the My Account and CMS pages
@@ -1019,7 +1020,7 @@ $j(document).ready(function () {
     // ==============================================
 
     if ($j('body.checkout-onepage-index').length) {
-        enquire.register('(max-width: ' + bp.large + 'px)', {
+        enquire.register('(max-width: ' + bp.xlarge + 'px)', {
             match: function () {
                 $j('#checkout-step-review').prepend($j('#checkout-progress-wrapper'));
             },
@@ -1046,7 +1047,7 @@ $j(document).ready(function () {
     // ==============================================
 
     if ($j('.a-left').length) {
-        enquire.register('(max-width: ' + bp.large + 'px)', {
+        enquire.register('(max-width: ' + bp.xlarge + 'px)', {
             match: function () {
                 $j('.gift-info').each(function() {
                   $j(this).next('td').children('textarea').appendTo(this).children();
@@ -1176,7 +1177,7 @@ $j(document).ready(function () {
             // // Don't use zoom on devices where touch has been used
             // PointerManager.getPointer() == PointerManager.TOUCH_POINTER_TYPE
             // // Don't use zoom when screen is small, or else zoom window shows outside body
-            // || Modernizr.mq("screen and (max-width:" + bp.medium + "px)")
+            // || Modernizr.mq("screen and (max-width:" + bp.xlarge + "px)")
         // ) {
             // return; // zoom not enabled
         // }

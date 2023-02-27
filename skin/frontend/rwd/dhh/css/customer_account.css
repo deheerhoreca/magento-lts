@@ -1,0 +1,203 @@
+@charset "UTF-8";
+
+@media all {
+  .customer-account .my-account .page-title h1 {
+    border: 0;
+    text-align: left;
+  }
+
+  .customer-account-create #remember-me-popup,
+  .customer-account-create .buttons-set {
+    max-width: 455px;
+  }
+
+  .customer-account-create .buttons-set,
+  .customer-account-create .fieldset {
+    margin-left: 30px;
+  }
+
+  .customer-account-forgotpassword .buttons-set,
+  .customer-account-forgotpassword .fieldset {
+    margin-left: 30px;
+    max-width: 400px;
+  }
+
+  .customer-account .my-account .title-buttons {
+    position: relative;
+    text-align: right;
+  }
+
+  .customer-account .my-account .title-buttons h1 {
+    text-align: left;
+  }
+
+  .customer-account .my-account .title-buttons .button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .customer-account .my-account .addresses-list h2,
+  .customer-account .my-account .fieldset h2,
+  .customer-account .my-account .order-details h2 {
+    display: inline-block;
+    width: 100%;
+  }
+
+  .customer-account .my-account .order-details h3 {
+    font-size: var(--text-size-normal);
+  }
+
+  .customer-account .my-account .addresses-list h3 {
+    font-weight: 600;
+    font-size: var(--text-size-normal);
+  }
+
+  .customer-account .my-account .fieldset {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .customer-account .data-table {
+    margin-top: 5px;
+  }
+
+  .customer-account .data-table td.view a {
+    display: block;
+  }
+
+  .customer-account .sidebar .block ol#compare-items li {
+    margin: 10px 0;
+  }
+
+  .customer-account .sidebar .block .block-content .actions {
+    margin-top: 30px;
+  }
+
+  .customer-account .sidebar .block-reorder ol#cart-sidebar-reorder li,
+  .customer-account .sidebar ol#cart-sidebar-reorder li {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .customer-account .sidebar ol#cart-sidebar-reorder p.product-name {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  .customer-account .sidebar .block-cart .summary {
+    margin-bottom: 15px;
+  }
+
+  .customer-account .sidebar .block-reorder ol#cart-sidebar-reorder p.product-name {
+    display: inline;
+    margin-bottom: 0;
+  }
+
+  .customer-account-create .scaffold-form .captcha-input-container label:first-child {
+    width: 100%;
+  }
+
+  .customer-account .my-account .title-buttons.recurring-profiles-title-buttons {
+    float: right;
+    margin-bottom: 30px;
+    text-align: right;
+  }
+
+  .customer-account .my-account .title-buttons.recurring-profiles-title-buttons .button {
+    position: static;
+  }
+
+
+  .customer-account div.block.block-account div.block-title strong {
+    color: #fff !important;
+  }
+
+
+  .customer-account-create div.account-create div.page-title h1 {
+    padding-top: 17px;
+    border: medium;
+  }
+
+  .frmloginwrap #login-email,
+  .frmloginwrap #login-password,
+  .customer-account-login #email,
+  .customer-account-login #pass {
+    display: block;
+    margin: 0;
+    padding: 0 10px;
+    width: 100%;
+    height: 38px;
+    border: 1px solid #bec4c4;
+    border-radius: 3px;
+    color: #2c3638;
+    font-size: var(--text-size-normal);
+    line-height: 1em;
+  }
+
+  .customer-account div.block.block-account div.block-content ul li a {
+    text-transform: none;
+    font-size: 14px !important;
+  }
+
+  .customer-account .col-left.sidebar.col-left-first {
+    margin-top: 25px !important;
+    padding-left: 0;
+  }
+
+  .customer-account div.main div.col-main div.my-account {
+    padding-top: 20px;
+  }
+
+  .customer-account div.block.block-account div.block-title {
+    position: relative !important;
+    margin-bottom: 0;
+    padding: 14px 20px .9em !important;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background: #3aacd9 !important;
+    color: #fff !important;
+  }
+
+  .customer-account div.block.block-account .block-content {
+    margin-top: 0;
+    padding: 10px 10px 10px 15px;
+    background: #f6f6f6 0 0;
+  }
+
+  .block-account li {
+    margin: 7px 0;
+  }
+
+  .customer-account .sidebar .block .block-content p.block-subtitle {
+    margin-bottom: 15px;
+  }
+
+  .customer-account-login .scaffold-form label:first-child {
+    width: 115px;
+  }
+
+  .customer-account-login .col2-set .buttons-set {
+    border-top: 0;
+    text-align: left;
+  }
+
+  .customer-account-login .col2-set .buttons-set .button,
+  .customer-account-login .col2-set .buttons-set button {
+    float: none;
+    margin: 0;
+    min-width: 50%;
+  }
+
+  .customer-account-login .col2-set .col-1 ul {
+    margin: 10px 0 20px;
+    padding-left: 20px;
+    list-style: disc;
+  }
+
+  .account-create {
+    margin: 0 auto;
+    padding-top: 35px;
+    max-width: 600px;
+  }
+}

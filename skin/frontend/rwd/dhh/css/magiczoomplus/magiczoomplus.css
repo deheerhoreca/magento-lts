@@ -1254,3 +1254,21 @@ a[data-zoom-id] img,
     opacity: 0.2;
     filter: alpha(opacity = 20);
 }
+
+/* DHH */
+
+div.MagicToolboxSelectorsContainer img {
+  max-width: 60px;
+  max-height: 60px;
+  object-fit: contain;
+}
+
+a[data-zoom-id] img, .mz-thumb img {
+  border-radius: 5px;
+  padding: .2em;
+  border: 1px solid transparent !important;
+}
+
+[data-magic-slide-id].active-selector img {
+  border: 1px solid Gray !important;
+}

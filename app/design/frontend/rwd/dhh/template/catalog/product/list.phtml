@@ -10,7 +10,7 @@ Varien_Profiler::start('DHH_PrepareProductList');
 
 $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
-$catid                        = null;
+$category_id                  = null;
 $carct                        = Mage::registry("current_category");
 $category_id                  = $carct->getId();
 $category_desc                = $carct->getDescription();
@@ -65,7 +65,7 @@ if($show_products === true) {
 /* CATEGORY HEADER & SEO */
 
 if($carct && ($category === "category")) {
-  $catid                = (int) $carct->getId();
+  $category_id          = (int) $carct->getId();
   $category_name        = $carct->getName();
   $category_name        = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   $category_name_lwr    = strtolower($category_name);
@@ -85,8 +85,9 @@ if($carct && ($category === "category")) {
   }
   
   // Add category boilerplate to bottom
-  if(strpos($category_desc, "<!--no_auto_desc-->") === false) {      
-    $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($catid);
+  if($on_first_page === true && $have_active_filters === false
+  && strpos($category_desc, "<!--no_auto_desc-->") === false) {      
+    $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($category_id, $_productCollection);
     if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
       $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
       $n = sizeof($manufacturers);
@@ -106,23 +107,23 @@ if($carct && ($category === "category")) {
       $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
     }
     
-    if($on_first_page === true && $have_active_filters === false) {
-      if(empty($_productCollection) === false
-      && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
-        $category_block_bottom_html .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
-      } else {
-        $category_block_bottom_html .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
-      }
-    }
+    // if($on_first_page === true && $have_active_filters === false) {
+      // if(empty($_productCollection) === false
+      // && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
+        // $category_block_bottom_html .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+      // } else {
+        // $category_block_bottom_html .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
+      // }
+    // }
   }
   
   // Add a H1 if there isn't one
-  if(stripos($category_desc, "<h1>") === false) {
+  if(isset($category_name) && stripos($category_desc, "<h1>") === false) {
     $category_desc      = "<h1>{$category_name}</h1>{$category_desc}";
   }
   
   if(empty($category_desc) === false) {
-    echo "<div class='ctdesc std' id='ctdesc'>";
+    echo "<div class='ctdesc' id='ctdesc'>";
     // Optionally cut off description and show a 'More' button
     if(strpos($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
@@ -255,8 +256,8 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       
       // @todo fix this? want to show the product link under the current category, and not link to another category
       // if(_dhh_debug()) {
-        // // printr($catid);
-        // $_category = Mage::getModel('catalog/category')->load($catid);
+        // // printr($category_id);
+        // $_category = Mage::getModel('catalog/category')->load($category_id);
         // printr(get_class($_category));
         // if (!$_category instanceof Mage_Catalog_Model_Category) {
           // echo "bier";
@@ -309,7 +310,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       
       $usp_options      = [
         "context"         => "listview",
-        "category_name"   => $category_name,
+        "category_name"   => $category_name ?? null,
       ];
       $usps             = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
       
@@ -323,8 +324,8 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       } else {
         // Product label
         $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
-        if(isset($productlabel) === true) {
-          $html .= "<span class='lblprolist'>{$productlabel}</span>";
+        if(empty($productlabel) === false) {
+          $html .= "<span class='product-label'>{$productlabel}</span>";
         }
       }
       
@@ -357,7 +358,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         echo $html;
         $title = $product_long_name;
         ?>
-        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image">
+        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?>" class="product-image">
         <?php
           echo "<img class='trans-opacity' id='product-collection-image-{$_product->getId()}'
             src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
@@ -369,7 +370,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
           <div class="info">
             <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller_or_mpn}</span>"; ?></span>
             <h2 class="product-name ellipsed ellipsed-2">
-              <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?> details'><?php echo $product_name; ?></a>
+              <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?>'><?php echo $product_name; ?></a>
             </h2>
             <?php
             if($this->getChild("name.after")) {
@@ -382,7 +383,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
             }
             
             if(isset($tagline) === true) {
-              echo "<div class='product-list-tagline'>{$tagline}</div>";
+              echo "<div class='product-list-tagline'>Onze Keuze</div>";
             }
             
             if(empty($usps) === false) {

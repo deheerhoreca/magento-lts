@@ -2,7 +2,7 @@
 /**
  * @var Mage_Page_Block_Html_Header $this
  */
-//echo $this->getLayout()->createBlock("cms/block")->setBlockId("header_top")->toHtml();
+// echo $this->getLayout()->createBlock("cms/block")->setBlockId("header_top")->toHtml();
 
 // if(Mage::getSingleton("customer/session")->isLoggedIn()) {
   // $account_url = $this->helper("customer")->getAccountUrl();
@@ -19,10 +19,10 @@
         </a>
         <div id="header-search" ><?php echo $this->getChildHtml("topSearch") ?></div>
         <div class="account-cart-wrapper">
-          <span class="ms-2"><a class="glightbox4 btn btn-primary toplink-phone skip-phone top-link" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
-          <span class="ms-2"><a class="skip-account top-link" href="<?php echo Mage::getUrl("customer/account"); ?>" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
-          <span class="ms-2"><?php echo $this->getChildHtml("miniquote_head"); ?></span>
-          <span class="ms-2"><?php echo $this->getChildHtml("minicart_head"); ?></span>
+          <span class="ms-1 ms-sm-2"><a class="glightbox4 btn btn-primary toplink-phone skip-phone top-link" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
+          <span class="ms-1 ms-sm-2"><a class="skip-account top-link" href="<?php echo Mage::getUrl("customer/account"); ?>" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
+          <span class="ms-1 ms-sm-2"><?php echo $this->getChildHtml("miniquote_head"); ?></span>
+          <span class="ms-1 ms-sm-2"><?php echo $this->getChildHtml("minicart_head"); ?></span>
         </div>
       </div>
     </div>
@@ -31,8 +31,18 @@
   <div id="header-nav" class="skip-content">
     <?php echo $this->getChildHtml("topMenu") ?>
   </div>
-  <div class="clzinfopagetop">
-    <div class="pageinfotpinner animate" id="topbar"></div>
+  <div class="clzinfopagetop px-1">
+    <div class="pageinfotpinner animate" id="topbar">
+      <span class='d-none d-s-block'>
+        <a href='//kiyoh.com/reviews/1044049/chefstore?from=widget&amp;lang=nl' alt='Reviews Chefstore.nl' title='Reviews Chefstore.nl' target='_blank' rel='noreferrer nofollow noopener'>TROTS op onze score van <strong>9.7</strong></a>
+      </span>
+      <span class='align-center'>
+        <a href='/promoties.html'><strong>SALE</strong></a>
+      </span>
+      <span class='d-none d-s-block'>
+        <a href='/qquoteadv/index/'>Maak een <strong>offerte</strong> voor lease of koop</a>
+      </span>
+    </div>
   </div>
   <?php echo $this->getChildHtml("topContainer"); ?>
 </header>

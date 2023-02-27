@@ -234,7 +234,12 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         }
 
         $cnt     = parent::getItemsCount();
-        $showAll = !Mage::getStoreConfig('amshopby/general/hide_one_value');
+        // DHH CORE HACK -- Allow certain attributes to ignore hide_one_value
+        if(in_array($this->_filter->getAttributeModel()->getAttributeCode(), ["recommended_product"], true) === true) {
+          $showAll = true;
+        } else {
+          $showAll = !Mage::getStoreConfig('amshopby/general/hide_one_value');
+        }
         return ($cnt > 1 || $showAll) ? $cnt : 0;
     }
 

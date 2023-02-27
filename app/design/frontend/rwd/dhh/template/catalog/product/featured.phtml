@@ -2,38 +2,25 @@
 
 // Settings
 $_helper                      = $this->helper("catalog/output");
-$catid                        = null;
-$carct                        = Mage::registry("current_category");
-$amschk                       = $this->getRequest()->getRouteName();
-$haschild                     = false;
-$short_name_cats              = [10, 119, 434, 174, 24, 38, 23, 104, 3, 544];
-$short_name_parent_cats       = [3];
-$max_product_highlight_items  = 6;
-$category_thumbs_dimensions   = 140;
-$parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
-$active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
-$have_active_filters          = (bool) empty($active_filters) === false;
-$mininum_lease_price          = 400;
 $show_ups_block               = false;
 $show_black_friday            = false;
 $show_actions                 = false;
-$_helper                      = $this->helper("catalog/output");
 $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
 $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
-$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview");
+$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["featured"]);
 
 // Get all products that are marked as featured
 $_productCollection = Mage::getModel("catalog/product")
   ->getCollection()
   ->addAttributeToSelect($attributes)
-  ->addFieldToFilter([["attribute" => "featured", "eq" => true]])
+  // ->addFieldToFilter([["attribute" => "featured", "eq" => true]])
+  ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
+  ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
   ->addOrder("popularity", "ASC")
-  ->addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
-  ->setPageSize(24)
-  ->setCurPage(1)
+  ->setPageSize(20)
   ->addFinalPrice(); // Necessary to respect sale price end date
 
 /*
@@ -46,10 +33,8 @@ $_productCollection = Mage::getModel("catalog/product")
  *
  * We now use both as an experiment...
  */
-$_productCollection->setFlag('require_stock_items', true);
-Mage::getModel('catalogInventory/stock')->addItemsToProducts($_productCollection);
-
-$_collectionSize        = $_productCollection->count();
+// $_productCollection->setFlag('require_stock_items', true);
+// Mage::getModel('catalogInventory/stock')->addItemsToProducts($_productCollection);
 
 $productBlock           = $this->getLayout()->createBlock('catalog/product_price');
 $parent_categories_ids  = [];
@@ -58,10 +43,10 @@ $_columnCount           = 4;
 $displaySize            = 175;
 $_imgSize               = 1 * $displaySize;
 
-if($_collectionSize > 0) {
+if($_productCollection->getFirstItem()) {
 ?>
   <div class="category-products">
-    <span class="h1 center" style="padding-top: 2em;">Populaire Producten</span>
+    <span class="h1 center" style="padding-top: 2em;">Populaire Producten</span><hr>
     <?php
    echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     $i = 0;
@@ -131,8 +116,8 @@ if($_collectionSize > 0) {
       } else {
         // Product label
         $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
-        if(isset($productlabel) === true) {
-          $html .= "<span class='lblprolist'>{$productlabel}</span>";
+        if(empty($productlabel) === false) {
+          $html .= "<span class='product-label'>{$productlabel}</span>";
         }
       }
 
@@ -160,7 +145,7 @@ if($_collectionSize > 0) {
       // Product name
       $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');        
       ?>
-      <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
+      <li class="item">
         <?php
         echo $html;
         $title = $product_long_name;
@@ -190,7 +175,7 @@ if($_collectionSize > 0) {
             }
             
             if(isset($tagline) === true) {
-              echo "<div class='product-list-tagline'>{$tagline}</div>";
+              echo "<div class='product-list-tagline' title='{$tagline}'>Onze Keuze</div>";
             }
             
             if(sizeof($usps) > 0) {

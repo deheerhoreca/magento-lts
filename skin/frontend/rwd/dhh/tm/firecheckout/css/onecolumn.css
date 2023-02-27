@@ -171,9 +171,10 @@
     border-radius: 4px;
     top: -10px;
     bottom: 0;
-    left: -40px;
-    right: -40px;
+    left: -30px;
+    right: -30px;
     display: none;
+    overflow: clip;
 }
 .onecolumn .current,
 .onecolumn .activated,
