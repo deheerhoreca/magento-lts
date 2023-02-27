@@ -153,7 +153,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return true;
     }
     
-    public function is_read_cache_enabled($non_anonymous_okay = false) {
+    /*
+     * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+     * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
+     */
+    public function is_read_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
       
       Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
       
@@ -165,75 +169,86 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         // echo "</pre>";
       // }
       
-      // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-      if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"])) {
-        self::log("Read cache disabled (URL parameter)");
+      if(DHH_FPC_ENABLED === false) {
+        self::log("Read cache disabled (DHH_FPC_ENABLED): {$debug_name}");
         return false;
       }
       
-      if(DHH_FPC_ENABLED === false) {
-        self::log("Read cache disabled (DHH_FPC_ENABLED)");
+      // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
+      if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"])) {
+        self::log("Read cache disabled (URL parameter): {$debug_name}");
         return false;
       }
       
       if($_SERVER["REQUEST_METHOD"] !== "GET") {
-        self::log("Read cache disabled (REQUEST_METHOD)");
+        self::log("Read cache disabled (REQUEST_METHOD): {$debug_name}");
         return false;
       }
       
-      $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
-      
-      if($_action === "cms_index_noRoute" || strstr($_action, "checkout")
-      || strstr($_action, "customer") || strstr($_action, "api")
-      || strstr($_action, "mpm") || strstr($_action, "manage")
-      || strstr($_action, "sales") || strstr($_action, "qquoteadv")) {
-        self::log("Read cache disabled (Magento action)");
-        return false;
-      }
-      
-      if(Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
-        if($non_anonymous_okay === false) {
-          self::log("Read cache disabled (Not anonymous)");
+      if($html_block_mode !== true) {
+        $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
+        if($_action === "cms_index_noRoute" || strstr($_action, "checkout")
+        || strstr($_action, "customer") || strstr($_action, "api")
+        || strstr($_action, "mpm") || strstr($_action, "manage")
+        || strstr($_action, "sales") || strstr($_action, "qquoteadv")) {
+          self::log("Read cache disabled (Magento action): {$debug_name}");
           return false;
         }
       }
       
-      self::log("Read cache enabled");
+      if($non_anonymous_okay === false && Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
+        self::log("Read cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
+        return false;
+      }
+      
+      self::log("Read cache enabled: {$debug_name}");
       
       Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
       return true;
     }
     
-    public function is_write_cache_enabled($non_anonymous_okay = false) {
+    /*
+     * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+     * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
+     */
+    public function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
       
       Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
       
-      $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
-      
-      if(DHH_FPC_ENABLED === false
-        || $_SERVER["REQUEST_METHOD"] !== "GET"
-        || isset($_GET["nofpc"]) === true
-        || isset($_GET["is_ajax"]) === true
-        || in_array($_action, ["cms_index_noRoute"])
-        || strstr($_action, "checkout")
-        || strstr($_action, "customer")
-        || strstr($_action, "api")
-        || strstr($_action, "mpm")
-        || strstr($_action, "manage")
-        || strstr($_action, "sales")
-        || strstr($_action, "qquoteadv")        
-      ) {
-        self::log("Write cache disabled (request excluded from caching)");
+      if(DHH_FPC_ENABLED === false) {
+        self::log("Write cache disabled (DHH_FPC_ENABLED): {$debug_name}");
         return false;
+      }
+      
+      // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
+      if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"])) {
+        self::log("Write cache disabled (URL parameter): {$debug_name}");
+        return false;
+      }
+      
+      if($_SERVER["REQUEST_METHOD"] !== "GET") {
+        self::log("Write cache disabled (REQUEST_METHOD): {$debug_name}");
+        return false;
+      }
+      
+      if($html_block_mode !== true) {
+        $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
+        if($_action === "cms_index_noRoute" || strstr($_action, "checkout")
+        || strstr($_action, "customer") || strstr($_action, "api")
+        || strstr($_action, "mpm") || strstr($_action, "manage")
+        || strstr($_action, "sales") || strstr($_action, "qquoteadv")) {
+          self::log("Write cache disabled (Magento action): {$debug_name}");
+          return false;
+        }
       }
       
       if($non_anonymous_okay === false && Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
-        self::log("Write cache disabled (request not anonymous)");
+        self::log("Read cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
         return false;
       }
       
-      self::log("Write cache enabled");
+      self::log("Write cache enabled: {$debug_name}");
       
       Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
@@ -282,10 +297,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       if($holepunch_formkey === true) {
         Varien_Profiler::start("DHH::FPC::Holepunch::formkey");
         $search = "<!-- fpc form_key_placeholder -->";
-        $formKey = Mage::getSingleton("core/session")->getFormKey();
-        if(empty($formKey) === false) {
-          $html = str_replace($search, $formKey, $html, $count);
-          self::log("Replaced {$search} {$count} times");
+        $replacement = Mage::getSingleton("core/session")->getFormKey();
+        if(empty($replacement) === false) {
+          $html = str_replace($search, $replacement, $html, $count);
+          self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
         }
         Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
       }
@@ -307,36 +322,36 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
           // ->createBlock("checkout/cart_sidebar")
           // ->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
         $sidebar_html = "";
-        $minicart_html = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
+        $replacement = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
         $search = "<!-- header_minicart_here -->";
-        $html = str_replace($search, $minicart_html, $html, $count);
-        self::log("Replaced {$search} {$count} times");
+        $html = str_replace($search, $replacement, $html, $count);
+        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::minicart");
         
         // core_messages
         
         Varien_Profiler::start("DHH::FPC::Holepunch::messages_html");
-        $messages_html .= Mage::app()
+        $replacement = Mage::app()
           ->getLayout()
           ->createBlock("core/messages")
           ->setTemplate("page/html/notices.phtml")->toHtml();
-        $messages_html .= Mage::app()->getLayout()->getMessagesBlock()->toHtml();
+        $replacement .= Mage::app()->getLayout()->getMessagesBlock()->toHtml();
+        // var_dump($replacement);exit;
         $search = "<!-- core_messages_here -->";
-        $html = str_replace($search, $messages_html, $html, $count);
-        self::log("Replaced {$search} {$count} times");
+        $html = str_replace($search, $replacement, $html, $count);
+        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::messages_html");
-        
         // miniquote
         
         Varien_Profiler::start("DHH::FPC::Holepunch::miniquote_html");
-        $miniquote_html = Mage::app()
+        $replacement = Mage::app()
           ->getLayout()
           ->createBlock("qquoteadv/checkout_miniquote_miniquote")
           ->setTemplate("qquoteadv/checkout/quote/miniquotehead.phtml")
           ->toHtml();
         $search = "<!-- header_miniquote_here -->";
-        $html = str_replace($search, $miniquote_html, $html, $count);
-        self::log("Replaced {$search} {$count} times");
+        $html = str_replace($search, $replacement, $html, $count);
+        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::miniquote_html");
         
         // // Breadcrumbs block -- only for catalog_product_view
@@ -374,18 +389,18 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         
         // Main nav
         Varien_Profiler::start("DHH::FPC::Holepunch::nav");
-        $nav_html = $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
+        $replacement = $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
         $search = "<!-- nav_here -->";
-        $html = str_replace($search, $nav_html, $html, $count);
-        self::log("Replaced {$search} {$count} times");
+        $html = str_replace($search, $replacement, $html, $count);
+        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
         
         // Footer
         Varien_Profiler::start("DHH::FPC::Holepunch::footer");
-        $nav_html = $_html = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
+        $replacement = $_html = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
         $search = "<!-- footer_here -->";
-        $html = str_replace($search, $nav_html, $html, $count);
-        self::log("Replaced {$search} {$count} times");
+        $html = str_replace($search, $replacement, $html, $count);
+        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
       }
       
@@ -472,35 +487,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    // public function replace_between($str, $needle_start, $needle_end, $replacement) {
-      
-      // if($pos_start = strpos($str, $needle_start) === false) {
-        // self::log(__METHOD__.": {$needle_start} not found!");
-        // self::log($str);
-        // return $str;
-      // }
-      // $start = $pos_start === false ? 0 : $pos_start;
-      
-      // if($pos_end = strpos($str, $needle_end, $start) === false) {
-        // if(DHH_FPC_DEBUG === true) {
-          // self::log(__METHOD__.": {$needle_start} not found!");
-          // self::log($str);
-        // }
-        // return $str;
-      // }
-      // $end = $pos_end === false ? strlen($str) : $pos_end + strlen($needle_end);
-      
-      // // $pos = strpos($str, $needle_start);
-      // // $start = $pos === false ? 0 : $pos;
-
-      // // $pos = strpos($str, $needle_end, $start);
-      // // $end = $pos === false ? strlen($str) : $pos + strlen($needle_end);
-      
-      // self::log(__METHOD__.": ".htmlentities($needle_start).":: Start = {$start}, End = {$end}");
-
-      // return substr_replace($str, $replacement, $start, $end - $start);
-    // }
-    
     public function replace_between($str, $needle_start, $needle_end, $replacement) {
       
       Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
@@ -523,9 +509,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       self::log(__METHOD__.": ".htmlentities($needle_start).":: Start = {$start}, End = {$end}");
       
-      return substr_replace($str, $replacement, $start, $end - $start);
-      
       Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      
+      return substr_replace($str, $replacement, $start, $end - $start);
     }
     
     static function log($msg): void {
@@ -556,7 +542,6 @@ if(function_exists("printr") === false) {
     echo $ret;
   }
 }
-
 
 // @see https://github.com/jenstornell/tiny-html-minifier/blob/master/src/TinyHtmlMinifier.php
 // "Latest commit 5bea148 on Jun 25, 2019"

@@ -1,3 +1,5 @@
+/* DHH CORE HACK - modified breaking points */
+
 if (typeof bp == 'undefined') {
     var bp = {
         xsmall: 479,
@@ -319,7 +321,7 @@ function amshopby_category_show(evt){
 function amshopby_filter_show(evt){
     var dt = Event.findElement(evt, 'dt');
     var isRwdOrUltimo = typeof enquire == 'object' && typeof ProductMediaManager == 'object';
-    if (isRwdOrUltimo && 770 > jQuery(window).width()) { // bp.medium = 770 - for mobile devices 
+    if (isRwdOrUltimo && bp.xlarge > jQuery(window).width()) { // bp.medium = 770 - for mobile devices 
         return;
     }
     var ol = dt.next('dd').select('ol').first(),
@@ -501,7 +503,7 @@ function amshopby_move_top_filter(){
             amshopby_rwd_toggle_content();
         }
         if (typeof enquire != 'undefined' && typeof bp != 'undefined') {
-            enquire.register('(max-width: ' + bp.medium + 'px)', {
+            enquire.register('(max-width: ' + bp.xlarge + 'px)', {
                 setup: function () {},
                 match: function () {
                     var parentByList = $$('.amshopby-filters-left #narrow-by-list').first();

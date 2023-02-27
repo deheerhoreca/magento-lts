@@ -36,7 +36,8 @@ $show_black_friday          = false;
 $javascripts                = [];
 $brand_block_name           = "";
 $brand                      = "";
-$max_highlighted_attributes = 10;
+$payment_methods_content    = "";
+$max_highlighted_attributes = 12;
 
 // Find the category this product belongs to
 // @todo is this expensive?
@@ -104,7 +105,7 @@ $buyblock_free_delivery_content = "";
 $buyblock_free_delivery = false;
 
 if($_finalPriceInclTax >= $freeshipping_from && $_product->isSaleable() === true && $overall_stock_status !== "eol") {
-  $buyblock_free_delivery_content .= "<div class='buyblock-usp fw-normal'><strong class=green>Gratis</strong> bezorgd</div>";
+  $buyblock_free_delivery_content .= "<div class='buyblock-usp fw-normal'><strong class=green>Gratis</strong> verzending in NL en BE</div>";
   $buyblock_free_delivery = true;
 }
 
@@ -550,8 +551,11 @@ if($i < $max_highlighted_attributes) {
   $image  = "{$skin}frontend/rwd/dhh/images/volt.svg";
   $name   = "Voltage";
   $title  = "Voltage";
-  if(is_scalar($value) && (stripos($value, "400") !== false)) {
-    $title = "Let op: 400 volt";
+  if(is_array($value)) {
+    $value = implode(", ", $value);
+  }
+  if((stripos($value, "400") !== false)) {
+    $title = "Let op: 400 volt apparaat";
   }
   if(empty($value) === false && strtolower($value) !== "n.v.t.") {
     $highlights[] = [
@@ -758,7 +762,7 @@ $hlstr = null;
 foreach($highlights as $key => $highlight) {
   $name = $highlight["name"] ?? $highlight["title"];
   if(empty($name) === false) $name .= ":";
-  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' loading=lazy width=40 height=40><span class='value'>{$highlight["text"]}</span></li>".PHP_EOL;
+  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' alt='{$highlight["title"]}' loading=lazy width=40 height=40><span class='value'>{$highlight["text"]}</span></li>".PHP_EOL;
 }
 
 // Retrieve cross sell product collection
@@ -796,6 +800,13 @@ if($refrigerant === "R290" || $refrigerant === "R290a") {
 }
 if($refrigerant === "R600" || $refrigerant === "R600a" || $refrigerant === "R660a") {
   $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r600")->toHtml()."</div>";
+}
+$value = $voltage;
+if(is_array($value)) {
+  $value = implode(" ", $value);
+}
+if((stripos($value, "400") !== false)) {
+  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_voltage_400")->toHtml()."</div>";
 }
 
 if(strlen($product_description) === 0) {
@@ -846,21 +857,19 @@ if($stock_data["overall_stock_status"] === "backorder"
   <?php /* PRODUCT IMAGES */ ?>
   
   <div class="proleftdv">
-  
-  <div class="product-name clearfix">
-    <h1><?php echo $productTitle; ?></h1>
-    <div class="float-left" style="margin-right:2em;">
-      <a href="<?php echo $brand_link; ?>"><?php echo $brand_name; ?></a>
+    
+    <div class="product-name">
+      <h1><?php echo $productTitle; ?></h1>
+      <div class="float-left"><a href="<?php echo $brand_link; ?>"><?php echo $brand_name; ?></a></div>
+      <?php echo $this->getReviewsSummaryHtml($_product, "short", false); ?>
     </div>
-    <?php echo $this->getReviewsSummaryHtml($_product, "short", false); ?>
-  </div>
-  
+    
     <div class="product-img-box">
       <span class="anchor" id="photos"></span>
       <?php
         // Product label
         if(empty($productlabel) === false) {
-          echo "<span class='lblprolistviewpg'>{$productlabel}</span>";
+          echo "<span class='product-label'>{$productlabel}</span>";
         }
         
         // Black friday
@@ -1115,8 +1124,8 @@ if($stock_data["overall_stock_status"] === "backorder"
           $i = 0;
           ?>
           <div class="crosssell product-collateral category-products">
+            <ul class="products-grid products-grid-mini">
             <?php
-            echo "<ul class='products-grid products-grid-mini'>";
               foreach($_crossSellProducts as $_product) {
                 $i++;
                 ?>
@@ -1130,7 +1139,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                     "_blank"                => true,
                     "prefer_rewrite_table"  => true, // Otherwise, getting ugly urls
                   ];
-                  echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
+                  Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
                 echo "</li>";
               }
               ?>
@@ -1284,14 +1293,14 @@ if($stock_data["overall_stock_status"] === "backorder"
     <?php /* Brand Logo & Text */ ?>
       
     <?php
-      if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
-        ?>
-        <div class="probottomdv" id="product-brand-text">
-        <span class="anchor" id="brand"></span>
-        <h3 class="tableftheader">Over <?php echo $brand_name; ?></h3>
-        <div class="brand std justify"><?php echo $brand_block_name; ?></div>
-        <?php
-      }
+      // if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
+        // 
+        // <div class="probottomdv" id="product-brand-text">
+        // <span class="anchor" id="brand"></span>
+        // <h3 class="tableftheader">Over $brand_name</h3>
+        // <div class="brand std justify">$brand_block_name</div>
+        // 
+      // }
       if(empty($brand_logo) === false) {
         echo "<div class='center'>";
         echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
@@ -1301,7 +1310,12 @@ if($stock_data["overall_stock_status"] === "backorder"
       ?>
   </div>
 </div>
+<?php
 
+// schema.org product data -- Called here and removed from layout xml to put it in the footer
+echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/richsnippets/richsnippets_json.phtml")->toHtml();
+
+?>
 <script>
   //<![CDATA[
   var productAddToCartForm = new VarienForm('product_addtocart_form');

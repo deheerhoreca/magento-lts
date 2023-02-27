@@ -9,9 +9,7 @@ $controller_name          = Mage::app()->getRequest()->getControllerName(); // "
 $dhh_debug                = false;
 $debug_lines              = [];
 
-// if(_dhh_debug()) {
-  // printr($controller_name);
-// }
+// printr($controller_name);
 
 /*
 Known configurations:
@@ -195,13 +193,13 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:'); ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_price + $_weeeTaxAmount, false); ?>
             </span>
           </span>
           <span class="price-including-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-            <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
             </span>
           </span>
@@ -214,7 +212,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_price + $_weeeTaxAmount, false) ?>
             </span>
           </span>
@@ -227,7 +225,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
             )</span>
           <span class="price-including-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-            <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
             </span>
           </span>
@@ -240,13 +238,13 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_price + $_weeeTaxAmount, false) ?>
             </span>
           </span>
           <span class="price-including-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-            <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
             </span>
             <span class="weee">(
@@ -266,7 +264,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_price, false) ?>
             </span>
           </span>
@@ -281,23 +279,24 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <span class="price-including-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-            <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
             </span>
           </span>
           <?php
+        }
         
-        /* CONTEXT 4 => Used:
-          - Listview without special price
-          - Detailview without special price
-          - Related products without special price
-        */
+        // CONTEXT: 4 => Used:
+        // - Listview without special price
+        // - Detailview without special price
+        // - Related products without special price
         
-        } else {
+        else {
           $debug_lines[] = "Context: 4";
           
           // MSRP
-          if($_msrp > $_finalPrice && $_discount_pct > 1) {
+          if($_msrp > $_finalPrice && $_discount_pct > 1 && $controller_name !== "category"
+          && $controller_name !== "cart" && $controller_name !== "index") {
             echo _displayMsrp($_msrp_formatted, $_msrpStoreLabel, $_id.$this->getIdSuffix());
           }
           ?>
@@ -311,15 +310,16 @@ if($_product->getAttributeText("eol") !== "Ja") {
             } else {
               $tmp = $_finalPrice_formatted;
             }
+            // <span class="label">$this->helper('tax')->__('Excl. Tax:')</span>
             ?>
-            <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>"><!--sse--><?php echo $tmp; ?><!--/sse--></span>
+            <span class="price"><!--sse--><?php echo $tmp; ?><!--/sse--></span>
           </span>
           
           <?php
-          if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
+          if($controller_name !== "category" && $controller_name !== "cart"
+          && $controller_name !== "index" && $controller_name !== "product") { ?>
             <span class="price-including-tax not-special italic small">
-              <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+              <span class="price">
                 <?php echo $_finalPriceInclTax_formatted; ?>
               </span>
               <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
@@ -341,7 +341,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           $debug_lines[] = "Context: 5";
           $weeeAmountToDisplay = $_taxHelper->displayPriceIncludingTax() ? $_weeeTaxAmountInclTaxes : $_weeeTaxAmount;
           ?>
-          <span class="regular-price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="regular-price">
             <?php echo $_coreHelper->currency($_price + $weeeAmountToDisplay, true, true) ?>
           </span>
 
@@ -361,7 +361,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
         } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)) { // incl. + weee
           $debug_lines[] = "Context: 6";
           ?>
-          <span class="regular-price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="regular-price">
             <?php echo $_coreHelper->formatPrice($_price + $_weeeTaxAmount, true) ?>
           </span>
           <span class="weee">(
@@ -395,7 +395,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
         
         } else {
           $debug_lines[] = "Context: 8"; ?>
-          <span class="regular-price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="regular-price">
             <?php if($_finalPrice == $_price): ?>
               <?php echo $_coreHelper->formatPrice($_price, true); ?>
             <?php else: ?>
@@ -416,7 +416,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
         ?>
         <p class="old-price">
           <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
-          <span class="price" id="old-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_regularPrice + $_originalWeeeTaxAmount, false) ?>
           </span>
         </p>
@@ -428,13 +428,13 @@ if($_product->getAttributeText("eol") !== "Ja") {
             <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
             <span class="price-excluding-tax">
               <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-              <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+              <span class="price">
                 <?php echo $_coreHelper->formatPrice($_finalPrice + $_weeeTaxAmount, false) ?>
               </span>
             </span>
           <span class="price-including-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-            <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
             </span>
           </span>
@@ -444,7 +444,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <p class="special-price">
             <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
-          <span class="price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_finalPrice + $_weeeTaxAmountInclTaxes, false) ?>
           </span>
           </p>
@@ -457,7 +457,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
         $debug_lines[] = "Context: 10"; ?>
         <p class="old-price">
           <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
-          <span class="price" id="old-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_regularPrice + $_originalWeeeTaxAmount, false) ?>
           </span>
         </p>
@@ -467,7 +467,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
             <?php echo $_coreHelper->formatPrice($_finalPrice + $_weeeTaxAmount, false) ?>
             </span>
           </span>
@@ -481,13 +481,13 @@ if($_product->getAttributeText("eol") !== "Ja") {
             )</span>
           <span class="price-including-tax">
           <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-          <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
           </span>
           </span>
         <?php else: ?>
           <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
-          <span class="price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_finalPrice + $_weeeTaxAmountInclTaxes, false) ?>
           </span>
           <span class="weee">(
@@ -508,7 +508,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
         <?php $debug_lines[] = "Context: 11"; ?>
         <p class="old-price">
           <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
-          <span class="price" id="old-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_regularPrice + $_originalWeeeTaxAmount, false) ?>
           </span>
         </p>
@@ -517,7 +517,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPrice + $_weeeTaxAmount, false) ?>
             </span>
           </span>
@@ -530,7 +530,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           )</span>
         <span class="price-including-tax">
           <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-          <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
           </span>
         </span>
@@ -543,7 +543,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
       <?php $debug_lines[] = "Context: 12"; ?>
         <p class="old-price">
           <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
-          <span class="price" id="old-price-<?php echo $_id.$this->getIdSuffix(); ?>">
+          <span class="price">
             <?php echo $_coreHelper->formatPrice($_regularPrice, false) ?>
           </span>
         </p>
@@ -552,7 +552,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
           <span class="price-excluding-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-            <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPrice, false) ?>
             </span>
           </span>
@@ -564,7 +564,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <?php endforeach; ?>
           <span class="price-including-tax">
             <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-            <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+            <span class="price">
               <?php echo $_coreHelper->formatPrice($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, false) ?>
             </span>
           </span>
@@ -572,9 +572,15 @@ if($_product->getAttributeText("eol") !== "Ja") {
 
       <?php
       
-      // CONTEXT 13 -- USED
+      }
       
-      } else {
+      // CONTEXT 13 -- USED:
+      // - Listview with special price
+      // - Related products with special price
+      // - Detailview with special price
+      // - Related products with special price
+      
+      else {
         
         // MSRP
         if($_msrp > $_finalPrice && $_discount_pct > 1 && $controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") {
@@ -595,14 +601,15 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <div class="special-price">
             <span class="price-excluding-tax">
-              <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+              <span class="price">
                 <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?><!--/sse-->
               </span>
             </span>
             <?php
-            if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
+            if($controller_name !== "category" && $controller_name !== "cart"
+            && $controller_name !== "index" && $controller_name !== "product") { ?>
               <span class="price-including-tax italic small">
-                <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+                <span class="price">
                   <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?><!--/sse-->
                 </span>
               <span class="label">incl. btw</span>
@@ -615,7 +622,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <div class="special-price">
             <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
-            <span class="price" id="product-price-<?php echo $_id.$this->getIdSuffix(); ?>"><!--sse-->
+            <span class="price"><!--sse-->
             <?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?>
             <!--/sse--></span>
           </div>
@@ -627,11 +634,13 @@ if($_product->getAttributeText("eol") !== "Ja") {
           echo _displayDiscount($_discount_abs_formatted, $_discount_pct_formatted, $_id.$this->getIdSuffix());
         }
         
-        echo _displayPriceDates($_store, $_special_price_from_date, $_special_price_to_date);
+        if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") {
+          echo _displayPriceDates($_store, $_special_price_from_date, $_special_price_to_date);
+        }
       } 
     } /* if($_finalPrice == $_price): */
     
-    /* CONTEXT 14 */
+    /* CONTEXT 14 -- Volume discount */
     
     if($showMinPrice && $_minimalPriceValue && $_minimalPriceValue < $_convertedFinalPrice) {
       $debug_lines[] = "Context 14";
@@ -662,7 +671,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
 
   <?php
 
-  /* CONTEXT 15 */
+  /* CONTEXT 15 -- Grouped Products */
 
   } else { /* if(!$_product->isGrouped()): */
     $debug_lines[] = "Context 15";
@@ -687,13 +696,13 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <?php if($_taxHelper->displayBothPrices()): ?>
             <span class="price-excluding-tax">
               <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
-              <span class="price" id="price-excluding-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+              <span class="price">
                 <?php echo $_coreHelper->formatPrice($_exclTax, false) ?>
               </span>
             </span>
             <span class="price-including-tax">
               <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-              <span class="price" id="price-including-tax-<?php echo $_id.$this->getIdSuffix(); ?>">
+              <span class="price">
                 <?php echo $_coreHelper->formatPrice($_inclTax, false) ?>
               </span>
             </span>

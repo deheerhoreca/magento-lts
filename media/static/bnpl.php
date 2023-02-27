@@ -2,7 +2,7 @@
   <head>
     <link rel="stylesheet" type="text/css" href="/skin/frontend/rwd/dhh/css/styles.css" media="all">
     <link rel="stylesheet" type="text/css" href="/skin/frontend/rwd/dhh/css/responsive.css" media="all">
-    <link as="font" href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/A.font-awesome.min.css" media="all">
     <title>Achteraf betalen</title>
   </head>
   <body>
@@ -13,9 +13,9 @@
           <img src="/skin/frontend/rwd/dhh/images/mondu_logo.png" alt="Mondu logo" title="Mondu" style="width:140px; height:auto; float:right; margin-top: .5em;">
           <h2>🤩Achteraf betalen met Mondu</h2>
           <h5><i>Voor zakelijke klanten in Nederland</i></h5>
-          <h4>Maximaal €20.000 (zakelijk), incl. BTW</h4>
+          <h4>Maximaal €15.000 (zakelijk), incl. BTW</h4>
           <div style="max-width: 600px;">
-            <strong>Met Mondu betaal je zonder rente binnen 30, 60 of 90 dagen.</strong>
+            <strong>Met Mondu betaal je zonder rente binnen 30, 60 of 90 dagen, of in 6 maandelijkse termijnen</strong>
           </div>
           <div style="max-width: 600px;">
             <p>Wanneer u hiervoor kiest, zorgt Mondu voor het gehele achteraf betalen proces. Mondu is speciaal gemaakt voor de zakelijke markt.</p>

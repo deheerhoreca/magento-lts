@@ -55,13 +55,14 @@ switch ($this->getDisplayType()) {
         if(strlen($item['label']) > 27) {
           $label = substr($item['label'], 0, 24)."...";
         }
-        echo
-          '<li'.
+        
+        $checkbox_html = (stripos($item['css'], "amshopby-attr-selected") !== false) ? '<span class="amshopby-choice"></span>' : '';
+        echo '<li'.
           (isset($item['style']) ? ' '.$item['style'] : '') .
           (isset($item['default_sort']) ? ' data-default_sort="' . $item['default_sort'] . '"': '') .
           (isset($item['featured_sort']) ? ' data-featured_sort="' . $item['featured_sort'] . '"': '') .
           ' data-text="' . htmlspecialchars($item['label']) . '"> ' .
-          '<a class="'.$item['css'].'"' . $item['rel'] . ' href="'.$item['url'].'" data-config=\''.$item['data-config'].'\' title="'. $item['label'] .'" rel="nofollow">'. $label . $count . '</a></li>'.PHP_EOL;
+          '<a class="'.$item['css'].'"' . $item['rel'] . ' href="'.$item['url'].'" data-config=\''.$item['data-config'].'\' title="'. $item['label'] .'" rel="nofollow">'. $label . $count . '</a>'.$checkbox_html.'</li>'.PHP_EOL;
       }
     }
   break;

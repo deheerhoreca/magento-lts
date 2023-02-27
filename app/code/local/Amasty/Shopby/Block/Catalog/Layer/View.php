@@ -539,11 +539,13 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
 
             $comment = $this->getStoreComment($filter, $storeId);
 
+            // DHH CORE HACK
             if ($comment) {
-                $img = Mage::getDesign()->getSkinUrl('images/amshopby-tooltip.png');
-                $img = ' <img class="amshopby-tooltip-img" src="' . $img . '" 
-                        width="9" height="9" alt="' . $comment . '" />';
-
+                // $img = Mage::getDesign()->getSkinUrl('images/amshopby-tooltip.png');
+                // $img = ' <img class="amshopby-tooltip-img" src="' . $img . '" 
+                  // width="9" height="9" alt="' . $comment . '" />';
+                
+                $img = "<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='false'></i> <span class='tooltiptext'>{$comment}</span></span>";
                 $pattern = '@(<dt[^>]*>\s*' . preg_quote($name, '@') . ')\s*(</dt>)@ui';
                 $replacement = '$1 ' . $img . '$2';
                 $html = preg_replace($pattern, $replacement, $html);

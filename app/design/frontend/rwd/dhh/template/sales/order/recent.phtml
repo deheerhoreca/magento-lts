@@ -16,12 +16,12 @@ $_orders = $this->getOrders();
 <?php if(sizeof($_orders->getItems()) > 0): ?>
   <table class="data-table orders" id="my-orders-table">
     <colgroup>
-      <col style="width:10%" />
-      <col style="width:10%" />
-      <col style="width:40%" />
-      <col style="width:10%" />
-      <col style="width:15%" />
-      <col style="width:15%" />
+      <col style="width:10%">
+      <col style="width:10%">
+      <col style="width:40%">
+      <col style="width:10%">
+      <col style="width:15%">
+      <col style="width:15%">
     </colgroup>
     <thead>
       <tr>
@@ -51,7 +51,6 @@ $_orders = $this->getOrders();
       <?php endforeach; ?>
     </tbody>
   </table>
-  <script type="text/javascript">decorateTable('my-orders-table')</script>
 <?php else: ?>
   <p><?php echo $this->__('You have placed no orders.'); ?></p>
 <?php endif; ?>

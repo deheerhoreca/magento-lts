@@ -123,6 +123,12 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
+    <!-- Disable memorizing toolbar parameters -->
+    <reference name="content">
+      <reference name="product_list_toolbar">
+        <action method="disableParamsMemorizing" />
+      </reference>
+    </reference>
   </catalog_category_default>
   <!-- Catalog ???, should be close to catalog_category_view -->
   <catalog_category_layered>
@@ -134,7 +140,28 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
+    <!-- Disable memorizing toolbar parameters -->
+    <reference name="content">
+      <reference name="product_list_toolbar">
+        <action method="disableParamsMemorizing" />
+      </reference>
+    </reference>
   </catalog_category_layered>
+  
+  <!-- <catalog_category_default translate="label"> -->
+    <!-- <reference name="content"> -->
+      <!-- <reference name="product_list_toolbar"> -->
+        <!-- <action method="disableParamsMemorizing" /> -->
+      <!-- </reference> -->
+    <!-- </reference> -->
+  <!-- </catalog_category_default> -->
+  <!-- <catalog_category_layered translate="label"> -->
+    <!-- <reference name="content"> -->
+      <!-- <reference name="product_list_toolbar"> -->
+        <!-- <action method="disableParamsMemorizing" /> -->
+      <!-- </reference> -->
+    <!-- </reference> -->
+  <!-- </catalog_category_layered> -->
   
   <!-- Product detail view -->
   <catalog_product_view>
@@ -148,12 +175,8 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
       <action method="removeItem"><type>skin_css</type><name>css/tm/richsnippets.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
+      <remove name="richsnippets.json" /><!-- Removing from head so it can be called from template at the bottom -->
       <!-- <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action> -->
-    </reference>
-  </catalog_product_view>
-  
-  <catalog_product_view translate="label">
-    <reference name="head">
       <action method="removeItem"><type>skin_js</type><name>js/lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js</name></action>
       <action method="addItem"><type>skin_css</type><name>css/catalog_product_view.css</name></action>
     </reference>
@@ -173,51 +196,57 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
     </reference>
   </cms_index_index>
   
+  <!-- Customer Account (1 name for many controllers) -->
+  <customer_account>
+    <reference name="head">
+      <action method="addItem"><type>skin_css</type><name>css/customer_account.css</name></action>
+    </reference>
+  </customer_account>
+  <customer_account_login>
+    <reference name="head">
+      <action method="addItem"><type>skin_css</type><name>css/customer_account.css</name></action>
+    </reference>
+  </customer_account_login>
+  <customer_account_create>
+    <reference name="head">
+      <action method="addItem"><type>skin_css</type><name>css/customer_account.css</name></action>
+    </reference>
+  </customer_account_create>
+
+  <!-- Cart -->
+  <checkout_cart_index>
+    <reference name="head">
+      <action method="addItem"><type>skin_css</type><name>css/checkout_cart_index.css</name></action>
+    </reference>
+  </checkout_cart_index>
+  
+  <!-- FAQ -->
+  <faq_index_index>
+    <reference name="head">
+      <action method="addItem"><type>skin_css</type><name>css/faq_index_index.css</name></action>
+    </reference>
+  </faq_index_index>
+  
   <!-- Blogs -->
   <blog_cat_view>
     <reference name="head"> 
       <action method="addItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
     </reference>
   </blog_cat_view>
-  
   <blog_index_index>
     <reference name="head"> 
       <action method="addItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
     </reference>
   </blog_index_index>
-  
   <blog_index_list>
     <reference name="head"> 
       <action method="addItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
     </reference>
   </blog_index_list>
-  
   <blog_post_view>
     <reference name="head"> 
       <action method="addItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
     </reference>
   </blog_post_view>
-
-  <catalog_category_default translate="label">
-
-    <!-- Disable memorizing toolbar parameters -->
-    <reference name="content">
-      <reference name="product_list_toolbar">
-        <action method="disableParamsMemorizing" />
-      </reference>
-    </reference>
-
-  </catalog_category_default>
-
-  <catalog_category_layered translate="label">
-
-    <!-- Disable memorizing toolbar parameters -->
-    <reference name="content">
-      <reference name="product_list_toolbar">
-        <action method="disableParamsMemorizing" />
-      </reference>
-    </reference>
-
-  </catalog_category_layered>
 
 </layout>

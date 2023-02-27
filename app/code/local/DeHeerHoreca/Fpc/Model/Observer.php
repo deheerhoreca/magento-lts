@@ -35,7 +35,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     Varien_Profiler::start("DHH::FPC::ServeCachedHTML");
     
     $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
-    $read_cache = Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true);
+    $read_cache = Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, false, "fpc");
     
     if($read_cache === false) {
       Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "BYPASS");
@@ -61,22 +61,26 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   }
   
   public function clearProductCache($observer) {
-    $product = $observer->getProduct();
-    $productId = $product->getId();
-    $patterns = [];
+    $product    = $observer->getProduct();
+    $productId  = $product->getId();
+    $patterns   = [];
     
     /* catalog_product_view */
     $patterns[] = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
+    $patterns[] = "zc:k:e6b_eke_ogmeta_product_{$productId}_";
+    $patterns[] = "zc:k:e6b_tm_richsnippets_product_json_{$productId}_";
     
     /* catalog_category_view */
     $category_ids = $product->getCategoryIds();
     if(empty($category_ids) === false && is_array($category_ids) === true) {
       foreach($category_ids as $category_id) {
-        $patterns[] = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
+        // From self::clearCategoryCache()
+        $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
+        $patterns[]   = "zc:k:e6b_aeke_ogmeta_category_{$category_id}_";
       }
     }
-    
-    $result = clean_fpc_pattern($patterns, false);    
+    var_dump($patterns);
+    $result     = clean_fpc_pattern($patterns, false);
     // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
     
     return true;
@@ -90,22 +94,27 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       return true;
     }
     
-    $pattern = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-    $result  = clean_fpc_pattern($pattern, false);
+    // Also to self::clearProductCache()
+    $patterns     = [];
+    $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
+    $patterns[]   = "zc:k:e6b_aeke_ogmeta_category_{$category_id}_";
+    
+    $result       = clean_fpc_pattern($patterns, false);
     // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
     
     return true;
   }
 }
 
-function clean_fpc_pattern_result_to_string($result) {
+function clean_fpc_pattern_result_to_string($result): string {
   $outputs = [];
   $result = (array) $result;
+  if(empty($result)) return "";
   foreach($result as $pattern => $return) {
     $outputs[] = "{$pattern}: {$return}";
   }
   
-  return implode(", ", $outputs);
+  return "<br>- ".implode("<br>- ", $outputs);
 }
 
 // Sync:

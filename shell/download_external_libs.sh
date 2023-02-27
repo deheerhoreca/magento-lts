@@ -18,6 +18,8 @@ wget https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js 
 wget https://cdnjs.cloudflare.com/ajax/libs/lite-youtube-embed/0.2.0/lite-yt-embed.min.js -O ../js/ext-lite-yt-embed.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js -O ../js/ext-jquery.ui.touch-punch.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js -O ../js/ext-jquery-ui.min.js
+wget https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js -O ../skin/frontend/rwd/dhh/js/ext-bootstrap.min.js
+wget https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css -O ../skin/frontend/rwd/dhh/css/ext-bootstrap.min.css
 
 # These need versioning outside of mod_pagespeed:extend_cache
 wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ../js/elastic-apm-rum.umd.min.js.map
@@ -42,10 +44,11 @@ mkdir -p ../skin/frontend/rwd/external/elastic_apm
 # needs a touch as well because the file timestamp would be in the 1980s otherwise
 wget https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js  -O ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js && touch ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js
 
-mkdir -p ../skin/frontend/rwd/external/fontawesome
-wget https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css -O ../skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css
-wget https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0 -O ../skin/frontend/rwd/external/fontawesome/fontawesome-webfont.woff2
-wget https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf -O ../skin/frontend/rwd/external/fontawesome/fontawesome-webfont.ttf
+# font-awesome.min.css was patched to have "font-display:swap;" do not overwrite
+# mkdir -p ../skin/frontend/rwd/external/fontawesome
+# wget https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css -O ../skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css
+# wget https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0 -O ../skin/frontend/rwd/external/fontawesome/fontawesome-webfont.woff2
+# wget https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf -O ../skin/frontend/rwd/external/fontawesome/fontawesome-webfont.ttf
 
 mkdir -p ../skin/frontend/rwd/external/sooqr
 wget https://static.sooqr.com/custom/115684/1/combined.css  -O ../skin/frontend/rwd/external/sooqr/combined.css

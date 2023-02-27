@@ -229,52 +229,269 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      * @return Array
      */
     public function getJsonSnippetsProduct()
-    {      
-      $description = (strlen($this->getProduct()->getDescription()) > 0) ? $this->getProduct()->getDescription() : $this->getProduct()->getName();
-      $description = strip_tags($description);
-        $data = array(
-            '@context'              => 'http://schema.org',
-            '@type'                 => 'Product',
-            'name'                  => $this->getProduct()->getName(),
-            'image'                 => (string)Mage::helper('catalog/image')->init($this->getProduct(), 'image'),
-            'description'           => $description,
-            'sku'                   => $this->getProduct()->getSku(),
-            'brand'                 => $this->getProduct()->getAttributeText('manufacturer'), /* DHH CORE HACK */
-            'url'                   => $this->getProduct()->getProductUrl(), // Use canonical url here, don't fuck around with SEO
-            'gtin'                  => $this->getProduct()->getResource()->getAttribute('ean')->getFrontend()->getValue($this->getProduct()),
-            'mpn'                   => $this->getProduct()->getData("sku_seller"),
-            'offers'                => array(
-                '@type'             => 'Offer',
-                'availability'      => $this->getStockStatusUrl(),
-                'priceCurrency'     => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
-                'itemCondition'     => "http://schema.org/NewCondition", /* DHH CORE HACK */
-                "priceValidUntil"   => date('Y-m-d',strtotime(date("Y-m-d", mktime()) . " + 365 day")), /* DHH CORE HACK */
-                'url'               => $this->getProduct()->getProductUrl(), // Use canonical url here, don't fuck around with SEO
-                "seller"            => [ /* DHH CORE HACK */
-                  "@type"           => "Organization", /* DHH CORE HACK */
-                  "name"            => Mage::getStoreConfig('richsnippets/organization/name'), /* DHH CORE HACK */
-                ] /* DHH CORE HACK */
-            )
-        );
-        
+    {
         /* DHH CORE HACK */
         
-        $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($this->getProduct());
+        $_product     = $this->getProduct();
+        
+        // Fixed fields
+        $data = [
+          '@context'              => 'http://schema.org',
+          '@type'                 => 'Product',
+          'name'                  => $_product->getName(),
+          'sku'                   => $_product->getSku(),
+          'image'                 => (string) Mage::helper('catalog/image')->init($_product, 'image'),
+          'brand'                 => $_product->getAttributeText('manufacturer'), /* DHH CORE HACK */
+          // 'logo'                  => "", @todo brand logo
+          'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
+          'gtin'                  => $_product->getResource()->getAttribute('ean')->getFrontend()->getValue($_product),
+          // "asin"                  => "", @todo
+          // "category"              => "", @todo
+          'offers'                => [
+            '@type'                 => 'Offer',
+            'availability'          => $this->getStockStatusUrl(),
+            'priceCurrency'         => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
+            'itemCondition'         => "http://schema.org/NewCondition", /* DHH CORE HACK */
+            "priceValidUntil"       => date('Y-m-d', strtotime(date("Y-m-d", mktime()) . " + 365 day")),
+            'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
+            "seller"                => [
+              "@type"               => "Organization",
+              "name"                => "Chefstore.nl",
+            ]
+          ]
+        ];
+        
+        // Optional fields
+        $schema_key = "gtin";
+        $value = _get_product_attribute($_product, "ean");
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        $schema_key = "gtin13";
+        $value = _get_product_attribute($_product, "ean13");
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        
+        $schema_key = "mpn";
+        $value = _get_product_attribute($_product, "mpn");
+        if(empty($value)) {
+          $value = _get_product_attribute($_product, "sku_seller");
+        }
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        
+        $schema_key = "description";
+        $value = (strlen($_product->getDescription()) > 0) ? strip_tags($_product->getDescription()) : $_product->getName();
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        
+        $schema_key = "width";
+        $value = _get_product_attribute($_product, "breedte");
+        if(strlen($value) > 0) {
+          $data[$schema_key] = [
+            "@type"     => "QuantitativeValue",
+            "unitCode"  => "MMT",
+            "value"     => $value,
+          ];
+        }
+        $schema_key = "depth";
+        $value = _get_product_attribute($_product, "diepte");
+        if(empty($value)) {
+          $value = _get_product_attribute($_product, "length_mm");
+        }
+        if(strlen($value) > 0) {
+          $data[$schema_key] = [
+            "@type"     => "QuantitativeValue",
+            "unitCode"  => "MMT",
+            "value"     => $value,
+          ];
+        }
+        $schema_key = "height";
+        $value = _get_product_attribute($_product, "hoogte");
+        if(strlen($value) > 0) {
+          $data[$schema_key] = [
+            "@type"     => "QuantitativeValue",
+            "unitCode"  => "MMT",
+            "value"     => $value,
+          ];
+        }
+        
+        // @todo
+        // $schema_key = "size";
+        // $value = _get_product_attribute($_product, "size");
+        // if(strlen($value) > 0) {
+          // $data[$schema_key] = [
+            // "@type"     => "QuantitativeValue",
+            // "unitCode"  => "MMT",
+            // "value"     => $value,
+          // ];
+        // }
+        
+        $schema_key = "weight";
+        $value = _get_product_attribute($_product, "weight");
+        if(strlen($value) > 0) {
+          $data[$schema_key] = [
+            "@type"     => "QuantitativeValue",
+            "unitCode"  => "KGM",
+            "value"     => $value,
+          ];
+        }
+        
+        $schema_key = "color";
+        $value = _get_product_attribute($_product, "color");
+        if(empty($value)) {
+          $value = _get_product_attribute($_product, "colors");
+        }
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        
+        $schema_key = "material";
+        $value = _get_product_attribute($_product, "materiaal");
+        if(empty($value)) {
+          $value = _get_product_attribute($_product, "material_group");
+        }
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        
+        $schema_key = "countryOfOrigin";
+        $value = _get_product_attribute($_product, "made_in_country_2code");
+        if(strlen($value) > 0) {
+          $data[$schema_key] = $value;
+        }
+        
+        // @todo EnergyConsumptionDetails
+        // @todo isRelatedTo
+        // @todo isSimilarTo
+        
+        // Offer fields
+
+        if (is_array($this->getPriceValues())) {
+          $getPriceValues = $this->getPriceValues();
+          $data['offers']['@type'] = 'AggregateOffer';
+          $data['offers']['lowPrice'] = $this->getConvertedPrice(min($getPriceValues));
+          $data['offers']['highPrice'] = $this->getConvertedPrice(max($getPriceValues));
+        } else {
+          $data['offers']['price'] = $this->getConvertedPrice($this->getPriceValues());
+        }
+        
+        $schema_key = "warranty";
+        $value = _get_product_attribute($_product, "garantie");
+        switch($value) {
+          case "6 maanden":   $months =  6;  break;
+          case "12 maanden":  $months = 12;  break;
+          case "24 maanden":  $months = 24;  break;
+          case "36 maanden":  $months = 36;  break;
+          case "60 maanden":  $months = 60;  break;
+        }
+        
+        if(strlen($months) > 0) {
+          $data["offers"][$schema_key] = [
+            "@type"     => "WarrantyPromise",
+            "durationOfWarranty" => [
+              "@type"     => "QuantitativeValue",
+              "value"     => "{$months}",
+              "unitCode"  => "MON"
+            ]
+          ];
+        }
+        
+        $schema_key = "priceValidUntil";
+        $value      = $_product->getData("special_to_date"); // Need raw value
+        if(empty($value) === false && strtotime($value) > time()) {
+          $value = date('Y-m-d', strtotime($value));
+        }
+        if(empty($value)) {
+          $value = date('Y-m-d', strtotime(date("Y-m-d", mktime()) . " + 365 day"));
+        }
+        if(strlen($value) > 0) {
+          $data["offers"][$schema_key] = $value;
+        }
+        
+        $value      = _get_product_attribute($_product, "levertijd_tmp_override");
+        if(empty($value) === false && strtotime($value) > time()) {
+          $value      = _get_product_attribute($_product, "levertijd");
+        }
+        
+        switch($value) {
+          case "1 werkdag":       $min_days = 0; $max_days = 1; break;
+          case "1-2 werkdagen":   $min_days = 1; $max_days = 2; break;
+          case "1-3 werkdagen":   $min_days = 1; $max_days = 3; break;
+          case "1-5 werkdagen":   $min_days = 1; $max_days = 5; break;
+          case "2-3 werkdagen":   $min_days = 2; $max_days = 3; break;
+          case "3-4 werkdagen":   $min_days = 3; $max_days = 4; break;
+          case "3-10 werkdagen":  $min_days = 3; $max_days = 10; break;
+          case "4-5 werkdagen":   $min_days = 4; $max_days = 5; break;
+          case "5-6 werkdagen":   $min_days = 5; $max_days = 6; break;
+          case "6-8 werkdagen":   $min_days = 6; $max_days = 8; break;
+          case "7-10 werkdagen":  $min_days = 7; $max_days = 10; break;
+          case "8-12 werkdagen":  $min_days = 8; $max_days = 12; break;
+          case "10-15 werkdagen": $min_days = 10; $max_days = 15; break;
+          case "3-4 weken":       $min_days = 15; $max_days = 20; break;
+          case "4-5 weken":       $min_days = 20; $max_days = 25; break;
+          default:                $min_days = 1; $max_days = 5; break;
+        }
+        
+        if(isset($data['offers']['price']) && is_numeric($data['offers']['price'])) {
+          if(($data['offers']['price'] / 1.21) > Mage::getStoreConfig('carriers/freeshipping/free_shipping_subtotal', $this->getStoreId())) {
+            $shipping_cost = 0;
+          } else {
+            $shipping_cost = 9.95;
+          }
+        }
+        
+        // @todo shippingDetails
+        $schema_key= "shippingDetails";
+        $data["offers"][$schema_key] = [
+          "@type"               => "OfferShippingDetails",
+          "shippingDestination" => [
+            "@type"               => "DefinedRegion",
+            "addressCountry"      => ["BE", "NL"],
+          ],
+          "shippingRate"        => [
+            "@type"               => "MonetaryAmount",
+            "value"               => $shipping_cost,
+            "currency"            => "EUR"
+          ],
+          "deliveryTime"        => [
+            "@type"               => "ShippingDeliveryTime",
+            "businessDays"        => [
+              "@type"             => "OpeningHoursSpecification",
+              "dayOfWeek"         => [
+                "https://schema.org/Monday",
+                "https://schema.org/Tuesday",
+                "https://schema.org/Wednesday",
+                "https://schema.org/Thursday",
+                "https://schema.org/Friday"
+              ]
+            ],
+            // "cutoffTime"          => "12:00:15Z", // @todo
+            "handlingTime"        => [
+              "@type"               => "QuantitativeValue",
+              "minValue"            => 0,
+              "maxValue"            => 1
+            ],
+            "transitTime"        => [
+              "@type"               => "QuantitativeValue",
+              "minValue"            => $min_days,
+              "maxValue"            => $max_days,
+            ],
+          ],
+        ];
+        
+        // Stock fields
+        $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
         $overall_stock_status = $stock_data["overall_stock_status"];
         
         switch($overall_stock_status) {
-          case "in_stock":
-            $data["offers"]["availability"] = "http://schema.org/InStock";
-            break;
-          case "backorder":
-            $data["offers"]["availability"] = "http://schema.org/PreOrder";
-            break;
-          case "not_sellable":
-            $data["offers"]["availability"] = "http://schema.org/OutOfStock";
-            break;
-          case "eol":
-            $data["offers"]["availability"] = "http://schema.org/OutOfStock";
-            break;
+          case "in_stock":       $data["offers"]["availability"] = "http://schema.org/InStock";    break;
+          case "backorder":      $data["offers"]["availability"] = "http://schema.org/PreOrder";   break;
+          case "not_sellable":   $data["offers"]["availability"] = "http://schema.org/OutOfStock"; break;
+          case "eol":            $data["offers"]["availability"] = "http://schema.org/OutOfStock"; break;
         }
         
         /* END DHH CORE HACK */
@@ -286,18 +503,6 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             $data['aggregateRating']['ratingValue'] = $this->getRatingSummary();
             $data['aggregateRating']['reviewCount'] = $this->getReviewCount();
             $data['aggregateRating']['ratingCount'] = $this->getReviewCount();
-        }
-
-        if (is_array($this->getPriceValues())) {
-
-            $getPriceValues = $this->getPriceValues();
-
-            $data['offers']['@type'] = 'AggregateOffer';
-            $data['offers']['lowPrice'] = $this->getConvertedPrice(min($getPriceValues));
-            $data['offers']['highPrice'] = $this->getConvertedPrice(max($getPriceValues));
-
-        } else {
-            $data['offers']['price'] = $this->getConvertedPrice($this->getPriceValues());
         }
 
         return Mage::helper('core')->jsonEncode($data);

@@ -4,7 +4,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()):
     $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
 	 // Microdata
     if ($snippetsType == '1') :
-		$data =	$this->getMicrodataSnippetsProduct();
+      $data =	$this->getMicrodataSnippetsProduct();
 	    $price = $this->getPriceValues();
 
 	    $itemtype = 'http://schema.org/Offer';

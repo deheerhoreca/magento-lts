@@ -1,39 +1,46 @@
-<!DOCTYPE html>
+<?php
+// NOTICE: Unused. CSS removed.
+?><!doctype html>
 <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js" itemscope itemtype="http://schema.org/WebPage">
   <head>
-  <?php echo $this->getChildHtml('head') ?>
+    <?php echo $this->getChildHtml('head') ?>
+    <?php echo "<script>apm_transaction = \"".Mage::app()->getFrontController()->getAction()->getFullActionName()."\";</script>" ?>
   </head>
   <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
-  <?php echo $this->getChildHtml('after_body_start') ?>
-  <div class="wrapper">
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="page">
-      <?php echo $this->getChildHtml('header') ?>
-      <div class="main-container col3-layout">
-        <div class="main">
-          <?php echo $this->getChildHtml('breadcrumbs') ?>
-          <div class="col-wrapper">
-            <?php // This left_first block will display above the main content on smaller viewports ?>
-            <?php if ($_leftContent = $this->getChildHtml('left_first')): ?>
-              <div class="col-left sidebar col-left-first"><?php echo $_leftContent;   ?></div>
-            <?php endif; ?>
-            <div class="col-main">
-              <!-- core_messages_start -->
-              <?php echo $this->getChildHtml('global_messages') ?>
-              <!-- core_messages_end -->
-              <?php echo $this->getChildHtml('content') ?>
+    <?php echo $this->getChildHtml('after_body_start') ?>
+    <div class="wrapper">
+      <?php echo $this->getChildHtml('global_notices') ?>
+      <div class="page">
+        <?php echo $this->getChildHtml('header') ?>
+        <div class="main-container col3-layout">
+          <div class="main">
+            <?php echo $this->getChildHtml('breadcrumbs') ?>
+            <div class="col-wrapper">
+              <?php // This left_first block will display above the main content on smaller viewports ?>
+              <?php if ($_tmp = $this->getChildHtml('left_first')): ?>
+                <div class="col-left sidebar col-left-first"><?php echo $_tmp;   ?></div>
+              <?php endif; ?>
+              <div class="col-main">
+                <!-- core_messages_start -->
+                <?php echo $this->getChildHtml('global_messages') ?>
+                <!-- core_messages_end -->
+                <?php echo $this->getChildHtml('content') ?>
+              </div>
+              <?php if ($_tmp = $this->getChildHtml('left')): ?>
+                <div class="col-left sidebar"><?php echo $_tmp ?></div>
+              <?php endif; ?>
             </div>
-            <div class="col-left sidebar"><?php echo $this->getChildHtml('left') ?></div>
+            <?php if ($_tmp = $this->getChildHtml('right')): ?>
+                <div class="col-left sidebar"><?php echo $_tmp ?></div>
+              <?php endif; ?>
           </div>
-          <div class="col-right sidebar"><?php echo $this->getChildHtml('right') ?></div>
         </div>
+        <?php echo $this->getChildHtml('footer_before') ?>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('global_cookie_notice') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
       </div>
-      <?php echo $this->getChildHtml('footer_before') ?>
-      <?php echo $this->getChildHtml('footer') ?>
-      <?php echo $this->getChildHtml('global_cookie_notice') ?>
-      <?php echo $this->getChildHtml('before_body_end') ?>
     </div>
-  </div>
-  <?php echo $this->getAbsoluteFooter() ?>
+    <?php echo $this->getAbsoluteFooter() ?>
   </body>
 </html>

@@ -12,7 +12,7 @@ $store        = Mage::app()->getStore();
 if($this->getItemCount()) { ?>
 <div class="crosssell product-collateral category-products">
   <?php
-  echo "<span class=h3>".$this->__("Based on your selection, you may be interested in the following items:")."</span><hr>";
+  echo "<h2 class='black'>".$this->__("Based on your selection, you may be interested in the following items:")."</h2><hr>";
   echo "<ul class='products-grid products-grid-mini'>";
   foreach ($this->getItems() as $_product) {
     $i++;
@@ -30,7 +30,8 @@ if($this->getItemCount()) { ?>
     echo "</li>";
   }
   ?>
-</ul></div>
+  </ul>
+</div>
 <?php }
 
 // Bargains

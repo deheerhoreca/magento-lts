@@ -56,73 +56,60 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
       }
     }
     
-    if($crumbs && is_array($crumbs) && sizeof($crumbs) > 1) {
-      echo '<div class="breadcrumbs">';
-        echo '<ul>';
-        $n = sizeof($crumbs);
-        $i = 0;
-        
-        // if(_dhh_debug()) {
-          // echo "<pre>";
-          // print_r($crumbs);
-          // echo "</pre>";
-        // }
-        
-        foreach($crumbs as $_crumbName => $_crumbInfo) {
-          
-          if(in_array($_crumbName, $ignored_categorie_keys) !== false) {
-            continue;
-          }
-          
-          if($n > 2 && $_crumbName === "product") {
-            continue;
-          }
-          
-          $css_classes = (substr($_crumbName, 0, 8) === "category") ? ["category"] : [];
-          
-          $label = $this->htmlEscape($_crumbInfo['label']);
-          $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
-          $label = trim($label);
-          
-          $title = $this->htmlEscape($_crumbInfo['title']);
-          $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
-          $title = trim($title);
-          
-          if(($_crumbName !== "home" && ($n - $i) > 3) || $_crumbInfo["last"]) {
-            $css_classes[] = "mobile-hide";
-          }
-          
-          $css_classes = implode(" ", $css_classes);
-          
-          echo "<li class='{$css_classes}'>";
-          
-          if($_crumbName !== "home") {
-            echo '<i class="fa fa-angle-left breadcrumb-separator center float-left" aria-hidden="true"></i>';
-          }
-          
-          if($_crumbName === "home") {
-            echo "<a title='{$title}' class='button no-transition' href='{$_crumbInfo['link']}' style='padding-left:1px; padding-right:1px;'><i class='fa fa-home'></i></a>";
-          } elseif($_crumbInfo['link'] && ($_crumbInfo['last'] !== true || $_product)) {
-            echo "<a title='{$title}' class='button no-transition' href='{$_crumbInfo['link']}'>{$label}</a>";
-          } else {
-            echo "<strong>{$label}</strong>";
-          }
-          
-          echo "</li>";
-          $i++;
-        }
-        echo '</ul>';
-      echo '</div>';
-    }
-    ?>
+    // if($crumbs && is_array($crumbs) && sizeof($crumbs) > 1) {
+      // if(_dhh_debug()) {
+        // echo "<pre>";
+        // print_r($crumbs);
+        // echo "</pre>";
+      // }
+    // }
     
-    <?php if(sizeof($dataBreadcrumbs['itemListElement']) >0 ) { ?>
-    <script type="application/ld+json">
-      <?php echo Mage::helper('core')->jsonEncode($dataBreadcrumbs); ?>
-    </script>
-    <?php } ?>
-
-    <?php
+    if($crumbs && is_array($crumbs) && sizeof($crumbs) > 1) {
+      echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">'.PHP_EOL;
+      $n = sizeof($crumbs);
+      $i = 0;
+      
+      foreach($crumbs as $_crumbName => $_crumbInfo) {
+        
+        if(in_array($_crumbName, $ignored_categorie_keys) !== false) {
+          continue;
+        }
+        
+        if($n > 2 && $_crumbName === "product") {
+          continue;
+        }
+        
+        $label = $this->htmlEscape($_crumbInfo['label']);
+        $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
+        $label = trim($label);
+        
+        $title = $this->htmlEscape($_crumbInfo['title']);
+        $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
+        $title = trim($title);
+        
+        if($_crumbName === "home") {
+          echo "              <li class='breadcrumb-item'>";
+          echo "<a title='{$title}' href='{$_crumbInfo['link']}'><i class='fa fa-home'></i></a></li>";
+        } elseif($_crumbInfo['link'] && ($_crumbInfo['last'] !== true || $_product)) {
+          // echo "<a title='{$title}' class='button no-transition' href='{$_crumbInfo['link']}'>{$label}</a>";
+          echo "              <li class='breadcrumb-item'>";
+          echo "<a title='{$title}' href='{$_crumbInfo['link']}'>{$label}</a></li>";
+        } else {
+          echo "              <li class='breadcrumb-item active' aria-current='page'>{$label}</li>";
+        }
+        
+        echo PHP_EOL;        
+        $i++;
+      }
+      echo '            </ol></nav>'.PHP_EOL;
+    }
+    
+    // Print JSON
+    if(empty($dataBreadcrumbs['itemListElement']) === false) {
+      $json = Mage::helper('core')->jsonEncode($dataBreadcrumbs);
+      $json = json_encode(json_decode($json), JSON_PRETTY_PRINT); // During development
+      echo "  <script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
+    }
   } elseif ($snippetsType == '1') {
     if($crumbs && is_array($crumbs)) { ?>
       <div class="breadcrumbs">

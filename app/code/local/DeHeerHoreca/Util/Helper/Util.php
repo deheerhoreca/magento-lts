@@ -161,27 +161,35 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $price / sizeof($_productCollection);
   }
   
-  // @todo can this go faster?
-  public function getBrandsPerCategory($category_id) {
-    $max_amount = 6;
+  public function getBrandsPerCategory($category_id, $_products = null) {
+    Varien_Profiler::start('DHH_'.__CLASS__."::".__METHOD__);
+    $max_amount = 5;
     
-    $products = Mage::getModel("catalog/category")->load($category_id)
-      ->getProductCollection()
-      ->addAttributeToSelect("manufacturer")   // add all attributes - optional
-      ->addAttributeToFilter("status", 1)      // enabled
-      ->addAttributeToFilter("visibility", 4); // visibility in catalog,search
+    if(!$_products) {
+      $_products = Mage::getModel("catalog/category")->load($category_id)
+        ->getProductCollection()
+        ->addAttributeToSelect("manufacturer")   // add all attributes - optional
+        ->addAttributeToFilter("status", 1)      // enabled
+        ->addAttributeToFilter("visibility", 4)  // visibility in catalog,search
+        ->setOrder('popularity', 'ASC')
+        ->setPageSize(100);
+    }
     
-    $manufacturers = [];
-    foreach($products as $product) {
-      if(isset($manufacturers[$product->getAttributeText("manufacturer")]) === false) {
-        $manufacturers[$product->getAttributeText("manufacturer")] = 0;
+    $manufacturer_ids = array_count_values($_products->getColumnValues("manufacturer"));
+    arsort($manufacturer_ids);
+    $manufacturer_ids = array_slice($manufacturer_ids, 0, $max_amount, true);
+    $manufacturer_ids = array_keys($manufacturer_ids);
+    $manufacturers    = [];
+    
+    if(empty($manufacturer_ids) === false) {
+      $_product = $_products->getFirstItem() ?? Mage::getModel('catalog/product');
+      foreach($manufacturer_ids as $attribute_option_id) {
+        $_product->setData("manufacturer", $attribute_option_id);
+        $manufacturers[] = $_product->getAttributeText("manufacturer");
       }
-      $manufacturers[$product->getAttributeText("manufacturer")]++;
-    }  
-    arsort($manufacturers);
-    $manufacturers = array_slice($manufacturers, 0, $max_amount, true);
-    $manufacturers = array_keys($manufacturers);
+    }
     
+    Varien_Profiler::stop('DHH_'.__CLASS__."::".__METHOD__);
     return $manufacturers;
   }
   
@@ -427,25 +435,32 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   // Get the minimum list of attributes to display something
-  public function getProductAttributes(string $which): array {
+  public static function getProductAttributes(string $which, array $add = []): array {
+    
+    $attributes = [];
     
     // This should include all attributes that have used_in_product_listing set to true
     if($which === "listview") {
-      return ["sku", "sku_seller", "manufacturer", "supplier", "name", "price", "special_price",
+      $attributes = [
+        "sku", "sku_seller", "manufacturer", "supplier", "name", "price", "special_price",
               
-              "breedte", "hoogte", "diepte", "size", "uitvoering",
-              "type_koeling", "aantal_blikjes", "aantal_flessen", "capacity_wine_bottles", "voorraadbunker_kg", "icecube_type",
-              "ijs_productie", "custom_highlights", "volume_net_liter", "inhoud_liters", "total_power_watt", "vermogen",
-              "vermogen_kw", "aantal_m3_uur", "garantie", "number_of_cooling_zones", "cooking_zones", "aftap", "afsluitbaar",
-              "motor", "isolatiedikte", "diameter_mm", "length_mm", "eenheid", "tagline", "small_image", "material_group",
-              "blade_length_mm","bottom_shape", "etaleer_oppervlak_m2", "grill_output_watt", "grill_tray_type", "indoor_outdoor",
-              "temp_range_from_c", "temp_range_to_c", "magnetron_output_watt", "nonstick_coating", "product_label", "self_closing",
-              
-              /* "name_short", */
+        "breedte", "hoogte", "diepte", "size", "uitvoering",
+        "type_koeling", "aantal_blikjes", "aantal_flessen", "capacity_wine_bottles", "voorraadbunker_kg", "icecube_type",
+        "ijs_productie", "custom_highlights", "volume_net_liter", "inhoud_liters", "total_power_watt", "vermogen",
+        "vermogen_kw", "aantal_m3_uur", "garantie", "number_of_cooling_zones", "cooking_zones", "aftap", "afsluitbaar",
+        "motor", "isolatiedikte", "diameter_mm", "length_mm", "eenheid", "tagline", "small_image", "material_group",
+        "blade_length_mm","bottom_shape", "etaleer_oppervlak_m2", "grill_output_watt", "grill_tray_type", "indoor_outdoor",
+        "temp_range_from_c", "temp_range_to_c", "magnetron_output_watt", "nonstick_coating", "product_label", "self_closing",
+        
+        /* "name_short", */
       ];
     }
     
-    return [];
+    if($add !== []) {
+      $attributes = array_merge($attributes, $add);
+    }
+    
+    return array_unique($attributes);
   }
   
   // @deprecated
@@ -1260,6 +1275,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if(empty($_product->getProductLabel()) === false) {
       return $_product->getProductLabel();
     }
+    if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
+      return "SALE";
+    }
     // if($_product->getAttributeText("supplier") === "Gastronoble") {
       // if($context === "detail") {
         // return "+5% Extra Korting met code <span style='font-family: sans-serif;'><strong>GASTRONOBLE5</strong></span>";
@@ -1267,6 +1285,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         // return "+5% Extra Korting";
       // }
     // }
+    
+    return "";
   }
   
   // Builds a YouTube video URL from an ID

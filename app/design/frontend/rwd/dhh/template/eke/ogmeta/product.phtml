@@ -1,54 +1,58 @@
 <?php
 
+$helper = Mage::helper("eke_ogmeta");
+if(!$helper->isOgMetaEnabled()) {
+  return;
+}
+
 $product    = Mage::registry("current_product");
-$cache_key  = "eke_ogmeta_product_".$product->getId();
-$cached     = Mage::app()->loadCache($cache_key);
+$html       = "";
+$cache_key  = "eke_ogmeta_product_{$product->getId()}_";
+$cache_tags = ["eke_ogmeta"];
 
-// if(_dhh_debug()) {
-  // printr("key: {$cache_key}");
-// }
-
-if(empty($cached) === false) {
-  echo unserialize($cached);
-} else {
-
-  // ------------ START REGULAR FLOW
-  $helper = Mage::helper("eke_ogmeta");
-
-  if(!$helper->isOgMetaEnabled()) {
-    return;
+if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta")) {
+  $html = Mage::app()->getCache()->load($cache_key);
+  if(empty($html) === true) {
+    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen($html)." chars");
   }
+}
 
+if(empty($html) === false) {
+  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen($html)." chars");
+  echo unserialize($html);
+} else {
+  
+  // ------------ START REGULAR FLOW  
   $siteName = $helper->getSiteName();  
   $imageFile = "media/catalog/product".$product->getSmallImage();
-
+  
   if(strlen($product->getSmallImage()) < 1) {
     $imageFile = $helper->getOgImage();
   }
-
+  
   $imageAttr = ["mime" => null, 0 => null, 1 => null];
   if(is_file($imageFile) === true) {
     @$imageAttr = getimagesize($imageFile);
   }
   $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);
-
+  
   if($helper->isProductShortEnabled()) {
     $productDescription = htmlentities(strip_tags($product->getShortDescription()));
   } else {
     $productDescription = htmlentities(strip_tags($product->getDescription()));
   }
-
+  
   // Fallback for when there is no description
   if(strlen($productDescription) < 10) {
     $productDescription = htmlentities($product->getName());
   }
-
+  
   // Remove newlines, trim, limit to 200 chars
   $productDescription   = substr(trim(preg_replace("/\s\s+/", ";", $productDescription)), 0, 200);
   $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
   $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product);
   $overall_stock_status = $stock_data["overall_stock_status"];
-
+  
   $availability = null;
   switch($overall_stock_status) {
     case "in_stock":
@@ -65,7 +69,9 @@ if(empty($cached) === false) {
       break;
   }
   
-  $html = PHP_EOL;
+  $html = "";
+  $html .= '<meta property="og:locale" content="nl_NL">'.PHP_EOL;
+  $html .= '<meta property="og:locale:alternate" content="nl_BE">'.PHP_EOL;
   $html .= '<meta property="og:title" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
   $html .= '<meta property="og:site_name" content="'.$siteName.'">'.PHP_EOL;
   $html .= '<meta property="og:type" content="product">'.PHP_EOL;
@@ -77,20 +83,22 @@ if(empty($cached) === false) {
   $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
   $html .= '<meta property="og:image:alt" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
   $html .= '<meta property="og:description" content="'.$productDescription.'">'.PHP_EOL;
-  if($helper->getFacebookAppId()) {
-    $html .= '<meta property="fb:app_id" content="'.$helper->getFacebookAppId().'">'.PHP_EOL;
-  }
   $html .= '<meta property="og:price:amount" content="'.Mage::registry("product")->getFinalPrice().'">'.PHP_EOL;
   $html .= '<meta property="og:price:currency" content="'.Mage::app()->getStore()->getCurrentCurrencyCode().'">'.PHP_EOL;
   if(empty($productVideo) === false) {
     $productVideo = Mage::helper("deheerhoreca_util/util")->build_product_video_url($productVideo);
     $html .= "<meta property='og:video' content='{$productVideo}'>".PHP_EOL;
+    $html .= "<meta property='og:video:secure_url' content='{$productVideo}'>".PHP_EOL;
   }
   
   // ------------ STOP REGULAR FLOW
   
   echo $html;
-
+  
   // Store in Magento cache
-  Mage::app()->saveCache(serialize($html), $cache_key, ["eke_ogmeta_product"], 10);
+  if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "eke_ogmeta")) {
+    if(Mage::app()->getCache()->save(serialize($html), $cache_key, $cache_tags, 86400 * 7)) {
+      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}, ".strlen($html)." chars");
+    }
+  }
 }

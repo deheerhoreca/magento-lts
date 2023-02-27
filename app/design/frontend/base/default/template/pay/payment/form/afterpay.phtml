@@ -5,7 +5,10 @@ $dob = $this->getDob();
 /** @var Mage_Sales_Model_Quote $quote */
 $quote = $this->getQuote();
 
-list($dobYear, $dobMonth, $dobDay) = explode('-', $dob);
+// list($dobYear, $dobMonth, $dobDay) = explode('-', $dob);
+/* DHH FIX */
+// @see https://github.com/paynl/magento-plugin/issues/52
+list($dobYear, $dobMonth, $dobDay) = array_pad(explode("-", $dob), 3, null);
 
 ?>
 

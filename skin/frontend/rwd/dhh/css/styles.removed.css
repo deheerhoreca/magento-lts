@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 .search-autocomplete {
   position: relative!important;
   top: 15px!important;
@@ -58,4 +60,48 @@
 .advanced-search select.multiselect option {
   padding: 2px 5px;
   border-bottom: 1px solid #ededed;
+}
+
+/* 3 column layout */
+
+.col3-layout .col-right {
+  width: 20.83333%;
+}
+
+.col3-layout .col-wrapper {
+  float: left;
+  width: 79.16667%;
+}
+
+.col3-layout .col-wrapper .col-main {
+  float: right;
+  width: 73.68421%;
+}
+
+.col3-layout .col-wrapper .col-left {
+  width: 26.31579%;
+}
+
+@media (max-width: 1000px) {
+  .col3-layout .col-right {
+    float: left;
+    clear: left;
+    padding-left: 0;
+    padding-right: 10px;
+    width: 25%;
+  }
+
+  .col3-layout .col-wrapper {
+    float: right;
+    width: 100%;
+  }
+
+  .col3-layout .col-wrapper .col-main {
+    float: right;
+    width: 75%;
+  }
+
+  .col3-layout .col-wrapper .col-left {
+    width: 25%;
+  }
 }

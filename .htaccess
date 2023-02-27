@@ -308,9 +308,6 @@
 
 # DHH ADDITIONS
 
-# non-production:
-SetEnv MAGE_IS_DEVELOPER_MODE "false"
-
 # OPENMAGE ADMIN (admin4JN0)
 <If "%{THE_REQUEST} =~ /admin4JN0/">
   
@@ -404,6 +401,20 @@ SetEnv MAGE_IS_DEVELOPER_MODE "false"
     Header set Cache-control "max-age=0, no-cache"
   </FilesMatch>
 </IfModule>
+
+# DEVELOPMENT SETTINGS
+<If "%{HTTP_HOST} == 'dev.chefstore.nl'">
+    SetEnv MAGE_IS_DEVELOPER_MODE "true"
+    
+    # No caching on dev
+    Header unset Etag
+    Header set Cache-control "max-age=0, no-cache"
+
+    <RequireAll>
+        Require ip 149.210.249.150 185.127.111.227 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.227
+    </RequireAll>
+</If>
+# END DEVELOPMENT SETTINGS
 
 # Do not listen to /index.php? requests, redirect them
 RedirectMatch 301 /index.php/((?!admin).*)$1 /$1

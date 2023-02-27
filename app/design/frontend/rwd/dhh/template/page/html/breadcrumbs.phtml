@@ -4,7 +4,7 @@
 
 if(isset($crumbs) === true && is_array($crumbs) === true) {
 ?>
-  <div class="breadcrumbs">
+  <div class="breadcrumbs mb-2">
     <ul>
       <?php foreach($crumbs as $_crumbName => $_crumbInfo): ?>
         <li class="<?php echo $_crumbName ?>">
@@ -24,4 +24,3 @@ if(isset($crumbs) === true && is_array($crumbs) === true) {
   </div>
 <?php
 }
-?>

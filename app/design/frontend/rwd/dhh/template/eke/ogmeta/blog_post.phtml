@@ -11,8 +11,8 @@ $siteName = $helper->getSiteName();
 //$imageAttr = getimagesize($image);
 $imageAttr = @getimagesize($image);
 ?>
-
-<!-- OG META Data -->
+<meta property="og:locale" content="nl_NL">
+<meta property="og:locale:alternate" content="nl_BE">
 <meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
 <meta property="og:site_name" content="<?php echo $siteName; ?>" />
 <meta property="og:type" content="article" />
@@ -23,7 +23,4 @@ $imageAttr = @getimagesize($image);
 <meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>" />
 <meta property="og:image:alt" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
 <meta property="og:description" content="<?php echo $this->getLayout()->getBlock('head')->getDescription(); ?>" />
-<?php if ($helper->getFacebookAppId()) { ?>
-<meta property="fb:app_id" content="<?php echo $helper->getFacebookAppId(); ?>"/>
-<?php } ?>
 <meta name="twitter:card" content="summary" />

@@ -6,12 +6,16 @@
 */
 $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->getTitle());
 ?>
+<meta charset="utf-8">
 <title><?php echo $page_title; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7">
-<?php /* Non-synchronous JS */ ?>
+<?php /* Non-synchronous JS */
+// Re-enabed Magento's implementation instead, this method does not track conversions!
+// <script>
+  // var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-107353431-1"]),_gaq.push(["_trackPageview"]),function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//ssl.google-analytics.com/ga.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(t,a)}();
+// </script>
+?>
 <script async src="//www.googletagmanager.com/gtag/js?id=G-SRTM9M2FM3"></script>
-<script>
-  var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-107353431-1"]),_gaq.push(["_trackPageview"]),function(){var t=document.createElement("script");t.async=!0,t.src="//ssl.google-analytics.com/ga.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(t,a)}();</script>
 <script>
   function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-SRTM9M2FM3");
   (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"20122079"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");

@@ -1,30 +1,23 @@
 <?php
 $helper = Mage::helper("eke_ogmeta");
-if (!$helper->isOgMetaEnabled()) {
+if(!$helper->isOgMetaEnabled()) {
   return;
 }
 
-$image    = $helper->getOgImage();
-$siteName = $helper->getSiteName();
-
-try {
-  $imageAttr = getimagesize($image);
-} catch(Exception $e) {
-  Mage::log("Failed to getimagesize({$image})", null, "exception.log", true);
-  $imageAttr = [];
-}
+// $image        = $helper->getOgImage();
+$siteName     = $helper->getSiteName();
+$image_file   = Mage::getBaseDir("skin")."/frontend/rwd/dhh/images/logo-chefstore.min.svg";
+$image_url    = "/skin/frontend/rwd/dhh/images/logo-chefstore.min.svg";
 ?>
-
+<meta property="og:locale" content="nl_NL">
+<meta property="og:locale:alternate" content="nl_BE">
 <meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>">
 <meta property="og:site_name" content="<?php echo $siteName; ?>">
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>">
-<meta property="og:image" content="<?php echo $image; ?>">
-<meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>">
-<meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>">
-<meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>">
-<meta property="og:image:alt" content="Chefstore.nl logo">
+<meta property="og:image" content="<?php echo $image_url; ?>">
+<meta property="og:image:type" content="image/svg+xml">
+<meta property="og:image:width" content="300">
+<meta property="og:image:height" content="62">
+<meta property="og:image:alt" content="Chefstore.nl: Alles voor de Chef">
 <meta property="og:description" content="<?php echo $this->getLayout()->getBlock('head')->getDescription(); ?>">
-<?php if($helper->getFacebookAppId()) { ?>
-  <meta property="fb:app_id" content="<?php echo $helper->getFacebookAppId(); ?>">
-<?php } ?>

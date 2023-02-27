@@ -23,6 +23,7 @@ if(Amasty_Shopby_Model_Catalog_Layer_Filter_Category::DT_ADVANCED != $_displayTy
 
 $renderedItemsCount = 0;
 $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
+$highest_level = 0;
 
 ?>
 <ol <?php if ($this->getCollapsed() && !$this->getHasSelection()) echo 'class="no-display-current"'?>  >
@@ -31,12 +32,11 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
       Amasty_Shopby_Model_Catalog_Layer_Filter_Category::DT_WSUBCAT,
     ))): ?>
   <?php foreach ($_items as $_item):
-    // if(isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] === "81.59.51.217") {
-      // var_dump($_item->getData());
+    $level          = $_item->getLevel();
+    $highest_level  = max($highest_level, $level);
+    // if($_item->getLevel() < 1) {
+      // continue;
     // }
-    if($_item->getLevel() < 1) {
-      continue;
-    }
     if($_item->getLevel() > 2) {
       continue;
     }
@@ -49,7 +49,7 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
     if(strlen($label) > 29) {
       $label = substr($label, 0, 27)."..";
     }
-    $class = 'amshopby-cat-level-' . max(0, $_item->getLevel());
+    $class = 'amshopby-cat-level-'.max(0, $_item->getLevel());
     if ($_multiselectEnabled) {
       $class .= ' amshopby-cat-multi';
       $class .= ($_item->getIsSelected() ? ' amshopby-cat-multiselected' : '');
@@ -66,7 +66,7 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
       <?php
       if ($_item->getIsSelected()) {
         if ($_multiselectEnabled) {
-          echo '<a class="amshopby-attr {$a_class}" href="' . $this->urlEscape($_item->getUrl())  .'" data-config = \''. $_item->getApplyData() .' \' title="'.$title.'">';
+          echo '<a class="amshopby-attr {$a_class}" href="'.$this->urlEscape($_item->getUrl())  .'" data-config = \''. $_item->getApplyData() .' \' title="'.$title.'">';
         }
         echo $label;
         if ($_showCount && $count) {
@@ -77,7 +77,7 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
         }
       } else {
         ?>
-        <a class="amshopby-attr <?php echo $a_class ;?>" href="<?php echo $this->urlEscape($_item->getUrl()) ?>" data-config=' <?php echo $_item->getApplyData(); ?>' title="<?php echo $title; ?>">
+        <a class="amshopby-cat <?php echo $a_class ;?>" href="<?php echo $this->urlEscape($_item->getUrl()) ?>" data-config=' <?php echo $_item->getApplyData(); ?>' title="<?php echo $title; ?>">
           <?php
           echo $label;
           if ($_showCount && $count) {
@@ -91,12 +91,13 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
 <?php elseif (Amasty_Shopby_Model_Catalog_Layer_Filter_Category::DT_STATIC2LVL == $_displayType): ?>
   <?php foreach ($_items as $_item): ?>
     <?php
-      $level    = $_item->getLevel();
-      $additional = $_item->getIsFolded() ? 'style="display:none"' : '';
+      $level          = $_item->getLevel();
+      $highest_level  = max($highest_level, $level);
+      $additional     = $_item->getIsFolded() ? 'style="display:none"' : '';
 
-      $class    = 'amshopby-cat-level-' . $level;
+      $class    = 'amshopby-cat-level-'.$level;
       if (1 != $level){
-        $class .= ' amshopby-cat-parentid-' . $_item->getParentId();
+        $class .= ' amshopby-cat-parentid-'.$_item->getParentId();
       } else {
         $renderedItemsCount++;
       }
@@ -151,8 +152,8 @@ $_toggleClasses = ' amshopby-cat-toggle amshopby-cat-toggle-hidden';
   $add = $renderedItemsCount - $_maxOptions;
   if ($add > 0 && $_maxOptions > 0) {
     $text = sprintf($this->__('View %d More'), $add);
-    echo '<li class="amshopby-clearer"><a id="amshopby-category-more" href="#">' . $text . '</a></li>';
-    echo '<li class="amshopby-clearer"><a id="amshopby-category-less" href="#" style="display:none">' . $this->__('Show Less') . '</a></li>';
+    echo '<li class="amshopby-clearer amshopby-cat-level-'.$highest_level.'"><a id="amshopby-category-more" href="#">'.$text.'</a></li>';
+    echo '<li class="amshopby-clearer amshopby-cat-level-'.$highest_level.'"><a id="amshopby-category-less" href="#" style="display:none">'.$this->__('Show Less').'</a></li>';
   }
 ?>
 </ol>

@@ -8,8 +8,9 @@ $_filters = $this->getActiveFilters();
 if(!empty($_filters)) {
   $_removeTxt = Mage::helper('catalog')->__('Remove This Item');
   echo "<div class='amshopby-active-filters'>";
-  echo "<div class='block-title'><span class='h2 strong blue'>Huidige filters</span></div>";
-  echo "<ul>";
+  echo "<div class='mb-2'><span class='h2 strong blue'>Actieve Filters</span></div>";
+  echo "<div class='currently'>";
+  echo "<ol>";
   foreach($_filters as $_filter) {
     if($_filter->hasData('children')) {
       $value = [];
@@ -31,7 +32,8 @@ if(!empty($_filters)) {
     }
     echo "</li>";
   }
-  echo "</ul>";
+  echo "</ol>";
+  echo "</div>";
   echo "<div class='actions'><a class='float-left' href='{$this->getParentBlock()->getClearUrl()}'>Filters verwijderen</a></div>";
   echo "</div>";
 }
