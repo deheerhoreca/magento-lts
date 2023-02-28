@@ -75,8 +75,9 @@ class Mestrona_ForwardToConfigurable_Model_Observer extends Mage_Core_Model_Abst
             // try to find other products if one parent product is not visible -> loop
         }
 
+        // DHH CORE HACK -- Expanding log message, reducing severity
         if (!$parentProduct->isVisibleInCatalog()) {
-            Mage::log(sprintf('Not enabled parent for product id %d found.', $productId), Zend_Log::WARN);
+            Mage::log(sprintf('No enabled parent %d for product id %d found, not redirecting.', $parentProduct->getId(), $productId), Zend_Log::INFO);
             return;
         }
 

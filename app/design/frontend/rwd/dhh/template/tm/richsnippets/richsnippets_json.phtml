@@ -9,9 +9,11 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
     $cache_tag  = "tm_richsnippets";
     
     if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, $cache_tag)) {
-      $json = Mage::app()->getCache()->load($cache_key);
-      if(empty($json) === true) {
-        DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen($json)." chars");
+      $serialized = Mage::app()->getCache()->load($cache_key);
+      if(empty($serialized) === true) {
+        DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
+      } else {
+        $json = unserialize($serialized);
       }
     }
     
@@ -20,8 +22,10 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
       echo "<script type=\"application/ld+json\">{$json}</script>";
     } else {
       $json = $this->getJsonSnippetsProduct();
-      $json = json_encode(json_decode($json), JSON_PRETTY_PRINT); // During development
-      echo "<script type=\"application/ld+json\">{$json}</script>";
+      if(isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+        $json = json_encode(json_decode($json), JSON_PRETTY_PRINT); // During development
+      }
+      echo "<script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
       
       // Store in Magento cache
       if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, $cache_tag)) {

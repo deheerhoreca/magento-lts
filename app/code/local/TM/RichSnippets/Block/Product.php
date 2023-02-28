@@ -65,6 +65,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      *
      * @return string
      */
+     // @todo add more options: https://developers.google.com/search/docs/appearance/structured-data/product#json-ld
     public function getStockStatusUrl()
     {
         if ($this->getProduct()->isSaleable() === true){
@@ -234,24 +235,28 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         
         $_product     = $this->getProduct();
         
+        $sku          = (string) $_product->getSku();
+        
+        // Max length not clear, taking 150 from observed warnings
+        $name         = (string) substr($_product->getName(), 0, 150);
+        
         // Fixed fields
         $data = [
           '@context'              => 'http://schema.org',
           '@type'                 => 'Product',
-          'name'                  => $_product->getName(),
-          'sku'                   => $_product->getSku(),
+          'name'                  => $name,
+          'sku'                   => $sku,
           'image'                 => (string) Mage::helper('catalog/image')->init($_product, 'image'),
-          'brand'                 => $_product->getAttributeText('manufacturer'), /* DHH CORE HACK */
+          'brand'                 => $_product->getAttributeText('manufacturer'),
           // 'logo'                  => "", @todo brand logo
           'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
-          'gtin'                  => $_product->getResource()->getAttribute('ean')->getFrontend()->getValue($_product),
           // "asin"                  => "", @todo
           // "category"              => "", @todo
           'offers'                => [
             '@type'                 => 'Offer',
             'availability'          => $this->getStockStatusUrl(),
             'priceCurrency'         => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
-            'itemCondition'         => "http://schema.org/NewCondition", /* DHH CORE HACK */
+            'itemCondition'         => "http://schema.org/NewCondition",
             "priceValidUntil"       => date('Y-m-d', strtotime(date("Y-m-d", mktime()) . " + 365 day")),
             'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
             "seller"                => [
@@ -473,12 +478,14 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             "handlingTime"        => [
               "@type"               => "QuantitativeValue",
               "minValue"            => 0,
-              "maxValue"            => 1
+              "maxValue"            => 1,
+              "unitCode"            => "d"
             ],
             "transitTime"        => [
               "@type"               => "QuantitativeValue",
               "minValue"            => $min_days,
               "maxValue"            => $max_days,
+              "unitCode"            => "d"
             ],
           ],
         ];

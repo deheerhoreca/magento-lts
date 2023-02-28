@@ -107,7 +107,9 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
     // Print JSON
     if(empty($dataBreadcrumbs['itemListElement']) === false) {
       $json = Mage::helper('core')->jsonEncode($dataBreadcrumbs);
-      $json = json_encode(json_decode($json), JSON_PRETTY_PRINT); // During development
+      if(isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+        $json = json_encode(json_decode($json), JSON_PRETTY_PRINT); // During development
+      }
       echo "  <script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
     }
   } elseif ($snippetsType == '1') {
