@@ -348,6 +348,22 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         if($enclz !== "") {
           $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
         }
+      } else {
+        $value = _get_product_attribute($_product, "energieklasse");
+        if(empty($value) === false) {
+          $enclz = "";
+          switch ($value) {
+            case "A+++":  $enclz = "enrgclz1";  break;
+            case "A++":   $enclz = "enrgclz1";  break;
+            case "A+":    $enclz = "enrgclz1";  break;
+            case "A":     $enclz = "enrgclz1";  break;
+            case "B":     $enclz = "enrgclz2";  break;
+            case "C":     $enclz = "enrgclz3";  break;
+          }
+          if($enclz !== "") {
+            $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
+          }
+        }
       }
       
       // Product name

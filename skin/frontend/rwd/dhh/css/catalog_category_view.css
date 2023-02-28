@@ -357,6 +357,10 @@ div.main div.col-main div.category-products div.toolbar .limiter select {
   display: none;
 }
 
+.price-box .minimal-price-link {
+  display: none;
+}
+
 /* MISC */
 
 @media (max-width: 61.9em) {

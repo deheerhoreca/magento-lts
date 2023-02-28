@@ -749,7 +749,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_code  = "afsluitbaar";
       $attribute_value = _get_product_attribute($_product, $attribute_code);
       if($attribute_value === "Ja") {
-        $usps[] = "Afsluitbaar";
+        $usps[] = "Met Slot";
       }
       
       if(sizeof($usps) >= $max_count) break;

@@ -3750,10 +3750,6 @@ form .form-instructions {
   margin-bottom: 0;
 }
 
-.products-grid > li:nth-child(odd) {
-  clear: left;
-}
-
 .products-grid > li:nth-child(even) {
   margin-right: 0;
 }
