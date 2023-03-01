@@ -5,12 +5,12 @@
 ?>
 
 <style>
-@media screen and (min-width: 1200.1px) {
-  .info-box-cart-success {
-    background: url(https://www.chefstore.nl/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
-    background-size: contain;
+  @media screen and (min-width: 1200px) {
+    .info-box-cart-success {
+      background: url(https://www.chefstore.nl/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
+      background-size: contain;
+    }
   }
-}
 </style>
 <div class="info-box info-box-cart-success">
   <div class="info-box-inner">
@@ -59,26 +59,82 @@
   </div>
 </div>
 
-<?php /* Clickcease.com Conversion tracking */ ?>
+<?php
+/* Clickcease.com Conversion tracking */
+?>
 
 <script>
   ccConVal = 0;
   var script = document.createElement("script");
   script.async = true;
-  var target = 'https://www.clickcease.com/monitor/cccontrack.js';
-  script.src = target;
+  script.src = '//www.clickcease.com/monitor/cccontrack.js';
   var elem = document.head;
   elem.appendChild(script);
 </script>
 
 <?php
 /* Bing Conversion tracking */
-$order_id = $this->getOrderId();
-$order    = Mage::getModel("sales/order")->loadByIncrementId($order_id);
-$total    = $order->getGrandTotal();
-$total   /= 1.21;
+
+$order_id             = $this->getOrderId();
+$_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
+$grand_total          = $_order->getGrandTotal() ?? null;
+if(is_numeric($grand_total)) {
+  $grand_total         /= 1.21;
+}
 ?>
 <script>
   window.uetq = window.uetq || [];
-  window.uetq.push('event', '', {'revenue_value': <?php echo $total; ?>, 'currency': 'EUR'});
+  window.uetq.push('event', '', {'revenue_value': <?php echo $grand_total; ?>, 'currency': 'EUR'});
+</script>
+
+<?php
+/* Datatrics Conversion tracking */
+
+// @see https://app.datatrics.com/integrations/datatrics-tracker/46731568013430307066
+
+$shipping_total       = $_order->getShippingAmount();
+$tax_info             = $_order->getFullTaxInfo();
+$tax_total            = $tax_info[0]["$tax_info"] ?? null;
+$total_no_shipping    = ($grand_total - $shipping_total);
+$discount_offered     = json_encode(!(empty($_order->getCouponCode())));
+$_items               = $_order->getAllItems();
+$datatrics_js         = "";
+foreach($_items as $_item) {
+  // printr($_item->getData());
+  // printr(get_class_methods($_item));
+  $_product         = $_item->getProduct();
+  // printr($_product->getData());
+  $category_ids       = $_product->getCategoryIds();
+  $_categories        = $_product->getCategoryCollection();
+  // printr($cats);
+  // printr(_get_product_attribute($_product, "product_type"));
+  // printr($_product->getResource()->getAttribute('product_type')->getFrontend()->getValue($_product));
+  
+  $sku              = $_item->getSku();
+  $name             = $_item->getName();
+  $price            = (float) $_item->getPrice();
+  $qty              = (int) $_item->getQtyOrdered();
+  $categories       = [];
+  
+  if($_product && empty(_get_product_attribute($_product, "product_type") === false)) {
+    $categories[]     = _get_product_attribute($_product, "product_type");
+  }
+  foreach($category_ids as $category_id) {
+    $_category        = Mage::getModel('catalog/category')->load($category_id);
+    $categories[]     = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($_category->getName());
+  }
+  $categories_json  = json_encode($categories); // Maybe add JSON_UNESCAPED_UNICODE
+  $datatrics_js    .= "_paq.push(['addEcommerceItem', '{$sku}', '{$name}', {$categories_json}, {$price}, {$qty}]);".PHP_EOL;
+}
+?>
+<script>
+  var _paq = _paq || [];
+  if(window.location.hostname == "www.chefstore.nl") {
+    <?php echo $datatrics_js ?>
+    _paq.push(['trackEcommerceOrder', "<?php echo $order_id ?>", <?php echo $grand_total; ?>, <?php echo $total_no_shipping; ?>, <?php echo $tax_total; ?>, <?php echo $shipping_total; ?>, <?php echo $discount_offered; ?>]);
+    <?php
+    // This already happens ealier, probably not needed
+    // _paq.push(['trackPageView']);
+    ?>
+  }
 </script>

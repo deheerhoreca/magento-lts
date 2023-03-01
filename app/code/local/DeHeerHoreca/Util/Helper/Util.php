@@ -1339,6 +1339,7 @@ if(function_exists('_get_product_attribute') === false) {
     if(is_object($_product) === false) {
       return null;
     }
+    
     $attribute = $_product->getResource()->getAttribute($attribute_code);
     if(!$attribute) {
       if(_dhh_debug()) {
@@ -1347,7 +1348,9 @@ if(function_exists('_get_product_attribute') === false) {
       Mage::log("_get_product_attribute: Attribute '{$attribute_code}' does not exist", null, "exception.log", true);
       return null;
     }
-    $value = $attribute->getFrontend()->getValue($_product);
+    
+    // $value = $attribute->getFrontend()->getValue($_product);
+    $value = $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
     if($implode_arrays === true && is_array($value) === true) {
       $value = implode(", ", $value);
     }

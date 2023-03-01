@@ -62,7 +62,6 @@
 .block-layered-nav dl dd ol>li>a.amshopby-cat {
   padding: 2px 0 2px 0px;
   width: 100%;
-  text-decoration: none;
 }
 
 .block-layered-nav dl dd ol>li>a .count {
@@ -135,7 +134,7 @@ body.amshopby-index-index div.page-title.category-title h1 {
 }
 
 .amshopby-attr,
-.amshopby-cat a,
+.amshopby-cat,
 .amshopby-attr-selected {
   position: relative;
   padding-right: 0;

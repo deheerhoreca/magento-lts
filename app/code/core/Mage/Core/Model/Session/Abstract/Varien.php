@@ -146,10 +146,10 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             session_cache_limiter((string)$sessionCacheLimiter);
         }
 
-        if(!headers_sent()) {
+        if(!headers_sent($file, $line)) {
             session_start();
         } else {
-            Mage::log('Failed to start session, headers already sent. URL: '.Mage::helper('core/url')->getCurrentUrl(), null, 'exception.log', true);
+            Mage::log('Failed to start session, headers already sent. Output started at '.$file.':'.$line.'. URL: '.Mage::helper('core/url')->getCurrentUrl(), null, 'exception.log', true);
         }
 
         if (Mage::app()->getFrontController()->getRequest()->isSecure() && empty($cookieParams['secure'])) {

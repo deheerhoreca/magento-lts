@@ -10362,7 +10362,6 @@ div.cross-sell-text-container {
 .disc-list {
   list-style: disc;
   padding: .5em 0 .5em 1.2em;
-  line-height: 1.5em;
 }
 
 body
@@ -10496,7 +10495,6 @@ section.st-ui-slide-autocomplete div.st-query-present a.st-ui-result .st-ui-type
   padding: 0 1em;
   border: 1px solid #aaa;
   border-radius: 4px;
-  line-height: 1.6em;
 }
 
 .info-box-not-found {
