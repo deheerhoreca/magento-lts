@@ -805,6 +805,10 @@
   .category-products .old-price {
     display: none;
   }
+  
+  .products-grid .special_price_dates {
+    display: none;
+  }
 }
 
 /* Bootstrap X-Small */
