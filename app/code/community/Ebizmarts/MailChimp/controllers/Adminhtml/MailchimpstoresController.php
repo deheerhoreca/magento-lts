@@ -47,7 +47,6 @@ class Ebizmarts_MailChimp_Adminhtml_MailchimpstoresController extends Mage_Admin
     protected function _initStore($idFieldName = 'id')
     {
         $this->_title($this->__('Mailchimp Stores'))->_title($this->__('Manage Mailchimp Stores'));
-
         $storeId = (int)$this->getRequest()->getParam($idFieldName);
 
         if ($storeId) {
@@ -65,9 +64,11 @@ class Ebizmarts_MailChimp_Adminhtml_MailchimpstoresController extends Mage_Admin
         $mailchimpStore = $this->loadMailchimpStore($id);
         $this->sessionregisterStore($mailchimpStore);
         $title = $id ? $this->__('Edit Store') : $this->__('New Store');
-
         $this->_initAction();
-        $block = $this->getLayout()->createBlock('mailchimp/adminhtml_mailchimpstores_edit')->setData('action', $this->getUrl('*/*/save'));
+
+        $block = $this->getLayout()
+            ->createBlock('mailchimp/adminhtml_mailchimpstores_edit')
+            ->setData('action', $this->getUrl('*/*/save'));
 
         $this->_addBreadcrumb($title, $title)
             ->_addContent($block)
@@ -156,6 +157,7 @@ class Ebizmarts_MailChimp_Adminhtml_MailchimpstoresController extends Mage_Admin
                 $helper->logError($e->getMessage());
                 continue;
             }
+
             try {
                 $root = $api->getRoot()->info();
                 $stores = $api->getEcommerce()->getStores()->get(null, null, null, 100);
@@ -181,34 +183,45 @@ class Ebizmarts_MailChimp_Adminhtml_MailchimpstoresController extends Mage_Admin
                         continue;
                     }
 
-                    $storeData = Mage::getModel('mailchimp/stores');
-                    $storeData->setApikey($apiKey)
-                        ->setStoreid($store['id'])
-                        ->setListid($store['list_id'])
-                        ->setName($store['name'])
-                        ->setPlatform($store['platform'])
-                        ->setIsSync($store['is_syncing'])
-                        ->setEmailAddress($store['email_address'])
-                        ->setCurrencyCode($store['currency_code'])
-                        ->setMoneyFormat($store['money_format'])
-                        ->setPrimaryLocale($store['primary_locale'])
-                        ->setTimezone($store['timezone'])
-                        ->setPhone($store['phone'])
-                        ->setAddressAddressOne($store['address']['address1'])
-                        ->setAddressAddressTwo($store['address']['address2'])
-                        ->setAddressCity($store['address']['city'])
-                        ->setAddressProvince($store['address']['province'])
-                        ->setAddressProvinceCode($store['address']['province_code'])
-                        ->setAddressPostalCode($store['address']['postal_code'])
-                        ->setAddressCountry($store['address']['country'])
-                        ->setAddressCountryCode($store['address']['country_code'])
-                        ->setDomain($store['domain'])
-                        ->setMcAccountName($root['account_name'])
-                        ->setListName(key_exists('name', $list) ? $list['name'] : '')
-                        ->save();
+                    $this->_saveStoreData($apiKey, $store, $root, $list);
                 }
             }
         }
+    }
+
+    /**
+     * @param $apiKey
+     * @param $store
+     * @param $root
+     * @param $list
+     */
+    protected function _saveStoreData($apiKey, $store, $root, $list)
+    {
+        $storeData = Mage::getModel('mailchimp/stores');
+        $storeData->setApikey($apiKey)
+            ->setStoreid($store['id'])
+            ->setListid($store['list_id'])
+            ->setName($store['name'])
+            ->setPlatform($store['platform'])
+            ->setIsSync($store['is_syncing'])
+            ->setEmailAddress($store['email_address'])
+            ->setCurrencyCode($store['currency_code'])
+            ->setMoneyFormat($store['money_format'])
+            ->setPrimaryLocale($store['primary_locale'])
+            ->setTimezone($store['timezone'])
+            ->setPhone($store['phone'])
+            ->setAddressAddressOne($store['address']['address1'])
+            ->setAddressAddressTwo($store['address']['address2'])
+            ->setAddressCity($store['address']['city'])
+            ->setAddressProvince($store['address']['province'])
+            ->setAddressProvinceCode($store['address']['province_code'])
+            ->setAddressPostalCode($store['address']['postal_code'])
+            ->setAddressCountry($store['address']['country'])
+            ->setAddressCountryCode($store['address']['country_code'])
+            ->setDomain($store['domain'])
+            ->setMcAccountName($root['account_name'])
+            ->setListName(key_exists('name', $list) ? $list['name'] : '')
+            ->save();
     }
 
     public function getstoresAction()
@@ -270,15 +283,15 @@ class Ebizmarts_MailChimp_Adminhtml_MailchimpstoresController extends Mage_Admin
     {
         $acl = '';
         switch ($this->getRequest()->getActionName()) {
-            case 'index':
-            case 'grid':
-            case 'edit':
-            case 'new':
-            case 'save':
-            case 'getstores':
-            case 'delete':
-                $acl = 'newsletter/mailchimp/mailchimpstores';
-                break;
+        case 'index':
+        case 'grid':
+        case 'edit':
+        case 'new':
+        case 'save':
+        case 'getstores':
+        case 'delete':
+            $acl = 'newsletter/mailchimp/mailchimpstores';
+            break;
         }
 
         return Mage::getSingleton('admin/session')->isAllowed($acl);
@@ -329,6 +342,7 @@ class Ebizmarts_MailChimp_Adminhtml_MailchimpstoresController extends Mage_Admin
         $address['postal_code'] = $formData['address_postal_code'];
         $address['country'] = '';
         $address['country_code'] = $formData['address_country_code'];
+
         return $address;
     }
 }

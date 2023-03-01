@@ -18,9 +18,12 @@ class Mandrill_Message extends Mandrill_Mandrill
     protected $_to = array();
     protected $_headers = array();
     protected $_fromName;
+    protected $_tags = array();
+    protected $_returnPath = null;
 
     /**
      * Flag: whether or not email has attachments
+     *
      * @var boolean
      */
     public $hasAttachments = false;
@@ -49,7 +52,7 @@ class Mandrill_Message extends Mandrill_Mandrill
      * @param string $mimeType
      * @param string $disposition
      * @param string $encoding
-     * @param null $filename
+     * @param null   $filename
      * @return Zend_Mime_Part
      */
     public function createAttachment(
@@ -81,8 +84,11 @@ class Mandrill_Message extends Mandrill_Mandrill
     public function getAttachments()
     {
         $_attachments = array();
+
         foreach ($this->_attachments as $attachment) {
-            /** @var Zend_Mime_Part $attachment */
+            /**
+             * @var Zend_Mime_Part $attachment
+             */
             $_attachments[] = array(
                 'type' => $attachment->type,
                 'name' => $attachment->filename,
@@ -97,10 +103,16 @@ class Mandrill_Message extends Mandrill_Mandrill
     {
         if (is_array($bcc)) {
             foreach ($bcc as $email) {
-                $this->_bcc[] = $email;
+                $this->_bcc[] = array(
+                    'email' => $email,
+                    'type' => 'bcc'
+                );
             }
         } else {
-            $this->_bcc[] = $bcc;
+            $this->_bcc[] = array(
+                'email' => $bcc,
+                'type' => 'bcc'
+            );
         }
     }
 
@@ -109,19 +121,59 @@ class Mandrill_Message extends Mandrill_Mandrill
         return $this->_bcc;
     }
 
-    public function addTo($email, $name = '')
+    public function addTo($emails, $names = '')
     {
-        if (!is_array($email)) {
-            $email = array($name => $email);
-        }
+        if (is_array($emails)) {
+            $max = count($emails);
 
-        foreach ($email as $n => $recipient) {
-            $this->_to[] = $recipient;
+            for ($i = 0; $i < $max; $i++) {
+                if (isset($names[$i])) {
+                    $this->_to[] = array(
+                        'email' => $emails[$i],
+                        'name' => $names[$i],
+                        'type' => 'to'
+                    );
+                } else {
+                    $this->_to[] = array(
+                        'email' => $emails[$i],
+                        'name' => '',
+                        'type' => 'to'
+                    );
+                }
+            }
+        } else {
+            $this->_to[] = array(
+                'email' => $emails,
+                'name' => $names,
+                'type' => 'to'
+            );
         }
-
+    }
+    public function getReplyTo()
+    {
+        $emails = array();
+        foreach ($this->_to as $item) {
+            $emails[] = $item['email'];
+        }
+        return $emails;
+    }
+    public function setReturnPath($email)
+    {
+//        if ($this->_returnPath === null) {
+            $email = $this->_filterEmail($email);
+            $this->_returnPath = $email;
+            $this->_headers['Reply-To'] = sprintf('%s', $email);
+//        }
         return $this;
     }
+    public function getReturnPath()
+    {
+        if (null !== $this->_returnPath) {
+            return $this->_returnPath;
+        }
 
+        return $this->_from;
+    }
     public function getTo()
     {
         return $this->_to;
@@ -158,6 +210,7 @@ class Mandrill_Message extends Mandrill_Mandrill
             $subject = $this->_filterOther($subject);
             $this->_subject = $subject;
         }
+
         return $this;
     }
 
@@ -170,10 +223,8 @@ class Mandrill_Message extends Mandrill_Mandrill
     {
 
         $email = $this->_filterEmail($email);
-        //        $name  = $this->_filterName($name);
         $this->_from = $email;
         $this->_fromName = $name;
-        //        $this->_storeHeader('From', $this->_formatAddress($email, $name), true);
 
         return $this;
     }
@@ -230,7 +281,7 @@ class Mandrill_Message extends Mandrill_Mandrill
     {
         $email = $this->_filterEmail($email);
         $name = $this->_filterName($name);
-        $this->_headers[] = array('Reply-To' => sprintf('%s <%s>', $name, $email));
+        $this->_headers['Reply-To'] = sprintf('%s <%s>', $name, $email);
         return $this;
     }
 
@@ -255,51 +306,52 @@ class Mandrill_Message extends Mandrill_Mandrill
 
     public function getHeaders()
     {
-        if (isset($this->_headers[0])) {
-            return $this->_headers[0];
-        }
-
-        return null;
+        return $this->_headers;
+    }
+    public function setTags($tags)
+    {
+        $this->_tags = $tags;
     }
 
     public function send()
     {
         $email = array();
-        foreach ($this->_to as $to) {
-            $email['to'][] = array(
-                'email' => $to
-            );
-        }
-        foreach ($this->_bcc as $bcc) {
-            $email['to'][] = array(
-                'email' => $bcc,
-                'type' => 'bcc'
-            );
-        }
+
+        $email['to'] = array_merge($this->getTo(),$this->getBcc());
+
         $email['subject'] = $this->_subject;
+
         if (isset($this->_fromName)) {
             $email['from_name'] = $this->_fromName;
         }
+
         $email['from_email'] = $this->_from;
+
         if ($headers = $this->getHeaders()) {
             $email['headers'] = $headers;
         }
+
         if ($att = $this->getAttachments()) {
             $email['attachments'] = $att;
         }
+
         if ($this->_bodyHtml) {
             $email['html'] = $this->_bodyHtml;
         }
+
         if ($this->_bodyText) {
             $email['text'] = $this->_bodyText;
         }
-
+        if ($this->_tags) {
+            $email['tags'] = $this->_tags;
+        }
         try {
             $this->messages->send($email);
         } catch (Exception $e) {
             Mage::logException($e);
             return false;
         }
+
         return true;
     }
 }

@@ -21,7 +21,6 @@ class Ebizmarts_MailChimp_Model_Config
     const GENERAL_CHECKOUT_SUBSCRIBE            = 'mailchimp/general/checkout_subscribe';
     const GENERAL_MCSTOREID                     = 'mailchimp/general/storeid';
     const GENERAL_MCISSYNCING                   = 'mailchimp/general/is_syicing';
-    const GENERAL_ECOMMMINSYNCDATEFLAG          = 'mailchimp/general/mcminsyncdateflag';
     const GENERAL_SUBMINSYNCDATEFLAG            = 'mailchimp/general/subminsyncdateflag';
     const GENERAL_TWO_WAY_SYNC                  = 'mailchimp/general/webhook_active';
     const GENERAL_UNSUBSCRIBE                   = 'mailchimp/general/webhook_delete';
@@ -33,6 +32,7 @@ class Ebizmarts_MailChimp_Model_Config
     const GENERAL_MIGRATE_FROM_115              = 'mailchimp/general/migrate_from_115';
     const GENERAL_MIGRATE_FROM_116              = 'mailchimp/general/migrate_from_116';
     const GENERAL_MIGRATE_FROM_1164             = 'mailchimp/general/migrate_from_1164';
+    const GENERAL_MIGRATE_FROM_1120             = 'mailchimp/general/migrate_from_1120';
     const GENERAL_MIGRATE_LAST_ORDER_ID         = 'mailchimp/general/migrate_last_order_id';
     const GENERAL_SUBSCRIBER_AMOUNT             = 'mailchimp/general/subscriber_batch_amount';
     const GENERAL_TIME_OUT                      = 'mailchimp/general/connection_timeout';
@@ -81,23 +81,20 @@ class Ebizmarts_MailChimp_Model_Config
     const POPUP_COOKIE_TIME             = 'mailchimp/emailcatcher/popup_cookie_time';
     const POPUP_INSIST                  = 'mailchimp/emailcatcher/popup_insist';
 
-    const ABANDONEDCART_ACTIVE      = 'mailchimp/abandonedcart/active';
-    const ABANDONEDCART_FIRSTDATE   = 'mailchimp/abandonedcart/firstdate';
-    const ABANDONEDCART_PAGE        = 'mailchimp/abandonedcart/page';
-    const CART_AMOUNT               = 'mailchimp/abandonedcart/cart_batch_amount';
+    const ABANDONEDCART_ACTIVE          = 'mailchimp/abandonedcart/active';
+    const ABANDONEDCART_FIRSTDATE       = 'mailchimp/abandonedcart/firstdate';
+    const ABANDONEDCART_PAGE            = 'mailchimp/abandonedcart/page';
+    const ABANDONEDCART_AMOUNT          = 'mailchimp/abandonedcart/cart_batch_amount';
 
-    const WARNING_MESSAGE           = 'mailchimp/warning_message';
-    const POPUP_MESSAGE             = 'mailchimp/popup_message';
+    const MANDRILL_APIKEY               = 'mandrill/general/apikey';
+    const MANDRILL_ACTIVE               = 'mandrill/general/active';
+    const MANDRILL_LOG                  = 'mandrill/general/enable_log';
 
-    const MANDRILL_APIKEY           = 'mandrill/general/apikey';
-    const MANDRILL_ACTIVE           = 'mandrill/general/active';
-    const MANDRILL_LOG              = 'mandrill/general/enable_log';
-
-    const IS_CUSTOMER   = "CUS";
-    const IS_PRODUCT    = "PRO";
-    const IS_ORDER      = "ORD";
-    const IS_QUOTE      = "QUO";
-    const IS_SUBSCRIBER = "SUB";
-    const IS_PROMO_RULE = "PRL";
-    const IS_PROMO_CODE = "PCD";
+    const IS_CUSTOMER                   = "CUS";
+    const IS_PRODUCT                    = "PRO";
+    const IS_ORDER                      = "ORD";
+    const IS_QUOTE                      = "QUO";
+    const IS_SUBSCRIBER                 = "SUB";
+    const IS_PROMO_RULE                 = "PRL";
+    const IS_PROMO_CODE                 = "PCD";
 }

@@ -13,41 +13,60 @@
 class Ebizmarts_MailChimp_Model_Cron
 {
     /**
- * @var Ebizmarts_MailChimp_Helper_Data
-*/
-    private $mailChimpHelper;
+     * @var Ebizmarts_MailChimp_Helper_Data
+     */
+    protected $_mailChimpHelper;
+    /**
+     * @var Ebizmarts_MailChimp_Helper_Migration
+     */
+    protected $_mailChimpMigrationHelper;
 
     public function __construct()
     {
-        $this->mailChimpHelper = Mage::helper('mailchimp');
+        $this->_mailChimpHelper = Mage::helper('mailchimp');
+        $this->_mailChimpMigrationHelper = Mage::helper('mailchimp/migration');
     }
 
-    public function syncEcommerceBatchData(Mage_Cron_Model_Schedule $schedule)
+    public function syncEcommerceBatchData()
     {
-        if ($this->getHelper()->migrationFinished()) {
+        if ($this->getMigrationHelper()->migrationFinished()) {
             Mage::getModel('mailchimp/api_batches')->handleEcommerceBatches();
         } else {
-            $this->getHelper()->handleMigrationUpdates();
+            $this->getMigrationHelper()->handleMigrationUpdates();
         }
     }
 
-    public function syncSubscriberBatchData(Mage_Cron_Model_Schedule $schedule)
+    public function syncSubscriberBatchData()
     {
         Mage::getModel('mailchimp/api_batches')->handleSubscriberBatches();
     }
 
-    public function processWebhookData($cron)
+    public function processWebhookData()
     {
         Mage::getModel('mailchimp/processWebhook')->processWebhookData();
     }
 
-    public function deleteWebhookRequests($cron)
+    public function deleteWebhookRequests()
     {
         Mage::getModel('mailchimp/processWebhook')->deleteProcessed();
     }
 
-    private function getHelper()
+    public function clearEcommerceData()
     {
-        return $this->mailChimpHelper;
+        Mage::getModel('mailchimp/clearEcommerce')->clearEcommerceData();
+    }
+    public function clearBatches()
+    {
+        Mage::getModel('mailchimp/clearBatches')->clearBatches();
+    }
+
+    protected function getHelper($type='')
+    {
+        return $this->_mailChimpHelper;
+    }
+
+    protected function getMigrationHelper()
+    {
+        return $this->_mailChimpMigrationHelper;
     }
 }

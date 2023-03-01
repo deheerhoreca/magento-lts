@@ -23,7 +23,8 @@ class Ebizmarts_MailChimp_Model_System_Config_Source_Store
 
     /**
      * Ebizmarts_MailChimp_Model_System_Config_Source_Store constructor.
-     * @param $params
+     *
+     * @param  $params
      * @throws Exception
      */
     public function __construct($params)
@@ -31,7 +32,9 @@ class Ebizmarts_MailChimp_Model_System_Config_Source_Store
         $helper = $this->_helper = $this->makeHelper();
         $scopeArray = $helper->getCurrentScope();
         if (empty($this->_stores)) {
-            $apiKey = (empty($params)) ? $helper->getApiKey($scopeArray['scope_id'], $scopeArray['scope']) : $params['api_key'];
+            $apiKey = (empty($params))
+                ? $helper->getApiKey($scopeArray['scope_id'], $scopeArray['scope'])
+                : $params['api_key'];
 
             if ($apiKey) {
                 try {
@@ -53,30 +56,33 @@ class Ebizmarts_MailChimp_Model_System_Config_Source_Store
 
         if (isset($mcStores['stores'])) {
             $stores[] = array('value' => '', 'label' => $helper->__('--- Select a Mailchimp Store ---'));
+
             foreach ($mcStores['stores'] as $store) {
                 if ($store['platform'] == 'Magento') {
-                    if ($store['list_id']=='') {
+                    if ($store['list_id'] == '') {
                         continue;
                     }
+
                     if (isset($store['connected_site'])) {
                         $label = $store['name'];
                     } else {
                         $label = $store['name'] . ' (' . $helper->__("Warning: not connected") . ')';
                     }
 
-                    $stores[] = array('value'=> $store['id'], 'label' => $label);
+                    $stores[] = array('value' => $store['id'], 'label' => $label);
                 }
             }
         } else {
             $stores[] = array('value' => '', 'label' => $helper->__('--- No data ---'));
         }
+
         return $stores;
     }
 
     /**
      * @return Ebizmarts_MailChimp_Helper_Data
      */
-    protected function getHelper()
+    protected function getHelper($type='')
     {
         return $this->_helper;
     }

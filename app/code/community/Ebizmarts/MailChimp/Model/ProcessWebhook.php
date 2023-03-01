@@ -13,10 +13,23 @@
 class Ebizmarts_MailChimp_Model_ProcessWebhook
 {
     const BATCH_LIMIT = 200;
+
     /**
      * @var Ebizmarts_MailChimp_Helper_Data
      */
-    private $helper;
+    protected $_helper;
+    protected $_dateHelper;
+
+    /**
+     * @var Ebizmarts_MailChimp_Model_Api_Subscribers_InterestGroupHandle
+     */
+    protected $_interestGroupHandle;
+
+    /**
+     * @var Ebizmarts_MailChimp_Model_Api_Subscribers_MailchimpTags
+     */
+    protected $_tags;
+
     /**
      * Webhooks request url path
      *
@@ -27,15 +40,11 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
 
     public function __construct()
     {
-        $this->helper = Mage::helper('mailchimp');
-    }
+        $this->_helper = Mage::helper('mailchimp');
+        $this->_dateHelper = Mage::helper('mailchimp/date');
 
-    /**
-     * @return Ebizmarts_MailChimp_Helper_Data
-     */
-    protected function getHelper()
-    {
-        return $this->helper;
+        $this->_tags = Mage::getModel('mailchimp/api_subscribers_MailchimpTags');
+        $this->_interestGroupHandle = Mage::getModel('mailchimp/api_subscribers_InterestGroupHandle');
     }
 
     public function saveWebhookRequest(array $data)
@@ -43,7 +52,7 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
         Mage::getModel('mailchimp/webhookrequest')
             ->setType($data['type'])
             ->setFiredAt($data['fired_at'])
-            ->setDataRequest(serialize($data['data']))
+            ->setDataRequest($this->_helper->serialize($data['data']))
             ->save();
     }
 
@@ -57,8 +66,10 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
         $collection = Mage::getModel('mailchimp/webhookrequest')->getCollection();
         $collection->addFieldToFilter('processed', array('eq' => 0));
         $collection->getSelect()->limit(self::BATCH_LIMIT);
+
         foreach ($collection as $webhookRequest) {
-            $data = unserialize($webhookRequest->getDataRequest());
+            $data = $this->_helper->unserialize($webhookRequest->getDataRequest());
+
             if ($data) {
                 switch ($webhookRequest->getType()) {
                     case 'subscribe':
@@ -77,15 +88,23 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
                         $this->_profile($data);
                 }
             }
-            $webhookRequest->setProcessed(1)
-                ->save();
+
+            $this->_saveProcessedWebhook($webhookRequest);
         }
+    }
+
+    /**
+     * @param $webhookRequest
+     */
+    protected function _saveProcessedWebhook($webhookRequest)
+    {
+        $webhookRequest->setProcessed(1)->save();
     }
 
     /**
      * Update customer email <upemail>
      *
-     * @param  array $data
+     * @param array $data
      * @return void
      */
     protected function _updateEmail(array $data)
@@ -114,7 +133,7 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
     /**
      * Add "Cleaned Emails" notification to Adminnotification Inbox <cleaned>
      *
-     * @param  array $data
+     * @param array $data
      * @return void
      */
     protected function _clean(array $data)
@@ -135,34 +154,14 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
     /**
      * Subscribe email to Magento list, store aware
      *
-     * @param  array $data
+     * @param array $data
      * @return void
      */
     protected function _subscribe(array $data)
     {
-        $helper = $this->getHelper();
         try {
-            $listId = $data['list_id'];
-            $email = $data['email'];
-            $subscriber = $helper->loadListSubscriber($listId, $email);
-            if ($subscriber) {
-                if ($subscriber->getId()) {
-                    if ($subscriber->getSubscriberStatus() != Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED) {
-                        $helper->subscribeMember($subscriber);
-                    }
-                } else {
-                    if (isset($data['merges']['FNAME'])) {
-                        $subscriberFname = filter_var($data['merges']['FNAME'], FILTER_SANITIZE_STRING);
-                        $subscriber->setSubscriberFirstname($subscriberFname);
-                    }
-
-                    if (isset($data['merges']['LNAME'])) {
-                        $subscriberLname = filter_var($data['merges']['LNAME'], FILTER_SANITIZE_STRING);
-                        $subscriber->setSubscriberLastname($subscriberLname);
-                    }
-                    $helper->subscribeMember($subscriber);
-                }
-            }
+            $subscribe = true;
+            $this->getMailchimpTagsModel()->processMergeFields($data, $subscribe);
         } catch (Exception $e) {
             Mage::logException($e);
         }
@@ -171,7 +170,7 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
     /**
      * Unsubscribe or delete email from Magento list, store aware
      *
-     * @param  array $data
+     * @param array $data
      * @return void
      */
     protected function _unsubscribe(array $data)
@@ -181,20 +180,27 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
         if ($subscriber && $subscriber->getId()) {
             try {
                 $action = isset($data['action']) ? $data['action'] : 'delete';
+                $subscriberStatus = $subscriber->getSubscriberStatus();
+                $statusUnsubscribed = Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED;
+
                 switch ($action) {
-                    case 'delete':
-                        //if config setting "Webhooks Delete action" is set as "Delete customer account"
-                        if (Mage::getStoreConfig(Ebizmarts_MailChimp_Model_Config::GENERAL_UNSUBSCRIBE, $subscriber->getStoreId())) {
-                            $subscriber->delete();
-                        } elseif ($subscriber->getSubscriberStatus() != Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED) {
-                            $helper->unsubscribeMember($subscriber);
-                        }
-                        break;
-                    case 'unsub':
-                        if ($subscriber->getSubscriberStatus() != Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED) {
-                            $helper->unsubscribeMember($subscriber);
-                        }
-                        break;
+                case 'delete':
+                    //if config setting "Webhooks Delete action" is set as "Delete customer account"
+
+                    if (Mage::getStoreConfig(
+                        Ebizmarts_MailChimp_Model_Config::GENERAL_UNSUBSCRIBE, $subscriber->getStoreId()
+                    )
+                    ) {
+                        $subscriber->delete();
+                    } elseif ($subscriberStatus != $statusUnsubscribed) {
+                        $helper->unsubscribeMember($subscriber);
+                    }
+                    break;
+                case 'unsub':
+                    if ($subscriberStatus != $statusUnsubscribed) {
+                        $helper->unsubscribeMember($subscriber);
+                    }
+                    break;
                 }
             } catch (Exception $e) {
                 Mage::logException($e);
@@ -202,70 +208,13 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
         }
     }
 
+    /**
+     * @param array $data
+     * @throws Mage_Core_Exception
+     */
     public function _profile(array $data)
     {
-        $helper = $this->getHelper();
-        $listId = $data['list_id'];
-        $email = $data['email'];
-        $fname = isset($data['merges']['FNAME']) ? $data['merges']['FNAME'] : null;
-        $lname = isset($data['merges']['LNAME']) ? $data['merges']['LNAME'] : null;
-        $customer = $helper->loadListCustomer($listId, $email);
-        $saveRequired = false;
-        if ($customer) {
-            if ($fname && $fname !== $customer->getFirstname()) {
-                $customer->setFirstname($fname);
-                $saveRequired = true;
-            }
-            if ($lname && $lname !== $customer->getLastname()) {
-                $customer->setLastname($lname);
-                $saveRequired = true;
-            }
-            if ($saveRequired) {
-                $customer->save();
-            }
-        } else {
-            $subscriber = $helper->loadListSubscriber($listId, $email);
-            if ($subscriber) {
-                if ($subscriber->getId()) {
-                    if ($fname && $fname !== $subscriber->getSubscriberFirstname()) {
-                        $subscriber->setSubscriberFirstname($fname);
-                        $saveRequired = true;
-                    }
-                    if ($lname && $lname !== $subscriber->getSubscriberLastname()) {
-                        $subscriber->setSubscriberLastname($lname);
-                        $saveRequired = true;
-                    }
-                    if ($saveRequired) {
-                        $subscriber->setSubscriberSource(Ebizmarts_MailChimp_Model_Subscriber::MAILCHIMP_SUBSCRIBE);
-                        $subscriber->save();
-                    }
-                } else {
-                    /**
-                     * Mailchimp subscriber not currently in magento newsletter subscribers.
-                     * Get mailchimp subscriber status and add missing newsletter subscriber.
-                     */
-                    $scopeArray = $helper->getFirstScopeFromConfig(Ebizmarts_MailChimp_Model_Config::GENERAL_LIST, $listId);
-                    $api = $helper->getApi($scopeArray['scope_id'], $scopeArray['scope']);
-                    try {
-                        $subscriber->setSubscriberFirstname($fname);
-                        $subscriber->setSubscriberLastname($lname);
-                        $md5HashEmail = md5(strtolower($email));
-                        $member = $api->getLists()->getMembers()->get($listId, $md5HashEmail, null, null);
-                        if ($member['status'] == 'subscribed') {
-                            $helper->subscribeMember($subscriber);
-                        } elseif ($member['status'] == 'unsubscribed') {
-                            if (!$helper->getWebhookDeleteAction($subscriber->getStoreId())) {
-                                $helper->unsubscribeMember($subscriber);
-                            }
-                        }
-                    } catch (MailChimp_Error $e) {
-                        $helper->logError($e->getFriendlyMessage());
-                    } catch (Exception $e) {
-                        $helper->logError($e->getMessage());
-                    }
-                }
-            }
-        }
+        $this->getMailchimpTagsModel()->processMergeFields($data);
     }
 
     public function deleteProcessed()
@@ -276,5 +225,42 @@ class Ebizmarts_MailChimp_Model_ProcessWebhook
         $tableName = $resource->getTableName('mailchimp/webhookrequest');
         $where = array("fired_at < NOW() - INTERVAL 30 DAY AND processed = 1");
         $connection->delete($tableName, $where);
+    }
+
+    protected function _getStoreId()
+    {
+        return Mage::app()->getStore()->getId();
+    }
+
+    /**
+     * @return false|Mage_Core_Model_Abstract
+     */
+    protected function getInterestGroupHandleModel()
+    {
+        return $this->_interestGroupHandle;
+    }
+
+    /**
+     * @return Ebizmarts_MailChimp_Model_Api_Subscribers_MailchimpTags
+     */
+    protected function getMailchimpTagsModel()
+    {
+        return $this->_tags;
+    }
+
+    /**
+     * @return Ebizmarts_MailChimp_Helper_Data
+     */
+    protected function getHelper($type='')
+    {
+        return $this->_helper;
+    }
+
+    /**
+     * @return Ebizmarts_MailChimp_Helper_Date|Mage_Core_Helper_Abstract
+     */
+    protected function getDateHelper()
+    {
+        return $this->_dateHelper;
     }
 }

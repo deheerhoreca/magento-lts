@@ -9,7 +9,7 @@
  * @copyright Ebizmarts (http://ebizmarts.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Ebizmarts_MailChimp_Model_Api_Carts
+class Ebizmarts_MailChimp_Model_Api_Carts extends Ebizmarts_MailChimp_Model_Api_ItemSynchronizer
 {
     const BATCH_LIMIT = 100;
 
@@ -21,75 +21,96 @@ class Ebizmarts_MailChimp_Model_Api_Carts
     protected $_token = null;
 
     /**
-     * @param $mailchimpStoreId
-     * @param $magentoStoreId
+     * @var $_ecommerceQuotesCollection Ebizmarts_MailChimp_Model_Resource_Ecommercesyncdata_Quote_Collection
+     */
+    protected $_ecommerceQuotesCollection;
+
+
+    /**
      * @return array
      */
-    public function createBatchJson($mailchimpStoreId, $magentoStoreId)
+    public function createBatchJson()
     {
-        /** @var Ebizmarts_MailChimp_Helper_Data $helper */
+        $mailchimpStoreId = $this->getMailchimpStoreId();
+        $magentoStoreId = $this->getMagentoStoreId();
+
+        $this->_ecommerceQuotesCollection = $this->initializeEcommerceResourceCollection();
+        $this->_ecommerceQuotesCollection->setStoreId($magentoStoreId);
+        $this->_ecommerceQuotesCollection->setMailchimpStoreId($mailchimpStoreId);
+
         $helper = $this->getHelper();
+        $oldStore = $helper->getCurrentStoreId();
+        $helper->setCurrentStore($magentoStoreId);
+
         $allCarts = array();
+
         if (!$helper->isAbandonedCartEnabled($magentoStoreId)) {
             return $allCarts;
         }
 
+        $dateHelper = $this->getDateHelper();
         $this->_firstDate = $helper->getAbandonedCartFirstDate($magentoStoreId);
         $this->setCounter(0);
 
-        $date = $helper->getDateMicrotime();
-        $this->setBatchId('storeid-' . $magentoStoreId . '_' . Ebizmarts_MailChimp_Model_Config::IS_QUOTE . '_' . $date);
+        $date = $dateHelper->getDateMicrotime();
+        $this->setBatchId(
+            'storeid-'
+            . $magentoStoreId . '_'
+            . Ebizmarts_MailChimp_Model_Config::IS_QUOTE . '_'
+            . $date
+        );
+
         $resendTurn = $helper->getResendTurn($magentoStoreId);
+
         if (!$resendTurn) {
             // get all the carts converted in orders (must be deleted on mailchimp)
-            $allCarts = array_merge($allCarts, $this->_getConvertedQuotes($mailchimpStoreId, $magentoStoreId));
+            $allCarts = array_merge($allCarts, $this->_getConvertedQuotes());
             // get all the carts modified but not converted in orders
-            $allCarts = array_merge($allCarts, $this->_getModifiedQuotes($mailchimpStoreId, $magentoStoreId));
+            $allCarts = array_merge($allCarts, $this->_getModifiedQuotes());
         }
+
         // get new carts
-        $allCarts = array_merge($allCarts, $this->_getNewQuotes($mailchimpStoreId, $magentoStoreId));
+        $allCarts = array_merge($allCarts, $this->_getNewQuotes());
+        $helper->setCurrentStore($oldStore);
+
         return $allCarts;
     }
 
     /**
-     * @param $mailchimpStoreId
-     * @param $magentoStoreId
      * @return array
      */
-    public function _getConvertedQuotes($mailchimpStoreId, $magentoStoreId)
+    public function _getConvertedQuotes()
     {
-        $mailchimpTableName = $this->getMailchimpEcommerceDataTableName();
+        $mailchimpStoreId = $this->getMailchimpStoreId();
+
         $batchId = $this->getBatchId();
         $allCarts = array();
-        $convertedCarts = $this->getQuoteCollection();
-        // get only the converted quotes
-        $convertedCarts->addFieldToFilter('store_id', array('eq' => $magentoStoreId));
-        $convertedCarts->addFieldToFilter('is_active', array('eq' => 0));
-        //join with mailchimp_ecommerce_sync_data table to filter by sync data.
-        $convertedCarts->getSelect()->joinLeft(
-            array('m4m' => $mailchimpTableName),
-            "m4m.related_id = main_table.entity_id and m4m.type = '" . Ebizmarts_MailChimp_Model_Config::IS_QUOTE . "'
-            AND m4m.mailchimp_store_id = '" . $mailchimpStoreId . "'",
-            array('m4m.*')
+
+        $convertedCarts = $this->buildEcommerceCollectionToSync(
+            Ebizmarts_MailChimp_Model_Config::IS_QUOTE,
+            "m4m.mailchimp_sync_deleted = 0",
+            "converted"
         );
-        // be sure that the quotes are already in mailchimp and not deleted
-        $convertedCarts->getSelect()->where("m4m.mailchimp_sync_deleted = 0");
-        // limit the collection
-        $convertedCarts->getSelect()->limit($this->getBatchLimitFromConfig());
+
         foreach ($convertedCarts as $cart) {
             $cartId = $cart->getEntityId();
             // we need to delete all the carts associated with this email
-            $allCartsForEmail = $this->getAllCartsByEmail($cart->getCustomerEmail(), $mailchimpStoreId, $magentoStoreId);
+            $allCartsForEmail = $this->getAllCartsByEmail($cart->getCustomerEmail());
+
             foreach ($allCartsForEmail as $cartForEmail) {
                 $alreadySentCartId = $cartForEmail->getEntityId();
                 $counter = $this->getCounter();
+
                 if ($alreadySentCartId != $cartId) {
                     $allCarts[$counter]['method'] = 'DELETE';
-                    $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts/' . $alreadySentCartId;
+                    $allCarts[$counter]['path'] = '/ecommerce/stores/'
+                        . $mailchimpStoreId . '/carts/'
+                        . $alreadySentCartId;
                     $allCarts[$counter]['operation_id'] = $batchId . '_' . $alreadySentCartId;
                     $allCarts[$counter]['body'] = '';
-                    $this->_updateSyncData($alreadySentCartId, $mailchimpStoreId, null, null, 0, null, 1);
-                    $this->setCounter($this->getCounter()+1);
+
+                    $this->markSyncDataAsDeleted($alreadySentCartId);
+                    $this->setCounter($this->getCounter() + 1);
                 }
             }
 
@@ -99,42 +120,32 @@ class Ebizmarts_MailChimp_Model_Api_Carts
             $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts/' . $cartId;
             $allCarts[$counter]['operation_id'] = $batchId . '_' . $cartId;
             $allCarts[$counter]['body'] = '';
-            $this->_updateSyncData($cartId, $mailchimpStoreId, null, null, 0, null, 1);
-            $this->setCounter($this->getCounter()+1);
+
+            $this->markSyncDataAsDeleted($cartId);
+            $this->setCounter($this->getCounter() + 1);
         }
 
         return $allCarts;
     }
 
     /**
-     * @param $mailchimpStoreId
-     * @param $magentoStoreId
      * @return array
      */
-    public function _getModifiedQuotes($mailchimpStoreId, $magentoStoreId)
+    public function _getModifiedQuotes()
     {
-        $mailchimpTableName = $this->getMailchimpEcommerceDataTableName();
+        $mailchimpStoreId = $this->getMailchimpStoreId();
+        $magentoStoreId = $this->getMagentoStoreId();
+
+        $helper = $this->getHelper();
         $batchId = $this->getBatchId();
+
+        $modifiedCarts = $this->buildEcommerceCollectionToSync(
+            Ebizmarts_MailChimp_Model_Config::IS_QUOTE,
+            "m4m.mailchimp_sync_deleted = 0 AND m4m.mailchimp_sync_delta < updated_at",
+            "modified"
+        );
+
         $allCarts = array();
-        $modifiedCarts = $this->getQuoteCollection();
-        // select carts with no orders
-        $modifiedCarts->addFieldToFilter('is_active', array('eq' => 1));
-        // select carts for the current Magento store id
-        $modifiedCarts->addFieldToFilter('store_id', array('eq' => $magentoStoreId));
-        //join with mailchimp_ecommerce_sync_data table to filter by sync data.
-        $modifiedCarts->getSelect()->joinLeft(
-            array('m4m' => $mailchimpTableName),
-            "m4m.related_id = main_table.entity_id and m4m.type = '" . Ebizmarts_MailChimp_Model_Config::IS_QUOTE . "'
-            AND m4m.mailchimp_store_id = '" . $mailchimpStoreId . "'",
-            array('m4m.*')
-        );
-        // be sure that the quotes are already in mailchimp and not deleted
-        $modifiedCarts->getSelect()->where(
-            "m4m.mailchimp_sync_deleted = 0
-        AND m4m.mailchimp_sync_delta < updated_at"
-        );
-        // limit the collection
-        $modifiedCarts->getSelect()->limit($this->getBatchLimitFromConfig());
         foreach ($modifiedCarts as $cart) {
             $cartId = $cart->getEntityId();
             /**
@@ -142,19 +153,28 @@ class Ebizmarts_MailChimp_Model_Api_Carts
              */
             $customer = $this->getCustomerModel();
             $customer->setWebsiteId($this->getWebSiteIdFromMagentoStoreId($magentoStoreId));
-            $customer->loadByEmail($cart->getCustomerEmail());
-            if ($customer->getEmail() != $cart->getCustomerEmail()) {
-                $allCartsForEmail = $this->getAllCartsByEmail($cart->getCustomerEmail(), $mailchimpStoreId, $magentoStoreId);
+            $cartCustomerEmail = $cart->getCustomerEmail();
+            $customer->loadByEmail($cartCustomerEmail);
+
+            $customerEmail = $customer->getEmail();
+            if ($customerEmail != $cartCustomerEmail) {
+                $allCartsForEmail = $this->getAllCartsByEmail($cartCustomerEmail);
+
                 foreach ($allCartsForEmail as $cartForEmail) {
                     $alreadySentCartId = $cartForEmail->getEntityId();
                     $counter = $this->getCounter();
+
                     if ($alreadySentCartId != $cartId) {
                         $allCarts[$counter]['method'] = 'DELETE';
-                        $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts/' . $alreadySentCartId;
+                        $allCarts[$counter]['path'] = '/ecommerce/stores/'
+                            . $mailchimpStoreId
+                            . '/carts/'
+                            . $alreadySentCartId;
                         $allCarts[$counter]['operation_id'] = $batchId . '_' . $alreadySentCartId;
                         $allCarts[$counter]['body'] = '';
-                        $this->_updateSyncData($alreadySentCartId, $mailchimpStoreId, null, null, 0, null, 1);
-                        $this->setCounter($this->getCounter() + 1);
+
+                        $this->markSyncDataAsDeleted($cartId);
+                        $this->setCounter($counter + 1);
                     }
                 }
 
@@ -162,26 +182,46 @@ class Ebizmarts_MailChimp_Model_Api_Carts
             }
 
             // avoid carts abandoned as guests when customer email associated to a registered customer.
-            if (!$cart->getCustomerId() && $customer->getEmail() == $cart->getCustomerEmail()) {
-                $this->_updateSyncData($cartId, $mailchimpStoreId);
+            if (!$cart->getCustomerId() && $customerEmail == $cartCustomerEmail) {
+                $this->addSyncData($cartId);
                 continue;
             }
+
             // send the products that not already sent
-            $allCarts = $this->addProductNotSentData($mailchimpStoreId, $magentoStoreId, $cart, $allCarts);
+            $allCarts = $this->addProductNotSentData($cart, $allCarts);
+            $cartJson = $this->makeCart($cart, true);
 
-            $cartJson = $this->_makeCart($cart, $mailchimpStoreId, $magentoStoreId, true);
-            if ($cartJson != "") {
-                $this->getHelper()->modifyCounterSentPerBatch(Ebizmarts_MailChimp_Helper_Data::QUO_MOD);
+            if ($cartJson !== false) {
+                if (!empty($cartJson)) {
+                    $helper->modifyCounterSentPerBatch(Ebizmarts_MailChimp_Helper_Data::QUO_MOD);
 
-                $counter = $this->getCounter();
-                $allCarts[$counter]['method'] = 'PATCH';
-                $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts/'.$cartId;
-                $allCarts[$counter]['operation_id'] = $batchId . '_' . $cartId;
-                $allCarts[$counter]['body'] = $cartJson;
-                $this->setCounter($this->getCounter()+1);
-                $this->_updateSyncData($cartId, $mailchimpStoreId, null, null, 0, null, null, $this->getToken());
+                    $counter = $this->getCounter();
+                    $allCarts[$counter]['method'] = 'PATCH';
+                    $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts/' . $cartId;
+                    $allCarts[$counter]['operation_id'] = $batchId . '_' . $cartId;
+                    $allCarts[$counter]['body'] = $cartJson;
+                    $this->setCounter($this->getCounter() + 1);
+
+                    $this->addSyncDataToken($cartId, $this->getToken());
+                } else {
+                    $error = $helper->__('There is not supported products in this cart.');
+                    $this->addSyncDataError($cartId, $error);
+                }
             } else {
-                $this->_updateSyncData($cartId, $mailchimpStoreId);
+                $jsonErrorMessage = json_last_error_msg();
+                $this->addSyncDataError($cartId, $jsonErrorMessage, $this->getToken());
+
+                //json encode failed
+                $this->logSyncError(
+                    $jsonErrorMessage,
+                    Ebizmarts_MailChimp_Model_Config::IS_QUOTE,
+                    $magentoStoreId,
+                    'magento_side_error',
+                    'Json Encode Failure',
+                    0,
+                    $cart->getId(),
+                    0
+                );
             }
 
             $this->setToken(null);
@@ -191,85 +231,118 @@ class Ebizmarts_MailChimp_Model_Api_Carts
     }
 
     /**
-     * @param $mailchimpStoreId
-     * @return array
+     * @return array|mixed
+     * @throws Mage_Core_Exception
      */
-    public function _getNewQuotes($mailchimpStoreId, $magentoStoreId)
+    public function _getNewQuotes()
     {
-        $helper = $this->getHelper();
-        $batchId = $this->getBatchId();
-        $allCarts = array();
-        $newCarts = $this->getQuoteCollection();
-        $newCarts->addFieldToFilter('is_active', array('eq' => 1));
-        $newCarts->addFieldToFilter('customer_email', array('notnull' => true));
-        $newCarts->addFieldToFilter('items_count', array('gt' => 0));
-        // select carts for the current Magento store id
-        $newCarts->addFieldToFilter('store_id', array('eq' => $magentoStoreId));
-        $helper->addResendFilter($newCarts, $magentoStoreId, Ebizmarts_MailChimp_Model_Config::IS_QUOTE);
-        // filter by first date if exists.
-        if ($this->getFirstDate()) {
-            $newCarts->addFieldToFilter('updated_at', array('gt' => $this->getFirstDate()));
-        }
+        $mailchimpStoreId = $this->getMailchimpStoreId();
+        $magentoStoreId = $this->getMagentoStoreId();
 
-        //join with mailchimp_ecommerce_sync_data table to filter by sync data.
-        $this->joinMailchimpSyncDataWithoutWhere($newCarts, $mailchimpStoreId);
-        // be sure that the quotes are already in mailchimp and not deleted
-        $newCarts->getSelect()->where("m4m.mailchimp_sync_delta IS NULL");
-        // limit the collection
-        $newCarts->getSelect()->limit($this->getBatchLimitFromConfig());
+        $helper = $this->getHelper();
+        $dateHelper = $this->getDateHelper();
+        $batchId = $this->getBatchId();
+        $newCarts = $this->buildEcommerceCollectionToSync(Ebizmarts_MailChimp_Model_Config::IS_QUOTE);
+
+        $allCarts = array();
 
         foreach ($newCarts as $cart) {
             $cartId = $cart->getEntityId();
             $orderCollection = $this->getOrderCollection();
-            $orderCollection->addFieldToFilter('main_table.customer_email', array('eq' => $cart->getCustomerEmail()));
+            $cartCustomerEmail = $cart->getCustomerEmail();
+            $orderCollection->addFieldToFilter(
+                'main_table.customer_email', array('eq' => $cartCustomerEmail)
+            );
             $orderCollection->addFieldToFilter('main_table.updated_at', array('from' => $cart->getUpdatedAt()));
             //if cart is empty or customer has an order made after the abandonment skip current cart.
-            if (!count($cart->getAllVisibleItems()) || $orderCollection->getSize()) {
-                $this->_updateSyncData($cartId, $mailchimpStoreId);
+            $allVisibleItems = $cart->getAllVisibleItems();
+
+            if (empty($allVisibleItems) || $orderCollection->getSize()) {
+                $this->addSyncData($cartId);
                 continue;
             }
 
             $customer = $this->getCustomerModel();
             $customer->setWebsiteId($this->getWebSiteIdFromMagentoStoreId($magentoStoreId));
-            $customer->loadByEmail($cart->getCustomerEmail());
-            if ($customer->getEmail() != $cart->getCustomerEmail()) {
-                $allCartsForEmail = $this->getAllCartsByEmail($cart->getCustomerEmail(), $mailchimpStoreId, $magentoStoreId);
+            $customer->loadByEmail($cartCustomerEmail);
+            $customerEmail = $customer->getEmail();
+
+            if ($customerEmail != $cartCustomerEmail) {
+                $allCartsForEmail = $this->getAllCartsByEmail($cartCustomerEmail);
+
                 foreach ($allCartsForEmail as $cartForEmail) {
                     $counter = $this->getCounter();
                     $alreadySentCartId = $cartForEmail->getEntityId();
                     $allCarts[$counter]['method'] = 'DELETE';
-                    $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts/' . $alreadySentCartId;
+                    $allCarts[$counter]['path'] = '/ecommerce/stores/'
+                        . $mailchimpStoreId
+                        . '/carts/'
+                        . $alreadySentCartId;
                     $allCarts[$counter]['operation_id'] = $batchId . '_' . $alreadySentCartId;
                     $allCarts[$counter]['body'] = '';
-                    $this->_updateSyncData($alreadySentCartId, $mailchimpStoreId, null, null, 0, null, 1);
-                    $this->setCounter($this->getCounter()+1);
+
+                    $this->markSyncDataAsDeleted($alreadySentCartId);
+                    $this->setCounter($counter + 1);
                 }
 
                 $allCartsForEmail->clear();
             }
 
             // don't send the carts for guest customers who are registered
-            if (!$cart->getCustomerId() && $customer->getEmail() == $cart->getCustomerEmail()) {
-                $this->_updateSyncData($cartId, $mailchimpStoreId);
+            if (!$cart->getCustomerId() && $customerEmail == $cartCustomerEmail) {
+                $this->addSyncData($cartId);
                 continue;
             }
 
             // send the products that not already sent
-            $allCarts = $this->addProductNotSentData($mailchimpStoreId, $magentoStoreId, $cart, $allCarts);
+            $allCarts = $this->addProductNotSentData($cart, $allCarts);
+            $cartJson = $this->makeCart($cart);
 
-            $cartJson = $this->_makeCart($cart, $mailchimpStoreId, $magentoStoreId);
-            if ($cartJson != "") {
-                $helper->modifyCounterSentPerBatch(Ebizmarts_MailChimp_Helper_Data::QUO_NEW);
+            if ($cartJson !== false) {
+                if (!empty($cartJson)) {
+                    $helper->modifyCounterSentPerBatch(Ebizmarts_MailChimp_Helper_Data::QUO_NEW);
 
-                $counter = $this->getCounter();
-                $allCarts[$counter]['method'] = 'POST';
-                $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts';
-                $allCarts[$counter]['operation_id'] = $batchId . '_' . $cartId;
-                $allCarts[$counter]['body'] = $cartJson;
-                $this->setCounter($this->getCounter()+1);
-                $this->_updateSyncData($cartId, $mailchimpStoreId, null, null, 0, null, null, $this->getToken());
+                    $counter = $this->getCounter();
+                    $allCarts[$counter]['method'] = 'POST';
+                    $allCarts[$counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts';
+                    $allCarts[$counter]['operation_id'] = $batchId . '_' . $cartId;
+                    $allCarts[$counter]['body'] = $cartJson;
+                    $this->setCounter($this->getCounter() + 1);
+
+                    $this->addSyncDataToken($cartId, $this->getToken());
+                } else {
+                    $error = $helper->__('There is not supported products in this cart.');
+
+                    $this->addSyncDataError(
+                        $cartId,
+                        $error,
+                        null,
+                        false,
+                        $dateHelper->getCurrentDateTime()
+                    );
+                }
             } else {
-                $this->_updateSyncData($cartId, $mailchimpStoreId);
+                $jsonErrorMessage = json_last_error_msg();
+
+                $this->addSyncDataError(
+                    $cartId,
+                    $jsonErrorMessage,
+                    null,
+                    false,
+                    $dateHelper->getCurrentDateTime()
+                );
+
+                //json encode failed
+                $this->logSyncError(
+                    $jsonErrorMessage,
+                    Ebizmarts_MailChimp_Model_Config::IS_QUOTE,
+                    $magentoStoreId,
+                    'magento_side_error',
+                    'Json Encode Failure',
+                    0,
+                    $cart->getId(),
+                    0
+                );
             }
 
             $this->setToken(null);
@@ -282,46 +355,47 @@ class Ebizmarts_MailChimp_Model_Api_Carts
      * Get all existing carts in the current store view for a given email address.
      *
      * @param  $email
-     * @param  $mailchimpStoreId
-     * @param  $magentoStoreId
      * @return object
      */
-    public function getAllCartsByEmail($email, $mailchimpStoreId, $magentoStoreId)
+    public function getAllCartsByEmail($email)
     {
-        $mailchimpTableName = $this->getMailchimpEcommerceDataTableName();
-        $allCartsForEmail = $this->getQuoteCollection();
+        $allCartsForEmail = $this->getItemResourceModelCollection();
         $allCartsForEmail->addFieldToFilter('is_active', array('eq' => 1));
-        $allCartsForEmail->addFieldToFilter('store_id', array('eq' => $magentoStoreId));
+        $allCartsForEmail->addFieldToFilter('store_id', array('eq' => $this->getMagentoStoreId()));
         $allCartsForEmail->addFieldToFilter('customer_email', array('eq' => $email));
-        $allCartsForEmail->getSelect()->joinLeft(
-            array('m4m' => $mailchimpTableName),
-            "m4m.related_id = main_table.entity_id and m4m.type = '" . Ebizmarts_MailChimp_Model_Config::IS_QUOTE . "'
-            AND m4m.mailchimp_store_id = '" . $mailchimpStoreId . "'",
-            array('m4m.*')
-        );
+        $this->joinLeftEcommerceSyncData($allCartsForEmail);
         // be sure that the quotes are already in mailchimp and not deleted
-        $allCartsForEmail->getSelect()->where("m4m.mailchimp_sync_deleted = 0 AND m4m.mailchimp_store_id = '" . $mailchimpStoreId . "'");
+        $where = "m4m.mailchimp_sync_deleted = 0 "
+            . "AND m4m.mailchimp_store_id = '"
+            . $this->getMailchimpStoreId() . "'";
+        $this->getEcommerceResourceCollection()->addWhere($allCartsForEmail, $where);
+
         return $allCartsForEmail;
     }
 
     /**
      * @param $cart
-     * @param $magentoStoreId
      * @param $isModified
      * @return string
      */
-    public function _makeCart($cart, $mailchimpStoreId, $magentoStoreId, $isModified = false)
+    public function makeCart($cart, $isModified = false)
     {
-        $helper = $this->getHelper();
+        $magentoStoreId = $this->getMagentoStoreId();
+
         $apiProduct = $this->getApiProducts();
+        $apiProduct->setMagentoStoreId($magentoStoreId);
+
         $campaignId = $cart->getMailchimpCampaignId();
         $oneCart = array();
         $oneCart['id'] = $cart->getEntityId();
         $customer = $this->_getCustomer($cart, $magentoStoreId);
+
         if (empty($customer)) {
             return "";
         }
+
         $oneCart['customer'] = $customer;
+
         if ($campaignId) {
             $oneCart['campaign_id'] = $campaignId;
         }
@@ -330,21 +404,47 @@ class Ebizmarts_MailChimp_Model_Api_Carts
         $oneCart['currency_code'] = $cart->getQuoteCurrencyCode();
         $oneCart['order_total'] = $cart->getGrandTotal();
         $oneCart['tax_total'] = 0;
-        $lines = array();
         // get all items on the cart
-        $items = $cart->getAllVisibleItems();
+        $lines = $this->_processCartLines($cart->getAllVisibleItems(), $apiProduct);
+
+        $jsonData = "";
+
+        if ($lines['count']) {
+            $oneCart['lines'] = $lines['lines'];
+            //encode to JSON
+            $jsonData = json_encode($oneCart);
+        }
+
+        return $jsonData;
+    }
+
+    /**
+     * @param $items
+     * @param $apiProduct Ebizmarts_MailChimp_Model_Api_Products
+     * @return array
+     */
+    protected function _processCartLines($items, $apiProduct)
+    {
+        $mailchimpStoreId = $this->getMailchimpStoreId();
+        $magentoStoreId = $this->getMagentoStoreId();
+
+        $lines = array();
         $itemCount = 0;
+
         foreach ($items as $item) {
             $productId = $item->getProductId();
             $isTypeProduct = $this->isTypeProduct();
-            $productSyncData = $helper->getEcommerceSyncDataItem($productId, $isTypeProduct, $mailchimpStoreId);
+            $productSyncData = $this->getMailchimpEcommerceSyncDataModel()
+                ->getEcommerceSyncDataItem($productId, $isTypeProduct, $mailchimpStoreId);
             $line = array();
+
             if ($item->getProductType() == 'bundle' || $item->getProductType() == 'grouped') {
                 continue;
             }
 
             if ($this->isProductTypeConfigurable($item)) {
                 $variant = null;
+
                 if ($item->getOptionByCode('simple_product')) {
                     $variant = $item->getOptionByCode('simple_product')->getProduct();
                 }
@@ -373,41 +473,34 @@ class Ebizmarts_MailChimp_Model_Api_Carts
 
                 if (!$isProductEnabled) {
                     // update disabled products to remove the product from mailchimp after sending the order
-                    $apiProduct->updateDisabledProducts($productId, $mailchimpStoreId);
+                    $apiProduct->updateDisabledProducts($productId);
                 }
             }
         }
 
-        $jsonData = "";
-        if ($itemCount) {
-            $oneCart['lines'] = $lines;
-            //enconde to JSON
-            try {
-                $jsonData = json_encode($oneCart);
-            } catch (Exception $e) {
-                //json encode failed
-                $helper->logError("Carts " . $cart->getId() . " json encode failed");
-            }
-        }
-
-        return $jsonData;
+        return array('lines' => $lines, 'count' => $itemCount);
     }
 
     /**
      * Get URL for the cart.
      *
      * @param  $cart
-     * @param $isModified
+     * @param  $isModified
      * @return string
      */
     protected function _getCheckoutUrl($cart, $isModified)
     {
         if (!$isModified) {
-            $token = md5(rand(0, 9999999));
+            $token = hash('md5', rand(0, 9999999));
         } else {
             $token = $cart->getMailchimpToken();
         }
-        $url = Mage::getModel('core/url')->setStore($cart->getStoreId())->getUrl('', array('_nosid' => true, '_secure' => true)) . 'mailchimp/cart/loadquote?id=' . $cart->getEntityId() . '&token=' . $token;
+
+        $url = Mage::getModel('core/url')->setStore($cart->getStoreId())->getUrl(
+                '',
+                array('_nosid' => true, '_secure' => true)
+            )
+            . 'mailchimp/cart/loadquote?id=' . $cart->getEntityId() . '&token=' . $token;
         $this->setToken($token);
         return $url;
     }
@@ -418,7 +511,7 @@ class Ebizmarts_MailChimp_Model_Api_Carts
     protected function getBatchLimitFromConfig()
     {
         $helper = $this->getHelper();
-        return $helper->getCustomerAmountLimit();
+        return $helper->getCartAmountLimit();
     }
 
     /**
@@ -431,25 +524,29 @@ class Ebizmarts_MailChimp_Model_Api_Carts
     public function _getCustomer($cart, $magentoStoreId)
     {
         $customer = array(
-            "id" => md5(strtolower($cart->getCustomerEmail())),
+            "id" => hash('md5', strtolower($cart->getCustomerEmail())),
             "email_address" => $cart->getCustomerEmail(),
             "opt_in_status" => $this->getApiCustomersOptIn($magentoStoreId)
         );
 
         $firstName = $cart->getCustomerFirstname();
+
         if ($firstName) {
             $customer["first_name"] = $firstName;
         }
 
         $lastName = $cart->getCustomerLastname();
+
         if ($lastName) {
             $customer["last_name"] = $lastName;
         }
 
         $billingAddress = $cart->getBillingAddress();
+
         if ($billingAddress) {
             $street = $billingAddress->getStreet();
             $address = array();
+
             if (isset($street[0])) {
                 $address['address1'] = $street[0];
 
@@ -458,28 +555,9 @@ class Ebizmarts_MailChimp_Model_Api_Carts
                 }
             }
 
-            if ($billingAddress->getCity()) {
-                $address['city'] = $billingAddress->getCity();
-            }
+            $address = $this->_addBillingAddress($address, $billingAddress);
 
-            if ($billingAddress->getRegion()) {
-                $address['province'] = $billingAddress->getRegion();
-            }
-
-            if ($billingAddress->getRegionCode()) {
-                $address['province_code'] = $billingAddress->getRegionCode();
-            }
-
-            if ($billingAddress->getPostcode()) {
-                $address['postal_code'] = $billingAddress->getPostcode();
-            }
-
-            if ($billingAddress->getCountry()) {
-                $address['country'] = $this->getCountryModel($billingAddress);
-                $address['country_code'] = $billingAddress->getCountry();
-            }
-
-            if (count($address)) {
+            if (!empty($address)) {
                 $customer['address'] = $address;
             }
         }
@@ -488,79 +566,76 @@ class Ebizmarts_MailChimp_Model_Api_Carts
         if ($billingAddress->getCompany()) {
             $customer["company"] = $billingAddress->getCompany();
         }
+
         return $customer;
     }
 
     /**
-     * update product sync data
-     *
-     * @param $cartId
-     * @param $mailchimpStoreId
-     * @param int|null $syncDelta
-     * @param int|null $syncError
-     * @param int|null $syncModified
-     * @param int|null $syncedFlag
-     * @param int|null $syncDeleted
-     * @param string|null $token
+     * @param $address
+     * @param $billingAddress
+     * @return array
      */
-    protected function _updateSyncData($cartId, $mailchimpStoreId, $syncDelta = null, $syncError = null, $syncModified = 0, $syncedFlag = null, $syncDeleted = null, $token = null)
+    protected function _addBillingAddress($address, $billingAddress)
     {
-        $helper = $this->getHelper();
-        $helper->saveEcommerceSyncData($cartId, Ebizmarts_MailChimp_Model_Config::IS_QUOTE, $mailchimpStoreId, $syncDelta, $syncError, $syncModified, $syncDeleted, $token, $syncedFlag);
+        if ($billingAddress->getCity()) {
+            $address['city'] = $billingAddress->getCity();
+        }
+
+        if ($billingAddress->getRegion()) {
+            $address['province'] = $billingAddress->getRegion();
+        }
+
+        if ($billingAddress->getRegionCode()) {
+            $address['province_code'] = $billingAddress->getRegionCode();
+        }
+
+        if ($billingAddress->getPostcode()) {
+            $address['postal_code'] = $billingAddress->getPostcode();
+        }
+
+        if ($billingAddress->getCountry()) {
+            $address['country'] = $this->getCountryModel($billingAddress);
+            $address['country_code'] = $billingAddress->getCountry();
+        }
+
+        return $address;
     }
 
     /**
-     * @param $mailchimpStoreId
-     * @param $magentoStoreId
      * @param $cart
      * @param $allCarts
      * @return mixed
      */
-    public function addProductNotSentData($mailchimpStoreId, $magentoStoreId, $cart, $allCarts)
+    public function addProductNotSentData($cart, $allCarts)
     {
+        $mailchimpStoreId = $this->getMailchimpStoreId();
+        $magentoStoreId = $this->getMagentoStoreId();
+
         $helper = $this->getHelper();
-        $productData = $this->getApiProducts()->sendModifiedProduct($cart, $mailchimpStoreId, $magentoStoreId);
+        $apiProducts = $this->getApiProducts();
+        $apiProducts->setMailchimpStoreId($mailchimpStoreId);
+        $apiProducts->setMagentoStoreId($magentoStoreId);
+
+        $productData = $apiProducts->sendModifiedProduct($cart);
         $productDataArray = $helper->addEntriesToArray($allCarts, $productData, $this->getCounter());
         $allCarts = $productDataArray[0];
         $this->setCounter($productDataArray[1]);
+
         return $allCarts;
     }
 
     /**
-     * @return Ebizmarts_MailChimp_Helper_Data
+     * @param Mage_Sales_Model_Resource_Quote_Collection $preFilteredCollection
      */
-    protected function getHelper()
+    public function joinLeftEcommerceSyncData($preFilteredCollection)
     {
-        return Mage::helper('mailchimp');
-    }
-
-    /**
-     * @param $newCarts
-     * @param $mailchimpStoreId
-     */
-    public function joinMailchimpSyncDataWithoutWhere($newCarts, $mailchimpStoreId)
-    {
-        $mailchimpTableName = $this->getMailchimpEcommerceDataTableName();
-        $newCarts->getSelect()->joinLeft(
-            array('m4m' => $mailchimpTableName),
-            "m4m.related_id = main_table.entity_id and m4m.type = '" . Ebizmarts_MailChimp_Model_Config::IS_QUOTE . "'
-            AND m4m.mailchimp_store_id = '" . $mailchimpStoreId . "'",
-            array('m4m.*')
-        );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailchimpEcommerceDataTableName()
-    {
-        return Mage::getSingleton('core/resource')->getTableName('mailchimp/ecommercesyncdata');
+        $this->_ecommerceQuotesCollection->joinLeftEcommerceSyncData($preFilteredCollection);
     }
 
     /**
      * @return Mage_Sales_Model_Resource_Quote_Collection
      */
-    public function getQuoteCollection()
+    public function getItemResourceModelCollection()
     {
         return Mage::getResourceModel('sales/quote_collection');
     }
@@ -625,6 +700,7 @@ class Ebizmarts_MailChimp_Model_Api_Carts
     {
         return $this->_token;
     }
+
     /**
      * @param string $token
      */
@@ -658,7 +734,7 @@ class Ebizmarts_MailChimp_Model_Api_Carts
      */
     protected function getApiCustomersOptIn($magentoStoreId)
     {
-        return Mage::getModel('mailchimp/api_customers')->getOptin($magentoStoreId);
+        return Mage::getModel('mailchimp/api_customers')->getOptIn($magentoStoreId);
     }
 
     /**
@@ -688,10 +764,69 @@ class Ebizmarts_MailChimp_Model_Api_Carts
     }
 
     /**
-     * @return false|Mage_Core_Model_Abstract
+     * @return Ebizmarts_MailChimp_Model_Api_Products
      */
     protected function getApiProducts()
     {
         return Mage::getModel('mailchimp/api_products');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getItemType()
+    {
+        return Ebizmarts_MailChimp_Model_Config::IS_QUOTE;
+    }
+
+    /**
+     * @return Ebizmarts_MailChimp_Model_Resource_Ecommercesyncdata_Quote_Collection
+     */
+    public function initializeEcommerceResourceCollection()
+    {
+        /**
+         * @var $collection Ebizmarts_MailChimp_Model_Resource_Ecommercesyncdata_Quote_Collection
+         */
+        $collection = Mage::getResourceModel('mailchimp/ecommercesyncdata_quote_collection');
+
+        return $collection;
+    }
+
+    /**
+     * @return Ebizmarts_MailChimp_Model_Resource_Ecommercesyncdata_Quote_Collection
+     */
+    public function getEcommerceResourceCollection()
+    {
+        return $this->_ecommerceQuotesCollection;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Resource_Quote_Collection $collectionToSync
+     * @param string $isNewItem
+     */
+    protected function addFilters(
+        Mage_Sales_Model_Resource_Quote_Collection $collectionToSync,
+        $isNewItem = "new"
+    ){
+        $magentoStoreId = $this->getMagentoStoreId();
+        $collectionToSync->addFieldToFilter('store_id', array('eq' => $magentoStoreId));
+
+        if ($isNewItem == "new") {
+            $collectionToSync->addFieldToFilter('is_active', array('eq' => 1));
+            $collectionToSync->addFieldToFilter('customer_email', array('notnull' => true));
+            $collectionToSync->addFieldToFilter('items_count', array('gt' => 0));
+
+            $this->getHelper()->addResendFilter(
+                $collectionToSync, $magentoStoreId, Ebizmarts_MailChimp_Model_Config::IS_QUOTE
+            );
+
+            if ($this->getFirstDate()) {
+                $collectionToSync->addFieldToFilter('updated_at', array('gt' => $this->getFirstDate()));
+            }
+        } elseif ($isNewItem == "modified") {
+            $collectionToSync->addFieldToFilter('is_active', array('eq' => 1));
+        } elseif ($isNewItem == "converted") {
+            $collectionToSync->addFieldToFilter('is_active', array('eq' => 0));
+        }
     }
 }

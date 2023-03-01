@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
-
 <config>
     <modules>
         <Ebizmarts_MailChimp>
-            <version>1.1.17</version>
+            <version>1.1.22</version>
         </Ebizmarts_MailChimp>
         <Ebizmarts_Mandrill>
-            <version>1.1.17</version>
+            <version>1.1.22</version>
         </Ebizmarts_Mandrill>
     </modules>
     <global>
@@ -85,6 +84,14 @@
                     </mailchimp_creditmemo_cancel>
                 </observers>
             </sales_order_creditmemo_cancel>
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <mailchimp_creditmemo_create>
+                        <class>mailchimp/observer</class>
+                        <method>createCreditmemo</method>
+                    </mailchimp_creditmemo_create>
+                </observers>
+            </sales_order_creditmemo_save_after>
             <sales_order_item_cancel>
                 <observers>
                     <mailchimp_item_cancel>
@@ -125,14 +132,22 @@
                     </mailchimp_clean_catalog_images_cache_after>
                 </observers>
             </clean_catalog_images_cache_after>
+            <catalog_product_import_finish_before>
+                <observers>
+                    <mailchimp_product_import_after>
+                        <class>mailchimp/observer</class>
+                        <method>productImportAfter</method>
+                    </mailchimp_product_import_after>
+                </observers>
+            </catalog_product_import_finish_before>
         </events>
         <models>
             <mailchimp>
                 <class>Ebizmarts_MailChimp_Model</class>
-                <resourceModel>mailchimp_mysql4</resourceModel>
+                <resourceModel>mailchimp_resource</resourceModel>
             </mailchimp>
-            <mailchimp_mysql4>
-                <class>Ebizmarts_MailChimp_Model_Mysql4</class>
+            <mailchimp_resource>
+                <class>Ebizmarts_MailChimp_Model_Resource</class>
                 <entities>
                     <synchbatches>
                         <table>mailchimp_sync_batches</table>
@@ -153,7 +168,7 @@
                         <table>mailchimp_stores</table>
                     </stores>
                 </entities>
-            </mailchimp_mysql4>
+            </mailchimp_resource>
             <newsletter>
                 <rewrite>
                     <subscriber>Ebizmarts_MailChimp_Model_Subscriber</subscriber>
@@ -437,6 +452,24 @@
                 </run>
                 <groups>ebizmarts_mailchimp</groups>
             </mailchimp_delete_webhook_processed>
+            <mailchimp_clear_ecommerce_data>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mailchimp/cron::clearEcommerceData</model>
+                </run>
+                <groups>ebizmarts_mailchimp</groups>
+            </mailchimp_clear_ecommerce_data>
+            <mailchimp_clear_batches>
+                <schedule>
+                    <cron_expr>0 0 * * 0</cron_expr>
+                </schedule>
+                <run>
+                    <model>mailchimp/cron::clearBatches</model>
+                </run>
+                <groups>ebizmarts_mailchimp</groups>
+            </mailchimp_clear_batches>
         </jobs>
     </crontab>
 </config>

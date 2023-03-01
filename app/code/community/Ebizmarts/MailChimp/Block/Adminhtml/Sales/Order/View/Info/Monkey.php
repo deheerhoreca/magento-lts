@@ -17,13 +17,16 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Sales_Order_View_Info_Monkey extends M
     /**
      * @var string $campaignName
      */
-    protected $campaignName = null;
+    protected $_campaignName = null;
 
     /**
      * @var Mage_Sales_Model_Order $order
      */
-    protected $order = null;
+    protected $_order = null;
 
+    /**
+     * @return bool
+     */
     public function isReferred()
     {
         $order = $this->getCurrentOrder();
@@ -49,24 +52,33 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Sales_Order_View_Info_Monkey extends M
      */
     public function getCampaignName()
     {
-        if (!$this->campaignName) {
+        if (!$this->_campaignName) {
             $campaignId = $this->getCampaignId();
             $order = $this->getCurrentOrder();
             $storeId = $order->getStoreId();
             $helper = $this->getMailChimpHelper();
 
             if ($helper->isEcomSyncDataEnabled($storeId)) {
-                $this->campaignName = $helper->getMailChimpCampaignNameById($campaignId, $storeId);
+                $this->_campaignName = $helper->getMailChimpCampaignNameById($campaignId, $storeId);
             }
         }
 
-        return $this->campaignName;
+        return $this->_campaignName;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    public function escapeQuote($data)
+    {
+        return $this->getMailChimpHelper()->mcEscapeQuote($data);
     }
 
     /**
      * @return Ebizmarts_MailChimp_Helper_Data
      */
-    protected function getMailChimpHelper()
+    public function getMailChimpHelper()
     {
         return Mage::helper('mailchimp');
     }
@@ -76,10 +88,11 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Sales_Order_View_Info_Monkey extends M
      */
     protected function getCurrentOrder()
     {
-        if (!$this->order) {
-            $this->order = Mage::registry('current_order');
+        if (!$this->_order) {
+            $this->_order = Mage::registry('current_order');
         }
-        return $this->order;
+
+        return $this->_order;
     }
 
     /**

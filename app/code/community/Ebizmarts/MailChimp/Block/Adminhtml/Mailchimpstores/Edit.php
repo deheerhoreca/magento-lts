@@ -20,7 +20,8 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Mailchimpstores_Edit extends Mage_Admi
         parent::__construct();
 
         $this->removeButton('reset');
-        $this->updateButton('delete', null, array(
+        $this->updateButton(
+            'delete', null, array(
             'label'     => Mage::helper('adminhtml')->__('Delete Store'),
             'class'     => 'delete',
             'onclick'   => 'deleteMCStoreConfirm(\''
@@ -31,14 +32,17 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Mailchimpstores_Edit extends Mage_Admi
                 . $this->getDeleteUrl()
                 . '\')',
             'sort_order' => 0
-        ));
+            )
+        );
 
         $scopeArray = $this->getScopeArrayIfValueExists();
+
         if ($scopeArray !== false) {
             $jsCondition = 'true';
         } else {
             $jsCondition = 'false';
         }
+
         $mcInUseMessage = $this->getMCInUseMessage($scopeArray);
         $this->_formScripts[] = "function deleteMCStoreConfirm(message, url) {
             if ($jsCondition) {
@@ -83,10 +87,16 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Mailchimpstores_Edit extends Mage_Admi
         $helper = $this->makeHelper();
         if ($scope !== false) {
             $scopeName = $helper->getScopeName($scope);
-            $message = $helper->__("This store is currently in use for this Magento store at %s scope. Do you want to proceed anyways?", $scopeName);
+            $message = $helper->__(
+                "This store is currently in use for this Magento store at %s scope. Do you want to proceed anyways?",
+                $scopeName
+            );
         } else {
-            $message = $helper->__("This store is currently in use for this Magento store. Do you want to proceed anyways?");
+            $message = $helper->__(
+                "This store is currently in use for this Magento store. Do you want to proceed anyways?"
+            );
         }
+
         return $message;
     }
 
@@ -98,9 +108,11 @@ class Ebizmarts_MailChimp_Block_Adminhtml_Mailchimpstores_Edit extends Mage_Admi
         $helper = $this->makeHelper();
         $currentMCStoreId = Mage::registry('current_mailchimpstore')->getStoreid();
         $keyIfExist = $helper->getScopeByMailChimpStoreId($currentMCStoreId);
+
         if ($keyIfExist === null) {
-            $keyIfExist = 'false';
+            $keyIfExist = false;
         }
+
         return $keyIfExist;
     }
 
