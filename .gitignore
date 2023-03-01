@@ -104,3 +104,4 @@ nohup*.out
 algolia_*.json
 _maintenance.flag
 maintenance.flag
+.idea/
