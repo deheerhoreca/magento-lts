@@ -17,7 +17,7 @@ $category_desc                = $carct->getDescription();
 $orig_category_desc           = $category_desc;
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
-$category_thumbs_dimensions   = 140;
+$category_thumbs_actual       = 140;
 // $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
@@ -131,7 +131,7 @@ if($carct && ($category === "category")) {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";
       echo "<button id='toggle-cat-text'><i id='cat-btn-arrow' class='fa fa-arrow-down' aria-hidden='true'></i>&nbsp;<span>Lees meer</span></button>";
     }
-    echo "</div>";
+    echo "</div>".PHP_EOL;
   }
 }
 
@@ -188,12 +188,15 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       // }
     // }
     
-    echo "<ul class='grid-shadow-tiles-text'>";
+    echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
     
     // Logic copied to amasty/amshopby/subcategories.phtml
-    $category_thumbs_dimensions = $category_thumbs_dimensions * 1.5;
+    $category_thumbs_dimensions = $category_thumbs_actual * 1.5;
     
-    foreach($subcategories as $subcategory) {
+    foreach($subcategories as $i => $subcategory) {
+      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
+        continue;
+      }
       $haschild           = true;
       $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
       $category_name_safe = htmlspecialchars($category_name);
@@ -203,24 +206,26 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       $resized_img_name   = $category_thumbs_dimensions."_{$subcategory->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
       $resized_img_path   = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
       $resized_img_url    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
+      $lazy               = ($i < 5) ? "loading=lazy " : "";
       
       if(is_file($resized_img_path) === false && is_file($img_path) === true) {
         $imageObj = new Varien_Image($img_path);
         $imageObj->constrainOnly(true);
         $imageObj->keepAspectRatio(true);
         $imageObj->keepFrame(true);
-        $imageObj->backgroundColor(array(255,255,255));
+        $imageObj->backgroundColor([255, 255, 255]);
         $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
         $imageObj->save($resized_img_path);
       }
       echo "<li style='max-width: 180px;'>";
       echo "<a href='{$category_url}' title='{$category_name_safe}'>";
       if(empty($image) === false) {
-        echo "<img class='trans-opacity' src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' loading=lazy height='{$category_thumbs_dimensions}' width='{$category_thumbs_dimensions}'>";
+        echo "<img class='trans-opacity' src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' {$lazy}height='{$category_thumbs_actual}' width='{$category_thumbs_actual}'>";
       }
-      echo "<strong>{$category_name}</strong></a></li>";
+      echo "<strong>{$category_name}</strong>";
+      echo "</a></li>".PHP_EOL;
     }
-    echo "</ul>";
+    echo "</ul>".PHP_EOL;
     if($haschild === true) {
       echo "<style>#sidebar-nav {display: block;}</style>";
     }

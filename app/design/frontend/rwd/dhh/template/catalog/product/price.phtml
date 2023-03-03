@@ -316,8 +316,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </span>
           
           <?php
-          if($controller_name !== "category" && $controller_name !== "cart"
-          && $controller_name !== "index" && $controller_name !== "product") { ?>
+          if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
             <span class="price-including-tax not-special italic small">
               <span class="price">
                 <?php echo $_finalPriceInclTax_formatted; ?>
@@ -606,8 +605,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
               </span>
             </span>
             <?php
-            if($controller_name !== "category" && $controller_name !== "cart"
-            && $controller_name !== "index" && $controller_name !== "product") { ?>
+            if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
               <span class="price-including-tax italic small">
                 <span class="price">
                   <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?><!--/sse-->

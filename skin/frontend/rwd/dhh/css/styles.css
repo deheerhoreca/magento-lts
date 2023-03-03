@@ -2777,7 +2777,7 @@ select + select {
   font-size: 1.2em;
 }
 
-.price-box .special-price,
+.price-box .special-price .price-excluding-tax,
 .special_price_dates {
   color: #f91906;
 }
