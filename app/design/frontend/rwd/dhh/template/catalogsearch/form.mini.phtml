@@ -13,16 +13,17 @@
  *
  * @category    Magmodules
  * @package     Magmodules_Sooqr
- * @author    Magmodules <info@magmodules.eu>
+ * @author      Magmodules <info@magmodules.eu>
  * @copyright   Copyright (c) 2019 (http://www.magmodules.eu)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 $catalogSearchHelper = $this->helper('catalogsearch');
 
 ?>
 <form id="search_mini_form" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get">
   <div class="input-box">
-    <input id="search" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text required-entry" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>">
+    <input id="search" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>">
   </div>
   <?php if ($this->multiSearch()): ?>
     <script>
@@ -45,7 +46,7 @@ $catalogSearchHelper = $this->helper('catalogsearch');
       (function () {
         var ws = document.createElement('script');
         ws.async = true;
-        ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $this->getSooqrScriptUri() ?>';
+        ws.src = '//' + '<?php echo $this->getSooqrScriptUri() ?>';
         //ws.src = '/skin/frontend/rwd/external/sooqr/sooqr.js';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ws, s);
@@ -64,7 +65,7 @@ $catalogSearchHelper = $this->helper('catalogsearch');
       (function () {
         var ws = document.createElement('script');
         ws.async = true;
-        ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $this->getSooqrScriptUri() ?>';
+        ws.src = '//' + '<?php echo $this->getSooqrScriptUri() ?>';
         // ws.src = '/skin/frontend/rwd/external/sooqr/sooqr.js';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ws, s);

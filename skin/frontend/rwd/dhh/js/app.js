@@ -1,26 +1,21 @@
 /**
- * Magento
+ * OpenMage
  *
  * NOTICE OF LICENSE
  *
  * This source file is subject to the Academic Free License (AFL 3.0)
  * that is bundled with this package in the file LICENSE_AFL.txt.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@magento.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
  * @category    design
  * @package     rwd_default
- * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @copyright   Copyright (c) 2019-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @license     https://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 // =============================================
@@ -700,7 +695,7 @@ $j(document).ready(function () {
     var skipContents = $j('.skip-content');
     var skipLinks = $j('.skip-link');
 
-    skipLinks.on('click', function (e) {
+    $j('.skip-links').on('click', '.skip-link', function (e) {
         e.preventDefault();
 
         var self = $j(this);
@@ -719,16 +714,18 @@ $j(document).ready(function () {
 
         // Toggle stubs
         if (isSkipContentOpen) {
-            // self.removeClass('skip-active');
-            if(elem.attr('id') == "header-nav") $j('#top-nav').removeClass('skip-active');
+            self.removeClass('skip-active');
+            elem.removeClass('skip-active');
+            // if(elem.attr('id') == "header-nav") $j('#top-nav').removeClass('skip-active');
         } else {
-            // self.addClass('skip-active');
+            self.addClass('skip-active');
             elem.addClass('skip-active');
-            if(elem.attr('id') == "header-nav") $j('#top-nav').addClass('skip-active');
+            // if(elem.attr('id') == "header-nav") $j('#top-nav').addClass('skip-active');
         }
     });
 
-    $j('#header-cart').on('click', '.skip-link-close', function(e) {
+    // $j('#header-cart').on('click', '.skip-link-close', function(e) {
+    $j('.skip-links').on('click', '#header-cart .skip-link-close', function(e) {
         var parent = $j(this).parents('.skip-content');
         var link = parent.siblings('.skip-link');
 
@@ -842,7 +839,7 @@ $j(document).ready(function () {
     //     destruct: defaults to false, but if true, the plugin will remove itself, display content, and remove event handlers
 
 
-    jQuery.fn.toggleSingle = function (options) {
+    $j.fn.toggleSingle = function (options) {
 
         // passing destruct: true allows
         var settings = $j.extend({
@@ -875,7 +872,7 @@ $j(document).ready(function () {
     // ==============================================
     // UI Pattern - Toggle Content (tabs and accordions in one setup)
     // ==============================================
-    
+
     $j('.toggle-content').each(function () {
         var wrapper = jQuery(this);
 
@@ -1159,6 +1156,8 @@ $j(document).ready(function () {
 // ==============================================
 // PDP - image zoom - needs to be available outside document.ready scope
 // ==============================================
+
+// To enable, also re-enable js/lib/imagesloaded.js
 
 // var ProductMediaManager = {
     // IMAGE_ZOOM_THRESHOLD: 20,

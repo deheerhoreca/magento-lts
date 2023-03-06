@@ -1,0 +1,17 @@
+<?php
+/**
+ * JS block for including Countries with Optional Zip
+ *
+ * @see Mage_Core_Block_Template
+ */
+
+$optional_zip_countries = $this->helper('directory')->getCountriesWithOptionalZip(false);
+if(!empty($optional_zip_countries)) {
+  ?>
+  <script>
+  //<![CDATA[
+  optionalZipCountries = <?php echo Mage::helper('core')->jsonEncode($optional_zip_countries); ?>;
+  //]]>
+  </script>
+<?php
+}

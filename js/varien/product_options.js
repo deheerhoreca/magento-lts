@@ -1,26 +1,20 @@
 /**
- * Magento
+ * OpenMage
  *
  * NOTICE OF LICENSE
  *
  * This source file is subject to the Academic Free License (AFL 3.0)
  * that is bundled with this package in the file LICENSE_AFL.txt.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@magento.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
  * @category    Varien
  * @package     js
- * @copyright   Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @license     https://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 var Product = Product || {};
@@ -37,7 +31,7 @@ Product.OptionsPrice.prototype = {
         this.productPrice       = config.productPrice;
         this.showIncludeTax     = config.showIncludeTax;
         this.showBothPrices     = config.showBothPrices;
-        this.productOldPrice    = config.productOldPrice / (1 + (this.currentTax / 100)); //compensation for later calc
+        this.productOldPrice    = config.productOldPrice;
         this.priceInclTax       = config.priceInclTax;
         this.priceExclTax       = config.priceExclTax;
         this.skipCalculate      = config.skipCalculate; /** @deprecated after 1.5.1.0 */
@@ -212,10 +206,6 @@ Product.OptionsPrice.prototype = {
 
                 if (price > 0 || this.displayZeroPrice) {
                     formattedPrice = this.formatPrice(price);
-                    // DHH
-                    formattedPrice = formattedPrice.replace(",00", "");
-                    formattedPrice = formattedPrice.replace("€", "");
-                    formattedPrice = formattedPrice.trim();
                 } else {
                     formattedPrice = '';
                 }
@@ -231,15 +221,6 @@ Product.OptionsPrice.prototype = {
                         $(pair.value+this.duplicateIdSuffix).innerHTML = formattedPrice;
                     }
                 }
-                
-                // DHH
-                
-                // at this time, productOldPrice has no VAT yet
-                // savings = (productOldPrice * (1 + (config.currentTax / 100))) - this.productPrice;
-                // console.log(price);
-                
-                // $('discount-amount-' + this.productId).innerHTML = this.formatPrice(this.savings);
-                
             };
         }.bind(this));
 
@@ -296,25 +277,7 @@ Product.OptionsPrice.prototype = {
                 }, this);
             }
         }
-        
-        // DHH
-        
-        _oldprice = $('old-price-'+this.productId).innerHTML;
-        _exprice = $('price-excluding-tax-'+this.productId).innerHTML;
-        
-        _oldprice = _oldprice.replace(".", "");
-        _oldprice = _oldprice.replace(",", ".");
-        _exprice  = _exprice.replace(".", "");
-        _exprice  = _exprice.replace(",", ".");
-        
-        console.log(_oldprice);
-        console.log(_exprice);
-        
-        _discount = (_oldprice - _exprice);
-        if(_discount > 0 && _discount < _oldprice) {
-          _discount = this.formatPrice(_discount);
-          document.querySelector('#discount-amount-'+this.productId).innerHTML = _discount;
-        }
+
     },
     formatPrice: function(price) {
         return formatCurrency(price, this.priceFormat);

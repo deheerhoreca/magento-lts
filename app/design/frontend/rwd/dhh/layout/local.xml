@@ -1,8 +1,4 @@
-<!--
-
-DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
-
--->
+<!-- @see: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/ -->
 
 <layout version="0.1.0">
   <default>
@@ -14,19 +10,30 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
     </customer_logged_in>
     
     <reference name="head">
-      <action method="addItem"><type>skin_js</type><name>js/dhh.js</name></action>
+    
+      <!-- Remove items which the RWD package is not dependent upon -->
+      <action method="removeItem"><type>skin_js</type><file>js/ie6.js</file></action>
       
-      <action method="removeItem"><type>js</type><file>scriptaculous/builder.js</file></action>
-      <action method="removeItem"><type>js</type><file>scriptaculous/dragdrop.js</file></action>
-      <action method="removeItem"><type>js</type><file>scriptaculous/controls.js</file></action>
+      <!-- Remove 3rd party stuff -->
       <action method="removeItem"><type>js</type><file>varien/menu.js</file></action>
-      <!--<action method="removeItem"><type>js</type><file>mage/translate.js</file></action>-->
-      <action method="removeItem"><type>js</type><file>lib/ccard.js</file></action>
-      <action method="removeItem"><type>js</type><file>lib/jquery/jquery-1.12.0.min.js</file></action>
-      <action method="removeItem"><type>js</type><file>prototype/prototype.js</file></action>
-      <action method="removeItem"><type>js</type><file>scriptaculous/effects.js</file></action>
-      <action method="removeItem"><type>js</type><file>scriptaculous/slider.js</file></action>
-      <action method="removeItem"><type>skin_css</type><name>css/easytabs.css</name></action>
+      <action method="removeItem"><type>js</type><file>calendar/calendar.js</file></action>
+      <action method="removeItem"><type>js</type><file>calendar/calendar-setup.js</file></action>
+      <action method="removeItem"><type>js_css</type><file>calendar/calendar-win2k-1.css</file></action>
+      <action method="removeItem"><type>skin_js</type><file>js/lightslider.js</file></action>
+      <action method="removeItem"><type>skin_css</type><file>css/easytabs.css</file></action>
+      <action method="removeItem"><type>skin_css</type><file>css/lightslider.css</file></action>
+      <action method="removeItem"><type>skin_css</type><file>aw_blog/css/style.css</file></action>
+      <action method="removeItem"><type>skin_css</type><file>magmodules/kiyoh/sidebar.css</file></action>
+      
+      <!-- The following are removed from default, then added where needed -->
+      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/category.css</name></action>
+      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/product.css</name></action>
+      <action method="removeItem"><type>skin_css</type><name>css/amshopby.css</name></action>
+      <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
+      <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      
+      <!-- @todo find out if we need this removed -->
+      <!-- <action method="addItem"><type>skin_css</type><name>css/qquoteadv.css</name></action> -->
       
       <!-- Remove billink assets if not enabled -->
       <action method="removeItem"><type>skin_css</type><name>css/billink.css</name></action>
@@ -36,36 +43,15 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="removeItem"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
       <action method="removeItem"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
       <action method="addItem" ifconfig="payment/billink/active"><type>skin_css</type><name>css/billink.css</name></action>
-      <action method="addJs"   ifconfig="payment/billink/active"><type>js</type><name>billink/billink_base.js</name></action>
-      <action method="addJs"   ifconfig="payment/billink/active"><type>js</type><name>billink/billink_mage_validationfix.js</name></action>
-      <action method="addJs"   ifconfig="payment/billink/active"><type>js</type><name>billink/billink_checkout_page_controller.js</name></action>
-      <action method="addJs"   ifconfig="payment/billink/active"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
-      <action method="addJs"   ifconfig="payment/billink/active"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
+      <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_base.js</name></action>
+      <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_mage_validationfix.js</name></action>
+      <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_checkout_page_controller.js</name></action>
+      <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
+      <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
       
-      <action method="removeItem"><type>skin_js</type><file>js/lightslider.js</file></action>
-      <action method="removeItem"><type>skin_css</type><file>css/lightslider.css</file></action>
-      <action method="removeItem"><type>skin_js</type><file>js/slideshow.js</file></action>
-      <action method="removeItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
-      <action method="removeItem"><type>js</type><name>calendar/calendar.js</name></action>
-      <action method="removeItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
-      <action method="removeItem"><type>skin_js</type><name>js/lib/jquery.cycle2.min.js</name></action>
-      <action method="removeItem"><type>skin_js</type><name>js/lib/jquery.cycle2.swipe.min.js</name></action>
-      <action method="removeItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
       <action method="addJs" ifconfig="mailchimp/ecommerce/active">
-        <script>ebizmarts/mailchimp/campaignCatcher.js</script><params>defer</params>
-      </action>
-      <action method="removeItem"><type>skin_css</type><name>magmodules/kiyoh/sidebar.css</name></action>
-      
-      <!-- Cart2Quote -->
-      <!-- <action method="addItem"><type>skin_css</type><name>css/qquoteadv.css</name></action> -->
-      
-      <!-- The following are removed from default, then added where needed -->
-      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/category.css</name></action>
-      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/product.css</name></action>
-      <action method="removeItem"><type>skin_css</type><name>css/amshopby.css</name></action>
-      <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
-      <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      
+        <script>ebizmarts/mailchimp/campaignCatcher.js</script><params>async</params>
+      </action>      
     </reference>
   </default>
   
@@ -76,6 +62,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -87,6 +74,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -98,6 +86,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -109,6 +98,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -120,6 +110,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -137,6 +128,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -166,6 +158,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
   <!-- Product detail view -->
   <catalog_product_view>
     <reference name="head">
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <action method="removeItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar.js</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
@@ -185,6 +178,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
   <!-- Homepage -->
   <cms_index_index>
     <reference name="head"> 
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <action method="removeItem"><type>skin_js</type><name>js/minicart.js</name></action>
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
       <action method="removeItem"><type>skin_css</type><name>css/amshopby.css</name></action>
@@ -217,6 +211,7 @@ DHH: https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascrip
   <checkout_cart_index>
     <reference name="head">
       <action method="addItem"><type>skin_css</type><name>css/checkout_cart_index.css</name></action>
+      <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/shoppingcart.css</name></action>
     </reference>
   </checkout_cart_index>
   

@@ -1,87 +1,48 @@
 <?php
 /**
- * Magento
+ * OpenMage
  *
  * NOTICE OF LICENSE
  *
  * This source file is subject to the Academic Free License (AFL 3.0)
  * that is bundled with this package in the file LICENSE_AFL.txt.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@magento.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @copyright   Copyright (c) 2021-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @license     https://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
-$_item = $this->getItem();
-$this->setPriceDataObject($_item);
-
-// Needed because some attributes are not part of the product yet...
-// @todo make it faster
-$_product = Mage::getResourceModel("catalog/product_collection")
-  ->addAttributeToSelect(["ean13"])
-  ->addAttributeToSelect(["small_image"])
-  ->addAttributeToFilter("entity_id", $_item->getProductId())
-  ->setPageSize(1)
-  ->setCurPage(1)
-  ->getFirstItem();
-$_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->resize(60, 60);
 ?>
-<tr<?php if (!$this->canDisplayGiftmessage()): ?> class="border"<?php endif; ?>>
-    <td class='a-center'>
-      <img style="max-width:60px; max-height:60px;" src="<?php echo $_imageUrl ?>" />
-    </td>
+<?php $_item = $this->getItem() ?>
+<?php $this->setPriceDataObject($_item) ?>
+<tr class="border">
     <td>
         <?php if ($this->canDisplayContainer()): ?>
         <div id="<?php echo $this->getHtmlId() ?>" class="item-container">
-        <?php endif; ?>
+        <?php endif ?>
         <div class="item-text">
             <?php echo $this->getColumnHtml($_item, 'name') ?>
         </div>
         <?php if ($this->canDisplayContainer()): ?>
         </div>
         <?php endif ?>
-        <?php // DHH CORE HACK
-        $chefstore_product_url  = Mage::helper("deheerhoreca_util/util")->get_url("tool_cs_product", $_item->getSku());
-        $intel_product_url      = Mage::helper("deheerhoreca_util/util")->get_url("tool_intel_product", $_item->getSku());
-        $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tool_mage_product", $_item->getSku());
-        if(empty($_product->getEan13()) === false) {
-          $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_item->getEan13());
-        }
-        $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tool_supplier_product", $_item->getSku());
-        ?>
-        <a target="_blank" rel="external" href="<?php echo $chefstore_product_url; ?>">Chefstore.nl</a> - 
-        <a target="_blank" rel="external" href="<?php echo $intel_product_url; ?>">Intel</a> -
-        <a target="_blank" rel="external" href="<?php echo $mage_product_url; ?>">Mage</a> -
-        <?php
-        if(isset($bol_search_product)) {
-          echo "<a target='_blank' rel='external' href='{$bol_search_product}'>Bol.com</a> -";
-        }
-        ?>
-        <a target="_blank" rel="external" href="<?php echo $tool_supplier_product; ?>">Supplier</a>
     </td>
     <td class="a-center"><?php echo $_item->getStatus() ?></td>
-    <td class="a-left"><?php print_r($_product->getAttributeText("supplier")); ?></td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('original_price') ?></td>
     <td class="a-right">
         <?php if ($this->helper('tax')->displaySalesBothPrices() || $this->helper('tax')->displaySalesPriceExclTax()): ?>
             <span class="price-excl-tax">
                 <?php if ($this->helper('tax')->displaySalesBothPrices()): ?>
                     <span class="label"><?php echo $this->__('Excl. Tax'); ?>:</span>
-                <?php endif; ?>
+                <?php endif ?>
 
-                <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales', $_item->getStoreId())): ?>
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, [0, 1, 4], 'sales', $_item->getStoreId())): ?>
                     <?php
                     echo $this->displayPrices(
                         $_item->getBasePrice()+$_item->getBaseWeeeTaxAppliedAmount()+$_item->getBaseWeeeTaxDisposition(),
@@ -90,7 +51,7 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                     ?>
                 <?php else: ?>
                     <?php echo $this->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
-                <?php endif; ?>
+                <?php endif ?>
 
 
                 <?php if (Mage::helper('weee')->getApplied($_item)): ?>
@@ -99,19 +60,19 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_amount'], $tax['amount']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_amount'], $tax['amount']); ?></small></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales', $_item->getStoreId())): ?>
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_amount'], $tax['amount']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
-                    <?php endif; ?>
+                    <?php endif ?>
 
                     <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <br />
@@ -123,24 +84,24 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                         );
                         ?>
                         </span>
-                    <?php endif; ?>
-                <?php endif; ?>
+                    <?php endif ?>
+                <?php endif ?>
             </span>
             <br />
-        <?php endif; ?>
+        <?php endif ?>
         <?php if ($this->helper('tax')->displaySalesBothPrices() || $this->helper('tax')->displaySalesPriceInclTax()): ?>
             <span class="price-incl-tax">
                 <?php if ($this->helper('tax')->displaySalesBothPrices()): ?>
                     <span class="label"><?php echo $this->__('Incl. Tax'); ?>:</span>
-                <?php endif; ?>
+                <?php endif ?>
                 <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
                 <?php $_baseIncl = $this->helper('checkout')->getBasePriceInclTax($_item); ?>
 
-                <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales', $_item->getStoreId())): ?>
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, [0, 1, 4], 'sales', $_item->getStoreId())): ?>
                     <?php echo $this->displayPrices($_baseIncl + Mage::helper('weee')->getBaseWeeeTaxInclTax($_item), $_incl + Mage::helper('weee')->getWeeeTaxInclTax($_item)); ?>
                 <?php else: ?>
                     <?php echo $this->displayPrices($_baseIncl-$_item->getBaseWeeeTaxDisposition(), $_incl-$_item->getWeeeTaxDisposition()) ?>
-                <?php endif; ?>
+                <?php endif ?>
 
                 <?php if (Mage::helper('weee')->getApplied($_item)): ?>
                     <br />
@@ -148,27 +109,27 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_amount_incl_tax'], $tax['amount_incl_tax']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_amount_incl_tax'], $tax['amount_incl_tax']); ?></small></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales', $_item->getStoreId())): ?>
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_amount_incl_tax'], $tax['amount_incl_tax']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
-                    <?php endif; ?>
+                    <?php endif ?>
 
                     <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <br />
                         <span class="nobr"><?php echo Mage::helper('weee')->__('Total'); ?>:<br /> <?php echo $this->displayPrices($_baseIncl + Mage::helper('weee')->getBaseWeeeTaxInclTax($_item) , $_incl + Mage::helper('weee')->getWeeeTaxInclTax($_item)); ?></span>
-                    <?php endif; ?>
-                <?php endif; ?>
+                    <?php endif ?>
+                <?php endif ?>
             </span>
-        <?php endif; ?>
+        <?php endif ?>
 
     </td>
     <td><?php echo $this->getColumnHtml($_item, 'qty') ?></td>
@@ -178,9 +139,9 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
             <span class="price-excl-tax">
                 <?php if ($this->helper('tax')->displaySalesBothPrices()): ?>
                     <span class="label"><?php echo $this->__('Excl. Tax'); ?>:</span>
-                <?php endif; ?>
+                <?php endif ?>
 
-                <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales', $_item->getStoreId())): ?>
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, [0, 1, 4], 'sales', $_item->getStoreId())): ?>
                     <?php
                     echo $this->displayPrices(
                         $_item->getBaseRowTotal()+$_item->getBaseWeeeTaxAppliedRowAmount()+$_item->getBaseWeeeTaxRowDisposition(),
@@ -189,7 +150,7 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                     ?>
                 <?php else: ?>
                     <?php echo $this->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
-                <?php endif; ?>
+                <?php endif ?>
 
 
                 <?php if (Mage::helper('weee')->getApplied($_item)): ?>
@@ -197,19 +158,19 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount'], $tax['row_amount']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount'], $tax['row_amount']); ?></small></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales', $_item->getStoreId())): ?>
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount'], $tax['row_amount']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
-                    <?php endif; ?>
+                    <?php endif ?>
 
                     <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <br />
@@ -221,23 +182,23 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                         );
                         ?>
                         </span>
-                    <?php endif; ?>
-                <?php endif; ?>
+                    <?php endif ?>
+                <?php endif ?>
             </span>
             <br />
-        <?php endif; ?>
+        <?php endif ?>
         <?php if ($this->helper('tax')->displaySalesBothPrices() || $this->helper('tax')->displaySalesPriceInclTax()): ?>
             <span class="price-incl-tax">
                 <?php if ($this->helper('tax')->displaySalesBothPrices()): ?>
                     <span class="label"><?php echo $this->__('Incl. Tax'); ?>:</span>
-                <?php endif; ?>
+                <?php endif ?>
                 <?php $_incl = $this->helper('checkout')->getSubtotalInclTax($_item); ?>
                 <?php $_baseIncl = $this->helper('checkout')->getBaseSubtotalInclTax($_item); ?>
-                <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales', $_item->getStoreId())): ?>
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, [0, 1, 4], 'sales', $_item->getStoreId())): ?>
                     <?php echo $this->displayPrices($_baseIncl + Mage::helper('weee')->getBaseRowWeeeTaxInclTax($_item), $_incl + Mage::helper('weee')->getRowWeeeTaxInclTax($_item)); ?>
                 <?php else: ?>
                     <?php echo $this->displayPrices($_baseIncl-$_item->getBaseWeeeTaxRowDisposition(), $_incl-$_item->getWeeeTaxRowDisposition()) ?>
-                <?php endif; ?>
+                <?php endif ?>
 
 
                 <?php if (Mage::helper('weee')->getApplied($_item)): ?>
@@ -247,26 +208,26 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']); ?></small></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                     <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales', $_item->getStoreId())): ?>
                         <small>
                         <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
                             <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']); ?></span>
-                        <?php endforeach; ?>
+                        <?php endforeach ?>
                         </small>
-                    <?php endif; ?>
+                    <?php endif ?>
 
                     <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales', $_item->getStoreId())): ?>
                         <br /><span class="nobr"><?php echo Mage::helper('weee')->__('Total'); ?>:<br /> <?php echo $this->displayPrices($_baseIncl + Mage::helper('weee')->getBaseRowWeeeTaxInclTax($_item),$_incl + Mage::helper('weee')->getRowWeeeTaxInclTax($_item)); ?></span>
-                    <?php endif; ?>
-                <?php endif; ?>
+                    <?php endif ?>
+                <?php endif ?>
             </span>
-        <?php endif; ?>
+        <?php endif ?>
     </td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('tax_amount') ?></td>
     <td class="a-right"><?php echo $this->displayTaxPercent($_item) ?></td>

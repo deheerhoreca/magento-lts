@@ -1,50 +1,71 @@
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# PhpStorm
+.idea
+
+# Openmage config
 /app/etc/local.xml
-/media/catalog
+
+# Add a base setup for running unit Tests with code coverage and send them to SonarCloud
+# https://github.com/OpenMage/magento-lts/pull/1836
+/dev/testfield
+/dev/tests/clover.xml
+/dev/tests/crap4j.xml
+/dev/tests/junit.xml
+
+# Add Gitpod online IDE config
+# https://github.com/OpenMage/magento-lts/pull/1836
+/dev/gitpod/docker-magento
+/dev/gitpod/.env
+
+# Add development environment setup files and README
+# https://github.com/OpenMage/magento-lts/pull/1012
+/dev/openmage/docker-magento
+/dev/openmage/.env
 /dev/tests/functional/generated
 /dev/tests/functional/vendor
 
-# DHH
-
 /media/*
 !/media/.htaccess
-
-!/media/customer
-/media/customer/*
+!/media/custom_options/.htaccess
 !/media/customer/.htaccess
-
-!/media/dhl
-/media/dhl/*
 !/media/dhl/logo.jpg
-
-!/media/downloadable
-/media/downloadable/*
 !/media/downloadable/.htaccess
 
-!/media/xmlconnect
-/media/xmlconnect/*
+/var/*
+!/var/.htaccess
 
-!/media/xmlconnect/custom
-/media/xmlconnect/custom/*
-!/media/xmlconnect/custom/ok.gif
+# composer
+/vendor
 
-!/media/xmlconnect/original
-/media/xmlconnect/original/*
-!/media/xmlconnect/original/ok.gif
+# ddev
+.ddev/config.yaml
 
-!/media/xmlconnect/system
-/media/xmlconnect/system/*
-!/media/xmlconnect/system/ok.gif
+# scss-cache
+/skin/*/*/*/scss/.sass-cache
 
-!/media/
-/media/*
-!/media/wysiwyg/
+# .phar (n98-magerun, ...)
+*.phar
+
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache
+
+# DHH
 
 /sitemap_*.xml
 /google_shopping_*.xml*
-
-/downloader/.cache/
-/downloader/cache.cfg
-/downloader/connect.cfg
 
 # External assets downloaded to local
 js/ext-*
@@ -61,21 +82,12 @@ bridge_*.php
 # Ignore downloader cache and configuration files
 /downloader/.cache/
 /downloader/cache.cfg
+/downloader/connect.cfg
 
 vendor/
 
 google*.html
 BingSiteAuth.xml
-
-CODE_OF_CONDUCT.md
-LICENSE.html
-LICENSE.txt
-LICENSE_AFL.txt
-LICENSE
-RELEASE_NOTES.txt
-php.ini
-php.ini.sample
-install.php
 
 media/wysiwyg/.thumbs/
 
