@@ -2,7 +2,7 @@
 <?php
 $html = <<<EOT
 <noscript><img height="1" width="1" style="display:none" src="//www.facebook.com/tr?id=808630443401252&ev=PageView&noscript=1" alt="fb"></noscript>
-<div class="footer-wrapper grid-inside " id="footer-wrapper">
+<div class="footer-wrapper grid-inside" id="footer-wrapper">
   <div class="footermidwrap blanc">
     <div class="footer grid">
       <div class="pb-4 text-center">
@@ -113,7 +113,7 @@ $html = <<<EOT
 EOT;
 echo $html;
 
-if(empty($html) === false && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true) === true) {
+if(empty($html) === false && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html") === true) {
   Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, ["quickndirtyfpc"], 86400);
 }
 ?>

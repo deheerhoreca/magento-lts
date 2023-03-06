@@ -62,7 +62,7 @@
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -74,7 +74,7 @@
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -86,7 +86,7 @@
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -98,7 +98,7 @@
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -110,7 +110,7 @@
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -128,7 +128,7 @@
       <action method="addCss"><stylesheet>css/amshopby.css</stylesheet></action>
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <remove name="amshopby.navtop" /><!-- Removing for performance -->
       <remove name="amshopby.top" /><!-- Removing for performance -->
     </reference>
@@ -158,7 +158,7 @@
   <!-- Product detail view -->
   <catalog_product_view>
     <reference name="head">
-      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
+      <!-- <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action> Still needed! -->
       <action method="removeItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar.js</name></action>
       <action method="removeItem"><type>js</type><name>calendar/calendar-setup.js</name></action>

@@ -8,15 +8,15 @@ function _dhh_ips() {
 if($_SERVER["REQUEST_METHOD"] === "GET"
 && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
 ) {
-  define("DHH_FPC_DEBUG", false); // Set to true to enable logging
+  define("DHH_FPC_DEBUG", false);    // Default: false
 } else {
-  define("DHH_FPC_DEBUG", false); // Should always be false unless wired in
+  define("DHH_FPC_DEBUG", false);   // Default: false
 }
 
 if(substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
-  define("DHH_FPC_ENABLED", false);
+  define("DHH_FPC_ENABLED", false); // Default: false
 } else {
-  define("DHH_FPC_ENABLED", true);
+  define("DHH_FPC_ENABLED", true);  // Default: true
 }
 
 const DHH_FPC_NAV_KEY = "FPC_cms_block_topmenu";

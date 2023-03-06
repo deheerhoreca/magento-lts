@@ -1320,7 +1320,7 @@ echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/ri
   //<![CDATA[
   var productAddToCartForm = new VarienForm('product_addtocart_form');
   productAddToCartForm.submit = function(button, url) {
-    if (this.validator.validate()) {
+    // if (typeof Validation !== 'function' || this.validator.validate()) {
       var form = this.form;
       var oldUrl = form.action;
 
@@ -1340,29 +1340,29 @@ echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/ri
       if (button && button != 'undefined') {
           button.disabled = true;
       }
-    }
+    // }
   }.bind(productAddToCartForm);
 
   productAddToCartForm.submitLight = function(button, url){
-    if(this.validator) {
-      var nv = Validation.methods;
-      delete Validation.methods['required-entry'];
-      delete Validation.methods['validate-one-required'];
-      delete Validation.methods['validate-one-required-by-name'];
-      // Remove custom datetime validators
-      for (var methodName in Validation.methods) {
-        if (methodName.match(/^validate-datetime-.*/i)) {
-          delete Validation.methods[methodName];
-        }
-      }
-      if (this.validator.validate()) {
+    // if(typeof Validation !== 'function' || this.validator) {
+      // var nv = Validation.methods;
+      // delete Validation.methods['required-entry'];
+      // delete Validation.methods['validate-one-required'];
+      // delete Validation.methods['validate-one-required-by-name'];
+      // // Remove custom datetime validators
+      // for (var methodName in Validation.methods) {
+        // if (methodName.match(/^validate-datetime-.*/i)) {
+          // delete Validation.methods[methodName];
+        // }
+      // }
+      // if (this.validator.validate()) {
         if (url) {
             this.form.action = url;
         }
         this.form.submit();
-      }
-      Object.extend(Validation.methods, nv);
-    }
+      // }
+      // Object.extend(Validation.methods, nv);
+    // }
   }.bind(productAddToCartForm);
   //]]>
   <?php
