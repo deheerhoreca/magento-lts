@@ -5,7 +5,7 @@
  * @package Amasty_Shopby
  */
 
-$category_thumbs_dimensions   = 140;
+$category_thumbs_actual       = 140;
 
 /** @var Amasty_Shopby_Block_Subcategories $this */
 /** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
@@ -30,47 +30,48 @@ echo '<div style="clear: both;"></div>';
   // ->joinUrlRewrite();
 // // $subcategories->addAttributeToSelect("image");
 
-if(sizeof($subcategories) > 1) {
+if($subcategories->count() > 1) {
   $media_path = Mage::getBaseDir('media');
   
-  echo '<ul class="grid-shadow-tiles-text">';
+  echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
+    
+  // Logic copied to amasty/amshopby/subcategories.phtml
+  $category_thumbs_dimensions = $category_thumbs_actual * 1.5;
   
-  // Logic copied from catalog/product/list.phtml
-  
-  foreach($subcategories as $category) {
-    if(in_array($category->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
+  foreach($subcategories as $i => $subcategory) {
+    if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
       continue;
     }
-    $haschild         = true;
-    $category         = Mage::getModel('catalog/category')->load($category->getId());
-    $categoryName     = $category->getName();
-    $image            = $category->getImage();
-    $img_path         = "{$media_path}/catalog/category/{$image}";
-    $resized_img_name = ($category_thumbs_dimensions*2)."_".basename($img_path);
-    $resized_img_path = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
-    $resized_img_url  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
+    $haschild           = true;
+    $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
+    $category_name_safe = htmlspecialchars($category_name);
+    $image              = $subcategory->getImage();
+    $category_url       = $subcategory->getUrl();
+    $img_path           = "{$media_path}/catalog/category/{$image}";
+    $resized_img_name   = $category_thumbs_dimensions."_{$subcategory->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
+    $resized_img_path   = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
+    $resized_img_url    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
+    $lazy               = ($i < 5) ? "loading=lazy " : "";
     
-    if(empty($image) === false && is_file($resized_img_path) !== true) {
+    if(is_file($resized_img_path) === false && is_file($img_path) === true) {
       $imageObj = new Varien_Image($img_path);
       $imageObj->constrainOnly(true);
       $imageObj->keepAspectRatio(true);
       $imageObj->keepFrame(true);
-      $imageObj->backgroundColor(array(255,255,255));
-      $imageObj->resize($category_thumbs_dimensions * 2, $category_thumbs_dimensions * 2);
+      $imageObj->backgroundColor([255, 255, 255]);
+      $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
       $imageObj->save($resized_img_path);
     }
-    ?>
-    <li>
-      <a href="<?php echo $category->getUrl() ?>" title='<?php echo $categoryName; ?>'>
-        <?php
-        if(empty($image) === false) {
-          echo "<img loading=lazy src='{$resized_img_url}' alt='{$categoryName}' title='{$categoryName}' height='".($category_thumbs_dimensions*2)."' width='".($category_thumbs_dimensions*2)."'>";
-        }
-        ?>
-        <strong><?php echo $categoryName; ?></strong>
-      </a>
-    </li>
-    <?php
+    echo "<li style='max-width: 180px;'>";
+    echo "<a href='{$category_url}' title='{$category_name_safe}'>";
+    if(empty($image) === false) {
+      echo "<img class='trans-opacity' src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' {$lazy}height='{$category_thumbs_actual}' width='{$category_thumbs_actual}'>";
+    }
+    echo "<strong>{$category_name}</strong>";
+    echo "</a></li>".PHP_EOL;
   }
-  echo "</ul>";
+  echo "</ul>".PHP_EOL;
+  if($haschild === true) {
+    echo "<style>#sidebar-nav {display: block;}</style>";
+  }
 }

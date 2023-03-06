@@ -3006,11 +3006,11 @@
   .toolbar-bottom .pager {
     float: left !important;
   }
-
+  
   .toolbar-bottom .sorter {
     display: none;
   }
-
+  
   .toolbar-bottom .pages li {
     margin-right: 11px;
     padding: 0;
@@ -3019,11 +3019,7 @@
     text-align: center;
     font-size: 15px;
   }
-
-  .toolbar-bottom .pages li:hover:not(.current) {
-    background-color: #eee;
-  }
-
+  
   .toolbar-bottom .pages a:hover {
     border: 0;
     text-decoration: none;
@@ -3031,19 +3027,24 @@
     font-size: 15px;
     transition: .2s;
   }
-
+  
   .toolbar-bottom .toolbar {
     border-top: none;
   }
-
+  
+  .price-box .special-price .price-excluding-tax,
+  .special_price_dates {
+    color: #f91906;
+  }
+  
   /* Checkout */
-
+  
   #checkout-review-table .summary-collapse,
   #shopping-cart-totals-table .summary-collapse {
     position: relative;
     cursor: pointer;
   }
-
+  
   #checkout-review-table .summary-collapse:before,
   #shopping-cart-totals-table .summary-collapse:before {
     position: static;
@@ -9320,7 +9321,7 @@
     opacity: .9;
   }
 
-  button:hover {
+  button:hover, .button:hover {
     opacity: .8;
   }
 
