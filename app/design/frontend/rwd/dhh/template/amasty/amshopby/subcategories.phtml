@@ -65,7 +65,7 @@ if($subcategories->count() > 1) {
     echo "<li style='max-width: 180px;'>";
     echo "<a href='{$category_url}' title='{$category_name_safe}'>";
     if(empty($image) === false) {
-      echo "<img class='trans-opacity' src='{$resized_img_url}' alt='Bekijk {$category_name}' title='Bekijk {$category_name}' {$lazy}height='{$category_thumbs_actual}' width='{$category_thumbs_actual}'>";
+      echo "<img class='trans-opacity' src='{$resized_img_url}' alt='{$category_name}' title='{$category_name}' {$lazy}height='{$category_thumbs_actual}' width='{$category_thumbs_actual}'>";
     }
     echo "<strong>{$category_name}</strong>";
     echo "</a></li>".PHP_EOL;

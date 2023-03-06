@@ -94,7 +94,7 @@ if(is_numeric($grand_total)) {
 
 $shipping_total       = $_order->getShippingAmount();
 $tax_info             = $_order->getFullTaxInfo();
-$tax_total            = $tax_info[0]["$tax_info"] ?? null;
+$tax_total            = $tax_info[0]["amount"] ?? null;
 $total_no_shipping    = ($grand_total - $shipping_total);
 $discount_offered     = json_encode(!(empty($_order->getCouponCode())));
 $_items               = $_order->getAllItems();
@@ -131,7 +131,7 @@ foreach($_items as $_item) {
   var _paq = _paq || [];
   if(window.location.hostname == "www.chefstore.nl") {
     <?php echo $datatrics_js ?>
-    _paq.push(['trackEcommerceOrder', "<?php echo $order_id ?>", <?php echo $grand_total; ?>, <?php echo $total_no_shipping; ?>, <?php echo $tax_total; ?>, <?php echo $shipping_total; ?>, <?php echo $discount_offered; ?>]);
+    _paq.push(['trackEcommerceOrder', '<?php echo $order_id ?>', <?php echo $grand_total; ?>, <?php echo $total_no_shipping; ?>, <?php echo $tax_total; ?>, <?php echo $shipping_total; ?>, <?php echo $discount_offered; ?>]);
     <?php
     // This already happens ealier, probably not needed
     // _paq.push(['trackPageView']);

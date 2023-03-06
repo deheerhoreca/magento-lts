@@ -86,7 +86,13 @@ $_products    = Mage::getModel("catalog/product")
 // }
 
 $i = 0;
-if($_products->getFirstItem()) {
+if($_products->getItems()) {
+  $options = [
+    "skip_usps"     => false,
+    "display"       => "mini",
+    "image_size"    => 125,
+    "_blank"        => true,
+  ];
   echo '<div class="crosssell product-collateral category-products">';
   echo "<h2>".$this->__("Hardlopers:")."</h2><hr>";
   echo "<ul class='products-grid products-grid-mini products-grid-mini-wide'>";
@@ -95,12 +101,6 @@ if($_products->getFirstItem()) {
     ?>
     <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
       <?php
-      $options = [
-        "skip_usps"     => false,
-        "display"       => "mini",
-        "image_size"    => 125,
-        "_blank"        => true,
-      ];
       echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
     echo "</li>";
   }

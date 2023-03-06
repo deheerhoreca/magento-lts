@@ -42,7 +42,7 @@ class AW_Blog_Block_Blog extends AW_Blog_Block_Abstract
             $head = $this->getLayout()->getBlock('head');
             if ($head) {
                 $head->unsetChild('aw_blog_og');
-                $head->setTitle(self::$_helper->getTitle());
+                // $head->setTitle(self::$_helper->getTitle()); // DHH CORE HACK -- Triggers on every page...
             }
         }
     }

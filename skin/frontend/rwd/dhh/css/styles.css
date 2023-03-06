@@ -572,6 +572,16 @@
   .small-text {
     font-size: .9em;
   }
+  
+  /* @see https://www.w3schools.com/howto/howto_css_hide_arrow_number.asp */
+  input.appear-text::-webkit-outer-spin-button,
+  input.appear-text::-webkit-inner-spin-button {
+    /* Chrome, Safari, Edge, Opera */
+    -webkit-appearance: none;
+    margin: 0;
+    /* Firefox */
+    -moz-appearance: textfield;
+  }
 
   /* PAGE HEADER */
 
@@ -3256,7 +3266,7 @@
 
   input[type="number"].qty,
   input[type="text"].qty {
-    width: 3em;
+    width: 4em;
     vertical-align: middle;
     text-align: center;
   }
@@ -4500,15 +4510,10 @@
 
   .cart-table .product-cart-actions .qty {
     margin-bottom: 10px;
-    width: 3.2em;
     height: 30px;
     border-color: silver;
     border-radius: 0;
     text-align: center;
-  }
-
-  .cart-table .product-cart-actions .button {
-    margin-bottom: 5px;
   }
 
   table.cart-table a {
@@ -5931,6 +5936,10 @@
     color: #cf5050;
     text-transform: uppercase;
     font-size: 12px;
+  }
+
+  .products-grid .price-box .minimal-price-link .label {
+    display: none;
   }
 
   .map-info {

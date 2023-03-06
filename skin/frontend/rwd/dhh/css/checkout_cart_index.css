@@ -31,9 +31,8 @@
   }
 
   div.pgcrtleft td.product-cart-actions .input-text.qty {
-    margin-bottom: 5px;
-    width: 40px;
-    height: 25px;
+    margin-bottom: 0;
+    height: 24px;
   }
 
   .messages .success-msg li {

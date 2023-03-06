@@ -175,17 +175,21 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         ->setPageSize(100);
     }
     
-    $manufacturer_ids = array_count_values($_products->getColumnValues("manufacturer"));
-    arsort($manufacturer_ids);
-    $manufacturer_ids = array_slice($manufacturer_ids, 0, $max_amount, true);
-    $manufacturer_ids = array_keys($manufacturer_ids);
     $manufacturers    = [];
+    $manufacturer_col = $_products->getColumnValues("manufacturer");
     
-    if(empty($manufacturer_ids) === false) {
-      $_product = $_products->getFirstItem() ?? Mage::getModel('catalog/product');
-      foreach($manufacturer_ids as $attribute_option_id) {
-        $_product->setData("manufacturer", $attribute_option_id);
-        $manufacturers[] = $_product->getAttributeText("manufacturer");
+    if(empty($manufacturer_col) === false) {
+      $manufacturer_ids = array_count_values($manufacturer_col);
+      arsort($manufacturer_ids);
+      $manufacturer_ids = array_slice($manufacturer_ids, 0, $max_amount, true);
+      $manufacturer_ids = array_keys($manufacturer_ids);
+      
+      if(empty($manufacturer_ids) === false) {
+        $_product = $_products->getFirstItem() ?? Mage::getModel('catalog/product');
+        foreach($manufacturer_ids as $attribute_option_id) {
+          $_product->setData("manufacturer", $attribute_option_id);
+          $manufacturers[] = $_product->getAttributeText("manufacturer");
+        }
       }
     }
     

@@ -212,6 +212,7 @@
     <reference name="head">
       <action method="addItem"><type>skin_css</type><name>css/checkout_cart_index.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/shoppingcart.css</name></action>
+      <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
     </reference>
   </checkout_cart_index>
   

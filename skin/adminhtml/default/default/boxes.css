@@ -1507,6 +1507,7 @@ ul.super-product-attributes { padding-left:15px; }
 .link-feed { background:url(images/icon_feed.gif) no-repeat left 2px; padding-left:18px; }
 
 #page-help-link {
+    display: none;
     line-height:26px;
     padding-left:20px;
     color:#ebebff;

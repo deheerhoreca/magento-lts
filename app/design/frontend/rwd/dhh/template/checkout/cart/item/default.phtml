@@ -18,7 +18,7 @@ $thumb_dimensions       = 1.5 * $thumb_size;
   <td class="product-cart-image">
     <?php if ($this->hasProductUrl()):?>
     <?php endif;?>
-      <img height="<?php echo $thumb_size; ?>" width="<?php echo $thumb_size; ?>" src="<?php echo $this->getProductThumbnail()->resize($thumb_dimensions, $thumb_dimensions); ?>" alt="<?php echo $this->escapeHtml($product_name) ?>" />
+      <img height="<?php echo $thumb_size; ?>" width="<?php echo $thumb_size; ?>" src="<?php echo $this->getProductThumbnail()->resize($thumb_dimensions, $thumb_dimensions); ?>" alt="<?php echo $this->escapeHtml($product_name) ?>">
     <?php if ($this->hasProductUrl()):?>
     <?php endif;?>
 
@@ -203,9 +203,9 @@ $thumb_dimensions       = 1.5 * $thumb_size;
     <?php endif; ?>
   <?php endif; ?>
   <td class="product-cart-actions" data-rwd-label="<?php echo $this->__('Qty'); ?>" width="150">
-		<input type='button' value='-' class='qtyminus' field='quantity' onclick="discresm2(this)" />
-		<input type="text" pattern="\d*(\.\d+)?" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" data-cart-item-id="<?php echo $this->jsQuoteEscape($_item->getSku()) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" maxlength="12" />
-    <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" field='quantity' />
+		<input type='button' value='-' class='qtyminus' field='quantity' onclick="discresm2(this)">
+		<input type="number" min="0" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="5" data-cart-item-id="<?php echo $this->jsQuoteEscape($_item->getSku()) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty appear-text" maxlength="4" required>
+    <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" field='quantity'>
     <button type="submit" name="update_cart_action" data-cart-item-update value="update_qty" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Update')); ?>" class="button btn-update">
       <i class="fa fa-refresh" aria-hidden="true"></i>
     </button>

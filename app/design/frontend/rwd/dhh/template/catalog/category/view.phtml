@@ -39,7 +39,9 @@ if($this->isMixedMode()) {
   
   $brand_name           = $this->helper("catalog/output")->categoryAttribute($_category, $_category->getName(), "name");
   $ctdesc_h1            = "Bekijk ons <span class='orange'>{$brand_name}</span> assortiment";
-  $this->getLayout()->getBlock('head')->setTitle("{$brand_name}");
+  // $this->getLayout()->getBlock('head')->setTitle("{$brand_name}"); // Too late for this
+  $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$brand_name} ".Mage::getStoreConfig('design/head/title_suffix');
+  echo "<script>document.title = ".json_encode($title)."</script>";
 }
 
 // Shop by brand
@@ -60,7 +62,9 @@ elseif($at_root_category === true && isset($_GET["manufacturer"]) && is_numeric(
       $brand_logo         = "/{$brand_logo_file}";
     }
   }
-  $this->getLayout()->getBlock('head')->setTitle("{$value}");
+  // $this->getLayout()->getBlock('head')->setTitle("{$value}"); // Too late for this
+  $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$value} ".Mage::getStoreConfig('design/head/title_suffix');
+  echo "<script>document.title = ".json_encode($title)."</script>";
   
   // Optional block manufacturer_ is shown above the category tiles
   $top_block_name = "shopbybrand-{$value}";

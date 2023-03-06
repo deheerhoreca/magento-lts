@@ -41,9 +41,8 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
             <col width="120">
             <col width="40%">
             <col width="100">
-            <col width="1">
-            <col width="1">
-            <col width="1">
+            <col width="200">
+            <col width="70">
             <?php if ($this->helper("tax")->displayCartBothPrices()): ?>
               <col width="1">
               <col width="1">
@@ -51,8 +50,8 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
           </colgroup>
           <thead>
             <tr>
-              <th rowspan="<?php echo $mergedCells; ?>" class="nobr">&nbsp;</th>
-              <th rowspan="<?php echo $mergedCells; ?>"  class="nobr"><?php echo $this->__("Product"); ?></th>
+              <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
+              <th rowspan="<?php echo $mergedCells; ?>"><?php echo $this->__("Product"); ?></th>
               <th class="align-right cart-price-head" colspan="<?php echo $mergedCells; ?>">
                 <?php echo $this->__("Price"); ?>
               </th>
@@ -61,7 +60,7 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
                 <?php
                   /*
                   if ($this->helper('wishlist')->isAllowInCart()) : ?>
-                    <span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span>
+                    <span><?php echo $this->__('Move to Wishlist') ?></span>
                   <?php endif
                   */
                 ?>
