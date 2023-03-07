@@ -21,6 +21,19 @@
 ?>
 <?php $_item = $this->getItem() ?>
 <?php $this->setPriceDataObject($_item) ?>
+<?php
+// DHH CORE HACK
+// Needed because some attributes are not part of the product yet...
+$_product = Mage::getResourceModel("catalog/product_collection")
+  ->addAttributeToSelect(["ean13"])
+  ->addAttributeToSelect(["small_image"])
+  ->addAttributeToFilter("entity_id", $_item->getProductId())
+  ->setPageSize(1)
+  ->setCurPage(1)
+  ->getFirstItem();
+$_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->resize(60, 60);
+// END DHH CORE HACK
+?>
 <tr class="border">
     <td>
         <?php if ($this->canDisplayContainer()): ?>
@@ -32,6 +45,26 @@
         <?php if ($this->canDisplayContainer()): ?>
         </div>
         <?php endif ?>
+        <?php // DHH CORE HACK
+        $chefstore_product_url  = Mage::helper("deheerhoreca_util/util")->get_url("tool_cs_product", $_item->getSku());
+        $intel_product_url      = Mage::helper("deheerhoreca_util/util")->get_url("tool_intel_product", $_item->getSku());
+        $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tool_mage_product", $_item->getSku());
+        $bol_search_product     = "";
+        if(empty($_product->getEan13()) === false) {
+          $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_product->getEan13());
+        }
+        $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tool_supplier_product", $_item->getSku());
+        ?>
+        <a target="_blank" rel="external" href="<?php echo $chefstore_product_url; ?>">Chefstore.nl</a> - 
+        <a target="_blank" rel="external" href="<?php echo $intel_product_url; ?>">Intel</a> -
+        <a target="_blank" rel="external" href="<?php echo $mage_product_url; ?>">Magento</a> -
+        <?php
+        if(empty($bol_search_product) === false) {
+          echo "<a target='_blank' rel='external' href='{$bol_search_product}'>Bol.com</a> -";
+        }
+        ?>
+        <a target="_blank" rel="external" href="<?php echo $tool_supplier_product; ?>">Supplier</a>
+        <?php // END DHH CORE HACK ?>
     </td>
     <td class="a-center"><?php echo $_item->getStatus() ?></td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('original_price') ?></td>
