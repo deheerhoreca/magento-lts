@@ -7,10 +7,8 @@ cd ~/httpdocs/deheerhoreca-magento/shell
 # New style
 
 wget https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css -O ../skin/frontend/rwd/dhh/css/ext-glightbox.min.css
-# Does not work, manually: https://cookie-script.com/item/edit/137075
-# wget https://cookie-script.com/item/edit/137075 -O ../js/ext-cookie-script.js
-wget https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.8.3/lazyload.min.js -O ../js/ext-lazyload.min.js
-wget https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js -O ../js/ext-jquery.min.js
+wget https://cdn.cookie-script.com/s/9e97d160d4e7a60d64717d815a816dd9.js -O ../js/ext-cookie-script.min.js
+wget https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js -O ../js/ext-jquery.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js -O ../js/ext-prototype.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.min.js -O ../js/ext-scriptaculous-builder.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js -O ../js/ext-scriptaculous-effects.min.js
@@ -18,13 +16,12 @@ wget https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js 
 wget https://cdnjs.cloudflare.com/ajax/libs/lite-youtube-embed/0.2.0/lite-yt-embed.min.js -O ../js/ext-lite-yt-embed.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js -O ../js/ext-jquery.ui.touch-punch.min.js
 wget https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js -O ../js/ext-jquery-ui.min.js
-wget https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js -O ../skin/frontend/rwd/dhh/js/ext-bootstrap.min.js
-wget https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css -O ../skin/frontend/rwd/dhh/css/ext-bootstrap.min.css
+wget https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js -O ../skin/frontend/rwd/dhh/js/ext-bootstrap.min.js
+wget https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ../skin/frontend/rwd/dhh/css/ext-bootstrap.min.css
 
 # These need versioning outside of mod_pagespeed:extend_cache
 wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ../js/elastic-apm-rum.umd.min.js.map
 wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js -O ../js/ext-elastic-apm-rum.umd.min.js
-wget https://tr.datatrics.com -O ../js/ext-datatrics-1.min.js
 
 # Old style
 
@@ -36,13 +33,6 @@ wget https://www.clickcease.com/monitor/stat.js -O ../skin/frontend/rwd/external
 
 mkdir -p ../skin/frontend/rwd/external/ga
 wget https://www.google-analytics.com/analytics.js -O ../skin/frontend/rwd/external/ga/analytics.js
-
-mkdir -p ../skin/frontend/rwd/external/zopim
-wget https://v2.zopim.com/?5GFYzGgeADrvMUAoHWiZPPglkc93U381  -O ../skin/frontend/rwd/external/zopim/widget.js
-
-mkdir -p ../skin/frontend/rwd/external/elastic_apm
-# needs a touch as well because the file timestamp would be in the 1980s otherwise
-wget https://unpkg.com/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js  -O ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js && touch ../skin/frontend/rwd/external/elastic_apm/elastic-apm-rum.umd.min.js
 
 # font-awesome.min.css was patched to have "font-display:swap;" do not overwrite
 # mkdir -p ../skin/frontend/rwd/external/fontawesome

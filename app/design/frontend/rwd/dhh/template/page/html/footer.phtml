@@ -105,7 +105,7 @@ $html = <<<EOT
     var j = d.createElement(s),
       t = d.getElementsByTagName(s)[0]
     
-    j.src = '/js/ext-elastic-apm-rum.umd.min.js'
+    j.src = '/js/ext-elastic-apm-rum.umd.min.js?v=1'
     j.onload = function() {elasticApm.init(c)}
     t.parentNode.insertBefore(j, t)
   })(document, 'script', {serviceName: 'chefstore_nl', serverUrl: '//rum.chefstore.nl:8200', environment: apm_env, pageLoadTransactionName: apm_transaction})
