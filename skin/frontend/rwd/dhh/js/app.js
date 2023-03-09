@@ -695,7 +695,7 @@ $j(document).ready(function () {
     var skipContents = $j('.skip-content');
     var skipLinks = $j('.skip-link');
 
-    $j('.skip-links').on('click', '.skip-link', function (e) {
+    skipLinks.on('click', function (e) {
         e.preventDefault();
 
         var self = $j(this);
@@ -714,18 +714,16 @@ $j(document).ready(function () {
 
         // Toggle stubs
         if (isSkipContentOpen) {
-            self.removeClass('skip-active');
-            elem.removeClass('skip-active');
-            // if(elem.attr('id') == "header-nav") $j('#top-nav').removeClass('skip-active');
+            // self.removeClass('skip-active');
+            if(elem.attr('id') == "header-nav") $j('#top-nav').removeClass('skip-active');
         } else {
-            self.addClass('skip-active');
+            // self.addClass('skip-active');
             elem.addClass('skip-active');
-            // if(elem.attr('id') == "header-nav") $j('#top-nav').addClass('skip-active');
+            if(elem.attr('id') == "header-nav") $j('#top-nav').addClass('skip-active');
         }
     });
 
-    // $j('#header-cart').on('click', '.skip-link-close', function(e) {
-    $j('.skip-links').on('click', '#header-cart .skip-link-close', function(e) {
+    $j('#header-cart').on('click', '.skip-link-close', function(e) {
         var parent = $j(this).parents('.skip-content');
         var link = parent.siblings('.skip-link');
 
@@ -839,7 +837,7 @@ $j(document).ready(function () {
     //     destruct: defaults to false, but if true, the plugin will remove itself, display content, and remove event handlers
 
 
-    $j.fn.toggleSingle = function (options) {
+    jQuery.fn.toggleSingle = function (options) {
 
         // passing destruct: true allows
         var settings = $j.extend({
@@ -872,7 +870,7 @@ $j(document).ready(function () {
     // ==============================================
     // UI Pattern - Toggle Content (tabs and accordions in one setup)
     // ==============================================
-
+    
     $j('.toggle-content').each(function () {
         var wrapper = jQuery(this);
 
