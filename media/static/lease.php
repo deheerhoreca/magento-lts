@@ -1,8 +1,6 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/skin/frontend/rwd/dhh/css/styles.css" media="all">
-    <link rel="stylesheet" type="text/css" href="/skin/frontend/rwd/dhh/css/responsive.css" media="all">
-    <link as="font" href="/skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css" rel="stylesheet" crossorigin="anonymous">
     <title>Leasen</title>
   </head>
   <body>

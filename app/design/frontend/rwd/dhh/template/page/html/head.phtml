@@ -15,7 +15,16 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->g
   function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-SRTM9M2FM3");
   (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"20122079"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");
   // !function(e,t,n,a,c,o,s){e.fbq||(c=e.fbq=function(){c.callMethod?c.callMethod.apply(c,arguments):c.queue.push(arguments)},e._fbq||(e._fbq=c),c.push=c,c.loaded=!0,c.version="2.0",c.queue=[],(o=t.createElement(n)).async=!0,o.src=a,(s=t.getElementsByTagName(n)[0]).parentNode.insertBefore(o,s))}(window,document,"script","//connect.facebook.net/en_US/fbevents.js"),fbq("init","808630443401252"),fbq("track","PageView");
-  var apm_transaction = "unset";
+  if(document.cookie.match(/^(.*;)?\s*dhh_on_first_page\s*=\s*[^;]+(.*)?$/) == null
+  && window.location.href.indexOf("cart") < 0
+  && window.location.href.indexOf("qquoteadv") < 0 
+  && window.location.href.indexOf("afrekenen") < 0
+  && window.location.href.indexOf("customer") < 0) {
+    window.zESettings = {webWidget:{chat:{connectOnPageLoad: false}}};
+  } else {
+    window.zESettings = {webWidget:{chat:{connectOnPageLoad: true}}};
+    document.cookie = "dhh_on_first_page=false; Secure";
+  }
 </script>
 <script id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
 <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2" crossorigin>

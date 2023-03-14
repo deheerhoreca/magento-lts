@@ -1113,15 +1113,26 @@ if($stock_data["overall_stock_status"] === "backorder"
     }
 
     /* Cross Sell Products */
-    if(empty($_crossSellProducts) === false) { ?>
+    if(empty($_crossSellProducts) === false) {
+      Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_SHOW_CROSSSELL_SKUS");
+      ?>
       <div class="probottomdv">
         <div class="topproducts_containter">
           <span class="anchor" id="accessoires"></span>
           <h2 class="tableftheader">Vaak samen gekocht</h2>
           <div>Deze combinaties worden aangeraden door de fabrikant, dus dat zit goed!</div>
           <?php
-          $_columnCount = 4;
-          $i = 0;
+          $_columnCount           = 4;
+          $i                      = 0;
+          $options                = [
+            "skip_usps"             => false,
+            "skip_info"             => true,
+            "display"               => "mini",
+            "image_size"            => 100,
+            "_blank"                => true,
+            "prefer_rewrite_table"  => true, // Otherwise, getting ugly urls
+            "fast_stock"            => true,
+          ];
           ?>
           <div class="crosssell product-collateral category-products">
             <ul class="products-grid products-grid-mini">
@@ -1131,14 +1142,6 @@ if($stock_data["overall_stock_status"] === "backorder"
                 ?>
                 <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
                   <?php
-                  $options = [
-                    "skip_usps"             => false,
-                    "skip_info"             => true,
-                    "display"               => "mini",
-                    "image_size"            => 100,
-                    "_blank"                => true,
-                    "prefer_rewrite_table"  => true, // Otherwise, getting ugly urls
-                  ];
                   Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
                 echo "</li>";
               }
@@ -1148,6 +1151,7 @@ if($stock_data["overall_stock_status"] === "backorder"
         </div>
       </div>
       <?php
+      Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_SHOW_CROSSSELL_SKUS");
     }
     
     /* Alternatives */

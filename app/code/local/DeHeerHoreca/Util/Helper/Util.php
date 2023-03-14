@@ -240,6 +240,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public function getProductGridHtml($_product, $product_block, $options = []) {
     
+    Varien_Profiler::start('DHH_'.__CLASS__."::".__METHOD__."_{$_product->getSku()}");
+    
     /*
     $options = [
       "image_size"              => 150,           // Image screen size, in pixels
@@ -250,6 +252,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       "show_category_link"      => false,         // Show a link to the category
       "prefer_rewrite_table"    => false,         // Get product URL preferring the rewrite table
       "use_short_product_names" => false,         // Use brand + MPN instead of product name @deprecated
+      "fast_stock"              => false,         // Base stock data on stock_status product field only
     ];
     
     Display usage:
@@ -271,13 +274,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $show_category_link       = $options["show_category_link"]      ?? false;
     $prefer_rewrite_table     = $options["prefer_rewrite_table"]    ?? false;
     $use_short_product_names  = $options["use_short_product_names"] ?? false;
-    $max_product_usps         = ($display === "mini")               ? 4 : 10;
+    $fast_stock               = $options["fast_stock"]              ?? false;
     
-    // @warning name_short is not configured for display in categories anymore
-    // if($use_short_product_names === true) {
-      // $product_short_name   = $_product->getData("name_short");
-      // if(strlen($product_short_name) > 0) $display_product_name = $product_short_name;
-    // }
+    $max_product_usps         = ($display === "mini")               ? 4 : 10;
     
     if(empty($a_target) === false) {
       $a_target = " target='{$a_target}'";
@@ -302,27 +301,33 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $price_html             = $product_block->getPriceHtml($_product, true);
     $price_html             = str_replace(",00", ",-", $price_html);
     $price_html             = str_replace("€", null, $price_html);
+    $stock_status           = strtolower(_get_product_attribute($_product, "stock_status"));
     
-    $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
-    $stock_message          = $stock_data["stock_message"];
-    $stock_message_short    = $stock_data["stock_message_short"];
-    $stock_class            = $stock_data["txtcltcz"];
-    
-    // @todo below variables are not used/needed, simplify
-    $in_stock               = $stock_data["in_stock"];
-    $stock_qty              = $stock_data["stock_qty"];
-    $backorders             = $stock_data["backorders"];
-    $saleable               = $stock_data["saleable"];
-    $eol                    = $stock_data["eol"];
-    $eol_replacement_sku    = $stock_data["eol_replacement_sku"];
-    $manage_stock           = $stock_data["manage_stock"];
-    $extra_delivery_time    = $stock_data["extra_delivery_time"];
-    $overall_stock_status   = $stock_data["overall_stock_status"];
-    $txtstockdate           = $stock_data["txtstockdate"];
-    // $calwekdate_min         = $stock_data["calwekdate_min"];
-    // $calwekdate_max         = $stock_data["calwekdate_max"];
-    $levertijd              = $stock_data["levertijd"];
-    $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
+    if($fast_stock === true && empty($stock_status === false)) {
+      $stock_message          = $stock_status === "direct leverbaar" ? "Op voorraad" : "Op aanvraag";
+      $stock_message_short    = $stock_message;
+      $overall_stock_status   = $stock_status === "direct leverbaar" ? "in_stock" : "backorder";
+      $stock_class            = $stock_status === "direct leverbaar" ? "buyblock-usp fw-normal" : "clzsoldout";
+    } else {
+      $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+      $stock_message          = $stock_data["stock_message"];
+      $stock_message_short    = $stock_data["stock_message_short"];
+      $stock_class            = $stock_data["txtcltcz"];
+      
+      // @todo below variables are not used/needed, simplify
+      // $in_stock               = $stock_data["in_stock"];
+      // $stock_qty              = $stock_data["stock_qty"];
+      $backorders             = $stock_data["backorders"];
+      $saleable               = $stock_data["saleable"];
+      $eol                    = $stock_data["eol"];
+      $eol_replacement_sku    = $stock_data["eol_replacement_sku"];
+      $manage_stock           = $stock_data["manage_stock"];
+      $extra_delivery_time    = $stock_data["extra_delivery_time"];
+      $overall_stock_status   = $stock_data["overall_stock_status"];
+      $txtstockdate           = $stock_data["txtstockdate"];
+      // $levertijd              = $stock_data["levertijd"];
+      // $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
+    }
     
     // if(_dhh_debug()) {
       // echo "<pre>";
@@ -436,6 +441,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       
     </div>
     <?php
+    Varien_Profiler::stop('DHH_'.__CLASS__."::".__METHOD__."_{$_product->getSku()}");
   }
   
   // Get the minimum list of attributes to display something
@@ -446,7 +452,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // This should include all attributes that have used_in_product_listing set to true
     if($which === "listview") {
       $attributes = [
-        "sku", "sku_seller", "manufacturer", "supplier", "name", "price", "special_price",
+        "sku", "sku_seller", "manufacturer", "supplier", "name", "price", "special_price", "stock_status",
               
         "breedte", "hoogte", "diepte", "size", "uitvoering",
         "type_koeling", "aantal_blikjes", "aantal_flessen", "capacity_wine_bottles", "voorraadbunker_kg", "icecube_type",
@@ -956,6 +962,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function getStockInfo($product, array $options = []) {
+    Varien_Profiler::start('DHH_'.__CLASS__."::".__METHOD__."_{$product->getSku()}");
+    
     $fastmode               = $options["fastmode"]            ?? false;
     $context                = $options["context"]             ?? null;
     
@@ -1172,6 +1180,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // if(_dhh_debug()) {
       // printr($stock_data);
     // }
+    
+    Varien_Profiler::stop('DHH_'.__CLASS__."::".__METHOD__."_{$product->getSku()}");
     
     return $stock_data;
   }

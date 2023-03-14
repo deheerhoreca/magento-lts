@@ -5,7 +5,16 @@ $i            = 0;
 $max_items    = $_columnCount;
 
 if($collection->count()) {
-  Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
+  $options = [
+    "image_size"              => 125,
+    "_blank"                  => false,
+    "use_short_product_names" => true,
+    "display"                 => "mini",
+    "fast_stock"              => true,
+  ];
+  if(!isset($options["fast_stock"]) || $options["fast_stock"] === false) {
+    Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
+  }
   ?>
   <div id="upsell-products" class="product-collateral category-products">
     <?php
@@ -17,12 +26,6 @@ if($collection->count()) {
       ?>
       <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
         <?php
-        $options = [
-          "image_size"              => 125,
-          "_blank"                  => false,
-          "use_short_product_names" => true,
-          "display"                 => "mini",
-        ];
         echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
       echo "</li>";
     }

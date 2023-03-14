@@ -171,7 +171,8 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
     ->joinUrlRewrite();
   // $subcategories->addAttributeToSelect("image");
   
-  if($subcategories->count() > 1) {
+  // @todo don't show subcategories if there only is one, but only on shop by brand/series pages
+  if($subcategories->count() >= 1) {
     
     // Copy a selection of filters to the new category, if they exist
     // @todo should use the real methods of building the url instead

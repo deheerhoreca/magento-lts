@@ -1,8 +1,6 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/skin/frontend/rwd/dhh/css/styles.css" media="all">
-    <link rel="stylesheet" type="text/css" href="/skin/frontend/rwd/dhh/css/responsive.css" media="all">
-    <link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/A.font-awesome.min.css" media="all">
     <title>Achteraf betalen</title>
   </head>
   <body>

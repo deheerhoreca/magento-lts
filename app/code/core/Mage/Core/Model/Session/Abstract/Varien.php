@@ -124,7 +124,12 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             $cookieParams['domain'] = $cookie->getDomain();
         }
 
-        call_user_func_array('session_set_cookie_params', array_values($cookieParams));
+        // DHH CORE HACK
+        if (!headers_sent($file, $line)) {
+            call_user_func_array('session_set_cookie_params', array_values($cookieParams));
+        } else {
+            Mage::log('Failed to set session cookie params, headers already sent. Output started at '.$file.':'.$line.'. URL: '.Mage::helper('core/url')->getCurrentUrl(), null, 'exception.log', true);
+        }
 
         if (!empty($sessionName)) {
             $this->setSessionName($sessionName);
@@ -149,7 +154,12 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             session_cache_limiter((string)$sessionCacheLimiter);
         }
 
-        session_start();
+        // DHH CORE HACK
+        if (!headers_sent($file, $line)) {
+            session_start();
+        } else {
+            Mage::log('Failed to start session, headers already sent. Output started at '.$file.':'.$line.'. URL: '.Mage::helper('core/url')->getCurrentUrl(), null, 'exception.log', true);
+        }
 
         Mage::dispatchEvent('session_before_renew_cookie', ['cookie' => $cookie]);
 
