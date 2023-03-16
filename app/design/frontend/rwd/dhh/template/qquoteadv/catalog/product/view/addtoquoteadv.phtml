@@ -39,8 +39,10 @@ if(Mage::getConfig()->getModuleConfig("Ophirah_Not2Order")->is("active", "true")
 }
 
 // Allow to request a quote for out of stock items
-if($_product->getData("allowed_to_quotemode") == 1 && $hideQuoteButton === false
-/* && $_product->getStockItem()->getIsInStock()*/ ) {
+if($_product->getData("allowed_to_quotemode") == 1
+&& $hideQuoteButton === false
+&& _get_product_attribute($_product, "eol") !== "Ja"
+) {
   
   // Quantity form -- disabled
   if(0 && (!$_product->isGrouped() && (!$_product->isSaleable() || $hideCartButton === true))) {

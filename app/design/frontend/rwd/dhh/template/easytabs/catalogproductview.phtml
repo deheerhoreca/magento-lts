@@ -74,7 +74,6 @@ $in_stock               = $stock_data["in_stock"];
 $backorders             = $stock_data["backorders"];
 $saleable               = $stock_data["saleable"];
 $eol                    = $stock_data["eol"];
-$eol_replacement_sku    = $stock_data["eol_replacement_sku"];
 $manage_stock           = $stock_data["manage_stock"];
 $extra_delivery_time    = $stock_data["extra_delivery_time"];
 $overall_stock_status   = $stock_data["overall_stock_status"];
@@ -225,22 +224,23 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
 
 // Buyblock EOL text
 if($overall_stock_status === "eol") {
-  $profiler_key = "DHH_PRODUCT_DETAILVIEW_GET_EOL_REPLACEMENT_SKU";
-  Varien_Profiler::start($profiler_key);
+  Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_GET_EOL_REPLACEMENT_SKU");
+  $eol_replacement_sku = $_product->getEolReplacementSku();
   $eol_text = "Wij helpen u graag met het vinden van een geschikt vervangend product.";
   if(empty($eol_replacement_sku) === false) {
     $_replacement_product = Mage::getResourceModel("catalog/product_collection")
       ->addFieldToFilter("sku", $eol_replacement_sku)
       ->addAttributeToSelect(["name"])
-      ->setPageSize(1)
-      ->getFirstItem();
-    if($_replacement_product !== false) {
+      ->addAttributeToFilter("status", ["in" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
+      ->addAttributeToFilter("visibility", ["in" => [Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH, Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG]])
+      ->setPageSize(1)->getFirstItem();
+    if(strlen($_replacement_product->getName()) > 1) {
       $name         = _get_product_attribute($_replacement_product, "name");
       $url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_replacement_product);
       $eol_text     = "<strong>Kijkt u naar het vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
     }
   }
-  Varien_Profiler::stop($profiler_key);
+  Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_GET_EOL_REPLACEMENT_SKU");
 }
 
 // Product Documents (uploaded & external)

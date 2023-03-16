@@ -35,6 +35,9 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
 // END DHH CORE HACK
 ?>
 <tr class="border">
+    <td class='a-center'>
+      <img style="max-width:60px; max-height:60px;" src="<?php echo $_imageUrl ?>" />
+    </td>
     <td>
         <?php if ($this->canDisplayContainer()): ?>
         <div id="<?php echo $this->getHtmlId() ?>" class="item-container">
