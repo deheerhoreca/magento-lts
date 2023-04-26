@@ -44,7 +44,7 @@ $highest_level = 0;
     if($count > 1000) {
       $count = "1000+";
     }
-    $label = trim(str_replace("[V]", "", $_item->getLabel())); // DHH CORE HACK
+    $label = trim(str_replace(["[V] ", "[0] "], "", $_item->getLabel())); // DHH CORE HACK
     $title = $label;
     if(strlen($label) > 29) {
       $label = substr($label, 0, 27)."..";

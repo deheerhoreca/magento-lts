@@ -10,7 +10,7 @@ const DEBUG = false;
 
 /* FILTERS */
 // $supplier_names = ["combisteel"];
-// $dhh_sku  = "BA-109881";
+$dhh_sku  = "DI-BFX-2R/08-R2";
 $fromDate = date('1970-01-01 00:00:00');
 $toDate   = date('Y-m-d H:i:s', strtotime("-1 day"));
 
@@ -18,7 +18,7 @@ ini_set('memory_limit', '8G');
 ini_set('display_errors', true);
 error_reporting(E_ALL | E_STRICT);
 
-require_once "./app/Mage.php";
+require_once __DIR__."/../app/Mage.php";
 Mage::setIsDeveloperMode(true);
 Mage::app(0);
 Mage::init();
@@ -33,11 +33,11 @@ if(Mage::registry('isSecureArea')) {
 Mage::register('isSecureArea', true);
 
 if(DEBUG === false) {
-  echo "Setting 3 indexers to manual...".PHP_EOL;
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual cataloginventory_stock");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual catalog_product_attribute");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual catalog_product_flat");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-manual catalog_product_price");
+  echo "Setting indexers to manual...".PHP_EOL;
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-manual cataloginventory_stock");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-manual catalog_product_attribute");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-manual catalog_product_flat");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-manual catalog_product_price");
 }
 
 $collection = Mage::getModel('catalog/product')->getCollection()
@@ -116,16 +116,16 @@ echo PHP_EOL."Saved {$i} product(s)".PHP_EOL;
 
 if(DEBUG === false) {
   echo "Re-enabling realtime indexing...".PHP_EOL;
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime cataloginventory_stock");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime catalog_product_attribute");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime catalog_product_flat");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --mode-realtime catalog_product_price");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-realtime cataloginventory_stock");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-realtime catalog_product_attribute");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-realtime catalog_product_flat");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --mode-realtime catalog_product_price");
   
   echo "Reindexing...".PHP_EOL;
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex cataloginventory_stock");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex catalog_product_attribute");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex catalog_product_flat");
-  shell_exec("/opt/plesk/php/7.3/bin/php shell/indexer.php --reindex catalog_product_price");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --reindex cataloginventory_stock");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --reindex catalog_product_attribute");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --reindex catalog_product_flat");
+  shell_exec("/opt/plesk/php/7.4/bin/php shell/indexer.php --reindex catalog_product_price");
 } else {
   echo "Skipping reindex, did not disable it".PHP_EOL;
 }

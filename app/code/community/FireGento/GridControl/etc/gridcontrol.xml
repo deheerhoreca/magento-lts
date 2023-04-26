@@ -34,14 +34,14 @@
       
       <massaction>
         <updateColumn>
-          <width>30</width>
+          <width>5%</width>
         </updateColumn>
       </massaction>
       
       <sku>
         <updateColumn>
           <header>SKU</header>
-          <width>10%</width>
+          <width>8%</width>
         </updateColumn>
         <after>name</after>
       </sku>
@@ -53,7 +53,7 @@
       </type>
       
       <visibility>
-        <remove/>
+        <!-- <remove/> -->
       </visibility>
       
       <!-- <action> -->

@@ -36,9 +36,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     }
   }
   
-  /**
-   * Update duplicated url keys by adding product SKU to the duplicated key
-   */
+  // Update duplicated url keys by adding product SKU to the duplicated key
   public function updateDuplicatedKeys() {
     
     $debug_data = [];
@@ -143,11 +141,8 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     // print_r($debug_data);
   }
   
-  /**
-   * Remove extra product url rewrites leaving $left of last
-   *
-   * @var $left
-   */
+  // Remove extra product url rewrites leaving $left of last
+  // @var $left
   public function clearExtraRewrites($left) {
     
     $debug_data = [];
@@ -206,15 +201,14 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
           ->setOrder("url_rewrite_id", "DESC")
         ;
         $urlRewritesCollection->getSelect()->limit(null, $left);
-        // echo $urlRewritesCollection->getSelect()->__toString();
-        // exit;
         
         foreach($urlRewritesCollection as $urlRewrite) {
+          $counter_total++;
           try {
             if(DRYRUN === false) {
               $urlRewrite->delete();
             }
-            $msg = "Deleted: store_id {$urlRewrite->getStoreId()}, rewrite_id {$urlRewrite->getUrlRewriteId()}, product_id {$urlRewrite->getProductId()}";
+            $msg = "Deleted: [store_id {$urlRewrite->getStoreId()}, product_id {$urlRewrite->getProductId()}, rewrite_id {$urlRewrite->getUrlRewriteId()}]";
             echo $msg.PHP_EOL;
             Mage::log($msg, null, "atwix_rewrites_doctor.log", true);
             $counter_deleted++;
@@ -238,7 +232,9 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     echo $message.PHP_EOL;
     Mage::log($message, null, "atwix_rewrites_doctor.log", true);
     
-    echo "Notice: If everything looks OK, you should remove the backup table \"{$backup_table}\"".PHP_EOL;
+    if(DRYRUN !== true) {
+      echo "Notice: If everything looks OK, you should remove the backup table \"{$backup_table}\"".PHP_EOL;
+    }
   }
   
   public function timeSpent($start, $end) {
@@ -250,10 +246,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     return $hours . " hours " . $mins . " minutes " . $secs . " seconds";
   }
   
-  /**
-   * Retrieve Usage Help Message
-   *
-   */
+  // Retrieve Usage Help Message
   public function usageHelp()  {
     return "
     \n

@@ -1,4 +1,7 @@
 <?php
+
+exit;
+
 error_reporting(E_ALL | E_STRICT);
 define('MAGENTO_ROOT', getcwd()."/..");
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
@@ -15,7 +18,7 @@ $products->addAttributeToFilter('visibility', 4); //optional for products only v
 $products->addAttributeToSelect('image');
 
 $file = "export_products-".date("Ymdhis").".csv";
-$fp        = fopen($file, "w");
+$fp   = fopen($file, "w");
 
 $csvHeader = array(
   "sku",

@@ -2,7 +2,7 @@
 
 // Cleans out some tables that tend to get filled with irrelevant data over time
 
-const DRYRUN = false;
+const DRYRUN = true;
 
 $queries = [];
 
@@ -18,11 +18,10 @@ $queries[] = "DELETE FROM `dataflow_batch_import`
     ) foo
   )
 ";
-
 $queries[] = "OPTIMIZE TABLE `dataflow_batch_import`";
 
+// index_event
 $queries[] = "DELETE FROM index_event WHERE created_at < NOW() - INTERVAL 365 DAY";
-
 $queries[] = "OPTIMIZE TABLE `index_event`";
 
 require_once __DIR__."/../app/Mage.php";

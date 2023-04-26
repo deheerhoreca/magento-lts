@@ -1239,7 +1239,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public static function cleanCategoryName($category_name) {
-    return trim(str_replace(["[V]", "[SKIPMENU]"], null, $category_name));
+    return trim(str_replace(["[V]", "[SKIPMENU]", "[0] "], "", $category_name));
   }
   
   public static function getLeaseRates($price_ex_vat, $time = "daily") {
@@ -1307,7 +1307,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public static function build_product_video_url($string) {
     if(strstr("http", $string) === false) {
       // Best way is to just store the youtube ID and build the URL
-      $string = "//www.youtube-nocookie.com/embed/{$string}?modestbranding=1&loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
+      // Attempt to reduce "Multiple video URLs discovered as belonging to this video" by adding https:
+      $string = "https://www.youtube-nocookie.com/embed/{$string}?modestbranding=1&loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
     }
     
     return $string;

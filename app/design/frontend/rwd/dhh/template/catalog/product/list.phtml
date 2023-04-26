@@ -307,7 +307,14 @@ if($show_products === true && $_productCollection->getFirstItem()) {
           break;
       }
       
-      $brand              = _get_product_attribute($_product, "manufacturer");
+      // @todo fix weird bug that gives the wrong brand for the first item
+      // $brand               = _get_product_attribute($_product, "manufacturer");
+      $brand                  = $_product->getData("manufacturer_value");
+      
+      $series_or_brand        = _get_product_attribute($_product, "brand_series");
+      if(empty($series_or_brand)) {
+        $series_or_brand        = $brand;
+      }      
       $sku_seller_or_mpn  = _get_product_attribute($_product, "mpn");
       if(empty($sku_seller_or_mpn)) {
         $sku_seller_or_mpn  = _get_product_attribute($_product, "sku_seller");
@@ -390,7 +397,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         </a>
         <div class="product-info">
           <div class="info">
-            <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller_or_mpn}</span>"; ?></span>
+            <span class="brand-name small fw-600 gray"><?php echo "{$series_or_brand} <span class=light-gray>{$sku_seller_or_mpn}</span>"; ?></span>
             <h2 class="product-name ellipsed ellipsed-2">
               <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?>'><?php echo $product_name; ?></a>
             </h2>

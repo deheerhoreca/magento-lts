@@ -79,7 +79,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $ignored_url_query_keys = [
         "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
         "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
-        "gclid", "cfhtmlcache",
+        "gclid", "cfhtmlcache", "mc_cid", "mc_eid",
       ];
       $url = self::strip_param_from_url($url, $ignored_url_query_keys);
       

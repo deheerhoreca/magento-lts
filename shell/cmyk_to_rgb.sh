@@ -3,15 +3,23 @@ pattern=~/httpdocs/deheerhoreca-magento/media/catalog/product/{0,1,2,3,4,5,6,7,8
 
 pattern=~/httpdocs/deheerhoreca-magento/media/catalog/product/haha/*.jpg
 
+DRYRUN=true
+
 for f in ${pattern}
   do
     type=$(identify -format '%[colorspace]' $f);
     if [ "$type" == "CMYK" ]
     then
-      echo Convert ${type} ${f}
-      # convert $f -colorspace RGB ./$
-      convert $f -colorspace CMYK -colorspace RGB $f # uncomment this line and comment previous line if previous line is not working.
+      echo "${type} ${f} NOK"
+      if [ "${DRYRUN}" == false ]
+      then
+        convert $f -colorspace RGB ./$
+        # convert $f -colorspace CMYK -colorspace RGB $f # uncomment this line and comment previous line if previous line is not working.
+        echo "$f -colorspace RGB";
+      else
+        echo "Dryrun: $f -colorspace RGB";
+      fi
     else
-      echo ${type} ${f}
+      echo "${type} ${f} OK"
     fi
   done

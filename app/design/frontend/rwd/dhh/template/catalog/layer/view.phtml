@@ -19,8 +19,10 @@ if($this->canShowBlock()) {
       if($this->canShowOptions()) {
 //        <div class="amshopby-all-filters">
         ?>
-          <div class="block-title block-subtitle block-subtitle--filter "><span class="h2 strong orange underline-orange center">Filteren</span></div>
-          <dl id="narrow-by-list">
+          <div class="block-title block-subtitle block-subtitle--filter">
+            <span class="h2 strong orange underline-orange center">Filteren</span>
+          </div>
+          <dl id="narrow-by-list" class="d-none d-xl-block">
             <?php
             $_filters = $this->getFilters();
             foreach($_filters as $_filter) {

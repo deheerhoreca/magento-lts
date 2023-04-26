@@ -850,10 +850,10 @@ $j(document).ready(function () {
                     $j(this)
                         .toggleClass('active')
                         .next()
-                        .toggleClass('no-display');
+                        .toggleClass('d-none'); // DHH CORE HACK
                 });
                 // Hide the content
-                $j(this).next().addClass('no-display');
+                $j(this).next().addClass('d-none'); // DHH CORE HACK
             } else {
                 // Remove event handler so that the toggle link can no longer be used
                 $j(this).off('click');
@@ -861,7 +861,7 @@ $j(document).ready(function () {
                 $j(this)
                     .removeClass('active')
                     .next()
-                    .removeClass('no-display');
+                    .removeClass('d-none'); // DHH CORE HACK
             }
 
         });

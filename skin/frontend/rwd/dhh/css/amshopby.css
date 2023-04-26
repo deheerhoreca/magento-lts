@@ -602,8 +602,7 @@ input[name^="amshopby"][id$="to"].input-text {
   width: auto;
 }
 
-.no-display-current,
-.no-display {
+.no-display-current {
   display: none;
 }
 

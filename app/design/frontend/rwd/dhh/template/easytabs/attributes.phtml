@@ -13,12 +13,13 @@ $_product             = $this->getProduct();
 
 // Tooltips
 $attr_tooltips        = [
-  "koeltemperatuur"     => "De behaalde temperatuur kan variëren. Factoren die van invloed zijn, zijn onder andere: koelmethode, omgevingstemperatuur, open-frequentie, ventilatie rondom het apparaat, de klimaatklasse, en de koelcyclus",
-  "aantal_blikjes"      => "Het exacte aantal kan iets variëren met de exacte grootte",
-  "deur_omkeerbaar"     => "Indien de draairichting van de deur wordt omgedraaid is het slot niet altijd meer bruikbaar en zijn eventuele afbeeldingen op de deur omgekeerd.",
-  "temp_range_from_c"   => "De behaalde temperatuur kan iets variëren, afhankelijk van omgevingsfactoren.",
-  "geluidsniveau"       => "Professionele koelingen zijn doorgaans uitgerust met ventilatoren en krachtige koelmotoren en produceren meestal meer geluid dan een consumentenkoeling. Nog steeds zijn sommige koelingen veel stiller dan andere. Twijfelt u over de juiste koeling, neem dan contact met ons op.",
-  "climate_class"       => "De klimaatklasse geeft aan in welke omgevingstemperatuur deze koeling zich fijn voelt. Zet de koeling niet in een te koude of te warme omgeving. Een krachtige, geforceerde koeling kan een hogere omgevingstemperatuur aan. Er zijn ook speciale koelingen voor koude omgevingen.",
+  "shipping_weight_gram"  => "Dit is het gewicht van het product zoals het wordt verstuurd, in een pakket of op een pallet",
+  "koeltemperatuur"       => "De behaalde temperatuur kan variëren. Factoren die van invloed zijn, zijn onder andere: koelmethode, omgevingstemperatuur, open-frequentie, ventilatie rondom het apparaat, de klimaatklasse, en de koelcyclus",
+  "aantal_blikjes"        => "Het exacte aantal kan iets variëren met de exacte grootte",
+  "deur_omkeerbaar"       => "Indien de draairichting van de deur wordt omgedraaid is het slot niet altijd meer bruikbaar en zijn eventuele afbeeldingen op de deur omgekeerd.",
+  "temp_range_from_c"     => "De behaalde temperatuur kan iets variëren, afhankelijk van omgevingsfactoren.",
+  "geluidsniveau"         => "Professionele koelingen zijn doorgaans uitgerust met ventilatoren en krachtige koelmotoren en produceren meestal meer geluid dan een consumentenkoeling. Nog steeds zijn sommige koelingen veel stiller dan andere. Twijfelt u over de juiste koeling, neem dan contact met ons op.",
+  "climate_class"         => "De klimaatklasse geeft aan in welke omgevingstemperatuur deze koeling zich fijn voelt. Zet de koeling niet in een te koude of te warme omgeving. Een krachtige, geforceerde koeling kan een hogere omgevingstemperatuur aan. Er zijn ook speciale koelingen voor koude omgevingen.",
 ];
 $attr_tooltips["vriestemperatuur"]      = $attr_tooltips["koeltemperatuur"];
 $attr_tooltips["aantal_flessen"]        = $attr_tooltips["aantal_blikjes"];
@@ -34,7 +35,8 @@ $attr_remove_decimals = [
   "aantal_blikjes", "aantal_wasprogrammas", "eenheid", "capacity_wine_bottles", "geluidsniveau",
   "number_of_cooling_zones", "aantal_flessen", "cooking_zones", "length_mm", "isolatiedikte", "number_of_slots",
   "max_geleiders", "package_height_mm", "package_width_mm", "package_depth_mm", "shipping_weight_gram",
-  "temp_range_from_c", "temp_range_to_c", "thickness_mm",
+  "temp_range_from_c", "temp_range_to_c", "thickness_mm", "hoogte_borden_max", "hoogte_glazen_max", "max_baskets_per_hour",
+  "tank_temperature_c",
 ];
 
 // No zero decimals, with number formatting
@@ -147,6 +149,9 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "temp_range_to_c":
           case "temp_resistance_from":
           case "temp_resistance_to":
+          case "tank_temperature_c":
+          case "naspoel_temperatuur":
+          case "temperatuur_water_aanvoer":
             if($value >= 0) {
               $prefix = "+";
             }
@@ -194,7 +199,12 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "package_width_mm":
           case "package_depth_mm":
           case "hoogte_borden_max":
+          case "hoogte_glazen_max":
             $postfix = " mm";
+            break;
+          
+          case "laadhoogte":
+            $postfix = " cm";
             break;
           
           // "Liter per Uur" postfix
@@ -203,7 +213,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             break;
           
           // "Liter per Cyclus" postfix
-          case "water_verbruik":
+          case "water_verbruik_cyclus":
             $postfix = " Liter per Cyclus";
             break;
           
@@ -212,15 +222,15 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             $postfix = " A";
             break;
           
-          // " kWh/jaar"
+          // " kWh/jaar" postfix
           case "annual_energy_consumption_kwh":
-            $postfix = " kWh/jaar";
+            $postfix = " kWh per jaar";
             break;
           
-          // Other
-          
+          // kW
           case "vermogen_kw":
           case "vermogen":
+          case "vermogen_boiler":
             if($value < 5) {
               $value *= 1000;
               $postfix = " Watt";
@@ -230,6 +240,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             }
             break;
           
+          // Watt
           case "total_power_watt":
             if($value  >= 5000) {
               $value   /= 1000;
@@ -240,8 +251,10 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
               $postfix = " Watt";
             }
             break;
-            
+          
+          // Grams
           case "gross_weight_gram":
+          case "shipping_weight_gram":
             if($value < 3000) {
               $postfix = " gr";
             } else {
@@ -249,8 +262,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
               $postfix = " kg";
             }
             break;
-            
-          case "shipping_weight_gram":
+          
+          // Kg
           case "weight":
             if($value < 3) {
               $value *= 1000;
@@ -260,6 +273,13 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             }
             break;
           
+          // " Korven per uur" postfix
+          case "number_of_baskets_per_hour":
+          case "max_baskets_per_hour":
+            $postfix = " Korven per uur";
+            break;
+          
+          // Conditional warranty supplement
           case "warranty_remarks":
             $supplier = strtolower($_product->getAttributeText("supplier"));
             if($supplier === "combisteel") {

@@ -87,6 +87,7 @@ Disallow: /tag/
 Disallow: /wishlist/
 Disallow: /cdn-cgi/*
 Disallow: /no-route
+Disallow: /media/static/
 
 ############################################
 ## Do not crawl dynamic filters. Uncomment what you need or add custom filters

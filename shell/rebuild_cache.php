@@ -1,10 +1,6 @@
 <?php
 
-if(isset($argv[1])) {
-  $forced = [$argv[1]];
-} else {
-  $forced = ["block_html", "layout", "amshopby"];
-}
+// Rebuild invalidated caches
 
 require_once __DIR__."/../app/Mage.php";
 umask(0);
@@ -17,10 +13,10 @@ try {
   foreach($invalidated_types as $invalidated_type) {
     $invalidated_ids[] = $invalidated_type->getData('id');
   }
-
+  
   $allTypes = Mage::app()->useCache();
   foreach($allTypes as $type => $value) {
-    if(in_array($type, $forced) || in_array($type, $invalidated_ids)) {
+    if(in_array($type, $invalidated_ids)) {
       Mage::app()->getCacheInstance()->cleanType($type);
       Mage::dispatchEvent('', array('type' => $type));
       echo "Cleaned {$type}".PHP_EOL;

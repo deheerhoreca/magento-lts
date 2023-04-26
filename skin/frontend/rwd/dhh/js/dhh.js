@@ -92,7 +92,7 @@ document.addEventListener('copy', (event) => {
   }
 });
 
-var kiyoh_score = 9.7;
+var kiyoh_score = 9.8;
 
 jQuery(document).ready(function(){
   jQuery(document).on('click', '#toggle-cat-text', function(){

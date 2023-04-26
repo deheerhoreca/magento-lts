@@ -94,7 +94,7 @@ class Zend_Json
                     case JSON_ERROR_CTRL_CHAR:
                         throw new Zend_Json_Exception('Decoding failed: Unexpected control character found');
                     case JSON_ERROR_SYNTAX:
-                        throw new Zend_Json_Exception('Decoding failed: Syntax error');
+                        throw new Zend_Json_Exception('Decoding failed: Syntax error. Payload: '.$encodedValue);
                     default:
                         throw new Zend_Json_Exception('Decoding failed');
                 }
