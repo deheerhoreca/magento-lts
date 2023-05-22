@@ -57,7 +57,7 @@ Contexts:
   
   - Context: 14   => Optional minimal price, used in case of volume discount
 - Grouped Products:
-  - Context: 15   => Grouped products
+  - Context: 15   => Grouped products, Used
 */
 
 /* Functions need to be declared only once and before use */
@@ -669,7 +669,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
 
   <?php
 
-  /* CONTEXT 15 -- Grouped Products */
+  /* CONTEXT: 15 -- Grouped Products */
 
   } else { /* if(!$_product->isGrouped()): */
     $debug_lines[] = "Context 15";
@@ -691,20 +691,24 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <?php if($showMinPrice): ?>
             <span class="price-label"><?php echo $this->__('Starting at:') ?></span>
           <?php endif ?>
-          <?php if($_taxHelper->displayBothPrices()): ?>
+          <?php if($_taxHelper->displayBothPrices()) { ?>
             <span class="price-excluding-tax">
               <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
               <span class="price">
-                <?php echo $_coreHelper->formatPrice($_exclTax, false) ?>
+                <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_exclTax, false)) ?><!--/sse-->
               </span>
             </span>
-            <span class="price-including-tax">
-              <span class="label"><?php echo $this->helper('tax')->__('Incl. Tax:') ?></span>
-              <span class="price">
-                <?php echo $_coreHelper->formatPrice($_inclTax, false) ?>
+            <?php
+            if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
+              <span class="price-including-tax italic small">
+                <span class="price">
+                  <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_inclTax, false)) ?><!--/sse-->
+                </span>
+              <span class="label">incl. btw</span>
               </span>
-            </span>
-          <?php else:
+              <?php
+            }
+          } else {
             $_showPrice = $_inclTax;
             if(!$_taxHelper->displayPriceIncludingTax()) {
               $_showPrice = $_exclTax;
@@ -713,7 +717,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
             <span class="price" id="product-minimal-price-<?php echo $_id.$this->getIdSuffix(); ?>">
             <?php echo $_coreHelper->formatPrice($_showPrice, false) ?>
           </span>
-          <?php endif; ?>
+          <?php } ?>
         </p>
       </div>
     <?php

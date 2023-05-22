@@ -104,8 +104,8 @@ endif;
             <div class="col-2">
               <?php
               $messages = [];
-              if($total > 3000) {
-                $messages[] = "Gespreid betalen (in3) is beschikbaar tot 3000 euro incl. BTW.";
+              if($total > 5000) {
+                $messages[] = "Gespreid betalen (in3) is beschikbaar tot 3.000 (B2C) of 5.000 (B2B) euro incl. BTW.";
               }
               $lim = Mage::getStoreConfig("payment/pay_payment_ideal/max_order_total");
               if($total > $lim) {

@@ -36,7 +36,7 @@ $attr_remove_decimals = [
   "number_of_cooling_zones", "aantal_flessen", "cooking_zones", "length_mm", "isolatiedikte", "number_of_slots",
   "max_geleiders", "package_height_mm", "package_width_mm", "package_depth_mm", "shipping_weight_gram",
   "temp_range_from_c", "temp_range_to_c", "thickness_mm", "hoogte_borden_max", "hoogte_glazen_max", "max_baskets_per_hour",
-  "tank_temperature_c",
+  "tank_temperature_c", "breedte_deur",
 ];
 
 // No zero decimals, with number formatting
@@ -46,7 +46,7 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "annual_energy_consumption_kwh", "capaciteit_boiler", "laadhoogte", "weight_fabric",
   "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus", "temp_resistance_from",
   "temp_resistance_to", "guide_set_distance_mm", "inhoud_vetpan_liter", "max_load_per_shelf_kg",
-  "gross_weight_gram", "amps",
+  "gross_weight_gram", "amps", "etaleer_oppervlak_m2",
 ];
 
 // Allow to show "No" values for these attributes
@@ -176,7 +176,13 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "volume_refrigerator_liter":
             $postfix = " liter";
             break;
-          
+
+          // "m2" postfix"
+          case "etaleer_oppervlak_m2":
+            $value = number_format($value, 2, ",", ".");
+            $postfix = " m²";
+            break;
+                    
           // "m3" postfix"
           case "inhoud_m3":
             $postfix = " m³";

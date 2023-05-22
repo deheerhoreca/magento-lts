@@ -102,7 +102,7 @@ endif;
                 </div>
             <?php endif ?>
             <div class="col-2">
-                <?php if($total > 3000) echo "Gespreid betalen (in3) is beschikbaar tot 3000 euro incl. BTW.<br /><br />"; ?>
+                <?php if($total > 5000) echo "Gespreid betalen (in3) is beschikbaar tot 3.000 (B2C) of 5.000 (B2B) euro incl. BTW.<br><br>"; ?>
                 <?php echo $this->getChildHtml('payment.method') ?>
             </div>
             <div class="step-mask"></div>

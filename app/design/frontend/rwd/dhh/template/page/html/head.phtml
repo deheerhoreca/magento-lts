@@ -10,11 +10,8 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->g
 <title><?php echo $page_title; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.7">
 <?php /* Non-synchronous JS */ ?>
-<script async src="//www.googletagmanager.com/gtag/js?id=G-SRTM9M2FM3"></script>
+<?php /* <script async src="//www.googletagmanager.com/gtag/js?id=G-SRTM9M2FM3"></script>--> */ ?>
 <script>
-  function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-SRTM9M2FM3");
-  (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"20122079"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");
-  // !function(e,t,n,a,c,o,s){e.fbq||(c=e.fbq=function(){c.callMethod?c.callMethod.apply(c,arguments):c.queue.push(arguments)},e._fbq||(e._fbq=c),c.push=c,c.loaded=!0,c.version="2.0",c.queue=[],(o=t.createElement(n)).async=!0,o.src=a,(s=t.getElementsByTagName(n)[0]).parentNode.insertBefore(o,s))}(window,document,"script","//connect.facebook.net/en_US/fbevents.js"),fbq("init","808630443401252"),fbq("track","PageView");
   if(document.cookie.match(/^(.*;)?\s*dhh_on_first_page\s*=\s*[^;]+(.*)?$/) == null
   && window.location.href.indexOf("cart") < 0
   && window.location.href.indexOf("qquoteadv") < 0 
@@ -46,6 +43,10 @@ echo $this->getChildHtml();
 ?><script src="/js/ext-translator.js" defer></script><?php
 echo $this->getIncludes();
 ?>
+<script>
+  <?php /* function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-SRTM9M2FM3");*/ ?>
+  (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"20122079"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");
+</script>
 <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>">
 <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>">
 <meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>">

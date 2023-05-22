@@ -102,6 +102,7 @@ Disallow: /*?q=*
 # Disallow: /*?cat=*
 # Disallow: /*?availability=*
 # Disallow: /*?brand=*
+Disallow: /*?manufacturer=*
 
 ############################################
 ## Do not crawl paths that can be safely ignored by search engines (no clean URLs)
@@ -109,6 +110,8 @@ Disallow: /*?q=*
 Disallow: /*?p=*&
 Disallow: /*.php$
 Disallow: /*?SID=
+Disallow: /*?refreshfpc
+Disallow: /*?nofpc
 
 ############################################
 ## Nope
