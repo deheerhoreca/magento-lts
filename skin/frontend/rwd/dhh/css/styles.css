@@ -11006,7 +11006,7 @@
   }
 
   .sooqrSearchContainer * {
-    font-family: Open Sans, Arial, Helvetica, Verdana, sans-serif !important;
+    font-family: var(--bs-font-sans-serif) !important;
   }
 
   .sooqrSearchContainer .sqr-powered-by-branding {
