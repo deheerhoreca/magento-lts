@@ -37,7 +37,8 @@ if (empty($_GET['f'])) {
 }
 
 // allow web server set content type automatically
-$contentType = false;
+// $contentType = false;
+$contentType = true; // DHH CORE HACK
 
 // set custom content type if specified
 if (isset($_GET['c'])) {

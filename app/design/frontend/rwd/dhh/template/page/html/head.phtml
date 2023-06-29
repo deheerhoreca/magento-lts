@@ -12,7 +12,7 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->g
 <?php /* Non-synchronous JS */ ?>
 <?php /* <script async src="//www.googletagmanager.com/gtag/js?id=G-SRTM9M2FM3"></script>--> */ ?>
 <script>
-  if(document.cookie.match(/^(.*;)?\s*dhh_on_first_page\s*=\s*[^;]+(.*)?$/) == null
+  if(document.cookie.match(/^(.*;)?\s*__Host-dhh_past_first_page\s*=\s*[^;]+(.*)?$/) == null
   && window.location.href.indexOf("cart") < 0
   && window.location.href.indexOf("qquoteadv") < 0 
   && window.location.href.indexOf("afrekenen") < 0
@@ -20,8 +20,8 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->g
     window.zESettings = {webWidget:{chat:{connectOnPageLoad: false}}};
   } else {
     window.zESettings = {webWidget:{chat:{connectOnPageLoad: true}}};
-    document.cookie = "dhh_on_first_page=false; Secure";
   }
+  document.cookie = "__Host-dhh_past_first_page=foo; path=/; Secure; Max-Age=2592000; SameSite=Strict";
 </script>
 <script id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
 <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2" crossorigin>

@@ -11,16 +11,16 @@ $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
 $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
 $attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["featured"]);
+$limit                        = 8;
 
 // Get all products that are marked as featured
 $_productCollection = Mage::getModel("catalog/product")
   ->getCollection()
   ->addAttributeToSelect($attributes)
-  // ->addFieldToFilter([["attribute" => "featured", "eq" => true]])
   ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
   ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
   ->addOrder("popularity", "ASC")
-  ->setPageSize(20)
+  ->setPageSize($limit)
   ->addFinalPrice(); // Necessary to respect sale price end date
 
 /*
@@ -46,17 +46,17 @@ $_imgSize               = 1 * $displaySize;
 if($_productCollection->getFirstItem()) {
 ?>
   <div class="category-products">
-    <span class="h1 center" style="padding-top: 2em;">Populaire Producten</span><hr>
+    <span class="h1 center" style="padding-top: 1em;">Topsellers</span><hr>
     <?php
    echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     $i = 0;
     foreach($_productCollection as $_product) {
       $i++;
-      $html                 = "";
+      $html = "";      
       
-      $productUrl = false;
       // If a product is present in multiple categories, we don't want to change that in this view
       //$productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
+      $productUrl = false;
       if($productUrl === false) {
         $productUrl = $_product->getProductUrl(); // Fallback
       }

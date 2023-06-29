@@ -20,12 +20,12 @@ $brand_logo                 = "";
 $brand_slug                 = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $brand_link                 = "/shop?manufacturer={$brand_id}";
 $anchors                    = [];
-$in3_minimum                = 100 / 1.21;
-$in3_maximum                = 5000 / 1.21;
+$in3_minimum                = 50 / 1.21;
+$in3_maximum                = 30000 / 1.21;
 $billink_minimum            = 10;
 $billink_maximum            = 3500;
-$biller_minimum             = 10;
-$biller_maximum             = 5000;
+$biller_minimum             = 25;
+$biller_maximum             = 10000;
 $mondu_pl_minimum           = 500;
 $mondu_pl_maximum           = 10000;
 $mondu_lease_minimum        = 750;
@@ -518,7 +518,7 @@ if($i < $max_highlighted_attributes) {
 // Power (electrical)
 if($i < $max_highlighted_attributes) {
   $code = "vermogen";
-  $text = (int) _get_product_attribute($_product, $code);
+  $text = _get_product_attribute($_product, $code);
   $image = "{$skin}frontend/rwd/dhh/images/watt.svg";
   $title = "Vermogen (ELEK)";
   if(empty($text) === false) {
@@ -773,7 +773,8 @@ if(sizeof($cross_sell_ids) > 0) {
    ->addAttributeToFilter("entity_id", ["in" => $cross_sell_ids])
    ->addAttributeToFilter("eol", ["neq" => 2075])
    ->addAttributeToSelect(DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview"))
-   ->setOrder("popularity", "ASC");
+   ->setOrder("popularity", "ASC")
+   ->load();
 }
 Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_GET_CROSSSELL_SKUS");
 
@@ -791,7 +792,7 @@ if($saleable === true && $this->hasOptions()) {
 if(strlen($product_description_md) > 0) {
   $product_description .= Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($product_description_md);
 } else {
-  $product_description .= $_product->getResource()->getAttribute("supplier_description")->getFrontend()->getValue($_product);
+  $product_description .= _get_product_attribute($_product, "supplier_description");
 }
 
 // Add specific blocks to the description based on attributes
@@ -1113,7 +1114,7 @@ if($stock_data["overall_stock_status"] === "backorder"
     }
 
     /* Cross Sell Products */
-    if(empty($_crossSellProducts) === false) {
+    if(empty($_crossSellProducts) === false && $_crossSellProducts->getSize() > 0) {
       Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_SHOW_CROSSSELL_SKUS");
       ?>
       <div class="probottomdv">
@@ -1239,27 +1240,31 @@ if($stock_data["overall_stock_status"] === "backorder"
             if(empty($external_document["url"])) {
               continue;
             }
-            $url            = $external_document["url"];
-            $url_encrypted  = "/view.php?id=".base64_encode(openssl_encrypt($url, $method, "wijdelengeenurls", 0, $iv));
-            // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
-            $name           = $external_document["title"]     ?? $external_document["url"];
-            $filetype       = $external_document["filetype"]  ?? null;
-            $language       = $external_document["language"]      ?? null;
-            switch($filetype) {
-              case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
-              default:      $fa_icon  = "fa-file-o";      break;
-            }
-            if(empty($language) === false) {
-              if(is_scalar($language)) {
-                $language = " (".strtoupper($language).")";
-              } elseif(is_array($language)) {
-                $language = array_map("strtoupper", $language);
-                $language = " (".implode(", ", $language).")";
+            $url = $external_document["url"];
+            if(filter_var($url, FILTER_VALIDATE_URL) === false) {
+              Mage::log("{$sku} has an invalid document URL {$url}");
+            } else {
+              $url_encrypted  = "/view.php?id=".base64_encode(openssl_encrypt($url, $method, "wijdelengeenurls", 0, $iv));
+              // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
+              $name           = $external_document["title"]     ?? $url;
+              $filetype       = $external_document["filetype"]  ?? null;
+              $language       = $external_document["language"]      ?? null;
+              switch($filetype) {
+                case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
+                default:      $fa_icon  = "fa-file-o";      break;
               }
+              if(empty($language) === false) {
+                if(is_scalar($language)) {
+                  $language = " (".strtoupper($language).")";
+                } elseif(is_array($language)) {
+                  $language = array_map("strtoupper", $language);
+                  $language = " (".implode(", ", $language).")";
+                }
+              }
+              echo "<li style='line-height:2.5em;'>";
+              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              echo "</li>";
             }
-            echo "<li style='line-height:2.5em;'>";
-            echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
-            echo "</li>";
           }
           ?>
         </ul>

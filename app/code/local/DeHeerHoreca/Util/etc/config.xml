@@ -108,6 +108,17 @@
       </sales_order_place_before>
     </events>
     
+    <!-- https://gist.github.com/fbrnc/3975149 -->
+    <events>
+      <controller_action_predispatch>
+        <observers>
+          <adminnotification>
+            <type>disabled</type>
+          </adminnotification>
+        </observers>
+      </controller_action_predispatch>
+    </events>
+    
   </adminhtml>
   
 </config>

@@ -287,10 +287,14 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           $data[$schema_key] = $value;
         }
         
+        // DHH CORE HACK
         $schema_key = "description";
-        $value = (strlen($_product->getDescription()) > 0) ? strip_tags($_product->getDescription()) : $_product->getName();
+        $value = Mage::helper("deheerhoreca_util/util")->_get_product_description($_product);
         if(strlen($value) > 0) {
-          $data[$schema_key] = $value;
+          $value = strip_tags($value);
+          if(strlen($value) > 0) {
+            $data[$schema_key] = $value;
+          }
         }
         
         $schema_key = "width";

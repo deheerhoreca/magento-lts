@@ -179,6 +179,7 @@
 
         ############################################
         # X-Content-Type-Options: nosniff disable content-type sniffing on some browsers.
+        # DHH: Also set via Cloudflare Transform Rules, because this .htaccess rule somehow does not work on all extensions
         Header set X-Content-Type-Options: nosniff
 
         ############################################
@@ -429,6 +430,8 @@ RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
 <IfModule mod_php7.c>
     php_value suhosin.session.encrypt=off
     php_value elastic_apm.service_name "chefstore_nl"
+    php_value session.cookie_samesite = "Lax"
+    php_value session.cookie_secure = 1
 </IfModule>
 
 # Landing URL from flyers

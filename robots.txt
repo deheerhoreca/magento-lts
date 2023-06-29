@@ -268,4 +268,5 @@ User-agent: SemrushBot-CT
 User-agent: SemrushBot-BM
 User-agent: DnBCrawler-Analytics
 User-agent: DataForSEO
+User-agent: SeekportBot
 Disallow: /

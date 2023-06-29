@@ -10430,7 +10430,7 @@
 
   .info-box-not-found {
     background: url(/skin/frontend/rwd/dhh/images/sadklaas.jpg) 90% 90% no-repeat;
-    background-size: contain;
+    background-size: contain !important;
   }
 
   .info-box-inner {
@@ -11075,6 +11075,11 @@
   .sooqrSearchContainer div.sqr-results.sqr-grid div.sqr-image img {
     background-color: transparent !important;
   }
+  
+  .sqr-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 
   /* BLACK FRIDAY */
 
@@ -11490,18 +11495,24 @@
 
 /* Mouse-only rules */
 @media (min-width: 992px) and (hover: hover) and (pointer: fine) {
+  .scale-xs img,
   .scale-1 img,
   .scale-2 img,
   .scale-3 img {
     transition: transform 150ms ease;
   }
 
+  .scale-xs:hover img,
   .scale-1:hover img,
   .scale-2:hover img,
   .scale-3:hover img {
     transition-property: transform;
     transition-duration: 300ms;
     transition-timing-function: ease;
+  }
+
+  .scale-xs:hover img {
+    transform: scale(1.00);
   }
 
   .scale-1:hover img {

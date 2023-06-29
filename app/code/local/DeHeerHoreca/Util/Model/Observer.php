@@ -4,11 +4,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   public function __construct() {}
   
+  // Lock some attributes from editing
   public function updateProductOnEdit($observer) {
     $event = $observer->getEvent();
     $product = $event->getProduct();
     // $product->lockAttribute("cost");
-    $product->lockAttribute("price_min");
+    // $product->lockAttribute("price_min");
     $product->lockAttribute("recommended_product");
     $product->lockAttribute("additional_attributes");
     $product->lockAttribute("automation_flags_json");
@@ -26,6 +27,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   // Also used directly in resave_all_products.php
   public function updateProductBeforeSave($observer_or_product) {
     if(get_class($observer_or_product) === "Varien_Event_Observer") {
+      if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS")
+      && MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS === true) {
+        return;
+      }
       $product = $observer_or_product->getProduct();
       $return = false;
     } else {
@@ -195,7 +200,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   // Also used directly in resave_all_products.php
   public function updateProductAfterSave($observer_or_product) {
+    
     if(get_class($observer_or_product) === "Varien_Event_Observer") {
+      if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS")
+      && MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS === true) {
+        return;
+      }
       $product = $observer_or_product->getProduct();
       $return = false;
     } else {

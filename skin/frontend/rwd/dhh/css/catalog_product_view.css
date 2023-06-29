@@ -89,6 +89,10 @@
     line-height: 3em;
     font-weight: 700;
   }
+  
+  ul.products-grid ul.product-list-highlights {
+    margin-top: .1em;
+  }
 
   ul.products-grid-mini .price-box .price-excluding-tax {
     line-height: 1em;

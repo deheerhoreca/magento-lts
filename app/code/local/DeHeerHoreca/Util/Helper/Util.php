@@ -478,6 +478,22 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return [];
   }
   
+  // Central place to keep fallback logic of product description
+  public static function _get_product_description(object $_product) {
+    $value = $_product->getDescription();
+    if(strlen($value) < 10) {
+      $value = $_product->getSupplierDescription();
+    }
+    if(strlen($value) < 10) {
+      $value = $_product->getName();
+    }
+    if(strlen($value) > 0) {
+      return $value;
+    }
+    
+    return false;
+  }
+  
   // Sync with list.phtml
   // NOTICE: Add used attributes to getProductAttributes()
   public function getProductUsps($_product, $options = [], $max_count = 100): array {

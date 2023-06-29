@@ -146,5 +146,10 @@
         <Fooman_SameOrderInvoiceNumber>
           <active>false</active>
         </Fooman_SameOrderInvoiceNumber>
+        
+        <!-- Disabling this breaks stuff -->
+        <Mage_AdminNotification>
+          <active>true</active>
+        </Mage_AdminNotification>
     </modules>
 </config>

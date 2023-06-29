@@ -15,6 +15,8 @@
         <remove/>
       </set_name>
 
+      <!-- To enable, also enable addWebsiteNamesToResult() -->
+      <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
       <websites>
         <remove/>
       </websites>
@@ -26,30 +28,25 @@
         </updateColumn>
       </entity_id>
       
-      <name>
-        <updateColumn>
-          <width>30%</width>
-        </updateColumn>
-      </name>
-      
-      <massaction>
-        <updateColumn>
-          <width>5%</width>
-        </updateColumn>
-      </massaction>
-      
       <sku>
         <updateColumn>
           <header>SKU</header>
           <width>8%</width>
         </updateColumn>
-        <after>name</after>
       </sku>
+      
+      <name>
+        <updateColumn>
+          <width>30%</width>
+        </updateColumn>
+        <after>sku</after>
+      </name>
       
       <type>
         <updateColumn>
           <width>100</width>
         </updateColumn>
+        <after>name</after>
       </type>
       
       <visibility>
@@ -102,6 +99,8 @@
         <after>manufacturer</after>
       </ean>
       
+      <!-- To enable, also enable code block in -->
+      <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
       <qty>
         <remove/>
       </qty>
@@ -126,12 +125,30 @@
         </add>
         <after>product_type</after>
       </bol_category>
+      
+      <massaction>
+        <updateColumn>
+          <width>5%</width>
+        </updateColumn>
+      </massaction>
 
     </productGrid>
     
     <!-- Category Products Grid -->
     
     <catalog_category_products>
+      
+      <entity_id>
+        <!-- <remove/> -->
+      </entity_id>
+      
+      <sku>
+        <after>name</after>
+      </sku>
+      
+      <name>
+        <after>sku</after>
+      </name>
       
       <product_type>
         <add>
@@ -150,7 +167,7 @@
           <index>status</index>
           <options>catalog/product_status::getOptionArray</options>
         </add>
-        <after>name</after>
+        <after>product_type</after>
       </status>
       
       <eol>
@@ -163,15 +180,15 @@
         <after>status</after>
       </eol>
       
-      <supplier>
-        <add>
-          <header>Leverancier</header>
-          <type>options</type>
-          <index>supplier</index>
-          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options>
-        </add>
-        <after>eol</after>
-      </supplier>
+      <!-- <supplier> -->
+        <!-- <add> -->
+          <!-- <header>Leverancier</header> -->
+          <!-- <type>options</type> -->
+          <!-- <index>supplier</index> -->
+          <!-- <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(supplier)</options> -->
+        <!-- </add> -->
+        <!-- <after>eol</after> -->
+      <!-- </supplier> -->
 
       <manufacturer>
         <add>
@@ -180,16 +197,12 @@
           <index>manufacturer</index>
           <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(manufacturer)</options>
         </add>
-        <after>supplier</after>
+        <after>eol</after>
       </manufacturer>
       
       <qty>
         <remove/>
       </qty>
-      
-      <entity_id>
-        <remove/>
-      </entity_id>
       
     </catalog_category_products>
     
@@ -253,6 +266,10 @@
         <after>attribute_code</after>
       </attribute_id>
       
+      <attribute_code>
+        <after>attribute_id</after>
+      </attribute_code>
+      
       <position>
         <add>
           <align>center</align>
@@ -261,8 +278,18 @@
           <index>position</index>
           <width>50</width>
         </add>
-        <after>attribute_id</after>
+        <after>attribute_code</after>
       </position>
+    
+      <frontend_label>
+        <add>
+          <header>Label</header>
+          <type>text</type>
+          <index>frontend_label</index>
+          <width>200</width>
+        </add>
+        <after>position</after>
+      </frontend_label>
       
       <frontend_input>
         <add>
@@ -272,28 +299,28 @@
           <index>frontend_input</index>
           <width>100</width>
         </add>
-        <after>attribute_code</after>
+        <after>frontend_label</after>
       </frontend_input>
     
-      <is_html_allowed_on_front>
-        <add>
-          <align>center</align>
-          <header>HTML</header>
-          <type>options</type>
-          <index>is_html_allowed_on_front</index>
-          <options>
-            <option_1>
-              <key>1</key>
-              <value>Ja</value>
-            </option_1>
-            <option_0>
-              <key>0</key>
-              <value>Nee</value>
-            </option_0>
-          </options>
-        </add>
-        <after>is_global</after>
-      </is_html_allowed_on_front>
+      <!-- <is_html_allowed_on_front> -->
+        <!-- <add> -->
+          <!-- <align>center</align> -->
+          <!-- <header>HTML</header> -->
+          <!-- <type>options</type> -->
+          <!-- <index>is_html_allowed_on_front</index> -->
+          <!-- <options> -->
+            <!-- <option_1> -->
+              <!-- <key>1</key> -->
+              <!-- <value>Ja</value> -->
+            <!-- </option_1> -->
+            <!-- <option_0> -->
+              <!-- <key>0</key> -->
+              <!-- <value>Nee</value> -->
+            <!-- </option_0> -->
+          <!-- </options> -->
+        <!-- </add> -->
+        <!-- <after>is_global</after> -->
+      <!-- </is_html_allowed_on_front> -->
       
       <is_used_for_promo_rules>
         <add>
@@ -312,27 +339,28 @@
             </option_0>
           </options>
         </add>
-        <after>is_global</after>
+        <after>frontend_label</after>
       </is_used_for_promo_rules>
       
       <is_visible_in_advanced_search>
-        <add>
-          <align>center</align>
-          <header>Adv. Search</header>
-          <type>options</type>
-          <index>is_visible_in_advanced_search</index>
-          <options>
-            <option_1>
-              <key>1</key>
-              <value>Ja</value>
-            </option_1>
-            <option_0>
-              <key>0</key>
-              <value>Nee</value>
-            </option_0>
-          </options>
-        </add>
-        <after>is_global</after>
+        <remove />
+        <!-- <add> -->
+          <!-- <align>center</align> -->
+          <!-- <header>Adv. Search</header> -->
+          <!-- <type>options</type> -->
+          <!-- <index>is_visible_in_advanced_search</index> -->
+          <!-- <options> -->
+            <!-- <option_1> -->
+              <!-- <key>1</key> -->
+              <!-- <value>Ja</value> -->
+            <!-- </option_1> -->
+            <!-- <option_0> -->
+              <!-- <key>0</key> -->
+              <!-- <value>Nee</value> -->
+            <!-- </option_0> -->
+          <!-- </options> -->
+        <!-- </add> -->
+        <!-- <after>frontend_label</after> -->
       </is_visible_in_advanced_search>
       
       <used_in_product_listing>
@@ -352,8 +380,20 @@
             </option_0>
           </options>
         </add>
-        <after>is_global</after>
+        <after>frontend_label</after>
       </used_in_product_listing>
+      
+      <is_global>
+        <remove />
+      </is_global>
+      
+      <is_user_defined>
+        <remove />
+      </is_user_defined>
+      
+      <is_comparable>
+        <remove />
+      </is_comparable>
     
     </attributeGrid>
     

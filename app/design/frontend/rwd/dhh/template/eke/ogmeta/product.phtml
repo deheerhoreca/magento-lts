@@ -36,15 +36,9 @@ if(empty($html) === false) {
   }
   $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);
   
-  if($helper->isProductShortEnabled()) {
-    $productDescription = htmlentities(strip_tags($product->getShortDescription()));
-  } else {
-    $productDescription = htmlentities(strip_tags($product->getDescription()));
-  }
-  
-  // Fallback for when there is no description
-  if(strlen($productDescription) < 10) {
-    $productDescription = htmlentities($product->getName());
+  $productDescription = Mage::helper("deheerhoreca_util/util")->_get_product_description($product);
+  if(strlen($productDescription) > 0) {
+    $productDescription = htmlentities(strip_tags($productDescription));
   }
   
   // Remove newlines, trim, limit to 200 chars
