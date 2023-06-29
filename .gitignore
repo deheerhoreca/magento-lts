@@ -18,6 +18,11 @@
 # Openmage config
 /app/etc/local.xml
 
+# CM Redis
+/app/code/community/Cm
+/app/etc/modules/Cm_RedisSession.xml
+/lib/Credis
+
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
 # https://github.com/OpenMage/magento-lts/pull/1836
 /dev/testfield
@@ -62,6 +67,20 @@
 # PHP-CS-Fixer cache
 .php-cs-fixer.cache
 
+# Ignore custom config files
+.php-cs-fixer*
+!.php-cs-fixer.dist.*
+
+.phpcs*.xml
+!.phpcs*.xml.dist
+
+phpstan*.neon
+!phpstan.dist.*.neon
+
+# dev scripts loaded via composer
+/shell/update-copyright.php
+/shell/translations.php
+
 # DHH
 
 /sitemap_*.xml
@@ -84,36 +103,25 @@ bridge_*.php
 /downloader/cache.cfg
 /downloader/connect.cfg
 
-vendor/
+/google*.html
+/BingSiteAuth.xml
 
-google*.html
-BingSiteAuth.xml
+/media/wysiwyg/.thumbs/
 
-media/wysiwyg/.thumbs/
-
-.modman/*/.git
+/.modman/*/.git
 
 !/media/static
-.well-known/
+/.well-known/
 
 # Store Manager
-tmp/
-
-# OpenMage
-.all-contributorsrc
-.github/
-.htaccess.sample
-SECURITY.md
-index.php.sample
+/tmp/
 
 # Biller webhook
-biller-webhook-errors.jsonl
-biller-webhook.jsonl
+/biller-webhook-errors.jsonl
+/biller-webhook.jsonl
 
-nohup.out
-nohup*.out
-*desktop.ini
-algolia_*.json
-_maintenance.flag
-maintenance.flag
-.idea/
+/nohup.out
+/nohup*.out
+/algolia_*.json
+/maintenance.flag
+/.idea

@@ -197,9 +197,9 @@ table.actions td                { vertical-align:top; }
 .grid tr.filter th.last          { border-right:0; }
 .grid tr.filter input.input-text { width:85%; }
 .grid tr.filter select           { width:100%; }
-.grid tr.filter .range .range-line { margin-bottom:3px; width:100px; }
+.grid tr.filter .range .range-line { margin-bottom:3px; width:90px; }
 .grid tr.filter .range div.date  { min-width:121px; }
-.grid tr.filter .range input     { width:60px !important; margin-top:0; }
+.grid tr.filter .range input     { width:50px !important; margin-top:0; }
 .grid tr.filter .range select    { float:right; width:65px !important; margin-top:0; }
 .grid tr.filter .range .label    { display:block; width:30px; float:left; padding-right:3px; text-align:right; }
 .grid tr.filter .date img        { width:15px; height:15px; cursor:pointer; vertical-align:middle; padding-left:3px; }
@@ -337,11 +337,9 @@ label.inline                            { float:none !important; width:auto !imp
 #coupon_container .entry-edit { min-width:310px; }
 
 /* Form Elements */
-input.input-text,input.input-color,textarea,select { border-width:1px; border-style:solid; border-color:#aaa #c8c8c8 #c8c8c8 #aaa; background:#fff; font:12px arial, helvetica, sans-serif; }
+input.input-text,textarea,select { border-width:1px; border-style:solid; border-color:#aaa #c8c8c8 #c8c8c8 #aaa; background:#fff; font:12px arial, helvetica, sans-serif; }
 select { min-height:17px; /* to set the height for empty selects */ }
 input.input-text,textarea       { padding:2px; }
-input.input-color               { padding:2px; width:222px !important; }
-input.input-color-html5         { width:48px !important; }
 input.qty                       { width:40px !important; }
 input.item-qty                  { width:22px !important; }
 input.price                     { width:50px !important; text-align:right; }
@@ -1503,6 +1501,7 @@ ul.super-product-attributes { padding-left:15px; }
 .link-feed { background:url(images/icon_feed.gif) no-repeat left 2px; padding-left:18px; }
 
 #page-help-link {
+    display: none;
     line-height:26px;
     padding-left:20px;
     color:#ebebff;

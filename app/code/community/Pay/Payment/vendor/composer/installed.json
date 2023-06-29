@@ -1,14 +1,9 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "dd6811714d41555273ed44d9e5b3792f",
     "packages": [
         {
             "name": "paynl/sdk",
             "version": "v1.6.5",
+            "version_normalized": "1.6.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/sdk.git",
@@ -32,7 +27,9 @@
             "suggest": {
                 "ext-simplexml": "*"
             },
+            "time": "2021-10-22T14:40:13+00:00",
             "type": "library",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Paynl\\": "src/"
@@ -52,11 +49,12 @@
                 "issues": "https://github.com/paynl/sdk/issues",
                 "source": "https://github.com/paynl/sdk/tree/v1.6.5"
             },
-            "time": "2021-10-22T14:40:13+00:00"
+            "install-path": "../paynl/sdk"
         },
         {
             "name": "php-curl-class/php-curl-class",
             "version": "9.17.2",
+            "version_normalized": "9.17.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-curl-class/php-curl-class.git",
@@ -85,7 +83,9 @@
             "suggest": {
                 "ext-mbstring": "*"
             },
+            "time": "2023-06-27T01:06:30+00:00",
             "type": "library",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Curl\\": "src/Curl/"
@@ -128,16 +128,9 @@
                 "issues": "https://github.com/php-curl-class/php-curl-class/issues",
                 "source": "https://github.com/php-curl-class/php-curl-class/tree/9.17.2"
             },
-            "time": "2023-06-27T01:06:30+00:00"
+            "install-path": "../php-curl-class/php-curl-class"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
-    "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "dev": true,
+    "dev-package-names": []
 }

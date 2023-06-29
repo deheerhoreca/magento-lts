@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => '__root__',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '18dbfcc6b9a52d7b39866355ba7823f1ea3a5135',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '18dbfcc6b9a52d7b39866355ba7823f1ea3a5135',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'paynl/sdk' => array(
+            'pretty_version' => 'v1.6.5',
+            'version' => '1.6.5.0',
+            'reference' => '7b35dc4e579280d34f12ba519fa6aaaca7d8b543',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../paynl/sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-curl-class/php-curl-class' => array(
+            'pretty_version' => '9.17.2',
+            'version' => '9.17.2.0',
+            'reference' => '60055da5b5ae91f9d8f4688d363483954ec640dd',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-curl-class/php-curl-class',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

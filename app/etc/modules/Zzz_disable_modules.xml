@@ -16,9 +16,6 @@
         <AW_Searchautocomplete>
             <active>false</active>
         </AW_Searchautocomplete>
-        <Phoenix_Moneybookers>
-            <active>false</active>
-        </Phoenix_Moneybookers>
         <Mage_Poll>
             <active>false</active>
         </Mage_Poll>
