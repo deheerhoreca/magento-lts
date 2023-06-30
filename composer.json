@@ -27,7 +27,6 @@
         "cweagans/composer-patches": "^1.7",
         "magento-hackathon/magento-composer-installer": "^3.1 || ^2.1 || ^4.0",
         "michelf/php-markdown": "^2.0",
-        "openmage/module-mage-pagecache": "^1.0",
         "pelago/emogrifier": "^7.0",
         "phpseclib/mcrypt_compat": "^2.0",
         "sabberworm/php-css-parser": "^8.4",

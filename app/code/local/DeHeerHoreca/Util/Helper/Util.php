@@ -222,10 +222,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function markdownToHtml($string) {
+    if(!is_string($string)) $string = ""; # Prevent type issues with defaultTransform()
     return Markdown::defaultTransform($string);
   }
   
   public function markdownExtraToHtml($string) {
+    if(!is_string($string)) $string = ""; # Prevent type issues with defaultTransform()
     return MarkdownExtra::defaultTransform($string);
   }
 

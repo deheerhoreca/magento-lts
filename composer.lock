@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9769d96437b52cb9dd5a3baa8dd24717",
+    "content-hash": "beab8c027e50e2f00f9291822d0078a0",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-redis",
@@ -556,41 +556,6 @@
                 "source": "https://github.com/michelf/php-markdown/tree/2.0.0"
             },
             "time": "2022-09-26T12:21:08+00:00"
-        },
-        {
-            "name": "openmage/module-mage-pagecache",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OpenMage/module-mage-pagecache.git",
-                "reference": "01610df61c4e6193ac2bf127779885a45ed60e07"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OpenMage/module-mage-pagecache/zipball/01610df61c4e6193ac2bf127779885a45ed60e07",
-                "reference": "01610df61c4e6193ac2bf127779885a45ed60e07",
-                "shasum": ""
-            },
-            "require": {
-                "magento-hackathon/magento-composer-installer": "*"
-            },
-            "type": "magento-module",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "OSL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Sven Reichel",
-                    "homepage": "https://github.com/sreichel"
-                }
-            ],
-            "description": "Mage_PageCache classes for backward compatibility.",
-            "support": {
-                "issues": "https://github.com/OpenMage/module-mage-pagecache/issues",
-                "source": "https://github.com/OpenMage/module-mage-pagecache/tree/v1.0.0"
-            },
-            "time": "2022-12-17T00:39:52+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
