@@ -154,13 +154,15 @@ class Mage_Tag_Model_Resource_Indexer_Summary extends Mage_Catalog_Model_Resourc
                         'tr.store_id',
                         'customers'         => 'COUNT(DISTINCT tr.customer_id)',
                         'products'          => 'COUNT(DISTINCT tr.product_id)',
-                        'popularity'        => 'COUNT(tr.customer_id) + MIN('
+                        // DHH CORE HACK --  https://github.com/OpenMage/magento-lts/commit/665a9e440d5524c57a8f6210c7221ff323c88a9c
+                        'popularity'        => new Zend_Db_Expr(
+                            'COUNT(tr.customer_id) + MIN('
                             . $writeAdapter->getCheckSql(
                                 'tp.base_popularity IS NOT NULL',
                                 'tp.base_popularity',
                                 '0'
-                            )
-                            . ')',
+                            ) . ')'
+                        ),
                         'uses'              => new Zend_Db_Expr(0), // deprecated since 1.4.0.1
                         'historical_uses'   => new Zend_Db_Expr(0), // deprecated since 1.4.0.1
                         'base_popularity'   => new Zend_Db_Expr(0)  // deprecated since 1.4.0.1
