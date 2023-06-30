@@ -22,7 +22,17 @@
     "ext-simplexml": "*",
     "ext-soap": "*",
     "ext-zlib": "*",
-    "magento-hackathon/magento-composer-installer": "^3.1 || ^2.1 || ^4.0"
+    "colinmollenhour/cache-backend-redis": "^1.16",
+    "colinmollenhour/magento-redis-session": "^3.1",
+    "cweagans/composer-patches": "^1.7",
+    "magento-hackathon/magento-composer-installer": "^3.1 || ^2.1 || ^4.0",
+    "michelf/php-markdown": "^2.0",
+    "openmage/module-mage-pagecache": "^1.0",
+    "pelago/emogrifier": "^7.0",
+    "phpseclib/mcrypt_compat": "^2.0",
+    "sabberworm/php-css-parser": "^8.4",
+    "shardj/zf1-future": "^1.22",
+    "symfony/css-selector": "^5.4"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
