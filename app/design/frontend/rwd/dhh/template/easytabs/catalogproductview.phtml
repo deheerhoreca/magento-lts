@@ -51,6 +51,9 @@ if(empty($categoryIds) === false) {
 $productlabel           = _get_product_attribute($_product, "product_label");
 $nofrost_method         = _get_product_attribute($_product, "ontdooisysteem");
 $energy_rating          = _get_product_attribute($_product, "energy_efficiency_class_a_g");
+if(empty($energy_rating) || $energy_rating === "N.v.t.") {
+  $energy_rating          = _get_product_attribute($_product, "energieklasse");
+}
 $refrigerant            = _get_product_attribute($_product, "refrigerant");
 $voltage                = _get_product_attribute($_product, "voltage");
 $productTitle           = $_helper->productAttribute($_product, $_product->getName(), "name");
@@ -783,7 +786,7 @@ $additional_attributes = Mage::helper("deheerhoreca_util/util")->markdownExtraTo
 /* PRODUCT DESCRIPTION */
 
 // Configurable products: Print attribute/stock table
-if($saleable === true && $this->hasOptions()) {
+if($saleable === true && $_product->canConfigure()) {
   $product_description .= "<h3>Varianten</h3>";
   $product_description .= "<p class='py-0'>De {$product_title_short} kent meerdere varianten. Configureer het product eenvoudig voordat je het koopt.</p>";
   $product_description .= _print_configurable_table($_product);
