@@ -145,5 +145,15 @@
         <Mage_AdminNotification>
           <active>true</active>
         </Mage_AdminNotification>
+        
+        <!-- We have Mage_GoogleAnalytics -->
+        <MagePal_GoogleTagManager>
+          <active>false</active>
+        </MagePal_GoogleTagManager>
+        
+        <!-- Leads to templatehints in sales emails, only enable when needed! -->
+        <Aoe_TemplateHints>
+          <active>false</active>
+        </Aoe_TemplateHints>
     </modules>
 </config>

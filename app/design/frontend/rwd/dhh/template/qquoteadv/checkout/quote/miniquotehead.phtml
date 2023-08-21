@@ -25,12 +25,17 @@
  * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
 
-$qty = $this->getTotalQty() ?? 0;
+// No cookie, no cart
+if(empty($_COOKIE[\Mage_Core_Controller_Front_Action::SESSION_NAMESPACE])) {
+  $qty = 0;
+} else {
+  $qty = $this->getTotalQty() ?? 0;
+}
 ?>
 <!-- header_miniquote_start -->
 <span class="header-miniquote">
   
-  <a href="<?php echo Mage::getUrl("qquoteadv/index/"); ?>" data-target-element="#header-quote" class="skip-quote <?php if ($qty <= 0): ?> no-count<?php endif; ?> top-link" title="Lease en Offerte Winkelwagen">
+  <a href="<?php echo Mage::getUrl("qquoteadv/index/"); ?>" data-target-element="#header-quote" class="skip-quote <?php if ($qty <= 0): ?>no-count <?php endif; ?>top-link" title="Lease, Mondu en Offerte Winkelwagen">
     <i class="fa fa-calculator fa-2x fa-fw"></i>
     <?php if($qty > 0) {
       /* This used to be a div (not allowed in HTML validator) */ ?>
@@ -48,5 +53,4 @@ $qty = $this->getTotalQty() ?? 0;
   // </span>
   ?>
 </span>
-
 <!-- header_miniquote_end -->

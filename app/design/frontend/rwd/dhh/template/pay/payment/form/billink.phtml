@@ -6,26 +6,24 @@ $_code = $this->getMethodCode();
 $instructions = $this->getInstructions();
 
 $dob = $this->getDob();
-if (! empty($dob)) {
-    list($dobYear,$dobMonth,$dobDay) = explode('-', $dob);
+if(!empty($dob)) {
+  list($dobYear,$dobMonth,$dobDay) = explode('-', $dob);
 } else {
-    $dobYear = '';
-    $dobMonth = '';
-    $dobDay = '';
+  $dobYear = '';
+  $dobMonth = '';
+  $dobDay = '';
 }
 
-$enablePersonal = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_personal',
-        Mage::app()->getStore());
-$enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_business',
-        Mage::app()->getStore());
+$enablePersonal = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_personal', Mage::app()->getStore());
+$enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_business', Mage::app()->getStore());
 ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
 
     <?php
     if ($enablePersonal == 1 && $enableBusiness == 1) {
         ?>
-        Type bestelling:
-        <li><input onchange="document.getElementById('paynl-data-personal').style.display='';document.getElementById('paynl-data-business').style.display='none';" type="radio" name="payment[type_order]" id="type_order_p" value="p" /> <label for="type_order_p">Persoonlijk</label></li>
+        Is dit een zakelijke bestelling?
+        <li><input onchange="document.getElementById('paynl-data-personal').style.display='';document.getElementById('paynl-data-business').style.display='none';" type="radio" name="payment[type_order]" id="type_order_p" value="p" /> <label for="type_order_p">Consument</label></li>
         <li><input onchange="document.getElementById('paynl-data-personal').style.display='none';document.getElementById('paynl-data-business').style.display='';" type="radio" name="payment[type_order]" id="type_order_b" value="b" /> <label for="type_order_b">Zakelijk</label></li>
         <?php
     }

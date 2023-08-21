@@ -4,8 +4,80 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "beab8c027e50e2f00f9291822d0078a0",
+    "content-hash": "7f86e8c77c81f075afb880824b29d799",
     "packages": [
+        {
+            "name": "aoepeople/aoe_dbretry",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AOEpeople/Aoe_DbRetry.git",
+                "reference": "70eedfefa24530243d4df949f9ae09654ab16b18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AOEpeople/Aoe_DbRetry/zipball/70eedfefa24530243d4df949f9ae09654ab16b18",
+                "reference": "70eedfefa24530243d4df949f9ae09654ab16b18",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": ">= 5.4"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Lee Saferite",
+                    "email": "lee.saferite@aoe.com"
+                }
+            ],
+            "description": "Magento DB adapter that will retry lost connections and deadlocks",
+            "support": {
+                "issues": "https://github.com/AOEpeople/Aoe_DbRetry/issues",
+                "source": "https://github.com/AOEpeople/Aoe_DbRetry/tree/master"
+            },
+            "time": "2018-01-25T10:04:19+00:00"
+        },
+        {
+            "name": "aoepeople/aoe_templatehints",
+            "version": "v0.4.4",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:AOEpeople/Aoe_TemplateHints.git",
+                "reference": "417bc451fbbe5f51e093af249a8a4b3ee54fee3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AOEpeople/Aoe_TemplateHints/zipball/417bc451fbbe5f51e093af249a8a4b3ee54fee3b",
+                "reference": "417bc451fbbe5f51e093af249a8a4b3ee54fee3b",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "replace": {
+                "aoemedia/aoe_templatehints": "*",
+                "fbrnc/aoe_templatehints": "*"
+            },
+            "type": "magento-module",
+            "license": [
+                "GPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Fabrizio Branca",
+                    "email": "{firtname}.{lastname}@aoe.com"
+                }
+            ],
+            "description": "Advanced Template Hints for Magento",
+            "homepage": "http://www.fabrizio-branca.de/magento-advanced-template-hints-20.html",
+            "time": "2017-03-23T15:56:07+00:00"
+        },
         {
             "name": "colinmollenhour/cache-backend-redis",
             "version": "1.16.0",
@@ -822,16 +894,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.20",
+            "version": "3.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "543a1da81111a0bfd6ae7bbc2865c5e89ed3fc67"
+                "reference": "4580645d3fc05c189024eb3b834c6c1e4f0f30a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/543a1da81111a0bfd6ae7bbc2865c5e89ed3fc67",
-                "reference": "543a1da81111a0bfd6ae7bbc2865c5e89ed3fc67",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/4580645d3fc05c189024eb3b834c6c1e4f0f30a1",
+                "reference": "4580645d3fc05c189024eb3b834c6c1e4f0f30a1",
                 "shasum": ""
             },
             "require": {
@@ -912,7 +984,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.20"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.21"
             },
             "funding": [
                 {
@@ -928,7 +1000,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-13T06:30:34+00:00"
+            "time": "2023-07-09T15:24:48+00:00"
         },
         {
             "name": "psr/container",
@@ -2631,16 +2703,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.20.0",
+            "version": "v3.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "0e8249e0b15e2bc022fbbd1090ce29d071481e69"
+                "reference": "f29a0598c022baf99d2136da533820fec63167ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/0e8249e0b15e2bc022fbbd1090ce29d071481e69",
-                "reference": "0e8249e0b15e2bc022fbbd1090ce29d071481e69",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/f29a0598c022baf99d2136da533820fec63167ed",
+                "reference": "f29a0598c022baf99d2136da533820fec63167ed",
                 "shasum": ""
             },
             "require": {
@@ -2715,7 +2787,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.20.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.21.0"
             },
             "funding": [
                 {
@@ -2723,7 +2795,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-27T20:22:39+00:00"
+            "time": "2023-07-05T21:28:10+00:00"
         },
         {
             "name": "macopedia/phpstan-magento1",
@@ -2766,16 +2838,16 @@
         },
         {
             "name": "magento-ecg/coding-standard",
-            "version": "4.5.2",
+            "version": "4.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento-ecg/coding-standard.git",
-                "reference": "4269fe560c0b20b30ccfdb76b745d23f34996b0c"
+                "reference": "1db1da45447682108c63ea94ce07119a002a6504"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-ecg/coding-standard/zipball/4269fe560c0b20b30ccfdb76b745d23f34996b0c",
-                "reference": "4269fe560c0b20b30ccfdb76b745d23f34996b0c",
+                "url": "https://api.github.com/repos/magento-ecg/coding-standard/zipball/1db1da45447682108c63ea94ce07119a002a6504",
+                "reference": "1db1da45447682108c63ea94ce07119a002a6504",
                 "shasum": ""
             },
             "require": {
@@ -2797,9 +2869,9 @@
             "homepage": "https://github.com/magento-ecg/coding-standard",
             "support": {
                 "issues": "https://github.com/magento-ecg/coding-standard/issues",
-                "source": "https://github.com/magento-ecg/coding-standard/tree/4.5.2"
+                "source": "https://github.com/magento-ecg/coding-standard/tree/v4.5.2"
             },
-            "time": "2022-12-06T11:33:03+00:00"
+            "time": "2023-07-05T15:24:16+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -3237,16 +3309,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.21",
+            "version": "1.10.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5"
+                "reference": "578f4e70d117f9a90699324c555922800ac38d8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5",
-                "reference": "b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/578f4e70d117f9a90699324c555922800ac38d8c",
+                "reference": "578f4e70d117f9a90699324c555922800ac38d8c",
                 "shasum": ""
             },
             "require": {
@@ -3295,7 +3367,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-21T20:07:58+00:00"
+            "time": "2023-07-06T12:11:37+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3617,16 +3689,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.9",
+            "version": "9.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a9aceaf20a682aeacf28d582654a1670d8826778"
+                "reference": "a6d351645c3fe5a30f5e86be6577d946af65a328"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a9aceaf20a682aeacf28d582654a1670d8826778",
-                "reference": "a9aceaf20a682aeacf28d582654a1670d8826778",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a6d351645c3fe5a30f5e86be6577d946af65a328",
+                "reference": "a6d351645c3fe5a30f5e86be6577d946af65a328",
                 "shasum": ""
             },
             "require": {
@@ -3700,7 +3772,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.9"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.10"
             },
             "funding": [
                 {
@@ -3716,7 +3788,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-11T06:13:56+00:00"
+            "time": "2023-07-10T04:04:23+00:00"
         },
         {
             "name": "psr/cache",
@@ -5593,7 +5665,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "aoepeople/aoe_dbretry": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -22,6 +22,8 @@
         "ext-simplexml": "*",
         "ext-soap": "*",
         "ext-zlib": "*",
+        "aoepeople/aoe_dbretry": "dev-master",
+        "aoepeople/aoe_templatehints": "^0.4.4",
         "colinmollenhour/cache-backend-redis": "^1.16",
         "colinmollenhour/magento-redis-session": "^3.1",
         "cweagans/composer-patches": "^1.7",
@@ -88,6 +90,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "cweagans/composer-patches": true
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "apcu-autoloader": true
     }
 }

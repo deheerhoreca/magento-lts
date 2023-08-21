@@ -311,28 +311,19 @@
 
 # DHH ADDITIONS
 
-# OPENMAGE ADMIN (admin4JN0)
-<If "%{THE_REQUEST} =~ /admin4JN0/">
-  
-  <IfModule mod_php7.c>
-    php_value max_execution_time 1800
-    #php_value memory_limit 1G
-  </IfModule>
-  
-</If>
-
-# FRONT-END
-<Else>
-  
-</Else>
-
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff)$)[^\.]+?$">
-#  Header add Link "<//ajax.cloudflare.com>;rel=preconnect; crossorigin"
-#  Header add Link "<//cdn.jsdelivr.net>;rel=preconnect; crossorigin"
-#  Header add Link "<//cdnjs.cloudflare.com>;rel=preconnect"
-  Header add Link "<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.google-analytics.com>;rel=preconnect; crossorigin,<//ssl.google-analytics.com>;rel=preconnect; crossorigin,<//region1.google-analytics.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//stats.g.doubleclick.net>;rel=preconnect; crossorigin,<//www.google.com>;rel=preconnect; crossorigin,<//www.google.nl>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
+  # Header add Link "<//ajax.cloudflare.com>;rel=preconnect; crossorigin"
+  # Header add Link "<//cdn.jsdelivr.net>;rel=preconnect; crossorigin"
+  # Header add Link "<//cdnjs.cloudflare.com>;rel=preconnect"
+  # Header add Link "<//www.google-analytics.com>;rel=preconnect; crossorigin"
+  # Header add Link "<//ssl.google-analytics.com>;rel=preconnect; crossorigin"
+  # Header add Link "<//region1.google-analytics.com>;rel=preconnect; crossorigin"
+  # Header add Link "<//stats.g.doubleclick.net>;rel=preconnect; crossorigin"
+  # Header add Link "<//www.google.com>;rel=preconnect; crossorigin"
+  # Header add Link "<//www.google.nl>;rel=preconnect; crossorigin"
+   Header add Link "<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
 </FilesMatch>
 
 <IfModule mod_deflate.c>
@@ -414,24 +405,26 @@
     Header set Cache-control "max-age=0, no-cache"
 
     <RequireAll>
-        Require ip 149.210.249.150 185.127.111.227 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.227
+      Require ip 149.210.249.150 185.127.111.227 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.227
     </RequireAll>
 </If>
 # END DEVELOPMENT SETTINGS
 
-# Do not listen to /index.php? requests, redirect them
-RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
-RewriteCond %{THE_REQUEST} ^.*/index.php
-RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+# DHH REDIRECTS
+<IfModule mod_rewrite.c>
 
-# Redirects file.php to view.php
-RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
+  # REDUCE 404s
+  RedirectMatch 301 (?i)/apple(-touch-icon-.*)?.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
+  RedirectMatch 301 /apple-touch-icon.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
 
-<IfModule mod_php7.c>
-    php_value suhosin.session.encrypt=off
-    php_value elastic_apm.service_name "chefstore_nl"
-    php_value session.cookie_samesite = "Lax"
-    php_value session.cookie_secure = 1
+  # Do not listen to /index.php? requests, redirect them
+  RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
+  RewriteCond %{THE_REQUEST} ^.*/index.php
+  RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+
+  # Redirects file.php to view.php
+  RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
+  
 </IfModule>
 
 # Landing URL from flyers

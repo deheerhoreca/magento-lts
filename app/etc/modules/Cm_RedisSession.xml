@@ -1,8 +1,1 @@
-<config>
-  <modules>
-    <Cm_RedisSession>
-      <active>false</active>
-      <codePool>community</codePool>
-    </Cm_RedisSession>
-  </modules>
-</config>
+../../../vendor/colinmollenhour/magento-redis-session/app/etc/modules/Cm_RedisSession.xml

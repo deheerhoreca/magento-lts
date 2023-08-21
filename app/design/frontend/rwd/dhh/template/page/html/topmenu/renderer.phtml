@@ -35,7 +35,14 @@ foreach($children as $child) {
   }
   $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   
-  if($childLevel < 2) $html .= "<li {$this->_getRenderedMenuItemAttributes($child)}>";
+  if($childLevel < 2) {
+    $attributes = $this->_getRenderedMenuItemAttributes($child);
+    // if($childlevel === 0) {
+      // $attributes = "class='level0'";
+    // }
+    $attributes = "class='level{$childLevel}'";
+    $html .= "<li {$attributes}>";
+  }
   $html .= "<a title=\"{$category_name}\" href='{$url}' >{$category_name}</a>";
 
   if($_hasChildren) {

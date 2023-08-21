@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
 ?>
 <?php
 /**
@@ -27,15 +27,7 @@ if($this->getSortFeaturedFirst()) { ?>
 <?php
 }
 
-// Pre-process attributes
 $items = $this->getItemsAsArray();
-// foreach($items as $key => $item) {
-  // if(empty($item["count"]) === false) $item["count"] = (int) $item["count"];
-  // if(_dhh_debug()) var_dump($item["count"]);
-  // if(isset($item["count"]) && is_numeric($item["count"]) && $item["count"] > 1000) {
-    // $items[$key]["count"] = "1000+";
-  // }
-// }
 
 switch ($this->getDisplayType()) {
   case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY:

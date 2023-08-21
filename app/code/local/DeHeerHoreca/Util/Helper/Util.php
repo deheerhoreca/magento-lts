@@ -179,7 +179,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $manufacturer_col = $_products->getColumnValues("manufacturer");
     
     if(empty($manufacturer_col) === false) {
-      $manufacturer_ids = array_count_values($manufacturer_col);
+      try {
+        $manufacturer_ids = array_count_values($manufacturer_col);
+      } catch(Exception $e) {
+        Mage::log("getBrandsPerCategory failed: {$e->getMessage()}", null, "exception.log", true);
+        return [];
+      }
+      
       arsort($manufacturer_ids);
       $manufacturer_ids = array_slice($manufacturer_ids, 0, $max_amount, true);
       $manufacturer_ids = array_keys($manufacturer_ids);
@@ -306,7 +312,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_status           = strtolower(_get_product_attribute($_product, "stock_status"));
     
     if($fast_stock === true && empty($stock_status === false)) {
-      $stock_message          = $stock_status === "direct leverbaar" ? "Op voorraad" : "Op aanvraag";
+      $stock_message          = $stock_status === "direct leverbaar" ? "Op voorraad" : "Pre-order";
       $stock_message_short    = $stock_message;
       $overall_stock_status   = $stock_status === "direct leverbaar" ? "in_stock" : "backorder";
       $stock_class            = $stock_status === "direct leverbaar" ? "buyblock-usp fw-normal" : "clzsoldout";
@@ -984,11 +990,27 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     $fastmode               = $options["fastmode"]            ?? false;
     $context                = $options["context"]             ?? null;
-    
     $stock_data             = [];
-        
+    
+    // @todo fix
+    // Fast mode, only report overall_stock_status
+    if(0 && $fastmode === true && empty(_get_product_attribute($product, "stock_status")) === false) {
+      switch(strtolower(_get_product_attribute($product, "stock_status"))) {
+        case "direct leverbaar":
+          $stock_data["overall_stock_status"] = "in_stock";
+          return $stock_data;
+        case "n.v.t.":
+          $stock_data["overall_stock_status"] = "backorder";
+          return $stock_data;
+        default:
+          // Follow normal flow for now
+          printr(_get_product_attribute($product, "stock_status"));
+      }
+    }
+    
     /* Availability, Stock */
     $stockitem              = $product->getStockItem();
+    // printr($stockitem);
     $stock_message          = null;
     $stock_tooltip          = null;
     $txtcltcz               = null;
@@ -1091,7 +1113,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $stock_message        = "Pre-order nu!";
       $stock_message_short  = "Pre-order";
       $stock_tooltip        = "Momenteel niet op vooraad maar u kunt het pre-orderen. U bent dan de eerste die het product krijgt.";
-      $delivery_text        = "Verw. levering: <strong>Op aanvraag</strong>";
+      $delivery_text        = "Verw. levering: <strong>Pre-order</strong>";
       $txtcltcz             = "buyblock-usp fw-normal";
       $fa_icon              = "fa-times";
       $backorder_needed     =  true;
@@ -1147,8 +1169,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $fa_icon              = "fa-check-circle";
       
       if($manage_stock === false) {
-        $stock_message        = "Op aanvraag";    // Unmanaged, be careful with overpromising
-        $stock_message_short  = "Op aanvraag";
+        $stock_message        = "Pre-order";    // Unmanaged, be careful with overpromising
+        $stock_message_short  = "Pre-order";
         $levertijd            = null;             // If we have an unmanaged product, we cannot really say when it will be available again
       } elseif(in_array($supplier, ["Bartscher"]) === true) {
         $stock_message        = "Op voorraad";    // Don't specify stock details for these suppliers

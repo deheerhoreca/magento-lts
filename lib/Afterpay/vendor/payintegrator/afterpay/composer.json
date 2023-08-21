@@ -1,0 +1,30 @@
+{
+    "name": "payintegrator/afterpay",
+    "type": "library",
+    "version": "2.4.0",
+    "description": "Library for connecting to AfterPay payment services",
+    "keywords": ["afterpay","openinvoice","payments"],
+    "homepage": "https://www.afterpay.nl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AfterPay",
+            "email": "plugins@afterpay.nl",
+            "homepage": "https://www.afterpay.io",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "^6.2.3"
+    },
+    "suggest": {
+        "ext-soap": "If AfterPay NL and BE are being used through the old SOAP connection, ext-soap is needed"
+    },
+    "autoload": {
+        "psr-4": {
+          "Afterpay\\" : "src/"
+        },
+        "files": ["src/functions_include.php"]
+  }
+}

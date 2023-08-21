@@ -5,10 +5,10 @@
 
 <div id="payment-errors" class="validation-advice" style="display:none;"></div>
 
-
+<fieldset class="form-list">
     <ul id="payment_form_<?php echo $_code; ?>" style="display:none;">
+        <?php if ($this->showGender()): ?>
         <li>
-            <?php if ($this->showGender()): ?>
             <div class="field">
                 <label for="<?php echo $_code; ?>_gender" class = "required"><em>*</em><?php echo $_helper->__('Gender:'); ?></label>
                 <div class="input-box" id="">
@@ -18,9 +18,9 @@
                     <label style="float:none" for="<?php echo $_code?>_gender_m"><?php echo $_helper->__('Male'); ?></label>
                 </div>
             </div>
-            <?php endif; ?>
-        <?php if ($isEnterprise): ?>
         </li>
+        <?php endif; ?>
+        <?php if ($isEnterprise): ?>
         <li>
         <?php endif;?>
             <?php if (!$this->isB2B()): ?>
@@ -71,7 +71,7 @@
             <div class="field">
                 <label for="<?php echo $_code; ?>_coc" class="required"><em>*</em><?php echo $_helper->__('Coc number:'); ?></label>
                 <div class="input-box">
-                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_coc" name="payment[<?php echo $_code; ?>][coc]">
+                    <input type="text" inputmode="numeric" minlength="8" maxlength="8" class="input-text required-entry" id="<?php echo $_code; ?>_coc" name="payment[<?php echo $_code; ?>][coc]">
                 </div>
             </div>
         </li>
@@ -137,3 +137,4 @@
             </label>
         </li>
     </ul>
+</fieldset>

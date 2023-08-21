@@ -117,7 +117,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @var bool
      */
-    protected $_logAllQueries       = false;
+    protected $_logAllQueries       = true;
 
     /**
      * Add to log call stack data (backtrace)
@@ -1445,6 +1445,14 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      */
     protected function _debugStat($type, $sql, $bind = [], $result = null)
     {
+      if(isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], ["81.59.51.217"], true) === true) {
+        $this->_debug = true;
+        $this->_logAllQueries = true;
+        if(isset($this->_dhh_total_queries) === false) {
+          $this->_dhh_total_queries = 0;
+        }
+        
+      }
         if (!$this->_debug) {
             return $this;
         }
@@ -1461,10 +1469,12 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 $code .= 'CONNECT' . $nl;
                 break;
             case self::DEBUG_TRANSACTION:
-                $code .= 'TRANSACTION ' . $sql . $nl;
+                $this->_dhh_total_queries++;
+                $code .= 'TRANSACTION ' . $this->_dhh_total_queries . ' ' . $nl;
                 break;
             case self::DEBUG_QUERY:
-                $code .= 'QUERY' . $nl;
+                $this->_dhh_total_queries++;
+                $code .= 'QUERY ' . $this->_dhh_total_queries . ' ' . $nl;
                 $code .= 'SQL: ' . $sql . $nl;
                 if ($bind) {
                     $code .= 'BIND: ' . var_export($bind, true) . $nl;

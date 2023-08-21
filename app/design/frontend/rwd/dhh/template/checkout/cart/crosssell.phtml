@@ -10,29 +10,34 @@ $i            = 0;
 $store        = Mage::app()->getStore();
 
 if($this->getItemCount()) { ?>
-<div class="crosssell product-collateral category-products">
+  <div class="crosssell product-collateral category-products">
+    <?php
+    echo "<h2>".$this->__("Based on your selection, you may be interested in the following items:")."</h2><hr>";
+    echo "<ul class='products-grid products-grid-mini'>";
+    
+    $options = [
+      "skip_usps"     => true,
+      "skip_info"     => true,
+      "display"       => "mini",
+      "image_size"    => 125,
+      "_blank"        => true,
+      "fast_stock"    => true,
+    ];
+    
+    foreach($this->getItems() as $_product) {
+      $i++;
+      // if(_dhh_debug()) {
+        // printr($_product->getData());
+      // }
+      ?>
+      <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
+        <?php echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options); ?>
+      </li>
+    <?php } ?>
+    </ul>
+  </div>
   <?php
-  echo "<h2 class='black'>".$this->__("Based on your selection, you may be interested in the following items:")."</h2><hr>";
-  echo "<ul class='products-grid products-grid-mini'>";
-  foreach ($this->getItems() as $_product) {
-    $i++;
-    ?>
-    <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
-      <?php
-      $options = [
-        "skip_usps"     => true,
-        "skip_info"     => true,
-        "display"       => "mini",
-        "image_size"    => 125,
-        "_blank"        => true,
-      ];
-      echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
-    echo "</li>";
-  }
-  ?>
-  </ul>
-</div>
-<?php }
+}
 
 // Bargains
 
@@ -50,27 +55,37 @@ if($this->getItemCount()) { ?>
   // var_dump("<br>\$productFlatHelper->isFlatCollectionDisabled(): ".$productFlatHelper->isFlatCollectionDisabled());
 // }
 
-$supplier_ids = getCartSupplierIDs();
-$product_ids  = getCartProductIDs();
+[$supplier_ids, $product_ids] = getCartDetails();
 $attributes   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview");
-$_products    = Mage::getModel("catalog/product")
+
+// Enabling flat products to make this faster
+$productFlatHelper = Mage::helper('catalog/product_flat');
+if(method_exists($productFlatHelper, "enableFlatCollection")) {
+  $productFlatHelper->enableFlatCollection();
+}
+
+$_products = Mage::getModel("catalog/product")
   ->getCollection()
   ->addAttributeToSelect($attributes)
-  // ->addFieldToFilter([["attribute" => "bargain", "eq" => "1"]])    // testing without bargain
   ->addAttributeToFilter("supplier", ["in" => $supplier_ids])
   ->addAttributeToFilter("entity_id", ["nin" => $product_ids])
+  // ->addExcludeProductFilter($product_ids)
   ->addAttributeToFilter("eol", ["nin" => "2075"])
   ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
   ->addAttributeToFilter("price", ["from" => 10, "to" => 200])
   ->addAttributeToFilter("small_image", ["notnull" => true])          // Do not suggest products without image
-  ->setFlag("require_stock_items", true)
-  ->addAttributeToFilter("stock_status", ["eq" => "2746"])            // Cheaper way to get probably in-stock items
+  ->setFlag("require_stock_items", false)                             // Using fast_stock
+  ->addAttributeToFilter("stock_status", ["eq" => "2746"])            // For fast_stock
   ->addOrder("popularity", "ASC")
-  ->setPageSize(12)
+  ->setPageSize(8)
   ->setCurPage(1)
   ->setStore($store)
   ->addStoreFilter($store)
   ;
+
+if(method_exists($productFlatHelper, "disableFlatCollection")) {
+  // $productFlatHelper->disableFlatCollection();
+}
 
 // Only show in stock SKUs
 // Expensive way to get probably in-stock items
@@ -92,6 +107,7 @@ if($_products->getItems()) {
     "display"       => "mini",
     "image_size"    => 125,
     "_blank"        => true,
+    "fast_stock"    => true,
   ];
   echo '<div class="crosssell product-collateral category-products">';
   echo "<h2>".$this->__("Hardlopers:")."</h2><hr>";
@@ -108,22 +124,15 @@ if($_products->getItems()) {
 </ul></div>
 <?php }
 
-function getCartSupplierIDs() {
-  $quote = Mage::helper("checkout/cart")->getCart()->getQuote();
-  $suppliers = [];
+// Get some cart details to exclude from bargain block
+function getCartDetails() {
+  $quote          = Mage::helper("checkout/cart")->getCart()->getQuote();
+  $suppliers      = [];
+  $product_ids    = [];
   foreach($quote->getAllItems() as $item) {
-    $suppliers[] = $item->getProduct()->getData("supplier");
+    $suppliers[]    = $item->getProduct()->getData("supplier");
+    $product_ids[]  = $item->getProduct()->getData("entity_id");
   }
-
-  return array_unique($suppliers);
-}
-
-function getCartProductIDs() {
-  $quote = Mage::helper("checkout/cart")->getCart()->getQuote();
-  $array = [];
-  foreach($quote->getAllItems() as $item) {
-    $array[] = $item->getProduct()->getData("entity_id");
-  }
-
-  return array_unique($array);
+  
+  return [array_unique($suppliers), array_unique($product_ids)];
 }

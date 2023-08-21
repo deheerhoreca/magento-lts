@@ -1,4 +1,5 @@
 <?php
+// DHH CORE HACK -- Partially patched to master (v20)
 /**
  * OpenMage
  *
@@ -68,32 +69,11 @@ class Mage_GoogleAnalytics_Block_Ga extends Mage_Core_Block_Template
      *
      * @param string $accountId
      * @return string
-     */
-    protected function _getPageTrackingCode($accountId)
-    {
-        /** @var Mage_GoogleAnalytics_Helper_Data $helper */
-        $helper = $this->helper('googleanalytics');
-        if ($helper->isUseUniversalAnalytics()) {
-            return $this->_getPageTrackingCodeUniversal($accountId);
-        }
-
-        return $this->_getPageTrackingCodeAnalytics($accountId);
-    }
-
-    /**
-     * Render regular page tracking javascript code
-     * The custom "page name" may be set from layout or somewhere else. It must start from slash.
-     *
-     * @param string $accountId
-     * @return string
+     * @deprecated
      */
     protected function _getPageTrackingCodeUniversal($accountId)
     {
-        return "
-ga('create', '{$this->jsQuoteEscape($accountId)}', 'auto');
-" . $this->_getAnonymizationCode() . "
-ga('send', 'pageview');
-";
+        return '';
     }
 
     /**
@@ -104,38 +84,66 @@ ga('send', 'pageview');
      * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gaq.html
      * @param string $accountId
      * @return string
+     * @deprecated
      */
     protected function _getPageTrackingCodeAnalytics($accountId)
     {
-        $pageName   = trim($this->getPageName());
-        $optPageURL = '';
-        if ($pageName && preg_match('/^\/.*/i', $pageName)) {
-            $optPageURL = ", '{$this->jsQuoteEscape($pageName)}'";
-        }
-        return "
-_gaq.push(['_setAccount', '{$this->jsQuoteEscape($accountId)}']);
-" . $this->_getAnonymizationCode() . "
-_gaq.push(['_trackPageview'{$optPageURL}]);
-";
+        return '';
     }
 
     /**
-     * Render information about specified orders and their items
+     * Render regular page tracking javascript code
+     * The custom "page name" may be set from layout or somewhere else. It must start from slash.
      *
+     * @param string $accountId
      * @return string
-     * @throws Mage_Core_Model_Store_Exception
      */
-    protected function _getOrdersTrackingCode()
+    protected function _getPageTrackingCode($accountId)
     {
         /** @var Mage_GoogleAnalytics_Helper_Data $helper */
         $helper = $this->helper('googleanalytics');
         if ($helper->isUseAnalytics4()) {
-            return $this->_getOrdersTrackingCodeAnalytics4();
-        } elseif ($helper->isUseUniversalAnalytics()) {
-            return $this->_getOrdersTrackingCodeUniversal();
+            return $this->_getPageTrackingCodeAnalytics4($accountId);
         }
 
-        return $this->_getOrdersTrackingCodeAnalytics();
+        return '';
+    }
+    
+    /**
+     * Render regular page tracking javascript code
+     *
+     * @link https://developers.google.com/tag-platform/gtagjs/reference
+     * @param string $accountId
+     * @return string
+     */
+    protected function _getPageTrackingCodeAnalytics4($accountId)
+    {
+        $trackingCode = "
+gtag('js', new Date());
+";
+        if (1 || !$this->helper('googleanalytics')->isDebugModeEnabled()) { // DHH CORE HACK
+            $trackingCode .= "
+gtag('config', '{$this->jsQuoteEscape($accountId)}');
+";
+        } else {
+            $trackingCode .= "
+gtag('config', '{$this->jsQuoteEscape($accountId)}', {'debug_mode':true});
+";
+        }
+
+        //add user_id
+        if (1 && Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $customer = Mage::getSingleton('customer/session')->getCustomer();
+            $trackingCode.= "
+gtag('set', 'user_id', '{$customer->getId()}');
+";
+        }
+
+        if (0 && $this->helper('googleanalytics')->isDebugModeEnabled()) {
+            $this->helper('googleanalytics')->log($trackingCode);
+        }
+
+        return $trackingCode;
     }
 
     /**
@@ -210,22 +218,28 @@ _gaq.push(['_trackPageview'{$optPageURL}]);
             $orderData = [
                 'currency' => $order->getBaseCurrencyCode(),
                 'transaction_id' => $order->getIncrementId(),
-                'value' => number_format($order->getBaseGrandTotal(), 2),
-                'coupon' => strtoupper($order->getCouponCode()),
-                'shipping' => number_format($order->getBaseShippingAmount(), 2),
-                'tax' => number_format($order->getBaseTaxAmount(), 2),
+                'value' => (double) number_format($order->getBaseGrandTotal(), 2, '.', ''),
+                'coupon' => strtoupper((string)$order->getCouponCode()),
+                'shipping' => (double) number_format($order->getBaseShippingAmount(), 2, '.', ''),
+                'tax' => (double) number_format($order->getBaseTaxAmount(), 2, '.', ''),
                 'items' => []
             ];
 
             /** @var Mage_Sales_Model_Order_Item $item */
             foreach ($order->getAllVisibleItems() as $item) {
-                $orderData['items'][] = [
+                $_item = [
                     'item_id' => $item->getSku(),
                     'item_name' => $item->getName(),
-                    'quantity' => $item->getQtyOrdered(),
-                    'price' => $item->getBasePrice(),
-                    'discount' => $item->getBaseDiscountAmount()
+                    'quantity' => (int) $item->getQtyOrdered(),
+                    'price' => (double) number_format($item->getBasePrice(), 2, '.', ''),
+                    'discount' => (double) number_format($item->getBaseDiscountAmount(), 2, '.', '')
                 ];
+                $_product = Mage::getModel('catalog/product')->load($item->getProductId());
+                if ($_product->getAttributeText('manufacturer')) {
+                    $_item['item_brand'] = $_product->getAttributeText('manufacturer');
+                }
+                
+                array_push($orderData['items'], $_item);
             }
             $result[] = "gtag('event', 'purchase', " . json_encode($orderData, JSON_THROW_ON_ERROR) . ");";
         }

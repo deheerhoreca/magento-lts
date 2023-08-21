@@ -10,6 +10,8 @@
 // For STORE_ID = 1: php shell/rewrites_doctor.php --remove_rewrites 10 --store 1
 // For STORE_ID = 4: php shell/rewrites_doctor.php --remove_rewrites 1 --store 4
 
+ini_set("display_errors", "1");
+
 const DRYRUN = true;
 
 require_once "abstract.php";
@@ -22,7 +24,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   
   public function run() {
     if($left = $this->getArg("remove_rewrites")) {
-      define(STORE_ID, $this->getArg("store"));
+      define("STORE_ID", $this->getArg("store"));
       if(empty(STORE_ID)) {
         die("use --store X");
       }
@@ -90,7 +92,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
               $urlKey = $product->getData("url_key");
               $name = $product->getData("name");
               $new_key = $this->slug($name, $sku);
-              if(0 && $urlKey === $new_key) {
+              if($urlKey === $new_key) {
                 $message = "{$sku} [{$product->getId()}] url_key {$urlKey} is the same as {$product->getData("url_key")}".PHP_EOL;
               } else {
                 $product->setData("url_key", $new_key);
@@ -101,7 +103,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
                   }
                 }
                 $counter++;
-                $message = "{$sku} [{$product->getId()}] url_key was changed from {$urlKey} to {$product->getData("url_key")}".PHP_EOL;
+                $message = "{$sku} [{$product->getId()}] url_key was changed from {$urlKey} to {$new_key}".PHP_EOL;
                 $debug_data[] = [
                   "sku"           => $sku,
                   "old_url_key"   => $urlKey,
@@ -170,7 +172,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     }
     
     $backup_table = $this->backupTable();    
-    if($result === false) {
+    if($backup_table === false) {
       echo "Error while backing up table, quiting...".PHP_EOL;
       return false;
     }
@@ -201,9 +203,10 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
           ->setOrder("url_rewrite_id", "DESC")
         ;
         $urlRewritesCollection->getSelect()->limit(null, $left);
+        $counter_total += $urlRewritesCollection->getSize();
         
         foreach($urlRewritesCollection as $urlRewrite) {
-          $counter_total++;
+          // $counter_total++;
           try {
             if(DRYRUN === false) {
               $urlRewrite->delete();
@@ -295,15 +298,14 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     
     $sku = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
     $sku = strtolower(str_replace(" ", "-", $sku));
-    $name = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
+    
+    $name = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($name, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
     $name = strtolower(str_replace(" ", "-", $name));
-    $name = substr($name, 0, (self::MAX_SLUG_LENGTH - strlen($sku)));
+    $name = substr($name, 0, (self::MAX_SLUG_LENGTH - strlen($sku)+1));
     $name = str_replace($sku, "", $name);
-    $parts[] = $name;
-    $parts[] = $sku;
-    $parts = array_filter($parts);
-    $string = implode("-", $parts);
-    return $string;
+    
+    $parts = array_filter([$name, $sku]);
+    return implode("-", $parts);
   }
 }
 
