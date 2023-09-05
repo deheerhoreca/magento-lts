@@ -1272,3 +1272,7 @@ a[data-zoom-id] img, .mz-thumb img {
 [data-magic-slide-id].active-selector img {
   border: 1px solid Gray !important;
 }
+
+.mz-figure img {
+  object-fit: contain; /* Allows for non-square images from CDN */
+}

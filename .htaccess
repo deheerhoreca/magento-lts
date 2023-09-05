@@ -313,17 +313,8 @@
 
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
-<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff)$)[^\.]+?$">
-  # Header add Link "<//ajax.cloudflare.com>;rel=preconnect; crossorigin"
-  # Header add Link "<//cdn.jsdelivr.net>;rel=preconnect; crossorigin"
-  # Header add Link "<//cdnjs.cloudflare.com>;rel=preconnect"
-  # Header add Link "<//www.google-analytics.com>;rel=preconnect; crossorigin"
-  # Header add Link "<//ssl.google-analytics.com>;rel=preconnect; crossorigin"
-  # Header add Link "<//region1.google-analytics.com>;rel=preconnect; crossorigin"
-  # Header add Link "<//stats.g.doubleclick.net>;rel=preconnect; crossorigin"
-  # Header add Link "<//www.google.com>;rel=preconnect; crossorigin"
-  # Header add Link "<//www.google.nl>;rel=preconnect; crossorigin"
-   Header add Link "<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
+<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
+   Header add Link "<////ik.imagekit.io/>;rel=preconnect,<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
 </FilesMatch>
 
 <IfModule mod_deflate.c>
@@ -353,7 +344,15 @@
   RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
 </IfModule>
 
-# Modify more caching headers
+# ImageKit:
+<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
+  <IfModule mod_headers.c>
+    Header set Accept-CH "DPR, Width, Downlink, Viewport-Width, Save-Data, Sec-CH-UA"
+    Header set Permissions-Policy "ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
+  </IfModule>
+</FilesMatch>
+
+# Modify more caching headers -- Also note Rules in Cloudflare
 <IfModule mod_headers.c>
   
   Header set X-XSS-Protection "1; mode=block"
@@ -373,23 +372,23 @@
   # the content-hash will remain the same, and the resources stored
   # in browser caches will stay relevant.
   
-  # Add "immutable" to hashed pagespeed resources
-  # Remember, cache control is about how long mod_pagespeed will cache assets.
+  # Remember, cache control is about how long mod_pagespeed will cache assets (if enabled)
   # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
-  # <FilesMatch "pagespeed">
-  #   # Etag is done by the hash in the filename
-  #   Header unset Etag
-  #   Header set Cache-Control "public, max-age=300, proxy-revalidate"
-  #   Header set x-bier "tijd"
-  # </FilesMatch>
+  # Static files might be served by nginx!
   
-  # Remember, cache control is about how long mod_pagespeed will cache assets.
-  # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
-  <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp|css|js)$">
+  # CSS/JS
+  <FilesMatch "\.(css|js)$">
     Header unset Etag
     Header set Cache-Control "public, max-age=300"
   </FilesMatch>
   
+  # IMAGES
+  <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
+    # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+  
+  # TEXT
   <FilesMatch "\.(html|htm|php)$">
     Header unset Etag
     Header set Cache-control "max-age=0, no-cache"

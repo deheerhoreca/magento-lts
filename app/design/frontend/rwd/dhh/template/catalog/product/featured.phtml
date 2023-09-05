@@ -9,9 +9,9 @@ $show_actions                 = false;
 $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
-$productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
-$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["featured"]);
-$limit                        = 8;
+$productBlock                 = $this->getLayout()->createBlock("catalog/product_price");
+$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["popularity"]);
+$limit                        = 12;
 
 // Get all products that are marked as featured
 $_productCollection = Mage::getModel("catalog/product")
@@ -19,9 +19,16 @@ $_productCollection = Mage::getModel("catalog/product")
   ->addAttributeToSelect($attributes)
   ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
   ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
-  ->addOrder("popularity", "ASC")
-  ->setPageSize($limit)
+  ->addFieldToFilter("popularity", ["notnull" => true]) // Prevent unset new products to show up
+  ->addAttributeToSort("popularity", "ASC")
+  ->setPageSize(($limit * 4)) // Random pick from top
   ->addFinalPrice(); // Necessary to respect sale price end date
+
+// if(_dhh_debug()) {
+  // echo $_productCollection->getSelect()->__toString();
+// }
+
+$_productCollection->load();
 
 /*
  * Bugfix: Using require_stock_items there was a bug that lead
@@ -33,26 +40,31 @@ $_productCollection = Mage::getModel("catalog/product")
  *
  * We now use both as an experiment...
  */
-// $_productCollection->setFlag('require_stock_items', true);
-// Mage::getModel('catalogInventory/stock')->addItemsToProducts($_productCollection);
+// $_productCollection->setFlag("require_stock_items", true);
+// Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
 
-$productBlock           = $this->getLayout()->createBlock('catalog/product_price');
+$productBlock           = $this->getLayout()->createBlock("catalog/product_price");
 $parent_categories_ids  = [];
-
 $_columnCount           = 4;
 $displaySize            = 175;
 $_imgSize               = 1 * $displaySize;
 
 if($_productCollection->getFirstItem()) {
-?>
+  ?>
   <div class="category-products">
     <span class="h1 center" style="padding-top: 1em;">Topsellers</span><hr>
     <?php
    echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     $i = 0;
     foreach($_productCollection as $_product) {
+      if(mt_rand(0, 100) > 35) {
+        continue; // Poor man's random
+      }
       $i++;
-      $html = "";      
+      if($i > $limit) {
+        continue;
+      }
+      $html = "";
       
       // If a product is present in multiple categories, we don't want to change that in this view
       //$productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
@@ -97,18 +109,18 @@ if($_productCollection->getFirstItem()) {
           break;
       }
       
-      $brand            = _get_product_attribute($_product, "manufacturer");
-      $sku_seller       = _get_product_attribute($_product, "sku_seller");
-      $tagline          = _get_product_attribute($_product, "tagline");
+      $brand                = _get_product_attribute($_product, "manufacturer");
+      $sku_seller           = _get_product_attribute($_product, "sku_seller");
+      $tagline              = _get_product_attribute($_product, "tagline");
       
-      $usp_options      = [
-        "context"         => "featured",
+      $usp_options          = [
+        "context"             => "featured",
       ];
-      $usps             = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 6);
+      $usps                 = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 6);
       
       // Price Block
-      $price_html = str_replace(",00", ",-", $price_html);
-      $price_html = str_replace("€", null, $price_html);
+      $price_html           = str_replace(",00", ",-", $price_html);
+      $price_html           = str_replace("€", null, $price_html);
       
       // Black friday
       if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
@@ -143,7 +155,32 @@ if($_productCollection->getFirstItem()) {
       }
       
       // Product name
-      $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');        
+      $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
+      
+      // Product thumbnail
+      $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
+      $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
+      if(is_file($image_path) === true) {
+        $col_width        = 175;
+        $cdn_img_options  = [
+          "fs_path"         => $image_path,
+          "url"             => $image_url,
+          "fit"             => "contain",
+          "width"           => $col_width,
+          "height"          => $col_width,
+          "lazy"            => true,
+          "add_mod_time"    => true,
+          "class"           => "trans-opacity",
+          "title"           => $product_name,
+          "alt"             => $product_name,
+          "quality"         => 75,
+          "dpr"             => 1.25,
+          "relative_url"    => true,
+        ];
+        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      }
       ?>
       <li class="item">
         <?php
@@ -152,13 +189,14 @@ if($_productCollection->getFirstItem()) {
         ?>
         <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image">
         <?php
-          echo "<img loading='lazy' class='trans-opacity' id='product-collection-image-{$_product->getId()}'
-            src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
-            alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
-            width='{$displaySize}' height='{$displaySize}'>";
+          // echo "<img loading='lazy' class='trans-opacity' id='product-collection-image-{$_product->getId()}'
+            // src='{$this->helper('catalog/image')->init($_product, 'thumbnail')->resize($_imgSize)}'
+            // alt='{$this->stripTags($this->getImageLabel($_product, 'thumbnail'), null, true)}'
+            // width='{$displaySize}' height='{$displaySize}'>";
+          echo $img_html;
         ?>
         </a>
-        <div class="product-info">
+        <div class="product-info" data-pop="<?=_get_product_attribute($_product, "popularity");?>">
           <div class="info">
             <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
             <h2 class='product-name ellipsed ellipsed-2'>

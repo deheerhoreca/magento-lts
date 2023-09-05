@@ -24,19 +24,40 @@
 <?php
 // DHH CORE HACK
 // Needed because some attributes are not part of the product yet...
+$img_html = "";
 $_product = Mage::getResourceModel("catalog/product_collection")
   ->addAttributeToSelect(["ean13"])
   ->addAttributeToSelect(["small_image"])
+  ->addAttributeToSelect(["thumbnail"])
   ->addAttributeToFilter("entity_id", $_item->getProductId())
   ->setPageSize(1)
   ->setCurPage(1)
   ->getFirstItem();
-$_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->resize(60, 60);
+$media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+if(strlen($_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_selection") {
+  $image_url        = "{$media}catalog/product{$_product->getThumbnail()}";
+  if(empty($image_url) === false) {
+    $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+    $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
+    $col_width        = 60;
+    $cdn_img_options  = [
+      "fs_path"         => $image_path,
+      "url"             => $image_url,
+      "width"           => $col_width,
+      "height"          => $col_width,
+      "lazy"            => true,
+      "add_mod_time"    => true,
+      "class"           => "",
+      "style"           => "object-fit:contain;",
+    ];
+    $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+  }
+}
 // END DHH CORE HACK
 ?>
 <tr class="border">
-    <td class='a-center'>
-      <img style="max-width:60px; max-height:60px;" src="<?php echo $_imageUrl ?>" />
+    <td class='a-center' style='width:<?php echo $col_width ?>px;'>
+      <?php echo $img_html ?>
     </td>
     <td>
         <?php if ($this->canDisplayContainer()): ?>
@@ -49,14 +70,14 @@ $_imageUrl = $this->helper("catalog/image")->init($_product, "small_image")->res
         </div>
         <?php endif ?>
         <?php // DHH CORE HACK
-        $chefstore_product_url  = Mage::helper("deheerhoreca_util/util")->get_url("tool_cs_product", $_item->getSku());
-        $intel_product_url      = Mage::helper("deheerhoreca_util/util")->get_url("tool_intel_product", $_item->getSku());
-        $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tool_mage_product", $_item->getSku());
+        $chefstore_product_url  = Mage::helper("deheerhoreca_util/util")->get_url("tools_chefstore_product_sku", $_item->getSku());
+        $intel_product_url      = Mage::helper("deheerhoreca_util/util")->get_url("tools_intel_product", $_item->getSku());
+        $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tools_magento_product_sku", $_item->getSku());
         $bol_search_product     = "";
         if(empty($_product->getEan13()) === false) {
           $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_product->getEan13());
         }
-        $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tool_supplier_product", $_item->getSku());
+        $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tools_supplier_product_sku", $_item->getSku());
         ?>
         <a target="_blank" rel="external" href="<?php echo $chefstore_product_url; ?>">Chefstore.nl</a> - 
         <a target="_blank" rel="external" href="<?php echo $intel_product_url; ?>">Intel</a> -

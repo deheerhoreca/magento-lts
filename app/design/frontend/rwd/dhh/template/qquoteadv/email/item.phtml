@@ -55,7 +55,7 @@ unset($merge_tier[$item->getData('qty')]);
 $showPrice = $quoteadvHelper->isPriceByDefaultAllowed();
 $itemPriceReplace = ' ';
 $rowTotalReplace = '--';
-$thumb_url = $this->helper('catalog/image')->init($product, 'small_image')->resize(75);
+$thumb_url = $this->helper('catalog/image')->init($product, 'thumbnail')->resize(75);
 
 $msrp = $product->getMsrp();
 

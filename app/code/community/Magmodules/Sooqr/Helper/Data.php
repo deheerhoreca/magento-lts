@@ -297,8 +297,15 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
         }
         
         /* DHH CORE HACK */
-        // We use price fields a lot to make filters possible, remove again for Sooqr
-        $value = str_replace(" EUR", null, $value);
+        if(is_string($value)) {
+          // We use price fields a lot to make filters possible, remove again for Sooqr
+          $value = str_replace(" EUR", null, $value);
+          
+          // Remove N.v.t. values
+          if(strtolower($value) === "n.v.t.") {
+            $value = "";
+          }
+        }
         // We need to have this field as an INT in Sooqr to make it sortable
         if($field === "popularity") {
           $value = intval($value);
@@ -429,7 +436,29 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
                     }
                 }
             }
-
+            // DHH CORE HACK -- Needs config in https://www.chefstore.nl/index.php/admin4JN0/system_config/edit/section/sooqr_connect/
+            if(empty($imageData['image'][$config['image_source']]) === false) {
+              $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+              $image_url        = "{$media}catalog/product{$product->getData($config['image_source'])}";
+              if(empty($image_url) === false) {
+                $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                $col_width        = 120;
+                $image_path       = "{$media_dir}/catalog/product{$product->getData($config['image_source'])}";
+                $cdn_img_options  = [
+                  "fs_path"         => $image_path,
+                  "url"             => $image_url,
+                  "url_only"        => true,
+                  "width"           => $col_width,
+                  "height"          => $col_width,
+                  "add_mod_time"    => true,
+                  "class"           => "",
+                  "relative_url"    => true,
+                ];
+                $img_url          = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+                $imageData['image'][$config['image_source']] = $img_url;
+              }
+            }
+            // END DHH CORE HACK
             if (!empty($config['images'])) {
                 $imageData['image_link'] = $image;
                 $container = new Varien_Object(array('attribute' => new Varien_Object(array('id' => $config['media_gallery_id']))));
@@ -695,6 +724,15 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             if ($priceAssociated > 0) {
                 $prices[] = $priceAssociated;
             }
+        }
+        
+        // DHH CORE HACK -- Prevent errors
+        if(sizeof($prices) === 0) {
+          return array(
+            'min_price'   => 0,
+            'max_price'   => 0,
+            'total_price' => 0,
+          );
         }
 
         return array(
@@ -964,8 +1002,12 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
      */
     public function getSortedArray($data, $sort)
     {
-        $code = "return strnatcmp(\$a['$sort'], \$b['$sort']);";
-        usort($data, create_function('$a,$b', $code));
+        // DHH CORE HACK: PHP 8
+        // $code = "return strnatcmp(\$a['$sort'], \$b['$sort']);";
+        // usort($data, create_function('$a,$b', $code));
+        usort($data, function ($a, $b) use ($sort) {
+            return strnatcmp($a[$sort], $b[$sort]);
+        });
 
         return array_reverse($data);
     }

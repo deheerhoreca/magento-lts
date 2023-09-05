@@ -369,17 +369,42 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $display_stock_message = $stock_message;
     }
     
-    $img_url = $product_block->helper('catalog/image')->init($_product, 'small_image')->resize($image_dimensions);
+    $img_id   = "product-collection-image-".$_product->getId();
     
+    $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
+    $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
+    if(is_file($image_path) === true) {
+      $col_width        = 200;
+      $cdn_img_options  = [
+        "fs_path"         => $image_path,
+        "url"             => $image_url,
+        "width"           => $image_size,
+        "height"          => $image_size,
+        "lazy"            => true,
+        "add_mod_time"    => true,
+        "class"           => "center",
+        "title"           => $image_label,
+        "alt"             => $image_label,
+        "id"              => $img_id,
+        "relative_url"    => true,
+      ];
+      $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    } else {
+      // Failure should not happen, but this is a fallback
+      $img_url  = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_dimensions);
+      $img_html = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
+    }
     ?>
     <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target;?>>
-      <img loading=lazy class="center" id="product-collection-image-<?php echo $_product->getId(); ?>" src="<?php echo $img_url; ?>" alt="<?php echo $image_label; ?>" width="<?php echo $image_size; ?>" height="<?php echo $image_size; ?>">
+      <?php echo $img_html; ?>
     </a>
     <div class="product-info">
       <div class="info">
         <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
         <h2 class='product-name ellipsed ellipsed-2'>
-          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target;?>><?php echo $display_product_name; ?></a>
+          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $display_product_name; ?></a>
         </h2>
         <?php
         if(isset($tagline) === true) {
@@ -469,6 +494,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         "motor", "isolatiedikte", "diameter_mm", "length_mm", "eenheid", "tagline", "small_image", "material_group",
         "blade_length_mm","bottom_shape", "etaleer_oppervlak_m2", "grill_output_watt", "grill_tray_type", "indoor_outdoor",
         "temp_range_from_c", "temp_range_to_c", "magnetron_output_watt", "nonstick_coating", "product_label", "self_closing",
+        "thumbnail",
         
         /* "name_short", */
       ];
@@ -1366,27 +1392,219 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   // Centralize building DHH URLs
-  public static function get_url(string $which, $id = "") {
-    if(empty($id) === false) {
-      $id = urlencode($id);
+  // Exists in OpenMage and Intel:
+  // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
+  // - lib/intel.inc.php
+  public static function get_url(string $which, $payload = null) {
+    if(strlen($payload)) {
+      $payload = urlencode($payload);
     }
     switch($which) {
-      case "tool_mage_order":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento1_order_id&q={$id}";
-      case "tool_mage_product":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento_product_sku&q={$id}";
-      case "tool_cs_product":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=chefstore_product_sku&q={$id}";
-      case "tool_supplier_product":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=supplier_product_sku&q={$id}";
-      case "tool_intel_product":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier={$id}";
+      case "tools_magento1_order_id":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento1_order_id&q={$payload}";
+      case "tools_magento_product_sku":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento_product_sku&q={$payload}";
+      case "tools_chefstore_product_sku":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=chefstore_product_sku&q={$payload}";
+      case "tools_supplier_product_sku":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=supplier_product_sku&q={$payload}";
+      case "magento_order":
+        return "https://www.chefstore.nl/index.php/admin4JN0/sales_order/view/order_id/{$payload}/";
+      case "magento_product":
+        return "https://www.chefstore.nl/index.php/admin4JN0/catalog_product/edit/id/{$payload}/";
+      case "tools-intel-product":
+      case "tools_intel_product":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier={$payload}";
+      case "tools_ii_sku":
+        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ltYWdlX2luc3BlY3Rvci9pbWFnZV9pbnNwZWN0b3IucGhw&sku={$payload}";
       case "bol_search_product":
         return "https://www.bol.com/nl/s/?searchtext={$id}";
     }
     
-    return null;
-  }  
+    return false;
+  }
+  
+  // Generate a HTML img tag for a cloudflare image
+  // Exists in OpenMage and Intel:
+  // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
+  // - lib/intel.inc.php
+  public static function _cdn_img($options) {
+    $url        = $options["url"]       ?? false;
+    $url        = (string) htmlspecialchars($url);
+    
+    if($url === false) {
+      return false;
+    }
+    
+    $options["cdn"] = isset($options["cdn"]) ? $options["cdn"] : "imagekit";
+    $fs_path      = $options["fs_path"]       ?? null;
+    $add_mod_time = $options["add_mod_time"]  ?? false; // Requires fs_path
+    $width        = $options["width"]         ?? 0;
+    $height       = $options["height"]        ?? 0;
+    $alt          = $options["alt"]           ?? $url;
+    $id           = $options["id"]            ?? "";
+    $fit          = $options["fit"]           ?? "scale-down";
+    $format       = $options["format"]        ?? "auto";
+    $quality      = $options["quality"]       ?? 75;
+    $url_only     = $options["url_only"]      ?? false;
+    $relative_url = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
+    $include_2x   = $options["2x"]            ?? true;
+    $lazy         = $options["lazy"]          ?? false;
+    $class        = $options["class"]         ?? "";
+    $style        = $options["style"]         ?? "";
+    
+    $cdn          = (string)  $options["cdn"];
+    $width        = (int)     $width;
+    $height       = (int)     $height;
+    $alt          = (string)  $alt;
+    $id           = (string)  $id;
+    $fit          = (string)  $fit;
+    $format       = (string)  $format;
+    $quality      = (int)     $quality;
+    $url_only     = (bool)    $url_only;
+    $relative_url = (bool)    $relative_url;
+    $include_2x   = (bool)    $include_2x;
+    $lazy         = (bool)    $lazy;
+    $class        = (string)  $class;
+    $style        = (string)  $style;
+    $id_html      = "";
+    $lazy_html    = "";
+    $class_html   = "";
+    $style_html   = "";
+    $html         = "";
+    
+    // Pre-process settings
+    if($cdn === "imagekit") {
+      $relative_url = true; // Required
+    }
+    
+    // Applies to all CDNs
+    if($lazy === true) {
+      $lazy_html = " loading=lazy";
+    }
+    if(strlen($id) > 0) {
+      $id_html = " id=\"{$id}\"";
+    }
+    if($fit === "contain" || $fit === "scale-down") {
+      $class .= " object-fit-contain";
+    }
+    if(strlen($class) > 0) {
+      $class_html = " class=\"{$class}\"";
+    }
+    if(strlen($style) > 0) {
+      $style_html .= " style=\"{$style}\"";
+    }
+    if($relative_url === true) {
+      $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
+    }
+    if($add_mod_time === true && strlen($fs_path) > 0) {
+      if(function_exists("_add_file_v_param")) {
+        $url = _add_file_v_param($url, $fs_path);
+      } else {
+        $url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path);
+      }
+    }
+    
+    switch($cdn) {
+      
+      case "none":
+        $src_url = $url;
+        $html = "<img src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        break;
+      
+      // @see https://docs.imagekit.io/features/image-transformations
+      case "imagekit":
+        $cdn_base     = "//ik.imagekit.io/vzc6xuj9l";
+        $cdn_options  = "tr:w-{$width},h-{$height}";
+        if($quality > 0) {
+          $cdn_options .= ",q-{$quality}";
+        }
+        if($fit === "contain" || $fit === "scale-down") {
+          $cdn_options .= ",c-at_max";    // max-size crop
+        }
+        $src_url      = "{$cdn_base}/{$cdn_options}/{$url}";
+        $html         = "<img src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        break;
+      
+      // @see https://docs.optimole.com/article/1872-how-to-use-the-custom-integration-in-optimole
+      case "optimole":
+        $skip_js = true;
+        if($skip_js) {
+          // https://mlwes2arpcu4.i.optimole.com/w:800/h:600/q:85/https://andreeacristinaradacina.github.io/image.png
+          $cdn_base     = "https://mlwes2arpcu4.i.optimole.com/";
+          $cdn_options  = "w:{$width}/h:{$height}/q:{$quality}";
+          $src_url      = "{$cdn_base}{$cdn_options}/{$url}";
+          $html         = "<img src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        } else {
+          $src_url = $url;
+          $html = "<img data-opt-src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        }
+        break;
+      
+      case "cloudflare":
+        // If desiring a relative URL, take out the BaseUrl
+        if($relative_url === true) {
+          $cdn_base         = "/cdn-cgi/image/";
+        } else {
+          $cdn_base         = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "/")."/cdn-cgi/image/";
+        }
+        $cdn_options_base = "metadata=none,q={$quality},fit={$fit},format={$format}";
+        $cdn_options      = "{$cdn_options_base},width={$width},height={$height}";
+        
+        if($add_mod_time === true && strlen($fs_path) > 0) {
+          if(function_exists("_add_file_v_param")) {
+            $url = _add_file_v_param($url, $fs_path);
+          } else {
+            $url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path);
+          }
+        }
+        $src_url      = "{$cdn_base}{$cdn_options}/{$url}";
+        
+        // Either use 2x the resolution, or set dpr=2
+        if($include_2x === true) {
+          // $width_2x       = $width * 2;
+          // $height_2x      = $height * 2;
+          $width_2x       = $width;
+          $height_2x      = $height;
+          $dpr            = 2;
+          $cdn_options_2x = "{$cdn_options_base},width={$width_2x},height={$height_2x},dpr={$dpr}";
+          $srcset         = "{$cdn_base}{$cdn_options_2x}/{$url} 2x";
+        }      
+        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        break;
+    }
+    
+    // foreach(array_keys($options) as $option) {
+      // printr("{$option}: ".var_export($$option, true));
+    // }
+    // printr("src_url: ".var_export($src_url, true));
+    // printr(str_repeat("-", 100));
+    
+    if($url_only === true) {
+      return $src_url;
+    }
+    
+    return $html;
+  }
+  
+  // Adds a ?v={timestamp} param to the URL
+  // Exists in OpenMage and Intel
+  public static function _add_file_v_param(string $url, string $fs_path): string {
+    if(is_file($fs_path)) {
+      if($mod_time = filemtime($fs_path)) {
+        // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
+        $url .= (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . "v={$mod_time}";
+      }
+    } else {
+      if(function_exists('logger')) {
+        logger("Cannot add file modification time of {$fs_path} because it does not exist", "NOTICE");
+      } else {
+        Mage::log("Cannot add file modification time of {$fs_path} because it does not exist");
+      }
+    }
+    
+    return $url;
+  }
 }
 
 if(function_exists('_get_product_attribute') === false) {
