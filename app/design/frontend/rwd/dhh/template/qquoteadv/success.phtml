@@ -24,38 +24,66 @@
  * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
  * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
-?>
 
-<?php
-$quote = $this->getData('quote');
-$header = '';
-$message = '';
-$footnote = '';
-$boldMessage = '';
-$statusPrintOnlyMatch = ($quote->getStatus() == Ophirah_Qquoteadv_Model_Status::STATUS_PRINT_ONLY);
+$quote                = $this->getData('quote');
+$header               = '';
+$message              = '';
+$footnote             = '';
+$boldMessage          = '';
+$statusPrintOnlyMatch =
+$quote->getStatus()   == Ophirah_Qquoteadv_Model_Status::STATUS_PRINT_ONLY;
 
-if ($statusPrintOnlyMatch) {
-    $header = $this->__('Thank you for your interest!');
-    $boldMessage = $this->__('Your Quote Request download should automatically begin in a few seconds.');
-    if ($this->Helper('customer')->isLoggedIn()) {
-        $message = $this->__('Your quote print # is: %s.',
-            sprintf('<a href="%s">%s</a>', Mage::getUrl('qquoteadv/view/view', ['id' => $quote->quote_id]),
-                $this->escapeHtml($quote->increment_id)));
-    } else {
-        $message = $this->__('Your quote print # is: %s.', $this->escapeHtml($quote->increment_id));
-    }
+if($statusPrintOnlyMatch) {
+  $header = $this->__('Thank you for your interest!');
+  $boldMessage = $this->__(
+    'Your Quote Request download should automatically begin in a few seconds.'
+  );
+  if($this->Helper('customer')->isLoggedIn()) {
+    $message = $this->__(
+      'Your quote print # is: %s.',
+      sprintf(
+        '<a href="%s">%s</a>',
+        Mage::getUrl('qquoteadv/view/view', ['id' => $quote->quote_id]),
+        $this->escapeHtml($quote->increment_id)
+      )
+    );
+  } else {
+    $message = $this->__(
+      'Your quote print # is: %s.',
+      $this->escapeHtml($quote->increment_id)
+    );
+  }
 } else {
-    $header = $this->__('Your quote request has been received');
-    $boldMessage = $this->__('Thank you for your interest!');
-    $footnote = $this->__('You will receive a quote confirmation email with a link to track progress.');
-    if ($this->Helper('customer')->isLoggedIn()) {
-        $message = $this->__('Your quote request # is: %s.',
-            sprintf('<a href="%s">%s</a>', Mage::getUrl('qquoteadv/view/view', ['id' => $quote->quote_id]),
-                $this->escapeHtml($quote->increment_id)));
-    } else {
-        $message = $this->__('Your quote request # is: %s.', $this->escapeHtml($quote->increment_id));
-    }
+  $header = $this->__('Your quote request has been received');
+  $boldMessage = $this->__('Thank you for your interest!');
+  $footnote = $this->__(
+    'You will receive a quote confirmation email with a link to track progress.'
+  );
+  if($this->Helper('customer')->isLoggedIn()) {
+    $message = $this->__(
+      'Your quote request # is: %s.',
+      sprintf(
+        '<a href="%s">%s</a>',
+        Mage::getUrl('qquoteadv/view/view', ['id' => $quote->quote_id]),
+        $this->escapeHtml($quote->increment_id)
+      )
+    );
+  } else {
+    $message = $this->__(
+      'Your quote request # is: %s.',
+      $this->escapeHtml($quote->increment_id)
+    );
+  }
 }
+
+// $event_data = [
+  // "event"       => "quote_created",
+  // "value"       => (double) number_format($quote->getGrandTotalExclTax(), 2, '.', ''),
+  // "currency"    => "EUR",
+  // "id"          => $quote->increment_id,
+// ];
+// $event_json = json_encode($event_data);
+// echo "<script>dataLayer.push({$event_json});</script>";
 ?>
 <style>
 @media screen and (min-width: 1200.1px) {
@@ -72,19 +100,23 @@ if ($statusPrintOnlyMatch) {
     <p><?php echo $message; ?></p>
     <p><?php echo $footnote; ?></p>
     <div class="buttons-set">
-    <button class="button center" type="button" onclick="window.location='<?php echo $this->getContinueShoppingUrl() ?>'">
-      <span><span><?php echo Mage::helper('customer')->__('Continue Shopping') ?></span></span></button>
+    <button class="button center" type="button" onclick="window.location='<?php echo $this->getContinueShoppingUrl(); ?>'">
+      <span><span><?php echo Mage::helper('customer')->__(
+        'Continue Shopping'
+      ); ?></span></span></button>
     </div>
   </div>
 </div>
 
 <!--
-<form action="<?php echo $this->getUrl('*/index/downloadQuotePdf') ?>" method="post" id="downloadQuotePdf">
+<form action="<?php echo $this->getUrl(
+  '*/index/downloadQuotePdf'
+); ?>" method="post" id="downloadQuotePdf">
   <input type="hidden" name="quoteID" value="<?php echo $quote->quote_id; ?>"/>
 </form>
 <script>
   var printOnly = "<?php echo $statusPrintOnlyMatch; ?>";
-  if (printOnly) {
+  if(printOnly) {
       $('downloadQuotePdf').submit();
   }
 </script>

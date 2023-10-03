@@ -32,6 +32,9 @@ $_columnCount                 = 4;
 $displaySize                  = 200;
 $_imgSize                     = 1 * $displaySize;
 $show_products                = (strpos($category_desc, "<!--no_products-->") === false);
+$media_url                    = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_dir                    = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
 
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
@@ -207,7 +210,6 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       $img_html           = "";
       
       if(is_file($image_path) === true) {
-        $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
         $image_url        = "{$media_url}/catalog/category/{$image}";
         $col_width        = 140;
         $cdn_img_options  = [
@@ -389,10 +391,12 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
       
       // Product thumbnail
-      $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-      $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
-      $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-      $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
+      $thumbnail        = $_product->getThumbnail();
+      if(strlen($thumbnail) === 0 || $thumbnail === "no_selection") {
+        $thumbnail        = "/placeholder/{$placeholder_image}";
+      }
+      $image_url        = "{$media_url}/catalog/product{$thumbnail}";
+      $image_path       = "{$media_dir}/catalog/product{$thumbnail}";
       if(is_file($image_path) === true) {
         $col_width        = 200;
         $cdn_img_options  = [

@@ -18,7 +18,8 @@ $brand_name                 = _get_product_attribute($_product, "manufacturer");
 $brand_id                   = $_product->getData("manufacturer");
 $brand_logo                 = "";
 $brand_slug                 = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_link                 = "/shop?manufacturer={$brand_id}";
+$seo_tag                    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
+$brand_link                 = "/shop?manufacturer={$brand_id}&cstag={$seo_tag}";
 $anchors                    = [];
 $in3_minimum                = 50 / 1.21;
 $in3_maximum                = 30000 / 1.21;
@@ -809,6 +810,9 @@ if($refrigerant === "R290" || $refrigerant === "R290a") {
 }
 if($refrigerant === "R600" || $refrigerant === "R600a" || $refrigerant === "R660a") {
   $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r600")->toHtml()."</div>";
+}
+if($refrigerant === "R454C") {
+  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r454c")->toHtml()."</div>";
 }
 $value = $voltage;
 if(is_array($value)) {

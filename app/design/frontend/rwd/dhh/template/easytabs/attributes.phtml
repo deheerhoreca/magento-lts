@@ -128,7 +128,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "manufacturer":
           case "brand_series":
             if(empty($_data["option_id"]) === false) {
-              $link_url   = "/shop?{$_data["code"]}={$_data["option_id"]}";
+              $seo_tag    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
+              $link_url   = "/shop?{$_data["code"]}={$_data["option_id"]}&cstag={$seo_tag}";
               $link_title = "Bekijk meer producten van {$value}";
             }
             break;

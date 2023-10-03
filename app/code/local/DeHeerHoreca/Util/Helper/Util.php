@@ -237,13 +237,26 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return MarkdownExtra::defaultTransform($string);
   }
 
-  public function getBrandUrlSlug($url) {
-    $url = strtolower($url);
-    $url = str_replace([" ", "-", "/", "&"], Mage::getStoreConfig('amshopby/seo/special_char'), $url);
-    $url = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $url);
-    $url = iconv('UTF-8', 'ASCII//TRANSLIT', $url);
+  public function getBrandUrlSlug($string) {
+    $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
+    $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
+    $string   = strtr(utf8_decode($string), utf8_decode($from), $to);
+    $string   = strtolower($string);
+    $string   = str_replace([" ", "-", "/", "&"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
+    $string   = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
     
-    return $url;
+    return $string;
+  }
+  
+  public function getUrlSlug($string) {
+    $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
+    $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
+    $string   = strtr(utf8_decode($string), utf8_decode($from), $to);
+    $string   = preg_replace('/[^\w\d\-\ ]/', '', $string);
+    $string   = str_replace(' ', '-', $string);
+    $string   = trim($string);
+    
+    return $string;
   }
   
   public function getProductGridHtml($_product, $product_block, $options = []) {
@@ -369,8 +382,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $display_stock_message = $stock_message;
     }
     
-    $img_id   = "product-collection-image-".$_product->getId();
-    
+    $img_id           = "product-collection-image-".$_product->getId();    
     $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
     $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
@@ -393,8 +405,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     } else {
       // Failure should not happen, but this is a fallback
-      $img_url  = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_dimensions);
-      $img_html = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
+      $img_url          = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_dimensions);
+      $img_html         = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
     }
     ?>
     <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target;?>>
@@ -1322,26 +1334,26 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         if(in_range($price_ex_vat, 400  , 2500  )) $rates[24] = $price_ex_vat * (4.99 / 100);
     elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[24] = $price_ex_vat * (4.89 / 100);
     elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[24] = $price_ex_vat * (4.78 / 100);
-    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[24] = $price_ex_vat * (4.68 / 100);
-    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[24] = $price_ex_vat * (4.63 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[24] = $price_ex_vat * (4.72 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[24] = $price_ex_vat * (4.68 / 100);
     
         if(in_range($price_ex_vat, 400  , 2500  )) $rates[36] = $price_ex_vat * (3.46 / 100);
     elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[36] = $price_ex_vat * (3.36 / 100);
-    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[36] = $price_ex_vat * (3.27 / 100);
-    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[36] = $price_ex_vat * (3.23 / 100);
-    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[36] = $price_ex_vat * (3.20 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[36] = $price_ex_vat * (3.30 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[36] = $price_ex_vat * (3.27 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[36] = $price_ex_vat * (3.23 / 100);
     
         if(in_range($price_ex_vat, 400  , 2500  )) $rates[48] = $price_ex_vat * (2.76 / 100);
-    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[48] = $price_ex_vat * (2.57 / 100);
-    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[48] = $price_ex_vat * (2.55 / 100);
-    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[48] = $price_ex_vat * (2.49 / 100);
-    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[48] = $price_ex_vat * (2.46 / 100);
+    elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[48] = $price_ex_vat * (2.60 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[48] = $price_ex_vat * (2.57 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[48] = $price_ex_vat * (2.53 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[48] = $price_ex_vat * (2.50 / 100);
     
-        if(in_range($price_ex_vat, 400  , 2500  )) $rates[60] = $price_ex_vat * (2.43 / 100);
+        if(in_range($price_ex_vat, 400  , 2500  )) $rates[60] = $price_ex_vat * (2.40 / 100);
     elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[60] = $price_ex_vat * (2.25 / 100);
-    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[60] = $price_ex_vat * (2.15 / 100);
-    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[60] = $price_ex_vat * (2.06 / 100);
-    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[60] = $price_ex_vat * (2.02 / 100);
+    elseif(in_range($price_ex_vat, 5001 , 12500 )) $rates[60] = $price_ex_vat * (2.19 / 100);
+    elseif(in_range($price_ex_vat, 12501, 25000 )) $rates[60] = $price_ex_vat * (2.13 / 100);
+    elseif(in_range($price_ex_vat, 25001, 150000)) $rates[60] = $price_ex_vat * (2.08 / 100);
     
     if($time === "daily") {
       $rates = array_map( function($val) { return round(($val * 12) / 365, 2); }, $rates);
@@ -1436,42 +1448,42 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    $options["cdn"] = isset($options["cdn"]) ? $options["cdn"] : "imagekit";
-    $fs_path      = $options["fs_path"]       ?? null;
-    $add_mod_time = $options["add_mod_time"]  ?? false; // Requires fs_path
-    $width        = $options["width"]         ?? 0;
-    $height       = $options["height"]        ?? 0;
-    $alt          = $options["alt"]           ?? $url;
-    $id           = $options["id"]            ?? "";
-    $fit          = $options["fit"]           ?? "scale-down";
-    $format       = $options["format"]        ?? "auto";
-    $quality      = $options["quality"]       ?? 75;
-    $url_only     = $options["url_only"]      ?? false;
-    $relative_url = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
-    $include_2x   = $options["2x"]            ?? true;
-    $lazy         = $options["lazy"]          ?? false;
-    $class        = $options["class"]         ?? "";
-    $style        = $options["style"]         ?? "";
+    $options["cdn"] = isset($options["cdn"])     ? $options["cdn"] : "imagekit";
+    $fs_path        = $options["fs_path"]       ?? null;
+    $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
+    $width          = $options["width"]         ?? 0;
+    $height         = $options["height"]        ?? 0;
+    $alt            = $options["alt"]           ?? $url;
+    $id             = $options["id"]            ?? "";
+    $fit            = $options["fit"]           ?? "scale-down";
+    $format         = $options["format"]        ?? "auto";
+    $quality        = $options["quality"]       ?? 75;
+    $url_only       = $options["url_only"]      ?? false;
+    $relative_url   = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
+    $include_2x     = $options["2x"]            ?? true;
+    $lazy           = $options["lazy"]          ?? false;
+    $class          = $options["class"]         ?? "";
+    $style          = $options["style"]         ?? "";
     
-    $cdn          = (string)  $options["cdn"];
-    $width        = (int)     $width;
-    $height       = (int)     $height;
-    $alt          = (string)  $alt;
-    $id           = (string)  $id;
-    $fit          = (string)  $fit;
-    $format       = (string)  $format;
-    $quality      = (int)     $quality;
-    $url_only     = (bool)    $url_only;
-    $relative_url = (bool)    $relative_url;
-    $include_2x   = (bool)    $include_2x;
-    $lazy         = (bool)    $lazy;
-    $class        = (string)  $class;
-    $style        = (string)  $style;
-    $id_html      = "";
-    $lazy_html    = "";
-    $class_html   = "";
-    $style_html   = "";
-    $html         = "";
+    $cdn            = (string)  $options["cdn"];
+    $width          = (int)     $width;
+    $height         = (int)     $height;
+    $alt            = (string)  $alt;
+    $id             = (string)  $id;
+    $fit            = (string)  $fit;
+    $format         = (string)  $format;
+    $quality        = (int)     $quality;
+    $url_only       = (bool)    $url_only;
+    $relative_url   = (bool)    $relative_url;
+    $include_2x     = (bool)    $include_2x;
+    $lazy           = (bool)    $lazy;
+    $class          = (string)  $class;
+    $style          = (string)  $style;
+    $id_html        = "";
+    $lazy_html      = "";
+    $class_html     = "";
+    $style_html     = "";
+    $html           = "";
     
     // Pre-process settings
     if($cdn === "imagekit") {
@@ -1604,6 +1616,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     return $url;
+  }
+  
+  public static function _get_placeholder_image_path() {
+    $media_dir  = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $image_path = "{$media_dir}/catalog/product/placeholder/".Mage::getStoreConfig("catalog/placeholder/image_placeholder");
+    return $image_path;
+  }
+  
+  public static function _get_placeholder_image_url() {
+    $media_url  = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $image_url  = "{$media_url}/catalog/product/placeholder/".Mage::getStoreConfig("catalog/placeholder/image_placeholder");
+    return $image_url;
   }
 }
 

@@ -80,6 +80,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
         "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
         "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
+        "cstag", 
       ];
       $url = self::strip_param_from_url($url, $ignored_url_query_keys);
       
