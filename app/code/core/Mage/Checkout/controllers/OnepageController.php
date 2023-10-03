@@ -284,7 +284,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
             return;
         }
 
-        $session->clear();
+        //$session->clear();
         $this->loadLayout();
         $this->_initLayoutMessages('checkout/session');
         Mage::dispatchEvent('checkout_onepage_controller_success_action', ['order_ids' => [$lastOrderId]]);

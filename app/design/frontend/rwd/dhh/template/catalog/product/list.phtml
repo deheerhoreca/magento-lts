@@ -32,6 +32,9 @@ $_columnCount                 = 4;
 $displaySize                  = 200;
 $_imgSize                     = 1 * $displaySize;
 $show_products                = (strpos($category_desc, "<!--no_products-->") === false);
+$media_url                    = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_dir                    = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
 
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
@@ -203,27 +206,32 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       $category_name_safe = htmlspecialchars($category_name);
       $image              = $subcategory->getImage();
       $category_url       = $subcategory->getUrl();
-      $img_path           = "{$media_path}/catalog/category/{$image}";
-      $resized_img_name   = $category_thumbs_dimensions."_{$subcategory->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
-      $resized_img_path   = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
-      $resized_img_url    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
-      $lazy               = ($i < 5) ? "loading=lazy " : "";
+      $image_path         = "{$media_path}/catalog/category/{$image}";
+      $img_html           = "";
       
-      if(is_file($resized_img_path) === false && is_file($img_path) === true) {
-        $imageObj = new Varien_Image($img_path);
-        $imageObj->constrainOnly(true);
-        $imageObj->keepAspectRatio(true);
-        $imageObj->keepFrame(true);
-        $imageObj->backgroundColor([255, 255, 255]);
-        $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
-        $imageObj->save($resized_img_path);
+      if(is_file($image_path) === true) {
+        $image_url        = "{$media_url}/catalog/category/{$image}";
+        $col_width        = 140;
+        $cdn_img_options  = [
+          "fs_path"         => $image_path,
+          "url"             => $image_url,
+          "fit"             => "contain",
+          "width"           => $col_width,
+          "height"          => $col_width,
+          "lazy"            => ($i < 5),
+          "add_mod_time"    => true,
+          "class"           => "trans-opacity",
+          "title"           => $category_name,
+          "alt"             => $category_name,
+          "quality"         => 80,
+          "dpr"             => 1.25,
+          "relative_url"    => true,
+        ];
+        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
       }
-      echo "<li style='max-width: 180px;'>";
-      echo "<a href='{$category_url}' title='{$category_name_safe}'>";
-      if(empty($image) === false) {
-        echo "<img class='trans-opacity' src='{$resized_img_url}' alt='{$category_name}' title='{$category_name}' {$lazy}height='{$category_thumbs_actual}' width='{$category_thumbs_actual}'>";
-      }
-      echo "<strong>{$category_name}</strong>";
+      
+      echo "<li style='max-width: 180px'>";
+      echo "<a href='{$category_url}' title='{$category_name_safe}'>{$img_html}<strong>{$category_name}</strong>";
       echo "</a></li>".PHP_EOL;
     }
     echo "</ul>".PHP_EOL;
@@ -381,6 +389,33 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       
       // Product name
       $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
+      
+      // Product thumbnail
+      $thumbnail        = $_product->getThumbnail();
+      if(strlen($thumbnail) === 0 || $thumbnail === "no_selection") {
+        $thumbnail        = "/placeholder/{$placeholder_image}";
+      }
+      $image_url        = "{$media_url}/catalog/product{$thumbnail}";
+      $image_path       = "{$media_dir}/catalog/product{$thumbnail}";
+      if(is_file($image_path) === true) {
+        $col_width        = 200;
+        $cdn_img_options  = [
+          "fs_path"         => $image_path,
+          "url"             => $image_url,
+          "fit"             => "contain",
+          "width"           => $col_width,
+          "height"          => $col_width,
+          "lazy"            => true,
+          "add_mod_time"    => true,
+          "class"           => "trans-opacity",
+          "title"           => $product_name,
+          "alt"             => $product_name,
+          "quality"         => 75,
+          "dpr"             => 1,
+          "relative_url"    => true,
+        ];
+        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      }
       ?>
       <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
         <?php
@@ -389,10 +424,11 @@ if($show_products === true && $_productCollection->getFirstItem()) {
         ?>
         <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?>" class="product-image">
         <?php
-          echo "<img class='trans-opacity' id='product-collection-image-{$_product->getId()}'
-            src='{$this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize)}'
-            alt='{$this->stripTags($this->getImageLabel($_product, 'small_image'), null, true)}'
-            width='{$displaySize}' height='{$displaySize}' loading=lazy>";
+          // echo "<img class='trans-opacity' id='product-collection-image-{$_product->getId()}'
+            // src='{$this->helper('catalog/image')->init($_product, 'thumbnail')->resize($_imgSize)}'
+            // alt='{$this->stripTags($this->getImageLabel($_product, 'thumbnail'), null, true)}'
+            // width='{$displaySize}' height='{$displaySize}' loading=lazy>";
+          echo $img_html;
         ?>
         </a>
         <div class="product-info">

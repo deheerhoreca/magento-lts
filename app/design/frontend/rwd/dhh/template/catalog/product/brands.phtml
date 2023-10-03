@@ -75,23 +75,47 @@ usort($manufacturers, function($a, $b) {
     
     $brand_logo   = "";
     $brand_name   = $label;
-    $brand_slug   = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_id     = $manufacturer["value"];
-    $shop_link    = "/shop?{$attribute_code}={$brand_id}";
+    $seo_tag      = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
+    $shop_link    = "/shop?{$attribute_code}={$brand_id}&cstag={$seo_tag}";
     $label_enc    = htmlspecialchars($label);
+    $img_html     = "";
     
     if(empty($brand_name) === false) {
-      $brand_logo_file = "media/wysiwyg/brands/{$brand_slug}.png";
+      $brand_slug       = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+      $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $image_url        = "{$media_url}/wysiwyg/brands/{$brand_slug}.png";
+      $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $brand_logo_file  = "{$media_dir}/wysiwyg/brands/{$brand_slug}.png";
+      
+      if(is_file($brand_logo_file) === false) {
+        $brand_logo_file  = Mage::helper("deheerhoreca_util/util")->_get_placeholder_image_path();
+        $image_url        = Mage::helper("deheerhoreca_util/util")->_get_placeholder_image_url();
+      }
+      
       if(is_file($brand_logo_file) === true) {
-        $brand_logo = "/".$brand_logo_file;
+        $image_path       = $brand_logo_file;
+        $cdn_img_options  = [
+          "fs_path"         => $image_path,
+          "url"             => $image_url,
+          "width"           => 140,
+          "height"          => 40,
+          "lazy"            => true,
+          "add_mod_time"    => true,
+          "class"           => "center",
+          "title"           => $label_enc,
+          "alt"             => $label_enc,
+          "relative_url"    => true,
+        ];
+        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
       }
     }
     
-    if($brand_logo !== "") {
+    if($img_html !== "") {
       ?>
       <li class="scale-3">
-        <a href="<?php echo $shop_link; ?>">
-          <img loading="lazy" src="<?php echo $brand_logo ?>" alt="<?php echo $label_enc ?>" title="<?php echo $label_enc ?>">
+        <a data-slug="<?php echo $brand_slug; ?>" href="<?php echo $shop_link; ?>" title="<?php echo $label_enc; ?>" alt="Alle producten van <?php echo $label_enc; ?>">
+          <?php echo $img_html; ?>
           <div class=strong><?php echo $label ?></div>
         </a>
       </li>

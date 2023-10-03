@@ -10,17 +10,10 @@ if (Validation) {
   });
 }
 
-document.observe("dom:loaded", bodyOnload);
+document.observe("dom:loaded", dhh_change_required_fields);
 
-$("eol").on('change', function() {
-  bodyOnload();
-});
-
-function bodyOnload() {
-
-  var eol = $('eol').getValue();
-  
-  if (eol == 2075) {
+function dhh_change_required_fields() {
+  if ($('eol').getValue() == 2075) {
     // Double because the class exists twice...
     $('levertijd').removeClassName('required-entry');
     $('levertijd').removeClassName('required-entry');
@@ -33,5 +26,9 @@ function bodyOnload() {
     $('price_supplier_discount_perc').addClassName('required-entry');
     $('msrp').addClassName('required-entry');
   }
-
+  
+  // Add listener for changes
+  $("eol").on('change', function() {
+    dhh_change_required_fields();
+  });
 }

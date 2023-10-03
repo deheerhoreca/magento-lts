@@ -36,7 +36,7 @@ $attr_remove_decimals = [
   "number_of_cooling_zones", "aantal_flessen", "cooking_zones", "length_mm", "isolatiedikte", "number_of_slots",
   "max_geleiders", "package_height_mm", "package_width_mm", "package_depth_mm", "shipping_weight_gram",
   "temp_range_from_c", "temp_range_to_c", "thickness_mm", "hoogte_borden_max", "hoogte_glazen_max", "max_baskets_per_hour",
-  "tank_temperature_c", "breedte_deur",
+  "tank_temperature_c", "breedte_deur", "capacity_people",
 ];
 
 // No zero decimals, with number formatting
@@ -46,7 +46,7 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "annual_energy_consumption_kwh", "capaciteit_boiler", "laadhoogte", "weight_fabric",
   "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus", "temp_resistance_from",
   "temp_resistance_to", "guide_set_distance_mm", "inhoud_vetpan_liter", "max_load_per_shelf_kg",
-  "gross_weight_gram", "amps", "etaleer_oppervlak_m2",
+  "gross_weight_gram", "amps", "etaleer_oppervlak_m2", "blade_length_mm",
 ];
 
 // Allow to show "No" values for these attributes
@@ -84,7 +84,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
     foreach($_additional["items"] as $_data) {
       switch($_data["code"]) {
         case "gn_capacity":                 $delete_these[] = "inhoud_aantal_gn";         break;
-        case "energy_efficiency_class_a_g": $delete_these[] = "energieklasse";            break;
+// @todo add N.v.t. exception        case "energy_efficiency_class_a_g": $delete_these[] = "energieklasse";            break;
         
         case "temp_range_from_c":
         case "temp_range_to_c":
@@ -128,7 +128,8 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "manufacturer":
           case "brand_series":
             if(empty($_data["option_id"]) === false) {
-              $link_url   = "/shop?{$_data["code"]}={$_data["option_id"]}";
+              $seo_tag    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
+              $link_url   = "/shop?{$_data["code"]}={$_data["option_id"]}&cstag={$seo_tag}";
               $link_title = "Bekijk meer producten van {$value}";
             }
             break;
@@ -177,18 +178,18 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             $postfix = " liter";
             break;
 
-          // "m2" postfix"
+          // "m2" postfix
           case "etaleer_oppervlak_m2":
             $value = number_format($value, 2, ",", ".");
             $postfix = " m²";
             break;
                     
-          // "m3" postfix"
+          // "m3" postfix
           case "inhoud_m3":
             $postfix = " m³";
             break;
           
-          // "mm" postfix
+          // {mm cm m} postfix depending on number for units in mm
           case "hoogte":
           case "breedte":
           case "diepte":
@@ -206,24 +207,40 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "package_depth_mm":
           case "hoogte_borden_max":
           case "hoogte_glazen_max":
+          case "blade_length_mm":
             $postfix = " mm";
+            if($value < 100) {
+              $postfix = " mm";
+            } elseif($value < 5000) {
+              $value /= 10;
+              $postfix = " cm";
+            } else {
+              $value /= 1000;        // Foils and such...
+              $postfix = " meter";
+            }
             break;
           
+          // " cm" postfix depending on number for units in cm
           case "laadhoogte":
             $postfix = " cm";
             break;
           
-          // "Liter per Uur" postfix
+          // " personen" postfix
+          case "capacity_people":
+            $postfix = " personen";
+            break;
+          
+          // " Liter per Uur" postfix
           case "water_verbruik":
             $postfix = " Liter per Uur";
             break;
           
-          // "Liter per Cyclus" postfix
+          // " Liter per Cyclus" postfix
           case "water_verbruik_cyclus":
             $postfix = " Liter per Cyclus";
             break;
           
-          // " A"
+          // " A" postfix
           case "amps":
             $postfix = " A";
             break;
@@ -233,7 +250,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             $postfix = " kWh per jaar";
             break;
           
-          // kW
+          // {Watt kW} postfix for units in kW
           case "vermogen_kw":
           case "vermogen":
           case "vermogen_boiler":
@@ -246,7 +263,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             }
             break;
           
-          // Watt
+          // {Watt kW} postfix for units in Watt
           case "total_power_watt":
             if($value  >= 5000) {
               $value   /= 1000;
@@ -258,7 +275,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             }
             break;
           
-          // Grams
+          // {gr kg} postfix for units in gram
           case "gross_weight_gram":
           case "shipping_weight_gram":
             if($value < 3000) {
@@ -269,9 +286,9 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             }
             break;
           
-          // Kg
+          // {gr kg} postfix for units in kg
           case "weight":
-            if($value < 3) {
+            if($value < 1) {
               $value *= 1000;
               $postfix = " gr";
             } else {

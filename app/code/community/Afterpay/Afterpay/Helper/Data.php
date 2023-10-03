@@ -26,13 +26,21 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function sendDebugEmail($email)
     {
+        // DHH CORE HACK
+        $quote_id = "-";
+        try {
+          $quote_id = Mage::getSingleton('checkout/session')->getQuoteId();
+        } catch (Exception $e) {
+          Mage::logException($e);
+        }
+        // END DHH CORE HACK
         $recipients = explode(',', Mage::getStoreConfig('afterpay/afterpay_general/debug_mail', Mage::app()->getStore()->getStoreId()));
         foreach ($recipients as $recipient) {
             $mail = Mage::getModel('core/email');
             $mail->setToName('AfterPay Debug Recipient');
             $mail->setToEmail($recipient);
             $mail->setBody($email);
-            $mail->setSubject('Afterpay Debug E-mail');
+            $mail->setSubject('Afterpay Debug E-mail '.$quote_id);
             $mail->setFromEmail(Mage::getStoreConfig('trans_email/ident_general/email'));
             $mail->setFromName(Mage::getStoreConfig('trans_email/ident_general/name'));
             $mail->setType('text');

@@ -25,7 +25,7 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
     {
         parent::__construct();
         
-        $this->setDefaultSort('position');
+        $this->setDefaultSort('popularity');    // DHH CORE HACK
         $this->setDefaultDir('ASC');
     }
     
@@ -38,6 +38,8 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
     	->addAttributeToSelect('name')
     	->addAttributeToSelect('sku')
     	->addAttributeToSelect('price')
+    	->addAttributeToSelect('thumbnail') // DHH CORE HACK
+    	->addAttributeToSelect('popularity') // DHH CORE HACK
     	->addStoreFilter($this->getRequest()->getParam('store'))
     	->joinField('position','catalog/category_product','position','product_id=entity_id','category_id='.(int) $this->getRequest()->getParam('id', 0),'left')
     	->joinField('qty','cataloginventory/stock_item','qty','product_id=entity_id','{{table}}.stock_id=1','left');
@@ -59,31 +61,46 @@ class Anowave_Sort_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Blo
 	{
 		parent::_prepareColumns();
 		
-		$this->addColumn('qty', array(
-			'header'    => Mage::helper('sales')->__('Stock Level'),
-			'width'     => '20',
-			'type'      => 'number',
-			'index'     => 'qty'
-		));
+		$this->addColumn('qty', [
+			'header'      => Mage::helper('sales')->__('Stock Level'),
+			'width'       => '20',
+			'type'        => 'number',
+			'index'       => 'qty'
+		]);
 		
-		$this->addColumn('arrange', array
-		(
-			'header'    => Mage::helper('catalog')->__('Sort'),
-			'width'     => '20px',
-			'type'      => 'text',
-			'align'		=> 'center',
-			'index'     => 'arrange',
-			'renderer'  => 'sort/drag'
-        ));
+		$this->addColumn('arrange',
+		[
+			'header'      => Mage::helper('catalog')->__('Sort'),
+			'width'       => '20px',
+			'type'        => 'text',
+			'align'		    => 'center',
+			'index'       => 'arrange',
+			'renderer'    => 'sort/drag',
+      'sortable'    => true,
+      'search'      => false,
+      'filter'      => false,
+     ]);
 		
-		$this->addColumnAfter('image', array
-		(
-			'header'    => Mage::helper('catalog')->__('Image'),
-			'width'     => '100px',
-			'type'      => 'text',
-			'align'		=> 'center',
-			'renderer'  => 'sort/image'
-		),'entity_id');
+		$this->addColumnAfter('image',
+		[
+			'header'      => Mage::helper('catalog')->__('Image'),
+			'width'       => '100px',
+			'type'        => 'text',
+			'align'		    => 'center',
+			'renderer'    => 'sort/image'
+		], 'entity_id');
+    
+    // DHH CORE HACK
+		$this->addColumnAfter('popularity',
+		[
+			'header'      => 'Populariteit',
+			'width'       => '50px',
+			'type'        => 'number',
+			'index'       => 'popularity',
+      'sortable'    => true,
+      'search'      => false,
+      'filter'      => false,
+		], 'price');
 	}
 
 	protected function _preparePage()

@@ -7,6 +7,8 @@
 const WATERMARKED_DIR = "haha/";
 const FILENAME_SECRET = "sterfmetjescraper";
 
+$use_cdn = true;
+
 // Logic exists in multiple places!
 // Allows for arbitrary number of dashes in the SKU
 function _extract_data_from_optimized_image_name($optimized_image) {
@@ -75,185 +77,218 @@ function _get_watermarked_image_filename($optimized_image) {
 
 /* @var $this Mage_Catalog_Block_Product_View_Media */
 
-$magicToolboxHelper = Mage::helper('magiczoomplus/settings');
-$mtDataHelper = Mage::helper('magiczoomplus');
-
-$templateFilename = $magicToolboxHelper->getTemplateFilename('product.info.media');
-
-$tool = $magicToolboxHelper->loadTool('product');
+$magicToolboxHelper   = Mage::helper('magiczoomplus/settings');
+$mtDataHelper         = Mage::helper('magiczoomplus');
+$templateFilename     = $magicToolboxHelper->getTemplateFilename('product.info.media');
+$tool                 = $magicToolboxHelper->loadTool('product');
 
 if($tool->params->checkValue('enable-effect', 'No')) {
-    require($templateFilename);
-    return;
+  require($templateFilename);
+  return;
 }
 
-$productModel = $this->getProduct();
-$productBaseImage = $productModel->getImage();
-if($productBaseImage == 'no_selection') $productBaseImage = null;
-$isBaseImageIncluded = false;//NOTE: is product base image not excluded from gallery
-$galleryImages = array();
-$galleryImagesCount = 0;
+$productModel         = $this->getProduct();
+$productBaseImage     = $productModel->getImage();
+$isBaseImageIncluded  = false; // NOTE: is product base image not excluded from gallery
+$galleryImages        = [];
+$galleryImagesCount   = 0;
+$productVideos        = $productModel->getData('product_videos');
+$productVideos        = empty($productVideos) ? [] : $magicToolboxHelper->getSerializer()->unserialize($productVideos);
+$productImages        = [];
+$imageFileOverride    = [];
+
+if($productBaseImage == 'no_selection') {
+  $productBaseImage   = null;
+}
 if(!$this->_isGalleryDisabled) {
-    $galleryImages = $this->getGalleryImages();
-    $galleryImagesCount = count($galleryImages->getItems());
+  $galleryImages      = $this->getGalleryImages();
+  $galleryImagesCount = count($galleryImages->getItems());
 }
-
-$productVideos = $productModel->getData('product_videos');
-$productVideos = empty($productVideos) ? array() : $magicToolboxHelper->getSerializer()->unserialize($productVideos);
-
-$productImages = array();
-
-$imageFileOverride = [];
 
 if($galleryImagesCount) {
 
-    foreach($galleryImages as $galleryImage) {
-        if (!$mtDataHelper->isGalleryImageVisible($productModel, $galleryImage)) {
-            continue;
-        }
-
-        $imagePath = $galleryImage->getPath();
-        
-        // DHH HACK
-        
-        // See if there is a watermarked counterpart
-        $wm_filename = _get_watermarked_image_filename($imagePath);
-        $wm_path     = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
-        
-        if(is_file($wm_path) === true) {
-          $imagePath = $wm_path;
-          $imageFileOverride[$galleryImage->getFile()] = WATERMARKED_DIR."{$wm_filename}";
-          //print_r($imageFile);
-        }
-        
-        // END DHH
-        
-        if(file_exists($imagePath)) {
-            $imageFile = $galleryImage->getFile();
-            $isBaseImage = ($imageFile == $productBaseImage);
-            try {
-                $productImages[] = array(
-                    'image-size' => getimagesize($imagePath),
-                    'image-file' => $imageFile,
-                    'image-label' => $galleryImage->getLabel(),
-                    'is-base-image' => $isBaseImage,
-                );
-                if($isBaseImage) {
-                    $isBaseImageIncluded = true;
-                }
-            } catch(Exception $e) {
-              //trigger_error($e->getMessage(), E_USER_ERROR);
-            }
-        }
+  foreach($galleryImages as $galleryImage) {
+    if (!$mtDataHelper->isGalleryImageVisible($productModel, $galleryImage)) {
+      continue;
     }
+
+    $imagePath = $galleryImage->getPath();
+    
+    // DHH HACK -- See if there is a watermarked counterpart
+    $wm_filename = _get_watermarked_image_filename($imagePath);
+    $wm_path   = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
+    
+    if(is_file($wm_path) === true) {
+      $imagePath = $wm_path;
+      $imageFileOverride[$galleryImage->getFile()] = DS.WATERMARKED_DIR."{$wm_filename}";
+    }
+    // END DHH
+    
+    if(file_exists($imagePath)) {
+      $imageFile = $galleryImage->getFile();
+      $isBaseImage = ($imageFile == $productBaseImage);
+      try {
+        $productImages[] = array(
+          'image-size' => getimagesize($imagePath),
+          'image-file' => $imageFile,
+          'image-label' => $galleryImage->getLabel(),
+          'is-base-image' => $isBaseImage,
+        );
+        if($isBaseImage) {
+          $isBaseImageIncluded = true;
+        }
+      } catch(Exception $e) {
+        //trigger_error($e->getMessage(), E_USER_ERROR);
+      }
+    }
+  }
 }
 
-if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
-  //echo "<pre>";
-  //var_dump($imageFileOverride);
-  //echo "</pre>";
+if(_dhh_debug()) {
+  printr($productImages);
+  printr($imageFileOverride);
 }
 
 if(!count($productImages)) {
-    if(!$productBaseImage && empty($productVideos)) {
-        $tool->params->setValue('enable-effect', 'No');
-        require($templateFilename);
-        return;
-    }
+  if(!$productBaseImage && empty($productVideos)) {
+    $tool->params->setValue('enable-effect', 'No');
+    require($templateFilename);
+    return;
+  }
 }
 
-$productId = $productModel->getId();
+$productId               = $productModel->getId();
 
-$outputHelper = $this->helper('catalog/output');
-$imageHelper = $this->helper('catalog/image');
+$outputHelper            = $this->helper('catalog/output');
+$imageHelper             = $this->helper('catalog/image');
 
-$productTitle = $this->htmlEscape($productModel->getName());
-$productDescription = $this->htmlEscape($outputHelper->productAttribute($productModel, $productModel->getDescription(), 'description'));
+$productTitle            = $this->htmlEscape($productModel->getName());
+$productDescription      = $this->htmlEscape($outputHelper->productAttribute($productModel, $productModel->getDescription(), 'description'));
 $productShortDescription = $this->htmlEscape($outputHelper->productAttribute($productModel, nl2br($productModel->getShortDescription()), 'short_description'));
-$productAlt = $this->htmlEscape($productModel->getImageLabel());
+$productAlt              = $this->htmlEscape($productModel->getImageLabel());
 
-$createSquareImages = $tool->params->checkValue('square-images', 'Yes');
-$useIndividualTitles = $tool->params->checkValue('use-individual-titles', 'Yes');
-$ignoreMagentoCSSclass = $tool->params->checkValue('ignore-magento-css', 'Yes') ? 'ignore-magento-css' : '';
-$scrollEnabled = $tool->params->checkValue('magicscroll', 'Yes');
-$eventName = $tool->params->getValue('selectorTrigger');
-if($eventName == 'hover') $eventName = 'mouseover';
+$createSquareImages      = $tool->params->checkValue('square-images', 'Yes');
+$useIndividualTitles     = $tool->params->checkValue('use-individual-titles', 'Yes');
+$ignoreMagentoCSSclass   = $tool->params->checkValue('ignore-magento-css', 'Yes') ? 'ignore-magento-css' : '';
+$scrollEnabled           = $tool->params->checkValue('magicscroll', 'Yes');
+$eventName               = $tool->params->getValue('selectorTrigger');
+if($eventName == 'hover') {
+  $eventName = 'mouseover';
+}
 
-$mainHTML = '';
-$defaultContainerId = 'zoom';
-$containersData = array(
-    'zoom' => '',
-    '360' => '',
-    //'video' => '',
-);
-$productImagesHTML = array();
-$associatedProductImagesHTML = array();
-$hiddenImagesHTML = array();
-$scriptHTML = '';
+$mainHTML                    = '';
+$defaultContainerId          = 'zoom';
+$containersData              = [
+  'zoom'                   => '',
+  '360'                    => '',
+  //'video'                => '',
+];
+$productImagesHTML           = [];
+$associatedProductImagesHTML = [];
+$hiddenImagesHTML            = [];
+$scriptHTML                  = '';
+
+$media_url            = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_dir            = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 
 foreach($productImages as &$productImage) {
-
+  
+  $productImage['alt'] = $this->htmlEscape($productImage['image-label']);
+  $productImage['title'] = $productTitle;
+  if($useIndividualTitles) {
+    $productImage['title'] = empty($productImage['alt']) ? $productTitle : $productImage['alt'];
+  }
+  
+  $image_url        = "{$media_url}/catalog/product{$productImage['image-file']}";
+  $image_path       = "{$media_dir}/catalog/product{$productImage['image-file']}";
+  $cdn_img_options  = [
+    "fs_path"         => $image_path,
+    "url"             => $image_url,
+    "add_mod_time"    => true,
+    "relative_url"    => true,
+    "url_only"        => true,
+  ];
+  
+  // Try CDN
+  $bigImage         = null;
+  $thumbImage       = null;
+  $mediumImage      = null;
+  if(is_file($image_path) === true) {
+    
+    $cdn_img_options["width"] = 2048;
+    $cdn_img_options["height"] = 2048;
+    $cdn_img_options["quality"] = 85;
+    $bigImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    
+    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
+    $cdn_img_options["width"] = $w;
+    $cdn_img_options["height"] = $h;
+    $cdn_img_options["quality"] = 75;
+    $thumbImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    
+    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
+    $cdn_img_options["width"] = $w;
+    $cdn_img_options["height"] = $h;
+    $cdn_img_options["quality"] = 75;
+    $mediumImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+  }
+  
+  // Fallback to resize()
+  if($bigImage === null) {
     if(isset($imageFileOverride[$productImage['image-file']])) {
       $bigImage = $imageHelper->init($productModel, 'image', $imageFileOverride[$productImage['image-file']])->__toString();
     } else {
       $bigImage = $imageHelper->init($productModel, 'image', $productImage['image-file'])->__toString();
     }
-
     if($createSquareImages) {
-        $bigImageSize = ($productImage['image-size'][0] > $productImage['image-size'][1]) ? $productImage['image-size'][0] : $productImage['image-size'][1];
-        $bigImage = $imageHelper->watermark(null, null)->resize($bigImageSize)->__toString();
+      $bigImageSize = min(2048, max($productImage['image-size'][0], $productImage['image-size'][1]));
+      $bigImage = $imageHelper->watermark(null, null)->resize($bigImageSize)->__toString();
     }
-
-    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
-    $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
-    // $mediumImage2x = $imageHelper->watermark(null, null)->resize($w*2, $h*2)->__toString();
-
+  }
+  if($thumbImage === null) {
     list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
     $thumbImage = $imageHelper->init($productModel, 'thumbnail', $productImage['image-file'])->resize($w, $h)->__toString();
-    // $thumbImage2x = $imageHelper->init($productModel, 'thumbnail', $productImage['image-file'])->resize($w*2, $h*2)->__toString();
-
-    $productImage['alt'] = $this->htmlEscape($productImage['image-label']);
-    $productImage['title'] = $productTitle;
-    if($useIndividualTitles) {
-        $productImage['title'] = empty($productImage['alt']) ? $productTitle : $productImage['alt'];
-    }
-
-    $aHtml = $tool->getSelectorTemplate(array(
-        'id'        => $productId,
-        'group'     => 'product-page',
-        'img'       => $bigImage,
-        'img2x'     => $bigImage,
-        'medium'    => $mediumImage,
-        // 'medium2x'  => $mediumImage2x,
-        'thumb'     => $thumbImage,
-        // 'thumb2x'   => $thumbImage2x,
-        'alt'       => $productImage['alt'],
-        'title'     => $productImage['title'],
-        "width"     => 60,
-        "height"    => 60,
+  }
+  if($mediumImage === null) {
+    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
+    $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
+  }
+  
+  $config     = [
+    'id'        => $productId,
+    'group'     => 'product-page',
+    'img'       => $bigImage,
+    'medium'    => $mediumImage,
+    'thumb'     => $thumbImage,
+    'alt'       => $productImage['alt'],
+    'title'     => $productImage['title'],
+    "width"     => 60,
+    "height"    => 60,
+  ];
+  if(_dhh_debug()) {
+    printr($config);
+  }
+  $aHtml = $tool->getSelectorTemplate($config);
+  $aHtml = str_replace('<a ', '<a on'.$eventName.'="magicToolboxOnChangeSelector(this);" ', $aHtml);
+  if($ignoreMagentoCSSclass) {
+    $aHtml = str_replace('<a ', '<a class="'.$ignoreMagentoCSSclass.'" ', $aHtml);
+    $aHtml = str_replace('<img ', '<img class="'.$ignoreMagentoCSSclass.'" ', $aHtml);
+  }
+  $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" ', $aHtml);
+  
+  $productImagesHTML[] = $aHtml;
+  
+  if($productImage['is-base-image']) {
+    $containersData['zoom'] = $tool->getMainTemplate(array(
+      'id' => $productId,
+      'img' => $bigImage,
+      'thumb' => $mediumImage,
+      'alt' => $productImage['alt'],
+      'title' => $productImage['title'],
+      'description' => $productDescription,
+      'shortDescription' => $productShortDescription,
     ));
-    $aHtml = str_replace('<a ', '<a on'.$eventName.'="magicToolboxOnChangeSelector(this);" ', $aHtml);
-    if($ignoreMagentoCSSclass) {
-        $aHtml = str_replace('<a ', '<a class="'.$ignoreMagentoCSSclass.'" ', $aHtml);
-        $aHtml = str_replace('<img ', '<img class="'.$ignoreMagentoCSSclass.'" ', $aHtml);
-    }
-    $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" ', $aHtml);
-
-    $productImagesHTML[] = $aHtml;
-
-    if($productImage['is-base-image']) {
-        $containersData['zoom'] = $tool->getMainTemplate(array(
-            'id' => $productId,
-            'img' => $bigImage,
-            'img2x' => $bigImage,
-            'thumb' => $mediumImage,
-            // 'thumb2x' => $mediumImage2x,
-            'alt' => $productImage['alt'],
-            'title' => $productImage['title'],
-            'description' => $productDescription,
-            'shortDescription' => $productShortDescription,
-        ));
-    }
+  }
 }
 
 //NOTE: if base image exluded from gallery
@@ -279,13 +314,11 @@ if(empty($containersData['zoom'])) {
 
     list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productBaseImageSize);
     $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
-    $mediumImage2x = $imageHelper->watermark(null, null)->resize($w*2, $h*2)->__toString();
 
     $containersData['zoom'] = $tool->getMainTemplate(array(
         'id' => $productId,
         'img' => $bigImage,
         'thumb' => $mediumImage,
-        // 'thumb2x' => $mediumImage2x,
         'alt' => $productBaseImageAlt,
         'title' => $productBaseImageTitle,
         'description' => $productDescription,
@@ -320,7 +353,7 @@ foreach ($productVideos as $videoUrl => $videoData) {
 
 //NOTE: for cooperative mode with Magic 360
 $magic360ClassName = Mage::registry('magic360ClassName');
-$magic360Images = $magic360ClassName ? Mage::registry('magic360Images') : array();
+$magic360Images = $magic360ClassName ? Mage::registry('magic360Images') : [];
 $usedMagic360 = false;
 if(count($magic360Images)) {
     $magic360Helper = Mage::helper($magic360ClassName.'/settings');
@@ -329,7 +362,7 @@ if(count($magic360Images)) {
         $magic360ImageHelper = Mage::helper($magic360ClassName.'/image');
         $baseDir = Mage::getBaseDir('media').DS.'magictoolbox'.DS.$magic360ClassName;
         $createSquare360Images = $magic360Tool->params->checkValue('square-images', 'Yes');
-        $magic360ImagesData = array();
+        $magic360ImagesData = [];
         $magic360Selector = null;
 
         foreach($magic360Images as $magic360Image) {
@@ -393,7 +426,7 @@ if(count($magic360Images)) {
 
             array_unshift(
                 $productImagesHTML,
-                '<a data-magic-slide-id="360" class="m360-selector '.$ignoreMagentoCSSclass.'" title="360" href="#" onclick="return false;"><img class="'.$ignoreMagentoCSSclass.'" src="'.$thumbImage.'" alt="360" /></a>'
+                '<a data-magic-slide-id="360" class="m360-selector '.$ignoreMagentoCSSclass.'" title="360" href="#" onclick="return false;"><img class="'.$ignoreMagentoCSSclass.'" src="'.$thumbImage.'" alt="360"></a>'
             );
 
             $containersData['360'] = $magic360Tool->getMainTemplate($magic360ImagesData, array('id' => 'productMagic360'));
@@ -481,7 +514,7 @@ if($productOptions) {
     foreach($productOptions as $productOption) {
         $optionType = $productOption->getType();
         if($optionType == Mage_Catalog_Model_Product_Option::OPTION_TYPE_DROP_DOWN || $optionType == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO) {
-            $optionValues = array();
+            $optionValues = [];
             foreach($productOption->getValues() as $optionValue) {
                 $optionValues[$optionValue->getOptionTypeId()] = strtolower(trim($optionValue->getTitle()));
             }
@@ -493,7 +526,7 @@ if($productOptions) {
 
 //NOTE: if only one base image in the gallery
 if(count($productImagesHTML) == 1 && $isBaseImageIncluded && (empty($associatedProductImagesHTML) || !$selectorsVisibility)) {
-    $productImagesHTML = array();
+    $productImagesHTML = [];
 }
 
 $moreViewsCaption = $this->__('More Views');
@@ -518,9 +551,10 @@ if(!empty($hiddenImagesHTML)) {
     echo '<div style="display: none !important;">'.implode($hiddenImagesHTML).'</div>';
 }
 
+$thumb_h = 400;
 foreach($containersData as $containerId => $containerHTML) {
-    $activeClass = $defaultContainerId == $containerId ? ' mt-active' : '';
-    $mainHTML .= "<div class=\"magic-slide{$activeClass}\" data-magic-slide=\"{$containerId}\">{$containerHTML}</div>";
+  $activeClass = $defaultContainerId == $containerId ? ' mt-active' : '';
+  $mainHTML .= "<div class=\"magic-slide{$activeClass}\" data-magic-slide=\"{$containerId}\" style=\"height:{$thumb_h}px;line-height:{$thumb_h}px;vertical-align:middle;\">{$containerHTML}</div>".PHP_EOL;
 }
 
 $scroll = $magicToolboxHelper->loadScroll();
@@ -546,7 +580,7 @@ if($scriptHTML) {
     echo '<script>'.$scriptHTML.'</script>';
 }
 
-echo '<img id="image" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="placeholder" class="invisible" />';
+echo '<img id="image" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="placeholder" class="invisible">';
 
 //NOTE: small fix for amconf extension
 if(preg_match('/amconf\/ajax\/index\//ims', $_SERVER['REQUEST_URI'])) {

@@ -61,9 +61,7 @@
   clear: both;
 }
 
-
 /* Address section */
-
 .firecheckout-index-index .address-section {
   padding-bottom: 15px;
 }
@@ -115,8 +113,7 @@
   font-size: 12px;
 }
 
-#coupon-code,
-#giftcard_code {
+#coupon-code, #giftcard_code {
   margin: 2px 0 2px;
   width: 125px;
 }
@@ -148,9 +145,7 @@
   margin: 0;
 }
 
-
 /* gift messages */
-
 .firecheckout-set .gift-messages {
   margin-bottom: 10px;
 }
@@ -368,7 +363,7 @@
 }
 
 #payment-method .sp-methods dd ul li {
-  padding: 5px 0;
+  padding: 1px 0;
 }
 
 #payment-method .sp-methods dd ul ul {
@@ -411,9 +406,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   padding-bottom: 0;
 }
 
-
 /* Coupon toggler */
-
 .firecheckout-set .discount-block.form-list {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -475,8 +468,6 @@ ul#payment_form_cryozonic_stripe .saved-cards {
 .firecheckout-set .updating {
   opacity: 0.6;
   animation: 1s div-blink infinite;
-  -ms-animation: none;
-  /* IE11 on WIN8.1 bugfix */
   cursor: wait;
 }
 
@@ -556,9 +547,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   display: inline;
 }
 
-
 /* Address verification */
-
 #address-verification-window .error-msg {
   min-height: 0 !important;
   margin: 4px 0 !important;
@@ -582,9 +571,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   line-height: 18px;
 }
 
-
 /* hints */
-
 [class*=hint--]::after,
 [class*=hint--]::before {
   z-index: 10;
@@ -593,9 +580,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   height: auto !important;
 }
 
-
 /* Fix to prevent jumping page, when calendar causes scrollbar appearing */
-
 .firecheckout-index-index .calendar {
   top: -500px;
   left: 0;
@@ -609,9 +594,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   box-sizing: content-box;
 }
 
-
 /* RWD theme */
-
 .firecheckout-set .product-options ul.options-list label,
 .firecheckout-set .col2-set .form-list .control label {
   width: auto !important;
@@ -622,8 +605,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
 .firecheckout-set #checkout-shipping-method-load .sp-methods dd label,
 .firecheckout-set #co-shipping-method-form .sp-methods dd label,
 .firecheckout-set .product-options ul.options-list label {
-  /* width: auto !important;
-  */
+  /* width: auto !important; */
   min-width: 0px !important;
   background-color: transparent !important;
 }
@@ -652,9 +634,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   }
 }
 
-
 /* Clears */
-
 .firecheckout-header,
 .col-fire-1,
 .col-fire-2,
@@ -714,7 +694,6 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   color: #3aacd9;
   text-transform: none;
 }
-
 
 /* Payment methods selector panel */
 

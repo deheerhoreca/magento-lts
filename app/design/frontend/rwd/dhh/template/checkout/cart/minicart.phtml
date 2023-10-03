@@ -4,7 +4,14 @@
  *
  * @see Mage_Checkout_Block_Cart_Sidebar
  */
-$qty = $this->getSummaryCount() ?? 0;
+
+// No cookie, no cart
+if(empty($_COOKIE[\Mage_Core_Controller_Front_Action::SESSION_NAMESPACE])) {
+  $qty = 0;
+} else {
+  $qty = $this->getSummaryCount() ?? 0;
+}
+
 ?>
 <!-- header_minicart_start -->
 <a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-cart top-link <?php if($qty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">

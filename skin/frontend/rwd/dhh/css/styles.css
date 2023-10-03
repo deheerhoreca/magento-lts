@@ -10186,7 +10186,7 @@
     position: relative;
     float: left;
     clear: both;
-    min-height: 300px;
+    min-height: 472px;
     width: 100%;
   }
 
@@ -11167,6 +11167,16 @@
   .bar-error:before {
     content: "X";
     background-color: #ff4136;
+  }
+  
+  /* Cloudflare */
+  
+  img.cf-ir {
+    object-fit: contain
+  }
+  
+  .object-fit-contain {
+    object-fit: contain
   }
 }
 

@@ -4,7 +4,7 @@
 body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
 @-->
 
-<div style="background:#F6F6F6; margin:0; padding:0;">
+<div style="background:#F6F6F6; margin:0; padding:0;" data-dhh-email-tag="CHEFSTORE_QUOTE_EMAIL">
   <table cellspacing="0" cellpadding="0" border="0" width="100%">
     <tr>
       <td align="center" valign="top" style="padding:20px 0 20px 0;">
@@ -12,7 +12,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
              style="border:1px solid #E0E0E0;">
           <!-- [ header starts here] -->
           <tr>
-            <td valign="top" style='text-align: center;'><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px; max-width:75%;" border="0"/></a></td>
+            <td valign="top" style="text-align: center;"><a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px; max-width:75%;" border="0"/></a></td>
           </tr>
           <!-- [ middle starts here] -->
           <tr>
@@ -56,19 +56,17 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                 </tr>
                 </tbody>
               </table>
-              <br/>
-              {{layout handle="qquoteadv_email_qquoteadv_items" quote=$quote}} <br>
-
+              <br>{{layout handle="qquoteadv_email_qquoteadv_items" quote=$quote}}<br>
             </td>
           </tr>
           <tr>
             <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;">
-              <center><p style="margin:0;">Met vriendelijke groeten, <strong>{{var
-                quote.getStoreGroupName()}}</strong></p></center>
+              <center><p style="margin:0;">Met vriendelijke groeten, <strong>{{var quote.getStoreGroupName()}}</strong></p></center>
             </td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
+  <center><span style="font-size:9px;">Tag: CHEFSTORE_QUOTE_EMAIL</span></center>
 </div>

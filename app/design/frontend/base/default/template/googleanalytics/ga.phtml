@@ -17,10 +17,18 @@
 $_helper = $this->helper('googleanalytics');
 $_accountId = $_helper->getAccountId();
 ?>
-<?php if (!$this->helper('core/cookie')->isUserNotAllowSaveCookie()): ?>
+<?php /* DHH CORE HACK */ if (1 || !$this->helper('core/cookie')->isUserNotAllowSaveCookie()): ?>
     <?php if ($_helper->isUseAnalytics4()): ?>
         <!-- BEGIN GOOGLE ANALYTICS 4 CODE -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $_accountId ?>"></script>
+        <!-- Google Tag Manager -->
+        <script>
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','<?php echo $_accountId ?>');
+        </script>
+        <!-- End Google Tag Manager -->
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

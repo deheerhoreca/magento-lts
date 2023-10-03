@@ -18,7 +18,8 @@ $brand_name                 = _get_product_attribute($_product, "manufacturer");
 $brand_id                   = $_product->getData("manufacturer");
 $brand_logo                 = "";
 $brand_slug                 = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-$brand_link                 = "/shop?manufacturer={$brand_id}";
+$seo_tag                    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
+$brand_link                 = "/shop?manufacturer={$brand_id}&cstag={$seo_tag}";
 $anchors                    = [];
 $in3_minimum                = 50 / 1.21;
 $in3_maximum                = 30000 / 1.21;
@@ -795,7 +796,12 @@ if($saleable === true && $_product->canConfigure()) {
 if(strlen($product_description_md) > 0) {
   $product_description .= Mage::helper("deheerhoreca_util/util")->markdownToHtmlSafe($product_description_md);
 } else {
-  $product_description .= _get_product_attribute($_product, "supplier_description");
+  $supplier_description = _get_product_attribute($_product, "supplier_description");
+  // If the supplier_description does not contain HTML, do a nl2br()
+  if(strlen($supplier_description) > 0 && preg_match("/<[^<]+>/", $supplier_description, $matches) == 0) {
+    $supplier_description = nl2br($supplier_description); // @todo fix upstream for supplier_description
+  }
+  $product_description .= $supplier_description;
 }
 
 // Add specific blocks to the description based on attributes
@@ -804,6 +810,9 @@ if($refrigerant === "R290" || $refrigerant === "R290a") {
 }
 if($refrigerant === "R600" || $refrigerant === "R600a" || $refrigerant === "R660a") {
   $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r600")->toHtml()."</div>";
+}
+if($refrigerant === "R454C") {
+  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r454c")->toHtml()."</div>";
 }
 $value = $voltage;
 if(is_array($value)) {
@@ -1103,7 +1112,7 @@ if($stock_data["overall_stock_status"] === "backorder"
 
     /* Product Description */
     
-    if(empty($subdescription) === false && strlen($subdescription) > 20 && strlen($subdescription) < 200) {
+    if(empty($subdescription) === false && strlen($subdescription) > 20 && strlen($subdescription) < 500) {
       echo "<div class='std p-2 my-2 fw-600' style='background-color:#e0f6ff; border-radius:5px;'>{$subdescription}</div>";
     }
     

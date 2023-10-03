@@ -49,10 +49,28 @@
       <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_payment_form_controller.js</name></action>
       <action method="addJs" ifconfig="payment/billink/active"><type>js</type><name>billink/billink_payment_form_session.js</name></action>
       
+      <!-- Enable html cache for certain blocks -->
+      <block type="billink/PageHeader" name="billink-page-header" template="shopworks_billink/pageheader.phtml">
+        <action method="setData"><key>cache_lifetime</key><value>86400</value></action>
+      </block>
+      
       <action method="addJs" ifconfig="mailchimp/ecommerce/active">
         <script>ebizmarts/mailchimp/campaignCatcher.js</script><params>async</params>
       </action>      
     </reference>
+    
+    <!-- Enable html cache for certain blocks - Replace blocks -->
+    <reference name="before_body_end">
+      <action method="unsetChild"><name>richsnippets.organization</name></action>
+      <action method="unsetChild"><name>richsnippets.website</name></action>
+      <block type="core/template" name="richsnippets.organization" template="tm/richsnippets/richsnippets_organization.phtml">
+        <action method="setData"><key>cache_lifetime</key><value>86400</value></action>
+      </block>
+      <block type="core/template" name="richsnippets.website" template="tm/richsnippets/richsnippets_website.phtml">
+        <action method="setData"><key>cache_lifetime</key><value>86400</value></action>
+      </block>
+    </reference>
+    
   </default>
   
   <!-- Categories -->

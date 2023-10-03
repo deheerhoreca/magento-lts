@@ -1455,8 +1455,8 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
             ->setIsForceCheck(!$forceMode);
 
         // DHH CORE HACK
-        // $mailer->setQueue($emailQueue)->send();
-        $mailer->send();
+        $mailer->setQueue($emailQueue)->send();
+        // $mailer->send();
 
         $this->setEmailSent(true);
         $this->_getResource()->saveAttribute($this, 'email_sent');

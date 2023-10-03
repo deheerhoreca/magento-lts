@@ -311,28 +311,10 @@
 
 # DHH ADDITIONS
 
-# OPENMAGE ADMIN (admin4JN0)
-<If "%{THE_REQUEST} =~ /admin4JN0/">
-  
-  <IfModule mod_php7.c>
-    php_value max_execution_time 1800
-    #php_value memory_limit 1G
-  </IfModule>
-  
-</If>
-
-# FRONT-END
-<Else>
-  
-</Else>
-
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
-<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff)$)[^\.]+?$">
-#  Header add Link "<//ajax.cloudflare.com>;rel=preconnect; crossorigin"
-#  Header add Link "<//cdn.jsdelivr.net>;rel=preconnect; crossorigin"
-#  Header add Link "<//cdnjs.cloudflare.com>;rel=preconnect"
-  Header add Link "<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.google-analytics.com>;rel=preconnect; crossorigin,<//ssl.google-analytics.com>;rel=preconnect; crossorigin,<//region1.google-analytics.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//stats.g.doubleclick.net>;rel=preconnect; crossorigin,<//www.google.com>;rel=preconnect; crossorigin,<//www.google.nl>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
+<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
+   Header add Link "<////ik.imagekit.io/>;rel=preconnect,<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
 </FilesMatch>
 
 <IfModule mod_deflate.c>
@@ -362,7 +344,15 @@
   RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
 </IfModule>
 
-# Modify more caching headers
+# ImageKit:
+<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
+  <IfModule mod_headers.c>
+    Header set Accept-CH "DPR, Width, Downlink, Viewport-Width, Save-Data, Sec-CH-UA"
+    Header set Permissions-Policy "ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
+  </IfModule>
+</FilesMatch>
+
+# Modify more caching headers -- Also note Rules in Cloudflare
 <IfModule mod_headers.c>
   
   Header set X-XSS-Protection "1; mode=block"
@@ -382,23 +372,23 @@
   # the content-hash will remain the same, and the resources stored
   # in browser caches will stay relevant.
   
-  # Add "immutable" to hashed pagespeed resources
-  # Remember, cache control is about how long mod_pagespeed will cache assets.
+  # Remember, cache control is about how long mod_pagespeed will cache assets (if enabled)
   # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
-  # <FilesMatch "pagespeed">
-  #   # Etag is done by the hash in the filename
-  #   Header unset Etag
-  #   Header set Cache-Control "public, max-age=300, proxy-revalidate"
-  #   Header set x-bier "tijd"
-  # </FilesMatch>
+  # Static files might be served by nginx!
   
-  # Remember, cache control is about how long mod_pagespeed will cache assets.
-  # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
-  <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp|css|js)$">
+  # CSS/JS
+  <FilesMatch "\.(css|js)$">
     Header unset Etag
     Header set Cache-Control "public, max-age=300"
   </FilesMatch>
   
+  # IMAGES
+  <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
+    # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+  
+  # TEXT
   <FilesMatch "\.(html|htm|php)$">
     Header unset Etag
     Header set Cache-control "max-age=0, no-cache"
@@ -419,19 +409,21 @@
 </If>
 # END DEVELOPMENT SETTINGS
 
-# Do not listen to /index.php? requests, redirect them
-RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
-RewriteCond %{THE_REQUEST} ^.*/index.php
-RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+# DHH REDIRECTS
+<IfModule mod_rewrite.c>
 
-# Redirects file.php to view.php
-RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
+  # REDUCE 404s
+  RedirectMatch 301 (?i)/apple(-touch-icon-.*)?.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
+  RedirectMatch 301 /apple-touch-icon.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
 
-<IfModule mod_php7.c>
-    php_value suhosin.session.encrypt=off
-    php_value elastic_apm.service_name "chefstore_nl"
-    php_value session.cookie_samesite = "Lax"
-    php_value session.cookie_secure = 1
+  # Do not listen to /index.php? requests, redirect them
+  RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
+  RewriteCond %{THE_REQUEST} ^.*/index.php
+  RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+
+  # Redirects file.php to view.php
+  RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
+  
 </IfModule>
 
 # Landing URL from flyers

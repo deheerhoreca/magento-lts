@@ -25,7 +25,8 @@
   display: inline;
 }
 
-.firecheckout-index-index {}
+.firecheckout-index-index {
+}
 
 .firecheckout-index-index .page-title {
   zoom: 1;
@@ -259,6 +260,7 @@
 .firecheckout-set .gift-messages-form .item .details .form-list li.wide textarea {
   width: 100%;
   /* rewrite theme styles */
+  ;
 }
 
 /* Ajax Loader */
@@ -320,6 +322,7 @@
   100% {
     box-shadow: 0 2.5em 0 -1.3em #ccc;
   }
+
   40% {
     box-shadow: 0 2.5em 0 0 #ccc;
   }
@@ -692,7 +695,8 @@
   width: auto;
 }
 
-.firecheckout-set .sp-methods dt {}
+.firecheckout-set .sp-methods dt {
+}
 
 .firecheckout-set .sp-methods dd {
   margin: 0;
@@ -918,7 +922,8 @@
   margin: 0;
 }
 
-.firecheckout-set .checkout-agreements .agreement-content {}
+.firecheckout-set .checkout-agreements .agreement-content {
+}
 
 .btn-agree {
   cursor: pointer;
@@ -1292,7 +1297,8 @@
   min-height: 400px;
 }
 
-#checkout-sagepay-iframe-load {}
+#checkout-sagepay-iframe-load {
+}
 
 #firecheckout-mask {
   background: #000;
@@ -1344,7 +1350,8 @@
 
 /* SagePay Server Integration */
 
-#checkout-sagepay-iframe-load {}
+#checkout-sagepay-iframe-load {
+}
 
 iframe#sage-pay-server-iframe {
   border: none;
@@ -1694,13 +1701,16 @@ iframe#sage-pay-server-iframe {
     background-size: 100px 125px;
     background-position: 0 -51px;
   }
+
   .firecheckout-section .block-title {
     background-size: 100px 125px;
     background-position: 0 -28px;
   }
+
   .firecheckout-window .close {
     font-size: 19px;
   }
+
   #firecheckout-spinner {
     background-image: url(../images/ajax-loader@2x.gif);
     background-size: 30px 30px;
@@ -1718,41 +1728,51 @@ iframe#sage-pay-server-iframe {
     float: none;
     margin: 0 0 20px;
   }
+
   #firecheckout-form .col3-fire-set #shipping-method {
     float: left;
     width: 49%;
   }
+
   #firecheckout-form .col3-fire-set #payment-method {
     float: right;
     width: 49%;
   }
+
   #firecheckout-form .col3-fire-set #checkout-coupon-discount-load,
   #firecheckout-form .col3-fire-set #checkout-giftcard-load {
     clear: both;
     width: 100%;
   }
+
   .firecheckout-set .wide .input-box {
     max-width: 100% !important;
   }
+
   .firecheckout-set .form-list li.wide textarea,
   .firecheckout-set .form-list li.wide select,
   .firecheckout-set .form-list li.wide input.input-text {
     max-width: 100%;
     width: 100%;
   }
+
   .firecheckout-set .product-name {
     font-size: .9em;
   }
+
   .firecheckout-set .data-table tfoot,
   .firecheckout-set .data-table strong {
     font-size: 1em;
   }
+
   .firecheckout-set .qty-wrapper .qty-spinner {
     display: none;
   }
+
   .firecheckout-set .qty-wrapper {
     width: auto;
   }
+
   .firecheckout-section .block-title {
     white-space: nowrap;
     overflow: hidden;
@@ -1769,9 +1789,11 @@ iframe#sage-pay-server-iframe {
     float: none;
     width: 100% !important;
   }
+
   .firecheckout-set #checkout-review .product-image {
     display: none;
   }
+
   .firecheckout-set #checkout-review .collateral {
     margin: 0 !important;
   }

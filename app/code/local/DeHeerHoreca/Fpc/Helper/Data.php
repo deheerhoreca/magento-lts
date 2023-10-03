@@ -79,7 +79,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $ignored_url_query_keys = [
         "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
         "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
-        "gclid", "cfhtmlcache", "mc_cid", "mc_eid",
+        "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
+        "cstag", 
       ];
       $url = self::strip_param_from_url($url, $ignored_url_query_keys);
       
@@ -174,8 +175,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
       }
       
+      // ath = Aoe_TemplateHints flag
       // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-      if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"])) {
+      if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])) {
         self::log("Read cache disabled (URL parameter): {$debug_name}");
         return false;
       }
@@ -221,8 +223,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
       }
       
+      // ath = Aoe_TemplateHints flag
       // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-      if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"])) {
+      if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])) {
         self::log("Write cache disabled (URL parameter): {$debug_name}");
         return false;
       }
@@ -282,7 +285,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       if(empty($html) === true) {
         self::log("Cache MISS: {$key}");
-        if(!headers_sent()) header("Server-Timing: miss");
+        self::_add_server_timing_header("FPC miss");
         return null;
       }
       
@@ -408,7 +411,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $size = strlen($html);
         self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
       }
-      if(!headers_sent()) header("Server-Timing: hit");
+      self::_add_server_timing_header("FPC hit");
+      self::_emit_server_timing_header();
       
       Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
@@ -478,7 +482,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // Store in cache
       if(Mage::app()->getCache()->save($html, $key, ["quickndirtyfpc"], 7 * 86400)) {
         self::log("Cache: SAVED {$key}, ".strlen($html)." chars");
-        if(!headers_sent()) header("Server-Timing: saved");
+        self::_add_server_timing_header("FPC saved");
+        self::_emit_server_timing_header();
         return true;
       }
       
@@ -518,6 +523,32 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       if(DHH_FPC_DEBUG === true) {
          Mage::log($msg, null, "fpc.log", true);
       }
+    }
+    
+    static function _add_server_timing_header(string $string) {
+      if(headers_sent()) {
+        return false;
+      }
+        
+      if(isset($GLOBALS["dhh_header_server_timing"]) === false) {
+        $GLOBALS["dhh_header_server_timing"] = [];
+      }
+      
+      $GLOBALS["dhh_header_server_timing"][] = $string;
+    }
+    
+    static function _emit_server_timing_header() {
+      if(headers_sent()) {
+        return false;
+      }
+      
+      if(isset($GLOBALS["dhh_header_server_timing"]) && is_array($GLOBALS["dhh_header_server_timing"])) {
+        header("Server-Timing: ".implode("; ", $GLOBALS["dhh_header_server_timing"]));
+        unset($GLOBALS["dhh_header_server_timing"]);
+        return true;
+      }
+      
+      return null;
     }
 }
 
