@@ -933,8 +933,14 @@ final class Ophirah_Qquoteadv_Helper_Data extends Mage_Core_Helper_Abstract
      * @param $optionPrice
      * @return float
      */
-    protected function _prepareOptionPrice($price, $price_type = 'fixed', $optionPrice)
+    // DHH CORE HACK -- PHP8
+    protected function _prepareOptionPrice($price, $price_type, $optionPrice)
+    // protected function _prepareOptionPrice($price, $price_type = 'fixed', $optionPrice)
     {
+      // DHH CORE HACK -- PHP8
+      if(empty($price_type)) {
+        $price_type = "fixed";
+      }
         if ($price_type == 'fixed') {
             return $optionPrice;
         } else {

@@ -1,4 +1,5 @@
 <?php
+// DHH NOTE: https://www.unphp.net/ to decode
 // Cart2Quote is a commercial software module for Magento.
 // Unpaid usage of our licensed functionalities is prohibited.
 // See www.cart2quote.com for more details.

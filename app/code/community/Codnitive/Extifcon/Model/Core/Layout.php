@@ -105,7 +105,9 @@ class Codnitive_Extifcon_Model_Core_Layout extends Mage_Core_Model_Layout
                         $helperName = implode('/', $helperName);
                         $arg = $arg->asArray();
                         unset($arg['@']);
-                        $args[$key] = call_user_func_array(array(Mage::helper($helperName), $helperMethod), $arg);
+                        // DHH CORE HACK -- PHP8 https://www.drupal.org/project/rules/issues/3210303
+                        $args[$key] = call_user_func_array(array(Mage::helper($helperName), $helperMethod), array_values($arg));
+                        // $args[$key] = call_user_func_array(array(Mage::helper($helperName), $helperMethod), $arg);
                     } else {
                         /**
                          * if there is no helper we hope that this is assoc array
@@ -129,7 +131,9 @@ class Codnitive_Extifcon_Model_Core_Layout extends Mage_Core_Model_Layout
             }
 
             $this->_translateLayoutNode($node, $args);
-            call_user_func_array(array($block, $method), $args);
+            // DHH CORE HACK -- PHP8 https://www.drupal.org/project/rules/issues/3210303
+            call_user_func_array([$block, $method], array_values($args));
+            // call_user_func_array(array($block, $method), $args);
         }
 
         Varien_Profiler::stop($_profilerKey);
