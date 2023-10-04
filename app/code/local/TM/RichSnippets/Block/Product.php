@@ -257,7 +257,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             'availability'          => $this->getStockStatusUrl(),
             'priceCurrency'         => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
             'itemCondition'         => "http://schema.org/NewCondition",
-            "priceValidUntil"       => date('Y-m-d', strtotime(date("Y-m-d", mktime()) . " + 365 day")),
+            "priceValidUntil"       => date('Y-m-d', strtotime("+1 year")), // DHH CORE HACK PHP 8
             'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
             "seller"                => [
               "@type"               => "Organization",
@@ -415,7 +415,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           $value = date('Y-m-d', strtotime($value));
         }
         if(empty($value)) {
-          $value = date('Y-m-d', strtotime(date("Y-m-d", mktime()) . " + 365 day"));
+          $value = date('Y-m-d', strtotime("+1 year")); // DHH CORE HACK PHP 8
         }
         if(strlen($value) > 0) {
           $data["offers"][$schema_key] = $value;
