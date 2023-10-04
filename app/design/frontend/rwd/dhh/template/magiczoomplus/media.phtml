@@ -144,10 +144,10 @@ if($galleryImagesCount) {
   }
 }
 
-if(_dhh_debug()) {
-  printr($productImages);
-  printr($imageFileOverride);
-}
+// if(_dhh_debug()) {
+//   printr($productImages);
+//   printr($imageFileOverride);
+// }
 
 if(!count($productImages)) {
   if(!$productBaseImage && empty($productVideos)) {
@@ -265,9 +265,9 @@ foreach($productImages as &$productImage) {
     "width"     => 60,
     "height"    => 60,
   ];
-  if(_dhh_debug()) {
-    printr($config);
-  }
+  // if(_dhh_debug()) {
+  //   printr($config);
+  // }
   $aHtml = $tool->getSelectorTemplate($config);
   $aHtml = str_replace('<a ', '<a on'.$eventName.'="magicToolboxOnChangeSelector(this);" ', $aHtml);
   if($ignoreMagentoCSSclass) {
