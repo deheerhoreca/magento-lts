@@ -1,8 +1,0 @@
-<config>
-   <modules>
-      <Valdecode_CookieLaw>
-         <active>false</active>
-         <codePool>community</codePool>
-      </Valdecode_CookieLaw>
-   </modules>
-</config>
