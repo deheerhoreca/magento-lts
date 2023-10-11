@@ -1,0 +1,218 @@
+# Hacked Code
+
+## Core Hacks
+- **app/code/core/Mage/**
+  - `app/code/core/Mage/Customer/etc/config.xml`
+    - Changing default email address for new customers created in the backend without an email address to our own domain
+    - @see https://github.com/loekvangool/deheerhoreca-magento/commit/a6e627894accf8daa6097477c4ea0b8b8f5fd0c9
+  - `app/code/core/Mage/Newsletter/Model/Subscriber.php`
+    - Really disable sending newsletter confirmation emails
+  - `app/code/core/Mage/Page/Block/Html/Breadcrumbs.php`
+    - Add full breadcrumbs on canonical product URLs
+    - https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
+  - `app/code/core/Mage/Sales/Model/Order.php`
+    - Directly send emails (no queue)
+  - `app/code/core/Mage/Checkout/Block/Cart/Crosssell.php`
+    - Increase cross sell items to 10
+  - `app/code/core/Mage/Payment/Model/Method/Banktransfer.php`
+    - Make this payment method available in backend only (for Bol.com orders)
+  - `app/code/core/Mage/Sales/etc/config.xml`
+    - Add certain attributes to the collection
+    - Make pending_payment order status visible in My Orders
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Helper/Form/Price.php`
+    - Removed check on below-zero price values
+  - `app/code/core/Mage/ConfigurableSwatches/Helper/Mediafallback.php`
+    - Added a check due to an error that started after re-saving a value on https://www.chefstore.nl/index.php/admin4JN0/system_config/edit/section/configswatches/
+  - **Admin Global Search**: Performance improvements
+    - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
+    - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
+    - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
+  - `app/code/core/Mage/Core/Helper/String.php`
+    - Preventing errors
+  - `app/code/core/Mage/Adminhtml/Block/Widget/Grid.php`
+    - Changing default page size
+  - `app/code/core/Mage/Catalog/Helper/Product/Flat.php`
+    - Adding `enableFlatCollection()` method
+  - `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
+  - `app/code/core/Mage/Core/Model/Resource/Session.php`
+    - Adding details and logging to session errors
+  - `app/code/core/Mage/Catalog/Model/Category.php`
+    - Removing `[0], [V]` from category names in frontend
+- **lib/**
+  - `lib/Zend/XmlRpc/Server.php`
+    - Fix "Calling Parameter do Not Match Signature"
+    - @see https://webkul.com/blog/magento-api-integration-calling-parameter-not-match-signature/
+    - @see https://github.com/loekvangool/deheerhoreca-magento/commit/f494be74dcf289de644b94a3cd8f0954ff880f6b
+- **js/**
+  - `js/varien/form.js`, `js/varien/js.js`
+    - Making Prototype Validator optional
+- **app/design/adminhtml/**
+  - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
+    - Bugfixes
+    - Add Cloudflare images
+  - `app/design/adminhtml/default/default/template/sales/order/view/items.phtml`
+    - ?
+- **app/design/frontend/base/**
+  - `app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
+    - Added because there were exceptions in the logs, more info in file
+    - @todo move to dhh theme?
+- **/***
+  - `.htaccess`
+    - Commented lines to fix "Option All not allowed here" errors in production
+    - Other modifications/additions
+  - `.gitignore`
+
+## Core Overrides
+- `app/code/local/Mage/*`
+  - Overridden, not core hacked
+  - `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
+    - Adjustments to the order invoice template
+
+## 3rd Party Hacks
+- **Anowave Sort**
+  - `app/code/local/Anowave/Sort/Model/Observer.php`
+  - `app/code/local/Anowave/Sort/Block/Catalog/Category/Tab/Product.php`
+    - Fixes to prevent issues
+  - `app/code/local/Anowave/Sort/Block/Image.php`
+  - `app/code/local/Anowave/Sort/Block/Catalog/Category/Tab/Product.php`
+    - Cloudflare images, performance improvements, grid improvements
+- **Codnitive Sidenav**
+  - `app/code/community/Codnitive/Sidenav/Block/Navigation.php`
+    - After moving to PHP 7.2, an error showed up "Warning: count(): Parameter must be an array or an object that implements Countable in ..."
+- **TM RichSnippets**
+  - `app/code/local/TM/RichSnippets/Block/Product.php`
+    - Adding to the structure data of products
+- **Magmodules Kiyoh**
+  - `app/code/local/Magmodules/Kiyoh/Model/Stats.php`
+    - Fixed a bug where PHP7.2 does not allow a `+=` on a variable that was initialized as a string
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/a6950b2ebc7735b8f4eedbecfc8b29e84aaac958
+- **Aoe Profiler**
+  - `app/code/community/Aoe/Profiler/Model/Run.php`
+    - Adding checks due to divide by zero errors
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
+- **MagicZoomPlus**
+  - `app/code/local/MagicToolbox/MagicZoomPlus/core/magictoolbox.params.class.php`, `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
+    - Remove hardcoded `memory_limit set` (it was not enough for some photos)
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/88743b48e7a101afac77417483bfee66e434259b
+- **Magmodules Channable**
+    - `app/code/community/Magmodules/Channable/Model/Channable.php`
+    - Added friendly URL to Channable feed
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/6cddc367ce8419eb26662e42f181deb523e8c770
+- **Magmodules Sooqr**
+  - `app/code/community/Magmodules/Sooqr/Helper/Data.php`
+    - ~Added friendly URL to Sooqr feed~
+    - Remove currency string from decimal fields
+    - We need to have `popularity` as an INT in Sooqr to make it sortable
+    - `normal_price` messes with the MSRP field and leads to failures in Sooqr
+    - Sooqr does not hide MSRP when it's smaller than the sales price
+    - Remove XML-incompatible characters
+    - Add CDN product images
+    - PHP 8 compatibility
+  - `shell/sooqr.php`
+    - Add `set_time_limit()` call
+- **TM CheckoutFields**
+  - `app/code/local/TM/CheckoutFields/etc/config.xml`
+  - `app/code/local/TM/CheckoutFields/etc/system.xml`
+  - `app/code/local/TM/CheckoutFields/etc/wsdl.xml`
+  - `app/code/local/TM/CheckoutFields/sql/tm_checkoutfields_setup/mysql4-install-1.0.0.php`
+  - `app/code/local/TM/CheckoutFields/sql/tm_checkoutfields_setup/mysql4-upgrade-1.1.0-1.1.1.php`
+    - Added 5 additional fields
+  - `app/code/local/TM/CheckoutFields/etc/wsdl.xml`
+    - Update `targetNamespace` to dynamic value
+- **TM Firecheckout**
+  - `app/code/local/TM/FireCheckout/etc/wsdl.xml`
+    - Update `targetNamespace` to dynamic value
+- **Geissweb InvoiceAutoSend**
+  - `app/code/community/Geissweb/InvoiceAutoSend/Model/System/Config/Activepm.php`
+  - `app/code/community/Geissweb/InvoiceAutoSend/Model/Observer.php`
+    - Enabling all payment methods for auto invoice, not just active ones
+    - Needed to allow disabled "Bankoverschrijving" to generate invoices on Bol.com orders
+    - Adding extra logging
+- **Paysafecash**
+  - `/app/code/community/Psc/Paysafecash/Model/Cpay.php:228`
+    - Combine address fields instead of just sending one
+- **Noble AdminOrderGrid**
+  - `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid.php`
+    - Abusing `shipping_method` column for `tm_field5`
+- **Mestrona Forward to Configurable**
+  - `app/code/community/Mestrona/ForwardToConfigurable/Model/Observer.php`
+- **Amasty Feeds**
+  - `app/code/local/Amasty/Feed/Model/Profile.php`
+    - https://amasty.com/knowledge-base/product-feed-output-https-links-to-image-urls.html
+    - Include an HTTPS link to an image URL in a product feed
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/05dc4f8ab5a39f4a9f47663b3a4e225d4bce932d
+  - `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
+    - Make sure dynamic category IDs don't make it into the feeds
+- **Amasty ShopBy**
+  - `js/amasty/amshopby/jquery-ui.min.js`
+    - Updated to a newer version
+  - `js/amasty/amshopby/amshopby-ajax.js`
+    - Added a Vanilla LazyLoad update statement
+  - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php`
+    - Removed some `.js` files
+    - Replace info tooltips
+  - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php:70`
+    - Removed unneeded `&nbsp;` character
+    - Allow certain attributes to ignore hide_one_value
+  - `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Category.php`
+    - Skipping count
+- **Cart2Quote**
+  - `app/code/community/Ophirah/Qquoteadv/Block/Adminhtml/Qquoteadv/Edit/Tab/Product.php`
+    - Force `isAllowedCustomFields()`
+    - Patching a timebomb bug
+  - `app/code/community/Ophirah/Qquoteadv/Block/Qquoteadv/View.php`
+  - `app/code/community/Ophirah/Qquoteadv/Model/Pdf/Qquote.php`
+  - `app/locale/nl_NL/Ophirah_Qquoteadv.csv`
+  - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_accepted.html`
+  - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request.html`
+  - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request_details.html`
+  - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_responsive_proposal.html`
+  - `app/code/community/Ophirah/Qquoteadv/etc/wsdl.xml`
+    - Update `targetNamespace` to dynamic value
+  - `app/code/community/Ophirah/Qquoteadv/Model/Qqadvcustomer.php`
+    - Make `getCouponCode()` compatible with updated parent
+  - `app/code/community/Ophirah/CustomProducts/Model/Observer.php`
+  - `app/code/community/Ophirah/Qquoteadv/Helper/Data.php`
+    - PHP 8 compatibility
+- **Staempfli ProductAttachment**
+  - https://github.com/staempfli/magento-product-attachment
+  - Patched up to master on 2023-01-17 (commit 445557b)
+- **aHeadWorks AutoRelated**
+  - `app/code/local/AW/Autorelated/Block/Blocks/Abstract.php`
+    - Performance improvements
+  - `app/code/local/AW/Autorelated/controllers/Adminhtml/Awautorelated/BlocksgridController.php`
+    - Fixing security issue
+- **FireGento DynamicCategory**
+  - `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
+    - Adding exception check and logging to prevent fatal errors
+- **Pay.nl**
+  - `app/code/community/Pay/Payment/controllers/OrderController.php`
+    - Adding log to critical transaction status updates
+
+### Closed
+- ~`app/design/frontend/rwd/default/layout/page.xml`~
+  - Fixed in https://github.com/loekvangool/deheerhoreca-magento/commit/fa8a6498ce4c78687d1718703f62fef09cefa35c
+- ~`app/code/community/Mollie/Mpm/Model/Api.php`~
+  - Forced internal availability of the payment methods to `true`. See also https://github.com/mollie/Magento/issues/91
+  - Seems to no longer be needed
+- ~`app/code/community/Mollie/Mpm/Helper/Data.php`~
+    - Prevent fatal errors. Fixed upstream.
+- ~`app/code/core/Mage/Catalog/Block/Product/View.php`~
+  - ~Change the product canonical URL in HTML head~
+- ~`app/code/core/Mage/Sitemap/Model/Sitemap.php`~
+  - ~Change the product canonical URL in sitemap.xml~
+- ~```ALTER TABLE `core_email_template` CHANGE `template_text` `template_text` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Template Content'```~
+  - ~To accomodate larger email templates~
+- ~`scheduler_cron.sh` (Aschroder Cron Extension)~
+  - ~Forced PHP binary because 5.4 gave MCRYPT errors. https://github.com/loekvangool/deheerhoreca-magento/commit/b4f3de1163a52f8c77e8b4e4827cc53aba518f43~
+  - Fixed in `/etc/profile.d/change_php.sh`
+- ~`app/code/core/Mage/Catalog/Model/Product/Image.php`~
+  - ~Code fails hard on non-working images. Changed code to a `catch` to be able to inspect and fix the image issue.~
+  - ~https://github.com/loekvangool/deheerhoreca-magento/commit/73584835b8f4e8e687106064e1279a7603cfd7bd~
+- `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
+- `app/code/community/Afterpay/Afterpay/etc/config.xml`
+  - Alterations to logo and text and such
+- `lib/Ebizmarts/MailChimp.php` and `lib/Ebizmarts/MailChimp/Exceptions.php`
+  - In 1.1.17 they introduced a bug: https://github.com/mailchimp/mc-magento/issues/1021
+- `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
+  - Fix for PHP 7.x
