@@ -106,11 +106,12 @@ bridge_*.php
 /google*.html
 /BingSiteAuth.xml
 
-/media/wysiwyg/.thumbs/
 
 /.modman/*/.git
 
 !/media/static
+!/media/wysiwyg
+!/media/dhl/logo.jpg
 /.well-known/
 
 # Store Manager

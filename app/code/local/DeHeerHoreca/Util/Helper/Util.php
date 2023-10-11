@@ -242,7 +242,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
     $string   = strtr(utf8_decode($string), utf8_decode($from), $to);
     $string   = strtolower($string);
-    $string   = str_replace([" ", "-", "/", "&"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
+    $string   = str_replace([" ", "-", "/", "&", "'"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
     $string   = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
     
     return $string;
