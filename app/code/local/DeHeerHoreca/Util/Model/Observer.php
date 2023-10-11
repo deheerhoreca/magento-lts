@@ -39,12 +39,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       $product = $observer_or_product;
     }
     
-    /* SHORT NAME */
-    if(strlen($product->getData("name_short")) < 3) {
-      $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
-      $product->setData("name_short", $new_value);
-      if($return === false) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
-    }
+    // SHORT NAME -- 2023-10-10 Disabling, better done from intel
+    // if(strlen($product->getData("name_short")) < 3) {
+      // $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
+      // $product->setData("name_short", $new_value);
+      // if($return === false) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
+    // }
     
     /* END OF LIFE */
     if($product->getData("eol") === "2075") {
@@ -64,19 +64,16 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("txtstockdate", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Back in stock date removed");
       }
-//      if($product->getData("skip_auto_stock") !== "1") {
-//        $product->setData("skip_auto_stock", "1");
-//        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Excluded from stock updates");
-//      }
       if(empty($product->getData("product_label")) === false) {
         $product->setData("product_label", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
       }
-      // var_dump($product->getVisibility());exit;
-      if((int) $product->getVisibility() === 4 || (int) $product->getVisibility() === 2) {
-        $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
-      }
+      
+      // 2023-10-10 Disabling to see if this is the cause of the visibility bug
+      // if((int) $product->getVisibility() === 4 || (int) $product->getVisibility() === 2) {
+        // $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
+        // if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
+      // }
     }
     
     /* PRICING */
