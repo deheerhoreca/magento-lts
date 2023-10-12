@@ -1,0 +1,39 @@
+Invoice,Rechnung
+Date,Datum
+Invoice number,Rechnungsnummer
+Credit memo,Gutschrift	
+VAT number,Umsatzsteuer Identifikationsnummer
+VAT office,VAT B?ro
+Billing Address,Rechnungsadresse
+Shipping Address,Versandadresse
+Shipping Method,Liefer- Methode
+Payment Method,Zahlungs-Methode
+Product,Produkt
+Price,Preis
+Quantity,Menge
+Subtotal,Zwischensumme
+Tax,Ust. Satz
+Discount Amount,Discount Amount
+Rowtotal,Zeilensumme
+Subtotal,Summe Waren
+Shipping & Handling,Shipping & Handling
+Grand Total,Gesamtsumme
+Company,Firma
+Contact,Kontakt
+Country,Land
+Description,Beschreibung
+Amount,Menge
+Unit Price,Einzelpreis
+Phone,Telefon
+Reference,Referenz
+Between amount,Zwischenbetrag
+VAT,MwSt
+Entire amount,Gesambetrag
+Payment,Bezahlung
+Order,Bestellung
+Refund,Rückerstattung
+Qty,Menge
+Shipping,Versandkosten
+Print Custom PDF Invoice,Druck-kundenspezifische PDF-Rechnung
+Print Custom PDF Credit Memo,Print Benutzerdefinierte PDF Gutschrift
+Print Custom PDF Order,Druck-kundenspezifische PDF Bestell

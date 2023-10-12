@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<template>
+    <name>Template 06</name>
+    <code>template06</code>
+    <image>template06.jpg</image>
+    <secret_key>b195bcda85ce2de0d10b461ccf214935</secret_key>
+    <type_format>A6</type_format>
+    <sort_order>5</sort_order>
+</template>

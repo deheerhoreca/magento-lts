@@ -1,0 +1,33 @@
+Invoice,Invoice
+Date,Date
+Invoice number,Invoice number
+VAT number,VAT number
+VAT office,VAT office
+Billing Address,Billing Address
+Shipping Address,Shipping Address
+Shipping Method,Shipping Method
+Payment Method,Payment Method
+Product,Product
+Price,Price
+Quantity,Quantity
+Subtotal,Subtotal
+Tax,Tax
+Discount Amount,Discount Amount
+Rowtotal,Rowtotal
+Subtotal,Subtotal
+Shipping & Handling,Shipping & Handling
+Grand Total,Grand Total
+Company,Company
+Contact,Contact
+Country,Country
+Description,Description
+Amount,Amount
+Unit Price,Unit Price
+Phone,Phone
+Reference,Reference
+Between amount,Between amount
+VAT,VAT
+Entire amount,Entire amount
+Payment,Payment
+Order,Order
+Refund,Refund

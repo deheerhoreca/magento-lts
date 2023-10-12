@@ -1,0 +1,35 @@
+Invoice,factuur
+Date,Datum
+Credit memo,Creditnota
+Invoice number,Factuurnummer
+VAT number,BTW-nummer
+VAT office,Btw-kantoor
+Billing Address,Factuuradres
+Shipping Address,Verzendadres
+Shipping Method,Verzendmethode
+Payment Method,Betaalmethode
+Product,Product
+Price,Prijs
+Quantity,Hoeveelheid
+Subtotal,Subtotaal
+Tax,Belasting
+Discount Amount,Korting Bedrag
+Rowtotal,rijtotaal
+Subtotal,Subtotaal
+Shipping & Handling,Shipping & Handling
+Grand Total,Algemeen totaal
+Company,Vennootschap
+Contact,Contact
+Country,Land
+Description,Beschrijving
+Amount,Bedrag
+Unit Price,Prijs unit
+Phone,Telefoon
+Reference,Verwijzing
+Between amount,Tussen de hoeveelheid
+VAT,BTW
+Entire amount,Volledige bedrag
+Payment,Betaling
+Order,Bestel
+Refund,Terugbetalen
+Qty,Aantal
