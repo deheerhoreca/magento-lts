@@ -2,15 +2,9 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Data
@@ -39,7 +33,7 @@ class Varien_Data_Collection_Filesystem extends Varien_Data_Collection
     /**
      * Target directory
      *
-     * @var string
+     * @var array
      */
     protected $_targetDirs = [];
 
@@ -343,14 +337,13 @@ class Varien_Data_Collection_Filesystem extends Varien_Data_Collection
      *
      * @param array $a
      * @param array $b
-     * @return int
+     * @return int|void
      */
     protected function _usort($a, $b)
     {
         foreach ($this->_orders as $key => $direction) {
             $result = $a[$key] > $b[$key] ? 1 : ($a[$key] < $b[$key] ? -1 : 0);
             return (self::SORT_ORDER_ASC === strtoupper($direction) ? $result : -$result);
-            break;
         }
     }
 

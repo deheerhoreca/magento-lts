@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Catalog
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2017-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2017-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @method Mage_Catalog_Model_Resource_Category|Mage_Catalog_Model_Resource_Category_Flat _getResource()
  * @method Mage_Catalog_Model_Resource_Category|Mage_Catalog_Model_Resource_Category_Flat getResource()
@@ -157,7 +150,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     /**
      * Category tree model
      *
-     * @var Mage_Catalog_Model_Resource_Category_Tree
+     * @var Mage_Catalog_Model_Resource_Category_Tree|null
      */
     protected $_treeModel = null;
 
@@ -589,7 +582,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     public function getParentId()
     {
         $parentIds = $this->getParentIds();
-        return intval(array_pop($parentIds));
+        return (int) array_pop($parentIds);
     }
 
     /**
@@ -714,7 +707,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     {
         $ids = $this->getData('path_ids');
         if (is_null($ids)) {
-            $ids = explode('/', $this->getPath());
+            $ids = explode('/', (string)$this->getPath());
             $this->setData('path_ids', $ids);
         }
         return $ids;
@@ -728,7 +721,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     public function getLevel()
     {
         if (!$this->hasLevel()) {
-            return count(explode('/', $this->getPath())) - 1;
+            return count(explode('/', (string)$this->getPath())) - 1;
         }
         return $this->getData('level');
     }
@@ -774,17 +767,6 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
      */
     public function getName()
     {
-      // DHH CORE HACK -- @todo move to override
-      // @see https://inchoo.net/magento/overriding-magento-blocks-models-helpers-and-controllers/
-      // @todo remove calls to cleanCategoryName() that are not needed anymore
-      if(isset($_SERVER["REQUEST_URI"]) && strpos($_SERVER["REQUEST_URI"], "admin4JN0") === false) {
-        try {
-          return Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->_getData('name'));
-        } catch(Exception $e) {
-          Mage::logException($e);          
-        }
-      }
-      // DHH CORE HACK
         return $this->_getData('name');
     }
 

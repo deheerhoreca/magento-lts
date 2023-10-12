@@ -54,13 +54,12 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
      * @param array $excludeAttr
      * @return array
      */
-    public function getAdditionalData(array $excludeAttr = array())
+    public function getAdditionalData(array $excludeAttr = [])
     {
-        $data = array();
+        $data = [];
         $product = $this->getProduct();
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
-//            if ($attribute->getIsVisibleOnFront() && $attribute->getIsUserDefined() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
             if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
                 $value = $attribute->getFrontend()->getValue($product);
 
@@ -73,11 +72,11 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
                 }
 
                 if (is_string($value) && strlen($value)) {
-                    $data[$attribute->getAttributeCode()] = array(
+                    $data[$attribute->getAttributeCode()] = [
                         'label' => $attribute->getStoreLabel(),
                         'value' => $value,
                         'code'  => $attribute->getAttributeCode()
-                    );
+                    ];
                 }
             }
         }
@@ -118,38 +117,32 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
           && $product->hasData($attribute_code)
           && $product->getDAta($attribute_code) !== null
           && $attribute->getIsVisibleOnFront()) {
-            Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_PREPROCESS_ATTRIBUTES_getAdditionalDataCustom_".$attribute_code);
             $value = $attribute->getFrontend()->getValue($product);
             
-            // if(_dhh_debug()) {
-              // echo "<pre>";
-              // var_dump($attribute_code);
-              // var_dump($product->getData($attribute_code));
-              // var_dump($value);
-              // echo "</pre>";
-            // }
-            
-            if(is_string($value) && strlen($value) > 0
-            /* && $product->hasData($attribute_code) */) {
+            if(is_string($value) && strlen($value) > 0) {
               
               $option_id = null;
               if($attribute->usesSource()) {
                 $option_id = $product->getData($attribute_code);
               }
               
-              //if ($attribute->getFrontendInput() == "price") {
-              //$value = Mage::app()->getStore()->convertPrice($value,true);
-              //}
+              // if ($attribute->getFrontendInput() == "price") {
+              //   $value = Mage::app()->getStore()->convertPrice($value,true);
+              // }
               
-              $group = 0;
-              if($tmp = $attribute->getData("attribute_group_id") ) {
-                $group = $tmp;
+              $groupId = 0;
+              $attribute_set_info = $attribute->getData("attribute_set_info") ?? [];
+              if($attribute_set_info !== []) {
+                $this_set = array_pop($attribute_set_info);
+                if(isset($this_set["group_id"])) {
+                  $groupId = $this_set["group_id"];
+                }
               }
               
-              if(isset($data[$group]["items"][$attribute_code])) {
-                $data[$group]["items"][$attribute_code]["value"][] = $value;
+              if(isset($data[$groupId]["items"][$attribute_code])) {
+                $data[$groupId]["items"][$attribute_code]["value"][] = $value;
               } else {
-                $data[$group]["items"][$attribute_code] = [
+                $data[$groupId]["items"][$attribute_code] = [
                   "label"     => $attribute->getStoreLabel(),
                   "value"     => [$value],
                   "code"      => $attribute_code,
@@ -157,10 +150,9 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
                 ];
               }
               
-              $data[$group]["attrid"] = $attribute->getId();
+              $data[$groupId]["attrid"] = $attribute->getId();
             }
           }
-          Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_PREPROCESS_ATTRIBUTES_getAdditionalDataCustom_".$attribute_code);
         }
       }
       
@@ -172,9 +164,7 @@ class Mage_Catalog_Block_Product_View_Attributes extends Mage_Core_Block_Templat
       foreach($_entity_attribute_groups as $_entity_attribute_group) {
         $GLOBALS["eav_group_cache"][$_entity_attribute_group->getId()] = $_entity_attribute_group->getAttributeGroupName();
       }
-      // if(_dhh_debug()) {
-        // print_r($GLOBALS["eav_group_cache"]);
-      // }
+      
       foreach($data as $groupId => &$group) {
         if(isset($GLOBALS["eav_group_cache"][$groupId])) {
           $group["title"] = $GLOBALS["eav_group_cache"][$groupId];

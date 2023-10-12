@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Cache
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,7 +46,6 @@
  *
  * @category  Mage
  * @package   Mage_Cache
- * @author    Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
 {
@@ -264,6 +257,8 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      * Return an array of stored tags
      *
      * @return array Array of stored tags (string)
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function getTags()
     {
@@ -367,7 +362,7 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
             'tags'   => $metadatas['tags']
         ];
 
-        return !!$this->_filePutContents($file, serialize($newMetadatas) . "\n" . $data);
+        return (bool) $this->_filePutContents($file, serialize($newMetadatas) . "\n" . $data);
     }
 
     /**
@@ -375,8 +370,9 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      *
      * @param  string $file  Cache file
      * @param  bool $withData
-     *
      * @return array|bool
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _getCache($file, $withData)
     {
@@ -481,6 +477,8 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      *
      * @throws Zend_Cache_Exception
      * @return boolean In case of success returns true
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _clean($dir, $mode = Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -648,6 +646,8 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      * Return the complete directory path where tags are stored
      *
      * @return string Complete directory path
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _tagPath()
     {
@@ -671,6 +671,8 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      * @param string|resource $tag
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _getTagIds($tag)
     {
@@ -744,6 +746,8 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      * @param  string $string String to put in file
      *
      * @return boolean In case of success returns true
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _filePutContents($file, $string)
     {
@@ -760,6 +764,8 @@ class Mage_Cache_Backend_File extends Zend_Cache_Backend_File
      *
      * @param string $id cache id
      * @return boolean true
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _recursiveMkdirAndChmod($id)
     {

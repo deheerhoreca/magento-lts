@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Sales
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2019-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2019-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +25,6 @@
  *
  * @category   Mage
  * @package    Mage_Sales
- * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @method Mage_Sales_Model_Resource_Quote _getResource()
  * @method Mage_Sales_Model_Resource_Quote getResource()
@@ -59,8 +52,6 @@
  * @method $this setCheckoutMethod(string $value)
  * @method string getConvertedAt()
  * @method $this setConvertedAt(string $value)
- * @method string getCouponCode()
- * @method $this setCouponCode(string $value)
  * @method string getCreatedAt()
  * @method $this setCreatedAt(string $value)
  * @method string getCustomerDob()
@@ -202,28 +193,28 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     /**
      * Quote customer model object
      *
-     * @var Mage_Customer_Model_Customer
+     * @var Mage_Customer_Model_Customer|null
      */
     protected $_customer;
 
     /**
      * Quote addresses collection
      *
-     * @var Mage_Sales_Model_Resource_Order_Address_Collection
+     * @var Mage_Sales_Model_Resource_Order_Address_Collection|null
      */
     protected $_addresses = null;
 
     /**
      * Quote items collection
      *
-     * @var Mage_Sales_Model_Resource_Quote_Item_Collection
+     * @var Mage_Sales_Model_Resource_Quote_Item_Collection|null
      */
     protected $_items = null;
 
     /**
      * Quote payments
      *
-     * @var Mage_Sales_Model_Resource_Quote_Payment_Collection
+     * @var Mage_Sales_Model_Resource_Quote_Payment_Collection|null
      */
     protected $_payments = null;
 
@@ -257,7 +248,6 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     protected function _initOldFieldsMap()
     {
-        $this->_oldFieldsMap = Mage::helper('sales')->getOldFieldMap('quote');
         return $this;
     }
 
@@ -292,7 +282,9 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function setStore(Mage_Core_Model_Store $store)
     {
-        $this->setStoreId($store->getId());
+        if ($this->getStoreId() != $store->getId()) {
+            $this->setStoreId($store->getId());
+        }
         return $this;
     }
 
@@ -409,6 +401,8 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         }
         $this->_getResource()->loadByCustomerId($this, $customerId);
         $this->_afterLoad();
+        $this->setOrigData();
+        $this->setDataChanges(false);
         return $this;
     }
 
@@ -422,6 +416,8 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     {
         $this->_getResource()->loadActive($this, $quoteId);
         $this->_afterLoad();
+        $this->setOrigData();
+        $this->setDataChanges(false);
         return $this;
     }
 
@@ -435,6 +431,8 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     {
         $this->_getResource()->loadByIdWithoutStore($this, $quoteId);
         $this->_afterLoad();
+        $this->setOrigData();
+        $this->setDataChanges(false);
         return $this;
     }
 
@@ -1111,7 +1109,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
 
         Mage::dispatchEvent('sales_quote_product_add_after', ['items' => $items]);
 
-        return $item;
+        return $parentItem;
     }
 
     /**
@@ -1834,7 +1832,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function getIsVirtual()
     {
-        return intval($this->isVirtual());
+        return (int) $this->isVirtual();
     }
 
     /**
@@ -1999,7 +1997,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     protected function _validateCouponCode()
     {
-        $code = $this->_getData('coupon_code');
+        $code = $this->getCouponCode();
         if (strlen($code)) {
             $addressHasCoupon = false;
             $addresses = $this->getAllAddresses();
@@ -2087,5 +2085,22 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
             return $this;
         }
         return parent::save();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCouponCode(): string
+    {
+        return (string)$this->_getData('coupon_code');
+    }
+
+    /**
+     * @param string|null $couponCode
+     * @return $this
+     */
+    public function setCouponCode(?string $couponCode)
+    {
+        return $this->setData('coupon_code', $couponCode);
     }
 }

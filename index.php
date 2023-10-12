@@ -2,50 +2,23 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
- * @category    Mage
- * @package     Mage
+ * @category   Mage
+ * @package    Mage
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2018-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2018-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-if (version_compare(phpversion(), '7.3.0', '<') === true) {
-    echo  '<div style="font:12px/1.35em arial, helvetica, sans-serif;">
-<div style="margin:0 0 25px 0; border-bottom:1px solid #ccc;">
-<h3 style="margin:0; font-size:1.7em; font-weight:normal; text-transform:none; text-align:left; color:#2f2f2f;">
-Whoops, it looks like you have an invalid PHP version.</h3></div><p>OpenMage supports PHP 7.3.0 or newer.
-<a href="https://www.openmage.org/magento-lts/install.html" target="">Find out</a> how to install</a>
- OpenMage using PHP-CGI as a work-around.</p></div>';
-    exit;
-}
-
-/**
- * Compilation includes configuration file
- */
 define('MAGENTO_ROOT', getcwd());
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 $maintenanceFile = 'maintenance.flag';
 $maintenanceIpFile = 'maintenance.ip';
 
-if (!file_exists($mageFilename)) {
-    if (is_dir('downloader')) {
-        header("Location: downloader");
-    } else {
-        echo $mageFilename . " was not found";
-    }
-    exit;
-}
 
 require MAGENTO_ROOT . '/app/bootstrap.php';
 require_once $mageFilename;
@@ -78,6 +51,10 @@ if (file_exists($maintenanceFile)) {
         include_once __DIR__ . '/errors/503.php';
         exit;
     }
+
+    // remove config cache to make the system check for DB updates
+    $config = Mage::app()->getConfig();
+    $config->getCache()->remove($config->getCacheId());
 }
 
 Mage::run($mageRunCode, $mageRunType);

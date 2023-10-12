@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_File
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -27,11 +21,20 @@
  *
  * @category   Varien
  * @package    Varien_File
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 class Varien_File_Uploader
 {
+    public const UPLOAD_ERRORS = [
+        UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+        UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
+        UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded',
+        UPLOAD_ERR_NO_FILE => 'No file was uploaded',
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
+        UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload'
+    ];
+
     /**
      * Uploaded file handle (copy of $_FILES[] element)
      *
@@ -51,7 +54,7 @@ class Varien_File_Uploader
     /**
      * Upload type. Used to right handle $_FILES array.
      *
-     * @var string Varien_File_Uploader::SINGLE_STYLE|Varien_File_Uploader::MULTIPLE_STYLE
+     * @var int Varien_File_Uploader::SINGLE_STYLE|Varien_File_Uploader::MULTIPLE_STYLE
      * @access protected
      */
     protected $_uploadType;
@@ -136,12 +139,16 @@ class Varien_File_Uploader
 
     public const SINGLE_STYLE = 0;
     public const MULTIPLE_STYLE = 1;
-    public const TMP_NAME_EMPTY = 666;
+
+    /**
+     * @deprecated Use UPLOAD_ERR_NO_FILE instead
+     */
+    public const TMP_NAME_EMPTY = UPLOAD_ERR_NO_FILE;
 
     /**
      * Resulting of uploaded file
      *
-     * @var array|false     Array with file info keys: path, file. Result is
+     * @var array|bool      Array with file info keys: path, file. Result is
      *                      FALSE when file not uploaded
      */
     protected $_result;
@@ -150,8 +157,10 @@ class Varien_File_Uploader
     {
         $this->_setUploadFileId($fileId);
         if (empty($this->_file['tmp_name']) || !file_exists($this->_file['tmp_name'])) {
-            $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
-            throw new Exception('File was not uploaded.', $code);
+            $errorCode = $this->_file['error'] ?? 0;
+            if (isset(self::UPLOAD_ERRORS[$errorCode])) {
+                throw new Exception(self::UPLOAD_ERRORS[$errorCode], $errorCode);
+            }
         } else {
             $this->_fileExists = true;
         }
@@ -337,7 +346,7 @@ class Varien_File_Uploader
     /**
      * Convert filename to lowercase in case of case-insensitive file names
      *
-     * @param string
+     * @param string $fileName
      * @return string
      */
     public function correctFileNameCase($fileName)
@@ -495,16 +504,14 @@ class Varien_File_Uploader
     private function _setUploadFileId($fileId)
     {
         if (empty($_FILES)) {
-            throw new Exception('$_FILES array is empty', self::TMP_NAME_EMPTY);
+            throw new Exception('$_FILES array is empty', UPLOAD_ERR_NO_FILE);
         }
 
         if (is_array($fileId)) {
             $this->_uploadType = self::MULTIPLE_STYLE;
             $this->_file = $fileId;
         } else {
-            preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
-
-            if (count($file) > 0 && (count($file[0]) > 0) && (count($file[1]) > 0)) {
+            if (preg_match('/^(\w+)\[(\w+)\]$/', $fileId, $file)) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 
@@ -526,6 +533,9 @@ class Varien_File_Uploader
         }
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
     private function _createDestinationFolder($destinationFolder)
     {
         if (!$destinationFolder) {

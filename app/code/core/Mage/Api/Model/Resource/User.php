@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Api
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2017-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2017-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Api
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
 {
@@ -227,7 +220,8 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
      * Delete the object
      *
      * @param Mage_Core_Model_Abstract $user
-     * @return bool
+     * @return $this
+     * @throws Exception
      */
     public function delete(Mage_Core_Model_Abstract $user)
     {
@@ -238,14 +232,11 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
             $dbh->delete($this->getTable('api/user'), ['user_id = ?' => $uid]);
             $dbh->delete($this->getTable('api/role'), ['user_id = ?' => $uid]);
             $dbh->commit();
-        } catch (Mage_Core_Exception $e) {
+        } catch (Throwable $e) {
             $dbh->rollBack();
             throw $e;
-        } catch (Exception $e) {
-            $dbh->rollBack();
-            return false;
         }
-        return true;
+        return $this;
     }
 
     /**
@@ -270,7 +261,7 @@ class Mage_Api_Model_Resource_User extends Mage_Core_Model_Resource_Db_Abstract
                 ['user_id = ?' => (int) $user->getId()]
             );
             foreach ($rolesIds as $rid) {
-                $rid = intval($rid);
+                $rid = (int) $rid;
                 if ($rid > 0) {
                     //$row = $this->load($user, $rid);
                     $row = ['tree_level' => 0];

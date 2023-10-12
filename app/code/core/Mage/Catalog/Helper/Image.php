@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Catalog
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2018-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2018-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
 {
@@ -37,7 +30,7 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
     /**
      * Current model
      *
-     * @var Mage_Catalog_Model_Product_Image
+     * @var Mage_Catalog_Model_Product_Image|null
      */
     protected $_model;
 
@@ -58,49 +51,49 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
     /**
      * Angle
      *
-     * @var int
+     * @var int|null
      */
     protected $_angle;
 
     /**
      * Watermark file name
      *
-     * @var string
+     * @var string|null
      */
     protected $_watermark;
 
     /**
      * Watermark Position
      *
-     * @var string
+     * @var string|null
      */
     protected $_watermarkPosition;
 
     /**
      * Watermark Size
      *
-     * @var string
+     * @var string|null
      */
     protected $_watermarkSize;
 
     /**
      * Watermark Image opacity
      *
-     * @var int
+     * @var int|null
      */
     protected $_watermarkImageOpacity;
 
     /**
      * Current Product
      *
-     * @var Mage_Catalog_Model_Product
+     * @var Mage_Catalog_Model_Product|null
      */
     protected $_product;
 
     /**
      * Image File
      *
-     * @var string
+     * @var string|null
      */
     protected $_imageFile;
 
@@ -571,6 +564,10 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
      */
     protected function parseSize($string)
     {
+        if ($string === null) {
+            return false;
+        }
+
         $size = explode('x', strtolower($string));
         if (count($size) === 2) {
             return [
@@ -578,6 +575,7 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
                 'heigth' => ($size[1] > 0) ? $size[1] : null,
             ];
         }
+
         return false;
     }
 
@@ -642,10 +640,10 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         }
 
         if ($imageInfo[0] > $maxDimension || $imageInfo[1] > $maxDimension) {
-            Mage::throwException($this->__('Disalollowed file format.'));
+            Mage::throwException($this->__('Disallowed file format.'));
         }
 
-        $_processor = new Varien_Image($filePath);
+        $_processor = Mage::getModel('varien/image', $filePath);
         $mimeType = $_processor->getMimeType();
 
         // Force garbage collection since image handler resource uses memory without counting toward memory limit

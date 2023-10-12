@@ -2,19 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_File
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @copyright  Copyright (c) 2022-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -23,15 +18,14 @@
  *
  * @deprecated after 1.4.0.0-rc1
  * @file       Image.php
- * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @property mixed $uploader
  */
-
 class Varien_File_Uploader_Image extends Varien_File_Uploader
 {
-    public function __construct($file = null)
+    public function __construct()
     {
         register_shutdown_function([$this, 'destruct']);
-        $this->newUploader($file);
     }
 
     /**
@@ -67,7 +61,7 @@ class Varien_File_Uploader_Image extends Varien_File_Uploader
      */
     public function rotate($degrees = null)
     {
-        $this->uploader->image_rotate = intval($degrees);
+        $this->uploader->image_rotate = (int) $degrees;
     }
 
     /**
@@ -78,7 +72,7 @@ class Varien_File_Uploader_Image extends Varien_File_Uploader
      * Default value is h (flip horizontally)
      *
      * @access public
-     * @var string;
+     * @param string $type
      */
     public function flip($type = "h")
     {
@@ -186,7 +180,7 @@ class Varien_File_Uploader_Image extends Varien_File_Uploader
      */
     public function addReflection($height = "10%", $space = 0, $color = "#FFFFFF", $opacity = 60)
     {
-        if (intval($height) == 0) {
+        if ((int) $height == 0) {
             return;
         }
 
@@ -222,7 +216,7 @@ class Varien_File_Uploader_Image extends Varien_File_Uploader
 
     public function setTextVisibilityPercent($percent)
     {
-        $this->uploader->image_text_percent = $visibilityPercent;
+        $this->uploader->image_text_percent = $percent;
     }
 
     public function setTextBackgroundColor($color)
@@ -356,7 +350,3 @@ class Varien_File_Uploader_Image extends Varien_File_Uploader
         $this->uploader->image_background_color = $color;
     }
 }
-
-// ft:php
-// fileformat:unix
-// tabstop:4

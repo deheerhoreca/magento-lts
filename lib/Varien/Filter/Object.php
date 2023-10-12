@@ -2,15 +2,9 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Filter
@@ -21,8 +15,16 @@
 
 class Varien_Filter_Object extends Zend_Filter
 {
+    /**
+     * @var array
+     */
     protected $_columnFilters = [];
 
+    /**
+     * @param Zend_Filter_Interface $filter
+     * @param string $column
+     * @return $this
+     */
     public function addFilter(Zend_Filter_Interface $filter, $column = '')
     {
         if ('' === $column) {
@@ -33,8 +35,14 @@ class Varien_Filter_Object extends Zend_Filter
             }
             $this->_columnFilters[$column]->addFilter($filter);
         }
+        return $this;
     }
 
+    /**
+     * @param Varien_Object $object
+     * @return mixed
+     * @throws Exception
+     */
     public function filter($object)
     {
         if (!$object instanceof Varien_Object) {

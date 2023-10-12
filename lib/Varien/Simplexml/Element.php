@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Simplexml
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Varien
  * @package    Varien_Simplexml
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Varien_Simplexml_Element extends SimpleXMLElement
 {
@@ -299,6 +292,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
     {
         $out = '';
         foreach ($this->children() as $child) {
+            /** @var Varien_Simplexml_Element $child */
             $out .= $child->asNiceXml($level);
         }
         return $out;
@@ -307,7 +301,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
     /**
      * Converts meaningful xml characters to xml entities
      *
-     * @param  string
+     * @param  string $value
      * @return string
      */
     public function xmlentities($value = null)
@@ -449,16 +443,6 @@ class Varien_Simplexml_Element extends SimpleXMLElement
         $node = $this;
         foreach ($arr as $i => $nodeName) {
             if ($last === $i) {
-                /*
-                if (isset($xml->$nodeName)) {
-                    if ($overwrite) {
-                        unset($xml->$nodeName);
-                    } else {
-                        continue;
-                    }
-                }
-                $xml->addChild($nodeName, $xml->xmlentities($value));
-                */
                 if (!isset($node->$nodeName) || $overwrite) {
                     $node->$nodeName = $value;
                 }
@@ -472,138 +456,4 @@ class Varien_Simplexml_Element extends SimpleXMLElement
         }
         return $this;
     }
-
-    /*
-        public function extendChildByNode($source, $overwrite=false, $mergeBy='name')
-        {
-            // this will be our new target node
-            $targetChild = null;
-
-            // name of the source node
-            $sourceName = $source->getName();
-
-            // here we have children of our source node
-            $sourceChildren = $source->children();
-
-            if (!$sourceChildren) {
-                // handle string node
-                if (isset($this->$sourceName)) {
-                    if ($overwrite) {
-                        unset($this->$sourceName);
-                    } else {
-                        return $this;
-                    }
-                }
-                $targetChild = $this->addChild($sourceName, (string)$source);
-                foreach ($source->attributes() as $key=>$value) {
-                    $targetChild->addAttribute($key, $value);
-                }
-                return $this;
-            }
-
-            if (isset($this->$sourceName)) {
-                // search for target child with same name subnode as node's name
-                if (isset($source->$mergeBy)) {
-                    foreach ($this->$sourceName as $targetNode) {
-                        if (!isset($targetNode->$mergeBy)) {
-                            Zend::exception("Can't merge identified node with non identified");
-                        }
-                        if ((string)$source->$mergeBy==(string)$targetNode->$mergeBy) {
-                            $targetChild = $targetNode;
-                            break;
-                        }
-                    }
-                } else {
-                    $existsWithId = false;
-                    foreach ($this->$sourceName as $targetNode) {
-                        if (isset($targetNode->$mergeBy)) {
-                            Zend::exception("Can't merge identified node with non identified");
-                        }
-                    }
-                    $targetChild = $this->$sourceName;
-                }
-            }
-
-            if (is_null($targetChild)) {
-                // if child target is not found create new and descend
-                $targetChild = $this->addChild($sourceName);
-                foreach ($source->attributes() as $key=>$value) {
-                    $targetChild->addAttribute($key, $value);
-                }
-            }
-
-            // finally add our source node children to resulting new target node
-            foreach ($sourceChildren as $childKey=>$childNode) {
-                $targetChild->extendChildByNode($childNode, $overwrite, $mergeBy);
-            }
-
-            return $this;
-        }
-
-        public function extendChildByAttribute($source, $overwrite=false, $mergeBy='name')
-        {
-            // this will be our new target node
-            $targetChild = null;
-
-            // name of the source node
-            $sourceName = $source->getName();
-
-            // here we have children of our source node
-            $sourceChildren = $source->children();
-
-            if (!$sourceChildren) {
-                // handle string node
-                if (isset($this->$sourceName)) {
-                    if ($overwrite) {
-                        unset($this->$sourceName);
-                    } else {
-                        return $this;
-                    }
-                }
-                $targetChild = $this->addChild($sourceName, (string)$source);
-                foreach ($source->attributes() as $key=>$value) {
-                    $targetChild->addAttribute($key, $value);
-                }
-                return $this;
-            }
-
-            if (isset($this->$sourceName)) {
-                // search for target child with same name subnode as node's name
-                if (isset($source[$mergeBy])) {
-                    foreach ($this->$sourceName as $targetNode) {
-                        if (!isset($targetNode[$mergeBy])) {
-                            Zend::exception("Can't merge identified node with non identified");
-                        }
-                        if ((string)$source[$mergeBy]==(string)$targetNode[$mergeBy]) {
-                            $targetChild = $targetNode;
-                            break;
-                        }
-                    }
-                } else {
-                    $existsWithId = false;
-                    foreach ($this->$sourceName as $targetNode) {
-                        if (isset($targetNode[$mergeBy])) {
-                            Zend::exception("Can't merge identified node with non identified");
-                        }
-                    }
-                    $targetChild = $this->$sourceName;
-                }
-            }
-
-            if (is_null($targetChild)) {
-                // if child target is not found create new and descend
-                $targetChild = $this->addChild($sourceName);
-                foreach ($source->attributes() as $key=>$value) {
-                    $targetChild->addAttribute($key, $value);
-                }
-            }
-
-            // finally add our source node children to resulting new target node
-            foreach ($sourceChildren as $childKey=>$childNode) {
-                $targetChild->extendChildByAttribute($childNode, $overwrite, $mergeBy);
-            }
-
-            return $this;
-        }
-    */
 }

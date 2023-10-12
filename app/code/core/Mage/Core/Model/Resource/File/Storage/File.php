@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Core
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2016-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2016-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,14 +18,13 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Core_Model_Resource_File_Storage_File
 {
     /**
      * Prefix of model events names
      *
-     * @var string
+     * @var string|null
      */
     protected $_mediaBaseDirectory = null;
 
@@ -41,10 +34,14 @@ class Mage_Core_Model_Resource_File_Storage_File
      */
     protected $_ignoredFiles;
 
-    /** @var resource */
+    /**
+     * @var resource|null
+     */
     protected $filePointer;
 
-    /** @var null|string[] */
+    /**
+     * @var null|string[]
+     */
     protected $_createdDirectories;
 
     /**
@@ -109,6 +106,8 @@ class Mage_Core_Model_Resource_File_Storage_File
      *
      * @param  string $dir
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function clear($dir = '')
     {
@@ -157,6 +156,8 @@ class Mage_Core_Model_Resource_File_Storage_File
      *
      * @param  array $dir
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function saveDir($dir)
     {
@@ -188,6 +189,8 @@ class Mage_Core_Model_Resource_File_Storage_File
      * @param  bool $overwrite
      * @return bool true if file written, otherwise false
      * @throws Mage_Core_Exception
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function saveFile($filePath, $content, $overwrite = false)
     {
@@ -232,6 +235,8 @@ class Mage_Core_Model_Resource_File_Storage_File
      *
      * @param string $filePath
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function lockCreateFile($filePath)
     {
@@ -275,6 +280,8 @@ class Mage_Core_Model_Resource_File_Storage_File
      * Unlock, close and remove a locked file (in case the file could not be read from remote storage)
      *
      * @param string $filePath
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function removeLockedFile($filePath)
     {

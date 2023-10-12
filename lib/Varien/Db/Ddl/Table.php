@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Db
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2022-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Varien
  * @package    Varien_Db
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Varien_Db_Ddl_Table
 {
@@ -83,7 +76,7 @@ class Varien_Db_Ddl_Table
     /**
      * Name of table
      *
-     * @var string
+     * @var string|null
      */
     protected $_tableName;
 
@@ -481,7 +474,7 @@ class Varien_Db_Ddl_Table
      * Add index to table
      *
      * @param string $indexName     the index name
-     * @param array|string $columns array of columns or column string
+     * @param array|string $fields  array of columns or column string
      * @param array $options        array of additional options
      * @return Varien_Db_Ddl_Table
      */
@@ -597,7 +590,7 @@ class Varien_Db_Ddl_Table
      *
      * @param string $key
      * @param string $value
-     * @return string
+     * @return $this
      */
     public function setOption($key, $value)
     {

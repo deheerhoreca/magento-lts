@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Adminhtml
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2019-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2019-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_Action
 {
@@ -113,9 +106,12 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
             $block = $this->getLayout()->createBlock('adminhtml/system_config_edit');
             $this->_addContent($block->initForm());
 
-            $this->_addJs($this->getLayout()
-                ->createBlock('adminhtml/template')
-                ->setTemplate('system/shipping/ups.phtml'));
+            if (($current == 'carriers') && Mage::helper('core')->isModuleEnabled('Mage_Usa')) {
+                $this->_addJs($this->getLayout()
+                     ->createBlock('adminhtml/template')
+                     ->setTemplate('system/shipping/ups.phtml'));
+            }
+
             $this->_addJs($this->getLayout()
                 ->createBlock('adminhtml/template')
                 ->setTemplate('system/config/js.phtml'));

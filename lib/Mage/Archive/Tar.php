@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Archive
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2021 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2021-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Archive
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Interface
 {
@@ -60,14 +53,14 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
     /**
     * Tarball data writer
     *
-    * @var Mage_Archive_Helper_File
+    * @var Mage_Archive_Helper_File|null
     */
     protected $_writer;
 
     /**
     * Tarball data reader
     *
-    * @var Mage_Archive_Helper_File
+    * @var Mage_Archive_Helper_File|null
     */
     protected $_reader;
 
@@ -261,7 +254,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
         if (!$skipRoot) {
             $header = $this->_composeHeader();
             $data = $this->_readFile($file);
-            $data = str_pad($data, floor(((is_dir($file) ? 0 : filesize($file)) + 512 - 1) / 512) * 512, "\0");
+            $data = str_pad($data, (int) (((is_dir($file) ? 0 : filesize($file)) + 512 - 1) / 512) * 512, "\0");
         }
         $sub = '';
         if (is_dir($file)) {
@@ -276,7 +269,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
             }
         }
         $tarData = $header . $data . $sub;
-        $tarData = str_pad($tarData, floor((strlen($tarData) - 1) / 1536) * 1536, "\0");
+        $tarData = str_pad($tarData, (int) ((strlen($tarData) - 1) / 1536) * 1536, "\0");
         return $tarData;
     }
 
@@ -364,7 +357,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
         $longHeader = '';
         if (!$long && strlen($nameFile) > 100) {
             $longHeader = $this->_composeHeader(true);
-            $longHeader .= str_pad($nameFile, floor((strlen($nameFile) + 512 - 1) / 512) * 512, "\0");
+            $longHeader .= str_pad($nameFile, (int) ((strlen($nameFile) + 512 - 1) / 512) * 512, "\0");
         }
         $header = [];
         $header['100-name']       = $long ? '././@LongLink' : substr($nameFile, 0, 100);
@@ -412,6 +405,8 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
      * @param string $destination path to file is unpacked
      * @return array list of files
      * @throws Mage_Exception
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     protected function _unpackCurrentTar($destination)
     {
@@ -462,7 +457,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
      *
      * @deprecated after 1.7.0.0
      * @param resource $pointer
-     * @return string
+     * @return array|false
      */
     protected function _parseHeader(&$pointer)
     {
@@ -497,13 +492,13 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
         $checksumOk = $header['checksum'] == $checksum;
         if (isset($header['name']) && $checksumOk) {
             if ($header['name'] == '././@LongLink' && $header['type'] == 'L') {
-                $realName = substr(fread($pointer, floor(($header['size'] + 512 - 1) / 512) * 512), 0, $header['size']);
+                $realName = substr(fread($pointer, (int) (($header['size'] + 512 - 1) / 512) * 512), 0, $header['size']);
                 $headerMain = $this->_parseHeader($pointer);
                 $headerMain['name'] = $realName;
                 return $headerMain;
             } else {
                 if ($header['size'] > 0) {
-                    $header['data'] = substr(fread($pointer, floor(($header['size'] + 512 - 1) / 512) * 512), 0, $header['size']);
+                    $header['data'] = substr(fread($pointer, (int) (($header['size'] + 512 - 1) / 512) * 512), 0, $header['size']);
                 } else {
                     $header['data'] = '';
                 }
@@ -555,7 +550,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
                 return $header;
             }
 
-            $realNameBlockSize = floor(($header['size'] + self::TAR_BLOCK_SIZE - 1) / self::TAR_BLOCK_SIZE)
+            $realNameBlockSize = (int) (($header['size'] + self::TAR_BLOCK_SIZE - 1) / self::TAR_BLOCK_SIZE)
                 * self::TAR_BLOCK_SIZE;
             $realNameBlock = $archiveReader->read($realNameBlockSize);
             $realName = substr($realNameBlock, 0, $header['size']);
@@ -662,7 +657,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
             }
 
             if ($header['type'] != 5) {
-                $skipBytes = floor(($header['size'] + self::TAR_BLOCK_SIZE - 1) / self::TAR_BLOCK_SIZE)
+                $skipBytes = (int) (($header['size'] + self::TAR_BLOCK_SIZE - 1) / self::TAR_BLOCK_SIZE)
                     * self::TAR_BLOCK_SIZE;
                 $archiveReader->read($skipBytes);
             }

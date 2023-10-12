@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Core
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2017-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2017-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @method string getCreatedAt()
  * @method $this setCreatedAt(string $currentTime)
@@ -51,6 +44,13 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      * @var string
      */
     protected $_eventObject = 'object';
+
+    /**
+     * Original data that was loaded
+     *
+     * @var array
+     */
+    protected $_origData;
 
     /**
      * Name of the resource model
@@ -109,6 +109,51 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     }
 
     /**
+     * Get object loaded data (original data)
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getOrigData($key = null)
+    {
+        if (is_null($key)) {
+            return $this->_origData;
+        }
+        return isset($this->_origData[$key]) ? $this->_origData[$key] : null;
+    }
+
+    /**
+     * Initialize object original data
+     *
+     * @param string $key
+     * @param mixed $data
+     * @return $this
+     */
+    public function setOrigData($key = null, $data = null)
+    {
+        if (is_null($key)) {
+            $this->_origData = $this->_data;
+        } else {
+            $this->_origData[$key] = $data;
+        }
+        return $this;
+    }
+
+    /**
+     * Compare object data with original data
+     *
+     * @param string $field
+     * @return boolean
+     */
+    public function dataHasChangedFor($field)
+    {
+        $newData = $this->getData($field);
+        $origData = $this->getOrigData($field);
+
+        return $newData != $origData;
+    }
+
+    /**
      * Set resource names
      *
      * If collection name is omitted, resource name will be used with _collection appended
@@ -161,7 +206,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     /**
      * Retrieve model object identifier
      *
-     * @return int|string
+     * @return int|string|null
      */
     public function getId()
     {
@@ -327,7 +372,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             return $this;
         }
         $this->_getResource()->beginTransaction();
-        $dataCommited = false;
+
         try {
             $this->_beforeSave();
             if ($this->_dataSaveAllowed) {
@@ -337,15 +382,12 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             $this->_getResource()->addCommitCallback([$this, 'afterCommitCallback'])
                 ->commit();
             $this->_hasDataChanges = false;
-            $dataCommited = true;
         } catch (Throwable $e) {
             $this->_getResource()->rollBack();
             $this->_hasDataChanges = true;
             throw $e;
         }
-        if ($dataCommited) {
-            $this->_afterSaveCommit();
-        }
+
         return $this;
     }
 
@@ -359,18 +401,6 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
         $this->cleanModelCache();
         Mage::dispatchEvent('model_save_commit_after', ['object' => $this]);
         Mage::dispatchEvent($this->_eventPrefix . '_save_commit_after', $this->_getEventData());
-        return $this;
-    }
-
-    /**
-     * Processing data save after transaction commit.
-     * When method is called we don't have guarantee what transaction was really committed
-     *
-     * @deprecated after 1.4.0.0 - please use afterCommitCallback instead
-     * @return $this
-     */
-    protected function _afterSaveCommit()
-    {
         return $this;
     }
 

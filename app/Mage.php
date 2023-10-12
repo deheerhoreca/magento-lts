@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
- * @category    Mage
- * @package     Mage
+ * @category   Mage
+ * @package    Mage
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2017-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2017-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -27,7 +21,7 @@ Mage::register('original_include_path', get_include_path());
 
 if (!empty($_SERVER['MAGE_IS_DEVELOPER_MODE']) || !empty($_ENV['MAGE_IS_DEVELOPER_MODE'])) {
     Mage::setIsDeveloperMode(true);
-    ini_set('display_errors', 1);
+    ini_set('display_errors', '1');
     ini_set('error_prepend_string', '<pre>');
     ini_set('error_append_string', '</pre>');
 }
@@ -49,15 +43,15 @@ include_once "Varien/Autoload.php";
 Varien_Autoload::register();
 
 /** AUTOLOADER PATCH **/
-if (file_exists($autoloaderPath = BP . DS . 'vendor/autoload.php') ||
-    file_exists($autoloaderPath = BP . DS . '../vendor/autoload.php')
-) {
-    require $autoloaderPath;
+$autoloaderPath = getenv('COMPOSER_VENDOR_PATH');
+if (!$autoloaderPath) {
+    $autoloaderPath = dirname(BP) . DS .  'vendor';
+    if (!is_dir($autoloaderPath)) {
+        $autoloaderPath = BP . DS . 'vendor';
+    }
 }
+require $autoloaderPath . DS . 'autoload.php';
 /** AUTOLOADER PATCH **/
-
-include_once "phpseclib/bootstrap.php";
-include_once "mcryptcompat/mcrypt.php";
 
 /* Support additional includes, such as composer's vendor/autoload.php files */
 foreach (glob(BP . DS . 'app' . DS . 'etc' . DS . 'includes' . DS . '*.php') as $path) {
@@ -66,8 +60,6 @@ foreach (glob(BP . DS . 'app' . DS . 'etc' . DS . 'includes' . DS . '*.php') as 
 
 /**
  * Main Mage hub class
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 final class Mage
 {
@@ -166,6 +158,7 @@ final class Mage
      * Gets the detailed Magento version information
      *
      * @return array
+     * @deprecated
      */
     public static function getVersionInfo()
     {
@@ -186,16 +179,16 @@ final class Mage
      *
      * @return string
      */
-    public static function getOpenMageVersion()
+    public static function getOpenMageVersion(): string
     {
-        $i = self::getOpenMageVersionInfo();
-        $versionString = "{$i['major']}.{$i['minor']}.{$i['patch']}";
-        if ($i['stability'] || $i['number']) {
-            $versionString .= "-";
-            if ($i['stability'] && $i['number']) {
-                $versionString .= implode('.', [$i['stability'], $i['number']]);
+        $info = self::getOpenMageVersionInfo();
+        $versionString = "{$info['major']}.{$info['minor']}.{$info['patch']}";
+        if ($info['stability'] || $info['number']) {
+            $versionString .= '-';
+            if ($info['stability'] && $info['number']) {
+                $versionString .= implode('.', [$info['stability'], $info['number']]);
             } else {
-                $versionString .= implode('', [$i['stability'], $i['number']]);
+                $versionString .= implode('', [$info['stability'], $info['number']]);
             }
         }
         return trim(
@@ -211,21 +204,19 @@ final class Mage
      *
      * @return array
      */
-    public static function getOpenMageVersionInfo()
+    public static function getOpenMageVersionInfo(): array
     {
-        $majorVersion = 19;
-
         /**
          * This code construct is to make merging for forward porting of changes easier.
          * By having the version numbers of different branches in own lines, they do not provoke a merge conflict
          * also as releases are usually done together, this could in theory be done at once.
          * The major Version then needs to be only changed once per branch.
          */
-        if ($majorVersion === 20) {
+        if (self::getOpenMageMajorVersion() === 20) {
             return [
                 'major'     => '20',
-                'minor'     => '0',
-                'patch'     => '20',
+                'minor'     => '1',
+                'patch'     => '1',
                 'stability' => '', // beta,alpha,rc
                 'number'    => '', // 1,2,3,0.3.7,x.7.z.92 @see https://semver.org/#spec-item-9
             ];
@@ -233,11 +224,19 @@ final class Mage
 
         return [
             'major'     => '19',
-            'minor'     => '4',
-            'patch'     => '23',
+            'minor'     => '5',
+            'patch'     => '1',
             'stability' => '', // beta,alpha,rc
             'number'    => '', // 1,2,3,0.3.7,x.7.z.92 @see https://semver.org/#spec-item-9
         ];
+    }
+
+    /**
+     * @return int<19,20>
+     */
+    public static function getOpenMageMajorVersion(): int
+    {
+        return 20;
     }
 
     /**
@@ -421,7 +420,8 @@ final class Mage
      */
     public static function getStoreConfigFlag($path, $store = null)
     {
-        $flag = strtolower(self::getStoreConfig($path, $store));
+        $flag = self::getStoreConfig($path, $store);
+        $flag = is_string($flag) ? strtolower($flag) : $flag;
         if (!empty($flag) && $flag !== 'false') {
             return true;
         } else {
@@ -444,7 +444,7 @@ final class Mage
     /**
      * Generate url by route and parameters
      *
-     * @param   string $route
+     * @param   null|string $route
      * @param   array $params
      * @return  string
      */
@@ -466,7 +466,7 @@ final class Mage
     /**
      * Retrieve a config instance
      *
-     * @return Mage_Core_Model_Config
+     * @return Mage_Core_Model_Config|null
      */
     public static function getConfig()
     {
@@ -474,7 +474,7 @@ final class Mage
     }
 
     /**
-     * Add observer to even object
+     * Add observer to events object
      *
      * @param string $eventName
      * @param callback $callback
@@ -529,7 +529,7 @@ final class Mage
      *
      * @param   string $modelClass
      * @param   array $arguments
-     * @return  Mage_Core_Model_Abstract
+     * @return  Mage_Core_Model_Abstract|false
      */
     public static function getSingleton($modelClass = '', array $arguments = [])
     {
@@ -839,7 +839,7 @@ final class Mage
      *
      * @param array|object|string $message
      * @param int $level
-     * @param string $file
+     * @param string|null $file
      * @param bool $forceLog
      */
     public static function log($message, $level = null, $file = '', $forceLog = false)
@@ -871,7 +871,7 @@ final class Mage
 
         $level  = is_null($level) ? Zend_Log::DEBUG : $level;
 
-        if (!self::$_isDeveloperMode && $level > $maxLogLevel) {
+        if (!self::$_isDeveloperMode && $level > $maxLogLevel && !$forceLog) {
             return;
         }
 
@@ -1052,14 +1052,5 @@ final class Mage
         }
 
         return $baseUrl;
-    }
-
-    /**
-     * Set is downloader flag
-     *
-     * @deprecated
-     */
-    public static function setIsDownloader()
-    {
     }
 }

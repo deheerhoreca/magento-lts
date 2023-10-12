@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Catalog
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2015-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2015-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @method Mage_Catalog_Model_Resource_Product _getResource()
  * @method Mage_Catalog_Model_Resource_Product getResource()
@@ -134,7 +127,6 @@
  * @method $this setLinksExist(bool $value)
  * @method bool getLinksPurchasedSeparately()
  * @method $this setLinksPurchasedSeparately(bool $value)
- * @method string getLinksTitle()
  * @method array getListSwatchAttrValues()
  *
  * @method array getMatchedRules()
@@ -223,9 +215,6 @@
  * @method $this setStoreId(int $store)
  * @method bool hasStoreIds()
  * @method $this setStoreIds(array $storeIds)
- * @method Mage_CatalogInventory_Model_Stock_Item getStockItem()
- * @method bool hasStockItem()
- * @method $this setStockItem(Mage_CatalogInventory_Model_Stock_Item $value)
  * @method array getSwatchPrices()
  *
  * @method int getTaxClassId()
@@ -271,9 +260,8 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      * Entity code.
      * Can be used as part of method name for entity processing
      */
-    public const ENTITY                 = 'catalog_product';
-
-    public const CACHE_TAG              = 'catalog_product';
+    public const ENTITY          = 'catalog_product';
+    public const CACHE_TAG       = 'catalog_product';
     protected $_cacheTag         = 'catalog_product';
     protected $_eventPrefix      = 'catalog_product';
     protected $_eventObject      = 'product';
@@ -282,7 +270,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Product type instance
      *
-     * @var Mage_Catalog_Model_Product_Type_Abstract
+     * @var Mage_Catalog_Model_Product_Type_Abstract|null|false
      */
     protected $_typeInstance            = null;
 
@@ -294,7 +282,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Product link instance
      *
-     * @var Mage_Catalog_Model_Product_Link
+     * @var Mage_Catalog_Model_Product_Link|null
      */
     protected $_linkInstance;
 
@@ -308,7 +296,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Product Url Instance
      *
-     * @var Mage_Catalog_Model_Product_Url
+     * @var Mage_Catalog_Model_Product_Url|null
      */
     protected $_urlModel = null;
 
@@ -341,6 +329,11 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     protected $_calculatePrice = true;
 
     /**
+     * @var Mage_CatalogInventory_Model_Stock_Item|null
+     */
+    protected $_stockItem;
+
+    /**
      * Initialize resources
      */
     protected function _construct()
@@ -356,7 +349,6 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      */
     protected function _initOldFieldsMap()
     {
-        $this->_oldFieldsMap = Mage::helper('catalog')->getOldFieldMap();
         return $this;
     }
 
@@ -595,7 +587,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      */
     public function getCategoryIds()
     {
-        if (! $this->hasData('category_ids')) {
+        if (!$this->hasData('category_ids')) {
             $wasLocked = false;
             if ($this->isLockedAttribute('category_ids')) {
                 $wasLocked = true;
@@ -679,6 +671,40 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
         }
 
         return $attributes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinksTitle()
+    {
+        return (string)$this->_getData('links_title');
+    }
+
+    /**
+     * @return Mage_CatalogInventory_Model_Stock_Item
+     */
+    public function getStockItem()
+    {
+        return $this->_stockItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasStockItem()
+    {
+        return !!$this->_stockItem;
+    }
+
+    /**
+     * @param Mage_CatalogInventory_Model_Stock_Item $stockItem
+     * @return $this
+     */
+    public function setStockItem($stockItem)
+    {
+        $this->_stockItem = $stockItem;
+        return $this;
     }
 
     /**
@@ -864,8 +890,8 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Get product tier price by qty
      *
-     * @param   double $qty
-     * @return  double
+     * @param   float $qty
+     * @return  float|array
      */
     public function getTierPrice($qty = null)
     {
@@ -934,7 +960,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Returns calculated final price
      *
-     * @return float
+     * @return float|null
      */
     public function getCalculatedFinalPrice()
     {
@@ -2229,14 +2255,23 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
 
         $this->setData([]);
         $this->setOrigData();
-        $this->_customOptions       = [];
-        $this->_optionInstance      = null;
-        $this->_options             = [];
-        $this->_canAffectOptions    = false;
-        $this->_errors              = [];
-        $this->_defaultValues       = [];
-        $this->_storeValuesFlags    = [];
-        $this->_lockedAttributes    = [];
+        $this->_customOptions         = [];
+        $this->_optionInstance        = null;
+        $this->_options               = [];
+        $this->_canAffectOptions      = false;
+        $this->_errors                = [];
+        $this->_defaultValues         = [];
+        $this->_storeValuesFlags      = [];
+        $this->_lockedAttributes      = [];
+        $this->_typeInstance          = null;
+        $this->_typeInstanceSingleton = null;
+        $this->_linkInstance          = null;
+        $this->_reservedAttributes    = null;
+        $this->_isDuplicable          = true;
+        $this->_calculatePrice        = true;
+        $this->_stockItem             = null;
+        $this->_isDeleteable          = true;
+        $this->_isReadonly            = false;
 
         return $this;
     }

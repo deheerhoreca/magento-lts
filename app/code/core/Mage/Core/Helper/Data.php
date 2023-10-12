@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Core
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2016-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2016-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -153,30 +146,32 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Format date using current locale options and time zone.
      *
-     * @param   string|Zend_Date|null $date
+     * @param   string|Zend_Date|null $date If empty, return current datetime.
      * @param   string              $format   See Mage_Core_Model_Locale::FORMAT_TYPE_* constants
      * @param   bool                $showTime Whether to include time
+     * @param   bool                $useTimezone Convert to local datetime?
      * @return  string
      */
-    public function formatDate($date = null, $format = Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, $showTime = false)
+    public function formatDate($date = null, $format = Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, $showTime = false, $useTimezone = true)
     {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $date;
         }
-        if (!($date instanceof Zend_Date) && $date && !strtotime($date)) {
-            return '';
-        }
-        if (is_null($date)) {
-            $date = Mage::app()->getLocale()->date(Mage::getSingleton('core/date')->gmtTimestamp(), null, null);
+        if (empty($date)) {
+            $date = Mage::app()->getLocale()->date(Mage::getSingleton('core/date')->gmtTimestamp(), null, null, $useTimezone);
+        } elseif (is_int($date)) {
+            $date = Mage::app()->getLocale()->date($date, null, null, $useTimezone);
         } elseif (!$date instanceof Zend_Date) {
-            $date = Mage::app()->getLocale()->date(strtotime($date), null, null);
+            if ($time = strtotime($date)) {
+                $date = Mage::app()->getLocale()->date($time, null, null, $useTimezone);
+            } else {
+                return '';
+            }
         }
 
-        if ($showTime) {
-            $format = Mage::app()->getLocale()->getDateTimeFormat($format);
-        } else {
-            $format = Mage::app()->getLocale()->getDateFormat($format);
-        }
+        $format = $showTime
+            ? Mage::app()->getLocale()->getDateTimeFormat($format)
+            : Mage::app()->getLocale()->getDateFormat($format);
 
         return $date->toString($format);
     }
@@ -333,6 +328,8 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $string
      * @param bool $german
      * @return false|string
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function removeAccents($string, $german = false)
     {
@@ -389,7 +386,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param int|null $storeId
+     * @param null|string|bool|int|Mage_Core_Model_Store $storeId
      * @return bool
      */
     public function isDevAllowed($storeId = null)
@@ -400,8 +397,8 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
         $remoteAddr = Mage::helper('core/http')->getRemoteAddr();
         if (!empty($allowedIps) && !empty($remoteAddr)) {
             $allowedIps = preg_split('#\s*,\s*#', $allowedIps, -1, PREG_SPLIT_NO_EMPTY);
-            if (array_search($remoteAddr, $allowedIps) === false
-                && array_search(Mage::helper('core/http')->getHttpHost(), $allowedIps) === false
+            if (!in_array($remoteAddr, $allowedIps)
+                && !in_array(Mage::helper('core/http')->getHttpHost(), $allowedIps)
             ) {
                 $allow = false;
             }
@@ -761,6 +758,8 @@ XML;
      * @param callable $beforeMergeCallback
      * @param array|string $extensionsFilter
      * @return bool|string
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function mergeFiles(
         array $srcFiles,
@@ -974,7 +973,7 @@ XML;
                 $value = (string)$value;
 
                 $firstLetter = substr($value, 0, 1);
-                if ($firstLetter !== false && in_array($firstLetter, ["=", "+", "-"])) {
+                if ($firstLetter && in_array($firstLetter, ['=', '+', '-'])) {
                     $data[$key] = ' ' . $value;
                 }
             }
@@ -1000,5 +999,40 @@ XML;
             }
         }
         return $data;
+    }
+
+    /**
+     * @param bool $setErrorMessage Adds a predefined error message to the 'core/session' object
+     * @return bool
+     */
+    public function isRateLimitExceeded($setErrorMessage = true, $recordRateLimitHit = true): bool
+    {
+        $active = Mage::getStoreConfigFlag('system/rate_limit/active');
+        if ($active && $remoteAddr = Mage::helper('core/http')->getRemoteAddr()) {
+            $cacheTag = 'rate_limit_' . $remoteAddr;
+            if (Mage::app()->testCache($cacheTag)) {
+                $errorMessage = "Too Soon: You are trying to perform this operation too frequently. Please wait a few seconds and try again.";
+                Mage::getSingleton('core/session')->addError($this->__($errorMessage));
+                return true;
+            }
+
+            if ($recordRateLimitHit) {
+                $this->recordRateLimitHit();
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return void
+     */
+    public function recordRateLimitHit(): void
+    {
+        $active = Mage::getStoreConfigFlag('system/rate_limit/active');
+        if ($active && $remoteAddr = Mage::helper('core/http')->getRemoteAddr()) {
+            $cacheTag = 'rate_limit_' . $remoteAddr;
+            Mage::app()->saveCache(1, $cacheTag, ['brute_force'], Mage::getStoreConfig('system/rate_limit/timeframe'));
+        }
     }
 }
