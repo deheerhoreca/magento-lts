@@ -115,14 +115,9 @@ phpstan*.neon
 /.modman/*/.git
 
 # This is tricky to get right
-# Here we cancel any /media rule until now and re-implement the openmage rules:
+# Frist whitelist /media, cancelling openmage's ignores above
 !/media/*
-!/media/.htaccess
-!/media/custom_options/.htaccess
-!/media/customer/.htaccess
-!/media/dhl/logo.jpg
-!/media/downloadable/.htaccess
-# ..and then our own rules:
+# ..and then just list the blacklist
 /media/amfeed
 /media/amfeed
 /media/cache
@@ -132,13 +127,6 @@ phpstan*.neon
 /media/sooqr
 /media/qquoteadv
 /media/catalog
-
-!/media/catalog/category/category_placeholder.png
-!/media/static
-!/media/static/**
-!/media/wysiwyg
-!/media/wysiwyg/**
-!/media/wysiwyg/brands
 
 # Store Manager
 /tmp
