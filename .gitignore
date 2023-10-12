@@ -96,7 +96,7 @@ bridge_*.php
 ._*
 
 /skin/frontend/rwd/external/
-!/skin/frontend/rwd/external/fontawesome/*
+!/skin/frontend/rwd/external/fontawesome
 
 # Ignore downloader cache and configuration files
 /downloader/.cache/
@@ -106,12 +106,12 @@ bridge_*.php
 /google*.html
 /BingSiteAuth.xml
 
-
 /.modman/*/.git
 
 !/media/static
 !/media/wysiwyg
 !/media/dhl/logo.jpg
+
 /.well-known/
 
 # Store Manager
