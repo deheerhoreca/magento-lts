@@ -81,20 +81,29 @@ phpstan*.neon
 /shell/update-copyright.php
 /shell/translations.php
 
-# DHH
+#########################################
+# CHEFSTORE.NL
+#########################################
 
-/sitemap_*.xml
-/google_shopping_*.xml*
-
-# External assets downloaded to local
-js/ext-*
-
-bridge_*.php
+# FILES
 
 .DS_Store
 ._.DS_Store
 ._*
+/sitemap_*.xml
+/google_shopping_*.xml*
+/bridge_*.php
+/google*.html
+/BingSiteAuth.xml
+/nohup.out
+/nohup*.out
+/algolia_*.json
+/maintenance.flag
 
+# DIRS
+
+# External assets downloaded to local
+/js/ext-*
 /skin/frontend/rwd/external/
 !/skin/frontend/rwd/external/fontawesome
 
@@ -103,26 +112,40 @@ bridge_*.php
 /downloader/cache.cfg
 /downloader/connect.cfg
 
-/google*.html
-/BingSiteAuth.xml
-
 /.modman/*/.git
 
-!/media/static
-!/media/wysiwyg
+# This is tricky to get right
+# Here we cancel any /media rule until now and re-implement the openmage rules:
+!/media/*
+!/media/.htaccess
+!/media/custom_options/.htaccess
+!/media/customer/.htaccess
 !/media/dhl/logo.jpg
+!/media/downloadable/.htaccess
+# ..and then our own rules:
+/media/amfeed
+/media/amfeed
+/media/cache
+/media/attachment
+/media/productattachment
+/media/import
+/media/sooqr
+/media/qquoteadv
+/media/catalog
 
-/.well-known/
+!/media/catalog/category/category_placeholder.png
+!/media/static
+!/media/static/**
+!/media/wysiwyg
+!/media/wysiwyg/**
+!/media/wysiwyg/brands
 
 # Store Manager
-/tmp/
+/tmp
 
 # Biller webhook
 /biller-webhook-errors.jsonl
 /biller-webhook.jsonl
 
-/nohup.out
-/nohup*.out
-/algolia_*.json
-/maintenance.flag
 /.idea
+/.well-known/

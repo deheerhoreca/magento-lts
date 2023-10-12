@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<template>
+    <name>Template 04</name>
+    <code>template04</code>
+    <image>template04.jpg</image>
+    <secret_key>e4b84d299ec8e24adb1a697cbf786d09</secret_key>
+    <sort_order>4</sort_order>
+</template>

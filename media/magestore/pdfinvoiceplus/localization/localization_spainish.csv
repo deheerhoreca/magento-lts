@@ -1,0 +1,35 @@
+Invoice,factura
+Date,fecha
+Credit memo,Nota de crédito
+Invoice number,número de factura
+VAT number,número de IVA
+VAT office,oficina del IVA
+Billing Address,Dirección de Facturación
+Shipping Address,Dirección de envío
+Shipping Method,Método de envío
+Payment Method,Método de pago
+Product,producto
+Price,precio
+Quantity,cantidad
+Subtotal,total parcial
+Tax,impuesto
+Discount Amount,Cantidad de Descuento
+Rowtotal,total de la fila
+Subtotal,total parcial
+Shipping & Handling,Envío y dirección
+Grand Total,Gran Total
+Company,empresa
+Contact,contacto
+Country,país
+Description,descripción
+Amount,cantidad
+Unit Price,Precio unitario
+Phone,teléfono
+Reference,referencia
+Between amount,Entre la cantidad
+VAT,IVA
+Entire amount,cantidad completa
+Payment,pago
+Order,orden
+Refund,reembolso
+Qty,Número

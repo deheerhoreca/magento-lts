@@ -1,0 +1,38 @@
+Invoice,Facture
+Date,Date
+Credit memo, Note de crédit
+Invoice number,Numéro de Facture
+VAT number,Numéro de TVA
+VAT office,Bureau de la TVA
+Billing Address,Adresse de facturation
+Shipping Address,Adresse de livraison
+Shipping Method,Méthode d'expédition
+Payment Method,Mode de paiement
+Product,Produit
+Price,Prix
+Quantity,Quantité
+Subtotal,Total
+Tax,Impôt
+Discount Amount,Montant du rabais
+Rowtotal,ligne de total
+Subtotal,Total
+Shipping & Handling,Frais de port et de manutention
+Grand Total,Total
+Company,Entreprise
+Contact,Contacter
+Country,Pays
+Description,Description
+Amount,Montant
+Unit Price,Prix unitaire
+Phone,Téléphone
+Reference,Référence
+Between amount,Entre la quantité
+VAT,TVA
+Entire amount,Totalité
+Payment,Paiement
+Order,Ordonnance
+Refund,Remboursement
+Qty,Qté
+Print Custom PDF Invoice,Imprimer personnalisé PDF Invoice
+Print Custom PDF Credit Memo,Mémo PDF de crédit Imprimer personnalisée
+Print Custom PDF Order,Imprimer Ordre personnalisé PDF
