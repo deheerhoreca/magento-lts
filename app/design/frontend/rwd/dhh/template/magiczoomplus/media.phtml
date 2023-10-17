@@ -15,7 +15,7 @@ $use_cdn = true;
 // - deheerhoreca-intel/actions/pushers/catalog-magento1/functions-products.inc.php
 //   - USES get_absolute_path() NOT realpath()
 // Allows for arbitrary number of dashes in the SKU
-function _extract_data_from_optimized_image_name($optimized_image) {
+function _extract_data_from_optimized_image_name($optimized_image, string $dhh_sku = "NO_SKU") {
   $filename = pathinfo($optimized_image, PATHINFO_FILENAME);
   $parts = explode("-", $filename);
   $count = sizeof($parts);
@@ -40,7 +40,7 @@ function _extract_data_from_optimized_image_name($optimized_image) {
     }
     
     if($optimized_image_data["path"] === $filename) {
-      $msg = __FUNCTION__." failed: Need full image path, not ".var_export($optimized_image, true);
+      $msg = "{$dhh_sku} ".__FUNCTION__." failed: Need full image path, not ".var_export($optimized_image, true);
       if(function_exists("logger")) {
         logger($msg, "ERROR");
       } else {
@@ -61,12 +61,7 @@ function _extract_data_from_optimized_image_name($optimized_image) {
     ];
     $optimized_image_data["sku"] = str_replace($replaces, null, $filename);
     
-    // if(VERBOSE === true) {
-      // printr($filename);
-      // printr($optimized_image_data);
-    // }
-    
-    $msg = "Extract data from ".var_export($optimized_image, true)." OK";
+    $msg = "{$dhh_sku} Extract data from ".var_export($optimized_image, true)." OK";
     if(function_exists("logger")) {
       logger($msg, "VERBOSE");
     } else {
@@ -81,7 +76,7 @@ function _extract_data_from_optimized_image_name($optimized_image) {
     return $optimized_image_data;
     
   } else {
-    $msg = "Extract data from ".var_export($optimized_image, true)." failed";
+    $msg = "{$dhh_sku} Extract data from ".var_export($optimized_image, true)." failed";
     if(function_exists("logger")) {
       logger($msg, "ERROR");
     } else {
@@ -99,7 +94,7 @@ function _extract_data_from_optimized_image_name($optimized_image) {
 // - deheerhoreca-intel/actions/pushers/catalog-magento1/functions-products.inc.php
 function _get_watermarked_image_filename($optimized_image, string $dhh_sku = "UNKNOWN_SKU") {
   
-  $result = _extract_data_from_optimized_image_name($optimized_image);
+  $result = _extract_data_from_optimized_image_name($optimized_image, $dhh_sku);
   
   if($result === false) {
     $path = $optimized_image;
