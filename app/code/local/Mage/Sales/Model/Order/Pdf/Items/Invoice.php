@@ -202,7 +202,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
   	  	// $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
    	  	// $page->setFont($font, 10);
-  	  	$page->drawText('De Heer Horeca B.V. Johan Huizingalaan 763A 1066 VH Amsterdam Nederland info@chefstore.nl +31 (0) 85-0441003, 42, 10, 'UTF-8');
+  	  	$page->drawText('De Heer Horeca B.V. John M. Keynesplein 12-46 1066 EP Amsterdam Nederland service@chefstore.nl +31 (0) 85-0441003, 42, 10, 'UTF-8');
         $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));
 	    	$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
  		    $page->setFont($font, 10);
@@ -210,7 +210,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
 		    $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
 	      // $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
  		    // $page->setFont($font, 10);
-		    $page->drawText(' | INFO@CHEFSTORE.NL | 085-0441003', 362, 10, 'UTF-8');
+		    $page->drawText(' | SERVICE@CHEFSTORE.NL | 085-0441003', 362, 10, 'UTF-8');
     }
 
     public function getInvoiceDate()

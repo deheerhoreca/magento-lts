@@ -9,18 +9,22 @@ const FILENAME_SECRET = "sterfmetjescraper";
 
 $use_cdn = true;
 
-// Logic exists in multiple places!
+// Logic exists in multiple places, keep in sync:
+// - deheerhoreca-magento/app/design/frontend/rwd/dhh/template/magiczoomplus/media.phtml
+//   - USES realpath() NOT get_absolute_path()
+// - deheerhoreca-intel/actions/pushers/catalog-magento1/functions-products.inc.php
+//   - USES get_absolute_path() NOT realpath()
 // Allows for arbitrary number of dashes in the SKU
-function _extract_data_from_optimized_image_name($optimized_image) {
+function _extract_data_from_optimized_image_name($optimized_image, string $dhh_sku = "NO_SKU") {
   $filename = pathinfo($optimized_image, PATHINFO_FILENAME);
   $parts = explode("-", $filename);
   $count = sizeof($parts);
-
+  
   if($count >= 5) {
     
     $optimized_image_data = [
       "input"       => $optimized_image,
-      "path"        => realpath($optimized_image),
+      "path"        => null,
       "supplier"    => $parts[0],
       // "sku"         => $parts[1],
       "nr"          => $parts[$count-3],
@@ -28,50 +32,125 @@ function _extract_data_from_optimized_image_name($optimized_image) {
       "hash"        => $parts[$count-1],
     ];
     
-    $optimized_image_data["sku"] = str_replace([
+    // get_absolute_path() on intel, realpath() in OpenMage
+    if(function_exists("get_absolute_path")) {
+      $optimized_image_data["path"] = get_absolute_path($optimized_image);
+    } else {
+      $optimized_image_data["path"] = realpath($optimized_image);
+    }
+    
+    if($optimized_image_data["path"] === $filename) {
+      $msg = "{$dhh_sku} ".__FUNCTION__." failed: Need full image path, not ".var_export($optimized_image, true);
+      if(function_exists("logger")) {
+        logger($msg, "ERROR");
+      } else {
+        Mage::log($msg, null, "system.log", true);
+      }
+      if(function_exists("im")) {
+        im("imgs_extract_data_failed");
+      }
+      return false;
+    }
+    
+    $replaces = [
       "{$optimized_image_data["path"]}-",
       "{$optimized_image_data["supplier"]}-",
       "-{$optimized_image_data["nr"]}",
       "-{$optimized_image_data["type"]}-", // Watch this... "-a" or "-b" matches the hash sometimes
       "{$optimized_image_data["hash"]}",
-    ], null, $filename);
+    ];
+    $optimized_image_data["sku"] = str_replace($replaces, null, $filename);
     
-    // if(VERBOSE === true) {
-      // printr($optimized_image_data);
-    // }
+    $msg = "{$dhh_sku} Extract data from ".var_export($optimized_image, true)." OK";
+    if(function_exists("logger")) {
+      logger($msg, "VERBOSE");
+    } else {
+      if(_dhh_debug()) {
+        Mage::log($msg, null, "verbose.log", true);
+      }
+    }
+    if(function_exists("im")) {
+      im("imgs_extract_data_ok");
+    }
     
     return $optimized_image_data;
     
   } else {
-    // logger("Invalid filename: {$optimized_image}", "ERROR");
+    $msg = "{$dhh_sku} Extract data from ".var_export($optimized_image, true)." failed";
+    if(function_exists("logger")) {
+      logger($msg, "ERROR");
+    } else {
+      Mage::log($msg, null, "system.log", true);
+    }
+    if(function_exists("im")) {
+      im("imgs_extract_data_failed");
+    }
     return false;
   }
 }
 
-// Logic exists in multiple places!
-function _get_watermarked_image_filename($optimized_image) {
+// Logic exists in multiple places, keep in sync:
+// - deheerhoreca-magento/app/design/frontend/rwd/dhh/template/magiczoomplus/media.phtml
+// - deheerhoreca-intel/actions/pushers/catalog-magento1/functions-products.inc.php
+function _get_watermarked_image_filename($optimized_image, string $dhh_sku = "UNKNOWN_SKU") {
   
-  $result = _extract_data_from_optimized_image_name($optimized_image);
-
+  $result = _extract_data_from_optimized_image_name($optimized_image, $dhh_sku);
+  
   if($result === false) {
-    // logger("Invalid filename: {$optimized_image}", "ERROR");
+    $path = $optimized_image;
+    if(function_exists("get_absolute_path")) {
+      $path = get_absolute_path($optimized_image);
+    }
+    $msg = "{$dhh_sku} Failed to extract data from ".var_export($path).", was the image named correctly?";
+    if(function_exists("logger")) {
+      logger($msg, "NOTICE");
+    } else {
+      Mage::log($msg, null, "system.log", true);
+    }
+    if(function_exists("im")) {
+      im("imgs_get_watermark_image_nok");
+    }
     return false;
   }
-
+  
   $supplier    = $result["supplier"];
   $sku         = $result["sku"];
   $nr          = $result["nr"];
   $type        = $result["type"];
   $hash        = $result["hash"];
-
+  
   $extension   = pathinfo($optimized_image, PATHINFO_EXTENSION);
   $hash        = substr(md5($nr.$sku.FILENAME_SECRET), 0, 4);
   $wm_path     = "{$supplier}-{$sku}-{$nr}-a-{$hash}.{$extension}";
   
-  // logger(__FUNCTION__.": {$optimized_image} => {$wm_path}", "VERBOSE");
+  $msg = "{$dhh_sku} ".__FUNCTION__.": ".var_export(basename($optimized_image), true)." => ".var_export($wm_path, true);
+  if(function_exists("logger")) {
+    logger($msg, "VERBOSE");
+  } else {
+    if(_dhh_debug()) {
+      Mage::log($msg, null, "verbose.log", true);
+    }
+  }
+  
+  if(function_exists("im")) {
+    im("imgs_get_watermark_image_ok");
+  }
   
   return $wm_path;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* END DHH PREP */
 
@@ -105,6 +184,8 @@ if(!$this->_isGalleryDisabled) {
   $galleryImagesCount = count($galleryImages->getItems());
 }
 
+$dhh_sku = $productModel->getSku();
+
 if($galleryImagesCount) {
 
   foreach($galleryImages as $galleryImage) {
@@ -114,13 +195,20 @@ if($galleryImagesCount) {
 
     $imagePath = $galleryImage->getPath();
     
-    // DHH HACK -- See if there is a watermarked counterpart
-    $wm_filename = _get_watermarked_image_filename($imagePath);
+    // DHH -- See if there is a watermarked counterpart
+    $wm_filename = _get_watermarked_image_filename($imagePath, $dhh_sku);
     $wm_path   = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
     
+    $msg = "";
     if(is_file($wm_path) === true) {
       $imagePath = $wm_path;
       $imageFileOverride[$galleryImage->getFile()] = DS.WATERMARKED_DIR."{$wm_filename}";
+      $msg = "{$dhh_sku} Watermarked image found at ".var_export($wm_path, true);
+    } else {
+      $msg = "{$dhh_sku} Watermarked image not found at ".var_export($wm_path, true);
+    }
+    if(_dhh_debug()) {
+      Mage::log($msg, null, "verbose.log", true);
     }
     // END DHH
     
@@ -145,8 +233,8 @@ if($galleryImagesCount) {
 }
 
 // if(_dhh_debug()) {
-//   printr($productImages);
-//   printr($imageFileOverride);
+  // printr($productImages);
+  // printr($imageFileOverride);
 // }
 
 if(!count($productImages)) {
@@ -191,6 +279,12 @@ $scriptHTML                  = '';
 $media_url            = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $media_dir            = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 
+$cdn_img_options      = [
+  "add_mod_time"        => true,
+  "relative_url"        => true,
+  "url_only"            => true,
+];
+
 foreach($productImages as &$productImage) {
   
   $productImage['alt'] = $this->htmlEscape($productImage['image-label']);
@@ -199,15 +293,16 @@ foreach($productImages as &$productImage) {
     $productImage['title'] = empty($productImage['alt']) ? $productTitle : $productImage['alt'];
   }
   
-  $image_url        = "{$media_url}/catalog/product{$productImage['image-file']}";
-  $image_path       = "{$media_dir}/catalog/product{$productImage['image-file']}";
-  $cdn_img_options  = [
-    "fs_path"         => $image_path,
-    "url"             => $image_url,
-    "add_mod_time"    => true,
-    "relative_url"    => true,
-    "url_only"        => true,
-  ];
+  // Override the non-watermarked OpenMage image with the watermarked one, if it exists
+  if(isset($imageFileOverride[$productImage['image-file']])) {
+    $productImage['image-file'] = $imageFileOverride[$productImage['image-file']];
+  }
+  
+  $image_url                  = "{$media_url}/catalog/product{$productImage['image-file']}";
+  $image_path                 = "{$media_dir}/catalog/product{$productImage['image-file']}";
+  
+  $cdn_img_options["fs_path"] = $image_path;
+  $cdn_img_options["url"]     = $image_url;
   
   // Try CDN
   $bigImage         = null;
@@ -235,11 +330,7 @@ foreach($productImages as &$productImage) {
   
   // Fallback to resize()
   if($bigImage === null) {
-    if(isset($imageFileOverride[$productImage['image-file']])) {
-      $bigImage = $imageHelper->init($productModel, 'image', $imageFileOverride[$productImage['image-file']])->__toString();
-    } else {
-      $bigImage = $imageHelper->init($productModel, 'image', $productImage['image-file'])->__toString();
-    }
+    $bigImage = $imageHelper->init($productModel, 'image', $productImage['image-file'])->__toString();
     if($createSquareImages) {
       $bigImageSize = min(2048, max($productImage['image-size'][0], $productImage['image-size'][1]));
       $bigImage = $imageHelper->watermark(null, null)->resize($bigImageSize)->__toString();
