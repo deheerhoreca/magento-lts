@@ -16,9 +16,6 @@
         <AW_Searchautocomplete>
             <active>false</active>
         </AW_Searchautocomplete>
-        <Mage_Poll>
-            <active>false</active>
-        </Mage_Poll>
         <Mage_Centinel>
             <active>false</active>
         </Mage_Centinel>
