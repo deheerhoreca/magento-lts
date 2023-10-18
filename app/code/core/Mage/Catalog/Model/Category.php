@@ -767,6 +767,19 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
      */
     public function getName()
     {
+        // DHH CORE HACK -- @todo move to override
+        // Somehow override does not work...so keeing it here
+        // @see https://inchoo.net/magento/overriding-magento-blocks-models-helpers-and-controllers/
+        // @todo remove calls to cleanCategoryName() that are not needed anymore
+        if(isset($_SERVER["REQUEST_URI"]) && strpos($_SERVER["REQUEST_URI"], "admin4JN0") === false) {
+            try {
+                return Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->_getData('name'));
+            } catch(Exception $e) {
+                Mage::logException($e);
+            }
+        }
+        // END DHH CORE HACK
+        
         return $this->_getData('name');
     }
 

@@ -1254,6 +1254,7 @@
                         <msrp_enabled/>
                         <msrp/>
                         <msrp_display_actual_price_type/>
+                        <!-- DHH for bargain products --><supplier/>
                     </product_attributes>
                 </item>
             </quote>
@@ -1304,6 +1305,7 @@
                         <statuses>
                             <pending_payment default="1"/>
                         </statuses>
+                        <!-- DHH CORE HACK--><visible_on_front>1</visible_on_front>
                     </pending_payment>
                     <processing translate="label">
                         <label>Processing</label>

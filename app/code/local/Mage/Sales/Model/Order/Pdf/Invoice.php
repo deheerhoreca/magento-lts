@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
- * @category    Mage
- * @package     Mage
+ * @category   Mage
+ * @package    Mage_Sales
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2017-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Sales
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abstract
 {
@@ -32,7 +25,6 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
      * Draw header for item table
      *
      * @param Zend_Pdf_Page $page
-     * @return void
      */
     protected function _drawHeader(Zend_Pdf_Page $page)
     {
@@ -41,51 +33,51 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $this->y, 570, $this->y -15);
+        $page->drawRectangle(25, $this->y, 570, $this->y - 15);
         $this->y -= 10;
         $page->setFillColor(new Zend_Pdf_Color_RGB(255, 255, 255));
 
         //columns headers
-        $lines[0][] = array(
+        $lines[0][] = [
             'text' => Mage::helper('sales')->__('Product'),
             'feed' => 25,
             'font' => 'bold',
-        );
+        ];
 
-        $lines[0][] = array(
-            'text'  => Mage::helper('sales')->__('SKU'),
-            'feed'  => 270,
+        $lines[0][] = [
+            'text'  => 'SKU',
+            'feed'  => 260,
             'align' => 'left',
             'font'  => 'bold',
-        );
+        ];
 
-        $lines[0][] = array(
+        $lines[0][] = [
             'text'  => Mage::helper('sales')->__('Price'),
             'feed'  => 430,
             'align' => 'right',
             'font'  => 'bold',
-        );
+        ];
 
-        $lines[0][] = array(
+        $lines[0][] = [
             'text'  => Mage::helper('sales')->__('Qty'),
             'feed'  => 465,
             'align' => 'center',
             'font'  => 'bold',
-        );
+        ];
 
-        $lines[0][] = array(
+        $lines[0][] = [
             'text'  => Mage::helper('sales')->__('Subtotal'),
             'feed'  => 560,
             'align' => 'right',
             'font'  => 'bold',
-        );
+        ];
 
-        $lineBlock = array(
+        $lineBlock = [
             'lines'  => $lines,
             'height' => 5,
-        );
+        ];
 
-        $this->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
+        $this->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
         $this->y -= 20;
     }
@@ -93,10 +85,10 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
     /**
      * Return PDF document
      *
-     * @param  array $invoices
+     * @param  Mage_Sales_Model_Order_Invoice[] $invoices
      * @return Zend_Pdf
      */
-    public function getPdf($invoices = array())
+    public function getPdf($invoices = [])
     {
         $this->_beforeGetPdf();
         $this->_initRenderer('invoice');
@@ -117,8 +109,8 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             $this->insertLogo($page, $invoice->getStore());
             /* Add address */
             $this->insertAddress($page, $invoice->getStore());
-
-      			$invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
+            
+            $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
       			$createdDate = $invoice->getCreatedAt();
       			$invoiceDate = date('d M Y', strtotime($createdDate));
 
@@ -130,7 +122,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
       			$page->drawText(Mage::helper('sales')->__('Factuurdatum: ') . $invoiceDate, 35, $top, 'UTF-8');
       			//$page->drawText(Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId(), 25, 740, 'UTF-8');
       			//$page->drawText(Mage::helper('sales')->__('Order # ') . $order->getRealOrderId(), 25, 725, 'UTF-8');
-
+            
             /* Add head */
             $this->insertOrder(
                 $page,
@@ -140,14 +132,14 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             /* Add document text and number */
             $this->insertDocumentNumber(
                 $page,
-                Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId()
+                Mage::helper('sales')->__('Factuurnummer: ') . $invoice->getIncrementId()
             );
             
             if(intval($invoice->getStoreId()) === 4) {
               $page->drawText("De factuur is reeds betaald via bol.com", 200, $top-20, 'UTF-8');
             } else {
-              $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen", 200, $top-10, 'UTF-8');
-              $page->drawText("over te maken onder vermelding van het factuurnummer", 200, $top-20, 'UTF-8');
+              $page->drawText("Indien van toepassing verzoeken u vriendelijk het verschuldigde bedrag", 200, $top-10, 'UTF-8');
+              $page->drawText("binnen 14 dagen over te maken onder vermelding van het factuurnummer.", 200, $top-20, 'UTF-8');
               $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 200, $top-35, 'UTF-8');
               if($order->getShippingAddress()->getCountryId() === "BE") {
                 $page->drawText("Zakelijke leveringen in België: Domestic charge, BTW verlegd", 200, $top-48, 'UTF-8');
@@ -157,7 +149,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             /* Add table */
             $this->_drawHeader($page);
             /* Add body */
-            foreach ($invoice->getAllItems() as $item){
+            foreach ($invoice->getAllItems() as $item) {
                 if ($item->getOrderItem()->getParentItem()) {
                     continue;
                 }
@@ -171,7 +163,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
                 Mage::app()->getLocale()->revert();
             }
         }
-		    $this->insertFooter(end($pdf->pages));
+        $this->insertFooter(end($pdf->pages));
         $this->_afterGetPdf();
         return $pdf;
     }
@@ -182,19 +174,19 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
      * @param  array $settings
      * @return Zend_Pdf_Page
      */
-    public function newPage(array $settings = array())
+    public function newPage(array $settings = [])
     {
         /* Add new table head */
         $page = $this->_getPdf()->newPage(Zend_Pdf_Page::SIZE_A4);
         $this->_getPdf()->pages[] = $page;
-        $this->y = 75;
+        $this->y = 800;
         if (!empty($settings['table_header'])) {
             $this->_drawHeader($page);
         }
         return $page;
     }
-
-	 public function insertFooter($page)
+    
+    public function insertFooter($page)
     {
 		    $this->_setFontRegular($page, 10);
 
@@ -240,7 +232,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         */
     }
 
-	public function getInvoiceDate()
+    public function getInvoiceDate()
     {
 		    $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
 		    $createdDate = $invoice->getCreatedAt();

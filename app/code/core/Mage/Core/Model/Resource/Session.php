@@ -132,14 +132,20 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
     public function setSaveHandler()
     {
         if ($this->hasConnection()) {
-            session_set_save_handler(
-                [$this, 'open'],
-                [$this, 'close'],
-                [$this, 'read'],
-                [$this, 'write'],
-                [$this, 'destroy'],
-                [$this, 'gc']
-            );
+            // DHH CORE HACK
+            if (!headers_sent($file, $line)) {
+                session_set_save_handler(
+                    [$this, 'open'],
+                    [$this, 'close'],
+                    [$this, 'read'],
+                    [$this, 'write'],
+                    [$this, 'destroy'],
+                    [$this, 'gc']
+                );
+            } else {
+                $msg = "Failed to set session save handler, headers already sent. Output started at {$file}:{$line}. URL: ".Mage::helper('core/url')->getCurrentUrl();
+                Mage::log($msg, null, 'exception.log', true);
+            }
         } else {
             session_save_path(Mage::getBaseDir('session'));
         }

@@ -36,43 +36,58 @@ class Mage_Adminhtml_Model_Search_Order extends Varien_Object
      */
     public function load()
     {
-        $arr = [];
+        $results = [];
 
         if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
-            $this->setResults($arr);
+            $this->setResults($results);
             return $this;
         }
 
-        $query = $this->getQuery();
+        $query = $this->getQuery()."%";
+        $query_wc = "%".$this->getQuery()."%";
         //TODO: add full name logic
-        $collection = Mage::getResourceModel('sales/order_collection')
-            ->addAttributeToSelect('*')
+        $collection = Mage::getResourceModel("sales/order_collection")
+            // DHH CORE HACK -- Limiting fields
+            // ->addAttributeToSelect("*")
+            ->addAttributeToSelect("increment_id")
+            ->addAttributeToSelect("entity_id")
             ->addAttributeToSearchFilter([
-                ['attribute' => 'increment_id',       'like' => $query . '%'],
-                ['attribute' => 'billing_firstname',  'like' => $query . '%'],
-                ['attribute' => 'billing_lastname',   'like' => $query . '%'],
-                ['attribute' => 'billing_telephone',  'like' => $query . '%'],
-
-                ['attribute' => 'shipping_firstname', 'like' => $query . '%'],
-                ['attribute' => 'shipping_lastname',  'like' => $query . '%'],
-                ['attribute' => 'shipping_telephone', 'like' => $query . '%'],
+                ["attribute" => "increment_id",       "like" => $query],
+                ["attribute" => "tm_field1",          "like" => $query_wc],
+                ["attribute" => "tm_field6",          "like" => $query],
+                ["attribute" => "tm_field8",          "like" => $query_wc],
+                ["attribute" => "customer_email",     "like" => $query],
+                // ["attribute" => "billing_firstname",  "like" => $query_wc],
+                // ["attribute" => "billing_lastname",   "like" => $query_wc],
+                // ["attribute" => "billing_telephone",  "like" => $query_wc],
+                // ["attribute" => "billing_postcode",   "like" => $query_wc],
+                // ["attribute" => "shipping_firstname", "like" => $query_wc],
+                // ["attribute" => "shipping_lastname",  "like" => $query_wc],
+                // ["attribute" => "shipping_telephone", "like" => $query_wc],
+                // ["attribute" => "shipping_postcode",  "like" => $query_wc],
             ])
             ->setCurPage($this->getStart())
             ->setPageSize($this->getLimit())
             ->load();
+            // var_dump($collection->getSelect()->__toString());
 
         foreach ($collection as $order) {
-            $arr[] = [
-                'id'                => 'order/1/' . $order->getId(),
+            $billing_address = $order->getBillingAddress();
+            $billing_fullname = trim($billing_address->getFirstname().' '.$order->getLastname());
+            $order_id = $order->getId();
+            $order_increment_id = $order->getIncrementId();
+            $results[] = [
+                'id'                => 'order/1/'.$order_id,
                 'type'              => Mage::helper('adminhtml')->__('Order'),
-                'name'              => Mage::helper('adminhtml')->__('Order #%s', $order->getIncrementId()),
-                'description'       => $order->getBillingFirstname() . ' ' . $order->getBillingLastname(),
-                'form_panel_title'  => Mage::helper('adminhtml')->__('Order #%s (%s)', $order->getIncrementId(), $order->getBillingFirstname() . ' ' . $order->getBillingLastname()),
-                'url' => Mage::helper('adminhtml')->getUrl('*/sales_order/view', ['order_id' => $order->getId()]),
+                'name'              => Mage::helper('adminhtml')->__('Order #%s', $order_increment_id),
+                'description'       => $billing_fullname,
+                'form_panel_title'  => Mage::helper('adminhtml')->__('Order #%s (%s)', $order_increment_id, $billing_fullname),
+                'url'               => Mage::helper('adminhtml')->getUrl('*/sales_order/view', ['order_id' => $order_id]),
             ];
         }
+        // print_r($results);
 
-        $this->setResults($arr);
+        $this->setResults($results);
 
         return $this;
     }

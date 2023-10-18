@@ -5,68 +5,34 @@
   - `app/code/core/Mage/Customer/etc/config.xml`
     - Changing default email address for new customers created in the backend without an email address to our own domain
     - @see https://github.com/loekvangool/deheerhoreca-magento/commit/a6e627894accf8daa6097477c4ea0b8b8f5fd0c9
-  - `app/code/core/Mage/Newsletter/Model/Subscriber.php`
-    - Really disable sending newsletter confirmation emails
-  - `app/code/core/Mage/Page/Block/Html/Breadcrumbs.php`
-    - Add full breadcrumbs on canonical product URLs
-    - https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
-  - `app/code/core/Mage/Sales/Model/Order.php`
-    - Directly send emails (no queue)
-  - `app/code/core/Mage/Checkout/Block/Cart/Crosssell.php`
-    - Increase cross sell items to 10
-  - `app/code/core/Mage/Payment/Model/Method/Banktransfer.php`
-    - Make this payment method available in backend only (for Bol.com orders)
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
-  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Helper/Form/Price.php`
-    - Removed check on below-zero price values
-  - `app/code/core/Mage/ConfigurableSwatches/Helper/Mediafallback.php`
-    - Added a check due to an error that started after re-saving a value on https://www.chefstore.nl/index.php/admin4JN0/system_config/edit/section/configswatches/
   - **Admin Global Search**: Performance improvements
     - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
-  - `app/code/core/Mage/Core/Helper/String.php`
-    - Preventing errors
-  - `app/code/core/Mage/Adminhtml/Block/Widget/Grid.php`
-    - Changing default page size
-  - `app/code/core/Mage/Catalog/Helper/Product/Flat.php`
-    - Adding `enableFlatCollection()` method
   - `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
   - `app/code/core/Mage/Core/Model/Resource/Session.php`
     - Adding details and logging to session errors
   - `app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
-- **lib/**
-  - `lib/Zend/XmlRpc/Server.php`
-    - Fix "Calling Parameter do Not Match Signature"
-    - @see https://webkul.com/blog/magento-api-integration-calling-parameter-not-match-signature/
-    - @see https://github.com/loekvangool/deheerhoreca-magento/commit/f494be74dcf289de644b94a3cd8f0954ff880f6b
-- **js/**
-  - `js/varien/form.js`, `js/varien/js.js`
-    - Making Prototype Validator optional
-- **app/design/adminhtml/**
-  - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
-    - Bugfixes
-    - Add Cloudflare images
-  - `app/design/adminhtml/default/default/template/sales/order/view/items.phtml`
-    - ?
 - **app/design/frontend/base/**
   - `app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file
-    - @todo move to dhh theme?
 - **/***
   - `.htaccess`
     - Commented lines to fix "Option All not allowed here" errors in production
-    - Other modifications/additions
+    - Other modifications/additions marked by "DHH"
   - `.gitignore`
 
-## Core Overrides
+## Core Overrides -- Not Hacks
 - `app/code/local/Mage/*`
-  - Overridden, not core hacked
-  - `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
-    - Adjustments to the order invoice template
+  - TBD
+- `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
+  - Adjustments to the order invoice template
+- `app/code/core/Mage/Newsletter/Model/Subscriber.php`
+  - Really disable sending newsletter confirmation emails
 
 ## 3rd Party Hacks
 - **Anowave Sort**
@@ -190,29 +156,68 @@
     - Adding log to critical transaction status updates
 
 ### Closed
-- ~`app/design/frontend/rwd/default/layout/page.xml`~
-  - Fixed in https://github.com/loekvangool/deheerhoreca-magento/commit/fa8a6498ce4c78687d1718703f62fef09cefa35c
-- ~`app/code/community/Mollie/Mpm/Model/Api.php`~
-  - Forced internal availability of the payment methods to `true`. See also https://github.com/mollie/Magento/issues/91
-  - Seems to no longer be needed
-- ~`app/code/community/Mollie/Mpm/Helper/Data.php`~
-    - Prevent fatal errors. Fixed upstream.
-- ~`app/code/core/Mage/Catalog/Block/Product/View.php`~
-  - ~Change the product canonical URL in HTML head~
-- ~`app/code/core/Mage/Sitemap/Model/Sitemap.php`~
-  - ~Change the product canonical URL in sitemap.xml~
-- ~```ALTER TABLE `core_email_template` CHANGE `template_text` `template_text` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Template Content'```~
-  - ~To accomodate larger email templates~
-- ~`scheduler_cron.sh` (Aschroder Cron Extension)~
-  - ~Forced PHP binary because 5.4 gave MCRYPT errors. https://github.com/loekvangool/deheerhoreca-magento/commit/b4f3de1163a52f8c77e8b4e4827cc53aba518f43~
-  - Fixed in `/etc/profile.d/change_php.sh`
-- ~`app/code/core/Mage/Catalog/Model/Product/Image.php`~
-  - ~Code fails hard on non-working images. Changed code to a `catch` to be able to inspect and fix the image issue.~
-  - ~https://github.com/loekvangool/deheerhoreca-magento/commit/73584835b8f4e8e687106064e1279a7603cfd7bd~
-- `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
-- `app/code/community/Afterpay/Afterpay/etc/config.xml`
-  - Alterations to logo and text and such
-- `lib/Ebizmarts/MailChimp.php` and `lib/Ebizmarts/MailChimp/Exceptions.php`
-  - In 1.1.17 they introduced a bug: https://github.com/mailchimp/mc-magento/issues/1021
-- `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
-  - Fix for PHP 7.x
+- **app/code/core/Mage/**
+  - `app/code/core/Mage/Catalog/Block/Product/View.php`
+    - Change the product canonical URL in HTML head
+  - `app/code/core/Mage/Sitemap/Model/Sitemap.php`
+    - Change the product canonical URL in sitemap.xml
+  - `app/code/core/Mage/Catalog/Model/Product/Image.php`
+    - Code fails hard on non-working images. Changed code to a `catch` to be able to inspect and fix the image issue.
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/73584835b8f4e8e687106064e1279a7603cfd7bd
+  - `app/code/core/Mage/Page/Block/Html/Breadcrumbs.php`
+    - Add full breadcrumbs on canonical product URLs
+    - https://stackoverflow.com/questions/12417499/making-consistent-breadcrumbs-on-individual-product-pages-in-magento
+  - `app/code/core/Mage/Sales/Model/Order.php`
+    - Directly send emails (no queue)
+  - `app/code/core/Mage/Checkout/Block/Cart/Crosssell.php`
+    - Increase cross sell items to 10
+  - `app/code/core/Mage/Payment/Model/Method/Banktransfer.php`
+    - Make this payment method available in backend only (for Bol.com orders)
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Helper/Form/Price.php`
+    - Removed check on below-zero price values
+  - `app/code/core/Mage/ConfigurableSwatches/Helper/Mediafallback.php`
+    - Added a check due to an error that started after re-saving a value on https://www.chefstore.nl/index.php/admin4JN0/system_config/edit/section/configswatches/
+  - `app/code/core/Mage/Adminhtml/Block/Widget/Grid.php`
+    - Changing default page size
+  - `app/code/core/Mage/Core/Helper/String.php`
+    - Preventing errors
+  - `app/code/core/Mage/Catalog/Helper/Product/Flat.php`
+    - Adding `enableFlatCollection()` method
+- **app/code/community/**
+  - `app/code/community/Mollie/Mpm/Model/Api.php`
+    - Forced internal availability of the payment methods to `true`. See also https://github.com/mollie/Magento/issues/91
+    - Seems to no longer be needed
+  - `app/code/community/Mollie/Mpm/Helper/Data.php`
+      - Prevent fatal errors. Fixed upstream.
+  - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
+  - `app/code/community/Afterpay/Afterpay/etc/config.xml`
+    - Alterations to logo and text and such
+  - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
+    - Fix for PHP 7.x
+- **app/design/adminhtml/**
+  - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
+    - Bugfixes
+    - Add Cloudflare images
+  - `app/design/adminhtml/default/default/template/sales/order/view/items.phtml`
+    - ?
+- **app/design/frontend/**
+  - `app/design/frontend/rwd/default/layout/page.xml`
+    - Fixed in https://github.com/loekvangool/deheerhoreca-magento/commit/fa8a6498ce4c78687d1718703f62fef09cefa35c
+- **js/**
+  - `js/varien/form.js`, `js/varien/js.js`
+    - Making Prototype Validator optional
+    - Now part of OpenMage
+- **lib/**
+  - `lib/Ebizmarts/MailChimp.php` and `lib/Ebizmarts/MailChimp/Exceptions.php`
+    - In 1.1.17 they introduced a bug: https://github.com/mailchimp/mc-magento/issues/1021
+  - `lib/Zend/XmlRpc/Server.php`
+    - Fix "Calling Parameter do Not Match Signature"
+    - @see https://webkul.com/blog/magento-api-integration-calling-parameter-not-match-signature/
+    - @see https://github.com/loekvangool/deheerhoreca-magento/commit/f494be74dcf289de644b94a3cd8f0954ff880f6b
+- **/***
+  - `scheduler_cron.sh` (Aschroder Cron Extension)
+    - Forced PHP binary because 5.4 gave MCRYPT errors. https://github.com/loekvangool/deheerhoreca-magento/commit/b4f3de1163a52f8c77e8b4e4827cc53aba518f43
+    - Fixed in `/etc/profile.d/change_php.sh`
+- **SQL**
+  - To accomodate larger email templates
+    - ```ALTER TABLE `core_email_template` CHANGE `template_text` `template_text` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Template Content'```
