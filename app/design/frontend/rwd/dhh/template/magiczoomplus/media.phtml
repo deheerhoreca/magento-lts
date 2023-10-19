@@ -101,7 +101,7 @@ function _get_watermarked_image_filename($optimized_image, string $dhh_sku = "UN
     if(function_exists("get_absolute_path")) {
       $path = get_absolute_path($optimized_image);
     }
-    $msg = "{$dhh_sku} Failed to extract data from ".var_export($path).", was the image named correctly?";
+    $msg = "{$dhh_sku} Failed to extract data from ".var_export($path, true).", was the image named correctly?";
     if(function_exists("logger")) {
       logger($msg, "NOTICE");
     } else {
