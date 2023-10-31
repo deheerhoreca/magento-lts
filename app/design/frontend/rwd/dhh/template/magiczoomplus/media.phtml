@@ -313,6 +313,8 @@ foreach($productImages as &$productImage) {
     $cdn_img_options["width"] = 2048;
     $cdn_img_options["height"] = 2048;
     $cdn_img_options["quality"] = 85;
+    // @todo $cdn_img_options["2x"] = true;
+    $cdn_img_options["fit"] = "scale-up";
     $bigImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     
     list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);

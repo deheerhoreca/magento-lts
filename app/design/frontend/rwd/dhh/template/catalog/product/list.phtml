@@ -320,24 +320,24 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       $brand                  = $_product->getData("manufacturer_value");
       
       $series_or_brand        = _get_product_attribute($_product, "brand_series");
-      if(empty($series_or_brand)) {
+      if(empty($series_or_brand) || in_array($series_or_brand, ["N.v.t."], true) === true) {
         $series_or_brand        = $brand;
       }      
-      $sku_seller_or_mpn  = _get_product_attribute($_product, "mpn");
+      $sku_seller_or_mpn      = _get_product_attribute($_product, "mpn");
       if(empty($sku_seller_or_mpn)) {
-        $sku_seller_or_mpn  = _get_product_attribute($_product, "sku_seller");
+        $sku_seller_or_mpn      = _get_product_attribute($_product, "sku_seller");
       }
-      $tagline            = _get_product_attribute($_product, "tagline");
+      $tagline                = _get_product_attribute($_product, "tagline");
       
-      $usp_options      = [
-        "context"         => "listview",
-        "category_name"   => $category_name ?? null,
+      $usp_options            = [
+        "context"               => "listview",
+        "category_name"         => $category_name ?? null,
       ];
-      $usps             = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
+      $usps                   = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
       
       // Price Block
-      $price_html       = str_replace(",00", ",-", $price_html);
-      $price_html       = str_replace("€", "", $price_html);
+      $price_html             = str_replace(",00", ",-", $price_html);
+      $price_html             = str_replace("€", "", $price_html);
       
       // Black friday
       if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {

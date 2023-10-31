@@ -21,6 +21,7 @@ wget https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ../ski
 
 # These need versioning outside of mod_pagespeed:extend_cache
 wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ../js/elastic-apm-rum.umd.min.js.map
+wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.js -O ../js/ext-elastic-apm-rum.umd.js
 wget https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js -O ../js/ext-elastic-apm-rum.umd.min.js
 
 # Old style

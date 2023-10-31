@@ -183,6 +183,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $manufacturer_ids = array_count_values($manufacturer_col);
       } catch(Exception $e) {
         Mage::log("getBrandsPerCategory failed: {$e->getMessage()}", null, "exception.log", true);
+        // varexport($manufacturer_col);
         return [];
       }
       
@@ -363,7 +364,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         // }
         break;
       case "backorder":
-        $stock_class = "buyblock-usp";
+        $stock_class = "buyblock-usp gray";
         // if($display === "mini") {
           // $stock_message = "Reserveren";
         // }
@@ -1148,11 +1149,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         
       // Backorder
       
-      $stock_message        = "Pre-order nu!";
+      $stock_message        = "Pre-order";
       $stock_message_short  = "Pre-order";
       $stock_tooltip        = "Momenteel niet op vooraad maar u kunt het pre-orderen. U bent dan de eerste die het product krijgt.";
       $delivery_text        = "Verw. levering: <strong>Pre-order</strong>";
-      $txtcltcz             = "buyblock-usp fw-normal";
+      $txtcltcz             = "buyblock-usp fw-normal gray";
       $fa_icon              = "fa-times";
       $backorder_needed     =  true;
       $overall_stock_status = "backorder";
@@ -1209,6 +1210,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       if($manage_stock === false) {
         $stock_message        = "Pre-order";    // Unmanaged, be careful with overpromising
         $stock_message_short  = "Pre-order";
+        $txtcltcz             = "buyblock-usp gray";
         $levertijd            = null;             // If we have an unmanaged product, we cannot really say when it will be available again
       } elseif(in_array($supplier, ["Bartscher"]) === true) {
         $stock_message        = "Op voorraad";    // Don't specify stock details for these suppliers
@@ -1460,7 +1462,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $quality        = $options["quality"]       ?? 75;
     $url_only       = $options["url_only"]      ?? false;
     $relative_url   = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
-    $include_2x     = $options["2x"]            ?? true;
+    $include_2x     = $options["2x"]            ?? false;
     $lazy           = $options["lazy"]          ?? false;
     $class          = $options["class"]         ?? "";
     $style          = $options["style"]         ?? "";
@@ -1497,7 +1499,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if(strlen($id) > 0) {
       $id_html = " id=\"{$id}\"";
     }
-    if($fit === "contain" || $fit === "scale-down") {
+    if($fit === "contain" || $fit === "scale-down" || $fit === "scale-up") {
       $class .= " object-fit-contain";
     }
     if(strlen($class) > 0) {
@@ -1527,15 +1529,29 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // @see https://docs.imagekit.io/features/image-transformations
       case "imagekit":
         $cdn_base     = "//ik.imagekit.io/vzc6xuj9l";
-        $cdn_options  = "tr:w-{$width},h-{$height}";
         if($quality > 0) {
-          $cdn_options .= ",q-{$quality}";
+          $cdn_options_base .= ",q-{$quality}";
         }
         if($fit === "contain" || $fit === "scale-down") {
-          $cdn_options .= ",c-at_max";    // max-size crop
+          $cdn_options_base .= ",c-at_max";             // max-size crop
         }
+        if($fit === "scale-up") {
+          $cdn_options_base .= ",c-at_max_enlarge";     // max-size crop
+        }
+        $cdn_options  = "tr:w-{$width},h-{$height},{$cdn_options_base}";
         $src_url      = "{$cdn_base}/{$cdn_options}/{$url}";
-        $html         = "<img src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        
+        // Either use 2x the resolution
+        if($include_2x === true) {
+          $width_2x       = $width * 2;
+          $height_2x      = $height * 2;
+          $cdn_options_2x = "{$cdn_options_base},width={$width_2x},height={$height_2x}";
+          $srcset         = "{$cdn_base}{$cdn_options_2x}/{$url} 1024w";
+        } else {
+          $srcset         = "";
+        }
+        
+        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
         break;
       
       // @see https://docs.optimole.com/article/1872-how-to-use-the-custom-integration-in-optimole
@@ -1581,7 +1597,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           $dpr            = 2;
           $cdn_options_2x = "{$cdn_options_base},width={$width_2x},height={$height_2x},dpr={$dpr}";
           $srcset         = "{$cdn_base}{$cdn_options_2x}/{$url} 2x";
-        }      
+        }
         $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
         break;
     }

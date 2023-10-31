@@ -11,6 +11,7 @@
 # THIS FILE SHOULD BE WINDOWS-LINE ENDED FOR PROPER COPY FUNCTION IN NOTEPAD++
 
 # DEHEERHORECA-MAGENTO
+#MAILTO="it+cron@deheerhoreca.nl"
  *    *  *  *  *  ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode always  1>>./var/log/cron.log 2>>./var/log/cron.err
  *    *  *  *  *  ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode default 1>>./var/log/cron.log 2>>./var/log/cron.err
 05    0  *  *  *  cd ~/httpdocs/deheerhoreca-magento; /usr/sbin/logrotate logrotate.conf -s /tmp/logrotate                          1>>./var/log/cron.log 2>>./var/log/cron.err

@@ -787,7 +787,7 @@ $additional_attributes = Mage::helper("deheerhoreca_util/util")->markdownExtraTo
 /* PRODUCT DESCRIPTION */
 
 // Configurable products: Print attribute/stock table
-if($saleable === true && $_product->canConfigure()) {
+if($saleable === true && $_product->isConfigurable()) {
   $product_description .= "<h3>Varianten</h3>";
   $product_description .= "<p class='py-0'>De {$product_title_short} kent meerdere varianten. Configureer het product eenvoudig voordat je het koopt.</p>";
   $product_description .= _print_configurable_table($_product);
