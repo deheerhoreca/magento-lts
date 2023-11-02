@@ -25,55 +25,74 @@ STRANGE BUG THAT CAUSES THIS FILE TO BE IGNORED, INSTEAD app\design\frontend\rwd
 */
 
 $catalogSearchHelper = $this->helper('catalogsearch');
+// DHH: Removing URL from form because some users submitted it
+// <form id="search_mini_form" action="<? php echo $catalogSearchHelper->getResultUrl() ? >" method="get">
+$placeholder = "Waar ben je naar op zoek?";
+$sooqr_options = $this->getSooqrOptions();
 ?>
-<form id="search_mini_form" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get">
+<form id="search_mini_form">
   <div class="input-box">
-    <input id="search" type="search" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="input-text" placeholder="<?php echo $this->quoteEscape($this->__('Search entire store here...')) ?>">
+    <input id="search" type="search" name="<?=$catalogSearchHelper->getQueryParamName()?>" value="<?=$catalogSearchHelper->getEscapedQueryText()?>" class="input-text" placeholder="<?=$placeholder?>">
   </div>
   <?php if ($this->multiSearch()): ?>
     <script>
       var _wssq = _wssq || [];
-      _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions()) ?>}]);
+      _wssq.push(['_load', {'suggest': <?=json_encode($this->getSooqrOptions())?>}]);
       _wssq.push(['suggest._setPosition', 'screen-middle']);
-      _wssq.push(['suggest._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
+      _wssq.push(['suggest._setLocale', '<?=$this->getSooqrLanguage()?>']);
       <?php if (!$this->isTrackingEnabled()) { ?>
-      _wssq.push(['suggest._disableTracking']);
+        _wssq.push(['suggest._disableTracking']);
       <?php } ?>
     </script>
     <script>
       var _wssq = _wssq || [];
-      _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions('second')) ?>}]);
+      _wssq.push(['_load', {'suggest': <?=json_encode($this->getSooqrOptions('second'))?>}]);
       _wssq.push(['suggest2._setPosition', 'screen-middle']);
-      _wssq.push(['suggest2._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
+      _wssq.push(['suggest2._setLocale', '<?=$this->getSooqrLanguage()?>']);
       <?php if (!$this->isTrackingEnabled()): ?>
-      _wssq.push(['suggest2._disableTracking']);
+        _wssq.push(['suggest2._disableTracking']);
       <?php endif; ?>
       (function () {
         var ws = document.createElement('script');
         ws.type = 'text/javascript';
         ws.async = true;
-        ws.src = '//' + '<?php echo $this->getSooqrScriptUri() ?>';
-        //ws.src = '/skin/frontend/rwd/external/sooqr/sooqr.js';
+        ws.src = '//' + '<?=$this->getSooqrScriptUri()?>';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ws, s);
       })();
     </script>
-  <?php else: ?>
+  <?php
+  // Code below is the one that is active
+  else:
+  ?>
     <script>
       var _wssq = _wssq || [];
-      _wssq.push(['_load', {'suggest': <?php echo json_encode($this->getSooqrOptions()) ?>}]);
-      _wssq.push(['suggest._setPosition', 'screen-middle']);
-      _wssq.push(['suggest._setLocale', '<?php echo $this->getSooqrLanguage() ?>']);
-      <?php if (!$this->isTrackingEnabled()): ?>
-      _wssq.push(['suggest._disableTracking']);
-      <?php endif; ?>
-      <?php echo $this->getSooqrJavascript() ?>
-      (function () {
+      var setResizeFunction = false;
+      var sooqrAccount = '<?=$sooqr_options["account"]?>';
+      _wssq.push(['_load', {'suggest': <?=json_encode($sooqr_options)?>}]);
+      _wssq.push(['suggest._setPosition', 'screen-middle', {
+        top: 0
+      }]);
+      _wssq.push(['suggest._setLocale', '<?=$this->getSooqrLanguage()?>']);
+      _wssq.push(['suggest._excludePlaceholders', '<?=$placeholder?>']);
+      <?php if (!$this->isTrackingEnabled()) { ?>
+        _wssq.push(['suggest._disableTracking']);
+      <?php } ?>
+      _wssq.push(['suggest._bindEvent', 'open', function() {
+        if (!setResizeFunction) {
+          $jQ(window).resize(function() {
+            if ($jQ('.sooqrSearchContainer-' + sooqrAccount).is(':visible')) {
+              websight.sooqr.instances['SQ-' + sooqrAccount].positionContainer(null, null, true);
+            }
+          });
+          setResizeFunction = true;
+        }
+      }]);
+      (function() {
         var ws = document.createElement('script');
         ws.type = 'text/javascript';
         ws.async = true;
-        ws.src = '//' + '<?php echo $this->getSooqrScriptUri() ?>';
-        // ws.src = '/skin/frontend/rwd/external/sooqr/sooqr.js';
+        ws.src = '//' + '<?=$this->getSooqrScriptUri()?>';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ws, s);
       })();
