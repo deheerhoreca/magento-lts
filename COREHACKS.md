@@ -128,6 +128,8 @@
     - Patching a timebomb bug
   - `app/code/community/Ophirah/Qquoteadv/Block/Qquoteadv/View.php`
     - TBD
+  - `app/code/community/Ophirah/Qquoteadv/Helper/License.php`
+    - Helping the license check
   - `app/code/community/Ophirah/Qquoteadv/Model/Pdf/Qquote.php`
     - Changes to PDF template
   - `app/locale/nl_NL/Ophirah_Qquoteadv.csv`
@@ -146,6 +148,7 @@
     - Make `getCouponCode()` compatible with updated parent
   - `app/code/community/Ophirah/CustomProducts/Model/Observer.php`
   - `app/code/community/Ophirah/Qquoteadv/Helper/Data.php`
+  - `app/code/community/Ophirah/Qquoteadv/Helper/Licensechecks.php`
     - PHP 8 compatibility
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
