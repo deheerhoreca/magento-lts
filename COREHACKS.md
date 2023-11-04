@@ -148,6 +148,8 @@
     - Make `getCouponCode()` compatible with updated parent
   - `app/code/community/Ophirah/CustomProducts/Model/Observer.php`
   - `app/code/community/Ophirah/Qquoteadv/Helper/Data.php`
+    - Adding `ob_start()` to prevent cookie sent error
+    - PHP 8 compatibility
   - `app/code/community/Ophirah/Qquoteadv/Helper/Licensechecks.php`
     - PHP 8 compatibility
 - **Staempfli ProductAttachment**
