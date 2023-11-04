@@ -26,7 +26,7 @@
  */
 -->
 <config>
-    <skin>default</skin>
+    <skin>dhh</skin>
     <report>
         <!--
             "action" can be set to "print" to show exception on screen and "email"

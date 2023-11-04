@@ -99,6 +99,7 @@ phpstan*.neon
 /nohup*.out
 /algolia_*.json
 /maintenance.flag
+/maintenance.ip
 
 # DIRS
 
