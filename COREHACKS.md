@@ -127,13 +127,20 @@
     - Force `isAllowedCustomFields()`
     - Patching a timebomb bug
   - `app/code/community/Ophirah/Qquoteadv/Block/Qquoteadv/View.php`
+    - TBD
   - `app/code/community/Ophirah/Qquoteadv/Model/Pdf/Qquote.php`
+    - Changes to PDF template
   - `app/locale/nl_NL/Ophirah_Qquoteadv.csv`
+    - Changes to translations
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_accepted.html`
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request.html`
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request_details.html`
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_responsive_proposal.html`
+    - Changes to email templates
+  - `app/code/community/Ophirah/Qquoteadv/etc/config.xml`
+  - `app/code/community/Ophirah/Qquoteadv/etc/system.xml`
   - `app/code/community/Ophirah/Qquoteadv/etc/wsdl.xml`
+  - `app/design/frontend/base/default/layout/qquoteadv.xml`
     - Update `targetNamespace` to dynamic value
   - `app/code/community/Ophirah/Qquoteadv/Model/Qqadvcustomer.php`
     - Make `getCouponCode()` compatible with updated parent
