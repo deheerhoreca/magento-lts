@@ -127,18 +127,30 @@
     - Force `isAllowedCustomFields()`
     - Patching a timebomb bug
   - `app/code/community/Ophirah/Qquoteadv/Block/Qquoteadv/View.php`
+    - TBD
+  - `app/code/community/Ophirah/Qquoteadv/Helper/License.php`
+    - Helping the license check
   - `app/code/community/Ophirah/Qquoteadv/Model/Pdf/Qquote.php`
+    - Changes to PDF template
   - `app/locale/nl_NL/Ophirah_Qquoteadv.csv`
+    - Changes to translations
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_accepted.html`
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request.html`
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request_details.html`
   - `app/locale/nl_NL/template/email/qquoteadv/qquoteadv_responsive_proposal.html`
+    - Changes to email templates
+  - `app/code/community/Ophirah/Qquoteadv/etc/config.xml`
+  - `app/code/community/Ophirah/Qquoteadv/etc/system.xml`
   - `app/code/community/Ophirah/Qquoteadv/etc/wsdl.xml`
+  - `app/design/frontend/base/default/layout/qquoteadv.xml`
     - Update `targetNamespace` to dynamic value
   - `app/code/community/Ophirah/Qquoteadv/Model/Qqadvcustomer.php`
     - Make `getCouponCode()` compatible with updated parent
   - `app/code/community/Ophirah/CustomProducts/Model/Observer.php`
   - `app/code/community/Ophirah/Qquoteadv/Helper/Data.php`
+    - Adding `ob_start()` to prevent cookie sent error
+    - PHP 8 compatibility
+  - `app/code/community/Ophirah/Qquoteadv/Helper/Licensechecks.php`
     - PHP 8 compatibility
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
