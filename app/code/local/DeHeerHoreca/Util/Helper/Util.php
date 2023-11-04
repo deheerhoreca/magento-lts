@@ -1528,7 +1528,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       
       // @see https://docs.imagekit.io/features/image-transformations
       case "imagekit":
-        $cdn_base     = "//ik.imagekit.io/vzc6xuj9l";
+        $cdn_base         = "//ik.imagekit.io/vzc6xuj9l";
+        $cdn_options_base = "";
+        
         if($quality > 0) {
           $cdn_options_base .= ",q-{$quality}";
         }
