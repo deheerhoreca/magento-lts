@@ -1,5 +1,112 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Qquoteadv_Model_Client { const pjHdB = 764/382; protected $t2wKZ; protected $v0kHB; public function __construct() { $this->v0kHB = "\150\x74\164\160\163\72\x2f\57\x64\141\163\x68\x62\157\141\162\x64\x2e\143\x61\x72\x74\62\x71\165\157\x74\145\x2e\143\x6f\x6d\57\163\164\x61\x74\163\55\141\160\151\57\167\x73\56\160\150\x70"; } private function bFdv_() { goto XEeB1; nuSw5: $this->t2wKZ = new Varien_Http_Client(); goto OUW2F; gcMvZ: return $this->t2wKZ; goto pti2F; OUW2F: LiNci: goto gcMvZ; XEeB1: if ($this->t2wKZ instanceof Varien_Http_Client) { goto LiNci; } goto nuSw5; pti2F: } private function BfPDo($sNvuL) { try { $riMUD = Zend_Json::encode($sNvuL); } catch (Exception $Chozq) { goto YUE3_; vcIlm: Mage::log("\105\x78\x63\x65\160\164\x69\x6f\156\x3a\x20" . $Chozq->getMessage(), null, "\x63\62\161\x5f\145\170\x63\x65\160\x74\x69\157\156\56\154\x6f\x67", true); goto PCj3K; PqvRS: Mage::log("\115\145\x73\x73\x61\147\x65\72\40" . $G_Hez, null, "\143\62\161\x2e\x6c\x6f\147", true); goto vcIlm; YUE3_: $G_Hez = "\143\x61\x6e\x20\x6e\157\164\40\x6a\x73\157\x6e\40\x65\x6e\x63\x6f\144\x65\x20\160\x61\x72\x61\155\163\72" . $Chozq->getMessage(); goto PqvRS; PCj3K: $riMUD = Zend_Json::encode(["\x65\x72\162\157\162", "\x65\156\143\x6f\x64\151\x6e\147"]); goto gTqQm; gTqQm: } return ["\x71\x71\165\x6f\x74\x65\141\144\x76\137\160\x61\162\x61\155\163" => $riMUD]; } public function sendRequest($sNvuL) { goto TM2UZ; iqo7b: try { $c6P0p = $imoas->request("\x50\117\123\124"); $wDG19 = Zend_Json::decode($c6P0p->getBody()); } catch (Exception $Chozq) { $wDG19 = false; Mage::log("\x45\170\143\145\x70\x74\x69\x6f\x6e\x3a\x20" . $Chozq->getMessage(), null, "\x63\62\x71\x5f\x65\170\x63\145\x70\164\x69\157\x6e\56\x6c\157\147", true); } goto dhaRc; dhaRc: return $wDG19; goto FfkDI; TM2UZ: $sNvuL = $this->BfPDo($sNvuL); goto U2X6r; U2X6r: $imoas = $this->bFdv_()->setUri($this->v0kHB)->setMethod(Zend_Http_Client::POST)->resetParameters()->setParameterPost($sNvuL)->setConfig(["\164\151\x6d\145\x6f\x75\164" => self::pjHdB]); goto iqo7b; FfkDI: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Model_Client
+ */
+class Ophirah_Qquoteadv_Model_Client
+{
+    const TIMEOUT = 2; //timeout in seconds to stop blocking
+
+    /**
+     * @var
+     */
+    protected $_client;
+
+    /**
+     * @var string
+     */
+    protected $_ophirah_uri;
+
+    /**
+     * Construct
+     */
+    public function __construct()
+    {
+        $this->_ophirah_uri = 'https://dashboard.cart2quote.com/stats-api/ws.php';
+    }
+
+    /**
+     * Function that gets or instantiates a HTTP client
+     *
+     * @return Varien_Http_Client
+     */
+    private function _getClient()
+    {
+        if (!$this->_client instanceof Varien_Http_Client) {
+            $this->_client = new Varien_Http_Client();
+        }
+
+        return $this->_client;
+    }
+
+    /**
+     * Function that prepares the given params to be send using json
+     *
+     * @param $params
+     * @return array
+     */
+    private function _prepareParams($params)
+    {
+        try {
+            $encParams = Zend_Json::encode($params);
+        } catch (Exception $e) {
+            $message = 'can not json encode params:' . $e->getMessage();
+            Mage::log('Message: ' .$message, null, 'c2q.log', true);
+            Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            $encParams = Zend_Json::encode(['error', 'encoding']);
+        }
+
+        return ['qquoteadv_params' => $encParams];
+    }
+
+    /**
+     * Function that sends a logging request
+     *
+     * @param $params
+     * @return bool
+     */
+    public function sendRequest($params)
+    {
+        $params = $this->_prepareParams($params);
+
+        $client = $this->_getClient()
+            ->setUri($this->_ophirah_uri)
+            ->setMethod(Zend_Http_Client::POST)
+            ->resetParameters()
+            ->setParameterPost($params)
+            ->setConfig(['timeout' => self::TIMEOUT]);
+        try {
+            $response = $client->request('POST');
+            $result = Zend_Json::decode($response->getBody());
+        } catch (Exception $e) {
+            $result = false;
+            Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+        }
+        return $result;
+    }
+}

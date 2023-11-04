@@ -137,7 +137,7 @@ if (!$quoteModel->getAddress()->getShippingMethod() == null && $useC2Qship === f
 } ?>
 <td id="store-shipping-settings" style="width:50px; vertical-align:top;">
     <?php if (!$useDefault === true): ?>
-        <input name="shipping_type" type="radio" value=""
+        <input id="shipping_type" name="shipping_type" type="radio" value=""
             <?php echo (($useC2Qship === false) ? 'checked="checked"' : $disabledHtmlRadio); ?>
                onclick="
                                            if (this.checked) {
@@ -178,7 +178,7 @@ if (!$quoteModel->getAddress()->getShippingMethod() == null && $useC2Qship === f
                 <dd>
                     <ul>
                         <li>
-                            <input name="shipping_default" type="radio" value="" checked="checked"/>
+                            <input id="shipping_default" name="shipping_default" type="radio" value="" checked="checked"/>
                             <label for="<?php echo $currentMethod->getData('code'); ?>" class="normal"
                                    style="margin: 0 5px 0 0;">
                                 <?php echo $currentMethod->getData('method_title'); ?> - <strong><span
@@ -223,7 +223,7 @@ if (!$quoteModel->getAddress()->getShippingMethod() == null && $useC2Qship === f
         ?>
 
         <a href="#order-shipping-method-choose" onclick="<?php echo $onclick; ?>"
-           style="margin: 0 0 0 25px;"><?php echo $linkTitle; ?></a>
+           style="margin: 0;"><?php echo $linkTitle; ?></a>
         <input type="hidden" name="order[has_shipping]" value=""/>
     </div>
     <div style="display:none;" id="order-shipping-method-choose">

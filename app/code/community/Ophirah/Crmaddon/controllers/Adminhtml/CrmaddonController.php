@@ -1,5 +1,642 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Crmaddon_Adminhtml_CrmaddonController extends Mage_Adminhtml_Controller_Action { const zcq3w = "\x71\x71\165\157\x74\145\141\x64\166\x5f\163\141\x6c\x65\163\137\x72\x65\x70\162\145\163\x65\156\x74\141\164\151\x76\x65\x73\x5f\155\145\163\163\141\x67\151\x6e\x67\x5f\x63\162\x6d\141\144\x64\157\x6e\137\143\x6f\156\164\x61\151\156\x65\x72"; const Pb8Ue = "\157\156"; public function getRequired($ndmGh = NULL) { goto cRXs3; MdQ7W: return $DB6iK[$ndmGh]; goto TzPlv; cRXs3: $DB6iK = []; goto vPBl5; vPBl5: $DB6iK["\163\x65\156\144\115\141\151\154"] = ["\143\162\x6d\137\163\165\142\x6a\145\x63\164" => "\163\165\x62\152\145\x63\164", "\143\162\x6d\x5f\x6d\145\x73\163\141\x67\x65" => "\x6d\145\163\x73\141\x67\x65"]; goto MdQ7W; TzPlv: } public function crmmessageAction() { goto vSflM; OBiHU: $Elydy = Ophirah_Crmaddon_Helper_Data::CRMADDON_UPGRADE_LINK; goto dOV6r; JZZlQ: Mage::dispatchEvent("\x6f\x70\150\151\x72\141\150\137\x63\162\x6d\x61\144\144\x6f\156\x5f\143\162\155\155\x65\163\163\x61\147\x65\137\x61\x66\x74\145\162", [$jWnF5]); goto f5mrM; Wk3jZ: bCDZI: goto JTrAJ; vSflM: $jWnF5 = $this->getCrmdata(); goto VjV0s; TBQOa: zvBBW: goto rH0ck; ltAO2: $this->_redirect($wpi2_); goto JZZlQ; VjV0s: $Fg6CZ = $jWnF5["\143\162\x6d\137\x69\144"]; goto MoEfk; HiAw4: foreach ($jWnF5 as $m6IJs => $svf1I) { goto qRlp_; kO746: qmbhN: goto hUTXU; t44Da: if (!array_key_exists($m6IJs, $hl61_)) { goto NI241; } goto Vqfhw; Vqfhw: $bp7t4 = $this->__("\104\x61\x74\141\x66\x69\x65\154\144\40\45\x73\x20\x69\x73\40\145\155\160\x74\x79", $hl61_[$m6IJs]); goto RtK11; qRlp_: if (!($svf1I == NULL || $svf1I == '')) { goto adUhq; } goto t44Da; RtK11: Mage::getSingleton("\x61\x64\x6d\151\156\150\164\155\x6c\57\163\x65\x73\x73\x69\157\156")->addError($bp7t4); goto khYOs; khYOs: NI241: goto mlQj6; mlQj6: adUhq: goto kO746; hUTXU: } goto TBQOa; TnZxn: return; goto Wk3jZ; WSTuo: if (Mage::helper("\x71\x71\165\x6f\164\145\x61\x64\x76\x2f\x6c\x69\143\145\156\163\145")->validLicense("\x6d\145\x73\163\x61\x67\x69\x6e\x67", $jWnF5["\143\162\145\x61\x74\x65\x48\141\x73\150"])) { goto bCDZI; } goto Pyaj0; JTrAJ: if (!(!isset($RDAc7) && !isset($bp7t4))) { goto oL9Y5; } goto KsjN3; CWceW: $hl61_ = $this->getRequired("\x73\x65\x6e\144\115\141\x69\x6c"); goto HiAw4; dOV6r: Mage::getSingleton("\x61\x64\x6d\151\156\150\164\155\154\x2f\163\145\x73\163\151\157\x6e")->addError($this->__($RDAc7, $Elydy)); goto o_Jg7; KsjN3: try { goto RBm52; UF7TM: goto Mn_kt; goto ev1bB; AV0ug: fiEvV: goto mibNN; RBm52: $VLyYG = $this->sendEmail($jWnF5); goto UOBpk; KxDmc: Mn_kt: goto UEfva; UOBpk: if (empty($VLyYG)) { goto dGZoa; } goto RDQse; vOWb8: Mage::getSingleton("\x61\x64\155\x69\156\150\164\155\154\57\x73\x65\163\163\151\x6f\156")->addError($bp7t4); goto I2LTo; L3zSf: NowYX: goto UF7TM; I2LTo: goto Mn_kt; goto AV0ug; mibNN: Mage::getSingleton("\x61\144\x6d\x69\156\150\x74\x6d\x6c\57\x73\145\x73\163\x69\x6f\x6e")->addNotice($this->__("\123\x65\x6e\x64\x69\x6e\x67\40\103\122\115\x20\105\x6d\x61\x69\154\x20\151\163\40\144\151\163\141\142\x6c\145\x64")); goto KxDmc; iUO_S: Mage::getSingleton("\141\144\x6d\x69\x6e\x68\164\x6d\154\x2f\x73\145\163\163\x69\157\156")->addSuccess($this->__("\103\122\x4d\x20\105\x6d\x61\x69\154\x20\x77\x61\x73\40\163\145\x6e\164")); goto L3zSf; ev1bB: dGZoa: goto Ekzed; Ekzed: $bp7t4 = $this->__("\103\122\x4d\x20\x6d\145\163\163\x61\147\145\40\143\x6f\x75\x6c\x64\x6e\x27\164\x20\x62\145\x20\x73\x65\x6e\x74\x20\164\157\x20\164\x68\x65\40\x63\154\151\145\156\x74"); goto vOWb8; HbATu: if (!(isset($jWnF5["\x63\162\155\x5f\156\x6f\164\151\146\x79\103\x75\163\x74\x6f\155\145\162"]) && $jWnF5["\143\x72\155\x5f\x6e\157\164\151\x66\x79\x43\x75\x73\x74\157\x6d\145\x72"] == 990/990)) { goto NowYX; } goto iUO_S; RDQse: if (is_string($VLyYG) && $VLyYG == Ophirah_Crmaddon_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL) { goto fiEvV; } goto HbATu; UEfva: } catch (Exception $ApRur) { goto kOxzV; AfXXM: Mage::getSingleton("\141\144\155\151\x6e\150\x74\155\x6c\x2f\x73\x65\x73\x73\151\x6f\x6e")->addError($bp7t4); goto FnaCY; tHCp3: Mage::log("\105\x78\x63\145\160\x74\151\x6f\156\72\x20\x43\122\115\101\144\x64\x6f\x6e\x3a\40" . $ApRur->getMessage(), null, "\x63\62\x71\137\x65\170\x63\x65\x70\x74\x69\x6f\156\56\154\157\147", true); goto AfXXM; kOxzV: $bp7t4 = $this->__("\103\x52\115\x20\155\x65\x73\163\141\147\145\40\x63\157\165\154\144\156\x27\x74\40\x62\145\40\x73\x65\x6e\x74\x20\164\x6f\x20\164\150\x65\40\x63\x6c\x69\x65\x6e\x74"); goto tHCp3; FnaCY: } goto FV2eE; Pyaj0: $RDAc7 = Ophirah_Crmaddon_Helper_Data::CRMADDON_UPGRADE_MESSAGE; goto OBiHU; MoEfk: Mage::dispatchEvent("\157\160\x68\x69\x72\141\150\137\x63\x72\x6d\x61\144\x64\x6f\x6e\137\143\162\155\x6d\x65\x73\163\141\x67\145\137\142\145\x66\x6f\162\145", [$jWnF5]); goto CWceW; rH0ck: $wpi2_ = $this->getBaseReturnPath($Fg6CZ, $jWnF5) . "\57\x63\x72\155\x61\144\144\x6f\156\57\x31"; goto WSTuo; o_Jg7: $this->_redirect($wpi2_); goto TnZxn; FV2eE: oL9Y5: goto ltAO2; f5mrM: } public function getCrmdata() { goto hHwOi; XEU30: return $DB6iK; goto Sf_0c; Z00Lv: RX6Yv: goto XEU30; jviNT: foreach ($this->getRequest()->getPost() as $m6IJs => $svf1I) { goto oTiRA; LF6QX: wR8nw: goto QFMKI; ErmoW: sHczp: goto mNHTL; QFMKI: AJr_P: goto Zc2Vw; kC2ky: $DB6iK[$m6IJs] = 878/878; goto LF6QX; oTiRA: if ($m6IJs == "\x63\x72\x6d\137\156\157\x74\x69\146\x79\x43\165\x73\x74\157\x6d\x65\162" && $svf1I == self::Pb8Ue) { goto dC167; } goto IHOBc; IHOBc: if (!(substr($m6IJs, 0, 3864/966) == "\x63\x72\x6d\x5f" || $m6IJs == "\143\162\145\x61\164\145\110\x61\163\150")) { goto sHczp; } goto xrSpa; xrSpa: $DB6iK[$m6IJs] = $svf1I; goto ErmoW; a3KiI: dC167: goto kC2ky; mNHTL: goto wR8nw; goto a3KiI; Zc2Vw: } goto Z00Lv; hHwOi: $DB6iK["\143\162\145\x61\x74\145\x48\x61\x73\150"] = null; goto jviNT; Sf_0c: } public function sendEmail($jWnF5) { goto x_H6P; W2XDn: $jxRp8["\155\145\163\163\141\x67\x65"] = $jWnF5["\143\162\155\x5f\x6d\145\x73\x73\x61\147\145"]; goto g1Dov; SHwu5: $FTFTe = Mage::getStoreConfig("\161\x71\165\x6f\164\145\141\144\166\x5f\x73\x61\154\145\x73\137\x72\x65\x70\162\145\x73\145\156\164\141\x74\x69\x76\x65\163\x2f\155\x65\x73\x73\x61\x67\151\156\147\x2f\143\162\155\141\144\144\157\156\x5f\x63\x6f\x6e\164\141\x69\156\x65\162", $PVO1O); goto jD9xY; I7Pkr: $jxRp8 = []; goto RwfsP; rnDTb: $Omh2q = Mage::getModel("\x71\x71\165\x6f\x74\145\x61\x64\x76\x2f\161\x71\141\x64\166\143\165\x73\164\x6f\x6d\145\162")->load($EOifg["\x71\165\x6f\x74\145\137\x69\x64"]); goto nLZ9W; yGwfv: $RvQcU = $this->sendEmailWithTemplate($jWnF5, $FTFTe, $PVO1O, $XW4wf, $jxRp8, $EOifg); goto c1BGX; nLZ9W: $EOifg["\x63\x75\x73\x74\157\155\145\x72\x5f\x69\144"] = (int) $Omh2q->getCustomerId(); goto ukkZq; Nq_Sz: VMu0y: goto rnDTb; E2dbw: $XKrPu = Mage::getModel("\143\x72\155\x61\144\144\157\x6e\57\143\x72\155\141\x64\144\157\x6e\155\x65\x73\x73\141\x67\145\163")->setData($EOifg)->save(); goto IaQ4J; ukkZq: $EOifg["\x75\x73\145\x72\137\x69\x64"] = (int) $Omh2q->getUserId(); goto E2dbw; x_H6P: $RvQcU = null; goto I7Pkr; UEvMq: V3khC: goto YeJl6; NGcy4: if (!isset($EOifg["\x63\165\163\x74\157\155\x65\x72\137\x6e\157\164\x69\146\151\145\144"])) { goto Uwi_6; } goto cz_Vl; Tajx9: $EOifg = $this->prepareSaveData($jWnF5); goto NGcy4; E6VID: Uwi_6: goto E1vxF; jD9xY: $DF08g = Ophirah_Crmaddon_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL; goto Z551B; E1vxF: $RvQcU = true; goto Awrgo; IaQ4J: Mage::dispatchEvent("\157\160\x68\151\x72\x61\x68\x5f\x63\x72\x6d\141\144\144\157\156\x5f\163\145\x6e\x64\137\141\146\x74\x65\162\x5f\163\x61\x76\x65", ["\x63\x72\155\137\141\x64\144\x6f\x6e\137\x6d\x65\x73\x73\x61\147\145\163\137\155\157\144\x65\x6c" => $XKrPu]); goto omCkP; c1BGX: TiqHb: goto Nq_Sz; AaS7d: goto VMu0y; goto E6VID; RwfsP: $PVO1O = $jWnF5["\x63\x72\x6d\x5f\163\x74\157\x72\x65\111\144"]; goto A1syt; Awrgo: goto VMu0y; goto UEvMq; Z551B: if (!($FTFTe != $DF08g)) { goto TiqHb; } goto yGwfv; A1syt: $jxRp8["\x63\162\x6d\x61\144\144\157\x6e\102\x6f\x64\171"] = $jWnF5["\x63\x72\x6d\137\x6d\x65\x73\x73\141\147\x65"]; goto W2XDn; YeJl6: $XW4wf = Mage::helper("\143\162\155\x61\x64\x64\157\x6e")->getEmailTemplateModel($PVO1O); goto SHwu5; g1Dov: $jxRp8["\163\164\x6f\162\x65"] = Mage::app()->getStore($PVO1O); goto Tajx9; omCkP: return $RvQcU; goto XHaTx; cz_Vl: if ((int) $EOifg["\x63\x75\x73\x74\157\155\145\x72\137\156\x6f\164\x69\146\151\145\x64"] == 252/252) { goto V3khC; } goto AaS7d; XHaTx: } public function loadtemplateAction() { goto YDZoX; okWVt: $Fg6CZ = $jWnF5["\143\162\155\x5f\151\144"]; goto e712E; ebR8V: $this->_redirect($wpi2_); goto OfSIA; YDZoX: $jWnF5 = $this->getCrmdata(); goto xTE0i; i0xUj: $CJ06l = $jWnF5["\143\162\x6d\x5f\155\x65\x73\x73\x61\x67\x65\137\x74\145\155\160\x6c\141\164\x65"]; goto okWVt; OfSIA: Mage::dispatchEvent("\157\160\x68\151\x72\x61\x68\137\x63\x72\x6d\x61\x64\x64\x6f\x6e\137\154\x6f\x61\x64\x74\145\155\160\x6c\x61\164\145\137\x61\146\x74\145\x72", [$jWnF5]); goto lHyjg; XsLrg: $wpi2_ = $this->getBaseReturnPath($Fg6CZ, $jWnF5) . "\57\143\x72\155\164\x6d\x70\154\57" . $CJ06l; goto ebR8V; xTE0i: Mage::dispatchEvent("\157\x70\150\x69\162\141\x68\137\143\162\155\141\x64\x64\x6f\x6e\137\x6c\157\x61\144\164\145\155\x70\154\x61\164\x65\x5f\142\x65\146\157\162\x65", [$jWnF5]); goto i0xUj; e712E: Mage::helper("\143\162\155\x61\x64\144\x6f\156")->checkLicense(null, $jWnF5["\x63\162\145\x61\x74\145\x48\141\163\x68"]); goto XsLrg; lHyjg: } public function loadcrmtemplateAction() { goto DQbTP; W9qNW: $Fg6CZ = $jWnF5["\143\x72\x6d\x5f\x69\144"]; goto Zw9Ig; Rirgf: $wpi2_ = $this->getBaseReturnPath($Fg6CZ, $jWnF5) . "\57\143\162\x6d\142\157\x64\171\164\155\x70\154\x2f" . $Cd6Kd; goto uhpQx; DQbTP: $jWnF5 = $this->getCrmdata(); goto tjkcF; uhpQx: $this->_redirect($wpi2_); goto JzNZ6; tjkcF: Mage::dispatchEvent("\x6f\160\150\151\162\x61\150\x5f\143\162\x6d\x61\144\144\x6f\x6e\x5f\x6c\x6f\x61\144\143\x72\155\x74\145\x6d\x70\154\141\164\x65\x5f\142\x65\x66\x6f\162\145", [$jWnF5]); goto MCuQG; MCuQG: $Cd6Kd = $jWnF5["\x63\x72\x6d\137\142\x6f\144\x79\111\144"]; goto W9qNW; JzNZ6: Mage::dispatchEvent("\157\160\150\x69\x72\x61\x68\x5f\143\162\x6d\x61\144\144\157\x6e\137\154\157\x61\x64\143\x72\155\164\x65\x6d\160\x6c\x61\x74\145\137\141\146\x74\x65\x72", [$jWnF5]); goto EHdHf; Zw9Ig: Mage::helper("\x63\x72\x6d\141\144\144\157\156")->checkLicense(null, $jWnF5["\x63\162\145\x61\x74\145\110\x61\x73\x68"]); goto Rirgf; EHdHf: } public function savecrmtemplateAction() { goto GEeEI; oOL21: $XW4wf->setData($EOifg); goto xHNG0; sso7M: Mage::helper("\x63\x72\155\141\x64\x64\x6f\x6e")->checkLicense(null, $jWnF5["\143\162\x65\141\164\145\x48\141\163\150"]); goto crXnO; yKaSN: $GqnY5 = $jWnF5["\x63\162\x6d\137\x62\157\x64\171\x74\145\155\160\154\x61\x74\145\x69\x64"]; goto W4ar9; BdbsI: $wpi2_ = $this->getBaseReturnPath($Fg6CZ, $jWnF5) . "\57\143\x72\x6d\x62\x6f\144\x79\164\x6d\x70\x6c\57" . $GqnY5; goto fZRZV; votKa: UBUeR: goto BdbsI; nxF_p: ESQBv: goto FgTPh; FgTPh: if (!((int) $jWnF5["\x63\x72\x6d\x5f\164\145\x6d\x70\x6c\x61\164\145\144\x65\146\x61\165\x6c\164"] == 436/436)) { goto UBUeR; } goto aepiT; W4ar9: Mage::dispatchEvent("\x6f\160\x68\x69\x72\141\x68\x5f\x63\x72\155\141\x64\144\x6f\156\137\x73\x61\166\x65\x63\x72\155\164\145\155\x70\x6c\141\x74\x65\137\x62\145\146\x6f\x72\145", [$jWnF5]); goto sso7M; K58TU: $Fg6CZ = $jWnF5["\143\162\x6d\137\151\144"]; goto yKaSN; mIeMi: Mage::dispatchEvent("\157\x70\150\x69\x72\x61\x68\137\x63\162\155\141\144\144\x6f\156\137\x73\x61\166\145\x63\x72\x6d\x74\145\155\x70\154\x61\x74\145\137\141\x66\164\x65\x72", [$jWnF5]); goto opOYX; xHNG0: $this->saveTemplate($XW4wf, $wpi2_); goto mIeMi; GEeEI: $jWnF5 = $this->getCrmdata(); goto K58TU; crXnO: if (isset($jWnF5["\x63\162\x6d\137\164\145\155\160\154\x61\164\145\x64\145\146\141\165\154\164"])) { goto ESQBv; } goto WZb1I; aepiT: $this->resetDefault(); goto votKa; fZRZV: $XW4wf = Mage::getModel("\143\162\x6d\141\x64\x64\157\x6e\x2f\x63\162\155\141\x64\144\x6f\x6e\164\145\155\x70\154\141\x74\x65\x73")->load($GqnY5); goto Vgzkp; Vgzkp: $EOifg = $this->prepareSavetemplateData($jWnF5); goto oOL21; WZb1I: $jWnF5["\143\x72\x6d\137\x74\145\155\x70\x6c\141\164\145\x64\145\146\x61\165\x6c\x74"] = 0; goto nxF_p; opOYX: } public function newcrmtemplateAction() { goto Bw2mE; W3NlF: $Mb6Lh = Mage::getModel("\143\162\x6d\141\144\144\157\156\57\x63\x72\x6d\141\x64\x64\x6f\156\164\x65\155\x70\154\141\x74\145\x73")->setData($EOifg); goto a3inX; dNLVY: $this->_redirect($wpi2_); goto dF9ZC; Q350U: $this->resetDefault(); goto oPifh; pSY7s: Mage::dispatchEvent("\x6f\160\x68\151\162\141\x68\137\143\162\155\141\x64\144\x6f\156\137\156\145\167\x63\x72\x6d\164\145\155\x70\x6c\141\164\145\x5f\x61\x66\164\x65\x72", [$jWnF5]); goto Ymfhv; Bw2mE: $jWnF5 = $this->getCrmdata(); goto uahYY; uahYY: $Fg6CZ = $jWnF5["\x63\162\155\x5f\x69\x64"]; goto sfNld; VcB1x: Mage::getSingleton("\x61\144\x6d\151\156\x68\x74\x6d\154\x2f\163\145\163\x73\x69\157\156")->addError($bp7t4); goto dNLVY; mQdVm: $jWnF5["\x63\162\x6d\137\x74\x65\155\160\x6c\x61\164\145\144\145\146\141\165\154\164"] = 0; goto LsiTQ; aDOHH: Mage::helper("\143\x72\x6d\141\x64\144\x6f\156")->checkLicense(null, $jWnF5["\x63\x72\145\141\x74\145\110\141\163\150"]); goto Nfyfu; hZo3h: $ZSxso = Mage::helper("\143\x72\x6d\141\x64\x64\x6f\x6e")->getTemplates(); goto FF9EU; FF9EU: foreach ($ZSxso as $Mu37_) { goto fGyoR; gWWIY: $bp7t4 = Mage::helper("\x63\162\x6d\141\144\x64\x6f\x6e")->__("\x43\122\x4d\40\164\145\155\160\x6c\x61\x74\145\40\156\x61\x6d\x65\x20\141\x6c\x6c\x72\x65\141\144\x79\40\145\170\151\x73\164\x73"); goto lz2MW; fGyoR: if (!(trim($jWnF5["\x63\162\x6d\x5f\x74\x65\155\160\154\141\x74\x65\156\141\x6d\x65"]) == trim($Mu37_["\156\x61\155\x65"]))) { goto daFSk; } goto gWWIY; i14RL: Dbfvy: goto x0bH5; lz2MW: daFSk: goto i14RL; x0bH5: } goto PODwH; sfNld: $GqnY5 = $jWnF5["\143\162\155\x5f\x62\x6f\x64\x79\164\x65\155\x70\154\x61\164\x65\x69\144"]; goto gNy0R; hiRmn: $EOifg = $this->prepareSavetemplateData($jWnF5); goto HQ1qv; LsiTQ: YS9dy: goto eU57M; PODwH: XGU6M: goto ytia2; a3inX: $this->saveTemplate($Mb6Lh, $wpi2_, true); goto RUVB_; dnUSp: $wpi2_ = $this->getBaseReturnPath($Fg6CZ, $jWnF5); goto hZo3h; oPifh: aHbEY: goto dnUSp; HQ1qv: unset($EOifg["\x74\145\x6d\160\x6c\x61\x74\145\137\x69\144"]); goto W3NlF; Nfyfu: if (isset($jWnF5["\143\162\155\x5f\164\145\x6d\160\x6c\141\x74\x65\144\x65\146\141\x75\154\164"])) { goto YS9dy; } goto mQdVm; aO2jz: Qdn0b: goto VcB1x; gNy0R: Mage::dispatchEvent("\157\x70\x68\x69\162\141\150\x5f\x63\x72\155\x61\x64\x64\x6f\x6e\137\x6e\x65\x77\143\x72\155\164\x65\155\160\x6c\x61\164\x65\x5f\x62\145\146\x6f\162\x65", [$jWnF5]); goto aDOHH; ytia2: if (isset($bp7t4)) { goto Qdn0b; } goto hiRmn; RUVB_: goto FyzMf; goto aO2jz; eU57M: if (!((int) $jWnF5["\143\x72\x6d\x5f\164\145\155\160\154\x61\164\145\x64\145\146\141\x75\154\164"] == 906/906)) { goto aHbEY; } goto Q350U; dF9ZC: FyzMf: goto pSY7s; Ymfhv: } public function deletecrmtemplateAction() { goto Xyb0V; juF2U: $C1JYf = (int) $jWnF5["\x63\162\155\137\x62\x6f\144\171\111\144"]; goto C4zV4; oQcMM: Mage::helper("\143\162\x6d\x61\x64\x64\x6f\x6e")->checkLicense(null, $jWnF5["\x63\x72\145\x61\164\x65\110\x61\x73\x68"]); goto PYYzr; tpjJ4: Mage::dispatchEvent("\x6f\x70\150\151\162\x61\150\x5f\x63\162\x6d\141\144\x64\157\156\x5f\144\145\x6c\145\164\x65\x63\162\x6d\x74\x65\x6d\160\x6c\141\164\x65\x5f\x62\145\146\x6f\x72\145", [$jWnF5]); goto oQcMM; Zd4Se: $wpi2_ = $this->getBaseReturnPath($Fg6CZ, $jWnF5) . "\57\x63\x72\155\142\x6f\144\171\164\x6d\160\x6c\x2f" . $X9V3v[0]["\x74\145\x6d\x70\x6c\x61\164\x65\x5f\x69\x64"]; goto juF2U; qSjxm: $Fg6CZ = $jWnF5["\143\162\x6d\137\151\144"]; goto tpjJ4; hIRiB: Mage::dispatchEvent("\157\x70\x68\151\x72\x61\x68\x5f\x63\x72\155\x61\144\x64\157\156\x5f\x64\145\154\145\164\x65\143\x72\x6d\164\145\x6d\x70\x6c\x61\164\x65\x5f\x61\146\164\145\x72", [$jWnF5]); goto eT4c9; PYYzr: $X9V3v = $this->getDefaultTemplate(); goto Zd4Se; C4zV4: try { goto ez8Ba; tKb2A: $bp7t4 = $this->__("\103\122\x4d\x20\164\x65\x6d\160\x6c\141\x74\145\x20\x68\x61\x73\40\x62\145\145\x6e\40\x73\165\x63\143\x65\163\x66\165\154\154\171\40\144\145\154\x65\x74\145\x64\x20\x66\162\x6f\155\x20\x74\150\145\x20\x64\x61\x74\141\142\141\x73\145"); goto tDcLq; ABvDi: if (empty($d6OKK)) { goto Sdjyq; } goto tKb2A; Ngl3L: q7jEg: goto HPe0J; vgXWQ: k7mlG: goto A6358; pYewJ: $d6OKK = ''; goto QQ3rp; ez8Ba: if (!empty($C1JYf)) { goto q7jEg; } goto pYewJ; HPe0J: $d6OKK = Mage::getModel("\x63\x72\x6d\141\x64\144\x6f\156\x2f\143\x72\x6d\x61\x64\x64\x6f\x6e\x74\145\155\160\x6c\141\164\145\163")->load($C1JYf)->delete(); goto D5CAC; nNIew: $bp7t4 = $this->__("\x43\122\115\40\x74\x65\155\x70\154\141\164\145\x20\143\157\x75\154\144\x6e\x27\x74\40\142\145\x20\x64\x65\x6c\x65\164\x65\x64\40\x66\162\x6f\155\x20\164\150\x65\x20\x64\x61\164\141\x62\x61\x73\145"); goto J0oKq; J0oKq: Mage::getSingleton("\141\144\x6d\x69\x6e\150\x74\x6d\x6c\x2f\x73\x65\163\x73\151\x6f\156")->addError($bp7t4); goto vgXWQ; D5CAC: g4DsK: goto ABvDi; KM6QR: Sdjyq: goto nNIew; QQ3rp: goto g4DsK; goto Ngl3L; NyH2S: goto k7mlG; goto KM6QR; tDcLq: Mage::getSingleton("\x61\x64\155\x69\x6e\150\x74\155\x6c\57\163\145\x73\x73\x69\x6f\156")->addSuccess($bp7t4); goto NyH2S; A6358: } catch (Exception $ApRur) { goto zcUt2; zcUt2: $bp7t4 = $this->__("\x43\x52\x4d\40\164\145\155\x70\154\141\x74\145\40\x63\x6f\165\x6c\144\x6e\x27\164\40\x62\x65\40\144\x65\154\x65\164\x65\x64\40\x66\x72\157\155\40\x74\x68\x65\40\x64\141\x74\141\142\141\163\145"); goto YQk51; pJ0Mv: Mage::getSingleton("\141\x64\155\x69\156\150\164\x6d\154\57\x73\x65\x73\x73\151\x6f\156")->addError($bp7t4); goto doMwS; YQk51: Mage::log("\x45\x78\x63\x65\160\164\x69\x6f\x6e\x3a\x20\x43\122\115\101\144\x64\157\x6e\72\x20" . $ApRur->getMessage(), null, "\x63\x32\161\x5f\x65\170\x63\x65\x70\164\151\x6f\x6e\56\x6c\x6f\147", true); goto pJ0Mv; doMwS: } goto Dqhmd; Dqhmd: $this->_redirect($wpi2_); goto hIRiB; Xyb0V: $jWnF5 = $this->getCrmdata(); goto qSjxm; eT4c9: } public function saveTemplate($EOifg, $wpi2_, $zku0x = false) { goto Gsmhf; ZYee5: foreach ($Mjt1Y as $lPWOv) { $GqnY5 = $lPWOv->getData("\x74\x65\155\x70\x6c\x61\164\145\137\151\x64"); kDVyO: } goto Zt6zK; Mg2mg: PJQKZ: goto gzBM6; Gsmhf: try { goto lAyat; QfjuK: Mage::getSingleton("\x61\144\x6d\x69\156\x68\164\155\154\x2f\x73\145\x73\163\x69\157\x6e")->addError($bp7t4); goto xzY4L; jGZO5: Mage::getSingleton("\141\144\155\x69\x6e\x68\x74\x6d\x6c\x2f\163\145\x73\x73\151\157\x6e")->addSuccess($bp7t4); goto jpWqg; Pk3y_: U6B_u: goto Ra8rW; xzY4L: tk5AZ: goto ED2LM; jpWqg: goto tk5AZ; goto Pk3y_; lAyat: $Mb6Lh = $EOifg->save(); goto XAAo4; Ra8rW: $bp7t4 = $this->__("\x43\122\115\x20\164\145\155\x70\x6c\141\x74\145\40\x63\157\x75\154\144\156\x27\164\40\142\x65\x20\163\x61\x76\x65\144\x20\164\157\40\164\x68\x65\x20\144\x61\164\141\142\141\163\x65"); goto QfjuK; SJnBa: $bp7t4 = $this->__("\103\122\x4d\x20\x74\145\x6d\x70\x6c\x61\x74\x65\x20\x68\141\163\40\163\x75\x63\143\145\163\146\x75\x6c\154\171\40\x62\145\145\x6e\40\x73\141\x76\x65\144\40\164\x6f\x20\x74\150\x65\x20\144\141\x74\x61\142\x61\163\x65"); goto jGZO5; XAAo4: if (empty($Mb6Lh)) { goto U6B_u; } goto SJnBa; ED2LM: } catch (Exception $ApRur) { goto thORa; l7MJh: Mage::log("\x45\170\143\x65\160\x74\x69\157\x6e\x3a\x20\103\x52\115\x41\144\144\157\x6e\72\40" . $ApRur->getMessage(), null, "\143\x32\161\x5f\145\170\143\145\160\x74\151\157\x6e\56\x6c\157\147", true); goto Ox63T; Ox63T: Mage::getSingleton("\141\x64\x6d\x69\x6e\x68\x74\155\x6c\57\163\x65\163\163\151\157\156")->addError($bp7t4); goto WkVi9; thORa: $bp7t4 = $this->__("\103\x52\x4d\x20\x74\x65\155\160\154\141\x74\145\40\143\157\165\154\144\x6e\x27\164\x20\142\x65\x20\163\x61\166\x65\144\x20\x74\157\x20\164\150\x65\x20\x64\x61\164\x61\x62\x61\163\145"); goto l7MJh; WkVi9: } goto t627k; enZK1: $wpi2_ = $wpi2_ . "\x2f\x63\162\155\142\x6f\x64\171\x74\155\x70\x6c\x2f" . $GqnY5; goto Mg2mg; RnEVT: $Mjt1Y = Mage::getModel("\x63\x72\x6d\141\x64\x64\157\156\x2f\x63\x72\155\x61\x64\x64\x6f\x6e\164\145\x6d\x70\x6c\141\164\145\x73")->getCollection()->addFieldToFilter("\156\x61\x6d\x65", $EOifg["\156\x61\155\x65"]); goto U3Cpk; t627k: if (!($zku0x === true)) { goto PJQKZ; } goto RnEVT; Zt6zK: Cguw5: goto enZK1; U3Cpk: $GqnY5 = 0; goto ZYee5; gzBM6: $this->_redirect($wpi2_); goto TTMFj; TTMFj: } public function prepareSaveData($jWnF5) { goto zFL52; SRbfw: return $mbEMB; goto UBtEs; Ac8rt: $mbEMB["\165\160\x64\141\164\145\144\137\141\x74"] = now(); goto SRbfw; g9ttI: foreach ($gmIy1 as $m6IJs => $svf1I) { goto lBrBk; tsdzX: $jWnF5[$svf1I] = htmlentities($jWnF5[$svf1I], ENT_QUOTES, "\x55\x54\x46\55\x38"); goto rWiRD; r9BXQ: $mbEMB[$m6IJs] = $jWnF5[$svf1I]; goto wMsdS; lBrBk: if (!isset($jWnF5[$svf1I])) { goto ePFbc; } goto m6wwT; rWiRD: gSSkp: goto r9BXQ; Dj9DR: GJakJ: goto C4Da1; r_ym3: if (!($m6IJs == "\155\145\x73\x73\141\147\x65")) { goto gSSkp; } goto tsdzX; m6wwT: $jWnF5[$svf1I] = trim($jWnF5[$svf1I]); goto r_ym3; wMsdS: ePFbc: goto Dj9DR; C4Da1: } goto jkvCM; Qk0qX: $mbEMB["\x63\x72\145\141\x74\x65\x64\x5f\141\x74"] = now(); goto Ac8rt; jkvCM: I5dgY: goto Qk0qX; zFL52: $mbEMB = []; goto KvYcG; KvYcG: $gmIy1 = ["\161\x75\157\x74\x65\137\x69\x64" => "\143\162\155\x5f\151\x64", "\145\155\x61\151\x6c\137\x61\x64\x64\162\x65\x73\163" => "\143\162\155\x5f\143\x75\x73\164\157\155\x65\x72\x45\155\x61\x69\x6c", "\163\x75\142\152\145\143\x74" => "\x63\x72\155\x5f\x73\165\x62\152\x65\143\164", "\x74\145\x6d\160\x6c\x61\164\x65\x5f\x69\144" => "\143\x72\x6d\137\155\145\163\x73\x61\147\x65\137\x74\145\155\160\154\x61\x74\145", "\x6d\x65\x73\x73\x61\147\145" => "\x63\162\155\x5f\155\x65\163\163\x61\147\145", "\143\165\163\x74\x6f\x6d\145\162\137\x6e\157\164\x69\x66\x69\x65\x64" => "\143\162\155\x5f\156\157\x74\x69\146\x79\x43\165\163\164\x6f\155\145\162"]; goto g9ttI; UBtEs: } public function prepareSavetemplateData($jWnF5) { goto wgU1_; m001h: $jWnF5["\x63\x72\155\137\x73\164\x61\164\x75\163"] = 206/206; goto kYFX0; kYFX0: $gmIy1 = ["\x74\x65\155\160\154\x61\164\145\x5f\151\x64" => "\x63\162\155\137\x62\x6f\x64\171\164\x65\x6d\x70\x6c\141\x74\145\151\144", "\x6e\x61\155\x65" => "\x63\162\x6d\137\164\145\155\160\x6c\x61\x74\x65\x6e\x61\155\x65", "\163\x75\x62\152\145\x63\x74" => "\143\162\155\137\x74\x65\155\160\x6c\141\x74\145\x73\165\x62\x6a\x65\143\x74", "\164\x65\x6d\160\x6c\141\x74\145" => "\143\x72\x6d\137\x74\x65\155\160\x6c\141\164\145\x62\157\144\171", "\x64\145\146\141\x75\154\x74" => "\x63\162\x6d\x5f\x74\145\x6d\x70\x6c\x61\164\x65\144\145\146\x61\x75\154\x74", "\163\x74\x61\x74\x75\163" => "\143\162\x6d\137\163\x74\141\164\x75\x73"]; goto k1LLD; AEgSP: return $EOifg; goto sj43B; xrlQh: iCCL_: goto AEgSP; k1LLD: foreach ($gmIy1 as $m6IJs => $svf1I) { goto SenHS; ZCXnM: $EOifg[$m6IJs] = $jWnF5[$svf1I]; goto qWfpP; fXrso: if (!($m6IJs == "\x74\145\155\x70\x6c\x61\x74\x65")) { goto T5HVl; } goto NlOcQ; SenHS: $jWnF5[$svf1I] = trim($jWnF5[$svf1I]); goto fXrso; qWfpP: YJpMZ: goto Qu_8l; iOFj7: T5HVl: goto ZCXnM; NlOcQ: $jWnF5[$svf1I] = htmlentities($jWnF5[$svf1I], ENT_QUOTES, "\x55\x54\x46\x2d\70"); goto iOFj7; Qu_8l: } goto xrlQh; wgU1_: $EOifg = []; goto m001h; sj43B: } public function getBaseReturnPath($Fg6CZ, $jWnF5) { goto sCo64; PEw9i: mFDF4: goto j5a2r; j58_L: $jWnF5["\143\x72\155\x5f\x6d\157\x64\x75\x6c\145\x4e\141\x6d\145"] = "\x2a"; goto PEw9i; NHoAv: return $DB6iK; goto Iopzb; sCo64: if (!($jWnF5["\x63\x72\x6d\137\x6d\x6f\x64\165\x6c\145\x4e\x61\x6d\145"] == NULL || $jWnF5["\x63\162\155\x5f\155\157\x64\165\x6c\145\x4e\141\x6d\145"] == "\x61\x64\x6d\x69\156")) { goto mFDF4; } goto j58_L; j5a2r: $DB6iK = $jWnF5["\x63\x72\155\x5f\x6d\x6f\144\x75\154\145\x4e\x61\155\x65"] . "\57" . $jWnF5["\x63\162\155\x5f\x63\157\x6e\164\x72\157\x6c\x6c\145\162\x4e\141\155\x65"] . "\x2f" . $jWnF5["\x63\162\155\137\x61\143\x74\151\157\156\116\x61\x6d\145"] . "\57\151\144\57" . $Fg6CZ; goto NHoAv; Iopzb: } public function getDefaultTemplate() { goto n2v3R; n2v3R: $isJSB = []; goto hFzrw; dEDIO: return $isJSB; goto MiNQ9; hFzrw: $Wfo1P = Mage::getModel("\143\162\x6d\141\x64\x64\x6f\x6e\57\143\x72\155\141\144\x64\x6f\156\x74\x65\155\x70\x6c\141\x74\x65\x73")->getCollection()->setOrder("\164\x65\155\x70\154\x61\x74\x65\137\151\x64", "\x41\123\103"); goto QumQ6; QumQ6: foreach ($Wfo1P as $dshPK) { goto EjpvW; gXr_t: $isJSB[] = $dshPK->getData(); goto sIJQ3; sIJQ3: X8Q6U: goto af_dY; af_dY: T8Up7: goto dGm7A; EjpvW: if (!($dshPK->getData("\x64\x65\146\141\x75\x6c\164") == 592/592)) { goto X8Q6U; } goto gXr_t; dGm7A: } goto tKdpS; tKdpS: n5_Lg: goto dEDIO; MiNQ9: } public function resetDefault() { goto ifCQ4; f_6_X: foreach ($X9V3v as $i6XRw) { Mage::getModel("\x63\162\155\x61\144\144\157\156\x2f\x63\162\155\x61\144\144\157\x6e\x74\x65\x6d\x70\x6c\x61\x74\145\x73")->load($i6XRw["\x74\x65\155\x70\154\x61\x74\x65\x5f\x69\144"])->setData("\144\145\146\141\x75\154\x74", 0)->save(); ZxyJE: } goto fZ2er; fZ2er: jGrw4: goto ka8yy; ifCQ4: $X9V3v = $this->getDefaultTemplate(); goto f_6_X; ka8yy: } public function sendEmailWithTemplate($jWnF5, $FTFTe, $PVO1O, $XW4wf, $jxRp8, $EOifg) { goto nNVFM; tgfOn: $yijRH = Mage::helper("\143\x6f\x72\145")->escapeHtml($jWnF5["\x63\x72\155\137\163\165\142\152\145\x63\164"]); goto d5OaM; I3HnH: goto TAm1Q; goto KZTsI; FXqtY: $XW4wf->load($C1JYf); goto xy_v4; fw7hE: goto pw5uC; goto tiIpX; H7iiq: $uERca = Mage::getModel("\141\144\x6d\x69\156\57\165\x73\145\162")->load($Omh2q->getUserId()); goto P39tj; xy_v4: pw5uC: goto doN11; Dvypa: return $RvQcU; goto pk3or; nNVFM: if ($FTFTe) { goto skBSn; } goto NxLCr; Kl6zN: $iGZ5t = Mage::getModel("\x71\x71\x75\157\x74\x65\141\x64\x76\x2f\x71\161\141\144\x76\143\x75\x73\x74\157\155\145\162")->load($Omh2q->getId())->getEmailSenderInfo(); goto xIAuM; jBjvP: $XW4wf->loadDefault($C1JYf, $GaFpd); goto fw7hE; ZL0dB: De_HM: goto tgfOn; y1YDe: Mage::dispatchEvent("\157\160\150\151\x72\141\x68\137\x63\x72\x6d\x61\144\x64\157\156\137\141\144\x64\123\145\x6e\x64\x4d\141\151\154\x5f\x61\x66\x74\145\x72", ["\164\145\155\160\x6c\141\164\145" => $XW4wf, "\162\x65\163\x75\154\164" => $RvQcU]); goto Dvypa; uobX1: $XW4wf->setDesignConfig(["\163\164\x6f\x72\x65" => $PVO1O]); goto vBODR; KZTsI: skBSn: goto SB8SN; WbMtV: $XW4wf->setTemplateSubject($yijRH); goto uobX1; Ne2e9: $XW4wf->setSenderEmail($iGZ5t["\x65\x6d\x61\x69\x6c"]); goto WbMtV; xIAuM: $W5ZxC = ["\161\x75\x6f\164\145" => $Omh2q, "\x63\x75\163\164\x6f\x6d\145\162" => Mage::getModel("\143\165\x73\164\x6f\x6d\145\x72\57\143\165\x73\x74\157\155\x65\162")->load($Omh2q->getCustomerId()), "\161\x75\x6f\164\145\x49\x64" => $Omh2q->getId(), "\x73\164\x6f\162\x65\x49\144" => $Omh2q->getStoreId(), "\x61\x64\x6d\x69\x6e\x6e\x61\x6d\x65" => $LOMHl, "\x61\144\x6d\151\x6e\x70\x68\157\156\145" => $uERca->getTelephone(), "\162\145\155\141\162\x6b" => $NH2qY, "\154\x69\156\x6b" => Mage::getUrl("\161\x71\165\x6f\164\145\141\144\166\x2f\166\x69\x65\167\57\x76\x69\145\x77\x2f", ["\151\x64" => $Omh2q->getId(), "\x5f\163\x74\157\x72\x65" => $Omh2q->getStoreId()]), "\141\x64\155\151\156\154\151\156\153" => Mage::getModel("\x61\x64\155\x69\156\x68\164\x6d\x6c\x2f\165\x72\x6c")->turnOffSecretKey()->getUrl("\52\57\161\161\165\x6f\164\x65\x61\x64\166\57\x65\x64\151\x74", ["\x69\144" => $Omh2q->getId(), "\137\x73\x74\x6f\162\145" => $Omh2q->getStoreId()]), "\x73\145\x6e\144\145\162" => $iGZ5t, "\x43\x52\115\x63\x75\163\164\x6f\155\145\x72\x6e\141\x6d\x65" => $S6UGK->getName(), "\103\122\x4d\163\145\156\x64\145\x72\x6e\141\x6d\x65" => $iGZ5t["\x6e\141\155\145"]]; goto Iyjgu; tr3_f: TAm1Q: goto Jdho0; uBThM: $jxRp8["\x73\165\x62\152\145\x63\164"] = $yijRH; goto ZK4tg; c6T72: $XW4wf->setSenderName($iGZ5t["\156\141\x6d\x65"]); goto Ne2e9; Iyjgu: $jxRp8 = array_merge($jxRp8, $W5ZxC); goto qIrQS; lQLdR: if (is_numeric($C1JYf)) { goto EPIAq; } goto jBjvP; P39tj: $LOMHl = $uERca->getFirstname() . "\40" . $uERca->getLastname(); goto iZ7kU; Jdho0: $GaFpd = Mage::getStoreConfig("\147\145\x6e\145\162\141\154\x2f\154\157\143\x61\154\x65\57\x63\x6f\144\145", $PVO1O); goto lQLdR; g3H4E: $S6UGK = Mage::getModel("\143\x75\163\164\157\x6d\145\162\x2f\x63\165\x73\164\x6f\x6d\145\x72")->load($Omh2q->getCustomerId()); goto H7iiq; iZ7kU: $NH2qY = Mage::getStoreConfig("\161\x71\x75\x6f\x74\x65\x61\144\166\137\161\x75\x6f\x74\x65\x5f\x63\x6f\x6e\146\151\147\165\162\x61\164\x69\x6f\156\x2f\160\x72\157\x70\x6f\163\141\x6c\x2f\x71\x71\165\x6f\x74\x65\x61\x64\x76\x5f\x72\145\x6d\141\162\x6b", $Omh2q->getStoreId()); goto Kl6zN; d5OaM: zoA2m: goto uBThM; tiIpX: EPIAq: goto FXqtY; SB8SN: $C1JYf = $FTFTe; goto tr3_f; NxLCr: $C1JYf = self::zcq3w; goto I3HnH; ZK4tg: $iGZ5t = Mage::getModel("\161\161\x75\x6f\x74\x65\x61\x64\x76\57\x71\x71\x61\144\x76\143\x75\x73\x74\157\x6d\145\x72")->load($EOifg["\x71\165\157\164\145\x5f\x69\x64"])->getEmailSenderInfo(); goto c6T72; ddEMC: $RvQcU = $XW4wf->send($S6UGK->getEmail(), $S6UGK->getName(), $jxRp8); goto y1YDe; qIrQS: Mage::dispatchEvent("\x6f\x70\150\151\162\x61\150\137\x63\x72\x6d\141\x64\144\157\x6e\x5f\x61\x64\x64\x53\145\156\144\115\x61\151\x6c\137\x62\x65\x66\157\162\x65", ["\x74\145\x6d\160\x6c\141\x74\145" => $XW4wf]); goto ddEMC; ghCmo: goto zoA2m; goto ZL0dB; ryglY: $yijRH = $XW4wf["\164\x65\x6d\160\x6c\141\164\x65\x5f\163\165\x62\152\x65\x63\x74"]; goto ghCmo; doN11: if (isset($jWnF5["\143\162\155\x5f\x73\x75\x62\x6a\145\143\164"])) { goto De_HM; } goto ryglY; vBODR: $Omh2q = Mage::getModel("\161\161\165\x6f\164\x65\141\x64\166\57\161\161\141\144\166\143\165\x73\x74\157\x6d\x65\x72")->load($EOifg["\x71\165\157\164\145\x5f\151\x64"]); goto g3H4E; pk3or: } public function fixdatabaseAction() { goto kxCw8; NjlkM: $this->_redirectUrl($yqco2); goto aRuDz; saoWo: $yqco2 = Mage::helper("\x61\144\x6d\151\156\x68\x74\x6d\x6c")->getUrl("\141\x64\x6d\x69\x6e\x68\164\155\x6c\57\163\x79\x73\164\145\155\137\143\157\156\x66\x69\x67\x2f\x65\x64\x69\164\x2f\163\145\143\x74\x69\157\x6e\57\x71\x71\165\x6f\164\145\141\x64\x76\x5f\163\x75\x70\160\157\x72\x74"); goto NjlkM; nI92x: $i74qu = $tiNtf->getTableName("\x63\x6f\x72\145\57\x72\x65\x73\157\165\x72\143\145"); goto m2cBS; ncazX: zeHXw: goto saoWo; AmrL9: $tiNtf = Mage::getSingleton("\x63\157\162\145\x2f\x72\145\x73\x6f\x75\162\x63\145"); goto RJn_4; m2cBS: $Ge7QU = "\x55\x50\x44\101\x54\x45\40" . $i74qu . "\x20\x53\x45\x54\x20\x76\x65\x72\x73\x69\157\156\x20\75\40\42" . $TToX_ . "\x22\40\127\x48\x45\122\x45\40\143\x6f\144\145\x20\75\40\42\x63\x72\155\x61\144\144\x6f\156\x5f\x73\x65\164\x75\x70\x22\73"; goto nqXbn; RJn_4: $usUuY = $tiNtf->getConnection("\x63\x6f\162\x65\137\167\162\x69\x74\x65"); goto nI92x; nqXbn: $usUuY->query($Ge7QU); goto kcxON; Qp_MS: if (!$TToX_) { goto zeHXw; } goto AmrL9; kxCw8: $TToX_ = Mage::getStoreConfig("\x71\x71\x75\157\164\x65\x61\x64\166\x5f\x73\141\154\x65\x73\x5f\x72\x65\160\x72\x65\x73\x65\x6e\x74\x61\164\151\166\145\163\57\154\141\x73\164\x5f\165\x70\x64\x61\164\145\x5f\x76\145\162\x73\x69\157\x6e"); goto Qp_MS; kcxON: $rXdQX = "\x55\x50\x44\101\124\x45\x20" . $i74qu . "\x20\123\105\124\40\144\141\164\x61\x5f\166\x65\x72\163\151\157\156\40\75\40\42" . $TToX_ . "\42\x20\127\x48\105\122\105\x20\143\x6f\144\145\40\x3d\40\42\143\162\155\141\144\x64\157\156\x5f\x73\145\x74\165\x70\42\73"; goto zmY8v; zmY8v: $usUuY->query($rXdQX); goto ncazX; aRuDz: } protected function _isAllowed() { $xKKJu = "\x73\x61\154\145\x73\57\161\x71\165\x6f\x74\x65\x61\144\x76\x2f\143\162\155\141\144\144\157\x6e"; return Mage::getSingleton("\141\144\x6d\151\156\x2f\x73\145\x73\x73\x69\157\156")->isAllowed($xKKJu); } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Crmaddon
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Crmaddon_Adminhtml_CrmaddonController
+ */
+class Ophirah_Crmaddon_Adminhtml_CrmaddonController extends Mage_Adminhtml_Controller_Action
+{
+    // Defining constants
+    const XML_PATH_CRMADDON_EMAIL_TEMPLATE = 'qquoteadv_sales_representatives_messaging_crmaddon_container';
+    const CHECKBOX_ENABLED = "on";
+
+    /**
+     * required fields
+     *
+     * @param null $option
+     * @return mixed
+     */
+    public function getRequired($option = NULL)
+    {
+
+        $return = [];
+        $return['sendMail'] = ['crm_subject' => 'subject',
+            'crm_message' => 'message'
+        ];
+
+        return $return[$option];
+    }
+
+    /**
+     *  Process Form data from Cart2Quote module
+     *  CRM message post action.
+     */
+    public function crmmessageAction()
+    {
+        // Get data from Post        
+        $crmData = $this->getCrmdata();
+        $quote_id = $crmData['crm_id'];
+
+        Mage::dispatchEvent('ophirah_crmaddon_crmmessage_before', [$crmData]);
+
+        // check empty fields
+        $required = $this->getRequired('sendMail');
+        foreach ($crmData as $key => $value) {
+            if ($value == NULL || $value == '') {
+                if (array_key_exists($key, $required)) {
+                    $message = $this->__("Datafield %s is empty", $required[$key]);
+                    Mage::getSingleton('adminhtml/session')->addError($message);
+                }
+            }
+        }
+
+        // set return path
+        $returnPath = $this->getBaseReturnPath($quote_id, $crmData) . '/crmaddon/1';
+
+        // Check for a valid Enterprise License
+        if (!Mage::helper('qquoteadv/license')->validLicense('messaging', $crmData['createHash'])) {
+            $errorMsg = Ophirah_Crmaddon_Helper_Data::CRMADDON_UPGRADE_MESSAGE;
+            $errorLink = Ophirah_Crmaddon_Helper_Data::CRMADDON_UPGRADE_LINK;
+            Mage::getSingleton('adminhtml/session')->addError($this->__($errorMsg, $errorLink));
+            $this->_redirect($returnPath);
+            return;
+        }
+
+        if (!isset($errorMsg) && !isset($message)) {
+            try {
+                $sendMail = $this->sendEmail($crmData);
+
+                if (empty($sendMail)) {
+                    $message = $this->__("CRM message couldn't be sent to the client");
+                    Mage::getSingleton('adminhtml/session')->addError($message);
+                } elseif (is_string($sendMail) && $sendMail == Ophirah_Crmaddon_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL) {
+                    Mage::getSingleton('adminhtml/session')->addNotice($this->__('Sending CRM Email is disabled'));
+                } else {
+                    if (isset($crmData['crm_notifyCustomer']) && $crmData['crm_notifyCustomer'] == 1) {
+                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__('CRM Email was sent'));
+                    }
+                }
+
+            } catch (Exception $e) {
+                $message = $this->__("CRM message couldn't be sent to the client");
+                Mage::log('Exception: CRMAddon: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                Mage::getSingleton('adminhtml/session')->addError($message);
+            }
+        }
+
+        $this->_redirect($returnPath);
+        Mage::dispatchEvent('ophirah_crmaddon_crmmessage_after', [$crmData]);
+    }
+
+    /**
+     *  Select CRM_addon data only
+     *  from the Form Post data
+     *
+     * @return array
+     */
+    public function getCrmdata()
+    {
+        $return['createHash'] = null;
+        foreach ($this->getRequest()->getPost() as $key => $value) {
+            if ($key == 'crm_notifyCustomer' && $value == self::CHECKBOX_ENABLED) {
+                $return[$key] = 1;
+            } else {
+                if (substr($key, 0, 4) == "crm_" || $key == 'createHash') {
+                    $return[$key] = $value;
+                }
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * Send email to client to informing about the quote proposition
+     * @param   Array ()     // $params customer address
+     * @return bool|mixed
+     */
+    public function sendEmail($crmData)
+    {
+        $res = null;
+
+        //Create an array of variables to assign to template
+        $vars = [];
+        $storeId = $crmData['crm_storeId'];
+
+        // Setting vars
+        $vars['crmaddonBody'] = $crmData['crm_message'];
+        $vars['message'] = $crmData['crm_message'];
+        $vars['store'] = Mage::app()->getStore($storeId);
+
+        // Prepare data for saving to database
+        $saveData = $this->prepareSaveData($crmData);
+
+        // Check if customer needs to be notified
+        if (!isset($saveData['customer_notified'])){
+            $res = true;
+        } elseif ((int)$saveData['customer_notified'] == 1) {
+            $template = Mage::helper('crmaddon')->getEmailTemplateModel($storeId);
+
+            $default_template = Mage::getStoreConfig('qquoteadv_sales_representatives/messaging/crmaddon_container', $storeId);
+            $disabledEmail = Ophirah_Crmaddon_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL;
+
+            //check for disabled template
+            if($default_template != $disabledEmail) {
+                $res = $this->sendEmailWithTemplate($crmData, $default_template, $storeId, $template, $vars, $saveData);
+            }
+        }
+
+        $qquote = Mage::getModel('qquoteadv/qqadvcustomer')->load($saveData['quote_id']);
+        $saveData['customer_id']    = (int)$qquote->getCustomerId();
+        $saveData['user_id']        = (int)$qquote->getUserId();
+        $crmaddonmessages = Mage::getModel('crmaddon/crmaddonmessages')->setData($saveData)->save();
+        Mage::dispatchEvent('ophirah_crmaddon_send_after_save', ['crm_addon_messages_model' => $crmaddonmessages]);
+        return $res;
+    }
+
+
+    /**
+     *  Load selected message template
+     *  for CRMaddon textarea
+     */
+    public function loadtemplateAction()
+    {
+        $crmData = $this->getCrmdata();
+        Mage::dispatchEvent('ophirah_crmaddon_loadtemplate_before', [$crmData]);
+        $msgtemplate = $crmData['crm_message_template'];
+        $quote_id = $crmData['crm_id'];
+
+        // Check Cart2Quote license
+        Mage::helper('crmaddon')->checkLicense(null, $crmData['createHash']);
+
+        $returnPath = $this->getBaseReturnPath($quote_id, $crmData) . '/crmtmpl/' . $msgtemplate;
+
+        $this->_redirect($returnPath);
+        Mage::dispatchEvent('ophirah_crmaddon_loadtemplate_after', [$crmData]);
+    }
+
+    /**
+     *  Load selected crm bodytemplate
+     *  for CRMaddon textarea
+     */
+    public function loadcrmtemplateAction()
+    {
+        $crmData = $this->getCrmdata();
+        Mage::dispatchEvent('ophirah_crmaddon_loadcrmtemplate_before', [$crmData]);
+        $bodytemplate = $crmData['crm_bodyId'];
+        $quote_id = $crmData['crm_id'];
+
+        // Check Cart2Quote license
+        Mage::helper('crmaddon')->checkLicense(null, $crmData['createHash']);
+
+        $returnPath = $this->getBaseReturnPath($quote_id, $crmData) . '/crmbodytmpl/' . $bodytemplate;
+
+        $this->_redirect($returnPath);
+        Mage::dispatchEvent('ophirah_crmaddon_loadcrmtemplate_after', [$crmData]);
+    }
+
+    /**
+     *  Save crm bodytemplate
+     *  from CRMaddon textarea
+     */
+    public function savecrmtemplateAction()
+    {
+        $crmData = $this->getCrmdata();
+        $quote_id = $crmData['crm_id'];
+        $bodyTmplId = $crmData['crm_bodytemplateid'];
+
+        Mage::dispatchEvent('ophirah_crmaddon_savecrmtemplate_before', [$crmData]);
+
+        // Check Cart2Quote license
+        Mage::helper('crmaddon')->checkLicense(null, $crmData['createHash']);
+
+        if (!isset($crmData['crm_templatedefault'])) {
+            $crmData['crm_templatedefault'] = 0;
+        }
+
+        //Check default setting
+        if ((int)$crmData['crm_templatedefault'] == 1) {
+            $this->resetDefault();
+        }
+
+        // set return path
+        $returnPath = $this->getBaseReturnPath($quote_id, $crmData) . '/crmbodytmpl/' . $bodyTmplId;
+        // get template from DB
+        $template = Mage::getModel('crmaddon/crmaddontemplates')->load($bodyTmplId);
+        // collect save data array
+        $saveData = $this->prepareSavetemplateData($crmData);
+        // set data
+        $template->setData($saveData);
+        // save and return
+        $this->saveTemplate($template, $returnPath);
+
+        Mage::dispatchEvent('ophirah_crmaddon_savecrmtemplate_after', [$crmData]);
+    }
+
+    /**
+     *  Create new crm bodytemplate
+     *  from CRMaddon textarea
+     */
+    public function newcrmtemplateAction()
+    {
+        $crmData = $this->getCrmdata();
+        $quote_id = $crmData['crm_id'];
+        $bodyTmplId = $crmData['crm_bodytemplateid'];
+
+        Mage::dispatchEvent('ophirah_crmaddon_newcrmtemplate_before', [$crmData]);
+
+        // Check Cart2Quote license
+        Mage::helper('crmaddon')->checkLicense(null, $crmData['createHash']);
+
+        if (!isset($crmData['crm_templatedefault'])) {
+            $crmData['crm_templatedefault'] = 0;
+        }
+
+        //Check default setting
+        if ((int)$crmData['crm_templatedefault'] == 1) {
+            $this->resetDefault();
+        }
+
+        // set return path
+        $returnPath = $this->getBaseReturnPath($quote_id, $crmData);
+        // Check unique template name
+        $templateNames = Mage::helper('crmaddon')->getTemplates();
+        foreach ($templateNames as $templateName) {
+            if (trim($crmData['crm_templatename']) == trim($templateName['name'])) {
+                $message = Mage::helper('crmaddon')->__("CRM template name allready exists");
+            }
+        }
+
+        if (isset($message)) {
+            Mage::getSingleton('adminhtml/session')->addError($message);
+            $this->_redirect($returnPath);
+        } else {
+            // collect save data array
+            $saveData = $this->prepareSavetemplateData($crmData);
+
+            // template_id needs to be unset for creating new template
+            unset($saveData['template_id']);
+            $save = Mage::getModel('crmaddon/crmaddontemplates')->setData($saveData);
+
+            $this->saveTemplate($save, $returnPath, true);
+        }
+
+        Mage::dispatchEvent('ophirah_crmaddon_newcrmtemplate_after', [$crmData]);
+    }
+
+    /**
+     *  Delete crm bodytemplate
+     *  from database
+     */
+    public function deletecrmtemplateAction()
+    {
+        $crmData = $this->getCrmdata();
+        $quote_id = $crmData['crm_id'];
+        Mage::dispatchEvent('ophirah_crmaddon_deletecrmtemplate_before', [$crmData]);
+
+        // Check Cart2Quote license
+        Mage::helper('crmaddon')->checkLicense(null, $crmData['createHash']);
+
+        // set return path
+        $defaultTemplate = $this->getDefaultTemplate();
+        $returnPath = $this->getBaseReturnPath($quote_id, $crmData) . '/crmbodytmpl/' . $defaultTemplate[0]['template_id'];
+
+        $templateId = (int)$crmData['crm_bodyId'];
+
+        try {
+            if (!empty($templateId)) {
+                $delete = Mage::getModel('crmaddon/crmaddontemplates')->load($templateId)->delete();
+            } else {
+                $delete = '';
+            }
+
+            if (empty($delete)) {
+                $message = $this->__("CRM template couldn't be deleted from the database");
+                Mage::getSingleton('adminhtml/session')->addError($message);
+            } else {
+                $message = $this->__("CRM template has been succesfully deleted from the database");
+                Mage::getSingleton('adminhtml/session')->addSuccess($message);
+
+            }
+
+        } catch (Exception $e) {
+            $message = $this->__("CRM template couldn't be deleted from the database");
+            Mage::log('Exception: CRMAddon: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            Mage::getSingleton('adminhtml/session')->addError($message);
+        }
+
+        $this->_redirect($returnPath);
+        Mage::dispatchEvent('ophirah_crmaddon_deletecrmtemplate_after', [$crmData]);
+    }
+
+    /**
+     *  Saving data from Form
+     *  to the database
+     *
+     * @param $saveData
+     * @param $returnPath
+     * @param bool $new
+     * @internal param $Array ()     // $saveData   - Prepared data from form
+     * @internal param $Array ()     // $returnPath - Path to redirect
+     */
+    public function saveTemplate($saveData, $returnPath, $new = false)
+    {
+        try {
+            $save = $saveData->save();
+
+            if (empty($save)) {
+                $message = $this->__("CRM template couldn't be saved to the database");
+                Mage::getSingleton('adminhtml/session')->addError($message);
+            } else {
+                $message = $this->__("CRM template has succesfully been saved to the database");
+                Mage::getSingleton('adminhtml/session')->addSuccess($message);
+
+            }
+
+        } catch (Exception $e) {
+            $message = $this->__("CRM template couldn't be saved to the database");
+            Mage::log('Exception: CRMAddon: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            Mage::getSingleton('adminhtml/session')->addError($message);
+        }
+
+        if ($new === true) {
+            $DB_templates = Mage::getModel('crmaddon/crmaddontemplates')
+                ->getCollection()
+                ->addFieldToFilter('name', $saveData['name']);
+
+            $bodyTmplId = 0;
+            foreach ($DB_templates as $DB_template) {
+                $bodyTmplId = $DB_template->getData('template_id');
+            }
+
+            $returnPath = $returnPath . '/crmbodytmpl/' . $bodyTmplId;
+        }
+
+        $this->_redirect($returnPath);
+    }
+
+    /**
+     *  Prepare data from Form to save to the database
+     *
+     * @param   array   // Data from form
+     * @return  array   // Data with keyname as the database column names
+     */
+    public function prepareSaveData($crmData)
+    {
+
+        $returnData = [];
+        $translateArray = ['quote_id' => 'crm_id',
+            'email_address' => 'crm_customerEmail',
+            'subject' => 'crm_subject',
+            'template_id' => 'crm_message_template',
+            'message' => 'crm_message',
+            'customer_notified' => 'crm_notifyCustomer'
+        ];
+
+        foreach ($translateArray as $key => $value) {
+            if (isset($crmData[$value])){
+                $crmData[$value] = trim($crmData[$value]);
+                if ($key == 'message') {
+                    $crmData[$value] = htmlentities($crmData[$value], ENT_QUOTES, "UTF-8");
+                }
+                $returnData[$key] = $crmData[$value];
+            }
+        }
+
+        $returnData['created_at'] = now();
+        $returnData['updated_at'] = now();
+
+        return $returnData;
+    }
+
+
+    /**
+     *  Prepare data from Form to save to the database
+     *
+     * @param   array   //Data from form
+     * @return  array   //Data with keyname as the database column names
+     */
+    public function prepareSavetemplateData($crmData)
+    {
+        $saveData = [];
+        // at the moment unused variable
+        $crmData['crm_status'] = 1;
+        $translateArray = ['template_id' => 'crm_bodytemplateid',
+            'name' => 'crm_templatename',
+            'subject' => 'crm_templatesubject',
+            'template' => 'crm_templatebody',
+            'default' => 'crm_templatedefault',
+            'status' => 'crm_status'
+        ];
+
+        foreach ($translateArray as $key => $value) {
+            $crmData[$value] = trim($crmData[$value]);
+            if ($key == 'template') {
+                $crmData[$value] = htmlentities($crmData[$value], ENT_QUOTES, "UTF-8");
+            }
+            $saveData[$key] = $crmData[$value];
+        }
+
+        return $saveData;
+    }
+
+    /**
+     *  Creates returnpath
+     *
+     * @param $quote_id
+     * @param $crmData
+     * @return string // Returnpath
+     * @internal param $decimal // QuoteId
+     */
+    public function getBaseReturnPath($quote_id, $crmData)
+    {
+        if ($crmData['crm_moduleName'] == NULL || $crmData['crm_moduleName'] == 'admin') {
+            $crmData['crm_moduleName'] = '*';
+        }
+        $return = $crmData['crm_moduleName'] . '/' . $crmData['crm_controllerName'] . '/' . $crmData['crm_actionName'] . '/id/' . $quote_id;
+
+        return $return;
+    }
+
+    /**
+     * Function that returns all default CRMaddon templates in an array
+     *
+     * @return array
+     */
+    public function getDefaultTemplate()
+    {
+        $defaultemplate = [];
+        $DB_defaultTemplates = Mage::getModel('crmaddon/crmaddontemplates')
+            ->getCollection()
+            ->setOrder('template_id', 'ASC');
+
+        foreach ($DB_defaultTemplates as $DB_default) {
+            if ($DB_default->getData('default') == 1) {
+                $defaultemplate[] = $DB_default->getData();
+            }
+        }
+
+        return $defaultemplate;
+    }
+
+    /**
+     * Function that resets all default templates to no default
+     */
+    public function resetDefault()
+    {
+        $defaultTemplate = $this->getDefaultTemplate();
+
+        foreach ($defaultTemplate as $default) {
+            Mage::getModel('crmaddon/crmaddontemplates')
+                ->load($default['template_id'])
+                ->setData('default', 0)
+                ->save();
+        }
+
+    }
+
+    /**
+     * @param $crmData
+     * @param $default_template
+     * @param $storeId
+     * @param $template
+     * @param $vars
+     * @param $saveData
+     * @return mixed
+     */
+    public function sendEmailWithTemplate($crmData, $default_template, $storeId, $template, $vars, $saveData)
+    {
+        if ($default_template) {
+            $templateId = $default_template;
+        } else {
+            $templateId = self::XML_PATH_CRMADDON_EMAIL_TEMPLATE;
+        }
+
+        // get locale of quote sent so we can sent email in that language
+        $storeLocale = Mage::getStoreConfig('general/locale/code', $storeId);
+
+        if (is_numeric($templateId)) {
+            $template->load($templateId);
+        } else {
+            $template->loadDefault($templateId, $storeLocale);
+        }
+
+        if (isset($crmData['crm_subject'])) {
+            $subject = Mage::helper('core')->escapeHtml($crmData['crm_subject']);
+        } else {
+            $subject = $template['template_subject'];
+        }
+        $vars['subject'] = $subject;
+
+        $sender = Mage::getModel('qquoteadv/qqadvcustomer')->load($saveData['quote_id'])->getEmailSenderInfo();
+
+        $template->setSenderName($sender['name']);
+        $template->setSenderEmail($sender['email']);
+        $template->setTemplateSubject($subject);
+        $template->setDesignConfig(['store' => $storeId]);
+
+        // getting vars
+        $qquote = Mage::getModel('qquoteadv/qqadvcustomer')->load($saveData['quote_id']);
+        $customer = Mage::getModel('customer/customer')->load($qquote->getCustomerId());
+
+        //get vars for template
+        $admin = Mage::getModel('admin/user')->load($qquote->getUserId());
+        $adminName = $admin->getFirstname() . ' ' . $admin->getLastname();
+        $remark = Mage::getStoreConfig('qquoteadv_quote_configuration/proposal/qquoteadv_remark', $qquote->getStoreId());
+        $sender = Mage::getModel('qquoteadv/qqadvcustomer')->load($qquote->getId())->getEmailSenderInfo();
+
+        //set vars for template
+        $varsExtra = [
+            'quote' => $qquote,
+            'customer' => Mage::getModel('customer/customer')->load($qquote->getCustomerId()),
+            'quoteId' => $qquote->getId(),
+            'storeId' => $qquote->getStoreId(),
+            'adminname' => $adminName,
+            'adminphone' => $admin->getTelephone(),
+            'remark' => $remark,
+            'link' => Mage::getUrl("qquoteadv/view/view/", [
+                'id' => $qquote->getId(),
+                '_store' => $qquote->getStoreId()
+            ]),
+            'adminlink' => Mage::getModel('adminhtml/url')->turnOffSecretKey()->getUrl("*/qquoteadv/edit", [
+                'id' => $qquote->getId(),
+                '_store' => $qquote->getStoreId()
+            ]),
+            'sender' => $sender,
+            'CRMcustomername' => $customer->getName(),
+            'CRMsendername' => $sender['name']
+        ];
+
+        $vars = array_merge($vars, $varsExtra);
+
+        /**
+         * Opens the qquote_request.html, throws in the variable array
+         * and returns the 'parsed' content that you can use as body of email
+         */
+        //$template->getProcessedTemplate($vars);
+
+        /*
+         * getProcessedTemplate is called inside send()
+         */
+        Mage::dispatchEvent('ophirah_crmaddon_addSendMail_before', ['template' => $template]);
+        $res = $template->send($customer->getEmail(), $customer->getName(), $vars);
+        Mage::dispatchEvent('ophirah_crmaddon_addSendMail_after', ['template' => $template, 'result' => $res]);
+        return $res;
+    }
+
+    /**
+     * Function that resets the core_resource crmaddon version to the last installed script version.
+     */
+    public function fixdatabaseAction() {
+        $last_update_version = Mage::getStoreConfig('qquoteadv_sales_representatives/last_update_version');
+        if($last_update_version){
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $table = $resource->getTableName('core/resource');
+
+            $versionSql = 'UPDATE ' . $table . ' SET version = "' . $last_update_version . '" WHERE code = "crmaddon_setup";';
+            $writeConnection->query($versionSql);
+
+            $dataVersionSql = 'UPDATE ' . $table . ' SET data_version = "' . $last_update_version . '" WHERE code = "crmaddon_setup";';
+            $writeConnection->query($dataVersionSql);
+        }
+
+        $url = Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/qquoteadv_support");
+        $this->_redirectUrl($url);
+    }
+
+    /**
+     * Acl check for admin
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $aclResource = 'sales/qquoteadv/crmaddon';
+        return Mage::getSingleton('admin/session')->isAllowed($aclResource);
+    }
+}

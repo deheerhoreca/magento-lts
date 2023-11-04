@@ -1,5 +1,399 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Crmaddon_Helper_Data extends Mage_Core_Helper_Abstract { const DTPhx = "\x54\150\x65\40\x43\x52\x4d\x20\155\157\144\x75\x6c\x65\40\x69\x73\x20\160\x61\162\x74\x20\x6f\146\x20\164\150\145\x20\103\141\162\x74\62\x51\165\157\x74\145\40\105\156\164\x65\162\x70\162\151\163\145\x20\166\145\162\x73\151\x6f\156\56\x20\74\141\x20\x68\162\x65\146\75\47\x25\163\x27\40\x74\x61\x72\147\x65\164\75\x27\142\154\x61\x6e\153\47\76\125\160\x67\162\141\144\145\40\157\162\40\143\x68\x61\156\x67\145\x20\164\x6f\x20\141\x20\160\141\x69\x64\x20\x70\154\141\x6e\74\57\x61\x3e\40\x74\x6f\40\165\x6e\x6c\x6f\x63\153\40\x6d\x6f\162\145\x20\146\145\x61\x74\x75\162\x65\x73"; const Iexmz = "\150\164\x74\x70\163\72\x2f\x2f\167\167\167\56\x63\x61\162\x74\62\x71\165\x6f\164\x65\56\143\x6f\x6d\x2f\x6d\141\147\145\x6e\x74\157\55\x71\165\x6f\x74\141\164\151\x6f\156\55\155\157\144\x75\x6c\x65\x2d\160\162\x69\143\x69\x6e\x67\56\x68\x74\x6d\x6c\77\x75\x74\x6d\x5f\163\x6f\x75\x72\x63\x65\75\143\154\151\145\x6e\x74\x77\145\x62\x73\x69\164\x65\x26\x75\x74\155\137\155\x65\144\x69\165\155\x3d\x63\x6c\151\145\156\x74\167\145\142\163\151\164\145\46\165\164\x6d\137\x74\145\x72\x6d\x3d\165\x70\x67\x72\141\x64\145\103\122\115\x26\165\164\x6d\x5f\x63\x6f\156\x74\145\x6e\164\x3d\165\160\x67\162\141\x64\x65\x43\x52\x4d\x26\x75\x74\x6d\x5f\143\141\155\160\x61\151\x67\156\x3d\165\x70\x67\162\141\x64\x65\x43\122\115"; const fdXus = "\x68\x74\164\160\163\72\x2f\x2f\167\167\x77\x2e\x63\141\162\x74\62\161\165\x6f\x74\145\56\x63\157\155\x2f\155\141\147\145\x6e\164\157\x2d\x71\165\x6f\x74\x61\x74\x69\x6f\156\x2d\x6d\157\x64\165\x6c\145\x2d\x70\x72\x69\143\x69\156\147\x2f\x6d\141\x67\145\x6e\164\x6f\55\x63\141\162\164\62\161\165\157\164\145\x2d\x65\x6e\164\x65\162\160\162\x69\x73\x65\x2e\x68\x74\x6d\154\77\165\164\x6d\137\163\157\165\x72\143\145\x3d\x63\x6c\x69\x65\156\164\x77\x65\142\163\x69\x74\145\46\x75\164\155\x5f\x6d\145\x64\x69\x75\155\x3d\x63\x6c\151\145\x6e\164\x77\145\142\x73\x69\164\x65\46\x75\x74\155\137\164\x65\x72\x6d\75\165\x70\147\162\x61\x64\145\x43\x52\115\x26\x75\x74\155\137\143\157\x6e\x74\x65\156\164\x3d\x75\160\147\162\141\x64\145\x43\122\x4d\x26\x75\x74\x6d\x5f\x63\141\x6d\160\x61\x69\x67\x6e\75\x75\160\x67\x72\x61\144\x65\x43\x52\x4d"; const T5pdM = "\124\x6f\40\x75\163\x65\x20\x74\x68\145\x20\x43\122\x4d\x20\x6d\x6f\x64\165\x6c\x65\x20\x6f\x66\40\x43\141\162\x74\62\x51\165\157\164\145\40\141\156\144\40\163\x65\156\x64\40\155\145\x73\163\x61\x67\145\x73\x20\164\157\x20\171\157\x75\x72\x20\x63\x75\x73\164\157\x6d\145\x72\x73\302\240\74\141\x20\150\x72\145\146\x3d\47\x25\163\x27\x20\164\x61\x72\147\x65\164\x3d\x27\x62\x6c\141\156\x6b\47\x3e\x75\160\x67\x72\x61\x64\x65\x3c\x2f\x61\76\40\x74\x6f\x20\x43\141\162\164\x32\121\165\157\x74\145\40\x45\156\164\145\x72\x70\x72\x69\x73\x65"; public function getTemplates() { goto VV3de; Mc32I: gyQfL: goto vDPoF; Syb0p: $c4DeP = Mage::getModel("\x63\x72\155\x61\x64\144\157\156\57\143\x72\155\141\x64\x64\157\x6e\164\145\x6d\x70\x6c\x61\x74\x65\x73")->getCollection()->addFieldToFilter("\163\x74\x61\164\x75\163", 267/267); goto SY7BQ; dt6gE: $SN58C = []; goto Syb0p; SY7BQ: foreach ($c4DeP as $YM7eP) { goto EY2CB; xSfWz: rpEOi: goto LKGkv; H6vnK: $RggwA[$YM7eP->getTemplateId()] = $YM7eP->getData(); goto xSfWz; EY2CB: if (!($YM7eP->getData("\144\x65\146\141\x75\154\x74") == 186/186)) { goto Qyt8i; } goto cUmoX; cUmoX: $SN58C["\x64\x65\x66\x61\x75\154\x74"] = $YM7eP->getData(); goto HdAhs; HdAhs: Qyt8i: goto H6vnK; LKGkv: } goto Mc32I; vDPoF: $RggwA = $SN58C + $RggwA; goto t6A_J; VV3de: $RggwA = []; goto dt6gE; t6A_J: return $RggwA; goto l6vA4; l6vA4: } public function createOptions($RggwA) { goto F9Dy6; JD9Uh: foreach ($RggwA as $Tv2X3 => $xNuMd) { goto HtVLa; YsVc8: goto h1Tji; goto ZdhvE; jf1z_: $KFjV9[$xNuMd["\164\145\155\160\154\x61\164\145\137\151\144"]] = $xNuMd["\x6e\x61\x6d\x65"]; goto YsVc8; HtVLa: if (isset($RggwA["\144\145\x66\x61\165\x6c\x74"]["\x74\145\x6d\x70\x6c\141\x74\x65\x5f\x69\x64"]) && !empty($RggwA["\x64\x65\x66\x61\x75\x6c\164"]["\x74\145\155\x70\154\141\x74\145\137\151\144"])) { goto O5Hg4; } goto jf1z_; V6hnu: Gy1uo: goto re8dd; MNlEi: h1Tji: goto V6hnu; QAjzM: $KFjV9[$xNuMd["\x74\145\155\x70\x6c\x61\164\145\137\151\x64"]] = $xNuMd["\156\141\155\145"]; goto l5KXg; l5KXg: fT40T: goto MNlEi; ZdhvE: O5Hg4: goto sTR0z; sTR0z: if (!($Tv2X3 != $RggwA["\x64\145\x66\141\x75\154\x74"]["\164\x65\x6d\x70\154\x61\x74\145\x5f\151\144"])) { goto fT40T; } goto QAjzM; re8dd: } goto BkIOW; F9Dy6: $KFjV9 = []; goto JD9Uh; pjOxn: return $KFjV9; goto PeiGM; BkIOW: P0RPE: goto pjOxn; PeiGM: } public function getMessages($lOPYJ, $QI6zG = true) { goto HG31m; InTPq: if (!empty($R1rPq)) { goto daIVq; } goto LR7UZ; OVYB_: return $R1rPq; goto hWPZE; EvqJ1: L90Uj: goto C6uS6; n5rfJ: krsort($R1rPq); goto OVYB_; C6uS6: if (!$QI6zG) { goto sh7Fs; } goto j6DYT; LR7UZ: $R1rPq[] = ["\x6d\145\163\x73\x61\x67\x65" => "\40", "\163\165\142\152\x65\x63\164" => "\x20", "\x63\x72\145\x61\164\x65\144\x5f\x61\x74" => now()]; goto aQ7zu; OL8fd: KCujg: goto hFSUD; hFSUD: sh7Fs: goto InTPq; j6DYT: $rP4SS = Mage::getModel("\x71\161\165\157\x74\x65\x61\144\x76\x2f\161\165\157\164\145\164\162\141\151\x6c")->getCollection()->addFieldToFilter("\161\165\x6f\164\145\x5f\151\144", $lOPYJ)->setOrder("\x74\162\141\x69\x6c\x5f\x69\144", "\104\x45\x53\103"); goto x53J0; x53J0: foreach ($rP4SS as $KRjDt) { goto J2mku; Rip7f: $umbf8 = $R7eCR->getTimestamp() . "\61" . (17700000/177 + (int) $KRjDt->getTrailId()); goto IKOmv; VQTP6: $R7eCR = DateTime::createFromFormat("\131\x2d\x6d\x2d\x64\40\x48\72\151\72\163", $KRjDt->getData("\x63\x72\x65\x61\x74\145\x64\x5f\x61\x74")); goto Rip7f; IKOmv: $R1rPq[$umbf8] = $KRjDt->getData(); goto gHhNT; RAbKw: $KRjDt->setData("\x73\165\x62\152\x65\143\x74", $this->__("\123\164\x61\164\x75\163\x20\165\x70\x64\x61\x74\x65\x20\50\x73\x79\x73\164\145\155\x20\x6d\145\x73\x73\141\147\x65\51")); goto VQTP6; J2mku: $KRjDt->setData("\155\x65\x73\163\141\147\x65\x5f\151\144", "\164\162\141\x69\x6c" . $KRjDt->getTrailId()); goto RAbKw; gHhNT: G6Bmu: goto sM75s; sM75s: } goto OL8fd; aQ7zu: daIVq: goto n5rfJ; HG31m: $R1rPq = []; goto AhAe0; TEMS4: foreach ($XsCDM as $KRjDt) { goto v5iAQ; XWtc3: $hQXXm = $this->getShortMsg($Dm90I); goto qvhsr; yPxq8: D97Er: goto IvUgY; BQsrr: $R7eCR = DateTime::createFromFormat("\131\x2d\x6d\x2d\144\40\x48\x3a\x69\x3a\163", $KRjDt->getData("\x63\162\x65\x61\x74\x65\144\137\x61\164")); goto ZMDwn; qvhsr: $KRjDt->setData("\155\145\163\163\141\x67\145", $KRjDt->getData("\155\x65\163\x73\141\147\145")); goto YmddL; ZMDwn: $umbf8 = $R7eCR->getTimestamp() . "\x30" . (35700000/357 + (int) $KRjDt->getMessageId()); goto L64Jv; U1VE0: if (isset($hQXXm["\155\x65\163\x73\141\147\145\x5f\x32"])) { goto goX_x; } goto ax02c; eqpUy: $KRjDt->setData("\155\145\x73\x73\141\x67\x65\x5f\x32", $hQXXm["\x6d\145\163\163\x61\x67\x65\137\62"]); goto BQsrr; Htwyj: $hQXXm["\x6d\145\163\x73\141\x67\145\137\x31"] = ''; goto yPxq8; YmddL: if (isset($hQXXm["\x6d\145\x73\163\x61\x67\x65\137\x31"])) { goto D97Er; } goto Htwyj; FB0z0: goX_x: goto eqpUy; L64Jv: $R1rPq[$umbf8] = $KRjDt->getData(); goto H7e2_; ax02c: $hQXXm["\155\x65\x73\163\x61\147\145\137\x32"] = null; goto FB0z0; IvUgY: $KRjDt->setData("\x6d\x65\163\163\141\x67\145\137\61", $hQXXm["\x6d\145\x73\163\141\x67\145\137\x31"]); goto U1VE0; H7e2_: xt0D_: goto sjEKP; v5iAQ: $Dm90I = $this->stripHtmlTags($KRjDt->getData("\x6d\x65\163\163\141\x67\x65")); goto XWtc3; sjEKP: } goto EvqJ1; AhAe0: $XsCDM = Mage::getModel("\x63\x72\x6d\x61\x64\144\157\x6e\x2f\x63\162\155\141\x64\144\157\156\155\145\x73\163\x61\x67\x65\x73")->getCollection()->addFieldToFilter("\x71\165\157\164\145\x5f\151\144", $lOPYJ)->setOrder("\x6d\x65\x73\x73\141\147\x65\x5f\x69\144", "\x44\x45\123\x43"); goto TEMS4; hWPZE: } public function stripHtmlTags($YFjny) { goto AO7gc; iUJ7X: $nzcSm = ''; goto nikkf; HyBZM: HdvZx: goto EezRF; F9R7e: foreach ($VNJaq as $QAxRw) { goto ikIBs; KXa5M: JlfvG: goto TkBZ0; ikIBs: if (!empty($QAxRw[1620/810])) { goto JlfvG; } goto kqCBp; Xtwvl: XKW_r: goto yYwIq; TkBZ0: $nzcSm = str_replace($QAxRw[690/690], $QAxRw[994/497], $ldiod); goto aGD7m; kqCBp: $QAxRw[1558/779] = $QAxRw[0][0]; goto KXa5M; aGD7m: $ldiod = $nzcSm; goto Xtwvl; yYwIq: } goto w3KkP; xPMd8: $VNJaq[] = [["\x3c\x70\x3e"], "\133\x5b\41\x21\43\x23\120\x4f\x50\105\116\x23\x23\41\41\x5d\x5d"]; goto mbAxI; nikkf: $QkvxZ = trim(html_entity_decode($YFjny)); goto y3vjz; w3KkP: KqZoH: goto X0OAG; D67qt: $VNJaq[] = [["\x3c\x62\162\76", "\74\x62\x72\x2f\76", "\74\x62\x72\x20\57\76"], "\x5b\133\x21\41\43\x23\102\122\x45\x41\113\x23\x23\41\41\135\135", "\x3c\x62\162\x20\x2f\x3e"]; goto xPMd8; ofgIf: $ldiod = ''; goto iUJ7X; mbAxI: $VNJaq[] = [["\x3c\57\x70\76"], "\133\133\41\41\43\43\120\x43\x4c\117\123\x45\x23\43\x21\41\x5d\135"]; goto ofgIf; X0OAG: return $nzcSm; goto JVqjR; EezRF: $ldiod = strip_tags($ldiod); goto F9R7e; y3vjz: foreach ($VNJaq as $QAxRw) { goto T7tZt; vnJQv: $QkvxZ = $ldiod; goto QtDl3; QtDl3: UJt8W: goto N4z1T; T7tZt: $ldiod = str_replace($QAxRw[0], $QAxRw[225/225], $QkvxZ); goto vnJQv; N4z1T: } goto HyBZM; AO7gc: $VNJaq = []; goto D67qt; JVqjR: } public function getShortMsg($YFjny) { goto kzCSD; x9zAS: $SLLSk = []; goto eJgiL; kzCSD: $ap6Wh = Mage::getStoreConfig("\161\161\165\157\x74\145\141\144\x76\x5f\163\141\x6c\x65\163\137\162\x65\x70\162\145\x73\145\x6e\164\x61\x74\x69\166\145\x73\x2f\x6d\x65\x73\163\141\x67\x69\x6e\x67\x2f\x63\162\x6d\141\x64\x64\157\156\137\x73\150\x6f\x72\x74\x6d\x73\147"); goto x9zAS; d1o9Q: $SLLSk["\x6d\145\x73\x73\x61\147\145\x5f\61"] = trim(substr($YFjny, 0, $ap6Wh)); goto S0Dmn; ILjYO: return $SLLSk; goto Futc9; eJgiL: if (!(strlen($YFjny) >= $ap6Wh)) { goto XGiXi; } goto d1o9Q; S0Dmn: $SLLSk["\155\x65\x73\163\141\x67\145\137\x32"] = trim(substr($YFjny, $ap6Wh)); goto QrE2J; QrE2J: XGiXi: goto ILjYO; Futc9: } public function tabIsActive() { goto nMK_H; EwByA: return true; goto cPzTT; cPzTT: rpR3y: goto n9f6S; nMK_H: if (!Mage::app()->getRequest()->getParam("\143\162\155\x62\x6f\144\x79\x74\x6d\160\x6c")) { goto rpR3y; } goto EwByA; n9f6S: return false; goto VS2h6; VS2h6: } public final function checkLicense($IDbJa = NULL) { goto zd88k; EGVso: Ib3I0: goto n3hyQ; zd88k: if (!($IDbJa == NULL)) { goto Ib3I0; } goto bBnUg; I1E6h: $IDbJa["\154\x69\x6e\153"] = Ophirah_Crmaddon_Helper_Data::Iexmz; goto EGVso; i6GTU: zkBG6: goto rzH5U; rV3TU: if (!is_array($IDbJa)) { goto tJkhS; } goto ZDbH8; n3hyQ: if (Mage::helper("\x71\x71\x75\157\x74\x65\141\144\166\57\x6c\x69\143\145\156\163\x65")->validLicense("\155\145\x73\x73\x61\147\x69\x6e\x67", null, true)) { goto idRlh; } goto rV3TU; mFvcm: Mage::getSingleton("\x61\x64\155\x69\156\x68\x74\x6d\154\x2f\163\145\x73\163\151\x6f\x6e")->addNotice($this->__($IDbJa)); goto i6GTU; ZDbH8: Mage::getSingleton("\141\144\x6d\x69\x6e\x68\164\155\x6c\57\163\145\x73\x73\x69\157\x6e")->addNotice($this->__($IDbJa["\155\145\163\x73\141\x67\x65"], $IDbJa["\x6c\151\156\153"])); goto nrQLw; bBnUg: $IDbJa["\155\x65\163\163\141\x67\145"] = Ophirah_Crmaddon_Helper_Data::DTPhx; goto I1E6h; nrQLw: goto zkBG6; goto rk05k; rzH5U: idRlh: goto g8Y_T; rk05k: tJkhS: goto mFvcm; g8Y_T: } public function duplicateQuoteMessagesToNewQuote($KPEmb, $xcNzB) { goto DHcQm; X1Khi: foreach ($cw9au as $YFjny) { goto szuPl; szuPl: $YeVbB = $YFjny->getData(); goto FMgzB; FMgzB: unset($YeVbB["\x6d\x65\163\x73\x61\147\145\137\x69\x64"]); goto FZtt_; xJG0W: $pUIfm = Mage::getModel("\143\x72\x6d\141\144\144\157\156\x2f\143\162\x6d\x61\144\x64\x6f\x6e\x6d\x65\x73\x73\x61\147\x65\x73")->setData($YeVbB); goto IoJQ5; IoJQ5: $pUIfm->setData("\x71\x75\x6f\x74\145\x5f\x69\x64", $xcNzB->getData("\161\165\x6f\164\x65\x5f\151\144")); goto D9j85; FZtt_: unset($YeVbB["\161\x75\157\x74\x65\137\151\144"]); goto xJG0W; D9j85: $pUIfm->save(); goto ety01; ety01: Q9UBf: goto cZOkk; cZOkk: } goto JJHRR; JJHRR: QHqUA: goto KczRV; DHcQm: $cw9au = Mage::getModel("\x63\162\x6d\x61\144\x64\157\156\57\143\162\x6d\x61\144\144\157\x6e\x6d\x65\x73\163\x61\147\x65\163")->getCollection()->addFieldToFilter("\161\x75\x6f\164\145\x5f\x69\x64", $KPEmb->getData("\x71\165\x6f\164\x65\x5f\x69\144"))->setOrder("\x6d\x65\163\x73\x61\147\145\x5f\151\144", "\104\105\123\x43"); goto X1Khi; KczRV: return; goto M3_yB; M3_yB: } public function getEmailTemplateModel($Jqj3K = null) { goto XaUBe; IzrTY: if (!Mage::helper("\143\157\162\x65")->isModuleEnabled("\102\162\157\156\164\x6f\137\x45\155\x61\151\x6c")) { goto YA1ZS; } goto X1G7C; Ntg3N: Jvd6Y: goto rlFIE; FOAlL: return Mage::getModel("\143\157\162\145\57\145\x6d\141\151\154\x5f\x74\x65\x6d\x70\x6c\x61\164\145"); goto VcCGz; JtWF5: MWxlr: goto IzrTY; XLwMT: $h4wF9->setStoreId($Jqj3K); goto QAflT; iMXSb: if (!Mage::helper("\143\157\162\145")->isModuleEnabled("\x45\x62\151\172\155\x61\162\x74\x73\137\115\141\x6e\x64\162\151\x6c\154")) { goto MWxlr; } goto Jo3TT; XaUBe: if (!($Jqj3K == null)) { goto T3eu1; } goto iC2Of; rUCT3: return Mage::getModel("\143\162\x6d\141\x64\x64\x6f\156\57\x74\x65\155\x70\154\x61\164\x65\x73\155\x74\x70\141\155\141\x73\164\x79"); goto O2ZMC; iC2Of: $Jqj3K = Mage::app()->getStore()->getId(); goto kUkYb; kUkYb: T3eu1: goto cBBsG; QAflT: return $h4wF9; goto JtWF5; rlFIE: if (!Mage::helper("\143\157\162\x65")->isModuleEnabled("\x41\155\x61\x73\x74\x79\137\x53\155\x74\160")) { goto zfUYf; } goto rUCT3; X1G7C: return Mage::getModel("\x63\x6f\x72\x65\x2f\145\x6d\141\x69\x6c\x5f\x74\x65\155\160\x6c\141\x74\x65"); goto fEpzs; s950u: return Mage::getModel("\143\x72\155\x61\144\x64\157\156\x2f\164\145\155\x70\x6c\141\x74\x65\163\155\164\160\x70\162\157"); goto Ntg3N; Jo3TT: $h4wF9 = Mage::getModel("\143\x72\155\x61\x64\144\x6f\x6e\57\x74\x65\x6d\160\154\141\164\x65\x6d\x61\156\x64\x72\x69\154\154"); goto XLwMT; cBBsG: if (!Mage::helper("\143\157\162\145")->isModuleEnabled("\101\x73\x63\x68\162\157\144\x65\162\x5f\x53\x4d\x54\120\x50\x72\x6f")) { goto Jvd6Y; } goto s950u; fEpzs: YA1ZS: goto FOAlL; O2ZMC: zfUYf: goto iMXSb; VcCGz: } public function getAllowedHtmlTags() { $o_l6M = ["\163\x74\x72\x6f\156\x67", "\x70", "\142\x72", "\x65\155", "\x61\x5b\141\x2d\172\x41\55\132\x3d\x22\x2d\x5f\x3a\x5c\x73\x5c\x3b\x5c\xe2\200\234\x5c\x22\x5c\342\200\x9d\x5c\56\x27\x5d\x2a\77", "\163\160\141\x6e\133\x61\55\x7a\101\55\132\75\42\x2d\x5f\72\x5c\x73\x5c\73\134\xe2\x80\x9c\134\42\x5c\342\x80\x9d\x5c\x2e\x27\135\52\77"]; return $o_l6M; } public function escapeHtml($E2ch8, $o_l6M = null, $xyLmn = false) { goto bPwpS; WVlq5: $oEUW3 = str_replace("\43\43\161\x75\x6f\x74\x23\x23", "\x22", $oEUW3); goto zN59m; nwO79: mmIUu: goto T3NFO; rJEjF: $oEUW3 = htmlspecialchars($oEUW3, ENT_COMPAT, "\125\x54\x46\x2d\70", false); goto ZM6nH; MXpwY: if (strlen($E2ch8)) { goto C2aQS; } goto zX9uZ; yoSrp: p7bKf: goto ekiCF; msFUM: LxW7u: goto HVqS0; bPwpS: if (!(!$xyLmn && !is_array($E2ch8))) { goto Y7xyh; } goto jbOwe; zX9uZ: $oEUW3 = $E2ch8; goto Tej9b; zN59m: mcF4a: goto sHD7G; uItXK: preg_match_all("\x2f\x3c\50\x5b\134\x2f\134\163\134\x72\x5c\156\135\x2a\51\x28" . $nTePQ . "\x29\x28\133\x5c\57\134\x73\134\162\134\x6e\135\52\51\x3e\x2f\x73\x69", $E2ch8, $xRpkS, PREG_SET_ORDER); goto Cjj8A; F9are: $oEUW3 = htmlspecialchars($E2ch8, ENT_COMPAT, "\x55\x54\106\x2d\x38", false); goto MmxuI; avYnu: aMPDr: goto sJyOs; ZM6nH: if (!$xyLmn) { goto mcF4a; } goto WVlq5; z4sQd: C2aQS: goto DtmX9; C26OF: $oEUW3 = preg_replace("\x2f\x3c\50\x5b\x5c\57\x5c\x73\134\x72\134\156\135\52\x29\x28" . $nTePQ . "\x29\x28\x5b\x5c\x2f\134\163\134\x72\134\x6e\135\52\x29\76\x2f\x73\151", "\43\x23\44\x31\44\62\x24\63\43\x23", $E2ch8); goto rJEjF; EpXyH: return $oEUW3; goto SK0pb; VBVlN: gM2Gm: goto C26OF; jbOwe: return Mage::helper("\x63\x6f\x72\145")->escapeHtml($E2ch8, $o_l6M); goto cGEka; x6YAS: foreach ($E2ch8 as $eA9uH) { $oEUW3[] = $this->escapeHtml($eA9uH, $o_l6M, $xyLmn); rA8Xd: } goto msFUM; sJyOs: $nTePQ = implode("\174", $o_l6M); goto n6BBc; T3NFO: $oEUW3 = []; goto x6YAS; AYC7E: ZYLuJ: goto yoSrp; sHD7G: $oEUW3 = preg_replace("\x2f\x23\x23\50\133\x5c\57\134\163\134\162\134\x6e\x5d\x2a\51\50" . $nTePQ . "\x29\x28\x5b\134\57\134\163\x5c\x72\x5c\x6e\x5d\52\x29\x23\43\x2f\x73\151", "\74\x24\61\x24\62\x24\63\76", $oEUW3); goto AYC7E; dCnQz: if (is_array($E2ch8)) { goto mmIUu; } goto MXpwY; n6BBc: if (!$xyLmn) { goto gM2Gm; } goto uItXK; Cjj8A: foreach ($xRpkS as $gNArT) { goto oNNIx; OTzC5: $pvUAK = str_replace("\42", "\x23\x23\x71\165\157\x74\43\x23", $fRwEj); goto xIsUg; xIsUg: $E2ch8 = str_replace($fRwEj, $pvUAK, $E2ch8); goto tRnLp; MiUSe: $fRwEj = $gNArT[0]; goto OTzC5; eCX2_: CJ2_9: goto VdbGc; tRnLp: YyBUq: goto eCX2_; oNNIx: if (!(!empty($gNArT) && is_array($gNArT) && isset($gNArT[0]))) { goto YyBUq; } goto MiUSe; VdbGc: } goto sfHa3; ekiCF: goto U9W4O; goto nwO79; MmxuI: goto ZYLuJ; goto avYnu; Tej9b: goto p7bKf; goto z4sQd; DtmX9: if (is_array($o_l6M) and !empty($o_l6M)) { goto aMPDr; } goto F9are; HVqS0: U9W4O: goto EpXyH; sfHa3: hU2fa: goto VBVlN; cGEka: Y7xyh: goto dCnQz; SK0pb: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Crmaddon
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Crmaddon_Helper_Data
+ */
+class Ophirah_Crmaddon_Helper_Data extends Mage_Core_Helper_Abstract
+{
+    // Defining constants
+    const CRMADDON_NOTICE = "The CRM module is part of the Cart2Quote Enterprise version. <a href='%s' target='blank'>Upgrade or change to a paid plan</a> to unlock more features";
+    const CRMADDON_NOTICE_LINK = "https://www.cart2quote.com/magento-quotation-module-pricing.html?utm_source=clientwebsite&utm_medium=clientwebsite&utm_term=upgradeCRM&utm_content=upgradeCRM&utm_campaign=upgradeCRM";
+    const CRMADDON_UPGRADE_LINK = "https://www.cart2quote.com/magento-quotation-module-pricing/magento-cart2quote-enterprise.html?utm_source=clientwebsite&utm_medium=clientwebsite&utm_term=upgradeCRM&utm_content=upgradeCRM&utm_campaign=upgradeCRM";
+    const CRMADDON_UPGRADE_MESSAGE = "To use the CRM module of Cart2Quote and send messages to your customers <a href='%s' target='blank'>upgrade</a> to Cart2Quote Enterprise";
+
+    /**
+     *  Retrieve array with message templates
+     *  from crmaddontemplates table
+     * 
+     *  @return array   // Database data
+     */
+    public function getTemplates()
+    {
+        $templates = [];
+        $default = [];
+        $DB_templates = Mage::getModel('crmaddon/crmaddontemplates')
+            ->getCollection()
+            ->addFieldToFilter('status', 1);
+
+        foreach ($DB_templates as $DB_template) {
+            if ($DB_template->getData('default') == 1) {
+                $default['default'] = $DB_template->getData();
+            }
+
+            $templates[$DB_template->getTemplateId()] = $DB_template->getData();
+
+        }
+
+        $templates = $default + $templates;
+
+        return $templates;
+    }
+
+    /**
+     * This function makes an array of possible CRMaddon templates
+     *
+     * @param $templates
+     * @return array
+     */
+    public Function createOptions($templates)
+    {
+        // create options from template array
+        $options = [];
+        foreach ($templates as $key => $value){
+            if(isset($templates['default']['template_id']) && !empty($templates['default']['template_id'])){
+                if ($key != $templates['default']['template_id']) {
+                    $options[$value['template_id']] = $value['name'];
+                }
+            } else {
+                $options[$value['template_id']] = $value['name'];
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     *  Retrieve array with messages
+     *  from crmaddonmesages table
+     *
+     * @param $quote_id
+     * @param bool $includeStateUpdates
+     * @return array    //Database data
+     * @internal param $decimal // Quote Id
+     */
+    public function getMessages($quote_id, $includeStateUpdates = true)
+    {
+        $messages = [];
+
+        $DB_messages = Mage::getModel('crmaddon/crmaddonmessages')
+            ->getCollection()
+            ->addFieldToFilter('quote_id', $quote_id)
+            ->setOrder('message_id', 'DESC');
+
+        foreach ($DB_messages as $DB_message) {
+            // replace message tekst with Html stripped tekst
+            $newMsg = $this->stripHtmlTags($DB_message->getData('message'));
+            // get short message
+            $shortMsg = $this->getShortMsg($newMsg);
+
+            $DB_message->setData('message', $DB_message->getData('message'));
+
+            if(!isset($shortMsg['message_1'])){
+                $shortMsg['message_1'] = '';
+            }
+            $DB_message->setData('message_1', $shortMsg['message_1']);
+
+            if(!isset($shortMsg['message_2'])){
+                $shortMsg['message_2'] = null;
+            }
+            $DB_message->setData('message_2', $shortMsg['message_2']);
+
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $DB_message->getData('created_at'));
+            $aKey = $date->getTimestamp().'0'.(100000+(int)$DB_message->getMessageId());
+            $messages[$aKey] = $DB_message->getData();
+
+        }
+
+        if($includeStateUpdates){
+            //trail
+            $trailMessages = Mage::getModel('qquoteadv/quotetrail')
+                ->getCollection()
+                ->addFieldToFilter('quote_id', $quote_id)
+                ->setOrder('trail_id', 'DESC');
+
+            foreach ($trailMessages as $DB_message) {
+                $DB_message->setData('message_id', 'trail'.$DB_message->getTrailId());
+
+                $DB_message->setData('subject', $this->__('Status update (system message)'));
+                $date = DateTime::createFromFormat('Y-m-d H:i:s', $DB_message->getData('created_at'));
+                $aKey = $date->getTimestamp().'1'.(100000+(int)$DB_message->getTrailId());
+                $messages[$aKey] = $DB_message->getData();
+            }
+        }
+
+        // create empty message if no messages are found
+        if (empty($messages)) {
+            $messages[] = ['message' => ' ',
+                'subject' => ' ',
+                'created_at' => now()
+            ];
+        }
+
+        krsort($messages);
+        return $messages;
+    }
+
+    /**
+     *  Strip Html markup, and
+     *  insert break tags
+     *
+     * @param  string // message text
+     * @return string     // new string
+     */
+    public function stripHtmlTags($message)
+    {
+        // Defining Arrays for replacement
+        // first    - array with target text
+        // second   - temp replacement text
+        // third    - final replacement text, if different from first
+        $totalReplace = [];
+        $totalReplace[] = [["<br>", "<br/>", "<br />"], "[[!!##BREAK##!!]]", "<br />"];
+        $totalReplace[] = [["<p>"], "[[!!##POPEN##!!]]"];
+        $totalReplace[] = [["</p>"], "[[!!##PCLOSE##!!]]"];
+        $replaceMsg = '';
+        $returnMsg = '';
+
+        // trim and decode message
+        $trimMessage = (trim(html_entity_decode($message)));
+        // replace text with temp text and strip Html
+        foreach ($totalReplace as $replacetext) {
+            $replaceMsg = str_replace($replacetext[0], $replacetext[1], $trimMessage);
+            $trimMessage = $replaceMsg;
+        }
+        // strip remaining tags
+        $replaceMsg = strip_tags($replaceMsg);
+        // replace temptext with html tag        
+        foreach ($totalReplace as $replacetext) {
+            if (empty($replacetext[2])) {
+                $replacetext[2] = $replacetext[0][0];
+            }
+            $returnMsg = str_replace($replacetext[1], $replacetext[2], $replaceMsg);
+            $replaceMsg = $returnMsg;
+        }
+
+        return $returnMsg;
+    }
+
+    /**
+     *  Cut message in 2 pieces
+     *  for shorttext display
+     *
+     * @param  string // message text
+     * @return array()    // array with short message
+     */
+    public function getShortMsg($message)
+    {
+        $shortMsglength = Mage::getStoreConfig('qquoteadv_sales_representatives/messaging/crmaddon_shortmsg');
+
+        $return = [];
+        if (strlen($message) >= $shortMsglength) {
+            $return['message_1'] = trim(substr($message, 0, $shortMsglength));
+            $return['message_2'] = trim(substr($message, $shortMsglength));
+
+        }
+
+        return $return;
+    }
+
+    /**
+     * Check if the CRMaddon tab on the edit quote page is selected
+     *
+     * @return bool
+     */
+    public function tabIsActive()
+    {
+        if (Mage::app()->getRequest()->getParam('crmbodytmpl')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * CRMaddon Module is only available
+     * fot Enterprise users of Cart2Quote
+     *
+     * @param   mixed      // Message to display, with or without link
+     */
+    final public function checkLicense($notice = NULL)
+    {
+
+        // Check for a valid Enterprise License
+        if ($notice == NULL) {
+            $notice['message'] = Ophirah_Crmaddon_Helper_Data::CRMADDON_NOTICE;
+            $notice['link'] = Ophirah_Crmaddon_Helper_Data::CRMADDON_NOTICE_LINK;
+        }
+
+        if (!Mage::helper('qquoteadv/license')->validLicense('messaging', null, true)) {
+            if (!is_array($notice)) {
+                Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice));
+            } else {
+                Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice['message'], $notice['link']));
+            }
+        }
+
+    }
+
+    /**
+     * @param $oldQuote
+     * @param $newQuote
+     */
+    public function duplicateQuoteMessagesToNewQuote($oldQuote, $newQuote){
+        $oldQuote_messages = Mage::getModel('crmaddon/crmaddonmessages')
+            ->getCollection()
+            ->addFieldToFilter('quote_id', $oldQuote->getData('quote_id'))
+            ->setOrder('message_id', 'DESC');
+
+        foreach ($oldQuote_messages as $message) {
+            //duplicate message for new quote
+            $cloneData = $message->getData();
+            unset($cloneData['message_id']);
+            unset($cloneData['quote_id']);
+            $new_message = Mage::getModel("crmaddon/crmaddonmessages")->setData($cloneData);
+            $new_message->setData("quote_id", $newQuote->getData("quote_id"));
+            $new_message->save();
+        }
+
+        return;
+    }
+
+    /**
+     * Function that adds support for SMTPPro and Amasty SMTP
+     *
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getEmailTemplateModel($storeId = null)
+    {
+        if ($storeId == null) {
+            $storeId = Mage::app()->getStore()->getId();
+        }
+
+        if (Mage::helper('core')->isModuleEnabled('Aschroder_SMTPPro')) {
+            return Mage::getModel('crmaddon/templatesmtppro');
+        }
+
+        if (Mage::helper('core')->isModuleEnabled('Amasty_Smtp')) {
+            return Mage::getModel('crmaddon/templatesmtpamasty');
+        }
+
+        if (Mage::helper('core')->isModuleEnabled('Ebizmarts_Mandrill')) {
+            $mandrillModel = Mage::getModel('crmaddon/templatemandrill');
+            $mandrillModel->setStoreId($storeId);
+            return $mandrillModel;
+        }
+
+        if (Mage::helper('core')->isModuleEnabled('Bronto_Email')) {
+            return Mage::getModel('core/email_template');
+        }
+
+        return Mage::getModel('core/email_template');
+    }
+
+    /**
+     * Get the allowed HTML tags for usage in the escapeHtml function
+     *
+     * @return array
+     */
+    public function getAllowedHtmlTags()
+    {
+        //list the HTML tags that don't need escaping
+        $allowedTags = [
+            'strong',
+            'p',
+            'br',
+            'em',
+            'a[a-zA-Z="-_:\s\;\“\"\”\.\']*?',
+            'span[a-zA-Z="-_:\s\;\“\"\”\.\']*?',
+        ];
+
+        return $allowedTags;
+    }
+
+    /**
+     * Escape html entities
+     *
+     * @param mixed $data
+     * @param null $allowedTags
+     * @param bool $allowInnerQuotes
+     * @return array|mixed|string
+     */
+    public function escapeHtml($data, $allowedTags = null, $allowInnerQuotes = false)
+    {
+        if (!$allowInnerQuotes && !is_array($data)) {
+            return Mage::helper('core')->escapeHtml($data, $allowedTags);
+        }
+
+        if (is_array($data)) {
+            $result = [];
+            foreach ($data as $item) {
+                $result[] = $this->escapeHtml($item, $allowedTags, $allowInnerQuotes);
+            }
+        } else {
+            // process single item
+            if (strlen($data)) {
+                if (is_array($allowedTags) and !empty($allowedTags)) {
+                    $allowed = implode('|', $allowedTags);
+
+                    //add tag to keep inner quotes
+                    if ($allowInnerQuotes) {
+                        preg_match_all(
+                            '/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si',
+                            $data,
+                            $matches,
+                            PREG_SET_ORDER
+                        );
+                        foreach ($matches as $match) {
+                            if (!empty($match) && is_array($match) && isset($match[0])) {
+                                $innerTag = $match[0];
+                                $innerTagAllowed = str_replace('"', '##quot##', $innerTag);
+
+                                $data = str_replace($innerTag, $innerTagAllowed, $data);
+                            }
+                        }
+                    }
+
+                    $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
+                    $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+
+                    //replace tag to keep inner quotes
+                    if ($allowInnerQuotes) {
+                        $result = str_replace('##quot##', '"', $result);
+                    }
+
+                    $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
+                } else {
+                    $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+                }
+            } else {
+                $result = $data;
+            }
+        }
+
+        return $result;
+    }
+}

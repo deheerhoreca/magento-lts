@@ -1,6 +1,953 @@
 <?php
-// DHH NOTE: https://www.unphp.net/ to decode
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract { private $HcRno = "\x55\x6e\160\141\x69\144\x20\x75\163\x61\x67\x65\40\157\x66\40\157\x75\x72\x20\x6c\151\143\145\x6e\163\x65\144\40\x66\165\156\x63\x74\151\x6f\x6e\141\154\x69\x74\x69\x65\163\40\151\x73\40\x70\x72\x6f\150\x69\x62\x69\x74\x65\144\56"; private $npBbM = "\x55\156\160\141\151\144\40\x75\x73\x61\147\145\x20\x6f\x66\x20\157\165\162\40\x6c\151\143\x65\x6e\x73\145\144\40\146\x75\x6e\143\164\151\157\156\x61\x6c\x69\x74\151\x65\163\x20\151\163\x20\x70\162\157\x68\151\142\x69\164\x65\x64\x2e"; private $Tygur = "\125\x6e\x70\x61\151\x64\40\x75\163\x61\x67\145\x20\x6f\146\x20\157\165\x72\x20\x6c\151\x63\145\x6e\163\145\144\x20\x66\165\156\x63\x74\151\x6f\x6e\x61\x6c\x69\x74\x69\x65\x73\x20\151\x73\x20\x70\162\157\150\151\x62\151\164\145\144\56"; private $ne1g8 = "\x55\156\160\x61\x69\x64\x20\x75\163\141\x67\145\40\157\x66\x20\x6f\165\162\40\154\x69\x63\x65\156\x73\145\x64\x20\146\x75\x6e\x63\164\151\x6f\156\141\x6c\x69\x74\x69\145\x73\x20\151\163\40\x70\x72\157\x68\x69\142\x69\164\145\144\x2e"; private $JyuRf = "\x55\x6e\160\x61\x69\x64\40\x75\163\141\x67\x65\40\157\x66\40\x6f\x75\162\40\x6c\151\143\x65\x6e\x73\145\144\x20\x66\x75\156\143\164\x69\157\x6e\x61\x6c\151\164\x69\145\x73\x20\151\163\x20\x70\162\157\150\151\x62\x69\164\x65\x64\x2e"; private $f209S = "\x55\156\x70\x61\151\144\x20\x75\x73\141\x67\x65\x20\x6f\146\x20\157\x75\x72\x20\154\x69\143\145\156\x73\x65\x64\40\146\x75\x6e\x63\164\151\x6f\x6e\141\154\151\x74\151\145\163\40\x69\x73\40\x70\162\x6f\150\x69\x62\x69\164\x65\x64\x2e"; private static $rLzUA = 16585210651/821; private $zcQ_R = false; private $vq9Ea = null; const UUNI4 = "\163\x74\x61\156\x64\141\162\x64"; const ni_gP = "\160\162\157\x66\145\163\x73\151\157\x6e\x61\154"; const jKqt0 = "\x65\156\164\145\x72\160\162\151\x73\x65"; const QenVP = "\124\162\x69\x61\x6c"; const mt2o3 = "\123\164\x61\162\164\x65\x72"; const pxcSy = "\x42\165\x73\x69\x6e\145\163\163"; const dVBtr = "\x45\x6e\164\x65\x72\x70\x72\x69\x73\145"; private $CYbZD = array(self::UUNI4 => array("\143\162\145\x61\164\x65\x2d\x65\144\x69\164\55\141\144\x6d\x69\156" => array("\x70\162\x69\x6e\x74\114\x61\142\x65\154" => null, "\x63\x6f\x6e\x66\x69\x67\120\141\164\x68" => null), "\x6d\171\55\x71\165\157\164\x65\x73" => array("\x70\x72\151\156\164\x4c\x61\142\x65\154" => null, "\x63\157\x6e\x66\x69\147\120\141\164\150" => null), "\x6e\x6f\156\x2d\146\162\145\x65" => array("\x70\162\x69\156\x74\x4c\141\142\145\x6c" => null, "\143\x6f\x6e\146\151\x67\120\141\164\x68" => null), "\x73\164\x61\156\144\141\x72\x64" => array("\160\x72\x69\156\164\x4c\141\142\x65\154" => null, "\143\157\x6e\146\151\147\x50\x61\x74\150" => null), "\163\164\x61\x72\164\x65\162" => array("\160\x72\151\156\164\114\x61\x62\x65\x6c" => null, "\143\157\x6e\146\151\x67\x50\x61\164\x68" => null)), self::ni_gP => array("\141\x75\164\157\137\160\x72\157\160\x6f\x73\x61\x6c" => array("\x70\162\x69\x6e\x74\114\141\x62\145\x6c" => "\101\165\164\x6f\40\x50\162\x6f\160\157\x73\141\x6c", "\x63\157\x6e\146\x69\x67\120\x61\164\x68" => "\144\145\146\x61\165\154\164\57\x71\x71\165\157\x74\x65\141\x64\166\x5f\161\165\157\x74\x65\x5f\143\x6f\156\146\x69\x67\x75\x72\x61\x74\x69\157\x6e\57\160\162\157\x70\157\x73\141\154\x2f\x61\165\x74\157\137\x70\x72\x6f\160\157\163\141\x6c"), "\x65\155\141\x69\154\55\x61\165\x74\157\55\x6c\157\147\151\x6e" => array("\160\x72\x69\156\164\x4c\141\142\x65\154" => null, "\x63\157\156\x66\x69\x67\120\x61\164\150" => null), "\x70\x72\x6f\x66\x65\163\163\151\157\156\x61\154" => array("\x70\x72\151\156\164\x4c\141\x62\x65\154" => null, "\143\x6f\156\x66\151\x67\x50\141\x74\x68" => null), "\x62\x75\x73\x69\156\x65\163\x73" => array("\x70\162\x69\x6e\164\x4c\141\x62\145\154" => null, "\x63\157\x6e\146\151\x67\120\x61\164\x68" => null), "\x71\x75\x69\143\153\137\161\x75\157\164\x65\x5f\155\157\144\x65" => array("\160\x72\151\156\x74\114\141\142\x65\154" => "\x45\x6e\x61\x62\154\145\x20\121\x75\151\x63\x6b\40\121\x75\x6f\x74\145", "\x63\x6f\156\146\151\x67\x50\x61\164\x68" => "\x64\145\x66\141\x75\x6c\164\57\x71\161\x75\x6f\x74\x65\x61\x64\166\137\161\x75\x6f\164\x65\x5f\146\162\157\156\164\x65\x6e\x64\57\143\141\x74\141\154\157\x67\57\x71\x75\x69\x63\x6b\x5f\x71\165\157\164\x65\137\155\157\x64\x65"), "\154\x69\156\153\x5f\x61\x75\164\157\x5f\154\157\147\151\x6e" => array("\x70\x72\151\156\164\x4c\141\142\145\154" => "\101\x75\x74\157\x20\x55\163\145\x72\40\114\157\147\151\x6e", "\143\157\156\x66\x69\147\x50\x61\x74\150" => "\x64\145\146\141\165\154\x74\x2f\161\x71\x75\157\x74\145\141\144\x76\137\141\144\x76\141\x6e\x63\145\144\137\163\145\x74\x74\x69\156\x67\x73\57\143\x68\x65\x63\x6b\157\x75\164\57\x6c\x69\156\x6b\137\141\165\x74\157\137\x6c\157\x67\151\156"), "\x61\165\164\157\137\x61\163\163\x69\147\x6e\137\x6c\x6f\147\151\x6e" => array("\160\162\151\156\x74\114\x61\x62\x65\x6c" => "\x41\x73\x73\x69\x67\156\x20\121\x75\157\x74\145\x20\x74\x6f\x20\114\157\x67\147\145\144\40\151\156\x20\x53\x61\x6c\x65\x73\40\x52\x65\160\162\x65\163\x65\x6e\164\x61\x74\151\166\145", "\143\157\156\x66\151\147\120\x61\164\150" => "\x64\x65\x66\141\x75\x6c\x74\57\x71\161\x75\157\164\145\141\144\166\137\163\x61\154\145\x73\x5f\162\x65\160\162\x65\x73\x65\x6e\164\141\164\x69\x76\145\163\x2f\x71\x75\x6f\x74\x65\137\x61\x73\163\151\147\156\155\x65\156\x74\57\x61\x75\x74\x6f\x5f\141\163\x73\x69\x67\156\x5f\x6c\x6f\147\x69\x6e")), self::jKqt0 => array("\x61\x70\151" => array("\160\162\x69\156\164\x4c\x61\142\x65\154" => null, "\x63\157\x6e\x66\151\x67\120\x61\x74\150" => null), "\145\x78\160\157\162\x74" => array("\x70\162\151\x6e\164\114\x61\142\x65\x6c" => null, "\x63\x6f\156\146\x69\x67\x50\x61\x74\x68" => null), "\x6d\x65\163\163\x61\x67\151\x6e\x67" => array("\x70\162\x69\156\164\x4c\x61\x62\x65\154" => "\x43\122\x4d\40\x61\x64\x64\x6f\156\x20\x73\x65\x74\164\x69\x6e\x67\x73", "\143\157\x6e\x66\151\147\120\141\x74\x68" => "\x64\145\x66\x61\x75\154\x74\57\161\x71\165\157\164\x65\x61\x64\x76\x5f\x73\x61\x6c\145\x73\x5f\x72\145\x70\x72\145\163\x65\156\164\x61\x74\x69\x76\145\x73\57\x6d\x65\163\163\x61\x67\x69\156\x67"), "\155\x61\x73\163\137\165\160\x64\141\x74\145\137\x71\x75\x6f\x74\x65\x5f\162\x65\x71\x75\145\163\164\163" => array("\160\162\x69\156\x74\x4c\141\142\x65\x6c" => null, "\143\157\156\x66\x69\x67\120\x61\x74\x68" => null), "\x73\145\x6e\144\x5f\x72\145\155\x69\156\144\x65\x72" => array("\x70\162\x69\156\164\114\x61\x62\x65\x6c" => "\x44\145\x66\141\165\154\164\40\122\145\x6d\x69\156\144\x65\162\40\x4e\157\x74\151\143\145", "\x63\x6f\156\x66\151\x67\120\141\x74\150" => "\144\145\x66\141\x75\x6c\164\57\161\161\x75\x6f\164\145\x61\x64\x76\x5f\161\x75\x6f\164\145\137\143\157\x6e\146\x69\x67\165\162\141\164\151\157\x6e\x2f\x65\170\160\151\x72\141\x74\151\157\156\137\164\x69\x6d\145\x73\137\141\156\144\137\x6e\157\164\151\x63\145\x73\57\163\x65\x6e\144\x5f\x72\145\155\x69\156\x64\x65\162"), "\161\161\165\157\164\145\x61\144\x76\137\161\x71\x75\157\164\145\141\144\x76\x5f\x65\170\x70\x69\162\x65\137\145\x6d\x61\151\x6c" => array("\x70\162\x69\156\164\114\x61\x62\145\x6c" => null, "\143\157\x6e\x66\151\147\120\x61\164\150" => null), "\x63\x75\x73\x74\157\155\x70\162\x6f\x64\165\x63\164" => array("\x70\162\x69\x6e\x74\114\x61\142\x65\154" => null, "\x63\157\156\x66\x69\147\120\x61\164\x68" => null), "\143\165\x73\164\157\155\x65\162\137\147\162\x6f\165\x70\x5f\x61\x6c\x6c\157\167" => array("\x70\x72\x69\156\x74\x4c\141\142\x65\x6c" => null, "\x63\x6f\156\x66\151\x67\120\141\164\150" => null), "\x65\156\x74\145\162\160\x72\151\163\145" => array("\160\x72\151\156\164\114\x61\142\145\154" => null, "\143\157\156\x66\151\x67\120\141\x74\150" => null), "\164\x69\x65\162\x2d\143\x6f\x73\x74" => array("\160\x72\x69\x6e\164\x4c\141\x62\145\x6c" => null, "\x63\x6f\x6e\146\151\x67\x50\x61\164\x68" => null), "\163\x75\x70\160\x6c\x69\x65\162\x2d\142\x69\x64\144\x69\x6e\147\x2d\x74\157\x6f\154" => array("\x70\162\x69\x6e\x74\114\x61\142\x65\x6c" => "\123\x75\160\160\x6c\151\145\x72\x20\142\x69\x64\144\151\156\147\x20\x74\x6f\x6f\x6c\40\163\145\x74\x74\x69\x6e\147\163", "\x63\x6f\156\146\x69\x67\120\141\164\x68" => "\144\x65\x66\x61\165\x6c\164\57\163\165\x70\160\154\x69\x65\x72\142\151\144\x64\x69\x6e\147\x74\157\x6f\x6c\57\x67\x65\156\145\162\x61\154\x2f\x65\x6e\x61\142\154\145\x64"), "\163\145\x6e\144\x5f\154\x69\156\153\x65\144\x5f\163\141\x6c\x65\137\x62\143\143" => array("\x70\162\151\x6e\164\x4c\141\x62\145\154" => "\x53\x65\x6e\x64\x20\102\x43\x43\x20\x74\x6f\40\114\151\x6e\153\x65\x64\x20\x53\x61\154\145\163\40\x52\x65\160\162\145\x73\x65\x6e\164\141\164\x69\166\145", "\143\157\156\x66\x69\x67\120\x61\164\150" => "\x64\x65\146\141\165\x6c\x74\x2f\x71\x71\x75\157\164\x65\141\144\x76\x5f\x71\x75\157\164\x65\137\145\x6d\141\151\x6c\x73\x2f\163\x61\x6c\x65\x73\x5f\162\x65\160\162\145\x73\x65\x6e\x74\141\x74\x69\166\145\163\x2f\x73\x65\x6e\144\137\x6c\x69\156\153\x65\144\x5f\163\x61\x6c\145\x5f\x62\143\x63"), "\161\x75\157\164\145\x5f\146\x6f\162\x6d\137\143\165\163\164\x6f\x6d\151\172\x61\164\x69\x6f\x6e" => array("\x70\x72\151\x6e\164\114\141\142\145\x6c" => "\x43\x75\x73\164\157\155\40\x46\151\x65\x6c\144\163", "\143\157\156\146\x69\x67\120\141\x74\150" => "\x64\145\x66\x61\x75\154\x74\x2f\161\161\x75\x6f\x74\145\141\x64\166\x5f\161\165\x6f\x74\x65\x5f\x66\157\162\155\x5f\142\165\x69\x6c\x64\x65\162\x2f\161\165\x6f\164\145\x5f\146\157\162\x6d\137\143\x75\x73\164\157\155\151\x7a\x61\164\151\157\156"), "\x64\x69\163\x70\x6c\x61\x79\137\x74\151\145\162\x70\162\x69\143\x65\x73" => array("\x70\162\x69\156\x74\x4c\x61\x62\145\x6c" => "\x44\151\x73\x70\x6c\x61\x79\x20\x70\x72\157\x64\165\143\164\x20\x74\151\x65\x72\x20\x70\x72\x69\x63\145\x73", "\x63\157\x6e\146\x69\x67\x50\141\x74\150" => "\144\145\x66\x61\x75\154\164\57\x71\161\x75\x6f\164\145\141\x64\x76\137\141\144\x76\141\156\143\145\x64\137\x73\145\x74\x74\151\156\x67\x73\x2f\143\150\145\x63\x6b\x6f\x75\164\x2f\144\151\x73\x70\154\x61\171\x5f\164\151\145\x72\x70\162\x69\143\x65\163"), "\x65\x6e\x61\x62\154\145\137\161\x75\157\164\145\137\x64\151\x72\x65\x63\x74\137\160\162\151\156\164" => array("\x70\x72\151\156\164\114\x61\142\145\154" => "\x45\156\x61\x62\154\145\40\x64\x69\x72\145\143\164\x20\160\162\x69\156\164\151\x6e\x67\x20\x66\x72\x6f\155\40\x71\x75\x6f\x74\x65\40\x6c\x69\163\x74", "\143\x6f\x6e\146\x69\x67\x50\141\x74\x68" => "\161\x71\165\157\164\x65\141\144\x76\137\161\165\157\164\x65\137\x66\x72\157\x6e\x74\x65\156\144\x2f\163\150\x6f\x70\160\151\156\x67\143\x61\x72\x74\137\x71\x75\157\x74\145\154\151\163\x74\57\145\156\x61\x62\x6c\145\137\x71\x75\x6f\164\x65\137\144\x69\162\145\143\164\137\160\x72\x69\x6e\x74"), "\154\151\155\151\164\137\163\x61\154\145\163\x72\145\160\x5f\x71\165\157\x74\145" => array("\x70\162\x69\156\164\114\x61\142\145\154" => null, "\143\157\x6e\146\151\x67\x50\x61\x74\150" => null), "\161\x75\x6f\164\145\x5f\x66\157\162\x6d\137\x66\151\154\145\x5f\165\160\154\157\141\x64" => array("\x70\x72\151\156\164\114\x61\x62\145\x6c" => "\105\156\141\142\154\145\40\x46\151\154\x65\40\x55\x70\154\157\x61\144", "\143\x6f\x6e\x66\x69\x67\120\141\x74\150" => "\161\x71\165\157\164\145\141\x64\166\137\x71\165\157\x74\x65\x5f\x66\x6f\162\155\137\x62\165\151\x6c\144\x65\x72\57\x71\x75\x6f\x74\x65\x5f\x66\x6f\162\x6d\137\146\151\x6c\145\137\165\160\x6c\157\141\144\x2f\145\x6e\141\x62\154\x65\x5f\146\151\154\x65\x5f\165\160\154\x6f\x61\x64"))); private static final function f_mxf() { return "\166\x36\x34\60\x5f\60\x31\60\71\62\60\62\x30\x2b\x53\164\100\x62\154\145\154\122\145\x6c\145\x61\163\x65\x2d\x4f\160\x65\156\115\141\x67\145\x21"; } public final function getC2QExpiryDate() { goto zc7Tm; r9TgE: return date("\x59\x6d\x64", mktime(0, 0, 0, $Sgkw9, $TY1q4 + $v4k32, $vRTpI)); goto Q2HG9; SsGd3: if (!($v4k32 !== null)) { goto tSffU; } goto xI1VC; xI1VC: $vRTpI = (int) substr(self::$rLzUA, 0, 624/156); goto N8NVO; N8NVO: $Sgkw9 = (int) substr(self::$rLzUA, 576/144, 1214/607); goto k80NQ; PJPrW: return self::$rLzUA; goto M4490; k80NQ: $TY1q4 = (int) substr(self::$rLzUA, 2544/424, 1454/727); goto r9TgE; zc7Tm: $v4k32 = self::FtKTN(); goto SsGd3; Q2HG9: tSffU: goto PJPrW; M4490: } public static final function isOpenSourceC2QVersion() { goto Xg7Cw; RyXcd: return true; goto mcCDV; kS4ED: return false; goto vDZcA; Xg7Cw: if (!(strtolower(self::f_mxf()) == "\x6f\160\x65\x6e\163\157\x75\x72\143\145")) { goto jeYT0; } goto RyXcd; mcCDV: jeYT0: goto kS4ED; vDZcA: } public final function hasExpired() { goto Ol7b_; mwDFK: $this->vq9Ea = true; goto ykDFn; P_p0p: $this->vq9Ea = false; goto aWWWi; QgOYP: $v4k32 = $this->FtKTN(); goto RS8cW; Ol7b_: if (!($this->vq9Ea === null)) { goto teJOH; } goto I71xb; ykjv2: byQzX: goto qOHj6; GV2Jg: goto UzUMZ; goto db37j; LJH7u: $this->vq9Ea = true; goto GV2Jg; A9A1K: LYzdI: goto xkBz7; RS8cW: if ($v4k32 !== null) { goto LYzdI; } goto juPN6; AvXcO: teJOH: goto Pwj55; sE3ys: FUUST: goto ykjv2; xkBz7: if (self::$rLzUA > date("\131\155\x64", strtotime("\55" . $v4k32 . "\40\x64\x61\171\163"))) { goto My5h3; } goto LJH7u; I71xb: $this->vq9Ea = false; goto Yse37; PQw1B: if (!($this->FtKTN() === null)) { goto FUUST; } goto mwDFK; ykDFn: return true; goto sE3ys; Y7ud3: JSLp0: goto e_7lx; e_7lx: E6J0w: goto AvXcO; Pwj55: return $this->vq9Ea; goto PGmCR; qOHj6: if (!(self::$rLzUA < date("\x59\x6d\x64") and self::$rLzUA !== false)) { goto E6J0w; } goto QgOYP; Yse37: if (!$this->NEH99()) { goto byQzX; } goto PQw1B; juPN6: $this->vq9Ea = true; goto XFgP1; XFgP1: goto JSLp0; goto A9A1K; aWWWi: UzUMZ: goto Y7ud3; db37j: My5h3: goto P_p0p; PGmCR: } public final function validLicense($GH9Ck, $K_0dz = null, $mhWgI = false) { goto AXmFs; RGeh7: return false; goto TP8rl; x5_qi: q8xPe: goto W4f7R; AH3cv: if (!in_array($GH9Ck, array_keys($Hve5f))) { goto xU2HJ; } goto fTNFe; M5AgK: $OcXjX = $this->getAccessLevel($K_0dz, $mhWgI); goto JUL48; W4f7R: Ivfmy: goto AH3cv; BzcuM: xU2HJ: goto RGeh7; AXmFs: $Hve5f = []; goto M5AgK; fTNFe: return true; goto BzcuM; JUL48: switch ($OcXjX) { case null: return false; goto Ivfmy; case 314117040/786: $Hve5f = $this->jEosn(self::UUNI4); goto Ivfmy; case 471317040/786: $Hve5f = $this->jEosn(self::ni_gP); goto Ivfmy; case 707681400/885: $Hve5f = $this->jEosn(self::jKqt0); goto Ivfmy; } goto x5_qi; TP8rl: } public final function getEdition($K_0dz = null) { goto mtUTx; tndFe: GIZA4: goto duQip; OEcFa: if ($this->isTrialVersion($K_0dz) && !$this->hasExpired()) { goto YNlNz; } goto lQEt0; i0vSm: qL9kU: goto F8X0z; ejpTY: $brBVW = "\40\x28\164\162\x69\x61\x6c\x29"; goto tndFe; nlKWh: YNlNz: goto ejpTY; mtUTx: $OcXjX = $this->getAccessLevel($K_0dz); goto OEcFa; fCo5T: RwZYl: goto eXOpi; lQEt0: $brBVW = ''; goto sZox_; eXOpi: M6O7M: goto eJ3yX; F8X0z: switch ($OcXjX) { case null: return self::QenVP; case 263762400/660: return self::mt2o3; case 253647720/423: return self::pxcSy; case 295866800/370: return self::dVBtr . $brBVW; default: return self::QenVP; goto M6O7M; } goto fCo5T; sZox_: goto GIZA4; goto nlKWh; rA3ye: return "\x4f\x70\145\156\163\157\165\x72\143\x65"; goto i0vSm; duQip: if (!(strtolower(self::f_mxf()) == "\x6f\x70\145\156\x73\157\165\x72\x63\145")) { goto qL9kU; } goto rA3ye; eJ3yX: } public final function isTrialVersion($K_0dz = null, $mhWgI = false) { goto fYi_s; fYi_s: if (!($this->getAccessLevelFromKey() == null && self::$rLzUA !== false)) { goto Ntf6o; } goto nNxsR; pnCVb: SHQR2: goto xFW5W; zkz_Q: return true; goto iO9_F; iO9_F: KYbK1: goto HZj7F; xFW5W: Ntf6o: goto YnJ6y; AfU7Q: return true; goto pnCVb; YnJ6y: return false; goto rDnbQ; nNxsR: if (!(is_array($K_0dz) && $K_0dz[0] == $this->getCreateHash($K_0dz[303/303]))) { goto KYbK1; } goto zkz_Q; HZj7F: if (!$mhWgI) { goto SHQR2; } goto AfU7Q; rDnbQ: } public final function getAccessLevelFromKey() { goto DGKJw; tBfp1: $this->zcQ_R = null; goto Dw151; A2Uvm: $Dg89r = explode("\73", $TNOoc); goto ROh3_; yk46R: xroDM: goto HhBcI; DGKJw: if (!($this->zcQ_R === false)) { goto BgSPP; } goto tBfp1; ROh3_: if (!count($Dg89r)) { goto bA4yo; } goto u8HMb; okZpD: bA4yo: goto yk46R; Lgedm: biPyG: goto okZpD; Dw151: $TNOoc = trim(Mage::getStoreConfig("\x71\161\x75\x6f\164\x65\141\144\166\137\147\x65\x6e\145\162\141\154\57\x71\x75\157\x74\141\164\x69\157\x6e\163\57\x6c\x69\143\145\x6e\x63\x65\137\x6b\145\171")); goto ci8CW; UpMOF: return $this->zcQ_R; goto mkQqt; u8HMb: foreach ($Dg89r as $eZUc0) { goto BKXu7; bk0CR: if (!$CY1d3) { goto scoZK; } goto XFxAH; SaBf3: goto biPyG; goto Ke8Yi; XFxAH: $Ndwk2 = explode("\x3b", $CY1d3); goto rCpRU; rCpRU: if (!count($Ndwk2)) { goto k0VCe; } goto faayc; oJhCW: $CY1d3 = base64_decode($eZUc0, true); goto bk0CR; Ke8Yi: scoZK: goto sDolr; U60X_: z_4SR: goto Ehegk; BKXu7: $eZUc0 = trim($eZUc0); goto oJhCW; faayc: foreach ($Ndwk2 as $hZhyi) { goto PZhCV; P9lDK: return $this->zcQ_R; goto fv9T4; K66kC: $this->zcQ_R = $this->O0uo7($hZhyi); goto SImld; txaHG: kGX7k: goto BVMB4; SImld: if (!($this->zcQ_R !== null)) { goto iXTZx; } goto P9lDK; PZhCV: if (!(strlen($hZhyi) > 5370/179)) { goto kGX7k; } goto K66kC; fv9T4: iXTZx: goto txaHG; BVMB4: t3psF: goto GJjHh; GJjHh: } goto U60X_; sDolr: LTnMi: goto UHs9N; Ehegk: k0VCe: goto SaBf3; UHs9N: } goto Lgedm; HhBcI: BgSPP: goto UpMOF; ci8CW: if (!(strlen($TNOoc) > 14820/494)) { goto xroDM; } goto A2Uvm; mkQqt: } private final function O0uo7($eZUc0) { goto rJOTB; gNFB7: Ix4Fb: goto yK17W; EY17n: if (isset($_SERVER["\123\105\x52\126\x45\x52\137\x4e\x41\x4d\x45"])) { goto bGlYa; } goto L19DA; DqmLu: switch ($eZUc0) { case $sFS5V: $c_IwA = 746064120/933; return $c_IwA; case $i4Voq: $c_IwA = 243453840/406; return $c_IwA; case $fi9LI: $c_IwA = 67139520/168; return $c_IwA; } goto gNFB7; H64mU: IZr5a: goto AUDaF; yK17W: mBgMI: goto OhW3y; ZxaTp: $i4Voq = md5("\103\x32\121\162\x36\x34\60\x5f\x35\x39\71" . $xymPu); goto jhJWn; dJDa0: goto SDh6K; goto H22uX; HCiCf: $fi9LI = md5("\x43\x32\121\x72\x36\64\x30\137\63\x39\71" . $Jyvzh); goto ZxaTp; tm5YO: kE8iT: goto H64mU; t8iYo: $xymPu = Mage::getStoreConfig("\x77\145\x62\x2f\163\145\x63\x75\162\145\57\142\x61\x73\x65\x5f\165\162\154", 0); goto qWvfm; RCgXV: $xymPu = Mage::getStoreConfig("\x77\x65\142\x2f\165\x6e\x73\145\x63\x75\162\145\57\x62\x61\x73\145\x5f\x75\162\154", 0); goto nvPMC; KU6Ig: goto GatMr; goto XKQv6; H22uX: LZ8B3: goto D8Tzw; jhJWn: $sFS5V = md5("\x43\x32\121\162\66\64\60\137\x37\71\71" . $xymPu); goto DqmLu; XSOzr: $Jyvzh = $_SERVER["\123\x45\x52\126\x45\x52\137\x4e\101\115\105"]; goto iybR8; nvPMC: if ($xymPu) { goto IZr5a; } goto t8iYo; XKQv6: bGlYa: goto XSOzr; L19DA: $Jyvzh = "\143\162\x6f\x6e"; goto KU6Ig; AFAO9: $xymPu = $Jyvzh; goto tm5YO; iybR8: GatMr: goto dJDa0; OhW3y: return null; goto wd7Cn; AUDaF: $xymPu = $this->pZgNW($xymPu); goto HCiCf; rJOTB: if (!empty($_SERVER["\x48\x54\x54\x50\137\110\117\x53\124"])) { goto LZ8B3; } goto EY17n; D8Tzw: $Jyvzh = $_SERVER["\x48\124\124\120\137\x48\x4f\x53\x54"]; goto R2A2y; qWvfm: if ($xymPu) { goto kE8iT; } goto AFAO9; R2A2y: SDh6K: goto RCgXV; wd7Cn: } public final function getAccessLevel($K_0dz = null, $mhWgI = false) { goto BDFom; BDFom: $c_IwA = $this->getAccessLevelFromKey(); goto PYHpU; wlwkE: return $c_IwA; goto vwfIu; PYHpU: if (!($this->isTrialVersion($K_0dz, $mhWgI) && !$this->hasExpired())) { goto hhIwJ; } goto H38ZB; s30Wu: hhIwJ: goto wlwkE; H38ZB: $c_IwA = 573341880/717; goto s30Wu; vwfIu: } private final function pZgNW($Jsbfm) { goto YtGn4; GLueK: Blu9D: goto eSpci; ArpKp: $Jsbfm = "\x68\164\164\x70\72\x2f\57" . $Jsbfm; goto GLueK; okASx: $skI0L = preg_replace("\x2f\x5e\167\167\167\134\56\x2f", '', $ZblO0["\x68\157\163\164"]); goto eogHI; YtGn4: $Jsbfm = trim($Jsbfm, "\57"); goto Tl1HK; Tl1HK: if (preg_match("\43\x5e\150\x74\164\x70\50\x73\51\x3f\72\x2f\x2f\43", $Jsbfm)) { goto Blu9D; } goto ArpKp; eSpci: $ZblO0 = parse_url($Jsbfm); goto okASx; eogHI: return $skI0L; goto okFwW; okFwW: } public final function getCreateHash($q02t1) { return self::_createHash($q02t1); } protected final function _createHash($q02t1) { return md5($q02t1 . self::$rLzUA . self::f_mxf()); } private final function FtKTN() { goto iPjMV; V27VU: Ned92: goto PqmdY; BIURU: $Dg89r = explode("\x3b", $TNOoc); goto FJYRq; FgzAN: $xymPu = "\143\162\x6f\x6e"; goto XF4Fe; Jac3L: if (!(strlen($TNOoc) > 27300/910)) { goto GJP2V; } goto BIURU; BTIxz: $TNOoc = trim(Mage::getStoreConfig("\161\x71\x75\x6f\164\x65\x61\x64\166\x5f\x67\x65\x6e\145\162\141\154\57\x71\165\157\164\x61\x74\151\x6f\x6e\163\x2f\x6c\151\143\x65\x6e\x63\x65\x5f\x6b\145\171")); goto Jac3L; Rf02x: foreach ($Dg89r as $eZUc0) { goto U0iyh; U0iyh: $eZUc0 = trim($eZUc0); goto oTlj8; DGEuR: MVutR: goto mvoaz; Fm03f: if (!count($Ndwk2)) { goto M7tyi; } goto v9uof; ddELs: $Ndwk2 = explode("\73", $CY1d3); goto Fm03f; oTlj8: $CY1d3 = base64_decode($eZUc0, true); goto BHY22; JG9oY: t4ytz: goto DGEuR; v9uof: foreach ($Ndwk2 as $hZhyi) { goto frfM0; CvHt7: rrdOK: goto WoUdO; IJcn7: $GfIDy = md5("\103\62\121\x72\x36\64\60\x5f\x30\x30\x30" . $xymPu . "\56\63\60" . "\56" . self::$rLzUA); goto FOS3G; MR7dc: WsdKz: goto TqdKV; frfM0: if (!(strlen($hZhyi) > 22050/735)) { goto WsdKz; } goto IJcn7; WoUdO: JAJiZ: goto MR7dc; FOS3G: $W6g1b = md5("\103\x32\x51\x72\66\x34\x30\x5f\x30\60\60" . $xymPu . "\56\66\60" . "\56" . self::$rLzUA); goto iItml; TqdKV: kxw1h: goto d3PhE; iItml: $ehWQM = md5("\103\62\x51\162\66\x34\x30\x5f\60\60\x30" . $xymPu . "\56\x39\x30" . "\x2e" . self::$rLzUA); goto elQQ9; elQQ9: switch ($hZhyi) { case $GfIDy: return 16890/563; case $W6g1b: return 34200/570; case $ehWQM: return 39870/443; } goto CvHt7; d3PhE: } goto m_I1d; rL1oU: M7tyi: goto JG9oY; BHY22: if (!$CY1d3) { goto t4ytz; } goto ddELs; m_I1d: nbsvl: goto rL1oU; mvoaz: } goto svDAK; wVRJe: if (isset($_SERVER["\123\105\x52\126\x45\x52\x5f\116\x41\x4d\105"])) { goto HeoUn; } goto FgzAN; bwBBK: kdi7n: goto A9GoQ; amMwT: $xymPu = $_SERVER["\123\105\x52\x56\x45\122\x5f\116\x41\x4d\x45"]; goto FLZJF; eJ8PC: $xymPu = Mage::getStoreConfig("\x77\x65\142\57\x73\x65\143\165\162\x65\57\x62\x61\163\145\137\x75\162\x6c", 0); goto i_6as; cwSvG: return null; goto kjibo; OUWHT: if ($xymPu) { goto Ned92; } goto eJ8PC; iPjMV: $xymPu = Mage::getStoreConfig("\167\145\x62\57\x75\x6e\x73\x65\x63\x75\162\x65\57\142\141\x73\145\137\165\162\x6c", 0); goto OUWHT; svDAK: nPppr: goto bwBBK; FJYRq: if (!count($Dg89r)) { goto kdi7n; } goto Rf02x; FLZJF: sLTR1: goto MJGQh; lIQ8v: $xymPu = $_SERVER["\x48\124\x54\120\x5f\110\x4f\x53\124"]; goto fB_Ae; fB_Ae: KWs3o: goto G1YJh; v1cFT: jDqkd: goto lIQ8v; cX3EB: if (!empty($_SERVER["\x48\x54\124\120\x5f\x48\117\123\124"])) { goto jDqkd; } goto wVRJe; PqmdY: $xymPu = self::pZgNW($xymPu); goto BTIxz; XF4Fe: goto sLTR1; goto hUpUL; G1YJh: Qin6l: goto V27VU; MJGQh: goto KWs3o; goto v1cFT; A9GoQ: GJP2V: goto cwSvG; i_6as: if ($xymPu) { goto Qin6l; } goto cX3EB; hUpUL: HeoUn: goto amMwT; kjibo: } private final function NEH99() { goto YMesa; ZVw82: $nf81a = Mage::getSingleton("\x63\157\162\145\57\162\145\x73\157\x75\x72\x63\145")->getTableName("\x71\x75\157\164\x65\x61\x64\x76\x5f\143\x75\x73\x74\x6f\x6d\x65\x72"); goto w_x3e; uojee: return false; goto ynAe9; RXoD3: $SA6a6 = Mage::getSingleton("\x63\x6f\x72\x65\x2f\162\145\x73\x6f\x75\x72\143\x65")->getConnection("\143\x6f\x72\x65\x5f\162\x65\x61\144"); goto goiI4; LWVrM: $rTuVZ[] = ["\x76\145\162\x73\x69\157\156" => "\66\x33\60\60", "\x68\141\163\150" => "\x32\60\61\x39\x31\62\63\61" . "\166\66\63\x30\x5f\x33\x31\61\x32\x32\60\61\71\53\123\x74\x40\x62\x6c\145\x6c\122\x65\x6c\x65\141\163\x65\55\116\x30\x42\x75\x67\163\x4c\x65\x66\164"]; goto NYc6V; NYc6V: $rTuVZ[] = ["\x76\145\162\163\x69\x6f\x6e" => "\66\x33\61\x30", "\x68\141\163\150" => "\62\60\62\x30\x30\64\x33\x30" . "\166\66\x33\61\137\63\x30\60\x34\62\60\62\x30\x2b\123\164\100\142\x6c\x65\154\x52\145\x6c\x65\141\x73\145\x2d\x4c\141\x73\164\115\61\131\x65\x61\x72"]; goto ZVw82; YMesa: $rTuVZ = []; goto gj8nG; YAJhh: ux24N: goto OL09k; OL09k: foreach ($rTuVZ as $ssg98) { goto SepR3; SepR3: foreach ($UWy18 as $TNOoc => $KU21a) { goto hbOM0; TYYVm: if (!($zwaM2 === $KU21a["\143\162\145\x61\164\145\137\x68\141\x73\x68"])) { goto GDVCC; } goto Wz4EP; C5yLt: GDVCC: goto EkwpD; EkwpD: pC02t: goto zlelp; hbOM0: $zwaM2 = md5($KU21a["\151\156\143\x72\x65\x6d\x65\156\x74\137\x69\144"] . $ssg98["\150\141\x73\150"]); goto TYYVm; Wz4EP: return true; goto C5yLt; zlelp: } goto u3REf; AN8WR: OnW6y: goto w9B7A; u3REf: NKMTU: goto AN8WR; w9B7A: } goto o2t87; cfiTC: $rTuVZ[] = ["\166\x65\x72\x73\x69\157\156" => "\x36\x32\x33\x30", "\150\x61\163\x68" => "\62\60\x31\x39\60\64\x30\x32" . "\x76\x36\62\64\x5f\60\x32\60\64\62\x30\x31\x39\53\x53\164\x40\142\x6c\145\154\122\145\154\145\141\x73\145\55\x4e\x30\102\x75\x67\x73\x4f\160\160\117\146\x52\x69\x67\150\x74"]; goto LWVrM; goiI4: $UWy18 = []; goto vRlTY; w_x3e: $CTKu9 = "\x53\x45\x4c\105\x43\124\40\x71\165\157\x74\145\x5f\x69\x64\54\40\115\117\116\x54\110\x28\x63\162\145\x61\164\145\144\x5f\x61\164\51\40\x41\123\40\143\x72\x65\141\164\145\137\x6d\x6f\x6e\x74\150\54\x20\131\x45\x41\122\x28\x63\x72\145\x61\164\145\144\137\x61\x74\x29\40\101\x53\40\143\162\145\x61\164\145\137\171\x65\x61\162\x2c\40\x63\x72\x65\x61\164\x65\137\x68\x61\163\150\x2c\40\x69\x6e\143\x72\x65\155\145\156\164\137\x69\x64\40\106\122\x4f\115\40" . $nf81a . "\12\x20\x20\x20\40\x20\40\40\x20\40\x20\x20\x20\x20\x20\40\x20\x57\x48\105\x52\105\40\x63\162\145\x61\164\145\x5f\150\x61\163\x68\x20\x49\123\x20\x4e\x4f\124\40\116\x55\x4c\x4c\12\x20\40\40\x20\x20\x20\40\40\40\40\x20\x20\40\x20\x20\x20\101\x4e\x44\x20\143\x72\x65\141\164\x65\144\137\x61\x74\x20\111\x53\x20\116\117\x54\40\x4e\125\114\114\xa\40\40\40\x20\40\x20\x20\40\x20\40\40\x20\x20\40\40\40\101\116\x44\x20\x69\x6e\x63\162\x65\155\145\156\x74\x5f\x69\144\40\111\123\40\116\117\124\x20\x4e\x55\114\x4c\12\x20\x20\x20\40\x20\40\40\x20\x20\x20\x20\x20\40\40\x20\40\x41\x4e\104\40\x63\162\x65\141\164\x65\144\137\141\x74\x20\76\40\x27\x32\x30\x31\x37\x2d\60\x32\x2d\x30\63\40\60\x30\72\x30\60\72\x30\60\47\12\x20\40\40\40\x20\x20\40\40\40\x20\40\40\x20\40\x20\40\x47\x52\117\125\x50\x20\102\131\x20\143\162\x65\x61\164\145\137\171\145\141\162\x2c\x20\143\x72\x65\141\164\x65\137\x6d\157\156\164\150\x20\x4f\122\104\x45\x52\x20\x42\x59\x20\x71\x75\157\x74\x65\x5f\151\144"; goto RXoD3; o2t87: Dpd2u: goto uojee; wZCDM: $rTuVZ[] = ["\166\145\x72\x73\151\157\156" => "\x36\62\x32\60", "\150\141\x73\150" => "\x32\60\61\71\60\63\61\66" . "\166\x36\x32\62\137\61\x36\x30\63\x32\x30\x31\71\x2b\x53\x74\x40\142\x6c\145\x6c\122\x65\154\145\141\x73\x65\x2d\102\145\64\x42\x6c\x75\145\115\157\156\x64\141\x79"]; goto cfiTC; vRlTY: foreach ($SA6a6->fetchAll($CTKu9) as $ttcqA) { $UWy18[] = ["\x69\x6e\143\162\x65\155\145\156\164\x5f\151\x64" => $ttcqA["\x69\x6e\x63\x72\x65\155\x65\156\164\x5f\151\x64"], "\143\162\x65\141\x74\x65\137\150\x61\x73\x68" => $ttcqA["\x63\162\145\141\164\x65\x5f\150\x61\x73\x68"]]; iNJp1: } goto YAJhh; gj8nG: $rTuVZ[] = ["\x76\145\x72\163\151\x6f\156" => "\66\62\x31\60", "\150\x61\163\150" => "\x32\60\61\71\60\62\x31\64" . "\x76\66\x32\x31\x5f\x31\x34\60\x32\x32\60\61\x39\x2b\x53\x74\x40\142\154\x65\154\122\x65\x6c\145\x61\163\x65\x2d\x4c\x6f\166\x65\x34\x73\145\166\145\x6e\144\157\x74\x32"]; goto wZCDM; ynAe9: } public final function checkQuoteLicense($VRlcm) { goto Rkfga; k4B9k: qmsh6: goto azlWL; biE6L: $Et6cf = $this->pZgNW($Et6cf); goto zfAxd; q8sT4: if ($Et6cf) { goto eYmWD; } goto OfL9b; zfAxd: if (!($Et6cf != $NJOH9)) { goto d68cD; } goto dPf_v; uLvqo: $NJOH9 = Mage::getStoreConfig("\x77\x65\x62\57\x75\156\x73\145\x63\x75\x72\145\x2f\142\141\163\145\137\x75\162\154", 0); goto muSfa; LrmWs: d68cD: goto OFAdu; azlWL: $NJOH9 = $this->pZgNW($NJOH9); goto sRDtN; uUzfw: $NJOH9 = Mage::getStoreConfig("\x77\x65\x62\x2f\163\x65\x63\165\162\145\x2f\x62\141\x73\x65\x5f\x75\x72\x6c", 0); goto k4B9k; muSfa: if ($NJOH9) { goto qmsh6; } goto uUzfw; mByIE: eYmWD: goto biE6L; Rkfga: if (!($this->getAccessLevel() == 176241240/441)) { goto uZAHG; } goto uLvqo; OfL9b: $Et6cf = Mage::getStoreConfig("\x77\x65\142\57\163\145\x63\x75\162\x65\57\142\141\x73\x65\137\x75\162\154", $VRlcm); goto mByIE; smfe4: return true; goto HnVDN; sRDtN: $Et6cf = Mage::getStoreConfig("\x77\145\x62\x2f\x75\156\x73\x65\143\165\x72\x65\57\142\x61\163\145\137\x75\x72\154", $VRlcm); goto q8sT4; OFAdu: uZAHG: goto smfe4; dPf_v: return false; goto LrmWs; HnVDN: } public final function isFreeUser() { goto L1VVJ; Cf3u6: crO2k: goto qQGvn; L1VVJ: if ($this->validLicense("\x6e\x6f\x6e\55\146\162\145\145", null, true)) { goto qqDxr; } goto Ku2lZ; lBZgn: return false; goto Cf3u6; Ku2lZ: return true; goto QibEy; s5fyh: qqDxr: goto lBZgn; QibEy: goto crO2k; goto s5fyh; qQGvn: } public function getCart2QuoteVersion() { $ssg98 = Mage::getConfig()->getModuleConfig("\117\x70\x68\151\x72\141\x68\x5f\x51\161\165\x6f\x74\145\141\x64\166")->k0Qtq; return $ssg98; } public function getNot2OrderVersion() { $ssg98 = Mage::getConfig()->getModuleConfig("\x4f\160\x68\x69\x72\x61\x68\x5f\116\x6f\164\x32\117\162\144\x65\x72")->k0Qtq; return $ssg98; } public function getCRMaddonVersion() { $ssg98 = Mage::getConfig()->getModuleConfig("\x4f\160\x68\151\x72\x61\x68\137\x43\162\x6d\x61\x64\144\x6f\x6e")->k0Qtq; return $ssg98; } public function getIonCubeVersion() { goto iJB7X; ioXxK: $BMgq1 = $this->ioncube_loader_version(); goto QPiqV; QPiqV: return $BMgq1; goto LtiZG; vaQwV: return "\x49\157\x6e\x43\165\x62\145\x20\151\163\x20\156\157\x74\x20\151\x6e\163\164\x61\154\x6c\x65\144"; goto iKPh3; iJB7X: if (extension_loaded("\x69\x6f\156\x43\x75\x62\145\40\x4c\x6f\x61\x64\x65\162")) { goto Y6wwZ; } goto vaQwV; LtiZG: wdALL: goto x8KOI; iKPh3: goto wdALL; goto K6zCC; K6zCC: Y6wwZ: goto ioXxK; x8KOI: } public function getPHPVersion() { $ssg98 = phpversion(); return $ssg98; } public function getCart2QuoteLicense() { $UNKfz = Mage::getStoreConfig("\x71\x71\x75\157\x74\145\x61\144\x76\x5f\147\145\x6e\145\x72\141\x6c\x2f\x71\165\x6f\x74\x61\164\x69\157\156\x73\57\154\151\x63\x65\x6e\143\145\137\x6b\x65\171"); return $UNKfz; } public function getCart2QuoteEdition() { goto dTkUB; gZ2x7: return $y2XFC; goto t3MUU; VOv42: MJFj8: goto gZ2x7; x0qPG: $y2XFC = "\x75\x6e\x6b\156\157\x77\156"; goto VOv42; dTkUB: $y2XFC = Mage::getStoreConfig("\161\x71\x75\157\x74\x65\141\x64\166\137\147\x65\156\x65\162\141\x6c\57\161\x75\x6f\164\x61\164\x69\x6f\156\x73\57\x65\144\x69\x74\151\x6f\156"); goto XvRXq; XvRXq: if (!(!isset($y2XFC) || empty($y2XFC))) { goto MJFj8; } goto x0qPG; t3MUU: } public function getMagentoVersion() { return Mage::getVersion(); } public function getOpenMageVersion() { goto OmYCb; nf2CP: Awabt: goto XIzjP; VONkM: BsDRF: goto Y0pQz; Y0pQz: return Mage::getOpenMageVersion(); goto nf2CP; w83b0: return ''; goto t5qBB; OmYCb: if (method_exists("\x4d\141\147\145", "\147\145\164\x4f\160\145\x6e\115\141\147\145\126\145\162\163\x69\157\156")) { goto BsDRF; } goto w83b0; t5qBB: goto Awabt; goto VONkM; XIzjP: } public function getMagentoEdition() { goto hpw9s; TKfXD: $y2XFC = Mage::getEdition(); goto n1Y80; yVm5A: return ''; goto aXCW9; tRpZm: AxmXl: goto TKfXD; uJSCE: YP1Ke: goto mtdcM; aXCW9: goto YP1Ke; goto tRpZm; hpw9s: if (method_exists("\x4d\x61\147\145", "\147\x65\x74\x45\x64\x69\x74\151\157\x6e")) { goto AxmXl; } goto yVm5A; n1Y80: return $y2XFC; goto uJSCE; mtdcM: } public function getCurrentDomain() { goto d80su; HVzuN: goto LjxDa; goto y_qsZ; Q1sd6: $xymPu = $_SERVER["\110\x54\x54\120\x5f\110\x4f\123\124"]; goto J_J2T; laqUM: $xymPu = Mage::getStoreConfig("\x77\145\142\57\163\x65\x63\165\x72\145\x2f\142\x61\x73\x65\x5f\x75\x72\x6c", 0); goto nv4Hu; zqZid: $xymPu = $_SERVER["\x53\x45\122\126\105\x52\x5f\x4e\101\115\105"]; goto HVzuN; pM4nn: NhzfG: goto H4P56; LCym8: if ($xymPu) { goto NhzfG; } goto laqUM; H4P56: $xymPu = self::pZgNW($xymPu); goto pVQ9d; J_J2T: LjxDa: goto XYY1f; pVQ9d: return $_SERVER["\123\x45\x52\x56\x45\x52\x5f\x4e\x41\x4d\x45"] . "\40\x28" . $xymPu . "\51"; goto rRh4F; XYY1f: fDAhs: goto pM4nn; d80su: $xymPu = Mage::getStoreConfig("\167\x65\142\57\x75\x6e\163\x65\x63\165\162\x65\57\x62\x61\163\x65\x5f\165\162\154", 0); goto LCym8; ehSc9: if (!empty($_SERVER["\110\x54\x54\x50\137\x48\x4f\x53\x54"])) { goto bD25h; } goto zqZid; nv4Hu: if ($xymPu) { goto fDAhs; } goto ehSc9; y_qsZ: bD25h: goto Q1sd6; rRh4F: } public function ioncube_loader_version() { goto JxE33; MpPGu: CfTAt: goto no213; dxSi0: if (!($mDE2a >= 61000000/610)) { goto ezhY9; } goto HJtrF; TGPZh: if (!function_exists("\x69\157\x6e\143\x75\x62\x65\137\154\x6f\x61\x64\x65\x72\137\x76\145\162\163\x69\x6f\156")) { goto CfTAt; } goto evz2_; HJtrF: $Nc3lF = 801/801; goto yWtaz; dWcau: $wFkxx = (int) substr($mDE2a, 2019/673 + $Nc3lF, 1164/582); goto GY0Jy; N74oo: $dX25D = (int) substr($mDE2a, 0, 364/364 + $Nc3lF); goto p06NZ; evz2_: $ByOij = ioncube_loader_version(); goto MpPGu; NqLXr: if (function_exists("\x69\x6f\156\x63\165\x62\x65\x5f\154\x6f\141\144\x65\x72\137\151\166\x65\162\163\151\157\x6e")) { goto Sw0Fw; } goto TGPZh; PPejj: Sw0Fw: goto nlikn; JxE33: $ByOij = ''; goto NqLXr; HB5nt: qjWyt: goto fPmIR; fPmIR: return $ByOij; goto VT_jN; nlikn: $mDE2a = ioncube_loader_iversion(); goto ACfyK; GY0Jy: $ByOij = sprintf("\x25\144\56\45\144\56\45\x64", $dX25D, $odtu7, $wFkxx); goto HB5nt; no213: goto qjWyt; goto PPejj; p06NZ: $odtu7 = (int) substr($mDE2a, 586/586 + $Nc3lF, 1466/733); goto dWcau; yWtaz: ezhY9: goto N74oo; ACfyK: $Nc3lF = 0; goto dxSi0; VT_jN: } public function getCart2QuoteExpiryDate() { goto KoNMg; KoNMg: $Bzq8U = Mage::getStoreConfig("\x71\x71\165\x6f\164\145\x61\144\x76\137\x67\145\156\145\x72\x61\154\57\x71\x75\x6f\x74\x61\164\x69\x6f\156\x73\x2f\x65\170\x70\151\x72\x79\x5f\144\x61\164\x65"); goto S30K1; S30K1: if (!(!isset($Bzq8U) || empty($Bzq8U))) { goto wFy3U; } goto r10JF; r10JF: $Bzq8U = "\165\x6e\x6b\x6e\x6f\x77\x6e"; goto DL43o; PMqWS: return $Bzq8U; goto fo64t; DL43o: wFy3U: goto PMqWS; fo64t: } public function getCart2QuoteTrialExpired() { return Mage::getStoreConfig("\161\161\x75\157\x74\x65\x61\x64\x76\137\x67\x65\x6e\x65\162\x61\154\57\161\165\x6f\x74\141\164\x69\157\x6e\163\57\x68\x61\x73\x5f\145\170\x70\x69\x72\x65\144"); } public function getRequiredLicense($I1jGk = null) { goto NYeyO; qeRAX: if (array_key_exists($I1jGk, $this->CYbZD[self::UUNI4])) { goto gmjId; } goto ouhjM; ouhjM: goto gf5gy; goto dyjwB; J3YiB: goto gf5gy; goto YA1me; L_ADN: if (array_key_exists($I1jGk, $this->CYbZD[self::ni_gP])) { goto aCff9; } goto qeRAX; Ei5yR: gmjId: goto H01qj; YA1me: aCff9: goto AjdxK; NYeyO: if (array_key_exists($I1jGk, $this->CYbZD[self::jKqt0])) { goto NGv5s; } goto L_ADN; z0EGt: return self::dVBtr; goto J3YiB; AjdxK: return self::pxcSy; goto bwvEo; H01qj: return self::mt2o3; goto LP5ON; LP5ON: gf5gy: goto bGSfW; bGSfW: return self::QenVP; goto Kmsxd; dyjwB: NGv5s: goto z0EGt; bwvEo: goto gf5gy; goto Ei5yR; Kmsxd: } private function jEosn($Ha2M0) { goto ufSLU; q6EXH: return []; goto p4bAm; ufSLU: switch ($Ha2M0) { case self::UUNI4: return $this->CYbZD[self::UUNI4]; case self::ni_gP: return array_merge_recursive($this->CYbZD[self::UUNI4], $this->CYbZD[self::ni_gP]); case self::jKqt0: case "\141\154\x6c": return array_merge_recursive($this->CYbZD[self::UUNI4], $this->CYbZD[self::ni_gP], $this->CYbZD[self::jKqt0]); } goto XXNgK; U90fq: y0oEB: goto q6EXH; XXNgK: AZk6x: goto U90fq; p4bAm: } public function getAllFeatures() { return $this->jEosn("\141\154\154"); } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Helper_License
+ */
+final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract
+{
+    //Warning
+    private $w1 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w2 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w3 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w4 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w5 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w6 = "Unpaid usage of our licensed functionalities is prohibited.";
+    //End - Warning
+
+    /**
+     * The date to expire this module at - the format is Ymd for instance for 7th of may 2012 this would be 20120507
+     *
+     * @var int
+     */
+    private static $_expiryDate = 20201231;
+
+    /**
+     * The result of getAccessLevelFromKey.
+     *
+     * If it is already found, there is no need to check for the key again.
+     * This improves performance and isn't a security risk because it is a private var
+     * and needs to be set every request again.
+     *
+     * @var bool
+     */
+    private $_accessLevelFromKey = false;
+
+    /**
+     * The result of the hasExpired function
+     *
+     * If it is already checked, there is no need to check it again.
+     * This improves performance and isn't a security risk because it is a private var
+     * and needs to be set every request again.
+     *
+     * @var null
+     */
+    private $_hasExpired = null;
+
+    /**
+     * Standard license identifier
+     */
+    const STANDARD = 'standard';
+    /**
+     * Professional license identifier
+     */
+    const PROFESSIONAL = 'professional';
+    /**
+     * Enterprise license identifier
+     */
+    const ENTERPRISE = 'enterprise';
+
+    /**
+     * Name for the free license
+     */
+    const FREE_LICENSE_NAME = 'Trial';
+    /**
+     * Name for the standard license
+     */
+    const STANDARD_LICENSE_NAME = 'Starter';
+    /**
+     * Name for the professional license
+     */
+    const PROFESSIONAL_LICENSE_NAME = 'Business';
+    /**
+     * Name for the enterprise license
+     */
+    const ENTERPRISE_LICENSE_NAME = 'Enterprise';
+
+    /**
+     * License features
+     * @var array
+     */
+    private $_features = [
+        self::STANDARD     => [
+            // API functionality for linking to CRM and ERP
+            'api'                                => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Export quotes to csv
+            'export'                             => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // CRM addon module
+            'messaging'                          => [
+                'printLabel' => 'CRM addon settings',
+                'configPath' => 'default/qquoteadv_sales_representatives/messaging'
+            ],
+            // Mass update in System>Config
+            'mass_update_quote_requests'         => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Reminder email
+            'send_reminder'                      => [
+                'printLabel' => 'Default Reminder Notice',
+                'configPath' => 'default/qquoteadv_quote_configuration/expiration_times_and_notices/send_reminder'
+            ],
+            // Expire email
+            'qquoteadv_qquoteadv_expire_email'   => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Custom product
+            'customproduct'   => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Cart2Quote allow quotation based on group
+            'customer_group_allow'               => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Key for enterprise options
+            'enterprise'                         => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Tier cost functionality
+            'tier-cost'                          => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Supplier Bidding Tool
+            'supplier-bidding-tool'              => [
+                'printLabel' => 'Supplier bidding tool settings',
+                'configPath' => 'default/supplierbiddingtool/general/enabled'
+            ],
+            // Send BCC to linked salesrep *
+            'send_linked_sale_bcc'                                => [
+                'printLabel' => 'Send BCC to Linked Sales Representative',
+                'configPath' => 'default/qquoteadv_quote_emails/sales_representatives/send_linked_sale_bcc'
+            ],
+            // Custom quote form fields
+            'quote_form_customization'           => [
+                'printLabel' => 'Custom Fields',
+                'configPath' =>
+                    'default/qquoteadv_quote_form_builder/quote_form_customization',
+            ],
+            //Automatic tier prices
+            'display_tierprices'                 => [
+                'printLabel' => 'Display product tier prices',
+                'configPath' => 'default/qquoteadv_advanced_settings/checkout/display_tierprices'
+            ],
+            //Direct Print Quote
+            'enable_quote_direct_print'                  => [
+                'printLabel' => 'Enable direct printing from quote list',
+                'configPath' => 'qquoteadv_quote_frontend/shoppingcart_quotelist/enable_quote_direct_print'
+            ],
+            //Can see other sales rep quotes ACL feature
+            'limit_salesrep_quote'                  => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            //Quote fileupload
+            'quote_form_file_upload'                  => [
+                'printLabel' => 'Enable File Upload',
+                'configPath' => 'qquoteadv_quote_form_builder/quote_form_file_upload/enable_file_upload'
+            ]
+        ],
+        self::PROFESSIONAL => [
+            // API functionality for linking to CRM and ERP
+            'api'                                => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Export quotes to csv
+            'export'                             => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // CRM addon module
+            'messaging'                          => [
+                'printLabel' => 'CRM addon settings',
+                'configPath' => 'default/qquoteadv_sales_representatives/messaging'
+            ],
+            // Mass update in System>Config
+            'mass_update_quote_requests'         => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Reminder email
+            'send_reminder'                      => [
+                'printLabel' => 'Default Reminder Notice',
+                'configPath' => 'default/qquoteadv_quote_configuration/expiration_times_and_notices/send_reminder'
+            ],
+            // Expire email
+            'qquoteadv_qquoteadv_expire_email'   => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Custom product
+            'customproduct'   => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Cart2Quote allow quotation based on group
+            'customer_group_allow'               => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Key for enterprise options
+            'enterprise'                         => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Tier cost functionality
+            'tier-cost'                          => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Supplier Bidding Tool
+            'supplier-bidding-tool'              => [
+                'printLabel' => 'Supplier bidding tool settings',
+                'configPath' => 'default/supplierbiddingtool/general/enabled'
+            ],
+            // Send BCC to linked salesrep *
+            'send_linked_sale_bcc'                                => [
+                'printLabel' => 'Send BCC to Linked Sales Representative',
+                'configPath' => 'default/qquoteadv_quote_emails/sales_representatives/send_linked_sale_bcc'
+            ],
+            // Custom quote form fields
+            'quote_form_customization'           => [
+                'printLabel' => 'Custom Fields',
+                'configPath' =>
+                    'default/qquoteadv_quote_form_builder/quote_form_customization',
+            ],
+            //Automatic tier prices
+            'display_tierprices'                 => [
+                'printLabel' => 'Display product tier prices',
+                'configPath' => 'default/qquoteadv_advanced_settings/checkout/display_tierprices'
+            ],
+            //Direct Print Quote
+            'enable_quote_direct_print'                  => [
+                'printLabel' => 'Enable direct printing from quote list',
+                'configPath' => 'qquoteadv_quote_frontend/shoppingcart_quotelist/enable_quote_direct_print'
+            ],
+            //Can see other sales rep quotes ACL feature
+            'limit_salesrep_quote'                  => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            //Quote fileupload
+            'quote_form_file_upload'                  => [
+                'printLabel' => 'Enable File Upload',
+                'configPath' => 'qquoteadv_quote_form_builder/quote_form_file_upload/enable_file_upload'
+            ]
+        ],
+        self::ENTERPRISE   => [
+            // API functionality for linking to CRM and ERP
+            'api'                                => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Export quotes to csv
+            'export'                             => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // CRM addon module
+            'messaging'                          => [
+                'printLabel' => 'CRM addon settings',
+                'configPath' => 'default/qquoteadv_sales_representatives/messaging'
+            ],
+            // Mass update in System>Config
+            'mass_update_quote_requests'         => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Reminder email
+            'send_reminder'                      => [
+                'printLabel' => 'Default Reminder Notice',
+                'configPath' => 'default/qquoteadv_quote_configuration/expiration_times_and_notices/send_reminder'
+            ],
+            // Expire email
+            'qquoteadv_qquoteadv_expire_email'   => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Custom product
+            'customproduct'   => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Cart2Quote allow quotation based on group
+            'customer_group_allow'               => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Key for enterprise options
+            'enterprise'                         => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Tier cost functionality
+            'tier-cost'                          => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            // Supplier Bidding Tool
+            'supplier-bidding-tool'              => [
+                'printLabel' => 'Supplier bidding tool settings',
+                'configPath' => 'default/supplierbiddingtool/general/enabled'
+            ],
+            // Send BCC to linked salesrep *
+            'send_linked_sale_bcc'                                => [
+                'printLabel' => 'Send BCC to Linked Sales Representative',
+                'configPath' => 'default/qquoteadv_quote_emails/sales_representatives/send_linked_sale_bcc'
+            ],
+            // Custom quote form fields
+            'quote_form_customization'           => [
+                'printLabel' => 'Custom Fields',
+                'configPath' =>
+                    'default/qquoteadv_quote_form_builder/quote_form_customization',
+            ],
+            //Automatic tier prices
+            'display_tierprices'                 => [
+                'printLabel' => 'Display product tier prices',
+                'configPath' => 'default/qquoteadv_advanced_settings/checkout/display_tierprices'
+            ],
+            //Direct Print Quote
+            'enable_quote_direct_print'                  => [
+                'printLabel' => 'Enable direct printing from quote list',
+                'configPath' => 'qquoteadv_quote_frontend/shoppingcart_quotelist/enable_quote_direct_print'
+            ],
+            //Can see other sales rep quotes ACL feature
+            'limit_salesrep_quote'                  => [
+                'printLabel' => null,
+                'configPath' => null
+            ],
+            //Quote fileupload
+            'quote_form_file_upload'                  => [
+                'printLabel' => 'Enable File Upload',
+                'configPath' => 'qquoteadv_quote_form_builder/quote_form_file_upload/enable_file_upload'
+            ]
+        ],
+    ];
+
+    /**
+     * @return string
+     */
+    final private static function getC2QCreateHash()
+    {
+        return "opensource";
+    }
+
+    /**
+     * @return int
+     */
+    final public function getC2QExpiryDate()
+    {
+        $extendDays = self::getTrialExtendDays();
+        if ($extendDays !== null) {
+            $year = (int)substr(self::$_expiryDate, 0, 4);
+            $month = (int)substr(self::$_expiryDate, 4, 2);
+            $day = (int)substr(self::$_expiryDate, 6, 2);
+            return date("Ymd", mktime(0, 0, 0, $month, $day + $extendDays, $year));
+        }
+        return self::$_expiryDate;
+    }
+
+    /**
+     * @return bool
+     */
+    final public static function isOpenSourceC2QVersion()
+    {
+        // if (strtolower(self::getC2QCreateHash()) == "opensource") {
+            // return true;
+        // }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    final public function hasExpired()
+    {
+        if ($this->_hasExpired === null) {
+            //not expired?
+            $this->_hasExpired = false;
+
+            //check if this is the first used installation of Cart2Quote
+            if ($this->isOldVersionDetected()) {
+                if ($this->getTrialExtendDays() === null) {
+                    //old version is detected and there is no trial extension key
+                    //trial is not allowed anymore
+                    $this->_hasExpired = true;
+                    return true;
+                }
+            }
+
+            if (self::$_expiryDate < date("Ymd") and self::$_expiryDate !== false) {
+                $extendDays = $this->getTrialExtendDays();
+                if ($extendDays !== null) {
+                    if (self::$_expiryDate > date("Ymd", strtotime("-" . $extendDays . " days"))) {
+                        //expired but extended trials is not expired
+                        $this->_hasExpired = false;
+                    } else {
+                        //expired and extended trials is also expired
+                        $this->_hasExpired = true;
+                    }
+                } else {
+                    //expired
+                    $this->_hasExpired = true;
+                }
+            }
+        }
+
+        return $this->_hasExpired;
+    }
+
+    /**
+     * This function compares the given license option with the available options for the current license
+     *
+     * @param            $fnName
+     * @param array|null $createHash
+     * @param bool       $noHash
+     * @return bool
+     */
+    final public function validLicense($fnName, $createHash = null, $noHash = false)
+    {
+        return true; // DHH CORE HACK
+        
+        $features = [];
+        $level = $this->getAccessLevel($createHash, $noHash);
+
+        switch ($level) {
+            case null:
+                return false;
+                break;
+
+            case 399640:
+                $features = $this->getLicenseFeatures(self::STANDARD);
+                break;
+
+            case 599640:
+                $features = $this->getLicenseFeatures(self::PROFESSIONAL);
+                break;
+
+            case 799640:
+                $features = $this->getLicenseFeatures(self::ENTERPRISE);
+                break;
+        }
+
+        if (in_array($fnName, array_keys($features))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * It would be nice to use this in the system>configuration page
+     * But in case of an ionCube issue, the page wouldn't load.
+     *
+     * @param null $createHash
+     * @return string
+     */
+    final public function getEdition($createHash = null)
+    {
+        $level = $this->getAccessLevel($createHash);
+
+        // if no valid license found check for trial version
+        if ($this->isTrialVersion($createHash) && !$this->hasExpired()) {
+            $trial = ' (trial)';
+        } else {
+            $trial = '';
+        }
+
+        // if (strtolower(self::getC2QCreateHash()) == "opensource") {
+            // return 'Opensource';
+        // }
+
+        switch ($level) {
+            case null:
+                return self::ENTERPRISE_LICENSE_NAME;
+            case 399640:
+                return self::ENTERPRISE_LICENSE_NAME;
+            case 599640:
+                return self::ENTERPRISE_LICENSE_NAME;
+            case 799640:
+                return self::ENTERPRISE_LICENSE_NAME . $trial;
+            default:
+                return self::ENTERPRISE_LICENSE_NAME;
+                break;
+        }
+    }
+
+    /**
+     * Check if quote is from current trial version
+     * $createHash = array( 0 => [HASH], 1 => [INCREMENTID])
+     *
+     * @param null $createHash
+     * @param bool $noHash
+     * @return bool
+     */
+    final public function isTrialVersion($createHash = null, $noHash = false)
+    {
+        // return false; // DHH CORE HACK
+        
+        if ($this->getAccessLevelFromKey() == null && self::$_expiryDate !== false) {
+            if (is_array($createHash) && ($createHash[0] == $this->getCreateHash($createHash[1]))) {
+                return true;
+            }
+            if ($noHash) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return int|null
+     */
+    final public function getAccessLevelFromKey(){ return 799640; }     
+
+    /**
+     * @param $licenseKey
+     * @return int|null
+     */
+    
+
+    /**
+     * @param null $createHash
+     * @param bool $noHash
+     * @return int|null
+     */
+    final public function getAccessLevel($createHash = null, $noHash = false)
+    {
+        // DHH CORE HACK
+        return 799640;
+        
+        // get access from license key
+        $access = $this->getAccessLevelFromKey();
+
+        // if no valid license found check for trial version
+        if ($this->isTrialVersion($createHash, $noHash) && !$this->hasExpired()) {
+            $access = 799640;
+        }
+
+        return $access;
+    }
+
+    /**
+     * Function to strip http/https, www and / form a domain
+     *
+     * @param $input
+     * @return mixed
+     */
+    final private function _stripUrlForLicenseKeyCheck($input)
+    {
+        $input = trim($input, '/');
+
+        if (!preg_match('#^http(s)?://#', $input)) {
+            $input = 'http://' . $input;
+        }
+        $urlParts = parse_url($input);
+
+        $domain = preg_replace('/^www\./', '', $urlParts['host']);
+
+        return $domain;
+    }
+
+    /**
+     * Unique hash for specific
+     * Cart2Quote version
+     *
+     * @param string $incrementId
+     * @return string
+     */
+    final public function getCreateHash($incrementId)
+    {
+        return self::_createHash($incrementId);
+    }
+
+    /**
+     * @param $incrementId
+     * @return string
+     */
+    final protected function _createHash($incrementId)
+    {
+        return md5($incrementId . self::$_expiryDate . self::getC2QCreateHash());
+    }
+
+    /**
+     * Get the extended trial days from the licensen key
+     * This function only works with the v5 keys.
+     *
+     * @return int|null
+     */
+    final private function getTrialExtendDays(){ return null;} 
+
+    /**
+     * This function try's to detect old versions of Cart2Quote
+     *
+     * This check is only used if there is not license key filled in the backend
+     * This check only search for items form version v4.1.6 of Cart2Quote and later
+     * This check only checks one item for each month.
+     * So at the time of writing this function the worst case scenario is that this generates 20x14 md5 hashes.
+     * That would set you back 115 microseconds or 0.000115 seconds. Just so you know ;)
+     *
+     * @return bool
+     */
+    final private function isOldVersionDetected(){ return false;} 
+
+    /**
+     * In case of a Starter license, check if the quote url is the same as the base url
+     *
+     * @param $storeId
+     * @return bool
+     */
+    final public function checkQuoteLicense($storeId)
+    {
+        if ($this->getAccessLevel() == 399640) {
+            $baseHost = Mage::getStoreConfig('web/unsecure/base_url', 0);
+            if (!$baseHost) {
+                $baseHost = Mage::getStoreConfig('web/secure/base_url', 0);
+            }
+            $baseHost = $this->_stripUrlForLicenseKeyCheck($baseHost);
+
+            $quoteHost = Mage::getStoreConfig('web/unsecure/base_url', $storeId);
+            if (!$quoteHost) {
+                $quoteHost = Mage::getStoreConfig('web/secure/base_url', $storeId);
+            }
+            $quoteHost = $this->_stripUrlForLicenseKeyCheck($quoteHost);
+
+            if ($quoteHost != $baseHost) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if this is free user.
+     *
+     * @return bool
+     */
+    final public function isFreeUser()
+    {
+        //check if 'non-free' is allowed
+        if ($this->validLicense('non-free', null, true)) {
+            //is not a free user
+            return false;
+        } else {
+            //is a free user
+            return true;
+        }
+    }
+
+    /**
+     * Get the Cart2Quote version
+     *
+     * @return mixed
+     */
+    public function getCart2QuoteVersion()
+    {
+        $version = Mage::getConfig()->getModuleConfig("Ophirah_Qquoteadv")->version;
+        return $version;
+    }
+
+    /**
+     * Get the Not2Order version
+     *
+     * @return mixed
+     */
+    public function getNot2OrderVersion()
+    {
+        $version = Mage::getConfig()->getModuleConfig("Ophirah_Not2Order")->version;
+        return $version;
+    }
+
+    /**
+     * Get the CRMaddon version
+     *
+     * @return mixed
+     */
+    public function getCRMaddonVersion()
+    {
+        $version = Mage::getConfig()->getModuleConfig("Ophirah_Crmaddon")->version;
+        return $version;
+    }
+
+    /**
+     * If ionCube is loaded, get the version
+     *
+     * @return string
+     */
+    public function getIonCubeVersion()
+    {
+        if (extension_loaded('ionCube Loader')) {
+            $ioncube_version = $this->ioncube_loader_version();
+            return $ioncube_version;
+        } else {
+            return 'IonCube is not installed';
+        }
+    }
+
+    /**
+     * Get the PHP version
+     *
+     * @return string
+     */
+    public function getPHPVersion()
+    {
+        $version = phpversion();
+        return $version;
+    }
+
+    /**
+     * Get the Cart2Quote license
+     *
+     * @return mixed
+     */
+    public function getCart2QuoteLicense()
+    {
+        $license_key = Mage::getStoreConfig('qquoteadv_general/quotations/licence_key');
+        return $license_key;
+    }
+
+    /**
+     * Get the Cart2Quote edition
+     * This data is only available if Cart2Quote gets enabled in the global config page
+     *
+     * @return string
+     */
+    public function getCart2QuoteEdition()
+    {
+        $edition = Mage::getStoreConfig('qquoteadv_general/quotations/edition');
+
+        if (!isset($edition) || empty($edition)) {
+            $edition = 'unknown';
+        }
+
+        return $edition;
+    }
+
+    /**
+     * Get the Magento version
+     *
+     * @return mixed
+     */
+    public function getMagentoVersion()
+    {
+        return Mage::getVersion();
+    }
+
+    /**
+     * Get the OpenMage version
+     *
+     * @return mixed
+     */
+    public function getOpenMageVersion()
+    {
+        if (method_exists('Mage', 'getOpenMageVersion')) {
+            return Mage::getOpenMageVersion();
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Get the Magento edition if that function is available
+     * If not, then the Magento version is probably below 1.7
+     *
+     * @return string
+     */
+    public function getMagentoEdition()
+    {
+        if (method_exists('Mage', 'getEdition')) {
+            $edition = Mage::getEdition();
+            return $edition;
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Get the current domain
+     *
+     * @return mixed
+     */
+    public function getCurrentDomain()
+    {
+        $host = Mage::getStoreConfig('web/unsecure/base_url', 0);
+        if (!$host) {
+            $host = Mage::getStoreConfig('web/secure/base_url', 0);
+            if (!$host) {
+                if (!empty($_SERVER['HTTP_HOST'])) {
+                    $host = $_SERVER['HTTP_HOST'];
+                } else {
+                    //This function is never triggered in cron, so no need for a fallback
+                    $host = $_SERVER['SERVER_NAME'];
+                }
+            }
+        }
+        $host = self::_stripUrlForLicenseKeyCheck($host);
+
+        return $_SERVER['SERVER_NAME'] . " (" . $host . ")";
+    }
+
+    /**
+     * This function gets the ionCube version from the integer version sting
+     * It also has a fallback for ionCube < v3.1
+     *
+     * @return string
+     */
+    public function ioncube_loader_version()
+    {
+        $ioncubeLoaderVersion = '';
+        if (function_exists('ioncube_loader_iversion')) {
+            $ioncubeLoaderIversion = ioncube_loader_iversion();
+            $extra = 0;
+            if ($ioncubeLoaderIversion >= 100000) {
+                $extra = 1;
+            }
+
+            $ioncubeLoaderVersionMajor = (int)substr($ioncubeLoaderIversion, 0, 1 + $extra);
+            $ioncubeLoaderVersionMinor = (int)substr($ioncubeLoaderIversion, 1 + $extra, 2);
+            $ioncubeLoaderVersionRevision = (int)substr($ioncubeLoaderIversion, 3 + $extra, 2);
+            $ioncubeLoaderVersion = sprintf(
+                '%d.%d.%d',
+                $ioncubeLoaderVersionMajor,
+                $ioncubeLoaderVersionMinor,
+                $ioncubeLoaderVersionRevision
+            );
+        } else {
+            if (function_exists('ioncube_loader_version')) {
+                $ioncubeLoaderVersion = ioncube_loader_version();
+            }
+        }
+
+        return $ioncubeLoaderVersion;
+    }
+
+    /**
+     * Get the Cart2Quote expiry date
+     * This data is only available if Cart2Quote gets enabled in the global config page
+     *
+     * @return string
+     */
+    public function getCart2QuoteExpiryDate()
+    {
+        $expiryDate = Mage::getStoreConfig('qquoteadv_general/quotations/expiry_date');
+
+        if (!isset($expiryDate) || empty($expiryDate)) {
+            $expiryDate = 'unknown';
+        }
+
+        return $expiryDate;
+    }
+
+    /**
+     * Get the Cart2Quote trial expired
+     * This data is only available if Cart2Quote gets enabled in the global config page
+     *
+     * @return string
+     */
+    public function getCart2QuoteTrialExpired()
+    {
+        return Mage::getStoreConfig('qquoteadv_general/quotations/has_expired');
+    }
+
+    /**
+     * Returns the minimum license needed for given feature $featurename
+     * @param null $feature
+     * @return string
+     */
+    public function getRequiredLicense($feature = null)
+    {
+        if (array_key_exists($feature, $this->_features[self::ENTERPRISE])) {
+            return self::ENTERPRISE_LICENSE_NAME;
+        } elseif (array_key_exists($feature, $this->_features[self::PROFESSIONAL])) {
+            return self::PROFESSIONAL_LICENSE_NAME;
+        } elseif (array_key_exists($feature, $this->_features[self::STANDARD])) {
+            return self::STANDARD_LICENSE_NAME;
+        }
+        return self::FREE_LICENSE_NAME;
+    }
+
+    /**
+     * Get features for a license
+     * @param $license
+     * @return array
+     */
+    private function getLicenseFeatures($license)
+    {
+        switch ($license) {
+            case self::STANDARD:
+                return $this->_features[self::STANDARD];
+            case self::PROFESSIONAL:
+                return array_merge_recursive(
+                    $this->_features[self::STANDARD],
+                    $this->_features[self::PROFESSIONAL]
+                );
+            case self::ENTERPRISE:
+            case 'all':
+                return array_merge_recursive(
+                    $this->_features[self::STANDARD],
+                    $this->_features[self::PROFESSIONAL],
+                    $this->_features[self::ENTERPRISE]
+                );
+        }
+
+        return [];
+    }
+
+    /**
+     * return the complete list of licensed features (for external use)
+     *
+     * @return array
+     */
+    public function getAllFeatures()
+    {
+        return $this->getLicenseFeatures('all');
+    }
+}

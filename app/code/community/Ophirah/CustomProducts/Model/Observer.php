@@ -202,9 +202,7 @@ class Ophirah_CustomProducts_Model_Observer extends Mage_Core_Helper_Abstract
      * @param $newProduct
      * @return array
      */
-    // DHH CORE HACK -- PHP8
-    // private function _convertProductOptions($oldOptions = [], $oldProduct, $newProduct)
-    private function _convertProductOptions($oldOptions, $oldProduct, $newProduct)
+    private function _convertProductOptions($oldOptions = [], $oldProduct, $newProduct)
     {
         $newOptions = [];
 
