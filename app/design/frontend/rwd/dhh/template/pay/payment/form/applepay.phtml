@@ -1,20 +1,26 @@
-<!-- Copied from module version 3.16.1 -->
+<?php
+$_code = $this->getMethodCode();
+$instructions = $this->getInstructions();
+
+?>
 <script>
 // $('dt_method_pay_payment_applepay').hide();
+$('p_method_pay_payment_applepay').hide();
 
-// function isApplePayAvailable()
-// {
-    // try {
-        // return window.ApplePaySession;
-    // } catch (e) {
-        // console.warn(e);
-        // return false;
-    // }
-// }
 
-// if (isApplePayAvailable()) {
-    // $('dt_method_pay_payment_applepay').show();
-// }
+function isApplePayAvailable()
+{
+    try {
+        return window.ApplePaySession;
+    } catch (e) {
+        console.warn(e);
+        return false;
+    }
+}
+
+if (isApplePayAvailable()) {
+    $('dt_method_pay_payment_applepay').show();
+}
 </script>
 
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">

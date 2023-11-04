@@ -2318,6 +2318,7 @@ final class Ophirah_Qquoteadv_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function executeArticleRequest()
     {
+        ob_start(); // DHH CORE HACK -- PREVENT HEADERS SENT ERROR AT https://dev.chefstore.nl/admin4JN0/qquoteadv/requestArticle?isAjax=true
         try {
             // VARS
             $section = 200293659; // Help section with the related articles

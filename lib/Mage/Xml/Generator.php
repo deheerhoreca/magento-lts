@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Xml
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2021 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2021-2022 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Xml_Generator
@@ -28,19 +22,28 @@ class Mage_Xml_Generator
         $this->_dom = new DOMDocument('1.0');
         $this->_dom->formatOutput = true;
         $this->_currentDom = $this->_dom;
-        return $this;
     }
 
+    /**
+     * @return DOMDocument|null
+     */
     public function getDom()
     {
         return $this->_dom;
     }
 
+    /**
+     * @return DOMElement
+     */
     protected function _getCurrentDom()
     {
         return $this->_currentDom;
     }
 
+    /**
+     * @param DOMElement $node
+     * @return $this
+     */
     protected function _setCurrentDom($node)
     {
         $this->_currentDom = $node;
@@ -48,7 +51,7 @@ class Mage_Xml_Generator
     }
 
     /**
-    * @param array $content
+    * @param array|array[] $content
     */
     public function arrayToXml($content)
     {
@@ -95,11 +98,18 @@ class Mage_Xml_Generator
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getDom()->saveXML();
     }
 
+    /**
+     * @param string $file
+     * @return $this
+     */
     public function save($file)
     {
         $this->getDom()->save($file);

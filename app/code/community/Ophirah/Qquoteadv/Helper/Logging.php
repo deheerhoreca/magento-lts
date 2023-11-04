@@ -1,5 +1,117 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- final class Ophirah_Qquoteadv_Helper_Logging extends Mage_Core_Helper_Abstract { public final function sentAnonymousData($LjI33, $HHBHN, $RcB0W) { goto IVZVc; fNAaL: $yTHt7 = Mage::helper("\x71\x71\165\x6f\x74\x65\141\x64\x76\57\x6c\x69\x63\145\x6e\163\x65")->getMagentoVersion(); goto aHL1h; PP2Wp: $dFxCx = (string) $dFxCx[0]; goto jQD23; wQz0K: $YK5ZM = Mage::helper("\161\161\x75\157\164\145\x61\x64\166\57\x6c\151\143\145\x6e\x73\145")->getNot2OrderVersion(); goto VWprk; Csqc8: if (!empty($YK5ZM[0]) && isset($YK5ZM[0])) { goto Q8Hwe; } goto qTgJD; KYQkt: $M9mqH = Mage::helper("\x71\161\165\157\x74\x65\141\x64\x76\x2f\154\x69\x63\x65\x6e\163\145")->getMagentoEdition(); goto SuEoS; mCzjq: if (Mage::helper("\x71\161\165\x6f\x74\145\x61\144\166\57\154\x69\x63\145\x6e\x73\145")->isTrialVersion($HvHcU) || is_null($IaVkz)) { goto Gtxu4; } goto NqF4O; awKd4: $GB8yG = Mage::helper("\x71\161\165\157\164\x65\141\x64\x76\57\x6c\151\143\145\156\x73\x65")->getCurrentDomain(); goto C3hsy; zlLSa: try { goto eKGkr; PkI5l: JYdG2: goto upcpq; eKGkr: $DccRh = Mage::getModel("\161\161\x75\x6f\164\145\141\x64\x76\57\143\x6c\151\x65\156\164")->sendRequest($PCzfy); goto zDoQA; Ghd1S: Mage::log("\x45\x78\x63\x65\160\164\x69\157\156\x20\50\154\157\147\147\151\x6e\147\51\72\40" . $DccRh["\x65\162\x72\157\x72"]["\145\162\162\156\157"] . "\x3a\40" . $DccRh["\x65\x72\162\157\162"]["\145\162\162\x6f\162\155\x73\147"], null, "\x63\x32\x71\x5f\x65\x78\143\145\x70\x74\151\157\156\56\154\x6f\147"); goto PkI5l; zDoQA: if (!isset($DccRh["\x65\162\x72\x6f\162"])) { goto JYdG2; } goto Ghd1S; upcpq: } catch (Exception $Hcjwj) { Mage::log("\105\170\143\145\160\x74\x69\x6f\156\x20\x28\x6c\x6f\147\x67\x69\156\x67\x29\72\40" . $Hcjwj->getMessage(), null, "\143\62\x71\137\x65\170\143\145\160\164\x69\x6f\156\x2e\x6c\157\x67", true); } goto k5G7H; m5sur: if (!Mage::helper("\x71\x71\x75\x6f\x74\x65\141\144\x76\57\x6c\x69\x63\x65\x6e\163\x65")->isOpenSourceC2QVersion()) { goto TPWVR; } goto SrQOW; II73A: goto SQmmU; goto M4ky4; SuEoS: $jG3gr = Mage::helper("\161\161\165\157\x74\145\x61\144\166\57\154\x69\143\x65\x6e\x73\145")->getPHPVersion(); goto NXqlX; tFWJ1: if (!($IaVkz == null)) { goto tuyKW; } goto X14vm; jQD23: CyLL6: goto Kisy2; IVZVc: $dde1J = isset($_SERVER["\110\124\x54\120\137\110\117\x53\x54"]) ? $_SERVER["\x48\x54\124\x50\137\x48\x4f\x53\124"] : "\x6e\157\x2d\x64\x6f\155\141\151\x6e\x2e\143\x6f\155"; goto wB2Z1; uGsbJ: $BE3wd = true; goto YXBhU; SrQOW: $IaVkz = -217/217; goto CxjFK; x5xQf: $HvHcU = Mage::registry("\x63\162\x65\141\164\x65\x48\141\163\x68"); goto mCzjq; X14vm: $IaVkz = 0; goto GTLkE; UizHf: if (!(!empty($dFxCx[0]) && isset($dFxCx[0]))) { goto CyLL6; } goto PP2Wp; M4ky4: Q8Hwe: goto Q7C4F; Kisy2: if (!(!empty($fo79d[0]) && isset($fo79d[0]))) { goto REOXT; } goto bNtpU; lQQP8: $PCzfy = ["\x64\x6f\x6d\141\151\x6e" => $dde1J, "\x61\143\x74\x69\x6f\156" => $LjI33, "\x6c\157\x63\141\164\151\x6f\156" => $HHBHN, "\154\x65\166\145\x6c" => $IaVkz, "\x69\163\137\x74\x72\151\x61\x6c" => $BE3wd, "\x76\145\x72\x73\x69\x6f\x6e" => $yTHt7, "\143\x32\x71\x5f\x76\145\x72\x73\x69\157\156" => $dFxCx, "\x65\x64\x69\164\x69\x6f\156" => $M9mqH, "\161\x75\x6f\x74\145\x5f\151\x64" => $RcB0W, "\160\150\160\x5f\x76\x65\162\x73\x69\157\x6e" => $jG3gr, "\x69\x63\x5f\166\x65\x72\163\x69\x6f\156" => $f6mqb, "\x73\145\162\166\x65\162\137\144\157\155\x61\x69\156" => $GB8yG, "\x63\62\x71\137\x65\144\x69\x74\x69\x6f\156" => $cmBTd, "\x63\62\161\137\154\151\x63\145\156\x73\145" => $XZB2U, "\x63\62\161\x5f\145\x78\160\151\162\x65\x64\x61\164\x65" => $fltZ6, "\143\x32\161\x5f\164\162\151\141\154\163\164\141\164\145" => $p0jDi, "\x6e\62\157\x5f\x76\145\x72\163\151\x6f\x6e" => $YK5ZM, "\x63\x72\155\137\x76\x65\x72\x73\x69\x6f\x6e" => $fo79d]; goto zlLSa; M4rf3: REOXT: goto Csqc8; DPuhb: $fltZ6 = Mage::helper("\x71\x71\165\157\164\x65\141\144\166\57\x6c\x69\143\145\x6e\x73\x65")->getCart2QuoteExpiryDate(); goto ZrUub; NXqlX: $f6mqb = Mage::helper("\x71\161\165\157\x74\145\141\144\166\x2f\154\151\143\145\156\163\145")->getIonCubeVersion(); goto awKd4; CxjFK: TPWVR: goto x5xQf; wB2Z1: $IaVkz = Mage::helper("\x71\x71\165\157\164\x65\x61\x64\x76\57\x6c\x69\143\145\x6e\163\x65")->getAccessLevel(); goto tFWJ1; VWprk: $fo79d = Mage::helper("\161\x71\165\x6f\x74\x65\x61\x64\x76\57\x6c\x69\143\145\x6e\163\145")->getCRMaddonVersion(); goto UizHf; qTgJD: $YK5ZM = "\x66\141\x6c\163\x65"; goto II73A; laSMI: Gtxu4: goto uGsbJ; WCMjM: SQmmU: goto lQQP8; NqF4O: $BE3wd = false; goto cO0XX; ZrUub: $p0jDi = Mage::helper("\x71\161\x75\157\164\145\141\144\166\x2f\x6c\151\x63\145\156\163\145")->getCart2QuoteTrialExpired(); goto wQz0K; Q7C4F: $YK5ZM = (string) $YK5ZM[0]; goto WCMjM; GTLkE: tuyKW: goto m5sur; aHL1h: $dFxCx = Mage::helper("\x71\x71\x75\157\164\x65\x61\144\166\57\154\151\x63\x65\x6e\163\145")->getCart2QuoteVersion(); goto KYQkt; YXBhU: R3wdF: goto fNAaL; cO0XX: goto R3wdF; goto laSMI; bNtpU: $fo79d = (string) $fo79d[0]; goto M4rf3; V33YT: $XZB2U = Mage::helper("\x71\x71\x75\x6f\x74\145\x61\144\166\x2f\154\x69\x63\145\156\x73\x65")->getCart2QuoteLicense(); goto DPuhb; C3hsy: $cmBTd = Mage::helper("\161\161\x75\x6f\164\x65\141\144\x76\57\x6c\x69\143\145\x6e\163\x65")->getCart2QuoteEdition(); goto V33YT; k5G7H: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Helper_Logging
+ */
+final class Ophirah_Qquoteadv_Helper_Logging extends Mage_Core_Helper_Abstract
+{
+
+    /**
+     * @param $action
+     * @param $location
+     * @param $quote_id
+     */
+    final public function sentAnonymousData($action, $location, $quote_id)
+    {
+        $domain = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : 'no-domain.com';
+        $level = Mage::helper('qquoteadv/license')->getAccessLevel();
+        if ($level == null) {
+            $level = 0;
+        }
+        if (Mage::helper('qquoteadv/license')->isOpenSourceC2QVersion()) {
+            $level = -1;
+        }
+
+        $createHash = Mage::registry('createHash');
+        if (Mage::helper('qquoteadv/license')->isTrialVersion($createHash) || is_null($level)) {
+            $is_trial = true;
+        } else {
+            $is_trial = false;
+        }
+
+        //get data
+        $version        = Mage::helper('qquoteadv/license')->getMagentoVersion();
+        $c2qVersion     = Mage::helper('qquoteadv/license')->getCart2QuoteVersion();
+        $edition        = Mage::helper('qquoteadv/license')->getMagentoEdition();
+        $phpVersion     = Mage::helper('qquoteadv/license')->getPHPVersion();
+        $icVersion      = Mage::helper('qquoteadv/license')->getIonCubeVersion();
+        $serverDomain   = Mage::helper('qquoteadv/license')->getCurrentDomain();
+        $c2qEdition     = Mage::helper('qquoteadv/license')->getCart2QuoteEdition();
+        $c2qLicense     = Mage::helper('qquoteadv/license')->getCart2QuoteLicense();
+        $c2qExpireDate  = Mage::helper('qquoteadv/license')->getCart2QuoteExpiryDate();
+        $c2qTrialStatus = Mage::helper('qquoteadv/license')->getCart2QuoteTrialExpired();
+        $n2oVersion     = Mage::helper('qquoteadv/license')->getNot2OrderVersion();
+        $crmVersion     = Mage::helper('qquoteadv/license')->getCRMaddonVersion();
+
+        //prepare data
+        if (!empty($c2qVersion[0]) && isset($c2qVersion[0])) {
+            $c2qVersion = (string)$c2qVersion[0];
+        }
+
+        if (!empty($crmVersion[0]) && isset($crmVersion[0])) {
+            $crmVersion = (string)$crmVersion[0];
+        }
+
+        if (!empty($n2oVersion[0]) && isset($n2oVersion[0])) {
+            $n2oVersion = (string)$n2oVersion[0];
+        } else {
+            $n2oVersion = 'false';
+        }
+
+        $params = [
+            "domain"            => $domain,
+            "action"            => $action,
+            "location"          => $location,
+            "level"             => $level,
+            "is_trial"          => $is_trial,
+            "version"           => $version,
+            "c2q_version"       => $c2qVersion,
+            "edition"           => $edition,
+            "quote_id"          => $quote_id,
+            "php_version"       => $phpVersion,
+            "ic_version"        => $icVersion,
+            "server_domain"     => $serverDomain,
+            "c2q_edition"       => $c2qEdition,
+            "c2q_license"       => $c2qLicense,
+            "c2q_expiredate"    => $c2qExpireDate,
+            "c2q_trialstate"    => $c2qTrialStatus,
+            "n2o_version"       => $n2oVersion,
+            "crm_version"       => $crmVersion
+        ];
+
+        try {
+            $client = Mage::getModel('qquoteadv/client')->sendRequest($params);
+
+            if (isset($client['error'])) {
+                Mage::log('Exception (logging): ' .$client['error']['errno'].': '.$client['error']['errormsg'], null, 'c2q_exception.log');
+            }
+        } catch (Exception $e) {
+            Mage::log('Exception (logging): ' .$e->getMessage(), null, 'c2q_exception.log', true);
+        }
+    }
+}

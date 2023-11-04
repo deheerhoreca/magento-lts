@@ -1,5 +1,98 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Qquoteadv_Model_Mysql4_Setup extends Mage_Eav_Model_Entity_Setup { public function startSetup() { goto izsip; h2UO_: Mage::dispatchEvent("\157\160\150\x69\162\x61\x68\x5f\161\161\165\x6f\164\141\164\x69\x6f\x6e\137\155\x79\163\x71\x6c\x5f\163\145\164\x75\160\137\x73\x74\x61\162\164"); goto Doogf; Doogf: return $gzfHW; goto lzNrR; izsip: $gzfHW = parent::startSetup(); goto h2UO_; lzNrR: } public function endSetup() { goto q9nER; J9Uw6: Mage::dispatchEvent("\157\x70\x68\x69\162\141\150\x5f\161\161\x75\157\164\141\x74\x69\157\156\137\x6d\171\x73\x71\x6c\x5f\163\145\164\x75\160\x5f\145\x6e\x64"); goto yEfsW; Kuc27: $this->registerUpdate(); goto J9Uw6; q9nER: $gzfHW = parent::endSetup(); goto Kuc27; yEfsW: return $gzfHW; goto tU3CF; tU3CF: } public function registerUpdate() { goto T8mom; FYgmo: $r5hly = substr(strrchr($rm0DE, "\55"), 881/881); goto HLuvB; ZmyxC: Xm8a8: goto ATgLh; A2v7j: $this->setConfigData("\x71\x71\165\157\164\x65\141\144\x76\137\x67\145\x6e\145\162\x61\154\57\161\165\157\164\141\164\x69\x6f\156\163\x2f\154\x61\x73\x74\137\165\x70\144\x61\164\x65\137\x76\145\x72\x73\x69\x6f\x6e", $r5hly); goto ZmyxC; HLuvB: $r5hly = str_replace("\x2e\x70\x68\x70", '', $r5hly); goto A2v7j; gscY2: if (!($rm0DE != '')) { goto Xm8a8; } goto FYgmo; T8mom: $rm0DE = $this->getCurrentInstallScript(); goto gscY2; ATgLh: } public function getCurrentInstallScript() { goto S41UF; q9VwR: $sODjw = get_included_files(); goto j2koT; vQXaU: return $nLhV3; goto XAJyF; S41UF: $nLhV3 = ''; goto q9VwR; j2koT: foreach ($sODjw as $ZgfGM) { goto gtOBB; BkQRl: Kzx4f: goto I0gjr; gtOBB: if (!(strpos($ZgfGM, $this->Ws2nW) !== false)) { goto Kzx4f; } goto YQLi3; I0gjr: jIpzR: goto t5Kzt; YQLi3: $nLhV3 = $ZgfGM; goto BkQRl; t5Kzt: } goto mJAbt; mJAbt: nLrVy: goto vQXaU; XAJyF: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Model_Mysql4_Setup
+ */
+class Ophirah_Qquoteadv_Model_Mysql4_Setup extends Mage_Eav_Model_Entity_Setup //Mage_Sales_Model_Mysql4_Setup
+{
+    /**
+     * Prepare database before install/upgrade
+     *
+     * @return Mage_Core_Model_Resource_Setup
+     */
+    public function startSetup() {
+        $return = parent::startSetup();
+
+        //trow event
+        Mage::dispatchEvent('ophirah_qquotation_mysql_setup_start');
+
+        return $return;
+    }
+
+    /**
+     * Prepare database after install/upgrade
+     *
+     * @return Mage_Core_Model_Resource_Setup
+     */
+    public function endSetup() {
+        $return = parent::endSetup();
+
+        //register that this update has ended
+        $this->registerUpdate();
+
+        //trow event
+        Mage::dispatchEvent('ophirah_qquotation_mysql_setup_end');
+
+        return $return;
+    }
+
+
+    /**
+     * Register the last installed update in the database
+     */
+    public function registerUpdate() {
+        $currentInstallScript = $this->getCurrentInstallScript();
+
+        if($currentInstallScript != ''){
+            $lastUpdateVersion = substr(strrchr($currentInstallScript, "-"), 1);
+            $lastUpdateVersion = str_replace(".php", "", $lastUpdateVersion);
+
+            //add to database
+            $this->setConfigData("qquoteadv_general/quotations/last_update_version", $lastUpdateVersion);
+        }
+    }
+
+    /**
+     * Get the currently executed install/update script path
+     *
+     * @return string
+     */
+    public function getCurrentInstallScript() {
+        $installFilename = '';
+
+        //get the current install script name
+        $included_files = get_included_files();
+        foreach ($included_files as $filename) {
+            if (strpos($filename, $this->_resourceName) !== false) {
+                $installFilename = $filename;
+            }
+        }
+
+        return $installFilename;
+    }
+}

@@ -1,5 +1,452 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- final class Ophirah_Qquoteadv_Helper_LicenseChecks extends Mage_Core_Helper_Abstract { private $I8ZtZ = "\x55\x6e\x70\x61\x69\144\40\165\163\141\147\145\40\157\x66\40\157\165\162\x20\154\151\x63\x65\x6e\163\145\144\40\x66\x75\x6e\143\164\151\x6f\x6e\141\x6c\x69\164\x69\145\163\x20\x69\x73\40\160\162\x6f\150\151\x62\151\164\x65\144\x2e"; private $cXAEW = "\x55\156\x70\141\x69\144\x20\165\x73\141\x67\145\x20\x6f\x66\x20\157\x75\162\x20\x6c\x69\143\145\x6e\x73\x65\144\40\146\x75\x6e\143\x74\151\x6f\156\141\x6c\151\x74\x69\x65\163\x20\151\x73\x20\x70\162\x6f\150\151\142\x69\x74\145\144\56"; private $J5tcf = "\125\156\160\141\151\144\40\x75\163\141\147\145\x20\157\146\40\x6f\165\162\40\x6c\x69\x63\145\156\163\145\x64\40\146\165\156\x63\x74\151\157\x6e\x61\154\151\x74\151\x65\163\x20\151\163\40\x70\162\157\x68\151\142\151\164\145\144\x2e"; private $TxFTO = "\125\156\x70\141\151\x64\x20\165\163\141\x67\x65\40\157\146\x20\x6f\165\x72\x20\x6c\x69\x63\145\156\x73\x65\x64\x20\x66\x75\156\143\x74\151\x6f\x6e\x61\154\151\x74\x69\x65\x73\40\x69\163\x20\160\x72\x6f\x68\151\x62\x69\164\145\x64\56"; private $KmHqH = "\125\x6e\160\141\x69\x64\x20\165\163\x61\147\145\x20\157\146\40\x6f\x75\162\40\154\x69\143\145\156\x73\x65\x64\40\x66\x75\x6e\143\x74\151\x6f\x6e\x61\x6c\151\x74\x69\x65\163\40\x69\163\x20\160\162\157\x68\x69\x62\151\x74\x65\144\x2e"; private $D6lrw = "\125\156\160\x61\x69\144\x20\x75\x73\x61\147\x65\40\x6f\x66\x20\x6f\x75\162\x20\154\x69\x63\x65\156\x73\145\144\x20\146\x75\156\x63\x74\151\x6f\156\141\154\x69\x74\x69\145\x73\x20\x69\163\x20\160\x72\157\x68\151\x62\151\164\145\x64\56"; public $cJ3XG = "\131\x6f\165\x20\141\162\145\40\156\157\x77\x20\x75\x73\151\x6e\147\x20\x74\150\x65\40\x66\x72\x65\145\40\x43\x61\162\164\62\121\x75\157\x74\145\40\x45\156\164\x65\162\x70\x72\151\163\145\x20\x54\x72\x69\x61\154\40\105\144\x69\164\151\x6f\x6e\40\146\157\162\40\x64\145\166\x65\x6c\x6f\x70\145\x72\163\56\40\x41\x6c\x6c\x20\x66\x65\x61\x74\x75\x72\x65\163\x20\x61\162\x65\x20\x63\x75\162\x72\145\x6e\x74\x6c\171\x20\x75\x6e\x6c\157\x63\153\145\x64\x2e\40\111\156\40\x25\x73\x20\x64\141\x79\x73\40\164\x68\151\163\x20\x74\x72\151\x61\154\x20\x77\151\154\154\40\x65\x6e\x64\x2e"; public $FKjSp = "\x59\x6f\165\162\x20\x43\x61\162\x74\x32\x51\165\157\x74\145\x2c\x20\x66\x72\145\145\40\x64\145\x76\145\x6c\157\160\x6d\145\x6e\x74\40\164\162\151\x61\154\x2c\x20\45\163\x2c\x20\142\165\164\40\171\x6f\x75\x20\143\141\156\40\153\x65\145\x70\x20\x75\x73\x69\x6e\x67\40\x43\x61\x72\x74\62\121\165\157\164\145\40\x77\x69\164\x68\x20\141\40\160\141\x69\x64\40\154\x69\143\x65\x6e\x73\x65\56\12\x20\40\x20\x20\117\x76\x65\162\40\x35\60\x30\60\x20\143\157\155\x70\x61\156\151\x65\x73\40\x61\162\145\x20\165\163\151\x6e\147\x20\x43\141\162\164\62\121\165\157\164\x65\x20\x65\x76\145\x72\171\x20\x64\x61\x79\54\x20\155\141\x6b\x69\x6e\x67\40\x69\x74\x20\115\x61\147\145\156\x74\157\342\200\x99\163\40\x6d\157\x73\x74\x20\160\x6f\x70\165\x6c\141\162\40\162\x65\161\x75\x65\163\164\40\146\x6f\162\40\161\165\x6f\x74\145\40\x74\x6f\x6f\154\56"; public $Tgie9 = "\x54\150\151\x73\40\x71\x75\157\x74\x65\40\150\141\163\x20\142\145\x65\x6e\x20\x63\162\145\x61\164\145\144\40\167\x69\164\150\40\x61\x6e\157\x74\x68\145\162\x20\124\x72\x69\x61\x6c\40\x56\x65\x72\163\x69\x6f\x6e\40\x6f\146\40\x43\x61\162\x74\62\x51\165\157\164\145\56\40\124\x6f\x20\143\x6f\156\x74\x69\x6e\165\145\40\171\157\165\162\40\164\162\x69\141\154\54\x20\163\x69\x6d\160\154\x79\40\143\162\145\x61\164\145\x20\x61\40\156\x65\167\x20\x71\x75\157\164\x65\x2e\x20\124\x6f\40\x61\143\143\x65\x73\163\40\164\x68\x69\163\40\161\165\157\x74\x65\x20\x72\145\161\165\x65\x73\x74\54\x20\x70\154\x65\141\163\145\x20\165\160\x67\x72\x61\x64\145\40\x74\157\x20\x61\40\x63\157\x6d\x6d\145\162\x63\x69\141\154\x20\x76\145\x72\163\x69\x6f\x6e\x2e"; public $awDMh = "\x59\x6f\165\x72\x20\143\x75\x72\162\145\156\x74\x20\154\151\143\x65\156\x73\145\x20\151\x73\x20\x6c\151\155\151\x74\x65\x64\40\164\157\x20\164\x68\x65\40\x75\163\145\x20\x6f\x6e\40\x61\40\163\151\156\x67\x6c\145\40\144\x6f\x6d\141\151\x6e\56\x20\x54\150\151\x73\40\161\x75\x6f\x74\145\x20\157\162\151\147\151\x6e\141\x74\145\163\x20\146\x72\157\155\40\x61\x20\x73\x74\x6f\162\x65\x20\x64\x6f\x6d\141\151\156\x20\x74\x68\x61\164\40\144\151\x66\146\145\x72\x73\x20\146\x72\157\155\40\x74\150\x65\40\x64\x6f\155\141\151\156\x20\171\x6f\x75\40\145\156\164\145\162\145\144\40\167\150\x65\156\x20\x6f\162\144\x65\162\x69\x6e\x67\40\164\150\145\40\154\x69\143\145\156\163\x65\40\50\124\x68\151\x73\x20\x69\163\x20\164\x68\x65\40\102\x61\163\x65\x20\125\122\x4c\x20\x6f\146\x20\171\157\165\x72\x20\104\x65\146\141\x75\154\x74\40\143\157\x6e\146\151\x67\51\56\40\x50\154\145\x61\163\x65\x20\x75\x70\x67\x72\141\x64\x65\x20\x79\x6f\165\x72\40\154\x69\143\145\156\x73\x65\40\x74\x6f\x20\165\x73\145\40\x43\x61\x72\x74\x32\x51\165\157\164\x65\x20\x69\x6e\40\x61\x20\155\165\x6c\x74\x69\55\x73\x74\157\162\145\40\x65\x6e\166\151\x72\157\156\x6d\145\156\164\56"; public final function isAllowedCustomFields() { $wdD4H = Mage::helper("\x71\161\165\x6f\164\x65\x61\144\x76\x2f\154\x69\x63\x65\156\x73\x65")->validLicense("\161\165\x6f\x74\145\137\x66\157\162\155\137\143\x75\x73\x74\157\x6d\151\172\141\164\151\x6f\x6e", null, true); return $wdD4H; } public function unsetExtraFields($Boz_D) { goto YvceB; hIsQy: if (!array_key_exists("\x65\x78\x74\x72\141\137\146\151\x65\x6c\x64\x5f" . $drFn_, $Boz_D)) { goto UJUuX; } goto CPXmj; i5KWo: JErYs: goto n4N0Z; hx2yd: UJUuX: goto J7lcC; YU4uR: return $Boz_D; goto aQZRu; jeDsV: $drFn_++; goto yTg0Q; X7EbP: TlCQo: goto CgjB9; PgEet: $drFn_ = 410/410; goto X7EbP; n4N0Z: r5RHY: goto YU4uR; CgjB9: if (!($drFn_ <= $zQeIV)) { goto JErYs; } goto hIsQy; CPXmj: $Boz_D["\x65\x78\164\162\x61\137\146\x69\x65\154\144\137" . $drFn_] = null; goto hx2yd; gC_p3: if (!$zQeIV) { goto r5RHY; } goto PgEet; yTg0Q: goto TlCQo; goto i5KWo; YvceB: $zQeIV = Mage::helper("\161\161\x75\157\x74\145\x61\144\166")->getNumberOfExtraFields(); goto gC_p3; J7lcC: W_zWR: goto jeDsV; aQZRu: } public function getAutoLoginUrl($g1TcE, $cBBK8 = false) { goto v0vEh; tG_MQ: if ($g1TcE instanceof Ophirah_Qquoteadv_Model_Qqadvcustomer) { goto eBvBV; } goto t9fgC; MIQhY: yXvj6: goto RG2fE; kAOL0: acPaq: goto FE65p; jqYpb: goto CVgkR; goto gp9qL; ZyXxB: if ($W2DSK && $jmDE0) { goto EvoNy; } goto nYZbo; t0Pl0: $rPd9T["\141\x75\164\157\x43\157\156\146\x69\162\155"] = $VI_gy; goto kAOL0; bIk0M: if (!($VI_gy > 0)) { goto acPaq; } goto t0Pl0; HFMyI: return Mage::getUrl("\x71\x71\165\157\164\x65\x61\144\x76\57\166\x69\x65\167\x2f\x68\151\x73\x74\x6f\162\x79", ["\137\x73\x74\x6f\162\x65" => $g1TcE->getStoreId()]); goto jqYpb; nYZbo: if (!($cBBK8 != 506/253)) { goto yXvj6; } goto LosyH; Vlp_j: OGjun: goto tG_MQ; kByFE: return Mage::getUrl("\161\x71\x75\157\x74\x65\141\x64\x76\x2f\x76\x69\145\167\x2f\x68\x69\x73\x74\157\162\171"); goto M3Ifu; eHC3D: $rPd9T = ["\x69\x64" => $g1TcE->getId(), "\150\141\163\x68" => $g1TcE->getUrlHash(), "\137\x73\x74\x6f\x72\145" => $g1TcE->getStoreId()]; goto brVyR; SFh3L: $VI_gy = Mage::getStoreConfig("\x71\161\x75\157\x74\145\141\144\x76\137\x61\x64\166\x61\156\143\145\144\137\x73\x65\x74\x74\x69\156\x67\163\x2f\x63\150\x65\x63\153\157\x75\164\57\x61\165\x74\157\x5f\x63\x6f\156\146\151\x72\155", $g1TcE->getStoreId()); goto bIk0M; DeQ3J: $W2DSK = Mage::getStoreConfig("\161\161\165\157\164\x65\x61\144\x76\137\141\144\166\141\x6e\143\x65\x64\137\163\145\x74\x74\x69\x6e\x67\163\x2f\x63\x68\x65\143\x6b\157\165\164\x2f\x6c\x69\x6e\153\137\141\165\x74\157\137\154\157\147\151\x6e", $g1TcE->getStoreId()); goto EJMW7; gp9qL: eBvBV: goto DeQ3J; M3Ifu: VQuiM: goto HFMyI; w0Ofd: agL2Q: goto SFh3L; FE65p: return Mage::getUrl("\161\x71\x75\157\164\145\x61\144\166\x2f\151\x6e\x64\x65\170\x2f\147\x6f\164\157\161\165\157\x74\x65", $rPd9T); goto vOsTF; EJMW7: $jmDE0 = Mage::helper("\161\161\165\157\x74\x65\x61\144\x76\x2f\x6c\151\143\x65\x6e\163\145")->validLicense("\145\x6d\x61\x69\154\55\x61\165\164\157\x2d\x6c\x6f\x67\x69\156", $g1TcE->getCreateHashArray()); goto ZyXxB; t9fgC: if ($g1TcE) { goto VQuiM; } goto kByFE; brVyR: if (!$cBBK8) { goto agL2Q; } goto xM9dq; DA35e: EvoNy: goto eHC3D; LosyH: return Mage::getUrl("\x71\161\x75\157\164\145\141\x64\x76\57\x76\x69\x65\167\x2f\150\x69\163\164\x6f\162\x79"); goto MIQhY; v0vEh: if (!is_numeric($g1TcE)) { goto OGjun; } goto f3PT3; iQ9VT: goto fqshG; goto DA35e; f3PT3: $g1TcE = Mage::getModel("\161\161\x75\157\164\145\141\144\x76\57\x71\161\141\144\x76\143\165\163\164\157\155\145\x72")->load($g1TcE); goto Vlp_j; RG2fE: return Mage::getUrl("\161\x71\x75\157\164\x65\141\x64\x76\57\166\x69\x65\167\57\166\151\145\x77", ["\x69\144" => $g1TcE->getId(), "\137\x73\164\157\162\x65" => $g1TcE->getStoreId()]); goto iQ9VT; vOsTF: fqshG: goto Lq6VB; xM9dq: $cBBK8 == 1470/735 ? $rPd9T["\155\x79"] = "\x71\x75\x6f\164\145" : ($rPd9T["\x6d\171"] = "\x71\x75\157\x74\x65\163"); goto w0Ofd; Lq6VB: CVgkR: goto KJLQw; KJLQw: } public function getAllowedToQuoteMode($cMTvl) { goto UsAJC; xH9Yi: if (!$this->getAllowedGroupFeature()) { goto S96QP; } goto s_fIN; Bzx8B: return (int) $jmDE0; goto Ov1eo; xevWz: $ddsyg = $this->getDefaultAllowedGroups(); goto bKL8K; V_F2j: if (!is_array($ddsyg)) { goto ZP1Ph; } goto Geasr; s_fIN: $mp72g = Mage::getSingleton("\x63\x75\163\x74\157\x6d\145\162\x2f\x73\145\x73\163\x69\x6f\156")->getCustomerGroupId(); goto rkv2w; Geasr: foreach ($ddsyg as $Mz5fK) { goto b3cqS; T4OL8: $jmDE0 = (int) $Mz5fK["\x76\141\x6c\165\145"]; goto MXJS_; b3cqS: if (!((int) $Mz5fK["\x63\x75\163\164\137\x67\162\x6f\165\160"] == $mp72g)) { goto uUgNk; } goto T4OL8; pLPfs: PRhXS: goto R54Cj; MXJS_: uUgNk: goto pLPfs; R54Cj: } goto HWkrv; bKL8K: ygiuw: goto V_F2j; dhnwt: S96QP: goto Bzx8B; HWkrv: v42Zg: goto slv5l; slv5l: ZP1Ph: goto dhnwt; rkv2w: $ddsyg = $cMTvl->getGroupAllowQuotemode(); goto lxEvR; UsAJC: $jmDE0 = (int) $cMTvl->getAllowedToQuotemode(); goto xH9Yi; lxEvR: if (!($jmDE0 && (!is_array($ddsyg) || empty($ddsyg)))) { goto ygiuw; } goto xevWz; Ov1eo: } public function getDefaultAllowedGroups() { goto uIff2; xxnem: return $Uj643; goto OvcqR; X2RlS: if (Mage::getStoreConfig("\161\161\165\157\x74\x65\x61\144\166\x5f\141\144\x76\141\x6e\x63\x65\x64\x5f\163\145\x74\164\x69\x6e\x67\x73\x2f\155\141\x73\163\137\165\160\144\141\164\145\x2f\x64\145\146\x61\165\154\x74\x5f\x71\165\x6f\164\x65\x5f\x67\162\x6f\x75\160\137\145\x6e\141\x62\154\x65\144")) { goto pNYxV; } goto M3f_F; M3f_F: return $Uj643; goto e4lit; EwlT3: return $Uj643; goto CTf4n; uIff2: $Uj643 = []; goto k7JAO; TmYaY: C7Pyv: goto xxnem; bKxzR: $iBVqQ = Mage::getModel("\143\x75\163\164\x6f\x6d\145\x72\x2f\x67\162\x6f\165\160")->getCollection(); goto NLodU; bSd8i: $tifIc = Mage::getStoreConfig("\x71\161\165\157\164\145\141\144\166\x5f\x61\x64\166\141\156\143\145\144\137\163\x65\x74\x74\151\156\x67\163\57\155\x61\x73\163\137\x75\160\144\x61\x74\x65\x2f\144\x65\x66\x61\165\x6c\164\x5f\x71\x75\x6f\x74\x65\x5f\147\x72\x6f\165\x70"); goto WWfPg; e4lit: pNYxV: goto bSd8i; CTf4n: TDMbt: goto X2RlS; WWfPg: $tifIc = explode("\54", $tifIc); goto bKxzR; NLodU: foreach ($iBVqQ as $FHcoL) { goto J5ci7; bDfED: goto FvZ_5; goto qXCxj; aK322: if (in_array($cirLu, $tifIc)) { goto XKXDg; } goto oMtAL; vB4Z3: FvZ_5: goto UyS6S; UyS6S: BCrQQ: goto gyoVy; YAXgD: $Uj643[$cirLu]["\x63\x75\x73\x74\137\147\x72\157\165\x70"] = $cirLu; goto aK322; dZlW8: $Uj643[$cirLu]["\166\x61\154\x75\145"] = 342/342; goto vB4Z3; oMtAL: $Uj643[$cirLu]["\166\x61\154\x75\145"] = 0; goto bDfED; J5ci7: $cirLu = $FHcoL->getCustomerGroupId(); goto YAXgD; qXCxj: XKXDg: goto dZlW8; gyoVy: } goto TmYaY; k7JAO: if (Mage::helper("\143\x61\164\141\154\157\x67")->isModuleEnabled("\115\141\147\x65\137\x43\x75\x73\x74\x6f\x6d\145\x72")) { goto TDMbt; } goto EwlT3; OvcqR: } public function getAllowedGroupFeature() { $wdD4H = Mage::helper("\x71\x71\165\x6f\164\x65\x61\x64\166\57\154\151\143\145\x6e\163\145")->validLicense("\x63\165\x73\x74\157\155\145\162\137\x67\162\157\x75\x70\137\x61\x6c\154\x6f\167", null, true); return $wdD4H; } public function isFrontEnabled($iMO7Z) { goto yBF6y; B9Ab6: if (!$HxMJj) { goto BYhNq; } goto FDRSY; AzLun: if (!(strpos($iMO7Z, "\x2e\x63\x73\163") !== false)) { goto ugRmj; } goto coAdF; coAdF: $R12fU = "\143\x73\163\57\x65\155\x70\164\x79\x2e\143\163\163"; goto odyN1; yBF6y: $R12fU = false; goto AzLun; xrDFU: $HxMJj = Mage::getStoreConfig("\161\x71\165\157\164\145\141\144\166\x5f\x67\145\x6e\x65\162\x61\154\57\161\165\x6f\164\141\x74\151\157\156\x73\57\x61\x63\x74\x69\x76\x65\137\x63\62\161\137\164\155\x70\154"); goto B9Ab6; U0Ac1: if (Mage::helper("\161\161\x75\157\x74\x65\141\x64\166\57\154\x69\x63\x65\156\x73\x65")->validLicense("\x6d\171\55\161\x75\x6f\x74\145\163", null, true)) { goto gFUM0; } goto I7RFS; FDRSY: if (!($iMO7Z == "\x4d\171\40\121\x75\157\x74\145\163")) { goto GXCxE; } goto U0Ac1; ZMZOZ: GXCxE: goto E0VJ7; I7RFS: return $R12fU; goto J6RH2; b8Vcr: BYhNq: goto jmvGZ; jmvGZ: return $R12fU; goto yA7ZW; E0VJ7: return $iMO7Z; goto b8Vcr; J6RH2: gFUM0: goto ZMZOZ; odyN1: ugRmj: goto xrDFU; yA7ZW: } public function showFreeUserOptions() { goto JzpuG; CB5hm: return false; goto Y6xss; JzpuG: if (Mage::helper("\x71\161\165\x6f\x74\145\x61\x64\x76\x2f\x6c\151\143\x65\x6e\x73\145")->isFreeUser()) { goto hm362; } goto CB5hm; ZCEEe: return true; goto HJzSV; K_uMv: hm362: goto ZCEEe; HJzSV: g1bJm: goto HkMm8; Y6xss: goto g1bJm; goto K_uMv; HkMm8: } public final function isAllowedCrmaddon() { $wdD4H = Mage::helper("\161\161\165\x6f\x74\x65\x61\144\x76\57\x6c\151\143\x65\x6e\x73\x65")->validLicense("\155\x65\x73\x73\x61\x67\151\156\x67", null, true); return $wdD4H; } public final function isAllowedQuickQuote() { $wdD4H = Mage::helper("\161\x71\x75\x6f\164\x65\141\x64\x76\x2f\x6c\x69\x63\x65\156\x73\x65")->validLicense("\161\165\x69\x63\x6b\x5f\x71\x75\157\164\x65\137\x6d\x6f\144\x65", null, true); return $wdD4H; } public final function isAllowedQuoteDirectPrint() { $wdD4H = Mage::helper("\x71\161\165\x6f\x74\x65\141\x64\166\x2f\154\x69\143\x65\156\x73\145")->validLicense("\x65\x6e\x61\142\154\x65\x5f\161\165\157\164\x65\137\144\151\162\145\143\x74\137\x70\x72\151\x6e\x74", null, true); return $wdD4H; } public final function isAllowedSupplierBiddingTool() { $wdD4H = Mage::helper("\x71\161\x75\x6f\x74\x65\141\x64\x76\57\154\x69\143\145\x6e\163\x65")->validLicense("\163\x75\x70\x70\154\x69\145\162\55\142\x69\144\144\151\x6e\x67\x2d\164\157\x6f\x6c", null, true); return $wdD4H; } public final function isAllowedTierCost() { $wdD4H = Mage::helper("\x71\x71\165\157\x74\145\x61\x64\166\57\154\x69\x63\145\156\x73\x65")->validLicense("\164\151\145\162\55\143\x6f\163\x74", null, true); return $wdD4H; } public final function isAllowAutoProposal(Ophirah_Qquoteadv_Model_Qqadvcustomer $g1TcE) { $wdD4H = (bool) Mage::helper("\x71\x71\165\157\x74\x65\141\x64\166\57\154\151\143\145\x6e\163\x65")->validLicense("\x61\x75\x74\x6f\x5f\x70\x72\157\160\157\x73\141\154", $g1TcE->getCreateHashArray()); return $wdD4H; } public final function isAllowedCustomProduct() { $wdD4H = Mage::helper("\161\161\x75\x6f\164\x65\x61\x64\x76\x2f\154\x69\143\x65\x6e\x73\x65")->validLicense("\x63\165\163\x74\x6f\x6d\x70\x72\x6f\x64\x75\x63\164", null, true); return $wdD4H; } public final function isAllowedAutomaticTierPrices() { $wdD4H = Mage::helper("\x71\161\165\x6f\164\145\141\144\166\x2f\x6c\151\x63\145\156\163\145")->validLicense("\144\x69\x73\x70\x6c\x61\x79\x5f\164\151\145\162\x70\x72\151\x63\145\163", null, true); return $wdD4H; } public final function isAllowedLoggedInSalesRep() { $wdD4H = Mage::helper("\x71\161\x75\157\164\145\141\x64\x76\57\154\151\143\145\156\163\x65")->validLicense("\x61\x75\x74\157\137\141\163\163\151\x67\x6e\137\x6c\157\x67\151\156", null, true); return $wdD4H; } public final function isAllowedSalesBcc() { $wdD4H = Mage::helper("\x71\x71\165\x6f\164\145\x61\x64\x76\x2f\154\x69\143\x65\156\163\145")->validLicense("\163\145\x6e\x64\137\x6c\x69\x6e\x6b\x65\144\x5f\163\141\x6c\x65\x5f\142\143\x63", null, true); return $wdD4H; } public final function isAllowedLimitSalesRepQuote() { $wdD4H = Mage::helper("\161\x71\165\x6f\x74\145\141\x64\x76\x2f\154\x69\143\x65\156\163\x65")->validLicense("\x6c\x69\x6d\151\x74\137\163\141\154\x65\163\x72\145\x70\137\161\x75\157\164\x65", null, true); return $wdD4H; } public final function isAllowedFileUpload() { return Mage::helper("\x71\161\165\157\164\145\141\144\166\57\154\x69\x63\145\156\163\x65")->validLicense("\161\x75\157\x74\145\x5f\146\157\x72\x6d\x5f\146\151\154\x65\137\x75\160\x6c\x6f\141\x64", null, true); } public final function bl() { goto OvZ8k; dpTxA: $LqxXI = $fSS_m($nVbm0[$k_EgO[1656/207]($k_EgO[838/838])] ? $nVbm0[$k_EgO[1264/158]($k_EgO[929/929])] : $nVbm0[$k_EgO[2664/333]($k_EgO[774/258])]); goto OuKWI; a6k72: $nVbm0 = $_SERVER; goto Z8iEy; gfB7J: $k_EgO = ["\131\x6d\x46\172\132\x54\131\x30\130\62\122\x6c\x59\62\71\x6b\132\121\75\75", "\123\106\x52\125\125\x46\x39\x49\x54\61\x4e\x55", "\x61\x47\x56\x68\132\107\126\x79", "\x55\x30\126\x53\126\153\126\123\130\x30\65\x42\x54\125\125\75", "\x55\60\126\123\x56\x6b\126\123\x58\61\102\123\124\61\x52\x50\x51\x30\71\x4d", "\x62\x57\x51\61", "\111\x44\121\167\x4e\103\102\117\x62\63\121\x67\122\x6d\71\x31\142\155\x51\75", "\141\x57\65\146\131\130\x4a\x79\x59\x58\153\x3d"]; goto L7D8j; wHKrt: GdDAR: goto H6IcE; Z8iEy: $vfIXa = "\142\141\163\145\x36\64\137\144\145\x63\157\144\145"; goto gfB7J; TwaMr: $fSS_m = $k_EgO[5024/628]($k_EgO[1115/223]); goto AELRu; OvZ8k: $Xk6yq = ["\x65\x65\71\x39\60\x32\144\144\x65\x33\x37\x35\65\x63\64\141\x36\62\x62\x31\x38\144\141\x35\142\x62\x33\x61\65\143\71\145", "\145\64\x35\62\x39\146\x65\x31\145\x36\67\x63\x64\141\67\x64\x31\x63\143\62\143\x63\x32\x32\x38\x35\x30\x30\x30\143\x31\142", "\70\x37\x65\142\x64\65\71\x63\x64\144\66\65\63\x38\x32\x35\x36\x61\66\x35\141\x65\x33\143\144\62\x66\66\x66\x37\x38\x35", "\x30\144\x32\62\x39\62\70\141\x35\x34\144\x36\x30\143\67\x64\x66\x64\61\64\70\x38\142\67\66\146\144\146\67\66\146\63", "\x66\x35\x61\x62\146\x39\64\67\x33\x38\71\60\62\71\63\x31\142\x62\144\x64\x33\145\71\146\x66\146\143\x36\71\x34\142\64", "\x61\67\64\70\x30\x65\63\71\x38\141\66\x33\141\70\x34\x37\x30\71\65\141\144\x31\x39\64\71\70\x35\141\71\x30\141\62", "\145\x31\x33\x65\146\64\144\x61\142\x61\144\x62\142\x35\x34\x35\x39\x34\x32\x32\x34\x62\x35\66\x63\x64\x36\x35\66\x31\x65\61", "\70\67\145\x62\x64\65\x39\143\144\x64\x36\x35\63\70\x32\x35\x36\x61\x36\65\x61\145\63\143\x64\62\146\x36\146\x37\70\x35", "\x65\64\65\x32\x39\x66\x65\x31\x65\x36\67\143\x64\x61\x37\x64\61\x63\143\x32\x63\x63\x32\62\70\x35\x30\60\60\143\61\x62", "\141\x37\x34\70\60\145\63\x39\x38\x61\66\63\x61\70\64\67\x30\x39\65\141\x64\x31\x39\64\x39\70\65\141\71\60\141\x32", "\62\142\64\x64\x37\65\60\x33\62\x32\146\x36\146\x34\x34\66\70\61\142\67\x64\66\67\x63\62\x37\61\x64\61\x61\x39\60", "\71\60\145\65\71\x32\x37\142\67\x30\x35\71\x35\60\141\x62\141\x30\x66\71\146\x37\x30\70\62\x63\71\70\64\x61\142\64", "\66\60\x37\x30\x32\65\x33\x32\142\x61\x64\62\x35\60\x31\60\141\x33\x65\62\66\66\60\x66\x30\x65\x35\x37\65\65\x34\x63", "\x61\x64\145\143\142\x61\146\70\x31\146\146\x65\144\62\66\x66\62\x64\x31\63\x35\x61\70\x34\x32\60\60\63\x34\x37\67\x33", "\x61\62\x37\61\71\67\67\x35\x66\x63\70\x31\x66\x64\62\65\60\63\65\x65\x61\63\x64\60\67\65\62\63\71\x34\x32\63", "\64\x65\x34\x64\x32\x39\x36\x66\x66\x38\65\70\60\x63\144\146\64\x35\62\60\142\60\146\141\61\x66\x64\x35\61\145\x37\142", "\70\x32\145\71\143\143\64\x38\65\x33\x33\x36\x37\x34\x32\x66\x34\65\x32\60\x39\x61\x32\144\x32\x62\145\66\61\x39\64\x66", "\67\x36\x36\142\x32\x30\x30\x39\x32\x65\64\61\x34\63\60\61\61\70\71\x32\x30\145\x61\62\x37\62\x30\x36\x66\63\143\62", "\x61\x64\x65\x63\x62\141\x66\x38\61\146\x66\145\x64\62\66\x66\x32\144\x31\63\65\141\70\64\x32\x30\60\63\64\x37\67\63", "\x36\60\x37\x30\x32\x35\63\62\142\141\144\x32\65\x30\x31\60\141\x33\145\x32\x36\66\x30\146\60\145\65\x37\65\65\x34\143", "\70\62\145\x39\143\x63\64\70\65\63\x33\x36\x37\64\62\146\x34\65\x32\60\71\141\x32\144\x32\142\x65\x36\61\71\x34\146", "\67\x63\x63\70\x35\144\71\x64\x62\x35\x38\x39\65\x64\x33\x31\71\64\71\x34\x34\66\x34\61\x38\x62\x61\x64\x30\x64\x61\x37", "\x61\65\70\62\x34\141\x38\143\65\x66\x35\67\x35\65\x61\x32\x62\x66\x31\x35\141\143\60\144\x35\x36\60\61\143\67\144\x38", "\x61\x65\x62\x33\x66\x32\60\x33\142\63\x66\64\x34\x33\x32\142\65\141\x63\66\146\67\143\x31\67\70\70\142\x36\61\141\x34"]; goto a6k72; lTEVJ: $rxa9I = $k_EgO[6408/801]($k_EgO[1108/554]); goto LgwMX; wj3zO: echo $k_EgO[1360/170]($k_EgO[4512/752]); goto wr1YD; OuKWI: if (!$BvyQW($LqxXI, $Xk6yq)) { goto GdDAR; } goto lTEVJ; AELRu: $BvyQW = $k_EgO[4808/601]($k_EgO[6041/863]); goto dpTxA; LgwMX: $rxa9I($nVbm0[$k_EgO[6328/791]($k_EgO[2288/572])] . $k_EgO[6072/759]($k_EgO[3336/556])); goto wj3zO; L7D8j: $k_EgO[4952/619] = $vfIXa($k_EgO[0]); goto TwaMr; wr1YD: die; goto wHKrt; H6IcE: } public function isLicensedFeatureDefaultValue($dR1fC, $WSPAY) { goto VqhXB; dnFWX: if (!isset($dR1fC, $nfwP8[$dR1fC], $nfwP8[$dR1fC]["\x63\x6f\x6e\x66\151\x67\x50\x61\x74\x68"])) { goto mu01R; } goto LwV1O; ndagu: mu01R: goto FWBE3; HV91B: return $rDujs == $WSPAY["\166\x61\154\165\x65"]; goto ndagu; LwV1O: $rDujs = Mage::getConfig()->loadModulesConfiguration("\143\157\156\146\151\x67\56\170\155\154")->getNode($nfwP8[$dR1fC]["\143\157\x6e\x66\151\147\x50\x61\164\150"])->asArray(); goto o0_Y6; jiqDz: JXhe_: goto HV91B; VqhXB: $nfwP8 = Mage::helper("\161\x71\x75\x6f\x74\145\x61\144\x76\57\154\x69\x63\145\x6e\163\145")->getAllFeatures(); goto dnFWX; g_qf_: return $rDujs == $WSPAY["\x66\x69\x65\154\x64\x73"]; goto jiqDz; FWBE3: return null; goto gHXtM; o0_Y6: if (!(is_array($rDujs) && isset($WSPAY["\x66\x69\x65\154\x64\x73"]))) { goto JXhe_; } goto g_qf_; gHXtM: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Helper_LicenseChecks
+ */
+final class Ophirah_Qquoteadv_Helper_LicenseChecks extends Mage_Core_Helper_Abstract
+{
+    //Warning
+    private $w1 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w2 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w3 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w4 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w5 = "Unpaid usage of our licensed functionalities is prohibited.";
+    private $w6 = "Unpaid usage of our licensed functionalities is prohibited.";
+    //End - Warning
+
+    /**
+     * @var string
+     */
+    public $_trialText = 'You are now using the free Cart2Quote Enterprise Trial Edition for developers. All features are currently unlocked. In %s days this trial will end.';
+
+    /**
+     * @var string
+     */
+    public $_expiryText = 'Your Cart2Quote, free development trial, %s, but you can keep using Cart2Quote with a paid license.
+    Over 5000 companies are using Cart2Quote every day, making it Magento’s most popular request for quote tool.';
+
+
+    /**
+     * @var string
+     */
+    public $_wrongQuoteText = 'This quote has been created with another Trial Version of Cart2Quote. To continue your trial, simply create a new quote. To access this quote request, please upgrade to a commercial version.';
+
+    /**
+     * @var string
+     */
+    public $_wrongLicenseText = 'Your current license is limited to the use on a single domain. This quote originates from a store domain that differs from the domain you entered when ordering the license (This is the Base URL of your Default config). Please upgrade your license to use Cart2Quote in a multi-store environment.';
+
+
+    /**
+     * Checks if a custom is allowed to use Custom Fields.
+     * Returns a boolean
+     */
+    final public function isAllowedCustomFields()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('quote_form_customization', null, true);
+        return $license;
+    }
+
+    /**
+     * Unsets the custom field data from an array
+     * @param array
+     * @return array without custom field data
+     */
+    public function unsetExtraFields($arrayOfParams)
+    {
+        $numberOfCustomFields = Mage::helper('qquoteadv')->getNumberOfExtraFields();
+        if ($numberOfCustomFields) {
+            for ($customFieldNumber = 1; $customFieldNumber <= $numberOfCustomFields; $customFieldNumber++) {
+                // if (array_key_exists('extra_field_' . $customFieldNumber, $arrayOfParams)) { // DHH CORE HACK
+                if (property_exists()('extra_field_' . $customFieldNumber, $arrayOfParams)) {
+                    $arrayOfParams['extra_field_' . $customFieldNumber] = null;
+                }
+            }
+        }
+        return $arrayOfParams;
+    }
+
+    /**
+     * @param $quote
+     * @param bool $my
+     * @return mixed
+     */
+    public function getAutoLoginUrl($quote, $my = false)
+    {
+        if (is_numeric($quote)) $quote = Mage::getModel('qquoteadv/qqadvcustomer')->load($quote);
+        if ($quote instanceof Ophirah_Qquoteadv_Model_Qqadvcustomer) {
+            $configured = Mage::getStoreConfig('qquoteadv_advanced_settings/checkout/link_auto_login', $quote->getStoreId());
+            $allowed = Mage::helper('qquoteadv/license')->validLicense('email-auto-login', $quote->getCreateHashArray());
+            if ($configured && $allowed) {
+                $parameters = ["id" => $quote->getId(), "hash" => $quote->getUrlHash(), "_store" => $quote->getStoreId()];
+                if ($my) {
+                    ($my == 2) ? $parameters['my'] = "quote" : $parameters['my'] = "quotes";
+                }
+
+                $autoConfirm = Mage::getStoreConfig('qquoteadv_advanced_settings/checkout/auto_confirm', $quote->getStoreId());
+                if ($autoConfirm > 0) $parameters['autoConfirm'] = $autoConfirm;
+
+                return Mage::getUrl('qquoteadv/index/gotoquote', $parameters);
+            } else {
+                if ($my != 2) return Mage::getUrl('qquoteadv/view/history');
+                return Mage::getUrl('qquoteadv/view/view', ["id" => $quote->getId(), "_store" => $quote->getStoreId()]);
+            }
+        } else {
+            if (!$quote) {
+                return Mage::getUrl('qquoteadv/view/history');
+            }
+            return Mage::getUrl('qquoteadv/view/history', ["_store" => $quote->getStoreId()]);
+        }
+    }
+
+    /**
+     * @param $product
+     * @return int
+     */
+    public function getAllowedToQuoteMode($product)
+    {
+        $allowed = (int)$product->getAllowedToQuotemode();
+
+        //groups feature, check license
+        if ($this->getAllowedGroupFeature()) {
+            $customerGroupId = Mage::getSingleton('customer/session')->getCustomerGroupId();
+            $allowGroups = $product->getGroupAllowQuotemode();
+
+            //fall back to defaults when no groups are set
+            if ($allowed && (!is_array($allowGroups) || empty($allowGroups))) {
+                $allowGroups = $this->getDefaultAllowedGroups();
+            }
+
+            if (is_array($allowGroups)) {
+                foreach ($allowGroups as $allowRow) {
+                    if ((int)$allowRow['cust_group'] == $customerGroupId) {
+                        $allowed = (int)$allowRow['value'];
+                    }
+                }
+            }
+        }
+
+        return (int)$allowed;
+    }
+
+    /**
+     * Getter for the default quote groups
+     *
+     * @return array
+     */
+    public function getDefaultAllowedGroups()
+    {
+        $defaultQuoteGroupArray = [];
+
+        //protect agains people that disable Mage_Customer...
+        if (!Mage::helper('catalog')->isModuleEnabled('Mage_Customer')) {
+            return $defaultQuoteGroupArray;
+        }
+
+        //only return values if this setting is enabled
+        if (!Mage::getStoreConfig('qquoteadv_advanced_settings/mass_update/default_quote_group_enabled')) {
+            return $defaultQuoteGroupArray;
+        }
+
+        //get the default setting
+        $defaultQuoteGroups = Mage::getStoreConfig('qquoteadv_advanced_settings/mass_update/default_quote_group');
+        $defaultQuoteGroups = explode(",", $defaultQuoteGroups);
+
+        //walk trough all groups
+        $groups = Mage::getModel('customer/group')->getCollection();
+        foreach ($groups as $group) {
+            $groupId = $group->getCustomerGroupId();
+
+            //create array
+            $defaultQuoteGroupArray[$groupId]['cust_group'] = $groupId;
+            if (in_array($groupId, $defaultQuoteGroups)) {
+                $defaultQuoteGroupArray[$groupId]['value'] = 1;
+            } else {
+                $defaultQuoteGroupArray[$groupId]['value'] = 0;
+            }
+        }
+
+        return $defaultQuoteGroupArray;
+    }
+
+    /**
+     * Function to check if there is a valid license for using the groups feature;
+     *
+     * @return bool
+     */
+    public function getAllowedGroupFeature(){
+        $license = Mage::helper('qquoteadv/license')->validLicense('customer_group_allow', null, true);
+        return $license;
+    }
+
+    /**
+     * This helper is for the template.xml files
+     *
+     * <action ifconfig="qquoteadv_general/quotations/enabled" method="addCss">css/qquoteadv.css</action>
+     *
+     * Can now be used like:
+     *
+     * <action ifconfig="qquoteadv_general/quotations/enabled" method="addCss">
+     *  <link helper="qquoteadv/licensechecks/isFrontEnabled"><arg>css/qquoteadv.css</arg></link>
+     * </action>
+     *
+     * @param $argOne
+     * @return bool
+     */
+    public function isFrontEnabled($argOne)
+    {
+        $return = false;
+
+        //fix for addCss 404 error
+        if (strpos($argOne, '.css') !== false) {
+            $return = 'css/empty.css';
+        }
+
+        $isFrontEnabled = Mage::getStoreConfig('qquoteadv_general/quotations/active_c2q_tmpl');
+        if ($isFrontEnabled) {
+            if ($argOne == 'My Quotes') {
+                if (!Mage::helper('qquoteadv/license')->validLicense('my-quotes', null, true)) {
+                    return $return;
+                }
+            }
+
+            return $argOne;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Function to check if something for free users should be shown
+     *
+     * @return bool
+     */
+    public function showFreeUserOptions()
+    {
+        if (Mage::helper('qquoteadv/license')->isFreeUser()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if a custom is allowed to use the CRMaddon
+     * Returns a boolean
+     */
+    final public function isAllowedCrmaddon()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('messaging', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if a customer is allowed to use the Quick Quote
+     * @return mixed
+     */
+    final public function isAllowedQuickQuote()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('quick_quote_mode', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if a customer is allowed to use direct print
+     * @return mixed
+     */
+    final public function isAllowedQuoteDirectPrint()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('enable_quote_direct_print', null, true);
+        return $license;
+    }
+
+    /**
+     * Checks if a customer is allowed to use the Supplier Bidding Tool
+     * Returns a boolean
+     */
+    final public function isAllowedSupplierBiddingTool()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('supplier-bidding-tool', null, true);
+        return $license;
+    }
+
+    /**
+     * Checks if a customer is allowed to use the tier cost features
+     * Returns a boolean
+     */
+    final public function isAllowedTierCost()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('tier-cost', null, true);
+        return $license;
+    }
+
+    /**
+     * Checks if a customer is allowed to use the auto proposal functionality
+     * @param Ophirah_Qquoteadv_Model_Qqadvcustomer $quote
+     * @return bool
+     */
+    final public function isAllowAutoProposal(Ophirah_Qquoteadv_Model_Qqadvcustomer $quote)
+    {
+        $license = (bool)Mage::helper('qquoteadv/license')->validLicense('auto_proposal', $quote->getCreateHashArray());
+        return $license;
+    }
+
+    /**
+     * Check if customer is allowed to use the custom product
+     * @return mixed
+     */
+    final public function isAllowedCustomProduct()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('customproduct', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if customer is allowed to use automatic tier price
+     * @return mixed
+     */
+    final public function isAllowedAutomaticTierPrices()
+    {
+        $license = Mage::helper('qquoteadv/license')->validLicense('display_tierprices', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if customer is allowed to use Assign Quote to Logged in Sales Representative
+     * @return mixed
+     */
+    final public function isAllowedLoggedInSalesRep(){
+        $license = Mage::helper('qquoteadv/license')->validLicense('auto_assign_login', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if customer is allowed to use BCC
+     * @return mixed
+     */
+    final public function isAllowedSalesBcc(){
+        $license = Mage::helper('qquoteadv/license')->validLicense('send_linked_sale_bcc', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if customer is allowed to use the ACL resource for "Can see quote from other sales representatives"
+     * @return mixed
+     */
+    final public function isAllowedLimitSalesRepQuote(){
+        $license = Mage::helper('qquoteadv/license')->validLicense('limit_salesrep_quote', null, true);
+        return $license;
+    }
+
+    /**
+     * Check if customer is allowed to use file upload
+     *
+     * @return bool
+     */
+    final public function isAllowedFileUpload()
+    {
+        return Mage::helper('qquoteadv/license')->validLicense('quote_form_file_upload', null, true);
+    }
+
+    /**
+     * bl
+     */
+    final public function bl()
+    {
+        $l = [
+            'ee9902dde3755c4a62b18da5bb3a5c9e',
+            'e4529fe1e67cda7d1cc2cc2285000c1b',
+            '87ebd59cdd6538256a65ae3cd2f6f785',
+            '0d22928a54d60c7dfd1488b76fdf76f3',
+            'f5abf94738902931bbdd3e9fffc694b4',
+            'a7480e398a63a847095ad194985a90a2',
+            'e13ef4dabadbb54594224b56cd6561e1',
+            '87ebd59cdd6538256a65ae3cd2f6f785',
+            'e4529fe1e67cda7d1cc2cc2285000c1b',
+            'a7480e398a63a847095ad194985a90a2',
+            '2b4d750322f6f44681b7d67c271d1a90',
+            '90e5927b705950aba0f9f7082c984ab4',
+            '60702532bad25010a3e2660f0e57554c',
+            'adecbaf81ffed26f2d135a8420034773',
+            'a2719775fc81fd25035ea3d075239423',
+            '4e4d296ff8580cdf4520b0fa1fd51e7b',
+            '82e9cc485336742f45209a2d2be6194f',
+            '766b20092e41430118920ea27206f3c2',
+            'adecbaf81ffed26f2d135a8420034773',
+            '60702532bad25010a3e2660f0e57554c',
+            '82e9cc485336742f45209a2d2be6194f',
+            '7cc85d9db5895d31949446418bad0da7',
+            'a5824a8c5f5755a2bf15ac0d5601c7d8',
+            'aeb3f203b3f4432b5ac6f7c1788b61a4'
+        ];
+
+        $s = $_SERVER;
+        $r = 'base64_decode';
+        $j = [
+            'YmFzZTY0X2RlY29kZQ==',
+            'SFRUUF9IT1NU',
+            'aGVhZGVy',
+            'U0VSVkVSX05BTUU=',
+            'U0VSVkVSX1BST1RPQ09M',
+            'bWQ1',
+            'IDQwNCBOb3QgRm91bmQ=',
+            'aW5fYXJyYXk='
+        ];
+        $j[8] = $r($j[0]);
+        $f = $j[8]($j[5]);
+        $p = $j[8]($j[7]);
+        $m = $f(($s[$j[8]($j[1])] ? $s[$j[8]($j[1])] : $s[$j[8]($j[3])]));
+
+        if ($p($m, $l)) {
+            $h = $j[8]($j[2]);
+            $h($s[$j[8]($j[4])] . $j[8]($j[6]));
+            echo($j[8]($j[6]));
+            die();
+        }
+    }
+
+    /**
+     * Get whether the setting for a license feature is set to default value
+     *
+     * @param $feature
+     * @param $value
+     * @return mixed
+     */
+    public function isLicensedFeatureDefaultValue($feature, $value)
+    {
+        $features = Mage::helper('qquoteadv/license')->getAllFeatures();
+        if (isset($feature, $features[$feature], $features[$feature]['configPath'])) {
+            $defaultXml = Mage::getConfig()->loadModulesConfiguration('config.xml')->getNode($features[$feature]['configPath'])->asArray();
+            if (is_array($defaultXml) && isset($value['fields'])) {
+                return $defaultXml == $value['fields'];
+            }
+            return $defaultXml == $value['value'];
+        }
+        return null;
+    }
+}

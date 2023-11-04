@@ -2484,9 +2484,11 @@ class Ophirah_Qquoteadv_Model_Qqadvcustomer extends Mage_Sales_Model_Quote
      *
      * @return string
      */
-    public function getCouponCode()
+    // public function getCouponCode()
+    public function getCouponCode(): string           // DHH CORE HACK -- OM 20.1.1
     {
-        return $this->getData('coupon_code');
+        // return $this->getData('coupon_code');
+        return (string)$this->getData('coupon_code'); // DHH CORE HACK -- OM 20.1.1
     }
 
     /**

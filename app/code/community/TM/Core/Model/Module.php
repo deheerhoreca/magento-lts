@@ -173,7 +173,7 @@ class TM_Core_Model_Module extends Mage_Core_Model_Abstract
         try {
             $result = Mage::helper('core')->jsonDecode($response);
             if (!is_array($result)) {
-                throw new Exception('Decoding failed');
+                throw new Exception('TM license check Decoding failed');
             }
         } catch (Exception $e) {
             $result = array(

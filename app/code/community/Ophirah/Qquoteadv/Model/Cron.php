@@ -1,5 +1,58 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Qquoteadv_Model_Cron { public function sendReminderEmail() { goto ncPLl; eZ403: Mage::getModel("\161\161\x75\157\x74\x65\141\144\x76\57\x71\161\x61\x64\x76\x63\165\x73\x74\x6f\155\x65\162")->sendReminderEmail(); goto v0b9A; ncPLl: if (!(Mage::helper("\161\x71\x75\157\x74\x65\141\x64\166\x2f\154\151\143\x65\x6e\x73\145")->validLicense("\163\x65\156\144\x5f\162\145\155\x69\156\144\x65\162", null, true) && !Mage::helper("\161\x71\165\157\164\145\141\x64\x76\x2f\154\x69\x63\145\x6e\x73\145\x63\150\145\x63\153\x73")->showFreeUserOptions())) { goto CPk7R; } goto eZ403; v0b9A: CPk7R: goto YKt9f; YKt9f: } public function sendExpireEmail() { goto kNiOu; PIB7J: ZNhzp: goto sqX5A; gw9BL: Mage::getModel("\161\161\165\157\164\x65\141\x64\x76\x2f\161\161\141\x64\166\x63\165\x73\x74\x6f\155\145\162")->sendExpireEmail(); goto PIB7J; kNiOu: if (!(Mage::helper("\x71\161\165\x6f\164\x65\x61\144\166\x2f\154\151\x63\145\x6e\x73\x65")->validLicense("\x71\x71\165\x6f\164\x65\141\x64\166\137\161\x71\165\x6f\x74\x65\x61\x64\166\x5f\145\x78\x70\151\162\145\x5f\x65\x6d\141\x69\154", null, true) && !Mage::helper("\x71\161\x75\x6f\x74\x65\x61\144\166\x2f\154\151\x63\145\156\x73\x65\143\x68\x65\x63\153\x73")->showFreeUserOptions())) { goto ZNhzp; } goto gw9BL; sqX5A: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Model_Cron
+ */
+class Ophirah_Qquoteadv_Model_Cron
+{
+    /**
+     * Cron job route to the qqadvcustomer sendReminderEmail
+     */
+    public function sendReminderEmail()
+    {
+        // Check for a valid Enterprise license & not free user
+        if (Mage::helper('qquoteadv/license')->validLicense('send_reminder', null, true)
+            && !Mage::helper('qquoteadv/licensechecks')->showFreeUserOptions()
+        ) {
+            Mage::getModel('qquoteadv/qqadvcustomer')->sendReminderEmail();
+        }
+    }
+
+    /**
+     * Cron job route to the qqadvcustomer sendExpireEmail
+     */
+    public function sendExpireEmail()
+    {
+        // Check for a valid license & not free user
+        if (Mage::helper('qquoteadv/license')->validLicense('qquoteadv_qquoteadv_expire_email', null, true)
+            && !Mage::helper('qquoteadv/licensechecks')->showFreeUserOptions()
+        ) {
+            Mage::getModel('qquoteadv/qqadvcustomer')->sendExpireEmail();
+        }
+    }
+}

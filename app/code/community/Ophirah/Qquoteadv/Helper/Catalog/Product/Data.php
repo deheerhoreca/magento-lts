@@ -1,5 +1,354 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Qquoteadv_Helper_Catalog_Product_Data extends Mage_Core_Helper_Abstract { public function getUrlAdd2QquoteadvList(Mage_Catalog_Model_Product $qPPbV, $v1D0s = array()) { goto gTRjn; XKB8T: if (!($qPPbV->getTypeInstance(true)->hasRequiredOptions($qPPbV) || $KlOQt)) { goto nSq3I; } goto FBrAm; GSLDZ: $KlOQt = true; goto Fte8W; dLacj: nSq3I: goto NRq6w; XFBM0: $rkpAP = strpos($SYqQw, "\x3f") !== false ? "\46" : "\77"; goto KFGqR; KFGqR: return $SYqQw . $rkpAP . "\x6f\x70\x74\x69\157\156\x73\75\x63\x61\162\164\x26\143\x32\x71\x72\145\144\151\x72\145\143\x74\75\61"; goto dLacj; Fte8W: gzm3Y: goto XKB8T; NRq6w: return $this->getUrlAdd2QquoteadvById($qPPbV->getId()); goto rtY4L; XF7Lo: $QbiUk = new Varien_Object(["\161\164\171" => 530/530]); goto ZV41l; ZV41l: $lRdjl = $qPPbV->getTypeInstance(true)->prepareForCartAdvanced($QbiUk, $qPPbV, null); goto YCrtP; FBrAm: $SYqQw = $qPPbV->getProductUrl(); goto XFBM0; gTRjn: $GwNLJ = "\x71\161\165\x6f\164\x65\141\x64\166\57\x69\156\x64\145\170"; goto fiOpb; YCrtP: if (!is_string($lRdjl)) { goto gzm3Y; } goto GSLDZ; fiOpb: $KlOQt = false; goto XF7Lo; rtY4L: } public function getUrlAdd2Qquoteadv(Mage_Catalog_Model_Product $qPPbV, $v1D0s = array()) { return $this->getUrlAdd2QquoteadvById($qPPbV->getId()); } public function getUrlAdd2QquoteadvById($IangS) { goto RmLku; RmLku: $GwNLJ = "\161\161\165\x6f\x74\145\x61\144\x76\x2f\x69\156\144\145\x78"; goto YVP36; yvvJP: Ln0PE: goto olyDf; YVP36: $SYqQw = "\x61\x64\x64\x49\x74\145\155"; goto JcKsz; i0kad: $SYqQw = "\141\x64\144\x49\164\x65\155\x41\x6a\x61\170"; goto yvvJP; olyDf: return Mage::getUrl($GwNLJ . "\x2f" . $SYqQw . "\x2f", ["\160\162\157\144\x75\143\x74" => $IangS, "\137\x73\x65\x63\165\x72\x65" => Mage::app()->getStore()->isCurrentlySecure()]); goto wo3M6; JcKsz: if (!(Mage::getStoreConfig("\161\161\165\x6f\164\145\141\144\166\137\161\165\157\164\145\137\x66\x72\157\156\x74\145\x6e\x64\x2f\143\x61\x74\141\x6c\157\x67\x2f\141\152\141\x78\137\141\x64\144") && Mage::helper("\x71\x71\165\x6f\164\x65\141\144\166")->checkQuickQuote() != "\61")) { goto Ln0PE; } goto i0kad; wo3M6: } public function getAddToQuoteAction($IangS) { goto DwhuN; DwhuN: $pD98s = Mage::getStoreConfig("\161\161\165\157\164\145\x61\x64\166\137\161\165\157\164\145\x5f\x66\162\157\x6e\164\x65\x6e\x64\x2f\143\x61\164\141\154\157\x67\x2f\141\152\x61\x78\x5f\x61\144\x64"); goto XU9a6; QFCzv: kUNeI: goto onJa6; wB2qB: $foHJI = "\141\x64\144\121\x75\x6f\x74\x65\50\47" . $SYqQw . "\47\54\40{$pD98s}\40\x29\73"; goto aVOnz; onJa6: return $foHJI; goto Ak3d6; XU9a6: $SYqQw = $this->getUrlAdd2QquoteadvById($IangS); goto wB2qB; aVOnz: if (!Mage::helper("\x71\161\x75\x6f\x74\145\141\x64\x76")->checkQuickQuote()) { goto kUNeI; } goto szjmz; szjmz: $foHJI = "\147\x65\164\x50\162\157\x64\165\x63\164\x49\156\146\x6f\50\x27" . Mage::helper("\x71\161\165\x6f\164\x65\141\144\x76\57\x63\141\164\141\x6c\x6f\x67\137\x70\162\x6f\144\165\143\x74\137\144\141\164\x61")->getQuickQuoteProductUrl($IangS) . "\47\x29\73\40"; goto QFCzv; Ak3d6: } public function compareBundles($mA3Cx, $WH21v, $QJPvW) { goto KxV6m; cw1ew: $qPPbV->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($WH21v)), $qPPbV); goto ofO30; Stqs1: if (!$qPPbV instanceof Mage_Catalog_Model_Product) { goto JDv0w; } goto lqiy8; MBr7X: return false; goto pr02q; OVknT: r2_Ng: goto rXeXf; HutrC: return true; goto ruw1g; KxV6m: $qPPbV = Mage::getModel("\143\x61\x74\x61\154\157\147\x2f\x70\x72\x6f\x64\x75\x63\164")->load($mA3Cx); goto Stqs1; lqiy8: $pYolU = clone $qPPbV; goto cw1ew; Ymepb: $BUIDp = $pYolU->getCustomOption("\x62\165\156\x64\x6c\x65\x5f\x69\144\x65\156\x74\151\164\x79"); goto uijAs; rXeXf: JDv0w: goto MBr7X; ruw1g: YQnTS: goto OVknT; a95SC: $CO_Wb = $qPPbV->getCustomOption("\x62\x75\x6e\144\154\145\x5f\x69\x64\x65\x6e\164\x69\164\171"); goto Ymepb; ofO30: $pYolU->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($QJPvW)), $pYolU); goto a95SC; C2uJY: if (!($CO_Wb->getValue() == $BUIDp->getValue())) { goto YQnTS; } goto HutrC; uijAs: if (!($BUIDp != null)) { goto r2_Ng; } goto C2uJY; pr02q: } public function compareConfigurable($mA3Cx, $WH21v, $QJPvW) { goto RJV18; mqcux: $qPPbV->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($WH21v)), $qPPbV); goto UIUJA; dFNAj: $CO_Wb = $qPPbV->getCustomOption("\x61\164\x74\162\151\x62\x75\164\145\x73"); goto vca8P; mATWd: return true; goto T468X; e3_P0: if (!($CO_Wb->getValue() == $BUIDp->getValue())) { goto LvgV0; } goto mATWd; UIUJA: $pYolU->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($QJPvW)), $pYolU); goto dFNAj; PB_93: $pYolU = clone $qPPbV; goto mqcux; H5tEO: pdL0C: goto na5IJ; B8Iq7: return false; goto B9YBU; QsvcK: if (!($CO_Wb instanceof Mage_Catalog_Model_Product_Configuration_Item_Option && $BUIDp instanceof Mage_Catalog_Model_Product_Configuration_Item_Option)) { goto pdL0C; } goto e3_P0; vca8P: $BUIDp = $pYolU->getCustomOption("\x61\x74\164\162\x69\x62\165\164\x65\x73"); goto QsvcK; na5IJ: pVEx3: goto B8Iq7; ELd0Q: if (!$qPPbV instanceof Mage_Catalog_Model_Product) { goto pVEx3; } goto PB_93; T468X: LvgV0: goto H5tEO; RJV18: $qPPbV = Mage::getModel("\x63\x61\x74\x61\x6c\x6f\147\57\160\162\157\144\x75\x63\164")->load($mA3Cx); goto ELd0Q; B9YBU: } public function getItemPictureDimensions($pQP6z, $QRLEh = null, $u1s5o = null) { goto uIzMS; tw9U2: if (!$u1s5o == null && (int) $u1s5o > 0) { goto BsBSs; } goto xV0Ph; RANIA: $QuMbk = $QRLEh * $h0Z7L; goto paRmX; Ze4za: goto ZSjtt; goto AF7nt; PSsBF: return $ACqOA; goto NCWCZ; HwBDo: JQ20W: goto yqppb; Ni8Y4: ZSjtt: goto MJUQI; IKKeE: goto ZSjtt; goto tKA70; cFSU5: $PQcAu = (int) $pQP6z->getOriginalHeight(); goto K9E1Q; dsX15: $QuMbk = $QRLEh; goto FaTMW; yqppb: if (!$QRLEh == null && (int) $QRLEh > 0) { goto U9APP; } goto tw9U2; MJUQI: goto Ri_mp; goto HwBDo; D6TvF: WEeiS: goto SNyE8; uayM0: if (!(is_object($pQP6z) && $pQP6z instanceof Mage_Catalog_Helper_Image)) { goto i1maW; } goto ZIenE; UTWUQ: $ACqOA["\167\151\144\164\150"] = (int) $QuMbk; goto tW36_; g9Fm3: BsBSs: goto JOu1J; ZIenE: $J54zb = (int) $pQP6z->getOriginalWidth(); goto cFSU5; LzSlj: $QuMbk = $J54zb; goto zCasd; uIzMS: $ACqOA = []; goto rlgM6; KDRE6: PtjtZ: goto PSsBF; gbagX: $QuMbk = $u1s5o * $h0Z7L; goto b0Ug5; yZTTB: list($J54zb, $PQcAu, $NozM6, $kNac_) = getimagesize($pQP6z); goto y2eAh; s0JOB: goto WEeiS; goto g9Fm3; rlgM6: $DaDs7 = null; goto uayM0; AF7nt: CEWmi: goto gbagX; pjP5M: if (!$u1s5o == null && (int) $u1s5o > 0) { goto CEWmi; } goto AsVN8; Dz0ua: if (!is_file($pQP6z)) { goto PSBUI; } goto yZTTB; yrK2h: if (!(isset($J54zb) && isset($PQcAu))) { goto PtjtZ; } goto dJmvy; vZNoZ: U9APP: goto dsX15; xV0Ph: goto WEeiS; goto vZNoZ; y2eAh: PSBUI: goto yrK2h; b0Ug5: $Zq4jW = $u1s5o; goto IKKeE; tW36_: $ACqOA["\150\x65\x69\147\150\x74"] = (int) $Zq4jW; goto KDRE6; FaTMW: $Zq4jW = $QRLEh / $h0Z7L; goto s0JOB; iOlkW: if ($h0Z7L > 684/684) { goto JQ20W; } goto pjP5M; K9E1Q: i1maW: goto KBolM; paRmX: $Zq4jW = $QRLEh; goto Ni8Y4; JOu1J: $QuMbk = $u1s5o; goto OVG_b; KBolM: if (!(is_object($pQP6z) && $pQP6z instanceof Zend_Pdf_Resource_Image)) { goto Psvj9; } goto uEyWL; uEyWL: $J54zb = (int) $pQP6z->getPixelWidth(); goto pAaNP; dJmvy: $h0Z7L = $J54zb / $PQcAu; goto LzSlj; pAaNP: $PQcAu = (int) $pQP6z->getPixelHeight(); goto V816d; OVG_b: $Zq4jW = $u1s5o / $h0Z7L; goto D6TvF; V816d: Psvj9: goto Dz0ua; AsVN8: if (!$QRLEh == null && (int) $QRLEh > 0) { goto PU9nz; } goto Ze4za; zCasd: $Zq4jW = $PQcAu; goto iOlkW; SNyE8: Ri_mp: goto UTWUQ; tKA70: PU9nz: goto RANIA; NCWCZ: } public function getQuickQuoteProductUrl($IangS) { return Mage::getUrl("\161\161\165\157\164\x65\x61\144\166\57\x69\x6e\144\145\170\x2f\x71\x75\x69\x63\x6b\161\165\157\164\x65\166\x69\145\x77", ["\x70\x72\157\144\165\143\164" => $IangS, "\x5f\x73\x65\143\x75\162\145" => Mage::app()->getStore()->isCurrentlySecure()]); } public function canShowImageOfChildProduct($i3gC2 = null) { goto Zsfij; Zsfij: if (!(!$i3gC2 || !$i3gC2->getData("\x74\150\x75\155\142\x6e\x61\151\154") || $i3gC2->getData("\164\150\165\x6d\142\x6e\141\151\x6c") == "\x6e\157\x5f\x73\145\154\145\143\x74\151\x6f\x6e" || Mage::getStoreConfig(Mage_Checkout_Block_Cart_Item_Renderer_Configurable::CONFIGURABLE_PRODUCT_IMAGE) == Mage_Checkout_Block_Cart_Item_Renderer_Configurable::USE_PARENT_IMAGE)) { goto rLs9F; } goto TgTVI; TgTVI: return false; goto UAF8m; KW6Tq: return true; goto VllGD; UAF8m: rLs9F: goto KW6Tq; VllGD: } public function getImageProduct($qPPbV, $i3gC2 = null) { goto RjNrv; IC9yB: return $qPPbV; goto Zski9; Kjxik: return $i3gC2; goto oEice; Weu2o: sE3DM: goto Kjxik; tZ2Pv: if ($this->canShowImageOfChildProduct($i3gC2)) { goto sE3DM; } goto JqKoJ; RjNrv: if (!($i3gC2 === null || $qPPbV->getId() == $i3gC2->getId())) { goto lhUI7; } goto IC9yB; JqKoJ: return $qPPbV; goto Weu2o; Zski9: lhUI7: goto tZ2Pv; oEice: } public function getConfChildProduct($DAzjD, $qPPbV = null, $TxOQE = null, $qO2D2 = true) { goto bhqTf; zqaXu: CKpx_: goto uvCwX; XjItw: if (!($qPPbV->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)) { goto hzjpX; } goto UqIdo; K1MDc: vTpF6: goto mWPoq; s_nr9: if ($TxOQE == null) { goto CKpx_; } goto SWNWi; tvXUj: if (!($i3gC2 != null)) { goto Q7TYK; } goto oY_86; PbtCb: $yslM3 = $qPPbV; goto XjItw; kiQys: $TxOQE = unserialize($TxOQE->getAttribute()); goto CBTw8; T4LXD: LQSNU: goto PbtCb; v7GWQ: Q7TYK: goto HG5Ce; SWNWi: if (is_array($TxOQE)) { goto or7Jl; } goto kiQys; CBTw8: or7Jl: goto bi269; Rt2O6: if (!($qPPbV == null && isset($TxOQE["\160\162\157\x64\165\143\164"]))) { goto LQSNU; } goto BgR13; UqIdo: $i3gC2 = Mage::getModel("\x63\141\x74\x61\154\157\147\x2f\160\162\157\144\165\x63\164\x5f\x74\x79\160\145\x5f\x63\157\156\146\151\147\x75\162\141\142\154\145")->getProductByAttributes($TxOQE["\x73\165\x70\x65\162\137\141\x74\x74\x72\151\x62\165\164\x65"], $qPPbV); goto tvXUj; bi269: goto V0nMe; goto zqaXu; uvCwX: $TxOQE = unserialize(Mage::getModel("\161\161\x75\x6f\x74\x65\x61\x64\166\x2f\161\161\x61\x64\166\160\162\157\x64\165\x63\x74")->load($DAzjD)->getAttribute()); goto gImIZ; HG5Ce: hzjpX: goto YNbxx; oY_86: $yslM3 = $i3gC2; goto v7GWQ; bhqTf: $yslM3 = null; goto wu_Ln; mWPoq: return $yslM3; goto Ze_qz; BgR13: $qPPbV = Mage::getModel("\x63\x61\164\141\154\157\x67\57\160\x72\157\144\165\x63\164")->load($TxOQE["\160\x72\157\x64\x75\143\x74"]); goto T4LXD; LPkiy: $yslM3 = Mage::getModel("\143\141\164\141\x6c\157\x67\x2f\160\x72\x6f\144\165\x63\164")->load($yslM3->getId()); goto K1MDc; YNbxx: if (!$qO2D2) { goto vTpF6; } goto LPkiy; gImIZ: V0nMe: goto Rt2O6; wu_Ln: $i3gC2 = null; goto s_nr9; Ze_qz: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Helper_Catalog_Product_Data
+ */
+class Ophirah_Qquoteadv_Helper_Catalog_Product_Data extends Mage_Core_Helper_Abstract
+{
+    /**
+     * Retrieve url for add product to cart
+     * Will return product view page URL if product has required options
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param array $additional
+     * @return string
+     */
+    public function getUrlAdd2QquoteadvList(Mage_Catalog_Model_Product $product, $additional = [])
+    {
+        $quoteAdvUrlPath = 'qquoteadv/index';
+        //check if there are no required options
+        $hasRequiredOptions = false;
+        $request = new Varien_Object(['qty' => 1]);
+        $resultPrepare = $product->getTypeInstance(true)->prepareForCartAdvanced($request, $product, null);
+        if (is_string($resultPrepare)) {
+            $hasRequiredOptions = true;
+        }
+
+        if ($product->getTypeInstance(true)->hasRequiredOptions($product) || $hasRequiredOptions) {
+            $url = $product->getProductUrl();
+            $link = (strpos($url, '?') !== false) ? '&' : '?';
+            return $url . $link . 'options=cart&c2qredirect=1';
+        }
+        return $this->getUrlAdd2QquoteadvById($product->getId());
+    }
+
+    /**
+     * Get add to quote url for a product
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param array $additional
+     * @return mixed
+     */
+    public function getUrlAdd2Qquoteadv(Mage_Catalog_Model_Product $product, $additional = [])
+    {
+        return $this->getUrlAdd2QquoteadvById($product->getId());
+    }
+
+    /**
+     * Get the add to quote url by product id
+     *
+     * @param $productId
+     * @return mixed
+     */
+    public function getUrlAdd2QquoteadvById($productId)
+    {
+        $quoteAdvUrlPath = 'qquoteadv/index';
+        $url = "addItem";
+        if (Mage::getStoreConfig('qquoteadv_quote_frontend/catalog/ajax_add') && Mage::helper('qquoteadv')->checkQuickQuote() != "1") $url = "addItemAjax";
+        return Mage::getUrl($quoteAdvUrlPath . '/' . $url . '/', ["product" => $productId, '_secure' => Mage::app()->getStore()->isCurrentlySecure()]);
+    }
+
+    /**
+     * Get the onclick action for the add to quote button
+     *
+     * @param $productId
+     * @return string
+     */
+    public function getAddToQuoteAction($productId)
+    {
+        $isAjax = Mage::getStoreConfig('qquoteadv_quote_frontend/catalog/ajax_add');
+        $url = $this->getUrlAdd2QquoteadvById($productId);
+        $actionQuote = "addQuote('" . $url . "', $isAjax );";
+
+        if (Mage::helper('qquoteadv')->checkQuickQuote()) {
+            // Set Quick Quote Action
+            $actionQuote =
+                "getProductInfo('".
+                Mage::helper('qquoteadv/catalog_product_data')->getQuickQuoteProductUrl($productId).
+                "'); ";
+        }
+
+        return $actionQuote;
+    }
+
+    /**
+     * Function that can compare bundles based on the same product
+     *
+     * @param $product_id
+     * @param $options1
+     * @param $options2
+     * @return bool
+     */
+    public function compareBundles($product_id, $options1, $options2)
+    {
+        $product = Mage::getModel('catalog/product')->load($product_id);
+        if ($product instanceof Mage_Catalog_Model_Product) {
+            $product2 = clone $product;
+
+            $product->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($options1)), $product);
+            $product2->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($options2)), $product2);
+
+            $identity1 = $product->getCustomOption('bundle_identity');
+            $identity2 = $product2->getCustomOption('bundle_identity');
+
+            if ($identity2 != null) {
+                if (($identity1->getValue()) == ($identity2->getValue())) {
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    /**
+     * Function that can compare configurables based on the same product
+     *
+     * @param $product_id
+     * @param $options1
+     * @param $options2
+     * @return bool
+     */
+    public function compareConfigurable($product_id, $options1, $options2)
+    {
+        $product = Mage::getModel('catalog/product')->load($product_id);
+        if ($product instanceof Mage_Catalog_Model_Product) {
+            $product2 = clone $product;
+
+            $product->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($options1)), $product);
+            $product2->getTypeInstance()->prepareForCartAdvanced(new Varien_Object(unserialize($options2)), $product2);
+
+            $identity1 = $product->getCustomOption('attributes');
+            $identity2 = $product2->getCustomOption('attributes');
+
+            if ($identity1 instanceof Mage_Catalog_Model_Product_Configuration_Item_Option &&
+                $identity2 instanceof Mage_Catalog_Model_Product_Configuration_Item_Option
+            ) {
+                if ($identity1->getValue() == $identity2->getValue()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Calculate new image sizes from original ratio
+     * Supports both Mage image object as image files
+     *
+     * @param  $image
+     * @param null $width
+     * @param null $height
+     * @return array
+     */
+    public function getItemPictureDimensions($image, $width = null, $height = null)
+    {
+        // Define variables
+        $return = [];
+        $newRatio = null;
+
+        // Original image size
+        // Mage image object
+        if (is_object($image) && ($image instanceof Mage_Catalog_Helper_Image)) {
+            $orgWidth = (int)$image->getOriginalWidth();
+            $orgHeight = (int)$image->getOriginalHeight();
+        }
+
+        // Zend PDF image object
+        if (is_object($image) && ($image instanceof Zend_Pdf_Resource_Image)) {
+            $orgWidth = (int)$image->getPixelWidth();
+            $orgHeight = (int)$image->getPixelHeight();
+        }
+
+        // File
+        if (is_file($image)) {
+            list($orgWidth, $orgHeight, $type, $attr) = getimagesize($image);
+        }
+
+        if (isset($orgWidth) && isset($orgHeight)) {
+            // Calculate original ratio
+            $originalRatio = $orgWidth / $orgHeight;
+
+            $newWidth = $orgWidth;
+            $newHeight = $orgHeight;
+
+            // Width is largest size
+            if ($originalRatio > 1) {
+                if (!$width == null && (int)$width > 0) {
+                    $newWidth = $width;
+                    $newHeight = $width / $originalRatio;
+                } elseif (!$height == null && (int)$height > 0) {
+                    $newWidth = $height;
+                    $newHeight = $height / $originalRatio;
+                }
+                // Height is largest size
+            } else {
+                if (!$height == null && (int)$height > 0) {
+                    $newWidth = $height * $originalRatio;
+                    $newHeight = $height;
+                } elseif (!$width == null && (int)$width > 0) {
+                    $newWidth = $width * $originalRatio;
+                    $newHeight = $width;
+                }
+            }
+
+            $return['width'] = (int)$newWidth;
+            $return['height'] = (int)$newHeight;
+        }
+
+        return $return;
+
+    }
+
+    /**
+     * Get the add to quote url by product id
+     *
+     * @param $productId
+     * @return string
+     * @throws \Mage_Core_Model_Store_Exception
+     */
+    public function getQuickQuoteProductUrl($productId)
+    {
+        return Mage::getUrl(
+            'qquoteadv/index/quickquoteview',
+            [
+                "product" => $productId,
+                '_secure'=> Mage::app()->getStore()->isCurrentlySecure()
+            ]
+        );
+    }
+
+    /**
+     * Function that checks if a given child product can show an image instead of the parent product
+     *
+     * @param null $childProduct
+     * @return bool
+     */
+    public function canShowImageOfChildProduct($childProduct = null)
+    {
+        if (!$childProduct || !$childProduct->getData('thumbnail')
+            || ($childProduct->getData('thumbnail') == 'no_selection')
+            || (Mage::getStoreConfig(
+                    Mage_Checkout_Block_Cart_Item_Renderer_Configurable::CONFIGURABLE_PRODUCT_IMAGE
+                ) == Mage_Checkout_Block_Cart_Item_Renderer_Configurable::USE_PARENT_IMAGE)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Function that returns the product object to get the image from
+     *
+     * @param $product
+     * @param null|Mage_Catalog_Model_Product $childProduct
+     * @return Mage_Catalog_Model_Product
+     */
+    public function getImageProduct($product, $childProduct = null)
+    {
+        //check if child product is available and not the same as product
+        if (($childProduct === null) || $product->getId() == $childProduct->getId()) {
+            return $product;
+        }
+
+        //make sure child product has an image and is allowed to be shown
+        if (!$this->canShowImageOfChildProduct($childProduct)) {
+            return $product;
+        }
+
+        //if everything is ok, return child product for the product image
+        return $childProduct;
+    }
+
+    /**
+     *  For configurable products,
+     *  get configured simple product
+     *
+     * @param int $productQuoteId
+     * @param null|\Mage_Catalog_Model_Product $product
+     * @param null|\Ophirah_Qquoteadv_Model_Qqadvproductt $quoteadvProduct
+     * @param bool $reload
+     * @return Mage_Catalog_Model_Product
+     */
+    public function getConfChildProduct(
+        $productQuoteId,
+        $product = null,
+        $quoteadvProduct = null,
+        $reload = true
+    ) {
+        $returnProduct = null;
+        $childProduct = null;
+
+        //only load quoteadv product when it isn't given
+        if ($quoteadvProduct == null) {
+            $quoteadvProduct = unserialize(Mage::getModel('qquoteadv/qqadvproduct')
+                ->load($productQuoteId)
+                ->getAttribute()
+            );
+        } else {
+            if (!is_array($quoteadvProduct)) {
+                $quoteadvProduct = unserialize($quoteadvProduct->getAttribute());
+            }
+        }
+
+        //only load product when it isn't given
+        if ($product == null && isset($quoteadvProduct['product'])) {
+            $product = Mage::getModel('catalog/product')->load($quoteadvProduct['product']);
+        }
+        $returnProduct = $product;
+
+        //only load child product on configurable
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+            $childProduct = Mage::getModel('catalog/product_type_configurable')
+                ->getProductByAttributes($quoteadvProduct['super_attribute'], $product);
+
+            if ($childProduct != null) {
+                $returnProduct = $childProduct;
+            }
+        }
+
+        //only reload when required (to avoid using collection items with less data)
+        if ($reload) {
+            $returnProduct = Mage::getModel('catalog/product')->load($returnProduct->getId());
+        }
+
+        return $returnProduct;
+    }
+}

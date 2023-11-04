@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Object
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,14 +18,13 @@
  *
  * @category   Varien
  * @package    Varien_Object
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Varien_Object implements ArrayAccess
 {
     /**
      * Object attributes
      *
-     * @var array
+     * @var array|null
      */
     protected $_data = [];
 
@@ -40,13 +33,6 @@ class Varien_Object implements ArrayAccess
      * @var bool $_hasDataChange
      */
     protected $_hasDataChanges = false;
-
-    /**
-    * Original data that was loaded
-    *
-    * @var array
-    */
-    protected $_origData;
 
     /**
      * Name of object id field
@@ -111,12 +97,13 @@ class Varien_Object implements ArrayAccess
 
     protected function _addFullNames()
     {
-        $existedShortKeys = array_intersect($this->_syncFieldsMap, array_keys($this->_data));
-        if (!empty($existedShortKeys)) {
-            foreach ($existedShortKeys as $key) {
-                $fullFieldName = array_search($key, $this->_syncFieldsMap);
-                $this->_data[$fullFieldName] = $this->_data[$key];
-            }
+        if (empty($this->_syncFieldsMap)) {
+            return;
+        }
+
+        $existedShortKeys = array_intersect_key(array_flip($this->_syncFieldsMap), $this->_data);
+        foreach ($existedShortKeys as $key => $fullFieldName) {
+            $this->_data[$fullFieldName] = $this->_data[$key];
         }
     }
 
@@ -701,7 +688,7 @@ class Varien_Object implements ArrayAccess
             return self::$_underscoreCache[$name];
         }
         #Varien_Profiler::start('underscore');
-        $result = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+        $result = strtolower(preg_replace('/([A-Z])/', "_$1", lcfirst($name)));
         #Varien_Profiler::stop('underscore');
         self::$_underscoreCache[$name] = $result;
         return $result;
@@ -740,50 +727,6 @@ class Varien_Object implements ArrayAccess
         }
         $res = implode($fieldSeparator, $data);
         return $res;
-    }
-
-    /**
-     * Get object loaded data (original data)
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getOrigData($key = null)
-    {
-        if (is_null($key)) {
-            return $this->_origData;
-        }
-        return isset($this->_origData[$key]) ? $this->_origData[$key] : null;
-    }
-
-    /**
-     * Initialize object original data
-     *
-     * @param string $key
-     * @param mixed $data
-     * @return $this
-     */
-    public function setOrigData($key = null, $data = null)
-    {
-        if (is_null($key)) {
-            $this->_origData = $this->_data;
-        } else {
-            $this->_origData[$key] = $data;
-        }
-        return $this;
-    }
-
-    /**
-     * Compare object data with original data
-     *
-     * @param string $field
-     * @return boolean
-     */
-    public function dataHasChangedFor($field)
-    {
-        $newData = $this->getData($field);
-        $origData = $this->getOrigData($field);
-        return $newData != $origData;
     }
 
     /**
@@ -835,8 +778,7 @@ class Varien_Object implements ArrayAccess
      * @param string $offset
      * @param mixed $value
      */
-    #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->_data[$offset] = $value;
     }
@@ -846,10 +788,9 @@ class Varien_Object implements ArrayAccess
      *
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      * @param string $offset
-     * @return boolean
+     * @return bool
      */
-    #[ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->_data[$offset]);
     }
@@ -860,8 +801,7 @@ class Varien_Object implements ArrayAccess
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      * @param string $offset
      */
-    #[ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->_data[$offset]);
     }
@@ -873,7 +813,7 @@ class Varien_Object implements ArrayAccess
      * @param string $offset
      * @return mixed
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->_data[$offset]) ? $this->_data[$offset] : null;

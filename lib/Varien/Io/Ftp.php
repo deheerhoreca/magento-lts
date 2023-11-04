@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Io
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2022-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Varien
  * @package    Varien_Io
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Varien_Io_Ftp extends Varien_Io_Abstract
 {
@@ -75,6 +68,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      *
      * @param array $args
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function open(array $args = [])
     {
@@ -145,6 +140,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      * Close a connection
      *
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function close()
     {
@@ -159,6 +156,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      * @param int $mode
      * @param boolean $recursive
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -170,6 +169,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      *
      * @param string $dir
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -180,6 +181,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      * Get current working directory
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function pwd()
     {
@@ -191,6 +194,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      *
      * @param string $dir
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function cd($dir)
     {
@@ -202,7 +207,7 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      *
      * @param string $filename
      * @param string|resource|null $dest destination file name, stream, or if null will return file contents
-     * @return string
+     * @return bool|string
      */
     public function read($filename, $dest = null)
     {
@@ -236,6 +241,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      * @param string $filename
      * @param string|resource $src filename, string data or source stream
      * @return int|boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function write($filename, $src, $mode = null)
     {
@@ -266,6 +273,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      *
      * @param string $filename
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function rm($filename)
     {
@@ -278,6 +287,8 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      * @param string $src
      * @param string $dest
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function mv($src, $dest)
     {
@@ -290,12 +301,17 @@ class Varien_Io_Ftp extends Varien_Io_Abstract
      * @param string $filename
      * @param int $mode
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function chmod($filename, $mode)
     {
         return @ftp_chmod($this->_conn, $mode, $filename);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
     public function ls($grep = null)
     {
         $ls = @ftp_nlist($this->_conn, '.');

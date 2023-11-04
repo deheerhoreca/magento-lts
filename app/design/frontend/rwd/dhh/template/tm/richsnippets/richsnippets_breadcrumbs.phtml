@@ -1,7 +1,10 @@
 <?php
 
 /* Ignore these categories in the breadcrumb */
-$ignored_categorie_keys = ["category834"]; // Promotions
+// $ignored_categorie_keys = [
+  // "category834",      // Promotions
+// ];
+$ignored_categorie_keys = [];
 
 $store = Mage::app()->getStore();
 $store_name = $store->getFrontendName();
@@ -58,9 +61,7 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
     
     // if($crumbs && is_array($crumbs) && sizeof($crumbs) > 1) {
       // if(_dhh_debug()) {
-        // echo "<pre>";
-        // print_r($crumbs);
-        // echo "</pre>";
+        // printr($crumbs);
       // }
     // }
     

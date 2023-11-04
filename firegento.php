@@ -1,1 +1,1 @@
-.modman/firegento-debug/src/firegento.php
+./vendor/firegento/debug/src/firegento.php

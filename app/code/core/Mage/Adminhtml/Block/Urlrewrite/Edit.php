@@ -2,29 +2,23 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Adminhtml
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2019-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2019-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 
 /**
  * Block for Urlrewrites edit form and selectors container
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_Container
 {
@@ -50,7 +44,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
         $this->setTemplate('urlrewrite/edit.phtml');
         $this->_addButton('back', [
             'label'   => Mage::helper('adminhtml')->__('Back'),
-            'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('*/*/') . '\')',
+            'onclick' => Mage::helper('core/js')->getSetLocationJs(Mage::helper('adminhtml')->getUrl('*/*/')),
             'class'   => 'back',
             'level'   => -1
         ]);
@@ -105,7 +99,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
                         'level'   => -1
                     ])
                 );
-                $this->_updateButton('back', 'onclick', 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('*/*/edit') . 'product\')');
+                $this->_updateButton(
+                    'back',
+                    'onclick',
+                    Mage::helper('core/js')->getSetLocationJs(Mage::helper('adminhtml')->getUrl('*/*/edit') . 'product')
+                );
             }
         } elseif ($this->getCategoryId()) { // edit form for category
             $this->_headerText = Mage::helper('adminhtml')->__('Add URL Rewrite for a Category');
@@ -175,7 +173,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
                 $suffix = 'category';
             }
         }
-        $this->_updateButton('back', 'onclick', 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('*/*/' . $action, $params) . $suffix . '\')');
+        $this->_updateButton(
+            'back',
+            'onclick',
+            Mage::helper('core/js')->getSetLocationJs(Mage::helper('adminhtml')->getUrl('*/*/' . $action, $params) . $suffix)
+        );
 
         return $this;
     }
@@ -193,7 +195,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
         if ($this->_buttonsHtml === null) {
             $this->_buttonsHtml = parent::getButtonsHtml();
             foreach ($this->_children as $alias => $child) {
-                if (strpos($alias, '_button') !== false) {
+                if (str_contains($alias, '_button')) {
                     $this->unsetChild($alias);
                 }
             }
@@ -267,6 +269,9 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderCssClass()
     {
         return 'icon-head head-urlrewrite';

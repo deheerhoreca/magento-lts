@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Weee
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Weee
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_Tax
 {
@@ -70,7 +63,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * Collect Weee taxes amount and prepare items prices for taxation and discount
      *
      * @param   Mage_Sales_Model_Quote_Address $address
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     public function collect(Mage_Sales_Model_Quote_Address $address)
     {
@@ -116,7 +109,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      *
      * @param   Mage_Sales_Model_Quote_Address $address
      * @param   Mage_Sales_Model_Quote_Item_Abstract $item
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     protected function _process(Mage_Sales_Model_Quote_Address $address, $item)
     {
@@ -241,6 +234,8 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
                 null
             );
         }
+
+        return $this;
     }
 
     /**
@@ -273,7 +268,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * @param   Mage_Sales_Model_Quote_Item_Abstract $item
      * @param   float $value
      * @param   float $baseValue
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     protected function _processDiscountSettings($item, $value, $baseValue)
     {
@@ -291,7 +286,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * @param   float $baseValue
      * @param   float $rowValue
      * @param   float $baseRowValue
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     protected function _processTaxSettings($item, $value, $baseValue, $rowValue, $baseRowValue)
     {
@@ -321,7 +316,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * @param   Mage_Sales_Model_Quote_Address $address
      * @param   float $rowValue
      * @param   float $baseRowValue
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     protected function _processTotalAmount($address, $rowValue, $baseRowValue)
     {
@@ -340,10 +335,11 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * Recalculate parent item amounts based on children results
      *
      * @param Mage_Sales_Model_Quote_Item_Abstract $item
-     * @return void
+     * @return $this
      */
     protected function _recalculateParent(Mage_Sales_Model_Quote_Item_Abstract $item)
     {
+        return $this;
     }
 
     /**
@@ -372,7 +368,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * Fetch FPT data to address object for display in totals block
      *
      * @param   Mage_Sales_Model_Quote_Address $address
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     public function fetch(Mage_Sales_Model_Quote_Address $address)
     {
@@ -399,7 +395,7 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
      * @param   Mage_Sales_Model_Quote_Address $address
      * @param   Mage_Sales_Model_Quote_Item_Abstract $item
      * @param   bool $updateParent
-     * @return  Mage_Weee_Model_Total_Quote_Weee
+     * @return  $this
      */
     protected function _processItem(Mage_Sales_Model_Quote_Address $address, $item, $updateParent = false)
     {
@@ -603,6 +599,8 @@ class Mage_Weee_Model_Total_Quote_Weee extends Mage_Tax_Model_Sales_Total_Quote_
                 null
             );
         }
+
+        return $this;
     }
 
     /**

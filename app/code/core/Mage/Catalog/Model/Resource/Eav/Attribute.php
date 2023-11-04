@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Catalog
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2019-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2019-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @method Mage_Catalog_Model_Resource_Attribute _getResource()
  * @method Mage_Catalog_Model_Resource_Attribute getResource()
@@ -37,7 +30,6 @@
  * @method $this setIsSearchable(int $value)
  * @method int getSearchWeight()
  * @method $this setSearchWeight(int $value)
- * @method int getIsFilterable()
  * @method $this setIsFilterable(int $value)
  * @method int getIsComparable()
  * @method $this setIsComparable(int $value)
@@ -54,7 +46,7 @@
  * @method $this setUsedForSortBy(int $value)
  * @method int getIsConfigurable()
  * @method $this setIsConfigurable(int $value)
- * @method $this setApplyTo(string $value)
+ * @method $this setApplyTo(string|array $value)
  * @method int getIsVisibleInAdvancedSearch()
  * @method $this setIsVisibleInAdvancedSearch(int $value)
  * @method int getPosition()
@@ -90,7 +82,7 @@ class Mage_Catalog_Model_Resource_Eav_Attribute extends Mage_Eav_Model_Entity_At
     /**
      * Array with labels
      *
-     * @var array
+     * @var array|null
      */
     protected static $_labels                   = null;
 
@@ -286,6 +278,15 @@ class Mage_Catalog_Model_Resource_Eav_Attribute extends Mage_Eav_Model_Entity_At
     public function getFrontendLabel()
     {
         return $this->_getData('frontend_label');
+    }
+
+    /**
+     * Retrieve is_filterable value
+     * @return int
+     */
+    public function getIsFilterable()
+    {
+        return $this->_getData('is_filterable');
     }
 
     /**

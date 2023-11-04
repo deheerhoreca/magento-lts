@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Core
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2018-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2018-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 {
@@ -55,7 +48,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         'Mage_SalesRule' => 23,
         'Mage_Usa' => 24,
         'Mage_Paygate' => 25,
-        'Mage_Backup' => 26,
+        'Mage_Backup' => 26, # removed
         'Mage_Checkout' => 27,
         'Mage_Paypal' => 28,
         'Mage_GoogleCheckout' => 29,
@@ -125,7 +118,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         'crontab'   => 0,
         'install'   => 0,
         'stores'    => 1,
-        'websites'  => 0
+        'websites'  => 1
     ];
 
     /**
@@ -181,7 +174,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      * Resource model
      * Used for operations with DB
      *
-     * @var Mage_Core_Model_Resource_Config
+     * @var Mage_Core_Model_Resource_Config|null
      */
     protected $_resourceModel;
 
@@ -690,10 +683,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             $this->_cacheLoadedSections[$sectionKey] = $this->_loadSectionCache($sectionKey);
             Varien_Profiler::stop('init_config_section:' . $sectionKey);
         }
-
-        if ($this->_cacheLoadedSections[$sectionKey] === false) {
-            return false;
-        }
         return $this->_cacheLoadedSections[$sectionKey];
     }
 
@@ -1014,7 +1003,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      *
      * @param string $fileName
      * @param null|Mage_Core_Model_Config_Base|Varien_Simplexml_Config $mergeToObject
-     * @param null $mergeModel
+     * @param Varien_Simplexml_Config|null $mergeModel
      * @return Mage_Core_Model_Config_Base|Varien_Simplexml_Config
      */
     public function loadModulesConfiguration($fileName, $mergeToObject = null, $mergeModel = null)
@@ -1373,7 +1362,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     public function getBlockClassName($blockType)
     {
-        if (strpos($blockType, '/') === false) {
+        if (!str_contains($blockType, '/')) {
             return $blockType;
         }
         return $this->getGroupedClassName('block', $blockType);
@@ -1387,7 +1376,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     public function getHelperClassName($helperName)
     {
-        if (strpos($helperName, '/') === false) {
+        if (!str_contains($helperName, '/')) {
             $helperName .= '/data';
         }
         return $this->getGroupedClassName('helper', $helperName);
@@ -1424,7 +1413,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function getModelClassName($modelClass)
     {
         $modelClass = trim($modelClass);
-        if (strpos($modelClass, '/') === false) {
+        if (!str_contains($modelClass, '/')) {
             return $modelClass;
         }
         return $this->getGroupedClassName('model', $modelClass);
@@ -1594,7 +1583,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         }
 
         // If unsecure base url is https, then all urls should be secure
-        if (strpos(Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_URL), 'https://') === 0) {
+        if (str_starts_with(Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_URL), 'https://')) {
             return true;
         }
 
@@ -1602,7 +1591,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             $this->_secureUrlCache[$url] = false;
             $secureUrls = $this->getNode('frontend/secure_url');
             foreach ($secureUrls->children() as $match) {
-                if (strpos($url, (string)$match) === 0) {
+                if (str_starts_with($url, (string)$match)) {
                     $this->_secureUrlCache[$url] = true;
                     break;
                 }

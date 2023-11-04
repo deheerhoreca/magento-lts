@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_DB
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2018-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2018-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Mage
  * @package    Mage_Db
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_DB_Mysqli
 {
@@ -42,7 +35,7 @@ class Mage_DB_Mysqli
 
     /**
      * Value escaper
-     * @var unknown_type
+     * @var string
      */
     public const VALUE_ESCAPER = '"';
 
@@ -53,7 +46,7 @@ class Mage_DB_Mysqli
     protected $conn;
     /**
      * Fetch mode
-     * @var unknown_type
+     * @var int
      */
     private $fetch_mode = MYSQLI_ASSOC;
 
@@ -73,6 +66,8 @@ class Mage_DB_Mysqli
      * @param string $db
      * @param int $port
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function connect($host, $user, $paswd, $db, $port = self::DEFAULT_PORT)
     {
@@ -117,7 +112,7 @@ class Mage_DB_Mysqli
 
     /**
      * Escape field name
-     * @param stirng $fld
+     * @param string $fld
      * @return string
      */
     public function escapeFieldName($fld)
@@ -303,7 +298,7 @@ class Mage_DB_Mysqli
     /**
      * Throw connect exception
      * @throws Mage_DB_Exception
-     * @return void
+     * @return never
      */
     protected function throwConnectException()
     {
@@ -312,7 +307,7 @@ class Mage_DB_Mysqli
 
     /**
      * Query - perform with throwing exception on error
-     * @param sting $sql query
+     * @param string $sql query
      * @throws Mage_DB_Exception
      * @return mixed
      */
@@ -458,7 +453,7 @@ class Mage_DB_Mysqli
     public function idsToString($ids)
     {
         if (is_scalar($ids)) {
-            return $this->escapeFieldValue(strval($ids));
+            return $this->escapeFieldValue((string) $ids);
         }
         $out = [];
         foreach ($ids as $id) {
@@ -508,7 +503,7 @@ class Mage_DB_Mysqli
         if (empty($data['cnt'])) {
             return 0;
         }
-        return intval($data['cnt']);
+        return (int) $data['cnt'];
     }
 
     public function lastInsertId()

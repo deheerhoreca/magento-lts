@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Varien
  * @package    Varien_Filter
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,7 +18,6 @@
  *
  * @category   Varien
  * @package    Varien_Filter
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 class Varien_Filter_Template implements Zend_Filter_Interface
@@ -135,9 +128,6 @@ class Varien_Filter_Template implements Zend_Filter_Interface
                 foreach ($constructions as $index => $construction) {
                     $replacedValue = '';
                     $callback = [$this, $directive];
-                    if (!is_callable($callback)) {
-                        continue;
-                    }
                     try {
                         $replacedValue = call_user_func($callback, $construction);
                     } catch (Exception $e) {
@@ -273,7 +263,7 @@ class Varien_Filter_Template implements Zend_Filter_Interface
     * Return variable value for var construction
     *
     * @param string $value raw parameters
-    * @param string $default default value
+    * @param string|null $default default value
     * @return string
     */
     protected function _getVariable($value, $default = '{no_value_defined}')
@@ -284,7 +274,7 @@ class Varien_Filter_Template implements Zend_Filter_Interface
         $stackVars = $tokenizer->tokenize();
         $result = $default;
         $last = 0;
-        /** @var $emailPathValidator Mage_Adminhtml_Model_Email_PathValidator */
+        /** @var Mage_Adminhtml_Model_Email_PathValidator $emailPathValidator */
         $emailPathValidator = $this->getEmailPathValidator();
         for ($i = 0; $i < count($stackVars); $i++) {
             if ($i == 0 && isset($this->_templateVars[$stackVars[$i]['name']])) {
@@ -327,7 +317,7 @@ class Varien_Filter_Template implements Zend_Filter_Interface
     /**
      * Retrieve model object
      *
-     * @return Mage_Core_Model_Abstract
+     * @return Mage_Adminhtml_Model_Email_PathValidator
      */
     protected function getEmailPathValidator()
     {

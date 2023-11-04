@@ -75,12 +75,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $deepCatId = 0;
     $path = '';
     $productPath = false;
-    
-    // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
-      // echo "<pre>";
-      // print_r($crumbs);
-      // echo "</pre>";
-    // }
 
     foreach($categories as $category) {
       // Look for the deepest path and save.
@@ -1432,7 +1426,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       case "tools_ii_sku":
         return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ltYWdlX2luc3BlY3Rvci9pbWFnZV9pbnNwZWN0b3IucGhw&sku={$payload}";
       case "bol_search_product":
-        return "https://www.bol.com/nl/s/?searchtext={$id}";
+        return "https://www.bol.com/nl/s/?searchtext={$payload}";
     }
     
     return false;

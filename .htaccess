@@ -230,6 +230,7 @@
 ## Add default Expires header
 ## http://developer.yahoo.com/performance/rules.html#expires
     ExpiresActive On
+    ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
@@ -239,7 +240,7 @@
     ExpiresByType text/x-javascript "access plus 1 month"
     ExpiresByType application/x-shockwave-flash "access plus 1 month"
     ExpiresByType image/x-icon "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresDefault "access plus 2 days"
 </IfModule>
 
@@ -261,7 +262,7 @@
         Order allow,deny
         Deny from all
     </FilesMatch>
-    <FilesMatch \.(dist|lock|md|neon|sample|sh|yml|yaml)$>
+    <FilesMatch \.(dist|flag|ip|lock|md|neon|sample|sh|yml|yaml)$>
         Order allow,deny
         Deny from all
     </FilesMatch>
@@ -277,6 +278,9 @@
         order allow,deny
         deny from all
     </Files>
+
+############################################
+### END DHH
 
 ############################################
 ## If running in cluster environment, uncomment this
@@ -309,7 +313,8 @@
 
     </Files>
 
-# DHH ADDITIONS
+###########################################
+## DHH
 
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
@@ -403,8 +408,9 @@
     Header unset Etag
     Header set Cache-control "max-age=0, no-cache"
 
+    # Pay.nl: 85.158.206.20
     <RequireAll>
-        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24
+        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20
     </RequireAll>
 </If>
 # END DEVELOPMENT SETTINGS
@@ -432,3 +438,6 @@
 </IfModule>
 
 ServerSignature Off
+
+############################################
+### END DHH

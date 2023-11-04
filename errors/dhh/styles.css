@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: normal normal 14px Helvetica Neue, Helvetica, Arial, Sans-Serif;
+    color: #444;
+    background: #fff;
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 200;
+    color: #222;
+}
+
+h1 { font-size: 2.25em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.75em; }
+h4 { font-size: 1.5em; }
+h5 { font-size: 1.25em; }
+
+@media (min-width: 1800px) { body { font-size: 22px; } }
+@media (max-width: 1800px) { body { font-size: 20px; } }
+@media (max-width: 1700px) { body { font-size: 19px; } }
+@media (max-width: 1600px) { body { font-size: 18px; } }
+@media (max-width: 1500px) { body { font-size: 17px; } }
+@media (max-width: 1400px) { body { font-size: 16px; } }
+@media (max-width: 1300px) { body { font-size: 15px; } }
+@media (max-width: 1200px) { body { font-size: 14px; } }
+@media (max-width: 1100px) { body { font-size: 13px; } }
+@media (max-width: 1000px) { body { font-size: 12px; } }
+
+a {
+    text-decoration: none;
+    color: #6441a5;
+    white-space: nowrap;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#container {
+    width: 34em;
+    text-align: center;
+    margin: 2em auto;
+}
+
+#logo-contain {
+    padding-top: 50%;
+    margin: 0 auto;
+    position: relative;
+}
+
+#logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#logo svg {
+    fill: #6441a5;
+}
+
+#brb {
+    padding-bottom: 4em;
+}
+
+#brb h1 {
+    margin-bottom: 0.6em;
+}
+
+#brb p {
+    margin: 0 auto;
+    width: 30em;
+}
+
+@-webkit-keyframes l-rotate {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(-180deg); }
+}
+
+@-webkit-keyframes r-rotate {
+    0% { -webkit-transform: rotate(22deg); }
+    100% { -webkit-transform: rotate(202deg); }
+}
+
+@-moz-keyframes l-rotate {
+    0% { -moz-transform: rotate(0deg); }
+    100% { -moz-transform: rotate(-180deg); }
+}
+
+@-moz-keyframes r-rotate {
+    0% { -moz-transform: rotate(22deg); }
+    100% { -moz-transform: rotate(202deg); }
+}
+
+@-o-keyframes l-rotate {
+    0% { -o-transform: rotate(0deg); }
+    100% { -o-transform: rotate(-180deg); }
+}
+
+@-o-keyframes r-rotate {
+    0% { -o-transform: rotate(22deg); }
+    100% { -o-transform: rotate(202deg); }
+}
+
+@keyframes l-rotate {
+    0% {
+        transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+    }
+}
+
+@keyframes r-rotate {
+    0% {
+        transform: rotate(22deg);
+        -ms-transform: rotate(22deg);
+    }
+    100% {
+        transform: rotate(202deg);
+        -ms-transform: rotate(202deg);
+    }
+}
+
+#gears {
+    position: relative;
+    height: 2em;
+    width: 100%;
+    margin-top: 2em;
+}
+
+.gear {
+    position: absolute;
+    width: 2em;
+    height: 2em;
+    margin-left: -1em;
+    margin-top: -1em;
+    fill: rgba(0,0,0,0.15);
+    -webkit-animation-duration: 4000ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-duration: 4000ms;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+    -o-animation-duration: 4000ms;
+    -o-animation-iteration-count: infinite;
+    -o-animation-timing-function: linear;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.gear-1 {
+    top: 50%;
+    left: 50%;
+    -webkit-animation-name: l-rotate;
+    -moz-animation-name: l-rotate;
+    -o-animation-name: l-rotate;
+    animation-name: l-rotate;
+}
+
+.gear-2 {
+    top: 50%;
+    left: 44%;
+    -webkit-animation-name: r-rotate;
+    -moz-animation-name: r-rotate;
+    -o-animation-name: r-rotate;
+    animation-name: r-rotate;
+}
+
+.gear-3 {
+    top: 50%;
+    left: 56%;
+    -webkit-animation-name: r-rotate;
+    -moz-animation-name: r-rotate;
+    -o-animation-name: r-rotate;
+    animation-name: r-rotate;
+}
+
+div.header {
+  display: none;
+}
+
+div.footer {
+  display: none;
+}

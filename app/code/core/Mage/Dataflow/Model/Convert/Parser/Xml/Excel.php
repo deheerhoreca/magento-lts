@@ -2,20 +2,14 @@
 /**
  * OpenMage
  *
- * NOTICE OF LICENSE
- *
  * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
+ * It is also available at https://opensource.org/license/osl-3-0-php
  *
  * @category   Mage
  * @package    Mage_Dataflow
  * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright  Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright  Copyright (c) 2020-2023 The OpenMage Contributors (https://www.openmage.org)
  * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -24,21 +18,20 @@
  *
  * @category   Mage
  * @package    Mage_Dataflow
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Dataflow_Model_Convert_Parser_Xml_Excel extends Mage_Dataflow_Model_Convert_Parser_Abstract
 {
     /**
      * Simple Xml object
      *
-     * @var SimpleXMLElement
+     * @var SimpleXMLElement|null
      */
     protected $_xmlElement;
 
     /**
      * Field list
      *
-     * @var array
+     * @var array|null
      */
     protected $_parseFieldNames;
 
@@ -153,75 +146,6 @@ class Mage_Dataflow_Model_Convert_Parser_Xml_Excel extends Mage_Dataflow_Model_C
             ->setAdapter($adapterName)
             ->save();
 
-        return $this;
-
-        $dom = new DOMDocument();
-        if (Mage::app()->getRequest()->getParam('files')) {
-            $path = Mage::app()->getConfig()->getTempVarDir() . '/import/';
-            $file = $path . urldecode(Mage::app()->getRequest()->getParam('files'));
-            if (file_exists($file)) {
-                $dom->load($file);
-            }
-        } else {
-            $this->validateDataString();
-            $dom->loadXML($this->getData());
-        }
-
-        $worksheets = $dom->getElementsByTagName('Worksheet');
-        if ($this->getVar('adapter') && $this->getVar('method')) {
-            $adapter = Mage::getModel($this->getVar('adapter'));
-        }
-        foreach ($worksheets as $worksheet) {
-            $wsName = $worksheet->getAttribute('ss:Name');
-            $rows = $worksheet->getElementsByTagName('Row');
-            $firstRow = true;
-            $fieldNames = [];
-            $wsData = [];
-            $i = 0;
-            foreach ($rows as $rowSet) {
-                $index = 1;
-                $cells = $rowSet->getElementsByTagName('Cell');
-                $rowData = [];
-                foreach ($cells as $cell) {
-                    $value = $cell->getElementsByTagName('Data')->item(0)->nodeValue;
-                    $ind = $cell->getAttribute('ss:Index');
-                    if (!is_null($ind) && $ind > 0) {
-                        $index = $ind;
-                    }
-                    if ($firstRow && !$this->getVar('fieldnames')) {
-                        $fieldNames[$index] = 'column' . $index;
-                    }
-                    if ($firstRow && $this->getVar('fieldnames')) {
-                        $fieldNames[$index] = $value;
-                    } else {
-                        $rowData[$fieldNames[$index]] = $value;
-                    }
-                    $index++;
-                }
-                $row = $rowData;
-                if ($row) {
-                    $loadMethod = $this->getVar('method');
-                    $adapter->$loadMethod(compact('i', 'row'));
-                }
-                $i++;
-
-                $firstRow = false;
-                if (!empty($rowData)) {
-                    $wsData[] = $rowData;
-                }
-            }
-            $data[$wsName] = $wsData;
-            $this->addException('Found worksheet "' . $wsName . '" with ' . count($wsData) . ' row(s)');
-        }
-        if ($wsName = $this->getVar('single_sheet')) {
-            if (isset($data[$wsName])) {
-                $data = $data[$wsName];
-            } else {
-                reset($data);
-                $data = current($data);
-            }
-        }
-        $this->setData($data);
         return $this;
     }
 

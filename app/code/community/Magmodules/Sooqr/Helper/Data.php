@@ -195,7 +195,9 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
      *
      * @return mixed
      */
-    public function getAttributeValue($field, $product, $config, $actions = '', $parent, $parentAttributes)
+    // DHH CORE HACK: PHP 8
+    // public function getAttributeValue($field, $product, $config, $actions = '', $parent, $parentAttributes)
+    public function getAttributeValue($field, $product, $config, $actions = '', $parent = null, $parentAttributes = [])
     {
         $dataRow = array();
         $data = $config['field'][$field];
@@ -1594,7 +1596,9 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
      *
      * @return float|int
      */
-    public function preparePrice($price, $isPercent = false, $product)
+    // DHH CORE HACK: PHP 8
+    // public function preparePrice($price, $isPercent = false, $product)
+    public function preparePrice($price, $isPercent, $product)
     {
         if ($isPercent && !empty($price)) {
             $price = $product->getFinalPrice() * $price / 100;
@@ -1610,7 +1614,9 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
      *
      * @return float|int
      */
-    public function prepareOldPrice($price, $isPercent = false, $product)
+    // DHH CORE HACK: PHP 8
+    // public function prepareOldPrice($price, $isPercent = false, $product)
+    public function prepareOldPrice($price, $isPercent, $product)
     {
         if ($isPercent && !empty($price)) {
             $price = $product->getPrice() * $price / 100;
