@@ -1523,26 +1523,27 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // @see https://docs.imagekit.io/features/image-transformations
       case "imagekit":
         $cdn_base         = "//ik.imagekit.io/vzc6xuj9l";
-        $cdn_options_base = "";
+        $cdn_options_base = ",";
         
         if($quality > 0) {
-          $cdn_options_base .= ",q-{$quality}";
+          $cdn_options_base .= "q-{$quality},";
         }
         if($fit === "contain" || $fit === "scale-down") {
-          $cdn_options_base .= ",c-at_max";             // max-size crop
+          $cdn_options_base .= "c-at_max,";             // max-size crop
         }
         if($fit === "scale-up") {
-          $cdn_options_base .= ",c-at_max_enlarge";     // max-size crop
+          $cdn_options_base .= "c-at_max_enlarge,";     // max-size crop
         }
-        $cdn_options  = "tr:w-{$width},h-{$height},{$cdn_options_base}";
-        $src_url      = "{$cdn_base}/{$cdn_options}/{$url}";
+        $cdn_options_base = rtrim($cdn_options_base, ",");
+        $cdn_options      = "tr:w-{$width},h-{$height}{$cdn_options_base}";
+        $src_url          = "{$cdn_base}/{$cdn_options}/{$url}";
         
-        // Either use 2x the resolution
+        // Add a version with 2x the resolution -- Should not be needed if we send the "Dpr" header
         if($include_2x === true) {
           $width_2x       = $width * 2;
           $height_2x      = $height * 2;
-          $cdn_options_2x = "{$cdn_options_base},width={$width_2x},height={$height_2x}";
-          $srcset         = "{$cdn_base}{$cdn_options_2x}/{$url} 1024w";
+          $cdn_options_2x = "tr:w-{$width_2x},h-{$height_2x}{$cdn_options_base}";
+          $srcset         = "{$cdn_base}/{$cdn_options_2x}/{$url} 2x";
         } else {
           $srcset         = "";
         }

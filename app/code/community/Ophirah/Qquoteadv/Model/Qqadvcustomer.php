@@ -2755,7 +2755,8 @@ class Ophirah_Qquoteadv_Model_Qqadvcustomer extends Mage_Sales_Model_Quote
      * @return array // array with available coupons
      * @internal param $ int || array        // $customerGroup
      */
-    public function getCouponList($websiteId = 1, $customerGroup)
+    // public function getCouponList($websiteId = 1, $customerGroup)
+    public function getCouponList($websiteId, $customerGroup) // DHH CORE HACK -- PHP8
     {
         $couponCollection = Mage::getModel('salesrule/rule')->getCollection();
         $couponCollection->addWebsiteGroupDateFilter(
