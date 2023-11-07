@@ -1,7 +1,7 @@
 <config>
    <modules>
       <Aoe_ClassPathCache>
-         <active>false</active>
+         <active>true</active>
          <codePool>community</codePool>
       </Aoe_ClassPathCache>
    </modules>

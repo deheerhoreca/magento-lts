@@ -33,6 +33,9 @@
   - Adjustments to the order invoice template
 - `app/code/core/Mage/Newsletter/Model/Subscriber.php`
   - Really disable sending newsletter confirmation emails
+- `app/design/frontend/rwd/default/layout/*.xml`
+- `app/design/frontend/rwd/dhh/layout/*.xml`
+  - Must be checked against `base/default/layout/*.xml`
 
 ## 3rd Party Hacks
 - **Anowave Sort**
