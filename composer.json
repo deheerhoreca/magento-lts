@@ -42,6 +42,7 @@
         "magento-root-dir": "."
     },
     "config": {
+        "process-timeout": 3600,
         "allow-plugins": {
             "magento-hackathon/magento-composer-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -63,5 +64,8 @@
             "type": "composer",
             "url": "https://packages.firegento.com"
         }
-    ]
+    ],
+    "scripts": {
+        "sniffer:php80": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+    }
 }
