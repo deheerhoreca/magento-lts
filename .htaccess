@@ -114,7 +114,7 @@
     #RewriteRule (.*)$ https://www.chefstore.nl/$1 [R=301,L]
     #RewriteCond %{HTTP_HOST} ^dev.prokoeling.nl$
     #RewriteRule (.*)$ https://dev.chefstore.nl/$1 [R=301,L]
-    
+
     # Fuck off competitors
     # gastrodeals.nl:
     RewriteCond %{HTTP:CF-CONNECTING-IP} 83.217.93.24
@@ -137,7 +137,7 @@
     # https://ma.ttias.be/block-user-agent-in-htaccess-for-apache-webserver/
     RewriteCond %{HTTP_USER_AGENT} "(serpstatbot|MegaIndex|Google-Apps-Script|infoobot|Vagabondo|Linguee|MauiBot|BorneoBot|Elisabot)"
     RewriteRule ^ - [F]
-    
+
     # Block persistent DigitalOcean scrapers
     RewriteCond %{QUERY_STRING} ccpturl=prokoeling.nl* [OR]
     RewriteCond %{REQUEST_URI} ccpturl=prokoeling.nl*
@@ -319,7 +319,7 @@
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
-   Header add Link "<////ik.imagekit.io/>;rel=preconnect,<//v2.zopim.com>;rel=preconnect,<//static.sooqr.com>;rel=preconnect; crossorigin,<//dynamic.sooqr.com>;rel=preconnect; crossorigin,<//static.zdassets.com>;rel=preconnect; crossorigin,<//ekr.zdassets.com>;rel=preconnect; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=preconnect; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=preconnect"
+   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.sooqr.com>;rel=dns-prefetch; crossorigin,<//dynamic.sooqr.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
 </FilesMatch>
 
 <IfModule mod_deflate.c>
@@ -359,9 +359,9 @@
 
 # Modify more caching headers -- Also note Rules in Cloudflare
 <IfModule mod_headers.c>
-  
+
   Header set X-XSS-Protection "1; mode=block"
-  
+
   # Any caching headers set on HTML are ignored, and all HTML is served
   # uncacheable.  PageSpeed rewrites HTML files each time they are served.  The
   # first time mod_pagespeed sees an HTML file, it generally won't optimize it
@@ -376,23 +376,23 @@
   # the content-hash.  As long as the content doesn't actually change,
   # the content-hash will remain the same, and the resources stored
   # in browser caches will stay relevant.
-  
+
   # Remember, cache control is about how long mod_pagespeed will cache assets (if enabled)
   # Also check for ModPagespeedLoadFromFile. Direct file access seems to nullify the max-age setting
   # Static files might be served by nginx!
-  
+
   # CSS/JS
   <FilesMatch "\.(css|js)$">
     Header unset Etag
     Header set Cache-Control "public, max-age=300"
   </FilesMatch>
-  
+
   # IMAGES
   <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
     # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
     Header set Cache-Control "public, max-age=300"
   </FilesMatch>
-  
+
   # TEXT
   <FilesMatch "\.(html|htm|php)$">
     Header unset Etag
@@ -403,10 +403,14 @@
 # DEVELOPMENT SETTINGS
 <If "%{HTTP_HOST} == 'dev.chefstore.nl'">
     SetEnv MAGE_IS_DEVELOPER_MODE "true"
-    
+
     # No caching on dev
     Header unset Etag
     Header set Cache-control "max-age=0, no-cache"
+
+    <IfModule mod_headers.c>
+        Header set Referrer-Policy "no-referrer"
+    </IfModule>
 
     # Pay.nl: 85.158.206.20
     <RequireAll>
@@ -414,6 +418,14 @@
     </RequireAll>
 </If>
 # END DEVELOPMENT SETTINGS
+
+# PRODUCTION SETTINGS
+<Else>
+    <IfModule mod_headers.c>
+        Header set Referrer-Policy "strict-origin-when-cross-origin"
+    </IfModule>
+</Else>
+# END PRODUCTION SETTINGS
 
 # DHH REDIRECTS
 <IfModule mod_rewrite.c>
@@ -429,12 +441,10 @@
 
   # Redirects file.php to view.php
   RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L]
-  
-</IfModule>
 
-# Landing URL from flyers
-<IfModule mod_rewrite.c>
-    Redirect /hallochef /promoties.html
+  # Landing URL from flyers
+  Redirect /hallochef /promoties.html
+
 </IfModule>
 
 ServerSignature Off

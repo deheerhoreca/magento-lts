@@ -67,6 +67,7 @@
         }
     ],
     "scripts": {
-        "sniffer:php80": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+        "sniffer:php80-errors": "phpcs -n -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
+        "sniffer:php80-all": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
     }
 }
