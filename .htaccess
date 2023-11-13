@@ -18,9 +18,9 @@
 <IfModule mod_php7.c>
 
 ############################################
-## adjust max execution time
+## adjust max execution time -- somehow used in ./shell/indexer.php scripts, keep this number high!
 
-    php_value max_execution_time 180
+    php_value max_execution_time 1800
 
 ############################################
 ## disable automatic session start
