@@ -51,7 +51,7 @@ $billsafe = false;
     <?php if ('billsafe' == $_code) $billsafe = true; ?>
     <?php if ($_code=='customercredit' && ($isPartial == -2 || $isPartial == -3)) continue; // hide customer credit
     ?>
-    <dt>
+    <dt id="dt_method_<?=$_code?>">
     <?php if (sizeof($this->getMethods()) > 1): ?>
         <?php if ($_code=='customercredit' && $isPartial==1): ?>
             <input id="p_method_<?php echo $_code ?>" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="checkbox" onclick="payment.switchMethod('<?php echo $_code ?>');" <?php if ($isCheckedCustomercredit) { ?>checked="checked"<?php } ?> />

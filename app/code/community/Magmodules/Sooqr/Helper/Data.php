@@ -327,28 +327,31 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
      */
     public function getProductUrl($product, $config, $parent, $parentAttributes)
     {
-        $url = '';
-        if (!empty($parent)) {
-            if ($parent->getRequestPath()) {
-                $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $parent->getRequestPath()));
-            }
+        // DHH CORE HACK
+        $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
+        
+        // $url = '';
+        // if (!empty($parent)) {
+            // if ($parent->getRequestPath()) {
+                // $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $parent->getRequestPath()));
+            // }
 
-            if (empty($url)) {
-                if ($parent->getUrlKey()) {
-                    $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $parent->getUrlKey()));
-                }
-            }
-        } else {
-            if ($product->getRequestPath()) {
-                $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $product->getRequestPath()));
-            }
+            // if (empty($url)) {
+                // if ($parent->getUrlKey()) {
+                    // $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $parent->getUrlKey()));
+                // }
+            // }
+        // } else {
+            // if ($product->getRequestPath()) {
+                // $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $product->getRequestPath()));
+            // }
 
-            if (empty($url)) {
-                if ($product->getUrlKey()) {
-                    $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $product->getUrlKey()));
-                }
-            }
-        }
+            // if (empty($url)) {
+                // if ($product->getUrlKey()) {
+                    // $url = Mage::helper('core')->escapeHtml(trim($config['website_url'] . $product->getUrlKey()));
+                // }
+            // }
+        // }
 
         if (!empty($config['product_url_suffix'])) {
             if (strpos($url, $config['product_url_suffix']) === false) {
