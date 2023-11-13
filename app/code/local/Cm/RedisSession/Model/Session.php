@@ -76,6 +76,18 @@ class Cm_RedisSession_Model_Session implements \Zend_Session_SaveHandler_Interfa
      */
     public function setSaveHandler()
     {
+         // DHH CORE HACK
+        if (!headers_sent($file, $line)) {
+            // OK
+        } else {
+            $intel_action = defined("INTEL_ACTION_STRING") ? INTEL_ACTION_STRING : "NO_INTEL_ACTION";
+            $msg = "Failed to do session_set_save_handler: Headers already sent. Output started at {$file}:{$line}. {$intel_action}";
+            Mage::log($msg, null, 'exception.log', true);
+            if(defined("INTEL_ACTION_STRING")) {
+                return $this; // If this is an INTEL session, give it back. Don't change behavior for chefstore.nl users
+            }
+        }
+        // END DHH CORE HACK
         session_set_save_handler(
             array($this, 'open'),
             array($this, 'close'),
