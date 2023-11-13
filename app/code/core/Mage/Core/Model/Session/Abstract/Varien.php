@@ -133,6 +133,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
         } else {
             $msg = "Failed to set session cookie params, headers already sent. Output started at {$file}:{$line}. URL: ".Mage::helper('core/url')->getCurrentUrl();
             Mage::log($msg, null, 'exception.log', true);
+            return $this;
         }
         // END DHH CORE HACK
 
