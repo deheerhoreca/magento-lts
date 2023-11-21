@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b01eb6a29065dae7223451d4644a866",
+    "content-hash": "2a0e5532411f6ae8ee995f1d0df6782e",
     "packages": [
         {
             "name": "amnuts/opcache-gui",
@@ -2458,35 +2458,38 @@
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
-            "version": "v0.7.2",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer.git",
-                "reference": "1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db"
+                "url": "https://github.com/PHPCSStandards/composer-installer.git",
+                "reference": "4be43904336affa5c2f70744a348312336afd0da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db",
-                "reference": "1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db",
+                "url": "https://api.github.com/repos/PHPCSStandards/composer-installer/zipball/4be43904336affa5c2f70744a348312336afd0da",
+                "reference": "4be43904336affa5c2f70744a348312336afd0da",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0 || ^2.0",
-                "php": ">=5.3",
+                "php": ">=5.4",
                 "squizlabs/php_codesniffer": "^2.0 || ^3.1.0 || ^4.0"
             },
             "require-dev": {
                 "composer/composer": "*",
+                "ext-json": "*",
+                "ext-zip": "*",
                 "php-parallel-lint/php-parallel-lint": "^1.3.1",
-                "phpcompatibility/php-compatibility": "^9.0"
+                "phpcompatibility/php-compatibility": "^9.0",
+                "yoast/phpunit-polyfills": "^1.0"
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin"
+                "class": "PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin"
             },
             "autoload": {
                 "psr-4": {
-                    "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\": "src/"
+                    "PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2502,7 +2505,7 @@
                 },
                 {
                     "name": "Contributors",
-                    "homepage": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer/graphs/contributors"
+                    "homepage": "https://github.com/PHPCSStandards/composer-installer/graphs/contributors"
                 }
             ],
             "description": "PHP_CodeSniffer Standards Composer Installer Plugin",
@@ -2526,10 +2529,10 @@
                 "tests"
             ],
             "support": {
-                "issues": "https://github.com/dealerdirect/phpcodesniffer-composer-installer/issues",
-                "source": "https://github.com/dealerdirect/phpcodesniffer-composer-installer"
+                "issues": "https://github.com/PHPCSStandards/composer-installer/issues",
+                "source": "https://github.com/PHPCSStandards/composer-installer"
             },
-            "time": "2022-02-04T12:51:07+00:00"
+            "time": "2023-01-05T11:28:13+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -2884,6 +2887,114 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.17.1"
             },
             "time": "2023-08-13T19:53:39+00:00"
+        },
+        {
+            "name": "openmage/dev-copyright",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenMage/dev-copyright.git",
+                "reference": "c963a65ec34e932f2fef0d80db087e059bb1fec8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenMage/dev-copyright/zipball/c963a65ec34e932f2fef0d80db087e059bb1fec8",
+                "reference": "c963a65ec34e932f2fef0d80db087e059bb1fec8",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Justin Beaty",
+                    "homepage": "https://github.com/justinbeaty"
+                }
+            ],
+            "description": "Updated copyright blocks.",
+            "support": {
+                "issues": "https://github.com/OpenMage/dev-copyright/issues",
+                "source": "https://github.com/OpenMage/dev-copyright/tree/main"
+            },
+            "time": "2023-04-04T07:37:16+00:00"
+        },
+        {
+            "name": "openmage/dev-meta-package",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenMage/dev-meta-package.git",
+                "reference": "34a240a5c5eab60dad41c19688a9a5e0e6c24474"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenMage/dev-meta-package/zipball/34a240a5c5eab60dad41c19688a9a5e0e6c24474",
+                "reference": "34a240a5c5eab60dad41c19688a9a5e0e6c24474",
+                "shasum": ""
+            },
+            "require": {
+                "openmage/dev-copyright": "dev-main",
+                "openmage/dev-translations": "dev-main"
+            },
+            "type": "metapackage",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sven Reichel",
+                    "email": "github-sr@hotmail.com"
+                }
+            ],
+            "description": "OpenMage tools that are only needed for development.",
+            "support": {
+                "issues": "https://github.com/OpenMage/dev-meta-package/issues",
+                "source": "https://github.com/OpenMage/dev-meta-package/tree/v1.0.3"
+            },
+            "time": "2023-04-04T07:39:43+00:00"
+        },
+        {
+            "name": "openmage/dev-translations",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenMage/dev-translations.git",
+                "reference": "bdbecd2f51723056787ca1efb24db700d605c152"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenMage/dev-translations/zipball/bdbecd2f51723056787ca1efb24db700d605c152",
+                "reference": "bdbecd2f51723056787ca1efb24db700d605c152",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Justin Beaty",
+                    "homepage": "https://github.com/justinbeaty"
+                }
+            ],
+            "description": "Finds missing and unused translations.",
+            "support": {
+                "issues": "https://github.com/OpenMage/dev-translations/issues",
+                "source": "https://github.com/OpenMage/dev-translations/tree/main"
+            },
+            "time": "2023-04-04T07:36:52+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -5461,6 +5572,49 @@
                 }
             ],
             "time": "2023-02-14T08:03:56+00:00"
+        },
+        {
+            "name": "symplify/vendor-patches",
+            "version": "11.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symplify/vendor-patches.git",
+                "reference": "793c5d0f995988af690e2a278d0133df41638528"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symplify/vendor-patches/zipball/793c5d0f995988af690e2a278d0133df41638528",
+                "reference": "793c5d0f995988af690e2a278d0133df41638528",
+                "shasum": ""
+            },
+            "require": {
+                "cweagans/composer-patches": "^1.7",
+                "php": ">=7.2"
+            },
+            "bin": [
+                "bin/vendor-patches"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Generate vendor patches for packages with single command",
+            "support": {
+                "issues": "https://github.com/symplify/vendor-patches/issues",
+                "source": "https://github.com/symplify/vendor-patches/tree/11.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/rectorphp",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-02-07T11:23:54+00:00"
         },
         {
             "name": "theseer/tokenizer",
