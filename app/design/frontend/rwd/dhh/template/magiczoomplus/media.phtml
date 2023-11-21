@@ -59,7 +59,7 @@ function _extract_data_from_optimized_image_name($optimized_image, string $dhh_s
       "-{$optimized_image_data["type"]}-", // Watch this... "-a" or "-b" matches the hash sometimes
       "{$optimized_image_data["hash"]}",
     ];
-    $optimized_image_data["sku"] = str_replace($replaces, null, $filename);
+    $optimized_image_data["sku"] = str_replace($replaces, "", $filename);
     
     $msg = "{$dhh_sku} Extract data from ".var_export($optimized_image, true)." OK";
     if(function_exists("logger")) {
@@ -252,7 +252,7 @@ $imageHelper             = $this->helper('catalog/image');
 
 $productTitle            = $this->htmlEscape($productModel->getName());
 $productDescription      = $this->htmlEscape($outputHelper->productAttribute($productModel, $productModel->getDescription(), 'description'));
-$productShortDescription = $this->htmlEscape($outputHelper->productAttribute($productModel, nl2br($productModel->getShortDescription()), 'short_description'));
+$productShortDescription = $this->htmlEscape($outputHelper->productAttribute($productModel, nl2br((string) $productModel->getShortDescription()), 'short_description'));
 $productAlt              = $this->htmlEscape($productModel->getImageLabel());
 
 $createSquareImages      = $tool->params->checkValue('square-images', 'Yes');

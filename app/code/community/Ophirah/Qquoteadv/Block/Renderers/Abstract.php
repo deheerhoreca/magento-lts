@@ -181,7 +181,9 @@ abstract class Ophirah_Qquoteadv_Block_Renderers_Abstract extends Mage_Catalog_B
      * @param Mage_Catalog_Model_Product $product
      * @return Mage_Catalog_Helper_Image
      */
-    public function getProductImage($size = 180, Mage_Catalog_Model_Product $product)
+    // DHH CORE HACK -- PHP 8
+    // public function getProductImage($size = 180, Mage_Catalog_Model_Product $product)
+    public function getProductImage($size, Mage_Catalog_Model_Product $product)
     {
         if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
             $productDataHelper = Mage::helper('qquoteadv/catalog_product_data');
@@ -192,6 +194,11 @@ abstract class Ophirah_Qquoteadv_Block_Renderers_Abstract extends Mage_Catalog_B
             );
         } else {
             $imageProduct = $product;
+        }
+        
+        // DHH CORE HACK
+        if(is_numeric($size) !== true || !($size > 0)) {
+          $size = 180;
         }
 
         return Mage::helper('catalog/image')->init($imageProduct, 'thumbnail')->resize($size);

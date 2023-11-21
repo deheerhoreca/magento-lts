@@ -130,5 +130,12 @@
         <Aoe_TemplateHints>
           <active>false</active>
         </Aoe_TemplateHints>
+        
+        <!-- Temporarily disable -->
+        <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->
+        <!-- <Ophirah_Crmaddon><active>false</active></Ophirah_Crmaddon> -->
+        <!-- <Ophirah_CustomProducts><active>false</active></Ophirah_CustomProducts> -->
+        <!-- <Ophirah_Qquoteadv><active>false</active></Ophirah_Qquoteadv> -->
+        <!-- <Ophirah_RequestNotification><active>false</active></Ophirah_RequestNotification> -->
     </modules>
 </config>

@@ -372,7 +372,9 @@ final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract
     /**
      * @return string
      */
-    final private static function getC2QCreateHash()
+    // DHH CORE HACK -- PHP 8
+    // final private static function getC2QCreateHash()
+    function getC2QCreateHash()
     {
         return "opensource";
     }
@@ -582,7 +584,9 @@ final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract
      * @param $input
      * @return mixed
      */
-    final private function _stripUrlForLicenseKeyCheck($input)
+    // DHH CORE HACK -- PHP 8
+    // final private function _stripUrlForLicenseKeyCheck($input)
+    function _stripUrlForLicenseKeyCheck($input)
     {
         $input = trim($input, '/');
 
@@ -623,7 +627,9 @@ final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract
      *
      * @return int|null
      */
-    final private function getTrialExtendDays(){ return null;} 
+    // DHH CORE HACK -- PHP 8
+    // final private function getTrialExtendDays(){ return null;} 
+    function getTrialExtendDays(){ return null;} 
 
     /**
      * This function try's to detect old versions of Cart2Quote
@@ -636,7 +642,9 @@ final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    final private function isOldVersionDetected(){ return false;} 
+    // DHH CORE HACK -- PHP 8
+    // final private function isOldVersionDetected(){ return false;} 
+    function isOldVersionDetected(){ return false;} 
 
     /**
      * In case of a Starter license, check if the quote url is the same as the base url
