@@ -164,15 +164,11 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
   
   $subcategories = $carct->getCollection()
     ->addIdFilter($carct->getChildren())
-    ->addAttributeToSelect("url_key")
     ->addAttributeToSelect("name")
-    ->addAttributeToSelect("all_children")
-    ->addAttributeToSelect("is_anchor")
     ->addAttributeToSelect("image")
     ->addAttributeToFilter("is_active", 1)
     ->setOrder("position", Varien_Db_Select::SQL_ASC)
     ->joinUrlRewrite();
-  // $subcategories->addAttributeToSelect("image");
   
   // @todo don't show subcategories if there only is one, but only on shop by brand/series pages
   if($subcategories->count() >= 1) {
@@ -192,10 +188,11 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       // }
     // }
     
-    echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
+    // Logic cloned:
+    // - catalog/product/list.phtml
+    // - amasty/amshopby/subcategories.phtml
     
-    // Logic copied to amasty/amshopby/subcategories.phtml
-    $category_thumbs_dimensions = $category_thumbs_actual * 1.5;
+    echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
     
     foreach($subcategories as $i => $subcategory) {
       if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
@@ -213,6 +210,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
         $image_url        = "{$media_url}/catalog/category/{$image}";
         $col_width        = 140;
         $cdn_img_options  = [
+          "identifier"      => $subcategory->getId(),
           "fs_path"         => $image_path,
           "url"             => $image_url,
           "fit"             => "contain",
@@ -224,7 +222,6 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
           "title"           => $category_name,
           "alt"             => $category_name,
           "quality"         => 80,
-          "dpr"             => 1.25,
           "relative_url"    => true,
         ];
         $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
@@ -534,7 +531,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
     
     // Optional block category-ID is shown below the category tiles
     if(empty($category_block_bottom_html) === false) {
-      echo "<div class='ctdesc'>{$category_block_bottom_html}</div>";
+      echo "<div>{$category_block_bottom_html}</div>";
     }
     ?>
   </div>

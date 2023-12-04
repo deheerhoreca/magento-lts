@@ -85,7 +85,7 @@ function increasem2(gb) {
 // });
 
 document.addEventListener('copy', (event) => {
-  if(document.getSelection().toString().length > 100) {
+  if(document.getSelection().toString().length > 200) {
     const pagelink = `\nBekijk het op: ${document.location.href}`;
     event.clipboardData.setData('text/plain', document.getSelection() + pagelink);
     event.preventDefault();

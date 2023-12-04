@@ -1,6 +1,5 @@
 <?php
 
-// Settings
 $_helper                      = $this->helper("catalog/output");
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $show_ups_block               = false;
@@ -9,8 +8,68 @@ $show_actions                 = false;
 $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
-$productBlock                 = $this->getLayout()->createBlock("catalog/product_price");
+$product_block                 = $this->getLayout()->createBlock("catalog/product_price");
 $attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["popularity"]);
+
+// Static block of fixes SKUs
+
+// $parent_categories_ids    = [];
+// $_columnCount             = 5;
+// $displaySize              = 175;
+// $_imgSize                 = 1 * $displaySize;
+
+// $options                  = [
+  // "image_size"              => 125,
+  // "_blank"                  => false,
+  // "use_short_product_names" => true,
+  // "display"                 => "normal",
+  // "skip_actions"            => true,
+  // "fast_stock"              => true,
+// ];
+
+// $_products = Mage::getModel("catalog/product")
+  // ->getCollection()
+  // ->addAttributeToSelect($attributes)
+  // ->addAttributeToFilter("sku", ["in" => ["CS-7455.3300", "CS-7450.0159", "CS-7450.0580", "CS-7464.0045", "CS-7072.1015"]])
+  // ->addAttributeToSort("popularity", "ASC")
+  // ->setPageSize(5)
+  // ->addFinalPrice();
+
+// $_products->load();
+// // if(_dhh_debug()) {
+  // // echo $_products->getSelect()->__toString();
+// // }
+// Mage::getModel("catalogInventory/stock")->addItemsToProducts($_products);
+
+
+// <style>
+  // .category-products li.item:hover {
+    // background-color: var(--color-white);
+    // -webkit-transition: background-color 200ms linear;
+    // -ms-transition: background-color 200ms linear;
+    // transition: background-color 200ms linear;
+ // }
+// </style>
+// <div id="promo-products" class="category-products pb-0 mb-3" style="background-color: #f6761c1a;">
+  // <div style="border-bottom: 1px solid var(--bs-gray-500); background-color: var(--color-antracite); color: #F9F9F9;" class="my-3 py-1">
+    // <h1 class="center">BLACK FRIDAY 2023 KNALLERS -- KORTINGEN TOT 62% -- <strong><i>ALLEEN VANDAAG TOT <u>16:25</u></i></strong></h1>
+  // </div>
+  // <ul class="products-grid products-grid--max-< ?=$_columnCount? >-col">
+    // <? php
+    // // foreach($_products as $_product) {
+      // ? >
+      // <li class="item"><?=Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $product_block, $options)? ></li>
+    // <? php
+    // // }
+    // ? >
+  // </ul>
+// </div>
+// < ?php
+// unset($_products);
+
+// Dynamic block of best sellers
+
+// Settings
 $limit                        = 12;
 
 // Get all products that are marked as featured
@@ -43,7 +102,6 @@ $_productCollection->load();
 // $_productCollection->setFlag("require_stock_items", true);
 // Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
 
-$productBlock           = $this->getLayout()->createBlock("catalog/product_price");
 $parent_categories_ids  = [];
 $_columnCount           = 4;
 $displaySize            = 175;
@@ -51,10 +109,12 @@ $_imgSize               = 1 * $displaySize;
 
 if($_productCollection->getFirstItem()) {
   ?>
-  <div class="category-products">
-    <span class="h1 center" style="padding-top: 1em;">Topsellers</span><hr>
+  <div class="category-products mt-3">
+    <div style="border-bottom: 1px solid var(--bs-gray-500); border-top: 1px solid var(--bs-gray-500); background-color: var(--color-light-gray);" class="my-1 py-1">
+    <h2 class="center py-1 my-1">Chefstore.nl Favorieten:</h2>
+    </div>
+    <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
     <?php
-   echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
     $i = 0;
     foreach($_productCollection as $_product) {
       if(mt_rand(0, 100) > 35) {
@@ -74,7 +134,7 @@ if($_productCollection->getFirstItem()) {
       }
       
       // $price_html           = $this->getPriceHtml($_product, true); // ListView version
-      $price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
+      $price_html           = $product_block->getPriceHtml($_product, true); // FeaturedProdcts version
       $finalPrice           = (float) $_product->getFinalPrice();
       
       $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["context" => "listview"]);

@@ -171,16 +171,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     $manufacturers    = [];
     $manufacturer_col = $_products->getColumnValues("manufacturer");
+    $manufacturer_col = array_filter($manufacturer_col);
     
     if(empty($manufacturer_col) === false) {
-      try {
-        $manufacturer_ids = array_count_values($manufacturer_col);
-      } catch(Exception $e) {
-        Mage::log("getBrandsPerCategory failed: {$e->getMessage()}", null, "exception.log", true);
-        // varexport($manufacturer_col);
-        return [];
-      }
-      
+      $manufacturer_ids = array_count_values(array_filter($manufacturer_col));
       arsort($manufacturer_ids);
       $manufacturer_ids = array_slice($manufacturer_ids, 0, $max_amount, true);
       $manufacturer_ids = array_keys($manufacturer_ids);
@@ -385,6 +379,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if(is_file($image_path) === true) {
       $col_width        = 200;
       $cdn_img_options  = [
+        "identifier"      => $_product->getSku(),
         "fs_path"         => $image_path,
         "url"             => $image_url,
         "width"           => $image_size,
@@ -1116,9 +1111,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       
       // EOL
       
-      $stock_message        = "Nooit meer leverbaar";
+      $stock_message        = "Niet meer leverbaar";
       $stock_message_short  = "Niet leverbaar";
-      $stock_tooltip        = "Dit product is verlopen en helaas niet meer leverbaar.";
+      $stock_tooltip        = "Dit product is helaas niet meer leverbaar. We helpen u graag met het vinden van een geschikt vervangend product.";
       $delivery_text        = "";
       $txtcltcz             = "clzsoldout";
       $fa_icon              = "clock-o";
@@ -1365,15 +1360,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
       return "SALE";
-    }
-    // if($_product->getAttributeText("supplier") === "Gastronoble") {
-      // if($context === "detail") {
-        // return "+5% Extra Korting met code <span style='font-family: sans-serif;'><strong>GASTRONOBLE5</strong></span>";
-      // } else {
-        // return "+5% Extra Korting";
-      // }
-    // }
-    
+    }    
     return "";
   }
   
@@ -1521,6 +1508,29 @@ if(function_exists("_dhh_debug") === false) {
   }
 }
 
+if(function_exists("_dhh_reflect") === false) {
+  function _dhh_reflect($function, $class = null) {
+    if($class === null) {
+      if($r = new ReflectionFunction($function)) {
+        return [
+          "file"  => $r->getFileName(),
+          "line"  => $r->getStartLine(),
+        ];
+      }
+    } else {
+      if($class = new ReflectionClass($class)) {
+        if($r = $class->getMethod($function)) {
+          return [
+            "file"  => $r->getFileName(),
+            "line"  => $r->getStartLine(),
+          ];
+        }
+      }
+    }
+    return false;
+  }
+}
+
 function _dhh_getselect($collection) {
   return $collection->getSelect()->__toString();
 }
@@ -1568,6 +1578,7 @@ if(function_exists('_cdn_img') === false) {
       return false;
     }
     
+    $identifier     = $options["identifier"]    ?? "NO_ID";
     $options["cdn"] = isset($options["cdn"])     ? $options["cdn"] : "imagekit_custom";
     $fs_path        = $options["fs_path"]       ?? null;
     $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
@@ -1630,7 +1641,7 @@ if(function_exists('_cdn_img') === false) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
     if($add_mod_time === true && strlen($fs_path) > 0) {
-      $url = _add_file_v_param($url, $fs_path);
+      $url = _add_file_v_param($url, $fs_path, $identifier);
     }
     
     switch($cdn) {
@@ -1768,7 +1779,7 @@ if(function_exists('_cdn_img') === false) {
 // Adds a ?v={timestamp} param to the URL
 // Exists in OpenMage and Intel
 if(function_exists('_add_file_v_param') === false) {
-  function _add_file_v_param(string $url, string $fs_path): string {
+  function _add_file_v_param(string $url, string $fs_path, string $identifier): string {
     if(is_file($fs_path)) {
       if($mod_time = filemtime($fs_path)) {
         // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
@@ -1776,9 +1787,9 @@ if(function_exists('_add_file_v_param') === false) {
       }
     } else {
       if(function_exists('logger')) {
-        logger("Cannot add file modification time of {$fs_path} because it does not exist", "NOTICE");
+        logger("{$identifier} Cannot add file modification time of {$fs_path} because it does not exist", "NOTICE");
       } else {
-        Mage::log("Cannot add file modification time of {$fs_path} because it does not exist");
+        Mage::log("{$identifier} Cannot add file modification time of {$fs_path} because it does not exist");
       }
     }
     

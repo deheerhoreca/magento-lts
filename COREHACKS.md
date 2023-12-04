@@ -17,6 +17,8 @@
     - Adding details and logging to session errors
   - `app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
+  - `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
+    - Printing additional debug info temporarily
 - **app/design/frontend/base/**
   - `app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file

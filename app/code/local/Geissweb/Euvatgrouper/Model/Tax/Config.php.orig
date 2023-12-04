@@ -1,9 +1,4 @@
 <?php
-
-if(defined("DHH_UUID") === false) {
-  define("DHH_UUID", uniqid());
-}
-
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -47,7 +42,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 		if (version_compare(Mage::getVersion(), '1.9', '>='))
 		{
 			$cbtEnabled = $this->_getStoreConfig(self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED, $store);
-			if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled: {$cbtEnabled}", null, 'euvatenhanced.log');
+			if($this->_debug) Mage::log('crossBorderTradeEnabled: '.$cbtEnabled, null, 'euvatenhanced.log');
 
 			if($cbtEnabled && !Mage::helper('euvatgrouper')->isAdmin())
 			{
@@ -76,12 +71,12 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 
 			if(isset($billingCountryId) && !Mage::helper('euvatgrouper')->isEuCountry($billingCountryId) )
 			{
-				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled exception: NON-EU", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log('crossBorderTradeEnabled exception: NON-EU', null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForOutOfEurope()) {
                     return false;
                 }
 			} elseif(isset($billingCountryId) && $basedOnAddress && $basedOnAddress->getVatIsValid() ) {
-				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled exception: valid VAT Number", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log('crossBorderTradeEnabled exception: valid VAT Number', null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForEuBusiness()) {
                     return false;
                 }
@@ -90,7 +85,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 			return $cbtEnabled;
 
 		} else {
-			if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__."crossBorderTrade is not available in Mage version: " . Mage::getVersion(), null, 'euvatenhanced.log');
+			if($this->_debug) Mage::log('crossBorderTrade is not available in Mage version: ' . Mage::getVersion(), null, 'euvatenhanced.log');
 		}
 
 		return false;
