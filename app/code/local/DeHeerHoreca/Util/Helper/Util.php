@@ -310,7 +310,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $tagline                = $_product->getTagline();
     $price_html             = $product_block->getPriceHtml($_product, true);
     $price_html             = str_replace(",00", ",-", $price_html);
-    $price_html             = str_replace("€", null, $price_html);
+    $price_html             = str_replace("€", "", $price_html);
     $stock_status           = strtolower(_get_product_attribute($_product, "stock_status"));
     
     if($fast_stock === true && empty($stock_status === false)) {
@@ -731,7 +731,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       
       // Custom highlights
       $attribute_code  = "custom_highlights";
-      $attribute_value = _get_product_attribute($_product, $attribute_code, false);
+      $attribute_value = (string) _get_product_attribute($_product, $attribute_code, false); // Casting required for explode()
       $parts = explode(",", $attribute_value);
       if(sizeof($parts) > 0) {
         foreach($parts as $part) {

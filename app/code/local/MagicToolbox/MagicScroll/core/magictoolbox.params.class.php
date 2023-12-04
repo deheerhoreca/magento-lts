@@ -515,7 +515,11 @@ class MagicToolboxParamsClass
         if (!is_array($value)) {
             $value = array($value);
         }
-        return in_array(strtolower($this->getValue($id, $profile, $strict)), array_map('strtolower', $value));
+        
+        // DHH CORE HACK -- PHP 8.1
+        // return in_array(strtolower($this->getValue($id, $profile, $strict)), array_map('strtolower', $value));
+        $value = array_map('strval', $value);
+        return in_array(strtolower((string) $this->getValue($id, $profile, $strict)), array_map('strtolower', $value));
     }
 
     /**
@@ -536,7 +540,12 @@ class MagicToolboxParamsClass
         if (!is_array($value)) {
             $value = array($value);
         }
-        return in_array(strtolower($this->getMobileValue($id, $profile, $strict)), array_map('strtolower', $value));
+        
+        // DHH CORE HACK -- PHP 8.1
+        $mobile_value = (string) $this->getMobileValue($id, $profile, $strict);
+        // return in_array(strtolower($this->getMobileValue($id, $profile, $strict)), array_map('strtolower', $value));
+        $value = array_map('strval', $value);
+        return in_array(strtolower($mobile_value), array_map('strtolower', $value));
     }
 
     /**
@@ -560,7 +569,8 @@ class MagicToolboxParamsClass
         if (!is_array($group)) {
             $group = array($group);
         }
-        return in_array(strtolower($this->params[$this->generalProfile][$id]['group']), array_map('strtolower', $group));
+        $group = array_map('strval', $group);
+        return in_array(strtolower((string) $this->params[$this->generalProfile][$id]['group']), array_map('strtolower', $group));
     }
 
     /**
