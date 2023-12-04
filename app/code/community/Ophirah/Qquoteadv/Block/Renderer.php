@@ -98,6 +98,8 @@ class Ophirah_Qquoteadv_Block_Renderer extends Mage_Catalog_Block_Product_Abstra
         if (!isset($this->_itemRenders[$type])) {
             $type = 'default';
         }
+        $this->_itemRenders[$type]['blockInstance'] = $this->getLayout()->createBlock($this->_itemRenders[$type]['block']);
+        // var_export($this->_itemRenders[$type]['blockInstance']);exit;
         if (is_null($this->_itemRenders[$type]['blockInstance'])) {
             $this->_itemRenders[$type]['blockInstance'] = $this->getLayout()
                 ->createBlock($this->_itemRenders[$type]['block'])

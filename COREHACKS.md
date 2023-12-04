@@ -68,8 +68,9 @@
     - https://github.com/loekvangool/deheerhoreca-magento/commit/88743b48e7a101afac77417483bfee66e434259b
 - **Magmodules Channable**
     - `app/code/community/Magmodules/Channable/Model/Channable.php`
-    - Added friendly URL to Channable feed
-    - https://github.com/loekvangool/deheerhoreca-magento/commit/6cddc367ce8419eb26662e42f181deb523e8c770
+      - Added friendly URL to Channable feed
+    - `app/code/community/Magmodules/Channable/Helper/Data.php`
+      - Prevent error on empty grouped product
 - **Magmodules Sooqr**
   - `app/code/community/Magmodules/Sooqr/Helper/Data.php`
     - ~Added friendly URL to Sooqr feed~

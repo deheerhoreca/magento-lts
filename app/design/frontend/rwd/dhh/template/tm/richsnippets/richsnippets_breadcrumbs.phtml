@@ -23,6 +23,10 @@ $currentUrl = Mage::helper('core/url')->getCurrentUrl();
 /* Pre-processing */
 if(is_array($crumbs) && sizeof($crumbs) > 0) {
   foreach($crumbs as $_crumbName => $_crumbInfo) {
+    
+    $_crumbInfo['title']          = (string) $_crumbInfo['title']; // required for strlen()
+    $crumbs[$_crumbName]['link']  = (string) $crumbs[$_crumbName]['link']; // required for strlen()
+    
     if(strlen($_crumbInfo['title']) < 1) {
       $crumbs[$_crumbName]['title'] = $crumbs[$_crumbName]['label'];
     }

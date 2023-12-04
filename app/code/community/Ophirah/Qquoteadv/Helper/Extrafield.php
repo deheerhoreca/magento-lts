@@ -154,7 +154,9 @@ class Ophirah_Qquoteadv_Helper_Extrafield extends Mage_Core_Helper_Abstract
      * @param $quote
      * @return string
      */
-    public function getFieldData($fieldId, $error = true, $quote)
+    // DHH CORE HACK -- PHP 8
+    // public function getFieldData($fieldId, $error = true, $quote)
+    public function getFieldData($fieldId, $error, $quote)
     {
         $fieldData = $quote->getData('extra_field_' . $fieldId);
         if ($error && is_null($fieldData)) {

@@ -65,7 +65,7 @@ Contexts:
 if(function_exists('_fixPrice') === false) {
   function _fixPrice($price, $keep_sign = false) {
     if($keep_sign === false) {
-      $price = str_replace(["€", "&nbsp;"], null, $price);    // Remove euro symbol
+      $price = str_replace(["€", "&nbsp;"], "", $price);    // Remove euro symbol
     }
     $price = str_replace(",00", ",-", $price);                // Trim zero cents
     $price = str_replace(".", "", $price);                    // Remove thousand separator
