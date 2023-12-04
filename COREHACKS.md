@@ -1,5 +1,8 @@
 # Hacked Code
 
+## Notes
+- Check composer packages for modifications: `composer status`
+
 ## Core Hacks
 - **app/code/core/Mage/**
   - `app/code/core/Mage/Customer/etc/config.xml`

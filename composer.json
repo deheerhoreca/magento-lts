@@ -13,7 +13,8 @@
         "aydin-hassan/magento-core-composer-installer": "~2.0.0",
         "firegento/debug": "*",
         "michelf/php-markdown": "^2.0",
-        "openmage/magento-lts": "^20.1.1",
+        "n98/magerun": "^1.97",
+        "openmage/magento-lts": "20.1.*",
         "sabberworm/php-css-parser": "^8.4",
         "symfony/css-selector": "^5.4"
     },
@@ -69,5 +70,16 @@
     "scripts": {
         "sniffer:php80-errors": "phpcs -n -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
         "sniffer:php80-all": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+    },
+    "replace": {  
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php54": "*",
+        "symfony/polyfill-php55": "*",
+        "symfony/polyfill-php56": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*"
     }
 }
