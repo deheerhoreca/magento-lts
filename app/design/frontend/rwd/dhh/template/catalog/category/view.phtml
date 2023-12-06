@@ -93,7 +93,8 @@ elseif($at_root_category === true && isset($_GET["brand_series"]) && is_numeric(
   }
   
   // Optional block BRAND_SERIES is shown above the category tiles
-  $top_block_name = "brand_series-{$brand_series_slug}";
+  $brand_series_slug = sanitize_alphanumeric($value, "_");
+  $top_block_name = "brand_series_{$brand_series_slug}";
 }
 
 // Display some HTML if we have it
