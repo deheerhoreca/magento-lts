@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "paynl/sdk",
-            "version": "v1.6.5",
-            "version_normalized": "1.6.5.0",
+            "version": "1.6.7",
+            "version_normalized": "1.6.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/sdk.git",
-                "reference": "7b35dc4e579280d34f12ba519fa6aaaca7d8b543"
+                "reference": "03c21abadb382676fdc0c1d488712ae1a50e4fde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/sdk/zipball/7b35dc4e579280d34f12ba519fa6aaaca7d8b543",
-                "reference": "7b35dc4e579280d34f12ba519fa6aaaca7d8b543",
+                "url": "https://api.github.com/repos/paynl/sdk/zipball/03c21abadb382676fdc0c1d488712ae1a50e4fde",
+                "reference": "03c21abadb382676fdc0c1d488712ae1a50e4fde",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
             "suggest": {
                 "ext-simplexml": "*"
             },
-            "time": "2021-10-22T14:40:13+00:00",
+            "time": "2023-11-13T15:33:10+00:00",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -47,23 +47,23 @@
             ],
             "support": {
                 "issues": "https://github.com/paynl/sdk/issues",
-                "source": "https://github.com/paynl/sdk/tree/v1.6.5"
+                "source": "https://github.com/paynl/sdk/tree/v1.6.7"
             },
             "install-path": "../paynl/sdk"
         },
         {
             "name": "php-curl-class/php-curl-class",
-            "version": "9.17.2",
-            "version_normalized": "9.17.2.0",
+            "version": "9.18.2",
+            "version_normalized": "9.18.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-curl-class/php-curl-class.git",
-                "reference": "60055da5b5ae91f9d8f4688d363483954ec640dd"
+                "reference": "2b8a93b37d0525b4585820397ab8af7f4c317bcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/60055da5b5ae91f9d8f4688d363483954ec640dd",
-                "reference": "60055da5b5ae91f9d8f4688d363483954ec640dd",
+                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/2b8a93b37d0525b4585820397ab8af7f4c317bcb",
+                "reference": "2b8a93b37d0525b4585820397ab8af7f4c317bcb",
                 "shasum": ""
             },
             "require": {
@@ -83,7 +83,7 @@
             "suggest": {
                 "ext-mbstring": "*"
             },
-            "time": "2023-06-27T01:06:30+00:00",
+            "time": "2023-09-11T18:08:28+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -98,6 +98,10 @@
             "authors": [
                 {
                     "name": "Zach Borboa"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/php-curl-class/php-curl-class/graphs/contributors"
                 }
             ],
             "description": "PHP Curl Class makes it easy to send HTTP requests and integrate with web APIs.",
@@ -126,7 +130,7 @@
             ],
             "support": {
                 "issues": "https://github.com/php-curl-class/php-curl-class/issues",
-                "source": "https://github.com/php-curl-class/php-curl-class/tree/9.17.2"
+                "source": "https://github.com/php-curl-class/php-curl-class/tree/9.18.2"
             },
             "install-path": "../php-curl-class/php-curl-class"
         }

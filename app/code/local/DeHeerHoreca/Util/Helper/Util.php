@@ -1606,7 +1606,7 @@ if(function_exists('_cdn_img') === false) {
     $html           = "";
     
     // Pre-process settings
-    if($cdn === "imagekit") {
+    if($cdn === "imagekit" || $cdn === "imagekit_custom") {
       $relative_url = true; // Required
     }
     
