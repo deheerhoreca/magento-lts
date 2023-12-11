@@ -1,5 +1,11 @@
 <?php
 
+const GEISSWEB_VAT_VERBOSE = false;
+
+if(defined("DHH_UUID") === false) {
+  define("DHH_UUID", uniqid());
+}
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -41,7 +47,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
     public function customerLogin(Varien_Event_Observer $observer)
     {
         if ($this->_debug) {
-            Mage::log("EVENT START customerLogin", null, 'euvatenhanced.log');
+            Mage::log(DHH_UUID." ".__METHOD__." EVENT START customerLogin", null, 'euvatenhanced.log');
         }
 
         /** @var Mage_Customer_Model_Customer $customer */
@@ -74,12 +80,12 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             }
 
             if ($this->_debug) {
-                Mage::log("customerLogin: doValidateBilling: $doValidateBilling (" . $billingVatNumber . ")", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__.": doValidateBilling: $doValidateBilling (" . $billingVatNumber . ")", null, 'euvatenhanced.log');
             }
 
             if ($doValidateBilling) {
                 if ($this->_debug) {
-                    Mage::log("customerLogin: quickValidate: " . $billingVatNumber, null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." quickValidate: " . $billingVatNumber, null, 'euvatenhanced.log');
                 }
 
                 $validatedAddress = Mage::helper('euvatgrouper')->quickValidate($billingVatNumber, $billingAddress);
@@ -87,7 +93,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     $billingAddress = $validatedAddress;
                     $billingAddress->save();
                     if ($this->_debug) {
-                        Mage::log("customerLogin: quote bill address is now: " . var_export($quote->getBillingAddress()->debug(), true), null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." quote bill address is now: " . var_export($quote->getBillingAddress()->debug(), true), null, 'euvatenhanced.log');
                     }
                 }
             }
@@ -95,7 +101,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             $quote->setBillingAddress(Mage::getSingleton('sales/quote_address')->importCustomerAddress($billingAddress));
         } else {
             if ($this->_debug) {
-                Mage::log("customerLogin: billingAddress is not Mage_Customer_Model_Address", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." billingAddress is not Mage_Customer_Model_Address", null, 'euvatenhanced.log');
             }
         }
 
@@ -118,12 +124,12 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             }
 
             if ($this->_debug) {
-                Mage::log("customerLogin: doValidateShipping: $doValidateShipping (" . $shippingVatNumber . ")", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." doValidateShipping: $doValidateShipping (" . $shippingVatNumber . ")", null, 'euvatenhanced.log');
             }
 
             if ($doValidateShipping) {
                 if ($this->_debug) {
-                    Mage::log("customerLogin: quickValidate: " . $shippingVatNumber, null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." quickValidate: " . $shippingVatNumber, null, 'euvatenhanced.log');
                 }
 
                 $validatedAddress = Mage::helper('euvatgrouper')->quickValidate($shippingVatNumber, $shippingAddress);
@@ -131,7 +137,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     $shippingAddress = $validatedAddress;
                     $shippingAddress->save();
                     if ($this->_debug) {
-                        Mage::log("customerLogin: quote ship address is now: " . var_export($quote->getShippingAddress()->debug(), true), null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." quote ship address is now: " . var_export($quote->getShippingAddress()->debug(), true), null, 'euvatenhanced.log');
                     }
                 }
             }
@@ -139,7 +145,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             $quote->setShippingAddress(Mage::getSingleton('sales/quote_address')->importCustomerAddress($shippingAddress));
         } else {
             if ($this->_debug) {
-                Mage::log("customerLogin: shippingAddress is not Mage_Customer_Model_Address", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." shippingAddress is not Mage_Customer_Model_Address", null, 'euvatenhanced.log');
             }
         }
 
@@ -148,7 +154,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
         }
 
         if ($this->_debug) {
-            Mage::log("EVENT END customerLogin", null, 'euvatenhanced.log');
+            Mage::log(DHH_UUID." ".__METHOD__." EVENT END customerLogin", null, 'euvatenhanced.log');
         }
     }
 
@@ -160,7 +166,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
     {
         if (Mage::helper('euvatgrouper')->isModuleActive()) {
             if ($this->_debug) {
-                Mage::log("EVENT RUNNING: salesConvertQuoteToOrder ----------", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: salesConvertQuoteToOrder ----------", null, 'euvatenhanced.log');
             }
 
             /** @var $customer Mage_Customer_Model_Customer */
@@ -168,14 +174,14 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             if ($customer->getGroupId() == null && $customer->getEntityId() > 0) {
                 $customerExisting = Mage::getSingleton('customer/customer')->load($customer->getEntityId());
                 if ($this->_debug) {
-                    Mage::log("Loading existing customer group: " . $customerExisting->getGroupId(), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." Loading existing customer group: " . $customerExisting->getGroupId(), null, 'euvatenhanced.log');
                 }
 
                 $customer->setGroupId($customerExisting->getGroupId());
             }
 
             if ($this->_debug) {
-                Mage::log("customerSaveBefore Customer Information: " . var_export($customer->debug(), true), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." customerSaveBefore Customer Information: " . var_export($customer->debug(), true), null, 'euvatenhanced.log');
             }
 
             //$taxvatCc = ($customer->getTaxvat() != '') ? strtoupper(substr($customer->getTaxvat(), 0, 2)) : null;
@@ -190,7 +196,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 || $customer->getDisableAutoGroupChange() == 1
             ) {
                 if ($this->_debug) {
-                    Mage::log("EVENT END: customerSaveBefore (just returned) - " . (string)Mage::helper('euvatgrouper')->isAdmin() . "-" . in_array($customer->getGroupId(), Mage::helper('euvatgrouper')->getExcludedGroups()) . "-" . $billingCc . "-" . $customer->getDisableAutoGroupChange() . "----", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." EVENT END: customerSaveBefore (just returned) - " . (string)Mage::helper('euvatgrouper')->isAdmin() . "-" . in_array($customer->getGroupId(), Mage::helper('euvatgrouper')->getExcludedGroups()) . "-" . $billingCc . "-" . $customer->getDisableAutoGroupChange() . "----", null, 'euvatenhanced.log');
                 }
 
                 return;
@@ -205,14 +211,14 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     $group_id = Mage::registry('euvat_checkout_group_id');
                     $customer->setGroupId($group_id);
                     if ($this->_debug) {
-                        Mage::log("Customer Group Assignment: using checkout group: $group_id ($billingCc)", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Customer Group Assignment: using checkout group: $group_id ($billingCc)", null, 'euvatenhanced.log');
                     }
 
                     Mage::unregister('euvat_checkout_group_id');
                 } elseif (is_object($customer->getDefaultBillingAddress())) {
                     $group_id = Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount($customer->getDefaultBillingAddress()->toArray());
                     if ($this->_debug) {
-                        Mage::log("Customer Group Assignment: Using DefaultBillingAddress: $group_id ($billingCc)", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Customer Group Assignment: Using DefaultBillingAddress: $group_id ($billingCc)", null, 'euvatenhanced.log');
                     }
 
                     if (is_int($group_id)) {
@@ -221,7 +227,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 } elseif (is_object($tempVatValidation)) {
                     $group_id = Mage::helper('euvatgrouper/customer')->getCustomerGroupForAccount($tempVatValidation->toArray());
                     if ($this->_debug) {
-                        Mage::log("Customer Group Assignment: using tempVatValidation, Group: $group_id ($billingCc)", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Customer Group Assignment: using tempVatValidation, Group: $group_id ($billingCc)", null, 'euvatenhanced.log');
                     }
 
                     if (is_int($group_id)) {
@@ -230,7 +236,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 } elseif (!Mage::helper('euvatgrouper')->isEuCountry($billingCc)) {
                     $customer->setGroupId(Mage::helper('euvatgrouper')->getOutsideEuGroupId());
                     if ($this->_debug) {
-                        Mage::log("Customer Group Assignment: NON-EU Country: $billingCc", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Customer Group Assignment: NON-EU Country: $billingCc", null, 'euvatenhanced.log');
                     }
                 }
             } catch (Exception $e) {
@@ -238,7 +244,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             }
 
             if ($this->_debug) {
-                Mage::log("EVENT END: customerSaveBefore ----------", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: customerSaveBefore ----------", null, 'euvatenhanced.log');
             }
         }
     }
@@ -251,7 +257,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
     public function customerAddressSaveBefore(Varien_Event_Observer $observer)
     {
         if ($this->_debug) {
-            Mage::log("EVENT START: customerAddressSaveBefore ------", null, 'euvatenhanced.log');
+            Mage::log(DHH_UUID." ".__METHOD__." EVENT START: customerAddressSaveBefore ------", null, 'euvatenhanced.log');
         }
 
         try {
@@ -259,7 +265,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             $address        = $observer->getCustomerAddress();
             $tempValidation = Mage::getSingleton('customer/session')->getData('temp_vat_validation');
             if ($this->_debug) {
-                Mage::log("customerAddressSaveBefore address is:" . var_export($address->debug(), true) . " and tempValidation is:" . var_export($tempValidation, true), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." customerAddressSaveBefore address is:" . var_export($address->debug(), true) . " and tempValidation is:" . var_export($tempValidation, true), null, 'euvatenhanced.log');
             }
 
             //Update validation data on existing address
@@ -273,7 +279,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 
             if ($address->getEntityId() > 0 && !$address->hasData('vat_request_success')) {
                 if ($this->_debug) {
-                    Mage::log("[EUVAT]customerAddressSaveBefore no vat_request_success", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." [EUVAT]customerAddressSaveBefore no vat_request_success", null, 'euvatenhanced.log');
                 }
 
                 $savedAddress = Mage::getSingleton('customer/address')->load($address->getEntityId());
@@ -304,7 +310,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         && $customer->getDisableAutoGroupChange() == 0
                     ) {
                         if ($this->_debug) {
-                            Mage::log("customerAddressSaveBefore: Group change needed!", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." customerAddressSaveBefore: Group change needed!", null, 'euvatenhanced.log');
                         }
 
                         try {
@@ -322,7 +328,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
         }
 
         if ($this->_debug) {
-            Mage::log("EVENT END: customerAddressSaveBefore --------", null, 'euvatenhanced.log');
+            Mage::log(DHH_UUID." ".__METHOD__." EVENT END: customerAddressSaveBefore --------", null, 'euvatenhanced.log');
         }
     }
 
@@ -338,7 +344,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 $result    = $observer->getEvent()->getResult();
                 $addressId = $observer->getEvent()->getAddressId();
                 if ($this->_debug) {
-                    Mage::log("EVENT RUNNING: vatCheckAfter (address_id: " . $addressId . ")", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: vatCheckAfter (address_id: " . $addressId . ")", null, 'euvatenhanced.log');
                 }
 
                 // Save validation information to address (from admin or customer account)
@@ -350,7 +356,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 
                     Mage::register('tempVatValidation', $result);
                     if ($this->_debug) {
-                        Mage::log("vatCheckAfter Validation result: " . var_export($result, true), null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." vatCheckAfter Validation result: " . var_export($result, true), null, 'euvatenhanced.log');
                     }
 
                     // Update address data from customer address edit
@@ -358,7 +364,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         $address = Mage::getModel('customer/address')->load((int)$addressId);
                         if ($address instanceof Mage_Customer_Model_Address) {
                             if ($this->_debug) {
-                                Mage::log("vatCheckAfter saving Validation result on address ID: $addressId", null, 'euvatenhanced.log');
+                                Mage::log(DHH_UUID." ".__METHOD__." vatCheckAfter saving Validation result on address ID: $addressId", null, 'euvatenhanced.log');
                             }
 
                             $address->setIsVatValidationTransaction(true);
@@ -378,7 +384,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                             Mage::getSingleton('customer/session')->setData('temp_vat_validation', $result);
                         } else {
                             if ($this->_debug) {
-                                Mage::log("vatCheckAfter on ADMIN Validation", null, 'euvatenhanced.log');
+                                Mage::log(DHH_UUID." ".__METHOD__." vatCheckAfter on ADMIN Validation", null, 'euvatenhanced.log');
                             }
 
                             Mage::getSingleton('adminhtml/session_quote')->setData('temp_vat_validation', $result);
@@ -390,7 +396,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         $customer = Mage::getSingleton('customer/session')->getCustomer();
                         if ($result->getGroup() != $customer->getGroupId() && !in_array($customer->getGroupId(), Mage::helper('euvatgrouper')->getExcludedGroups()) && $customer->getDisableAutoGroupChange() == 0) {
                             if ($this->_debug) {
-                                Mage::log("Customer group change needed", null, 'euvatenhanced.log');
+                                Mage::log(DHH_UUID." ".__METHOD__." Customer group change needed", null, 'euvatenhanced.log');
                             }
 
                             $customer->setGroupId($result->getGroup());
@@ -410,7 +416,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 }
 
                 if ($this->_debug) {
-                    Mage::log("EVENT END: vatCheckAfter -----------------", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." EVENT END: vatCheckAfter -----------------", null, 'euvatenhanced.log');
                 }
             } catch (Exception $e) {
                 Mage::logException($e);
@@ -428,7 +434,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
     {
         if (Mage::helper('euvatgrouper')->isModuleActive()) {
             if ($this->_debug) {
-                Mage::log("Function RUNNING: _setVatSessionData($addressType) -- Address is instanceof " . get_class($validationResult) . " | vat_is_valid:" . $validationResult->getVatIsValid(), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." Function RUNNING: _setVatSessionData($addressType) -- Address is instanceof " . get_class($validationResult) . " | vat_is_valid:" . $validationResult->getVatIsValid(), null, 'euvatenhanced.log');
             }
 
             if (is_object($validationResult)) {
@@ -444,13 +450,13 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         'vat_request_date'        => $validationResult->getVatRequestDate(),
                     ];
                     if ($this->_debug) {
-                        Mage::log("data is " . var_export($vatDataUpdate, true), null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." data is " . var_export($vatDataUpdate, true), null, 'euvatenhanced.log');
                     }
 
                     if (Mage::helper('euvatgrouper')->isAdmin()) {
                         $quote = Mage::getSingleton('adminhtml/session_quote')->getQuote();
                         if ($this->_debug) {
-                            Mage::log("_setVatSessionData($addressType) -- AdminQuote!", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." _setVatSessionData($addressType) -- AdminQuote!", null, 'euvatenhanced.log');
                         }
                     } else {
                         /** @var Mage_Sales_Model_Quote $quote */
@@ -462,14 +468,14 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 
                     if ($addressType == 'billing') {
                         if ($this->_debug) {
-                            Mage::log("setting billing", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." setting billing", null, 'euvatenhanced.log');
                         }
 
                         $billAddress = Mage::helper('euvatgrouper')->setValidationResultOnAddress(new Varien_Object($vatDataUpdate), $billAddress);
                         $quote->setBillingAddress($billAddress);
                         if ($shipAddress->getSameAsBilling() || $billAddress->getUseForShipping()) {
                             if ($this->_debug) {
-                                Mage::log("AND setting shipping", null, 'euvatenhanced.log');
+                                Mage::log(DHH_UUID." ".__METHOD__." AND setting shipping", null, 'euvatenhanced.log');
                             }
 
                             $shipAddress = Mage::helper('euvatgrouper')->setValidationResultOnAddress(new Varien_Object($vatDataUpdate), $shipAddress);
@@ -477,7 +483,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         }
                     } elseif ($addressType == 'shipping') {
                         if ($this->_debug) {
-                            Mage::log("setting shipping", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." setting shipping", null, 'euvatenhanced.log');
                         }
 
                         $shipAddress = Mage::helper('euvatgrouper')->setValidationResultOnAddress(new Varien_Object($vatDataUpdate), $shipAddress);
@@ -490,12 +496,12 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 }
             } else {
                 if ($this->_debug) {
-                    Mage::log("No address", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." No address", null, 'euvatenhanced.log');
                 }
             }
 
             if ($this->_debug) {
-                Mage::log("Function END: _setVatSessionData", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." Function END: _setVatSessionData", null, 'euvatenhanced.log');
             }
         }
     }
@@ -510,7 +516,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
         $dataHelper = Mage::helper('euvatgrouper');
         if ($dataHelper->isModuleActive()) {
             if ($this->_debug) {
-                Mage::log("EVENT RUNNING: salesQuoteAddressCollectTotalsBefore", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: salesQuoteAddressCollectTotalsBefore", null, 'euvatenhanced.log');
             }
 
             $address = $observer->getEvent()->getQuoteAddress();
@@ -528,14 +534,14 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     $address = $dataHelper->setValidationResultOnAddress($customerDefault, $address);
                     $address->setCountryId($customerDefault->getCountry());
                     if ($this->_debug) {
-                        Mage::log("salesQuoteAddressCollectTotalsBefore isPlainQuote!", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." salesQuoteAddressCollectTotalsBefore isPlainQuote!", null, 'euvatenhanced.log');
                     }
                 }
 
                 //Make sure no VAT validation fragments persist on the quote address if no VAT number is used
             } elseif ($address->getVatId() == '') {
                 if ($this->_debug) {
-                    Mage::log("Clearing VAT Info from Address!", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." Clearing VAT Info from Address!", null, 'euvatenhanced.log');
                 }
 
                 $address = $dataHelper->clearVatInfoFromAddress($address);
@@ -552,7 +558,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 $adminTempValidation = Mage::getSingleton('adminhtml/session_quote')->getData('temp_vat_validation');
                 if ($adminTempValidation != false && $adminTempValidation->getVatId() == $address->getVatId()) {
                     if ($this->_debug) {
-                        Mage::log("Setting admin validation data to address.", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Setting admin validation data to address.", null, 'euvatenhanced.log');
                     }
 
                     $address = $dataHelper->setValidationResultOnAddress($adminTempValidation, $address);
@@ -561,7 +567,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 
             $observer->getEvent()->setQuoteAddress($address);
             if ($this->_debug) {
-                Mage::log("EVENT END: salesQuoteAddressCollectTotalsBefore", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: salesQuoteAddressCollectTotalsBefore", null, 'euvatenhanced.log');
             }
         }
     }
@@ -574,14 +580,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
     public function taxRateDataFetch(Varien_Event_Observer $observer)
     {
         if (Mage::helper('euvatgrouper')->isModuleActive()) {
-            if ($this->_debug) {
-                Mage::log("EVENT RUNNING: taxRateDataFetch", null, 'euvatenhanced.log');
-            }
-
-            /** @var Varien_Object $request */
-            $request = $observer->getEvent()->getRequest();
-            if ($this->_debug) {
-                Mage::log("Request is: " . var_export($request->debug(), true), null, 'euvatenhanced.log');
+            if ($this->_debug && GEISSWEB_VAT_VERBOSE) {
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: taxRateDataFetch", null, 'euvatenhanced.log');
             }
 
             /** @var Geissweb_Euvatgrouper_Helper_Data $dataHelper */
@@ -600,7 +600,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 );
                 if ($vatBasedOn == 'default' || $vatBasedOn == 'origin') {
                     if ($this->_debug) {
-                        Mage::log("Just returned. Need address based VAT calculation", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Just returned. Need address based VAT calculation", null, 'euvatenhanced.log');
                     }
 
                     return;
@@ -617,15 +617,15 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         $billingAddress  = $quote->getBillingAddress();
                     } else {
                         if ($this->_debug) {
-                            Mage::log("No admin Quote found.", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." No admin Quote found.", null, 'euvatenhanced.log');
                         }
 
                         return;
                     }
                 } else {
                     if (!Mage::getSingleton('checkout/session')->hasQuote()) {
-                        if ($this->_debug) {
-                            Mage::log("No Quote found.", null, 'euvatenhanced.log');
+                        if ($this->_debug && GEISSWEB_VAT_VERBOSE) {
+                            Mage::log(DHH_UUID." ".__METHOD__." No Quote found.", null, 'euvatenhanced.log');
                         }
 
                         return;
@@ -644,8 +644,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     && in_array($customer->getGroupId(), $dataHelper->getRegularTaxCalculationGroups())
                 ) {
                     if ($this->_debug) {
-                        Mage::log(
-                            "customer group is set for regular Magento tax calculation: "
+                        Mage::log(DHH_UUID." ".__METHOD__.
+                            " customer group is set for regular Magento tax calculation: "
                                   . var_export($customer->getGroupId(), true),
                             null,
                             'euvatenhanced.log'
@@ -655,13 +655,19 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     return;
                 }
 
+                /** @var Varien_Object $request */
+                $request = $observer->getEvent()->getRequest();
+                if ($this->_debug) {
+                    Mage::log(DHH_UUID." ".__METHOD__." Request is: " . var_export($request->debug(), true), null, 'euvatenhanced.log');
+                }
+
                 // Check for shipping to multiple addresses
                 if ($quote->getIsMultiShipping()) {
                     $basedOnAddress = $dataHelper->getCurrentMultiShippingAddress($request, $quote);
                     if ($basedOnAddress == false) {
                         if ($this->_debug) {
-                            Mage::log(
-                                "Unable to get proper multi shipping quote address.",
+                            Mage::log(DHH_UUID." ".__METHOD__.
+                                " Unable to get proper multi shipping quote address.",
                                 null,
                                 'euvatenhanced.log'
                             );
@@ -676,7 +682,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 // Use existing customer default addresses if quote has no address set and customer is logged in
                 if ($dataHelper->isPlainQuote($basedOnAddress) && $dataHelper->isPlainAddress($basedOnAddress)) {
                     if ($this->_debug) {
-                        Mage::log("Got plain quote and address.", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Got plain quote and address.", null, 'euvatenhanced.log');
                     }
 
                     if (!$isAdmin && $customerSession->isLoggedIn()) {
@@ -718,8 +724,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 $customerVatIdCc = (!is_null($basedOnAddress->getVatId())) ? strtoupper(substr($basedOnAddress->getVatId(), 0, 2)) : $basedOnCc;
 
                 if ($this->_debug) {
-                    Mage::log(
-                        sprintf("taxCalc basedOnCC is: %s | customerVatIdCc is: %s | basedOnAddress is: %s",
+                    Mage::log(DHH_UUID." ".__METHOD__.
+                        sprintf(" taxCalc basedOnCC is: %s | customerVatIdCc is: %s | basedOnAddress is: %s",
                             $basedOnCc,
                             $customerVatIdCc,
                             var_export($dataHelper->debugAddress($basedOnAddress->getData()), true)
@@ -736,8 +742,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 if ($request->getCountryId() == $basedOnCc) {
 
                     if ($this->_debug) {
-                        Mage::log(
-                            sprintf("Current customer group: %s",
+                        Mage::log(DHH_UUID." ".__METHOD__.
+                            sprintf(" Current customer group: %s",
                                 $customer->getGroupId()), null, 'euvatenhanced.log'
                         );
                     }
@@ -752,8 +758,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         $request->setCountryId($customerVatIdCc);
                         $basedOnCc = $customerVatIdCc;
                         if ($this->_debug) {
-                            Mage::log(
-                                sprintf("MOSS exception VAT according to VAT number country prefix (basedOnCC=%s)",
+                            Mage::log(DHH_UUID." ".__METHOD__.
+                                sprintf(" MOSS exception VAT according to VAT number country prefix (basedOnCC=%s)",
                                     $basedOnCc), null, 'euvatenhanced.log'
                             );
                         }
@@ -773,8 +779,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         if (!$preCheck) { //Customer has valid VAT-ID and is not domestic
                             $request->setCustomerClassId($taxExemptClassId);
                             if ($this->_debug) {
-                                Mage::log(
-                                    sprintf("Valid VAT exempt - %s country: %s - vatIsValid: %s ClassID: %s",
+                                Mage::log(DHH_UUID." ".__METHOD__.
+                                    sprintf(" Valid VAT exempt - %s country: %s - vatIsValid: %s ClassID: %s",
                                         $vatBasedOn,
                                         $basedOnCc,
                                         $basedOnAddress->getVatIsValid(),
@@ -784,7 +790,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         } else {
                             $request->setCustomerClassId($taxIncludingClassIdBusiness);
                             if ($this->_debug) {
-                                Mage::log("Prevention ($customerVatIdCc) $vatBasedOn country: $basedOnCc - vatIsValid: " . $basedOnAddress->getVatIsValid() . " ClassID: $taxIncludingClassId", null, 'euvatenhanced.log');
+                                Mage::log(DHH_UUID." ".__METHOD__." Prevention ($customerVatIdCc) $vatBasedOn country: $basedOnCc - vatIsValid: " . $basedOnAddress->getVatIsValid() . " ClassID: $taxIncludingClassId", null, 'euvatenhanced.log');
                             }
                         }
 
@@ -794,7 +800,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                               && (($basedOnCc != '' && $shopCc == $basedOnCc))
                     ) {
                         if ($this->_debug) {
-                            Mage::log("Same $vatBasedOn and shop country - $vatBasedOn country: $basedOnCc - vatIsValid: " . $basedOnAddress->getVatIsValid() . " ClassID: $taxIncludingClassId", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." Same $vatBasedOn and shop country - $vatBasedOn country: $basedOnCc - vatIsValid: " . $basedOnAddress->getVatIsValid() . " ClassID: $taxIncludingClassId", null, 'euvatenhanced.log');
                         }
 
                         $request->setCustomerClassId($taxIncludingClassIdBusiness);
@@ -805,7 +811,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         ) {
                             $request->setCustomerClassId($taxExemptClassId);
                             if ($this->_debug) {
-                                Mage::log("MOSS exception allows domestic billing address", null, 'euvatenhanced.log');
+                                Mage::log(DHH_UUID." ".__METHOD__." MOSS exception allows domestic billing address", null, 'euvatenhanced.log');
                             }
                         }
 
@@ -814,8 +820,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         //Don't need to set because there should be no tax rate for these countries anyway
                         //$request->setCustomerClassId($taxExemptClassId);
                         if ($this->_debug) {
-                            Mage::log(
-                                "Out of EU from $shopCc - $vatBasedOn country: $basedOnCc - vatIsValid: "
+                            Mage::log(DHH_UUID." ".__METHOD__.
+                                " Out of EU from $shopCc - $vatBasedOn country: $basedOnCc - vatIsValid: "
                                       . $basedOnAddress->getVatIsValid() . " ClassID: $taxExemptClassId",
                                 null,
                                 'euvatenhanced.log'
@@ -825,8 +831,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     //Customer is Enduser
                     } else {
                         if ($this->_debug) {
-                            Mage::log(
-                                "Enduser/Default (" . $customer->getTaxClassId() . "|"
+                            Mage::log(DHH_UUID." ".__METHOD__.
+                                " Enduser/Default (" . $customer->getTaxClassId() . "|"
                                 . $request->getCustomerClassId() . ") - $vatBasedOn country: $basedOnCc - vatIsValid: "
                                 . $basedOnAddress->getVatIsValid() . " ClassID: $taxIncludingClassId",
                                 null,
@@ -842,8 +848,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                             && $ukCalculator->isCurrentCartAbove($dataHelper->getUkVatThresholdValue())
                         ) {
                             if ($this->_debug) {
-                                Mage::log(
-                                    "UkThresholdCalculator is above threshold",
+                                Mage::log(DHH_UUID." ".__METHOD__.
+                                    " UkThresholdCalculator is above threshold",
                                     null,
                                     'euvatenhanced.log'
                                 );
@@ -860,7 +866,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         && in_array($customer->getGroupId(), $dataHelper->getExcludedTaxGroups())
                     ) {
                         if ($this->_debug) {
-                            Mage::log("Is excluded tax group: " . $customer->getGroupId(), null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." Is excluded tax group: " . $customer->getGroupId(), null, 'euvatenhanced.log');
                         }
 
                         $request->setCustomerClassId($taxExemptClassId);
@@ -873,17 +879,17 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     && $dataHelper->isThresholdCountry($basedOnCc)
                 ) {
                     if ($this->_debug) {
-                        Mage::log("CBT enabled and threshold country.", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." CBT enabled and threshold country.", null, 'euvatenhanced.log');
                     }
 
                     $request->setCountryId($basedOnCc);
                 }
 
                 if ($this->_debug) {
-                    Mage::log("CBT enabled: " . $dataHelper->isCbtEnabled(), null, 'euvatenhanced.log');
-                    Mage::log("DisableCbtForEuBusiness: " . $dataHelper->getDisableCbtForEuBusiness(), null, 'euvatenhanced.log');
-                    Mage::log("DisableCbtForOutOfEurope: " . $dataHelper->getDisableCbtForOutOfEurope(), null, 'euvatenhanced.log');
-                    Mage::log("isThresholdCountry: " . $dataHelper->isThresholdCountry($basedOnCc), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." CBT enabled: " . $dataHelper->isCbtEnabled(), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." DisableCbtForEuBusiness: " . $dataHelper->getDisableCbtForEuBusiness(), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." DisableCbtForOutOfEurope: " . $dataHelper->getDisableCbtForOutOfEurope(), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." isThresholdCountry: " . $dataHelper->isThresholdCountry($basedOnCc), null, 'euvatenhanced.log');
                 }
             } catch (Mage_Core_Model_Store_Exception $e) {
                 Mage::logException($e);
@@ -892,10 +898,10 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             }
 
             if ($this->_debug) {
-                Mage::log("Request after: " . get_class($request) . "::" . var_export($request->debug(), true), null, 'euvatenhanced.log');
-                Mage::log("Customer tax class: " . $dataHelper->getClassName($request->getCustomerClassId()), null, 'euvatenhanced.log');
-                Mage::log("Product tax class: " . $dataHelper->getClassName($request->getProductClassId()), null, 'euvatenhanced.log');
-                Mage::log("EVENT END: taxRateDataFetch", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." Request after: " . get_class($request) . "::" . var_export($request->debug(), true), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." Customer tax class: " . $dataHelper->getClassName($request->getCustomerClassId()), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." Product tax class: " . $dataHelper->getClassName($request->getProductClassId()), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: taxRateDataFetch", null, 'euvatenhanced.log');
             }
         }
     }
@@ -909,7 +915,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
         $dataHelper = Mage::helper('euvatgrouper');
         if ($dataHelper->isModuleActive()) {
             if ($this->_debug) {
-                Mage::log("EVENT RUNNING: send_success_mail", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: send_success_mail", null, 'euvatenhanced.log');
             }
 
             if ($dataHelper->doSendValidationMail()) {
@@ -942,16 +948,16 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
 
                 $translate->setTranslateInline(true);
                 if ($this->_debug) {
-                    Mage::log("Validation email sent.", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." Validation email sent.", null, 'euvatenhanced.log');
                 }
             } else {
                 if ($this->_debug) {
-                    Mage::log("Disabled sending validation email.", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." Disabled sending validation email.", null, 'euvatenhanced.log');
                 }
             }
 
             if ($this->_debug) {
-                Mage::log("EVENT END: send_success_mail", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: send_success_mail", null, 'euvatenhanced.log');
             }
         }
     }
@@ -965,7 +971,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
         $dataHelper = Mage::helper('euvatgrouper');
         if ($dataHelper->isModuleActive() /*&& !$dataHelper->isAdmin()*/) {
             if ($this->_debug) {
-                Mage::log("EVENT RUNNING: salesConvertQuoteToOrder", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: salesConvertQuoteToOrder", null, 'euvatenhanced.log');
             }
 
             //if ($dataHelper->isAdmin() || $observer->getEvent()->getQuote()->getIsSuperMode()) return;
@@ -976,7 +982,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             $shippingAddress = $quote->getShippingAddress();
             $basedOnAddress  = $dataHelper->getVatBasedOnAddress($billingAddress, $shippingAddress, $dataHelper->isAdmin());
             if ($this->_debug) {
-                Mage::log("salesConvertQuoteToOrder Using basedOnAddress: " . var_export($dataHelper->debugAddress($basedOnAddress->debug()), true), null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." salesConvertQuoteToOrder Using basedOnAddress: " . var_export($dataHelper->debugAddress($basedOnAddress->debug()), true), null, 'euvatenhanced.log');
             }
 
             // Set the customer group for the specific order according to VAT status
@@ -984,8 +990,8 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             if (is_int($orderGroupId) && !$quote->getIsMultiShipping()) {
                 $groupName = Mage::getModel('customer/group')->load($orderGroupId)->getCustomerGroupCode();
                 if ($this->_debug) {
-                    Mage::log(
-                        "salesConvertQuoteToOrder Setting customer group id on order: "
+                    Mage::log(DHH_UUID." ".__METHOD__.
+                        " salesConvertQuoteToOrder Setting customer group id on order: "
                               . $orderGroupId . " ($groupName)",
                         null,
                         'euvatenhanced.log'
@@ -1003,7 +1009,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             }
 
             if ($this->_debug) {
-                Mage::log("EVENT END: salesConvertQuoteToOrder", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: salesConvertQuoteToOrder", null, 'euvatenhanced.log');
             }
         }
     }
@@ -1021,7 +1027,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
         $dataHelper = Mage::helper('euvatgrouper');
         if ($dataHelper->isModuleActive() && !$dataHelper->isAdmin()) {
             if ($this->_debug) {
-                Mage::log("EVENT RUNNING: sales_order_place_before", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: sales_order_place_before", null, 'euvatenhanced.log');
             }
 
             $order           = $observer->getEvent()->getOrder();
@@ -1035,7 +1041,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 && $basedOnAddress->getVatIsValid() != true
             ) {
                 if ($this->_debug) {
-                    Mage::log("Valid VAT number is required to checkout, but not provided", null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." Valid VAT number is required to checkout, but not provided", null, 'euvatenhanced.log');
                 }
 
                 Mage::throwException(
@@ -1045,7 +1051,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
             }
 
             if ($this->_debug) {
-                Mage::log("EVENT END: sales_order_place_before", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: sales_order_place_before", null, 'euvatenhanced.log');
             }
         }
     }
@@ -1061,7 +1067,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
     {
         if (Mage::helper('euvatgrouper')->isModuleActive()) {
             if ($this->_debug) {
-                Mage::log("EVENT RUNNING: sales_order_place_after", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT RUNNING: sales_order_place_after", null, 'euvatenhanced.log');
             }
 
             // set order comment
@@ -1081,7 +1087,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 }
 
                 if ($this->_debug) {
-                    Mage::log("Tax address is: " . var_export($orderAddress->debug(), true), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." Tax address is: " . var_export($orderAddress->debug(), true), null, 'euvatenhanced.log');
                 }
 
                 $vatId            = Mage::helper('euvatgrouper')->cleanCustomerVatId($orderAddress->getVatId());
@@ -1135,12 +1141,12 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                 // Takeover the VAT number of the address to the customers account
                 if (!empty($vatId) && Mage::helper('euvatgrouper')->getIsTakeoverVatToAccount()) {
                     if ($this->_debug) {
-                        Mage::log("Setting account based VAT field: " . $vatId, null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Setting account based VAT field: " . $vatId, null, 'euvatenhanced.log');
                     }
 
                     if (intval($orderInstance->getCustomerId()) > 0) {
                         if ($this->_debug) {
-                            Mage::log("Saving to customer.", null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".__METHOD__." Saving to customer.", null, 'euvatenhanced.log');
                         }
 
                         $customer = Mage::getModel('customer/customer')->load($orderInstance->getCustomerId());
@@ -1148,21 +1154,21 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                     }
 
                     if ($this->_debug) {
-                        Mage::log("Saving to order.", null, 'euvatenhanced.log');
+                        Mage::log(DHH_UUID." ".__METHOD__." Saving to order.", null, 'euvatenhanced.log');
                     }
 
                     $orderInstance->setCustomerTaxvat($vatId);
                 }
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    Mage::log($e->getMessage(), null, 'euvatenhanced.log');
+                    Mage::log(DHH_UUID." ".__METHOD__." ".$e->getMessage(), null, 'euvatenhanced.log');
                 }
 
                 Mage::logException($e);
             }
 
             if ($this->_debug) {
-                Mage::log("EVENT END: sales_order_place_after", null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".__METHOD__." EVENT END: sales_order_place_after", null, 'euvatenhanced.log');
             }
         }
     }

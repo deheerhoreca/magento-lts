@@ -12,13 +12,13 @@ $use_cdn = true;
 // Logic exists in multiple places, keep in sync:
 // - deheerhoreca-magento/app/design/frontend/rwd/dhh/template/magiczoomplus/media.phtml
 //   - USES realpath() NOT get_absolute_path()
-// - deheerhoreca-intel/actions/pushers/catalog-magento1/functions-products.inc.php
+// - deheerhoreca-intel/lib/intel.inc.php
 //   - USES get_absolute_path() NOT realpath()
 // Allows for arbitrary number of dashes in the SKU
 function _extract_data_from_optimized_image_name($optimized_image, string $dhh_sku = "NO_SKU") {
   $filename = pathinfo($optimized_image, PATHINFO_FILENAME);
-  $parts = explode("-", $filename);
-  $count = sizeof($parts);
+  $parts    = explode("-", $filename);
+  $count    = sizeof($parts);
   
   if($count >= 5) {
     
@@ -71,22 +71,20 @@ function _extract_data_from_optimized_image_name($optimized_image, string $dhh_s
     }
     if(function_exists("im")) {
       im("imgs_extract_data_ok");
-    }
-    
-    return $optimized_image_data;
-    
+    }    
+    return $optimized_image_data;    
   } else {
-    $msg = "{$dhh_sku} Extract data from ".var_export($optimized_image, true)." failed";
+    $msg = "{$dhh_sku} Failed to extract data from ".var_export($optimized_image, true).", was the image named correctly?";
     if(function_exists("logger")) {
-      logger($msg, "ERROR");
+      logger($msg, "NOTICE");
     } else {
       Mage::log($msg, null, "system.log", true);
     }
     if(function_exists("im")) {
       im("imgs_extract_data_failed");
     }
-    return false;
   }
+  return false;
 }
 
 // Logic exists in multiple places, keep in sync:

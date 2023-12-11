@@ -925,12 +925,24 @@ if($stock_data["overall_stock_status"] === "backorder"
             <div class="add-to-cart-wrapper">
               <?php
               
-              // if(empty($subdescription) === false && strlen($subdescription) > 20 && strlen($subdescription) < 300) {
-                // echo "<div class='float-left py-2' style='margin-right:2em;'>{$subdescription}</div>";
-              // }
+              if($show_black_friday === true && $saleable === true && $eol !== true) {
+                ?>
+                <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
+                  <div class="info-box-inner" style="max-width: unset;">
+                    <div style="float:right; margin-top: .5em;">
+                      <img src="/media/wysiwyg/banners/x_2023_11_blackfriday_corner.png" alt="Black Friday 2023" title="Black Friday 2023" style="width:100px; height:auto; float:right;">
+                    </div>
+                    <div>
+                      <strong>De beste Black Friday deals <i>zijn persoonlijk</i>:</strong><br>
+                      Maak een <strong>offerte</strong> om uw eigen Black Friday Deal te maken.<br>
+                      <span class="strong orange"><i>U kunt tot 16:59 Black Friday offertes indienen</i></span>
+                    </div>
+                  </div>
+                </div>
+                <?php
+              }
               
-              // Configurable products
-              
+              // Configurable products              
               if($saleable === true && $this->hasOptions()) {
                 echo $this->getChildChildHtml('container1', '', true, true);
                 ?>

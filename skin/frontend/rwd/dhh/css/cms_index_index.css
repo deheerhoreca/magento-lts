@@ -162,10 +162,8 @@
 
   ul#brands li {
     float: left;
-    width: 130px;
     list-style: none;
     padding: 0 1em;
-    max-width: 12%;
   }
 
   ul#brands li:last-child {

@@ -2,13 +2,13 @@
 
 @media all {
   :root {
-    --color-blue: #3aacd9;
-    --color-antracite: #2d2d2d;
-    --color-light-gray: #f9f9f9;
-    --color-orange: #ed7e2f;
-    --color-success: #53d04a;
-    --color-green: #17a249;
-    --color-white: #fff;
+    --color-blue: #2F86DE;
+    --color-antracite: #2D2D2D;
+    --color-light-gray: #F9F9F9;
+    --color-orange: #F5751A;
+    --color-success: #53D04A;
+    --color-green: #17A249;
+    --color-white: #FFF;
     --text-paragraph-margin: .5em;
     --text-size-small: 13px;
     --text-size-normal: 14px;
@@ -315,6 +315,7 @@
 
   .orange {
     color: var(--color-orange) !important;
+    text-decoration-color: var(--color-orange) !important;
   }
 
   .white {
@@ -342,7 +343,7 @@
   }
 
   .blue {
-    color: #3aacd9 !important;
+    color: var(--color-blue) !important;
   }
 
   .dark-blue {
@@ -366,7 +367,7 @@
   }
 
   .bg-blue {
-    background-color: #3aacd9 !important;
+    background-color: var(--color-blue) !important;
   }
 
   .bg-dark-blue {
@@ -382,7 +383,7 @@
   }
 
   .border-blue {
-    border-color: #3aacd9 !important;
+    border-color: var(--color-blue) !important;
   }
 
   .green_checkbox_before,
@@ -866,7 +867,7 @@
     border: 1px solid var(--color-blue);
     border-radius: 4px;
     background-color: var(--color-blue);
-    background-image: linear-gradient(180deg, #3aacd9, #3aacd9, #3aacd9);
+    background-image: linear-gradient(180deg, #2F86DE, #2F86DE, #2F86DE);
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .15);
     color: #fff;
     vertical-align: middle;
@@ -949,6 +950,8 @@
   .h1,
   h1 {
     margin: .2em 0;
+    padding-top: .5em;
+    padding-bottom: .5em;
     font-size: 16px;
   }
 
@@ -972,10 +975,6 @@
   .h3 {
     font-weight: 600;
     font-size: 1.2em;
-  }
-
-  h1, .h1, h2, .h2, h3, .h3 {
-    letter-spacing: -0.4px
   }
 
   .h3,
@@ -1020,19 +1019,19 @@
   h5.product-name a,
   p.product-name a {
     color: var(--color-blue);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   /* Bootstrap 5 parts */
 
   :root,
   [data-bs-theme=light] {
-    --bs-blue: #0d6efd;
+    --bs-blue: var(--color-blue);
     --bs-indigo: #6610f2;
     --bs-purple: #6f42c1;
     --bs-pink: #d63384;
     --bs-red: #dc3545;
-    --bs-orange: #fd7e14;
+    --bs-orange: var(--color-orange);
     --bs-yellow: #ffc107;
     --bs-green: #198754;
     --bs-teal: #20c997;
@@ -8927,7 +8926,7 @@
   }
 
   div.block-content.toggle-content div.actions a {
-    color: #3aacd9 !important;
+    color: var(--color-blue) !important;
     font-weight: 600;
   }
 
@@ -9373,7 +9372,7 @@
     border-color: var(--color-blue);
     border-radius: 0 3px 3px 0;
     background-color: var(--color-blue);
-    background-image: linear-gradient(180deg, #3aacd9, #3aacd9, #3aacd9);
+    background-image: linear-gradient(180deg, #2F86DE, #2F86DE, #2F86DE);
     color: #fff;
   }
 
@@ -10747,7 +10746,7 @@
 
   .category-products ul.products-grid li.item .product-name {
     margin-bottom: 0;
-    font-size: 1.1em;
+    font-size: 15px;
     line-height: 1.2em;
   }
 

@@ -726,10 +726,17 @@ class Magmodules_Channable_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
 
+        // DHH CORE HACK
+        // return array(
+            // 'min_price'   => min($prices),
+            // 'max_price'   => max($prices),
+            // 'total_price' => $totalPrice > 0 ? $totalPrice : min($prices)
+        // );
+
         return array(
-            'min_price'   => min($prices),
-            'max_price'   => max($prices),
-            'total_price' => $totalPrice > 0 ? $totalPrice : min($prices)
+            'min_price'   => sizeof($prices) > 0 ? min($prices) : 0,
+            'max_price'   => sizeof($prices) > 0 ? max($prices) : 0,
+            'total_price' => $totalPrice > 0 ? $totalPrice : (sizeof($prices) > 0 ? min($prices) : 0)
         );
     }
 

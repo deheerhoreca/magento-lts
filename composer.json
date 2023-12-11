@@ -13,7 +13,8 @@
         "aydin-hassan/magento-core-composer-installer": "^2.0.0",
         "firegento/debug": "*",
         "michelf/php-markdown": "^2.0",
-        "openmage/magento-lts": "^20.1.1",
+        "n98/magerun": "^1.97",
+        "openmage/magento-lts": "20.1.*",
         "sabberworm/php-css-parser": "^8.4",
         "symfony/css-selector": "^5.4",
         "symfony/var-dumper": "^5.4"

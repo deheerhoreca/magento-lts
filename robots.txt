@@ -92,17 +92,19 @@ Disallow: /media/static/
 ############################################
 ## Do not crawl dynamic filters. Uncomment what you need or add custom filters
 
-Disallow: /*?dir*
-Disallow: /*?limit*
-Disallow: /*?mode*
 Disallow: /*?price=*
 Disallow: /*?___from_store=*
 Disallow: /*?___store=*
-Disallow: /*?q=*
-# Disallow: /*?cat=*
-# Disallow: /*?availability=*
-# Disallow: /*?brand=*
-Disallow: /*?manufacturer=*
+Disallow: /*?order=*
+Disallow: /*&order=*
+Disallow: /*?dir=*
+Disallow: /*&dir=*
+Disallow: /*?limit=*
+Disallow: /*&limit=*
+Disallow: /*?mode=*
+Disallow: /*&mode=*
+Disallow: /*?sqr=*
+Disallow: /*&sqr=*
 
 ############################################
 ## Do not crawl paths that can be safely ignored by search engines (no clean URLs)

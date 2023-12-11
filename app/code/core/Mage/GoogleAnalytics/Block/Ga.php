@@ -214,7 +214,10 @@ gtag('set', 'user_id', '{$customer->getId()}');
             $productCollection = clone $layer->getProductCollection();
             $productCollection->addAttributeToSelect('sku');
 
-            $toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar');
+            // DHH CORE HACK -- EXTRA DEBUG LOGS
+            if(!($toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar'))) {
+              Mage::log("URL: ".var_export(Mage::helper('core/url')->getCurrentUrl(), true), 5, "exception.log", true);
+            }
             $pageSize = $toolbarBlock->getLimit();
             $currentPage = $toolbarBlock->getCurrentPage();
             if ($pageSize !== 'all') {
