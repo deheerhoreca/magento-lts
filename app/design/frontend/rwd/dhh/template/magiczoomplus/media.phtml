@@ -278,6 +278,7 @@ $media_url            = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_M
 $media_dir            = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 
 $cdn_img_options      = [
+  "identifier"          => $dhh_sku,
   "add_mod_time"        => true,
   "relative_url"        => true,
   "url_only"            => true,

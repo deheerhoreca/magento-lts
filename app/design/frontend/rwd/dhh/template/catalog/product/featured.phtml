@@ -125,6 +125,7 @@ if($_productCollection->getFirstItem()) {
         continue;
       }
       $html = "";
+      $dhh_sku = $_product->getSku();
       
       // If a product is present in multiple categories, we don't want to change that in this view
       //$productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
@@ -225,6 +226,7 @@ if($_productCollection->getFirstItem()) {
       if(is_file($image_path) === true) {
         $col_width        = 175;
         $cdn_img_options  = [
+          "identifier"      => $dhh_sku,
           "fs_path"         => $image_path,
           "url"             => $image_url,
           "fit"             => "contain",
