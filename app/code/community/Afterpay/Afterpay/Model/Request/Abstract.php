@@ -128,6 +128,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
 
     public function sendRequest()
     {
+        // DHH CORE HACK: IMPROVING DEBUG EMAIL
         $this->_debugEmail .= "AFTERPAY DEBUG INFORMATION\n\n";
         $this->_debugEmail .= "--- General information: ---\n\n";
         $this->_debugEmail .= "Magento store id: " . $this->_order->getStoreId() . "\n";
@@ -194,8 +195,19 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             ->setIsB2B($this->getIsB2B())
             ->setCountry($this->getCountry());
         $response = $api->authorizationRequest();
+        // DHH CORE HACK: XML to DOT
         $this->_debugEmail .= $api->_afterpay->client->getDebugLog();
-
+        // Does not work:
+        // $xml = $api->_afterpay->client->getDebugLog();
+        // $array = xml_string_to_array($xml);
+        // if(empty($array)) {
+          // $this->_debugEmail .= $xml;     // DHH: Fallback to XML string
+        // } else {
+          // $dot = new \Adbar\Dot($array);
+          // $dotted = $flatten = $dot->flatten();
+          // $this->_debugEmail .= $dotted;  // DHH: Dotted string, better for humans
+        // }
+        
         $this->_debugEmail .= "Processing response... \n";
         //process the response
         $responseModel->setResponse($response)
