@@ -7,6 +7,7 @@
     ],
     "type": "magento-source",
     "require": {
+        "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
         "aoepeople/aoe_dbretry": "dev-master",
         "aoepeople/aoe_templatehints": "^0.4.4",

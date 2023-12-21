@@ -212,7 +212,8 @@
       - Prevent fatal errors. Fixed upstream.
   - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
   - `app/code/community/Afterpay/Afterpay/etc/config.xml`
-    - Alterations to logo and text and such
+  - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
+    - Alterations to logo and text, debug email
   - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
     - Fix for PHP 7.x
 - **app/design/adminhtml/**

@@ -1835,3 +1835,28 @@ if(function_exists('remove_url_param') === false) {
     return "{$base_url}?{$new_query}";          // Finally url is ready
   }
 }
+
+// Try to convert an XML string to an array, fail quietly with logging
+if(function_exists('xml_string_to_array') === false) {
+  function xml_string_to_array(string $string) {
+    if(($object = simplexml_load_string($string)) !== false) {
+      try {
+        $json = json_encode($object, 0, 512, JSON_THROW_ON_ERROR);
+      } catch (Exception $e) {
+        Mage::log("xml_string_to_array: JSON encoding failed. {$e->__toString()}", null, "exception.log", true);
+        return false;
+      }
+      try {
+        $array = json_decode($json, $associative = true, $depth = 512, JSON_THROW_ON_ERROR);
+        return $array;
+      } catch (Exception $e) {
+        Mage::log("xml_string_to_array: JSON decoding failed. {$e->__toString()}", null, "exception.log", true);
+        return false;
+      }
+    } else {
+      Mage::log(var_export($string, true), null, "exception.log", true);
+      Mage::log("xml_string_to_array: Invalid XML string given", null, "exception.log", true);
+      return false;
+    }
+  }
+}
