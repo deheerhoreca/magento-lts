@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "23fdd9de1774c38cdec4972b32b04317",
+    "content-hash": "d85027990f0af69d2082ef85c40d0dea",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -193,6 +193,85 @@
             "description": "Advanced Template Hints for Magento",
             "homepage": "http://www.fabrizio-branca.de/magento-advanced-template-hints-20.html",
             "time": "2017-03-23T15:56:07+00:00"
+        },
+        {
+            "name": "aschroder/smtp_pro",
+            "version": "dev-dhh-fixes",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension.git",
+                "reference": "f470dddcbec68564164df69af348cee5bb440c59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deheerhoreca/Magento-SMTP-Pro-Email-Extension/zipball/f470dddcbec68564164df69af348cee5bb440c59",
+                "reference": "f470dddcbec68564164df69af348cee5bb440c59",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "extra": {
+                "map": [
+                    [
+                        "app/etc/modules/Aschroder_SMTPPro.xml",
+                        "app/etc/modules/Aschroder_SMTPPro.xml"
+                    ],
+                    [
+                        "app/code/local/Aschroder/SMTPPro",
+                        "app/code/local/Aschroder/SMTPPro"
+                    ],
+                    [
+                        "app/design/adminhtml/base/default/template/smtppro",
+                        "app/design/adminhtml/default/default/template/smtppro"
+                    ],
+                    [
+                        "app/locale/de_DE/Aschroder_SMTPPro.csv",
+                        "app/locale/de_DE/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/en_US/Aschroder_SMTPPro.csv",
+                        "app/locale/en_US/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/fr_FR/Aschroder_SMTPPro.csv",
+                        "app/locale/fr_FR/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/es_ES/Aschroder_SMTPPro.csv",
+                        "app/locale/es_ES/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/nl_NL/Aschroder_SMTPPro.csv",
+                        "app/locale/nl_NL/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/pt_BR/Aschroder_SMTPPro.csv",
+                        "app/locale/pt_BR/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/tr_TR/Aschroder_SMTPPro.csv",
+                        "app/locale/tr_TR/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/ru_RU/Aschroder_SMTPPro.csv",
+                        "app/locale/ru_RU/Aschroder_SMTPPro.csv"
+                    ]
+                ]
+            },
+            "authors": [
+                {
+                    "name": "aschroder"
+                }
+            ],
+            "description": "sending Magento mail through an external smtp-server",
+            "homepage": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension",
+            "support": {
+                "source": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension/tree/dhh-fixes"
+            },
+            "time": "2018-03-26T06:37:41+00:00"
         },
         {
             "name": "aydin-hassan/magento-core-composer-installer",
@@ -7241,6 +7320,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "aoepeople/aoe_dbretry": 20,
+        "aschroder/smtp_pro": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
