@@ -10,8 +10,8 @@
       <div style="margin-top: 1em;"><h3>Sales & Advies:</h3></div>
       <ul class="indented-disc" style="line-height: 1.5em;">
         <li><a href="/qquoteadv/index/" target="_blank">U kunt <strong>offertes</strong> zelf aanvragen via de website</a></li>
-        <li><a href="tel:+31850441003" title="Bel ons"><strong>+31 85 0441003</strong></a><small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small></li>
-        <li><strong>Chat</strong> met ons via de knop rechtsonderin uw scherm zit<small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small></li>
+        <li><a href="tel:+31850441003" title="Bel ons"><span itemprop="telephone" class="strong">+31 85 0441003</span></a><small>&nbsp;&nbsp;Bereikbaar tijdens kantooruren</small></li>
+        <li><strong>Chat</strong> met ons via de knop rechtsonderin uw scherm zit<small>&nbsp;&nbsp;Tijdens kantooruren</small></li>
         <li>Stuur een <strong>e-mail</strong> naar <a href="mailto:sales@chefstore.nl" title="Sales">sales@chefstore.nl</a></li>
         <li><a rel="nofollow noreferrer" href="//form.jotform.com/200604056344041" target="_blank" title="Wij bellen u"><strong>Bel-mij-terug</strong> formulier</a></li>
       </ul>
