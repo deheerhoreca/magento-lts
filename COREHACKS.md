@@ -5,9 +5,6 @@
 
 ## Core Hacks
 - **app/code/core/Mage/**
-  - `app/code/core/Mage/Customer/etc/config.xml`
-    - Changing default email address for new customers created in the backend without an email address to our own domain
-    - @see https://github.com/loekvangool/deheerhoreca-magento/commit/a6e627894accf8daa6097477c4ea0b8b8f5fd0c9
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
@@ -178,6 +175,10 @@
 
 ### Closed
 - **app/code/core/Mage/**
+  - `app/code/core/Mage/Customer/etc/config.xml`
+    - Changing default email address for new customers created in the backend without an email address to our own domain
+    - @see https://github.com/loekvangool/deheerhoreca-magento/commit/a6e627894accf8daa6097477c4ea0b8b8f5fd0c9
+    - Seems configurable now, reverted core hack
   - `app/code/core/Mage/Catalog/Block/Product/View.php`
     - Change the product canonical URL in HTML head
   - `app/code/core/Mage/Sitemap/Model/Sitemap.php`

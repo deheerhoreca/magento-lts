@@ -412,13 +412,13 @@
   # CSS/JS
   <FilesMatch "\.(css|js)$">
     Header unset Etag
-    Header set Cache-Control "public, max-age=300"
+    Header set Cache-Control "public, max-age=600"
   </FilesMatch>
 
   # IMAGES
   <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
     # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
-    Header set Cache-Control "public, max-age=300"
+    Header set Cache-Control "public, max-age=600"
   </FilesMatch>
 
   # TEXT
@@ -432,9 +432,9 @@
 <If "%{HTTP_HOST} == 'dev.chefstore.nl'">
     SetEnv MAGE_IS_DEVELOPER_MODE "true"
 
-    # No caching on dev
-    Header unset Etag
-    Header set Cache-control "max-age=0, no-cache"
+    # No caching on dev -- Disable for mod_pagespeed and such
+    # Header unset Etag
+    # Header set Cache-control "max-age=0, no-cache"
 
     <IfModule mod_headers.c>
         Header set Referrer-Policy "no-referrer"
