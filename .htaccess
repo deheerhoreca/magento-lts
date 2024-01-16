@@ -170,6 +170,9 @@
     RewriteCond %{QUERY_STRING} ccpturl=prokoeling.nl* [OR]
     RewriteCond %{REQUEST_URI} ccpturl=prokoeling.nl*
     RewriteRule (.*) /? [L,R=301]
+    
+    # Redirect /document/asdf to document.php
+    RewriteRule ^document/.*$ document.php
 
 ############################################
 ### END DHH
