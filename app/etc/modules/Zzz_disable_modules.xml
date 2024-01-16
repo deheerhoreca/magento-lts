@@ -131,6 +131,11 @@
           <active>false</active>
         </Aoe_TemplateHints>
         
+        <!-- TinyMCE is preferred in v20.2.0+ -->
+        <Bubble_Highlighter>
+          <active>false</active>
+        </Bubble_Highlighter>
+        
         <!-- Temporarily disable -->
         <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->
         <!-- <Ophirah_Crmaddon><active>false</active></Ophirah_Crmaddon> -->

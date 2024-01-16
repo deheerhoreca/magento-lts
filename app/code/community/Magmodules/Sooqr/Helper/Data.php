@@ -328,7 +328,7 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
     public function getProductUrl($product, $config, $parent, $parentAttributes)
     {
         // DHH CORE HACK
-        $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
+        $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product, true, 1);
         
         // $url = '';
         // if (!empty($parent)) {

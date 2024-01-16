@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_Pdfinvoiceplus
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <adminhtml_pdfinvoiceplus_pdfinvoiceplus_index>
+        <reference name="content">
+            <block type="pdfinvoiceplus/adminhtml_pdfinvoiceplus" name="pdfinvoiceplus" />
+        </reference>
+    </adminhtml_pdfinvoiceplus_pdfinvoiceplus_index>
+    
+    <adminhtml_pdfinvoiceplus_pdfinvoiceplus_edit>
+        <reference name="head">
+             <action method="addJs">
+                <script>magestore/pdfinvoiceplus/jscolor/jscolor.js</script>
+            </action>
+             <action method="addJs">
+                <script>magestore/pdfinvoiceplus/tooltip.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/pdfinvoiceplus/tinybox.js</script>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/magestore/pdfinvoiceplus.css</stylesheet>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/magestore/pdfinvoiceplus/jquery-1.11.2.min.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/magestore/pdfinvoiceplus/ajaxfileupload.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/magestore/pdfinvoiceplus/no-conflict.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/magestore/pdfinvoiceplus/tinybox2.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/magestore/pdfinvoiceplus/tinybox2.css</name>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/wysiwyg/widget.js</script>
+            </action>
+            <action method="addJs">
+                <script>lib/flex.js</script>
+            </action>
+            <action method="addJs">
+                <script>lib/FABridge.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/pdfinvoiceplus/variables.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/flexuploader.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/browser.js</script>
+            </action>
+            <action method="addJs">
+                <script>extjs/ext-tree.js</script>
+            </action>
+            <action method="addJs">
+                <script>extjs/ext-tree-checkbox.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/pdfinvoiceplus/window.js</script>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>magestore/pdfinvoiceplus/magento.css</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>extjs/resources/css/ext-all.css</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>extjs/resources/css/ytheme-magento.css</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>prototype/windows/themes/default.css</name>
+                <params/>
+            </action>
+            <block type="page/html_head" name="head" as="head"/>
+        </reference>
+    </adminhtml_pdfinvoiceplus_pdfinvoiceplus_edit>
+	<adminhtml_pdfinvoiceplus_design_edithtml>
+        <reference name="head">
+            <action method="addJs">
+                <script>mage/adminhtml/wysiwyg/widget.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/variables.js</script>
+            </action>
+            <action method="addJs">
+                <!-- DHH OVERRIDE: From 20.2.0 this file has changed location -->
+                <script>mage/adminhtml/wysiwyg/tinymce/setup.js</script>
+            </action>
+            <action method="addJs">
+                <script>tiny_mce/tiny_mce.js</script>
+            </action>
+            <action method="addJs">
+                <script>varien/js.js</script>
+            </action>
+        </reference>
+    </adminhtml_pdfinvoiceplus_design_edithtml>
+    <adminhtml_pdfinvoiceplus_pdfinvoiceplus_template>
+        <reference name="content">
+            <block type="pdfinvoiceplus/adminhtml_template" name="pdfinvoiceplus" template="pdfinvoiceplus/loadtemplate/template02" />
+        </reference>
+    </adminhtml_pdfinvoiceplus_pdfinvoiceplus_template>
+</layout>

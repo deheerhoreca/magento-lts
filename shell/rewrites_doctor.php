@@ -5,10 +5,10 @@
 // @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
 
 // Normal flow:
-// php shell/rewrites_doctor.php update_keys (1-5 min)
-// php shell/indexer.php --reindex catalog_url (5-10 min)
-// For STORE_ID = 1: php shell/rewrites_doctor.php --remove_rewrites 10 --store 1
-// For STORE_ID = 4: php shell/rewrites_doctor.php --remove_rewrites 1 --store 4
+// mphp -c ../php.cmd.ini rewrites_doctor.php update_keys       (1-5 min)
+// mphp -c ../php.cmd.ini indexer.php --reindex catalog_url     (5-10 min)
+// For STORE_ID = 1: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 10 --store 1
+// For STORE_ID = 4: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
 
 ini_set("display_errors", "1");
 
@@ -103,7 +103,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
                   }
                 }
                 $counter++;
-                $message = "{$sku} [{$product->getId()}] url_key was changed from {$urlKey} to {$new_key}".PHP_EOL;
+                $message = "{$sku} [{$product->getId()}] [{$urlKey}] >> [{$new_key}]".PHP_EOL;
                 $debug_data[] = [
                   "sku"           => $sku,
                   "old_url_key"   => $urlKey,
@@ -130,7 +130,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       }
 
       $end = time();
-      $message = $counter . " products were updated, time spent: " . $this->timeSpent($start, $end);
+      $message = $counter . " products updated, time spent: " . $this->timeSpent($start, $end);
       Mage::log($message, null, "atwix_rewrites_doctor.log", true);
       echo $message . PHP_EOL;
 

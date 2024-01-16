@@ -1,0 +1,13 @@
+# DEHEERHORECA-MAGENTO
+OUTPUT_LOG  = ~/httpdocs/deheerhoreca-magento/var/log/cron.log
+ERROR_LOG   = ~/httpdocs/deheerhoreca-magento/var/log/cron.err
+ *    *  *  *  *  ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode always  1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+ *    *  *  *  *  ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode default 1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+@daily            cd ~/httpdocs/deheerhoreca-magento; /usr/sbin/logrotate logrotate.conf -s /tmp/logrotate    1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+29   05  *  *  *  cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/rebuild_cache.php             1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+30   05  *  *  *  cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/indexer.php reindexall        1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+30   02  *  *  *  cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/cm_redis_tools/rediscli.php -s 127.0.0.1 -p 6379 -d 0,1 1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+#00   22  *  *  0  cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/resave_all_products.php       1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+55   21  *  *  0  cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/clean_mysql.php               1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+00   01  *  *  *  cd ~/httpdocs/deheerhoreca-magento; ./shell/download_external_libs.sh                       1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
+00   05  *  *  *  cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/sooqr.php --generate 1        1 >> "${OUTPUT_LOG}" 2 >> "${ERROR_LOG}"
