@@ -190,7 +190,10 @@ if($galleryImagesCount) {
     if (!$mtDataHelper->isGalleryImageVisible($productModel, $galleryImage)) {
       continue;
     }
-
+    // DHH: Somehow, isGalleryImageVisible() does not catch disabled images
+    if($galleryImage->getData('disabled_default') === "1" && $galleryImage->getData('disabled_default') === "1") {
+      continue;
+    }
     $imagePath = $galleryImage->getPath();
     
     // DHH -- See if there is a watermarked counterpart

@@ -18,17 +18,23 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * This function attempts to get the URL fast and easy from core_url_rewrite.
    * It should be fallbacked with $product->getProductUrl()
    */
-  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product, $single = true) {
+   // ALTER TABLE `prokoeling`.`core_url_rewrite` DROP INDEX `DHH_PRODUCT_ID_GETFULLPRODUCTURLFROMREWRITES`, ADD 
+   // INDEX `DHH_PRODUCT_ID_GETFULLPRODUCTURLFROMREWRITES` (`product_id`, `category_id`, `store_id`, `is_system`, `request_path`) USING BTREE;
+  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product, $single = true, int $store_id = -1) {
     $resource       = Mage::getSingleton('core/resource');
     $readConnection = $resource->getConnection('core_read');
-    $tableName      = $resource->getTableName('core_url_rewrite');
-    $product_id     = (int) $product->getId();
-    $base_url       = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
-    $store_id       = (int) Mage::app()->getStore()->getStoreId();
+    $tableName      = (string)  $resource->getTableName('core_url_rewrite');
+    $product_id     = (int)     $product->getId();
+    $base_url       = (string)  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+    if($store_id < 0) {
+      $store_id = (int) Mage::app()->getStore()->getStoreId();
+    }
+    $query          = "SELECT `request_path` FROM `{$tableName}` WHERE product_id='{$product_id}' AND store_id = '{$store_id}' ORDER BY `category_id` IS NULL, '1' ASC, `is_system` DESC";
     
-    // Return the first URL -- assume we want a category
+    // Single mode: Return the first URL -- Assume we prefer a URL with a category
+    // Custom sorting to prefer system-defined ("primary" category), and in-category URLs, with fallback
     if($single === true) {
-      $query    = "SELECT request_path FROM `{$tableName}` WHERE product_id = '{$product_id}' AND category_id IS NOT NULL";
+      $query    .= " LIMIT 1";
       $results  = $readConnection->fetchAll($query);
       if(empty($results[0]["request_path"]) === false) {
         return $base_url.$results[0]["request_path"];
@@ -36,10 +42,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    // Return multiple URLs if they exist -- including without category
-    $query    = "SELECT request_path FROM `{$tableName}` WHERE product_id = '{$product_id}' AND store_id = '{$store_id}'";
-    $results  = $readConnection->fetchAll($query);
-    if(empty($results) === false) {
+    // Return all URLs -- Use sorting to prefer the same URL as above
+    // $query    = "SELECT request_path FROM `{$tableName}` WHERE product_id = '{$product_id}' AND store_id = '{$store_id}'";
+    $query    .= " LIMIT 10";
+    if($results = $readConnection->fetchAll($query)) {
       $urls     = [];
       foreach($results as $result) {
         $urls[] = $base_url.$result["request_path"];
@@ -50,10 +56,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return false;
   }
   
-  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product, $single = true) {
-    $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product, $single);
+  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product, $single = true, int $store_id = -1) {
+    $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product, $single, $store_id);
     if($url === false) {
-      $url = $product->getProductUrl(); //fallback
+      $url = $product->getProductUrl(); // fallback
     }
     
     return $url;
