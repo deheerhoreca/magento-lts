@@ -41,6 +41,7 @@ if(strlen($_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_se
     $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
     $col_width        = 60;
     $cdn_img_options  = [
+      "identifier"      => $_item->getSku(),
       "fs_path"         => $image_path,
       "url"             => $image_url,
       "width"           => $col_width,

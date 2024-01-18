@@ -96,6 +96,7 @@ usort($manufacturers, function($a, $b) {
       if(is_file($brand_logo_file) === true) {
         $image_path       = $brand_logo_file;
         $cdn_img_options  = [
+          "identifier"      => "BRAND_{$brand_id}",
           "fs_path"         => $image_path,
           "url"             => $image_url,
           "width"           => 140,
