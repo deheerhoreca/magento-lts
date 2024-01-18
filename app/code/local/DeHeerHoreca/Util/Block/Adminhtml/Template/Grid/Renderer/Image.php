@@ -6,7 +6,7 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
     }
     
     protected function _getValue(Varien_Object $row)
-    {       
+    {
       $val = $row->getData($this->getColumn()->getId());
       $out = "-";
       if(strlen($val) > 0 && $val !== "no_selection") {
@@ -17,6 +17,7 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
           $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
           $image_path       = "{$media_dir}/catalog/product{$val}";
           $cdn_img_options  = [
+            "identifier"      => $row->getData("sku"),
             "fs_path"         => $image_path,
             "url"             => $image_url,
             "width"           => $col_width,
