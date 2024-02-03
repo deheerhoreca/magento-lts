@@ -471,11 +471,18 @@
   # Redirects file.php to view.php
   RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L,QSD]
 
+  # Magento exposes this stuff, weird
+  RewriteRule ^/errors/report.php(.*)$ / [R=301,NC,L,QSD]
+  RewriteRule ^/errors/(.*)$ / [R=301]
+
   # Redirects script kiddies
   RewriteRule (.*)amfeed/main/(.*)$ https://www.bol.com/nl/nl/p/hacken-voor-dummies/9200000107966600/ [R=301,NC,L]
 
   # Landing URL from flyers
   Redirect /hallochef /promoties.html
+
+  # https://webmasters.stackexchange.com/questions/138033/what-is-well-known-traffic-advice-directory
+  RewriteRule ^\.well-known/traffic-advice$ - [T=application/trafficadvice+json,END]
 
 </IfModule>
 

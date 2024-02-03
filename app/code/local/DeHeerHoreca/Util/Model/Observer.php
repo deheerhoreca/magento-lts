@@ -8,8 +8,6 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   public function updateProductOnEdit($observer) {
     $event = $observer->getEvent();
     $product = $event->getProduct();
-    // $product->lockAttribute("cost");
-    // $product->lockAttribute("price_min");
     $product->lockAttribute("recommended_product");
     $product->lockAttribute("additional_attributes");
     $product->lockAttribute("automation_flags_json");
@@ -182,7 +180,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       }
     }
     
-    /* EAN */
+    /* Backfill EAN13 from EAN if possible */
     if(empty($product->getData("ean")) === false && strlen($product->getData("ean")) < 13) {
       $new_value = sprintf('%013d', $product->getData("ean"));
       $product->setData("ean", $new_value);
@@ -374,4 +372,15 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $_order->setData("tm_field8", null); // Packing Slip ID
   }
   
+  /**
+   * event observer called after emails are sent
+   *
+   * @param Varien_Event_Observer $observer
+   */
+  public function emailSendAfter(Varien_Event_Observer $observer) {
+    // 2024-01-21 Starting with 1 second sleep and monitoring for Gmail limit errors
+    $n = 1;
+    sleep($n);
+    Mage::log("Slept for {$n} seconds after sending email", null, "system.log", true);
+  }  
 }

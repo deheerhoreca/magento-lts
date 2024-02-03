@@ -1,27 +1,22 @@
 <?xml version="1.0"?>
 <config>
-
   <modules>
     <DeHeerHoreca_Util>
       <version>0.1.0</version>
     </DeHeerHoreca_Util>
   </modules>
-  
   <global>
     <helpers>
       <deheerhoreca_util>
         <class>DeHeerHoreca_Util_Helper</class>
       </deheerhoreca_util>
     </helpers>
-    
     <models>
       <deheerhoreca_util>
         <class>DeHeerHoreca_Util_Model</class>
       </deheerhoreca_util>
     </models>
-    
     <events>
-      
       <catalog_product_edit_action>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -31,7 +26,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_edit_action>
-      
       <catalog_product_save_before>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -41,7 +35,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_save_before>
-      
       <catalog_product_save_after>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -52,8 +45,17 @@
         </observers>
       </catalog_product_save_after>
       
+      <!-- Implement a simple wait after sending an email to not cross Gmail limits -->
+      <email_send_after>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>emailSendAfter</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </email_send_after>
+      
     </events>
-    
     <blocks>
       <adminhtml>
         <rewrite>
@@ -62,9 +64,7 @@
         </rewrite>
       </adminhtml>
     </blocks>
-    
   </global>
-  
   <frontend>
     <events>
       <catalog_controller_product_view>
@@ -74,7 +74,6 @@
           </reports>
         </observers>
       </catalog_controller_product_view>
-      
       <controller_front_send_response_after>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -86,7 +85,6 @@
       </controller_front_send_response_after>
     </events>
   </frontend>
-  
   <adminhtml>
     <layout>
       <updates>
@@ -95,7 +93,6 @@
         </adminhtml_catalog_product_edit>
       </updates>
     </layout>
-    
     <events>
       <sales_order_place_before>
         <observers>
@@ -107,7 +104,6 @@
         </observers>
       </sales_order_place_before>
     </events>
-    
     <!-- https://gist.github.com/fbrnc/3975149 -->
     <events>
       <controller_action_predispatch>
@@ -118,7 +114,5 @@
         </observers>
       </controller_action_predispatch>
     </events>
-    
   </adminhtml>
-  
 </config>
