@@ -5,15 +5,15 @@ function _dhh_ips() {
 }
 
 // Cannot use _dhh_debug() due to the ?nofpc requirement
-if($_SERVER["REQUEST_METHOD"] === "GET"
+if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "GET"
 && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
 ) {
-  define("DHH_FPC_DEBUG", false);    // Default: false
+  define("DHH_FPC_DEBUG", false);   // Default: false
 } else {
   define("DHH_FPC_DEBUG", false);   // Default: false
 }
 
-if(substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
+if(isset($_SERVER["HTTP_HOST"]) && substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
   define("DHH_FPC_ENABLED", false); // Default: false
 } else {
   define("DHH_FPC_ENABLED", true);  // Default: true
@@ -79,7 +79,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         $patterns[]   = "zc:k:e6b_aeke_ogmeta_category_{$category_id}_";
       }
     }
-    var_dump($patterns);
+    // var_dump($patterns);
     $result     = clean_fpc_pattern($patterns, false);
     // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
     

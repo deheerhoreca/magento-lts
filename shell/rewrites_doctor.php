@@ -126,7 +126,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       }
 
       if($counter % self::LOG_MESSAGE_ROWS != 0) {
-        Mage::log($logMessage, null, "atwix_rewrites_doctor.log", true);
+        Mage::log($message, null, "atwix_rewrites_doctor.log", true);
       }
 
       $end = time();
@@ -140,7 +140,6 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     }
     
     // echo (new ArrayToTextTable($debug_data))->render().PHP_EOL;
-    // print_r($debug_data);
   }
   
   // Remove extra product url rewrites leaving $left of last
@@ -193,6 +192,9 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       $productCollection->load();
       $ids = $productCollection->getAllIds();
       $counter_skus = sizeof($ids);
+      
+      $total_rewrite_urls = Mage::getModel("core/url_rewrite")->getCollection()->getSize();
+      
       echo "Doing {$counter_skus} SKUs...".PHP_EOL;
       foreach($ids as $id) {
         // Get rewrites collection for current product id
@@ -226,12 +228,12 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       Mage::log($e->getMessage(), null, "atwix_rewrites_doctor.log", true);
     }
     
-    if($counter_total > 0) {
-      $pct_deleted = number_format(($counter_deleted / $counter_total * 100), 2);
+    if($total_rewrite_urls > 0) {
+      $pct_deleted = number_format(($counter_deleted / $total_rewrite_urls * 100), 2);
     } else {
       $pct_deleted = 0;
     }
-    $message = "Total URL rewrites deleted: {$counter_deleted}/{$counter_total} ({$pct_deleted}%), total number of SKUs: {$counter_skus}, time spent: ".$this->timeSpent($start, time());
+    $message = "Total URL rewrites deleted: {$counter_deleted}/{$total_rewrite_urls} ({$pct_deleted}%), total number of SKUs: {$counter_skus}, time spent: ".$this->timeSpent($start, time());
     echo $message.PHP_EOL;
     Mage::log($message, null, "atwix_rewrites_doctor.log", true);
     
@@ -280,10 +282,14 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     echo $query1.PHP_EOL;
     if(DRYRUN === false) {
       $result = $writeConnection->query($query1);
+    } else {
+      print_r("Dryrun: Skipping MySQL query").PHP_EOL;
     }
     echo $query2.PHP_EOL;
     if(DRYRUN === false) {
       $result = $writeConnection->query($query2);
+    } else {
+      print_r("Dryrun: Skipping MySQL query").PHP_EOL;
     }
     echo "Copied {$table} to {$new_table}".PHP_EOL;
     
