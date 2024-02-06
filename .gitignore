@@ -126,6 +126,7 @@ phpstan*.neon
 /media/sooqr
 /media/qquoteadv
 /media/catalog
+/media/tmp/
 
 # Store Manager
 /tmp

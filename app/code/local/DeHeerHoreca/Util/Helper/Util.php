@@ -10,6 +10,10 @@ const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
 
 $dhh_click_log = [];
 
+// If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
+// Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
+const SUPPLIERS_HIDE_STOCK_DETAILS = ["bartscher", "deheerhoreca", "foster-gamko", "liebherr", "smeg"];
+
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /*
@@ -1196,12 +1200,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $fa_icon              = "fa-check-circle";
       
       if($manage_stock === false) {
-        $stock_message        = "Pre-order";    // Unmanaged, be careful with overpromising
+        $stock_message        = "Pre-order";        // Unmanaged, be careful with overpromising
         $stock_message_short  = "Pre-order";
         $txtcltcz             = "buyblock-usp gray";
-        $levertijd            = null;             // If we have an unmanaged product, we cannot really say when it will be available again
-      } elseif(in_array($supplier, ["Bartscher"]) === true) {
-        $stock_message        = "Op voorraad";    // Don't specify stock details for these suppliers
+        $levertijd            = null;
+      } elseif(in_array(strtolower($supplier), SUPPLIERS_HIDE_STOCK_DETAILS, true) === true) {
+        $stock_message        = "Op voorraad";      // Don't specify stock details for these suppliers
         $stock_message_short  = "Op voorraad";
       } elseif($stock_qty < 4) {
         if($context !== "listview") {

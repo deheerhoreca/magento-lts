@@ -136,6 +136,11 @@
           <active>false</active>
         </Bubble_Highlighter>
         
+        <!-- Does not seem to work nicely, but in order to disable this we must change a rewrite in Geissweb first -->
+        <Aschroder_SMTPPro>
+          <active>true</active>
+        </Aschroder_SMTPPro>
+        
         <!-- Temporarily disable -->
         <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->
         <!-- <Ophirah_Crmaddon><active>false</active></Ophirah_Crmaddon> -->

@@ -9,71 +9,85 @@ $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
 $product_block                 = $this->getLayout()->createBlock("catalog/product_price");
-$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["popularity"]);
+$attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["popularity", "featured"]);
 
-// Static block of fixes SKUs
+// Block or semi-random recommended products
 
-// $parent_categories_ids    = [];
-// $_columnCount             = 5;
-// $displaySize              = 175;
-// $_imgSize                 = 1 * $displaySize;
+$parent_categories_ids    = [];
+$_columnCount             = 5;
+$displaySize              = 175;
+$_imgSize                 = 1 * $displaySize;
 
-// $options                  = [
-  // "image_size"              => 125,
-  // "_blank"                  => false,
-  // "use_short_product_names" => true,
-  // "display"                 => "normal",
-  // "skip_actions"            => true,
-  // "fast_stock"              => true,
-// ];
+$options                  = [
+  "image_size"              => 125,
+  "_blank"                  => false,
+  "use_short_product_names" => true,
+  "display"                 => "normal",
+  "skip_actions"            => true,
+  "fast_stock"              => true,
+];
 
-// $_products = Mage::getModel("catalog/product")
-  // ->getCollection()
-  // ->addAttributeToSelect($attributes)
+// Settings
+$limit                    = 5;
+
+$_products = Mage::getModel("catalog/product")
+  ->getCollection()
+  ->addAttributeToSelect($attributes)
+  ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
+  ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
+  ->addFieldToFilter([["attribute" => "featured", "eq" => 1]])
   // ->addAttributeToFilter("sku", ["in" => ["CS-7455.3300", "CS-7450.0159", "CS-7450.0580", "CS-7464.0045", "CS-7072.1015"]])
-  // ->addAttributeToSort("popularity", "ASC")
-  // ->setPageSize(5)
-  // ->addFinalPrice();
+  ->addAttributeToSort("popularity", "ASC")
+  ->setPageSize(($limit * 4)) // Random pick from top
+  ->addFinalPrice(); // Necessary to respect sale price end date
+$_products->load();
+// if(_dhh_debug()) {
+  // echo $_products->getSelect()->__toString();
+// }
+Mage::getModel("catalogInventory/stock")->addItemsToProducts($_products);
 
-// $_products->load();
-// // if(_dhh_debug()) {
-  // // echo $_products->getSelect()->__toString();
-// // }
-// Mage::getModel("catalogInventory/stock")->addItemsToProducts($_products);
+if($_products->getFirstItem()) {
+  ?>
 
-
-// <style>
-  // .category-products li.item:hover {
-    // background-color: var(--color-white);
-    // -webkit-transition: background-color 200ms linear;
-    // -ms-transition: background-color 200ms linear;
-    // transition: background-color 200ms linear;
- // }
-// </style>
-// <div id="promo-products" class="category-products pb-0 mb-3" style="background-color: #f6761c1a;">
-  // <div style="border-bottom: 1px solid var(--bs-gray-500); background-color: var(--color-antracite); color: #F9F9F9;" class="my-3 py-1">
-    // <h1 class="center">BLACK FRIDAY 2023 KNALLERS -- KORTINGEN TOT 62% -- <strong><i>ALLEEN VANDAAG TOT <u>16:25</u></i></strong></h1>
-  // </div>
-  // <ul class="products-grid products-grid--max-< ?=$_columnCount? >-col">
-    // <? php
-    // // foreach($_products as $_product) {
-      // ? >
-      // <li class="item"><?=Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $product_block, $options)? ></li>
-    // <? php
-    // // }
-    // ? >
-  // </ul>
-// </div>
-// < ?php
-// unset($_products);
+  <style>
+    .category-products li.item:hover {
+      background-color: var(--color-white);
+      -webkit-transition: background-color 200ms linear;
+      -ms-transition: background-color 200ms linear;
+      transition: background-color 200ms linear;
+   }
+  </style>
+  <div id="promo-products" class="category-products mt-5 pb-0 mb-3" style="/* background-color: #f6761c1a; */">
+    <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
+      <?php
+      $i = 0;
+      $total = $_products->getSize();
+      foreach($_products as $_product) {
+        if($total > $limit && mt_rand(0, 100) > 75) {
+          continue; // Poor man's random
+        }
+        $i++;
+        if($i > $limit) {
+          continue;
+        }
+        echo "<li class='item'>";
+        Mage::helper('deheerhoreca_util/util')->getProductGridHtml($_product, $product_block, $options);
+        echo "</li>";
+      }
+      ?>
+    </ul>
+  </div>
+  <?php
+}
+unset($_products);
 
 // Dynamic block of best sellers
 
 // Settings
 $limit                        = 12;
 
-// Get all products that are marked as featured
-$_productCollection = Mage::getModel("catalog/product")
+// Get 4x the top products by popularity and take a random sample out of those
+$_products = Mage::getModel("catalog/product")
   ->getCollection()
   ->addAttributeToSelect($attributes)
   ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
@@ -84,10 +98,10 @@ $_productCollection = Mage::getModel("catalog/product")
   ->addFinalPrice(); // Necessary to respect sale price end date
 
 // if(_dhh_debug()) {
-  // echo $_productCollection->getSelect()->__toString();
+  // echo $_products->getSelect()->__toString();
 // }
 
-$_productCollection->load();
+$_products->load();
 
 /*
  * Bugfix: Using require_stock_items there was a bug that lead
@@ -99,15 +113,15 @@ $_productCollection->load();
  *
  * We now use both as an experiment...
  */
-// $_productCollection->setFlag("require_stock_items", true);
-// Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
+// $_products->setFlag("require_stock_items", true);
+// Mage::getModel("catalogInventory/stock")->addItemsToProducts($_products);
 
 $parent_categories_ids  = [];
 $_columnCount           = 4;
 $displaySize            = 175;
 $_imgSize               = 1 * $displaySize;
 
-if($_productCollection->getFirstItem()) {
+if($_products->getFirstItem()) {
   ?>
   <div class="category-products mt-3">
     <div style="border-bottom: 1px solid var(--bs-gray-500); border-top: 1px solid var(--bs-gray-500); background-color: var(--color-light-gray);" class="my-1 py-1">
@@ -116,7 +130,7 @@ if($_productCollection->getFirstItem()) {
     <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
     <?php
     $i = 0;
-    foreach($_productCollection as $_product) {
+    foreach($_products as $_product) {
       if(mt_rand(0, 100) > 35) {
         continue; // Poor man's random
       }
@@ -367,7 +381,7 @@ if($_productCollection->getFirstItem()) {
     foreach ($_afterChildren as $_afterChildName) {
       $_afterChild = $this->getChild('after')->getChild($_afterChildName);
       //set product collection on after blocks
-      $_afterChild->setProductCollection($_productCollection);
+      $_afterChild->setProductCollection($_products);
       echo $_afterChild->toHtml();
     }
   }
