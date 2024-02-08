@@ -171,6 +171,9 @@
     RewriteCond %{QUERY_STRING} ccpturl=prokoeling.nl* [OR]
     RewriteCond %{REQUEST_URI} ccpturl=prokoeling.nl*
     RewriteRule (.*) /? [L,R=301]
+    
+    # Redirect /document/asdf to document.php
+    RewriteRule ^document/.*$ document.php
 
 ############################################
 ### END DHH
@@ -470,9 +473,9 @@
     </IfModule>
 
     # Pay.nl: 85.158.206.20
-    <RequireAll>
-        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20
-    </RequireAll>
+#    <RequireAll>
+#        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20 87.208.26.238
+#    </RequireAll>
 </If>
 # END DEVELOPMENT SETTINGS
 

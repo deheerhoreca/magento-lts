@@ -21,7 +21,6 @@
 # CM Redis
 /app/code/community/Cm
 /app/etc/modules/Cm_RedisSession.xml
-/lib/Credis
 
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
 # https://github.com/OpenMage/magento-lts/pull/1836
@@ -149,3 +148,5 @@ phpstan*.neon
 /app/locale/pt_BR/Aschroder_SMTPPro.csv
 /app/locale/tr_TR/Aschroder_SMTPPro.csv
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
+/app/code/community/Cm/Cache/Backend/Redis.php
+/lib/Credis
