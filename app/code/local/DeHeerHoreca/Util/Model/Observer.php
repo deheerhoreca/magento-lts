@@ -382,5 +382,44 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $n = 1;
     sleep($n);
     Mage::log("Slept for {$n} seconds after sending email", null, "system.log", true);
-  }  
+  }
+  
+  public function alterGa4Data(Varien_Event_Observer &$observer) {
+    // if(_dhh_debug()) {
+      // dump($observer);
+      // $ga4Event = $observer->getEvent()->getGa4DataTransport()->getData()[0] ?? false;
+      
+      // if($varien_event = $observer->getEvent()) {
+        // dump($varien_event);
+        // if($ga4DataTransport = $varien_event->getData("ga4_data_transport")) {
+          // dump($ga4DataTransport);
+          
+        // }
+        // $event_name = $ga4Event[0] ?? null;
+        // dump($event_name);
+        // $event_data = $ga4Event[1] ?? null;
+        // dump($event_data);
+        
+        // if($event_name !== "purchase") {
+          // return;
+        // }
+      // }
+      
+      // if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+        // if($customer = Mage::getSingleton('customer/session')->getCustomer()) {
+          // $email = $customer->getEmail();
+          // $email = trim($email);
+          // $email = strtolower($email);
+        
+          // $userData     = [
+            // "email"       => $email,
+          // ];
+          
+          // $result[] = ['set', 'user_data', $userData];
+        // }
+      // }
+      
+      // dump($ga4DataTransport->getData());
+    // }
+  }
 }

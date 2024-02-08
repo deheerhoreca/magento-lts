@@ -55,6 +55,16 @@
         </observers>
       </email_send_after>
       
+      <!-- Add data to GA4 events -->
+      <googleanalytics_ga4_send_data_before>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>alterGa4Data</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </googleanalytics_ga4_send_data_before>
+      
     </events>
     <blocks>
       <adminhtml>

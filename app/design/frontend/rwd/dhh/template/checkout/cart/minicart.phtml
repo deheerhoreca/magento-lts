@@ -12,17 +12,92 @@ if(empty($_COOKIE[\Mage_Core_Controller_Front_Action::SESSION_NAMESPACE])) {
   $qty = $this->getSummaryCount() ?? 0;
 }
 
+// This is the only dynamic code in an FPC-served page, so add some stuff here for GA4
+$tracking_codes = [];
+$ga4_user_data  = [];
+  
+// Prefer a checkout session over a logged-in user
+// This adds data to the very important purchase event regardless of customer logged-in status
+if($session = Mage::getSingleton("checkout/session")) {
+  
+  $controller = Mage::app()->getRequest()->getControllerName();
+  
+  // Check for "success" page -- @see https://stackoverflow.com/questions/48950024/magento-detect-checkout-success-page
+  if($session->getLastOrderId() && !$session->getQuoteId() && in_array($controller, ["cart", "onepage"], true)) {
+    if($_order = Mage::getModel("sales/order")->load($session->getLastOrderId())) {
+      $billingAddress = $_order->getBillingAddress();
+      
+      // sha256_email_address => dhh_mile_sha256
+      $value = (string) $_order->getCustomerEmail();
+      if(strlen($value) > 0) {
+        $value = trim(strtolower($value));
+        $sha256_value = hash("sha256", $value);
+        // $trackingCodes[] = "let dhh_mile_sha256 = ".json_encode($sha256_value).";";
+        $ga4_user_data["sha256_email_address"] = $sha256_value;
+      }
+      // address.sha256_first_name => dhh_cord_sha256
+      $value = (string) $billingAddress->getData("firstname");
+      if(strlen($value) > 0) {
+        $value = trim(strtolower($value));
+        $sha256_value = hash("sha256", $value);
+        // $trackingCodes[] = "let dhh_cord_sha256 = ".json_encode($sha256_value).";";
+        $ga4_user_data["address"]["address.sha256_first_name"] = $sha256_value;
+      }
+      // address.sha256_last_name => dhh_loan_sha256
+      $value = (string) $billingAddress->getData("lastname");
+      if(strlen($value) > 0) {
+        $value = trim(strtolower($value));
+        $sha256_value = hash("sha256", $value);
+        // $trackingCodes[] = "let dhh_loan_sha256 = ".json_encode($sha256_value).";";
+        $ga4_user_data["address"]["address.sha256_last_name"] = $sha256_value;
+      }
+    }
+  }
+}
+
+// Otherwise, check for logged-in status -- Mind that we retry if above block failed halfway
+if($ga4_user_data === [] && Mage::getSingleton("customer/session")->isLoggedIn()) {
+  if($customer = Mage::getSingleton("customer/session")->getCustomer()) {
+    $tracking_codes[] = "gtag('set', 'user_id', ".json_encode($customer->getId()).");";
+    
+    // sha256_email_address => dhh_mile_sha256
+    $value = (string) $customer->getEmail();
+    if(strlen($value) > 0) {
+      $value = trim(strtolower($value));
+      $sha256_value = hash("sha256", $value);
+      // $trackingCodes[] = "let dhh_mile_sha256 = ".json_encode($sha256_value).";";
+      $ga4_user_data["sha256_email_address"] = $sha256_value;
+    }
+    // address.sha256_first_name => dhh_cord_sha256
+    $value = (string) $customer->getFirstname();
+    if(strlen($value) > 0) {
+      $value = trim(strtolower($value));
+      $sha256_value = hash("sha256", $value);
+      // $trackingCodes[] = "let dhh_cord_sha256 = ".json_encode($sha256_value).";";
+      $ga4_user_data["address"]["address.sha256_first_name"] = $sha256_value;
+    }
+    // address.sha256_last_name => dhh_loan_sha256
+    $value = (string) $customer->getLastname();
+    if(strlen($value) > 0) {
+      $value = trim(strtolower($value));
+      $sha256_value = hash("sha256", $value);
+      // $trackingCodes[] = "let dhh_loan_sha256 = ".json_encode($sha256_value).";";
+      $ga4_user_data["address"]["address.sha256_last_name"] = $sha256_value;
+    }
+  }
+}
+
 ?>
 <!-- header_minicart_start -->
-<a href="<?php echo $this->helper('checkout/cart')->getCartUrl(); ?>" data-target-element="#header-cart" class="skip-cart top-link <?php if($qty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">
+<a href="<?=$this->helper("checkout/cart")->getCartUrl()?>" data-target-element="#header-cart" class="skip-cart top-link <?php if($qty <= 0): ?>no-count<?php endif; ?>" title="Winkelwagen">
   <i class="fa fa-shopping-cart fa-2x fa-fw"></i>
   <?php if($qty > 0) {
     /* This used to be a div (not allowed in HTML validator) */ ?>
-    <span class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></span>
+    <span class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?=$qty?></span>
   <?php } ?>
 </a>
-<span class="header-minicart"><? /* This used to be a div (not allowed in HTML validator) */ ?>
-  <span id="header-cart" class="block-cart skip-content"><? /* This used to be a div (not allowed in HTML validator) */ ?>
+<span class="header-minicart">
+  <span id="header-cart" class="block-cart skip-content">
     <!-- header_sidebar_start -->
     <?php
     // Disabled for performance
@@ -30,6 +105,14 @@ if(empty($_COOKIE[\Mage_Core_Controller_Front_Action::SESSION_NAMESPACE])) {
     // echo Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
     ?>
     <!-- header_sidebar_end -->
-  </span><? /* This used to be a div (not allowed in HTML validator) */ ?>
-</span><? /* This used to be a div (not allowed in HTML validator) */ ?>
+  </span>
+</span>
+<?php
+  if($tracking_code = implode(" ", $tracking_codes)) {
+    echo PHP_EOL."<script>{$tracking_code}</script>";
+  }
+  if($ga4_user_data !== []) {
+    echo PHP_EOL."<script>gtag('set', 'user_data', ".json_encode($ga4_user_data).");</script>";
+  }
+?>
 <!-- header_minicart_end -->
