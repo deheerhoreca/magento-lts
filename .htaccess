@@ -376,6 +376,34 @@
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
+  
+  # DHH REDIRECTS
+
+  # REDUCE 404s
+  RedirectMatch 301 (?i)/apple(-touch-icon-.*)?.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
+  RedirectMatch 301 /apple-touch-icon.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
+
+  # Do not listen to /index.php? requests, redirect them
+  RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
+  RewriteCond %{THE_REQUEST} ^.*/index.php
+  RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+
+  # Redirects file.php to view.php
+  RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L,QSD]
+
+  # Magento exposes this stuff, weird
+  RewriteRule ^/errors/report.php(.*)$ / [R=301,NC,L,QSD]
+  RewriteRule ^/errors/(.*)$ / [R=301]
+
+  # Redirects script kiddies
+  RewriteRule (.*)amfeed/main/(.*)$ https://www.bol.com/nl/nl/p/hacken-voor-dummies/9200000107966600/ [R=301,NC,L]
+
+  # Landing URL from flyers
+  Redirect /hallochef /promoties.html
+
+  # https://webmasters.stackexchange.com/questions/138033/what-is-well-known-traffic-advice-directory
+  RewriteRule ^\.well-known/traffic-advice$ - [T=application/trafficadvice+json,END]
+
 </IfModule>
 
 # ImageKit:
@@ -455,36 +483,6 @@
     </IfModule>
 </Else>
 # END PRODUCTION SETTINGS
-
-# DHH REDIRECTS
-<IfModule mod_rewrite.c>
-
-  # REDUCE 404s
-  RedirectMatch 301 (?i)/apple(-touch-icon-.*)?.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
-  RedirectMatch 301 /apple-touch-icon.png /skin/frontend/rwd/dhh/images/favicons/apple-touch-icon-152x152.png
-
-  # Do not listen to /index.php? requests, redirect them
-  RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
-  RewriteCond %{THE_REQUEST} ^.*/index.php
-  RewriteRule ^(.*)index.php$ /$1 [R=301,L]
-
-  # Redirects file.php to view.php
-  RewriteRule ^file.php(.*)$ /view.php$1 [R=301,NC,L,QSD]
-
-  # Magento exposes this stuff, weird
-  RewriteRule ^/errors/report.php(.*)$ / [R=301,NC,L,QSD]
-  RewriteRule ^/errors/(.*)$ / [R=301]
-
-  # Redirects script kiddies
-  RewriteRule (.*)amfeed/main/(.*)$ https://www.bol.com/nl/nl/p/hacken-voor-dummies/9200000107966600/ [R=301,NC,L]
-
-  # Landing URL from flyers
-  Redirect /hallochef /promoties.html
-
-  # https://webmasters.stackexchange.com/questions/138033/what-is-well-known-traffic-advice-directory
-  RewriteRule ^\.well-known/traffic-advice$ - [T=application/trafficadvice+json,END]
-
-</IfModule>
 
 ServerSignature Off
 
