@@ -1,6 +1,6 @@
 # DEHEERHORECA-MAGENTO -- LOGS PATHS MUST BE ABSOLUTE
-OUTPUT_LOG=/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/var/log/cron.log
-ERROR_LOG=/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/var/log/cron.err
+OUTPUT_LOG=/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/var/log/cron_event.log
+ERROR_LOG=/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/var/log/cron_error.log
  *    *  *  *  *      ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode always  1>>${OUTPUT_LOG} 2>>${ERROR_LOG}
  *    *  *  *  *      ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode default 1>>${OUTPUT_LOG} 2>>${ERROR_LOG}
 @daily                cd ~/httpdocs/deheerhoreca-magento; /usr/sbin/logrotate logrotate.conf -s /tmp/logrotate    1>>${OUTPUT_LOG} 2>>${ERROR_LOG}
