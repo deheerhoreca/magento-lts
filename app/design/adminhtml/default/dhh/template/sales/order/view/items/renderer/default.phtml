@@ -24,8 +24,9 @@
 <?php
 // DHH CORE HACK
 // Needed because some attributes are not part of the product yet...
-$img_html = "";
-$_product = Mage::getResourceModel("catalog/product_collection")
+$img_html   = "";
+$col_width  = 60;
+$_product   = Mage::getResourceModel("catalog/product_collection")
   ->addAttributeToSelect(["ean13"])
   ->addAttributeToSelect(["small_image"])
   ->addAttributeToSelect(["thumbnail"])
@@ -39,7 +40,6 @@ if(strlen($_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_se
   if(empty($image_url) === false) {
     $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
     $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
-    $col_width        = 60;
     $cdn_img_options  = [
       "identifier"      => $_item->getSku(),
       "fs_path"         => $image_path,
