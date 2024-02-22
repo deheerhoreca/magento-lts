@@ -150,3 +150,4 @@ phpstan*.neon
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/code/community/Cm/Cache/Backend/Redis.php
 /lib/Credis
+/freshdesk-webhook.ndjson

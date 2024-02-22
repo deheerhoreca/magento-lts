@@ -7,7 +7,7 @@ shopt -s nocaseglob
 cd ~/httpdocs/deheerhoreca-magento
 
 # PATTERN=~/httpdocs/deheerhoreca-magento/media/catalog/product/{0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,O,P,Q,R,S,T,U,V,W,X,Y,Z,haha}/*/*.jpg
-PATTERN=~/httpdocs/deheerhoreca-magento/media/catalog/product/haha/*.jpg
+PATTERN=~/httpdocs/deheerhoreca-magento/media/catalog/product/*/*.jpg
 
 DRYRUN=true
 
@@ -34,7 +34,8 @@ sleep 1
           echo "convert $f -colorspace RGB";
         fi
       else
-        echo "${TYPE} ${f} OK"
+        # echo "${TYPE} ${f} OK"
+        printf "."
       fi
     done
 )
