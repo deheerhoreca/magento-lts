@@ -13,7 +13,7 @@ if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "GET"
   define("DHH_FPC_DEBUG", false);   // Default: false
 }
 
-if(isset($_SERVER["HTTP_HOST"]) && substr($_SERVER["HTTP_HOST"], 0, 3) === "dev") {
+if(isset($_SERVER["HTTP_HOST"]) && substr((string) $_SERVER["HTTP_HOST"], 0, 3) === "dev") {
   define("DHH_FPC_ENABLED", false); // Default: false
 } else {
   define("DHH_FPC_ENABLED", true);  // Default: true
@@ -125,7 +125,7 @@ function clean_fpc_pattern($patterns, $nowait = false) {
   $result = [];
   foreach($patterns as $pattern) {
     
-    if(strlen($pattern) < 5) {
+    if(strlen((string) $pattern) < 5) {
       // logger("Refusing to clear FPC cache pattern with less than 5 characters: {$pattern}", "ERROR");
       continue;
     }

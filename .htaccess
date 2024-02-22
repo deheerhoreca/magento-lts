@@ -476,6 +476,10 @@
 #    <RequireAll>
 #        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20 87.208.26.238
 #    </RequireAll>
+
+    <IfModule pagespeed_module>
+        ModPagespeed off
+    </IfModule>
 </If>
 # END DEVELOPMENT SETTINGS
 

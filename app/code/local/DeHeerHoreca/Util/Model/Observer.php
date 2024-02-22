@@ -181,7 +181,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     }
     
     /* Backfill EAN13 from EAN if possible */
-    if(empty($product->getData("ean")) === false && strlen($product->getData("ean")) < 13) {
+    if(empty($product->getData("ean")) === false && strlen((string) $product->getData("ean")) < 13) {
       $new_value = sprintf('%013d', $product->getData("ean"));
       $product->setData("ean", $new_value);
       if($return === false) Mage::getSingleton('core/session')->addSuccess("ean zerofilled");
@@ -306,8 +306,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     
     $full_url   = Mage::helper('core/url')->getCurrentUrl();
     $url        = Mage::getSingleton('core/url')->parseUrl($full_url);
-    $path       = ltrim($url->getPath(), "/");
-    $query      = ltrim($url->getQuery(), "?");
+    $path       = ltrim((string) $url->getPath(), "/");
+    $query      = ltrim((string) $url->getQuery(), "?");
     $entity_id  = null;
     
     // current_* is fastest, but in case of an FPC HIT we cannot use them

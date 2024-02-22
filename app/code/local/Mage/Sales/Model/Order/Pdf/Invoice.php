@@ -28,6 +28,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
      */
     protected function _drawHeader(Zend_Pdf_Page $page)
     {
+      Mage::log(__FILE__, null, 'verbose.log', true);
         /* Add table head */
         $this->_setFontRegular($page, 10);
         $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));
@@ -110,6 +111,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             /* Add address */
             $this->insertAddress($page, $invoice->getStore());
             
+            /* DHH BEGIN */
             $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoice->getIncrementId());
       			$createdDate = $invoice->getCreatedAt();
       			$invoiceDate = date('d M Y', strtotime($createdDate));
@@ -122,6 +124,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
       			$page->drawText(Mage::helper('sales')->__('Factuurdatum: ') . $invoiceDate, 35, $top, 'UTF-8');
       			//$page->drawText(Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId(), 25, 740, 'UTF-8');
       			//$page->drawText(Mage::helper('sales')->__('Order # ') . $order->getRealOrderId(), 25, 725, 'UTF-8');
+            /* DHH END */
             
             /* Add head */
             $this->insertOrder(
@@ -132,9 +135,10 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
             /* Add document text and number */
             $this->insertDocumentNumber(
                 $page,
-                Mage::helper('sales')->__('Factuurnummer: ') . $invoice->getIncrementId()
+                Mage::helper('sales')->__('Invoice # ') . $invoice->getIncrementId()
             );
             
+            /* DHH BEGIN */
             if(intval($invoice->getStoreId()) === 4) {
               $page->drawText("De factuur is reeds betaald via bol.com", 200, $top-20, 'UTF-8');
             } else {
@@ -145,6 +149,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
                 $page->drawText("Zakelijke leveringen in België: Domestic charge, BTW verlegd", 200, $top-48, 'UTF-8');
               }
             }
+            /* DHH END */
             
             /* Add table */
             $this->_drawHeader($page);
@@ -163,7 +168,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
                 Mage::app()->getLocale()->revert();
             }
         }
-        $this->insertFooter(end($pdf->pages));
+        /* DHH */ $this->insertFooter(end($pdf->pages));
         $this->_afterGetPdf();
         return $pdf;
     }
@@ -186,13 +191,10 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         return $page;
     }
     
+    /* DHH BEGIN */
     public function insertFooter($page)
     {
 		    $this->_setFontRegular($page, 10);
-
-        // $page->drawText("Wij verzoeken u vriendelijk het verschuldigde bedrag binnen 14 dagen over te maken onder vermelding van het factuurnummer", 35, 80, 'UTF-8');
-        // $page->drawText("Onze algemene voorwaarden zijn van toepassing en kunt u vinden op onze website", 35, 65, 'UTF-8');
-
         $page->setFillColor(new Zend_Pdf_Color_Html('#4F81BD'));
         $page->setLineColor(new Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
@@ -201,8 +203,6 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $y  =   $height /2.5;
         $page->drawRectangle(1, 20, 35+ $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-    		// $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/Corbel_Bold.ttf');
-     		// $page->setFont($font, 10);
     		$page->drawText('Chefstore.nl: Alles voor de Chef', 250, 29, 'UTF-8');
 
         $page->setFillColor(new Zend_Pdf_Color_Html('#1F497D'));
@@ -213,23 +213,7 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $y = $height /2.5;
         $page->drawRectangle(1, 1, 35 + $width /1.5, $y + $height / 2);
         $page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-    		// $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/Corbel_Bold.ttf');
- 		    // $page->setFont($font, 10);
     		$page->drawText('De Heer Horeca B.V. John M. Keynesplein 12-46 1066 EP Amsterdam Nederland service@chefstore.nl +31 (0) 85-0441003', 40, 8, 'UTF-8');
-
-        /*
-        $page->setFillColor(new Zend_Pdf_Color_Html('#F79646'));
-    		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
-     		$page->setFont($font, 10);
-    		$page->drawText('CHEFSTORE.NL', 272, 10, 'UTF-8');
-        */
-
-        /*
-    		$page->setFillColor(new Zend_Pdf_Color_Html('#FFFFFF'));
-    		$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir().'/font/CORBEL.TTF');
-     		$page->setFont($font, 10);
-    		$page->drawText(' | SERVICE@CHEFSTORE.NL | +31 (0) 85-0441003', 362, 10, 'UTF-8');
-        */
     }
 
     public function getInvoiceDate()
@@ -239,4 +223,5 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
         $invoiceDate = date('d M Y', strtotime($createdDate));
         return $invoiceDate;
     }
+    /* DHH END */
 }

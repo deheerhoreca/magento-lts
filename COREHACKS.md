@@ -172,6 +172,9 @@
 - **Pay.nl**
   - `app/code/community/Pay/Payment/controllers/OrderController.php`
     - Adding log to critical transaction status updates
+- **firegento/firegento-logger**
+  - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
+  - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432
 
 ### Closed
 - **app/code/core/Mage/**

@@ -6,6 +6,12 @@
         "AFL-3.0"
     ],
     "type": "magento-source",
+    "authors": [
+        {
+            "name": "Loek van Gool",
+            "email": "loek@chefstore.nl"
+        }
+    ],
     "require": {
         "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
@@ -16,13 +22,14 @@
         "firegento/debug": "*",
         "michelf/php-markdown": "^2.0",
         "n98/magerun": "^1.97",
-        "openmage/magento-lts": "20.2.*",
+        "openmage/magento-lts": "20.4.0",
         "sabberworm/php-css-parser": "^8.4",
         "symfony/css-selector": "^5.4",
         "symfony/var-dumper": "^5.4"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
+        "ergebnis/composer-normalize": "^2.42",
         "friendsofphp/php-cs-fixer": "^3.4",
         "macopedia/phpstan-magento1": "^1.0.5",
         "magento-ecg/coding-standard": "^4.5",
@@ -31,39 +38,19 @@
         "phpmd/phpmd": "^2.13",
         "phpstan/phpstan": "^1.9.13",
         "phpunit/phpunit": "^9.5",
+        "rector/rector": "^1.0",
         "roave/security-advisories": "dev-latest",
         "squizlabs/php_codesniffer": "^3.7",
         "symplify/vendor-patches": "^11.1"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Loek van Gool",
-            "email": "loekvangool@gmail.com"
-        }
-    ],
-    "extra": {
-        "magento-root-dir": ".",
-        "auto-append-gitignore": true
-    },
-    "config": {
-        "process-timeout": 3600,
-        "allow-plugins": {
-            "magento-hackathon/magento-composer-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
-            "aydin-hassan/magento-core-composer-installer": true
-        },
-        "magento-core-deploy" : {
-            "excludes": [ 
-                ".htaccess",
-                "app/etc/local.xml"
-            ]
-        },
-        "sort-packages": true,
-        "optimize-autoloader": true,
-        "apcu-autoloader": true
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*"
     },
     "repositories": [
         {
@@ -75,17 +62,33 @@
             "url": "https://packages.firegento.com"
         }
     ],
-    "scripts": {
-        "sniffer:php80-errors": "phpcs -n -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "sniffer:php80-all": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "aydin-hassan/magento-core-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ergebnis/composer-normalize": true,
+            "magento-hackathon/magento-composer-installer": true
+        },
+        "apcu-autoloader": true,
+        "magento-core-deploy": {
+            "excludes": [
+                ".htaccess",
+                "app/etc/local.xml"
+            ]
+        },
+        "optimize-autoloader": true,
+        "process-timeout": 3600,
+        "sort-packages": true
     },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-mbstring": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*"
+    "extra": {
+        "auto-append-gitignore": true,
+        "magento-root-dir": "."
+    },
+    "scripts": {
+        "sniffer:php80-all": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
+        "sniffer:php80-errors": "phpcs -n -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
     }
 }

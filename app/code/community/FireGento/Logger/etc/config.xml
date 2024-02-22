@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file is part of a FireGento e.V. module.
+ *
+ * This FireGento e.V. module is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This script is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * @category  FireGento
+ * @package   FireGento_Logger
+ * @author    FireGento Team <team@firegento.com>
+ * @copyright 2013 FireGento Team (http://www.firegento.com)
+ * @license   http://opensource.org/licenses/gpl-3.0 GNU General Public License, version 3 (GPLv3)
+ */
+ -->
+<config>
+    <modules>
+        <FireGento_Logger>
+            <version>1.9.0</version>
+        </FireGento_Logger>
+    </modules>
+    <crontab>
+        <jobs>
+            <clean_logs>
+                <schedule>
+                    <cron_expr>15 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>firegento_logger/observer::cleanLogsCron</model>
+                </run>
+            </clean_logs>
+            <!--
+            <rotate_logs>
+                <schedule>
+                    <cron_expr>5 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>firegento_logger/observer::rotateLogs</model>
+                </run>
+            </rotate_logs>
+            -->
+        </jobs>
+    </crontab>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <logger before="Mage_Adminhtml">FireGento_Logger_Adminhtml</logger>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <firegento_logger>
+                    <file>firegento_logger.xml</file>
+                </firegento_logger>
+            </updates>
+        </layout>
+    </adminhtml>
+    <global>
+        <models>
+            <firegento_logger>
+                <class>FireGento_Logger_Model</class>
+                <resourceModel>logger_resource</resourceModel>
+            </firegento_logger>
+            <logger_resource>
+                <class>FireGento_Logger_Model_Resource</class>
+                <entities>
+                    <db_entry>
+                        <table>advanced_logger</table>
+                    </db_entry>
+                </entities>
+            </logger_resource>
+        </models>
+        <resources>
+            <logger_setup>
+                <setup>
+                    <module>FireGento_Logger</module>
+                </setup>
+            </logger_setup>
+        </resources>
+        <helpers>
+            <firegento_logger>
+                <class>FireGento_Logger_Helper</class>
+            </firegento_logger>
+        </helpers>
+        <blocks>
+            <firegento_logger>
+                <class>FireGento_Logger_Block</class>
+            </firegento_logger>
+        </blocks>
+        <log>
+            <core>
+                <writer_model>FireGento_Logger_Model_Queue</writer_model>
+                <writer_models>
+                    <default>
+                        <label>Files (Magento Default)</label>
+                        <class>Zend_Log_Writer_Stream</class>
+                    </default>
+                    <advanced>
+                        <label>Files (Advanced Format)</label>
+                        <class>FireGento_Logger_Model_Stream</class>
+                    </advanced>
+                    <json>
+                        <label>Files (JSON Lines)</label>
+                        <class>FireGento_Logger_Model_JsonStream</class>
+                    </json>
+                    <mailconfig>
+                        <label>Mail</label>
+                        <class>FireGento_Logger_Model_Mail</class>
+                    </mailconfig>
+                    <db>
+                        <label>Database</label>
+                        <class>FireGento_Logger_Model_Db</class>
+                    </db>
+                    <xmpp>
+                        <label>XMPP</label>
+                        <class>FireGento_Logger_Model_Xmpp</class>
+                    </xmpp>
+                    <graylog2>
+                        <label>Graylog2 (experimental)</label>
+                        <class>FireGento_Logger_Model_Graylog2</class>
+                    </graylog2>
+                    <syslog translate="label">
+                        <label>Local Syslog</label>
+                        <class>FireGento_Logger_Model_Syslog</class>
+                    </syslog>
+                    <rsyslog>
+                        <label>Remote Syslog (UDP)</label>
+                        <class>FireGento_Logger_Model_Rsyslog</class>
+                    </rsyslog>
+                    <logglysyslog>
+                        <label>Loggly, via Remote Syslog (UDP)</label>
+                        <class>FireGento_Logger_Model_Logglysyslog</class>
+                    </logglysyslog>
+                    <logglyhttps>
+                        <label>Loggly, via HTTPS</label>
+                        <class>FireGento_Logger_Model_Logglyhttps</class>
+                    </logglyhttps>
+                    <papertrailsyslog>
+                        <label>Papertrail, via Remote Syslog (UDP)</label>
+                        <class>FireGento_Logger_Model_Papertrailsyslog</class>
+                    </papertrailsyslog>
+                    <chromelogger>
+                        <label>Chrome Logger</label>
+                        <class>FireGento_Logger_Model_Chromelogger</class>
+                    </chromelogger>
+                    <logstash>
+                        <label>Logstash Logger</label>
+                        <class>FireGento_Logger_Model_Logstash</class>
+                    </logstash>
+                    <redis>
+                        <label>Redis Logger</label>
+                        <class>FireGento_Logger_Model_Redis</class>
+                    </redis>
+                    <sentry>
+                        <label>Sentry</label>
+                        <class>FireGento_Logger_Model_Sentry</class>
+                    </sentry>
+                    <airbrake>
+                        <label>Airbrake</label>
+                        <class>FireGento_Logger_Model_Airbrake</class>
+                    </airbrake>
+                </writer_models>
+            </core>
+        </log>
+        <template>
+            <email>
+                <firegento_logger_notification_email_template>
+                    <label>Notification Email Template</label>
+                    <file>firegento_logger/notification.html</file>
+                    <type>html</type>
+                </firegento_logger_notification_email_template>
+            </email>
+        </template>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <init_logger_client>
+                        <class>firegento_logger/observer</class>
+                        <method>initLoggerClient</method>
+                    </init_logger_client>
+                </observers>
+            </controller_action_predispatch>
+        </events>
+    </global>
+    <crontab>
+        <events>
+            <cron_before>
+                <observers>
+                    <init_logger_client>
+                        <class>firegento_logger/observer</class>
+                        <method>initLoggerClient</method>
+                    </init_logger_client>
+                </observers>
+            </cron_before>
+        </events>
+    </crontab>
+    <default>
+
+        <logger>
+            <general>
+                <targets>default,advanced</targets>
+                <target_map>a:2:{s:18:"_1575507325664_664";a:4:{s:7:"pattern";s:26:"system\.log|exception\.log";s:6:"target";s:8:"advanced";s:9:"backtrace";s:1:"1";s:13:"stop_on_match";s:1:"1";}s:18:"_1575507340100_100";a:4:{s:7:"pattern";s:2:".*";s:6:"target";s:7:"default";s:9:"backtrace";s:1:"0";s:13:"stop_on_match";s:1:"1";}}</target_map>
+                <priority>7</priority>
+                <format><![CDATA[
+%timestamp% %priorityName% (%storeCode%): %requestMethod% %requestUri%
+REQUEST: %requestData%
+TIME: %timeElapsed%s
+ADDRESS: %remoteAddress%
+USER AGENT: %httpUserAgent%
+FILE: %file%:%line%
+%message%]]></format>
+                <max_data_length>1000</max_data_length>
+                <filter_request_data><![CDATA[
+payment.cc_number
+payment.cc_cid
+login.password
+password
+confirmation]]></filter_request_data>
+                <max_backtrace_lines>0</max_backtrace_lines>
+                <viewer_enabled>0</viewer_enabled>
+            </general>
+            <default>
+                <priority>default</priority>
+            </default>
+            <advanced>
+                <priority>default</priority>
+            </advanced>
+            <json>
+                <priority>default</priority>
+            </json>
+            <mailconfig>
+                <priority>default</priority>
+            </mailconfig>
+            <db>
+                <priority>default</priority>
+                <max_days_to_keep>45</max_days_to_keep>
+            </db>
+            <xmpp>
+                <priority>default</priority>
+            </xmpp>
+            <graylog2>
+                <priority>default</priority>
+                <hostname>localhost</hostname>
+                <port>12201</port>
+                <chunk_size>1420</chunk_size>
+                <app_name>Magento/</app_name>
+            </graylog2>
+            <syslog>
+                <priority>default</priority>
+                <application>Magento/</application>
+                <facility>8</facility>
+            </syslog>
+            <rsyslog>
+                <priority>default</priority>
+                <timeout>5</timeout>
+                <app_name>Magento/</app_name>
+            </rsyslog>
+            <logglyhttps>
+                <priority>default</priority>
+                <hostname>logs-01.loggly.com</hostname>
+                <timeout>5</timeout>
+                <inputkey></inputkey>
+                <app_name>Magento/</app_name>
+            </logglyhttps>
+            <logglysyslog>
+                <priority>default</priority>
+                <hostname>logs-01.loggly.com</hostname>
+                <port>514</port>
+                <timeout>5</timeout>
+                <app_name>Magento/</app_name>
+            </logglysyslog>
+            <papertrailsyslog>
+                <priority>default</priority>
+                <hostname>logs.papertrailapp.com</hostname>
+                <port></port>
+                <app_name>Magento</app_name>
+            </papertrailsyslog>
+            <chrome>
+                <priority>default</priority>
+            </chrome>
+            <logstash>
+                <priority>default</priority>
+                <host>127.0.0.1</host>
+                <port>6666</port>
+                <protocol>udp</protocol>
+            </logstash>
+            <redis>
+                <priority>default</priority>
+                <host>127.0.0.1</host>
+                <port>6379</port>
+                <db>0</db>
+                <key>magento-log</key>
+                <password/>
+                <type>magento-log</type>
+            </redis>
+            <sentry>
+                <curl_method>async</curl_method>
+                <priority>4</priority>
+            </sentry>
+            <airbrake>
+                <timeout>60</timeout>
+            </airbrake>
+        </logger>
+    </default>
+    <frontend>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <add_logger_js>
+                        <type>singleton</type>
+                        <class>FireGento_Logger_Model_Observer</class>
+                        <method>addLoggerJs</method>
+                    </add_logger_js>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+        <routers>
+            <logger>
+                <use>standard</use>
+                <args>
+                    <module>FireGento_Logger</module>
+                    <frontName>logger</frontName>
+                </args>
+            </logger>
+        </routers>
+        <layout>
+            <updates>
+                <firegento_logger>
+                    <file>firegento_logger.xml</file>
+                </firegento_logger>
+            </updates>
+        </layout>
+    </frontend>
+</config>

@@ -44,8 +44,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function checkUrl() {
-      $k = base64_decode(Mage::app()->getRequest()->getParam("k"));
-      $v = base64_decode(Mage::app()->getRequest()->getParam("v"));
+      $k = base64_decode((string) Mage::app()->getRequest()->getParam("k"));
+      $v = base64_decode((string) Mage::app()->getRequest()->getParam("v"));
       $ek = Mage::helper("core")->decrypt($v);
       return $k && $v && ($ek == $k);
     }
@@ -60,8 +60,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return Mage::getUrl(
         "deheerhorecafpc/index/clear",
         array(
-          "k"      => base64_encode($k),
-          "v"      => base64_encode(Mage::helper("core")->encrypt($k)),
+          "k"      => base64_encode((string) $k),
+          "v"      => base64_encode((string) Mage::helper("core")->encrypt($k)),
           "_store" => Mage::app()->getDefaultStoreView()->getCode()
         )
       );
@@ -72,7 +72,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Optionally takes a URL for debug/dev
     public function get_cache_url(string $url = "") {
       if($url === "") {
-        $url = html_entity_decode(Mage::helper("core/url")->getCurrentUrl());
+        $url = html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
       }
       
       // List of query parameters that have no consequences for the rendered HTML
@@ -85,7 +85,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $url = self::strip_param_from_url($url, $ignored_url_query_keys);
       
       // Remove things that can be ignored safely
-      $url = rtrim($url, "&?/");
+      $url = rtrim((string) $url, "&?/");
       
       return $url;
     }
@@ -94,28 +94,28 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     public function strip_param_from_url($url, $params, $sort = true) {
       $url        = strtok($url, "#");            // Remove the fragment
       $base_url   = strtok($url, "?");            // Get the base url
-      
+
       if($base_url === $url) {                    // Shortcut if there are no parameters
         return $url;
       }
-      
+
       $parsed_url = parse_url($url);              // Parse it
       $query      = $parsed_url["query"];         // Get the query string
       parse_str($query, $parameters);             // Convert Parameters into array
-      
+
       foreach($params as $param) {
         if(isset($parameters[$param])) {
           unset($parameters[$param]);             // Delete the one you want
         }
       }
-      
+
       if($sort) {
         ksort($parameters);                       // Sort remaining params
       }
-      
+
       $new_query = http_build_query($parameters); // Rebuilt query string
       $url = "{$base_url}?{$new_query}";
-      
+
       return rtrim($url, "?");                    // Trim possible trailing ?
     }
     
@@ -189,10 +189,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       if($html_block_mode !== true) {
         $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
-        if($_action === "cms_index_noRoute" || strstr($_action, "checkout")
-        || strstr($_action, "customer") || strstr($_action, "api")
-        || strstr($_action, "mpm") || strstr($_action, "manage")
-        || strstr($_action, "sales") || strstr($_action, "qquoteadv")) {
+        if($_action === "cms_index_noRoute" || strstr((string) $_action, "checkout")
+        || strstr((string) $_action, "customer") || strstr((string) $_action, "api")
+        || strstr((string) $_action, "mpm") || strstr((string) $_action, "manage")
+        || strstr((string) $_action, "sales") || strstr((string) $_action, "qquoteadv")) {
           self::log("Read cache disabled (Magento action): {$debug_name}");
           return false;
         }
@@ -237,10 +237,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       if($html_block_mode !== true) {
         $_action = Mage::app()->getFrontController()->getAction()->getFullActionName();
-        if($_action === "cms_index_noRoute" || strstr($_action, "checkout")
-        || strstr($_action, "customer") || strstr($_action, "api")
-        || strstr($_action, "mpm") || strstr($_action, "manage")
-        || strstr($_action, "sales") || strstr($_action, "qquoteadv")) {
+        if($_action === "cms_index_noRoute" || strstr((string) $_action, "checkout")
+        || strstr((string) $_action, "customer") || strstr((string) $_action, "api")
+        || strstr((string) $_action, "mpm") || strstr((string) $_action, "manage")
+        || strstr((string) $_action, "sales") || strstr((string) $_action, "qquoteadv")) {
           self::log("Write cache disabled (Magento action): {$debug_name}");
           return false;
         }
@@ -266,7 +266,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       if(empty($cache_key_prefix) === true) {
         $cache_key_prefix = Mage::helper("deheerhoreca_fpc/data")->get_cache_prefix();
       }
-      $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
+      $cache_key_url_hash = substr(base_convert(md5((string) $cache_key_url), 16, 32), 0, 12);
       $_cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
       if(DHH_FPC_DEBUG === true) {
         self::log("Cache URL: {$cache_key_url}");
@@ -290,7 +290,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       }
       
       if(DHH_FPC_DEBUG === true) {
-        $size_raw_key = strlen($html);
+        $size_raw_key = strlen((string) $html);
       }
       
       /* Hole punching */
@@ -302,8 +302,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $search = "<!-- fpc form_key_placeholder -->";
         $replacement = Mage::getSingleton("core/session")->getFormKey();
         if(empty($replacement) === false) {
-          $html = str_replace($search, $replacement, $html, $count);
-          self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
+          $html = str_replace($search, $replacement, (string) $html, $count);
+          self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
         }
         Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
       }
@@ -327,8 +327,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $sidebar_html = "";
         $replacement = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
         $search = "<!-- header_minicart_here -->";
-        $html = str_replace($search, $replacement, $html, $count);
-        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
+        $html = str_replace($search, $replacement, (string) $html, $count);
+        self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::minicart");
         
         // core_messages
@@ -354,7 +354,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
           ->toHtml();
         $search = "<!-- header_miniquote_here -->";
         $html = str_replace($search, $replacement, $html, $count);
-        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
+        self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::miniquote_html");
         
         // // Breadcrumbs block -- only for catalog_product_view
@@ -395,7 +395,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $replacement = $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
         $search = "<!-- nav_here -->";
         $html = str_replace($search, $replacement, $html, $count);
-        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
+        self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
         
         // Footer
@@ -403,12 +403,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         $replacement = $_html = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
         $search = "<!-- footer_here -->";
         $html = str_replace($search, $replacement, $html, $count);
-        self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
+        self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
         Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
       }
       
       if(DHH_FPC_DEBUG === true) {
-        $size = strlen($html);
+        $size = strlen((string) $html);
         self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
       }
       self::_add_server_timing_header("FPC hit");
@@ -424,7 +424,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
       
       // Minify -- Minifying after the holepunching breaks the btn-cart buttons in the listview
-      $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", $html); // Prevent canonical URL shortening
+      $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", (string) $html); // Prevent canonical URL shortening
       $html = str_replace("value=\"https://www.chefstore.nl/", "value=\"/", $html);
       $html = str_replace("src=\"https://www.chefstore.nl/", "src=\"/", $html);
       $html = str_replace("src='https://www.chefstore.nl/", "src='/", $html);
@@ -481,7 +481,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       // Store in cache
       if(Mage::app()->getCache()->save($html, $key, ["quickndirtyfpc"], 7 * 86400)) {
-        self::log("Cache: SAVED {$key}, ".strlen($html)." chars");
+        self::log("Cache: SAVED {$key}, ".strlen((string) $html)." chars");
         self::_add_server_timing_header("FPC saved");
         self::_emit_server_timing_header();
         return true;
@@ -496,27 +496,27 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
       
-      $pos_start  = strpos($str, $needle_start);
+      $pos_start  = strpos((string) $str, (string) $needle_start);
       if($pos_start === false) {
         self::log(__METHOD__.": {$needle_start} not found!");
         return $str;
       }
       
       $start      = $pos_start === false ? 0 : $pos_start;
-      $pos_end    = strpos($str, $needle_end, $start);
+      $pos_end    = strpos((string) $str, (string) $needle_end, $start);
       
       if($pos_end === false) {
         self::log(__METHOD__.": {$needle_end} not found!");
         return $str;
       }
       
-      $end        = $pos_end === false ? strlen($str) : $pos_end + strlen($needle_end);
+      $end        = $pos_end === false ? strlen((string) $str) : $pos_end + strlen((string) $needle_end);
       
-      self::log(__METHOD__.": ".htmlentities($needle_start).":: Start = {$start}, End = {$end}");
+      self::log(__METHOD__.": ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
       
       Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
       
-      return substr_replace($str, $replacement, $start, $end - $start);
+      return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
     }
     
     static function log($msg): void {
@@ -647,7 +647,7 @@ class TinyHtmlMinifier
         $rest = $html;
 
         while (!empty($rest)) {
-            $parts = explode('<', $rest, 2);
+            $parts = explode('<', (string) $rest, 2);
             $this->walk($parts[0]);
             $rest = (isset($parts[1])) ? $parts[1] : '';
         }
@@ -658,7 +658,7 @@ class TinyHtmlMinifier
     // Walk trough html
     private function walk(&$part)
     {
-        $tag_parts = explode('>', $part);
+        $tag_parts = explode('>', (string) $part);
         $tag_content = $tag_parts[0];
 
         if (!empty($tag_content)) {
@@ -695,19 +695,19 @@ class TinyHtmlMinifier
     // Remove comments
     private function removeComments($content = '')
     {
-        return preg_replace('/(?=<!--)([\s\S]*?)-->/', '', $content);
+        return preg_replace('/(?=<!--)([\s\S]*?)-->/', '', (string) $content);
     }
 
     // Check if string contains string
     private function contains($needle, $haystack)
     {
-        return strpos($haystack, $needle) !== false;
+        return strpos((string) $haystack, (string) $needle) !== false;
     }
 
     // Return type of element
     private function toType($element)
     {
-        return (substr($element, 1, 1) == '/') ? 'close' : 'open';
+        return (substr((string) $element, 1, 1) == '/') ? 'close' : 'open';
     }
 
     // Create element
@@ -730,7 +730,7 @@ class TinyHtmlMinifier
                     "' type='text/css'"
                 ],
                 ['', ''],
-                $element
+                (string) $element
             );
         } elseif ($name == 'script') {
             $element = str_replace(
@@ -739,7 +739,7 @@ class TinyHtmlMinifier
                     " type='text/javascript'"
                 ],
                 ['', ''],
-                $element
+                (string) $element
             );
         }
         return $element;
@@ -749,9 +749,9 @@ class TinyHtmlMinifier
     private function stripWhitespace($element)
     {
         if ($this->skip == 0) {
-            $element = preg_replace('/\s+/', ' ', $element);
+            $element = preg_replace('/\s+/', ' ', (string) $element);
         }
-        return trim($element);
+        return trim((string) $element);
     }
 
     // Add chevrons around element
@@ -768,8 +768,8 @@ class TinyHtmlMinifier
     // Remove unneeded self slash
     private function removeSelfSlash($element)
     {
-        if (substr($element, -3) == ' />') {
-            $element = substr($element, 0, -3) . '>';
+        if (substr((string) $element, -3) == ' />') {
+            $element = substr((string) $element, 0, -3) . '>';
         }
         return $element;
     }
@@ -780,7 +780,7 @@ class TinyHtmlMinifier
         if ($this->skip != 0) {
             $name = $this->skipName;
         } else {
-            $content = preg_replace('/\s+/', ' ', $content);
+            $content = preg_replace('/\s+/', ' ', (string) $content);
         }
 
         if (in_array($name, $this->elements['skip'])) {
@@ -800,11 +800,11 @@ class TinyHtmlMinifier
 
             if (!empty($this->options['collapse_whitespace'])) {
 
-                if (strlen(trim($build['content'])) == 0)
+                if (strlen(trim((string) $build['content'])) == 0)
                     continue;
 
                 elseif ($build['type'] != 'content' && !in_array($build['name'], $this->elements['inline']))
-                    trim($build['content']);
+                    trim((string) $build['content']);
 
             }
 
@@ -817,11 +817,11 @@ class TinyHtmlMinifier
     // Find name by part
     private function findName($part)
     {
-        $name_cut = explode(" ", $part, 2)[0];
+        $name_cut = explode(" ", (string) $part, 2)[0];
         $name_cut = explode(">", $name_cut, 2)[0];
         $name_cut = explode("\n", $name_cut, 2)[0];
         $name_cut = preg_replace('/\s+/', '', $name_cut);
-        $name_cut = strtolower(str_replace('/', '', $name_cut));
+        $name_cut = strtolower(str_replace('/', '', (string) $name_cut));
         return $name_cut;
     }
 
@@ -846,14 +846,14 @@ class TinyHtmlMinifier
     // Minify all, even spaces between elements
     private function minifyHard($element)
     {
-        $element = preg_replace('!\s+!', ' ', $element);
-        $element = trim($element);
+        $element = preg_replace('!\s+!', ' ', (string) $element);
+        $element = trim((string) $element);
         return trim($element);
     }
 
     // Strip but keep one space
     private function minifyKeepSpaces($element)
     {
-        return preg_replace('!\s+!', ' ', $element);
+        return preg_replace('!\s+!', ' ', (string) $element);
     }
 }

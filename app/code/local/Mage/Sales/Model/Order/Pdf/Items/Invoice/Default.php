@@ -33,9 +33,6 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
         $lines  = [];
 
         // draw Product name
-        $clean_name = $item->getName();
-        $clean_name = str_replace(["-", "|", $this->getSku($item)], null, $clean_name);
-        $clean_name = trim($clean_name);
         $lines[0] = [[
             'text' => Mage::helper('core/string')->str_split($item->getName(), 32, true, true),
             'feed' => 25,

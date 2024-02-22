@@ -88,7 +88,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     foreach($categories as $category) {
       // Look for the deepest path and save.
-      if (substr_count($category->getData('path'), '/') > substr_count($path, '/')) {
+      if (substr_count((string) $category->getData('path'), '/') > substr_count((string) $path, '/')) {
         $path = $category->getData('path');
         $deepCatId = $category->getId();
       }
@@ -98,7 +98,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $category = Mage::getModel('catalog/category')->load($deepCatId);
 
     // Remove .html from category url_path.
-    $categoryPath = str_replace('.html', '',  $category->getData('url_path'));
+    $categoryPath = str_replace('.html', '',  (string) $category->getData('url_path'));
 
     // Get product url path if set.
     $productUrlPath = $product->getData('url_path');
@@ -113,10 +113,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     // Now grab only the product path including suffix (if any).
     if ($productUrlPath) {
-      $path = explode('/', $productUrlPath);
+      $path = explode('/', (string) $productUrlPath);
       $productPath = array_pop($path);
     } elseif ($productRequestPath) {
-      $path = explode('/', $productRequestPath);
+      $path = explode('/', (string) $productRequestPath);
       $productPath = array_pop($path);
     }
 
@@ -140,7 +140,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     foreach($categories as $category) {
       // Look for the deepest path and save.
-      if (substr_count($category->getData('path'), '/') > substr_count($path, '/')) {
+      if (substr_count((string) $category->getData('path'), '/') > substr_count((string) $path, '/')) {
         $path = $category->getData('path');
         $deepCatId = (int) $category->getId();
       }
@@ -208,12 +208,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function markdownToHtmlSafe($string) {
-    if(strstr($string, "<!--markdown-->") !== false) {
-      $string = trim(str_replace("<!--markdown-->", null, $string));
+    if(strstr((string) $string, "<!--markdown-->") !== false) {
+      $string = trim(str_replace("<!--markdown-->", null, (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
     }
-    if(strstr($string, "<!--markdownextra-->") !== false) {
-      $string = trim(str_replace("<!--markdownextra-->", null, $string));
+    if(strstr((string) $string, "<!--markdownextra-->") !== false) {
+      $string = trim(str_replace("<!--markdownextra-->", null, (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($string);
     }
     return $string;
@@ -232,7 +232,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public function getBrandUrlSlug($string) {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
-    $string   = strtr(utf8_decode($string), utf8_decode($from), $to);
+    $string   = strtr(utf8_decode((string) $string), utf8_decode($from), $to);
     $string   = strtolower($string);
     $string   = str_replace([" ", "-", "/", "&", "'"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
     $string   = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
@@ -243,9 +243,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public function getUrlSlug($string) {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
-    $string   = strtr(utf8_decode($string), utf8_decode($from), $to);
+    $string   = strtr(utf8_decode((string) $string), utf8_decode($from), $to);
     $string   = preg_replace('/[^\w\d\-\ ]/', '', $string);
-    $string   = str_replace(' ', '-', $string);
+    $string   = str_replace(' ', '-', (string) $string);
     $string   = trim($string);
     
     return $string;
@@ -312,9 +312,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $max_product_info_items = 3;
     $tagline                = $_product->getTagline();
     $price_html             = $product_block->getPriceHtml($_product, true);
-    $price_html             = str_replace(",00", ",-", $price_html);
+    $price_html             = str_replace(",00", ",-", (string) $price_html);
     $price_html             = str_replace("€", "", $price_html);
-    $stock_status           = strtolower(_get_product_attribute($_product, "stock_status"));
+    $stock_status           = strtolower((string) _get_product_attribute($_product, "stock_status"));
     
     if($fast_stock === true && empty($stock_status === false)) {
       $stock_message          = $stock_status === "direct leverbaar" ? "Op voorraad" : "Pre-order";
@@ -326,7 +326,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $stock_message          = $stock_data["stock_message"];
       $stock_message_short    = $stock_data["stock_message_short"];
       $stock_class            = $stock_data["txtcltcz"];
-      
+
       // @todo below variables are not used/needed, simplify
       // $in_stock               = $stock_data["in_stock"];
       // $stock_qty              = $stock_data["stock_qty"];
@@ -375,9 +375,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     $img_id           = "product-collection-image-".$_product->getId();    
-    $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $media_url        = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
-    $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
     if(is_file($image_path) === true) {
       $col_width        = 200;
@@ -520,13 +520,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   // Central place to keep fallback logic of product description
   public static function _get_product_description(object $_product) {
     $value = $_product->getDescription();
-    if(strlen($value) < 10) {
+    if(strlen((string) $value) < 10) {
       $value = $_product->getSupplierDescription();
     }
-    if(strlen($value) < 10) {
+    if(strlen((string) $value) < 10) {
       $value = $_product->getName();
     }
-    if(strlen($value) > 0) {
+    if(strlen((string) $value) > 0) {
       return $value;
     }
     
@@ -561,7 +561,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_value = (array) _get_product_attribute($_product, $attribute_code, false);
       if(empty($attribute_value) === false) {
         foreach($attribute_value as $value) {
-          $usps[] = trim(str_ireplace(["(Roestvast staal)"], "", $value));
+          $usps[] = trim(str_ireplace(["(Roestvast staal)"], "", (string) $value));
         }
       }
       
@@ -714,7 +714,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       }
       if(empty($attribute_value) === false
         && empty($category_name) === false
-        && strstr($category_name, "GN") === false) {
+        && strstr((string) $category_name, "GN") === false) {
           if(is_array($attribute_value)) {
             $attribute_value = implode(" ", $attribute_value);
           }
@@ -1026,7 +1026,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // @todo fix
     // Fast mode, only report overall_stock_status
     if(0 && $fastmode === true && empty(_get_product_attribute($product, "stock_status")) === false) {
-      switch(strtolower(_get_product_attribute($product, "stock_status"))) {
+      switch(strtolower((string) _get_product_attribute($product, "stock_status"))) {
         case "direct leverbaar":
           $stock_data["overall_stock_status"] = "in_stock";
           return $stock_data;
@@ -1085,7 +1085,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     */
     
-    if(strtolower($levertijd_tmp_override) === "n.v.t.") {
+    if(strtolower((string) $levertijd_tmp_override) === "n.v.t.") {
       $levertijd_tmp_override = null;
     }
 
@@ -1103,7 +1103,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         
         // Only show future date if within 4 months
         if($datetime1 > $now && $interval <= (365/3)) {
-          $txtstockdate = date("d-m-Y", strtotime($real_txtstockdate));
+          $txtstockdate = date("d-m-Y", strtotime((string) $real_txtstockdate));
         }
       }
     }
@@ -1204,7 +1204,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $stock_message_short  = "Pre-order";
         $txtcltcz             = "buyblock-usp gray";
         $levertijd            = null;
-      } elseif(in_array(strtolower($supplier), SUPPLIERS_HIDE_STOCK_DETAILS, true) === true) {
+      } elseif(in_array(strtolower((string) $supplier), SUPPLIERS_HIDE_STOCK_DETAILS, true) === true) {
         $stock_message        = "Op voorraad";      // Don't specify stock details for these suppliers
         $stock_message_short  = "Op voorraad";
       } elseif($stock_qty < 4) {
@@ -1259,7 +1259,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
 
   public function addParamToUrl($url, $param) {
-    if(strpos($url,'?') !== false) {
+    if(strpos((string) $url,'?') !== false) {
       $url .= "&{$param}";
     } else {
       $url .= "?{$param}";
@@ -1311,7 +1311,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public static function cleanCategoryName($category_name) {
-    return trim(str_replace(["[V]", "[SKIPMENU]", "[0] "], "", $category_name));
+    return trim(str_replace(["[V]", "[SKIPMENU]", "[0] "], "", (string) $category_name));
   }
   
   public static function getLeaseRates($price_ex_vat, $time = "daily") {
@@ -1369,7 +1369,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   // Builds a YouTube video URL from an ID
   public static function build_product_video_url($string) {
-    if(strstr("http", $string) === false) {
+    if(strstr("http", (string) $string) === false) {
       // Best way is to just store the youtube ID and build the URL
       // Attempt to reduce "Multiple video URLs discovered as belonging to this video" by adding https:
       $string = "https://www.youtube-nocookie.com/embed/{$string}?modestbranding=1&loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
@@ -1381,7 +1381,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   // Make an attempt to fix some common issues while displaying comments in adminhtml
   public static function _correct_admin_comment($comment) {
     
-    $comment = str_replace(["<br>\n", "<br \>", "<br\>"], "<br>", $comment);
+    $comment = str_replace(["<br>\n", "<br \>", "<br\>"], "<br>", (string) $comment);
     $comment = nl2br($comment, false);
     $comment = str_replace(["\n"], "", $comment);
     $comment = str_replace(["<br><br><br><br>", "<br><br><br>"], "<br><br>", $comment);
@@ -1394,8 +1394,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
   // - lib/intel.inc.php
   public static function get_url(string $which, $payload = null) {
-    if(strlen($payload)) {
-      $payload = urlencode($payload);
+    if(strlen((string) $payload)) {
+      $payload = urlencode((string) $payload);
     }
     switch($which) {
       case "tools_magento1_order_id":
@@ -1423,13 +1423,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public static function _get_placeholder_image_path() {
-    $media_dir  = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $media_dir  = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_path = "{$media_dir}/catalog/product/placeholder/".Mage::getStoreConfig("catalog/placeholder/image_placeholder");
     return $image_path;
   }
   
   public static function _get_placeholder_image_url() {
-    $media_url  = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+    $media_url  = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_url  = "{$media_url}/catalog/product/placeholder/".Mage::getStoreConfig("catalog/placeholder/image_placeholder");
     return $image_url;
   }
@@ -1494,16 +1494,16 @@ if(function_exists("sanitizeForFilename") === false) {
     // If you don't need to handle multi-byte characters
     // you can use preg_replace rather than mb_ereg_replace
     // Thanks @Łukasz Rysiak!
-    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $string);
+    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string) $string);
     // Remove any runs of periods (thanks falstro!)
-    $output = mb_ereg_replace("([\.]{2,})", '', $string);
-    return strtolower($output);
+    $output = mb_ereg_replace("([\.]{2,})", '', (string) $string);
+    return strtolower((string) $output);
   }
 }
 
 if(function_exists("sanitize_alphanumeric") === false) {
   function sanitize_alphanumeric($string, string $replacement = "-") {
-    $string = strtolower(preg_replace("/[^a-zA-Z0-9]+/", $replacement, $string));
+    $string = strtolower((string) preg_replace("/[^a-zA-Z0-9]+/", $replacement, (string) $string));
     return $string;
   }
 }
@@ -1559,17 +1559,17 @@ function in_range($number, $min, $max, $inclusive = false) {
 if(function_exists("_getAlternativeEans") === false) {
   function _getAlternativeEans($ean) {
     $eans = (array) $ean;
-    if(strlen($ean) === 13) {
+    if(strlen((string) $ean) === 13) {
       $eans[] = sprintf("%014d", $ean);
     }
-    if(substr($ean, 0, 1) === "0") {
-      $eans[] = substr($ean, 1);
+    if(substr((string) $ean, 0, 1) === "0") {
+      $eans[] = substr((string) $ean, 1);
     }
-    if(substr($ean, 0, 2) === "00") {
-      $eans[] = substr($ean, 2);
+    if(substr((string) $ean, 0, 2) === "00") {
+      $eans[] = substr((string) $ean, 2);
     }
-    if(substr($ean, 0, 3) === "000") {
-      $eans[] = substr($ean, 3);
+    if(substr((string) $ean, 0, 3) === "000") {
+      $eans[] = substr((string) $ean, 3);
     }
     
     return $eans;
@@ -1583,7 +1583,7 @@ if(function_exists("_getAlternativeEans") === false) {
 if(function_exists('_cdn_img') === false) {
   function _cdn_img($options) {
     $url        = $options["url"]       ?? false;
-    $url        = (string) htmlspecialchars($url);
+    $url        = (string) htmlspecialchars((string) $url);
     
     if($url === false) {
       return false;
@@ -1651,7 +1651,7 @@ if(function_exists('_cdn_img') === false) {
     if($relative_url === true) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
-    if($add_mod_time === true && strlen($fs_path) > 0) {
+    if($add_mod_time === true && strlen((string) $fs_path) > 0) {
       $url = _add_file_v_param($url, $fs_path, $identifier);
     }
     
@@ -1753,7 +1753,7 @@ if(function_exists('_cdn_img') === false) {
         if($relative_url === true) {
           $cdn_base         = "/cdn-cgi/image/";
         } else {
-          $cdn_base         = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "/")."/cdn-cgi/image/";
+          $cdn_base         = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "/")."/cdn-cgi/image/";
         }
         $cdn_options_base = "metadata=none,q={$quality},fit={$fit},format={$format}";
         $cdn_options      = "{$cdn_options_base},width={$width},height={$height}";
@@ -1815,7 +1815,7 @@ if(function_exists('implode_array_with_keys') === false) {
     foreach($array as $key => $val) {
       $ret .= $key.$glue.$val.$separator;
     }
-    $ret = substr($ret, 0, -(strlen($separator)));
+    $ret = substr($ret, 0, -(strlen((string) $separator)));
     return $ret;
   }
 }
