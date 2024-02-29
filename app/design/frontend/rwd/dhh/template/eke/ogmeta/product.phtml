@@ -13,12 +13,12 @@ $cache_tags = ["eke_ogmeta"];
 if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta")) {
   $html = Mage::app()->getCache()->load($cache_key);
   if(empty($html) === true) {
-    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen($html)." chars");
+    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen((string) $html)." chars");
   }
 }
 
 if(empty($html) === false) {
-  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen($html)." chars");
+  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen((string) $html)." chars");
   echo unserialize($html);
 } else {
   
@@ -26,7 +26,7 @@ if(empty($html) === false) {
   $siteName = $helper->getSiteName();  
   $imageFile = "media/catalog/product".$product->getSmallImage();
   
-  if(strlen($product->getSmallImage()) < 1) {
+  if(strlen((string) $product->getSmallImage()) < 1) {
     $imageFile = $helper->getOgImage();
   }
   
@@ -37,12 +37,12 @@ if(empty($html) === false) {
   $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);
   
   $productDescription = Mage::helper("deheerhoreca_util/util")->_get_product_description($product);
-  if(strlen($productDescription) > 0) {
+  if(strlen((string) $productDescription) > 0) {
     $productDescription = htmlentities(strip_tags($productDescription));
   }
   
   // Remove newlines, trim, limit to 200 chars
-  $productDescription   = substr(trim(preg_replace("/\s\s+/", ";", $productDescription)), 0, 200);
+  $productDescription   = substr(trim(preg_replace("/\s\s+/", ";", (string) $productDescription)), 0, 200);
   $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
   $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product);
   $overall_stock_status = $stock_data["overall_stock_status"];

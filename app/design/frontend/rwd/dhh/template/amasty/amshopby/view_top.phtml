@@ -20,7 +20,7 @@ return "";
         <div class="actions"><a href="<?php echo Mage::helper('amshopby/url')->getFullUrl(array(), 1) ?>">
             <?php echo Mage::helper('catalog')->__('Clear All') ?></a>
         </div>
-      <?php endif; ?>
+<?php endif; ?>
       <?php if($this->canShowOptions()): ?>
           <div class="amshopby-container-top block-layered-nav">
             <?php foreach ($this->getFilters() as $_filter): ?>

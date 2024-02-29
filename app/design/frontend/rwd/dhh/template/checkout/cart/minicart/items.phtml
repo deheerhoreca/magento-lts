@@ -16,17 +16,17 @@ $_items = $this->getRecentItems();
 
 ?>
 <div class="minicart-wrapper">
-  
+
   <div id="minicart-error-message" class="minicart-message"></div>
   <div id="minicart-success-message" class="minicart-message"></div>
-  
+
   <p class="block-subtitle">
     <a class="blanc" alt="Winkelwagen" href='<?php echo $this->getUrl('checkout/cart') ?>'>Winkelwagen</a>
     <a class="close skip-link-close" href="#" title="<?php echo $this->quoteEscape($this->__('Close')); ?>">
       <i class="fa fa-times" aria-hidden="true"></i>
     </a>
   </p>
-  
+
   <?php
   if(empty($_items) === false) {
   ?>
@@ -48,7 +48,7 @@ $_items = $this->getRecentItems();
         Mini.init();
       });
     </script>
-    
+
     <div id="minicart-widgets">
       <?php echo $this->getChildHtml('cart_promotion') ?>
     </div>
@@ -64,7 +64,7 @@ $_items = $this->getRecentItems();
         <?php endif; ?>
       </p>
     </div>
-    
+
     <div class="minicart-actions">
       <button type="button" title="Ga door naar afrekenen" class="button btn-proceed-checkout btn-checkout" onclick="window.location='<?php echo $this->getUrl('checkout/cart'); ?>';">
         <span>Bekijk winkelmandje</span>
@@ -73,7 +73,7 @@ $_items = $this->getRecentItems();
         </span>
       </button>
     </div>
-    
+
     <?php
   } else {
     ?>

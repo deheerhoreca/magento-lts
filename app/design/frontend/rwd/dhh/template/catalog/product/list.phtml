@@ -31,7 +31,7 @@ $show_toolbar                 = true;
 $_columnCount                 = 4;
 $displaySize                  = 200;
 $_imgSize                     = 1 * $displaySize;
-$show_products                = (strpos($category_desc, "<!--no_products-->") === false);
+$show_products                = (!str_contains($category_desc, "<!--no_products-->"));
 $media_url                    = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $media_dir                    = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
@@ -79,24 +79,24 @@ if($carct && ($category === "category")) {
     $category_desc      = "";
   }
   // Create a H1 if the description is empty
-  if(strlen($category_desc) < 5) {
+  if(strlen((string) $category_desc) < 5) {
     $category_desc      = "<h1>{$category_name}</h1>";
   }
   // In case of shop-by-brand, do not show another H1
   if(defined("CTDESC_H1_SENT") === true) {
-    $category_desc = str_ireplace("h1>", "h2>", $category_desc);
+    $category_desc = str_ireplace("h1>", "h2>", (string) $category_desc);
   }
   
   // Add category boilerplate to bottom
   if($on_first_page === true && $have_active_filters === false
-  && strpos($category_desc, "<!--no_auto_desc-->") === false) {      
+  && !str_contains($category_desc, "<!--no_auto_desc-->")) {      
     $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($category_id, $_productCollection);
     if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
       $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
       $n = sizeof($manufacturers);
       $i = 0;
       foreach($manufacturers as $manufacturer) {
-        if(strlen($manufacturer) < 3) continue;
+        if(strlen((string) $manufacturer) < 3) continue;
         $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
         $i++;
         if($i === $n-1) {
@@ -109,7 +109,7 @@ if($carct && ($category === "category")) {
       }
       $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
     }
-    
+
     // if($on_first_page === true && $have_active_filters === false) {
       // if(empty($_productCollection) === false
       // && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
@@ -121,14 +121,14 @@ if($carct && ($category === "category")) {
   }
   
   // Add a H1 if there isn't one
-  if(isset($category_name) && stripos($category_desc, "<h1>") === false) {
+  if(isset($category_name) && stripos((string) $category_desc, "<h1>") === false) {
     $category_desc      = "<h1>{$category_name}</h1>{$category_desc}";
   }
   
   if(empty($category_desc) === false) {
     echo "<div class='ctdesc' id='ctdesc'>";
     // Optionally cut off description and show a 'More' button
-    if(strpos($category_desc, "<!--no_more_btn-->") !== false || strlen($category_desc) < 1000) {
+    if(str_contains($category_desc, "<!--no_more_btn-->") || strlen((string) $category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";
@@ -157,7 +157,7 @@ if($have_active_filters === true) {
 
 if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== false
 && empty($appliedFilters) === true
-&& strpos($orig_category_desc, "<!--no_cat_tiles-->") === false) {
+&& !str_contains($orig_category_desc, "<!--no_cat_tiles-->")) {
   
   // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
   // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);
@@ -200,7 +200,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       }
       $haschild           = true;
       $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
-      $category_name_safe = htmlspecialchars($category_name);
+      $category_name_safe = htmlspecialchars((string) $category_name);
       $image              = $subcategory->getImage();
       $category_url       = $subcategory->getUrl();
       $image_path         = "{$media_path}/catalog/category/{$image}";
@@ -334,7 +334,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       $usps                   = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
       
       // Price Block
-      $price_html             = str_replace(",00", ",-", $price_html);
+      $price_html             = str_replace(",00", ",-", (string) $price_html);
       $price_html             = str_replace("€", "", $price_html);
       
       // Black friday
@@ -390,7 +390,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
       
       // Product thumbnail
       $thumbnail        = $_product->getThumbnail();
-      if(strlen($thumbnail) === 0 || $thumbnail === "no_selection") {
+      if(strlen((string) $thumbnail) === 0 || $thumbnail === "no_selection") {
         $thumbnail        = "/placeholder/{$placeholder_image}";
       }
       $image_url        = "{$media_url}/catalog/product{$thumbnail}";
@@ -479,7 +479,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
                   <?php echo $additional_delivery_messages; ?>
                 </div>
                 <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
-                <?php
+<?php
               } else {
                 // Simple product, not sellable
                 ?>
@@ -488,7 +488,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
                   <?php echo $additional_delivery_messages; ?>
                 </div>
                 <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-                <?php
+<?php
               }
             } else {
               // Configurable product
@@ -498,7 +498,7 @@ if($show_products === true && $_productCollection->getFirstItem()) {
                 <?php echo $additional_delivery_messages; ?>
               </div>
               <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-            <?php } ?>
+<?php } ?>
           </div>
         </div>
       </li>

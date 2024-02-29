@@ -108,7 +108,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             
       foreach($values as $value) {
         
-        if(strlen($code) < 1 || in_array($code, $hidden_attributes, true)) {
+        if(strlen((string) $code) < 1 || in_array($code, $hidden_attributes, true)) {
           continue;
         }
         

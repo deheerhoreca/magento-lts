@@ -15,7 +15,7 @@ $page = $this->getPageType();
 if($force ||
    $recentlyViewedProductsBlockEffectEnabled ||
    ($tool->params->profileExists($page) && !$tool->params->checkValue('enable-effect', 'No', $page))) {
-    echo $tool->getHeadersTemplate(str_replace('/magiczoomplus.js', '', $this->getSkinUrl('js/magiczoomplus.js')), str_replace('/magiczoomplus.css', '', $this->getSkinUrl('css/magiczoomplus/magiczoomplus.css')));
+    echo $tool->getHeadersTemplate(str_replace('/magiczoomplus.js', '', (string) $this->getSkinUrl('js/magiczoomplus.js')), str_replace('/magiczoomplus.css', '', (string) $this->getSkinUrl('css/magiczoomplus/magiczoomplus.css')));
     if($page == 'product' && $this->displayProductPageScript() && $this->getRequest()->getModuleName() != 'review') {
         $current_product = Mage::registry('current_product');
         if($current_product) {
@@ -31,7 +31,7 @@ if($force ||
     var magicToolboxProductId = <?php echo $current_product_id; ?>;
     var magicToolboxTool = 'magiczoomplus';
     var magicToolboxToolMainId = 'MagicZoomPlusImage'+magicToolboxProductId;
-    var magicToolboxOptionTitles = ['<?php echo strtolower(trim(preg_replace('/\s*,\s*/is', "','", $tool->params->getValue('option-associated-with-images', 'product')))); ?>'];
+    var magicToolboxOptionTitles = ['<?php echo strtolower(trim(preg_replace('/\s*,\s*/is', "','", (string) $tool->params->getValue('option-associated-with-images', 'product')))); ?>'];
     var magicToolboxSwitchMetod = '<?php echo $mouseEvent; ?>';
     var magicToolboxMouseoverDelay = <?php echo $tool->params->checkValue('selectorTrigger', 'hover', 'product') ? 60 : 0; ?>;
 
@@ -52,7 +52,7 @@ if($force ||
     if($tool->params->checkValue('magicscroll', 'Yes', $page) && $this->displayAdditionalScroll()) {
         $scroll = $magicToolboxHelper->loadScroll();
         $scroll->params->resetProfile();
-        echo $scroll->getHeadersTemplate(str_replace('/magicscroll.js', '', $this->getSkinUrl('js/magicscroll.js')), str_replace('/magicscroll.css', '', $this->getSkinUrl('css/magiczoomplus/magicscroll.css')), false);
+        echo $scroll->getHeadersTemplate(str_replace('/magicscroll.js', '', (string) $this->getSkinUrl('js/magicscroll.js')), str_replace('/magicscroll.css', '', (string) $this->getSkinUrl('css/magiczoomplus/magicscroll.css')), false);
         $this->displayAdditionalScroll(false);
     }
 }

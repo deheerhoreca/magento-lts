@@ -71,7 +71,7 @@ if (Mage::getModel('customproducts/customproduct')->isCustomProduct($item->getPr
     <td align="left" valign="top" style="padding:3px 9px; border-bottom:1px dotted #CCCCCC;">
       <a href="<?php echo $product->getProductUrl(); ?>"><?php echo $this->escapeHtml($product->getName()) ?></a>
       <?php
-      $product->setStoreId($item->getStoreId() ? $item->getStoreId() : 1);
+      $product->setStoreId($item->getStoreId() ?: 1);
       $quoteByProduct = $quoteadvHelper->getQuoteItem($product, $item->getAttribute(), null,  $item);
       foreach ($quoteByProduct->getAllItems() as $_unit) {
         if ($_unit->getProductId() == $product->getId()) {

@@ -44,7 +44,7 @@ if($_quoteadv && count($collection) > 0):
 
   <div id="main" class="my-account my-quote">
     <div class="page-title title-buttons">
-      <h1><?php echo $this->__('Quotation #%s - Proposal', $_quoteadv->getIncrementId() ? $_quoteadv->getIncrementId() : $_quoteadv->getId()) ?></h1>
+      <h1><?php echo $this->__('Quotation #%s - Proposal', $_quoteadv->getIncrementId() ?: $_quoteadv->getId()) ?></h1>
       <?php
       if(
           ($status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL ||

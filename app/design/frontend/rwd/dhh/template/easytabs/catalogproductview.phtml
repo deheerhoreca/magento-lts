@@ -65,7 +65,7 @@ $tagline                = _get_product_attribute($_product, "tagline");
 $supplier_name          = _get_product_attribute($_product, "supplier");
 $_price                 = $_product->getPrice(); // @todo is this used?
 $_finalPrice            = $_product->getFinalPrice();
-$product_description_md = trim(_get_product_attribute($_product, "description"));
+$product_description_md = trim((string) _get_product_attribute($_product, "description"));
 $product_description    = "";
 
 // Availability, Stock
@@ -93,7 +93,7 @@ $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/fr
 $_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_finalPrice, true);
 
 // Add +/- symbol to delivery time unless it's "op aanvraag"
-if(stristr($used_levertijd, "aanvraag") === false && $used_levertijd !== "1 werkdag" && empty($used_levertijd) === false) {
+if(stristr((string) $used_levertijd, "aanvraag") === false && $used_levertijd !== "1 werkdag" && empty($used_levertijd) === false) {
   $used_levertijd = "&plusmn; {$used_levertijd}";
 }
 if($used_levertijd === "1 werkdag") {
@@ -179,15 +179,15 @@ if(empty($our_usps) === false) {
 
 // Payment methods content
 if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder") {
-  
+
   $payment_methods_texts  = [];
-  
+
   // Lease
   if($_finalPrice >= $mondu_lease_minimum || $_finalPrice >= $grenke_lease_minimum) {
     $text = "Leasen tegen scherpe tarieven";
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/lease.php'>{$text}</a>";
   }
-  
+
   // BNPL
   $bnpl_payment_methods   = [];  
   if($_finalPrice >= $mondu_pl_minimum && $_finalPrice <= $mondu_pl_maximum) {
@@ -214,7 +214,7 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
     }
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=in3 data-glightbox='effect:fade; width:600px;' href='/media/static/in3.php'>{$text}</a>";
   }
-  
+
   if(empty($payment_methods_texts) === false) {
     $payment_methods_content = "<ul class='fa-ul'>";
     foreach($payment_methods_texts as $text) {
@@ -238,7 +238,7 @@ if($overall_stock_status === "eol") {
       ->addAttributeToFilter("status", ["in" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
       ->addAttributeToFilter("visibility", ["in" => [Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH, Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG]])
       ->setPageSize(1)->getFirstItem();
-    if(strlen($_replacement_product->getName()) > 1) {
+    if(strlen((string) $_replacement_product->getName()) > 1) {
       $name         = _get_product_attribute($_replacement_product, "name");
       $url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_replacement_product);
       $eol_text     = "<strong>Kijkt u naar het vervangend product:</strong><br /><a href='{$url}'>{$name}</a>";
@@ -259,7 +259,7 @@ if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();
-    
+
     if(empty($files) === false) {
       $external_documents_json = "";
     }
@@ -288,7 +288,7 @@ $i          = 0;
 // Combined dimensions
 $dimension_pair_set = false;
 if($i < $max_highlighted_attributes) {
-  
+
   // Try Width + Depth + Height
   $codes  = ["breedte", "diepte", "hoogte"];
   $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
@@ -314,7 +314,7 @@ if($i < $max_highlighted_attributes) {
     $i++;
     $dimension_pair_set = true;
   }
-  
+
   // Try Width + Height
   if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
     $codes  = ["breedte", "hoogte"];
@@ -339,7 +339,7 @@ if($i < $max_highlighted_attributes) {
       $i++;
     }
   }
-  
+
   // Try Width + Depth
   if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
     $codes  = ["breedte", "diepte"];
@@ -527,7 +527,7 @@ if($i < $max_highlighted_attributes) {
   $title = "Vermogen (ELEK)";
   if(empty($text) === false) {
     if(ctype_alnum($text) || is_numeric($text)) {
-      $text = str_replace(",", ".", $text);
+      $text = str_replace(",", ".", (string) $text);
       $text = (double) $text;
       if($text < 3) {
         $text = (int) ($text * 1000)." W";
@@ -558,7 +558,7 @@ if($i < $max_highlighted_attributes) {
   if(is_array($value)) {
     $value = implode(", ", $value);
   }
-  if((stripos($value, "400") !== false)) {
+  if((stripos((string) $value, "400") !== false)) {
     $title = "Let op: 400 volt apparaat";
   }
   if(empty($value) === false && strtolower($value) !== "n.v.t.") {
@@ -581,7 +581,7 @@ if($i < $max_highlighted_attributes) {
   if($text > 0) {
     $text = number_format($text, 1, ",", ".");
     $text = str_replace(",0", null, $text);
-    if(strstr(strtolower($text), "V") === false) {
+    if(!str_contains(strtolower($text), "V")) {
       $text = "{$text} kW";
     }
     $highlights[] = [
@@ -650,7 +650,7 @@ if($i < $max_highlighted_attributes) {
   $image  = "{$skin}frontend/rwd/dhh/images/wine.svg";
   $title  = "Flesjes";
   $text   = (int) _get_product_attribute($_product, $code);
-  if(empty($text) === false && $text !== "Nee") {
+  if(empty($text) === false && $text !== 0) {
     $text = "{$text} X";
     $highlights[] = [
       "image" => $image,
@@ -667,7 +667,7 @@ if($i < $max_highlighted_attributes) {
   $image  = "{$skin}frontend/rwd/dhh/images/wine.svg";
   $title  = "Aantal 75cl Wijnflessen";
   $text   = (int) _get_product_attribute($_product, $code);
-  if(empty($text) === false && $text !== "Nee") {
+  if(empty($text) === false && $text !== 0) {
     $text = "{$text} x 75cl.";
     $highlights[] = [
       "image" => $image,
@@ -684,7 +684,7 @@ if($i < $max_highlighted_attributes) {
   $image  = "{$skin}frontend/rwd/dhh/images/stove.svg";
   $title  = "Kookzones";
   $text   = (int) _get_product_attribute($_product, $code);
-  if(empty($text) === false && $text !== "Nee") {
+  if(empty($text) === false && $text !== 0) {
     $text = "{$text} X";
     $highlights[] = [
       "image" => $image,
@@ -798,7 +798,7 @@ if(strlen($product_description_md) > 0) {
 } else {
   $supplier_description = _get_product_attribute($_product, "supplier_description");
   // If the supplier_description does not contain HTML, do a nl2br()
-  if(strlen($supplier_description) > 0 && preg_match("/<[^<]+>/", $supplier_description, $matches) == 0) {
+  if(strlen((string) $supplier_description) > 0 && preg_match("/<[^<]+>/", (string) $supplier_description, $matches) == 0) {
     $supplier_description = nl2br($supplier_description); // @todo fix upstream for supplier_description
   }
   $product_description .= $supplier_description;
@@ -818,7 +818,7 @@ $value = $voltage;
 if(is_array($value)) {
   $value = implode(" ", $value);
 }
-if((stripos($value, "400") !== false)) {
+if((stripos((string) $value, "400") !== false)) {
   $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_voltage_400")->toHtml()."</div>";
 }
 
@@ -842,7 +842,7 @@ if(strlen($product_description) > 10)               $anchors["description"]     
 if(empty($_crossSellProducts) === false)            $anchors["accessoires"]         = "Vaak samen gekocht";
 if(empty($alternative_products_block) === false)    $anchors["alternatives"]        = "Alternatieven";
 if(empty($product_additional_data_block) === false) $anchors["specs"]               = "Specificaties";
-if(strlen($additional_attributes) > 10)             $anchors["additional"]          = "Extra Productinformatie";
+if(strlen((string) $additional_attributes) > 10)             $anchors["additional"]          = "Extra Productinformatie";
 if(empty($files) === false)                         $anchors["documents"]           = "Documantatie";
 if(empty($external_documents_json) === false)       $anchors["external-documents"]  = "Externe Documentatie";
 if(empty($upsell_products_block) === false)         $anchors["upsells"]             = "Bekijk ook eens";
@@ -866,17 +866,17 @@ if($stock_data["overall_stock_status"] === "backorder"
 <script>var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
-  
+
   <?php /* PRODUCT IMAGES */ ?>
-  
+
   <div class="proleftdv">
-    
+
     <div class="product-name">
       <h1><?php echo $productTitle; ?></h1>
       <div class="float-left"><a href="<?php echo $brand_link; ?>"><?php echo $brand_name; ?></a></div>
       <?php echo $this->getReviewsSummaryHtml($_product, "short", false); ?>
     </div>
-    
+
     <div class="product-img-box">
       <span class="anchor" id="photos"></span>
       <?php
@@ -884,47 +884,47 @@ if($stock_data["overall_stock_status"] === "backorder"
         if(empty($productlabel) === false) {
           echo "<span class='product-label'>{$productlabel}</span>";
         }
-        
+
         // Black friday
         if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
           echo "<span class='bf-banner-detail'></span>";
         }
-        
+
         // Package quantity
         $package_quantity = (int) $_product->getData("eenheid");
         if($package_quantity > 1) {
           echo "<span class='product-label-right bg-blue bit-bigger'>{$package_quantity}x</span>";
         }
-        
+
         // Energy rating
         if(empty($enclz) === false) {
           echo "<span class='lblenergylabel {$enclz}' title='Energielabel {$enclz}'>{$energy_rating}</span>";
         }
-        
+
         echo $this->getChildHtml("media");
       ?>
     </div>
   </div>
-  
+
   <div class="product-essential">
     <div id="sticky-container">
       <div class="product-shop">
-        
+
         <?php /* Add to Cart Block */ ?>
-        
+
         <form action="<?php echo $this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
           <?php echo $this->getBlockHtml("formkey") ?>
           <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
           <input type="hidden" name="related_product" id="related-products-field" value="" />
           <div class="prodetailtopright">
-            
+
             <?php
             echo $this->getChildHtml("alert_urls");
             echo $this->getChildHtml("other");
             ?>
             <div class="add-to-cart-wrapper">
               <?php
-              
+
               if($show_black_friday === true && $saleable === true && $eol !== true) {
                 ?>
                 <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
@@ -941,7 +941,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                 </div>
                 <?php
               }
-              
+
               // Configurable products              
               if($saleable === true && $this->hasOptions()) {
                 echo $this->getChildChildHtml('container1', '', true, true);
@@ -964,7 +964,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo $this->getChildHtml("addto");
                   ?>
                 </div>
-                
+
                 <?php                
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
@@ -975,21 +975,21 @@ if($stock_data["overall_stock_status"] === "backorder"
                 if(empty($delivery_text) !== true) {
                   echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
                 }
-                
+
                 echo $our_usps_content;
                 echo $payment_methods_content;
                 echo $help_content;
-                
+
                 echo $this->getChildHtml("extra_buttons");
               }
-              
+
               // All products
-              
+
               echo $this->getChildHtml("product_type_data");
               echo $this->getChildHtml("extrahint");
-              
+
               // Non-configurable products
-              
+
               if(!$this->hasOptions()) {
                 ?>
                 <div class="add-to-box">
@@ -1024,14 +1024,14 @@ if($stock_data["overall_stock_status"] === "backorder"
                     echo "<div class=eol_text>{$eol_text}</div>";
                   }
                 }
-                
+
                 echo $our_usps_content;
                 echo $payment_methods_content;
                 echo $help_content;
                 echo $this->getChildHtml("extra_buttons");
-              
+
               // Non-sellable products
-              
+
               } elseif($saleable === false) {
                 ?>
                 <div class="add-to-box">
@@ -1050,7 +1050,7 @@ if($stock_data["overall_stock_status"] === "backorder"
               // }
               ?>
             </div>
-            
+
             <?php
             if(sizeof($anchors) > 2) {
               ?>
@@ -1062,9 +1062,9 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo "<li><a href='#{$key}'>{$anchor}</a></li>";
                 }
                 echo "</ul>";
-                
+
                 if(empty($categoryUrl) === false && empty($categoryName) === false) {
-                  $categoryName = str_ireplace(["[V] ", "[0] "], "", $categoryName);
+                  $categoryName = str_ireplace(["[V] ", "[0] "], "", (string) $categoryName);
                   echo "<small>Of ga naar alle <a href='{$categoryUrl}'>{$categoryName}</a></small>";
                 }
                 ?>
@@ -1072,11 +1072,11 @@ if($stock_data["overall_stock_status"] === "backorder"
               <?php
             }
             ?>
-            
+
           </div>
         </form>
         <?php
-        
+
         // Configurable products
         if($saleable === true && $this->hasOptions()) {
           echo $this->getChildChildHtml("container2", "", true, true);
@@ -1085,15 +1085,15 @@ if($stock_data["overall_stock_status"] === "backorder"
       </div>
     </div>
   </div>
-  
+
   <div class="proleftdv">
     <?php  
-    
+
     /* Product Tagline */
     if(empty($tagline) === false) {
       echo "<div class='product-detail-tagline px-2 py-1 my-2'>{$tagline}</div>";
     }
-    
+
     /* Product Video */
     if(empty($pvideo) === false) { ?>
       <div class="py-1">
@@ -1123,11 +1123,11 @@ if($stock_data["overall_stock_status"] === "backorder"
     }
 
     /* Product Description */
-    
-    if(empty($subdescription) === false && strlen($subdescription) > 20 && strlen($subdescription) < 500) {
+
+    if(empty($subdescription) === false && strlen((string) $subdescription) > 20 && strlen((string) $subdescription) < 500) {
       echo "<div class='std p-2 my-2 fw-600' style='background-color:#e0f6ff; border-radius:5px;'>{$subdescription}</div>";
     }
-    
+
     if(strlen($product_description) > 10) {
       ?>
       <div class="py-1 std justify" id="product-detail-description">
@@ -1162,12 +1162,12 @@ if($stock_data["overall_stock_status"] === "backorder"
           <div class="crosssell product-collateral category-products">
             <ul class="products-grid products-grid-mini">
             <?php
-              foreach($_crossSellProducts as $_product) {
+              foreach($_crossSellProducts as $_crossSellProduct) {
                 $i++;
                 ?>
                 <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
                   <?php
-                  Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
+                  Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_crossSellProduct, $this, $options);
                 echo "</li>";
               }
               ?>
@@ -1178,7 +1178,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       <?php
       Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_SHOW_CROSSSELL_SKUS");
     }
-    
+
     /* Alternatives */
     if(empty($alternative_products_block) === false) {
       ?>
@@ -1188,7 +1188,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       </div>
       <?php
     }
-    
+
     /* Product Attributes */
     if(empty($product_additional_data_block) === false) {
       ?>
@@ -1200,9 +1200,9 @@ if($stock_data["overall_stock_status"] === "backorder"
       </div>
       <?php
     }
-    
+
     /* Additional Product Attributes */
-    if(strlen($additional_attributes) > 10) {
+    if(strlen((string) $additional_attributes) > 10) {
       ?>
       <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
@@ -1224,17 +1224,19 @@ if($stock_data["overall_stock_status"] === "backorder"
         <span class="anchor" id="documents"></span>
         <ul class="fa-ul">
           <?php
+
           foreach($files as $document) {
+            echo "ghghj";
             if(empty($document["path"])) {
               continue;
             }
             $url      = "{$upload_dir}/{$document['path']}";
             $name     = $document["title"]    ?? ($document["filename"] ?? "-");
             $filetype = $document["type"]     ?? null;
-            switch($filetype) {
-              case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
-              default:      $fa_icon  = "fa-file-o";      break;
-            }
+            // $fa_icon = match ($filetype) {
+            //   'pdf' => 'fa-file-pdf-o',
+            //   default => 'fa-file-o',
+            // };
             echo "<li style='line-height:2.5em;'>";
             echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}</a>";
             echo "</li>";
@@ -1245,18 +1247,20 @@ if($stock_data["overall_stock_status"] === "backorder"
       <?php
     }
     ?>
-    
+
     <?php /* External Documents */ ?>
     <?php
     if(empty($external_documents_json) === false && $external_documents_json !== "[]") {
-      $external_documents = json_decode($external_documents_json, true);
-      // printr($external_document);
+      $external_documents = json_decode((string) $external_documents_json, true);
+      dump($external_documents);
       ?>
       <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
       <div class="probottomdv" id="product-external-documents-list">
         <span class="anchor" id="external-documents"></span>
+        
         <ul class="fa-ul">
           <?php
+          
           $method = "aes128";
           $iv = str_repeat("a", openssl_cipher_iv_length($method));
           
@@ -1266,17 +1270,17 @@ if($stock_data["overall_stock_status"] === "backorder"
             }
             $url = $external_document["url"];
             if(filter_var($url, FILTER_VALIDATE_URL) === false) {
-              Mage::log("{$sku} has an invalid document URL {$url}");
+              Mage::log("{$sku} has an invalid document URL {$url}", null, "system.log", true);
             } else {
               $url_encrypted  = "/view.php?id=".base64_encode(openssl_encrypt($url, $method, "wijdelengeenurls", 0, $iv));
               // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
               $name           = $external_document["title"]     ?? $url;
               $filetype       = $external_document["filetype"]  ?? null;
               $language       = $external_document["language"]      ?? null;
-              switch($filetype) {
-                case "pdf":   $fa_icon  = "fa-file-pdf-o";  break;
-                default:      $fa_icon  = "fa-file-o";      break;
-              }
+              $fa_icon = match ($filetype) {
+                "pdf" => "fa-file-pdf-o",
+                default => "fa-file-o",
+              };
               if(empty($language) === false) {
                 if(is_scalar($language)) {
                   $language = " (".strtoupper($language).")";
@@ -1287,6 +1291,42 @@ if($stock_data["overall_stock_status"] === "backorder"
               }
               echo "<li style='line-height:2.5em;'>";
               echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              echo "</li>";
+            }
+          }
+          
+          // NG
+          $entity_id = $_product->getEntityId();
+          foreach($external_documents as $i => $external_document) {
+            if(empty($external_document["url"])) {
+              continue;
+            }
+            $url = $external_document["url"];
+            if(filter_var($url, FILTER_VALIDATE_URL) === false) {
+              Mage::log("{$sku} has an invalid document URL {$url}", null, "system.log", true);
+            } else {
+              $hash           = (string) hash("crc32", $url, false);
+              $hash           = $i; // TMP
+              $seo_name       = "seoname";
+              $document_url   = "/document/{$entity_id}/{$hash}/{$seo_name}";              
+              $name           = $external_document["title"]     ?? $url;
+              $filetype       = $external_document["filetype"]  ?? "";
+              $language       = $external_document["language"]  ?? "";
+              $fa_icon        = match($filetype) {
+                "pdf"           => "fa-file-pdf-o",
+                default         => "fa-file-o",
+              };
+              
+              if(empty($language) === false) {
+                if(is_scalar($language)) {
+                  $language = " (".strtoupper($language).")";
+                } elseif(is_array($language)) {
+                  $language = array_map("strtoupper", $language);
+                  $language = " (".implode(", ", $language).")";
+                }
+              }
+              echo "<li style='line-height:2.5em;'>";
+              echo "<a title='{$name}' class='document-link' href='{$document_url}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
               echo "</li>";
             }
           }
@@ -1309,9 +1349,9 @@ if($stock_data["overall_stock_status"] === "backorder"
       <?php
     }
     ?>
-    
+
     <?php /* Related Products */ ?>
-    
+
     <?php
     if(empty($related_products_block) === false) {
       ?>
@@ -1322,9 +1362,9 @@ if($stock_data["overall_stock_status"] === "backorder"
       <?php
     }
     ?>
-    
+
     <?php /* Brand Logo & Text */ ?>
-      
+
     <?php
       // if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
         // 
@@ -1410,8 +1450,8 @@ echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/ri
 <?php
 if(function_exists("sanitizeForFilename") === false) {
   function sanitizeForFilename($string) {
-    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $string);
-    $output = mb_ereg_replace("([\.]{2,})", '', $string);
+    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string) $string);
+    $output = mb_ereg_replace("([\.]{2,})", '', (string) $string);
     return strtolower($output);
   }
 }
@@ -1419,14 +1459,14 @@ if(function_exists("sanitizeForFilename") === false) {
 function _print_configurable_table($_product) {
   $children = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $_product);
   $table = [];
-  
+
   // Get a list of attributes that are used in this configurable product
   $_attributes = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
   $used_conf_attributes = [];
   foreach($_attributes as $_attribute) {
     $used_conf_attributes[$_attribute["label"]] = $_attribute["attribute_code"];
   }
-  
+
   foreach ($children as $_child) {
     $stock_data = Mage::helper("deheerhoreca_util/util")->getStockInfo($_child);
     $row = ["SKU" => $_child->getSku()];
@@ -1436,22 +1476,22 @@ function _print_configurable_table($_product) {
     $row["Voorraad"] = "<div class='{$stock_data['txtcltcz']}'>{$stock_data["stock_message"]}</div>";
     $table[] = $row;
   }
-  
+
   return html_table($table);
 }
 
 function html_table(array $data): string {  
   if(sizeof($data) === 0) return "";
-  
+
   $rows = $cells = [];
-  
+
   $cols = array_keys(array_slice($data, 0, 1)[0]);
-  
+
   foreach($cols as $col) {
     $cells[] = "<th>{$col}</th>";
   }
   $head = "<tr>" . implode('', $cells) . "</tr>";
-  
+
   foreach ($data as $row) {
     $cells = [];
     foreach ($row as $cell) {

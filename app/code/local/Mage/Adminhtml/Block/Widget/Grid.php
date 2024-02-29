@@ -60,7 +60,7 @@ class Mage_Adminhtml_Block_Widget_Grid extends Mage_Adminhtml_Block_Widget
     protected $_varNameDir      = 'dir';
     protected $_varNameFilter   = 'filter';
 
-    protected $_defaultLimit    = 50;
+    protected $_defaultLimit    = 50; // DHH
     protected $_defaultPage     = 1;
     protected $_defaultSort     = false;
     protected $_defaultDir      = 'desc';
@@ -1884,6 +1884,6 @@ class Mage_Adminhtml_Block_Widget_Grid extends Mage_Adminhtml_Block_Widget
      */
     public function getLimitOptions(): array
     {
-        return [50, 100, 200, 500, 1000, 2500];
+        return [50, 100, 200, 500, 1000, 2500]; // DHH
     }
 }

@@ -372,7 +372,7 @@ final class Ophirah_Qquoteadv_Helper_License extends Mage_Core_Helper_Abstract
     /**
      * @return string
      */
-    // DHH CORE HACK -- PHP 8
+    // DHH CORE HACK -- PHP 8.1
     // final private static function getC2QCreateHash()
     function getC2QCreateHash()
     {

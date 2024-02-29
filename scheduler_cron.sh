@@ -79,10 +79,9 @@ acquire_lock () {
 # DHH CORE HACK
 # source /etc/profile.d/change_php.sh
 # PHP_BIN=$(which php || true)
-# PHP_BIN=/opt/plesk/php/8.0/bin/php
-PHP_BIN=/opt/plesk/php/7.4/bin/php
+PHP_BIN=/opt/plesk/php/8.1/bin/php
 if [ -z "${PHP_BIN}" ]; then
-    echo "Could not find a binary for php" 1>&2
+    echo "Could not find a binary for php at ".PHP_BIN 1>&2
     exit 1
 fi
 

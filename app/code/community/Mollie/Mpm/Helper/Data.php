@@ -90,10 +90,11 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    public function isModuleEnabled($storeId = null, $websiteId = null)
-    {
-        return $this->isAvailable($storeId);
-    }
+    // DHH CORE HACK -- FUNCTION NO LONGER VALID AND INTERFERING
+    // public function isModuleEnabled($storeId = null, $websiteId = null)
+    // {
+        // return $this->isAvailable($storeId);
+    // }
 
     /**
      * Availabiliy check, on Active, API Client & API Key

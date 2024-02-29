@@ -1819,7 +1819,9 @@ class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Con
      * @param $storeId
      * @return mixed
      */
-    final private function checkQuoteLicense($storeId)
+    // DHH CORE HACK -- PHP 8.1
+    // final private function checkQuoteLicense($storeId)
+    function checkQuoteLicense($storeId)
     {
         return Mage::helper('qquoteadv/license')->checkQuoteLicense($storeId);
     }
@@ -1830,7 +1832,9 @@ class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Con
      * @param null $createHash
      * @return mixed
      */
-    final private function getAccessLevel($createHash = null)
+    // DHH CORE HACK -- PHP 8.1
+    // final private function getAccessLevel($createHash = null)
+    function getAccessLevel($createHash = null)
     {
         return Mage::helper('qquoteadv/license')->getAccessLevel($createHash);
     }
@@ -1840,7 +1844,9 @@ class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Con
      *
      * @return mixed
      */
-    final private function hasExpired()
+    // DHH CORE HACK -- PHP 8.1
+    // final private function hasExpired()
+    function hasExpired()
     {
         return Mage::helper('qquoteadv/license')->hasExpired();
     }

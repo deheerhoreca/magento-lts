@@ -90,7 +90,7 @@ class Mage_Core_Model_Resource_Session implements SessionHandlerInterface
         if (is_null($this->_lifeTime)) {
             $configNode = Mage::app()->getStore()->isAdmin() ?
                     'admin/security/session_cookie_lifetime' : 'web/cookie/cookie_lifetime';
-            $this->_lifeTime = (int) Mage::getStoreConfig($configNode);
+            $this->_lifeTime = Mage::getStoreConfigAsInt($configNode);
 
             if ($this->_lifeTime < 60) {
                 $this->_lifeTime = ini_get('session.gc_maxlifetime');
@@ -124,6 +124,28 @@ class Mage_Core_Model_Resource_Session implements SessionHandlerInterface
         return true;
     }
 
+    /**
+     * Setup save handler
+     *
+     * @return $this
+     */
+    // public function setSaveHandler()
+    // {
+        // if ($this->hasConnection()) {
+            // session_set_save_handler(
+                // [$this, 'open'],
+                // [$this, 'close'],
+                // [$this, 'read'],
+                // [$this, 'write'],
+                // [$this, 'destroy'],
+                // [$this, 'gc']
+            // );
+        // } else {
+            // session_save_path(Mage::getBaseDir('session'));
+        // }
+        // return $this;
+    // }
+    
     /**
      * Setup save handler
      *

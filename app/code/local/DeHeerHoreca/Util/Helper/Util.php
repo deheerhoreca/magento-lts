@@ -166,7 +166,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function getBrandsPerCategory($category_id, $_products = null) {
-    Varien_Profiler::start('DHH_'.__CLASS__."::".__METHOD__);
+    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__);
     $max_amount = 5;
     
     if(!$_products) {
@@ -198,7 +198,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       }
     }
     
-    Varien_Profiler::stop('DHH_'.__CLASS__."::".__METHOD__);
+    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__);
     return $manufacturers;
   }
   
@@ -208,11 +208,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function markdownToHtmlSafe($string) {
-    if(strstr((string) $string, "<!--markdown-->") !== false) {
+    if(str_contains((string) $string, "<!--markdown-->")) {
       $string = trim(str_replace("<!--markdown-->", null, (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
     }
-    if(strstr((string) $string, "<!--markdownextra-->") !== false) {
+    if(str_contains((string) $string, "<!--markdownextra-->")) {
       $string = trim(str_replace("<!--markdownextra-->", null, (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($string);
     }
@@ -253,7 +253,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public function getProductGridHtml($_product, $product_block, $options = []) {
     
-    Varien_Profiler::start('DHH_'.__CLASS__."::".__METHOD__."_{$_product->getSku()}");
+    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
     
     /*
     $options = [
@@ -479,7 +479,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       
     </div>
     <?php
-    Varien_Profiler::stop('DHH_'.__CLASS__."::".__METHOD__."_{$_product->getSku()}");
+    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
   }
   
   // Get the minimum list of attributes to display something
@@ -714,7 +714,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       }
       if(empty($attribute_value) === false
         && empty($category_name) === false
-        && strstr((string) $category_name, "GN") === false) {
+        && !str_contains((string) $category_name, "GN")) {
           if(is_array($attribute_value)) {
             $attribute_value = implode(" ", $attribute_value);
           }
@@ -1017,7 +1017,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function getStockInfo($product, array $options = []) {
-    Varien_Profiler::start('DHH_'.__CLASS__."::".__METHOD__."_{$product->getSku()}");
+    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$product->getSku()}");
     
     $fastmode               = $options["fastmode"]            ?? false;
     $context                = $options["context"]             ?? null;
@@ -1253,13 +1253,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // printr($stock_data);
     // }
     
-    Varien_Profiler::stop('DHH_'.__CLASS__."::".__METHOD__."_{$product->getSku()}");
+    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$product->getSku()}");
     
     return $stock_data;
   }
 
   public function addParamToUrl($url, $param) {
-    if(strpos((string) $url,'?') !== false) {
+    if(str_contains((string) $url,'?')) {
       $url .= "&{$param}";
     } else {
       $url .= "?{$param}";
@@ -1350,8 +1350,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     elseif(in_range($price_ex_vat, 25001, 150000)) $rates[60] = $price_ex_vat * (2.08 / 100);
     
     if($time === "daily") {
-      $rates = array_map( function($val) { return round(($val * 12) / 365, 2); }, $rates);
-      $rates = array_map( function($val) { return max($val, .01); }, $rates); // At least 1 cent per day
+      $rates = array_map( fn($val) => round(($val * 12) / 365, 2), $rates);
+      $rates = array_map( fn($val) => max($val, .01), $rates); // At least 1 cent per day
     }
     
     return $rates;
@@ -1369,7 +1369,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   // Builds a YouTube video URL from an ID
   public static function build_product_video_url($string) {
-    if(strstr("http", (string) $string) === false) {
+    if(!str_contains("http", (string) $string)) {
       // Best way is to just store the youtube ID and build the URL
       // Attempt to reduce "Multiple video URLs discovered as belonging to this video" by adding https:
       $string = "https://www.youtube-nocookie.com/embed/{$string}?modestbranding=1&loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
@@ -1394,8 +1394,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
   // - lib/intel.inc.php
   public static function get_url(string $which, $payload = null) {
-    if(strlen((string) $payload)) {
-      $payload = urlencode((string) $payload);
+    if(strlen($payload)) {
+      $payload = urlencode($payload);
     }
     switch($which) {
       case "tools_magento1_order_id":
@@ -1476,9 +1476,8 @@ if(function_exists('printr') === false) {
     $ret .= print_r($expr, true);
     if(php_sapi_name() !== "cli") {
       $ret .= "</pre>";
-    } else {
-      $ret .= PHP_EOL;
     }
+    $ret .= PHP_EOL;
     if($return) {
       return $return;
     }
@@ -1562,13 +1561,13 @@ if(function_exists("_getAlternativeEans") === false) {
     if(strlen((string) $ean) === 13) {
       $eans[] = sprintf("%014d", $ean);
     }
-    if(substr((string) $ean, 0, 1) === "0") {
+    if(str_starts_with((string) $ean, "0")) {
       $eans[] = substr((string) $ean, 1);
     }
-    if(substr((string) $ean, 0, 2) === "00") {
+    if(str_starts_with((string) $ean, "00")) {
       $eans[] = substr((string) $ean, 2);
     }
-    if(substr((string) $ean, 0, 3) === "000") {
+    if(str_starts_with((string) $ean, "000")) {
       $eans[] = substr((string) $ean, 3);
     }
     
@@ -1590,7 +1589,7 @@ if(function_exists('_cdn_img') === false) {
     }
     
     $identifier     = $options["identifier"]    ?? "NO_ID";
-    $options["cdn"] = isset($options["cdn"])     ? $options["cdn"] : "imagekit_custom";
+    $options["cdn"] ??= "imagekit_custom";
     $fs_path        = $options["fs_path"]       ?? null;
     $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
     $width          = $options["width"]         ?? 0;
@@ -1851,7 +1850,7 @@ if(function_exists('xml_string_to_array') === false) {
   function xml_string_to_array(string $string) {
     if(($object = simplexml_load_string($string)) !== false) {
       try {
-        $json = json_encode($object, 0, 512, JSON_THROW_ON_ERROR);
+        $json = json_encode($object, 0, 512);
       } catch (Exception $e) {
         Mage::log("xml_string_to_array: JSON encoding failed. {$e->__toString()}", null, "exception.log", true);
         return false;

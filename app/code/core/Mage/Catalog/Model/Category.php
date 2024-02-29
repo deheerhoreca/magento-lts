@@ -760,6 +760,16 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
         return $this->_getData('request_path');
     }
 
+    // /**
+     // * Retrieve Name data wrapper
+     // *
+     // * @return string
+     // */
+    // public function getName()
+    // {
+        // return $this->_getData('name');
+    // }
+    
     /**
      * Retrieve Name data wrapper
      *
@@ -767,7 +777,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
      */
     public function getName()
     {
-        // DHH CORE HACK -- @todo move to override
+        // DHH CORE HACK -- @todo move to override?
         // Somehow override does not work...so keeing it here
         // @see https://inchoo.net/magento/overriding-magento-blocks-models-helpers-and-controllers/
         // @todo remove calls to cleanCategoryName() that are not needed anymore

@@ -194,7 +194,7 @@ if($_products->getFirstItem()) {
       $usps                 = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 6);
       
       // Price Block
-      $price_html           = str_replace(",00", ",-", $price_html);
+      $price_html           = str_replace(",00", ",-", (string) $price_html);
       $price_html           = str_replace("€", null, $price_html);
       
       // Black friday
@@ -324,7 +324,7 @@ if($_products->getFirstItem()) {
                     <?php echo $additional_delivery_messages; ?>
                   </div>
                   <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
-                  <?php
+<?php
                 } else {
                   // Simple product, not sellable
                   ?>
@@ -333,7 +333,7 @@ if($_products->getFirstItem()) {
                     <?php echo $additional_delivery_messages; ?>
                   </div>
                   <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-                  <?php
+<?php
                 }
               } else {
                 // Configurable product
@@ -343,7 +343,7 @@ if($_products->getFirstItem()) {
                   <?php echo $additional_delivery_messages; ?>
                 </div>
                 <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-              <?php } ?>
+<?php } ?>
             </div>
           <?php } ?>
         </div>

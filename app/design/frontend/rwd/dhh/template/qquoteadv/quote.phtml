@@ -123,7 +123,7 @@ if($this->getQuote()->getData() == []) { ?>
           }
           
           $product_long_name = $product->getName();
-          $show_product_long_name = (bool) (strlen($product->getNameShort()) < 1);
+          $show_product_long_name = (bool) (strlen((string) $product->getNameShort()) < 1);
           $product_name = ($show_product_long_name === true) ? $product_long_name : $product->getNameShort();
           ?>
           <tr>

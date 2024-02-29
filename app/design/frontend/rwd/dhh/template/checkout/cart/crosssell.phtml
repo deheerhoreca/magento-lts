@@ -33,7 +33,7 @@ if($this->getItemCount()) { ?>
       <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
         <?php echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options); ?>
       </li>
-    <?php } ?>
+<?php } ?>
     </ul>
   </div>
   <?php

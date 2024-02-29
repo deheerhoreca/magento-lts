@@ -197,7 +197,7 @@ $_code = $this->getMethodCode();
 <script>
 
 
-    billink.validationError     = '<?php echo str_replace("'", "\\'",$this->getValidationErrorMessage()); ?>';
+    billink.validationError     = '<?php echo str_replace("'", "\\'",(string) $this->getValidationErrorMessage()); ?>';
 
     var addressParserUrl    =  '<?php echo $this->getUrl('billink/AddressParser/getAddress/', array('_secure'=>true)); ?>';
 

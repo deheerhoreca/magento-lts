@@ -15,18 +15,18 @@ if(empty($_COOKIE[\Mage_Core_Controller_Front_Action::SESSION_NAMESPACE])) {
 // This is the only dynamic code in an FPC-served page, so add some stuff here for GA4
 $tracking_codes = [];
 $ga4_user_data  = [];
-  
+
 // Prefer a checkout session over a logged-in user
 // This adds data to the very important purchase event regardless of customer logged-in status
 if($session = Mage::getSingleton("checkout/session")) {
-  
+
   $controller = Mage::app()->getRequest()->getControllerName();
-  
+
   // Check for "success" page -- @see https://stackoverflow.com/questions/48950024/magento-detect-checkout-success-page
   if($session->getLastOrderId() && !$session->getQuoteId() && in_array($controller, ["cart", "onepage"], true)) {
     if($_order = Mage::getModel("sales/order")->load($session->getLastOrderId())) {
       $billingAddress = $_order->getBillingAddress();
-      
+
       // sha256_email_address => dhh_mile_sha256
       $value = (string) $_order->getCustomerEmail();
       if(strlen($value) > 0) {
@@ -59,7 +59,7 @@ if($session = Mage::getSingleton("checkout/session")) {
 if($ga4_user_data === [] && Mage::getSingleton("customer/session")->isLoggedIn()) {
   if($customer = Mage::getSingleton("customer/session")->getCustomer()) {
     $tracking_codes[] = "gtag('set', 'user_id', ".json_encode($customer->getId()).");";
-    
+
     // sha256_email_address => dhh_mile_sha256
     $value = (string) $customer->getEmail();
     if(strlen($value) > 0) {
@@ -94,7 +94,7 @@ if($ga4_user_data === [] && Mage::getSingleton("customer/session")->isLoggedIn()
   <?php if($qty > 0) {
     /* This used to be a div (not allowed in HTML validator) */ ?>
     <span class="header__count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?=$qty?></span>
-  <?php } ?>
+<?php } ?>
 </a>
 <span class="header-minicart">
   <span id="header-cart" class="block-cart skip-content">

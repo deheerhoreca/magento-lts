@@ -65,9 +65,9 @@ Contexts:
 if(function_exists('_fixPrice') === false) {
   function _fixPrice($price, $keep_sign = false) {
     if($keep_sign === false) {
-      $price = str_replace(["€", "&nbsp;"], "", $price);    // Remove euro symbol
+      $price = str_replace(["€", "&nbsp;"], "", (string) $price);    // Remove euro symbol
     }
-    $price = str_replace(",00", ",-", $price);                // Trim zero cents
+    $price = str_replace(",00", ",-", (string) $price);                // Trim zero cents
     $price = str_replace(".", "", $price);                    // Remove thousand separator
     $price = preg_replace("/(^\s+)|(\s+$)/us", "", $price);   // An utf8 trim()
     $price = strip_tags(trim($price));
@@ -146,48 +146,48 @@ if($_product->getAttributeText("eol") !== "Ja") {
     if($_weeeHelper->isTaxable()) {
       $_weeeTaxAmountInclTaxes = $_weeeHelper->getAmountInclTaxes($_weeeTaxAttributes);
     }
-    
+
     $_weeeTaxAmount           = $_store->roundPrice($_store->convertPrice($_weeeTaxAmount));
     $_weeeTaxAmountInclTaxes  = $_store->roundPrice($_store->convertPrice($_weeeTaxAmountInclTaxes));
     $_convertedPrice          = $_store->roundPrice($_store->convertPrice($_product->getPrice()));
-    
+
     $used_msrp                = $_product->getMsrpDisplayed();
     if(empty($used_msrp)) {
       $used_msrp                = $_product->getMsrp();
     }
     $used_msrp                = $_store->convertPrice($used_msrp);
-    
+
     $_msrp                    = $_taxHelper->getPrice($_product, $used_msrp);
     $_price                   = $_taxHelper->getPrice($_product, $_convertedPrice);
     $_regularPrice            = $_taxHelper->getPrice($_product, $_convertedPrice, $_simplePricesTax);
     $_finalPrice              = $_taxHelper->getPrice($_product, $_convertedFinalPrice);
     $_finalPriceInclTax       = $_taxHelper->getPrice($_product, $_convertedFinalPrice, true);
     $_weeeDisplayType         = $_weeeHelper->getPriceDisplayType();
-      
+
     $_discount                = ($_finalPrice - $_msrp) * 1;
-    
+
     // Prep for display, no more calcs
     $_msrp_formatted              = _fixPrice($_coreHelper->formatPrice($_msrp, false));
     $_discount_abs_formatted      = _fixPrice($_coreHelper->formatPrice($_discount * -1, false), true);
     $_price_formatted             = _fixPrice($_coreHelper->formatPrice($_price, false));
     $_finalPrice_formatted        = _fixPrice($_coreHelper->formatPrice($_finalPrice, false));
     $_finalPriceInclTax_formatted = _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false));
-      
+
     $_discount_pct = $_discount_pct_formatted = null;
     if($_price != 0) {
       $_discount_pct = ($_discount / $_price) * 100 * -1;
       $_discount_pct_formatted  = number_format($_discount_pct, 0);
     }
     ?>
-    
+
     <div class="price-box nowrap">
-    
+
     <?php
     if($_finalPrice >= $_price) {
       if($_taxHelper->displayBothPrices()) {
-        
+
         // CONTEXT 0 -- NOT USED
-        
+
         if($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)) { // including
           $debug_lines[] = "Context: 0";
           ?>
@@ -204,9 +204,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
             </span>
           </span>
           <?php
-        
+
         // CONTEXT 1 -- NOT USED
-        
+
         } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)) { // incl. + weee
           $debug_lines[] = "Context: 1";
           ?>
@@ -230,9 +230,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
             </span>
           </span>
           <?php
-        
+
         // CONTEXT 2 -- NOT USED
-        
+
         } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)) { // incl. + weee
           $debug_lines[] = "Context: 2";
           ?>
@@ -256,9 +256,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
               )</span>
           </span>
           <?php
-        
+
         // CONTEXT 3 -- NOT USED
-        
+
         } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)) { // excl. + weee + final
           $debug_lines[] = "Context: 3";
           ?>
@@ -285,15 +285,15 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </span>
           <?php
         }
-        
+
         // CONTEXT: 4 => Used:
         // - Listview without special price
         // - Detailview without special price
         // - Related products without special price
-        
+
         else {
           $debug_lines[] = "Context: 4";
-          
+
           // MSRP
           if($_msrp > $_finalPrice && $_discount_pct > 1 && $controller_name !== "category"
           && $controller_name !== "cart" && $controller_name !== "index") {
@@ -314,7 +314,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
             ?>
             <span class="price"><!--sse--><?php echo $tmp; ?><!--/sse--></span>
           </span>
-          
+
           <?php
           if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
             <span class="price-including-tax not-special italic small">
@@ -325,17 +325,17 @@ if($_product->getAttributeText("eol") !== "Ja") {
             </span>
             <?php
           }
-          
+
           // SHOW DISCOUNT IF >2%
           if($_discount_pct > 2 && $controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") {
             echo _displayDiscount($_discount_abs_formatted, $_discount_pct_formatted, $_id.$this->getIdSuffix());
           }
         }
-        
+
       } else { // $_taxHelper->displayBothPrices()
-      
+
         // CONTEXT 5 -- NOT USED
-        
+
         if($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1))) { // including
           $debug_lines[] = "Context: 5";
           $weeeAmountToDisplay = $_taxHelper->displayPriceIncludingTax() ? $_weeeTaxAmountInclTaxes : $_weeeTaxAmount;
@@ -353,10 +353,10 @@ if($_product->getAttributeText("eol") !== "Ja") {
                 <?php $_weeeSeparator = ' + '; ?>
               <?php endforeach; ?>
               )</span>
-          <?php endif;
-        
+<?php endif;
+
         /* CONTEXT 6 */
-        
+
         } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)) { // incl. + weee
           $debug_lines[] = "Context: 6";
           ?>
@@ -371,9 +371,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
             <?php endforeach; ?>
             )</span>
         <?php
-        
+
         /* CONTEXT 7 */
-        
+
         } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)) { // excl. + weee + final
           $debug_lines[] = "Context: 7";
           ?>
@@ -389,9 +389,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
             <?php echo $_coreHelper->currency($_price + $weeeAmountToDisplay, true, true) ?>
           </span>
           <?php
-        
+
         /* CONTEXT 8 */
-        
+
         } else {
           $debug_lines[] = "Context: 8"; ?>
           <span class="regular-price">
@@ -407,9 +407,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
     } else { // if($_finalPrice == $_price):
       $_originalWeeeTaxAmount = $_weeeHelper->getOriginalAmount($_product);
       $_originalWeeeTaxAmount = $_store->roundPrice($_store->convertPrice($_originalWeeeTaxAmount));
-      
+
       // CONTEXT 9 -- NOT USED
-      
+
       if($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)) { // including
         $debug_lines[] = "Context: 9";
         ?>
@@ -449,9 +449,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </p>
         <?php
         }
-      
+
       // CONTEXT 10 -- NOT USED
-      
+
       } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)) { // incl. + weee
         $debug_lines[] = "Context: 10"; ?>
         <p class="old-price">
@@ -500,9 +500,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
         <?php endif; ?>
         </p>
       <?php
-      
+
       // CONTEXT 11 -- NOT USED
-      
+
       } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)) { // incl. + weee ?>
         <?php $debug_lines[] = "Context: 11"; ?>
         <p class="old-price">
@@ -535,9 +535,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
         </span>
         </p>
       <?php
-      
+
       // CONTEXT 12 -- NOT USED
-      
+
       } elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)) { // excl. + weee + final ?>
       <?php $debug_lines[] = "Context: 12"; ?>
         <p class="old-price">
@@ -569,23 +569,23 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </span>
         </p>
 
-      <?php
-      
+<?php
+
       }
-      
+
       // CONTEXT 13 -- USED:
       // - Listview with special price
       // - Related products with special price
       // - Detailview with special price
       // - Related products with special price
-      
+
       else {
-        
+
         // MSRP
         if($_msrp > $_finalPrice && $_discount_pct > 1 && $controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") {
           echo _displayMsrp($_msrp_formatted, $_msrpStoreLabel, $_id.$this->getIdSuffix());
         }
-        
+
         if(Mage::app()->getLocale()->isStoreDateInInterval($_store, $_special_price_from_date, $_special_price_to_date)) {
           $debug_lines[] = "Context: 13A";
           // if($_msrp > $_price) {
@@ -594,7 +594,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
         } else {
           $debug_lines[] = "Context: 13B";
         }
-        
+
         // SPECIAL PRICE
         if($_taxHelper->displayBothPrices()) {
           ?>
@@ -626,20 +626,20 @@ if($_product->getAttributeText("eol") !== "Ja") {
           </div>
         <?php
         }
-                
+
         // SHOW DISCOUNT IF >2%
         if($_discount_pct > 2 && $controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") {
           echo _displayDiscount($_discount_abs_formatted, $_discount_pct_formatted, $_id.$this->getIdSuffix());
         }
-        
+
         if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") {
           echo _displayPriceDates($_store, $_special_price_from_date, $_special_price_to_date);
         }
       } 
     } /* if($_finalPrice == $_price): */
-    
+
     /* CONTEXT 14 -- Volume discount */
-    
+
     if($showMinPrice && $_minimalPriceValue && $_minimalPriceValue < $_convertedFinalPrice) {
       $debug_lines[] = "Context 14";
       $_minimalPriceDisplayValue = $_minimalPrice;
@@ -673,7 +673,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
 
   } else { /* if(!$_product->isGrouped()): */
     $debug_lines[] = "Context 15";
-    
+
     if($showMinPrice && $_minimalPriceValue) {
       $_exclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue);
       $_inclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue, true);
@@ -683,7 +683,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
       $_exclTax = $_taxHelper->getPrice($_product, $price);
       $_inclTax = $_taxHelper->getPrice($_product, $price, true);
     }
-    
+
     if($price) {
       ?>
       <div class="price-box nowrap">
@@ -723,9 +723,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
     <?php
     }
   }
-  
+
   // if(_dhh_debug()) {
-    
+
     // $debug_lines[] = "displayBothPrices() = {$_taxHelper->displayBothPrices()}";
     // $debug_lines[] = "_simplePricesTax: {$_simplePricesTax}";
     // $debug_lines[] = "_minimalPriceValue: {$_minimalPriceValue}";
@@ -742,7 +742,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
     // $debug_lines[] = "_special_price_to_date: {$_special_price_to_date}";
     // $debug_lines[] = "_special_price_from_ts: {$_special_price_from_ts}";
     // $debug_lines[] = "_special_price_to_ts: {$_special_price_to_ts}";
-    
+
     // echo "<pre>";
     // foreach($debug_lines as $line) {
       // echo $line.PHP_EOL;

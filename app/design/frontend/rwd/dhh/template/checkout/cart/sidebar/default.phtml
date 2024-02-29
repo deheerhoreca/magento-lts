@@ -114,7 +114,7 @@ $img_size = 2 * $img_dimensions;
 
             <?php endif; //Can apply MSRP ?>
           </td>
-           
+
           <td>
 					<input id="mc-decrease-<?php echo $_item->getId(); ?>" type='button' value='-' class='qtyminus' onclick="discresm2(this)" />
             <input
@@ -127,7 +127,7 @@ $img_size = 2 * $img_dimensions;
               <?php if ($this->isOnCheckoutPage()) echo 'disabled'; ?>
               />
             <input type='button' value='+' class='qtyplus' onclick="increasem2(this)" />
-            
+
             <button id="qbutton-<?php echo $_item->getId(); ?>"
             data-item-id="<?php echo $_item->getId(); ?>"                 
             data-update
@@ -135,7 +135,7 @@ $img_size = 2 * $img_dimensions;
             class="button quantity-button normal-font-weight">
               <i class="fa fa-refresh" aria-hidden="true"></i>
             </button>
-            
+
             <?php if ($isVisibleProduct): ?>
               <?php if (!$this->isOnCheckoutPage()): ?>
                <a href="<?php echo $this->getAjaxDeleteUrl() ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Remove This Item')) ?>"
@@ -147,7 +147,7 @@ $img_size = 2 * $img_dimensions;
                  <i class="fa fa-trash" aria-hidden="true"></i>
               <?php endif; ?>
             <?php endif ?>
-            
+
           </td>
 					<td><?php echo Mage::helper('checkout')->formatPrice($_item->getRowTotal());?></td>
         </tr>

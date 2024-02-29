@@ -10,7 +10,7 @@
     </customer_logged_in>
     
     <reference name="head">
-    
+
       <!-- Remove items which the RWD package is not dependent upon -->
       <action method="removeItem"><type>skin_js</type><file>js/ie6.js</file></action>
       
@@ -25,7 +25,17 @@
       <action method="removeItem"><type>skin_css</type><file>aw_blog/css/style.css</file></action>
       <action method="removeItem"><type>skin_css</type><file>magmodules/kiyoh/sidebar.css</file></action>
       
-      <!-- The following are removed from default, then added where needed -->
+      <action method="removeItem"><type>js</type><file>prototype/prototype.js</file></action>
+      <action method="removeItem"><type>js</type><file>lib/jquery/jquery-1.12.4.min.js</file></action>
+      <action method="removeItem"><type>js</type><file>lib/ccard.js</file></action>
+      <action method="removeItem"><type>js</type><file>scriptaculous/builder.js</file></action>
+      <action method="removeItem"><type>js</type><file>scriptaculous/effects.js</file></action>
+      <action method="removeItem"><type>js</type><file>scriptaculous/dragdrop.js</file></action>
+      <action method="removeItem"><type>js</type><file>scriptaculous/controls.js</file></action>
+      <action method="removeItem"><type>js</type><file>scriptaculous/slider.js</file></action>
+      <action method="unsetChild"><name>head.viewport</name></action>
+      
+      <!-- The following are removed from default, then added where needed in specific controllers (see below) -->
       <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/category.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>aw_autorelated/css/product.css</name></action>
       <action method="removeItem"><type>skin_css</type><name>css/amshopby.css</name></action>
@@ -56,7 +66,11 @@
       
       <action method="addJs" ifconfig="mailchimp/ecommerce/active">
         <script>ebizmarts/mailchimp/campaignCatcher.js</script><params>async</params>
-      </action>      
+      </action>
+      
+      <!-- DHH additions -->
+      <action method="addItem"><type>skin_js</type><name>js/dhh.js</name></action>
+      
     </reference>
     
     <!-- Enable html cache for certain blocks - Replace blocks -->

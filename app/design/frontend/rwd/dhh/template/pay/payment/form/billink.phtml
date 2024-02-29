@@ -7,7 +7,7 @@ $instructions = $this->getInstructions();
 
 $dob = $this->getDob();
 if(!empty($dob)) {
-  list($dobYear,$dobMonth,$dobDay) = explode('-', $dob);
+  [$dobYear, $dobMonth, $dobDay] = explode('-', $dob);
 } else {
   $dobYear = '';
   $dobMonth = '';

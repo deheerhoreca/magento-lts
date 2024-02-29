@@ -24,13 +24,13 @@ foreach($children as $child) {
   // $child->setIsLast($counter === $topLeveChildrenCount);
   $child->setPositionClass($itemPositionClassPrefix . $counter);
   
-  $url = str_replace($base_url, "/", $child->getUrl());
+  $url = str_replace($base_url, "/", (string) $child->getUrl());
 
   $outermostClassCode = 'level'. $childLevel;
   $_hasChildren       = $child->hasChildren();
   $has_children_class = ($_hasChildren && $childLevel < 1) ? ' has-children' : '';
   $category_name      = $this->escapeHtml($this->__($child->getName()));
-  if(strpos($category_name, "[SKIPMENU]") !== false) {
+  if(str_contains($category_name, "[SKIPMENU]")) {
     continue;
   }
   $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);

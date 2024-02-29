@@ -61,7 +61,7 @@ if($this->getCollection()->getSize()) {
     // @todo fix upstream
     $pager_html = $this->getPagerHtml();
     // $pager_html = str_replace("?p=1&", "?", $pager_html); // Remove ?p=1 for FPC
-    $pager_html = str_replace("?p=1\"", "\"", $pager_html); // Remove ?p=1 for FPC
+    $pager_html = str_replace("?p=1\"", "\"", (string) $pager_html); // Remove ?p=1 for FPC
     // $pager_html = str_replace("&p=1", "", $pager_html); // Remove &p=1 for FPC
     echo $pager_html;
     ?>

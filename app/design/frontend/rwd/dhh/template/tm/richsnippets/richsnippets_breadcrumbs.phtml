@@ -33,7 +33,7 @@ if(is_array($crumbs) && sizeof($crumbs) > 0) {
     if($crumbs[$_crumbName]['first']) {
       $crumbs[$_crumbName]['label'] = $store_name;
     }
-    if($crumbs[$_crumbName]['last'] && strlen($crumbs[$_crumbName]['link']) < 1) {
+    if($crumbs[$_crumbName]['last'] && strlen((string) $crumbs[$_crumbName]['link']) < 1) {
       $crumbs[$_crumbName]['link'] = $currentUrl;
     }
   }
@@ -113,7 +113,7 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
     if(empty($dataBreadcrumbs['itemListElement']) === false) {
       $json = Mage::helper('core')->jsonEncode($dataBreadcrumbs);
       if(isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
-        $json = json_encode(json_decode($json), JSON_PRETTY_PRINT); // During development
+        $json = json_encode(json_decode((string) $json), JSON_PRETTY_PRINT); // During development
       }
       echo "  <script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
     }

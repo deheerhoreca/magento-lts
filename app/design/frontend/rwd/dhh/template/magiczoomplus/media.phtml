@@ -16,7 +16,7 @@ $use_cdn = true;
 //   - USES get_absolute_path() NOT realpath()
 // Allows for arbitrary number of dashes in the SKU
 function _extract_data_from_optimized_image_name($optimized_image, string $dhh_sku = "NO_SKU") {
-  $filename = pathinfo($optimized_image, PATHINFO_FILENAME);
+  $filename = pathinfo((string) $optimized_image, PATHINFO_FILENAME);
   $parts    = explode("-", $filename);
   $count    = sizeof($parts);
   
@@ -117,11 +117,11 @@ function _get_watermarked_image_filename($optimized_image, string $dhh_sku = "UN
   $type        = $result["type"];
   $hash        = $result["hash"];
   
-  $extension   = pathinfo($optimized_image, PATHINFO_EXTENSION);
+  $extension   = pathinfo((string) $optimized_image, PATHINFO_EXTENSION);
   $hash        = substr(md5($nr.$sku.FILENAME_SECRET), 0, 4);
   $wm_path     = "{$supplier}-{$sku}-{$nr}-a-{$hash}.{$extension}";
   
-  $msg = "{$dhh_sku} ".__FUNCTION__.": ".var_export(basename($optimized_image), true)." => ".var_export($wm_path, true);
+  $msg = "{$dhh_sku} ".__FUNCTION__.": ".var_export(basename((string) $optimized_image), true)." => ".var_export($wm_path, true);
   if(function_exists("logger")) {
     logger($msg, "VERBOSE");
   } else {
@@ -198,7 +198,7 @@ if($galleryImagesCount) {
     
     // DHH -- See if there is a watermarked counterpart
     $wm_filename = _get_watermarked_image_filename($imagePath, $dhh_sku);
-    $wm_path   = dirname($imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
+    $wm_path   = dirname((string) $imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
     
     $msg = "";
     if(is_file($wm_path) === true) {
@@ -226,7 +226,7 @@ if($galleryImagesCount) {
         if($isBaseImage) {
           $isBaseImageIncluded = true;
         }
-      } catch(Exception $e) {
+      } catch(Exception) {
         //trigger_error($e->getMessage(), E_USER_ERROR);
       }
     }
@@ -319,13 +319,13 @@ foreach($productImages as &$productImage) {
     $cdn_img_options["fit"] = "scale-up";
     $bigImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     
-    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
+    [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
     $cdn_img_options["width"] = $w;
     $cdn_img_options["height"] = $h;
     $cdn_img_options["quality"] = 75;
     $thumbImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     
-    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
+    [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
     $cdn_img_options["width"] = $w;
     $cdn_img_options["height"] = $h;
     $cdn_img_options["quality"] = 75;
@@ -341,11 +341,11 @@ foreach($productImages as &$productImage) {
     }
   }
   if($thumbImage === null) {
-    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
+    [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
     $thumbImage = $imageHelper->init($productModel, 'thumbnail', $productImage['image-file'])->resize($w, $h)->__toString();
   }
   if($mediumImage === null) {
-    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
+    [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
     $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
   }
   
@@ -364,7 +364,7 @@ foreach($productImages as &$productImage) {
   //   printr($config);
   // }
   $aHtml = $tool->getSelectorTemplate($config);
-  $aHtml = str_replace('<a ', '<a on'.$eventName.'="magicToolboxOnChangeSelector(this);" ', $aHtml);
+  $aHtml = str_replace('<a ', '<a on'.$eventName.'="magicToolboxOnChangeSelector(this);" ', (string) $aHtml);
   if($ignoreMagentoCSSclass) {
     $aHtml = str_replace('<a ', '<a class="'.$ignoreMagentoCSSclass.'" ', $aHtml);
     $aHtml = str_replace('<img ', '<img class="'.$ignoreMagentoCSSclass.'" ', $aHtml);
@@ -407,7 +407,7 @@ if(empty($containersData['zoom'])) {
         $bigImage = $imageHelper->watermark(null, null)->resize($bigImageSize)->__toString();
     }
 
-    list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productBaseImageSize);
+    [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productBaseImageSize);
     $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
 
     $containersData['zoom'] = $tool->getMainTemplate(array(
@@ -477,7 +477,7 @@ if(count($magic360Images)) {
                 $bigImage = $magic360ImageHelper->setWatermarkFile(null)->resize($bigImageSize)->__toString();
             }
 
-            list($w, $h) = $magic360Helper->magicToolboxGetSizes('thumb', $magic360Image['size']);
+            [$w, $h] = $magic360Helper->magicToolboxGetSizes('thumb', $magic360Image['size']);
             $mediumImage = $magic360ImageHelper->setWatermarkFile(null)->resize($w, $h)->__toString();
 
             $magic360ImagesData[] = array(
@@ -516,7 +516,7 @@ if(count($magic360Images)) {
                 $magic360ImageHelper->setWatermarkFile(null)->resize($bigImageSize)->__toString();
             }
 
-            list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $magic360Selector['size']);
+            [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('selector', $magic360Selector['size']);
             $thumbImage = $magic360ImageHelper->resize($w, $h)->__toString();
 
             array_unshift(
@@ -559,10 +559,10 @@ if($productModel->getTypeId() == 'configurable' && $tool->params->checkValue('sh
             $bigImage = $imageHelper->watermark(null, null)->resize($bigImageSize)->__toString();
         }
 
-        list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('thumb', $originalSizeArray);
+        [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('thumb', $originalSizeArray);
         $mediumImage = $imageHelper->watermark(null, null)->resize($w, $h)->__toString();
 
-        list($w, $h) = $magicToolboxHelper->magicToolboxGetSizes('selector', $originalSizeArray);
+        [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('selector', $originalSizeArray);
         $thumbImage = $imageHelper->init($associatedProduct, 'thumbnail', $associatedProductBaseImage)->resize($w, $h)->__toString();
 
         $imageAlt = $this->htmlEscape($associatedProduct->getImageLabel());
@@ -581,7 +581,7 @@ if($productModel->getTypeId() == 'configurable' && $tool->params->checkValue('sh
             'title' => $imageTitle,
         ));
 
-        $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" data-id="'.$associatedProductId.'" on'.$eventName.'="magicToolboxOnChangeSelectorConfigurable(this);" ', $aHtml);
+        $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" data-id="'.$associatedProductId.'" on'.$eventName.'="magicToolboxOnChangeSelectorConfigurable(this);" ', (string) $aHtml);
         $aHtml = str_replace('<img ', '<img id="imageConfigurable'.$associatedProductId.'" ', $aHtml);
 
         if($selectorsVisibility) {
@@ -643,7 +643,7 @@ if($usedMagic360) {
 }
 
 if(!empty($hiddenImagesHTML)) {
-    echo '<div style="display: none !important;">'.implode($hiddenImagesHTML).'</div>';
+    echo '<div style="display: none !important;">'.implode('', $hiddenImagesHTML).'</div>';
 }
 
 $thumb_h = 400;
@@ -678,6 +678,6 @@ if($scriptHTML) {
 echo '<img id="image" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" alt="placeholder" class="invisible">';
 
 //NOTE: small fix for amconf extension
-if(preg_match('/amconf\/ajax\/index\//ims', $_SERVER['REQUEST_URI'])) {
+if(preg_match('/amconf\/ajax\/index\//ims', (string) $_SERVER['REQUEST_URI'])) {
     echo '<script>MagicZoom.start();magicToolboxPrepareOptions();</script>';
 }

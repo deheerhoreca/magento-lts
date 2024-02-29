@@ -12,18 +12,18 @@ $cache_key  = "aeke_ogmeta_category_".Mage::getModel("catalog/layer")->getCurren
 if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "aeke_ogmeta_category")) {
   $html = Mage::app()->getCache()->load($cache_key);
   if(empty($html) === true) {
-    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen($html)." chars");
+    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen((string) $html)." chars");
   }
 }
 
 if(empty($html) === false) {
-  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen($html)." chars");
+  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen((string) $html)." chars");
   echo unserialize($html);
 } else {
   
   // DHH CORE HACK: we can do better than this...
   $categoryImage = Mage::getModel("catalog/layer")->getCurrentCategory()->getImage();
-  if(strlen($categoryImage) < 1) {
+  if(strlen((string) $categoryImage) < 1) {
     $image_url = $helper->getOgImage();
     $image_file = null;
   } else {
@@ -37,7 +37,7 @@ if(empty($html) === false) {
     $imageAttr = getimagesize($image_file);
     try {
       $imageAttr = getimagesize($image_file);
-    } catch(Exception $e) {
+    } catch(Exception) {
       Mage::log("Failed to getimagesize({$image_file})", null, "exception.log", true);
       $imageAttr = [];
     }

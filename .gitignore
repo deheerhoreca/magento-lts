@@ -21,6 +21,7 @@
 # CM Redis
 /app/code/community/Cm
 /app/etc/modules/Cm_RedisSession.xml
+/lib/Credis
 
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
 # https://github.com/OpenMage/magento-lts/pull/1836
@@ -38,6 +39,7 @@
 # https://github.com/OpenMage/magento-lts/pull/1012
 /dev/openmage/docker-magento
 /dev/openmage/.env
+/dev/openmage/Caddyfile
 /dev/tests/functional/generated
 /dev/tests/functional/vendor
 
@@ -53,9 +55,6 @@
 
 # composer
 /vendor
-
-# ddev
-.ddev/config.yaml
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
@@ -80,8 +79,12 @@ phpstan*.neon
 /shell/update-copyright.php
 /shell/translations.php
 
+# DDEV
+.ddev/config.yaml
+.ddev/.sampleData
+
 #########################################
-# CHEFSTORE.NL
+# DHH ADDITIONS
 #########################################
 
 # FILES
@@ -150,4 +153,21 @@ phpstan*.neon
 /app/locale/tr_TR/Aschroder_SMTPPro.csv
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/code/community/Cm/Cache/Backend/Redis.php
-/lib/Credis
+/app/etc/modules/Aoe_DbRetry.xml
+/app/code/community/Aoe/DbRetry
+/app/etc/modules/Aoe_TemplateHints.xml
+/app/code/community/Aoe/TemplateHints
+/skin/frontend/base/default/aoe_templatehints
+/app/code/community/FireGento/Debug
+/app/design/adminhtml/default/default/layout/firegento_debug.xml
+/app/design/adminhtml/default/default/template/firegento/debug
+/app/etc/modules/FireGento_Debug.xml
+/app/locale/de_CH/FireGento_Debug.csv
+/app/locale/de_DE/FireGento_Debug.csv
+/app/locale/en_US/FireGento_Debug.csv
+/app/locale/fr_FR/FireGento_Debug.csv
+/lib/FireGento/ChromePhp
+/lib/FireGento/FireLogger
+/lib/FireGento/FirePHP
+/firegento.php
+/skin/adminhtml/default/default/firegento/debug

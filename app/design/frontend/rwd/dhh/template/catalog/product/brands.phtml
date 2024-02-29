@@ -5,9 +5,7 @@ $manufacturers  = $_attribute->getSource()->getAllOptions(false);
 $ignored_values = ["N.v.t."];
 $counts         = count_skus_per_attribute($attribute_code);
 
-usort($manufacturers, function($a, $b) {
-  return $a['label'] <=> $b['label'];
-});
+usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
 ?>
 <style>
   #manufacturer_list li>a,.smart-banner__icon {
@@ -78,7 +76,7 @@ usort($manufacturers, function($a, $b) {
     $brand_id     = $manufacturer["value"];
     $seo_tag      = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
     $shop_link    = "/shop?{$attribute_code}={$brand_id}&cstag={$seo_tag}";
-    $label_enc    = htmlspecialchars($label);
+    $label_enc    = htmlspecialchars((string) $label);
     $img_html     = "";
     
     if(empty($brand_name) === false) {
@@ -156,7 +154,7 @@ function countProductsPerBrand($brand_id) {
     $collection = Mage::getModel("catalog/product")->getCollection();
     $_productCollection = $collection->addAttributeToFilter($attribute_code, $brand_id)->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]);
     return $_productCollection->getSize();
-  } catch (Exception $e) {
+  } catch (Exception) {
     return "error";
   }
 }

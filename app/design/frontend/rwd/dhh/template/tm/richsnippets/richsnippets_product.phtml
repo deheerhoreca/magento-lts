@@ -50,7 +50,7 @@ if (Mage::helper('richsnippets')->snippetsEnabled()):
 								            <?php echo $data['offers']['priceCurrency'] ?>
 								            <?php echo $data['offers']['highPrice'] ?>
 							        	</span>
-							        <?php endif; ?>
+<?php endif; ?>
 							    <?php else: ?>
 							        <span itemprop="price" content="<?php echo $data['offers']['price'] ?>"><?php echo $this->__("Price:") ?><?php echo $this->getFormattedPrice($price); ?></span>
 							    <?php endif; ?>

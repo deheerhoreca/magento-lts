@@ -238,6 +238,9 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
                 return false;
             }
         }
+        
+        // dump($controllerInstance);
+        // Mage::log(__METHOD__.": Failed to find controllerClassName ".var_export($controllerClassName, true)." or action {$action}", null, "system.log", true);
 
         // set values only after all the checks are done
         $request->setModuleName($module);

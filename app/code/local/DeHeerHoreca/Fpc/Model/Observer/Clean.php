@@ -13,7 +13,7 @@
 
 class DeHeerHoreca_Fpc_Model_Observer_Clean
 {
-    const CACHE_TYPE = 'quickndirtyfpc';
+    public const CACHE_TYPE = 'quickndirtyfpc';
 
     public function controllerActionPredispatchAdminhtmlCacheMassRefresh()
     {

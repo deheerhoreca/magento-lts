@@ -27,7 +27,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Price extends Varien_Data
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
-        // $this->addClass('validate-zero-or-greater'); // DHH CORE HACK
+        // $this->addClass('validate-zero-or-greater'); // DHH CORE HACK -- This field is used for non-price stuff
     }
 
     /**

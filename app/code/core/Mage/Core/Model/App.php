@@ -812,7 +812,7 @@ class Mage_Core_Model_App
     }
 
     /**
-     * Loding part of area data
+     * Loading part of area data
      *
      * @param   string $area
      * @param   string $part
@@ -870,6 +870,7 @@ class Mage_Core_Model_App
         }
 
         if (empty($this->_stores[$id])) {
+          Mage::log(var_export($id, true), null, 'verbose.log', true);
             $store = Mage::getModel('core/store');
             /** @var Mage_Core_Model_Store $store */
             if (is_numeric($id)) {
@@ -877,7 +878,6 @@ class Mage_Core_Model_App
             } elseif (is_string($id)) {
                 $store->load($id, 'code');
             }
-
             if (!$store->getCode()) {
                 $this->throwStoreException();
             }

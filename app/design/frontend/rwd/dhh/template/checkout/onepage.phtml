@@ -131,31 +131,31 @@ $logged=Mage::getSingleton('customer/session')->isLoggedIn();
         saveMethod: '<?php echo $this->getUrl('checkout/onepage/saveMethod') ?>',
         failure: '<?php echo $this->getUrl('checkout/cart') ?>'}
     );
-	
-	
-	
+
+
+
 	Accordion.prototype.openSection = Accordion.prototype.openSection.wrap(
     function(parentMethod, section) {
         // Call parent method
         parentMethod(section);
 		sect=accordion.currentSection;
       //  alert(sect);
-		
+
 		if(sect=='opc-billing'){
 			jQuery('#checkout-step-login').addClass('clzloginshow');
 			jQuery('#opc-billing').addClass('clzbillactive');
-			
+
 			jQuery('.checkout-number').removeClass('cheknoactive');
 			jQuery('#checkout-step-1 .checkout-number').addClass('cheknoactive');
-						
+
 		}
 		else{
 			jQuery('#checkout-step-login').removeClass('clzloginshow');
 			jQuery('#opc-billing').removeClass('clzbillactive');
 		}
-		
-		
-		
+
+
+
 		if(sect=='opc-login'){
 			jQuery('.stpactive').removeClass('stpactive');
 			jQuery('#checkout-step-1').addClass('stpactive');
@@ -167,28 +167,28 @@ $logged=Mage::getSingleton('customer/session')->isLoggedIn();
 		if(sect=='opc-shipping'){
 			jQuery('.stpactive').removeClass('stpactive');
 			jQuery('#checkout-step-3').addClass('stpactive');
-			
+
 		}
 		if(sect=='opc-shipping_method'){
 			jQuery('.stpactive').removeClass('stpactive');
 			jQuery('#checkout-step-4').addClass('stpactive');
-			
+
 		}
 		if(sect=='opc-payment'){
 			jQuery('.stpactive').removeClass('stpactive');
 			jQuery('#checkout-step-5').addClass('stpactive');
-			
+
 		}
-		
+
 		if(sect=='opc-review'){
 			jQuery('.stpactive').removeClass('stpactive');
 			jQuery('#checkout-step-6').addClass('stpactive');
 		}
-		
-		
-		
+
+
+
     });
-	
+
 jQuery(function(){		
 		<?php
 		if($logged==true){
@@ -202,29 +202,29 @@ jQuery(function(){
 			<?php
 		}
 		?>		
-		
+
 		jQuery('#btncaguest').click(function(){
 			jQuery('#co-billing-form > h1').hide();
 			jQuery('input[value="guest"]').prop('checked',true);
 			jQuery('#onepage-guest-register-button').trigger('click');
 			jQuery('.col-2.logindvchecko').hide();
 			jQuery('#checkout-step-login .col-1').css('width','100%');
-			
+
 			jQuery('.clzregcheckout .buttons-set').hide();
 		});		
-		
+
 		jQuery('#btncareg').click(function(){
 			jQuery('#co-billing-form > h1').hide();
 			jQuery('input[value="register"]').prop('checked',true);
 			jQuery('#onepage-guest-register-button').trigger('click');
 			jQuery('.col-2.logindvchecko').hide();
 			jQuery('#checkout-step-login .col-1').css('width','100%');
-			
+
 			jQuery('.clzregcheckout .buttons-set').hide();
 		});		
-		
+
 	});
 //<![CDATA[	
-	
+
 //]]>
 </script>

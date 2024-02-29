@@ -34,13 +34,13 @@ if(empty($_COOKIE[\Mage_Core_Controller_Front_Action::SESSION_NAMESPACE])) {
 ?>
 <!-- header_miniquote_start -->
 <span class="header-miniquote">
-  
+
   <a href="<?php echo Mage::getUrl("qquoteadv/index/"); ?>" data-target-element="#header-quote" class="skip-quote <?php if ($qty <= 0): ?>no-count <?php endif; ?>top-link" title="Lease, Mondu en Offerte Winkelwagen">
     <i class="fa fa-calculator fa-2x fa-fw"></i>
     <?php if($qty > 0) {
       /* This used to be a div (not allowed in HTML validator) */ ?>
       <span class="header__quote-count-badge js-header__cart-articles-count" data-acte-cart-icon-articles-count="0"><?php echo $qty; ?></span>
-    <?php } ?>
+<?php } ?>
   </a>
   <?php /* This used to be a div (not allowed in HTML validator) */
   // <span id="header-quote" class="block skip-content">

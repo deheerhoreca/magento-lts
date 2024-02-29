@@ -86,12 +86,12 @@ $_product = $this->getProduct();
               ?>
             </div>
             <?php echo $this->getChildHtml('extra_buttons') ?>
-            <?php elseif (!$_product->isSaleable()): ?>
+<?php elseif (!$_product->isSaleable()): ?>
             <div class="add-to-box">
               <?php echo $this->getChildHtml('addto') ?>
               <?php //echo $this->getChildHtml('sharing') ?>
             </div>
-          <?php endif; ?>
+<?php endif; ?>
   				<div class="clearer"></div>
           <?php
            echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_right_bottom')->toHtml();

@@ -21,7 +21,7 @@
       <li>We sturen je order direct naar het magazijn of de leverancier</li>
       <li>Indien nodig nemen wij contact op om de details van de order en/of de levering door te nemen</li>
       <li>Indien het pakket mee kan met de postbode, dan zal het via reguliere pakketpost komen. Het kan ook zijn dat het item met een transporteur wordt bezorgd. De meeste transporteurs ondersteunen Track &amp; Trace, en die krijg je van ons zodra wij hem hebben.</li>
-    
+
     <?php if ($this->getOrderId()):?>
       <?php if ($this->getCanViewOrder()) :?>
         <li><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></li>
@@ -36,7 +36,7 @@
         </li>
       <?php endif;?>
     <?php endif;?>
-    
+
     <?php if ($this->getAgreementRefId()): ?>
       <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
     <?php endif;?>
@@ -51,11 +51,11 @@
       </ul>
     <?php endif;?>
     </ol>
-    
+
     <button type="button" style="margin: 2em auto;" class="center button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Continue Shopping')) ?>" onclick="window.location='<?php echo $this->getUrl() ?>'">
       Naar Chefstore.nl
     </button>
-  
+
   </div>
 </div>
 
@@ -109,13 +109,13 @@ foreach($_items as $_item) {
   // printr($cats);
   // printr(_get_product_attribute($_product, "product_type"));
   // printr($_product->getResource()->getAttribute('product_type')->getFrontend()->getValue($_product));
-  
+
   $sku              = $_item->getSku();
   $name             = $_item->getName();
   $price            = (float) $_item->getPrice();
   $qty              = (int) $_item->getQtyOrdered();
   $categories       = [];
-  
+
   if($_product && empty(_get_product_attribute($_product, "product_type") === false)) {
     $categories[]     = _get_product_attribute($_product, "product_type");
   }

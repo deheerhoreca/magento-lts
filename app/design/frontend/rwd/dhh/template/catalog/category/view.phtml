@@ -110,7 +110,7 @@ if(empty($extra_block_name) === false) {
 if(empty($brand_logo) === false || empty($ctdesc_h1) === false) {
   echo "<div class='ctdesc std'>";
   if(empty($brand_logo) === false) {
-    echo "<img class='float-right' alt='".htmlspecialchars($brand_name)." logo' id='brand_logo_small' src='{$brand_logo}'>";
+    echo "<img class='float-right' alt='".htmlspecialchars((string) $brand_name)." logo' id='brand_logo_small' src='{$brand_logo}'>";
   }
   if(empty($ctdesc_h1) === false) {
     echo "<div id='cat-text'>";

@@ -295,6 +295,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
                 $html .= sprintf($format, $mergedUrl, $params);
             } else {
                 foreach ($rows as $src) {
+                    $src = str_replace((string) Mage::getBaseUrl(), "/", $src); // DHH
                     $html .= sprintf($format, $src, $params);
                 }
             }

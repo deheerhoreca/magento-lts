@@ -2,8 +2,8 @@
 $_item                  = $this->getItem();
 $_product               = $_item->getProduct();
 $product_long_name      = $_product->getName();
-$product_name           = (strlen($_product->getNameShort()) > 0) ? $_product->getNameShort() : $product_long_name;
-$show_product_long_name = (bool) (strlen($_product->getNameShort()) > 0);
+$product_name           = (strlen((string) $_product->getNameShort()) > 0) ? $_product->getNameShort() : $product_long_name;
+$show_product_long_name = (bool) (strlen((string) $_product->getNameShort()) > 0);
 
 $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
 $overall_stock_status   = $stock_data["overall_stock_status"];
@@ -72,7 +72,7 @@ $thumb_dimensions       = 1.5 * $thumb_size;
     <?php
     if($messages = $this->getMessages()) {
       foreach($messages as $message) {
-        if(stripos($message['text'], 'backorder') !== false && !empty($_product->getData("txtstockdate"))) {
+        if(stripos((string) $message['text'], 'backorder') !== false && !empty($_product->getData("txtstockdate"))) {
           $txtstockdate = strtotime($_product->getData("txtstockdate"));
           if($txtstockdate > time()) {
             $txtstockdate = date("d-m-Y", $txtstockdate);

@@ -8,56 +8,59 @@
  * It is also available at https://opensource.org/license/afl-3-0-php
  *
  * @category    design
- * @package     base_default
+ * @package     rwd_dhh
  * @copyright   Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
- * @copyright   Copyright (c) 2021-2022 The OpenMage Contributors (https://www.openmage.org)
+ * @copyright   Copyright (c) 2020-2022 The OpenMage Contributors (https://www.openmage.org)
  * @license     https://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout version="0.1.0">
-<!--
-Default layout, loads most of the pages
--->
-    
+    <!--
+    Default layout, loads most of the pages
+    -->
+
     <default translate="label" module="page">
         <label>All Pages</label>
         <block type="page/html" name="root" output="toHtml" template="page/3columns.phtml">
+
             <block type="page/html_head" name="head" as="head">
-                <!-- <action method="addJs"><script>prototype/prototype.js</script></action> -->
-                <!-- <action method="addJs"><script>lib/jquery/jquery-1.12.0.min.js</script></action> -->
+                <action method="addJs"><script>prototype/prototype.js</script></action>
+                <action method="addJs"><script>lib/jquery/jquery-1.12.4.min.js</script></action>
                 <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
-                <!-- <action method="addJs"><script>lib/ccard.js</script></action> -->
+                <action method="addJs"><script>lib/ccard.js</script></action>
                 <action method="addJs"><script>prototype/validation.js</script></action>
-                <!-- <action method="addJs"><script>scriptaculous/builder.js</script></action> -->
-                <!-- <action method="addJs"><script>scriptaculous/effects.js</script></action> -->
-                <!-- <action method="addJs"><script>scriptaculous/dragdrop.js</script></action> -->
-                <!-- <action method="addJs"><script>scriptaculous/controls.js</script></action> -->
-                <!-- <action method="addJs"><script>scriptaculous/slider.js</script></action> -->
+                <action method="addJs"><script>scriptaculous/builder.js</script></action>
+                <action method="addJs"><script>scriptaculous/effects.js</script></action>
+                <action method="addJs"><script>scriptaculous/dragdrop.js</script></action>
+                <action method="addJs"><script>scriptaculous/controls.js</script></action>
+                <action method="addJs"><script>scriptaculous/slider.js</script></action>
                 <action method="addJs"><script>varien/js.js</script></action>
-                <action method="addItem"><type>skin_js</type><name>js/dhh.js</name></action>
                 <action method="addJs"><script>varien/form.js</script></action>
                 <action method="addJs"><script>mage/translate.js</script></action>
                 <action method="addJs"><script>mage/cookies.js</script></action>
-                
+
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
-                
+
                 <!-- Add vendor dependencies -->
                 <action method="addItem"><type>skin_js</type><name>js/lib/modernizr.custom.min.js</name></action>
-                <!-- <action method="addItem"><type>skin_js</type><name>js/lib/selectivizr.js</name></action> --> <!-- IE only -->
-                <!-- <action method="addItem"><type>skin_js</type><name>js/lib/matchMedia.js</name></action> --> <!-- IE only -->
-                <!-- <action method="addItem"><type>skin_js</type><name>js/lib/matchMedia.addListener.js</name></action> --> <!-- IE only -->
                 <!-- <action method="addItem"><type>skin_js</type><name>js/lib/enquire.js</name></action> -->
                 <action method="addItem"><type>skin_js</type><name>js/lib/enquire.min.js</name></action>
                 <action method="addItem"><type>skin_js</type><name>js/app.js</name></action>
                 <!-- <action method="addItem"><type>skin_js</type><name>js/lib/jquery.cycle2.min.js</name></action> -->
                 <!-- <action method="addItem"><type>skin_js</type><name>js/lib/jquery.cycle2.swipe.min.js</name></action> -->
                 <!-- <action method="addItem"><type>skin_js</type><name>js/slideshow.js</name></action> -->
-                <action method="addItem"><type>skin_js</type><name>js/minicart.js</name></action>
+                <!-- <action method="addItem"><type>skin_js</type><name>js/lib/imagesloaded.js</name></action> -->
+                <!-- <action method="addLinkRel"><rel>stylesheet</rel><href><![CDATA[//fonts.googleapis.com/css?family=Raleway:300,400,500,700,600&display=swap]]></href></action> -->
+                <!-- <action method="addItem"><type>skin_js</type><name>js/minicart.js</name></action> -->
                 
                 <!-- Add stylesheets with media queries for use by modern browsers -->
-                <action method="addItem"><type>skin_css</type><name>css/styles.css</name><params/></action>
-                <!-- <action method="addItem"><type>skin_css</type><name>css/responsive.css</name><params/></action> -->
-                <!-- <action method="addItem"><type>skin_css</type><name>css/madisonisland.css</name><params/></action> -->
+                <action method="addItem"><type>skin_css</type><name>css/styles.css</name></action>
+                <!-- <action method="addItem"><type>skin_css</type><name>css/madisonisland.css</name></action> -->
+
+                <!-- Sets viewport meta tag using text block -->
+                <block type="core/text" name="head.viewport">
+                    <action method="setText"><text><![CDATA[<meta name="viewport" content="initial-scale=1.0, width=device-width" />]]>&#10;</text></action>
+                </block>
             </block>
             
             <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
@@ -152,9 +155,6 @@ Default layout, loads most of the pages
 
                 <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/widgets.css</stylesheet></action>
-
-                <action method="addItem"><type>js</type><name>lib/ds-sleight.js</name><params/><if>lt IE 7</if></action>
-                <!--<action method="addItem"><type>skin_js</type><name>js/iehover-fix.js</name><params/><if>lt IE 7</if></action>-->
             </block>
 
             <block type="core/text_list" name="content" as="content" translate="label">

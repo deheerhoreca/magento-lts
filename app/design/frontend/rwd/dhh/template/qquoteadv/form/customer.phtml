@@ -28,9 +28,9 @@
 /** @var Ophirah_Qquoteadv_Block_Form_Address $this */
 $parent = $this->getParentBlock();
 $customer = $this->getCustomer();
-$email = $customer->getEmail() ? $customer->getEmail() : $parent->getCustomerEmail();
-$firstName = $customer->getFirstname() ? $customer->getFirstname() : $parent->getCustomerFirstname();
-$lastName = $customer->getLastname() ? $customer->getLastname() : $parent->getCustomerLastname();
+$email = $customer->getEmail() ?: $parent->getCustomerEmail();
+$firstName = $customer->getFirstname() ?: $parent->getCustomerFirstname();
+$lastName = $customer->getLastname() ?: $parent->getCustomerLastname();
 
 if($this->getAllowQuoteReference()) {?>
   <label for="customer:quote_reference"><?php echo $this->__('Quote reference') ?></label>
@@ -115,7 +115,7 @@ if($parent->isCustomerLoggedIn() && !empty($billingEmail)) { ?>
     ?>
   </table>
   </div>
-  
+
   <?php if (Mage::getStoreConfig('qquoteadv_quote_form_builder/options/newsletter_subscribe')) { ?>
     <div class="checkbox-container">
       <input id="chkNews" type="checkbox" name="newsletter">

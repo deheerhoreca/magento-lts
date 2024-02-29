@@ -137,7 +137,7 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
               <?php foreach ($this->getMethods("methods") as $method) {
                 if ($methodHtml = $this->getMethodHtml($method)) {
                   echo '<li class="method-' .
-                    preg_replace("/[^_a-zA-Z0-9-]/", "-", $method) .
+                    preg_replace("/[^_a-zA-Z0-9-]/", "-", (string) $method) .
                     '">' .
                     $methodHtml .
                     "</li>";

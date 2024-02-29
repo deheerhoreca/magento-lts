@@ -20,7 +20,7 @@ if (!function_exists('amshopby_render_label')) {
   }
 }
 
-$attribute      = $this->getAttributeCode() ? $this->getAttributeCode() : $this->getAttributeModel()->getAttributeCode();
+$attribute      = $this->getAttributeCode() ?: $this->getAttributeModel()->getAttributeCode();
 $position       = $this->getData('amprice-position');
 $prefix         = 'amshopby-' . $attribute;
 $prefix         = $position ? $prefix . '-' . $position : $prefix;
@@ -87,7 +87,7 @@ if(in_array($this->getDisplayType(), $needs_count)) {
     </li></ol>
   <?php
   }
-  
+
   elseif (Amasty_Shopby_Model_Catalog_Layer_Filter_Price::DT_SLIDER == $this->getDisplayType()) { ?>
 
     <li>
@@ -99,7 +99,7 @@ if(in_array($this->getDisplayType(), $needs_count)) {
       $step             = $this->getSliderDecimal();
       $valueLabel       = $this->getValueLabel();
       $valuePlacement   = $this->getValuePlacement();
-      
+
       // Limit the # of options to 20
       if($step > 0) {
         $options = ceil($max / $step);
@@ -107,7 +107,7 @@ if(in_array($this->getDisplayType(), $needs_count)) {
           $step *= ceil($options / 20);
         }
       }
-      
+
       if($step == 1.0) {
         $max = ceil($max);
         $min = floor($min);
@@ -128,9 +128,9 @@ if(in_array($this->getDisplayType(), $needs_count)) {
         $toValue = $max;
       }
       $sliderTo = min($max, $toValue);
-      
+
       $params = implode(',', [$sliderFrom, $sliderTo, $max, $prefix, $min, $step]);
-      
+
       /* Current selection only */
       if ($sliderType == 0) : ?>
           <?php if (!$useCustomSlider) : ?>

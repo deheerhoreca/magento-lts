@@ -36,14 +36,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       $return = true;
       $product = $observer_or_product;
     }
-    
+
     // SHORT NAME -- 2023-10-10 Disabling, better done from intel
     // if(strlen($product->getData("name_short")) < 3) {
       // $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
       // $product->setData("name_short", $new_value);
       // if($return === false) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
     // }
-    
+
     /* END OF LIFE */
     if($product->getData("eol") === "2075") {
       if(empty($product->getData("tagline")) === false) {
@@ -66,18 +66,18 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("product_label", null);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
       }
-      
+
       // 2023-10-10 Disabling to see if this is the cause of the visibility bug
       // if((int) $product->getVisibility() === 4 || (int) $product->getVisibility() === 2) {
         // $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
         // if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
       // }
     }
-    
+
     /* PRICING */
-    
+
     // Disabled, intel is better for this
-    
+
     // // Fill cost from msrp and price_supplier_discount_perc
     // if(empty($product->getData("msrp")) === false) {
       // if(empty($product->getData("price_supplier_discount_perc")) === false) {
@@ -90,7 +90,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
           // }
         // }
       // }
-      
+
       // // Fill price_min from msrp and price_supplier_msrp_disc_limit
       // if(empty($product->getData("price_supplier_msrp_disc_limit")) === false) {
         // $new_value = (double) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_msrp_disc_limit") / 100)), 2);
@@ -103,8 +103,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // }
       // }
     // }
-    
-    
+
+
     // if(empty($product->getData("price_supplier_msrp_disc_limit")) === true) {
       // // Clear the value if price_supplier_msrp_disc_limit is empty
       // if(empty($product->getData("price_min")) === false) {
@@ -112,7 +112,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
       // }
     // }
-    
+
     // if(empty($product->getData("price_bol_be_auto")) === false && $product->getData("price_bol_be_auto") === "1") {
       // $new_value = (float) $product->getData("special_price") * 1.21;
       // $new_value = round($new_value, 0);
@@ -122,7 +122,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // if($return === false) Mage::getSingleton('core/session')->addSuccess("price_bol_be auto-filled");
       // }
     // }
-    
+
     // if(empty($product->getData("price_bol_nl_auto")) === false && $product->getData("price_bol_nl_auto") === "1") {
       // $new_value = (float) $product->getData("special_price") * 1.21;
       // $new_value = round($new_value, 0);
@@ -132,13 +132,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // if($return === false) Mage::getSingleton('core/session')->addSuccess("price_bol_nl auto-filled");
       // }
     // }
-    
+
     // if(empty($product->getData("cost")) === false && $product->getData("cost") > 0) {
       // $our_price = (float) $product->getData("price");
       // if(empty($product->getData("special_price")) === false) {
         // $our_price = (float) $product->getData("special_price");
       // }
-      
+
       // if($our_price > 0) {
         // // Gross Margin EUR
         // $new_value = (float) number_format($our_price - $product->getData("cost"), 4, null, "");
@@ -146,7 +146,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
           // $product->setData("gross_margin_euro", $new_value);
           // if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_euro auto-filled");
         // }
-        
+
         // // Gross Margin PERC
         // $new_value = (float) number_format(((($our_price - $product->getData("cost")) / $our_price) * 100), 4, null, "");
         // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_perc")) {
@@ -155,7 +155,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // }
       // }
     // }
-    
+
     /* MERCHANDISING */
     if(empty($product->getData("tagline")) === false) {
       if($product->getData("recommended_product") !== "1826") {
@@ -166,31 +166,31 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("recommended_product", "0");
       }
     }
-    
+
     /* POWER */
     if(empty($product->getData("vermogen")) === false
     || empty($product->getData("vermogen_kw")) === false) {
       $vermogen    = empty($product->getData("vermogen")) === true    ? 0 : (double) $product->getData("vermogen");
       $vermogen_kw = empty($product->getData("vermogen_kw")) === true ? 0 : (double) $product->getData("vermogen_kw");
       $new_value   = ($vermogen + $vermogen_kw) * 1000;
-      
+
       if($new_value > 0 && $new_value != $product->getData("total_power_watt")) {
         $product->setData("total_power_watt", $new_value);
         if($return === false) Mage::getSingleton('core/session')->addSuccess("total_power_watt auto-filled");
       }
     }
-    
+
     /* Backfill EAN13 from EAN if possible */
     if(empty($product->getData("ean")) === false && strlen((string) $product->getData("ean")) < 13) {
       $new_value = sprintf('%013d', $product->getData("ean"));
       $product->setData("ean", $new_value);
       if($return === false) Mage::getSingleton('core/session')->addSuccess("ean zerofilled");
     }
-    
+
     if($return === true) {
       return $product;
     }
-    
+
     /* NOTHING BELOW THIS */
   }
   
@@ -274,7 +274,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   // Adds an EOL = No filter to any listview unless it's explicitly set to Yes
   public function addEolFilter($observer) {
     // $productCollection = $observer->getEvent()->getCollection();
-    
+
     // /* If the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
     // if(Mage::helper('core')->isModuleEnabled('Amasty_Shopby')) {
       // $eol_filter = Mage::helper('amshopby')->getRequestValues("eol") ?? false;
@@ -289,9 +289,9 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // ], '', 'left');
       // }
     // }
-    
+
     // $observer->getEvent()->setCollection($productCollection);    
-    
+
     // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
       // echo $productCollection->getSelect()->__toString();
       // $filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
@@ -374,8 +374,6 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   /**
    * event observer called after emails are sent
-   *
-   * @param Varien_Event_Observer $observer
    */
   public function emailSendAfter(Varien_Event_Observer $observer) {
     // 2024-01-21 Starting with 1 second sleep and monitoring for Gmail limit errors
@@ -388,37 +386,37 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     // if(_dhh_debug()) {
       // dump($observer);
       // $ga4Event = $observer->getEvent()->getGa4DataTransport()->getData()[0] ?? false;
-      
+
       // if($varien_event = $observer->getEvent()) {
         // dump($varien_event);
         // if($ga4DataTransport = $varien_event->getData("ga4_data_transport")) {
           // dump($ga4DataTransport);
-          
+
         // }
         // $event_name = $ga4Event[0] ?? null;
         // dump($event_name);
         // $event_data = $ga4Event[1] ?? null;
         // dump($event_data);
-        
+
         // if($event_name !== "purchase") {
           // return;
         // }
       // }
-      
+
       // if(Mage::getSingleton('customer/session')->isLoggedIn()) {
         // if($customer = Mage::getSingleton('customer/session')->getCustomer()) {
           // $email = $customer->getEmail();
           // $email = trim($email);
           // $email = strtolower($email);
-        
+
           // $userData     = [
             // "email"       => $email,
           // ];
-          
+
           // $result[] = ['set', 'user_data', $userData];
         // }
       // }
-      
+
       // dump($ga4DataTransport->getData());
     // }
   }

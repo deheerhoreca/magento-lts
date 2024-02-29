@@ -7,6 +7,8 @@
  * @since  2013-05-23
  */
 
+// require_once __DIR__."/TinyHtmlMinifier.class.php";
+
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     public function clearCache() {
@@ -160,7 +162,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function is_read_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
       
-      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
       
       // $dhh_ips = ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
       // if(isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], $dhh_ips, true) && isset($_GET['nofpc'])) {
@@ -205,7 +207,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       self::log("Read cache enabled: {$debug_name}");
       
-      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       
       return true;
     }
@@ -216,7 +218,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
       
-      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
       
       if(DHH_FPC_ENABLED === false) {
         self::log("Write cache disabled (DHH_FPC_ENABLED): {$debug_name}");
@@ -253,14 +255,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       self::log("Write cache enabled: {$debug_name}");
       
-      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       
       return true;
     }
     
     // Optionally takes a URL for debug/dev
     public function get_cache_key($cache_key_prefix = null, string $url = "") {
-      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
       
       $cache_key_url = Mage::helper("deheerhoreca_fpc/data")->get_cache_url($url);
       if(empty($cache_key_prefix) === true) {
@@ -273,13 +275,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}");
       }
       
-      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       
       return $_cacheKey;
     }
     
     public function get_cached_html($key, $holepunch_formkey = true, $holepunch_blocks = true) {
-      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
       
       $html = Mage::app()->getCache()->load($key);
       
@@ -414,14 +416,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       self::_add_server_timing_header("FPC hit");
       self::_emit_server_timing_header();
       
-      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       
       return $html;
     }
     
     public function save_cached_html($key, $html, $holepunch_formkey = true, $holepunch_blocks = true) {
       
-      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
       
       // Minify -- Minifying after the holepunching breaks the btn-cart buttons in the listview
       $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", (string) $html); // Prevent canonical URL shortening
@@ -487,14 +489,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return true;
       }
       
-      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       
       return false;
     }
     
     public function replace_between($str, $needle_start, $needle_end, $replacement) {
       
-      Varien_Profiler::start("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
       
       $pos_start  = strpos((string) $str, (string) $needle_start);
       if($pos_start === false) {
@@ -514,7 +516,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       self::log(__METHOD__.": ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
       
-      Varien_Profiler::stop("DHH::FPC::".__CLASS__."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       
       return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
     }
@@ -564,9 +566,8 @@ if(function_exists("printr") === false) {
     $ret .= print_r($expr, true);
     if(php_sapi_name() !== "cli") {
       $ret .= "</pre>";
-    } else {
-      $ret .= PHP_EOL;
     }
+    $ret .= PHP_EOL;
     if($return) {
       return $return;
     }
@@ -574,286 +575,3 @@ if(function_exists("printr") === false) {
   }
 }
 
-// @see https://github.com/jenstornell/tiny-html-minifier/blob/master/src/TinyHtmlMinifier.php
-// "Latest commit 5bea148 on Jun 25, 2019"
-class TinyHtmlMinifier
-{
-    private $options;
-    private $output;
-    private $build;
-    private $skip;
-    private $skipName;
-    private $head;
-    private $elements;
-
-    public function __construct(array $options)
-    {
-        $this->options = $options;
-        $this->output = '';
-        $this->build = [];
-        $this->skip = 0;
-        $this->skipName = '';
-        $this->head = false;
-        $this->elements = [
-            'skip' => [
-                'code',
-                'pre',
-                'script',
-                'textarea',
-            ],
-            'inline' => [
-                'a',
-                'abbr',
-                'acronym',
-                'b',
-                'bdo',
-                'big',
-                'br',
-                'cite',
-                'code',
-                'dfn',
-                'em',
-                'i',
-                'img',
-                'kbd',
-                'map',
-                'object',
-                'samp',
-                'small',
-                'span',
-                'strong',
-                'sub',
-                'sup',
-                'tt',
-                'var',
-                'q',
-            ],
-            'hard' => [
-                '!doctype',
-                'body',
-                'html',
-            ]
-        ];
-    }
-
-    // Run minifier
-    public function minify(string $html) : string
-    {
-        if (!isset($this->options['disable_comments']) ||
-            !$this->options['disable_comments']) {
-            $html = $this->removeComments($html);
-        }
-
-        $rest = $html;
-
-        while (!empty($rest)) {
-            $parts = explode('<', (string) $rest, 2);
-            $this->walk($parts[0]);
-            $rest = (isset($parts[1])) ? $parts[1] : '';
-        }
-
-        return $this->output;
-    }
-
-    // Walk trough html
-    private function walk(&$part)
-    {
-        $tag_parts = explode('>', (string) $part);
-        $tag_content = $tag_parts[0];
-
-        if (!empty($tag_content)) {
-            $name = $this->findName($tag_content);
-            $element = $this->toElement($tag_content, $part, $name);
-            $type = $this->toType($element);
-
-            if ($name == 'head') {
-                $this->head = $type === 'open';
-            }
-
-            $this->build[] = [
-                'name' => $name,
-                'content' => $element,
-                'type' => $type
-            ];
-
-            $this->setSkip($name, $type);
-
-            if (!empty($tag_content)) {
-                $content = (isset($tag_parts[1])) ? $tag_parts[1] : '';
-                if ($content !== '') {
-                    $this->build[] = [
-                        'content' => $this->compact($content, $name, $element),
-                        'type' => 'content'
-                    ];
-                }
-            }
-
-            $this->buildHtml();
-        }
-    }
-
-    // Remove comments
-    private function removeComments($content = '')
-    {
-        return preg_replace('/(?=<!--)([\s\S]*?)-->/', '', (string) $content);
-    }
-
-    // Check if string contains string
-    private function contains($needle, $haystack)
-    {
-        return strpos((string) $haystack, (string) $needle) !== false;
-    }
-
-    // Return type of element
-    private function toType($element)
-    {
-        return (substr((string) $element, 1, 1) == '/') ? 'close' : 'open';
-    }
-
-    // Create element
-    private function toElement($element, $noll, $name)
-    {
-        $element = $this->stripWhitespace($element);
-        $element = $this->addChevrons($element, $noll);
-        $element = $this->removeSelfSlash($element);
-        $element = $this->removeMeta($element, $name);
-        return $element;
-    }
-
-    // Remove unneeded element meta
-    private function removeMeta($element, $name)
-    {
-        if ($name == 'style') {
-            $element = str_replace(
-                [
-                    ' type="text/css"',
-                    "' type='text/css'"
-                ],
-                ['', ''],
-                (string) $element
-            );
-        } elseif ($name == 'script') {
-            $element = str_replace(
-                [
-                    ' type="text/javascript"',
-                    " type='text/javascript'"
-                ],
-                ['', ''],
-                (string) $element
-            );
-        }
-        return $element;
-    }
-
-    // Strip whitespace from element
-    private function stripWhitespace($element)
-    {
-        if ($this->skip == 0) {
-            $element = preg_replace('/\s+/', ' ', (string) $element);
-        }
-        return trim((string) $element);
-    }
-
-    // Add chevrons around element
-    private function addChevrons($element, $noll)
-    {
-        if (empty($element)) {
-            return $element;
-        }
-        $char = ($this->contains('>', $noll)) ? '>' : '';
-        $element = '<' . $element . $char;
-        return $element;
-    }
-
-    // Remove unneeded self slash
-    private function removeSelfSlash($element)
-    {
-        if (substr((string) $element, -3) == ' />') {
-            $element = substr((string) $element, 0, -3) . '>';
-        }
-        return $element;
-    }
-
-    // Compact content
-    private function compact($content, $name, $element)
-    {
-        if ($this->skip != 0) {
-            $name = $this->skipName;
-        } else {
-            $content = preg_replace('/\s+/', ' ', (string) $content);
-        }
-
-        if (in_array($name, $this->elements['skip'])) {
-            return $content;
-        } elseif (in_array($name, $this->elements['hard']) ||
-            $this->head) {
-            return $this->minifyHard($content);
-        } else {
-            return $this->minifyKeepSpaces($content);
-        }
-    }
-
-    // Build html
-    private function buildHtml()
-    {
-        foreach ($this->build as $build) {
-
-            if (!empty($this->options['collapse_whitespace'])) {
-
-                if (strlen(trim((string) $build['content'])) == 0)
-                    continue;
-
-                elseif ($build['type'] != 'content' && !in_array($build['name'], $this->elements['inline']))
-                    trim((string) $build['content']);
-
-            }
-
-            $this->output .= $build['content'];
-        }
-
-        $this->build = [];
-    }
-
-    // Find name by part
-    private function findName($part)
-    {
-        $name_cut = explode(" ", (string) $part, 2)[0];
-        $name_cut = explode(">", $name_cut, 2)[0];
-        $name_cut = explode("\n", $name_cut, 2)[0];
-        $name_cut = preg_replace('/\s+/', '', $name_cut);
-        $name_cut = strtolower(str_replace('/', '', (string) $name_cut));
-        return $name_cut;
-    }
-
-    // Set skip if elements are blocked from minification
-    private function setSkip($name, $type)
-    {
-        foreach ($this->elements['skip'] as $element) {
-            if ($element == $name && $this->skip == 0) {
-                $this->skipName = $name;
-            }
-        }
-        if (in_array($name, $this->elements['skip'])) {
-            if ($type == 'open') {
-                $this->skip++;
-            }
-            if ($type == 'close') {
-                $this->skip--;
-            }
-        }
-    }
-
-    // Minify all, even spaces between elements
-    private function minifyHard($element)
-    {
-        $element = preg_replace('!\s+!', ' ', (string) $element);
-        $element = trim((string) $element);
-        return trim($element);
-    }
-
-    // Strip but keep one space
-    private function minifyKeepSpaces($element)
-    {
-        return preg_replace('!\s+!', ' ', (string) $element);
-    }
-}

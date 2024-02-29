@@ -96,7 +96,7 @@
     <?php if ($_quotes->getSize()): ?>
     <?php foreach ($_quotes as $_item): ?>
         <tr>
-            <td><?php echo ($_item->getIncrementId()) ? $_item->getIncrementId() : $_item->getQuoteId() ?></td>
+            <td><?php echo $_item->getIncrementId() ?: $_item->getQuoteId() ?></td>
             <td><?php echo $this->formatDate($_item->getCreatedAt()) ?></td>
 
             <?php if ($_item->getStatus() != Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_SAVED
@@ -112,7 +112,7 @@
                     <!-- <a href="<?php echo $this->getReorderUrl($_item) ?>" style="font-weight: bold; color: #FF6600;"><?php echo $this->__('Reorder') ?></a>-->
                     <?php /*endif*/ ?>
                 </td>
-            <?php else: ?>
+<?php else: ?>
                 <td>
                     <em><?php echo $this->__('In Process') ?></em>
                 </td>

@@ -28,7 +28,6 @@ class Mage_Sales_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Abst
      */
     protected function _drawHeader(Zend_Pdf_Page $page)
     {
-      Mage::log(__FILE__, null, 'verbose.log', true);
         /* Add table head */
         $this->_setFontRegular($page, 10);
         $page->setFillColor(new Zend_Pdf_Color_Html('#5180c2'));

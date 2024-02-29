@@ -26,7 +26,7 @@ class Mage_Checkout_Block_Cart_Crosssell extends Mage_Catalog_Block_Product_Abst
      *
      * @var int
      */
-    protected $_maxItemCount = 10;
+    protected $_maxItemCount = 10; // DHH
 
     /**
      * Get crosssell items

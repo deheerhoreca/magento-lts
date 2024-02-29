@@ -13,7 +13,7 @@ if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "GET"
   define("DHH_FPC_DEBUG", false);   // Default: false
 }
 
-if(isset($_SERVER["HTTP_HOST"]) && substr((string) $_SERVER["HTTP_HOST"], 0, 3) === "dev") {
+if(isset($_SERVER["HTTP_HOST"]) && substr((string) $_SERVER["HTTP_HOST"], 0, 4) === "dev.") {
   define("DHH_FPC_ENABLED", false); // Default: false
 } else {
   define("DHH_FPC_ENABLED", true);  // Default: true

@@ -8,36 +8,84 @@
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
+    - Updated up to: v20.4.0
   - **Admin Global Search**: Performance improvements
     - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
+    - Updated up to: v20.4.0
   - `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
+    - Updated up to: v20.4.0
   - `app/code/core/Mage/Core/Model/Resource/Session.php`
     - Adding details and logging to session errors
+    - Updated up to: v20.4.0
   - `app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
+    - Updated up to: v20.4.0
   - `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
     - Printing additional debug info temporarily
+    - Updated up to: v20.4.0
 - **app/design/frontend/base/**
   - `app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file
+    - Updated up to: v20.4.0
+- **app/code/**`
+  - `app/code/core/Mage/Page/Block/Html/Head.php`
+    - Removing some of the unnecessary base URLs from HEAD assets
 - **/***
   - `.htaccess`
     - Commented lines to fix "Option All not allowed here" errors in production
     - Other modifications/additions marked by "DHH"
+    - Updated up to: v20.4.0
   - `.gitignore`
+    - Updated up to: v20.4.0
 
 ## Core Overrides -- Not Hacks
 - `app/code/local/Mage/*`
-  - TBD
-- `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
-  - Adjustments to the order invoice template
-- `app/code/core/Mage/Newsletter/Model/Subscriber.php`
-  - Really disable sending newsletter confirmation emails
+  - `cm && find app/code/local/Mage/ -type f`
+  - `cm && diff -r app/code/local/Mage/ app/code/core/Mage/ | grep -v '^Only in'`
+  - `app/code/local/Mage/Adminhtml/Block/Catalog/Product/Helper/Form/Price.php`
+    - Updated up to: v20.4.0
+    - Allowing negative values because this field is used for other things then prices
+  - `app/code/local/Mage/Adminhtml/Block/Sales/Order/Grid.php`
+    - Updated up to: v20.4.0
+    - Changes to column width
+  - `app/code/local/Mage/Adminhtml/Block/Widget/Grid.php`
+    - Updated up to: v20.4.0
+    - Changing default and possible grid lengths
+  - `app/code/local/Mage/Catalog/Block/Product/View/Attributes.php`
+    - Updated up to: v20.4.0
+    - Putting product attributes in groups
+  - `app/code/local/Mage/Checkout/Block/Cart/Crosssell.php`
+    - Updated up to: v20.4.0
+    - Changing max item count
+  - `app/code/local/Mage/ConfigurableSwatches/Helper/Mediafallback.php`
+    - Updated up to: v20.4.0
+    - Bugfix
+  - `app/code/local/Mage/Eav/Block/Adminhtml/Attribute/Grid/Abstract.php`
+    - Updated up to: v20.4.0
+    - Change default sorting
+  - `app/code/local/Mage/Newsletter/Model/Subscriber.php`
+    - Updated up to: v20.4.0
+    - Prevent sending newsletter signup confirmation emails
+  - `app/code/local/Mage/Payment/Model/Method/Banktransfer.php`
+    - Enable Banktransfer for backend but not for frontend
+    - Updated up to: v20.4.0
+  - `app/code/local/Mage/Sales/Model/Order/Pdf/Abstract.php`
+    - Changes to PDF
+    - Updated up to: v20.4.0
+  - `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
+    - Changes to PDF
+    - Updated up to: v20.4.0
+  - `app/code/local/Mage/Sales/Model/Order/Pdf/Items/Invoice/Default.php`
+    - Changes to PDF column layout
+    - Updated up to: v20.4.0
 - `app/design/frontend/rwd/default/layout/*.xml`
+  - Updated up to: v20.4.0
 - `app/design/frontend/rwd/dhh/layout/*.xml`
+  - `cm && diff -r app/design/frontend/rwd/default/layout/ app/design/frontend/rwd/dhh/layout/ | grep -v '^Only in'`
   - Must be checked against `base/default/layout/*.xml`
+  - Updated up to: v20.4.0
 
 ## 3rd Party Hacks
 - **Anowave Sort**

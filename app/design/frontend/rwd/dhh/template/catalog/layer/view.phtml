@@ -30,7 +30,7 @@ if($this->canShowBlock()) {
               Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
               if($_filter->getItemsCount()) {
                 $name = $this->__($sys_name);
-                
+
                 // Special handling of Category filter
                 if($name === "Categorie") {                
                   // Don't display this filter if there are no subcategories
