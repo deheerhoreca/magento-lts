@@ -139,6 +139,9 @@ phpstan*.neon
 /biller-webhook-errors.jsonl
 /biller-webhook.jsonl
 
+# Freshdesk webhook
+/freshdesk-webhook.ndjson
+
 /.idea
 /.well-known/
 /app/etc/modules/Aschroder_SMTPPro.xml
@@ -153,7 +156,8 @@ phpstan*.neon
 /app/locale/tr_TR/Aschroder_SMTPPro.csv
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/code/community/Cm/Cache/Backend/Redis.php
-<<<<<<< HEAD
+
+# Symlinks
 /app/etc/modules/Aoe_DbRetry.xml
 /app/code/community/Aoe/DbRetry
 /app/etc/modules/Aoe_TemplateHints.xml
@@ -172,7 +176,7 @@ phpstan*.neon
 /lib/FireGento/FirePHP
 /firegento.php
 /skin/adminhtml/default/default/firegento/debug
-=======
 /lib/Credis
-/freshdesk-webhook.ndjson
->>>>>>> c871fe977f236c664941f80b7af1c9fefe6a6108
+
+/etc/*-local.ini
+/*.bak-*
