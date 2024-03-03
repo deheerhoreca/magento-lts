@@ -62,8 +62,11 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
             Mage::app()->getStore()->getId()
         );
 
-        $this->maxOrderAmountNewCustomers .= round($newCustomerAmount, 2);
-        $this->maxOrderAmountReturningCustomers .= round($returningCustomerAmount, 2);
+        // DHH CORE HACK -- PHP 8.1
+        $this->maxOrderAmountNewCustomers .= round((int) $newCustomerAmount, 2);
+        $this->maxOrderAmountReturningCustomers .= round((int) $returningCustomerAmount, 2);
+        // $this->maxOrderAmountNewCustomers .= round($newCustomerAmount, 2);
+        // $this->maxOrderAmountReturningCustomers .= round($returningCustomerAmount, 2);
 
         $this->country = Mage::getStoreConfig(
             'afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_country',

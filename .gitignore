@@ -180,3 +180,4 @@ phpstan*.neon
 
 /etc/*-local.ini
 /*.bak-*
+/shell/php_error.log
