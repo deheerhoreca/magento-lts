@@ -116,7 +116,7 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
 
         //exclude dependant, since 1.4.7
         foreach ($filters as $filter) {
-            $parentAttributes = trim(str_replace(' ', '', $filter->getDependOnAttribute()));
+            $parentAttributes = trim((string) str_replace(' ', '', (string) $filter->getDependOnAttribute()));
 
             if (!$parentAttributes) {
                 continue;
@@ -576,7 +576,7 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
                         : $comment[0];
                 }
             }
-            $comment = htmlspecialchars($comment);
+            $comment = htmlspecialchars((string) $comment);
         }
 
         return $comment;
@@ -757,10 +757,10 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
      */
     protected function _isCurrentUserAgentExcluded()
     {
+      return false; // DHH this code is not PHP 8.1 compatible
         /** @var Mage_Core_Helper_Http $helper */
         $helper = Mage::helper('core/http');
         $currentAgent = $helper->getHttpUserAgent();
-
         $excludeAgents = explode(',', Mage::getStoreConfig('amshopby/seo/exclude_user_agent'));
         foreach ($excludeAgents as $agent) {
             if (stripos($currentAgent, trim($agent)) !== false) {
