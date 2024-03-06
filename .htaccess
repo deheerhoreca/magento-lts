@@ -324,6 +324,10 @@
 ## Deny access to other project files to prevent disclosure of the installed Magento version or other information
 ## Only robots.txt and manifest.json should be allowed by default
 
+    <Files security.txt>
+        Order allow,deny
+        Allow from all
+    </Files>
     <FilesMatch (?<!robots)\.txt$>
         Order allow,deny
         Deny from all
@@ -374,7 +378,7 @@
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
-   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.sooqr.com>;rel=dns-prefetch; crossorigin,<//dynamic.sooqr.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
+   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.sooqr.com>;rel=dns-prefetch; crossorigin,<//dynamic.sooqr.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//squeezely.tech>;rel=preconnect; crossorigin,<//t.squeezely.tech>;rel=preconnect; crossorigin,<//cdn.cookie-script.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
 </FilesMatch>
 
 ###########################################
@@ -392,7 +396,7 @@
 
     # Limit access to tools:
     <Files "tool_*.php">
-        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20 87.208.26.238
+        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20 87.208.26.238 136.144.183.232 127.0.0.1
     </Files>
 
 <IfModule mod_deflate.c>

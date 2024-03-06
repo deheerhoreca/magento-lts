@@ -7,14 +7,17 @@
 
 $limits = $this->getAvailableLimit();
 
+$select_sort_id = isset($GLOBALS["select_sort"]) ? "select_sort_bottom" : "select_sort_top";
+$GLOBALS["select_sort"] = true;
+
 if($this->getCollection()->getSize()) {
   echo "<div class='toolbar'>";
   if($this->isExpanded() && defined("DHH_SORTING_BLOCK_PRINTED") === false) { ?>
     <div class="sorter">
       <div class="sort-by">
-        <label for="select_sort"><?php echo $this->__("Sort By") ?></label>
+        <label for="<?=$select_sort_id?>"><?php echo $this->__("Sort By") ?></label>
         <div class="selwrapper">
-        <select id="select_sort" onchange="setLocation(this.value)" title="<?=Mage::helper("core")->quoteEscape($this->__("Sort By"))?>">
+        <select id="<?=$select_sort_id?>" onchange="setLocation(this.value)" title="<?=Mage::helper("core")->quoteEscape($this->__("Sort By"))?>">
           <?php foreach($this->getAvailableOrders() as $_key=>$_order): ?>
             <option value="<?php echo $this->getOrderUrl($_key, "asc") ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
               <?php echo $this->__($_order) ?>

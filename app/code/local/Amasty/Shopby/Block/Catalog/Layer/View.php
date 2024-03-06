@@ -757,7 +757,7 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
      */
     protected function _isCurrentUserAgentExcluded()
     {
-      return false; // DHH this code is not PHP 8.1 compatible
+         return false; // DHH CORE HACK -- This code is not PHP 8.1 compatible
         /** @var Mage_Core_Helper_Http $helper */
         $helper = Mage::helper('core/http');
         $currentAgent = $helper->getHttpUserAgent();
