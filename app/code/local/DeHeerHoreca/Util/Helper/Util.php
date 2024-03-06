@@ -933,7 +933,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       if($power_usp_done !== true) {
         $attribute_code  = "total_power_watt";
         $attribute_value = (int) _get_product_attribute($_product, $attribute_code);
-        if(empty($attribute_value) === false) {
+        if(empty($attribute_value) === false && is_numeric($attribute_value)) {
           if($attribute_value  >= 5000) {
             $attribute_value   /= 1000;
             $attribute_value    = number_format($attribute_value, 2, ",", ".");
@@ -953,7 +953,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $attribute_code  = "vermogen";
         $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
         $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-        if(empty($attribute_value) === false) {
+        if(empty($attribute_value) === false && is_numeric($attribute_value)) {
           if($attribute_value < 3) {
             $attribute_value *= 1000;
             if($attribute_value > 0) {
@@ -972,7 +972,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_code  = "vermogen_kw";
       $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
       $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-      if($power_usp_done !== true && empty($attribute_value) === false) {
+      if($power_usp_done !== true && empty($attribute_value) === false && is_numeric($attribute_value)) {
         if($attribute_value < 3) {
           $attribute_value *= 1000;
           if($attribute_value > 0) {
@@ -1283,13 +1283,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
       $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
     }
-    $client  = @$_SERVER['HTTP_CLIENT_IP'];
-    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-    $remote  = $_SERVER['REMOTE_ADDR'];
+    $client  = $_SERVER['HTTP_CLIENT_IP']       ?? "";
+    $forward = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? "";
+    $remote  = $_SERVER['REMOTE_ADDR']          ?? "";
 
-    if(filter_var($client, FILTER_VALIDATE_IP)) {
+    if(empty($client) === false && filter_var($client, FILTER_VALIDATE_IP)) {
       $ip = $client;
-    } elseif(filter_var($forward, FILTER_VALIDATE_IP)) {
+    } elseif(empty($forward) === false && filter_var($forward, FILTER_VALIDATE_IP)) {
       $ip = $forward;
     } else {
       $ip = $remote;

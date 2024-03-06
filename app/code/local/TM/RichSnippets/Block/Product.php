@@ -390,6 +390,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         
         $schema_key = "warranty";
         $value = _get_product_attribute($_product, "garantie");
+        $months = "";
         switch($value) {
           case "6 maanden":   $months =  6;  break;
           case "12 maanden":  $months = 12;  break;

@@ -39,17 +39,18 @@ NOW=`date`
 
 echo > ${TARGET_PHP_INI}
 
+printf "; File: ${TARGET_PHP_INI}\n" >> ${TARGET_PHP_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_PHP_INI}
 printf "; PHP version: ${PHP_VERSION}\n" >> ${TARGET_PHP_INI}
 printf "; Created: %s\n" "$NOW\n" >> ${TARGET_PHP_INI}
 
-printf "\n; ------------------------------------- ${DEFAULT_PHP_INI}-------------------------------------\n\n" >> ${TARGET_PHP_INI}
+printf "\n; ---------------------- ${DEFAULT_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${DEFAULT_PHP_INI} >> ${TARGET_PHP_INI}
 
-printf "\n; ------------------------------------- ${SHARED_PHP_INI}-------------------------------------\n\n" >> ${TARGET_PHP_INI}
+printf "\n; ---------------------- ${SHARED_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${SHARED_PHP_INI} >> ${TARGET_PHP_INI}
 
-printf "\n; ------------------------------------- ${LOCAL_PHP_INI}-------------------------------------\n\n" >> ${TARGET_PHP_INI}
+printf "\n; ---------------------- ${LOCAL_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${LOCAL_PHP_INI} >> ${TARGET_PHP_INI}
 
 # Create new .user.ini
@@ -59,14 +60,16 @@ NOW=`date`
 
 echo > ${TARGET_USER_INI}
 
+printf "; File: ${TARGET_USER_INI}\n" >> ${TARGET_USER_INI}
+printf "; This should be used as Additional PHP Directives in Plesk\n" >> ${TARGET_USER_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_USER_INI}
 printf "; PHP version: ${PHP_VERSION}\n" >> ${TARGET_USER_INI}
 printf "; Created: %s\n" "$NOW\n" >> ${TARGET_USER_INI}
 
-printf "\n; ------------------------------------- ${SHARED_USER_INI}-------------------------------------\n\n" >> ${TARGET_USER_INI}
+printf "\n; ---------------------- ${SHARED_USER_INI} ----------------------\n\n" >> ${TARGET_USER_INI}
 cat ${SHARED_USER_INI} >> ${TARGET_USER_INI}
 
-printf "\n; ------------------------------------- ${LOCAL_USER_INI}-------------------------------------\n\n" >> ${TARGET_USER_INI}
+printf "\n; ---------------------- ${LOCAL_USER_INI} ----------------------\n\n" >> ${TARGET_USER_INI}
 cat ${LOCAL_USER_INI} >> ${TARGET_USER_INI}
 
 echo "Done"

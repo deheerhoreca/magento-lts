@@ -105,7 +105,11 @@ class Ophirah_Qquoteadv_Model_Client
             $result = Zend_Json::decode($response->getBody());
         } catch (Exception $e) {
             $result = false;
-            Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            // DHH CORE HACK
+            // Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
+            Mage::log('Exception: ' .$e->__toString(), null, 'c2q_exception.log', true);
+            Mage::log("Cart2Quote debug params: ".var_export($params, true), null, 'verbose.log', true);
+            Mage::log("Cart2Quote debug reponse: ".var_export($response, true), null, 'verbose.log', true);
         }
         return $result;
     }

@@ -757,6 +757,7 @@ class Amasty_Shopby_Block_Catalog_Layer_View extends Amasty_Shopby_Block_Catalog
      */
     protected function _isCurrentUserAgentExcluded()
     {
+return false;
         /** @var Mage_Core_Helper_Http $helper */
         $helper = Mage::helper('core/http');
         $currentAgent = $helper->getHttpUserAgent();

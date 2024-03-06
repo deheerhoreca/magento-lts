@@ -84,7 +84,7 @@ $overall_stock_status   = $stock_data["overall_stock_status"];
 $txtstockdate           = $stock_data["txtstockdate"];
 $levertijd              = $stock_data["levertijd"];
 $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
-$bestelartikel          = $stock_data["bestelartikel"];
+$bestelartikel          = $stock_data["bestelartikel"]            ?? "";
 $min_sale_qty           = $stock_data["min_sale_qty"];
 
 // Fulfilment, Financials
@@ -1226,17 +1226,16 @@ if($stock_data["overall_stock_status"] === "backorder"
           <?php
 
           foreach($files as $document) {
-            echo "ghghj";
             if(empty($document["path"])) {
               continue;
             }
             $url      = "{$upload_dir}/{$document['path']}";
             $name     = $document["title"]    ?? ($document["filename"] ?? "-");
             $filetype = $document["type"]     ?? null;
-            // $fa_icon = match ($filetype) {
-            //   'pdf' => 'fa-file-pdf-o',
-            //   default => 'fa-file-o',
-            // };
+            $fa_icon = match ($filetype) {
+              'pdf' => 'fa-file-pdf-o',
+              default => 'fa-file-o',
+            };
             echo "<li style='line-height:2.5em;'>";
             echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}</a>";
             echo "</li>";
@@ -1252,7 +1251,7 @@ if($stock_data["overall_stock_status"] === "backorder"
     <?php
     if(empty($external_documents_json) === false && $external_documents_json !== "[]") {
       $external_documents = json_decode((string) $external_documents_json, true);
-      dump($external_documents);
+      // dump($external_documents);
       ?>
       <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
       <div class="probottomdv" id="product-external-documents-list">
@@ -1296,40 +1295,40 @@ if($stock_data["overall_stock_status"] === "backorder"
           }
           
           // NG
-          $entity_id = $_product->getEntityId();
-          foreach($external_documents as $i => $external_document) {
-            if(empty($external_document["url"])) {
-              continue;
-            }
-            $url = $external_document["url"];
-            if(filter_var($url, FILTER_VALIDATE_URL) === false) {
-              Mage::log("{$sku} has an invalid document URL {$url}", null, "system.log", true);
-            } else {
-              $hash           = (string) hash("crc32", $url, false);
-              $hash           = $i; // TMP
-              $seo_name       = "seoname";
-              $document_url   = "/document/{$entity_id}/{$hash}/{$seo_name}";              
-              $name           = $external_document["title"]     ?? $url;
-              $filetype       = $external_document["filetype"]  ?? "";
-              $language       = $external_document["language"]  ?? "";
-              $fa_icon        = match($filetype) {
-                "pdf"           => "fa-file-pdf-o",
-                default         => "fa-file-o",
-              };
+          // $entity_id = $_product->getEntityId();
+          // foreach($external_documents as $i => $external_document) {
+            // if(empty($external_document["url"])) {
+              // continue;
+            // }
+            // $url = $external_document["url"];
+            // if(filter_var($url, FILTER_VALIDATE_URL) === false) {
+              // Mage::log("{$sku} has an invalid document URL {$url}", null, "system.log", true);
+            // } else {
+              // $hash           = (string) hash("crc32", $url, false);
+              // $hash           = $i; // TMP
+              // $seo_name       = "seoname";
+              // $document_url   = "/document/{$entity_id}/{$hash}/{$seo_name}";              
+              // $name           = $external_document["title"]     ?? $url;
+              // $filetype       = $external_document["filetype"]  ?? "";
+              // $language       = $external_document["language"]  ?? "";
+              // $fa_icon        = match($filetype) {
+                // "pdf"           => "fa-file-pdf-o",
+                // default         => "fa-file-o",
+              // };
               
-              if(empty($language) === false) {
-                if(is_scalar($language)) {
-                  $language = " (".strtoupper($language).")";
-                } elseif(is_array($language)) {
-                  $language = array_map("strtoupper", $language);
-                  $language = " (".implode(", ", $language).")";
-                }
-              }
-              echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$name}' class='document-link' href='{$document_url}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
-              echo "</li>";
-            }
-          }
+              // if(empty($language) === false) {
+                // if(is_scalar($language)) {
+                  // $language = " (".strtoupper($language).")";
+                // } elseif(is_array($language)) {
+                  // $language = array_map("strtoupper", $language);
+                  // $language = " (".implode(", ", $language).")";
+                // }
+              // }
+              // echo "<li style='line-height:2.5em;'>";
+              // echo "<a title='{$name}' class='document-link' href='{$document_url}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              // echo "</li>";
+            // }
+          // }
           ?>
         </ul>
       </div>
