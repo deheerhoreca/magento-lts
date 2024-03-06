@@ -2,6 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
+require_once __DIR__."/strftime_replacement.php";
+
 use Michelf\Markdown;
 use Michelf\MarkdownExtra;
 
