@@ -57,7 +57,7 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     
     public function getAttributes()
     {
-        
+
         $options = array(
             self::TYPE_ATTRIBUTE_PRODUCT => array(
                 'label' => $this->__("Product Attributes"),
@@ -68,10 +68,10 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
 //                'options' => $otherAttributes->getOptions()
 //            )
         );
-        
+
         return $options;
-        
-        
+
+
 //        if ($this->_attributes){
 //            return $this->_attributes;
 //        }
@@ -210,7 +210,7 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
         $fieldOrder = 0;
         
         foreach ($lines as $key => $line) {
-            
+
 //            $temp = explode("{", $line);
 //            if (isset($temp[0])) {
 //                $fields['before'][$key] = $temp[0];
@@ -219,38 +219,38 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
 //            if (isset($temp[1])) {
 //                $fields['after'][$key] = $temp[1];
 //            }
-            
+
             $regex = "#{(.*?)}#";
-            
+
             preg_match_all($regex, $line, $vars);
-            
+
             if (isset($vars[1])) {
-                
+
                 $lines2fields[$key] = array(
                     'tpl' => $line,
                     'vars' => $vars[1],
                     'links' => array()
                 );
-                
+
                 foreach($vars[1] as $var){
-                    
+
                     $parsed = $this->_parseXmlPlaceholder($var);
-                    
+
                     if (isset($parsed['type'])) {
                         $fields['type'][$fieldOrder] = $parsed['type'];
                     } else {
                         throw new Exception('type: is requred');
                     }
-                    
+
                     $fields['format'][$fieldOrder] = isset($parsed['format']) ? $parsed['format'] : 'as_is';
                     $fields['image_format'][$fieldOrder] = $fields['format'][$fieldOrder];
                     $fields['length'][$fieldOrder] = isset($parsed['length']) ? $parsed['length'] : '';
                     $fields['optional'][$fieldOrder] = isset($parsed['optional']) ? $parsed['optional'] : 'no';
                     $fields['parent'][$fieldOrder] = isset($parsed['parent']) ? $parsed['parent'] : 'no';
-                    
+
                     $fields['before'][$fieldOrder] = '';
                     $fields['after'][$fieldOrder] = '';
-            
+
                     switch ($parsed['type']) {
                         case 'attribute':
                             $fields['attr'][$fieldOrder] = $parsed['value'];
@@ -271,7 +271,7 @@ class Amasty_Feed_Helper_Data extends Mage_Core_Helper_Abstract
                             $fields['images'][$fieldOrder] = $parsed['value'];
                         break;
                 }
-                    
+
                     $lines2fields[$key]['links'][] = $fieldOrder;
                     $fieldOrder++;
                 }

@@ -1,4 +1,3 @@
-
 <?php
 /**
 * @author Amasty Team
@@ -8,7 +7,7 @@
 class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection
 {
     protected $_feed;
-    
+
     function getFeed(){
         return $this->_feed;
     }
@@ -17,37 +16,37 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
     protected $_skipAttributes = array(
         "sku", "tax_class_id"
     );
-    
+
     public function init($feed){
         $this->_feed = $feed;
     }
-    
+
     protected function _prepareConditionValue($value, $order){
         $condVal = $value['condition']['value'][$order];
-        
+
         $operator = $value['condition']['operator'][$order];
-        
+
         if ($operator == 'like' || $operator == 'nlike'){
-            
+
             if (strpos($condVal, "%") === FALSE){
                 $condVal = "%" . $condVal . "%";
             }
         }
-        
+
         $repl = array(
             "%now%" => date("Y-m-d H:i:s"),
             "%today%" => date("Y-m-d")
         );
-        
+
         return strtr($condVal, $repl);
     }
-    
+
     protected function _getDummyCollection($config){
-        
+
         $hlrAttribute = Mage::helper("amfeed/attribute");
-        
+
         $attributesFields = array();
-                
+
         $dummyCollection = Mage::getResourceModel('amfeed/product_collection');
 
         foreach($config['condition']['type'] as $order => $type){
@@ -56,10 +55,10 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
             $condVal = $this->_prepareConditionValue($config, $order);
 
             if ($operator == 'isempty'){
-                
+
                 $operator = 'null';
                 $condVal = true;
-                
+
             } else if ($operator == 'isnotempty') {
                 $operator = 'notnull';
                 $condVal = true;
@@ -71,35 +70,35 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
                     'attribute' => $code, 
                     $operator => $condVal
                 );
-                
+
             } else if ($type == Amasty_Feed_Model_Filter::$_TYPE_OTHER){
                 $attribute = $hlrAttribute->getCompoundAttribute($code);
                 $attribute->prepareCondition($dummyCollection, $operator, $condVal, $attributesFields);
             }
         }
         $dummyCollection->addAttributeToFilter($attributesFields, null, 'left');
-        
+
         return $dummyCollection;
     }
 
     protected function _addBaseConditions(){
-        
+
         $storeId = $this->getFeed()->getStoreId();
-        
+
         if ($this->getFeed()->getCondDisabled())
         {
             $this->addAttribute("status", $storeId);
-            
+
             $this->addAttributeToFilter(array(array(
                     "attribute" => 'status',
                     'eq' => 1
             )), null);
         }
-        
+
         if ($this->getFeed()->getCondStock()) {
             Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($this);
         }
-        
+
         $this->setStoreId($storeId);
         $this->addStoreFilter($storeId);
 
@@ -110,63 +109,63 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
         $this->_addProdTypeCondition();
         $this->_addAttributeSetsCondition();
     }
-    
+
     protected function _addProdTypeCondition(){
         $types = array();
-        
+
         $condType = $this->getFeed()->getCondType();
-        
+
         if (!empty($condType)){
             $types = explode(",", $condType);
         }
-        
+
         if (count($types) > 0) {
             $this->addFieldToFilter("type_id", array(
                 "in" => $types
             ));
         }
     }
-    
+
     protected function _addAttributeSetsCondition(){
        $attributeSets = array();
-        
+
        $condAttributeSets = $this->getFeed()->getCondAttributeSets();
-       
+
        if (!empty($condAttributeSets)){
             $attributeSets = explode(",", $condAttributeSets);
        }
-       
+
        if (count($attributeSets) > 0) {
             $this->addFieldToFilter("attribute_set_id", array(
                 "in" => $attributeSets
             ));
        }
     }
-    
+
     function addConditions(){
-        
+
         $this->_addBaseConditions();
-        
+
         $condition = $this->getFeed()
                 ->getCondition();
-        
+
         $from = array();
         $where = array();
         foreach($condition as $config){
             if (is_array($config['condition']) &&
                     is_array($config['condition']['type'])){
-        
+
                 $dummyCollection = $this->_getDummyCollection($config);
-                
+
                 $from = array_merge($from, $dummyCollection->getSelect()->getPart(Zend_Db_Select::FROM));
                 $where = array_merge($where, $dummyCollection->getSelect()->getPart(Zend_Db_Select::WHERE));
             }
         }
-        
+
         $from = array_merge($from, $this->getSelect()->getPart(Zend_Db_Select::FROM));
-        
+
         $this->getSelect()->setPart(Zend_Db_Select::FROM, $from);
-        
+
         foreach($where as $w){
             $this->getSelect()->where($w);
         }
@@ -188,9 +187,9 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
                     break;
             }
         }
-        
+
     }
-    
+
     public function addParentIdToSelect()
     {
         $this->getSelect()
@@ -198,7 +197,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
                 'relation_table.child_id = e.entity_id',
                         array('parent_id' => 'relation_table.parent_id'));
     }
-    
+
     protected function _checkJoin($alias){
         $magentoVersion = Mage::getVersion();
         if (version_compare($magentoVersion, '1.6', '>=')) {
@@ -209,18 +208,18 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
             return isset($from['_table_' . $alias]);
         }
     }
-    
+
     public function joinCategories(){
         if (!$this->_checkJoin('category_id')){
             // DHH CORE HACK -- Make sure dynamic category IDs don't make it into the feeds
             // $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', null, 'left');
             $this->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id=entity_id', "(dynamic=0)", 'left');
-            
+
             $this->getSelect()->columns("GROUP_CONCAT(at_category_id.category_id) as category_ids");
 //            $this->joinField('category_id', 'catalog/category_product_index', 'category_id', 'product_id = entity_id', '{{table}}.store_id = ' . $this->getStoreId(), 'left');
         }
     }
-    
+
     public function joinIsInStock(){
         if (!$this->_checkJoin('amfeed_is_in_stock')){
             $this->joinTable(
@@ -235,7 +234,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
             );
         }
     }
-    
+
     public function joinQty(){
         if (!$this->_checkJoin('qty')){
             $this->joinField('qty',
@@ -246,15 +245,15 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
                  'left');
         }
     }
-    
+
     public function joinPrice(){
         if (!$this->_checkJoin('attribute_price')){
             $this->joinAttribute('attribute_price', 'catalog_product/price' , 'entity_id', null, 'left', $this->getStoreId());
-            
+
             $this->addPriceData();
         }
     }
-    
+
     protected function _productLimitationPrice($joinLeft = false)
     {
         $defaultPrice = null;
@@ -342,7 +341,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
 
     public function addPriceData($customerGroupId = null, $websiteId = null)
     {
-        
+
         $this->_productLimitationFilters['use_price_index'] = true;
 
         $customerGroupId = 0;
@@ -350,7 +349,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
 //        if (!isset($this->_productLimitationFilters['customer_group_id']) && is_null($customerGroupId)) {
 //            $customerGroupId = Mage::getSingleton('customer/session')->getCustomerGroupId();
 //        }
-        
+
         if (!isset($this->_productLimitationFilters['website_id']) && is_null($websiteId)) {
             $websiteId       = Mage::app()->getStore($this->getStoreId())->getWebsiteId();
         }
@@ -366,12 +365,12 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
 
         return $this;
     }
-    
+
     protected function _productLimitationJoinPrice()
     {
         return $this->_productLimitationPrice(true);
     }
-    
+
     public function joinTaxPercents($store)
     {
         $countryId = Mage::getStoreConfig('general/country/default', $store->getStoreId());
@@ -382,7 +381,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
         );
 
         $this->joinPrice();
-            
+
         if (!$this->_checkJoin('tax_table')){
 
             $this->getSelect()
@@ -519,7 +518,7 @@ class Amasty_Feed_Model_Mysql4_Product_Collection extends Mage_Catalog_Model_Res
         $total = $this->getConnection()->fetchOne($countSelect);
         return intval($total);
     }
-    
+
     public function isEnabledFlat()
     {
         return false;

@@ -116,7 +116,7 @@ class Amasty_Shopby_Model_Mysql4_Price extends Mage_Catalog_Model_Resource_Eav_M
             $oldWhere = $ret->getPart(Varien_Db_Select::WHERE);
             $newWhere = array();
             foreach ($oldWhere as $cond){
-               if (false === strpos($cond, $this->_price))
+               if (false === strpos($cond, (string) $this->_price))
                    $newWhere[] = $cond;
             }
             if ($newWhere && substr($newWhere[0], 0, 3) == 'AND')

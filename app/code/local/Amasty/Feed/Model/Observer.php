@@ -23,15 +23,15 @@ class Amasty_Feed_Model_Observer
             
             if ($currentFeed->getMode() && ((Amasty_Feed_Model_Profile::STATE_READY == $currentFeed->getStatus()) || (Amasty_Feed_Model_Profile::STATE_ERROR == $currentFeed->getStatus())) &&
                 ($this->_onSchedule($currentFeed))) {
-                
+
                 $isCompleted = false;
-                
+
                 while (!$isCompleted) {
                     try {
                         $feed = Mage::getModel('amfeed/profile')->load($currentFeed->getId());
                         $hasGenerated = $feed->generate();
                         $total = $feed->getInfoTotal();
-                        
+
                         if (!$total) {
 //                            $message = Mage::helper('amfeed')->__('There are no products to export for feed `%s`', $feed->getTitle());
                             $isCompleted = true;

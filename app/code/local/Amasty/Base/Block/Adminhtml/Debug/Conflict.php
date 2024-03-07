@@ -67,7 +67,7 @@ class Amasty_Base_Block_Adminhtml_Debug_Conflict extends Amasty_Base_Block_Admin
 
                 $lines = file($classPath);
                 foreach ($lines as $line) {
-                    if (strpos($line, $pureClassName) !== false) {
+                    if (strpos($line, (string) $pureClassName) !== false) {
                         $ret = true;
                         break;
                     }

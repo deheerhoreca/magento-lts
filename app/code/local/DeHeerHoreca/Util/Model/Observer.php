@@ -25,7 +25,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   // Also used directly in resave_all_products.php
   public static function updateProductBeforeSave($observer_or_product) {
-    if(get_class($observer_or_product) === "Varien_Event_Observer") {
+    if($observer_or_product::class === "Varien_Event_Observer") {
       if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS")
       && MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS === true) {
         return;
@@ -197,7 +197,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   // Also used directly in resave_all_products.php
   public static function updateProductAfterSave($observer_or_product) {
     
-    if(get_class($observer_or_product) === "Varien_Event_Observer") {
+    if($observer_or_product::class === "Varien_Event_Observer") {
       if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS")
       && MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS === true) {
         return;

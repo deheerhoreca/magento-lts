@@ -304,7 +304,7 @@ class Amasty_Base_Model_InformationObserver
                 $lines = file($classPath);
 
                 foreach ($lines as $line) {
-                    if (strpos($line, $pureClassName) !== false) {
+                    if (strpos($line, (string) $pureClassName) !== false) {
                         $isConflictResolved = true;
                         break;
                     }
@@ -324,7 +324,7 @@ class Amasty_Base_Model_InformationObserver
         $conflictModules = array();
         $isConflict = false;
         foreach ($conflict as $position => $class) {
-            if (strpos($class, $this->getBlock()->getModuleCode()) !== false) {
+            if (strpos($class, (string) $this->getBlock()->getModuleCode()) !== false) {
                 $isConflict = true;
                 unset($conflict[$position]);
                 break;

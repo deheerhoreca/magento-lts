@@ -42,7 +42,7 @@ class Amasty_Shopby_Model_Sitemap_Observer
 
         $result = array();
         foreach ($collectionPages as $item) {
-            if (strstr($item['url'], $baseUrl)) {
+            if (strstr($item['url'], (string) $baseUrl)) {
                 $object = new Varien_Object();
                 $object->setData(
                     array(

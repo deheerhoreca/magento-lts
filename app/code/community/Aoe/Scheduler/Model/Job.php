@@ -125,7 +125,7 @@ class Aoe_Scheduler_Model_Job extends Mage_Core_Model_Abstract
         if (empty($cronExpr) && $this->getScheduleCronExpr()) {
             $cronExpr = $this->getScheduleCronExpr();
         }
-        return trim($cronExpr);
+        return trim((string) $cronExpr);
     }
 
     /**

@@ -63,12 +63,12 @@ class Amasty_Feed_Model_Product_Collection extends Mage_Catalog_Model_Resource_E
             
             
         } elseif ( !in_array($fields[$fieldAttr][$key], $notJoin)) {
-            
-            
+
+
             if ($fields[$fieldAttr][$key] == 'price' || $fields[$fieldAttr][$key] == 'special_price'){
                 $this->_addPrice[] = 'min_price';
             }
-            
+
             $this->_joinCustomAttribute($fields[$fieldAttr][$key], $storeId);
 //            $attr[] = $fields[$fieldAttr][$key];
 //            $this->joinAttribute($fields[$fieldAttr][$key], 'catalog_product/' . $fields[$fieldAttr][$key], 'entity_id', null, 'left', $storeId);
@@ -539,11 +539,11 @@ class Amasty_Feed_Model_Product_Collection extends Mage_Catalog_Model_Resource_E
     {
 //        if ($this->_catConds) {
             $joinConds = array();
-        
+
         $this->getSelect()
              ->joinLeft(array('cat_prod' => $this->getTable('catalog/category_product')),
                         'e.entity_id = cat_prod.product_id', array('cat_prod_product_id' => 'cat_prod.product_id'));
-        
+
         if (Mage::helper('catalog/category_flat')->isEnabled()) {
             $this->getSelect()
                 ->joinLeft(array('cat_flat' => $this->getTable('catalog/category_flat'). '_store_'.$storeId ),
@@ -565,10 +565,10 @@ class Amasty_Feed_Model_Product_Collection extends Mage_Catalog_Model_Resource_E
 //                    $joinConds[] = ' and IFNULL(cat_flat.is_active, 0) = 1';
 
         } else {
-        
+
             $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_category', 'name');
                 $isActiveAttributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_category', 'is_active');
-            
+
             $this->getSelect()
                     ->joinLeft(array('at_is_active' => Mage::getSingleton('core/resource')->getTableName('catalog_category_entity_int')),
                                '(at_is_active.entity_id = cat_prod.category_id) AND ' .

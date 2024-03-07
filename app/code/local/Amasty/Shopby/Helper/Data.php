@@ -297,9 +297,9 @@ class Amasty_Shopby_Helper_Data extends Amasty_Shopby_Helper_Cached
            return array();
        }
 
-       $tmp = str_replace(Amasty_Shopby_Helper_Attributes::MAPPED_PREFIX, '', $v);
+       $tmp = str_replace(Amasty_Shopby_Helper_Attributes::MAPPED_PREFIX, '', (string) $v); // DHH
        if (preg_match('/^[0-9,]+$/', $tmp)) {
-            $v = array_unique(explode(',', $v));
+            $v = array_unique(explode(',', (string) $v)); // DHH
        } else {
             $v = array();
        }

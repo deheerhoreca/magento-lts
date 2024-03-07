@@ -50,17 +50,16 @@ if(in_array($this->getDisplayType(), $needs_count)) {
       if(is_numeric($count) && $count > 1000) {
         $count = "1000+";
       }
-      if($_item->getCount() > 0) {
-        echo "<li>";
+      if($count > 0) {
+        echo PHP_EOL."<li>";
         $dataConfig = $_item->getUrlAttributeOptionConfigAsJson();
         $url = $this->urlEscape($_item->getUrl());
-        echo "<a rel='nofollow' class='{$prefix} amshopby-attr' href='{$url}' data-config='{$dataConfig}'>";
+        echo "  <a rel='nofollow' class='{$prefix} amshopby-attr' href='{$url}' data-config='{$dataConfig}'>";
         echo $_item->getLabel();
         if(!$hideCounts) {
           echo "<span class='count'>({$count})</span>";
         }
-        echo "</a>";
-        echo "</li></ol>";
+        echo "  </a></li>".PHP_EOL;
       }
     }
   }

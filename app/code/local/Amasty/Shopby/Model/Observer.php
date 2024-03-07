@@ -328,7 +328,7 @@ class Amasty_Shopby_Model_Observer
     {
         if ($observer->getBlock() instanceof Mage_Cms_Block_Block) {
             $blockModel = Mage::getModel('cms/block')->load($observer->getBlock()->getBlockId());
-            if (strpos($blockModel->getContent(), 'amshopby/subcategories') !== false) {
+            if (strpos((string) $blockModel->getContent(), 'amshopby/subcategories') !== false) { // DHH
                 $observer->getBlock()->setCacheLifetime(null);
             }
         }

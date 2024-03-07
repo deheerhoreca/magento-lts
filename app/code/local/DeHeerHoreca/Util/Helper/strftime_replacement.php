@@ -121,7 +121,7 @@ function dhh_strftime(string $format, $timestamp = null, ?string $locale = null)
 			return floor($timestamp->format('Y') / 100);
 		},
 		'%g' => function ($timestamp) {
-			return substr($timestamp->format('o'), -2);
+			return substr((string) $timestamp->format('o'), -2);
 		},
 		'%G' => 'o',
 		'%y' => 'y',
@@ -179,6 +179,6 @@ function dhh_strftime(string $format, $timestamp = null, ?string $locale = null)
 		}
 	}, $format);
 
-	$out = str_replace('%%', '%', $out);
+	$out = str_replace('%%', '%', (string) $out);
 	return $out;
 }

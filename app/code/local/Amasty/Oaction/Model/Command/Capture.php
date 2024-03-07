@@ -47,7 +47,7 @@ class Amasty_Oaction_Model_Command_Capture extends Amasty_Oaction_Model_Command_
                         $this->_errors[] = $hlp->__('Can not capture invoice #%s', $invoiceCode);
                         continue;
                     }
-                    
+
                     //BEGIN modification: For compatibility with Klarna
                     if ('true' == (string)Mage::getConfig()->getNode('modules/Klarna_KlarnaPaymentModule/active')) {
                         $forRequest = array();
@@ -65,15 +65,15 @@ class Amasty_Oaction_Model_Command_Capture extends Amasty_Oaction_Model_Command_
                         }
                     }
                     //END modification: For compatibility with Klarna
-                    
+
                     $isOk = Mage::getModel('sales/order_invoice_api_v2')
                         ->capture($invoiceCode);   
-                    
+
                     if ($isOk && $notifyCustomer){   
                         Mage::getModel('sales/order_invoice_api_v2')
                             ->addComment($invoiceCode, $comment, true, true);                        
                     }
-                    
+
                     //BEGIN modification: For compatibility with Klarna
                     if ('true' == (string)Mage::getConfig()->getNode('modules/Klarna_KlarnaPaymentModule/active')) {
                         $invoiceItems = array('items' => array());

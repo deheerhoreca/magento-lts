@@ -130,7 +130,7 @@ class Amasty_Shopby_Helper_Image extends Mage_Catalog_Helper_Image
             $result = array();
             foreach ($this->getRequestConfigurableMap() as $code => $values) {
                 foreach ($values as $value) {
-                    if (strpos($value, $prefix) === 0) {
+                    if (strpos($value, (string) $prefix) === 0) {
                         $simpleValues[] = str_replace($prefix, '', $value);
                     }
                 }

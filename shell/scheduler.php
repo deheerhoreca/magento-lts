@@ -2,6 +2,8 @@
 
 require_once 'abstract.php';
 
+require_once __DIR__."/../app/code/local/DeHeerHoreca/Util/Helper/strftime_replacement.php"; // DHH
+
 class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract
 {
     /**

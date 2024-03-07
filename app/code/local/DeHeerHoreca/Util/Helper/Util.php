@@ -1396,32 +1396,21 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
   // - lib/intel.inc.php
   public static function get_url(string $which, $payload = null) {
-    if(strlen($payload)) {
-      $payload = urlencode($payload);
+    if(strlen((string) $payload)) {
+      $payload = urlencode((string) $payload);
     }
-    switch($which) {
-      case "tools_magento1_order_id":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento1_order_id&q={$payload}";
-      case "tools_magento_product_sku":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento_product_sku&q={$payload}";
-      case "tools_chefstore_product_sku":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=chefstore_product_sku&q={$payload}";
-      case "tools_supplier_product_sku":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=supplier_product_sku&q={$payload}";
-      case "magento_order":
-        return "https://www.chefstore.nl/index.php/admin4JN0/sales_order/view/order_id/{$payload}/";
-      case "magento_product":
-        return "https://www.chefstore.nl/index.php/admin4JN0/catalog_product/edit/id/{$payload}/";
-      case "tools-intel-product":
-      case "tools_intel_product":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier={$payload}";
-      case "tools_ii_sku":
-        return "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ltYWdlX2luc3BlY3Rvci9pbWFnZV9pbnNwZWN0b3IucGhw&sku={$payload}";
-      case "bol_search_product":
-        return "https://www.bol.com/nl/s/?searchtext={$payload}";
-    }
-    
-    return false;
+    return match ($which) {
+      "tools_magento1_order_id" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento1_order_id&q={$payload}",
+      "tools_magento_product_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento_product_sku&q={$payload}",
+      "tools_chefstore_product_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=chefstore_product_sku&q={$payload}",
+      "tools_supplier_product_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=supplier_product_sku&q={$payload}",
+      "magento_order" => "https://www.chefstore.nl/index.php/admin4JN0/sales_order/view/order_id/{$payload}/",
+      "magento_product" => "https://www.chefstore.nl/index.php/admin4JN0/catalog_product/edit/id/{$payload}/",
+      "tools-intel-product", "tools_intel_product" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier={$payload}",
+      "tools_ii_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ltYWdlX2luc3BlY3Rvci9pbWFnZV9pbnNwZWN0b3IucGhw&sku={$payload}",
+      "bol_search_product" => "https://www.bol.com/nl/s/?searchtext={$payload}",
+      default => false,
+    };
   }
   
   public static function _get_placeholder_image_path() {

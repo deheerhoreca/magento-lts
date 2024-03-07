@@ -59,7 +59,7 @@ function defaults($d,$v) {
 
 // rewrite $PHP_SELF to block XSS attacks
 //
-$PHP_SELF= isset($_SERVER['PHP_SELF']) ? htmlentities(strip_tags($_SERVER['PHP_SELF'],''), ENT_QUOTES, 'UTF-8') : '';
+$PHP_SELF= isset($_SERVER['PHP_SELF']) ? htmlentities(strip_tags((string) $_SERVER['PHP_SELF'],''), ENT_QUOTES, 'UTF-8') : '';
 $time = time();
 $host = php_uname('n');
 if($host) { $host = '('.$host.')'; }
@@ -113,7 +113,7 @@ if (empty($_REQUEST)) {
 foreach($vardom as $var => $dom) {
     if (!isset($_REQUEST[$var])) {
         $MYREQUEST[$var]=null;
-    } else if (!is_array($_REQUEST[$var]) && preg_match($dom.'D',$_REQUEST[$var])) {
+    } else if (!is_array($_REQUEST[$var]) && preg_match($dom.'D',(string) $_REQUEST[$var])) {
         $MYREQUEST[$var]=$_REQUEST[$var];
     } else {
         $MYREQUEST[$var]=$_REQUEST[$var]=null;
@@ -247,10 +247,10 @@ if (isset($MYREQUEST['IMG']))
         if ($text) {
             if ($placeindex>0) {
                 imageline($im,$centerX + round($r*cos($w)/2), $centerY + round($r*sin($w)/2),$diameter, $placeindex*12,$color1);
-                imagestring($im,4,$diameter, $placeindex*12,$text,$color1);
+                imagestring($im,4,$diameter, $placeindex*12,(string) $text,$color1);
 
             } else {
-                imagestring($im,4,$centerX + round($r*cos($w)/2), $centerY + round($r*sin($w)/2),$text,$color1);
+                imagestring($im,4,$centerX + round($r*cos($w)/2), $centerY + round($r*sin($w)/2),(string) $text,$color1);
             }
         }
     }
@@ -261,10 +261,10 @@ if (isset($MYREQUEST['IMG']))
 
         if ($placeindex>0) {
             imageline($im,$centerX + round($r*cos($w)/2), $centerY + round($r*sin($w)/2),$diameter, $placeindex*12,$color1);
-            imagestring($im,4,$diameter, $placeindex*12,$text,$color1);
+            imagestring($im,4,$diameter, $placeindex*12,(string) $text,$color1);
 
         } else {
-            imagestring($im,4,$centerX + round($r*cos($w)/2), $centerY + round($r*sin($w)/2),$text,$color1);
+            imagestring($im,4,$centerX + round($r*cos($w)/2), $centerY + round($r*sin($w)/2),(string) $text,$color1);
         }
     }
 
@@ -292,7 +292,7 @@ if (isset($MYREQUEST['IMG']))
                     $py=$placeindex*12+6;
                     imagefilledrectangle($im, $px+90, $py+3, $px+90-4, $py-3, $color2);
                     imageline($im,$x,$y+round($h/2),$px+90,$py,$color2);
-                    imagestring($im,2,$px,$py-6,$text,$color1);
+                    imagestring($im,2,$px,$py-6,(string) $text,$color1);
 
                 } else {
                     if ($placeindex<31) {
@@ -304,10 +304,10 @@ if (isset($MYREQUEST['IMG']))
                     }
                     imagefilledrectangle($im, $px, $py+3, $px-4, $py-3, $color2);
                     imageline($im,$x+$w,$y+round($h/2),$px,$py,$color2);
-                    imagestring($im,2,$px+2,$py-6,$text,$color1);
+                    imagestring($im,2,$px+2,$py-6,(string) $text,$color1);
                 }
             } else {
-                imagestring($im,4,$x+5,$y1-16,$text,$color1);
+                imagestring($im,4,$x+5,$y1-16,(string) $text,$color1);
             }
         }
     }
@@ -897,7 +897,7 @@ EOB;
 EOB;
         if(isset($mem['adist'])) {
             foreach($mem['adist'] as $i=>$v) {
-                $cur = pow(2,$i); $nxt = pow(2,$i+1)-1;
+                $cur = 2 ** $i; $nxt = 2 ** ($i+1)-1;
                 if($i==0) $range = "1";
                 else $range = "$cur - $nxt";
                 echo "<tr><th align=right>$range</th><td align=right>$v</td></tr>\n";
@@ -961,14 +961,14 @@ EOB;
         '<option value=500',$MYREQUEST['COUNT']=='500'? ' selected':'','>Top 500</option>',
         '<option value=0  ',$MYREQUEST['COUNT']=='0'  ? ' selected':'','>All</option>',
         '</select>',
-    '&nbsp; Search: <input name=SEARCH value="',isset($MYREQUEST['SEARCH']) ? htmlspecialchars($MYREQUEST['SEARCH']) : '','" type=text size=25/>',
+    '&nbsp; Search: <input name=SEARCH value="',isset($MYREQUEST['SEARCH']) ? htmlspecialchars((string) $MYREQUEST['SEARCH']) : '','" type=text size=25/>',
         '&nbsp;<input type=submit value="GO!">',
         '</form></div>';
 
     if (isset($MYREQUEST['SEARCH'])) {
         // Don't use preg_quote because we want the user to be able to specify a
         // regular expression subpattern.
-        $MYREQUEST['SEARCH_REGEX'] = '/'.str_replace('/', '\\/', $MYREQUEST['SEARCH']).'/i';
+        $MYREQUEST['SEARCH_REGEX'] = '/'.str_replace('/', '\\/', (string) $MYREQUEST['SEARCH']).'/i';
         if (preg_match($MYREQUEST['SEARCH_REGEX'], 'test') === false) {
             echo '<div class="error">Error: enter a valid regular expression as a search query.</div>';
             break;
@@ -1008,7 +1008,7 @@ EOB;
         }
         if (!$AUTHENTICATED) {
             // hide all path entries if not logged in
-            $list[$k.$entry[$fieldname]]=preg_replace('/^.*(\\/|\\\\)/','*hidden*/',$entry);
+            $list[$k.$entry[$fieldname]]=preg_replace('/^.*(\\/|\\\\)/','*hidden*/',(string) $entry);
         } else {
             $list[$k.$entry[$fieldname]]=$entry;
         }
@@ -1025,15 +1025,15 @@ EOB;
         // output list
         $i=0;
         foreach($list as $k => $entry) {
-            if(empty($MYREQUEST['SEARCH_REGEX']) || preg_match($MYREQUEST['SEARCH_REGEX'], $entry[$fieldname]) != 0) {
-                $sh=md5($entry["info"]);
-                $field_value = htmlentities(strip_tags($entry[$fieldname],''), ENT_QUOTES, 'UTF-8');
+            if(empty($MYREQUEST['SEARCH_REGEX']) || preg_match($MYREQUEST['SEARCH_REGEX'], (string) $entry[$fieldname]) != 0) {
+                $sh=md5((string) $entry["info"]);
+                $field_value = htmlentities(strip_tags((string) $entry[$fieldname],''), ENT_QUOTES, 'UTF-8');
                 if ($sh == $MYREQUEST["SH"]) {
                     $shstr = "";
                 } else {
                     $shstr = "&SH=" . $sh;
                 }
-                $href = "$MY_SELF&OB=" . $MYREQUEST['OB'] . (!empty($MYREQUEST['SEARCH']) ? "&SEARCH=" . urlencode($MYREQUEST['SEARCH']) : '') . $shstr . "#key-" . $sh;
+                $href = "$MY_SELF&OB=" . $MYREQUEST['OB'] . (!empty($MYREQUEST['SEARCH']) ? "&SEARCH=" . urlencode((string) $MYREQUEST['SEARCH']) : '') . $shstr . "#key-" . $sh;
                 echo
                     '<tr id="key-'. $sh .'" class=tr-',$i%2,'>',
                     "<td class=td-0><a href=\"$href\">",$field_value,'</a></td>',
@@ -1055,8 +1055,8 @@ EOB;
                 } else if ($MYREQUEST['OB'] == OB_USER_CACHE) {
                     echo '<td class="td-last center">';
                     echo '[<a href="', $MY_SELF, '&OB=', $MYREQUEST['OB'],
-                        '&DU=', urlencode($entry[$fieldkey]),
-                        isset($MYREQUEST['SEARCH']) ? '&SEARCH=' . htmlspecialchars(urlencode($MYREQUEST['SEARCH'])) : '',
+                        '&DU=', urlencode((string) $entry[$fieldkey]),
+                        isset($MYREQUEST['SEARCH']) ? '&SEARCH=' . htmlspecialchars(urlencode((string) $MYREQUEST['SEARCH'])) : '',
                         '">Delete Now</a>]';
                     echo '</td>';
                 } else {
@@ -1133,15 +1133,15 @@ EOB;
 
         for ($j = 2; $j + 1 < count($changelog); $j += 2) {
             $v = $changelog[$j];
-            list(, $ver) = explode(' ', $v, 2);
+            [, $ver] = explode(' ', (string) $v, 2);
             if ($i < 0 && version_compare($apcversion, $ver, '>=')) {
                 break;
             } else if (!$i--) {
                 break;
             }
             $changes = $changelog[$j + 1];
-            echo "<b><a href=\"https://pecl.php.net/package/APCu/$ver\">".htmlspecialchars($v, ENT_QUOTES, 'UTF-8')."</a></b><br><blockquote>";
-            echo nl2br(htmlspecialchars($changes, ENT_QUOTES, 'UTF-8'))."</blockquote>";
+            echo "<b><a href=\"https://pecl.php.net/package/APCu/$ver\">".htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8')."</a></b><br><blockquote>";
+            echo nl2br(htmlspecialchars((string) $changes, ENT_QUOTES, 'UTF-8'))."</blockquote>";
         }
         echo '</td></tr>';
     }

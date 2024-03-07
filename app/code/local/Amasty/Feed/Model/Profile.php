@@ -207,24 +207,24 @@ class Amasty_Feed_Model_Profile extends Amasty_Feed_Model_Filter
     }
     
         protected function _prepareProductParentCollection(){
-        
+
         $this->_prepereCollection($this->getProductParentCollection());
-        
+
         $idsSelect = "select DISTINCT parent_id from (" . $this->getProductCollection()->getSelect()->__toString() . ") as tmp";
 
         $this->getProductParentCollection()->getSelect()->reset(Zend_Db_Select::WHERE);
-        
+
         $from = $this->getProductParentCollection()->getSelect()->getPart(Zend_Db_Select::FROM);
-        
+
         $from['products'] = array(
                 'joinType' => 'inner join',
                 'schema' => null,
                 'tableName' => new Zend_Db_Expr('(' . $idsSelect . ')'),
                 'joinCondition' => 'e.entity_id = parent_id'
             );
-        
+
         $this->getProductParentCollection()->getSelect()->setPart(Zend_Db_Select::FROM, $from);
-        
+
 //        $this->getProductParentCollection()->getSelect()->where("e.entity_id in (" .
 //            $idsSelect
 //        . ")");

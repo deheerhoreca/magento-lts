@@ -81,7 +81,7 @@ class RedisStatus
         if (is_null($this->servers)) {
             $this->servers = array();
             foreach ($this->config as $instance) {
-                $password = isset($instance['password']) ? $instance['password'] : null;
+                $password = $instance['password'] ?? null;
                 if (class_exists('Credis_Client')) {
                     $redis = new Credis_Client($instance['host'], $instance['port'], null, '', 0, $password);
                 } else {
@@ -204,7 +204,7 @@ $redisStatus = new RedisStatus($config);
     <div id="main">
         <form id="refresh" action="" method="get">
             <label>Refresh interval (seconds)
-                <input type="text" name="refresh" value="<?php echo isset($_GET['refresh']) ? $_GET['refresh'] : 0 ?>" />
+                <input type="text" name="refresh" value="<?php echo $_GET['refresh'] ?? 0 ?>" />
             </label>
             <input type="submit" value="Set" />
         </form>

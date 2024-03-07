@@ -579,7 +579,7 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_M
         $newWhere = array();
 
         foreach ($oldWhere as $cond){
-            if (strpos($cond, $alias) === false){
+            if (strpos($cond, (string) $alias) === false){
                 $newWhere[] = $cond;
             }
         }

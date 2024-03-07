@@ -88,7 +88,7 @@ if(empty($external_documents_json)) {
 }
 
 try {
-  $external_documents = json_decode($external_documents_json, true);
+  $external_documents = json_decode((string) $external_documents_json, true);
 } catch(Exception $e) {
   dump($e);
   redirect("/", null, "Failed to decode JSON");
@@ -123,7 +123,7 @@ if(!isset($the_document["filetype"]) || $the_document["filetype"] !== "pdf") {
 }
 
 $url    = escapeshellarg($document_url);
-$title  = escapeshellarg($the_document["title"]);
+$title  = escapeshellarg((string) $the_document["title"]);
 $output = escapeshellarg(DOCUMENTS_CACHE_DIR."/{$hash}.{$the_document["filetype"]}");
 
 $command = new mikehaertl\shellcommand\Command("python3 ".__DIR__."/shell/PDF-manipulation/src/Convert-PDF.py");
@@ -208,5 +208,5 @@ function redirect($url, $status_code = null, string $msg = "") {
     // $store = Mage::app()->getStore();
     // $sku = $_resource->getAttributeRawValue($entityId, 'sku', $store);
 
-    
+
 // }

@@ -62,7 +62,7 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 
     //checking update time
     if (filemtime($configCacheFile) + $config['update_time'] > time()) {
-        $mediaDirectory = trim(str_replace($bp . $ds, '', $config['media_directory']), $ds);
+        $mediaDirectory = trim(str_replace($bp . $ds, '', (string) $config['media_directory']), $ds);
         $allowedResources = array_merge($allowedResources, $config['allowed_resources']);
     }
 }
@@ -110,7 +110,7 @@ if (empty($mediaDirectory)) {
 
 if (!$mediaDirectory) {
     $config = Mage_Core_Model_File_Storage::getScriptConfig();
-    $mediaDirectory = str_replace($bp . $ds, '', $config['media_directory']);
+    $mediaDirectory = str_replace($bp . $ds, '', (string) $config['media_directory']);
     $allowedResources = array_merge($allowedResources, $config['allowed_resources']);
 
     $relativeFilename = str_replace($mediaDirectory . '/', '', $pathInfo);
@@ -179,7 +179,7 @@ function checkResource($resource, array $allowedResources)
 {
     $isResourceAllowed = false;
     foreach ($allowedResources as $allowedResource) {
-        if (0 === stripos($resource, $allowedResource)) {
+        if (0 === stripos($resource, (string) $allowedResource)) {
             $isResourceAllowed = true;
         }
     }

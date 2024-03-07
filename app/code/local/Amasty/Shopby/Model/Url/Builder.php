@@ -70,7 +70,7 @@ class Amasty_Shopby_Model_Url_Builder
         self::$reservedKey = trim(Mage::getStoreConfig('amshopby/seo/key'));
         self::$magentoBaseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, Mage::app()->getStore()->isCurrentlySecure());
 
-        $excludeParamsStr = trim(Mage::getStoreConfig('amshopby/seo/query_param_exclude'));
+        $excludeParamsStr = trim((string) Mage::getStoreConfig('amshopby/seo/query_param_exclude')); // DHH
         self::$excludeParams = $excludeParamsStr == '' ? array() : explode(',', $excludeParamsStr);
 
         self::$currentLandingKey = Mage::app()->getRequest()->getParam('am_landing');
@@ -427,7 +427,7 @@ class Amasty_Shopby_Model_Url_Builder
             }
             if (!$hasFilter) {
                 foreach (array_keys($this->query) as $k) {
-                    if (!in_array($k, array('p','mode','order','dir','limit')) && false === strpos('__', $k)) {
+                    if (!in_array($k, array('p','mode','order','dir','limit')) && false === strpos('__', (string) $k)) {
                         $hasFilter = true;
                         break;
                     }
@@ -546,7 +546,7 @@ class Amasty_Shopby_Model_Url_Builder
         $unsecureBaseUrl = $category->getUrlInstance()->getBaseUrl(array('_secure' => false));
         $secureBaseUrl = $category->getUrlInstance()->getBaseUrl(array('_secure' => true));
 
-        if (strpos($categoryUrl, $unsecureBaseUrl) === 0) {
+        if (strpos($categoryUrl, (string) $unsecureBaseUrl) === 0) {
             $categoryUrl = substr_replace($categoryUrl, $secureBaseUrl, 0, mb_strlen($unsecureBaseUrl));
         }
 

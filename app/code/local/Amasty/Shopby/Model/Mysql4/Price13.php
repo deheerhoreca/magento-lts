@@ -120,7 +120,7 @@ class Amasty_Shopby_Model_Mysql4_Price13 extends Mage_CatalogIndex_Model_Mysql4_
             $oldWhere = $ret->getPart(Varien_Db_Select::WHERE);
             $newWhere = array();
             foreach ($oldWhere as $cond){
-               if (false === strpos($cond, $this->_price)){
+               if (false === strpos($cond, (string) $this->_price)){
                    $newWhere[] = $cond;
                }
             }
