@@ -1,6 +1,6 @@
 <?php
 
-if(empty((string) $_GET["id"]) === true) {
+if(!isset($_GET["id"]) || empty((string) $_GET["id"])) {
   header("Location: /", true, 301);
   exit;
 }

@@ -867,6 +867,14 @@ final class Mage
         if (!self::getConfig()) {
             return;
         }
+        
+        // tmp dhh
+        //if($file === "euvatenhanced.log" && isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] === "81.59.51.217") {
+        //  $forceLog = true;
+        //}
+        //$ip = $_SERVER["REMOTE_ADDR"] ?? "";
+        //if(is_scalar($message)) $message = "{$ip} {$message}";
+        // end tmp dhh
 
         try {
             $logActive = self::getStoreConfig('dev/log/active');

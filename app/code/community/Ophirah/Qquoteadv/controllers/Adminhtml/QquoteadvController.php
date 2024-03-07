@@ -2351,7 +2351,8 @@ class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Con
         $saveBilling = $billingAddress->getData('save_in_address_book');
         $customerShipAddressId = $quote->getShippingAddress()->getCustomerAddressId();
         $saveShipping = $shipAddress->getData('save_in_address_book');
-        $shippingAsBilling = $data['shipping_as_billing'];
+        // $shippingAsBilling = $data['shipping_as_billing'];
+        $shippingAsBilling = $data['shipping_as_billing'] ?? null; // DHH CORE HACK PHP 8.1
 
         //Save or update customer billing address
         if (($saveBilling == 1) && ($customerBillingAddressId == '0')) {

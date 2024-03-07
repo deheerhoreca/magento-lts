@@ -77,7 +77,6 @@ acquire_lock () {
 
 # Location of the php binary
 # DHH CORE HACK
-# source /etc/profile.d/change_php.sh
 # PHP_BIN=$(which php || true)
 PHP_BIN=/opt/plesk/php/8.1/bin/php
 if [ -z "${PHP_BIN}" ]; then
@@ -179,4 +178,6 @@ if [ -n "${EXCLUDE_JOBS}" ]; then
 fi
 
 # Run the job in the foreground
-"${PHP_BIN}" "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS}
+echo "${PHP_BIN} -c $(dirname "$0")/php.cmd.ini ${SCHEDULER} --action cron --mode ${MODE} ${OPTIONS}"
+# "${PHP_BIN}" "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS} # DHH CORE HACK
+"${PHP_BIN}" -c $(dirname "$0")/php.cmd.ini "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS}

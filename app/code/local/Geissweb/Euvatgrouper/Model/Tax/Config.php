@@ -76,17 +76,19 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 
 			if(isset($billingCountryId) && !Mage::helper('euvatgrouper')->isEuCountry($billingCountryId) )
 			{
-				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled exception: NON-EU", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled enabled: NON-EU", null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForOutOfEurope()) {
+          if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled disabled: DisableCbtForEuBusiness", null, 'euvatenhanced.log');
                     return false;
                 }
 			} elseif(isset($billingCountryId) && $basedOnAddress && $basedOnAddress->getVatIsValid() ) {
-				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled exception: valid VAT Number", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled enabled: Valid VAT Number", null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForEuBusiness()) {
+          if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled disabled: DisableCbtForEuBusiness", null, 'euvatenhanced.log');
                     return false;
                 }
 			}
-
+      if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled result: ".var_export($cbtEnabled, true), null, 'euvatenhanced.log');
 			return $cbtEnabled;
 
 		} else {

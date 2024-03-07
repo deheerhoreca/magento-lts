@@ -57,6 +57,9 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Updated up to: v20.5.0
   - `.gitignore`
     - Updated up to: v20.5.0
+  - `scheduler_cron.sh` (Aschroder Cron Extension)
+    - Forced PHP binary
+    - Updated up to: v20.5.0
 
 ## Core Overrides -- Not Hacks
 - `app/code/local/Mage/*`
@@ -199,6 +202,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `app/code/community/Ophirah/Qquoteadv/Block/Adminhtml/Qquoteadv/Edit/Tab/Product.php`
     - Force `isAllowedCustomFields()`
     - Patching a timebomb bug
+  - `app/code/community/Ophirah/Qquoteadv/controllers/Adminhtml/QquoteadvController.php`
+    - PHP 8.1 fix
   - `app/code/community/Ophirah/Qquoteadv/Block/Qquoteadv/View.php`
     - TBD
   - `app/code/community/Ophirah/Qquoteadv/Helper/License.php`
@@ -307,10 +312,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Fix "Calling Parameter do Not Match Signature"
     - @see https://webkul.com/blog/magento-api-integration-calling-parameter-not-match-signature/
     - @see https://github.com/loekvangool/deheerhoreca-magento/commit/f494be74dcf289de644b94a3cd8f0954ff880f6b
-- **/***
-  - `scheduler_cron.sh` (Aschroder Cron Extension)
-    - Forced PHP binary because 5.4 gave MCRYPT errors. https://github.com/loekvangool/deheerhoreca-magento/commit/b4f3de1163a52f8c77e8b4e4827cc53aba518f43
-    - Fixed in `/etc/profile.d/change_php.sh`
 - **SQL**
   - To accomodate larger email templates
     - ```ALTER TABLE `core_email_template` CHANGE `template_text` `template_text` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Template Content'```

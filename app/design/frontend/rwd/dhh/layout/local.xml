@@ -248,6 +248,16 @@
     </reference>
   </checkout_cart_index>
   
+  <!-- FireCheckout -->
+  <!-- Prevent including both the .js and the .min.js -->
+  <!-- See: app/design/frontend/base/default/layout/tm/firecheckout/geissweb_euvatgrouper.xml -->
+  <!-- See: app/design/frontend/base/default/layout/euvatgrouper.xml -->
+  <firecheckout_index_index>
+      <reference name="head">
+          <action method="removeItem"><type>js</type><file>geissweb/vatvalidation.js</file></action>
+      </reference>
+  </firecheckout_index_index>
+  
   <!-- FAQ -->
   <faq_index_index>
     <reference name="head">
