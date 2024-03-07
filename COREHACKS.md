@@ -3,6 +3,24 @@
 ## Notes
 - Check composer packages for modifications: `composer status`
 
+## Rector'ed code
+Certain code dirs have been Rector'ed to fix PHP 8.1 compatibility.
+These diffs are not listed separately or commented with "DHH CORE HACK".
+Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exclusions.
+- All code:
+  - `Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class`
+    - `mphp vendor/bin/rector process --dry-run --config=dev/rector.php`
+- 3d party code:
+  - `SetList::PHP_81`:
+    - `mphp vendor/bin/rector process ./*.php --dry-run --config=dev/rector.php`
+    - `mphp vendor/bin/rector process ./app/code/local/Amasty/ --dry-run --config=dev/rector.php`
+    - `mphp vendor/bin/rector process ./app/code/community/ --dry-run --config=dev/rector.php`
+    - `mphp vendor/bin/rector process ./app/code/local/ --dry-run --config=dev/rector.php`
+- Our code:
+  - `LevelSetList::UP_TO_PHP_81`:
+    - `mphp vendor/bin/rector process ./app/code/local/DeHeerHoreca/ --dry-run --config=dev/rector.php`
+    - `mphp vendor/bin/rector process ./app/design/frontend/rwd/dhh/ --dry-run --config=dev/rector.php`
+
 ## Core Hacks
 - **app/code/core/Mage/**
   - `app/code/core/Mage/Sales/etc/config.xml`
@@ -171,6 +189,7 @@
   - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php`
     - Removed some `.js` files
     - Replace info tooltips
+    - Disable user-agent based filter skipping (PHP 8.1)
   - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php:70`
     - Removed unneeded `&nbsp;` character
     - Allow certain attributes to ignore hide_one_value
