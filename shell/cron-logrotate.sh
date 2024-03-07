@@ -31,6 +31,6 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate /tmp/logrotate-intel.conf -s /tmp/logrotate.deheerhoreca-intel.tmp -v
+/usr/sbin/logrotate /tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-intel.tmp -v
 
 set +x
