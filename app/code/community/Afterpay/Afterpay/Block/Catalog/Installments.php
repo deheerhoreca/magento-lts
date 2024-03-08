@@ -38,7 +38,7 @@ class Afterpay_Afterpay_Block_Catalog_Installments extends Mage_Core_Block_Templ
     public function getCssSelectors()
     {
         $selectors = Mage::getStoreConfig(self::XML_CONFIG_PREFIX . $this->getPageType() . '_price_block_selectors');
-        return explode("\n", $selectors);
+        return explode("\n", (string) $selectors);
     }
 
     public function getHtmlTemplate()

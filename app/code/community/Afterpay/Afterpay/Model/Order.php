@@ -34,7 +34,7 @@ class Afterpay_Afterpay_Model_Order extends Afterpay_Afterpay_Model_Method_Payov
                 if (in_array($i, ['consumer', 'billing', 'shipping'], TRUE)) {
                     foreach ($body[$i] as $j => $sensitive)
                     {
-                        $body[$i][$j] = preg_replace('/\S/', '*', $sensitive);
+                        $body[$i][$j] = preg_replace('/\S/', '*', (string) $sensitive);
                     }
                 } else {
                     $body[$i] = $this->_sanitizeContent($val);
@@ -81,7 +81,7 @@ class Afterpay_Afterpay_Model_Order extends Afterpay_Afterpay_Model_Method_Payov
 
         // Request order token to API
         $result = $this->_sendRequest($gatewayUrl, $postData, 'POST', 'StartAfterpayPayment');
-        $resultObject = json_decode($result);
+        $resultObject = json_decode((string) $result);
 
         // Check if token is NOT in response
         if ( empty($resultObject->orderToken) && empty($resultObject->token) ) {
@@ -152,7 +152,7 @@ class Afterpay_Afterpay_Model_Order extends Afterpay_Afterpay_Model_Method_Payov
 
         // Request order token to API
         $result = $this->_sendRequest($gatewayUrl, $postData, 'POST', 'StartAfterpayExpress');
-        $resultObject = json_decode($result);
+        $resultObject = json_decode((string) $result);
 
         // Check if token is NOT in response
         if ( empty($resultObject->token) ) {
@@ -207,7 +207,7 @@ class Afterpay_Afterpay_Model_Order extends Afterpay_Afterpay_Model_Method_Payov
 
         // Request order token to API
         $result = $this->_sendRequest($gatewayUrl, $postData, 'POST', 'StartAfterpayDirectCapture');
-        $resultObject = json_decode($result);
+        $resultObject = json_decode((string) $result);
 
         // Check if token is NOT in response
         if( !empty($resultObject->errorCode) || !empty($resultObject->errorId) ) {
@@ -236,7 +236,7 @@ class Afterpay_Afterpay_Model_Order extends Afterpay_Afterpay_Model_Method_Payov
 
         // Request order token to API
         $result = $this->_sendRequest($gatewayUrl, false, 'GET', 'Get order by token ' . $orderToken);
-        $resultObject = json_decode($result);
+        $resultObject = json_decode((string) $result);
 
         return $resultObject;
     }

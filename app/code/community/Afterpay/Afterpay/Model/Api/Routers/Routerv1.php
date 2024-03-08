@@ -64,13 +64,13 @@ class Afterpay_Afterpay_Model_Api_Routers_Routerv1
         $gatewayUrl = $settings[Afterpay_Afterpay_Model_System_Config_Source_ApiMode::KEY_API_URL] . 'v1/payments/';
 
         if( !empty($type) && $type == $search_target ) {
-            $url = (substr($gatewayUrl, -1) == '/' ? $gatewayUrl : $gatewayUrl . '/') . 'token:' . urlencode($search_target);
+            $url = (str_ends_with($gatewayUrl, '/') ? $gatewayUrl : $gatewayUrl . '/') . 'token:' . urlencode((string) $search_target);
         }
         else if( !empty($type) && $type == 'id') {
-            $url = (substr($gatewayUrl, -1) == '/' ? $gatewayUrl : $gatewayUrl . '/') . $search_target;
+            $url = (str_ends_with($gatewayUrl, '/') ? $gatewayUrl : $gatewayUrl . '/') . $search_target;
         }
         else if( !empty($type) && $type == 'courier') {
-            $url = (substr($gatewayUrl, -1) == '/' ? $gatewayUrl : $gatewayUrl . '/') . $search_target . "/courier/";
+            $url = (str_ends_with($gatewayUrl, '/') ? $gatewayUrl : $gatewayUrl . '/') . $search_target . "/courier/";
         }
         else if( !empty($type) && $type == 'token' ) {
             $url = $settings[Afterpay_Afterpay_Model_System_Config_Source_ApiMode::KEY_API_URL] . 'v1/orders/' . $search_target;
@@ -158,7 +158,7 @@ class Afterpay_Afterpay_Model_Api_Routers_Routerv1
         $gatewayUrl = $settings[Afterpay_Afterpay_Model_System_Config_Source_ApiMode::KEY_WEB_URL] . $countryCode . '/checkout';
 
         if( !empty($token) ) {
-            $url = (substr($gatewayUrl, -1) == '/' ? $gatewayUrl : $gatewayUrl . '/') . '?token=' . urlencode($token) . '&redirected=1&relativeCallbackUrl=';
+            $url = (str_ends_with($gatewayUrl, '/') ? $gatewayUrl : $gatewayUrl . '/') . '?token=' . urlencode((string) $token) . '&redirected=1&relativeCallbackUrl=';
         }
 
         return $url;

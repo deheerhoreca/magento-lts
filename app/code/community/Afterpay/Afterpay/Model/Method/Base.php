@@ -96,7 +96,7 @@ abstract class Afterpay_Afterpay_Model_Method_Base extends Mage_Payment_Model_Me
     public function getRestrictedCategoryIds()
     {
         $ids = Mage::getStoreConfig('payment/afterpaypayovertime/restricted_categories');
-        return explode(',', $ids);
+        return explode(',', (string) $ids);
     }
 
     /**
@@ -236,7 +236,7 @@ abstract class Afterpay_Afterpay_Model_Method_Base extends Mage_Payment_Model_Me
         }
 
         $matches = null;
-        preg_match('/^HTTP\/[\d.]+\s+(\d+).*/', $metadata['wrapper_data'][0], $matches);
+        preg_match('/^HTTP\/[\d.]+\s+(\d+).*/', (string) $metadata['wrapper_data'][0], $matches);
 
         if (isset($matches[1])) {
             return intval($matches[1]);
@@ -289,7 +289,7 @@ abstract class Afterpay_Afterpay_Model_Method_Base extends Mage_Payment_Model_Me
         $body = $this->getApiAdapter()->buildRefundRequest($amount, $payment);
 
         $response = $this->_sendRequest($url, $body, 'POST');
-        $resultObject = json_decode($response, true);
+        $resultObject = json_decode((string) $response, true);
 
         if (isset($resultObject['errorId']) || isset($resultObject['errorCode'])) {
             throw Mage::exception(
@@ -320,7 +320,7 @@ abstract class Afterpay_Afterpay_Model_Method_Base extends Mage_Payment_Model_Me
         $response = $client->request($method, ($body!==false)?$body:array());
 
         // Do advanced logging after
-        $this->_logRequest($url, 'response', $call, json_decode($response, true));
+        $this->_logRequest($url, 'response', $call, json_decode((string) $response, true));
 
         return $response;
     }
@@ -376,7 +376,7 @@ abstract class Afterpay_Afterpay_Model_Method_Base extends Mage_Payment_Model_Me
 
         $response = $client->request();
 
-        $data = json_decode($response, true);
+        $data = json_decode((string) $response, true);
 
         if (isset($data['errorId']) || isset($data['errorCode'])) {
             $helper->log($data);
@@ -405,7 +405,7 @@ abstract class Afterpay_Afterpay_Model_Method_Base extends Mage_Payment_Model_Me
      * @since 1.0.0
      */
     private function _cleanup_string($string) {
-        $result = preg_replace("/[^a-zA-Z0-9]+/", "", $string);
+        $result = preg_replace("/[^a-zA-Z0-9]+/", "", (string) $string);
         return $result;
     }
 

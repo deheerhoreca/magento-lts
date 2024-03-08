@@ -49,7 +49,7 @@ class Afterpay_Afterpay_Model_Request_Capture extends Afterpay_Afterpay_Model_Re
             'afterpay/afterpay_' . $method . '/portfolio_country',
             $this->_order->getStoreId()
         );
-        if(strpos($method, 'rest') !== false){
+        if(str_contains((string) $method, 'rest')){
             $country .= '-rest';
         }
         $this->setCountry($country);

@@ -54,7 +54,7 @@ class Afterpay_Afterpay_Model_Api_Refund extends Afterpay_Afterpay_Model_Api_Abs
                 continue;
             }
 
-            $name         = preg_replace("/[^a-zA-Z0-9\_\-\s]/i", "", $line['articleDescription']);
+            $name         = preg_replace("/[^a-zA-Z0-9\_\-\s]/i", "", (string) $line['articleDescription']);
             $sku          = $line['articleId'];
             $qty          = $line['quantity'];
             $price        = $line['unitPrice'];

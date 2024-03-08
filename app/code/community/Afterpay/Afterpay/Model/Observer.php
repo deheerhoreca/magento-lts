@@ -116,7 +116,7 @@ class Afterpay_Afterpay_Model_Observer
 
             $base = new Afterpay_Afterpay_Model_Method_Payovertime();
 
-            if (strlen($code = Mage::getSingleton('adminhtml/config_data')->getWebsite())) // website level
+            if (strlen((string) ($code = Mage::getSingleton('adminhtml/config_data')->getWebsite()))) // website level
             {
 
                 $website_code = Mage::getSingleton('adminhtml/config_data')->getWebsite();

@@ -110,7 +110,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             'afterpay/afterpay_' . $this->_method . '/portfolio_country',
             $this->_order->getStoreId()
         );
-        if(strpos($method, 'rest') !== false){
+        if(str_contains((string) $method, 'rest')){
             $country .= '-rest';
         }
         $this->setCountry($country);
@@ -284,7 +284,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
 
     protected function _addPortfolioVariables()
     {
-        list($portfolioId, $password) = $this->_getPortfolioId();
+        [$portfolioId, $password] = $this->_getPortfolioId();
 
         $array = array(
             'portfolioId' => $portfolioId,
@@ -359,7 +359,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
     {
         $currentIp = $_SERVER['REMOTE_ADDR'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ips = explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']);
             $currentIp = trim($ips[count($ips) - 1]);
         }
         if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
@@ -483,7 +483,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         // Check if variable bankaccount is available
         if (isset($this->_additionalFields['bankaccount'])) {
             // Strip whitespace from bankaccount string
-            $bankAccountNumber = preg_replace('/\s+/', '', $this->_additionalFields['bankaccount']);
+            $bankAccountNumber = preg_replace('/\s+/', '', (string) $this->_additionalFields['bankaccount']);
             $array = array(
                 'bankAccountNumber' => $bankAccountNumber,
             );
@@ -516,16 +516,16 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             case 'shipping':
                 $email       = $this->_shippingInfo['email'];
                                $phoneNumber = $this->_getPhoneNumber('shipping');
-                               $lastname    = ucfirst($this->_shippingInfo['lastname']);
-                               $firstname   = ucfirst($this->_shippingInfo['firstname']);
+                               $lastname    = ucfirst((string) $this->_shippingInfo['lastname']);
+                               $firstname   = ucfirst((string) $this->_shippingInfo['firstname']);
                                $gender      = $this->_getGender('shipping');
                 break;
             case 'billing':
             default:
                 $email       = $this->_billingInfo['email'];
                                $phoneNumber = $this->_getPhoneNumber('billing');
-                               $lastname    = ucfirst($this->_billingInfo['lastname']);
-                               $firstname   = ucfirst($this->_billingInfo['firstname']);
+                               $lastname    = ucfirst((string) $this->_billingInfo['lastname']);
+                               $firstname   = ucfirst((string) $this->_billingInfo['firstname']);
                                $gender      = $this->_getGender('billing');
                 break;
         }
@@ -940,10 +940,10 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             return 4;
         }
 
-        $highTaxClasses = explode(',', Mage::getStoreConfig('afterpay/afterpay_tax/high', $this->_order->getStoreId()));
-        $lowTaxClasses  = explode(',', Mage::getStoreConfig('afterpay/afterpay_tax/low', $this->_order->getStoreId()));
-        $zeroTaxClasses = explode(',', Mage::getStoreConfig('afterpay/afterpay_tax/zero', $this->_order->getStoreId()));
-        $noTaxClasses   = explode(',', Mage::getStoreConfig('afterpay/afterpay_tax/no', $this->_order->getStoreId()));
+        $highTaxClasses = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_tax/high', $this->_order->getStoreId()));
+        $lowTaxClasses  = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_tax/low', $this->_order->getStoreId()));
+        $zeroTaxClasses = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_tax/zero', $this->_order->getStoreId()));
+        $noTaxClasses   = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_tax/no', $this->_order->getStoreId()));
 
         if (in_array($taxClassId, $highTaxClasses)) {
             return 1;
@@ -1040,7 +1040,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         $return = array("orginal" => $number, "clean" => false, "mobile" => false, "valid" => false);
 
         // First replace any available plus sign with 00
-        $number = str_replace('+', '00', $number);
+        $number = str_replace('+', '00', (string) $number);
 
         // Then strip out the non-numeric characters:
         $match = preg_replace('/[^0-9]/Uis', '', $number);
@@ -1148,7 +1148,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         if (isset($this->_additionalFields['dob']) || isset($this->_additionalFields['dob_year'])) {
             // Logics if javascript worked
             if (array_key_exists('dob', $this->_additionalFields)) {
-                $dobTimestamp = strtotime($this->_additionalFields['dob'], time());
+                $dobTimestamp = strtotime((string) $this->_additionalFields['dob'], time());
                 $dob = date('Y-m-d\TH:i:s', $dobTimestamp);
             } elseif (array_key_exists('dob_year', $this->_additionalFields)
                 // Logics if javascript for date has not worked
@@ -1163,7 +1163,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         } elseif ($this->_order->getCustomerDob()) {
             // No birthday sent through form fields, look if a birthday was sent using Magento default fields
             $dobdate = $this->_order->getCustomerDob();
-            $dobTimestamp = strtotime($dobdate, time());
+            $dobTimestamp = strtotime((string) $dobdate, time());
             $dob = date('Y-m-d\TH:i:s', $dobTimestamp);
         }
         // If the variable $dob is not filled, then there was a problem with getting the correct date of birth
@@ -1190,18 +1190,18 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         //checks if the number is valid, if not: try to fix it
         $invalidNotations = array("00310", "0310", "310", "31");
         foreach ($invalidNotations as $invalid) {
-            if (strpos(substr($number, 0, 6), $invalid) !== false) {
+            if (str_contains(substr((string) $number, 0, 6), $invalid)) {
                 $valid = substr($invalid, 0, -1);
-                if (substr($valid, 0, 2) == '31') {
+                if (str_starts_with($valid, '31')) {
                     $valid = "00" . $valid;
                 }
-                if (substr($valid, 0, 2) == '03') {
+                if (str_starts_with($valid, '03')) {
                     $valid = "0" . $valid;
                 }
                 if ($valid == '3') {
                     $valid = "0" . $valid . "1";
                 }
-                $number = str_replace($invalid, $valid, $number);
+                $number = str_replace($invalid, $valid, (string) $number);
             }
         }
         return $number;
@@ -1214,7 +1214,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             'houseNumber'         => '',
             'houseNumberAddition' => '',
         );
-        if (preg_match('#^(.*?)([0-9]+)(.*)#s', $address, $matches)) {
+        if (preg_match('#^(.*?)([0-9]+)(.*)#s', (string) $address, $matches)) {
             if ('' == $matches[1]) {
                 // Number at beginning
                 $ret['houseNumber'] = trim($matches[2]);

@@ -63,7 +63,7 @@ class Afterpay_Afterpay_Model_Api_Adapters_Adapterv1
 
                 $discount_name = (string)$object->getCouponCode();
 
-                if( empty($discount_name) || strlen(trim($discount_name)) == '' ) {
+                if( empty($discount_name) || strlen(trim($discount_name)) == 0 ) {
                     $discount_name = 'Discount:';
                 }
 
@@ -184,7 +184,7 @@ class Afterpay_Afterpay_Model_Api_Adapters_Adapterv1
             $discount_amount = $item->getDiscountAmount();
             if ( !empty($discount_amount) && round((float)$discount_amount, $precision) > 0 ) {
                 $discount_name = (string)$object->getCouponCode();
-                if( empty($discount_name) || strlen(trim($discount_name)) == '' ) {
+                if( empty($discount_name) || strlen(trim($discount_name)) == 0 ) {
                     $discount_name = 'Discount:';
                 }
                 $params['discounts'][] =  array(
@@ -203,9 +203,9 @@ class Afterpay_Afterpay_Model_Api_Adapters_Adapterv1
     {
         if ($quote->getData('afterpay_express_checkout') ) {
             $params = array(
-                'amount' => json_decode($quote->getData('afterpay_express_amount'), true),
+                'amount' => json_decode((string) $quote->getData('afterpay_express_amount'), true),
                 'isCheckoutAdjusted' => true,
-                'shipping' => json_decode($quote->getData('afterpay_express_shipping'), true),
+                'shipping' => json_decode((string) $quote->getData('afterpay_express_shipping'), true),
             );
         } else {
             $params = array();
@@ -304,7 +304,7 @@ class Afterpay_Afterpay_Model_Api_Adapters_Adapterv1
         }
 
         if( !empty($errors) && count($errors) ) {
-            throw new InvalidArgumentException( "<br/>" . implode($errors, '<br/>') );
+            throw new InvalidArgumentException( "<br/>" . implode('<br/>', $errors) );
         }
     }
 }

@@ -29,7 +29,7 @@ class Afterpay_Afterpay_Block_Adminhtml_Ipaddress extends Mage_Adminhtml_Block_S
     {
         $currentIp = $_SERVER['REMOTE_ADDR'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ips = explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']);
             $currentIp = trim($ips[count($ips) - 1]);
         }
         if (!empty($_SERVER['HTTP_X_REAL_IP'])) {

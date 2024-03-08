@@ -169,9 +169,9 @@ class Afterpay_Afterpay_Model_Api_Authorize extends Afterpay_Afterpay_Model_Api_
             $price          = $line['unitPrice'];
             $tax_category   = $line['vatCategory'];
             $vat_amount     = $line['vatAmount'];
-            $product_url    = isset($line['productUrl']) ? $line['productUrl'] : '';
-            $image_url      = isset($line['imageUrl']) ? $line['imageUrl'] : '';
-            $group_id       = isset($line['groupId']) ? $line['groupId'] : '';
+            $product_url    = $line['productUrl'] ?? '';
+            $image_url      = $line['imageUrl'] ?? '';
+            $group_id       = $line['groupId'] ?? '';
 
             $this->_afterpay->create_order_line(
                 $sku,

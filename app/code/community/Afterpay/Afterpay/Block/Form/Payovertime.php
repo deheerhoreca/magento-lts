@@ -21,8 +21,6 @@ class Afterpay_Afterpay_Block_Form_Payovertime extends Afterpay_Afterpay_Block_F
 
     protected function _construct()
     {
-        parent::_construct();
-
         // logic borrowed from Mage_Paypal_Block_Standard_form
         $block = Mage::getConfig()->getBlockClassName('core/template');
         $block = new $block;

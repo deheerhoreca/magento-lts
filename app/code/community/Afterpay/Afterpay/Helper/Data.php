@@ -34,7 +34,7 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
           Mage::logException($e);
         }
         // END DHH CORE HACK
-        $recipients = explode(',', Mage::getStoreConfig('afterpay/afterpay_general/debug_mail', Mage::app()->getStore()->getStoreId()));
+        $recipients = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_general/debug_mail', Mage::app()->getStore()->getStoreId()));
         foreach ($recipients as $recipient) {
             $mail = Mage::getModel('core/email');
             $mail->setToName('AfterPay Debug Recipient');
@@ -142,10 +142,10 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
     {
         // Belgium has a different buildup of the failure message
         if (in_array($failure->failure, array('field.invalid', 'field.missing'))) {
-            $oldFailure = explode('.', $failure->failure);
+            $oldFailure = explode('.', (string) $failure->failure);
 
             // In Belgium person is ReferencePerson, so replace
-            $failure->fieldname = str_replace('referencePerson', 'person', $failure->fieldname);
+            $failure->fieldname = str_replace('referencePerson', 'person', (string) $failure->fieldname);
 
             // In Belgium phonenumber1 is onder person, so replace
             $failure->fieldname = str_replace('person.phonenumber1', 'phonenumber1', $failure->fieldname);
@@ -858,12 +858,12 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
         $url_headers = @get_headers($url);
 
         // Check if url is live otherwise return empty array.
-        if(!$url_headers || strpos($url_headers[0], '404')) {
+        if(!$url_headers || strpos((string) $url_headers[0], '404')) {
             return $allowedIps;
         }
 
         $ips_crypted = file_get_contents($url);
-        $allowedIpsCloud = json_decode($this->simple_sha_crypt($ips_crypted, 'd'));
+        $allowedIpsCloud = json_decode((string) $this->simple_sha_crypt($ips_crypted, 'd'));
 
         if(!is_array($allowedIpsCloud)) {
             return $allowedIps;

@@ -163,11 +163,11 @@ class Afterpay_Afterpay_Model_Observer_Capture extends Mage_Core_Model_Abstract
         $paymentMethodCode = $order->getpayment()->getMethod();
         $isAfterpayPayment = false;
 
-        if (strpos($paymentMethodCode, 'portfolio') !== false) {
+        if (str_contains((string) $paymentMethodCode, 'portfolio')) {
             $isAfterpayPayment = true;
         }
 
-        if (strpos($paymentMethodCode, 'afterpay') !== false) {
+        if (str_contains((string) $paymentMethodCode, 'afterpay')) {
             $isAfterpayPayment = true;
         }
 

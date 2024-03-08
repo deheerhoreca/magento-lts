@@ -148,7 +148,7 @@ class Afterpay_Afterpay_ExpressController extends Mage_Core_Controller_Front_Act
                     ->setCustomerEmail($order['consumer']['email']);
             }
 
-            $fullName = explode(' ', $order['shipping']['name']);
+            $fullName = explode(' ', (string) $order['shipping']['name']);
             $lastName = array_pop($fullName);
             if (empty($fullName)) {
                 $firstName = $lastName; // if $order['shipping']['name'] contains only one word
@@ -164,7 +164,7 @@ class Afterpay_Afterpay_ExpressController extends Mage_Core_Controller_Front_Act
                 ->setTelephone($order['shipping']['phoneNumber'])
                 ->setStreet(array(
                     $order['shipping']['line1'],
-                    isset($order['shipping']['line2'])?$order['shipping']['line2']:null
+                    $order['shipping']['line2'] ?? null
                 ))
                 ->setCity($order['shipping']['suburb'])
                 ->setRegion($order['shipping']['state'])
@@ -181,7 +181,7 @@ class Afterpay_Afterpay_ExpressController extends Mage_Core_Controller_Front_Act
                     ->setTelephone($order['shipping']['phoneNumber'])
                     ->setStreet(array(
                         $order['shipping']['line1'],
-                        isset($order['shipping']['line2'])?$order['shipping']['line2']:null
+                        $order['shipping']['line2'] ?? null
                     ))
                     ->setCity($order['shipping']['suburb'])
                     ->setRegion($order['shipping']['state'])

@@ -70,7 +70,7 @@ class Afterpay_Afterpay_Model_Request_Cancel extends Afterpay_Afterpay_Model_Req
         $soap->setvars($this->getVars())
              ->setMethod($this->getMethod())
              ->setIsPartial($this->getIsPartial());
-        list($response, $responseXML, $requestXML) = $soap->cancelRequest();
+        [$response, $responseXML, $requestXML] = $soap->cancelRequest();
         $this->_debugEmail .= "The SOAP request has been sent. \n";
         if (!is_object($requestXML) || !is_object($responseXML)) {
             $this->_debugEmail .= "Request or response was not an object \n";

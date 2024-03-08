@@ -51,7 +51,7 @@ class Afterpay_Afterpay_Model_Api_Http_Client
             $opts[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
             $opts[CURLOPT_HTTPHEADER][] = 'Content-Length: '.strlen($opts[CURLOPT_POSTFIELDS]);
 
-            switch (strtoupper($method)) {
+            switch (strtoupper((string) $method)) {
                 case 'POST':
                     $opts[CURLOPT_POST] = TRUE;
                     break;

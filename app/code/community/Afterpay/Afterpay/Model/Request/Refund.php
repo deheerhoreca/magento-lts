@@ -67,7 +67,7 @@ class Afterpay_Afterpay_Model_Request_Refund extends Afterpay_Afterpay_Model_Req
     public function loadInvoiceByTransactionId($transactionId)
     {
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
-            if (substr($invoice->getTransactionId(), 0, 32) == substr($transactionId, 0, 32)) {
+            if (substr((string) $invoice->getTransactionId(), 0, 32) == substr((string) $transactionId, 0, 32)) {
                 $invoice->load($invoice->getId()); // to make sure all data will properly load (maybe not required)
                 return $invoice;
             }
@@ -87,7 +87,7 @@ class Afterpay_Afterpay_Model_Request_Refund extends Afterpay_Afterpay_Model_Req
             'afterpay/afterpay_' . $method . '/portfolio_country',
             Mage::app()->getStore()->getId()
         );
-        if(strpos($method, 'rest') !== false){
+        if(str_contains((string) $method, 'rest')){
             $country .= '-rest';
         }
         $this->setCountry($country);

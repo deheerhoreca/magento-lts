@@ -81,7 +81,7 @@ class Afterpay_Afterpay_Block_Onetouch extends Mage_Core_Block_Template
     {
         $apiMode = Mage::getStoreConfig('payment/afterpaypayovertime/' . Afterpay_Base::API_MODE_CONFIG_FIELD);
         $settings = ApiMode::getEnvironmentSettings($apiMode);
-        $key = urlencode(Mage::getStoreConfig('afterpay/payovertime_cart/express_key'));
+        $key = urlencode((string) Mage::getStoreConfig('afterpay/payovertime_cart/express_key'));
 
         return $settings[ApiMode::KEY_WEB_URL] . 'afterpay.js?merchant_key=' . $key;
     }

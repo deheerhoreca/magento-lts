@@ -130,7 +130,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
         }
 
         $portfolioIpCheckEnabled  = (bool) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/limit_by_ip', $storeId);
-        $allowedIps               = array_map('trim', explode(',', Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/limit_by_ip_ips', $storeId)));
+        $allowedIps               = array_map('trim', explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/limit_by_ip_ips', $storeId)));
 
         // If the IP check is used
         // Get allowedIps from mip.afterpay.nl
@@ -145,7 +145,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
 
         $currentIp                = $_SERVER['REMOTE_ADDR'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ips = explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']);
             $currentIp = trim($ips[count($ips) - 1]);
         }
         if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
@@ -157,7 +157,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
 
         // If reversed iprestriction is filled with ip addresses then the payment method is not available for that ip adresses
         $portfolioReversedIpCheckEnabled    = (bool) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/reversed_iprestriction', $storeId);
-        $disallowedIps                      = array_map('trim', explode(',', Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/reversed_iprestriction_ips', $storeId)));
+        $disallowedIps                      = array_map('trim', explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/reversed_iprestriction_ips', $storeId)));
 
         if ($portfolioReversedIpCheckEnabled) {
             if (in_array($currentIp, $disallowedIps)) {
@@ -192,7 +192,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
         }
 
         $specificCustomerGroupsAllowed = (bool) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/allowspecific_customers', $storeId);
-        $customerGroupsAllowed         = explode(',', Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/specificcustomers', $storeId));
+        $customerGroupsAllowed         = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/specificcustomers', $storeId));
         $groupId                       = Mage::getSingleton('checkout/session')->getQuote()->getCustomerGroupId();
         $group                         = Mage::getSingleton('customer/group')->load($groupId)->getData('customer_group_code');
 
@@ -204,7 +204,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
         }
 
         $specificCountry  = (bool) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/allowspecific', $storeId);
-        $countriesAllowed = explode(',', Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/specificcountry', $storeId));
+        $countriesAllowed = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/specificcountry', $storeId));
         $countrySelected  = $quote->getBillingAddress()->getCountry();
 
         //check if the country specified in the billing address is allowed to use this payment method
@@ -213,7 +213,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
         }
 
         //check not allowed shipment methods
-        $shippingMethodsNotAllowed = explode(',', Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/notallowedshippingmethods', $storeId));
+        $shippingMethodsNotAllowed = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_' . $this->_code . '/notallowedshippingmethods', $storeId));
         $shippingMethodSelected = $quote->getShippingAddress()->getShippingMethod();
         if (is_array($shippingMethodsNotAllowed) && !empty($shippingMethodSelected) && in_array($shippingMethodSelected, $shippingMethodsNotAllowed)) {
             return false;
@@ -346,7 +346,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
 
         //changes the payment method code to camelCased to use with Magento's get method
         $codeString = 'get';
-        $codeBits = explode('_', $this->_code);
+        $codeBits = explode('_', (string) $this->_code);
         foreach ($codeBits as $bit) {
             $codeString .= ucFirst($bit);
         }
@@ -368,7 +368,7 @@ class Afterpay_Afterpay_Model_Portfolios_Abstract extends Mage_Payment_Model_Met
             $infoArray = $this->_assignData($data);
         }
 
-        if (strpos($this->_code, 'portfolio_') !== false || strpos($this->_code, 'afterpay_') !== false) {
+        if (str_contains((string) $this->_code, 'portfolio_') || str_contains((string) $this->_code, 'afterpay_')) {
             $info = $this->getInfoInstance();
             $info->setAdditionalInformation($infoArray);
         }
