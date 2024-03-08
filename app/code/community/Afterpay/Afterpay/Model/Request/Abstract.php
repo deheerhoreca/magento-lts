@@ -702,6 +702,8 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         $orderLines[] = $this->_addGiftCardLine();
         $orderLines[] = $this->_addStoreCreditsLine();
         $orderLines[] = $this->_addRewardPointsLine();
+        // DHH CORE HACK -- Remove empty lines to prevent PHP 8.1 incompatibilities
+        $orderLines = array_filter($orderLines);
         return $orderLines;
     }
 

@@ -285,6 +285,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `app/code/community/Afterpay/Afterpay/etc/config.xml`
   - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
     - Alterations to logo and text, debug email
+  - `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
+    - Remove empty lines to prevent PHP 8.1 incompatibilities
+  - `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
+    - Prevent doing str_replace on arrays
   - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
     - Fix for PHP 7.x
 - **app/design/adminhtml/**

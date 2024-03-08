@@ -10,28 +10,28 @@
 cm
 
 TARGET_PHP_INI=./php.cmd.ini
-TARGET_USER_INI=.user.ini
+TARGET_USER_INI=_user.ini
 PHP_VERSION=$(iphp -r "echo phpversion();")
 
-# Backup the current php.ini
+# Backup php.cmd.ini
 PHP_INI_BACKUP="php.cmd.ini.bak-$(date +%F_%H%M%S)"
 cp ${TARGET_PHP_INI} ${PHP_INI_BACKUP}
 if [ $? -ne 0 ]; then
-  echo "Fatal error: Failed to backup php.ini. Keeping current php.ini"
+  echo "Fatal error: Failed to backup ${TARGET_PHP_INI}. Keeping current configuration."
   exit
 fi
-echo "Old php.ini backed up to ${PHP_INI_BACKUP}";
+echo "Existing ${TARGET_PHP_INI} backed up to ${PHP_INI_BACKUP}";
 
-# Backup the current .user.ini
-USER_INI_BACKUP=".user.ini.bak-$(date +%F_%H%M%S)"
+# Backup _user.ini
+USER_INI_BACKUP="${TARGET_USER_INI}.bak-$(date +%F_%H%M%S)"
 cp ${TARGET_USER_INI} ${USER_INI_BACKUP}
 if [ $? -ne 0 ]; then
-  echo "Fatal error: Failed to backup .user.ini. Keeping current .user.ini"
+  echo "Fatal error: Failed to backup ${TARGET_USER_INI}. Keeping current configuration."
   exit
 fi
-echo "Old .user.ini backed up to ${USER_INI_BACKUP}";
+echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 
-# Create new php.ini
+# Create new php.cmd.ini
 DEFAULT_PHP_INI=$(iphp -r "echo php_ini_loaded_file();")
 SHARED_PHP_INI=$(pwd)/etc/php.cmd-dist.ini
 LOCAL_PHP_INI=$(pwd)/etc/php.cmd-local.ini
@@ -53,7 +53,7 @@ cat ${SHARED_PHP_INI} >> ${TARGET_PHP_INI}
 printf "\n; ---------------------- ${LOCAL_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${LOCAL_PHP_INI} >> ${TARGET_PHP_INI}
 
-# Create new .user.ini
+# Create new _user.ini
 SHARED_USER_INI=$(pwd)/etc/.user-dist.ini
 LOCAL_USER_INI=$(pwd)/etc/.user-local.ini
 NOW=`date`

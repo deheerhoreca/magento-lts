@@ -1,5 +1,5 @@
 {
     "require": {
-        "payintegrator/afterpay": "2.4"
+        "payintegrator/afterpay": "^2.4"
     }
 }

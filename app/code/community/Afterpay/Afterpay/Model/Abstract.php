@@ -361,8 +361,11 @@ class Afterpay_Afterpay_Model_Abstract extends Mage_Payment_Model_Method_Abstrac
         $cleanArray = array();
 
         foreach ($array as $key => $value) {
-            $value = str_replace('\r', ' ', (string) $value);
-            $value = str_replace('\n', ' ', $value);
+            // DHH CORE HACK -- Prevent doing str_replace on arrays
+            if(is_scalar($value)) {
+                $value = str_replace('\r', ' ', $value);
+                $value = str_replace('\n', ' ', $value);
+            }
             $cleanArray[$key] = $value;
         }
 
