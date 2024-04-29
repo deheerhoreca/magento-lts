@@ -19,7 +19,7 @@ $brand_id                   = $_product->getData("manufacturer");
 $brand_logo                 = "";
 $brand_slug                 = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $seo_tag                    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
-$brand_link                 = "/shop?manufacturer={$brand_id}&cstag={$seo_tag}";
+$brand_link                 = "/shop?manufacturer={$brand_id}&title={$seo_tag}";
 $anchors                    = [];
 $in3_minimum                = 50 / 1.21;
 $in3_maximum                = 30000 / 1.21;

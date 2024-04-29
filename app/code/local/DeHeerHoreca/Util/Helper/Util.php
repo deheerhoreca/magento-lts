@@ -14,7 +14,9 @@ $dhh_click_log = [];
 
 // If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
 // Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
-const SUPPLIERS_HIDE_STOCK_DETAILS = ["bartscher", "deheerhoreca", "foster-gamko", "liebherr", "smeg"];
+const SUPPLIERS_HIDE_STOCK_DETAILS = ["apexa", "bartscher", "deheerhoreca", "espressions",
+"foster-gamko", "heatmaestro", "hoshizaki", "orionstar", "probbqshop", "liebherr", "smeg",
+"youcup"];
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   

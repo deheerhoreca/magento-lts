@@ -5,7 +5,7 @@ function _dhh_ips() {
 }
 
 // Cannot use _dhh_debug() due to the ?nofpc requirement
-if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "GET"
+if(isset($_SERVER["REQUEST_METHOD"]) && ($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "HEAD")
 && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
 ) {
   define("DHH_FPC_DEBUG", false);   // Default: false

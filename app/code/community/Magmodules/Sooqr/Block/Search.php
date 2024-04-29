@@ -140,7 +140,9 @@ class Magmodules_Sooqr_Block_Search extends Mage_Core_Block_Template
             return 'static.staging.sooqr.com/sooqr.js';
         }
 
-        return 'static.sooqr.com/sooqr.js';
+        // DHH CORE HACK -- https://sooqrsearch.atlassian.net/servicedesk/customer/portal/1/article/2911698947
+        return 'static.spotlersearch.com/sooqr.js';
+        // return 'static.sooqr.com/sooqr.js';
     }
 
 }

@@ -75,7 +75,7 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
     $brand_name   = strtok($label, " "); // Best effort
     $brand_id     = $manufacturer["value"];
     $seo_tag      = Mage::helper("deheerhoreca_util/util")->getUrlSlug($label);
-    $shop_link    = "/shop?{$attribute_code}={$brand_id}&cstag={$seo_tag}";
+    $shop_link    = "/shop?{$attribute_code}={$brand_id}&title={$seo_tag}";
     $label_enc    = htmlspecialchars((string) $label);
     $img_html     = "";
     

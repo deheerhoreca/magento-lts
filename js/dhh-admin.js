@@ -23,7 +23,7 @@ function dhh_change_required_fields() {
     $('msrp').removeClassName('required-entry');
   } else {
     $('levertijd').addClassName('required-entry');
-    $('price_supplier_discount_perc').addClassName('required-entry');
+    // $('price_supplier_discount_perc').addClassName('required-entry');
     $('msrp').addClassName('required-entry');
   }
   

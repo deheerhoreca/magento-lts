@@ -870,7 +870,6 @@ class Mage_Core_Model_App
         }
 
         if (empty($this->_stores[$id])) {
-          Mage::log(var_export($id, true), null, 'verbose.log', true);
             $store = Mage::getModel('core/store');
             /** @var Mage_Core_Model_Store $store */
             if (is_numeric($id)) {

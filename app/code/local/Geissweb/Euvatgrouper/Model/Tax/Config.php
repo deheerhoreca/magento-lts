@@ -3,6 +3,12 @@
 if(defined("DHH_UUID") === false) {
   define("DHH_UUID", uniqid());
 }
+if(defined("DHH_QUOTE_ID") === false) {
+  define("DHH_QUOTE_ID", "");
+}
+if(defined("GEISSWEB_VAT_VERBOSE") === false) {
+  define("GEISSWEB_VAT_VERBOSE", false);
+}
 
 /**
  * ||GEISSWEB| EU VAT Enhanced
@@ -88,7 +94,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
                     return false;
                 }
 			}
-      if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled result: ".var_export($cbtEnabled, true), null, 'euvatenhanced.log');
+      if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled result: ".json_encode($cbtEnabled), null, 'euvatenhanced.log');
 			return $cbtEnabled;
 
 		} else {

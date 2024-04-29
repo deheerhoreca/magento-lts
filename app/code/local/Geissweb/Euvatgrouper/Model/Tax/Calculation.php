@@ -131,7 +131,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Calculation extends Mage_Tax_Model_Calcula
 			}
 
 			/** @var $request Varien_Object */
-			if($debug) Mage::log("Request is: ".get_class($request)."::".var_export($request->debug(),true), null, 'euvatenhanced.log');
+			if($debug) Mage::log("Request is: ".get_class($request)."::".json_encode($request->debug()), null, 'euvatenhanced.log');
 			$customerSession = Mage::getSingleton('customer/session');
 
 			try {
@@ -144,7 +144,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Calculation extends Mage_Tax_Model_Calcula
 				// Check for shipping to multiple addresses
 				/** @var Mage_Sales_Model_Quote $quote */
 				//$quote = Mage::getSingleton('checkout/session')->getQuote();
-				//if($debug) Mage::log("Quote is: ".var_export($quote->debug(),true), null, 'euvatenhanced.log');
+				//if($debug) Mage::log("Quote is: ".json_encode($quote->debug()), null, 'euvatenhanced.log');
 				//if($quote->getIsMultiShipping()) {
 					/*
 					$address = $dataHelper->getCurrentMultiShippingAddress($request, $quote);
@@ -161,7 +161,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Calculation extends Mage_Tax_Model_Calcula
 					return $request;
 				}
 
-				//if($debug) Mage::log("basedOn address: ".var_export($address->debug(),true), null, 'euvatenhanced.log');
+				//if($debug) Mage::log("basedOn address: ".json_encode($address->debug()), null, 'euvatenhanced.log');
 
 				if(!is_null($address->getCountryId())) {
 					$basedOnCc = $address->getCountryId();

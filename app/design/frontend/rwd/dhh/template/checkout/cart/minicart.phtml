@@ -64,7 +64,9 @@ if($ga4_user_data === [] && Mage::getSingleton("customer/session")->isLoggedIn()
     $value = (string) $customer->getEmail();
     if(strlen($value) > 0) {
       $value = trim(strtolower($value));
+      // Mage::log(json_encode($value), null, "verbose.txt", true);
       $sha256_value = hash("sha256", $value);
+      // Mage::log(json_encode($sha256_value), null, "verbose.txt", true);
       // $trackingCodes[] = "let dhh_mile_sha256 = ".json_encode($sha256_value).";";
       $ga4_user_data["sha256_email_address"] = $sha256_value;
     }
