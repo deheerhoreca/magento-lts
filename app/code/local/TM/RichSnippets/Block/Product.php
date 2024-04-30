@@ -446,12 +446,15 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           default:                $min_days = 1; $max_days = 5; break;
         }
         
+        $shipping_cost = ""; // DHH CORE HACK
         if(isset($data['offers']['price']) && is_numeric($data['offers']['price'])) {
           if(($data['offers']['price'] / 1.21) > Mage::getStoreConfig('carriers/freeshipping/free_shipping_subtotal', $this->getStoreId())) {
             $shipping_cost = 0;
           } else {
             $shipping_cost = 9.95;
           }
+        } else {
+          Mage::log("{$sku} Product no price while doing getJsonSnippetsProduct()", null, "system.log", true); // DHH CORE HACK
         }
         
         // @todo shippingDetails
