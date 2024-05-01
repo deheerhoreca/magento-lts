@@ -200,39 +200,47 @@ if($galleryImagesCount) {
     $wm_filename = _get_watermarked_image_filename($imagePath, $dhh_sku);
     $wm_path   = dirname((string) $imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
     
-    $msg = "";
+    // $msg = "";
     if(is_file($wm_path) === true) {
       $imagePath = $wm_path;
       $imageFileOverride[$galleryImage->getFile()] = DS.WATERMARKED_DIR."{$wm_filename}";
-      $msg = "{$dhh_sku} Watermarked image found at ".var_export($wm_path, true);
+      // $msg = "{$dhh_sku} Watermarked image found at ".var_export($wm_path, true);
     } else {
-      $msg = "{$dhh_sku} Watermarked image not found at ".var_export($wm_path, true);
+      // $msg = "{$dhh_sku} Watermarked image not found at ".var_export($wm_path, true);
     }
     // END DHH
     
+    // DHH EDITS:
     if(file_exists($imagePath)) {
-      $imageFile = $galleryImage->getFile();
-      $isBaseImage = ($imageFile == $productBaseImage);
+      $imageFile    = $galleryImage->getFile();
+      $isBaseImage  = ($imageFile == $productBaseImage);
+      
       try {
-        $productImages[] = array(
-          'image-size' => getimagesize($imagePath),
-          'image-file' => $imageFile,
-          'image-label' => $galleryImage->getLabel(),
-          'is-base-image' => $isBaseImage,
-        );
-        if($isBaseImage) {
-          $isBaseImageIncluded = true;
-        }
+        $image_size = getimagesize($imagePath);
       } catch(Exception) {
-        //trigger_error($e->getMessage(), E_USER_ERROR);
+        Mage::log("{$dhh_sku} getimagesize() failed on ".var_export($imagePath, true), null, "system.log", true);
+        continue; // Assume that it's a fucked image and skip it
       }
+      $productImages[]  = [
+        'image-size'      => $image_size,
+        'image-file'      => $imageFile,
+        'image-label'     => $galleryImage->getLabel(),
+        'is-base-image'   => $isBaseImage,
+      ];
+      if($isBaseImage) {
+        $isBaseImageIncluded = true;
+      }
+    } else {
+      $msg = "{$dhh_sku} Product image does not exist: ".var_export($imagePath, true);
+      Mage::log($msg, null, "system.log", true);
     }
+    // END DHH
   }
 }
 
 // if(_dhh_debug()) {
-  // printr($productImages);
-  // printr($imageFileOverride);
+  // dump($productImages);
+  // dump($imageFileOverride);
 // }
 
 if(!count($productImages)) {
