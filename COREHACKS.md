@@ -240,6 +240,15 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - PHP 8 compatibility
   - `app/code/community/Ophirah/Qquoteadv/Helper/Licensechecks.php`
     - PHP 8 compatibility
+- **AfterPay**
+  - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
+  - `app/code/community/Afterpay/Afterpay/etc/config.xml`
+  - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
+    - Alterations to logo and text, debug email
+  - `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
+    - Remove empty lines to prevent PHP 8.1 incompatibilities
+  - `app/code/community/Afterpay/Afterpay/Model/Abstract.php`
+    - Prevent doing str_replace on arrays
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
   - Patched up to master on 2023-01-17 (commit 445557b)
@@ -296,14 +305,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Seems to no longer be needed
   - `app/code/community/Mollie/Mpm/Helper/Data.php`
       - Prevent fatal errors. Fixed upstream.
-  - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
-  - `app/code/community/Afterpay/Afterpay/etc/config.xml`
-  - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
-    - Alterations to logo and text, debug email
-  - `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
-    - Remove empty lines to prevent PHP 8.1 incompatibilities
-  - `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
-    - Prevent doing str_replace on arrays
   - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
     - Fix for PHP 7.x
 - **app/design/adminhtml/**

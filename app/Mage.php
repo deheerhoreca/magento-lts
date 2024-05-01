@@ -973,8 +973,10 @@ final class Mage
         if (!self::getConfig()) {
             return;
         }
-        $file = self::getStoreConfig('dev/log/exception_file');
-        self::log("\n" . $e->__toString(), Zend_Log::ERR, $file);
+        // DHH CORE HACK
+        // $file = self::getStoreConfig('dev/log/exception_file');
+        self::log($e->__toString(), Zend_Log::ERR, "exception.log", true);
+        // self::log("\n" . $e->__toString(), Zend_Log::ERR, $file);
     }
 
     /**

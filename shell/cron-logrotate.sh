@@ -2,8 +2,8 @@
 
 # ~/httpdocs/deheerhoreca-magento/shell/cron-logrotate.sh
 
-# set -e      # Exit immediately if a command exits with a non-zero status
-# set -u      # Treat unset variables as an error when substituting
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
 
 now=`date`
 echo "--------------------------------------------------------------------"
@@ -22,16 +22,19 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.jsonl
 ~/httpdocs/deheerhoreca-magento/var/log/*.ndjson
 ~/logs/deheerhoreca-magento/*.log
+~/logs/deheerhoreca-magento/*_log
 {
   daily
   nocopytruncate
   dateext
-  rotate 3
+  rotate 2
   missingok
   notifempty
 }
 EOF
 
 /usr/sbin/logrotate /tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-intel.tmp -v
+
+rm /tmp/logrotate-deheerhoreca-magento.conf
 
 # set +x

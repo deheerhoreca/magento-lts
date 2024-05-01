@@ -136,7 +136,7 @@
             </template>
             <log>
                 <file>system.log</file>
-                <allowedFileExtensions>log,txt,html,csv</allowedFileExtensions>
+                <allowedFileExtensions>log,txt,html,csv,json,jsonl,ndjson</allowedFileExtensions>
             </log>
         </dev>
         <general>
