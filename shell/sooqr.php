@@ -26,8 +26,8 @@ require_once 'abstract.php';
 class Sooqr_Shell_GenerateFeed extends Mage_Shell_Abstract
 {
 
-    const XPATH_ENABLED = 'sooqr_connect/generate/enabled';
-    const XPATH_RESULT = 'sooqr_connect/generate/feed_result';
+    public const XPATH_ENABLED = 'sooqr_connect/generate/enabled';
+    public const XPATH_RESULT = 'sooqr_connect/generate/feed_result';
 
     /**
      *
@@ -70,7 +70,7 @@ class Sooqr_Shell_GenerateFeed extends Mage_Shell_Abstract
             return $allStores;
         }
 
-        return explode(',', trim($generate));
+        return explode(',', trim((string) $generate));
     }
 
     /**
