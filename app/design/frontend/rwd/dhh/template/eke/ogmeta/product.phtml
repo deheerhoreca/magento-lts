@@ -23,8 +23,11 @@ if(empty($html) === false) {
 } else {
   
   // ------------ START REGULAR FLOW  
-  $siteName = $helper->getSiteName();  
-  $imageFile = "media/catalog/product".$product->getSmallImage();
+  $siteName = $helper->getSiteName();
+  $imageFile = "";
+  if(!empty($product->getSmallImage())) {
+    $imageFile = "media/catalog/product".$product->getSmallImage();
+  }
   
   $imageAttr = [];
   if(strlen($imageFile) > 0 && is_file($imageFile) === true) {
@@ -34,12 +37,12 @@ if(empty($html) === false) {
       $imageAttr = [];
       Mage::logException($e);
       $msg = "{$product->getSku()} getimagesize() failed on file ".var_export($imageFile, true);
-      Mage::log($msg, null, "system.log", true);
+      Mage::log($msg, Zend_Log::NOTICE, "system.log", true);
     }
   } else {
     if(strlen($imageFile) > 0) {
       $msg = "{$product->getSku()} Product image does not exist: ".var_export($imageFile, true);
-      Mage::log($msg, null, "system.log", true);
+      Mage::log($msg, Zend_Log::NOTICE, "system.log", true);
     }
     $imageFile = $helper->getOgImage();
   }
