@@ -242,7 +242,7 @@ if($this->getQuote()->getData() == []) { ?>
                 <?php endif; ?>
               </div>
               <input type="hidden" name="quote[<?php echo $item->getId() ?>][qty]" value="<?php echo $item->getQty()*1; ?>" size="3"/>
-              <input type="hidden" name="quote[<?php echo $item->getId() ?>][attributeEncode]" value="<?php echo base64_encode($item->getAttribute()) ?>"/>
+              <input type="hidden" name="quote[<?php echo $item->getId() ?>][attributeEncode]" value="<?php echo base64_encode((string) $item->getAttribute()) ?>"/>
               <input type="hidden" name="quote[<?php echo $item->getId() ?>][product]" value="<?php echo $product->getId() ?>"/>
               <input type="hidden" name="quote[<?php echo $item->getId() ?>][quoteid]" value="<?php echo $item->getId() ?>"/>
             </td>

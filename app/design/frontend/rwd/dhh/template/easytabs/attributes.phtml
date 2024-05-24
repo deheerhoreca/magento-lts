@@ -304,7 +304,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           
           // Conditional warranty supplement
           case "warranty_remarks":
-            $supplier = strtolower($_product->getAttributeText("supplier"));
+            $supplier = strtolower((string) $_product->getAttributeText("supplier"));
             if($supplier === "combisteel") {
               $link_url   = "/garantievoorwaarden-combisteel";
               $link_title = "Aanvullende garantievoorwaarden CombiSteel";

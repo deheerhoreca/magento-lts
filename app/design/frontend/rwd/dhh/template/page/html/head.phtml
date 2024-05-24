@@ -39,9 +39,9 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->g
 <?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
 <script src="/js/ext-translator.js" defer></script>
 <?=$this->getIncludes()?>
-<meta name="description" content="<?=htmlspecialchars($this->getDescription())?>">
-<meta name="keywords" content="<?=htmlspecialchars($this->getKeywords())?>">
-<meta name="robots" content="<?=htmlspecialchars($this->getRobots())?>">
+<meta name="description" content="<?=htmlspecialchars((string) $this->getDescription())?>">
+<meta name="keywords" content="<?=htmlspecialchars((string) $this->getKeywords())?>">
+<meta name="robots" content="<?=htmlspecialchars((string) $this->getRobots())?>">
 <meta name="theme-color" content="#fff">
 <meta name="application-name" content="Chefstore.nl">
 <meta name="msapplication-TileColor" content="#fff">

@@ -7,7 +7,7 @@
         ><?php echo $this->__('Back to Store') ?></a>
     </h1>
 
-    <?php $subtitle = trim(Mage::getStoreConfig('firecheckout/general/subtitle')); ?>
+    <?php $subtitle = trim((string) Mage::getStoreConfig('firecheckout/general/subtitle')); ?>
     <?php if ($subtitle) : ?>
         <div class="checkout-subtitle">
             <?php echo $this->__($subtitle) ?>
@@ -22,7 +22,7 @@
 
 <?php
     $topContainer = $this->getChildHtml('firecheckout.top.container');
-    $topContainer = trim($topContainer);
+    $topContainer = trim((string) $topContainer);
     if (strlen($topContainer)) :
 ?>
     <div class="firecheckout-top-container">
@@ -133,7 +133,7 @@ endif;
         </div>
     </div>
 
-    <?php $additional = trim($this->getChildHtml('checkout.additional.information')) // it's not used ?>
+    <?php $additional = trim((string) $this->getChildHtml('checkout.additional.information')) // it's not used ?>
     <?php if ($additional) : ?>
         <div class="step step-additional" id="step-additional">
             <div class="step-content">

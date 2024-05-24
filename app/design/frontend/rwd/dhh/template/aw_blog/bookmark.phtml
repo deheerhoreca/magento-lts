@@ -10,7 +10,7 @@
             <img src="<?php echo Mage::getDesign()->getSkinUrl('aw_blog/images/communityIcons'); ?>/http-getpocket-com-.gif" width="20" height="20" alt = "" /></a>&nbsp;
         <a href="http://reddit.com/submit?url=<?php echo $post->getAddress(); ?>&amp;title=<?php echo $post->getTitle(); ?>" class="bm">
             <img src="<?php echo Mage::getDesign()->getSkinUrl('aw_blog/images/communityIcons'); ?>/http-reddit-com.gif" width="20" height="20" alt = "" /></a>&nbsp;
-        <a href="whatsapp://send?text=<?php echo urlencode($post->getAddress());?>" data-action="share/whatsapp/share" class="bm">
+        <a href="whatsapp://send?text=<?php echo urlencode((string) $post->getAddress());?>" data-action="share/whatsapp/share" class="bm">
             <img src="<?php echo Mage::getDesign()->getSkinUrl('aw_blog/images/communityIcons'); ?>/http-whatsapp-com.gif" width="20" height="20" alt = "" /></a>&nbsp;
     </div>
 <?php

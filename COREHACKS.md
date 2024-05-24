@@ -15,11 +15,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - `mphp vendor/bin/rector process ./*.php --dry-run --config=dev/rector.php`
     - `mphp vendor/bin/rector process ./app/code/community/ --dry-run --config=dev/rector.php`
     - `mphp vendor/bin/rector process ./app/code/local/ --dry-run --config=dev/rector.php`
-    - `mphp vendor/bin/rector process ./app/code/community/Afterpay ./lib/Afterpay --config=dev/rector-3rdparty.php`
-- Our code:
-  - `LevelSetList::UP_TO_PHP_81`:
-    - `mphp vendor/bin/rector process ./app/code/local/DeHeerHoreca/ --dry-run --config=dev/rector.php`
-    - `mphp vendor/bin/rector process ./app/design/frontend/rwd/dhh/ --dry-run --config=dev/rector.php`
+  - Pre-configured:
+    - `mphp vendor/bin/rector process --dry-run --config=dev/rector-3rdparty.php`
+- Our own code:
+  - `mphp vendor/bin/rector process  --dry-run --config=dev/rector-owncode.php`
 
 ## Core Hacks
 - **app/code/core/Mage/**

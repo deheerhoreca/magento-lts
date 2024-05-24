@@ -31,7 +31,7 @@ if($force ||
     var magicToolboxProductId = <?php echo $current_product_id; ?>;
     var magicToolboxTool = 'magiczoomplus';
     var magicToolboxToolMainId = 'MagicZoomPlusImage'+magicToolboxProductId;
-    var magicToolboxOptionTitles = ['<?php echo strtolower(trim(preg_replace('/\s*,\s*/is', "','", (string) $tool->params->getValue('option-associated-with-images', 'product')))); ?>'];
+    var magicToolboxOptionTitles = ['<?php echo strtolower(trim((string) preg_replace('/\s*,\s*/is', "','", (string) $tool->params->getValue('option-associated-with-images', 'product')))); ?>'];
     var magicToolboxSwitchMetod = '<?php echo $mouseEvent; ?>';
     var magicToolboxMouseoverDelay = <?php echo $tool->params->checkValue('selectorTrigger', 'hover', 'product') ? 60 : 0; ?>;
 

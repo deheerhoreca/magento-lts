@@ -31,9 +31,9 @@ $show_toolbar                 = true;
 $_columnCount                 = 4;
 $displaySize                  = 200;
 $_imgSize                     = 1 * $displaySize;
-$show_products                = (!str_contains($category_desc, "<!--no_products-->"));
-$media_url                    = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-$media_dir                    = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$show_products                = (!str_contains((string) $category_desc, "<!--no_products-->"));
+$media_url                    = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_dir                    = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
 
 // Product price block
@@ -71,7 +71,7 @@ if($carct && ($category === "category")) {
   $category_id          = (int) $carct->getId();
   $category_name        = $carct->getName();
   $category_name        = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
-  $category_name_lwr    = strtolower($category_name);
+  $category_name_lwr    = strtolower((string) $category_name);
   $orig_category_desc   = $carct->getDescription();
   
   // Assemble category description
@@ -89,7 +89,7 @@ if($carct && ($category === "category")) {
   
   // Add category boilerplate to bottom
   if($on_first_page === true && $have_active_filters === false
-  && !str_contains($category_desc, "<!--no_auto_desc-->")) {      
+  && !str_contains((string) $category_desc, "<!--no_auto_desc-->")) {      
     $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($category_id, $_productCollection);
     if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
       $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
@@ -128,7 +128,7 @@ if($carct && ($category === "category")) {
   if(empty($category_desc) === false) {
     echo "<div class='ctdesc' id='ctdesc'>";
     // Optionally cut off description and show a 'More' button
-    if(str_contains($category_desc, "<!--no_more_btn-->") || strlen((string) $category_desc) < 1000) {
+    if(str_contains((string) $category_desc, "<!--no_more_btn-->") || strlen((string) $category_desc) < 1000) {
       echo "<div id='cat-text'>{$category_desc}</div>";
     } else {
       echo "<div id='cat-text' class='short'>{$category_desc}</div>";
@@ -157,7 +157,7 @@ if($have_active_filters === true) {
 
 if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== false
 && empty($appliedFilters) === true
-&& !str_contains($orig_category_desc, "<!--no_cat_tiles-->")) {
+&& !str_contains((string) $orig_category_desc, "<!--no_cat_tiles-->")) {
   
   // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
   // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);

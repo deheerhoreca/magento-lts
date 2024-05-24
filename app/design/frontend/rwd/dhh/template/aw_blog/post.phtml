@@ -44,7 +44,7 @@
         <?php foreach ($comments as $comment) : ?>
             <div class="commentWrapper">
                 <div class="commentDetails"><h4 class="username"><?php echo $this->getClearComment($comment->getUser()); ?></h4> <?php echo $this->__("posted on") ?> <?php echo $this->formatDate($comment->getCreatedTime(), Mage::getStoreConfig('blog/blog/dateformat'), true); ?></div>
-                <div class="commentContent"><?php echo nl2br($this->getClearComment($comment->getComment())); ?></div>
+                <div class="commentContent"><?php echo nl2br((string) $this->getClearComment($comment->getComment())); ?></div>
             </div>
         <?php endforeach; ?>
      <?php echo $this->getChildHtml('aw_blog_comments_toolbar'); ?>

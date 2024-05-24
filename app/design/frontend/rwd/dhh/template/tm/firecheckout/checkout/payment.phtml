@@ -79,8 +79,8 @@
   </script>
   <?php
     $j2tRewardPoints = $this->getLayout()->getBlock("checkout_cart_coupon_normal");
-    $coupon = trim($this->getChildHtml("coupon"));
-    $giftcard = trim($this->getChildHtml("giftcard"));
+    $coupon = trim((string) $this->getChildHtml("coupon"));
+    $giftcard = trim((string) $this->getChildHtml("giftcard"));
     
     $checkboxState = Mage::getStoreConfig("firecheckout/general/discount_checkbox_state");
     ?>

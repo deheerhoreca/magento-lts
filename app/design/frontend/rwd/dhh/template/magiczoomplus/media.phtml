@@ -277,8 +277,8 @@ $associatedProductImagesHTML = [];
 $hiddenImagesHTML            = [];
 $scriptHTML                  = '';
 
-$media_url            = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-$media_dir            = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_url            = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_dir            = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 
 $cdn_img_options      = [
   "identifier"          => $dhh_sku,
@@ -611,10 +611,10 @@ if($productOptions) {
         if($optionType == Mage_Catalog_Model_Product_Option::OPTION_TYPE_DROP_DOWN || $optionType == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO) {
             $optionValues = [];
             foreach($productOption->getValues() as $optionValue) {
-                $optionValues[$optionValue->getOptionTypeId()] = strtolower(trim($optionValue->getTitle()));
+                $optionValues[$optionValue->getOptionTypeId()] = strtolower(trim((string) $optionValue->getTitle()));
             }
             $scriptHTML .= ' optionLabels[\''.$productOption->getId().'\'] = '.Mage::helper('core')->jsonEncode($optionValues).';'.
-                           ' optionTitles[\''.$productOption->getId().'\'] = \''.strtolower(trim($productOption->getTitle())).'\'; ';
+                           ' optionTitles[\''.$productOption->getId().'\'] = \''.strtolower(trim((string) $productOption->getTitle())).'\'; ';
         }
     }
 }

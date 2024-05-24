@@ -34,7 +34,7 @@ $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
       </a>
     </li>
     <li>
-      <a class="ml-2" href="mailto:?subject=<?php echo urlencode($_productName); ?>&body=<?php echo urlencode("Gezien op Chefstore.nl: {$em_url}") ?>" target="_blank" title="Deel dit via E-mail" rel="noreferrer nofollow">
+      <a class="ml-2" href="mailto:?subject=<?php echo urlencode((string) $_productName); ?>&body=<?php echo urlencode("Gezien op Chefstore.nl: {$em_url}") ?>" target="_blank" title="Deel dit via E-mail" rel="noreferrer nofollow">
         <i class="fa fa-envelope-o black" aria-hidden="true"></i>
       </a>
     </li>

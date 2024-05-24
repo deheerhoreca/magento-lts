@@ -70,7 +70,7 @@ if(function_exists('_fixPrice') === false) {
     $price = str_replace(",00", ",-", (string) $price);                // Trim zero cents
     $price = str_replace(".", "", $price);                    // Remove thousand separator
     $price = preg_replace("/(^\s+)|(\s+$)/us", "", $price);   // An utf8 trim()
-    $price = strip_tags(trim($price));
+    $price = strip_tags(trim((string) $price));
     
     return $price;
   }
@@ -103,7 +103,7 @@ if(function_exists('_displayPriceDates') === false) {
     
     if(Mage::app()->getLocale()->isStoreDateInInterval($store, $_special_price_from_date, $_special_price_to_date)) {
       setlocale(LC_TIME, "nl_NL");
-      $_special_price_to_ts = strtotime($_special_price_to_date);
+      $_special_price_to_ts = strtotime((string) $_special_price_to_date);
       $display_date = strftime("%A %e %B", $_special_price_to_ts);
       return "<div class='special_price_dates pt-1'>SALE eindigt <strong>{$display_date}</strong></div>";
     }
@@ -136,8 +136,8 @@ if($_product->getAttributeText("eol") !== "Ja") {
   $_special_price_from_date = $_product->getSpecialFromDate();
   $_special_price_to_date   = $_product->getSpecialToDate();
 
-  $_special_price_from_ts   = empty($_special_price_from_date) ? null : strtotime($_special_price_from_date);
-  $_special_price_to_ts     = empty($_special_price_to_date)   ? null : strtotime($_special_price_to_date);
+  $_special_price_from_ts   = empty($_special_price_from_date) ? null : strtotime((string) $_special_price_from_date);
+  $_special_price_to_ts     = empty($_special_price_to_date)   ? null : strtotime((string) $_special_price_to_date);
 
   if(!$_product->isGrouped()) {
     $_weeeTaxAmount           = $_weeeHelper->getAmountForDisplay($_product);
