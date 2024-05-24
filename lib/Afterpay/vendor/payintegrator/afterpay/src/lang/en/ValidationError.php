@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,10 +19,10 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
-$prefix_message = "An error occurred in the payment request to AfterPay: \n\n";
+$prefix_message = "An error occurred in the payment request to Riverty: \n\n";
 
 return [
     'field.unknown.invalid' => $prefix_message . 'An unknown field is invalid, please contact our customer service.',
@@ -188,6 +188,7 @@ Please check your billing details or contact our customer service.',
                     Please check your billing details or contact our customer service.',
     'field.company.establishmentnumber.missing' => $prefix_message . 'The establishment number is missing.
                     Please check your billing details or contact our customer service.',
+    'invoicenumber.amount.limit' => 'The refund cannot be processed, because you are trying to refund more than is available on the invoice. Please check your refund details or contact the customer service of Riverty.',
     'fallback' => $prefix_message . 'An unknown field is invalid.
                     Please check your shipping and billing details or contact our customer service.'
 ];

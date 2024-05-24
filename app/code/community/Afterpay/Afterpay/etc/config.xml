@@ -2,13 +2,13 @@
 <config>
     <modules>
         <Afterpay_Afterpay>
-            <version>3.0</version>
+            <version>3.3</version>
         </Afterpay_Afterpay>
     </modules>
     <global>
         <payment>
             <groups>
-                <afterpay>AfterPay</afterpay>
+                <afterpay>Riverty</afterpay>
             </groups>
         </payment>
         <events>
@@ -71,6 +71,11 @@
             <afterpay>
                 <class>Afterpay_Afterpay_Block</class>
             </afterpay>
+            <checkout>
+                <rewrite>
+                    <onepage_payment_methods>Afterpay_Afterpay_Block_Onepage_Payment_Methods</onepage_payment_methods>
+                </rewrite>
+            </checkout>
         </blocks>
         <models>
             <afterpay>
@@ -80,7 +85,7 @@
         <helpers>
             <afterpay>
                 <class>Afterpay_Afterpay_Helper</class>
-            </afterpay>  
+            </afterpay>
         </helpers>
         <resources>
             <afterpay_setup>
@@ -167,7 +172,7 @@
                 <model>afterpay/portfolios_portfolioA_paymentMethod</model>
                 <sort_order>100</sort_order>
                 <group>afterpay</group>
-                <title>AfterPay Portfolio A</title>
+                <title>Riverty Portfolio A</title>
                 <separate_discount>1</separate_discount>
             </portfolio_a>
             <portfolio_b translate="title">
@@ -175,7 +180,7 @@
                 <model>afterpay/portfolios_portfolioB_paymentMethod</model>
                 <sort_order>200</sort_order>
                 <group>afterpay</group>
-                <title>AfterPay Portfolio B</title>
+                <title>Riverty Portfolio B</title>
                 <separate_discount>1</separate_discount>
             </portfolio_b>
             <portfolio_c translate="title">
@@ -183,7 +188,7 @@
                 <model>afterpay/portfolios_portfolioC_paymentMethod</model>
                 <sort_order>300</sort_order>
                 <group>afterpay</group>
-                <title>AfterPay Portfolio C</title>
+                <title>Riverty Portfolio C</title>
                 <separate_discount>1</separate_discount>
             </portfolio_c>
             <portfolio_d translate="title">
@@ -191,7 +196,7 @@
                 <model>afterpay/portfolios_portfolioD_paymentMethod</model>
                 <sort_order>400</sort_order>
                 <group>afterpay</group>
-                <title>AfterPay Portfolio D</title>
+                <title>Riverty Portfolio D</title>
                 <separate_discount>1</separate_discount>
             </portfolio_d>
             <portfolio_e translate="title">
@@ -199,136 +204,142 @@
                 <model>afterpay/portfolios_portfolioE_paymentMethod</model>
                 <sort_order>500</sort_order>
                 <group>afterpay</group>
-                <title>AfterPay Portfolio E</title>
+                <title>Riverty Portfolio E</title>
                 <separate_discount>1</separate_discount>
             </portfolio_e>
             <portfolio_f translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_portfolioF_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay Portfolio F</title>
+                <title>Riverty Portfolio F</title>
                 <separate_discount>1</separate_discount>
             </portfolio_f>
             <afterpay_nl_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nldigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NL Digital Invoice</title>
+                <title>Riverty NL Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_nl_digital_invoice>
             <afterpay_nl_direct_debit translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nldirectdebit_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NL Direct Debit</title>
+                <title>Riverty NL Direct Debit</title>
                 <separate_discount>1</separate_discount>
             </afterpay_nl_direct_debit>
             <afterpay_nl_business translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nlbusiness_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NL Business</title>
+                <title>Riverty NL Business</title>
                 <separate_discount>1</separate_discount>
             </afterpay_nl_business>
             <afterpay_nl_digital_invoice_rest translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nldigitalinvoicerest_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NL Digital Invoice (REST)</title>
+                <title>Riverty NL Digital Invoice (REST)</title>
             </afterpay_nl_digital_invoice_rest>
             <afterpay_nl_direct_debit_rest translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nldirectdebitrest_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NL Direct Debit (REST)</title>
+                <title>Riverty NL Direct Debit (REST)</title>
             </afterpay_nl_direct_debit_rest>
             <afterpay_nl_business_rest translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nlbusinessrest_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NL Business (REST)</title>
+                <title>Riverty NL Business (REST)</title>
             </afterpay_nl_business_rest>
+            <afterpay_nl_payinx_rest translate="title">
+                <active>1</active>
+                <model>afterpay/portfolios_NlPayInXRest_paymentMethod</model>
+                <group>afterpay</group>
+                <title>Riverty NL Pay In X</title>
+            </afterpay_nl_payinx_rest>
             <afterpay_be_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Bedigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay BE Digital Invoice</title>
+                <title>Riverty BE Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_be_digital_invoice>
             <afterpay_be_digital_invoice_rest translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Bedigitalinvoicerest_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay BE Digital Invoice (REST)</title>
+                <title>Riverty BE Digital Invoice (REST)</title>
             </afterpay_be_digital_invoice_rest>
             <afterpay_de_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Dedigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay DE Digital Invoice</title>
+                <title>Riverty DE Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_de_digital_invoice>
             <afterpay_de_direct_debit translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Dedirectdebit_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay DE Direct Debit</title>
+                <title>Riverty DE Direct Debit</title>
                 <separate_discount>1</separate_discount>
             </afterpay_de_direct_debit>
             <afterpay_at_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Atdigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay AT Digital Invoice</title>
+                <title>Riverty AT Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_at_digital_invoice>
             <afterpay_at_direct_debit translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Atdirectdebit_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay AT Direct Debit</title>
+                <title>Riverty AT Direct Debit</title>
                 <separate_discount>1</separate_discount>
             </afterpay_at_direct_debit>
             <afterpay_ch_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Chdigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay CH Digital Invoice</title>
+                <title>Riverty CH Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_ch_digital_invoice>
             <afterpay_se_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Sedigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay SE Digital Invoice</title>
+                <title>Riverty SE Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_se_digital_invoice>
             <afterpay_fi_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Fidigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay FI Digital Invoice</title>
+                <title>Riverty FI Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_fi_digital_invoice>
             <afterpay_dk_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Dkdigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay Dk Digital Invoice</title>
+                <title>Riverty Dk Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_dk_digital_invoice>
             <afterpay_no_digital_invoice translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_Nodigitalinvoice_paymentMethod</model>
                 <group>afterpay</group>
-                <title>AfterPay NO Digital Invoice</title>
+                <title>Riverty NO Digital Invoice</title>
                 <separate_discount>1</separate_discount>
             </afterpay_no_digital_invoice>
             <afterpay_de_installment_payment translate="title">
                 <active>1</active>
                 <model>afterpay/portfolios_installment_paymentMethod</model>
                 <group>afterpay</group>
-                <title>DE AfterPay Installment Payment</title>
+                <title>DE Riverty Installment Payment</title>
                 <separate_discount>1</separate_discount>
             </afterpay_de_installment_payment>
             <afterpay_at_installment_payment translate="title">
@@ -336,7 +347,7 @@
                 <model>afterpay/portfolios_installment_paymentMethodAT</model>
                 <sort_order>650</sort_order>
                 <group>afterpay</group>
-                <title>AT AfterPay Installment Payment</title>
+                <title>AT Riverty Installment Payment</title>
                 <separate_discount>1</separate_discount>
             </afterpay_at_installment_payment>
             <afterpay_no_installment_payment translate="title">
@@ -344,7 +355,7 @@
                 <model>afterpay/portfolios_installment_paymentMethodNO</model>
                 <sort_order>750</sort_order>
                 <group>afterpay</group>
-                <title>NO AfterPay Installment Payment</title>
+                <title>NO Riverty Installment Payment</title>
                 <separate_discount>1</separate_discount>
             </afterpay_no_installment_payment>
             <afterpay_se_installment_payment translate="title">
@@ -352,7 +363,7 @@
                 <model>afterpay/portfolios_installment_paymentMethodSE</model>
                 <sort_order>750</sort_order>
                 <group>afterpay</group>
-                <title>SE AfterPay Installment Payment</title>
+                <title>SE Riverty Installment Payment</title>
                 <separate_discount>1</separate_discount>
             </afterpay_se_installment_payment>
             <afterpay_fi_installment_payment translate="title">
@@ -360,7 +371,7 @@
                 <model>afterpay/portfolios_installment_paymentMethodFI</model>
                 <sort_order>800</sort_order>
                 <group>afterpay</group>
-                <title>FI AfterPay Installment Payment</title>
+                <title>FI Riverty Installment Payment</title>
                 <separate_discount>1</separate_discount>
             </afterpay_fi_installment_payment>
             <afterpay_dk_installment_payment translate="title">
@@ -368,7 +379,7 @@
                 <model>afterpay/portfolios_installment_paymentMethodDK</model>
                 <sort_order>850</sort_order>
                 <group>afterpay</group>
-                <title>DK AfterPay Installment Payment</title>
+                <title>DK Riverty Installment Payment</title>
                 <separate_discount>1</separate_discount>
             </afterpay_dk_installment_payment>
         </payment>
@@ -390,13 +401,12 @@
                 <limit_by_ip>0</limit_by_ip>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay Particulier</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
-                <portfolio_extended_information>Binnen enkele dagen zult u per mail een betaaloverzicht van AfterPay ontvangen van waaruit u uw bestelling via DigiAccept/iDEAL kunt betalen.</portfolio_extended_information>
+                <portfolio_extended_information>Binnen enkele dagen zult u per mail een betaaloverzicht van Riverty ontvangen van waaruit u uw bestelling via DigiAccept/iDEAL kunt betalen.</portfolio_extended_information>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
                 <order_status_pending>pending</order_status_pending>
@@ -408,17 +418,38 @@
                 <sort_order>1</sort_order>
                 <area>both</area>
             </afterpay_afterpay_nl_digital_invoice>
+            <afterpay_afterpay_nl_payinx_rest>
+                <active>0</active>
+                <mode>1</mode>
+                <limit_by_ip>0</limit_by_ip>
+                <portfolio_type>B2C</portfolio_type>
+                <portfolio_showbankaccount>0</portfolio_showbankaccount>
+                <portfolio_showdob>1</portfolio_showdob>
+                <portfolio_showphonenumber>0</portfolio_showphonenumber>
+                <portfolio_showssn>0</portfolio_showssn>
+                <portfolio_label>Pay in 3</portfolio_label>
+                <portfolio_footnote></portfolio_footnote>
+                <portfolio_min_amount>5</portfolio_min_amount>
+                <portfolio_country>nlnl</portfolio_country>
+                <order_status_pending>pending</order_status_pending>
+                <order_status_accepted>processing</order_status_accepted>
+                <order_status_refused>canceled</order_status_refused>
+                <allowspecific>1</allowspecific>
+                <specificcountry>NL</specificcountry>
+                <allowspecific_customers>0</allowspecific_customers>
+                <sort_order>1</sort_order>
+                <area>both</area>
+            </afterpay_afterpay_nl_payinx_rest>
             <afterpay_afterpay_nl_direct_debit>
                 <active>0</active>
                 <mode>1</mode>
                 <limit_by_ip>0</limit_by_ip>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>1</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay - Veilig achteraf betalen (eenmalige machtiging)</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen (eenmalige machtiging)</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -437,11 +468,10 @@
                 <limit_by_ip>0</limit_by_ip>
                 <portfolio_type>B2B</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay Zakelijk</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen voor bedrijven</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -461,11 +491,10 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -485,11 +514,10 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>1</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -509,11 +537,10 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>1</portfolio_showssn>
-                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>nlnl</portfolio_country>
@@ -532,11 +559,10 @@
                 <limit_by_ip>0</limit_by_ip>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>benl</portfolio_country>
@@ -556,11 +582,10 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
-                <portfolio_label>AfterPay - Veilig achteraf betalen</portfolio_label>
+                <portfolio_label>Veilig achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>benl</portfolio_country>
@@ -580,7 +605,6 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
@@ -607,7 +631,6 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankcode>1</portfolio_showbankcode>
                 <portfolio_showbankaccount>1</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
@@ -633,7 +656,6 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
@@ -660,7 +682,6 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankcode>1</portfolio_showbankcode>
                 <portfolio_showbankaccount>1</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
@@ -686,7 +707,6 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>0</portfolio_showssn>
@@ -712,7 +732,6 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>1</portfolio_showssn>
@@ -736,7 +755,6 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>1</portfolio_showssn>
@@ -760,11 +778,10 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>1</portfolio_showssn>
-                <portfolio_label>AfterPay</portfolio_label>
+                <portfolio_label>Riverty</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <portfolio_country>dkda</portfolio_country>
@@ -784,7 +801,6 @@
                 <reversed_iprestriction>0</reversed_iprestriction>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showdob>0</portfolio_showdob>
                 <portfolio_showphonenumber>0</portfolio_showphonenumber>
                 <portfolio_showssn>1</portfolio_showssn>
@@ -807,12 +823,11 @@
                 <limit_by_ip>0</limit_by_ip>
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showdob>1</portfolio_showdob>
                 <portfolio_showphonenumber>1</portfolio_showphonenumber>
                 <portfolio_label>Achteraf betalen</portfolio_label>
                 <portfolio_footnote></portfolio_footnote>
-                <portfolio_extended_information>Binnen enkele dagen zult u per mail een betaaloverzicht van AfterPay ontvangen van waaruit u uw bestelling via DigiAccept/iDEAL kunt betalen.</portfolio_extended_information>
+                <portfolio_extended_information>Binnen enkele dagen zult u per mail een betaaloverzicht van Riverty ontvangen van waaruit u uw bestelling via DigiAccept/iDEAL kunt betalen.</portfolio_extended_information>
                 <portfolio_min_amount>10</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>
@@ -906,12 +921,11 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>1</portfolio_showbankaccount>
                 <portfolio_showbankcode>1</portfolio_showbankcode>
-                <portfolio_showgender>1</portfolio_showgender>
                 <portfolio_showssn>0</portfolio_showssn>
                 <portfolio_useprofiletracking>0</portfolio_useprofiletracking>
                 <portfolio_profiletrackingclientid></portfolio_profiletrackingclientid>
                 <portfolio_country>dede</portfolio_country>
-                <portfolio_label>AfterPay - Ratenzahlung</portfolio_label>
+                <portfolio_label>Riverty - Ratenzahlung</portfolio_label>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>
@@ -931,12 +945,11 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
                 <portfolio_showbankcode>0</portfolio_showbankcode>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showssn>1</portfolio_showssn>
                 <portfolio_useprofiletracking>0</portfolio_useprofiletracking>
                 <portfolio_profiletrackingclientid></portfolio_profiletrackingclientid>
                 <portfolio_country>atde</portfolio_country>
-                <portfolio_label>AfterPay - Ratenzahlung</portfolio_label>
+                <portfolio_label>Riverty - Ratenzahlung</portfolio_label>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>
@@ -956,10 +969,9 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
                 <portfolio_showbankcode>0</portfolio_showbankcode>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showssn>1</portfolio_showssn>
                 <portfolio_country>nonb</portfolio_country>
-                <portfolio_label>AfterPay - Ratenzahlung</portfolio_label>
+                <portfolio_label>Riverty - Ratenzahlung</portfolio_label>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>
@@ -979,10 +991,9 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
                 <portfolio_showbankcode>0</portfolio_showbankcode>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showssn>1</portfolio_showssn>
                 <portfolio_country>sesv</portfolio_country>
-                <portfolio_label>AfterPay - Ratenzahlung</portfolio_label>
+                <portfolio_label>Riverty - Ratenzahlung</portfolio_label>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>
@@ -1002,10 +1013,9 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
                 <portfolio_showbankcode>0</portfolio_showbankcode>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showssn>1</portfolio_showssn>
                 <portfolio_country>fifi</portfolio_country>
-                <portfolio_label>AfterPay - Ratenzahlung</portfolio_label>
+                <portfolio_label>Riverty - Ratenzahlung</portfolio_label>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>
@@ -1025,10 +1035,9 @@
                 <portfolio_type>B2C</portfolio_type>
                 <portfolio_showbankaccount>0</portfolio_showbankaccount>
                 <portfolio_showbankcode>0</portfolio_showbankcode>
-                <portfolio_showgender>0</portfolio_showgender>
                 <portfolio_showssn>1</portfolio_showssn>
                 <portfolio_country>dkda</portfolio_country>
-                <portfolio_label>AfterPay - Ratenzahlung</portfolio_label>
+                <portfolio_label>Riverty - Ratenzahlung</portfolio_label>
                 <portfolio_min_amount>5</portfolio_min_amount>
                 <order_status_pending>pending</order_status_pending>
                 <order_status_accepted>processing</order_status_accepted>

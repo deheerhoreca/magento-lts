@@ -4,6 +4,9 @@ function _dhh_ips() {
   return ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
 }
 
+const DHH_FPC_NAV_KEY     = "FPC_cms_block_topmenu";
+const DHH_FPC_FOOTER_KEY  = "FPC_cms_block_footer";
+
 // Cannot use _dhh_debug() due to the ?nofpc requirement
 if(isset($_SERVER["REQUEST_METHOD"]) && ($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "HEAD")
 && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
@@ -18,9 +21,6 @@ if(isset($_SERVER["HTTP_HOST"]) && str_starts_with((string) $_SERVER["HTTP_HOST"
 } else {
   define("DHH_FPC_ENABLED", true);  // Default: true
 }
-
-const DHH_FPC_NAV_KEY = "FPC_cms_block_topmenu";
-const DHH_FPC_FOOTER_KEY = "FPC_cms_block_footer";
 
 if(DHH_FPC_DEBUG === true) {
   $verb = $_SERVER["REQUEST_METHOD"] ?? null;

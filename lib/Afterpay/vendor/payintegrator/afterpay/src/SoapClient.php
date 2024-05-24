@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,11 +19,12 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
 namespace Afterpay;
 
+#[AllowDynamicProperties]
 class SoapClient extends Client
 {
     /**
@@ -218,7 +219,7 @@ class SoapClient extends Client
                         'dateofbirth' => $order['billtoaddress']['referenceperson']['dob'],
                         'emailaddress' => $order['billtoaddress']['referenceperson']['email'],
                         'gender' => $order['billtoaddress']['referenceperson']['gender'],
-                        'initials' => $order['billtoaddress']['referenceperson']['initials'],
+                        'initials' => \Afterpay\cleanText($order['billtoaddress']['referenceperson']['initials'], 1),
                         'isoLanguage' => $order['billtoaddress']['referenceperson']['isolanguage'],
                         'lastname' => $order['billtoaddress']['referenceperson']['lastname'],
                         'phonenumber1' => \Afterpay\cleanphone(
@@ -231,7 +232,7 @@ class SoapClient extends Client
                         'dateofbirth' => $order['shiptoaddress']['referenceperson']['dob'],
                         'emailaddress' => $order['shiptoaddress']['referenceperson']['email'],
                         'gender' => $order['shiptoaddress']['referenceperson']['gender'],
-                        'initials' => $order['shiptoaddress']['referenceperson']['initials'],
+                        'initials' => \Afterpay\cleanText($order['shiptoaddress']['referenceperson']['initials'], 1),
                         'isoLanguage' => $order['shiptoaddress']['referenceperson']['isolanguage'],
                         'lastname' => $order['shiptoaddress']['referenceperson']['lastname'],
                         'phonenumber1' => \Afterpay\cleanphone(
@@ -252,7 +253,7 @@ class SoapClient extends Client
                     'dateofbirth' => $order['billtoaddress']['referenceperson']['dob'],
                     'emailaddress' => $order['billtoaddress']['referenceperson']['email'],
                     'gender' => '',
-                    'initials' => $order['billtoaddress']['referenceperson']['initials'],
+                    'initials' => \Afterpay\cleanText($order['billtoaddress']['referenceperson']['initials'], 1),
                     'isoLanguage' => $order['billtoaddress']['referenceperson']['isolanguage'],
                     'lastname' => $order['billtoaddress']['referenceperson']['lastname'],
                     'phonenumber1' => \Afterpay\cleanphone(
@@ -263,6 +264,32 @@ class SoapClient extends Client
         }
         $this->order += [
             'ordernumber' => $order['ordernumber'],
+            'shopdetails' => [
+                'afterPayPluginSupplier' => (
+                    isset($order['shopdetails']['afterPayPluginSupplier']) ?
+                        substr($order['shopdetails']['afterPayPluginSupplier'],0,50) : 'Arvato Financial Solutions'
+                ),
+                'afterPayPluginVersion' => (
+                    isset($order['shopdetails']['afterPayPluginVersion']) ?
+                        substr($order['shopdetails']['afterPayPluginVersion'],0,50) : $this->getLibraryVersion()
+                ),
+                'shopURL' => (
+                    isset($order['shopdetails']['shopURL']) ?
+                        substr($order['shopdetails']['shopURL'],0,2048) : ''
+                ),
+                'webshopLanguage' => (
+                    isset($order['shopdetails']['webshopLanguage']) ?
+                        substr($order['shopdetails']['webshopLanguage'],0,50) : 'PHP ' . PHP_VERSION
+                ),
+                'webshopPlatform' => (
+                    isset($order['shopdetails']['webshopPlatform']) ?
+                        substr($order['shopdetails']['webshopPlatform'],0,50) : 'PHP'
+                ),
+                'webshopPlatformVersion' => (
+                    isset($order['shopdetails']['webshopPlatformVersion']) ?
+                        substr($order['shopdetails']['webshopPlatformVersion'],0,50) : PHP_VERSION
+                ),
+            ],
             'bankaccountNumber' => (isset($order['bankaccountnumber'])) ? $order['bankaccountnumber'] : '',
             'currency' => $order['currency'],
             'ipAddress' => $order['ipaddress'],

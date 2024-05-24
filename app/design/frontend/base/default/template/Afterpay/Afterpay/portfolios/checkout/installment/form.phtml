@@ -20,12 +20,13 @@
  * @package     Afterpay_Afterpay
  * @copyright   Copyright (c) 2011-2020 arvato Finance B.V.
  */
+
 /* @var $this Afterpay_Afterpay_Block_Portfolios_Checkout_Installment_Form */
 ?>
-<?php $this->setBlockData()?>
+<?php $this->setBlockData() ?>
 <?php $_code = $this->getMethodCode(); ?>
-<?php $_helper = $this->helper('afterpay');?>
-<?php $isEnterprise = (bool) Mage::getConfig()->getModuleConfig("Enterprise_Enterprise")->version;?>
+<?php $_helper = $this->helper('afterpay'); ?>
+<?php $isEnterprise = (bool)Mage::getConfig()->getModuleConfig("Enterprise_Enterprise")->version; ?>
 
 <div id="payment-errors" class="validation-advice" style="display:none;"></div>
 <fieldset class="form-list">
@@ -42,8 +43,9 @@
             </span>
         </div>
         <li>
-            <select id="<?php echo $_code; ?>_installmentplan" class="afterpay_installmentplan" name="payment[<?php echo $_code; ?>][installmentprofile]">
-                <?php foreach($this->getInstallmentOptions() as $option): ?>
+            <select id="<?php echo $_code; ?>_installmentplan" class="afterpay_installmentplan"
+                    name="payment[<?php echo $_code; ?>][installmentprofile]">
+                <?php foreach ($this->getInstallmentOptions() as $option): ?>
                     <option value='<?php echo $option->getInstallmentProfileNumber() ?>'>
                         <?php echo $this->__('%s per month in %s installments',
                             $option->getFormattedInstallmentAmount(),
@@ -55,49 +57,41 @@
         </li>
 
         <?php foreach ($this->getInstallmentOptions() as $index => $installmentPlan): ?>
-            <div class="installment_plan <?php if($index === 0) echo 'installment_active'?>" id="installment_plan_<?php echo $installmentPlan->getInstallmentProfileNumber() ?>">
+            <div class="installment_plan <?php if ($index === 0) echo 'installment_active' ?>"
+                 id="installment_plan_<?php echo $installmentPlan->getInstallmentProfileNumber() ?>">
                 <ul>
                     <li><?php echo $this->__('Same amount every month, no surprises') ?></li>
                     <li><?php echo $this->__('You can pay the total balance at anytime you want') ?></li>
                     <li><?php echo $this->__('Fix interest rate of: %s', $installmentPlan->getInterestRate()) ?>%</li>
-                    <li><?php echo $this->__('Effective interest rate of: %s', $installmentPlan->getEffectiveInterestRate()) ?>%</li>
+                    <li><?php echo $this->__('Effective interest rate of: %s',
+                            $installmentPlan->getEffectiveInterestRate()) ?>%
+                    </li>
                     <li><?php echo $this->__('Total cost of: %s', $installmentPlan->getFormattedTotalAmount()) ?></li>
                 </ul>
             </div>
         <?php endforeach; ?>
 
         <li>
-            <?php if ($this->showGender()): ?>
-                <div class="field">
-                    <label for="<?php echo $_code; ?>_gender" class = "required"><em>*</em><?php echo $_helper->__('Gender:'); ?></label>
-                    <div class="input-box" id="">
-                        <input type="radio" name="payment[<?php echo $_code; ?>][gender]" value="V" id="<?php echo $_code?>_gender_v" checked="checked">
-                        <label style="float:none" for="<?php echo $_code?>_gender_v"><?php echo $_helper->__('Female'); ?></label>
-                        <input type="radio" name="payment[<?php echo $_code; ?>][gender]" value="M" id="<?php echo $_code?>_gender_m">
-                        <label style="float:none" for="<?php echo $_code?>_gender_m"><?php echo $_helper->__('Male'); ?></label>
-                    </div>
-                </div>
-            <?php endif; # showGender ?>
-            <?php if ($isEnterprise): ?>
-        </li>
+            <?php if ($this->showBankcode()): ?>
         <li>
-        <?php endif; # $isEnterprise ?>
-        <?php if ($this->showBankcode()): ?>
-            <li>
-                <div class="field">
-                    <label for="<?php echo $_code; ?>_bankcode" class="required"><em>*</em><?php echo $_helper->__('BIC / Swift-Code:'); ?></label>
-                    <div class="input-box">
-                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_bankcode" name="payment[<?php echo $_code; ?>][bankcode]" style="">
-                    </div>
+            <div class="field">
+                <label for="<?php echo $_code; ?>_bankcode"
+                       class="required"><em>*</em><?php echo $_helper->__('BIC / Swift-Code:'); ?></label>
+                <div class="input-box">
+                    <input type="text" class="required-entry" id="<?php echo $_code; ?>_bankcode"
+                           name="payment[<?php echo $_code; ?>][bankcode]" style="">
                 </div>
-            </li>
-        <?php endif; #showBankcode ?>
+            </div>
+        </li>
+    <?php endif; #showBankcode ?>
         <?php if ($this->showBankaccount()): ?>
             <li>
                 <div class="field">
-                    <label for="<?php echo $_code; ?>_bankaccount" class="required"><em>*</em><?php echo $_helper->__('Bank account number:'); ?></label>
+                    <label for="<?php echo $_code; ?>_bankaccount"
+                           class="required"><em>*</em><?php echo $_helper->__('Bank account number:'); ?></label>
                     <div class="input-box">
-                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_bankaccount" name="payment[<?php echo $_code; ?>][bankaccount]" style="">
+                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_bankaccount"
+                               name="payment[<?php echo $_code; ?>][bankaccount]" style="">
                     </div>
                 </div>
             </li>
@@ -105,24 +99,44 @@
         <?php if ($this->showSsn()): ?>
             <li>
                 <div class="field">
-                    <label for="<?php echo $_code; ?>_ssn" class="required"><em>*</em><?php echo $_helper->__('Social security number'); ?>:</label>
+                    <label for="<?php echo $_code; ?>_ssn"
+                           class="required"><em>*</em><?php echo $_helper->__('Social security number'); ?>:</label>
                     <div class="input-box">
-                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_ssn" name="payment[<?php echo $_code; ?>][ssn]">
+                        <input type="text" class="required-entry" id="<?php echo $_code; ?>_ssn"
+                               name="payment[<?php echo $_code; ?>][ssn]">
                     </div>
                 </div>
             </li>
         <?php endif;# showSsn ?>
-            <li>
-                <input type="checkbox" class="checkbox required-entry" id="<?php echo $_code; ?>_termsAndConditions" name="payment[<?php echo $_code; ?>][conditions]">
-                <label for="<?php echo $_code; ?>_termsAndConditions" class="required" style="float:none;">
-                    <em>*</em>
-                    <?php echo $_helper->__(
-                        'I have read and accepted the AfterPay %sTerms and Conditions%s.',
-                        $this->paymentConditionsUrl,
-                        $this->anchorClose
-                    );?>
-                </label>
-            </li>
+        <li>
+            <?php
+            /**
+             * If Available Payment Methods (APM) in use
+             */
+            if ($this->getMethodsLegalStatement($_code)): ?>
+                <?php if ($this->getMethodRequiresCustomerConsent($_code)): ?>
+                    <input type="checkbox" class="checkbox required-entry" id="<?php echo $_code; ?>_termsAndConditions"
+                           name="payment[<?php echo $_code; ?>][conditions]">
+                    <label for="<?php echo $_code; ?>_termsAndConditions" class="required" style="float:none;">
+                <?php endif; ?>
+                <?php echo $this->getMethodsLegalStatement($_code); ?>
+
+                <?php if ($this->getMethodRequiresCustomerConsent($_code)): ?>
+                    </label>
+                <?php endif; ?>
+
+            <?php else: ?>
+            <div style="color: #999; font-size: 12px;">
+                <?php echo $_helper->__(
+                    'The %sGeneral Terms and Conditions%s for the Riverty payment method apply. The Privacy Policy of Riverty can be found %shere%s.',
+                    $this->paymentConditionsUrl,
+                    $this->anchorClose,
+                    $this->privacyStatementUrl,
+                    $this->anchorClose
+                ); ?>
+                <?php endif; ?>
+            </div>
+        </li>
         <p class="authorization-notice">
             <?php echo $this->getAuthorizationNotice() ?>
         </p>
@@ -131,7 +145,7 @@
 
 <?php //TODO we don't have layouts for this module so doing js and css inline for now ?>
 <script type="text/javascript">
-    $$(".afterpay_installmentplan").invoke('observe', 'change', function() {
+    $$(".afterpay_installmentplan").invoke('observe', 'change', function () {
         var selected_installment = 'installment_plan_' + $(this).getValue();
         $$('.installment_plan').invoke('removeClassName', 'installment_active');
         $(selected_installment).addClassName('installment_active');
@@ -139,11 +153,13 @@
 </script>
 <style>
     .installment_plan {
-        display:none;
+        display: none;
     }
+
     .installment_plan.installment_active {
-        display:block;
+        display: block;
     }
+
     .installment_plan ul {
         list-style-type: disc;
         margin-left: 25px;

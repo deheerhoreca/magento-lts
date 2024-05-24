@@ -48,6 +48,14 @@ class Afterpay_Afterpay_Model_Api_Authorize extends Afterpay_Afterpay_Model_Api_
         return $this->doRequest();
     }
 
+    private function setOrder($orderType) {
+        $this->_afterpay->set_order(
+            $this->addPlugingProviderData($this->_afterpay_order),
+            $orderType
+        );
+    }
+
+
     protected function _addAfterPayB2BOrder()
     {
         // Set the billing address
@@ -73,7 +81,7 @@ class Afterpay_Afterpay_Model_Api_Authorize extends Afterpay_Afterpay_Model_Api_
         $this->_afterpay_order['ipaddress'] = $this->_vars['ipAddress'];
 
         // Set the order information to the AfterPay Object
-        $this->_afterpay->set_order($this->_afterpay_order, 'B2B');
+        $this->setOrder('B2B');
     }
 
     protected function _addAfterPayB2COrder()
@@ -100,9 +108,9 @@ class Afterpay_Afterpay_Model_Api_Authorize extends Afterpay_Afterpay_Model_Api_
         $this->_afterpay_order['profileTrackingId'] = $this->_vars['billing']['session'];
 
         // Set the order information to the AfterPay Object
-        $this->_afterpay->set_order($this->_afterpay_order, 'B2C');
+        $this->setOrder('B2C');
     }
-    
+
     protected function _addBillToAddress()
     {
         $this->_afterpay_order['billtoaddress']['city']                  = $this->_vars['billingAddress']['city'];
@@ -169,9 +177,9 @@ class Afterpay_Afterpay_Model_Api_Authorize extends Afterpay_Afterpay_Model_Api_
             $price          = $line['unitPrice'];
             $tax_category   = $line['vatCategory'];
             $vat_amount     = $line['vatAmount'];
-            $product_url    = $line['productUrl'] ?? '';
-            $image_url      = $line['imageUrl'] ?? '';
-            $group_id       = $line['groupId'] ?? '';
+            $product_url    = isset($line['productUrl']) ? $line['productUrl'] : '';
+            $image_url      = isset($line['imageUrl']) ? $line['imageUrl'] : '';
+            $group_id       = isset($line['groupId']) ? $line['groupId'] : '';
 
             $this->_afterpay->create_order_line(
                 $sku,

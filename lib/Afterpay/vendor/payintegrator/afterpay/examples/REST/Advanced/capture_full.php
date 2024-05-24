@@ -13,6 +13,7 @@ $Afterpay->set_ordermanagement('capture_full');
 $aporder['invoicenumber'] = 'INVOICE123456';
 $aporder['ordernumber'] = 'ORDER1234567';
 $aporder['totalamount'] = '9000';
+$aporder['totalNetAmount'] = '74.38';
 
 // Create the order object for order management (OM)
 $Afterpay->set_order($aporder, 'OM');

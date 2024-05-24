@@ -42,7 +42,7 @@ class Afterpay_Afterpay_Model_Observer_Capture extends Mage_Core_Model_Abstract
     public function sales_order_payment_capture(Varien_Event_Observer $observer)
     {
         Mage::register('AfterpayCaptureStarted', 1);
-        
+
         return $this->_capture($observer->getInvoice()->getOrder(), $observer->getInvoice());
     }
 
@@ -80,7 +80,7 @@ class Afterpay_Afterpay_Model_Observer_Capture extends Mage_Core_Model_Abstract
             }
         } catch (Exception $e) {
             $order->addStatusHistoryComment(
-                'AfterPay: Cannot auto create invoice based on shipping. Exception message: '.
+                'Riverty: Cannot auto create invoice based on shipping. Exception message: '.
                 $e->getMessage(),
                 false
             );
@@ -120,7 +120,7 @@ class Afterpay_Afterpay_Model_Observer_Capture extends Mage_Core_Model_Abstract
             }
         } catch (Exception $e) {
             $order->addStatusHistoryComment(
-                'AfterPay: Cannot auto create invoice based on status. Exception message: '.
+                'Riverty: Cannot auto create invoice based on status. Exception message: '.
                 $e->getMessage(),
                 false
             );
@@ -163,11 +163,11 @@ class Afterpay_Afterpay_Model_Observer_Capture extends Mage_Core_Model_Abstract
         $paymentMethodCode = $order->getpayment()->getMethod();
         $isAfterpayPayment = false;
 
-        if (str_contains((string) $paymentMethodCode, 'portfolio')) {
+        if (strpos($paymentMethodCode, 'portfolio') !== false) {
             $isAfterpayPayment = true;
         }
 
-        if (str_contains((string) $paymentMethodCode, 'afterpay')) {
+        if (strpos($paymentMethodCode, 'afterpay') !== false) {
             $isAfterpayPayment = true;
         }
 
@@ -182,7 +182,7 @@ class Afterpay_Afterpay_Model_Observer_Capture extends Mage_Core_Model_Abstract
         if ($invoice->getBaseGrandTotal() - $order->getBaseGrandTotal() > 0.05
             || $invoice->getBaseGrandTotal() - $order->getBaseGrandTotal() < -0.05
         ) {
-            Mage::throwException('Can only capture full invoices. Partial invoices cannot be captured by AfterPay.');
+            Mage::throwException('Can only capture full invoices. Partial invoices cannot be captured by Riverty.');
             return false;
         }
 

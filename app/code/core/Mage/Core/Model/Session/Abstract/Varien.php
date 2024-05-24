@@ -94,9 +94,9 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
         $cookie = $this->getCookie();
         if (Mage::app()->getStore()->isAdmin()) {
             $sessionMaxLifetime = Mage_Core_Model_Resource_Session::SEESION_MAX_COOKIE_LIFETIME;
-            // DHH CORE HACK:
-            // $adminSessionLifetime = Mage::getStoreConfigAsInt('admin/security/session_cookie_lifetime');
-            $adminSessionLifetime = (int)Mage::getStoreConfig('admin/security/session_cookie_lifetime');
+            // DHH CORE HACK -- reversed:
+            $adminSessionLifetime = Mage::getStoreConfigAsInt('admin/security/session_cookie_lifetime');
+            // $adminSessionLifetime = (int)Mage::getStoreConfig('admin/security/session_cookie_lifetime');
             if ($adminSessionLifetime > $sessionMaxLifetime) {
                 $adminSessionLifetime = $sessionMaxLifetime;
             }
@@ -107,7 +107,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
 
         // session cookie params
         $cookieParams = [
-            'lifetime' => $cookie->getLifetime(),
+            'lifetime' => (int)$cookie->getLifetime(),
             'path'     => $cookie->getPath(),
             'domain'   => $cookie->getConfigDomain(),
             'secure'   => $cookie->isSecure(),
@@ -511,7 +511,15 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      */
     public function setValidatorSessionRenewTimestamp($timestamp)
     {
-        $_SESSION[self::VALIDATOR_KEY][self::VALIDATOR_SESSION_RENEW_TIMESTAMP] = $timestamp;
+      // DHH CORE HACK -- ADDING TEST TO CLEAR INVALID SESSIONS
+      if(!session_id()) {
+          Mage::log("Destroyed corrupt session!", null, "system.log", true);
+          $_SESSION = [];
+          $this->getCookie()->delete(session_name());
+          throw new Mage_Core_Model_Session_Exception('');
+      }
+      
+      $_SESSION[self::VALIDATOR_KEY][self::VALIDATOR_SESSION_RENEW_TIMESTAMP] = $timestamp;
     }
 
     /**

@@ -61,6 +61,7 @@ class Afterpay_Afterpay_Model_Portfolios_Installment_PaymentMethod extends After
      */
     public function validate()
     {
+        parent::validate();
         $paymentInfo = $this->getInfoInstance();
         // validate store currency
         if (!in_array(Mage::app()->getStore()->getCurrentCurrencyCode(), $this->getAllowedCurrencies(), true)) {

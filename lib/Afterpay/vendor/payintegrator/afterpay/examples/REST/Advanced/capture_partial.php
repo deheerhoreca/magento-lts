@@ -19,13 +19,19 @@ $name = 'Product name 1';
 $qty = 1;
 $price = 3000; // in cents
 $tax_amount = 4.79; // in euros
+$product_url = 'https://www.testsite.com/producturl'; // Url to product detail page
+$product_image = 'https://www.testsite.com/productimage.jpg'; // Url to product image
 $Afterpay->create_order_line(
     $sku,
     $name,
     $qty,
     $price,
     null, // Tax category not needed for DE
-    $tax_amount
+    $tax_amount,
+    null, // When available fill in Google Product Category ID
+    null, // When available fill in Google Product ID
+    $product_url,
+    $product_image
 );
 
 // Create the order object for order management (OM)

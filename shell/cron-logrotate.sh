@@ -21,6 +21,8 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.log
 ~/httpdocs/deheerhoreca-magento/var/log/*.jsonl
 ~/httpdocs/deheerhoreca-magento/var/log/*.ndjson
+~/logs/deheerhoreca-magento/access_log
+~/logs/deheerhoreca-magento/error_log
 ~/logs/deheerhoreca-magento/*.log
 ~/logs/deheerhoreca-magento/*_log
 {

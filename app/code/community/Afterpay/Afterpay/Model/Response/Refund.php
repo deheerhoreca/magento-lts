@@ -84,7 +84,7 @@ class Afterpay_Afterpay_Model_Response_Refund extends Afterpay_Afterpay_Model_Re
 
         $method = $this->_order->getPayment()->getMethod();
 
-        if ($country == 'dede' || str_contains((string) $method, 'rest')) {
+        if ($country == 'dede' || strpos($method, 'rest') !== false) {
             $this->_debugEmail .= "REST order, no checksum check is needed.\n";
             return true;
         }

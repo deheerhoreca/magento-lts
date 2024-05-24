@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,10 +19,10 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
-$prefix_message = "Une erreur s'est produite dans la demande de paiement à AfterPay: \n\n";
+$prefix_message = "Une erreur s'est produite dans la demande de paiement à Riverty: \n\n";
 
 return [
     'field.unknown.invalid' => $prefix_message . "Un champ de formulaire inconnu est invalide, veuillez contacter notre service clientèle.",
@@ -79,7 +79,7 @@ return [
     'field.shipto.isolanguagecode.invalid' => $prefix_message . "La langue dans l'adresse de livraison n'est pas valide. Vérifiez vos informations d'expédition ou contactez notre service clientèle.",
     'field.ordernumber.missing' => $prefix_message . "Le numéro de commande n'est pas disponible. Veuillez contacter notre service clientèle.",
     'field.ordernumber.invalid' => $prefix_message . "Le numéro de commande est invalide. Veuillez contacter notre service clientèle.",
-    'field.ordernumber.exists' => $prefix_message . "Le numéro de commande existe déjà et ne peut plus être transmis à AfterPay. Veuillez contacter notre service clientèle.",
+    'field.ordernumber.exists' => $prefix_message . "Le numéro de commande existe déjà et ne peut plus être transmis à Riverty. Veuillez contacter notre service clientèle.",
     'field.bankaccountnumber.missing' => $prefix_message . "Le numéro de compte bancaire n'est pas présent. Veuillez vérifier votre numéro de compte bancaire ou contacter notre service clientèle.",
     'field.bankaccountnumber.invalid' => $prefix_message . "Le numéro de compte bancaire n'est pas valide. Veuillez vérifier votre numéro de compte bancaire ou contacter notre service clientèle.",
     'field.currency.missing' => $prefix_message . "La monnaie n'est pas présente. Veuillez contacter notre service clientèle.",
@@ -99,5 +99,6 @@ return [
     'field.unitprice.invalid' => $prefix_message . "Le prix unitaire est invalide. Veuillez contacter notre service clientèle.",
     'field.netunitprice.missing' => $prefix_message . "Le prix unitaire net n'est pas présent. Veuillez contacter notre service clientèle.",
     'field.netunitprice.invalid' => $prefix_message . "Le prix unitaire net est invalide. Veuillez contacter notre service clientèle.",
+    'invoicenumber.amount.limit' => 'Le remboursement ne peut pas être effectué car vous essayez de rembourser plus que ce qui est actuellement disponible. Vérifiez vos informations de facturation ou contactez le service clientèle Riverty.',
     'fallback' => $prefix_message . 'Un champ de formulaire inconnu est invalide, veuillez contacter notre service clientèle.'
 ];

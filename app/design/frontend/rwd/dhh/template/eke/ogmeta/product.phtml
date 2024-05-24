@@ -26,12 +26,8 @@ if(empty($html) === false) {
   $siteName = $helper->getSiteName();  
   $imageFile = "media/catalog/product".$product->getSmallImage();
   
-  if(strlen((string) $product->getSmallImage()) < 1) {
-    $imageFile = $helper->getOgImage();
-  }
-  
   $imageAttr = [];
-  if(is_file($imageFile) === true) {
+  if(strlen($imageFile) > 0 && is_file($imageFile) === true) {
     try {
       $imageAttr = getimagesize($imageFile);
     } catch(Exception $e) {
@@ -41,8 +37,11 @@ if(empty($html) === false) {
       Mage::log($msg, null, "system.log", true);
     }
   } else {
-    $msg = "{$product->getSku()} Product image does not exist: ".var_export($imageFile, true);
-    Mage::log($msg, null, "system.log", true);
+    if(strlen($imageFile) > 0) {
+      $msg = "{$product->getSku()} Product image does not exist: ".var_export($imageFile, true);
+      Mage::log($msg, null, "system.log", true);
+    }
+    $imageFile = $helper->getOgImage();
   }
   
   $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);

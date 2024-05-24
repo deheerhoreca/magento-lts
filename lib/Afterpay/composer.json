@@ -1,5 +1,10 @@
 {
     "require": {
-        "payintegrator/afterpay": "^2.4"
+        "payintegrator/afterpay": "^4.4"
+    },
+    "config": {
+        "platform": {
+            "php": "5.6.40"
+        }
     }
 }

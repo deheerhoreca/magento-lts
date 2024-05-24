@@ -1,25 +1,24 @@
 {
     "name": "payintegrator/afterpay",
     "type": "library",
-    "version": "2.4.0",
-    "description": "Library for connecting to AfterPay payment services",
-    "keywords": ["afterpay","openinvoice","payments"],
-    "homepage": "https://www.afterpay.nl",
+    "description": "Library for connecting to Riverty | AfterPay payment services",
+    "keywords": ["riverty","afterpay","openinvoice","directdebit","bnpl","instalments","installments","payments"],
+    "homepage": "https://developer.riverty.com",
     "license": "MIT",
     "authors": [
         {
-            "name": "AfterPay",
-            "email": "plugins@afterpay.nl",
-            "homepage": "https://www.afterpay.io",
+            "name": "Riverty",
+            "email": "plugins@arvato.com",
+            "homepage": "https://developer.riverty.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": ">=5.5",
-        "guzzlehttp/guzzle": "^6.2.3"
+        "guzzlehttp/guzzle": ">=6.2.3"
     },
     "suggest": {
-        "ext-soap": "If AfterPay NL and BE are being used through the old SOAP connection, ext-soap is needed"
+        "ext-soap": "If legacy SOAP payment methods are being used, ext-soap is needed"
     },
     "autoload": {
         "psr-4": {

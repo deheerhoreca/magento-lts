@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,10 +19,10 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
-$prefix_message = "Er is een fout opgetreden in het betaalverzoek naar AfterPay: \n\n";
+$prefix_message = "Er is een fout opgetreden in het betaalverzoek naar Riverty: \n\n";
 
 return [
     'field.unknown.invalid' => $prefix_message . 'Een onbekend veld is ongeldig, neem alstublieft contact op met onze klantenservice.',
@@ -188,6 +188,7 @@ return [
                     Controleer uw factuurgegevens of neem contact op met onze klantenservice.',
     'field.company.establishmentnumber.missing' => $prefix_message . 'Het dossiernummer is niet aanwezig.
                     Controleer uw factuurgegevens of neem contact op met onze klantenservice.',
+    'invoicenumber.amount.limit' => 'De refund kan niet worden uitgevoerd omdat u probeert meer te refunden dan dat er op dit moment beschikbaar is. Controleer uw factuurgegevens of neem contact op met de klantenservice van Riverty.',
     'fallback' => $prefix_message . 'Een onbekend veld is ongeldig.
                     Neem alstublieft contact op met onze klantenservice.'
 ];

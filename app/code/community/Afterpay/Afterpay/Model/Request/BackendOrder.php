@@ -78,7 +78,7 @@ class Afterpay_Afterpay_Model_Request_BackendOrder extends Afterpay_Afterpay_Mod
              ->setTestMode($this->getTestMode())
              ->setIsB2B($this->getIsB2B());
 
-        [$response, $responseXML, $requestXML] = $soap->authorizationRequest();
+        list($response, $responseXML, $requestXML) = $soap->authorizationRequest();
 
         $this->_debugEmail .= "The SOAP request has been sent. \n";
 

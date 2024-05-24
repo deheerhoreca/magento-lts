@@ -67,7 +67,7 @@ class Afterpay_Afterpay_Model_Request_Refund extends Afterpay_Afterpay_Model_Req
     public function loadInvoiceByTransactionId($transactionId)
     {
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
-            if (substr((string) $invoice->getTransactionId(), 0, 32) == substr((string) $transactionId, 0, 32)) {
+            if (substr($invoice->getTransactionId(), 0, 32) == substr($transactionId, 0, 32)) {
                 $invoice->load($invoice->getId()); // to make sure all data will properly load (maybe not required)
                 return $invoice;
             }
@@ -87,7 +87,7 @@ class Afterpay_Afterpay_Model_Request_Refund extends Afterpay_Afterpay_Model_Req
             'afterpay/afterpay_' . $method . '/portfolio_country',
             Mage::app()->getStore()->getId()
         );
-        if(str_contains((string) $method, 'rest')){
+        if(strpos($method, 'rest') !== false){
             $country .= '-rest';
         }
         $this->setCountry($country);
@@ -170,7 +170,7 @@ class Afterpay_Afterpay_Model_Request_Refund extends Afterpay_Afterpay_Model_Req
         $this->_rewardPointsToRefund = (int) $this->_creditmemo->getRewardPointsBalanceRefund() * 100;
 
         if ($captureModeUsed == 1 && !$captured) {
-            Mage::throwException($this->_helper->__('This order has not yet been captured by AfterPay.'));
+            Mage::throwException($this->_helper->__('This order has not yet been captured by Riverty.'));
         }
 
         if (!Mage::getStoreConfig('afterpay/afterpay_refund/enabled', Mage::app()->getStore()->getId())) {
@@ -335,7 +335,7 @@ class Afterpay_Afterpay_Model_Request_Refund extends Afterpay_Afterpay_Model_Req
         }
         return false;
     }
-    
+
     protected function _addDiscountLine()
     {
         $vatCategory = $this->_getTaxCategory(

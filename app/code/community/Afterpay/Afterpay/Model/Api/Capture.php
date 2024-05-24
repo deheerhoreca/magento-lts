@@ -50,7 +50,10 @@ class Afterpay_Afterpay_Model_Api_Capture extends Afterpay_Afterpay_Model_Api_Ab
             $this->_afterpay_order['totalamount'] = $this->_vars['totalOrderAmount'];
         }
 
-        $this->_afterpay->set_order($this->_afterpay_order, 'OM');
+        $this->_afterpay->set_order(
+            $this->addPlugingProviderData($this->_afterpay_order),
+            'OM'
+        );
 
         return $this->doRequest();
     }

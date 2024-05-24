@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2011-2020  arvato Finance B.V.
  *
@@ -37,28 +38,34 @@ class Afterpay_Afterpay_Model_Request_Installmentplans_Lookup extends Afterpay_A
      */
     public function sendLookupRequest()
     {
-        $responseProcessor = $this->getResponseProcessor();
-        $api = $this->getApiModel();
+        // Get the Installment plans from the checkout/session to avoid sendind a second request to the API
+        $availableInstallmentPlans = Mage::getModel('checkout/session')->getData('afterpay_installment_plans');
 
-        $variables = $this->shopVariables();
-        $api->setVars($variables)->setTestMode($this->getTestMode());
+        $plans = array();
+
+        foreach ($availableInstallmentPlans as $planDetails) {
+            $installmentPlan = Mage::getModel('afterpay/portfolios_installment_option_plan');
+
+            foreach ($planDetails as $name => $value) {
+                $installmentPlan->setDataUsingMethod($name, $value);
+            }
+
+            $plans[] = $installmentPlan;
+        }
+
         $data = array(
             'amount' => $this->getCartTotal(),
-            'currency' => $this->getCartCurrency()
+            'currency' => $this->getCartCurrency(),
+            'installment_plans' => $plans
         );
+
         Mage::dispatchEvent(
-            'afterpay_lookup_request_addcustomvars',
+            'afterpay_installment_plans_lookup',
             array('request' => $this, 'data' => $data)
         );
 
-        try {
-            $response = $api->execute($data);
-            return $responseProcessor->setResponse($response)->setRequest($this)
-                ->processResponse();
-        } catch (Exception $exception) {
-            $this->logException($exception);
-            return array();
-        }
+        return $plans;
+
     }
 
     /**
@@ -75,21 +82,5 @@ class Afterpay_Afterpay_Model_Request_Installmentplans_Lookup extends Afterpay_A
     private function getCartCurrency()
     {
         return $this->getQuote()->getQuoteCurrencyCode();
-    }
-
-    /**
-     * @return false|Afterpay_Afterpay_Model_Response_Installmentplans_Lookup
-     */
-    private function getResponseProcessor()
-    {
-        return Mage::getModel('afterpay/response_installmentplans_lookup');
-    }
-
-    /**
-     * @return false|Afterpay_Afterpay_Model_Api_Installmentplans_Lookup
-     */
-    private function getApiModel()
-    {
-        return Mage::getModel('afterpay/api_installmentplans_lookup');
     }
 }

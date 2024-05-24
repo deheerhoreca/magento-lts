@@ -92,10 +92,10 @@ class Afterpay_Afterpay_Model_Observer_Config extends Mage_Core_Model_Abstract
         foreach ($payments as $payment) {
             $code = $payment->getCode();
             $isAfterpayPayment = false;
-            if (str_contains((string) $code, 'portfolio')) {
+            if (strpos($code, 'portfolio') !== false) {
                 $isAfterpayPayment = true;
             }
-            if (str_contains((string) $code, 'afterpay')) {
+            if (strpos($code, 'afterpay') !== false) {
                 $isAfterpayPayment = true;
             }
             if ($isAfterpayPayment === true) {

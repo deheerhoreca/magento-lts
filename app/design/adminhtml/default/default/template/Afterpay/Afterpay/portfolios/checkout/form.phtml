@@ -10,9 +10,9 @@
         <li>
             <p style = "padding:0;">
                 <?php echo $_helper->__("
-		    Door middel van deze betaalmethode kunt u telefonisch order aannemen en via AfterPay laten betalen. 
-	            Consumenten kunnen gebruik maken van AfterPay tot een bedrag van %s voor de eerste keer of voor een bedrag van %s als de consument al bekend is bij AfterPay.
-		    De optie om deze betaalmogelijkheid te gebruiken moet contractueel zijn vastgelegd met AfterPay en hiervoor moet een aparte 'callcenter' portefeuille worden gebruikt. Neem contact op met AfterPay voor meer informatie.
+		    Door middel van deze betaalmethode kunt u telefonisch order aannemen en via Riverty laten betalen. 
+	            Consumenten kunnen gebruik maken van Riverty tot een bedrag van %s voor de eerste keer of voor een bedrag van %s als de consument al bekend is bij Riverty.
+		    De optie om deze betaalmogelijkheid te gebruiken moet contractueel zijn vastgelegd met Riverty en hiervoor moet een aparte 'callcenter' portefeuille worden gebruikt. Neem contact op met Riverty voor meer informatie.
 		",
                     $this->maxOrderAmountNewCustomers,
                     $this->maxOrderAmountReturningCustomers
@@ -20,8 +20,8 @@
             </p>
             <p style = "padding:0;">
                 <?php echo $_helper->__(
-                    'Ter goedkeuring van het verzoek om te betalen met factuur voert AfterPay een gegevenscontrole uit.
-                    AfterPay hanteert een strikt privacybeleid zoals omschreven in haar %sprivacy statement%s.
+                    'Ter goedkeuring van het verzoek om te betalen met factuur voert Riverty een gegevenscontrole uit.
+                    Riverty hanteert een strikt privacybeleid zoals omschreven in haar %sprivacy statement%s.
                     Mocht onverhoopt het verzoek tot betaling met factuur niet geautoriseerd worden, dan moet de klant geadviseerd worden om het aan te kopen met een andere betaalmethode.',
                     $this->privacyStatementUrl,
                     $this->anchorClose
@@ -83,7 +83,7 @@
             <label for="<?php echo $_code; ?>_termsAndConditions" class="required">
                 <em>*</em>
                 <?php echo $_helper->__(
-                    'De consument is geinformeerd en akkoord met de %sbetalingsvoorwaarden%s van AfterPay',
+                    'De consument is geinformeerd en akkoord met de %sbetalingsvoorwaarden%s van Riverty',
                     $this->paymentConditionsUrl,
                     $this->anchorClose
                 );?>

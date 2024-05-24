@@ -103,6 +103,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
 
             $product = $assocProducts->getFirstItem();
 
+            $groupedProductsPricesArray = []; // DHH CORE HACK
             foreach ($assocProducts as $assocProduct) {
                 $groupedProductsPricesArray[] = $assocProduct->getFinalPrice();
             }

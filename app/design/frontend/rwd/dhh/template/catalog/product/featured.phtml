@@ -10,14 +10,15 @@ $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
 $product_block                 = $this->getLayout()->createBlock("catalog/product_price");
 $attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["popularity", "featured"]);
+$done_dhh_skus                = [];
 
-// Block or semi-random recommended products
+// Block of semi-random recommended products
 
 $parent_categories_ids    = [];
 $_columnCount             = 5;
 $displaySize              = 175;
 $_imgSize                 = 1 * $displaySize;
-
+$limit                    = 5;
 $options                  = [
   "image_size"              => 125,
   "_blank"                  => false,
@@ -27,9 +28,6 @@ $options                  = [
   "fast_stock"              => true,
 ];
 
-// Settings
-$limit                    = 5;
-
 $_products = Mage::getModel("catalog/product")
   ->getCollection()
   ->addAttributeToSelect($attributes)
@@ -38,7 +36,7 @@ $_products = Mage::getModel("catalog/product")
   ->addFieldToFilter([["attribute" => "featured", "eq" => 1]])
   // ->addAttributeToFilter("sku", ["in" => ["CS-7455.3300", "CS-7450.0159", "CS-7450.0580", "CS-7464.0045", "CS-7072.1015"]])
   ->addAttributeToSort("popularity", "ASC")
-  ->setPageSize(($limit * 4)) // Random pick from top
+  ->setPageSize(($limit * 5)) // Random pick from top
   ->addFinalPrice(); // Necessary to respect sale price end date
 $_products->load();
 // if(_dhh_debug()) {
@@ -63,13 +61,14 @@ if($_products->getFirstItem()) {
       $i = 0;
       $total = $_products->getSize();
       foreach($_products as $_product) {
+        if($i > $limit) {
+          continue;
+        }
         if($total > $limit && mt_rand(0, 100) > 75) {
           continue; // Poor man's random
         }
         $i++;
-        if($i > $limit) {
-          continue;
-        }
+        $done_dhh_skus[] = $_product->getSku();
         echo "<li class='item'>";
         Mage::helper('deheerhoreca_util/util')->getProductGridHtml($_product, $product_block, $options);
         echo "</li>";
@@ -81,10 +80,10 @@ if($_products->getFirstItem()) {
 }
 unset($_products);
 
-// Dynamic block of best sellers
+// Dynamic block of bestsellers
 
 // Settings
-$limit                        = 12;
+$limit                        = 8;
 
 // Get 4x the top products by popularity and take a random sample out of those
 $_products = Mage::getModel("catalog/product")
@@ -93,6 +92,7 @@ $_products = Mage::getModel("catalog/product")
   ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
   ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
   ->addFieldToFilter("popularity", ["notnull" => true]) // Prevent unset new products to show up
+  ->addFieldToFilter("sku", ["nin" => $done_dhh_skus]) // Prevent duplicate products on the homepage
   ->addAttributeToSort("popularity", "ASC")
   ->setPageSize(($limit * 4)) // Random pick from top
   ->addFinalPrice(); // Necessary to respect sale price end date

@@ -1862,3 +1862,21 @@ if(function_exists('xml_string_to_array') === false) {
     }
   }
 }
+
+// Attempt to get the current quote ID (cart ID)
+if(function_exists("dhh_get_quote_id") === false) {
+  function dhh_get_quote_id(): string {
+    if($_SESSION) {
+      if(!empty($GLOBALS["dhh_current_quote_id"])) {
+        return $GLOBALS["dhh_current_quote_id"];
+      }
+      $id = (string) (Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "");
+      if(!empty($id)) {
+        $GLOBALS["dhh_current_quote_id"] = $id;
+        return $GLOBALS["dhh_current_quote_id"];
+      }
+    }
+    
+    return "NO_QUOTE_ID";
+  }
+}

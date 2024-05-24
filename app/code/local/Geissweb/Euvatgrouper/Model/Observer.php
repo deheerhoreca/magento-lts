@@ -3,17 +3,12 @@
 if(defined("DHH_UUID") === false) {
   define("DHH_UUID", uniqid());
 }
-// if(defined("DHH_QUOTE_ID") === false) {
-  // $quote_id = Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "NO_QUOTE_ID";
-  // define("DHH_QUOTE_ID", $quote_id);
-// }
-// if(defined("GEISSWEB_VAT_VERBOSE") === false) {
-  // define("GEISSWEB_VAT_VERBOSE", (bool) ($quote_id == 134375));
-// }
 if(defined("DHH_QUOTE_ID") === false) {
-  define("DHH_QUOTE_ID", "");
+  define("DHH_QUOTE_ID", Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "NO_QUOTE_ID");
+  // define("DHH_QUOTE_ID", "");
 }
 if(defined("GEISSWEB_VAT_VERBOSE") === false) {
+  // define("GEISSWEB_VAT_VERBOSE", (bool) ($quote_id == 134375));
   define("GEISSWEB_VAT_VERBOSE", false);
 }
 
