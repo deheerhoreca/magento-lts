@@ -100,7 +100,11 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_Account extends Mage_Adminhtm
         switch ($element->getId()) {
             case 'email':
                 $element->setRequired(0);
+                // DHH CORE HACK -- Remove ability to change the email address during new order input in admin.
+                // The automation uses a mix of customer email and order email, they should not deviate.
                 $element->setClass('validate-email');
+                // $element->setClass('validate-email disabled');
+                // $element->setDisabled(true);
                 break;
         }
         return $this;

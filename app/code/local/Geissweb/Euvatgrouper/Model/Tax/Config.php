@@ -3,6 +3,14 @@
 if(defined("DHH_UUID") === false) {
   define("DHH_UUID", uniqid());
 }
+if(defined("DHH_QUOTE_ID") === false) {
+  define("DHH_QUOTE_ID", Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "NO_QUOTE_ID");
+  // define("DHH_QUOTE_ID", "");
+}
+if(defined("GEISSWEB_VAT_VERBOSE") === false) {
+  // define("GEISSWEB_VAT_VERBOSE", (bool) ($quote_id == 134375));
+  define("GEISSWEB_VAT_VERBOSE", false);
+}
 
 /**
  * ||GEISSWEB| EU VAT Enhanced
@@ -47,7 +55,7 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 		if (version_compare(Mage::getVersion(), '1.9', '>='))
 		{
 			$cbtEnabled = $this->_getStoreConfig(self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED, $store);
-			if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled: {$cbtEnabled}", null, 'euvatenhanced.log');
+			// if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Feature enabled Magento config: ".var_export($cbtEnabled), null, 'euvatenhanced.log');
 
 			if($cbtEnabled && !Mage::helper('euvatgrouper')->isAdmin())
 			{
@@ -76,24 +84,26 @@ class Geissweb_Euvatgrouper_Model_Tax_Config extends Geissweb_Euvatgrouper_Model
 
 			if(isset($billingCountryId) && !Mage::helper('euvatgrouper')->isEuCountry($billingCountryId) )
 			{
-				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled enabled: NON-EU", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." NON-EU country", null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForOutOfEurope()) {
-          if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled disabled: DisableCbtForEuBusiness", null, 'euvatenhanced.log');
+          if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Result: disabled for non-EU country", null, 'euvatenhanced.log');
                     return false;
                 }
 			} elseif(isset($billingCountryId) && $basedOnAddress && $basedOnAddress->getVatIsValid() ) {
-				if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled enabled: Valid VAT Number", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Valid VAT number", null, 'euvatenhanced.log');
 				if(Mage::helper('euvatgrouper')->getDisableCbtForEuBusiness()) {
-          if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled disabled: DisableCbtForEuBusiness", null, 'euvatenhanced.log');
+          if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Result: disabled for EU country", null, 'euvatenhanced.log');
                     return false;
                 }
 			}
-      if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__." crossBorderTradeEnabled result: ".var_export($cbtEnabled, true), null, 'euvatenhanced.log');
+      if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Result: ".json_encode($cbtEnabled), null, 'euvatenhanced.log');
 			return $cbtEnabled;
 
 		} else {
-			if($this->_debug) Mage::log(DHH_UUID." ".__METHOD__."crossBorderTrade is not available in Mage version: " . Mage::getVersion(), null, 'euvatenhanced.log');
+			if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Not available in this Magento version: " . Mage::getVersion(), null, 'euvatenhanced.log');
 		}
+    
+    if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Result: disabled", null, 'euvatenhanced.log');
 
 		return false;
 	}

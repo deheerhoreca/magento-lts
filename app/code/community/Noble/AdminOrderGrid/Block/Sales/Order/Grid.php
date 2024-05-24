@@ -19,6 +19,19 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
+        
+        // DHH CORE HACK
+        $from   = date("Y-m-d", strtotime('-6 months'));
+        $locale = Mage::app()->getLocale()->getLocaleCode();
+        $this->setDefaultFilter([
+          "created_at"  => [
+            "from"        => new Zend_Date($from, null, $locale),
+            "locale"      => $locale,
+            "orig_from"   => Mage::helper("core")->formatDate($from),
+            "datetime"    => true,
+          ],
+        ]);
+        // END DHH CORE HACK
     }
 
     /**
@@ -126,7 +139,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 		if(Mage::getStoreConfig('noble/default_columns/real_order_id')) {
 			$this->addColumn('real_order_id', array(
 				'header'=> Mage::helper('sales')->__('Order #'),
-				'width' => '80px',
+				'width' => '70px',
 				'type'  => 'text',
 				'index' => 'increment_id',
 				'filter_index' => 'main_table.increment_id'
@@ -151,7 +164,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 				'header' => Mage::helper('sales')->__('Purchased On'),
 				'index' => 'created_at',
 				'type' => 'datetime',
-				'width' => '100px',
+				'width' => '130px',
 				'filter_index' => 'main_table.created_at'
 			));
 		}

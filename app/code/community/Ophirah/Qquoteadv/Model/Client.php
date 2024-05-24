@@ -108,8 +108,8 @@ class Ophirah_Qquoteadv_Model_Client
             // DHH CORE HACK
             // Mage::log('Exception: ' .$e->getMessage(), null, 'c2q_exception.log', true);
             Mage::log('Exception: ' .$e->__toString(), null, 'c2q_exception.log', true);
-            Mage::log("Cart2Quote debug params: ".var_export($params, true), null, 'verbose.log', true);
-            Mage::log("Cart2Quote debug reponse: ".var_export($response, true), null, 'verbose.log', true);
+            Mage::log("Cart2Quote debug params: ".var_export($params, true), null, 'verbose.txt', true);
+            Mage::log("Cart2Quote debug reponse: ".var_export($response, true), null, 'verbose.txt', true);
         }
         return $result;
     }

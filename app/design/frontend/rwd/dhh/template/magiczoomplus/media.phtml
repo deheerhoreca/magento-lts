@@ -66,7 +66,7 @@ function _extract_data_from_optimized_image_name($optimized_image, string $dhh_s
       logger($msg, "VERBOSE");
     } else {
       if(_dhh_debug()) {
-        Mage::log($msg, null, "verbose.log", true);
+        Mage::log($msg, null, "verbose.txt", true);
       }
     }
     if(function_exists("im")) {
@@ -126,7 +126,7 @@ function _get_watermarked_image_filename($optimized_image, string $dhh_sku = "UN
     logger($msg, "VERBOSE");
   } else {
     if(_dhh_debug()) {
-      Mage::log($msg, null, "verbose.log", true);
+      Mage::log($msg, null, "verbose.txt", true);
     }
   }
   
@@ -200,42 +200,47 @@ if($galleryImagesCount) {
     $wm_filename = _get_watermarked_image_filename($imagePath, $dhh_sku);
     $wm_path   = dirname((string) $imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
     
-    $msg = "";
+    // $msg = "";
     if(is_file($wm_path) === true) {
       $imagePath = $wm_path;
       $imageFileOverride[$galleryImage->getFile()] = DS.WATERMARKED_DIR."{$wm_filename}";
-      $msg = "{$dhh_sku} Watermarked image found at ".var_export($wm_path, true);
+      // $msg = "{$dhh_sku} Watermarked image found at ".var_export($wm_path, true);
     } else {
-      $msg = "{$dhh_sku} Watermarked image not found at ".var_export($wm_path, true);
-    }
-    if(_dhh_debug()) {
-      Mage::log($msg, null, "verbose.log", true);
+      // $msg = "{$dhh_sku} Watermarked image not found at ".var_export($wm_path, true);
     }
     // END DHH
     
+    // DHH EDITS:
     if(file_exists($imagePath)) {
-      $imageFile = $galleryImage->getFile();
-      $isBaseImage = ($imageFile == $productBaseImage);
+      $imageFile    = $galleryImage->getFile();
+      $isBaseImage  = ($imageFile == $productBaseImage);
+      
       try {
-        $productImages[] = array(
-          'image-size' => getimagesize($imagePath),
-          'image-file' => $imageFile,
-          'image-label' => $galleryImage->getLabel(),
-          'is-base-image' => $isBaseImage,
-        );
-        if($isBaseImage) {
-          $isBaseImageIncluded = true;
-        }
+        $image_size = getimagesize($imagePath);
       } catch(Exception) {
-        //trigger_error($e->getMessage(), E_USER_ERROR);
+        Mage::log("{$dhh_sku} getimagesize() failed on ".var_export($imagePath, true), null, "system.log", true);
+        continue; // Assume that it's a fucked image and skip it
       }
+      $productImages[]  = [
+        'image-size'      => $image_size,
+        'image-file'      => $imageFile,
+        'image-label'     => $galleryImage->getLabel(),
+        'is-base-image'   => $isBaseImage,
+      ];
+      if($isBaseImage) {
+        $isBaseImageIncluded = true;
+      }
+    } else {
+      $msg = "{$dhh_sku} Product image does not exist: ".var_export($imagePath, true);
+      Mage::log($msg, null, "system.log", true);
     }
+    // END DHH
   }
 }
 
 // if(_dhh_debug()) {
-  // printr($productImages);
-  // printr($imageFileOverride);
+  // dump($productImages);
+  // dump($imageFileOverride);
 // }
 
 if(!count($productImages)) {
@@ -312,11 +317,21 @@ foreach($productImages as &$productImage) {
   $mediumImage      = null;
   if(is_file($image_path) === true) {
     
+    $extension = strtolower((string) pathinfo($image_path, PATHINFO_EXTENSION));
+    
     $cdn_img_options["width"] = 2048;
     $cdn_img_options["height"] = 2048;
     $cdn_img_options["quality"] = 85;
     // @todo $cdn_img_options["2x"] = true;
     $cdn_img_options["fit"] = "scale-up";
+    
+    // GIFs are very slow in imagekit and lead to timeouts if not made smaller
+    if($extension === "gif") {
+      $cdn_img_options["width"]   /= 2;
+      $cdn_img_options["height"]  /= 2;
+      // $cdn_img_options["quality"] = 85;
+    }
+    
     $bigImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     
     [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
@@ -336,7 +351,7 @@ foreach($productImages as &$productImage) {
   if($bigImage === null) {
     $bigImage = $imageHelper->init($productModel, 'image', $productImage['image-file'])->__toString();
     if($createSquareImages) {
-      $bigImageSize = min(2048, max($productImage['image-size'][0], $productImage['image-size'][1]));
+      $bigImageSize = min($cdn_img_options["width"], max($productImage['image-size'][0], $productImage['image-size'][1]));
       $bigImage = $imageHelper->watermark(null, null)->resize($bigImageSize)->__toString();
     }
   }
@@ -371,7 +386,7 @@ foreach($productImages as &$productImage) {
   }
   $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" ', $aHtml);
   
-  $productImagesHTML[] = $aHtml;
+  $productImagesHTML[] = $aHtml.PHP_EOL;
   
   if($productImage['is-base-image']) {
     $containersData['zoom'] = $tool->getMainTemplate(array(
@@ -442,7 +457,7 @@ foreach ($productVideos as $videoUrl => $videoData) {
     $productImagesHTML[] =
         '<a data-magic-slide-id="video-'.$videoIndex.'" data-video-type="'.$dataVideoType.'" class="video-selector" href="#" onclick="return false">'.
         '<img src="'.$videoData['thumb'].'" alt="video"'.($scrollEnabled ? '' : ' style="max-width: '.$sMaxWidth.'px; max-height: '.$sMaxHeight.'px;"').'/>'.
-        '</a>';
+        '</a>'.PHP_EOL;
     $videoIndex++;
 }
 
@@ -521,7 +536,7 @@ if(count($magic360Images)) {
 
             array_unshift(
                 $productImagesHTML,
-                '<a data-magic-slide-id="360" class="m360-selector '.$ignoreMagentoCSSclass.'" title="360" href="#" onclick="return false;"><img class="'.$ignoreMagentoCSSclass.'" src="'.$thumbImage.'" alt="360"></a>'
+                '<a data-magic-slide-id="360" class="m360-selector '.$ignoreMagentoCSSclass.'" title="360" href="#" onclick="return false;"><img class="'.$ignoreMagentoCSSclass.'" src="'.$thumbImage.'" alt="360"></a>'.PHP_EOL
             );
 
             $containersData['360'] = $magic360Tool->getMainTemplate($magic360ImagesData, array('id' => 'productMagic360'));
@@ -581,7 +596,7 @@ if($productModel->getTypeId() == 'configurable' && $tool->params->checkValue('sh
             'title' => $imageTitle,
         ));
 
-        $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" data-id="'.$associatedProductId.'" on'.$eventName.'="magicToolboxOnChangeSelectorConfigurable(this);" ', (string) $aHtml);
+        $aHtml = str_replace('<a ', '<a data-magic-slide-id="zoom" data-id="'.$associatedProductId.'" on'.$eventName.'="magicToolboxOnChangeSelectorConfigurable(this);" ', (string) $aHtml).PHP_EOL;
         $aHtml = str_replace('<img ', '<img id="imageConfigurable'.$associatedProductId.'" ', $aHtml);
 
         if($selectorsVisibility) {

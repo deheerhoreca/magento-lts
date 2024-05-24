@@ -88,6 +88,9 @@ class Mage_Api_Model_Server_Wsi_Adapter_Soap extends Mage_Api_Model_Server_Adapt
                         )
                     )
                 );
+                
+                // DHH CORE HACK
+                // $content = str_replace("http://schemas.xmlsoap.org", "https://schemas.xmlsoap.org", $content);
 
                 $this->getController()->getResponse()
                     ->clearHeaders()
@@ -95,8 +98,10 @@ class Mage_Api_Model_Server_Wsi_Adapter_Soap extends Mage_Api_Model_Server_Adapt
                     ->setHeader('Content-Length', strlen($content), true)
                     ->setBody($content);
             } catch (Zend_Soap_Server_Exception $e) {
+                Mage::logException($e); // DHH CORE HACK
                 $this->fault($e->getCode(), $e->getMessage());
             } catch (Exception $e) {
+                Mage::logException($e); // DHH CORE HACK
                 $this->fault($e->getCode(), $e->getMessage());
             }
         }

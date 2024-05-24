@@ -69,15 +69,11 @@ $sooqr_options = $this->getSooqrOptions();
       var _wssq = _wssq || [];
       var setResizeFunction = false;
       var sooqrAccount = '<?=$sooqr_options["account"]?>';
+      
       _wssq.push(['_load', {'suggest': <?=json_encode($sooqr_options)?>}]);
-      _wssq.push(['suggest._setPosition', 'screen-middle', {
-        top: 0
-      }]);
+      _wssq.push(['suggest._setPosition', 'screen-middle', {top:0}]);
       _wssq.push(['suggest._setLocale', '<?=$this->getSooqrLanguage()?>']);
-      _wssq.push(['suggest._excludePlaceholders', '<?=$placeholder?>']);
-      <?php if (!$this->isTrackingEnabled()) { ?>
-        _wssq.push(['suggest._disableTracking']);
-      <?php } ?>
+      _wssq.push(['suggest._excludePlaceholders', <?=json_encode($placeholder)?>]);
       _wssq.push(['suggest._bindEvent', 'open', function() {
         if (!setResizeFunction) {
           $jQ(window).resize(function() {
@@ -88,14 +84,28 @@ $sooqr_options = $this->getSooqrOptions();
           setResizeFunction = true;
         }
       }]);
+      
       (function() {
         var ws = document.createElement('script');
-        ws.type = 'text/javascript';
         ws.async = true;
-        ws.src = '//' + '<?=$this->getSooqrScriptUri()?>';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(ws, s);
+        ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'static.spotlersearch.com/sooqr.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s);
       })();
+      (function() {
+        var ws = document.createElement('script');
+        ws.async = true;
+        ws.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'spotlersearchanalytics.com/insights.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s);
+      })();
+      
+      // (function() {
+        // var ws = document.createElement('script');
+        // ws.type = 'text/javascript';
+        // ws.async = true;
+        // ws.src = '//' + '<?=$this->getSooqrScriptUri()?>';
+        // var s = document.getElementsByTagName('script')[0];
+        // s.parentNode.insertBefore(ws, s);
+      // })();
     </script>
   <?php endif; ?>
 </form>

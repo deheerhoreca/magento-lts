@@ -38,6 +38,10 @@ final class Ophirah_Qquoteadv_Helper_Logging extends Mage_Core_Helper_Abstract
      */
     final public function sentAnonymousData($action, $location, $quote_id)
     {
+      
+        // DHH: Fuck this
+        return;
+      
         $domain = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : 'no-domain.com';
         $level = Mage::helper('qquoteadv/license')->getAccessLevel();
         if ($level == null) {

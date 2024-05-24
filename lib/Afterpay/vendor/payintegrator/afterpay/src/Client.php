@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,13 +19,29 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
 namespace Afterpay;
 
+#[AllowDynamicProperties]
 abstract class Client
 {
+    /**
+     * Used for number_format() function as property
+     */
+    const THOUSANDS_SEP = '';
+
+    /**
+     * Used for number_format() function as property
+     */
+    const DEC_POINT = '.';
+
+    /**
+     * Used for number_format() function as property
+     */
+    const DECIMALS = 2;
+
     /**
      * @var array $authorization
      */
@@ -324,5 +340,66 @@ abstract class Client
         } else {
             $this->country = $this->selectedCountry;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPluginProviderData($order)
+    { 
+        $pluginProviderArray =  [
+            'pluginProvider' => (
+                isset($order['additionalData']['pluginProvider']) ?
+                    substr($order['additionalData']['pluginProvider'],0,50) : 'Arvato Financial Solutions'
+            ),
+            'pluginVersion' => (
+                isset($order['additionalData']['pluginVersion']) ?
+                    substr($order['additionalData']['pluginVersion'],0,50) : $this->getLibraryVersion()
+            ),
+            'shopUrl' => (
+                isset($order['additionalData']['shopUrl']) ?
+                    substr($order['additionalData']['shopUrl'],0,2048) : ''
+            ),
+            'shopPlatform' => (
+                isset($order['additionalData']['shopPlatform']) ?
+                    substr($order['additionalData']['shopPlatform'],0,50) : 'PHP'
+            ),
+            'shopPlatformVersion' => (
+                isset($order['additionalData']['shopPlatformVersion']) ?
+                    substr($order['additionalData']['shopPlatformVersion'],0,50) : PHP_VERSION
+            ),
+            'partnerData' => (
+                [
+                    'pspName' => isset($order['additionalData']['partnerData']['pspName']) ?
+                        $order['additionalData']['partnerData']['pspName'] : '',
+                    'pspType' => isset($order['additionalData']['partnerData']['pspType']) ?
+                        $order['additionalData']['partnerData']['pspType'] : ''
+                ]
+            )
+        ];
+        return $pluginProviderArray;
+    }
+
+    /**
+     * @return string
+     */
+    public function roundAmount($amount)
+    { 
+        $amount = ($amount == null) ? 0 : $amount;
+        $amount = number_format(
+            $amount,
+            self::DECIMALS,
+            self::DEC_POINT,
+            self::THOUSANDS_SEP
+        );
+        return $amount;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getLibraryVersion()
+    {
+        return '4.4.0';
     }
 }

@@ -44,6 +44,6 @@ class Afterpay_Afterpay_Block_RejectDescriptions extends Mage_Core_Block_Abstrac
 
     protected function _toHtml()
     {
-        return 'Rejected by AfterPay: ' . $this->_rejectTemplate;
+        return 'Rejected by Riverty: ' . $this->_rejectTemplate;
     }
 }

@@ -2,7 +2,7 @@
 
 // Cleans out some tables that tend to get filled with irrelevant data over time
 
-const DRYRUN = true;
+const DRYRUN = false;
 
 $queries = [];
 
@@ -31,9 +31,10 @@ Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 $write_db = Mage::getSingleton("core/resource")->getConnection("core_write");
 
 foreach($queries as $query) {
-  echo $query.PHP_EOL;
   if(DRYRUN !== true) {
     $result = $write_db->query($query);
     echo "Affected rows: {$result->rowCount()}".PHP_EOL.PHP_EOL;
+  } else {
+    echo $query.PHP_EOL;
   }
 }

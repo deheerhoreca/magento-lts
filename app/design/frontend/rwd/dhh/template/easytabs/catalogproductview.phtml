@@ -19,7 +19,7 @@ $brand_id                   = $_product->getData("manufacturer");
 $brand_logo                 = "";
 $brand_slug                 = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
 $seo_tag                    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($brand_name);
-$brand_link                 = "/shop?manufacturer={$brand_id}&cstag={$seo_tag}";
+$brand_link                 = "/shop?manufacturer={$brand_id}&title={$seo_tag}";
 $anchors                    = [];
 $in3_minimum                = 50 / 1.21;
 $in3_maximum                = 30000 / 1.21;
@@ -1275,18 +1275,13 @@ if($stock_data["overall_stock_status"] === "backorder"
               // $url            = openssl_decrypt($url_encrypted, $method, "wijdelengeenurls", 0, $iv);
               $name           = $external_document["title"]     ?? $url;
               $filetype       = $external_document["filetype"]  ?? null;
-              $language       = $external_document["language"]      ?? null;
-              $fa_icon = match ($filetype) {
-                "pdf" => "fa-file-pdf-o",
-                default => "fa-file-o",
+              $language       = $external_document["language"]  ?? "";
+              $fa_icon        = match ($filetype) {
+                "pdf"           => "fa-file-pdf-o",
+                default         => "fa-file-o",
               };
-              if(empty($language) === false) {
-                if(is_scalar($language)) {
-                  $language = " (".strtoupper($language).")";
-                } elseif(is_array($language)) {
-                  $language = array_map("strtoupper", $language);
-                  $language = " (".implode(", ", $language).")";
-                }
+              if($language !== "") {
+                $language       = strtoupper(" (".implode(", ", (array) $language).")");
               }
               echo "<li style='line-height:2.5em;'>";
               echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer nofollow'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;

@@ -61,6 +61,10 @@ class Amasty_Base_Model_Feed extends Mage_AdminNotification_Model_Feed
 
     public function checkUpdate()
     {
+        
+        // DHH CORE HACK -- fuck this shit
+        return $this;
+        
         if (($this->getFrequency() + $this->getLastUpdate()) > time()) {
             return $this;
         }

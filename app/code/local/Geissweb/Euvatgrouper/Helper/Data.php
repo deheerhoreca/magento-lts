@@ -1,5 +1,17 @@
 <?php
 
+if(defined("DHH_UUID") === false) {
+  define("DHH_UUID", uniqid());
+}
+if(defined("DHH_QUOTE_ID") === false) {
+  // define("DHH_QUOTE_ID", Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "NO_QUOTE_ID");
+  define("DHH_QUOTE_ID", "");
+}
+if(defined("GEISSWEB_VAT_VERBOSE") === false) {
+  // define("GEISSWEB_VAT_VERBOSE", (bool) ($quote_id == 134375));
+  define("GEISSWEB_VAT_VERBOSE", false);
+}
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -355,14 +367,14 @@ class Geissweb_Euvatgrouper_Helper_Data extends Geissweb_Euvatgrouper_Helper_Abs
             }
 
             if ($this->_debug) {
-                Mage::log('Added validation data on address (ID:' . $address->getId() . ') (VATID:' . $cleanVatId . ')', null, 'euvatenhanced.log');
+                Mage::log(DHH_UUID." ".DHH_QUOTE_ID.' Added validation data on address (ID:' . $address->getId() . ') (VATID:' . $cleanVatId . ')', null, 'euvatenhanced.log');
             }
 
             return $address;
         }
 
         if ($this->_debug) {
-            Mage::log('No result added on address.', null, 'euvatenhanced.log');
+            Mage::log(DHH_UUID." ".DHH_QUOTE_ID.' No result added on address.', null, 'euvatenhanced.log');
         }
 
         return $address;

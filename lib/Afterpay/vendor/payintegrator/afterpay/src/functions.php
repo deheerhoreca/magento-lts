@@ -1,6 +1,6 @@
 <?php
- /**
- * Copyright (c) 2020 arvato Finance B.V.
+/**
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -15,11 +15,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE PROGRAM OR THE USE OR OTHER DEALINGS
  * IN THE PROGRAM.
- * 
+ *
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
 namespace Afterpay;
@@ -54,6 +54,20 @@ function cleanphone($phoneNumber, $country = 'NL')
         } elseif (strlen($phoneNumber) == '13' && substr($phoneNumber, 0, 3) == '0031') {
             $phoneNumber = '0031' . substr($phoneNumber, -9);
         }
+    } elseif ($country == 'DE') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0049');
+    } elseif ($country == 'AT') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0043');
+    } elseif ($country == 'CH') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0041');
+    } elseif ($country == 'NO') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0047');
+    } elseif ($country == 'SE') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0046');
+    } elseif ($country == 'FI') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0358');
+    } elseif ($country == 'DK') {
+        $phoneNumber = simplePhoneNumberReplacement($phoneNumber, '0045');
     } elseif ($country == 'BE') {
         // Land lines
         if (
@@ -75,6 +89,24 @@ function cleanphone($phoneNumber, $country = 'NL')
         } elseif (strlen($phoneNumber) == '13' && substr($phoneNumber, 0, 3) == '0032') {
             $phoneNumber = '0032' . substr($phoneNumber, -9);
         }
+    }
+
+    return $phoneNumber;
+}
+
+/**
+ * The method removes the first digit if it is 0 and replaces with the country code number
+ *
+ * @param $phoneNumber
+ * @param $countryCode
+ * @return string|void
+ */
+function simplePhoneNumberReplacement($phoneNumber, $countryCode)
+{
+    if (substr($phoneNumber, 0, 3) != $countryCode
+        && substr($phoneNumber, 0, 1) == '0'
+    ) {
+        return $countryCode . substr($phoneNumber, 1);
     }
 
     return $phoneNumber;
@@ -193,22 +225,18 @@ function arrayRecursiveDiff($arrayOne, $arrayTwo)
  *
  * @return number|string
  */
-function convertPrice($price) {
+function convertPrice($price)
+{
     // Check if price is negative
     $priceIsNegative = false;
-    if( $price < 0 ) {
+    if ($price < 0) {
         $priceIsNegative = true;
     }
     $price = abs($price);
-    if( $priceIsNegative ) {
+    if ($priceIsNegative) {
         $price = $price * -1;
     }
-    $price = number_format(
-        $price,
-        RestClient::DECIMALS,
-        RestClient::DEC_POINT,
-        RestClient::THOUSANDS_SEP
-    );
+    $price = ($price == null) ? 0 : $price;
     return $price;
 }
 
@@ -220,14 +248,17 @@ function convertPrice($price) {
  *
  * @return int $vatPercentage
  */
-function calculateVatPercentage($priceInclVat, $vatAmount) {
+function calculateVatPercentage($priceInclVat, $vatAmount)
+{
     // Check if values are zero, then return zero. Otherwise there will be issues dividing by zero
-    if ( $priceInclVat == 0 && $vatAmount == 0 ) return 0;
+    if ($priceInclVat == 0 && $vatAmount == 0) {
+        return 0;
+    }
     $vatPercentage = 0;
     $priceExclVat = $priceInclVat - $vatAmount;
     $onePercentage = $priceExclVat / 100;
     $vatPercentage = $vatAmount / $onePercentage;
-    return round($vatPercentage);
+    return $vatPercentage;
 }
 
 /**
@@ -238,74 +269,44 @@ function calculateVatPercentage($priceInclVat, $vatAmount) {
  *
  * @return float $vatAmount
  */
-function calculateVatAmount($priceInclVat, $vatPercentage) {
+function calculateVatAmount($priceInclVat, $vatPercentage)
+{
     $vatAmount = 0;
-    $priceExclVat = ( $priceInclVat / ( $vatPercentage + 100 ) ) * 100;
+    $priceExclVat = ($priceInclVat / ($vatPercentage + 100)) * 100;
     $vatAmount = $priceInclVat - $priceExclVat;
-    return round( $vatAmount, 2 );
+    return $vatAmount;
 }
 
 /**
  * Function for cleaning texts and filtering out special characters.
  *
  * @param string $text
- *
+ * @param int $limit
  * @return string $text
  */
-
-function cleanText($text)
+function cleanText($text, $limit = 0)
 {
     // Replace special character with normal characters.
-    $replace = [
-        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'Ae',
-        'Ä' => 'A', 'Å' => 'A', 'Ā' => 'A', 'Ą' => 'A', 'Ă' => 'A', 'Æ' => 'Ae',
-        'Ç' => 'C', 'Ć' => 'C', 'Č' => 'C', 'Ĉ' => 'C', 'Ċ' => 'C', 'Ď' => 'D', 'Đ' => 'D',
-        'Ð' => 'D', 'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E', 'Ē' => 'E',
-        'Ę' => 'E', 'Ě' => 'E', 'Ĕ' => 'E', 'Ė' => 'E', 'Ĝ' => 'G', 'Ğ' => 'G',
-        'Ġ' => 'G', 'Ģ' => 'G', 'Ĥ' => 'H', 'Ħ' => 'H', 'Ì' => 'I', 'Í' => 'I',
-        'Î' => 'I', 'Ï' => 'I', 'Ī' => 'I', 'Ĩ' => 'I', 'Ĭ' => 'I', 'Į' => 'I',
-        'İ' => 'I', 'Ĳ' => 'IJ', 'Ĵ' => 'J', 'Ķ' => 'K', 'Ł' => 'K', 'Ľ' => 'K',
-        'Ĺ' => 'K', 'Ļ' => 'K', 'Ŀ' => 'K', 'Ñ' => 'N', 'Ń' => 'N', 'Ň' => 'N',
-        'Ņ' => 'N', 'Ŋ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O',
-        'Ö' => 'Oe', 'Ö' => 'Oe', 'Ø' => 'O', 'Ō' => 'O', 'Ő' => 'O', 'Ŏ' => 'O',
-        'Œ' => 'OE', 'Ŕ' => 'R', 'Ř' => 'R', 'Ŗ' => 'R', 'Ś' => 'S', 'Š' => 'S',
-        'Ş' => 'S', 'Ŝ' => 'S', 'Ș' => 'S', 'Ť' => 'T', 'Ţ' => 'T', 'Ŧ' => 'T',
-        'Ț' => 'T', 'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'Ue', 'Ū' => 'U',
-        'Ü' => 'Ue', 'Ů' => 'U', 'Ű' => 'U', 'Ŭ' => 'U', 'Ũ' => 'U', 'Ų' => 'U',
-        'Ŵ' => 'W', 'Ý' => 'Y', 'Ŷ' => 'Y', 'Ÿ' => 'Y', 'Ź' => 'Z', 'Ž' => 'Z',
-        'Ż' => 'Z', 'Þ' => 'T', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a',
-        'ä' => 'ae', 'ä' => 'ae', 'å' => 'a', 'ā' => 'a', 'ą' => 'a', 'ă' => 'a',
-        'æ' => 'ae', 'ç' => 'c', 'ć' => 'c', 'č' => 'c', 'ĉ' => 'c', 'ċ' => 'c',
-        'ď' => 'd', 'đ' => 'd', 'ð' => 'd', 'è' => 'e', 'é' => 'e', 'ê' => 'e',
-        'ë' => 'e', 'ē' => 'e', 'ę' => 'e', 'ě' => 'e', 'ĕ' => 'e', 'ė' => 'e',
-        'ƒ' => 'f', 'ĝ' => 'g', 'ğ' => 'g', 'ġ' => 'g', 'ģ' => 'g', 'ĥ' => 'h',
-        'ħ' => 'h', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ī' => 'i',
-        'ĩ' => 'i', 'ĭ' => 'i', 'į' => 'i', 'ı' => 'i', 'ĳ' => 'ij', 'ĵ' => 'j',
-        'ķ' => 'k', 'ĸ' => 'k', 'ł' => 'l', 'ľ' => 'l', 'ĺ' => 'l', 'ļ' => 'l',
-        'ŀ' => 'l', 'ñ' => 'n', 'ń' => 'n', 'ň' => 'n', 'ņ' => 'n', 'ŉ' => 'n',
-        'ŋ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'oe',
-        'ö' => 'oe', 'ø' => 'o', 'ō' => 'o', 'ő' => 'o', 'ŏ' => 'o', 'œ' => 'oe',
-        'ŕ' => 'r', 'ř' => 'r', 'ŗ' => 'r', 'š' => 's', 'ù' => 'u', 'ú' => 'u',
-        'û' => 'u', 'ü' => 'ue', 'ū' => 'u', 'ü' => 'ue', 'ů' => 'u', 'ű' => 'u',
-        'ŭ' => 'u', 'ũ' => 'u', 'ų' => 'u', 'ŵ' => 'w', 'ý' => 'y', 'ÿ' => 'y',
-        'ŷ' => 'y', 'ž' => 'z', 'ż' => 'z', 'ź' => 'z', 'þ' => 't', 'ß' => 'ss',
-        'ſ' => 'ss', 'ый' => 'iy', 'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G',
-        'Д' => 'D', 'Е' => 'E', 'Ё' => 'YO', 'Ж' => 'ZH', 'З' => 'Z', 'И' => 'I',
-        'Й' => 'Y', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O',
-        'П' => 'P', 'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F',
-        'Х' => 'H', 'Ц' => 'C', 'Ч' => 'CH', 'Ш' => 'SH', 'Щ' => 'SCH', 'Ъ' => '',
-        'Ы' => 'Y', 'Ь' => '', 'Э' => 'E', 'Ю' => 'YU', 'Я' => 'YA', 'а' => 'a',
-        'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'yo',
-        'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'y', 'к' => 'k', 'л' => 'l',
-        'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's',
-        'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch',
-        'ш' => 'sh', 'щ' => 'sch', 'ъ' => '', 'ы' => 'y', 'ь' => '', 'э' => 'e',
-        'ю' => 'yu', 'я' => 'ya'
-    ];
-    $text = str_replace(array_keys($replace), $replace, $text);
+    $return = iconv('utf-8', 'ascii//TRANSLIT', $text);
+
+    // If string is empty, it is probably not utf8 encoded.
+    if (strlen($return) == 0) {
+        $return = utf8_encode($text);
+        $return = iconv('utf-8', 'ascii//TRANSLIT', $return);
+    }
 
     // Filter out any other characters and leave only A-Z, a-z, spaces and dashes.
-    $text = preg_replace( "/[^A-Za-z0-9\s\-]/", '', $text );
+    $return = preg_replace("/[^A-Za-z0-9\s\-]/", '', $return);
 
-    return $text;
+    // Replace double whitespaces with one.
+    $return = str_replace("  ", " ", $return);
+
+    // Trim any enclosing whitespaces.
+    $return = trim($return);
+
+    if ($limit > 0) {
+        $return = substr($return, 0, $limit);
+    }
+
+    return $return;
 }

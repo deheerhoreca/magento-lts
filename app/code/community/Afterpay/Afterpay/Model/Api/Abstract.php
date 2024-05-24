@@ -169,16 +169,62 @@ class Afterpay_Afterpay_Model_Api_Abstract extends Mage_Core_Model_Abstract
         $this->_method = $method;
         return $this;
     }
+    
+    /**
+     * getPlugingProviderData
+     *
+     * @return void
+     */
+    private function getPlugingProviderData()
+    {
+        $path = __DIR__ . "./../../etc/config.xml";
+        $configXmlContent = json_decode(json_encode(simplexml_load_string(file_get_contents($path, true))), true);
+        $modules = $configXmlContent["modules"];
+        $afterPayModule = $modules["Afterpay_Afterpay"];
+        $moduleVersion = $afterPayModule["version"];
+
+        return array(
+            "pluginProvider" => "Arvato",
+            "pluginVersion" => $moduleVersion,
+            "shopUrl" => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB),
+            "shopPlatform" => "Magento",
+            "shopPlatformVersion" => Mage::getVersion()
+        );
+    }
+    
+    /**
+     * addPlugingProviderData
+     *
+     * @param  mixed $order
+     * @return void
+     */
+    public function addPlugingProviderData($order) {
+
+        if(isset($order['additionalData'])){
+            return $order;
+        }
+
+        // Add additionalData (Plugin PRovider Data) to the current order payload
+        $order['additionalData'] = $this->getPlugingProviderData();
+
+        return $order;
+    }
 
     public function doRequest()
     {
-        $authorisation['merchantid'] = $this->_vars['merchantId'];
-        $authorisation['portfolioid'] = $this->_vars['portfolioId'];
-        $authorisation['password'] = $this->_vars['password'];
-        $authorisation['apiKey'] = $this->_vars['merchantId'];
+        // DHH CORE HACK
+        // $authorisation['merchantid'] = $this->_vars['merchantId'];
+        // $authorisation['portfolioid'] = $this->_vars['portfolioId'];
+        // $authorisation['password'] = $this->_vars['password'];
+        // $authorisation['apiKey'] = $this->_vars['merchantId'];
+        $authorisation['merchantid'] = $this->_vars['merchantId']   ?? "";
+        $authorisation['portfolioid'] = $this->_vars['portfolioId'] ?? "";
+        $authorisation['password'] = $this->_vars['password']       ?? "";
+        $authorisation['apiKey'] = $this->_vars['merchantId']       ?? "";
 
         // Check test or live modus
         $mode = $this->getTestMode();
+
         $this->_afterpay->do_request($authorisation, $mode);
         return $this->_afterpay->order_result;
     }

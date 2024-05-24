@@ -70,7 +70,7 @@ class Afterpay_Afterpay_Model_Request_Cancel extends Afterpay_Afterpay_Model_Req
         $soap->setvars($this->getVars())
              ->setMethod($this->getMethod())
              ->setIsPartial($this->getIsPartial());
-        [$response, $responseXML, $requestXML] = $soap->cancelRequest();
+        list($response, $responseXML, $requestXML) = $soap->cancelRequest();
         $this->_debugEmail .= "The SOAP request has been sent. \n";
         if (!is_object($requestXML) || !is_object($responseXML)) {
             $this->_debugEmail .= "Request or response was not an object \n";
@@ -101,7 +101,7 @@ class Afterpay_Afterpay_Model_Request_Cancel extends Afterpay_Afterpay_Model_Req
         $captureModeUsed = $this->_order->getAfterpayCaptureMode();
         $captured = $this->_order->getAfterpayCaptured();
         if ($captureModeUsed == 1 && $captured == 1) {
-            Mage::throwException($this->_helper->__('This order has already been captured by AfterPay.'));
+            Mage::throwException($this->_helper->__('This order has already been captured by Riverty.'));
         }
         if (!Mage::getStoreConfig('afterpay/afterpay_refund/enabled', $this->_order->getStoreId())) {
             Mage::throwException(

@@ -71,11 +71,11 @@
 
         <div class="clear"></div>
         <?php echo $this->getChildHtml('gift_options') ?>
-
+        <?php /* DHH CORE HACK -- Fix conflicting HTML ID */ ?>
         <div class="clear"></div>
         <div class="box-left entry-edit">
             <div class="entry-edit-head"><h4><?php echo Mage::helper('sales')->__('Order History') ?></h4></div>
-            <fieldset id="order-comment"><?php echo $this->getChildHtml('comment') ?></fieldset>
+            <fieldset id="order-comment-fieldset"><?php echo $this->getChildHtml('comment') ?></fieldset>
         </div>
         <div class="box-right entry-edit">
             <div class="entry-edit-head"><h4><?php echo Mage::helper('sales')->__('Order Totals') ?></h4></div>

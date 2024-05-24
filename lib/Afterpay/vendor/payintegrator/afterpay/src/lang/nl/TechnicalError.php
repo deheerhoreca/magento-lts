@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,23 +19,23 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
 
 return [
     'nl.afterpay.mercury.soap.exception.AccessDeniedException' => [
-        'message' => 'Er was een technisch authenticatie probleem in de verbinding met de AfterPay BE webservice.',
+        'message' => 'Er was een technisch authenticatie probleem in de verbinding met de Riverty BE webservice.',
         'description' => 'Er is een technisch probleem opgetreden, neem contact op met onze klantenservice.'
     ],
     'nl.afterpay.ad3.web.service.impl.exception.AuthenticationException' => [
-        'message' => 'Er was een technisch authenticatie probleem in de verbinding met de AfterPay NL webservice.',
+        'message' => 'Er was een technisch authenticatie probleem in de verbinding met de Riverty NL webservice.',
         'description' => 'Er is een technisch probleem opgetreden, neem contact op met onze klantenservice.'
     ],
     'fallback' => [
-        'message' => 'Er is een technisch probleem opgetreden in de verbinding met AfterPay',
+        'message' => 'Er is een technisch probleem opgetreden in de verbinding met Riverty',
         'description' =>
-            'Er is een technisch probleem opgetreden in de verbinding met AfterPay, neem contact op met onze klantenservice.'
+            'Er is een technisch probleem opgetreden in de verbinding met Riverty, neem contact op met onze klantenservice.'
     ],
-    'default.message' => 'Er is een technisch probleem opgetreden in de verbinding met AfterPay, neem contact op met onze klantenservice.'
+    'default.message' => 'Er is een technisch probleem opgetreden in de verbinding met Riverty, neem contact op met onze klantenservice.'
 ];

@@ -40,7 +40,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $template29 = "
         <p>
-            Hartelijk welkom bij AfterPay. 
+            Hartelijk welkom bij Riverty. 
             Het spijt ons u te moeten mededelen dat uw aanvraag om uw bestelling achteraf te betalen op dit moment niet door AfterPay wordt geaccepteerd. 
             AfterPay hanteert voor voor eerste gebruikers een instapbedrag. 
             Uw huidige orderbedrag overstijgt het instapbedrag. 
@@ -55,7 +55,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $template30 = "
         <p>
-            Hartelijk welkom bij AfterPay. 
+            Hartelijk welkom bij Riverty. 
             Het spijt ons u te moeten mededelen dat uw aanvraag om uw bestelling achteraf te betalen op dit moment niet door AfterPay wordt geaccepteerd. 
             Graag wil AfterPay uw betaalverzoek accepteren, echter volgens onze administratie heeft u het maximale aantal openstaande betalingen bereikt. 
             Indien u tot betaling overgaat zijn wij u graag weer snel van dienst.
@@ -106,7 +106,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $template71 = "
         <p>
-            Hartelijk welkom bij AfterPay. 
+            Hartelijk welkom bij Riverty. 
             Het spijt ons u te moeten mededelen dat uw aanvraag om uw bestelling achteraf te betalen op dit moment niet door AfterPay wordt geaccepteerd. 
             Helaas kunnen wij uw kamer van koophandel dossier niet raadplegen. 
             Dit kan als oorzaak hebben dat uw KVK nummer niet juist is en/of de bedrijfsnaam die u ingegegeven heeft niet overeenkomt met hetgeen geregistreerd staat bij de kamer van koophandel.
@@ -134,7 +134,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebe29 = "
         <p>
-            Hartelijk welkom bij AfterPay. 
+            Hartelijk welkom bij Riverty. 
             Het spijt ons u te moeten mededelen dat uw aanvraag om uw bestelling achteraf te betalen op dit moment niet door AfterPay wordt geaccepteerd. 
             AfterPay hanteert voor voor eerste gebruikers een instapbedrag. 
             Uw huidige orderbedrag overstijgt het instapbedrag. 
@@ -149,7 +149,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebe30 = "
         <p>
-            Hartelijk welkom bij AfterPay. 
+            Hartelijk welkom bij Riverty. 
             Het spijt ons u te moeten mededelen dat uw aanvraag om uw bestelling achteraf te betalen op dit moment niet door AfterPay wordt geaccepteerd. 
             Graag wil AfterPay uw betaalverzoek accepteren, echter volgens onze administratie heeft u het maximale aantal openstaande betalingen bereikt. 
             Indien u tot betaling overgaat zijn wij u graag weer snel van dienst.
@@ -200,10 +200,10 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr1 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay. Il peut y avoir plusieurs raisons à cela.
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty. Il peut y avoir plusieurs raisons à cela.
         </p>
         <p>
-            Pour plus d'informations, veuillez contacter le service clientèle d'AfterPay. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
+            Pour plus d'informations, veuillez contacter le service clientèle d'Riverty. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
         </p>
         <p>
             Cependant, il est possible de compléter votre commande avec un autre mode de paiement.
@@ -212,10 +212,10 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr29 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay. Le montant total de votre commande est trop élevé. 
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty. Le montant total de votre commande est trop élevé. 
         </p>
         <p>
-            Pour plus d'informations, veuillez contacter le service clientèle d'AfterPay. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
+            Pour plus d'informations, veuillez contacter le service clientèle d'Riverty. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
         </p>
         <p>
             Nous vous conseillons de commander pour un montant inférieur ou de compléter votre commande avec un autre mode de paiement.
@@ -224,10 +224,10 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr30 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay. C'est parce que vous avez atteint le nombre maximum de commandes en cours. 
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty. C'est parce que vous avez atteint le nombre maximum de commandes en cours. 
         </p>
         <p>
-            Pour plus d'informations, veuillez contacter le service clientèle d'AfterPay. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
+            Pour plus d'informations, veuillez contacter le service clientèle d'Riverty. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
         </p>
         <p>
             Cependant, il est possible de compléter votre commande avec un autre mode de paiement.
@@ -236,7 +236,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr36 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay.
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty.
         </p>
         <p>
             Ceci est dû au fait que vous avez saisi une adresse e-mail invalide.
@@ -247,7 +247,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr40 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay.
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty.
         </p>
         <p>
             C'est parce que vous n'avez pas encore 18 ans ou plus.
@@ -258,7 +258,7 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr42 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay.
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty.
         </p>
         <p>
             C'est parce que l'adresse que vous avez saisie est incorrecte ou invalide.
@@ -269,10 +269,10 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr43 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay. Le montant total de votre commande est trop élevé.
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty. Le montant total de votre commande est trop élevé.
         </p>
         <p>
-            Pour plus d'informations, veuillez contacter le service clientèle d'AfterPay. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
+            Pour plus d'informations, veuillez contacter le service clientèle d'Riverty. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
         <p>
             Nous vous conseillons de commander pour un montant inférieur ou de compléter votre commande avec un autre mode de paiement.
         </p>
@@ -280,10 +280,10 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr47 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay. Le montant total de votre commande est trop faible. 
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty. Le montant total de votre commande est trop faible. 
         </p>
         <p>
-            Pour plus d'informations, veuillez contacter le service clientèle d'AfterPay. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
+            Pour plus d'informations, veuillez contacter le service clientèle d'Riverty. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
         <p>
             Nous vous conseillons de commander pour un montant supérieur ou de compléter votre commande avec un autre mode de paiement.
         </p>
@@ -291,10 +291,10 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
 
     public $templatebefr71 = "
         <p>
-            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec AfterPay. Ceci est dû à des informations invalides/incorrectes dans la combinaison des données de l'entreprise et du numéro de la Chambre de Commerce.
+            Pour l'instant, il n'est malheureusement pas possible de payer votre commande ultérieurement avec Riverty. Ceci est dû à des informations invalides/incorrectes dans la combinaison des données de l'entreprise et du numéro de la Chambre de Commerce.
         </p>
         <p>
-            Pour plus d'informations, veuillez contacter le service clientèle d'AfterPay. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
+            Pour plus d'informations, veuillez contacter le service clientèle d'Riverty. Les coordonnées et les réponses aux questions fréquentes sont disponibles à l'adresse https://www.afterpay.be/fr/service. <a href=\"https://www.afterpay.be/fr/service\" target=\"_blank\">https://www.afterpay.be/fr/service</a>.
         <p>
             Nous vous conseillons de commander pour un montant supérieur ou de compléter votre commande avec un autre mode de paiement.
         </p>
@@ -318,13 +318,13 @@ class Afterpay_Afterpay_Block_RejectMessages extends Mage_Core_Block_Abstract
     public function setRejectTemplate($id = 1)
     {
         $templateId = 'template' . $id;
-        
+
         $this->_rejectTemplate = $this->template1;
-        
+
         if (isset($this->$templateId)) {
             $this->_rejectTemplate = $this->$templateId;
         }
-        
+
         return $this;
     }
 

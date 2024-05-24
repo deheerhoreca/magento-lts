@@ -1,8 +1,48 @@
 <?php
 
+use Elastic\Apm\ElasticApm;
+use Elastic\Apm\TransactionInterface;
+
 class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   public function __construct() {}
+  
+  // Setup Elastic APM
+  public function configureElasticApm($observer) {
+    
+    $action_name      = Mage::app()?->getFrontController()?->getAction()?->getFullActionName();
+    $verb             = $_SERVER["REQUEST_METHOD"] ?? "";
+    $transaction_name = $verb." ".$action_name;
+    
+    if(!extension_loaded("elastic_apm")) {
+      Mage::log("Elastic APM extension not available [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
+      return;
+    }
+    
+    // Careful execution with try block:
+    try {
+      $transaction = ElasticApm::getCurrentTransaction();
+      if(is_object($transaction)) {
+        
+        // Set transaction.name to HTTP method + the name of the OpenMage action
+        $transaction->setName($transaction_name);
+        
+        // Try to detect admin and set a different service_name
+        if(Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() === "adminhtml") {
+          $transaction->setType("admin");
+        } elseif(php_sapi_name() === "cli") {
+          $transaction->setType("cli");
+        } else {
+          $transaction->setType("frontend");
+        }
+        
+        $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
+        $transaction->context()->setLabel("sapi", php_sapi_name());
+      }
+    } catch(Exception $e) {
+      Mage::logException($e);
+    }
+  }
   
   // Lock some attributes from editing
   public function updateProductOnEdit($observer) {
@@ -354,8 +394,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     try {
       $json = json_encode($dhh_click_log);
       file_put_contents("./var/log/clicks.jsonl", $json.PHP_EOL, FILE_APPEND);
-    } catch (Exception $e) {
-      Mage::log($e->getMessage(), null, 'exception.log', true);
+    } catch(Exception $e) {
+      Mage::logException($e);
     }
   }
   

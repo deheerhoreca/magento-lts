@@ -324,10 +324,12 @@
 ## Deny access to other project files to prevent disclosure of the installed Magento version or other information
 ## Only robots.txt and manifest.json should be allowed by default
 
-    <Files security.txt>
+    # BEGIN DHH
+    <FilesMatch "(security|ads)\.txt$">
         Order allow,deny
         Allow from all
-    </Files>
+    </FilesMatch>
+    # END DHH
     <FilesMatch (?<!robots)\.txt$>
         Order allow,deny
         Deny from all
@@ -378,7 +380,7 @@
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
-   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.sooqr.com>;rel=dns-prefetch; crossorigin,<//dynamic.sooqr.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//squeezely.tech>;rel=preconnect; crossorigin,<//t.squeezely.tech>;rel=preconnect; crossorigin,<//cdn.cookie-script.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
+   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.spotlersearch.com>;rel=dns-prefetch; crossorigin,<//spotlersearchanalytics.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//squeezely.tech>;rel=preconnect; crossorigin,<//t.squeezely.tech>;rel=preconnect; crossorigin,<//cdn.cookie-script.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
 </FilesMatch>
 
 ###########################################
@@ -453,17 +455,17 @@
     # CSS/JS
     <FilesMatch "\.(css|js)$">
         Header unset Etag
-        Header set Cache-Control "public, max-age=600"
+        Header set Cache-Control "public, max-age=3600"
     </FilesMatch>
 
     # IMAGES
         <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
         # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
-        Header set Cache-Control "public, max-age=600"
+        Header set Cache-Control "public, max-age=3600"
     </FilesMatch>
 
-    # TEXT
-    <FilesMatch "\.(html|htm|php)$">
+    # TEXT, ARCHIVES
+    <FilesMatch "\.(html|htm|php|xml|zip)$">
         Header unset Etag
         Header set Cache-control "max-age=0, no-cache"
     </FilesMatch>

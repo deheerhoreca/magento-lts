@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,7 +19,7 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
 namespace Afterpay;
@@ -28,51 +28,13 @@ use GuzzleHttp;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
+#[AllowDynamicProperties]
 class RestClient extends Client
 {
-    /**
-     * Used for number_format() function as property
-     */
-    const THOUSANDS_SEP = '';
-
-    /**
-     * Used for number_format() function as property
-     */
-    const DEC_POINT = '.';
-
-    /**
-     * Used for number_format() function as property
-     */
-    const DECIMALS = 2;
-
     /**
      * @var GuzzleHttp\Client $restClient
      */
     private $restClient;
-
-    /**
-     * @var array $vatMapping
-     */
-    private $vatMapping = [
-        1 => 'HighCategory',
-        2 => 'LowCategory',
-        3 => 'NullCategory',
-        4 => 'NoCategory',
-        5 => 'MiddleCategory',
-        'fallback' => 'OtherCategory'
-    ];
-
-    /**
-     * @var array $vatMappingDE
-     */
-    private $vatMappingDE = [
-        1 => '19',
-        2 => '7',
-        3 => '0',
-        4 => '0',
-        5 => '0',
-        'fallback' => '0'
-    ];
 
     /**
      * @var string $requestUrl
@@ -135,7 +97,7 @@ class RestClient extends Client
         $quantity,
         $unitPrice,
         $vatCategory = null,
-        $vatAmount = null,
+        $vatAmount = 0,
         $googleProductCategoryId = null,
         $googleProductCategory = null,
         $productUrl = null,
@@ -143,27 +105,25 @@ class RestClient extends Client
         $groupId = null
     )
     {
-        $grossUnitPrice = ((int)$unitPrice / 100);
-        $netUnitPrice = round(($grossUnitPrice - $vatAmount),4);
+        $vatAmount = $this->roundAmount($vatAmount);
+        $grossUnitPrice = $this->roundAmount(($unitPrice / 100));
+        $netUnitPrice = $this->roundAmount(($grossUnitPrice - $vatAmount));
         if ($this->orderAction === 'refund_partial') {
             $orderLine['refundType'] = 'Refund';
-            $grossUnitPrice = $grossUnitPrice * -1;
-            $netUnitPrice = $netUnitPrice * -1;
-            $vatAmount = $vatAmount * -1;
+            $grossUnitPrice = $this->roundAmount($grossUnitPrice * -1);
+            $netUnitPrice = $this->roundAmount($netUnitPrice * -1);
+            $vatAmount = $this->roundAmount($vatAmount * -1);
         }
         $orderLine = [
             'productId' => substr($productId, 0, 49),
             'description' => $description,
-            'quantity' => $quantity,
+            'quantity' => (string) $quantity,
             'grossUnitPrice' => $grossUnitPrice,
             'netUnitPrice' => $netUnitPrice
         ];
-        if (isset($vatCategory)) {
-            $orderLine['vatCategory'] = $this->setAfterpayVATMapping($vatCategory);
-        }
         if ($vatAmount !== null) {
             $orderLine['vatAmount'] = $vatAmount;
-            $orderLine['vatPercent'] = \Afterpay\calculateVatPercentage(abs($grossUnitPrice), abs($vatAmount));
+            $orderLine['vatPercent'] = $this->roundAmount(\Afterpay\calculateVatPercentage(abs($grossUnitPrice), abs($vatAmount)));
         }
         if (isset($googleProductCategoryId)) {
             $orderLine['googleProductCategoryId'] = $googleProductCategoryId;
@@ -171,45 +131,19 @@ class RestClient extends Client
         if (isset($googleProductCategory)) {
             $orderLine['googleProductCategory'] = $googleProductCategory;
         }
-        if (isset($productUrl)) {
+        if (isset($productUrl) && $this->verifyUrl($imageUrl)) {
             $orderLine['productUrl'] = $productUrl;
         }
-        if (isset($imageUrl)) {
+        if (isset($imageUrl) && $this->verifyUrl($imageUrl)) {
             $orderLine['imageUrl'] = $imageUrl;
         }
         if (isset($groupId)) {
             $orderLine['groupId'] = $groupId;
         }
 
-        $this->totalOrderAmount = ($this->totalOrderAmount + ($quantity * ((int)$unitPrice / 100)));
+        $this->totalOrderAmount = ($this->totalOrderAmount + ($quantity * $grossUnitPrice));
         $this->totalNetAmount = ($this->totalNetAmount + ($quantity * $netUnitPrice));
         $this->orderLines[] = $orderLine;
-    }
-
-    /**
-     * @param int $vatCategory
-     *
-     * @return string
-     */
-    private function setAfterpayVATMapping($vatCategory)
-    {
-        if (array_key_exists($vatCategory, $this->vatMapping)) {
-            return $this->vatMapping[$vatCategory];
-        }
-        return $this->vatMapping['fallback'];
-    }
-
-    /**
-     * @param int $vatCategory
-     *
-     * @return string
-     */
-    private function setAfterpayVATMappingDE($vatCategory)
-    {
-        if (array_key_exists($vatCategory, $this->vatMappingDE)) {
-            return $this->vatMappingDE[$vatCategory];
-        }
-        return $this->vatMappingDE['fallback'];
     }
 
     /**
@@ -242,14 +176,15 @@ class RestClient extends Client
                     $totalNetAmount = $order['totalNetAmount'];
                     $this->order = [
                         'orderDetails' => [
-                            'totalGrossAmount' => \Afterpay\convertPrice($totalAmount),
-                            'totalNetAmount' => \Afterpay\convertPrice($totalNetAmount)
+                            'totalGrossAmount' => $this->roundAmount(\Afterpay\convertPrice($totalAmount)),
+                            'totalNetAmount' => $this->roundAmount(\Afterpay\convertPrice($totalNetAmount))
                         ],
                         'invoiceNumber' => $order['invoicenumber'],
                     ];
                     if (!empty($this->orderLines)) {
                         $this->order['orderDetails']['items'] = $this->orderLines;
-                        $this->order['orderDetails']['totalNetAmount'] = $this->totalNetAmount;
+                        $this->order['orderDetails']['totalGrossAmount'] = $this->roundAmount($this->totalOrderAmount);
+                        $this->order['orderDetails']['totalNetAmount'] = $this->roundAmount($this->totalNetAmount);
                     }
                     break;
                 case 'capture_partial':
@@ -258,8 +193,8 @@ class RestClient extends Client
                     $totalNetAmount = $this->totalNetAmount;
                     $this->order = [
                         'orderDetails' => [
-                            'totalGrossAmount' => \Afterpay\convertPrice($totalGrossAmount),
-                            'totalNetAmount' => \Afterpay\convertPrice($totalNetAmount),
+                            'totalGrossAmount' => $this->roundAmount(\Afterpay\convertPrice($totalGrossAmount)),
+                            'totalNetAmount' => $this->roundAmount(\Afterpay\convertPrice($totalNetAmount)),
                             'items' => $this->orderLines,
                         ],
                         'invoiceNumber' => $order['invoicenumber'],
@@ -276,13 +211,16 @@ class RestClient extends Client
                     ];
                     break;
                 case 'void':
-                    $totalGrossAmount = $this->totalOrderAmount;
-                    $this->order = [
-                        'cancellationDetails' => [
-                            'totalGrossAmount' => \Afterpay\convertPrice($totalGrossAmount),
-                            'items' => $this->orderLines
-                        ]
-                    ];
+                    $this->order = '';
+                    if($this->orderLines) {
+                        $this->order = [
+                            'cancellationDetails' => [
+                                'totalGrossAmount' => $this->roundAmount(\Afterpay\convertPrice($this->totalOrderAmount)),
+                                'totalNetAmount' => $this->roundAmount(\Afterpay\convertPrice($this->totalNetAmount)),
+                                'items' => $this->orderLines ?: ''
+                            ]
+                        ];
+                    }
                     break;
                 case 'customer_lookup':
                     if (isset($order['countryCode'])) {
@@ -311,24 +249,36 @@ class RestClient extends Client
                     break;
                 case 'validate_bankaccount':
                     $this->order = [
-                        'bankAccount' => $order['bankAccount'],
-                        'bankCode' => $order['bankCode']
+                        'bankAccount' => $order['bankAccount']
                     ];
                     break;
                 case 'available_payment_methods':
-                    $this->order = [
-                      'order' => [
-                          'totalGrossAmount' => $order['order']['totalGrossAmount'],
-                          'totalNetAmount' => $order['order']['totalNetAmount']
-                      ]
-                    ];
+                    if (isset($order['conversationLanguage'])) {
+                        $this->order['conversationLanguage'] = $order['conversationLanguage'];
+                    }
+                    if (isset($order['country'])) {
+                        $this->order['country'] = strtoupper($order['country']);
+                    }
+                    if (isset($order['order']['totalGrossAmount'])) {
+                        $this->order['order']['totalGrossAmount'] = $this->roundAmount($order['order']['totalGrossAmount']);
+                    }
+                    if (isset($order['order']['totalNetAmount'])) {
+                        $this->order['order']['totalNetAmount'] = $this->roundAmount($order['order']['totalNetAmount']);
+                    }
+                    if (isset($order['order']['currency'])) {
+                        $this->order['order']['currency'] = $order['order']['currency'];
+                    }
+                    if (array_key_exists('additionalData', $order)) {
+                        $this->order['additionalData'] = $this->getPluginProviderData($order);
+        
+                        if (!isset($order['additionalData']['partnerData']['pspName']) &&
+                            !isset($order['additionalData']['partnerData']['pspType'])) {
+                            unset($this->order['additionalData']['partnerData']);
+                        }
+                    }
                     break;
                 default:
                     break;
-            }
-            // Check if there is a subcontract merchant id set, if so merge it with the order data
-            if (array_key_exists('apiMerchantId', $order) && !(empty($order['apiMerchantId']))) {
-                $this->order['references']['merchantId'] = $order['apiMerchantId'];
             }
             return;
         }
@@ -401,29 +351,18 @@ class RestClient extends Client
                 ]);
         }
         // Check if there is an additional information array, if so merge it with the order data
-        if (array_key_exists('additional', $order)) {
+        if (array_key_exists('additionalData', $order)) {
             $this->order = array_merge_recursive($this->order,
                 [
-                    'additionalData' => [
-                        'pluginProvider' => (
-                            isset($order['additional']['pluginProvider']) ? $order['additional']['pluginProvider'] : ''
-                        ),
-                        'pluginVersion' => (
-                            isset($order['additional']['pluginVersion']) ?$order['additional']['pluginVersion'] : ''
-                        ),
-                        'shopUrl' => (
-                            isset($order['additional']['shopUrl']) ? $order['additional']['shopUrl'] : ''
-                        ),
-                        'shopPlatform' => (
-                            isset($order['additional']['shopPlatform']) ? $order['additional']['shopPlatform'] : ''
-                        ),
-                        'shopPlatformVersion' => (
-                            isset($order['additional']['shopPlatformVersion']) ?
-                                $order['additional']['shopPlatformVersion'] : ''
-                        ),
-                    ],
+                    'additionalData' => $this->getPluginProviderData($order)
                 ]);
+
+            if (!isset($order['additionalData']['partnerData']['pspName']) &&
+                !isset($order['additionalData']['partnerData']['pspType'])) {
+                unset($this->order['additionalData']['partnerData']);
+            }
         }
+
         // Check if there is an housenumber addition, if so merge it with the order data
         if (array_key_exists('housenumberaddition', $order['billtoaddress'])
             && !(empty($order['billtoaddress']['housenumberaddition']))) {
@@ -431,7 +370,7 @@ class RestClient extends Client
                 [
                     'customer' => [
                         'address' => [
-                            'streetNumberAdditional' => $order['billtoaddress']['housenumberaddition']
+                            'streetNumberAdditional' => substr($order['billtoaddress']['housenumberaddition'],0,10)
                         ]
                     ]
                 ]);
@@ -467,6 +406,7 @@ class RestClient extends Client
                         'postalCode' => $order['shiptoaddress']['postalcode'],
                         'street' => $order['shiptoaddress']['streetname'],
                         'careOf' => (isset($order['shiptoaddress']['careof']) ? $order['shiptoaddress']['careof'] : ''),
+                        'addressType' => (isset($order['shiptoaddress']['addresstype']) ? $order['shiptoaddress']['addresstype'] : ''),
                     ],
                     'birthDate' => (isset($order['shiptoaddress']['referenceperson']['dob'])
                         ? $order['shiptoaddress']['referenceperson']['dob'] : ''),
@@ -489,7 +429,8 @@ class RestClient extends Client
                     [
                         'deliveryCustomer' => [
                             'address' => [
-                                'streetNumberAdditional' => $order['shiptoaddress']['housenumberaddition']
+                                // The maximum amount of characters for a housenumber addition is 10.
+                                'streetNumberAdditional' => substr($order['shiptoaddress']['housenumberaddition'],0,10)
                             ]
                         ]
                     ]);
@@ -512,9 +453,21 @@ class RestClient extends Client
             if (array_key_exists('companyname', $order['company']) && $order['company']['companyname'] !== '') {
                 $this->order['customer']['customerCategory'] = 'Company';
                 $this->order['customer']['companyName'] = $order['company']['companyname'];
+                if(isset($order['company']['identificationnumber']) && $order['company']['identificationnumber'] !== '') {
+                    $this->order['customer']['identificationNumber'] = $order['company']['identificationnumber'];
+                }
+                if(isset($order['company']['legalform']) && $order['company']['legalform'] !== '') {
+                    $this->order['customer']['legalForm'] = $order['company']['legalform'];
+                }
                 if (array_key_exists('deliveryCustomer', $order)) {
                     $this->order['deliveryCustomer']['customerCategory'] = 'Company';
                     $this->order['deliveryCustomer']['companyName'] = $order['company']['companyname'];
+                    if(isset($order['company']['identificationnumber']) && $order['company']['identificationnumber'] !== '') {
+                        $this->order['deliveryCustomer']['identificationNumber'] = $order['company']['identificationnumber'];
+                    }
+                    if(isset($order['company']['legalform']) && $order['company']['legalform'] !== '') {
+                        $this->order['deliveryCustomer']['legalForm'] = $order['company']['legalform'];
+                    }
                 }
             }
         }
@@ -527,8 +480,8 @@ class RestClient extends Client
                 'number' => $order['ordernumber'],
                 'currency' => $order['currency'],
                 'items' => $this->orderLines,
-                'totalGrossAmount' => \Afterpay\convertPrice($this->totalOrderAmount),
-                'totalNetAmount' => \Afterpay\convertPrice($this->totalNetAmount)
+                'totalGrossAmount' => $this->roundAmount(\Afterpay\convertPrice($this->totalOrderAmount)),
+                'totalNetAmount' => $this->roundAmount(\Afterpay\convertPrice($this->totalNetAmount))
             ]
         ];
 
@@ -546,7 +499,6 @@ class RestClient extends Client
                         'profileNo' => $order['installment']['profileNo'],
                     ],
                     'directDebit' => [
-                        'bankCode' => $order['installment']['bankCode'],
                         'bankAccount' => $order['installment']['bankAccount']
                     ]
                 ];
@@ -580,6 +532,25 @@ class RestClient extends Client
                 ];
         }
 
+        // Check if this is campaign payment method, if so pass campaign number in the request
+        if (
+            array_key_exists('campaign', $order)
+            && !(empty($order['campaign']['campaignNumber']))
+            ) {
+            $this->order['payment']['campaign'] =
+                [
+                        'campaignNumber' => $order['campaign']['campaignNumber'],
+                ];
+        }
+
+        // Check if this is pay in X payment method, if so change the type element to pay in X in the request
+        if (array_key_exists('payInX', $order) && !(empty($order['payInX']['dueAmount']))) {
+            $this->order['payment'] =
+                [
+                    'type' => 'payInX',
+                ];
+        }
+
         // Check if there is DirectDebit element set, if so merge it with the order data
         if (array_key_exists('directDebit', $order)  && $order['directDebit']['bankAccount']) {
             $this->order['payment'] =
@@ -589,9 +560,6 @@ class RestClient extends Client
                         'bankAccount' => $order['directDebit']['bankAccount']
                     ]
                 ];
-            if ($order['directDebit']['bankCode']) {
-                $this->order['payment']['directDebit']['bankCode'] = $order['directDebit']['bankCode'];
-            }
         }
 
         // Check if there is google analytics user id set, if so merge it with the order data
@@ -613,18 +581,20 @@ class RestClient extends Client
                 ]);
         }
 
-        // Check if there is a subcontract merchant id set, if so merge it with the order data
-        if (array_key_exists('apiMerchantId', $order) && !(empty($order['apiMerchantId']))) {
-            $this->order['merchantId'] = $order['apiMerchantId'];
-        }
-
         // Remove fields that are not filled for customer and deliveryCustomer
+        if (empty($this->order['customer']['address']['streetNumber'])) unset($this->order['customer']['address']['streetNumber']);
+        if (empty($this->order['deliveryCustomer']['address']['streetNumber'])) unset($this->order['deliveryCustomer']['address']['streetNumber']);
+        if (empty($this->order['customer']['address']['streetNumberAdditional'])) unset($this->order['customer']['address']['streetNumberAdditional']);
+        if (empty($this->order['deliveryCustomer']['address']['streetNumberAdditional'])) unset($this->order['deliveryCustomer']['address']['streetNumberAdditional']);
         if (empty($this->order['customer']['address']['careOf'])) unset($this->order['customer']['address']['careOf']);
         if (empty($this->order['deliveryCustomer']['address']['careOf'])) unset($this->order['deliveryCustomer']['address']['careOf']);
+        if (empty($this->order['deliveryCustomer']['address']['addressType'])) unset($this->order['deliveryCustomer']['address']['addressType']);
         if (empty($this->order['customer']['birthDate'])) unset($this->order['customer']['birthDate']);
         if (empty($this->order['deliveryCustomer']['birthDate'])) unset($this->order['deliveryCustomer']['birthDate']);
         if (empty($this->order['customer']['identificationNumber'])) unset($this->order['customer']['identificationNumber']);
         if (empty($this->order['deliveryCustomer']['identificationNumber'])) unset($this->order['deliveryCustomer']['identificationNumber']);
+        if (empty($this->order['customer']['legalForm'])) unset($this->order['customer']['legalForm']);
+        if (empty($this->order['deliveryCustomer']['legalForm'])) unset($this->order['deliveryCustomer']['legalForm']);
         if (empty($this->order['customer']['email'])) unset($this->order['customer']['email']);
         if (empty($this->order['deliveryCustomer']['email'])) unset($this->order['deliveryCustomer']['email']);
         if (empty($this->order['customer']['salutation'])) unset($this->order['customer']['salutation']);
@@ -645,22 +615,12 @@ class RestClient extends Client
             unset($this->order['customer']['riskData']['profileTrackingId']);
             unset($this->order['deliveryCustomer']['riskData']['profileTrackingId']);
         }
-		if (empty($this->order['customer']['riskData']['customerIndividualScore'])) {
+        if (empty($this->order['customer']['riskData']['customerIndividualScore'])) {
             unset($this->order['customer']['riskData']['customerIndividualScore']);
             unset($this->order['deliveryCustomer']['riskData']['customerIndividualScore']);
         }
         if (empty($this->order['customer']['mobilePhone'])) unset($this->order['customer']['mobilePhone']);
         if (empty($this->order['deliveryCustomer']['mobilePhone'])) unset($this->order['deliveryCustomer']['mobilePhone']);
-
-        /* Country specific actions */
-        // DE does not need vatCategory 
-        if($this->country == 'DE') {
-            if(isset($this->order['order']['items']) && is_array($this->order['order']['items'])) {
-                foreach($this->order['order']['items'] as $orderline_key => $orderline_value) {
-                    unset($this->order['order']['items'][$orderline_key]['vatCategory']);
-                }
-            }
-        }
     }
 
     /**
@@ -703,6 +663,10 @@ class RestClient extends Client
                 $this->requestUrl = 'checkout/payment-methods';
                 $this->requestMethod = 'POST';
                 break;
+            case 'get_order':
+                $this->requestUrl = sprintf('orders/%s', $orderNumber);
+                $this->requestMethod = 'GET';
+                break;
             default:
                 $this->requestUrl = '';
                 $this->requestUrl = 'checkout/authorize';
@@ -726,14 +690,20 @@ class RestClient extends Client
         $this->setAuthorization($authorization);
         $this->setRestClient();
         try {
+            // Set the request parameters.
+            $requestParameters = [
+                // Use the 'body' method instead of 'json' method because of the JSON_UNESCAPED_UNICODE setting
+                'body' => json_encode($this->order, JSON_UNESCAPED_UNICODE),
+                'headers' => ['Content-Type' => 'application/json']
+            ];
+            // Unset the body parameter when the request method is a GET call.
+            if($this->requestMethod == 'GET') {
+                unset($requestParameters['body']);
+            }
             $this->apiResponse = $this->restClient->request(
                 $this->requestMethod,
                 $this->requestUrl,
-                [
-                    // Use the 'body' method instead of 'json' method because of the JSON_UNESCAPED_UNICODE setting
-                    'body' => json_encode($this->order, JSON_UNESCAPED_UNICODE),
-                    'headers' => ['Content-Type' => 'application/json']
-                ]
+                $requestParameters
             );
             $this->createDebugLine('Request', $this->order);
             $this->orderResultTmp = json_decode($this->apiResponse->getBody());
@@ -828,11 +798,11 @@ class RestClient extends Client
     {
         $webServiceUrl = null;
         if ($mode === 'test') {
-            $webServiceUrl = 'https://api-pt.afterpay.io/api/v3/';
+            $webServiceUrl = 'https://api.bnpl-pt.riverty.io/api/v3/';
         } elseif ($mode === 'sandbox') {
-            $webServiceUrl = 'https://sandbox.afterpay.io/api/v3/';
+            $webServiceUrl = 'https://sandbox.bnpl.riverty.io/api/v3/';
         } elseif ($mode === 'live') {
-            $webServiceUrl = 'https://api.afterpay.io/api/v3/';
+            $webServiceUrl = 'https://api.bnpl.riverty.io/api/v3/';
         }
         return $webServiceUrl;
     }
@@ -987,5 +957,20 @@ class RestClient extends Client
             return json_decode(json_encode($this->orderResult));
         }
         return $this->orderResult;
+    }
+
+    /**
+     * Verifies whether the URL is correct
+     *
+     * @param $url
+     * @return bool
+     */
+    protected function verifyUrl($url)
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -109,11 +109,18 @@ class Afterpay_Afterpay_Model_Response_Abstract extends Afterpay_Afterpay_Model_
 
         return $return;
     }
-    
+
     protected function _parseResponse()
     {
-        if (array_key_exists($this->_response->return->resultId, $this->responseCodes)) {
-            $response = $this->responseCodes[$this->_response->return->resultId];
+        // DHH CORE HACK -- Log API response
+        Mage::log(var_export($this->_response, true), null, "verbose.txt", true);
+        
+        // DHH CORE HACK -- The API type is different from what is assumed here
+        // $resultId = intval($this->_response->return->resultId);
+        $resultId = intval($this->_response["return"]->resultId);
+
+        if (array_key_exists($resultId, $this->responseCodes)) {
+            $response = $this->responseCodes[$resultId];
         } else {
             $response = false;
         }
@@ -203,7 +210,7 @@ class Afterpay_Afterpay_Model_Response_Abstract extends Afterpay_Afterpay_Model_
         );
 
         $this->_order->setStatus(Mage::getStoreConfig('afterpay/afterpay_' . $this->_order->getPayment()->getMethod() . '/order_status_refused', $this->_order->getStoreId()))->cancel()->save();
-        
+
         $this->_debugEmail .= "The order has been cancelled. \n";
         $this->restoreQuote();
         $this->_debugEmail .= "The quote has been restored. \n";
@@ -341,7 +348,7 @@ class Afterpay_Afterpay_Model_Response_Abstract extends Afterpay_Afterpay_Model_
         $this->_debugEmail .= "The order has been cancelled. \n";
         $this->restoreQuote();
         $this->_debugEmail .= "The quote has been restored. \n";
-        
+
         return array('response'=>false, 'error'=>'validation');
     }
 
@@ -438,7 +445,7 @@ class Afterpay_Afterpay_Model_Response_Abstract extends Afterpay_Afterpay_Model_
 
     public function _updateAndInvoice()
     {
-        $this->_order->addStatusHistoryComment($this->_helper->__('This order has been accepted by AfterPay.'));
+        $this->_order->addStatusHistoryComment($this->_helper->__('This order has been accepted by Riverty.'));
         $this->_order->save();
 
         $this->_order->setStatus(Mage::getStoreConfig('afterpay/afterpay_' . $this->_order->getPayment()->getMethod() . '/order_status_acceptedni', $this->_order->getStoreId()))->save();
@@ -456,7 +463,7 @@ class Afterpay_Afterpay_Model_Response_Abstract extends Afterpay_Afterpay_Model_
                     $this->_order->setTotalPaid($this->_order->getBaseGrandTotal());
                     $this->_order->setStatus(Mage::getStoreConfig('afterpay/afterpay_' . $this->_order->getPayment()->getMethod() . '/order_status_accepted', $this->_order->getStoreId()))->save();
                 }
-                
+
                 if (Mage::getStoreConfig('afterpay/afterpay_general/send_invoice', Mage::app()->getStore()->getId()) == '1') {
                     $invoice = $this->_order->getInvoiceCollection()->getLastItem();
                     $invoice->sendEmail();

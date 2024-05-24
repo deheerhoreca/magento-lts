@@ -19,6 +19,19 @@ define('BP', dirname(__DIR__));
 
 Mage::register('original_include_path', get_include_path());
 
+// if(isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] === "185.127.111.252") {
+  // // error_reporting(E_ALL);
+  // // error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+  // // error_reporting(E_ALL & ~E_DEPRECATED);
+  // // ini_set('display_errors', '1');
+  // // ini_set('log_errors', '1');
+  // // ini_set('error_log', 'php_error_dev.log');
+  // // Mage::setIsDeveloperMode(true);
+  // define("DHH_DEBUG", true);
+// } else {
+  // define("DHH_DEBUG", false);
+// }
+
 if (!empty($_SERVER['MAGE_IS_DEVELOPER_MODE']) || !empty($_ENV['MAGE_IS_DEVELOPER_MODE'])) {
     Mage::setIsDeveloperMode(true);
     ini_set('display_errors', '1');
@@ -962,8 +975,10 @@ final class Mage
         if (!self::getConfig()) {
             return;
         }
-        $file = self::getStoreConfig('dev/log/exception_file');
-        self::log("\n" . $e->__toString(), Zend_Log::ERR, $file);
+        // DHH CORE HACK
+        // $file = self::getStoreConfig('dev/log/exception_file');
+        self::log($e->__toString(), Zend_Log::ERR, "exception.log", true);
+        // self::log("\n" . $e->__toString(), Zend_Log::ERR, $file);
     }
 
     /**

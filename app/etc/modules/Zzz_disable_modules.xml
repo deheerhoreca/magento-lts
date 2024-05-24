@@ -141,6 +141,11 @@
           <active>true</active>
         </Aschroder_SMTPPro>
         
+        <!-- Temporarily disabled -->
+        <!-- <Afterpay_Afterpay> -->
+          <!-- <active>false</active> -->
+        <!-- </Afterpay_Afterpay> -->
+        
         <!-- Temporarily disable -->
         <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->
         <!-- <Ophirah_Crmaddon><active>false</active></Ophirah_Crmaddon> -->

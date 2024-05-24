@@ -168,7 +168,7 @@ table.actions td                { vertical-align:top; }
 .grid tr.headings th a:hover { color:#d85909; text-decoration:none; }
 .grid tr.headings th a.sort-arrow-desc,
 .grid tr.headings th a.sort-arrow-asc { background:url(images/sort_on_bg.gif) 0 0 no-repeat; border-bottom:1px solid #fff; border-right:1px solid #fff; padding-bottom:2px; }
-.grid tr.headings th span.sort-title { display:block; padding:3px 12px 4px 0; line-height:1; }
+.grid tr.headings th span.sort-title { display:block; padding:3px 3px 4px 0; line-height:1; }
 .grid tr.headings th a.sort-arrow-desc span.sort-title,
 .grid tr.headings th a.sort-arrow-asc span.sort-title { background-position:right 50%; background-repeat:no-repeat; padding:3px 12px 2px 8px; }
 .grid tr.headings th a.sort-arrow-desc span.sort-title { background-image:url(images/grid_sort_desc.gif); }
@@ -199,9 +199,9 @@ table.actions td                { vertical-align:top; }
 .grid tr.filter select           { width:100%; }
 .grid tr.filter .range .range-line { margin-bottom:3px; width:90px; }
 .grid tr.filter .range div.date  { min-width:121px; }
-.grid tr.filter .range input     { width:50px !important; margin-top:0; }
+.grid tr.filter .range input     { width:56px !important; margin-top:0; }
 .grid tr.filter .range select    { float:right; width:65px !important; margin-top:0; }
-.grid tr.filter .range .label    { display:block; width:30px; float:left; padding-right:3px; text-align:right; }
+.grid tr.filter .range .label    { display:block; width:20px; float:left; padding-right:3px; text-align:right; }
 .grid tr.filter .date img        { width:15px; height:15px; cursor:pointer; vertical-align:middle; padding-left:3px; }
 .grid .head-massaction select    { width:auto !important; max-width:90px; }
 .grid select.select-export-filter,
@@ -337,7 +337,7 @@ label.inline                            { float:none !important; width:auto !imp
 #coupon_container .entry-edit { min-width:310px; }
 
 /* Form Elements */
-input.input-text,input.input-color,textarea,select { border-width:1px; border-style:solid; border-color:#aaa #c8c8c8 #c8c8c8 #aaa; background:#fff; font:12px arial, helvetica, sans-serif; }
+input.input-text,input.input-color,textarea,select { border-width:1px; border-style:solid; border-color:#aaa #c8c8c8 #c8c8c8 #aaa; background:#fff; font:11px arial, helvetica, sans-serif; }
 select { min-height:17px; /* to set the height for empty selects */ }
 input.input-text,textarea       { padding:2px; }
 input.input-color               { padding:2px; width:222px !important; }

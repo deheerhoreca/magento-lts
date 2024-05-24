@@ -26,6 +26,7 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function sendDebugEmail($email)
     {
+        
         // DHH CORE HACK
         $quote_id = "-";
         try {
@@ -34,13 +35,14 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
           Mage::logException($e);
         }
         // END DHH CORE HACK
+        
         $recipients = explode(',', (string) Mage::getStoreConfig('afterpay/afterpay_general/debug_mail', Mage::app()->getStore()->getStoreId()));
         foreach ($recipients as $recipient) {
             $mail = Mage::getModel('core/email');
             $mail->setToName('AfterPay Debug Recipient');
             $mail->setToEmail($recipient);
             $mail->setBody($email);
-            $mail->setSubject('Afterpay Debug E-mail '.$quote_id);
+            $mail->setSubject('Afterpay Debug E-mail '.$quote_id); // DHH
             $mail->setFromEmail(Mage::getStoreConfig('trans_email/ident_general/email'));
             $mail->setFromName(Mage::getStoreConfig('trans_email/ident_general/name'));
             $mail->setType('text');
@@ -87,7 +89,7 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
             // 'portfolio_k',
             // 'portfolio_l',
         );
-        
+
         return $array;
     }
 
@@ -556,7 +558,7 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
                 return "Le numéro de commande est invalide. Veuillez contacter notre service clientèle.";
                 break;
             case 'fr.field.ordernumber.exists':
-                return "Le numéro de commande existe déjà et ne peut plus être transmis à AfterPay. Veuillez contacter notre service clientèle.";
+                return "Le numéro de commande existe déjà et ne peut plus être transmis à Riverty. Veuillez contacter notre service clientèle.";
                 break;
             case 'fr.field.bankaccountnumber.missing':
                 return "Le numéro de compte bancaire n'est pas présent. Veuillez vérifier votre numéro de compte bancaire ou contacter notre service clientèle.";

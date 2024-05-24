@@ -128,7 +128,8 @@ abstract class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract extends
                    . '" class="' . $className . '"><span class="sort-title">'
                    . $this->escapeHtml($this->getColumn()->getHeader()) . '</span></a>';
         } else {
-            $out = $this->escapeHtml($this->getColumn()->getHeader());
+            // $out = $this->escapeHtml($this->getColumn()->getHeader()); // DHH CORE HACK
+            $out = '<span name="' . $this->getColumn()->getId() . '">'.$this->escapeHtml($this->getColumn()->getHeader()) . '</span>';
         }
         return $out;
     }

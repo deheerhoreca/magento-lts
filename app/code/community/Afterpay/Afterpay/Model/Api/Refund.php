@@ -37,10 +37,14 @@ class Afterpay_Afterpay_Model_Api_Refund extends Afterpay_Afterpay_Model_Api_Abs
             $this->_afterpay_order['apiMerchantId'] = $this->_vars['apiMerchantId'];
         }
 
-        $this->_afterpay->set_order($this->_afterpay_order, 'OM');
+        $this->_afterpay->set_order(
+            $this->addPlugingProviderData($this->_afterpay_order),
+            'OM'
+        );
+
         return $this->doRequest();
     }
-    
+
     protected function _addInvoiceLines()
     {
         $invoiceLines = array();
@@ -54,7 +58,7 @@ class Afterpay_Afterpay_Model_Api_Refund extends Afterpay_Afterpay_Model_Api_Abs
                 continue;
             }
 
-            $name         = preg_replace("/[^a-zA-Z0-9\_\-\s]/i", "", (string) $line['articleDescription']);
+            $name         = preg_replace("/[^a-zA-Z0-9\_\-\s]/i", "", $line['articleDescription']);
             $sku          = $line['articleId'];
             $qty          = $line['quantity'];
             $price        = $line['unitPrice'];

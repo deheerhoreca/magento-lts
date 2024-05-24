@@ -487,12 +487,13 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
      */
     public function addProduct($params)
     {
-        Mage::log(
-            'DEPRECATED: ' . __METHOD__ . ' in ' . __FILE__ . '(' . __LINE__ . ')',
-            null,
-            'c2q_deprecated.log',
-            true
-        );
+        // DHH CORE HACK -- Will never be fixed by vendor
+        // Mage::log(
+            // 'DEPRECATED: ' . __METHOD__ . ' in ' . __FILE__ . '(' . __LINE__ . ')',
+            // null,
+            // 'c2q_deprecated.log',
+            // true
+        // );
 
         $checkQty = $this->checkQuantities($params['product_id'], $params['qty']);
         if ($checkQty->getHasError()) {
@@ -517,12 +518,13 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
      */
     public function updateProduct($id, $params)
     {
-        Mage::log(
-            'DEPRECATED: ' . __METHOD__ . ' in ' . __FILE__ . '(' . __LINE__ . ')',
-            null,
-            'c2q_deprecated.log',
-            true
-        );
+        // DHH CORE HACK -- Will never be fixed by vendor
+        // Mage::log(
+            // 'DEPRECATED: ' . __METHOD__ . ' in ' . __FILE__ . '(' . __LINE__ . ')',
+            // null,
+            // 'c2q_deprecated.log',
+            // true
+        // );
 
         $quoteadvProduct = $this->load($id);
         $params['attribute'] = unserialize($quoteadvProduct->getAttribute());
@@ -942,12 +944,13 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
      * @deprecated since v5.2.3
      */
     public function removeDefaultTax($price, $quoteCustomPrice){
-        Mage::log(
-            'DEPRECATED: ' . __METHOD__ . ' in ' . __FILE__ . '(' . __LINE__ . ')',
-            null,
-            'c2q_deprecated.log',
-            true
-        );
+        // DHH CORE HACK -- Will never be fixed by vendor
+        // Mage::log(
+            // 'DEPRECATED: ' . __METHOD__ . ' in ' . __FILE__ . '(' . __LINE__ . ')',
+            // null,
+            // 'c2q_deprecated.log',
+            // true
+        // );
 
         return $price;
     }

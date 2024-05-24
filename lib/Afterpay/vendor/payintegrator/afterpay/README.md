@@ -1,12 +1,12 @@
-![AfterPay](https://developer.afterpay.io/resources/AfterPay_Logo_300.png)
+<img src="https://cdn.riverty.design/logo/riverty-checkout-logo.svg" width="200">
 
 [![Latest Stable Version](https://poser.pugx.org/payintegrator/afterpay/v/stable)](https://packagist.org/packages/payintegrator/afterpay)
 [![Latest Unstable Version](https://poser.pugx.org/payintegrator/afterpay/v/unstable)](https://packagist.org/packages/payintegrator/afterpay)
 [![Total Downloads](https://poser.pugx.org/payintegrator/afterpay/downloads)](https://packagist.org/packages/payintegrator/afterpay)
 [![License](https://poser.pugx.org/payintegrator/afterpay/license)](https://packagist.org/packages/payintegrator/afterpay)
 
-# AfterPay PHP API client
-This package is a convenience wrapper to communicate with the AfterPay SOAP-API or AfterPay.io REST-API.
+# Riverty PHP API client
+This package is a convenience wrapper to communicate with the Riverty REST API and the legacy SOAP API.
 
 ## Installation
 For the installation of the client, use composer.
@@ -16,7 +16,7 @@ Include the package in your `composer.json` file
 ``` json
 {
     "require": {
-        "payintegrator/afterpay": "^1.5"
+        "payintegrator/afterpay": "<VERSION>"
     }
 }
 ```
@@ -31,18 +31,136 @@ require 'vendor/autoload.php';
 ```
 
 ## Getting started
-To get started with connecting to the AfterPay API, please contact AfterPay (https://www.afterpay.nl) for test credentials and account to the AfterPay Order Management System.
+To get started with connecting to the Riverty API, please check the Riverty developer portal (https://developer.riverty.com) for test credentials and more specific documentation on how to integrate.
 
 ## Examples
 The folder Examples contains examples for all available operations.
 
 ## Documentation
-More documentation can be found at [developer.afterpay.io](http://developer.afterpay.io)
+More documentation can be found at [developer.riverty.com](https://developer.riverty.com)
 
 ## Contributing
 We love contributions, but please note that every contribution has to be reviewed and tested. If you have suggested changes, you may create a Pull Request.
 
 ## Release notes
+
+**2024.02.28 - version 4.4.0**
+
+* DP-1777 - We updated guzzlehttp version constraints and quantity property data type at orderlines.
+
+**2024.02.14 - version 4.3.0**
+
+* DP-1764 - We updated logic for getting gross unit price when creating order lines and resolving issue related to different items prices at authorization and full capture requests when using decimal quantities for products. 
+
+**2023.11.30 - version 4.2.0**
+
+* DP-1717 - We updated our dependency on the GuzzleHTTP library to version 7.8.0. 
+
+**2023.11.07 - version 4.1.0**
+
+* DP-1660 - We have added optimizations to rounding amounts code logic for calculating vat perventage and vat amount to handle null values passed to number_format function
+* DP-1661 - We have added support for the legalForm value in the authorisation call.
+
+**2023.06.19 - version 4.0.0**
+
+* DP-1535 - We have added rounding to two decimals for all the amounts that are communicated in the authorisation, capture and refund calls.
+* DP-1559 - We have added support for the addressType value in the authorisation call.
+
+**2022.12.20 - version 3.9.0**
+
+* DP-1396 - We have updated the endpoints of the REST API to the new Riverty endpoints.
+* DP-1383 - We have fixed an issue of zero vat values to be included in the API calls, to support zero vat value order lines.
+* DP-1348 - We have updated the translation folder to be in line with the Riverty brand change.
+* DP-1260 - We have changed the way we round numbers to 4 decimals from round to number_format, because of PHP compatibility.
+* DP-1251 - We have updated the code structure for the new Pay in X payment method.
+
+**2022.11.17 - version 3.8.0**
+
+* DP-1251 - We have added support for the new Pay in X payment method.
+
+**2022.09.29 - version 3.7.0**
+
+* DP-1217 - We have updated the way of getting the plugin provider data. This is an internal change in the code. No changes are needed.
+* DP-1225 - We changed the way we round to 4 decimals.
+* DP-1224 - We added the element "country" to the available payment methods call. This to ensure to provide the correct legal information in the response.
+* DP-1218 - We added validation on the submitted URLs for product links and images. If the URL's are not working, they will be left empty.
+* DP-1249 - We updated our dependency on the GuzzleHTTP library to version 7.4.5.
+
+**2022.09.01 - version 3.6.0**
+
+* DP-1121 - Added support for additional plugin provider data in requests.
+* DP-1026 - Added support for PHP data to the Authorization request.
+* DP-1037 - Created default values for additionalData element.
+* DP-1097 - Added support for additional platform data in SOAP request.
+* DP-1025 - Improved the way of sending in B2B data for the Netherlands.
+* DP-1158 - Added conversation language to available payment methods request.
+
+**2022.05.16 - version 3.5.3**
+
+* DP-771 - Update dependency on Guzzle 7.4.2.
+
+**2022.05.03 - version 3.5.2**
+
+* DP-771 - Update dependency on Guzzle 7.3.0.
+* DP-823 - Adjusting the logic for phone number formatting.
+
+**2022.03.15 - version 3.5.1**
+
+* DP-840 - Unassigned vatCategory and dependencies.
+* DP-823 - Adjusting the logic for phone number formatting.
+
+**2022.01.18 - version 3.5.0**
+
+* DP-805 - Do not show the 'too many open orders' rejection message.
+* DP-789 - Fixed issue with too much decimals in vatAmount.
+
+**2021.09.29 - version 3.4.0**
+
+* DP-786 - Adding plugin data fields in the Authorize and Available payment methods calls.
+
+**2021.09.23 - version 3.3.0**
+
+* DP-773 - Removed BIC from bankaccount validation, direct debit and installments.
+
+**2021.06.02 - version 3.2.0**
+
+* DP-736 - Allow addresses without housenumbers and remove housenumber and housenumber element when empty.
+* DP-749 - Remove MerchantID from API calls.
+
+**2021.04.20 - version 3.1.0**
+
+* DP-741 - Limit the amount of characters in housenumberaddition.
+
+**2021.02.08 - version 3.0.0**
+
+* DP-673 - Add support for Campaign payment method.
+* DP-702 - Check initials on special characters (SOAP NL/BE).
+* Update copyright.
+
+**2020.11.23 - version 2.9.1**
+
+* DP-462 - Update functionality to call a void request.
+
+**2020.11.16 - version 2.9.0**
+
+* DP-675 - Add functionality to call get_order request.
+
+**2020.10.20 - version 2.8.0**
+
+* DP-664 - Set a max on the decimals in order management requests with REST.
+
+**2020.07.09 - version 2.7.0**
+
+* DP-659 - Update endpoint for the SOAP and REST test environment.
+
+**2020.05.27 - version 2.6.0**
+
+* DP-657 - Update endpoint for the NL SOAP test environment.
+
+**2020.05.19 - version 2.5.0**
+
+* DP-641 - Add error message for SOAP invoice limit.
+* DP-652 - Fixed issue with TotalNetAmount not being available for payment methods call.
 
 **2020.03.20 - version 2.4.0**
 

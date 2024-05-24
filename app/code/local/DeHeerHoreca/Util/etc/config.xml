@@ -17,6 +17,18 @@
       </deheerhoreca_util>
     </models>
     <events>
+      
+      <!-- Elastic APM, using a very early (pre-session!) event -->
+      <controller_action_predispatch>
+        <observers>
+          <configure_elastic_apm>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>configureElasticApm</method>
+          </configure_elastic_apm>
+        </observers>
+      </controller_action_predispatch>
+      
       <catalog_product_edit_action>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -26,6 +38,7 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_edit_action>
+      
       <catalog_product_save_before>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -35,6 +48,7 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_save_before>
+      
       <catalog_product_save_after>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -84,6 +98,8 @@
           </reports>
         </observers>
       </catalog_controller_product_view>
+      
+      <!-- Track a click -->
       <controller_front_send_response_after>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -93,6 +109,7 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </controller_front_send_response_after>
+      
     </events>
   </frontend>
   <adminhtml>
@@ -104,6 +121,8 @@
       </updates>
     </layout>
     <events>
+      
+      
       <sales_order_place_before>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -113,16 +132,16 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </sales_order_place_before>
-    </events>
-    <!-- https://gist.github.com/fbrnc/3975149 -->
-    <events>
-      <controller_action_predispatch>
-        <observers>
-          <adminnotification>
-            <type>disabled</type>
-          </adminnotification>
-        </observers>
-      </controller_action_predispatch>
+      
+      <!-- Disable admin notifications -->
+      <!-- https://gist.github.com/fbrnc/3975149 -->
+      <!-- <controller_action_predispatch> -->
+        <!-- <observers> -->
+          <!-- <adminnotification> -->
+            <!-- <type>disabled</type> -->
+          <!-- </adminnotification> -->
+        <!-- </observers> -->
+      <!-- </controller_action_predispatch> -->
     </events>
   </adminhtml>
 </config>

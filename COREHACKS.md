@@ -31,6 +31,13 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
     - Updated up to: v20.5.0
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php`
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php`
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php`
+    - Changed default sort to `sku`, did not work using `app/local/Mage`
+    - Updated up to: v20.5.0
+  - `app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
+    - Remove ability to change the email address during new order input in admin
   - `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
     - Updated up to: v20.5.0
   - `app/code/core/Mage/Core/Model/Resource/Session.php`
@@ -147,6 +154,11 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - PHP 8 compatibility
   - `shell/sooqr.php`
     - Add `set_time_limit()` call
+  - `app/code/community/Magmodules/Sooqr/Block/Search.php`
+    - Update script URL because the module is dead
+- **TM Core**
+  - `app/code/community/TM/Core/Model/Notification/Feed.php`
+    - Disable admin notifications
 - **TM CheckoutFields**
   - `app/code/local/TM/CheckoutFields/etc/config.xml`
   - `app/code/local/TM/CheckoutFields/etc/system.xml`
@@ -173,6 +185,9 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Abusing `shipping_method` column for `tm_field5`
 - **Mestrona Forward to Configurable**
   - `app/code/community/Mestrona/ForwardToConfigurable/Model/Observer.php`
+- **Amasty Base**
+  - `app/code/local/Amasty/Base/Model/Feed.php`
+    - Disable admin spam
 - **Amasty Feeds**
   - `app/code/local/Amasty/Feed/Model/Profile.php`
     - https://amasty.com/knowledge-base/product-feed-output-https-links-to-image-urls.html
@@ -224,6 +239,15 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - PHP 8 compatibility
   - `app/code/community/Ophirah/Qquoteadv/Helper/Licensechecks.php`
     - PHP 8 compatibility
+- **AfterPay**
+  - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
+  - `app/code/community/Afterpay/Afterpay/etc/config.xml`
+  - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
+    - Alterations to logo and text, debug email
+  - `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
+    - Remove empty lines to prevent PHP 8.1 incompatibilities
+  - `app/code/community/Afterpay/Afterpay/Model/Abstract.php`
+    - Prevent doing str_replace on arrays
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
   - Patched up to master on 2023-01-17 (commit 445557b)
@@ -280,10 +304,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Seems to no longer be needed
   - `app/code/community/Mollie/Mpm/Helper/Data.php`
       - Prevent fatal errors. Fixed upstream.
-  - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
-  - `app/code/community/Afterpay/Afterpay/etc/config.xml`
-  - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
-    - Alterations to logo and text, debug email
   - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
     - Fix for PHP 7.x
 - **app/design/adminhtml/**

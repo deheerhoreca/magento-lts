@@ -1,4 +1,17 @@
 <?php
+
+if(defined("DHH_UUID") === false) {
+  define("DHH_UUID", uniqid());
+}
+if(defined("DHH_QUOTE_ID") === false) {
+  // define("DHH_QUOTE_ID", Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "NO_QUOTE_ID");
+  define("DHH_QUOTE_ID", "");
+}
+if(defined("GEISSWEB_VAT_VERBOSE") === false) {
+  // define("GEISSWEB_VAT_VERBOSE", (bool) ($quote_id == 134375));
+  define("GEISSWEB_VAT_VERBOSE", false);
+}
+
 /**
  * ||GEISSWEB| EU VAT Enhanced
  *
@@ -51,7 +64,14 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 		// If no other countryId is available
 		$customerCcs[] = $this->getMerchantCountryId();
 
-		if ($this->_debug) { $_debug_msg = '|'; foreach ($customerCcs as $cc) { $_debug_msg .= $cc.'|'; } Mage::log("[EUVAT] Billing-CCs: ".$_debug_msg, null, 'euvatenhanced.log'); Mage::log("[EUVAT] PreferredCc is $preferredCc", null, 'euvatenhanced.log'); }
+		if ($this->_debug) {
+      $_debug_msg = '|';
+      foreach($customerCcs as $cc) {
+        $_debug_msg .= $cc.'|';
+      }
+      Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Billing-CCs: ".$_debug_msg, null, 'euvatenhanced.log');
+      Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] PreferredCc is $preferredCc", null, 'euvatenhanced.log');
+    }
 
 		foreach ($customerCcs as $cc) {
 			if ($cc != NULL)
@@ -84,8 +104,10 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 
 		$customerCcs[] = $this->getMerchantCountryId();
 
-		if ($this->_debug) { $_debug_msg = '|'; foreach ($customerCcs as $cc) { $_debug_msg .= $cc.'|'; } Mage::log("[EUVAT] Shipping-CCs: ".$_debug_msg, null, 'euvatenhanced.log');	}
-
+		if($this->_debug) {
+      $_debug_msg = '|'; foreach ($customerCcs as $cc) { $_debug_msg .= $cc.'|'; }
+      Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Shipping-CCs: ".$_debug_msg, null, 'euvatenhanced.log');
+    }
 		foreach ($customerCcs as $cc) {
 			if ($cc != NULL)
 				return strtoupper($cc);
@@ -106,16 +128,16 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 	 */
 	public function getCustomerGroupForAccount(array $vatdata, $customerCc=null)
 	{
-		if($this->_debug) Mage::log("[EUVAT] Function RUNNING: getCustomerGroupForAccount(vatdata, $customerCc)", null, 'euvatenhanced.log');
-        if($this->_debug) Mage::log("[EUVAT] Validation Data: ".var_export($vatdata,true), null, 'euvatenhanced.log');
+		if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Function RUNNING: getCustomerGroupForAccount(vatdata, $customerCc)", null, 'euvatenhanced.log');
+        if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Validation Data: ".json_encode($vatdata), null, 'euvatenhanced.log');
 		$shopCc = $this->getMerchantCountryId();
 
         if(is_array($vatdata) && isset($vatdata['country_id'])) {
             $customerCc = $vatdata['country_id'];
-            if($this->_debug) Mage::log("[EUVAT] Getting customer group for VAT country: $customerCc VatdataCC[".$vatdata['country_id']."] (ShopCC: $shopCc)", null, 'euvatenhanced.log');
+            if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Getting customer group for VAT country: $customerCc VatdataCC[".$vatdata['country_id']."] (ShopCC: $shopCc)", null, 'euvatenhanced.log');
         } else {
             $customerCc = $this->getBillingCountry(Mage::getSingleton('customer/session')->getCustomer(), $customerCc);
-            if ($this->_debug) Mage::log("[EUVAT] Getting customer group for billing country: $customerCc  (ShopCC: $shopCc)", null, 'euvatenhanced.log');
+            if ($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Getting customer group for billing country: $customerCc  (ShopCC: $shopCc)", null, 'euvatenhanced.log');
         }
         // Fix Greece
         if($customerCc == "EL") $customerCc = "GR";
@@ -132,7 +154,7 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
                 && $shopCc != $customerCc
                 && $this->isEuCountry($customerCc))
             {
-				if($this->_debug) Mage::log("[EUVAT] Valid VAT-exempt -> GRP[" . $this->getValidEuVatGroupId() . "]", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Valid VAT-exempt -> GRP[" . $this->getValidEuVatGroupId() . "]", null, 'euvatenhanced.log');
 				return (int)$this->getValidEuVatGroupId();
 
 			} elseif ($vatdata['vat_is_valid'] == true
@@ -140,11 +162,11 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
                 && $shopCc == $customerCc
                 && $this->isEuCountry($customerCc))
             {
-                if($this->_debug) Mage::log("[EUVAT] Valid own Country -> GRP[" . $this->getSameCountryGroupId() . "]", null, 'euvatenhanced.log');
+                if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Valid own Country -> GRP[" . $this->getSameCountryGroupId() . "]", null, 'euvatenhanced.log');
                 return (int)$this->getSameCountryGroupId();
 
             } elseif($vatdata['vat_is_valid'] == false && $vatdata['vat_request_success'] == true ) {
-                if( $this->_debug ) Mage::log("[EUVAT] InValid VAT Number -> GRP[" . $this->getInvalidGroupId() . "]", null, 'euvatenhanced.log');
+                if( $this->_debug ) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] InValid VAT Number -> GRP[" . $this->getInvalidGroupId() . "]", null, 'euvatenhanced.log');
                 if(!$this->isModifyGroupOnError()) {
 	                return (int)$this->getInvalidGroupId();
                 } else {
@@ -152,7 +174,7 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
                 }
 
             } elseif($vatdata['vat_request_success'] == false) {
-                if($this->_debug) Mage::log("[EUVAT] Error during VAT Number validation -> GRP[" . $this->getErrorGroupId() . "]", null, 'euvatenhanced.log');
+                if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID."[EUVAT] Error during VAT Number validation -> GRP[" . $this->getErrorGroupId() . "]", null, 'euvatenhanced.log');
 				if(!$this->isModifyGroupOnError()) {
 					return (int)$this->getErrorGroupId();
 				} else {
@@ -161,11 +183,11 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 
 			} else {
 				if (!$this->isEuCountry($customerCc)) {
-					if($this->_debug) Mage::log("[EUVAT] OUTSIDE EU -> GRP[" . $this->getOutsideEuGroupId() . "]", null, 'euvatenhanced.log');
+					if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] OUTSIDE EU -> GRP[" . $this->getOutsideEuGroupId() . "]", null, 'euvatenhanced.log');
 					return (int)$this->getOutsideEuGroupId();
 
 				} else {
-					if($this->_debug) Mage::log("[EUVAT] DEFAULT", null, 'euvatenhanced.log');
+					if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] DEFAULT", null, 'euvatenhanced.log');
 					return (int)$this->getDefaultGroupId();
 				}
 			}
@@ -173,10 +195,10 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 		// No validation data, try to identify country outside EU
 		} else {
 			if (!$this->isEuCountry($customerCc)) {
-				if($this->_debug) Mage::log("[EUVAT] OUTSIDE EU2 -> GRP[" . $this->getOutsideEuGroupId() . "]", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] OUTSIDE EU2 -> GRP[" . $this->getOutsideEuGroupId() . "]", null, 'euvatenhanced.log');
 				return (int)$this->getOutsideEuGroupId();
 			} else {
-				if($this->_debug) Mage::log("[EUVAT] DEFAULT2", null, 'euvatenhanced.log');
+				if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] DEFAULT2", null, 'euvatenhanced.log');
 				return (int)$this->getDefaultGroupId();
 			}
 		}
@@ -194,7 +216,7 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 	 */
 	public function getCustomerGroupForOrder($basedOnAddress)
 	{
-		if($this->_debug) Mage::log("[EUVAT] Function RUNNING: getCustomerGroupForOrder(address)", null, 'euvatenhanced.log');
+		if($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Function RUNNING: getCustomerGroupForOrder(address)", null, 'euvatenhanced.log');
 
 		// Do we have VAT data to evalualte?
 		if( $this->isModifyOrderGroup() && is_object($basedOnAddress))
@@ -226,7 +248,7 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 				&& $this->isEuCountry($customerCc)
                 && $basedOnAddress->getVatRequestSuccess() == true)
 			{
-				if ($this->_debug) Mage::log("[EUVAT] Valid VAT-exempt -> GRP[" . $this->getValidEuVatGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getValidEuVatGroupId()) . "]", null, 'euvatenhanced.log');
+				if ($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Valid VAT-exempt -> GRP[" . $this->getValidEuVatGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getValidEuVatGroupId()) . "]", null, 'euvatenhanced.log');
 				return (int)$this->getValidEuVatGroupId();
 
 			} elseif ($basedOnAddress->getVatId() != ''
@@ -235,14 +257,14 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 				&& $this->isEuCountry($customerCc)
                 && $basedOnAddress->getVatRequestSuccess() == true)
 			{
-				if ($this->_debug) Mage::log("[EUVAT] Valid own Country -> GRP[" . $this->getSameCountryGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getSameCountryGroupId()) . "]", null, 'euvatenhanced.log');
+				if ($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Valid own Country -> GRP[" . $this->getSameCountryGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getSameCountryGroupId()) . "]", null, 'euvatenhanced.log');
 				return (int)$this->getSameCountryGroupId();
 
             } elseif($basedOnAddress->getVatId() != '' &&
 				$basedOnAddress->getVatIsValid() == false
                 && $basedOnAddress->getVatRequestSuccess() == true )
             {
-                if( $this->_debug ) Mage::log("[EUVAT] InValid VAT Number -> GRP[" . $this->getInvalidGroupId() . "]", null, 'euvatenhanced.log');
+                if( $this->_debug ) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] InValid VAT Number -> GRP[" . $this->getInvalidGroupId() . "]", null, 'euvatenhanced.log');
 	            if(!$this->isModifyGroupOnError()) {
 		            return (int)$this->getInvalidGroupId();
 	            } else {
@@ -250,7 +272,7 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 	            }
 
             } elseif($basedOnAddress->getVatId() != '' && $basedOnAddress->getVatRequestSuccess() == false) {
-                if( $this->_debug ) Mage::log("[EUVAT] Error during VAT Number validation -> GRP[" . $this->getErrorGroupId() . "]", null, 'euvatenhanced.log');
+                if( $this->_debug ) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] Error during VAT Number validation -> GRP[" . $this->getErrorGroupId() . "]", null, 'euvatenhanced.log');
 				if(!$this->isModifyGroupOnError()) {
 					return (int)$this->getErrorGroupId();
 				} else {
@@ -259,10 +281,10 @@ class Geissweb_Euvatgrouper_Helper_Customer extends Geissweb_Euvatgrouper_Helper
 
 			} else {
 				if (!$this->isEuCountry($customerCc)) {
-					if ($this->_debug) Mage::log("[EUVAT] OUTSIDE EU -> GRP[" . $this->getOutsideEuGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getOutsideEuGroupId()) . "]", null, 'euvatenhanced.log');
+					if ($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] OUTSIDE EU -> GRP[" . $this->getOutsideEuGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getOutsideEuGroupId()) . "]", null, 'euvatenhanced.log');
 					return (int)$this->getOutsideEuGroupId();
 				} else {
-					if ($this->_debug) Mage::log("[EUVAT] DEFAULT -> GRP[" . $this->getDefaultGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getDefaultGroupId()) . "]", null, 'euvatenhanced.log');
+					if ($this->_debug) Mage::log(DHH_UUID." ".DHH_QUOTE_ID." [EUVAT] DEFAULT -> GRP[" . $this->getDefaultGroupId() . "] TXCLS[" . $this->getTaxClassIdForGroup($this->getDefaultGroupId()) . "]", null, 'euvatenhanced.log');
 					return (int)$this->getDefaultGroupId();
 				}
 			}

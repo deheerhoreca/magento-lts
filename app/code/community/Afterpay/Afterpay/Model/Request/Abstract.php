@@ -110,6 +110,8 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             'afterpay/afterpay_' . $this->_method . '/portfolio_country',
             $this->_order->getStoreId()
         );
+        // DHH CORE HACK
+        // if(strpos($method, 'rest') !== false){
         if(str_contains((string) $method, 'rest')){
             $country .= '-rest';
         }
@@ -128,7 +130,6 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
 
     public function sendRequest()
     {
-        // DHH CORE HACK: IMPROVING DEBUG EMAIL
         $this->_debugEmail .= "AFTERPAY DEBUG INFORMATION\n\n";
         $this->_debugEmail .= "--- General information: ---\n\n";
         $this->_debugEmail .= "Magento store id: " . $this->_order->getStoreId() . "\n";
@@ -195,19 +196,8 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             ->setIsB2B($this->getIsB2B())
             ->setCountry($this->getCountry());
         $response = $api->authorizationRequest();
-        // DHH CORE HACK: XML to DOT
         $this->_debugEmail .= $api->_afterpay->client->getDebugLog();
-        // Does not work:
-        // $xml = $api->_afterpay->client->getDebugLog();
-        // $array = xml_string_to_array($xml);
-        // if(empty($array)) {
-          // $this->_debugEmail .= $xml;     // DHH: Fallback to XML string
-        // } else {
-          // $dot = new \Adbar\Dot($array);
-          // $dotted = $flatten = $dot->flatten();
-          // $this->_debugEmail .= $dotted;  // DHH: Dotted string, better for humans
-        // }
-        
+
         $this->_debugEmail .= "Processing response... \n";
         //process the response
         $responseModel->setResponse($response)
@@ -284,7 +274,7 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
 
     protected function _addPortfolioVariables()
     {
-        [$portfolioId, $password] = $this->_getPortfolioId();
+        list($portfolioId, $password) = $this->_getPortfolioId();
 
         $array = array(
             'portfolioId' => $portfolioId,
@@ -359,6 +349,8 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
     {
         $currentIp = $_SERVER['REMOTE_ADDR'];
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // DHH CORE HACK
+            // $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $ips = explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']);
             $currentIp = trim($ips[count($ips) - 1]);
         }
@@ -483,6 +475,8 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         // Check if variable bankaccount is available
         if (isset($this->_additionalFields['bankaccount'])) {
             // Strip whitespace from bankaccount string
+            // DHH CORE HACK
+            // $bankAccountNumber = preg_replace('/\s+/', '', $this->_additionalFields['bankaccount']);
             $bankAccountNumber = preg_replace('/\s+/', '', (string) $this->_additionalFields['bankaccount']);
             $array = array(
                 'bankAccountNumber' => $bankAccountNumber,
@@ -702,6 +696,8 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
         $orderLines[] = $this->_addGiftCardLine();
         $orderLines[] = $this->_addStoreCreditsLine();
         $orderLines[] = $this->_addRewardPointsLine();
+        // DHH CORE HACK -- Remove empty lines to prevent PHP 8.1 incompatibilities
+        $orderLines = array_filter($orderLines);
         return $orderLines;
     }
 
@@ -1157,13 +1153,13 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
             ) {
                 $dobdate = $this->_additionalFields['dob_year'] . '-' . $this->_additionalFields['dob_month'] . '-' .
                     $this->_additionalFields['dob_day'];
-                $dobTimestamp = strtotime($dobdate, time());
+                $dobTimestamp = strtotime((string) $dobdate, time());
                 $dob = date('Y-m-d\TH:i:s', $dobTimestamp);
             }
         } elseif ($this->_order->getCustomerDob()) {
             // No birthday sent through form fields, look if a birthday was sent using Magento default fields
             $dobdate = $this->_order->getCustomerDob();
-            $dobTimestamp = strtotime((string) $dobdate, time());
+            $dobTimestamp = strtotime($dobdate, time());
             $dob = date('Y-m-d\TH:i:s', $dobTimestamp);
         }
         // If the variable $dob is not filled, then there was a problem with getting the correct date of birth
@@ -1189,19 +1185,20 @@ class Afterpay_Afterpay_Model_Request_Abstract extends Afterpay_Afterpay_Model_A
     {
         //checks if the number is valid, if not: try to fix it
         $invalidNotations = array("00310", "0310", "310", "31");
+        $number = (string) $number; // DHH CORE HACK
         foreach ($invalidNotations as $invalid) {
-            if (str_contains(substr((string) $number, 0, 6), $invalid)) {
+            if (strpos(substr($number, 0, 6), $invalid) !== false) {
                 $valid = substr($invalid, 0, -1);
-                if (str_starts_with($valid, '31')) {
+                if (substr($valid, 0, 2) == '31') {
                     $valid = "00" . $valid;
                 }
-                if (str_starts_with($valid, '03')) {
+                if (substr($valid, 0, 2) == '03') {
                     $valid = "0" . $valid;
                 }
                 if ($valid == '3') {
                     $valid = "0" . $valid . "1";
                 }
-                $number = str_replace($invalid, $valid, (string) $number);
+                $number = str_replace($invalid, $valid, $number);
             }
         }
         return $number;

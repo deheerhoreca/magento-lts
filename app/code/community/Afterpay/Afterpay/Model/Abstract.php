@@ -232,7 +232,7 @@ class Afterpay_Afterpay_Model_Abstract extends Mage_Payment_Model_Method_Abstrac
             return $this;
         }
 
-        $method = strtolower((string) $this->_order->getShippingMethod());
+        $method = strtolower((string) $this->_order->getShippingMethod()); // DHH
 
         $firstname = $shippingAddress->getFirstname();
         $lastname = $shippingAddress->getLastname();
@@ -247,15 +247,15 @@ class Afterpay_Afterpay_Model_Abstract extends Mage_Payment_Model_Method_Abstrac
         $prefix = $shippingAddress->getPrefix();
 
         // COMPATIBLE WITH PAAZL
-        if (str_starts_with($method, 'paazl_pakjegemak')) {
+        if (substr($method, 0, 16) == 'paazl_pakjegemak') {
             $rate = Mage::getModel('sales/quote_address_rate')->load($this->_order->getShippingMethod(), 'code');
-            $street = explode(" ", (string) $rate->getServicePointAddress());
+            $street = explode(" ", $rate->getServicePointAddress());
             $firstname = 'P';
             $lastname = 'Paazl Pakjegemak';
 
             if (count($street) > 0) {
                 $street_last = $street[count($street)-1];
-                $street_name = str_replace($street[count($street)-1], '', (string) $rate->getServicePointAddress());
+                $street_name = str_replace($street[count($street)-1], '', $rate->getServicePointAddress());
                 $street_name = str_replace($street[count($street)-2], '', $street_name);
                 $street_add = $street_last;
                 $street_number = $street[count($street)-2];
@@ -314,7 +314,7 @@ class Afterpay_Afterpay_Model_Abstract extends Mage_Payment_Model_Method_Abstrac
             if($this->_order->getSendcloudServicePoint()) {
                 $sendcloudServicePoint = $this->_order->getSendcloudServicePoint();
                 $sendcloudServicePointExtra = $this->_order->getSendcloudServicePointExtra();
-                $sendcloudServicePointAddress = explode("|", (string) $sendcloudServicePointExtra);
+                $sendcloudServicePointAddress = explode("|", $sendcloudServicePointExtra);
                 if(is_array($sendcloudServicePointAddress)) {
                     $sendcloudZipAndCity = explode(" ", $sendcloudServicePointAddress[2]);
                     $firstname = 'A';
@@ -361,8 +361,11 @@ class Afterpay_Afterpay_Model_Abstract extends Mage_Payment_Model_Method_Abstrac
         $cleanArray = array();
 
         foreach ($array as $key => $value) {
-            $value = str_replace('\r', ' ', (string) $value);
-            $value = str_replace('\n', ' ', $value);
+            // DHH CORE HACK -- Prevent doing str_replace on arrays
+            if(is_scalar($value)) {
+                $value = str_replace('\r', ' ', $value);
+                $value = str_replace('\n', ' ', $value);
+            }
             $cleanArray[$key] = $value;
         }
 

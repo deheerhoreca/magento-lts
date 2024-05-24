@@ -14,7 +14,9 @@ $dhh_click_log = [];
 
 // If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
 // Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
-const SUPPLIERS_HIDE_STOCK_DETAILS = ["bartscher", "deheerhoreca", "foster-gamko", "liebherr", "smeg"];
+const SUPPLIERS_HIDE_STOCK_DETAILS = ["apexa", "bartscher", "deheerhoreca", "espressions",
+"foster-gamko", "heatmaestro", "hoshizaki", "orionstar", "probbqshop", "liebherr", "smeg",
+"youcup"];
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
@@ -1858,5 +1860,23 @@ if(function_exists('xml_string_to_array') === false) {
       Mage::log("xml_string_to_array: Invalid XML string given", null, "exception.log", true);
       return false;
     }
+  }
+}
+
+// Attempt to get the current quote ID (cart ID)
+if(function_exists("dhh_get_quote_id") === false) {
+  function dhh_get_quote_id(): string {
+    if($_SESSION) {
+      if(!empty($GLOBALS["dhh_current_quote_id"])) {
+        return $GLOBALS["dhh_current_quote_id"];
+      }
+      $id = (string) (Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "");
+      if(!empty($id)) {
+        $GLOBALS["dhh_current_quote_id"] = $id;
+        return $GLOBALS["dhh_current_quote_id"];
+      }
+    }
+    
+    return "NO_QUOTE_ID";
   }
 }

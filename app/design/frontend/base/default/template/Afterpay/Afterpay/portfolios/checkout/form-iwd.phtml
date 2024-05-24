@@ -1,128 +1,145 @@
-<?php $this->setBlockData()?>
+<?php $this->setBlockData() ?>
 <?php $_code = $this->getMethodCode(); ?>
-<?php $_helper = $this->helper('afterpay');?>
-<?php $isEnterprise = (bool) Mage::getConfig()->getModuleConfig("Enterprise_Enterprise")->version;?>
+<?php $_helper = $this->helper('afterpay'); ?>
+<?php $isEnterprise = (bool)Mage::getConfig()->getModuleConfig("Enterprise_Enterprise")->version; ?>
 
 <div id="payment-errors" class="validation-advice" style="display:none;"></div>
 
 <ul id="payment_form_<?php echo $_code; ?>" class="form-list opc-cc-container">
-    <li>
-        <?php if ($this->showGender()): ?>
-        <div class="field">
-            <label for="<?php echo $_code; ?>_gender" class = "required"><em>*</em><?php echo $_helper->__('Gender:'); ?></label>
-            <div class="input-box" id="">
-                <input type="radio" name="payment[<?php echo $_code; ?>][gender]" value="V" id="<?php echo $_code?>_gender_v" checked="checked">
-                <label style="float:none" for="<?php echo $_code?>_gender_v"><?php echo $_helper->__('Female'); ?></label>
-                <input type="radio" name="payment[<?php echo $_code; ?>][gender]" value="M" id="<?php echo $_code?>_gender_m">
-                <label style="float:none" for="<?php echo $_code?>_gender_m"><?php echo $_helper->__('Male'); ?></label>
-            </div>
+    <?php if ($_code === 'afterpay_nl_payinx_rest'): ?>
+        <div class="payinx_plan">
+            <ul>
+                <li><?php echo $this->__('Pay in 3 instalments, one per month.') ?></li>
+                <li><?php echo $this->__('Pay with iDeal or bank transfer.') ?></li>
+                <li><?php echo $this->__('No interest or hidden fees.') ?></li>
+            </ul>
         </div>
-        <?php endif; ?>
-    <?php if ($isEnterprise): ?>
-        </li>
-        <li>
-    <?php endif;?>
-    <?php if (!$this->isB2B()): ?>
+    <?php endif; ?>
+    <li>
+        <?php if (!$this->isB2B()): ?>
         <?php if ($this->showDob()): ?>
         <div class="field">
-            <?php 
+            <?php
             echo $this->getLayout()->createBlock('afterpay/customer_widget_dob')
-                                   ->setFieldIdFormat($_code . ':billing:%s')
-                                   ->setFieldNameFormat('payment[' . $_code . '][%s]')
-                                   ->setIsRequired(true)
-                                   ->setPaymentMethodCode($_code)
-                                   ->toHtml() 
+                ->setFieldIdFormat($_code . ':billing:%s')
+                ->setFieldNameFormat('payment[' . $_code . '][%s]')
+                ->setIsRequired(true)
+                ->setPaymentMethodCode($_code)
+                ->toHtml()
             ?>
-         </div>
-        </li>
-        <?php endif; ?>
-        <?php if ($this->showBankaccount()): ?>
-        <li> 
+        </div>
+    </li>
+    <?php endif; ?>
+    <?php if ($this->showBankaccount()): ?>
+        <li>
             <div class="field">
-                <label for="<?php echo $_code; ?>_bankaccount" class="required"><em>*</em><?php echo $_helper->__('Bank account number:'); ?></label>
+                <label for="<?php echo $_code; ?>_bankaccount"
+                       class="required"><em>*</em><?php echo $_helper->__('Bank account number:'); ?></label>
                 <div class="input-box">
-                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_bankaccount" name="payment[<?php echo $_code; ?>][bankaccount]" style="">
+                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_bankaccount"
+                           name="payment[<?php echo $_code; ?>][bankaccount]" style="">
                 </div>
             </div>
         </li>
-        <?php endif; ?>
+    <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->isB2B()): ?>
         <li>
             <div class="field">
-                <label for="<?php echo $_code; ?>_companyname" class="required"><em>*</em><?php echo $_helper->__('Company name:'); ?></label>
+                <label for="<?php echo $_code; ?>_companyname"
+                       class="required"><em>*</em><?php echo $_helper->__('Company name:'); ?></label>
                 <div class="input-box">
-                    <input type="text" value="<?php echo $this->getCompany(); ?>" class="input-text required-entry" id="<?php echo $_code; ?>_companyname" name="payment[<?php echo $_code; ?>][companyname]">
+                    <input type="text" value="<?php echo $this->getCompany(); ?>" class="input-text required-entry"
+                           id="<?php echo $_code; ?>_companyname" name="payment[<?php echo $_code; ?>][companyname]">
                 </div>
             </div>
         </li>
         <li>
             <div class="field">
-                <label for="<?php echo $_code; ?>_coc" class="required"><em>*</em><?php echo $_helper->__('Coc number:'); ?></label>
+                <label for="<?php echo $_code; ?>_coc"
+                       class="required"><em>*</em><?php echo $_helper->__('Coc number:'); ?></label>
                 <div class="input-box">
-                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_coc" name="payment[<?php echo $_code; ?>][coc]">
+                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_coc"
+                           name="payment[<?php echo $_code; ?>][coc]">
                 </div>
             </div>
         </li>
     <?php endif; ?>
     <?php if ($this->showPhonenumber()): ?>
-    <li> 
-        <div class="field">
-            <label for="<?php echo $_code; ?>_phonenumber" class="required"><em>*</em><?php echo $_helper->__('Phone number'); ?>:</label>
-            <div class="input-box">
-                <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_phonenumber" name="payment[<?php echo $_code; ?>][phonenumber]" style="">
+        <li>
+            <div class="field">
+                <label for="<?php echo $_code; ?>_phonenumber"
+                       class="required"><em>*</em><?php echo $_helper->__('Phone number'); ?>:</label>
+                <div class="input-box">
+                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_phonenumber"
+                           name="payment[<?php echo $_code; ?>][phonenumber]" style="">
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
     <?php endif; ?>
     <?php if ($this->showSsn()): ?>
-    <li> 
-        <div class="field">
-            <label for="<?php echo $_code; ?>_ssn" class="required"><em>*</em><?php echo $_helper->__('Social security number'); ?>:</label>
-            <div class="input-box">
-                <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_ssn" name="payment[<?php echo $_code; ?>][ssn]" style="">
+        <li>
+            <div class="field">
+                <label for="<?php echo $_code; ?>_ssn"
+                       class="required"><em>*</em><?php echo $_helper->__('Social security number'); ?>:</label>
+                <div class="input-box">
+                    <input type="text" class="input-text required-entry" id="<?php echo $_code; ?>_ssn"
+                           name="payment[<?php echo $_code; ?>][ssn]" style="">
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
     <?php endif; ?>
     <?php if ($this->useProfiletracking()): ?>
         <?php // Get the Magento session for profile tracking. ?>
         <?php $session_id = Mage::getSingleton('core/session')->getEncryptedSessionId(); ?>
-        <input type="hidden" id="<?php echo $_code; ?>_session" name="payment[<?php echo $_code; ?>][session]" value="<?php echo $session_id; ?>" />
+        <input type="hidden" id="<?php echo $_code; ?>_session" name="payment[<?php echo $_code; ?>][session]"
+               value="<?php echo $session_id; ?>"/>
         <script type="text/javascript">
             var _itt = {
-            c: '<?php echo $this->getProfiletrackingClientId(); ?>',
-            s: '<?php echo $session_id; ?>',
-            t: 'CO'};(function() {
-            var a = document.createElement('script');
-            a.type = 'text/javascript'; a.async = true;
-            a.src = '//uc8.tv/7982.js';
-            var b = document.getElementsByTagName('script')[0]; b.parentNode.insertBefore(a, b);
+                c: '<?php echo $this->getProfiletrackingClientId(); ?>',
+                s: '<?php echo $session_id; ?>',
+                t: 'CO'
+            };
+            (function () {
+                var a = document.createElement('script');
+                a.type = 'text/javascript';
+                a.async = true;
+                a.src = '//uc8.tv/7982.js';
+                var b = document.getElementsByTagName('script')[0];
+                b.parentNode.insertBefore(a, b);
             })();
         </script>
         <noscript>
-            <img src="//uc8.tv/img/7982/<?php echo $session_id; ?>" border=0 height=0 width=0 />
+            <img src="//uc8.tv/img/7982/<?php echo $session_id; ?>" border=0 height=0 width=0/>
         </noscript>
     <?php endif; ?>
     <li>
-        <input type="checkbox" class="checkbox required-entry" id="<?php echo $_code; ?>_termsAndConditions" name="payment[<?php echo $_code; ?>][conditions]">
-        <label for="<?php echo $_code; ?>_termsAndConditions" class="required" style="float:none;">
-            <em>*</em>
-            <?php if ($this->country == 'nlnl' || $this->country == 'benl'  || $this->country == 'befr'): ?>
+        <?php
+        /**
+         * If Available Payment Methods (APM) in use
+         */
+        if ($this->getMethodsLegalStatement($_code)): ?>
+            <?php if ($this->getMethodRequiresCustomerConsent($_code)): ?>
+                <input type="checkbox" class="checkbox required-entry" id="<?php echo $_code; ?>_termsAndConditions"
+                       name="payment[<?php echo $_code; ?>][conditions]">
+                <label for="<?php echo $_code; ?>_termsAndConditions" class="required" style="float:none;">
+            <?php endif; ?>
+            <?php echo $this->getMethodsLegalStatement($_code); ?>
+
+            <?php if ($this->getMethodRequiresCustomerConsent($_code)): ?>
+                </label>
+            <?php endif; ?>
+
+        <?php else: ?>
+        <div style="color: #999; font-size: 12px;">
             <?php echo $_helper->__(
-                'I have read and accepted the AfterPay %sTerms and Conditions%s.',
-                $this->paymentConditionsUrl,
-                $this->anchorClose
-            );?>
-            <?php else : ?>
-            <?php echo $_helper->__(
-                'I have read the %sTerms & Conditions%s and the %sPrivacy Policy%s of AfterPay and do accept them.',
+                'The %sGeneral Terms and Conditions%s for the Riverty payment method apply. The Privacy Policy of Riverty can be found %shere%s.',
                 $this->paymentConditionsUrl,
                 $this->anchorClose,
                 $this->privacyStatementUrl,
                 $this->anchorClose
-            );?>
+            ); ?>
             <?php endif; ?>
-        </label>
+        </div>
     </li>
 </ul>

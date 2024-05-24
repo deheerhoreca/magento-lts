@@ -82,7 +82,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
         "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
         "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
-        "cstag", 
+        "cstag", "title",
       ];
       $url = self::strip_param_from_url($url, $ignored_url_query_keys);
       
@@ -184,7 +184,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
       }
       
-      if($_SERVER["REQUEST_METHOD"] !== "GET") {
+      if($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD") {
         self::log("Read cache disabled (REQUEST_METHOD): {$debug_name}");
         return false;
       }
@@ -232,7 +232,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
       }
       
-      if($_SERVER["REQUEST_METHOD"] !== "GET") {
+      if($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD") {
         self::log("Write cache disabled (REQUEST_METHOD): {$debug_name}");
         return false;
       }

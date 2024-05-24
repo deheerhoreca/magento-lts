@@ -1,6 +1,6 @@
 <?php
  /**
- * Copyright (c) 2020 arvato Finance B.V.
+ * Copyright (c) 2021 arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -19,23 +19,23 @@
  * @name        AfterPay Class
  * @author      AfterPay (plugins@afterpay.nl)
  * @description PHP Library to connect with AfterPay Post Payment services
- * @copyright   Copyright (c) 2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2021 arvato Finance B.V.
  */
 
 
 return [
     'nl.afterpay.mercury.soap.exception.AccessDeniedException' => [
-        'message' => 'There was an authentication exception while connecting with the AfterPay BE webservice.',
+        'message' => 'There was an authentication exception while connecting with the Riverty BE webservice.',
         'description' =>
-            "Une erreur technique est survenue dans la connexion avec AfterPay, veuillez contacter notre service clientèle."
+            "Une erreur technique est survenue dans la connexion avec Riverty, veuillez contacter notre service clientèle."
     ],
     'nl.afterpay.ad3.web.service.impl.exception.AuthenticationException' => [
-        'message' => 'There was an authentication exception while connecting with the AfterPay NL webservice.',
+        'message' => 'There was an authentication exception while connecting with the Riverty NL webservice.',
         'description' => 
-            "Une erreur technique est survenue dans la connexion avec AfterPay, veuillez contacter notre service clientèle."
+            "Une erreur technique est survenue dans la connexion avec Riverty, veuillez contacter notre service clientèle."
     ],
     [
         'default.message' =>
-            "Une erreur technique est survenue dans la connexion avec AfterPay, veuillez contacter notre service clientèle."
+            "Une erreur technique est survenue dans la connexion avec Riverty, veuillez contacter notre service clientèle."
     ]
 ];

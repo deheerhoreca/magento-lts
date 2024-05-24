@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2011-2020  arvato Finance B.V.
+ * Copyright (c) 2011-2022  arvato Finance B.V.
  *
  * AfterPay reserves all rights in the Program as delivered. The Program
  * or any portion thereof may not be reproduced in any form whatsoever without
@@ -18,27 +18,27 @@
  *
  * @category    AfterPay
  * @package     Afterpay_Afterpay
- * @copyright   Copyright (c) 2011-2020 arvato Finance B.V.
+ * @copyright   Copyright (c) 2011-2022 arvato Finance B.V.
  */
 
 class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Block_Form
 {
-    public $shopName                         = '';
-    public $maxOrderAmountNewCustomers       = '&#8364;';
+    public $shopName = '';
+    public $maxOrderAmountNewCustomers = '&#8364;';
     public $maxOrderAmountReturningCustomers = '&#8364;';
-    public $anchorClose                      = '</a>';
-    public $privacyStatementUrl              = '<a href="http://www.afterpay.nl/page/privacy-statement" target="_blank">';
-    public $consumerContactUrl               = '<a href="http://www.afterpay.nl/page/consument-contact" target="_blank">';
-    public $consumerPageUrl                  = '<a href="http://www.afterpay.nl/page/consument" target="_blank">';
-    public $paymentConditionsUrl             = '<a href="http://www.afterpay.nl/page/consument-betalingsvoorwaarden" target="_blank" style="margin-top:0; float:none; margin-left:0">';
-    public $country                          = 'nlnl';
+    public $anchorClose = '</a>';
+    public $privacyStatementUrl = '';
+    public $consumerContactUrl = '<a href="http://www.afterpay.nl/page/consument-contact" target="_blank">';
+    public $consumerPageUrl = '<a href="http://www.afterpay.nl/page/consument" target="_blank">';
+    public $paymentConditionsUrl = '';
+    public $country = 'nlnl';
 
     protected $_template = 'Afterpay/Afterpay/portfolios/checkout/form.phtml';
 
     public function __construct()
     {
         parent::__construct();
-        
+
         // If IWD or OSC is used then use different form template
         if (Mage::helper('core')->isModuleEnabled('IWD_Opc')) {
             $this->setTemplate('Afterpay/Afterpay/portfolios/checkout/form-iwd.phtml');
@@ -50,7 +50,7 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
     public function setBlockData()
     {
         $shopName = Mage::getStoreConfig('general/store_information/name', Mage::app()->getStore()->getId());
-        $this->shopName = $shopName ? $shopName : 'deze webshop';
+        $this->shopName = $shopName ?: 'deze webshop';
 
         $newCustomerAmount = Mage::getStoreConfig(
             'afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_max_amount_new_customers',
@@ -73,89 +73,200 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
             Mage::app()->getStore()->getId()
         );
 
+        $this->merchantId = Mage::getStoreConfig(
+            'afterpay/afterpay_' . $this->getMethod()->getCode() . '/api_merchant_id',
+            Mage::app()->getStore()->getId()
+        );
+
+        $allowedLocales = [
+            'atde',
+            'benl',
+            'dkda',
+            'fifi',
+            'dede',
+            'nlnl',
+            'nonb',
+            'sesv',
+            'chde'
+        ];
+
+        if (in_array($this->country, $allowedLocales)) {
+            $this->privacyStatementUrl = $this->formatLink(
+                'privacy_statement',
+                $this->country,
+                $this->merchantId
+            );
+            $this->paymentConditionsUrl = $this->formatLink(
+                'terms_conditions',
+                $this->country,
+                $this->merchantId,
+                $this->getMethod()->getCode()
+            );
+        } else {
+            $this->paymentConditionsUrl = $this->formatLink(
+                'terms_conditions',
+                $this->country,
+                $this->merchantId,
+                $this->getMethod()->getCode()
+            );
+        }
+
         // Check if portfolio is for Belgium (Dutch).
         if ($this->country == 'benl') {
-            $this->privacyStatementUrl             = '<a href="https://www.afterpay.be/nl/klantenservice/privacy-statement/" target="_blank">';
-            $this->consumerContactUrl            = '<a href="https://www.afterpay.be/nl/klantenservice/vraag-en-antwoord/" target="_blank">';
-            $this->consumerPageUrl                = '<a href="https://www.afterpay.be/nl/klantenservice/vraag-en-antwoord/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://www.afterpay.be/nl/klantenservice/betalingsvoorwaarden/" target="_blank">';
+            $this->consumerContactUrl = '<a href="https://www.afterpay.be/nl/klantenservice/vraag-en-antwoord/" target="_blank">';
+            $this->consumerPageUrl = '<a href="https://www.afterpay.be/nl/klantenservice/vraag-en-antwoord/" target="_blank">';
         }
 
         // Check if portfolio is for Belgium (French).
         if ($this->country == 'befr') {
-            $this->privacyStatementUrl             = '<a href="https://www.afterpay.be/fr/footer/a-propos-d-afterpay/declaration-de-confidentialite" target="_blank">';
-            $this->consumerContactUrl            = '<a href="https://www.afterpay.be/fr/footer/payer-avec-afterpay/service-a-la-clientele" target="_blank">';
-            $this->consumerPageUrl                = '<a href="https://www.afterpay.be/fr/footer/payer-avec-afterpay/service-a-la-clientele" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://www.afterpay.be/fr/footer/payer-avec-afterpay/conditions-de-paiement" target="_blank">';
+            $this->consumerContactUrl = '<a href="https://www.afterpay.be/fr/footer/payer-avec-afterpay/service-a-la-clientele" target="_blank">';
+            $this->consumerPageUrl = '<a href="https://www.afterpay.be/fr/footer/payer-avec-afterpay/service-a-la-clientele" target="_blank">';
         }
 
         // Check if portfolio is for Germany.
         if ($this->country == 'dede') {
-            $this->privacyStatementUrl             = '<a href="	https://documents.myafterpay.com/privacy-statement/de_de/" target="_blank">';
-            $this->consumerContactUrl            = '<a href="https://www.afterpay.de/kontakt" target="_blank">';
-            $this->consumerPageUrl                = '<a href="https://www.afterpay.de/fragen-antworten/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/de_de/" target="_blank">';
+            $this->consumerContactUrl = '<a href="https://www.afterpay.de/kontakt" target="_blank">';
+            $this->consumerPageUrl = '<a href="https://www.afterpay.de/fragen-antworten/" target="_blank">';
         }
 
         // Check if portfolio is for Austria.
         if ($this->country == 'atde') {
-            $this->privacyStatementUrl             = '<a href="https://documents.myafterpay.com/privacy-statement/de_at/" target="_blank">';
-            $this->consumerContactUrl            = '<a href="https://www.afterpay.de/kontakt" target="_blank">';
-            $this->consumerPageUrl                = '<a href="https://www.afterpay.de/fragen-antworten/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/de_at/" target="_blank">';
+            $this->consumerContactUrl = '<a href="https://www.afterpay.de/kontakt" target="_blank">';
+            $this->consumerPageUrl = '<a href="https://www.afterpay.de/fragen-antworten/" target="_blank">';
         }
 
         // Check if portfolio is for Switzerland.
         if ($this->country == 'chde') {
-            $this->privacyStatementUrl             = '<a href="https://documents.myafterpay.com/privacy-statement/de_ch/" target="_blank">';
-            $this->consumerContactUrl            = '<a href="https://www.afterpay.de/kontakt" target="_blank">';
-            $this->consumerPageUrl                = '<a href="https://www.afterpay.de/fragen-antworten/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/de_ch/" target="_blank">';
-        }
-
-        // Check if portfolio is for Sweden.
-        if ($this->country == 'sesv') {
-            $this->privacyStatementUrl             = '<a href="https://documents.myafterpay.com/privacy-statement/sv_se/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/sv_se/" target="_blank">';
-        }
-
-        // Check if portfolio is for Finland.
-        if ($this->country == 'fifi') {
-            $this->privacyStatementUrl             = '<a href="https://documents.myafterpay.com/privacy-statement/fi_fi/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/fi_fi/" target="_blank">';
-        }
-
-        // Check if portfolio is for Denmark.
-        if ($this->country == 'dkda') {
-            $this->privacyStatementUrl             = '<a href="https://documents.myafterpay.com/privacy-statement/da_dk/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/da_dk/" target="_blank">';
-        }
-
-        // Check if portfolio is for Norway.
-        if ($this->country == 'nonb') {
-            $this->privacyStatementUrl             = '<a href="https://documents.myafterpay.com/privacy-statement/no_no/" target="_blank">';
-            $this->paymentConditionsUrl            = '<a href="https://documents.myafterpay.com/consumer-terms-conditions/no_no/" target="_blank">';
+            $this->consumerContactUrl = '<a href="https://www.afterpay.de/kontakt" target="_blank">';
+            $this->consumerPageUrl = '<a href="https://www.afterpay.de/fragen-antworten/" target="_blank">';
         }
 
         if (Mage::getStoreConfig('afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_type') == 'B2B') {
-            $this->paymentConditionsUrl            = '<a href="https://www.afterpay.nl/nl/klantenservice/betalingsvoorwaarden-b2b/" target="_blank">';
+            $this->paymentConditionsUrl = $this->formatLink(
+                'terms_conditions',
+                $this->country,
+                $this->merchantId,
+                $this->getMethod()->getCode()
+            );
+        }
+
+        $availablePayments = Mage::getModel('checkout/session')->getData('afterpay_payment_available');
+        $legalInfo = $availablePayments[$this->getMethod()->getCode()]['legalInfo'];
+        $legalInfoText = $legalInfo['text'];
+        $legalInfoConditionsLink = $legalInfo['termsAndConditionsUrl'];
+        $legalInfoPrivacyLink = $legalInfo['privacyStatementUrl'];
+
+        if (!$legalInfoText) {
+            if ($legalInfoConditionsLink && $legalInfoPrivacyLink) {
+                $this->paymentConditionsUrl = '<a href="' . $legalInfoConditionsLink . '" target="_blank">';
+                $this->privacyStatementUrl = '<a href="' . $legalInfoPrivacyLink . '" target="_blank">';
+            }
+        }
+    }
+
+    public function formatLink($type, $locale, $merchantId, $methodCode = null)
+    {
+        $acceptableTypes = [
+            'terms_conditions',
+            'privacy_statement'
+        ];
+        $acceptableLocales = [
+            'atde' => 'de_at',
+            'benl' => 'nl_be',
+            'dkda' => 'da_dk',
+            'fifi' => 'fi_fi',
+            'dede' => 'de_de',
+            'nlnl' => 'nl_nl',
+            'nonb' => 'no_no',
+            'sesv' => 'sv_se',
+            'chde' => 'de_ch',
+        ];
+        $definedCodes = [
+            'digital_invoice' => 'invoice',
+            'direct_debit' => 'direct_debit',
+            'installment_payment' => 'fix_installments',
+        ];
+
+        if (empty($merchantId)) {
+            $merchantId = 'default';
+        }
+
+        $definedLocale = $acceptableLocales[$locale] ?: $acceptableLocales['nlnl'];
+
+        foreach ($definedCodes as $key => $value) {
+            if (strpos($methodCode, $key)) {
+                $methodCode = $value;
+            }
+        }
+
+        if (empty($merchantId)) {
+            $merchantId = 'default';
+        }
+
+        if ($type == $acceptableTypes[0]) {
+            return '<a href="https://documents.riverty.com/' . $acceptableTypes[0] . '/payment_methods/' . $methodCode . '/' . $definedLocale . '/' . $merchantId . '" target="_blank">';
+        } else {
+            return '<a href="https://documents.riverty.com/' . $acceptableTypes[1] . '/checkout/' . $definedLocale . '" target="_blank">';
         }
     }
 
     public function getMethodLabelAfterHtml()
     {
-	// DHH CORE HACK
-        $labelAfterHtml = $this->getMethod()->getTitle().'<img src="//static.pay.nl/payment_profiles/20x20/2561.png" style="padding-right:10px;" alt="AfterPay" class="v-middle"/>';
+        $availablePayments = Mage::getModel('checkout/session')->getData('afterpay_payment_available');
+
+        if (isset($availablePayments[$this->getMethod()->getCode()])) {
+            $paymentTitle = $availablePayments[$this->getMethod()->getCode()]['title'];
+            $paymentFootNote = $availablePayments[$this->getMethod()->getCode()]['tag'];
+            $paymentLogo = $availablePayments[$this->getMethod()->getCode()]['logo'];
+        } else {
+            $shopLocale = Mage::app()->getLocale()->getLocaleCode();
+            $paymentTitle = $this->getMethod()->getTitle();
+            $paymentFootNote = $this->getMethod()->getFootnote();
+            $paymentLogo = "https://cdn.myafterpay.com/logo/AfterPay_logo_checkout.svg";
+            $englishLocale = ['en_US', 'en_AU', 'en_CA', 'en_IE', 'en_NZ', 'en_GB'];
+
+            if (Mage::getStoreConfig('afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_type') == 'B2B') {
+                if (in_array($shopLocale, $englishLocale)) {
+                    if ($paymentTitle === 'Achteraf betalen') {
+                        $paymentTitle = 'Invoice';
+                        $paymentFootNote = 'Buy now, Pay later';
+                    }
+                } else {
+                    $paymentTitle = $this->getMethod()->getTitle();
+                    $paymentFootNote = $this->getMethod()->getFootnote();
+                }
+            } else {
+                if (in_array($shopLocale, $englishLocale)) {
+                    if ($paymentTitle === 'Achteraf betalen') {
+                        $paymentTitle = 'Invoice - 14 days';
+                        $paymentFootNote = 'Buy now, Pay in 14 days';
+                    } elseif ($paymentTitle === 'Automatische incasso') {
+                        $paymentTitle = 'Direct debit';
+                        $paymentFootNote = 'Have the amount conveniently collected from your account';
+                    } else {
+                        $paymentTitle = $this->getMethod()->getTitle();
+                        $paymentFootNote = $this->getMethod()->getFootnote();
+                    }
+                } else {
+                    $paymentTitle = $this->getMethod()->getTitle();
+                    $paymentFootNote = $this->getMethod()->getFootnote();
+                }
+            }
+        }
+
+        $labelAfterHtml = '<img src="' . $paymentLogo . '" alt="" style="width:60px; margin-top:3px; vertical-align: middle; float: none; display: initial; margin-right: 5px;" />&nbsp;' . '<p style="margin-left:68px;margin-top:-38px;">' . $paymentTitle;
 
         if ($this->getMethod()->getFootnote()) {
-            $labelAfterHtml .= '<span class = \'afterpay_paymentmethod_label afterpay_paymentmethod_label_'
-                        . $this->getMethod()->getCode()
-                        . '\'>' . $this->getMethod()->getFootnote() . '</span>';
+            $labelAfterHtml .= '<p style="margin-left:68px;margin-top:-9px; font-size:13px;" class = \'afterpay_paymentmethod_label afterpay_paymentmethod_label_'
+                . $this->getMethod()->getCode()
+                . '\'>' . $paymentFootNote . '</p></p>';
+        } else {
+            $labelAfterHtml .= '</p>';
         }
 
         // If IWD is used then use no logo
         if (Mage::helper('core')->isModuleEnabled('IWD_Opc') || Mage::helper('core')->isModuleEnabled('Idev_OneStepCheckout')) {
-            $labelAfterHtml = $this->getMethod()->getTitle();
+            $labelAfterHtml = $paymentTitle;
         }
 
         return $labelAfterHtml;
@@ -186,14 +297,6 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
     public function showBankaccount()
     {
         if (Mage::getStoreConfig('afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_showbankaccount') == '1') {
-            return true;
-        }
-        return false;
-    }
-
-    public function showGender()
-    {
-        if (Mage::getStoreConfig('afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_showgender') == '1') {
             return true;
         }
         return false;
@@ -239,7 +342,7 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
     public function getCompany()
     {
         $billingAddress = Mage::getSingleton('checkout/session')->getQuote()->getBillingAddress();
-        
+
         return $billingAddress->getCompany();
     }
 
@@ -249,5 +352,27 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
     public function showBankCode()
     {
         return Mage::getStoreConfigFlag('afterpay/afterpay_' . $this->getMethod()->getCode() . '/portfolio_showbankcode');
+    }
+
+    /**
+     * @param $methodCode
+     * @return mixed
+     */
+    public function getMethodsLegalStatement($methodCode)
+    {
+        $availablePayments = Mage::getModel('checkout/session')->getData('afterpay_payment_available');
+
+        return $availablePayments[$methodCode]['legalInfo']['text'];
+    }
+
+    /**
+     * @param $methodCode
+     * @return mixed
+     */
+    public function getMethodRequiresCustomerConsent($methodCode)
+    {
+        $availablePayments = Mage::getModel('checkout/session')->getData('afterpay_payment_available');
+
+        return $availablePayments[$methodCode]['legalInfo']['requiresCustomerConsent'];
     }
 }

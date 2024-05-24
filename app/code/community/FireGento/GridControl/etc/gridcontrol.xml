@@ -200,6 +200,16 @@
         <after>eol</after>
       </manufacturer>
       
+      <brand_series>
+        <add>
+          <header>Serie</header>
+          <type>options</type>
+          <index>brand_series</index>
+          <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(brand_series)</options>
+        </add>
+        <after>manufacturer</after>
+      </brand_series>
+      
       <qty>
         <remove/>
       </qty>
@@ -207,6 +217,9 @@
     </catalog_category_products>
     
     <!-- Orders Grid -->
+    
+    <!-- Perhaps better to use the Noble module to make changes -->
+    <!-- Noble module also interferes with the grid! -->
 
     <sales_order_grid>
     
@@ -221,6 +234,14 @@
       <store_id>
         <remove/>
       </store_id>
+      
+      <action>
+        <remove/>
+      </action>
+      
+      <state>
+        <remove/>
+      </state>
       
     </sales_order_grid>
     

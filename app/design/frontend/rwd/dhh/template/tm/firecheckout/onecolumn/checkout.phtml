@@ -30,10 +30,10 @@
     </div>
 <?php endif ?>
 
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('tm/firecheckout/js/firecheckout.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('tm/firecheckout/js/firecheckout-compatibility.js') ?>"></script>
-<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
-<script type="text/javascript">FC.Ajax.rules = <?php echo Mage::helper('core')->jsonEncode(Mage::helper('firecheckout/ajax')->getRules()) ?></script>
+<script src="<?php echo $this->getSkinUrl('tm/firecheckout/js/firecheckout.js') ?>"></script>
+<script src="<?php echo $this->getSkinUrl('tm/firecheckout/js/firecheckout-compatibility.js') ?>"></script>
+<script>countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<script>FC.Ajax.rules = <?php echo Mage::helper('core')->jsonEncode(Mage::helper('firecheckout/ajax')->getRules()) ?></script>
 <?php echo $this->getChildHtml('firecheckout.script.after') ?>
 
 <form action="" id="firecheckout-form" method="post">
@@ -203,7 +203,7 @@ endif;
 
 <?php echo $this->getChildHtml('firecheckout.scripts') ?>
 
-<script type="text/javascript">
+<script>
 //<![CDATA[
     <?php
         $_isSecure = $this->getRequest()->isSecure();

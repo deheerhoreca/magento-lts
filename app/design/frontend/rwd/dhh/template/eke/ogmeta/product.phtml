@@ -26,14 +26,24 @@ if(empty($html) === false) {
   $siteName = $helper->getSiteName();  
   $imageFile = "media/catalog/product".$product->getSmallImage();
   
-  if(strlen((string) $product->getSmallImage()) < 1) {
+  $imageAttr = [];
+  if(strlen($imageFile) > 0 && is_file($imageFile) === true) {
+    try {
+      $imageAttr = getimagesize($imageFile);
+    } catch(Exception $e) {
+      $imageAttr = [];
+      Mage::logException($e);
+      $msg = "{$product->getSku()} getimagesize() failed on file ".var_export($imageFile, true);
+      Mage::log($msg, null, "system.log", true);
+    }
+  } else {
+    if(strlen($imageFile) > 0) {
+      $msg = "{$product->getSku()} Product image does not exist: ".var_export($imageFile, true);
+      Mage::log($msg, null, "system.log", true);
+    }
     $imageFile = $helper->getOgImage();
   }
   
-  $imageAttr = ["mime" => null, 0 => null, 1 => null];
-  if(is_file($imageFile) === true) {
-    @$imageAttr = getimagesize($imageFile);
-  }
   $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);
   
   $productDescription = Mage::helper("deheerhoreca_util/util")->_get_product_description($product);
@@ -72,9 +82,11 @@ if(empty($html) === false) {
   $html .= '<meta property="og:availability" content="'.$availability.'">'.PHP_EOL;
   $html .= '<meta property="og:url" content="'.$product_url.'">'.PHP_EOL;
   $html .= '<meta property="og:image" content="'.$product->getImageUrl().'">'.PHP_EOL;
-  $html .= '<meta property="og:image:type" content="'.$imageAttr['mime'].'">'.PHP_EOL;
-  $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">'.PHP_EOL;
-  $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
+  if($imageAttr !== []) {
+    if(isset($imageAttr['mime'])) $html .= '<meta property="og:image:type" content="'.$imageAttr['mime'].'">'.PHP_EOL;
+    if(isset($imageAttr[0]))      $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">'.PHP_EOL;
+    if(isset($imageAttr[1]))      $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
+  }
   $html .= '<meta property="og:image:alt" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
   $html .= '<meta property="og:description" content="'.$productDescription.'">'.PHP_EOL;
   $html .= '<meta property="og:price:amount" content="'.Mage::registry("product")->getFinalPrice().'">'.PHP_EOL;

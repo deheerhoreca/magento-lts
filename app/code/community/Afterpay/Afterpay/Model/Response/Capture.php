@@ -98,7 +98,7 @@ class Afterpay_Afterpay_Model_Response_Capture extends Afterpay_Afterpay_Model_R
 
         $method = $this->_order->getPayment()->getMethod();
 
-        if ($country == 'dede' || str_contains((string) $method, 'rest')) {
+        if ($country == 'dede' || strpos($method, 'rest') !== false) {
             $this->_debugEmail .= "REST order, no checksum check is needed.\n";
             return true;
         }
@@ -163,7 +163,7 @@ class Afterpay_Afterpay_Model_Response_Capture extends Afterpay_Afterpay_Model_R
         $this->_order->setStatus(Mage::getStoreConfig('afterpay/afterpay_capture/order_status_accepted', $this->_order->getStoreId()))
                      ->save();
 
-        Mage::getSingleton('adminhtml/session')->addSuccess($this->_helper->__('this invoice was captured by AfterPay.'));
+        Mage::getSingleton('adminhtml/session')->addSuccess($this->_helper->__('this invoice was captured by Riverty.'));
 
         return true;
     }
@@ -190,7 +190,7 @@ class Afterpay_Afterpay_Model_Response_Capture extends Afterpay_Afterpay_Model_R
 
         return false;
     }
-    
+
     protected function _error()
     {
         $this->_debugEmail .= "The capture request generated an error. \n";
@@ -218,7 +218,7 @@ class Afterpay_Afterpay_Model_Response_Capture extends Afterpay_Afterpay_Model_R
 
         return false;
     }
-    
+
     /**
      * Saves the order's reference as the transaction Id of the invoice. This is done to allow the invoice to be refunded online
      */

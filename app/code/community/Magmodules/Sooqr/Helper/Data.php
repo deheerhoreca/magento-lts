@@ -1415,6 +1415,9 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             if (empty($name)) {
                 $name = $cat['name'];
             }
+            
+            // DHH CORE HACK
+            $name = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($name);
 
             if ($exclude != 1) {
                 $_categories[$cat->getId()] = array(
