@@ -61,7 +61,7 @@ if($_products->getFirstItem()) {
       $i = 0;
       $total = $_products->getSize();
       foreach($_products as $_product) {
-        if($i > $limit) {
+        if($i >= $limit) {
           continue;
         }
         if($total > $limit && mt_rand(0, 100) > 75) {
