@@ -4,6 +4,14 @@
 # - app/design/frontend/rwd/dhh/template/checkout/success.phtml
 ?>
 
+<?php
+$shipping_total       = $_order->getShippingAmount();
+$tax_info             = $_order->getFullTaxInfo();
+$tax_total            = $tax_info[0]["amount"] ?? null;
+$total_no_shipping    = ($grand_total - $shipping_total);
+$discount_offered     = json_encode(!(empty($_order->getCouponCode())));
+?>
+
 <style>
   @media screen and (min-width: 1200px) {
     .info-box-cart-success {
@@ -59,11 +67,9 @@
   </div>
 </div>
 
-<?php
-/* Clickcease.com Conversion tracking */
-?>
+<?php /* Clickcease.com Conversion tracking */ ?>
 
-<script>
+<script type="module">
   ccConVal = 0;
   var script = document.createElement("script");
   script.async = true;
@@ -73,65 +79,24 @@
 </script>
 
 <?php
+
 /* Bing Conversion tracking */
 
 $order_id             = $this->getOrderId();
 $_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
 $grand_total          = $_order->getGrandTotal() ?? null;
+$grand_total_ex_vat   = null;
 if(is_numeric($grand_total)) {
-  $grand_total         /= 1.21;
+  $grand_total_ex_vat = $grand_total / 1.21;
 }
 ?>
-<script>
+<script type="module">
   window.uetq = window.uetq || [];
-  window.uetq.push('event', '', {'revenue_value': <?php echo $grand_total; ?>, 'currency': 'EUR'});
-</script>
-
-<?php
-/* Datatrics Conversion tracking */
-
-// @see https://app.datatrics.com/integrations/datatrics-tracker/46731568013430307066
-
-$shipping_total       = $_order->getShippingAmount();
-$tax_info             = $_order->getFullTaxInfo();
-$tax_total            = $tax_info[0]["amount"] ?? null;
-$total_no_shipping    = ($grand_total - $shipping_total);
-$discount_offered     = json_encode(!(empty($_order->getCouponCode())));
-$_items               = $_order->getAllItems();
-$datatrics_js         = "";
-foreach($_items as $_item) {
-  // printr($_item->getData());
-  // printr(get_class_methods($_item));
-  $_product         = $_item->getProduct();
-  // printr($_product->getData());
-  $category_ids       = $_product->getCategoryIds();
-  $_categories        = $_product->getCategoryCollection();
-  // printr($cats);
-  // printr(_get_product_attribute($_product, "product_type"));
-  // printr($_product->getResource()->getAttribute('product_type')->getFrontend()->getValue($_product));
-
-  $sku              = $_item->getSku();
-  $name             = $_item->getName();
-  $price            = (float) $_item->getPrice();
-  $qty              = (int) $_item->getQtyOrdered();
-  $categories       = [];
-
-  if($_product && empty(_get_product_attribute($_product, "product_type") === false)) {
-    $categories[]     = _get_product_attribute($_product, "product_type");
-  }
-  foreach($category_ids as $category_id) {
-    $_category        = Mage::getModel('catalog/category')->load($category_id);
-    $categories[]     = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($_category->getName());
-  }
-  $categories_json  = json_encode($categories); // Maybe add JSON_UNESCAPED_UNICODE
-  $datatrics_js    .= "_paq.push(['addEcommerceItem', '{$sku}', '{$name}', {$categories_json}, {$price}, {$qty}]);".PHP_EOL;
-}
-?>
-<script>
+  window.uetq.push('event', '', {'revenue_value': <?=$grand_total_ex_vat?>, 'currency': 'EUR'});
+  
   var _paq = _paq || [];
   if(window.location.hostname == "www.chefstore.nl") {
-    <?php echo $datatrics_js ?>
-    _paq.push(['trackEcommerceOrder', '<?php echo $order_id ?>', <?php echo $grand_total; ?>, <?php echo $total_no_shipping; ?>, <?php echo $tax_total; ?>, <?php echo $shipping_total; ?>, <?php echo $discount_offered; ?>]);
+    _paq.push(['trackEcommerceOrder', '<?=$order_id?>', <?=$grand_total_ex_vat?>, <?=$total_no_shipping?>, <?=$tax_total?>, <?=$shipping_total?>, <?=$discount_offered?>]);
     <?php
     // This already happens ealier, probably not needed
     // _paq.push(['trackPageView']);

@@ -150,11 +150,13 @@ class Afterpay_Afterpay_Block_Portfolios_Checkout_Form extends Mage_Payment_Bloc
             );
         }
 
+        // DHH CORE HACK: They run this even if it's all disabled...add ?? safety
+
         $availablePayments = Mage::getModel('checkout/session')->getData('afterpay_payment_available');
-        $legalInfo = $availablePayments[$this->getMethod()->getCode()]['legalInfo'];
-        $legalInfoText = $legalInfo['text'];
-        $legalInfoConditionsLink = $legalInfo['termsAndConditionsUrl'];
-        $legalInfoPrivacyLink = $legalInfo['privacyStatementUrl'];
+        $legalInfo = $availablePayments[$this->getMethod()->getCode()]['legalInfo'] ?? "";
+        $legalInfoText = $legalInfo['text'] ?? "";
+        $legalInfoConditionsLink = $legalInfo['termsAndConditionsUrl'] ?? "";
+        $legalInfoPrivacyLink = $legalInfo['privacyStatementUrl'] ?? "";
 
         if (!$legalInfoText) {
             if ($legalInfoConditionsLink && $legalInfoPrivacyLink) {

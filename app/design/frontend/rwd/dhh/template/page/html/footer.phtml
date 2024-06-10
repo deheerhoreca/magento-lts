@@ -88,7 +88,7 @@ $html = <<<EOT
     preload: false
   });
 
-  if (window.location.hostname == "www.chefstore.nl") {
+  if(window.location.hostname == "www.chefstore.nl") {
     var _paq = _paq || [];
     _paq.push(["trackPageView"]);
     _paq.push(["enableLinkTracking"]);
@@ -125,6 +125,7 @@ $html = <<<EOT
 EOT;
 echo $html;
 
+// @todo replace with APCu?
 if(empty($html) === false && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html") === true) {
   Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, ["quickndirtyfpc"], 86400);
 }
