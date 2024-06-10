@@ -1,32 +1,37 @@
+<?php
+$tx_name    = (string) (Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name() ?? "unknown");
+$env        = (string) (ini_get("elastic_apm.environment") ?? "unknown");
+$body_class = $this->getBodyClass();
+?>
 <!DOCTYPE html>
-<html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js" itemscope itemtype="http://schema.org/WebPage">
+<html lang="<?=$this->getLang();?>" id="top" class="no-js" itemscope itemtype="http://schema.org/WebPage" data-environment="<?=$env?>" data-transaction="<?=$tx_name?>">
   <head>
-    <?php echo $this->getChildHtml('head') ?>
-    <?php echo "<script>apm_transaction = \"".Mage::app()->getFrontController()->getAction()->getFullActionName()."\";</script>" ?>
+    <?=$this->getChildHtml('head')?>
+    <script>apm_transaction="<?=$tx_name?>";</script>
   </head>
-  <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
-    <?php echo $this->getChildHtml('after_body_start') ?>
+  <body class="<?=$body_class?>">
+    <?=$this->getChildHtml('after_body_start')?>
     <div class="wrapper">
-      <?php echo $this->getChildHtml('global_notices') ?>
+      <?=$this->getChildHtml('global_notices')?>
       <div class="page">
-        <?php echo $this->getChildHtml('header') ?>
+        <?=$this->getChildHtml('header')?>
         <div class="main-container col1-layout">        
           <div class="main">
-            <?php echo $this->getChildHtml('breadcrumbs') ?>
+            <?=$this->getChildHtml('breadcrumbs')?>
             <div class="col-main">
               <!-- core_messages_start -->
-              <?php echo $this->getChildHtml('global_messages') ?>
+              <?=$this->getChildHtml('global_messages')?>
               <!-- core_messages_end -->
-              <?php echo $this->getChildHtml('content') ?>
+              <?=$this->getChildHtml('content')?>
             </div>
           </div>
         </div>
-        <?php echo $this->getChildHtml('footer_before') ?>
-        <?php echo $this->getChildHtml('footer') ?>
-        <?php echo $this->getChildHtml('global_cookie_notice') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
+        <?=$this->getChildHtml('footer_before')?>
+        <?=$this->getChildHtml('footer')?>
+        <?=$this->getChildHtml('global_cookie_notice')?>
+        <?=$this->getChildHtml('before_body_end')?>
       </div>
     </div>
-    <?php echo $this->getAbsoluteFooter() ?>
+    <?=$this->getAbsoluteFooter()?>
   </body>
 </html>

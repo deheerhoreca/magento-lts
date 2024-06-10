@@ -4,6 +4,9 @@
 
 # This script takes the system-configured php.ini for the PHP version that is applicable to this app, and adds our modifications into a new php.ini
 
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
+
 # Set User Environment
 . ${HOME}/.profile
 
@@ -53,6 +56,9 @@ cat ${SHARED_PHP_INI} >> ${TARGET_PHP_INI}
 printf "\n; ---------------------- ${LOCAL_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${LOCAL_PHP_INI} >> ${TARGET_PHP_INI}
 
+# Sometimes the OS INI has no unix line endings
+dos2unix -k ${TARGET_PHP_INI}
+
 # Create new _user.ini
 SHARED_USER_INI=$(pwd)/etc/.user-dist.ini
 LOCAL_USER_INI=$(pwd)/etc/.user-local.ini
@@ -71,5 +77,8 @@ cat ${SHARED_USER_INI} >> ${TARGET_USER_INI}
 
 printf "\n; ---------------------- ${LOCAL_USER_INI} ----------------------\n\n" >> ${TARGET_USER_INI}
 cat ${LOCAL_USER_INI} >> ${TARGET_USER_INI}
+
+# Sometimes the OS INI has no unix line endings
+dos2unix -k ${TARGET_PHP_INI}
 
 echo "Done"

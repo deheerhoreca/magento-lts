@@ -18,6 +18,8 @@ const SUPPLIERS_HIDE_STOCK_DETAILS = ["apexa", "bartscher", "deheerhoreca", "esp
 "foster-gamko", "heatmaestro", "hoshizaki", "orionstar", "probbqshop", "liebherr", "smeg",
 "youcup"];
 
+// Mage::helper("deheerhoreca_util/util")->__METHOD__()
+
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /*
@@ -1429,6 +1431,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public static function _cdn_img($options) {
     return _cdn_img($options);
+  }
+  
+  public static function get_apm_transaction_name(): string {
+    return (string) trim(implode(" ", [
+      ($_SERVER["REQUEST_METHOD"] ?? ""),
+      (Mage::app()->getFrontController()->getAction()->getFullActionName() ?? "UNKNOWN_ACTION"),
+    ]));
   }
 }
 

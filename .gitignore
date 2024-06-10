@@ -180,4 +180,7 @@ phpstan*.neon
 
 /etc/*-local.ini
 /*.bak-*
-/shell/php_error.log
+
+# Don't store generated PHP configurations:
+#/_user.ini
+#/php.cmd.ini
