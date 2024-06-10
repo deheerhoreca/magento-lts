@@ -4,6 +4,14 @@
 # - app/design/frontend/rwd/dhh/template/checkout/success.phtml
 ?>
 
+<?php
+$shipping_total       = $_order->getShippingAmount();
+$tax_info             = $_order->getFullTaxInfo();
+$tax_total            = $tax_info[0]["amount"] ?? null;
+$total_no_shipping    = ($grand_total - $shipping_total);
+$discount_offered     = json_encode(!(empty($_order->getCouponCode())));
+?>
+
 <style>
   @media screen and (min-width: 1200px) {
     .info-box-cart-success {
@@ -77,17 +85,18 @@
 $order_id             = $this->getOrderId();
 $_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
 $grand_total          = $_order->getGrandTotal() ?? null;
+$grand_total_ex_vat   = null;
 if(is_numeric($grand_total)) {
-  $grand_total         /= 1.21;
+  $grand_total_ex_vat = $grand_total / 1.21;
 }
 ?>
 <script type="module">
   window.uetq = window.uetq || [];
-  window.uetq.push('event', '', {'revenue_value': <?=$grand_total?>, 'currency': 'EUR'});
+  window.uetq.push('event', '', {'revenue_value': <?=$grand_total_ex_vat?>, 'currency': 'EUR'});
   
   var _paq = _paq || [];
   if(window.location.hostname == "www.chefstore.nl") {
-    _paq.push(['trackEcommerceOrder', '<?=$order_id?>', <?=$grand_total?>, <?=$total_no_shipping?>, <?=$tax_total?>, <?=$shipping_total?>, <?=$discount_offered?>]);
+    _paq.push(['trackEcommerceOrder', '<?=$order_id?>', <?=$grand_total_ex_vat?>, <?=$total_no_shipping?>, <?=$tax_total?>, <?=$shipping_total?>, <?=$discount_offered?>]);
     <?php
     // This already happens ealier, probably not needed
     // _paq.push(['trackPageView']);
