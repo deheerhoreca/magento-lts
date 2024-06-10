@@ -182,5 +182,5 @@ phpstan*.neon
 /*.bak-*
 
 # Don't store generated PHP configurations:
-#/_user.ini
-#/php.cmd.ini
+/_user.ini
+/php.cmd.ini
