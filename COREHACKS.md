@@ -112,6 +112,9 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - Must be checked against `base/default/layout/*.xml`
   - Updated up to: v20.5.0
 
+## ./vendor/ Hacks
+- `vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php`
+
 ## 3rd Party Hacks
 - **Anowave Sort**
   - `app/code/local/Anowave/Sort/Model/Observer.php`

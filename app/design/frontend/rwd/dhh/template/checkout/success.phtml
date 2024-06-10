@@ -5,6 +5,8 @@
 ?>
 
 <?php
+$order_id             = $this->getOrderId();
+$_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
 $shipping_total       = $_order->getShippingAmount();
 $tax_info             = $_order->getFullTaxInfo();
 $tax_total            = $tax_info[0]["amount"] ?? null;
