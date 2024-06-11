@@ -163,7 +163,7 @@ if (Mage::getModel('customproducts/customproduct')->isCustomProduct($item->getPr
         foreach ($superAttribute as $option => $value): ?>
           <dt><strong><em><?php echo $option ?></em></strong></dt>
           <dd style="margin:0; padding:0 0 0 9px;">
-            <?php echo (!empty($value)) ? $value : nl2br($this->escapeHtml($value)) ?>
+            <?php echo (!empty($value)) ? $value : nl2br((string) $this->escapeHtml($value)) ?>
           </dd>
         <?php endforeach;
         echo '</dl>';
@@ -223,7 +223,7 @@ if (Mage::getModel('customproducts/customproduct')->isCustomProduct($item->getPr
       <strong style="font-size:11px;"><?php echo $quoteadvHelper->__('Notes with Product:');?></strong>
     </td>
     <td colspan="4" align="left" valign="top"
-      style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;"><?php echo nl2br($this->escapeHtml($item->getClientRequest())) ?></td>
+      style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;"><?php echo nl2br((string) $this->escapeHtml($item->getClientRequest())) ?></td>
     <td style="border-bottom:1px dotted #CCCCCC;">&nbsp;</td>
 
     <?php if (!$this->isSetAutoProposal()): ?>

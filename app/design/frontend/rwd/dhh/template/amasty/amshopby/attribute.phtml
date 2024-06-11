@@ -20,7 +20,7 @@ if($this->getSingleChoice()) {
 if ($this->getSortFeaturedFirst() && in_array($this->getDisplayType(), array(Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY, Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS))) {
   $class .= " sort-featured-first-".$this->getRequestValue();
 }
-$class = trim($class);
+$class = trim((string) $class);
 echo "<ol class='{$class}'>";
 if($this->getSortFeaturedFirst()) { ?>
   <input type="hidden" id="field_sort_featured_<?php echo $this->getRequestValue(); ?>" value="default_sort">
@@ -35,7 +35,7 @@ switch ($this->getDisplayType()) {
       echo '<li rel="search"><input type="text" class="amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)"></li>';
     }
     foreach($items as $item) {
-      if(strtolower($item['label']) !== "n.v.t.") {
+      if(strtolower((string) $item['label']) !== "n.v.t.") {
 
         $count = $item["countValue"];
         if(is_numeric($count) && $count > 1000) {

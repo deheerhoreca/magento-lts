@@ -78,7 +78,7 @@ if($_quoteadv && count($collection) > 0):
         $status == Ophirah_Qquoteadv_Model_Status::STATUS_AUTO_PROPOSAL ||
         $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_ACTION_OWNER ||
         $status == Ophirah_Qquoteadv_Model_Status::STATUS_PROPOSAL_ACTION_CUSTOMER) && (int) $expDays) {
-      $updDate = strtotime($_quoteadv->getExpiry());
+      $updDate = strtotime((string) $_quoteadv->getExpiry());
       $dat = mktime(0, 0, 0, date("m", $updDate), date('d', $updDate), date("Y", $updDate));
       $text = Mage::helper('core')->formatDate(date('D M j Y', $dat), 'medium', false);
       ?>
@@ -134,7 +134,7 @@ if($_quoteadv && count($collection) > 0):
             <div class="box-title">
               <h2><?php echo $this->__('Remark with Proposal') ?> </h2>
             </div>
-            <div class="box-content"><?php echo nl2br($customer_comment); ?></div>
+            <div class="box-content"><?php echo nl2br((string) $customer_comment); ?></div>
           </div>
         </div>
       <?php } ?>
@@ -292,7 +292,7 @@ if($_quoteadv && count($collection) > 0):
               <!-- /Item HTML -->
             </td>
             <?php } ?>
-            <td ><?php echo nl2br($this->escapeHtml($item->getClientRequest())) ?>&nbsp;</td>
+            <td ><?php echo nl2br((string) $this->escapeHtml($item->getClientRequest())) ?>&nbsp;</td>
             <?php
             $collection = Mage::getModel("qquoteadv/requestitem")->getCollection()->setQuote($_quoteadv);
             $collection->getSelect()->where("quoteadv_product_id = ?", $item->getId());

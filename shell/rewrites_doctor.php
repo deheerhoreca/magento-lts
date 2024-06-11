@@ -18,9 +18,9 @@ require_once "abstract.php";
 
 class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   
-  const PAGE_SIZE = 1000;
-  const LOG_MESSAGE_ROWS = 100;
-  const MAX_SLUG_LENGTH = 60;
+  public const PAGE_SIZE = 1000;
+  public const LOG_MESSAGE_ROWS = 100;
+  public const MAX_SLUG_LENGTH = 60;
   
   public function run() {
     if($left = $this->getArg("remove_rewrites")) {
@@ -40,16 +40,16 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   
   // Update duplicated url keys by adding product SKU to the duplicated key
   public function updateDuplicatedKeys() {
-    
+
     $debug_data = [];
-    
+
     try {
       $counter = 0;
       $start = time();
       $storeId = Mage::app()->getStore()->getId().PHP_EOL;
 
       //url key attriubte load for further use
-      
+
       $entityType = Mage::getModel("eav/entity_type")->loadByCode("catalog_product");
       $attributes = $entityType->getAttributeCollection()
         ->addFieldToFilter("attribute_code", array("eq" => "url_key"))
@@ -81,7 +81,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
           ;
           $ids = $productCollection->getAllIds();
           $skus = $productCollection->getColumnValues("sku");
-          
+
           echo "SKUs [".implode(", ", $skus)."] share the same URK key: {$duplicatedUrlKey}".PHP_EOL;
 
           foreach($ids as $id) {
@@ -138,7 +138,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       echo $e->getMessage() . PHP_EOL;
       Mage::log($e->getMessage(), null, "atwix_rewrites_doctor.log", true);
     }
-    
+
     // echo (new ArrayToTextTable($debug_data))->render().PHP_EOL;
   }
   
@@ -299,13 +299,13 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   // Translate a product name and a SKU, and creates an URL slug without special characters and limited in length
   private function slug($name, $sku) {
     // Don't remove + signs, unique SKUs will collide
-    $name = str_replace("+", "plus", $name);
-    $sku = str_replace("+", "plus", $sku);
+    $name = str_replace("+", "plus", (string) $name);
+    $sku = str_replace("+", "plus", (string) $sku);
     
-    $sku = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
+    $sku = strtolower(trim((string) preg_replace("~[^0-9a-z]~i", "-", html_entity_decode((string) preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($sku, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
     $sku = strtolower(str_replace(" ", "-", $sku));
     
-    $name = strtolower(trim(preg_replace("~[^0-9a-z]~i", "-", html_entity_decode(preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($name, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
+    $name = strtolower(trim((string) preg_replace("~[^0-9a-z]~i", "-", html_entity_decode((string) preg_replace("~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i", "$1", htmlentities($name, ENT_QUOTES, "UTF-8")), ENT_QUOTES, "UTF-8")), "-"));
     $name = strtolower(str_replace(" ", "-", $name));
     $name = substr($name, 0, (self::MAX_SLUG_LENGTH - strlen($sku)+1));
     $name = str_replace($sku, "", $name);

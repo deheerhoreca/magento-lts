@@ -20,7 +20,7 @@ $at_root_category = (intval(Mage::registry('current_category')->getId()) === 2);
 if($this->isMixedMode()) {
   
   $_category            = $this->getCurrentCategory();
-  $brand_name           = strtolower($_category->getName());
+  $brand_name           = strtolower((string) $_category->getName());
   
   if(empty($brand_name) === false) {
     $brand                = sanitizeForFilename($brand_name);  

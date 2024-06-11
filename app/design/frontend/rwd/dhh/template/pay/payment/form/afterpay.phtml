@@ -7,7 +7,7 @@ $quote = $this->getQuote();
 
 // list($dobYear, $dobMonth, $dobDay) = explode('-', $dob);
 // DHH FIX @see https://github.com/paynl/magento-plugin/issues/52
-[$dobYear, $dobMonth, $dobDay] = array_pad(explode("-", $dob), 3, null);
+[$dobYear, $dobMonth, $dobDay] = array_pad(explode("-", (string) $dob), 3, null);
 
 ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
@@ -34,7 +34,7 @@ $quote = $this->getQuote();
     </li>
     <?php
     if(!empty($instructions)){
-        echo "<li>".nl2br($instructions)."</li>";
+        echo "<li>".nl2br((string) $instructions)."</li>";
     }
     ?>
 </ul>

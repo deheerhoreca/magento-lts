@@ -26,7 +26,7 @@ if(!$argv[1] || !$argv[2])
  */
 function launch($attrCodeOLD, $attrCodeNEW)
 {
-    $attrCodeTEMP = $attrCodeOLD."_temp".rand(1,1000);
+    $attrCodeTEMP = $attrCodeOLD."_temp".random_int(1,1000);
 
     /** @var Mage_Eav_Model_Entity_Attribute $attributeOLD */
     $attributeOLD = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $attrCodeOLD);
@@ -42,7 +42,7 @@ function launch($attrCodeOLD, $attrCodeNEW)
 
     $fp = fopen($attrCodeOLD.".csv", 'w+');
     foreach ($collection as $product) {
-        $data = trim($product->getData($attrCodeOLD));
+        $data = trim((string) $product->getData($attrCodeOLD));
         if(!empty($data))
             fputcsv($fp, array($product->getId(), $data));
     }
@@ -109,7 +109,7 @@ function launch($attrCodeOLD, $attrCodeNEW)
     {
         while (($data = fgetcsv($handle, 1000)) !== FALSE)
         {
-            list($_id, $_value) = $data;
+            [$_id, $_value] = $data;
 
             if (empty($myArray[$_value]) or !isset($myArray[$_value]))
                 $_v = null;

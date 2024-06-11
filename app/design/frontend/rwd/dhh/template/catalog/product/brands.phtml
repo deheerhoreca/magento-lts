@@ -81,9 +81,9 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
     
     if(empty($brand_name) === false) {
       $brand_slug       = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
-      $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $media_url        = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $image_url        = "{$media_url}/wysiwyg/brands/{$brand_slug}.png";
-      $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $brand_logo_file  = "{$media_dir}/wysiwyg/brands/{$brand_slug}.png";
       
       if(is_file($brand_logo_file) === false) {

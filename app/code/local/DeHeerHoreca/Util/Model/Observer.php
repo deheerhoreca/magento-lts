@@ -10,9 +10,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   // Setup Elastic APM
   public function configureElasticApm($observer) {
     
-    $action_name      = Mage::app()?->getFrontController()?->getAction()?->getFullActionName();
-    $verb             = $_SERVER["REQUEST_METHOD"] ?? "";
-    $transaction_name = $verb." ".$action_name;
+    // $action_name      = Mage::app()?->getFrontController()?->getAction()?->getFullActionName();
+    // $verb             = $_SERVER["REQUEST_METHOD"] ?? "";
+    // $transaction_name = $verb." ".$action_name;
+    $transaction_name = Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name();
     
     if(!extension_loaded("elastic_apm")) {
       Mage::log("Elastic APM extension not available [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
@@ -38,10 +39,15 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         
         $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
         $transaction->context()->setLabel("sapi", php_sapi_name());
+        return true;
+      } else {
+        Mage::log("Failed to get current transaction form Elastic APM", Zend_Log::NOTICE, "system.log", true);
       }
     } catch(Exception $e) {
       Mage::logException($e);
     }
+    
+    return false;
   }
   
   // Lock some attributes from editing

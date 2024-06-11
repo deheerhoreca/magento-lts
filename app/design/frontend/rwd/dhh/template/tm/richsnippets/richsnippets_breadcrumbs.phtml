@@ -86,11 +86,11 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
         
         $label = $this->htmlEscape($_crumbInfo['label']);
         $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
-        $label = trim($label);
+        $label = trim((string) $label);
         
         $title = $this->htmlEscape($_crumbInfo['title']);
         $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
-        $title = trim($title);
+        $title = trim((string) $title);
         
         if($_crumbName === "home") {
           echo "              <li class='breadcrumb-item'>";
@@ -126,11 +126,11 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
             
             $label = $this->htmlEscape($_crumbInfo['label']);
             $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
-            $label = trim($label);
+            $label = trim((string) $label);
             
             $title = $this->htmlEscape($_crumbInfo['title']);
             $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
-            $title = trim($title);
+            $title = trim((string) $title);
             
             echo "<li class='{$_crumbName}'";
             if($_crumbInfo['link']) {

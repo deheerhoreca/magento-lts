@@ -152,7 +152,7 @@ if($qty_increments > 0) {
 $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4><ul class='fa-ul'>
   <li class=my-1>
     <i class='fa-li fa fa-question'></i>
-    <a class='glightbox4' data-gallery=q data-glightbox='effect:fade; width:600px;' href='//form.jotform.com/213136047906049?sku=".urlencode($sku)."&product=".urlencode($productTitle)."'>Stel een vraag</a>
+    <a class='glightbox4' data-gallery=q data-glightbox='effect:fade; width:600px;' href='//form.jotform.com/213136047906049?sku=".urlencode((string) $sku)."&product=".urlencode((string) $productTitle)."'>Stel een vraag</a>
   </li>
   <li class=my-1>
     <i class='fa-li fa fa-phone' title='Bellen'></i>
@@ -255,7 +255,7 @@ if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
   $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-  if(empty($external_documents_json) === true || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
+  if(empty($external_documents_json) === true || in_array(strtolower((string) $supplier_name), $suppliers_external_docs_preferred) === false) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();
@@ -526,7 +526,7 @@ if($i < $max_highlighted_attributes) {
   $image = "{$skin}frontend/rwd/dhh/images/watt.svg";
   $title = "Vermogen (ELEK)";
   if(empty($text) === false) {
-    if(ctype_alnum($text) || is_numeric($text)) {
+    if(ctype_alnum((string) $text) || is_numeric($text)) {
       $text = str_replace(",", ".", (string) $text);
       $text = (double) $text;
       if($text < 3) {
@@ -561,7 +561,7 @@ if($i < $max_highlighted_attributes) {
   if((stripos((string) $value, "400") !== false)) {
     $title = "Let op: 400 volt apparaat";
   }
-  if(empty($value) === false && strtolower($value) !== "n.v.t.") {
+  if(empty($value) === false && strtolower((string) $value) !== "n.v.t.") {
     $highlights[] = [
       "image"   => $image,
       "name"    => $name,
@@ -799,7 +799,7 @@ if(strlen($product_description_md) > 0) {
   $supplier_description = _get_product_attribute($_product, "supplier_description");
   // If the supplier_description does not contain HTML, do a nl2br()
   if(strlen((string) $supplier_description) > 0 && preg_match("/<[^<]+>/", (string) $supplier_description, $matches) == 0) {
-    $supplier_description = nl2br($supplier_description); // @todo fix upstream for supplier_description
+    $supplier_description = nl2br((string) $supplier_description); // @todo fix upstream for supplier_description
   }
   $product_description .= $supplier_description;
 }
@@ -1100,7 +1100,7 @@ if($stock_data["overall_stock_status"] === "backorder"
         <span class="anchor" id="video"></span>
         <div class="content center">
           <?php
-          $pvideos = explode(";", $pvideo);
+          $pvideos = explode(";", (string) $pvideo);
           foreach($pvideos as $video_key) {
             $yt_url = Mage::helper("deheerhoreca_util/util")->build_product_video_url($pvideo);
             echo "<iframe loading=lazy width='534' height='300' src='{$yt_url}' allow='accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture' allowfullscreen style='border:0;max-width:100%;' frameborder='0'></iframe>";
@@ -1256,13 +1256,13 @@ if($stock_data["overall_stock_status"] === "backorder"
       <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
       <div class="probottomdv" id="product-external-documents-list">
         <span class="anchor" id="external-documents"></span>
-        
+
         <ul class="fa-ul">
           <?php
-          
+
           $method = "aes128";
           $iv = str_repeat("a", openssl_cipher_iv_length($method));
-          
+
           foreach($external_documents as $external_document) {
             if(empty($external_document["url"])) {
               continue;
@@ -1288,7 +1288,7 @@ if($stock_data["overall_stock_status"] === "backorder"
               echo "</li>";
             }
           }
-          
+
           // NG
           // $entity_id = $_product->getEntityId();
           // foreach($external_documents as $i => $external_document) {
@@ -1310,7 +1310,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                 // "pdf"           => "fa-file-pdf-o",
                 // default         => "fa-file-o",
               // };
-              
+
               // if(empty($language) === false) {
                 // if(is_scalar($language)) {
                   // $language = " (".strtoupper($language).")";
@@ -1327,7 +1327,7 @@ if($stock_data["overall_stock_status"] === "backorder"
           ?>
         </ul>
       </div>
-      <?php
+<?php
     }
     ?>
 

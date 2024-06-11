@@ -233,9 +233,9 @@ if($_products->getFirstItem()) {
       $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
       
       // Product thumbnail
-      $media_url        = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $media_url        = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
-      $media_dir        = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+      $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
       if(is_file($image_path) === true) {
         $col_width        = 175;

@@ -51,11 +51,11 @@ if(empty($html) === false) {
   
   $productDescription = Mage::helper("deheerhoreca_util/util")->_get_product_description($product);
   if(strlen((string) $productDescription) > 0) {
-    $productDescription = htmlentities(strip_tags($productDescription));
+    $productDescription = htmlentities(strip_tags((string) $productDescription));
   }
   
   // Remove newlines, trim, limit to 200 chars
-  $productDescription   = substr(trim(preg_replace("/\s\s+/", ";", (string) $productDescription)), 0, 200);
+  $productDescription   = substr(trim((string) preg_replace("/\s\s+/", ";", (string) $productDescription)), 0, 200);
   $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
   $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product);
   $overall_stock_status = $stock_data["overall_stock_status"];

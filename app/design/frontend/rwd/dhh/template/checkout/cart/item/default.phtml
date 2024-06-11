@@ -73,7 +73,7 @@ $thumb_dimensions       = 1.5 * $thumb_size;
     if($messages = $this->getMessages()) {
       foreach($messages as $message) {
         if(stripos((string) $message['text'], 'backorder') !== false && !empty($_product->getData("txtstockdate"))) {
-          $txtstockdate = strtotime($_product->getData("txtstockdate"));
+          $txtstockdate = strtotime((string) $_product->getData("txtstockdate"));
           if($txtstockdate > time()) {
             $txtstockdate = date("d-m-Y", $txtstockdate);
             echo "<span class='buyblock-usp' style='line-height: 1.5em;'>Verwacht: {$txtstockdate}</span><br>";

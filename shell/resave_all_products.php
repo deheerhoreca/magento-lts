@@ -56,7 +56,7 @@ if(empty($supplier_names) === false) {
   foreach($supplier_names as $supplier) {
     reset($supplier_options);        
     foreach($supplier_options as $option) {
-      if(strtolower($option['label']) === $supplier) {
+      if(strtolower((string) $option['label']) === $supplier) {
         echo "Supplier: {$option['label']}".PHP_EOL;
         $collection->addAttributeToFilter("supplier", $option['value']);
         break 1;

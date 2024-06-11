@@ -13,8 +13,8 @@ echo '<div style="clear: both;"></div>';
 
 if($subcategories->count() > 1) {
   $media_path     = Mage::getBaseDir('media');
-  $media_url      = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-  $media_dir      = rtrim(Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+  $media_url      = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+  $media_dir      = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 
   // Logic cloned:
   // - catalog/product/list.phtml
