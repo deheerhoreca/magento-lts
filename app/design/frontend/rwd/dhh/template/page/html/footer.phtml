@@ -77,7 +77,7 @@ $html = <<<EOT
   <div class="text-center pt-2 pb-5">© 2017 - 2024 Chefstore.nl</div>
 </div>
 
-<script>  
+<script>
   const lightbox = GLightbox({
     touchNavigation: true
   });
@@ -87,25 +87,9 @@ $html = <<<EOT
     keyboardNavigation: false,
     preload: false
   });
+</script>
 
-  if(window.location.hostname == "www.chefstore.nl") {
-    var _paq = _paq || [];
-    _paq.push(["trackPageView"]);
-    _paq.push(["enableLinkTracking"]);
-    (function() {
-      var u = (("https:" == document.location.protocol) ? "https" : "http") + "://tr.datatrics.com/";
-      _paq.push(["setTrackerUrl", "//tr.datatrics.com/"]);
-      _paq.push(["setProjectId", "404040881"]);
-      var d = document,
-        g = d.createElement("script"),
-        s = d.getElementsByTagName("script")[0];
-      g.defer = true;
-      g.async = true;
-      g.src = u;
-      s.parentNode.insertBefore(g, s);
-    })();
-  }
-  
+<script type="module">
   (function(d, s, c) {
     var j = d.createElement(s),
       t = d.getElementsByTagName(s)[0]
