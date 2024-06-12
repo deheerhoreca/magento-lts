@@ -23,8 +23,8 @@ if (!Mage::isInstalled()) {
 }
 
 // Only for urls, don't remove this
-$_SERVER['SCRIPT_NAME'] = str_replace(basename(__FILE__), 'index.php', (string) $_SERVER['SCRIPT_NAME']);
-$_SERVER['SCRIPT_FILENAME'] = str_replace(basename(__FILE__), 'index.php', (string) $_SERVER['SCRIPT_FILENAME']);
+$_SERVER['SCRIPT_NAME'] = str_replace(basename(__FILE__), 'index.php', $_SERVER['SCRIPT_NAME']);
+$_SERVER['SCRIPT_FILENAME'] = str_replace(basename(__FILE__), 'index.php', $_SERVER['SCRIPT_FILENAME']);
 
 try {
     Mage::app('admin')->setUseSessionInUrl(false);

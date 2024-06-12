@@ -1,92 +1,26 @@
 {
     "name": "deheerhoreca/openmage",
-    "description": "A fork of Magento-1 that is accepting bug fixes (backward compatible, drop in replacement for official Magento)",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
-    "type": "magento-core",
+    "type": "project",
     "require": {
         "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
         "aoepeople/aoe_dbretry": "dev-master",
         "aoepeople/aoe_templatehints": "^0.4.4",
         "aschroder/smtp_pro": "dev-dhh-fixes",
-        "aydin-hassan/magento-core-composer-installer": "^2.1",
-        "firegento/debug": "*",
+        "aydin-hassan/magento-core-composer-installer": "^2.1.0",
+        "firegento/debug": "^1.5",
         "michelf/php-markdown": "^2.0",
         "mikehaertl/php-shellcommand": "^1.7",
         "n98/magerun": "^1.97",
         "openmage/magento-lts": "20.5.0",
-        "outcompute/phpinfo": "^1.1",
-        "sabberworm/php-css-parser": "^8.4",
-        "symfony/css-selector": "^5.4",
-        "symfony/var-dumper": "^5.4",
-        "cweagans/composer-patches": "1.7.3"
+        "sabberworm/php-css-parser": "^8.5",
+        "symfony/cache": "^6.4",
+        "symfony/css-selector": "^6.4",
+        "symfony/var-dumper": "^6.4"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-        "friendsofphp/php-cs-fixer": "^3.4",
-        "macopedia/phpstan-magento1": "^1.0.5",
-        "magento-ecg/coding-standard": "^4.5",
-        "openmage/dev-meta-package": "^1.0",
-        "phpcompatibility/php-compatibility": "^9.3",
-        "phpmd/phpmd": "^2.13",
-        "phpstan/phpstan": "^1.9.13",
-        "phpunit/phpunit": "^9.5",
-        "rector/rector": "^1.0",
-        "roave/security-advisories": "dev-latest",
-        "squizlabs/php_codesniffer": "^3.7",
-        "symplify/vendor-patches": "^11.1"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Loek van Gool",
-            "email": "loekvangool@gmail.com"
-        }
-    ],
-    "extra": {
-        "composer-exit-on-patch-failure": true,
-        "enable-patching": true,
-        "magento-core-package-type": "magento-source",
-        "magento-root-dir": ".",
-        "auto-append-gitignore": true
-    },
-    "config": {
-        "process-timeout": 3600,
-        "preferred-install": "dist",
-        "allow-plugins": {
-            "magento-hackathon/magento-composer-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cweagans/composer-patches": true,
-            "aydin-hassan/magento-core-composer-installer": true
-        },
-        "magento-core-deploy" : {
-            "excludes": [
-                ".htaccess",
-                "app/etc/local.xml"
-            ]
-        },
-        "sort-packages": true,
-        "classmap-authoritative": false,
-        "optimize-autoloader": true,
-        "apcu-autoloader": true
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension"
-        },
-        {
-            "type": "composer",
-            "url": "https://packages.firegento.com"
-        }
-    ],
-    "scripts": {
-        "sniffer:php80-errors": "phpcs -n -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "sniffer:php80-all": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+        "ergebnis/composer-normalize": "^2.42",
+        "rector/rector": "^1.1"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
@@ -105,11 +39,65 @@
         "aoepeople/aoe_scheduler": "Advanced cron scheduling management",
         "aschroder/smtp_pro": "Support for sending emails via SMTP",
         "avstudnitz/fast-simple-import": "Imports products and customers from arrays",
+        "colinmollenhour/Perfect_Watermarks": "Replacement for OpenMage's GD2 image adapter with imagemagick",
         "colinmollenhour/cache-backend-redis": "Support for storing OpenMage's cache in Redis",
         "colinmollenhour/magento-redis-session": "Support for storing OpenMage' sessions in Redis",
-        "colinmollenhour/Perfect_Watermarks": "Replacement for OpenMage's GD2 image adapter with imagemagick",
         "fballiano/magento1-image-cleaner": "Identify and remove orphan images",
         "fballiano/openmage-lesti-fpc": "PHP bases Full Page Cache",
         "firegento/logger": "Advanced logging capabilities"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension"
+        },
+        {
+            "type": "composer",
+            "url": "https://packages.firegento.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "aydin-hassan/magento-core-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "ergebnis/composer-normalize": true,
+            "magento-hackathon/magento-composer-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "apcu-autoloader": true,
+        "classmap-authoritative": false,
+        "magento-core-deploy": {
+            "excludes": [
+                ".htaccess",
+                ".htaccess.sample",
+                "README.md",
+                "index.php.sample",
+                "install.php",
+                "php.ini.sample",
+                "RELEASE_NOTES.txt",
+                "app/etc/local.xml",
+                "app/etc/local.xml.template",
+                "CODE_OF_CONDUCT.md",
+                "LICENSE.md",
+                "LICENSE_AFL.txt",
+                ".all-contributorsrc"
+            ]
+        },
+        "optimize-autoloader": true,
+        "process-timeout": 3600,
+        "sort-packages": true
+    },
+    "extra": {
+        "auto-append-gitignore": true,
+        "composer-exit-on-patch-failure": true,
+        "enable-patching": true,
+        "magento-core-package-type": "magento-source",
+        "magento-root-dir": "."
+    },
+    "scripts": {
+        "sniffer:php80-all": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
+        "sniffer:php80-errors": "phpcs -n -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
     }
 }

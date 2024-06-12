@@ -1,6 +1,7 @@
 #
 # SEE: https://github.com/h5bp/server-configs-apache/blob/main/dist/.htaccess
-# THIS FILE INCLUDED AND ONLY READ ***ONCE*** DURING APACHE RESTART
+# THIS FILE CAN BE INCLUDED AND ONLY READ ***ONCE*** DURING APACHE RESTART
+# IF IT'S NAMED .htaccess IT'S INSTEAD READ WITH EVERY REQUEST
 # @SEE: https://prod.deheerhoreca.nl:8443/smb/web/web-server-settings/id/TBD
 # @SEE: https://dev.deheerhoreca.nl:8443/smb/web/web-server-settings/id/6
 #

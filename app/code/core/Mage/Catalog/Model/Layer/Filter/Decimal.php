@@ -160,10 +160,9 @@ class Mage_Catalog_Model_Layer_Filter_Decimal extends Mage_Catalog_Model_Layer_F
     {
         $range = $this->getData('range');
         if (!$range) {
-            $maxValue = $this->getMaxValue();
+            $maxValue = (double) $this->getMaxValue();
             $index = 1;
             do {
-                $maxValue = (double) $maxValue;
                 $range = pow(10, (strlen(floor($maxValue)) - $index));
                 $items = $this->getRangeItemCounts($range);
                 $index++;

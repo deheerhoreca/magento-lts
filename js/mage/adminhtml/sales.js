@@ -902,8 +902,7 @@ AdminOrder.prototype = {
     },
 
     commentFieldChange : function(){
-        /* DHH CORE HACK -- Fix conflicting HTML ID */
-        this.saveData(this.serializeData('order-comment-fieldset'));
+        this.saveData(this.serializeData('order-comment'));
     },
 
     giftmessageFieldsBind : function(container){

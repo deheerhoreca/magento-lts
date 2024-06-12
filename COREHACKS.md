@@ -21,48 +21,52 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `mphp vendor/bin/rector process  --dry-run --config=dev/rector-owncode.php`
 
 ## Core Hacks
-- **app/code/core/Mage/**
+- **/***
+  - `/.htaccess`
+    - Commented lines to fix "Option All not allowed here" errors in production
+    - Other modifications/additions marked by "DHH"
+    - Updated up to: v20.5.0
+  - `/.gitignore`
+    - Updated up to: v20.5.0
+- **/app/Mage.php**
+  - Changed `logException()`
+- **/app/code/core/Mage/**
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
     - Updated up to: v20.5.0
+  - `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
+    - Adding debug info to log
   - **Admin Global Search**: Performance improvements
     - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
     - Updated up to: v20.5.0
-  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php`
-  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php`
-  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php`
+  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php`
+  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php`
+  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php`
     - Changed default sort to `sku`, did not work using `app/local/Mage`
     - Updated up to: v20.5.0
-  - `app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
+  - `/app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
     - Remove ability to change the email address during new order input in admin
-  - `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
+  - `/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
     - Updated up to: v20.5.0
-  - `app/code/core/Mage/Core/Model/Resource/Session.php`
+  - `/app/code/core/Mage/Core/Model/Resource/Session.php`
     - Adding details and logging to session errors
     - Updated up to: v20.5.0
-  - `app/code/core/Mage/Catalog/Model/Category.php`
+  - `/app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
     - Updated up to: v20.5.0
-  - `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
+  - `/app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
     - Printing additional debug info temporarily
     - Updated up to: v20.5.0
 - **app/design/frontend/base/**
-  - `app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
+  - `/app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file
     - Updated up to: v20.5.0
 - **app/code/**`
-  - `app/code/core/Mage/Page/Block/Html/Head.php`
+  - `/app/code/core/Mage/Page/Block/Html/Head.php`
     - Removing some of the unnecessary base URLs from HEAD assets
-- **/***
-  - `.htaccess`
-    - Commented lines to fix "Option All not allowed here" errors in production
-    - Other modifications/additions marked by "DHH"
-    - Updated up to: v20.5.0
-  - `.gitignore`
-    - Updated up to: v20.5.0
 
 ## Core Overrides -- Not Hacks
 - `app/code/local/Mage/*`
