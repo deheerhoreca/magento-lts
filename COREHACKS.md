@@ -30,6 +30,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Updated up to: v20.5.0
 - **/app/Mage.php**
   - Changed `logException()`
+  - Updated up to: v20.5.0
 - **/app/code/core/Mage/**
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
@@ -67,6 +68,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **app/code/**`
   - `/app/code/core/Mage/Page/Block/Html/Head.php`
     - Removing some of the unnecessary base URLs from HEAD assets
+    - Updated up to: v20.5.0
 
 ## Core Overrides -- Not Hacks
 - `app/code/local/Mage/*`
@@ -117,6 +119,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 
 ## ./vendor/ Hacks
 - `vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php`
+  - Updated up to: v20.5.0
 
 ## 3rd Party Hacks
 - **Anowave Sort**
