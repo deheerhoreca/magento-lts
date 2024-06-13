@@ -4,6 +4,7 @@
     "require": {
         "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
+        "aoepeople/aoe_blackholesession": "^1.0",
         "aoepeople/aoe_dbretry": "dev-master",
         "aoepeople/aoe_templatehints": "^0.4.4",
         "aschroder/smtp_pro": "dev-dhh-fixes",
@@ -90,7 +91,7 @@
         "sort-packages": true
     },
     "extra": {
-        "auto-append-gitignore": true,
+        "auto-append-gitignore": false,
         "composer-exit-on-patch-failure": true,
         "enable-patching": true,
         "magento-core-package-type": "magento-source",

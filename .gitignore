@@ -76,8 +76,6 @@ phpstan*.neon
 !phpstan.dist.*.neon
 
 # dev scripts loaded via composer
-/shell/update-copyright.php
-/shell/translations.php
 
 # DDEV
 .ddev/config.yaml
@@ -142,8 +140,14 @@ phpstan*.neon
 # Freshdesk webhook
 /freshdesk-webhook.ndjson
 
+# Don't store generated configurations:
+/etc/*-local.ini
+/*.bak-*
+/_user.ini
+/php.cmd.ini
+
 /.idea
-/.well-known/
+#/.well-known/
 /app/etc/modules/Aschroder_SMTPPro.xml
 /app/code/local/Aschroder/SMTPPro
 /app/design/adminhtml/default/default/template/smtppro
@@ -157,7 +161,7 @@ phpstan*.neon
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/code/community/Cm/Cache/Backend/Redis.php
 
-# Symlinks
+# Symlinks -- Watch out to not ignore core hacks
 /app/etc/modules/Aoe_DbRetry.xml
 /app/code/community/Aoe/DbRetry
 /app/etc/modules/Aoe_TemplateHints.xml
@@ -176,11 +180,5 @@ phpstan*.neon
 /lib/FireGento/FirePHP
 /firegento.php
 /skin/adminhtml/default/default/firegento/debug
-/lib/Credis
-
-/etc/*-local.ini
-/*.bak-*
-
-# Don't store generated PHP configurations:
-/_user.ini
-/php.cmd.ini
+/app/code/community/Aoe/BlackHoleSession
+/app/etc/modules/Aoe_BlackHoleSession.xml
