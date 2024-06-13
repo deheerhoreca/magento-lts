@@ -92,8 +92,8 @@ phpstan*.neon
 .DS_Store
 ._.DS_Store
 ._*
-/sitemap_*.xml
-/google_shopping_*.xml*
+/sitemap_watdachtjezelf*.xml
+/google_shopping_vijfbatmansymbol.*
 /bridge_*.php
 /google*.html
 /BingSiteAuth.xml
