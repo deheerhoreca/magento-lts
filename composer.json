@@ -81,8 +81,9 @@
                 "app/etc/local.xml",
                 "app/etc/local.xml.template",
                 "CODE_OF_CONDUCT.md",
-                "LICENSE.md",
+                "LICENSE.txt",
                 "LICENSE_AFL.txt",
+                "robots.txt.sample",
                 ".all-contributorsrc"
             ]
         },
