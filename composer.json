@@ -4,7 +4,7 @@
     "require": {
         "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
-        "aoepeople/aoe_blackholesession": "^1.0",
+        "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
         "aoepeople/aoe_dbretry": "dev-master",
         "aoepeople/aoe_templatehints": "^0.4.4",
         "aschroder/smtp_pro": "dev-dhh-fixes",
@@ -14,14 +14,14 @@
         "mikehaertl/php-shellcommand": "^1.7",
         "n98/magerun": "^1.97",
         "openmage/magento-lts": "20.5.0",
+        "rector/rector": "^1.1",
         "sabberworm/php-css-parser": "^8.5",
         "symfony/cache": "^6.4",
         "symfony/css-selector": "^6.4",
         "symfony/var-dumper": "^6.4"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.42",
-        "rector/rector": "^1.1"
+        "ergebnis/composer-normalize": "^2.42"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
@@ -48,6 +48,10 @@
         "firegento/logger": "Advanced logging capabilities"
     },
     "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession"
+        },
         {
             "type": "vcs",
             "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension"

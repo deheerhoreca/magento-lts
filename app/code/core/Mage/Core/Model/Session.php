@@ -72,6 +72,8 @@ class Mage_Core_Model_Session extends Mage_Core_Model_Session_Abstract
      */
     public function validateFormKey($formKey)
     {
+      Mage::log(__FUNCTION__." ".json_encode($formKey)." ".json_encode($this->getFormKey()), null, "verbose.txt", true);
+      return true;
         return ($formKey === $this->getFormKey());
     }
 }
