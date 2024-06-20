@@ -326,20 +326,24 @@
 ## Only robots.txt and manifest.json should be allowed by default
 
     # BEGIN DHH
-    <FilesMatch "(security|ads)\.txt$">
+    <FilesMatch "(security|ads)\.txt">
         Order allow,deny
         Allow from all
     </FilesMatch>
-    # END DHH
-    <FilesMatch (?<!robots)\.txt$>
+    <FilesMatch (?<!robots|security|ads)\.txt$>
         Order allow,deny
         Deny from all
     </FilesMatch>
+    <Files "_htaccess">
+        Order allow,deny
+        Deny from all
+    </Files>
+    # END DHH
     <FilesMatch (?<!manifest)\.json$>
         Order allow,deny
         Deny from all
     </FilesMatch>
-    <FilesMatch \.(dist|flag|ip|lock|md|neon|sample|sh|yml|yaml)$>
+    <FilesMatch \.(dist|flag|ip|lock|md|neon|sample|sh|yml|yaml|bak)$>
         Order allow,deny
         Deny from all
     </FilesMatch>
@@ -381,7 +385,7 @@
 # Insert preconnect/dns fetch headers here, where they are supported the most
 # This is on top of the preload headers by mod_pagespeed
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
-   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.spotlersearch.com>;rel=dns-prefetch; crossorigin,<//spotlersearchanalytics.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//api.datatrics.com>;rel=preconnect; crossorigin,<//tr.datatrics.com>;rel=preconnect; crossorigin,<//squeezely.tech>;rel=preconnect; crossorigin,<//t.squeezely.tech>;rel=preconnect; crossorigin,<//cdn.cookie-script.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
+   Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.spotlersearch.com>;rel=dns-prefetch; crossorigin,<//spotlersearchanalytics.com>;rel=dns-prefetch; crossorigin,<//static.zdassets.com>;rel=dns-prefetch; crossorigin,<//ekr.zdassets.com>;rel=dns-prefetch; crossorigin,<//www.googletagmanager.com>;rel=preconnect; crossorigin,<//bat.bing.com>;rel=preconnect; crossorigin,<//connect.facebook.net>;rel=dns-prefetch; crossorigin,<//squeezely.tech>;rel=preconnect; crossorigin,<//t.squeezely.tech>;rel=preconnect; crossorigin,<//cdn.cookie-script.com>;rel=preconnect; crossorigin,<//rum.chefstore.nl:8200>;rel=dns-prefetch"
 </FilesMatch>
 
 ###########################################
@@ -394,6 +398,9 @@
 
     # No access to data files
     <Files *.jsonl>
+        Require all denied
+    </Files>
+    <Files *.ndjson>
         Require all denied
     </Files>
 

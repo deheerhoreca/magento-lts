@@ -37,7 +37,9 @@ class Varien_Autoload
 
         // Allow APC to be disabled externally by explicitly setting Varien_Autoload::$useAPC = FALSE;
         if (self::$useAPC === null) {
-            self::$useAPC = extension_loaded('apc') && ini_get('apc.enabled');
+            // DHH CORE HACK
+            self::$useAPC = extension_loaded('apcu') && ini_get('apc.enabled');
+            // self::$useAPC = extension_loaded('apc') && ini_get('apc.enabled');
         }
 
         self::$cacheKey = self::CACHE_KEY_PREFIX . "_" . md5(self::$_BP);
@@ -173,7 +175,7 @@ class Varien_Autoload
     {
 
         if (self::isApcUsed()) {
-            $value = apc_fetch(self::getCacheKey());
+            $value = apcu_fetch(self::getCacheKey());
             if ($value !== false) {
                 self::setCache($value);
             }
@@ -274,11 +276,12 @@ class Varien_Autoload
         if (self::$_numberOfFilesAddedToCache > 0) {
             if (self::isApcUsed()) {
                 if (PHP_SAPI != 'cli') {
-                    apc_store(self::getCacheKey(), self::$_cache, 0);
+                    apcu_store(self::getCacheKey(), self::$_cache, 0);
                 }
             } elseif (is_dir_writeable(dirname(self::getCacheFilePath()))) {
                 $fileContent = serialize(self::$_cache);
                 $tmpFile = tempnam(sys_get_temp_dir(), 'aoe_classpathcache');
+                Mage::log($tmpFile, Zend_Log::DEBUG, "verbose.txt", true);
                 if (file_put_contents($tmpFile, $fileContent)) {
                     if (@rename($tmpFile, self::getCacheFilePath())) {
                         @chmod(self::getCacheFilePath(), 0664);

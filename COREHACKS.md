@@ -31,7 +31,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **/app/Mage.php**
   - Changed `logException()`
   - Updated up to: v20.5.0
-- **/app/code/core/Mage/**
+- **/app/code/core/**
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
@@ -61,13 +61,14 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `/app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
     - Printing additional debug info temporarily
     - Updated up to: v20.5.0
+  - `/app/code/core/Mage/Page/Block/Html/Head.php`
+    - Removing some of the unnecessary base URLs from HEAD assets
+    - Updated up to: v20.5.0
+  - `/app/code/community/Varien/Autoload.php`
+    - Support APCu for Aoe ClassPathCache
 - **app/design/frontend/base/**
   - `/app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file
-    - Updated up to: v20.5.0
-- **app/code/**`
-  - `/app/code/core/Mage/Page/Block/Html/Head.php`
-    - Removing some of the unnecessary base URLs from HEAD assets
     - Updated up to: v20.5.0
 
 ## Core Overrides -- Not Hacks
