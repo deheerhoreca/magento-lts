@@ -7,11 +7,21 @@
 <?php
 $order_id             = $this->getOrderId();
 $_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
+$grand_total          = $_order->getGrandTotal() ?? null;
 $shipping_total       = $_order->getShippingAmount();
 $tax_info             = $_order->getFullTaxInfo();
 $tax_total            = $tax_info[0]["amount"] ?? null;
-$total_no_shipping    = ($grand_total - $shipping_total);
 $discount_offered     = json_encode(!(empty($_order->getCouponCode())));
+$grand_total_ex_vat   = null;
+$order_email          = $_order->getCustomerEmail();
+
+if(is_numeric($grand_total)) {
+  $total_no_shipping = ($grand_total - $shipping_total);
+}
+
+if(is_numeric($grand_total)) {
+  $grand_total_ex_vat = $grand_total / 1.21;
+}
 ?>
 
 <style>
@@ -34,35 +44,35 @@ $discount_offered     = json_encode(!(empty($_order->getCouponCode())));
 
     <?php if ($this->getOrderId()):?>
       <?php if ($this->getCanViewOrder()) :?>
-        <li><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></li>
+        <li><?=$this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId())))?></li>
       <?php else :?>
-        <li><strong><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></strong></p>
+        <li><strong><?=$this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId()))?></strong></p>
       <?php endif;?>
-        <li>Je krijgt een e-mail met je orderbevestiging. Natuurlijk sturen wij ook order updates daarnaartoe</li>
+        <li>Je krijgt een e-mail op <span class="strong" id="customer_email"><?=$order_email?></span> met je orderbevestiging, en we houden je op de hoogte. Vragen? Reply, of mail naar service@chefstore.nl</li>
       <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
         <li>
-          <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
-          <?php echo $this->getChildHtml() ?>
+          <?=$this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl())?>
+          <?=$this->getChildHtml()?>
         </li>
       <?php endif;?>
     <?php endif;?>
 
-    <?php if ($this->getAgreementRefId()): ?>
-      <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+    <?php if ($this->getAgreementRefId()):?>
+      <p><?=$this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
     <?php endif;?>
 
     <?php if ($profiles = $this->getRecurringProfiles()):?>
-      <p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+      <p><?=$this->__('Your recurring payment profiles:');?></p>
       <ul class="disc">
         <?php foreach($profiles as $profile):?>
           <?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
-          <li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+          <li><?=$this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
         <?php endforeach;?>
       </ul>
     <?php endif;?>
     </ol>
 
-    <button type="button" style="margin: 2em auto;" class="center button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Continue Shopping')) ?>" onclick="window.location='<?php echo $this->getUrl() ?>'">
+    <button type="button" style="margin: 2em auto;" class="center button" title="<?=Mage::helper('core')->quoteEscape($this->__('Continue Shopping'))?>" onclick="window.location='<?=$this->getUrl()?>'">
       Naar Chefstore.nl
     </button>
 
@@ -72,7 +82,7 @@ $discount_offered     = json_encode(!(empty($_order->getCouponCode())));
 <?php /* Clickcease.com Conversion tracking */ ?>
 
 <script type="module">
-  ccConVal = 0;
+  var ccConVal = <?=json_encode($grand_total_ex_vat)?>;
   var script = document.createElement("script");
   script.async = true;
   script.src = '//www.clickcease.com/monitor/cccontrack.js';
@@ -80,18 +90,6 @@ $discount_offered     = json_encode(!(empty($_order->getCouponCode())));
   elem.appendChild(script);
 </script>
 
-<?php
-
-/* Bing Conversion tracking */
-
-$order_id             = $this->getOrderId();
-$_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
-$grand_total          = $_order->getGrandTotal() ?? null;
-$grand_total_ex_vat   = null;
-if(is_numeric($grand_total)) {
-  $grand_total_ex_vat = $grand_total / 1.21;
-}
-?>
 <script type="module">
   window.uetq = window.uetq || [];
   window.uetq.push('event', '', {'revenue_value': <?=$grand_total_ex_vat?>, 'currency': 'EUR'});
@@ -100,7 +98,7 @@ if(is_numeric($grand_total)) {
   if(window.location.hostname == "www.chefstore.nl") {
     _paq.push(['trackEcommerceOrder', '<?=$order_id?>', <?=$grand_total_ex_vat?>, <?=$total_no_shipping?>, <?=$tax_total?>, <?=$shipping_total?>, <?=$discount_offered?>]);
     <?php
-    // This already happens ealier, probably not needed
+    // This already happens earlier, probably not needed
     // _paq.push(['trackPageView']);
     ?>
   }

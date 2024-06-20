@@ -19,7 +19,6 @@ $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 $maintenanceFile = 'maintenance.flag';
 $maintenanceIpFile = 'maintenance.ip';
 
-
 require MAGENTO_ROOT . '/app/bootstrap.php';
 require_once $mageFilename;
 
