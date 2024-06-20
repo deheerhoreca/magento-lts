@@ -7,5 +7,5 @@
 59   23  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-logrotate.sh                             1>>${OLOG} 2>>${TERR}
 29   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-rebuild-cache.sh                         1>>${OLOG} 2>>${TERR}
 30   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-reindexer.sh                             1>>${OLOG} 2>>${TERR}
-00   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/sooqr.sh                                      1>>${OLOG} 2>>${TERR}
+00   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-sooqr.sh                                 1>>${OLOG} 2>>${TERR}
 #00   22  *  *  0    cd ~/httpdocs/deheerhoreca-magento; mphp -c php.cmd.ini shell/resave_all_products.php 1>>${OLOG} 2>>${TERR}
