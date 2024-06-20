@@ -281,7 +281,6 @@ class Varien_Autoload
             } elseif (is_dir_writeable(dirname(self::getCacheFilePath()))) {
                 $fileContent = serialize(self::$_cache);
                 $tmpFile = tempnam(sys_get_temp_dir(), 'aoe_classpathcache');
-                Mage::log($tmpFile, Zend_Log::DEBUG, "verbose.txt", true);
                 if (file_put_contents($tmpFile, $fileContent)) {
                     if (@rename($tmpFile, self::getCacheFilePath())) {
                         @chmod(self::getCacheFilePath(), 0664);
