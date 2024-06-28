@@ -146,7 +146,8 @@ phpstan*.neon
 /_user.ini
 /php.cmd.ini
 
-/.idea
+/protected/
+/.idea/
 #/.well-known/
 /app/etc/modules/Aschroder_SMTPPro.xml
 /app/code/local/Aschroder/SMTPPro

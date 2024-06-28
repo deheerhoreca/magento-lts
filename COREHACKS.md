@@ -194,6 +194,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Noble AdminOrderGrid**
   - `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid.php`
     - Abusing `shipping_method` column for `tm_field5`
+    - Adding a 6 month default filter
 - **Mestrona Forward to Configurable**
   - `app/code/community/Mestrona/ForwardToConfigurable/Model/Observer.php`
 - **Amasty Base**

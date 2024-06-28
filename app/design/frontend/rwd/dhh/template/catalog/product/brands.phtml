@@ -2,7 +2,7 @@
 $attribute_code = "manufacturer";
 $_attribute     = Mage::getSingleton("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attribute_code);
 $manufacturers  = $_attribute->getSource()->getAllOptions(false);
-$ignored_values = ["N.v.t."];
+$ignored_values = ["N.v.t.", "Throne"];
 $counts         = count_skus_per_attribute($attribute_code);
 
 usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
@@ -53,19 +53,14 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
   <?php
   foreach($manufacturers as $manufacturer) {
     
-    $label        = $manufacturer['label'];
+    $label = $manufacturer['label'];
     
-    if(in_array($label, $ignored_values, true) === true) {
+    if(in_array($label, $ignored_values, true)) {
       continue;
     }
     
-    if(isset($counts[$label])) {
-      $n = $counts[$label];
-    } elseif(sizeof($counts) > 0) {
-      $n = 0;
-    } else {
-      $n = countProductsPerBrand($manufacturer["value"]);
-    }
+    // $n = $counts[$label] ?? countProductsPerBrand($manufacturer["value"]);
+    $n = $counts[$label] ?? 0;
     
     if($n < 1) {
       continue;
@@ -113,18 +108,18 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
     if($img_html !== "") {
       ?>
       <li class="scale-3">
-        <a data-slug="<?php echo $brand_slug; ?>" href="<?php echo $shop_link; ?>" title="<?php echo $label_enc; ?>" alt="Alle producten van <?php echo $label_enc; ?>">
-          <?php echo $img_html; ?>
-          <div class=strong><?php echo $label ?></div>
+        <a data-slug="<?=$brand_slug?>" href="<?=$shop_link?>" title="<?=$label_enc?>" alt="Alle producten van <?=$label_enc?>">
+          <?=$img_html?>
+          <div class=strong><?=$label?></div>
         </a>
       </li>
       <?php
     } else {
       ?>
       <li class="scale-3">
-        <a href="<?php echo $shop_link; ?>">
+        <a href="<?=$shop_link?>">
           <div class="image-placeholder"></div>
-          <div class=strong><?php echo $label ?></div>
+          <div class="strong"><?=$label?></div>
         </a>
       </li>
       <?php
@@ -135,12 +130,12 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
 <?php
 
 function count_skus_per_attribute($attribute_code) {
-  $query = "SELECT {$attribute_code}_value, count(*) as n FROM `catalog_product_flat_1` WHERE eol_value != 'Ja' GROUP BY {$attribute_code}_value order by n DESC";
-  $resource = Mage::getSingleton('core/resource');
+  $query          = "SELECT {$attribute_code}_value, count(*) as n FROM `catalog_product_flat_1` WHERE eol_value != 'Ja' GROUP BY {$attribute_code}_value";
+  $resource       = Mage::getSingleton('core/resource');
   $readConnection = $resource->getConnection('core_read');
-  $results = $readConnection->fetchAll($query);
+  $results        = $readConnection->fetchAll($query);
+  $counts         = [];
   
-  $counts = [];
   foreach($results as $result) {
     $counts[$result["{$attribute_code}_value"]] = (int) $result["n"];
   }
@@ -148,6 +143,7 @@ function count_skus_per_attribute($attribute_code) {
   return $counts;
 }
 
+// Bad idea (slow)
 function countProductsPerBrand($brand_id) {
   global $attribute_code;
   try {

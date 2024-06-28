@@ -25,7 +25,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
         $locale = Mage::app()->getLocale()->getLocaleCode();
         $this->setDefaultFilter([
           "created_at"  => [
-            "from"        => new Zend_Date($from, null, $locale),
+            "from"        => Mage::helper("core")->formatDate($from),
             "locale"      => $locale,
             "orig_from"   => Mage::helper("core")->formatDate($from),
             "datetime"    => true,
