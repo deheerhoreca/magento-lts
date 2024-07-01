@@ -58,6 +58,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `/app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
     - Updated up to: v20.5.0
+  - `/app/code/core/Mage/Customer/Model/Customer.php`
+    - Overriding auto-generated password length and used chars
   - `/app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
     - Printing additional debug info temporarily
     - Updated up to: v20.5.0

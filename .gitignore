@@ -92,6 +92,8 @@ phpstan*.neon
 ._*
 /sitemap_watdachtjezelf*.xml
 /google_shopping_vijfbatmansymbol.*
+/protected/*.xml
+/protected/*.zip
 /bridge_*.php
 /google*.html
 /BingSiteAuth.xml
@@ -146,7 +148,6 @@ phpstan*.neon
 /_user.ini
 /php.cmd.ini
 
-/protected/
 /.idea/
 #/.well-known/
 /app/etc/modules/Aschroder_SMTPPro.xml

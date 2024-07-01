@@ -1,0 +1,6 @@
+<FilesMatch \.(xml|zip|php)$>
+  AuthType Basic
+  AuthName "Authentication Required"
+  AuthUserFile /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/protected/.htpasswd
+  Require valid-user
+</FilesMatch>

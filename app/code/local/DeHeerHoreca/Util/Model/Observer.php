@@ -21,7 +21,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     }
     // After clearing opcache, there are a few requests that strangely make it past extension_loaded() but still don't have Elastic APM available, adding another check:
     if(!class_exists("\Elastic\Apm\ElasticApm")) {
-      Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
+      Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::NOTICE, "system.log", true);
       return;
     }
     
