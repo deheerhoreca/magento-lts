@@ -61,6 +61,11 @@
             "url": "https://packages.firegento.com"
         }
     ],
+    "autoload": {
+      "files": [
+        "lib/Chefstore/Utils.php"
+      ]
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {

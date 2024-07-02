@@ -140,7 +140,10 @@ if($carct && ($category === "category")) {
 
 /* SUBCATEGORIES */
 
-$forwarded_filters  = ["brand", "brand_series"];
+$forwarded_filters  = [
+  // "brand",
+  "brand_series",
+];
 $show_sub_tiles     = true;
 
 // Hide subcategories if filters are active, except for some attributes where we forward them to the subcategory
