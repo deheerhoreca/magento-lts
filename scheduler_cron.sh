@@ -178,6 +178,9 @@ if [ -n "${EXCLUDE_JOBS}" ]; then
 fi
 
 # Run the job in the foreground
-# echo "${PHP_BIN} -c /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/php.cmd.ini ${SCHEDULER} --action cron --mode ${MODE} ${OPTIONS}"
+# DHH CORE HACK
 # "${PHP_BIN}" "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS} # DHH CORE HACK
-"${PHP_BIN}" -c /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/php.cmd.ini "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS}
+
+COMMAND="${PHP_BIN} -c ../php.cmd.ini ${SCHEDULER} --action cron --mode ${MODE} ${OPTIONS}"
+# echo ${COMMAND}
+${COMMAND}

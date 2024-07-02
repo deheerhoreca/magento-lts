@@ -534,10 +534,12 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
         if ($minPasswordLength > $length) {
             $length = $minPasswordLength;
         }
+        $length = max($length, 10); // DHH CORE HACK
         $chars = Mage_Core_Helper_Data::CHARS_PASSWORD_LOWERS
             . Mage_Core_Helper_Data::CHARS_PASSWORD_UPPERS
             . Mage_Core_Helper_Data::CHARS_PASSWORD_DIGITS
-            . Mage_Core_Helper_Data::CHARS_PASSWORD_SPECIALS;
+            // . Mage_Core_Helper_Data::CHARS_PASSWORD_SPECIALS // DHH CORE HACK
+            ; // DHH CORE HACK
         return Mage::helper('core')->getRandomString($length, $chars);
     }
 

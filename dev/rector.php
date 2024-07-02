@@ -29,7 +29,7 @@ return static function (Rector\Config\RectorConfig $rectorConfig): void {
   ]);
   
   $rectorConfig->skip([
-    __DIR__ . "/../vendor",
+    // __DIR__ . "/../vendor",
     __DIR__ . "/../media",
     __DIR__ . "/../tool_*.php",
     __DIR__ . "/../lib/TM/Geoip/vendor",
@@ -61,18 +61,18 @@ return static function (Rector\Config\RectorConfig $rectorConfig): void {
   // Define sets of rules
   $rectorConfig->sets([
     // SetList::PHP_81,
-    LevelSetList::UP_TO_PHP_81,
+    // LevelSetList::UP_TO_PHP_81,
     // LevelSetList::UP_TO_PHP_82,
-    // LevelSetList::UP_TO_PHP_83,
-    // SetList::DEAD_CODE,
-    // SetList::CODE_QUALITY,
-    // SetList::CODING_STYLE,
-    // SetList::STRICT_BOOLEANS,
-    // SetList::GMAGICK_TO_IMAGICK,
-    // SetList::NAMING,
-    // SetList::PRIVATIZATION,
-    // SetList::EARLY_RETURN,
-    // SetList::INSTANCEOF,
+    LevelSetList::UP_TO_PHP_83,
+    SetList::DEAD_CODE,
+    SetList::CODE_QUALITY,
+    SetList::CODING_STYLE,
+    SetList::STRICT_BOOLEANS,
+    SetList::GMAGICK_TO_IMAGICK,
+    SetList::NAMING,
+    SetList::PRIVATIZATION,
+    SetList::EARLY_RETURN,
+    SetList::INSTANCEOF,
     
     // Broken:
     // SetList::TYPE_DECLARATION,

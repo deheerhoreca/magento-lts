@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "800d27816d6cbe23262940770b85b2c4",
+    "content-hash": "f0ecc2acf5e95f08570f751ac0dd07ac",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -62,16 +62,16 @@
         },
         {
             "name": "amnuts/opcache-gui",
-            "version": "3.5.4",
+            "version": "3.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amnuts/opcache-gui.git",
-                "reference": "f3a8fe44c0a4c69dd69b9999d68f9097ee362946"
+                "reference": "4ad9866c4bb5a96fd8a40353afb15f6934f4919b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amnuts/opcache-gui/zipball/f3a8fe44c0a4c69dd69b9999d68f9097ee362946",
-                "reference": "f3a8fe44c0a4c69dd69b9999d68f9097ee362946",
+                "url": "https://api.github.com/repos/amnuts/opcache-gui/zipball/4ad9866c4bb5a96fd8a40353afb15f6934f4919b",
+                "reference": "4ad9866c4bb5a96fd8a40353afb15f6934f4919b",
                 "shasum": ""
             },
             "require": {
@@ -112,7 +112,7 @@
             "support": {
                 "email": "andy@amnuts.com",
                 "issues": "https://github.com/amnuts/opcache-gui/issues",
-                "source": "https://github.com/amnuts/opcache-gui/tree/3.5.4"
+                "source": "https://github.com/amnuts/opcache-gui/tree/3.5.5"
             },
             "funding": [
                 {
@@ -120,27 +120,26 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-25T19:09:56+00:00"
+            "time": "2024-06-23T13:01:33+00:00"
         },
         {
             "name": "aoepeople/aoe_blackholesession",
-            "version": "1.0.0",
+            "version": "dev-dhh-fixes",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AOEpeople/Aoe_BlackHoleSession.git",
-                "reference": "8317963f5f34a3cf4197b6a54c41130d3e8e08a2"
+                "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession.git",
+                "reference": "56a225ffc7c406e2b84b67df98c40195d9af74b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AOEpeople/Aoe_BlackHoleSession/zipball/8317963f5f34a3cf4197b6a54c41130d3e8e08a2",
-                "reference": "8317963f5f34a3cf4197b6a54c41130d3e8e08a2",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_BlackHoleSession/zipball/56a225ffc7c406e2b84b67df98c40195d9af74b9",
+                "reference": "56a225ffc7c406e2b84b67df98c40195d9af74b9",
                 "shasum": ""
             },
             "require": {
                 "magento-hackathon/magento-composer-installer": "*"
             },
             "type": "magento-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPLv3"
             ],
@@ -153,10 +152,9 @@
             "description": "Will skip creating a real session for bots",
             "homepage": "https://github.com/AOEpeople/Aoe_BlackHoleSession",
             "support": {
-                "issues": "https://github.com/AOEpeople/Aoe_BlackHoleSession/issues",
-                "source": "https://github.com/AOEpeople/Aoe_BlackHoleSession/tree/1.0.0"
+                "source": "https://github.com/deheerhoreca/Aoe_BlackHoleSession/tree/dhh-fixes"
             },
-            "time": "2016-08-15T07:44:31+00:00"
+            "time": "2024-06-14T11:35:23+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
@@ -1788,6 +1786,64 @@
             "time": "2024-03-03T02:14:58+00:00"
         },
         {
+            "name": "phpstan/phpstan",
+            "version": "1.11.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "9100a76ce8015b9aa7125b9171ae3a76887b6c82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9100a76ce8015b9aa7125b9171ae3a76887b6c82",
+                "reference": "9100a76ce8015b9aa7125b9171ae3a76887b6c82",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-06T12:19:22+00:00"
+        },
+        {
             "name": "psr/cache",
             "version": "3.0.0",
             "source": {
@@ -2067,6 +2123,65 @@
                 "source": "https://github.com/bobthecow/psysh/tree/v0.12.4"
             },
             "time": "2024-06-10T01:18:23+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "c930cdb21294f10955ddfc31b720971e8333943d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/c930cdb21294f10955ddfc31b720971e8333943d",
+                "reference": "c930cdb21294f10955ddfc31b720971e8333943d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0",
+                "phpstan/phpstan": "^1.11"
+            },
+            "conflict": {
+                "rector/rector-doctrine": "*",
+                "rector/rector-downgrade-php": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-symfony": "*"
+            },
+            "suggest": {
+                "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Instant Upgrade and Automated Refactoring of any PHP code",
+            "keywords": [
+                "automation",
+                "dev",
+                "migration",
+                "refactoring"
+            ],
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/1.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-21T07:51:17+00:00"
         },
         {
             "name": "rmccue/requests",
@@ -4276,128 +4391,12 @@
                 }
             ],
             "time": "2020-07-06T04:49:32+00:00"
-        },
-        {
-            "name": "phpstan/phpstan",
-            "version": "1.11.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9100a76ce8015b9aa7125b9171ae3a76887b6c82"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9100a76ce8015b9aa7125b9171ae3a76887b6c82",
-                "reference": "9100a76ce8015b9aa7125b9171ae3a76887b6c82",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2|^8.0"
-            },
-            "conflict": {
-                "phpstan/phpstan-shim": "*"
-            },
-            "bin": [
-                "phpstan",
-                "phpstan.phar"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHPStan - PHP Static Analysis Tool",
-            "keywords": [
-                "dev",
-                "static analysis"
-            ],
-            "support": {
-                "docs": "https://phpstan.org/user-guide/getting-started",
-                "forum": "https://github.com/phpstan/phpstan/discussions",
-                "issues": "https://github.com/phpstan/phpstan/issues",
-                "security": "https://github.com/phpstan/phpstan/security/policy",
-                "source": "https://github.com/phpstan/phpstan-src"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/phpstan",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-06-06T12:19:22+00:00"
-        },
-        {
-            "name": "rector/rector",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rectorphp/rector.git",
-                "reference": "556509e2dcf527369892b7d411379c4a02f31859"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/556509e2dcf527369892b7d411379c4a02f31859",
-                "reference": "556509e2dcf527369892b7d411379c4a02f31859",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.11"
-            },
-            "conflict": {
-                "rector/rector-doctrine": "*",
-                "rector/rector-downgrade-php": "*",
-                "rector/rector-phpunit": "*",
-                "rector/rector-symfony": "*"
-            },
-            "suggest": {
-                "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
-            },
-            "bin": [
-                "bin/rector"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Instant Upgrade and Automated Refactoring of any PHP code",
-            "keywords": [
-                "automation",
-                "dev",
-                "migration",
-                "refactoring"
-            ],
-            "support": {
-                "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.1.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-05-18T09:40:27+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "aoepeople/aoe_blackholesession": 20,
         "aoepeople/aoe_dbretry": 20,
         "aschroder/smtp_pro": 20
     },

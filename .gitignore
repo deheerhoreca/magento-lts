@@ -92,6 +92,8 @@ phpstan*.neon
 ._*
 /sitemap_watdachtjezelf*.xml
 /google_shopping_vijfbatmansymbol.*
+/protected/*.xml
+/protected/*.zip
 /bridge_*.php
 /google*.html
 /BingSiteAuth.xml
@@ -146,7 +148,7 @@ phpstan*.neon
 /_user.ini
 /php.cmd.ini
 
-/.idea
+/.idea/
 #/.well-known/
 /app/etc/modules/Aschroder_SMTPPro.xml
 /app/code/local/Aschroder/SMTPPro
@@ -161,24 +163,10 @@ phpstan*.neon
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/code/community/Cm/Cache/Backend/Redis.php
 
-# Symlinks -- Watch out to not ignore core hacks
-/app/etc/modules/Aoe_DbRetry.xml
-/app/code/community/Aoe/DbRetry
-/app/etc/modules/Aoe_TemplateHints.xml
-/app/code/community/Aoe/TemplateHints
-/skin/frontend/base/default/aoe_templatehints
-/app/code/community/FireGento/Debug
-/app/design/adminhtml/default/default/layout/firegento_debug.xml
-/app/design/adminhtml/default/default/template/firegento/debug
-/app/etc/modules/FireGento_Debug.xml
-/app/locale/de_CH/FireGento_Debug.csv
-/app/locale/de_DE/FireGento_Debug.csv
-/app/locale/en_US/FireGento_Debug.csv
-/app/locale/fr_FR/FireGento_Debug.csv
-/lib/FireGento/ChromePhp
-/lib/FireGento/FireLogger
-/lib/FireGento/FirePHP
-/firegento.php
-/skin/adminhtml/default/default/firegento/debug
+##################################################
+# Symlinks -- Watch out to not ignore core hacks!!
+##################################################
+
+# Should be ignored (running from our own fork)
 /app/code/community/Aoe/BlackHoleSession
 /app/etc/modules/Aoe_BlackHoleSession.xml

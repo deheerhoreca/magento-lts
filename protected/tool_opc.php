@@ -14,4 +14,4 @@ if(!isset($_SERVER["REMOTE_ADDR"]) || !in_array($_SERVER["REMOTE_ADDR"], $dhh_ip
   exit;
 }
 
-require_once __DIR__."/vendor/amnuts/opcache-gui/index.php";
+require_once __DIR__."/../vendor/amnuts/opcache-gui/index.php";

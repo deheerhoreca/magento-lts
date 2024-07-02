@@ -31,7 +31,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **/app/Mage.php**
   - Changed `logException()`
   - Updated up to: v20.5.0
-- **/app/code/core/Mage/**
+- **/app/code/core/**
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
@@ -59,16 +59,19 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `/app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
     - Updated up to: v20.5.0
+  - `/app/code/core/Mage/Customer/Model/Customer.php`
+    - Overriding auto-generated password length and used chars
   - `/app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
     - Printing additional debug info temporarily
     - Updated up to: v20.5.0
+  - `/app/code/core/Mage/Page/Block/Html/Head.php`
+    - Removing some of the unnecessary base URLs from HEAD assets
+    - Updated up to: v20.5.0
+  - `/app/code/community/Varien/Autoload.php`
+    - Support APCu for Aoe ClassPathCache
 - **app/design/frontend/base/**
   - `/app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file
-    - Updated up to: v20.5.0
-- **app/code/**`
-  - `/app/code/core/Mage/Page/Block/Html/Head.php`
-    - Removing some of the unnecessary base URLs from HEAD assets
     - Updated up to: v20.5.0
 
 ## Core Overrides -- Not Hacks
@@ -194,6 +197,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Noble AdminOrderGrid**
   - `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid.php`
     - Abusing `shipping_method` column for `tm_field5`
+    - Adding a 6 month default filter
 - **Mestrona Forward to Configurable**
   - `app/code/community/Mestrona/ForwardToConfigurable/Model/Observer.php`
 - **Amasty Base**
