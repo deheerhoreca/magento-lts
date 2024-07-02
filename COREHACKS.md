@@ -38,6 +38,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Updated up to: v20.5.0
   - `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
     - Adding debug info to log
+    - Updated up to: v20.5.0
   - **Admin Global Search**: Performance improvements
     - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
