@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <profitmetrics module="profitmetrics">
+            <label>Profitmetrics</label>
+            <sort_order>200</sort_order>
+        </profitmetrics>
+    </tabs>
+    <sections>
+        <profitmetrics translate="label" module="profitmetrics">
+            <label>Settings</label>
+            <tab>profitmetrics</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <settings translate="label">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_store>1</show_in_store>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                        <headless_mode translate="label comment">
+                            <label>Activate Headless Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[Please contact <a href="mailto:support@profitmetrics.io">support@profitmetrics.io</a> in order to request a tracking script to be generated for you. The script must be implemented on all pages.]]></comment>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </headless_mode>
+                        <store_public_id translate="label comment">
+                            <label>Store Public Id</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Store ID from ProfitMetrics]]></comment>
+                        </store_public_id>
+                        <cron_frequency translate="label comment">
+                            <label>Feed Generation Cron Frequency</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>profitmetrics/system_config_source_cron_frequency</source_model>
+                            <backend_model>profitmetrics/system_config_backend_cron_frequency</backend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cron_frequency>
+                        <time translate="label">
+                            <label>Feed Generation Start Time</label>
+                            <frontend_type>time</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </time>
+                        <configurable_price_source>
+                            <label>Source for configurable products price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>profitmetrics/system_config_source_configurable_product_price</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[There are two options for configurable prices determination: 1) get from the configurable product 2) retrieve the minimal price of related simple options.]]></comment>
+                        </configurable_price_source>
+                        <buy_price_attribute translate="label comment">
+                            <label>Price Buy Attribute Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Attribute code for price_buy attribute. There is a default attribute, created by this module, its code is 'price_buy'. In the case of different attribute, please look for the attribute in Magento admin (Catalog > Attributes > Manage Attributes and specify the attribute code]]></comment>
+                        </buy_price_attribute>
+                        <buy_price_from_configurable translate="label comment">
+                            <label>Use Buy Price from Configurable Parent</label>
+                            <comment>If enabled, buy price attribute in the configurable parent will be preferably use in feed generated. If none specified - then simple product buy_price value will be used in product feed.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </buy_price_from_configurable>
+                        <secret_code translate="label comment">
+                            <label>Secret Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                <model>profitmetrics/adminhtml_feedFilename_secretCode</model>
+                            </comment>
+                        </secret_code>
+                        <feed_filename>
+                            <label>Feed Filename</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                <model>profitmetrics/adminhtml_feedFilename_commentText</model>
+                            </comment>
+                        </feed_filename>
+                        <tracking_code_js translate="label comment">
+                            <label>Google Analytics 4</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tracking_code_js>
+                        <weight_multiplier>
+                            <label>Weight Multiplier (grams)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Specify multiplier for order weight conversion to grams</comment>
+                            <validate>required-entry</validate>
+                        </weight_multiplier>
+                        <conversion_booster_snippet translate="label comment">
+                            <label>Conversion Booster Snippet</label>
+                            <comment><![CDATA[Please obtain this JSON snippet from ProfitMetrics]]></comment>
+                            <backend_model>profitmetrics/system_config_backend_conversion_booster_snippet</backend_model>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </conversion_booster_snippet>
+                        <google_ads_conversion_id translate="label comment">
+                            <label>Google Ads Conversion ID</label>
+                            <comment><![CDATA[This will add the Google Ads tracking script to all your pages. Remember to add the full Conversion ID: AW-123456]]></comment>
+                            <backend_model>profitmetrics/system_config_backend_googleAdsConversionId</backend_model>
+                            <validate>validate-google-ads-conversion-id</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>120</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </google_ads_conversion_id>
+                    </fields>
+                </settings>
+                <order_cron_settings translate="label">
+                    <label>Orders Data Sending Cron Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>110</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <order_statuses>
+                            <label>Order Status To Send</label>
+                            <comment>Order Statuses to send to ProfitMetrics</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_statuses>
+                        <cron_frequency translate="label comment">
+                            <label>Orders Send Cron Frequency</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>profitmetrics/system_config_source_cron_frequency</source_model>
+                            <backend_model>profitmetrics/system_config_backend_cron_frequency</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_frequency>
+                        <start_time translate="label">
+                            <label>Orders Send Start Time</label>
+                            <frontend_type>time</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                <model>profitmetrics/adminhtml_ordersSend_commentText</model>
+                            </comment>
+                        </start_time>
+                    </fields>
+                </order_cron_settings>
+                <advanced translate="label">
+                    <label>Advanced Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>120</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <order_send_days translate="label comment">
+                            <label>Order lookback window (days)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Set the maximum amount of days from order create date, before an order is excluded from the order data sync (leave empty for no date limit)</comment>
+                        </order_send_days>
+                        <tracking_data_lifetime translate="label comment">
+                            <label>Tracking data lifetime, days</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Visitor data will be cleared from the database if they are not updated for more than the specified number of days.</comment>
+                        </tracking_data_lifetime>
+                        <installation_date translate="label comment">
+                            <label>Module Installation Date</label>
+                            <frontend_model>profitmetrics/system_config_form_field_readonlyField</frontend_model>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </installation_date>
+                    </fields>
+                </advanced>
+            </groups>
+        </profitmetrics>
+    </sections>
+</config>

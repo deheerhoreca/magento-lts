@@ -1,0 +1,4 @@
+Contact: mailto:it+security@chefstore.nl
+Expires: 2029-12-31T22:59:00.000Z
+Preferred-Languages: en, nl
+Canonical: https://www.chefstore.nl/.well-known/security.txt

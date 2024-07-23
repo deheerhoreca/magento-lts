@@ -1,0 +1,31 @@
+<?php
+
+/** @var Profitmetrics_MagentoIntegration_Block_Conversion_Booster_Snippet $this */
+/** @var Profitmetrics_MagentoIntegration_Helper_Data $profitmetricsHelper */
+$profitmetricsHelper = Mage::helper('profitmetrics');
+?>
+<?php if ($this->isConversionBoosterConfigured() && !$profitmetricsHelper->getIsHeadlessModeActive()): ?>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        if (typeof gtag !== 'function') {
+            function gtag() { dataLayer.push(arguments); }
+        }
+        <?php foreach ($this->getProfitSendToSnippets() as $sendTo) : ?>
+        gtag('event', 'pm_grossprofit', {
+            send_to: "<?= $sendTo ?>",
+            value: <?= $this->getOrderValueModifier() * $this->getOrderGrandTotal() ?>,
+            currency: "<?= $this->getOrderCurrency() ?>",
+            transaction_id: "<?= $this->getTransactionId() ?>"
+        });
+        <?php endforeach; ?>
+
+        <?php foreach ($this->getRevenueSendToSnippets() as $sendTo) : ?>
+        gtag('event', 'pm_revenue', {
+            send_to: "<?= $sendTo ?>",
+            value: <?= $this->getOrderGrandTotal() ?>,
+            currency: "<?= $this->getOrderCurrency() ?>",
+            transaction_id: "<?= $this->getTransactionId() ?>"
+        });
+        <?php endforeach; ?>
+    </script>
+<?php endif; ?>
