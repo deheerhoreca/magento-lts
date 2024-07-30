@@ -265,11 +265,13 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
   - Patched up to master on 2023-01-17 (commit 445557b)
-- **aHeadWorks AutoRelated**
+- **aHeadWorks**
   - `app/code/local/AW/Autorelated/Block/Blocks/Abstract.php`
     - Performance improvements
   - `app/code/local/AW/Autorelated/controllers/Adminhtml/Awautorelated/BlocksgridController.php`
     - Fixing security issue
+  - `app/code/local/AW/All/Model/Cron.php`
+    - Nullifying the cronjob since it leads to XML errors
 - **FireGento DynamicCategory**
   - `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
     - Adding exception check and logging to prevent fatal errors
