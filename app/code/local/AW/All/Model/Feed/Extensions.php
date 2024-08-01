@@ -129,6 +129,9 @@ class AW_All_Model_Feed_Extensions extends AW_All_Model_Feed_Abstract
      */
     public function check()
     {
+      // DHH CORE HACK -- Stopped working, so killing this bs
+      return;
+      
         if (!(Mage::app()->loadCache('aw_all_extensions_feed'))
             || (time() - Mage::app()->loadCache('aw_all_extensions_feed_lastcheck')) >
             Mage::getStoreConfig('awall/feed/check_frequency')
