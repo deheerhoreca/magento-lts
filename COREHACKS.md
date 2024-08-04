@@ -123,6 +123,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 ## ./vendor/ Hacks
 - `vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php`
   - Updated up to: v20.5.0
+  - Unignored in git
 
 ## 3rd Party Hacks
 - **Anowave Sort**

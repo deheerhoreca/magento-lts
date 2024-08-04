@@ -117,10 +117,8 @@ phpstan*.neon
 
 /.modman/*/.git
 
-# This is tricky to get right
-# Frist whitelist /media, cancelling openmage's ignores above
+# First unignore /media/*, then add blacklisted items again
 !/media/*
-# ..and then just list the blacklist
 /media/amfeed
 /media/cache
 /media/attachment
@@ -132,17 +130,26 @@ phpstan*.neon
 /media/tmp/
 /media/dhh/
 
-# Store Manager
+# UNIGNORE COREACKED FILES
+
+!/app/code/community/Cm/RedisSession/Model/Session.php
+!/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
+
+# STORE MANAGER
+
 /tmp
 
-# Biller webhook
+# BILLER WEBHOOK
+
 /biller-webhook-errors.jsonl
 /biller-webhook.jsonl
 
-# Freshdesk webhook
+# FRESHDESK WEBHOOK
+
 /freshdesk-webhook.ndjson
 
-# Don't store generated configurations:
+# GENERATED CONFIGURATIONS
+
 /etc/*-local.ini
 /*.bak-*
 /_user.ini
