@@ -279,6 +279,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Pay.nl**
   - `app/code/community/Pay/Payment/controllers/OrderController.php`
     - Adding log to critical transaction status updates
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php`
+    - Add some logging to capture Pay API communcation
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/`
+    - Removed 3rd party `.gitignore` and added the dir to our repo to record the corehack above
 - **firegento/firegento-logger**
   - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
   - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432
