@@ -127,8 +127,9 @@ phpstan*.neon
 /media/sooqr
 /media/qquoteadv
 /media/catalog
-/media/tmp/
-/media/dhh/
+/media/tmp
+/media/dhh
+/media/wysiwyg/*
 
 # UNIGNORE COREACKED FILES
 
