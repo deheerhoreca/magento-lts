@@ -6,7 +6,7 @@ namespace Curl;
 
 class Curl extends BaseCurl
 {
-    const VERSION = '9.18.2';
+    const VERSION = '9.19.2';
     const DEFAULT_TIMEOUT = 30;
 
     public $curl = null;
@@ -699,20 +699,20 @@ class Curl extends BaseCurl
      * @param        $url
      * @param        $data
      * @param        $follow_303_with_post
-     *                                     If true, will cause 303 redirections to be followed using a POST request
-     *                                     (default: false).
-     *                                     Notes:
-     *                                     - Redirections are only followed if the CURLOPT_FOLLOWLOCATION option is set
-     *                                     to true.
-     *                                     - According to the HTTP specs (see [1]), a 303 redirection should be followed
-     *                                     using the GET method. 301 and 302 must not.
-     *                                     - In order to force a 303 redirection to be performed using the same method,
-     *                                     the underlying cURL object must be set in a special state (the
-     *                                     CURLOPT_CUSTOMREQUEST option must be set to the method to use after the
-     *                                     redirection). Due to a limitation of the cURL extension of PHP < 5.5.11 ([2],
-     *                                     [3]), it is not possible to reset this option. Using these PHP engines, it is
-     *                                     therefore impossible to restore this behavior on an existing php-curl-class
-     *                                     Curl object.
+     *                                    If true, will cause 303 redirections to be followed using a POST request
+     *                                    (default: false).
+     *                                    Notes:
+     *                                    - Redirections are only followed if the CURLOPT_FOLLOWLOCATION option is set
+     *                                    to true.
+     *                                    - According to the HTTP specs (see [1]), a 303 redirection should be followed
+     *                                    using the GET method. 301 and 302 must not.
+     *                                    - In order to force a 303 redirection to be performed using the same method,
+     *                                    the underlying cURL object must be set in a special state (the
+     *                                    CURLOPT_CUSTOMREQUEST option must be set to the method to use after the
+     *                                    redirection). Due to a limitation of the cURL extension of PHP < 5.5.11 ([2],
+     *                                    [3]), it is not possible to reset this option. Using these PHP engines, it is
+     *                                    therefore impossible to restore this behavior on an existing php-curl-class
+     *                                    Curl object.
      * @return mixed Returns the value provided by exec.
      *
      * [1] https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.2
@@ -1307,7 +1307,7 @@ class Curl extends BaseCurl
             }
 
             echo
-                'Sent an HTTP '   . $request_method . ' request to "' . $request_url . '".' . "\n" .
+                'Sent an HTTP ' . $request_method . ' request to "' . $request_url . '".' . "\n" .
                 'Request contained ' . $request_headers_count . ' ' . (
                     $request_headers_count === 1 ? 'header:' : 'headers:'
                 ) . "\n";
@@ -1692,8 +1692,18 @@ class Curl extends BaseCurl
         return $curl_const_by_code;
     }
 
-    public function displayCurlOptionValue($option, $value)
+    /**
+     * Display Curl Option Value.
+     *
+     * @param $option
+     * @param $value
+     */
+    public function displayCurlOptionValue($option, $value = null)
     {
+        if ($value === null) {
+            $value = $this->getOpt($option);
+        }
+
         if (isset($this->curlOptionCodeConstants[$option])) {
             echo $this->curlOptionCodeConstants[$option] . ':';
         } else {
@@ -1701,7 +1711,7 @@ class Curl extends BaseCurl
         }
 
         if (is_string($value)) {
-            echo ' ' . $value . "\n";
+            echo ' "' . $value . '"' . "\n";
         } elseif (is_int($value)) {
             echo ' ' . $value;
 
@@ -1980,7 +1990,7 @@ class Curl extends BaseCurl
     private function parseResponseHeaders($raw_response_headers)
     {
         $response_header_array = explode("\r\n\r\n", $raw_response_headers);
-        $response_header  = '';
+        $response_header = '';
         for ($i = count($response_header_array) - 1; $i >= 0; $i--) {
             if (isset($response_header_array[$i]) && stripos($response_header_array[$i], 'HTTP/') === 0) {
                 $response_header = $response_header_array[$i];
