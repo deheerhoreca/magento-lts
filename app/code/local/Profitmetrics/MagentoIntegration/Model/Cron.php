@@ -52,13 +52,16 @@ class Profitmetrics_MagentoIntegration_Model_Cron
                 $productItem = $channel->addChild('item');
                 $productItem->addChild('g:id', $product->getId(), 'g');
                 $productItem->addChild('title', $helper->escapeHtml($product->getName()));
-                $productItem->addChild('g:image_link', $this->getProductImageUrl($product, $store), 'g');
                 $productItem->addChild('link', $product->getProductUrl());
                 $productItem->addChild('g:price', $this->getProductPrice($product, $store), 'g');
                 $productItem->addChild('pm:price_currency', $storeCurrency, 'pm');
                 $productItem->addChild('pm:price_buy', $this->getBuyPrice($product, $store, $buyPriceAttribute), 'pm');
                 $productItem->addChild('pm:price_buy_currency', $priceBuyCurrency, 'pm');
                 $productItem->addChild('pm:num_stock', (int)$product->getQty(), 'pm');
+
+                if ($productImageUrl = $this->getProductImageUrl($product, $store)) {
+                    $productItem->addChild('g:image_link', $productImageUrl, 'g');
+                }
             }
 
             $feedFileName = $helper->getFeedFileName();
@@ -125,13 +128,13 @@ class Profitmetrics_MagentoIntegration_Model_Cron
      */
     public function getProductImageUrl(Mage_Catalog_Model_Product $product, Mage_Core_Model_Store $store)
     {
-        if ($product->getImage() && 'no_selection' !== $product->getImage()) {
-            return $url = $this->getProductImageUrlOrEmpty($product);
-        }
-
-        $this->loadConfigurableDataBySimpleProductId($store);
-
         try {
+            if ($product->getImage() && 'no_selection' !== $product->getImage()) {
+                return $url = $this->getProductImageUrlOrEmpty($product);
+            }
+
+            $this->loadConfigurableDataBySimpleProductId($store);
+
             return isset($this->_configurableProductsDataBySimpleProductIds[$product->getId()]['image'])
                 ? $this->_configurableProductsDataBySimpleProductIds[$product->getId()]['image']
                 : $this->getProductImageUrlOrEmpty($product);
@@ -373,7 +376,9 @@ class Profitmetrics_MagentoIntegration_Model_Cron
                 'entity_id=entity_id',
                 new Zend_Db_Expr('{{table}}.attribute_id = ' . $priceBuyAttribute->getId().' AND {{table}}.store_id = 0'),
                 'left'
-            );
+            )
+            ->setOrder('entity_id', 'DESC')
+        ;
 
         $productsCount = $productsCollection->getSize();
         $pagesCount = ceil($productsCount / self::PRODUCT_BATCH_SIZE);

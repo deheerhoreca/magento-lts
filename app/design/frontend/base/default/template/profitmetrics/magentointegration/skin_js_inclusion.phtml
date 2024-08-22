@@ -11,6 +11,7 @@ $profitmetricsHelper = Mage::helper('profitmetrics');
     };
 
     window._pm_TPTrackEndpoint = '<?php echo Mage::getUrl('profitmetrics/tracking/index', array('_secure' => true)); ?>';
+    window.blockScriptBeforeConsent = <?php echo $profitmetricsHelper->getBlockScriptBeforeContent() ? 'true' : 'false'; ?>;
 
     includeJsFile('<?php echo $this->getSkinUrl($this->getData('skin_js'), array('_secure' => true)); ?>?v=1');
 </script>
@@ -25,10 +26,41 @@ $profitmetricsHelper = Mage::helper('profitmetrics');
         <!-- ProfitMetrics Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $this->escapeUrl($googleAdsConversionId) ?>"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '<?= $this->jsQuoteEscape($googleAdsConversionId) ?>');
+            function formatAWID(awID) {
+                // Ensure the AW ID is in the correct format
+                if (!awID.startsWith('AW-')) {
+                    awID = 'AW-' + awID.replace(/^AW/, '');
+                }
+                return awID;
+            }
+
+            const inputAWID = '<?= $this->quoteEscape($googleAdsConversionId) ?>';
+            const awID = formatAWID(inputAWID);
+
+            function _pm_executeAWConfig() {
+                const scriptExists = document.querySelector('script[src^=\"https://www.googletagmanager.com/gtag/js?id=\"]');
+
+                if (scriptExists && window.dataLayer) {
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag('config', awID);
+                } else {
+                    const script = document.createElement('script');
+                    script.async = true;
+                    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + awID;
+                    document.head.appendChild(script);
+                    script.addEventListener('load', function() {
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() {
+                            dataLayer.push(arguments);
+                        }
+                        gtag('js', new Date());
+                        gtag('config', awID);
+                    });
+                }
+            }
+            _pm_executeAWConfig();
         </script>
     <?php endif; ?>
 <?php endif; ?>

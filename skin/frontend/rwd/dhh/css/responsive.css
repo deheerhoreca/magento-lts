@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
 @media all {
-  @charset "UTF-8";
 
   :root {
     --color-blue: #3aacd9;
@@ -187,6 +186,7 @@
     cursor: pointer;
     -webkit-appearance: button;
     -moz-appearance: button;
+    appearance: button;
   }
 
   button[disabled],
@@ -203,6 +203,7 @@
   input[type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
   }
 
   button::-moz-focus-inner,
@@ -245,6 +246,7 @@
   input[type="search"] {
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
   }
 
   @-ms-viewport {
@@ -526,6 +528,7 @@
 
   .ellipsed-2 {
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .border-1 {
@@ -2561,9 +2564,11 @@
     width: auto;
   }
 
+  /*
   .col2-left-layout .col-main {
-    /* float: right; */
+    float: right;
   }
+  */
 
   .col2-set {
     width: 100%;
@@ -4940,6 +4945,7 @@
     -o-transition: opacity 300ms linear 0;
     transition: opacity 300ms linear .2s;
     -webkit-transition-delay: 0;
+    transition-delay: 0;
   }
 
   .opc.opc-firststep-login .section#opc-login .step-title .number {
@@ -4948,6 +4954,7 @@
     -o-transition: width 80ms linear 0;
     transition: width 80ms linear .2s;
     -webkit-transition-delay: 0;
+    transition-delay: 0;
   }
 
   .opc.opc-firststep-login .section#opc-login .step-title h2 {
@@ -4956,6 +4963,7 @@
     -o-transition: margin-left 80ms linear 0;
     transition: margin-left 80ms linear .2s;
     -webkit-transition-delay: 0;
+    transition-delay: 0;
   }
 
   body:not(.opc-has-progressed-from-login) .opc-block-progress-step-login,
@@ -4981,11 +4989,12 @@
     margin: 5px 0;
   }
 
-  .sp-methods label a {
-    /* float: right; */
-    /* margin-top: 6px; */
-    /* margin-left: 10px; */
+  /* .sp-methods label a {
+    float: right;
+    margin-top: 6px;
+    margin-left: 10px;
   }
+  */
 
   .gift-messages-form .item h5 {
     font-weight: 700;
@@ -5274,6 +5283,7 @@
     clear: both;
     margin-left: -3px;
     -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     zoom: 1;
   }
 
@@ -9362,6 +9372,7 @@
     cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
   }
 
   #btncaguest,
@@ -9383,6 +9394,7 @@
     cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
   }
 
   #btncaguest,
@@ -10768,6 +10780,7 @@
     cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
   }
 
   div.minicart-wrapper .product-name a,
@@ -12167,9 +12180,9 @@
     margin-right: 4.54545%;
   }
 
-  .crosssell .products-grid > li:nth-child(odd) {
-    /* clear: left; */
-  }
+  /* .crosssell .products-grid > li:nth-child(odd) {
+    clear: left;
+  } */
 
   .crosssell .products-grid > li:nth-child(even) {
     margin-right: 0;
@@ -13441,10 +13454,10 @@
     float: left;
   }
 
-  .cart-table .cart-footer-actions .btn-update,
+  /* .cart-table .cart-footer-actions .btn-update,
   .cart-table .cart-footer-actions span.or {
-    /* display: none; */
-  }
+    display: none;
+  } */
 
   .display-both-prices .cart-table td[data-rwd-tax-label]:before {
     content: attr(data-rwd-tax-label) ":";

@@ -170,6 +170,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Add `set_time_limit()` call
   - `app/code/community/Magmodules/Sooqr/Block/Search.php`
     - Update script URL because the module is dead
+- **Profitmetrics**
+  - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
+    - Reduce the list of orders that we send to PM
+    - Replace the ID in the PM feed to match what PM expects
 - **TM Core**
   - `app/code/community/TM/Core/Model/Notification/Feed.php`
     - Disable admin notifications
