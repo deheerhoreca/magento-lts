@@ -90,8 +90,6 @@ if(function_exists('_displayRegularPriceDuringSpecialPrice') === false) {
 
 if(function_exists('_displayDiscount') === false) {
   function _displayDiscount($_discount_abs_formatted, $discount_perc, $id) {
-    // return "<div class='discount-amount'><span class='price-label'>Je bespaart&nbsp;</span><span class='price green strong' id='discount-amount-{$id}'><!--sse-->{$_discount_abs_formatted}<!--/sse--></span></div>";
-    
     return "<div class='productdetail__discount'>Bespaar <span class=strong><!--sse-->{$_discount_abs_formatted}<!--/sse--></span></div>";
   }
 }

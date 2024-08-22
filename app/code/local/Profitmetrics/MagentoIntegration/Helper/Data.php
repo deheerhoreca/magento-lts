@@ -11,6 +11,7 @@ class Profitmetrics_MagentoIntegration_Helper_Data extends Mage_Core_Helper_Abst
     const XML_PATH_TRACKING_CODE_JS = 'profitmetrics/settings/tracking_code_js';
     const XML_PATH_WEIGHT_MULTIPLIER = 'profitmetrics/settings/weight_multiplier';
     const XML_PATH_GOOGLE_ADS_CONVERSION_ID = 'profitmetrics/settings/google_ads_conversion_id';
+    const XML_PATH_BLOCK_SCRIPT_BEFORE_CONSENT = 'profitmetrics/settings/block_script_before_consent';
     const XML_PATH_ORDER_STATUSES_TO_SEND = 'profitmetrics/order_cron_settings/order_statuses';
     const XML_PATH_ORDER_SEND_DAYS = 'profitmetrics/advanced/order_send_days';
     const XML_PATH_TRACKING_DATA_LIFETIME = 'profitmetrics/advanced/tracking_data_lifetime';
@@ -183,5 +184,10 @@ class Profitmetrics_MagentoIntegration_Helper_Data extends Mage_Core_Helper_Abst
         }
 
         return $this->moduleInstallationDate;
+    }
+
+    public function getBlockScriptBeforeContent()
+    {
+        return (int) Mage::getStoreConfig(self::XML_PATH_BLOCK_SCRIPT_BEFORE_CONSENT);
     }
 }

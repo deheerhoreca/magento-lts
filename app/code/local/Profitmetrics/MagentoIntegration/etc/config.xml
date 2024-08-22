@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Profitmetrics_MagentoIntegration>
-            <version>0.0.22</version>
+            <version>0.0.24</version>
         </Profitmetrics_MagentoIntegration>
     </modules>
 
@@ -209,6 +209,7 @@
                 <buy_price_from_configurable>0</buy_price_from_configurable>
                 <weight_multiplier>1</weight_multiplier>
                 <conversion_booster_snippet></conversion_booster_snippet>
+                <block_script_before_consent>0</block_script_before_consent>
             </settings>
             <order_cron_settings>
                 <order_statuses>pending,processing,complete</order_statuses>

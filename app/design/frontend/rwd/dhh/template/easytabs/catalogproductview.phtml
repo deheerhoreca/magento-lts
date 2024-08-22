@@ -6,6 +6,8 @@
  * @see Mage_Review_Block_Product_View
  */
 
+ use Carbon\CarbonImmutable;
+
 $_product                   = $this->getProduct();
 $_helper                    = $this->helper("catalog/output");
 $sku                        = _get_product_attribute($_product, "sku");
@@ -62,7 +64,7 @@ $subdescription         = _get_product_attribute($_product, "sub_description");
 $product_title_short    = _get_product_attribute($_product, "name_short");
 $pvideo                 = _get_product_attribute($_product, "product_video");
 $tagline                = _get_product_attribute($_product, "tagline");
-$supplier_name          = _get_product_attribute($_product, "supplier");
+$supplier_name          = (string) _get_product_attribute($_product, "supplier");
 $_price                 = $_product->getPrice(); // @todo is this used?
 $_finalPrice            = $_product->getFinalPrice();
 $product_description_md = trim((string) _get_product_attribute($_product, "description"));
@@ -255,7 +257,7 @@ if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
   $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-  if(empty($external_documents_json) === true || in_array(strtolower((string) $supplier_name), $suppliers_external_docs_preferred) === false) {
+  if(empty($external_documents_json) === true || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();
@@ -533,7 +535,7 @@ if($i < $max_highlighted_attributes) {
         $text = (int) ($text * 1000)." W";
       } else {
         $text = number_format($text, 1, ",", ".");
-        $text = str_replace(",0", null, $text);
+        $text = str_replace(",0", "", $text);
         $text = "{$text} kW";
       }
     } else {
@@ -580,7 +582,7 @@ if($i < $max_highlighted_attributes) {
   $text   = (float) _get_product_attribute($_product, $code);
   if($text > 0) {
     $text = number_format($text, 1, ",", ".");
-    $text = str_replace(",0", null, $text);
+    $text = str_replace(",0", "", $text);
     if(!str_contains(strtolower($text), "V")) {
       $text = "{$text} kW";
     }
@@ -964,7 +966,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo $this->getChildHtml("addto");
                   ?>
                 </div>
-
+                
                 <?php                
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
@@ -1014,6 +1016,24 @@ if($stock_data["overall_stock_status"] === "backorder"
                     echo $qs_content;
                   }
                   echo "</ul>";
+                  
+                  if(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-09-01 00:00:00")) {
+                    ?>
+                    <div class="card mx-auto p-2 mx-3">
+                    <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                    <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Hendi Coupon Code">
+                      <div class="card-body">
+
+                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
+                        <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
+                        <p class="card-text mt-2 fw-light"><em>Geldig t/m 31 augustus 2024</em></p>
+                      </div>
+                    </div>
+                    <?php
+                  } else {
+                    echo "<span style='display:none;'>{$supplier_name}</span>";
+                  }
+
                   echo $this->getChildHtml("addtocart");
                   echo $this->getChildHtml("addto");
                   ?>
