@@ -37,7 +37,22 @@ class Pay_Payment_Block_Form_Abstract extends Mage_Payment_Block_Form
         $mark = new $markClass;
         $mark->setTemplate('pay/payment/mark.phtml')
             ->setPaymentMethodImageSrc('https://static.pay.nl/payment_profiles/' . $iconSize . '/' . $this->paymentMethodId . '.png')
-            ->setPaymentMethodName($this->paymentMethodName);
+            ->setPaymentMethodName($this->paymentMethodName)
+            ->setIconSizeWidth('')
+            ->setIconSizeHeight('');
+
+        $differentIconArray = array(1813, 3144, 3183, 3192, 2856);
+
+        if (in_array($this->paymentMethodId, $differentIconArray)) {
+            $iconSize = explode("x", $iconSize);
+
+            $mark->setTemplate('pay/payment/mark.phtml')
+                ->setPaymentMethodImageSrc('https://static.pay.nl/payment_profiles/100x100/' . $this->paymentMethodId . '.svg')
+                ->setPaymentMethodName($this->paymentMethodName)
+                ->setIconSizeWidth($iconSize[0] + 10)
+                ->setIconSizeHeight($iconSize[1]);
+        }
+
 
         $fee = $this->getPaymentCharge();
 
