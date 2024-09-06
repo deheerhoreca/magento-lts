@@ -22,19 +22,19 @@ sleep 1
 (shopt -s nocaseglob; 
   for f in ${PATTERN}
     do
-      TYPE=$(identify -format '%[colorspace]' $f);
+      TYPE=$(identify -format '%[colorspace]' "${f}");
       if [ "$TYPE" == "CMYK" ]
       then
-        echo "${TYPE} ${f} NOK"
+        echo "${TYPE} '${f}' NOK"
         if [ "${DRYRUN}" == false ]; then
-          convert $f -colorspace RGB ./$
+          convert "${f}" -colorspace RGB ./$
           # convert $f -colorspace CMYK -colorspace RGB $f # uncomment this line and comment previous line if previous line is not working.
-          echo "$f -colorspace RGB";
+          echo "'${f}' -colorspace RGB";
         else
-          echo "convert $f -colorspace RGB";
+          echo "convert '${f}' -colorspace RGB";
         fi
       else
-        # echo "${TYPE} ${f} OK"
+        # echo "${TYPE} '${f}' OK"
         printf "."
       fi
     done

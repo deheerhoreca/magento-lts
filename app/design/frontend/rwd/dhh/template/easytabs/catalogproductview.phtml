@@ -967,7 +967,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   ?>
                 </div>
                 
-                <?php                
+                <?php
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
                   if(empty($eol_text) !== true) {
@@ -1017,7 +1017,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   }
                   echo "</ul>";
                   
-                  if(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-09-01 00:00:00")) {
+                  if(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-09-16 00:00:00")) {
                     ?>
                     <div class="card mx-auto p-2 mx-3">
                     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
@@ -1026,7 +1026,7 @@ if($stock_data["overall_stock_status"] === "backorder"
 
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em>Geldig t/m 31 augustus 2024</em></p>
+                        <p class="card-text mt-2 fw-light"><em>Geldig t/m 15 september 2024</em></p>
                       </div>
                     </div>
                     <?php
@@ -1063,8 +1063,8 @@ if($stock_data["overall_stock_status"] === "backorder"
                   </div>
                 </div>
                 <?php
-              }              
-              echo $this->getChildHtml("sharing");              
+              }
+              echo $this->getChildHtml("sharing");
               // if($_product->getFinalPrice() < 150 && strtolower($supplier_name) === "gastronoble") {
                 // echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
               // }
