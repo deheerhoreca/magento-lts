@@ -15,6 +15,8 @@ echo "--------------------------------------------------------------------"
 
 cm
 
+mkdir -p ~/tmp
+
 cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.log
 ~/httpdocs/deheerhoreca-magento/var/log/*.jsonl
@@ -33,6 +35,6 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate /tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-intel.tmp -v
+/usr/sbin/logrotate /tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate.deheerhoreca-intel.tmp -v
 
 rm /tmp/logrotate-deheerhoreca-magento.conf
