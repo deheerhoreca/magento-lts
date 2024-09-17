@@ -179,3 +179,17 @@ phpstan*.neon
 # Should be ignored (running from our own fork)
 /app/code/community/Aoe/BlackHoleSession
 /app/etc/modules/Aoe_BlackHoleSession.xml
+
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudio
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+#########################################
+# END DHH ADDITIONS
+#########################################

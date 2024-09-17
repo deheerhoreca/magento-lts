@@ -3,7 +3,7 @@
  *    *  *  *  *    ! test -e ~/httpdocs/deheerhoreca-magento/maintenance.flag && cd ~/httpdocs/deheerhoreca-magento && /bin/bash ./scheduler_cron.sh --mode default 1>>${OLOG} 2>>${OERR}
 55   21  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-clean-mysql.sh                           1>>${OLOG} 2>>${OERR}
 30   02  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-clean-redis.sh                           1>>${OLOG} 2>>${OERR}
-00   01  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-download-external-assets.sh              1>>${OLOG} 2>>${OERR}
+00   01  *  *  0    ~/httpdocs/deheerhoreca-magento/shell/cron-download-external-assets.sh              1>>${OLOG} 2>>${OERR}
 59   23  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-logrotate.sh                             1>>${OLOG} 2>>${OERR}
 29   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-rebuild-cache.sh                         1>>${OLOG} 2>>${OERR}
 30   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-reindexer.sh                             1>>${OLOG} 2>>${OERR}
