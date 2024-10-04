@@ -212,7 +212,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    if($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD") {
+    if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
       self::log("Read cache disabled (REQUEST_METHOD): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
@@ -268,7 +268,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    if($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD") {
+    if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
       self::log("Write cache disabled (REQUEST_METHOD): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
