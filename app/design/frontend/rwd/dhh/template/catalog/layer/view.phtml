@@ -4,8 +4,11 @@
  *
  * @see Mage_Catalog_Block_Layer_View
  */
+Varien_Profiler::start("DHH_AMSHOPBY_canShowBlock");
+$canShowBlock = $this->canShowBlock();
+Varien_Profiler::stop("DHH_AMSHOPBY_canShowBlock");
 
-if($this->canShowBlock()) {
+if($canShowBlock) {
   $classes = "block block-layered-nav";
   // $filters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
   // if(!$filters) {
@@ -15,8 +18,13 @@ if($this->canShowBlock()) {
     ?>
     <div class="block-content toggle-content">
       <?php
+      Varien_Profiler::start("DHH_AMSHOPBY_getStateHtml");
       echo $this->getStateHtml();
-      if($this->canShowOptions()) {
+      Varien_Profiler::stop("DHH_AMSHOPBY_getStateHtml");
+      Varien_Profiler::start("DHH_AMSHOPBY_canShowOptions");
+      $canshowoptions = $this->canShowOptions();
+      Varien_Profiler::stop("DHH_AMSHOPBY_canShowOptions");
+      if($canshowoptions) {
 //        <div class="amshopby-all-filters">
         ?>
           <div class="block-title block-subtitle block-subtitle--filter">
@@ -24,6 +32,7 @@ if($this->canShowBlock()) {
           </div>
           <dl id="narrow-by-list" class="d-none d-xl-block">
             <?php
+            Varien_Profiler::start("DHH_AMSHOPBY_FILTER");
             $_filters = $this->getFilters();
             foreach($_filters as $_filter) {
               $sys_name = $_filter->getName();
@@ -32,7 +41,7 @@ if($this->canShowBlock()) {
                 $name = $this->__($sys_name);
 
                 // Special handling of Category filter
-                if($name === "Categorie") {                
+                if($name === "Categorie") {
                   // Don't display this filter if there are no subcategories
                   $name = "Categorie"; // DHH
                   $items = $_filter->getItems();
@@ -52,6 +61,7 @@ if($this->canShowBlock()) {
               }
               Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
             }
+            Varien_Profiler::stop("DHH_AMSHOPBY_FILTER");
             ?>
           </dl>
           <?php /* <script>decorateDataList("narrow-by-list")</script> */ ?>

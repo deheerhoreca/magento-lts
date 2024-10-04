@@ -6,7 +6,7 @@
  */
 /* @var $this Mage_Catalog_Block_Product_List */
 
-Varien_Profiler::start('DHH_PrepareProductList');
+Varien_Profiler::start("DHH_PrepareProductList");
 
 $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
@@ -37,13 +37,13 @@ $media_dir                    = rtrim((string) Mage::getBaseDir(Mage_Core_Model_
 $placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
 
 // Product price block
-// $productBlock                 = $this->getLayout()->createBlock('catalog/product_price');
+// $productBlock                 = $this->getLayout()->createBlock("catalog/product_price");
 
 // Optional static blocks for this category
 $category_block_top_html      = $this->getLayout()->createBlock("cms/block")->setBlockId("category-{$category_id}-top")->toHtml();
 $category_block_bottom_html   = $this->getLayout()->createBlock("cms/block")->setBlockId("category-{$category_id}-bottom")->toHtml();
 
-Varien_Profiler::stop('DHH_PrepareProductList');
+Varien_Profiler::stop("DHH_PrepareProductList");
 
 if($show_products === true) {
   /*
@@ -58,16 +58,19 @@ if($show_products === true) {
    *
    * DHH_ReAddStockItems profiles to single-digit ms delay
    */
-  Varien_Profiler::start('DHH_ReAddStockItems');
+  Varien_Profiler::start("DHH_ReAddStockItems");
   $_productCollection = $this->getLoadedProductCollection();
   $_productCollection->setFlag("require_stock_items", true);
   Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
-  Varien_Profiler::stop('DHH_ReAddStockItems');
+  Varien_Profiler::stop("DHH_ReAddStockItems");
 }
 
 /* CATEGORY HEADER & SEO */
 
 if($carct && ($category === "category")) {
+  
+  Varien_Profiler::start("DHH_CategoryHeader");
+  
   $category_id          = (int) $carct->getId();
   $category_name        = $carct->getName();
   $category_name        = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
@@ -126,19 +129,23 @@ if($carct && ($category === "category")) {
   }
   
   if(empty($category_desc) === false) {
-    echo "<div class='ctdesc' id='ctdesc'>";
+    echo "<div class=\"ctdesc\" id=\"ctdesc\">";
     // Optionally cut off description and show a 'More' button
     if(str_contains((string) $category_desc, "<!--no_more_btn-->") || strlen((string) $category_desc) < 1000) {
-      echo "<div id='cat-text'>{$category_desc}</div>";
+      echo "<div id=\"cat-text\">{$category_desc}</div>";
     } else {
-      echo "<div id='cat-text' class='short'>{$category_desc}</div>";
-      echo "<button id='toggle-cat-text'><i id='cat-btn-arrow' class='fa fa-arrow-down' aria-hidden='true'></i>&nbsp;<span>Lees meer</span></button>";
+      echo "<div id=\"cat-text\" class=\"short\">{$category_desc}</div>";
+      echo "<button id=\"toggle-cat-text\"><i id=\"cat-btn-arrow\" class=\"fa fa-arrow-down\" aria-hidden=\"true\"></i>&nbsp;<span>Lees meer</span></button>";
     }
     echo "</div>".PHP_EOL;
   }
+  
+  Varien_Profiler::stop("DHH_CategoryHeader");
 }
 
 /* SUBCATEGORIES */
+
+Varien_Profiler::start("DHH_Subcategories");
 
 $forwarded_filters  = [
   // "brand",
@@ -147,7 +154,7 @@ $forwarded_filters  = [
 $show_sub_tiles     = true;
 
 // Hide subcategories if filters are active, except for some attributes where we forward them to the subcategory
-if($have_active_filters === true) {
+if($have_active_filters) {
   foreach($active_filters as $active_filter) {
     $show_sub_tiles = true;
     $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
@@ -195,7 +202,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
     // - catalog/product/list.phtml
     // - amasty/amshopby/subcategories.phtml
     
-    echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
+    echo "<ul class=\"grid-shadow-tiles-text\">".PHP_EOL;
     
     foreach($subcategories as $i => $subcategory) {
       if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
@@ -230,8 +237,8 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
         $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
       }
       
-      echo "<li style='max-width: 180px'>";
-      echo "<a href='{$category_url}' title='{$category_name_safe}'>{$img_html}<strong>{$category_name}</strong>";
+      echo "<li style=\"max-width: 180px\">";
+      echo "<a href=\"{$category_url}\" title=\"{$category_name_safe}\">{$img_html}<strong>{$category_name}</strong>";
       echo "</a></li>".PHP_EOL;
     }
     echo "</ul>".PHP_EOL;
@@ -244,270 +251,286 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
 // Optional block category-ID is shown below the category tiles
 echo $category_block_top_html;
 
+Varien_Profiler::stop("DHH_Subcategories");
+
 /* LIST PRODUCTS */
 
-if($show_products === true && $_productCollection->getFirstItem()) {
-  echo "<div class='category-products'>";
-    if($show_toolbar === true) {
-      $toolbar_html = $this->getToolbarHtml();
-      echo "<div class='top_toolbar'>{$toolbar_html}</div>";
-      define("DHH_SORTING_BLOCK_PRINTED", true);
-    }
-    echo "<ul class='products-grid products-grid--max-{$_columnCount}-col'>";
-    $i = 0;
+if($show_products && $_productCollection->getFirstItem()) {
+  
+  Varien_Profiler::start("DHH_ListProducts");
+  
+  echo "<div class=\"category-products\">";
+  
+  if($show_toolbar) {
+    $toolbar_html = $this->getToolbarHtml();
+    echo "<div class=\"top_toolbar\">{$toolbar_html}</div>";
+    define("DHH_SORTING_BLOCK_PRINTED", true);
+  }
+  
+  echo "<ul class=\"products-grid products-grid--max-{$_columnCount}-col\">";
+  $i = 0;
+    
     foreach($_productCollection as $_product) {
-      // $hideQuoteButton = Mage::helper("qquoteadv")->hideQuoteButton($_product);
+      
       $i++;
-      $html = null;
-      $dhh_sku = $_product->getSku();
+      $product_id = $_product->getId();
       
-      $productUrl = false;
-      // If a product is present in multiple categories, we don't want to change that in this view
-      // This function does a best guess
-      // $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
-      if($productUrl === false) {
-        $productUrl = $_product->getProductUrl(); // Fallback
+      $cache_key  = "dhh_listview_product_{$product_id}";
+      
+      $GLOBALS["read_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "dhh_listview_product");
+      if($GLOBALS["read_cache_enabled"]) {
+        if($html = (string) Mage::app()->getCache()->load($cache_key)) {
+          Varien_Profiler::start("DHH_ListProduct_{$product_id}_cached");
+          DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
+          Varien_Profiler::stop("DHH_ListProduct_{$product_id}_cached");
+        } else {
+          DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
+        }
       }
       
-      // @todo fix this? want to show the product link under the current category, and not link to another category
-      // if(_dhh_debug()) {
-        // // printr($category_id);
-        // $_category = Mage::getModel('catalog/category')->load($category_id);
-        // printr(get_class($_category));
-        // if (!$_category instanceof Mage_Catalog_Model_Category) {
-          // echo "bier";
+      if(empty($html)) {
+        Varien_Profiler::start("DHH_ListProduct_{$product_id}_uncached");
+        // $hideQuoteButton = Mage::helper("qquoteadv")->hideQuoteButton($_product);
+        $html = "";
+        $dhh_sku = $_product->getSku();
+        
+        $productUrl = false;
+        // If a product is present in multiple categories, we don't want to change that in this view
+        // This function does a best guess
+        $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
+        if($productUrl === false) {
+          $productUrl = $_product->getProductUrl(); // Fallback
+        }
+        
+        // @todo fix this? want to show the product link under the current category, and not link to another category
+        // if(_dhh_debug()) {
+          // // printr($category_id);
+          // $_category = Mage::getModel("catalog/category")->load($category_id);
+          // printr(get_class($_category));
+          // if (!$_category instanceof Mage_Catalog_Model_Category) {
+            // echo "bier";
+          // }
+          // // printr($_product->getUrlPath($_product, $_category));
         // }
-        // // printr($_product->getUrlPath($_product, $_category));
-      // }
-      
-      $price_html           = $this->getPriceHtml($_product, true); // ListView version
-      //$price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
-      $finalPrice           = (float) $_product->getFinalPrice();
-      
-      $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["context" => "listview"]);
-      
-      $stock_message        = $stock_data["stock_message"];
-      $stock_class          = $stock_data["txtcltcz"];
-      $stock_qty            = $stock_data["stock_qty"];
-      $in_stock             = $stock_data["in_stock"];
-      $backorders           = $stock_data["backorders"];
-      $saleable             = $stock_data["saleable"];
-      $eol                  = $stock_data["eol"];
-      $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
-      $manage_stock         = $stock_data["manage_stock"];
-      $extra_delivery_time  = $stock_data["extra_delivery_time"];
-      $overall_stock_status = $stock_data["overall_stock_status"];
-      $txtstockdate         = $stock_data["txtstockdate"];
-      $levertijd            = $stock_data["levertijd"];
-      
-      $additional_delivery_messages = null;
-      
-      switch($overall_stock_status) {
-        case "in_stock":
-          if($finalPrice >= $freeshipping_from) {
-            $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
-          }
-          break;
-        case "backorder":
-          if($finalPrice >= $freeshipping_from) {
-            $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
-          }
-          $stock_class = "buyblock-usp";
-          break;
-      }
-      
-      // @todo fix weird bug that gives the wrong brand for the first item
-      // $brand               = _get_product_attribute($_product, "manufacturer");
-      $brand                  = $_product->getData("manufacturer_value");
-      
-      $series_or_brand        = _get_product_attribute($_product, "brand_series");
-      if(empty($series_or_brand) || in_array($series_or_brand, ["N.v.t."], true) === true) {
-        $series_or_brand        = $brand;
-      }      
-      $sku_seller_or_mpn      = _get_product_attribute($_product, "mpn");
-      if(empty($sku_seller_or_mpn)) {
-        $sku_seller_or_mpn      = _get_product_attribute($_product, "sku_seller");
-      }
-      $tagline                = _get_product_attribute($_product, "tagline");
-      
-      $usp_options            = [
-        "context"               => "listview",
-        "category_name"         => $category_name ?? null,
-      ];
-      $usps                   = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
-      
-      // Price Block
-      $price_html             = str_replace(",00", ",-", (string) $price_html);
-      $price_html             = str_replace("€", "", $price_html);
-      
-      // Black friday
-      if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
-        $html .= "<span class='bf-banner-list'></span>";
-      } else {
-        // Product label
-        $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
-        if(empty($productlabel) === false) {
-          $html .= "<span class='product-label'>{$productlabel}</span>";
+        
+        $price_html           = $this->getPriceHtml($_product, true); // ListView version
+        //$price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
+        $finalPrice           = (float) $_product->getFinalPrice();
+        
+        $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["context" => "listview"]);
+        
+        $stock_message        = $stock_data["stock_message"];
+        $stock_class          = $stock_data["txtcltcz"];
+        $stock_qty            = $stock_data["stock_qty"];
+        $in_stock             = $stock_data["in_stock"];
+        $backorders           = $stock_data["backorders"];
+        $saleable             = $stock_data["saleable"];
+        $eol                  = $stock_data["eol"];
+        $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
+        $manage_stock         = $stock_data["manage_stock"];
+        $extra_delivery_time  = $stock_data["extra_delivery_time"];
+        $overall_stock_status = $stock_data["overall_stock_status"];
+        $txtstockdate         = $stock_data["txtstockdate"];
+        $levertijd            = $stock_data["levertijd"];
+        
+        $additional_delivery_messages = null;
+        
+        switch($overall_stock_status) {
+          case "in_stock":
+            if($finalPrice >= $freeshipping_from) {
+              $additional_delivery_messages .= "<br><span class=\"buyblock-usp\" style=\"line-height: 1.5em;\"><strong>Gratis</strong> bezorgd</span>";
+            }
+            break;
+          case "backorder":
+            if($finalPrice >= $freeshipping_from) {
+              $additional_delivery_messages .= "<br><span class=\"buyblock-usp\" style=\"line-height: 1.5em;\"><strong>Gratis</strong> bezorgd</span>";
+            }
+            $stock_class = "buyblock-usp";
+            break;
         }
-      }
-      
-      // Package quantity
-      $value = intval(_get_product_attribute($_product, "eenheid"));
-      if($value > 1) {
-        $html .= "<span class='product-label-right white bg-blue border-blue border-1'>{$value} X</span>";
-      }
+        
+        // @todo fix weird bug that gives the wrong brand for the first item
+        // $brand               = _get_product_attribute($_product, "manufacturer");
+        $brand                  = $_product->getData("manufacturer_value");
+        
+        $series_or_brand        = _get_product_attribute($_product, "brand_series");
+        if(empty($series_or_brand) || in_array($series_or_brand, ["N.v.t."], true) === true) {
+          $series_or_brand        = $brand;
+        }      
+        $sku_seller_or_mpn      = _get_product_attribute($_product, "mpn");
+        if(empty($sku_seller_or_mpn)) {
+          $sku_seller_or_mpn      = _get_product_attribute($_product, "sku_seller");
+        }
+        $tagline                = _get_product_attribute($_product, "tagline");
+        
+        $usp_options            = [
+          "context"               => "listview",
+          "category_name"         => $category_name ?? null,
+        ];
+        $usps                   = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
+        
+        // Price Block
+        $price_html             = str_replace(",00", ",-", (string) $price_html);
+        $price_html             = str_replace("€", "", $price_html);
+        
+        // Black friday
+        if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+          $html .= "<span class=\"bf-banner-list\"></span>";
+        } else {
+          // Product label
+          $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
+          if(empty($productlabel) === false) {
+            $html .= "<span class=\"product-label\">{$productlabel}</span>";
+          }
+        }
+        
+        // Package quantity
+        $value = intval(_get_product_attribute($_product, "eenheid"));
+        if($value > 1) {
+          $html .= "<span class=\"product-label-right white bg-blue border-blue border-1\">{$value} X</span>";
+        }
 
-      // Energy rating
-      $value = _get_product_attribute($_product, "energy_efficiency_class_a_g");
-      if(empty($value) === false) {
-        $enclz = "";
-        switch ($value) {
-          case "A":     $enclz = "enrgclz1";  break;
-          case "B":     $enclz = "enrgclz2";  break;
-          case "C":     $enclz = "enrgclz3";  break;
-          case "D":     $enclz = "enrgclz4";  break;
-        }
-        if($enclz !== "") {
-          $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
-        }
-      } else {
-        $value = _get_product_attribute($_product, "energieklasse");
+        // Energy rating
+        $value = _get_product_attribute($_product, "energy_efficiency_class_a_g");
         if(empty($value) === false) {
           $enclz = "";
           switch ($value) {
-            case "A+++":  $enclz = "enrgclz1";  break;
-            case "A++":   $enclz = "enrgclz1";  break;
-            case "A+":    $enclz = "enrgclz1";  break;
             case "A":     $enclz = "enrgclz1";  break;
             case "B":     $enclz = "enrgclz2";  break;
             case "C":     $enclz = "enrgclz3";  break;
+            case "D":     $enclz = "enrgclz4";  break;
           }
           if($enclz !== "") {
-            $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
+            $html .= "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$value}\">{$value}</span>";
+          }
+        } else {
+          $value = _get_product_attribute($_product, "energieklasse");
+          if(empty($value) === false) {
+            $enclz = "";
+            switch ($value) {
+              case "A+++":  $enclz = "enrgclz1";  break;
+              case "A++":   $enclz = "enrgclz1";  break;
+              case "A+":    $enclz = "enrgclz1";  break;
+              case "A":     $enclz = "enrgclz1";  break;
+              case "B":     $enclz = "enrgclz2";  break;
+              case "C":     $enclz = "enrgclz3";  break;
+            }
+            if($enclz !== "") {
+              $html .= "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$value}\">{$value}</span>";
+            }
           }
         }
-      }
+        
+        // Product name
+        $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), "name");
+        
+        // Product thumbnail
+        $thumbnail        = (string) $_product->getThumbnail();
+        if($thumbnail === "" || $thumbnail === "no_selection") {
+          $thumbnail        = "/placeholder/{$placeholder_image}";
+        }
+        $image_url        = "{$media_url}/catalog/product{$thumbnail}";
+        $image_path       = "{$media_dir}/catalog/product{$thumbnail}";
+        $img_html         = "";
+        
+        if(is_file($image_path)) {
+          $col_width        = 200;
+          $cdn_img_options  = [
+            "identifier"      => $dhh_sku,
+            "fs_path"         => $image_path,
+            "url"             => $image_url,
+            "fit"             => "contain",
+            "width"           => $col_width,
+            "height"          => $col_width,
+            "lazy"            => true,
+            "add_mod_time"    => true,
+            "class"           => "trans-opacity",
+            "title"           => $product_name,
+            "alt"             => $product_name,
+            "quality"         => 75,
+            "dpr"             => 1,
+            "relative_url"    => true,
+          ];
+          $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+        }
+        
+        $html .= "
+          <a href=\"{$productUrl}\" data-product-id=\"{$product_id}\" title=\"{$product_long_name}\" class=\"product-image\">{$img_html}</a>
+          <div class=\"product-info\">
+          <div class=\"info\"><span class=\"brand-name small fw-600 gray\">{$series_or_brand}<span class=\"light-gray ms-1\">{$sku_seller_or_mpn}</span></span>
+          <h2 class=\"product-name ellipsed ellipsed-2\"><a href=\"{$productUrl}\" title=\"{$product_long_name}\">{$product_name}</a></h2>";
+        
+        if($this->getChild("name.after")) {
+          $_nameAfterChildren = $this->getChild("name.after")->getSortedChildren();
+          foreach($_nameAfterChildren as $_nameAfterChildName) {
+            $_nameAfterChild = $this->getChild("name.after")->getChild($_nameAfterChildName);
+            $_nameAfterChild->setProduct($_product);
+            $html .= $_nameAfterChild->toHtml();
+          }
+        }
       
-      // Product name
-      $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
-      
-      // Product thumbnail
-      $thumbnail        = $_product->getThumbnail();
-      if(strlen((string) $thumbnail) === 0 || $thumbnail === "no_selection") {
-        $thumbnail        = "/placeholder/{$placeholder_image}";
-      }
-      $image_url        = "{$media_url}/catalog/product{$thumbnail}";
-      $image_path       = "{$media_dir}/catalog/product{$thumbnail}";
-      if(is_file($image_path) === true) {
-        $col_width        = 200;
-        $cdn_img_options  = [
-          "identifier"      => $dhh_sku,
-          "fs_path"         => $image_path,
-          "url"             => $image_url,
-          "fit"             => "contain",
-          "width"           => $col_width,
-          "height"          => $col_width,
-          "lazy"            => true,
-          "add_mod_time"    => true,
-          "class"           => "trans-opacity",
-          "title"           => $product_name,
-          "alt"             => $product_name,
-          "quality"         => 75,
-          "dpr"             => 1,
-          "relative_url"    => true,
-        ];
-        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+        if(isset($tagline)) {
+          $html .= "<div class=\"product-list-tagline\">Onze Keuze</div>";
+        }
+          
+        if(!empty($usps)) {
+          $html .= "<ul class=\"product-list-highlights inline-list\">";
+          foreach($usps as $usp) {
+            $html .= "<li>{$usp}</li>";
+          }
+          $html .= "</ul>";
+        }
+        
+        // Volume discount tag
+        if(!empty($_product->getTierPrice())) {
+          $html .= "<span class=\"small\" style=\"line-height: 2em;\"><i class=\"fa fa-eur\" aria-hidden=\"true\"></i>&nbsp;<em>Volumekorting</em></span>";
+        }
+        
+        $html .= "</div>";
+        $html .= $price_html;
+        $html .= "<div class=\"actions\">";
+        
+        if(!$_product->canConfigure()) {
+          
+          // Simple product, sellable
+          if($_product->isSaleable()) {
+            $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
+            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation(\"".$this->getAddToCartUrl($_product)."\")\"><i class=\"fa fa-shopping-cart\"></i></button>";
+          }
+          
+          // Simple product, not sellable
+          else {
+            $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
+            <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
+          }
+        }
+        
+        // Configurable product
+        else {
+          $html .= "<div class=\"float-left\"><span class=\"buyblock-usp\" style=\"line-height: 1.5em;\">Meerdere varianten</span>{$additional_delivery_messages}</div>
+          <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
+        }
+        
+        $html .= "</div></div>";
+  
+        // Store in cache
+        $GLOBALS["write_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "dhh_listview_product");
+        if($GLOBALS["write_cache_enabled"]) {
+          $cache_tags = ["DHH_LISTVIEW_PRODUCT", "PRODUCT_{$product_id}"];
+          if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400)) {
+            DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
+          }
+        }
+        
+        Varien_Profiler::stop("DHH_ListProduct_{$product_id}_uncached");
       }
       ?>
+      
       <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
-        <?php
-        echo $html;
-        $title = $product_long_name;
-        ?>
-        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?>" class="product-image">
-        <?php
-          // echo "<img class='trans-opacity' id='product-collection-image-{$_product->getId()}'
-            // src='{$this->helper('catalog/image')->init($_product, 'thumbnail')->resize($_imgSize)}'
-            // alt='{$this->stripTags($this->getImageLabel($_product, 'thumbnail'), null, true)}'
-            // width='{$displaySize}' height='{$displaySize}' loading=lazy>";
-          echo $img_html;
-        ?>
-        </a>
-        <div class="product-info">
-          <div class="info">
-            <span class="brand-name small fw-600 gray"><?php echo "{$series_or_brand} <span class=light-gray>{$sku_seller_or_mpn}</span>"; ?></span>
-            <h2 class="product-name ellipsed ellipsed-2">
-              <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?>'><?php echo $product_name; ?></a>
-            </h2>
-            <?php
-            if($this->getChild("name.after")) {
-              $_nameAfterChildren = $this->getChild("name.after")->getSortedChildren();
-              foreach ($_nameAfterChildren as $_nameAfterChildName) {
-                $_nameAfterChild = $this->getChild("name.after")->getChild($_nameAfterChildName);
-                $_nameAfterChild->setProduct($_product);
-                echo $_nameAfterChild->toHtml();
-              }
-            }
-            
-            if(isset($tagline) === true) {
-              echo "<div class='product-list-tagline'>Onze Keuze</div>";
-            }
-            
-            if(empty($usps) === false) {
-              echo "<ul class='product-list-highlights inline-list'>";
-              foreach($usps as $usp) {
-                echo "<li>{$usp}</li>";
-              }
-              echo "</ul>";
-            }
-            
-            // Volume discount tag
-            if(empty($_product->getTierPrice()) === false) {
-              echo "<span class='small' style='line-height: 2em;'>
-                <i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
-            }
-            ?>
-          </div>
-          <?php
-          echo $price_html;
-          ?>
-          <div class="actions">
-            <?php
-            if(!$_product->canConfigure()) {
-              if($_product->isSaleable()) {
-                // Simple product, sellable
-                ?>
-                <div class="float-left">
-                  <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
-                  <?php echo $additional_delivery_messages; ?>
-                </div>
-                <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
-<?php
-              } else {
-                // Simple product, not sellable
-                ?>
-                <div class="float-left">
-                  <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
-                  <?php echo $additional_delivery_messages; ?>
-                </div>
-                <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-<?php
-              }
-            } else {
-              // Configurable product
-              ?>
-              <div class="float-left">
-                <span class="buyblock-usp" style='line-height: 1.5em;'>Meerdere varianten</span>
-                <?php echo $additional_delivery_messages; ?>
-              </div>
-              <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-<?php } ?>
-          </div>
-        </div>
+        <?=$html?>
       </li>
-
-      <?php
-      if(($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0)) { ?>
+      
+      <?php if(($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0)) { ?>
         </ul>
           <div class="new-tab-contant-text mobile-hide">
             <div class="col-md-3 new-contant">
@@ -523,15 +546,18 @@ if($show_products === true && $_productCollection->getFirstItem()) {
               <p><i class="fa fa-check"></i>Snelle levering</p>
             </div>
           </div>
-        <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
+        <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
         <?php
       }
-    }    
+      
+      unset($html);
+    }
+    
     ?>
     </ul>
     <?php
-    if($show_toolbar === true) {
-      echo "<div class='toolbar-bottom pb-4'>{$toolbar_html}</div>";
+    if($show_toolbar) {
+      echo "<div class=\"toolbar-bottom pb-4\">{$toolbar_html}</div>";
     }
     
     // Optional block category-ID is shown below the category tiles
@@ -541,15 +567,17 @@ if($show_products === true && $_productCollection->getFirstItem()) {
     ?>
   </div>
   <?php
-
+  
   // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
   if($this->getChild("after")) {
-    $_afterChildren = $this->getChild('after')->getSortedChildren();
+    $_afterChildren = $this->getChild("after")->getSortedChildren();
     foreach ($_afterChildren as $_afterChildName) {
-      $_afterChild = $this->getChild('after')->getChild($_afterChildName);
-      //set product collection on after blocks
+      $_afterChild = $this->getChild("after")->getChild($_afterChildName);
+      // Set product collection on after blocks
       $_afterChild->setProductCollection($_productCollection);
       echo $_afterChild->toHtml();
     }
   }
+  
+  Varien_Profiler::stop("DHH_ListProducts");
 }

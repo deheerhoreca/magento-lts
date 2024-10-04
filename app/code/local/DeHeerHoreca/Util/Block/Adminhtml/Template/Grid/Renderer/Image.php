@@ -7,12 +7,14 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
     
     protected function _getValue(Varien_Object $row)
     {
-      $val = $row->getData($this->getColumn()->getId());
       $out = "-";
-      if(strlen((string) $val) > 0 && $val !== "no_selection") {
+      $val = (string) $row->getData($this->getColumn()->getId());
+      
+      if($val !== "" && $val !== "no_selection") {
         $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
         $image_url        = "{$media}catalog/product{$val}";
-        if(empty($image_url) === false) {
+        
+        if(!empty($image_url)) {
           $col_width        = 60;
           $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
           $image_path       = "{$media_dir}/catalog/product{$val}";
@@ -27,10 +29,11 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
             "class"           => "",
             "style"           => "object-fit:contain;",
           ];
-          $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
-          return $img_html;
+          
+          return Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
         }
       }
+      
       return $out;
     }
 }

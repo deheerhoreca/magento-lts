@@ -22,7 +22,7 @@ if(isset($_SERVER["HTTP_HOST"]) && str_starts_with((string) $_SERVER["HTTP_HOST"
   define("DHH_FPC_ENABLED", true);  // Default: true
 }
 
-if(DHH_FPC_DEBUG === true) {
+if(DHH_FPC_DEBUG) {
   $verb = $_SERVER["REQUEST_METHOD"] ?? null;
   DeHeerHoreca_Fpc_Helper_Data::log("---------------------------------------------------------------------");
   DeHeerHoreca_Fpc_Helper_Data::log("{$verb} ".Mage::helper("core/url")->getCurrentUrl());
@@ -39,6 +39,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     if($read_cache === false) {
       Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "BYPASS");
+      Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
       return;
     }
     
@@ -51,6 +52,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "HIT");
         // To allow for closing actions (AoE Profiler is one)
         Mage::dispatchEvent("controller_front_send_response_after");
+        Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
         exit;
       }
     }
@@ -61,60 +63,89 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   }
   
   public function clearProductCache($observer) {
-    $product    = $observer->getProduct();
-    $productId  = $product->getId();
-    $patterns   = [];
     
-    /* catalog_product_view */
-    $patterns[] = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
-    $patterns[] = "zc:k:e6b_eke_ogmeta_product_{$productId}_";
-    $patterns[] = "zc:k:e6b_tm_richsnippets_product_json_{$productId}_";
+    $productId  = $observer->getProduct()->getId();
     
-    /* catalog_category_view */
-    $category_ids = $product->getCategoryIds();
-    if(empty($category_ids) === false && is_array($category_ids) === true) {
-      foreach($category_ids as $category_id) {
-        // From self::clearCategoryCache()
-        $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-        $patterns[]   = "zc:k:e6b_aeke_ogmeta_category_{$category_id}_";
-      }
+    // @todo Why do we need to put e6b_ when cleaning, but not when writing?
+    $cache_tags = ["e6b_PRODUCT_{$productId}", "PRODUCT_{$productId}"];
+    
+    foreach($observer->getProduct()->getCategoryIds() as $category_id) {
+      $cache_tags[] = "e6b_CATEGORY_{$category_id}";
+      $cache_tags[] = "CATEGORY_{$category_id}";
     }
-    // var_dump($patterns);
-    $result     = clean_fpc_pattern($patterns, false);
-    // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
     
-    return true;
+    return self::_clean_by_keys($cache_tags);
+    
+    // return false;
+    
+    // $patterns   = [];
+    
+    // /* catalog_product_view */
+    // $patterns[] = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
+    // $patterns[] = "zc:k:e6b_eke_ogmeta_product_{$productId}_";
+    // $patterns[] = "zc:k:e6b_tm_richsnippets_product_json_{$productId}_";
+    
+    // /* catalog_category_view */
+    // $category_ids = $observer->getProduct()->getCategoryIds();
+    // if(!empty($category_ids) && is_array($category_ids)) {
+    //   foreach($category_ids as $category_id) {
+    //     // From self::clearCategoryCache()
+    //     $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
+    //     $patterns[]   = "zc:k:e6b_eke_ogmeta_category_{$category_id}_";
+    //   }
+    // }
+    
+    // $result     = clean_fpc_pattern($patterns, false);
+    
+    // return true;
+  }
+  
+  private static function _clean_by_keys(string|array $cache_tags) {
+    $cache_tags = (array) $cache_tags;
+    
+    if(DHH_FPC_DEBUG) {
+      $cache_keys = Mage::app()->getCache()->getIdsMatchingAnyTags($cache_tags);
+      Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
+    }
+    
+    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
+    if(DHH_FPC_DEBUG) {
+      Mage::log("Response: ".var_export($response, true), Zend_Log::DEBUG, "verbose.txt", true);
+    }
+    
+    return $response;
   }
   
   public function clearCategoryCache($observer) {
-    $category     = $observer->getEvent()->getCategory();
-    $category_id  = $category->getId();
+    $category_id  = $observer->getEvent()->getCategory()->getId();
     
     if(empty($category_id)) {
       return true;
     }
     
-    // Also to self::clearProductCache()
-    $patterns     = [];
-    $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-    $patterns[]   = "zc:k:e6b_aeke_ogmeta_category_{$category_id}_";
+    $cache_tags   = ["e6b_CATEGORY_{$category_id}"];
+    $cache_tags[] = "CATEGORY_{$category_id}";
+    return self::_clean_by_keys($cache_tags);
     
-    $result       = clean_fpc_pattern($patterns, false);
-    // Mage::getSingleton("core/session")->addSuccess("FPC patterns cleared: ".clean_fpc_pattern_result_to_string($result));
-    
-    return true;
-  }
-}
-
-function clean_fpc_pattern_result_to_string($result): string {
-  $outputs = [];
-  $result = (array) $result;
-  if(empty($result)) return "";
-  foreach($result as $pattern => $return) {
-    $outputs[] = "{$pattern}: {$return}";
-  }
+    // if(!empty($cache_tag) && Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$cache_tag])) {
+    //   // Mage::getSingleton("core/session")->addSuccess("Redis cleared by Tag {$cache_tag}");
+    //   return true;
+    // }
   
-  return "<br>- ".implode("<br>- ", $outputs);
+    // return false;
+    
+    // $category     = $observer->getEvent()->getCategory();
+    // $category_id  = $category->getId();
+    
+    // // Also to self::clearProductCache()
+    // $patterns     = [];
+    // $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
+    // $patterns[]   = "zc:k:e6b_eke_ogmeta_category_{$category_id}_";
+    
+    // $result       = clean_fpc_pattern($patterns, false);
+    
+    // return true;
+  }
 }
 
 // Sync:
@@ -122,7 +153,14 @@ function clean_fpc_pattern_result_to_string($result): string {
 // deheerhoreca-intel/lib/intel.inc.php
 function clean_fpc_pattern($patterns, $nowait = false) {
   $patterns = (array) $patterns;
-  $result = [];
+  $result   = [];
+  
+  // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "tm_richsnippets")) {
+  //   if(Mage::app()->getCache()->save(serialize($json), $cache_key, $cache_tags, 86400 * 7)) {
+  //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}, ".strlen((string) $json)." chars");
+  //   }
+  // }
+  
   foreach($patterns as $pattern) {
     
     if(strlen((string) $pattern) < 5) {
@@ -142,7 +180,7 @@ function clean_fpc_pattern($patterns, $nowait = false) {
     // Optionally dont wait for output:
     if($nowait === true) {
       $cmd .= " > /dev/null 2>&1 &";
-      msleep(100); // In batch, we might loose connection to Redis if we add too many connections, so wait a bit
+      msleep(50); // In batch, we might loose connection to Redis if we add too many connections, so wait a bit
       if(exec($cmd) !== false) {
         $result[$pattern] = "OK";
       } else {

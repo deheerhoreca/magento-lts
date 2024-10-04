@@ -103,7 +103,9 @@ class Geissweb_Euvatgrouper_Model_Validation_Abstract extends Varien_Object
                 $regex = '(AT)?U[0-9]{8}';
                 break;
             case 'BE': // Belgium
-                $regex = '(BE)?0[0-9]{9}';
+                // DHH CORE HACK -- New format: "BE1000298543"
+                // $regex = '(BE)?0[0-9]{9}';
+                $regex = '(BE)?[0-1][0-9]{9,10}';
                 break;
             case 'BG': // Bulgaria
                 $regex = '(BG)?[0-9]{9,10}';
@@ -189,6 +191,8 @@ class Geissweb_Euvatgrouper_Model_Validation_Abstract extends Varien_Object
                 break;
             default: return false;
         }
+        
+        Mage::log(var_export($regex, true)." - ".var_export($vatNumber, true), Zend_Log::DEBUG, "verbose.txt", true);
 
         if (preg_match('/^' . $regex . '$/i', $vatNumber)) {
             return true;

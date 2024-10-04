@@ -348,12 +348,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
     }
     
-    // if(_dhh_debug()) {
-      // echo "<pre>";
-      // var_dump($stock_data);
-      // echo "</pre>";
-    // }
-    
     switch($overall_stock_status) {
       case "in_stock":
         // if($display === "mini") {
@@ -415,7 +409,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       <div class="info">
         <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
         <h2 class='product-name ellipsed ellipsed-2'>
-          <a href='<?php echo $product_url; ?>' title='<?php echo $this->stripTags($product_name); ?> kopen'<?php echo $a_target; ?>><?php echo $display_product_name; ?></a>
+          <a href="<?=$product_url?>" title='<?=$this->stripTags($product_name)?> kopen'<?=$a_target?>><?=$display_product_name?></a>
         </h2>
         <?php
         if(isset($tagline) === true) {
@@ -1022,17 +1016,34 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $usps; 
   }
   
-  public function getStockInfo($product, array $options = []) {
-    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$product->getSku()}");
+  public function getStockInfo($_product, array $options = []) {
+    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
+    
+    $dhh_sku                = $_product->getSku();
+    $product_id             = $_product->getEntityId();
+    
+    $hash                   = md5(json_encode($options));
+    $cache_key              = "stockinfo_product_{$product_id}_{$hash}";
+    
+    if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "get_stock_info")) {
+      if($stock_data = Mage::app()->getCache()->load($cache_key)) {
+        DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
+        Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
+        return json_decode($stock_data, true);
+      } else {
+        DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
+      }
+    }
     
     $fastmode               = $options["fastmode"]            ?? false;
-    $context                = $options["context"]             ?? null;
+    $context                = $options["context"]             ?? "";
+    
     $stock_data             = [];
     
-    // @todo fix
     // Fast mode, only report overall_stock_status
-    if(0 && $fastmode === true && empty(_get_product_attribute($product, "stock_status")) === false) {
-      switch(strtolower((string) _get_product_attribute($product, "stock_status"))) {
+    if($fastmode && !empty(_get_product_attribute($_product, "stock_status"))) {
+      $stock_status_sys = strtolower((string) _get_product_attribute($_product, "stock_status"));
+      switch($stock_status_sys) {
         case "direct leverbaar":
           $stock_data["overall_stock_status"] = "in_stock";
           return $stock_data;
@@ -1041,12 +1052,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           return $stock_data;
         default:
           // Follow normal flow for now
-          printr(_get_product_attribute($product, "stock_status"));
+          Mage::log("{$dhh_sku} Unsupported stock_status: ".d($stock_status_sys), Zend_Log::ERR, "system.log", true);
       }
     }
     
     /* Availability, Stock */
-    $stockitem              = $product->getStockItem();
+    $stockitem              = $_product->getStockItem();
     // printr($stockitem);
     $stock_message          = null;
     $stock_tooltip          = null;
@@ -1065,18 +1076,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $min_sale_qty           = 0;
     }
     $in_stock               = ($in_stock === true || $in_stock === "1") ? true : false;
-    $saleable               = $product->isSaleable();
+    $saleable               = $_product->isSaleable();
     $extra_delivery_time    = 0;
-    $eol                    = ($product->getEol() === true || $product->getEol() === "2075") ? true : false;
-    $eol_replacement_sku    = $product->getEolReplacementSku();
-    $expected_delivery      = $product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($product);
-    $levertijd              = $product->getAttributeText("levertijd");
-    $levertijd_tmp_override = $product->getAttributeText("levertijd_tmp_override");
-    $bestelartikel          = $product->getAttributeText("bestelartikel");
+    $eol                    = ($_product->getEol() === true || $_product->getEol() === "2075") ? true : false;
+    $eol_replacement_sku    = $_product->getEolReplacementSku();
+    $expected_delivery      = $_product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($_product);
+    $levertijd              = $_product->getAttributeText("levertijd");
+    $levertijd_tmp_override = $_product->getAttributeText("levertijd_tmp_override");
+    $bestelartikel          = $_product->getAttributeText("bestelartikel");
     
     // $calwekdate_min         = $calwekdate_max = null;
     
-    $supplier               = $product->getAttributeText('supplier');
+    $supplier               = $_product->getAttributeText('supplier');
     
     /* Temporarily adjust levertijd during holidays */
     
@@ -1098,7 +1109,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     /* Delivery time text */
     
     $txtstockdate = $interval = null;
-    $real_txtstockdate = $product->getData("txtstockdate");
+    $real_txtstockdate = $_product->getData("txtstockdate");
     if(empty($real_txtstockdate) === false
     // && ($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder" || $manage_stock === false)
     ) {
@@ -1255,11 +1266,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_data["levertijd_tmp_override"] = $levertijd_tmp_override;
     $stock_data["min_sale_qty"]           = $min_sale_qty;
     
-    // if(_dhh_debug()) {
-      // printr($stock_data);
-    // }
+    if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "get_stock_info")) {
+      if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCK_ITEMS", "PRODUCT_{$product_id}"], 3600 * 7)) {
+        DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
+      }
+    }
     
-    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$product->getSku()}");
+    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
     
     return $stock_data;
   }
@@ -1714,6 +1727,14 @@ if(function_exists('_cdn_img') === false) {
         }
         if($fit === "scale-up") {
           $cdn_options["c"] = "at_max_enlarge";             // max-size crop
+        }
+        
+        // cm overrides c
+        if(!empty($options["cm"])) {
+          $cdn_options["cm"] = $options["cm"];
+          if(isset($cdn_options["c"])) {
+            unset($cdn_options["c"]);
+          }
         }
         $cdn_options_string   = implode_array_with_keys($cdn_options, ",", "-");
         $url                  = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."

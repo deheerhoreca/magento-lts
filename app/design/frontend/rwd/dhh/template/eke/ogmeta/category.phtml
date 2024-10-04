@@ -7,17 +7,17 @@ if(!$helper->isOgMetaEnabled()) {
 
 $product    = Mage::registry("current_product");
 $html       = "";
-$cache_key  = "aeke_ogmeta_category_".Mage::getModel("catalog/layer")->getCurrentCategory()->getId()."_";
+$cache_key  = "eke_ogmeta_category_".Mage::getModel("catalog/layer")->getCurrentCategory()->getId()."_";
 
-if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "aeke_ogmeta_category")) {
+if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta_category")) {
   $html = Mage::app()->getCache()->load($cache_key);
   if(empty($html) === true) {
-    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen((string) $html)." chars");
+    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
   }
 }
 
 if(empty($html) === false) {
-  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen((string) $html)." chars");
+  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
   echo unserialize($html);
 } else {
   
@@ -68,9 +68,10 @@ if(empty($html) === false) {
   echo $html;
   
   // Store in Magento cache
+  $cache_tags = array_merge(Mage::helper("deheerhoreca_fpc/data")->get_cache_tags(), ["DHH_EKE_OGMETA"]);
   if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "eke_ogmeta")) {
-    if(Mage::app()->getCache()->save(serialize($html), $cache_key, ["eke_ogmeta"], 86400 * 7)) {
-      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}, ".strlen($html)." chars");
+    if(Mage::app()->getCache()->save(serialize($html), $cache_key, $cache_tags, 86400 * 7)) {
+      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key} chars");
     }
   }
 }

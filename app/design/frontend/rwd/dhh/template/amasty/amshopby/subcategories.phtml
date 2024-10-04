@@ -8,6 +8,7 @@
 /** @var Amasty_Shopby_Block_Subcategories $this */
 /** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
 $subcategories = $this->getSubcategories();
+$haschild = false;
 
 echo '<div style="clear: both;"></div>';
 
@@ -23,7 +24,7 @@ if($subcategories->count() > 1) {
   echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
 
   foreach($subcategories as $i => $subcategory) {
-    if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
+    if(!in_array((int) $subcategory->getId(), EXCLUDED_CATEGORY_IDS, true)) {
       continue;
     }
     $haschild           = true;
