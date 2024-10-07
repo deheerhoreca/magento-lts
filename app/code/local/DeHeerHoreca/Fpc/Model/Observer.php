@@ -74,46 +74,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       $cache_tags[] = "CATEGORY_{$category_id}";
     }
     
-    return self::_clean_by_keys($cache_tags);
-    
-    // return false;
-    
-    // $patterns   = [];
-    
-    // /* catalog_product_view */
-    // $patterns[] = "zc:k:e6b_FPC_catalog_product_view_{$productId}_*";
-    // $patterns[] = "zc:k:e6b_eke_ogmeta_product_{$productId}_";
-    // $patterns[] = "zc:k:e6b_tm_richsnippets_product_json_{$productId}_";
-    
-    // /* catalog_category_view */
-    // $category_ids = $observer->getProduct()->getCategoryIds();
-    // if(!empty($category_ids) && is_array($category_ids)) {
-    //   foreach($category_ids as $category_id) {
-    //     // From self::clearCategoryCache()
-    //     $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-    //     $patterns[]   = "zc:k:e6b_eke_ogmeta_category_{$category_id}_";
-    //   }
-    // }
-    
-    // $result     = clean_fpc_pattern($patterns, false);
-    
-    // return true;
-  }
-  
-  private static function _clean_by_keys(string|array $cache_tags) {
-    $cache_tags = (array) $cache_tags;
-    
-    if(DHH_FPC_DEBUG) {
-      $cache_keys = Mage::app()->getCache()->getIdsMatchingAnyTags($cache_tags);
-      Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
-    }
-    
-    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
-    if(DHH_FPC_DEBUG) {
-      Mage::log("Response: ".var_export($response, true), Zend_Log::DEBUG, "verbose.txt", true);
-    }
-    
-    return $response;
+    return DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys($cache_tags);
   }
   
   public function clearCategoryCache($observer) {
@@ -125,91 +86,6 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     $cache_tags   = ["e6b_CATEGORY_{$category_id}"];
     $cache_tags[] = "CATEGORY_{$category_id}";
-    return self::_clean_by_keys($cache_tags);
-    
-    // if(!empty($cache_tag) && Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$cache_tag])) {
-    //   // Mage::getSingleton("core/session")->addSuccess("Redis cleared by Tag {$cache_tag}");
-    //   return true;
-    // }
-  
-    // return false;
-    
-    // $category     = $observer->getEvent()->getCategory();
-    // $category_id  = $category->getId();
-    
-    // // Also to self::clearProductCache()
-    // $patterns     = [];
-    // $patterns[]   = "zc:k:e6b_FPC_catalog_category_view_{$category_id}_*";
-    // $patterns[]   = "zc:k:e6b_eke_ogmeta_category_{$category_id}_";
-    
-    // $result       = clean_fpc_pattern($patterns, false);
-    
-    // return true;
+    return DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys($cache_tags);
   }
-}
-
-// Sync:
-// deheerhoreca-magento/app/code/local/DeHeerHoreca/Fpc/Model/Observer.php
-// deheerhoreca-intel/lib/intel.inc.php
-function clean_fpc_pattern($patterns, $nowait = false) {
-  $patterns = (array) $patterns;
-  $result   = [];
-  
-  // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "tm_richsnippets")) {
-  //   if(Mage::app()->getCache()->save(serialize($json), $cache_key, $cache_tags, 86400 * 7)) {
-  //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}, ".strlen((string) $json)." chars");
-  //   }
-  // }
-  
-  foreach($patterns as $pattern) {
-    
-    if(strlen((string) $pattern) < 5) {
-      // logger("Refusing to clear FPC cache pattern with less than 5 characters: {$pattern}", "ERROR");
-      continue;
-    }
-    
-    // logger("Cleaning FPC pattern: {$pattern}", "VERBOSE");
-    
-    // Old style, slow:
-    // $cmd = "redis-cli --scan --pattern \"{$pattern}_*\" | xargs redis-cli unlink"; // unlink is non-blocking
-    
-    // New style, with LUA:
-    // defaultKey is there to supress "Wrong number of args calling Redis command From Lua script" if there are no matching keys
-    $cmd = "redis-cli EVAL \"return redis.call('del', 'defaultKey', unpack(redis.call('keys', ARGV[1])))\" 0 \"{$pattern}*\"*";
-    
-    // Optionally dont wait for output:
-    if($nowait === true) {
-      $cmd .= " > /dev/null 2>&1 &";
-      msleep(50); // In batch, we might loose connection to Redis if we add too many connections, so wait a bit
-      if(exec($cmd) !== false) {
-        $result[$pattern] = "OK";
-      } else {
-        $result[$pattern] = "NOK";
-      }
-    } else {
-      $result[$pattern] = shell_exec($cmd);
-    }
-    
-    // if(DRYRUN === false) {
-      // [$return, $output, $result_code] = safe_exec_full_output($cmd);
-      // $result[] = [
-        // "cmd"         => $cmd,
-        // "pattern"     => $pattern,
-        // "result"      => $return,
-        // "result_code" => $result_code,
-        // "output"      => $output,
-        // "nowait"      => $nowait,
-      // ];
-    // }
-  }
-  
-  if(sizeof($result) === 1) {
-    $result = array_pop($result);
-  }
-  
-  return $result;
-}
-
-function msleep(int $time): void {
-  usleep($time * 1000);
 }
