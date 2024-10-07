@@ -1022,18 +1022,20 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $dhh_sku                = $_product->getSku();
     $product_id             = $_product->getEntityId();
     
-    $hash                   = md5(json_encode($options));
-    $cache_key              = "stockinfo_product_{$product_id}_{$hash}";
+    // $hash                   = md5(json_encode($options));
+    // $cache_key              = "stockinfo_product_{$product_id}_{$hash}";
     
-    if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "get_stock_info")) {
-      if($stock_data = Mage::app()->getCache()->load($cache_key)) {
-        DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
-        Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
-        return json_decode($stock_data, true);
-      } else {
-        DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
-      }
-    }
+    // @TODO FPC BROKEN: GETS SAVED WITHOUT LEVERTIJD FIELD (AND MAYBE OTHER FIELDS?) Then goes missing in Detailview
+    
+    // if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "get_stock_info")) {
+    //   if($stock_data = Mage::app()->getCache()->load($cache_key)) {
+    //     DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
+    //     Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
+    //     return json_decode($stock_data, true);
+    //   } else {
+    //     DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
+    //   }
+    // }
     
     $fastmode               = $options["fastmode"]            ?? false;
     $context                = $options["context"]             ?? "";
@@ -1266,11 +1268,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_data["levertijd_tmp_override"] = $levertijd_tmp_override;
     $stock_data["min_sale_qty"]           = $min_sale_qty;
     
-    if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "get_stock_info")) {
-      if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCK_ITEMS", "PRODUCT_{$product_id}"], 3600 * 7)) {
-        DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-      }
-    }
+    // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "get_stock_info")) {
+    //   if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCK_ITEMS", "PRODUCT_{$product_id}"], 3600 * 7)) {
+    //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
+    //   }
+    // }
     
     Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
     
