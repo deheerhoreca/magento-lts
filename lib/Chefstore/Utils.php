@@ -16,6 +16,7 @@ class Utils {
   // PHP var_export() with short array syntax (square brackets) indented 2 spaces.
   // NOTE: The only issue is when a string value has `=>\n[`, it will get converted to `=> [`
   // @link https://www.php.net/manual/en/function.var-export.php
+  // Chefstore\Utils::d()
   public static function d($expression, bool $return = false) {
     $export     = var_export($expression, true);
     $patterns   = [
@@ -68,6 +69,10 @@ class Utils {
     }
     
     return false;
+  }
+  
+  function msleep(int $time): void {
+    usleep($time * 1000);
   }
   
 }

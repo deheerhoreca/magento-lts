@@ -16,6 +16,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     "cms_page_view", "cms_index_index",
     // "amshopby_index_index", // Disabled because we need to tag it properly first
   ];
+  
   public static $request_is_anonymous = null;
   
   public function clearCache() {
@@ -145,21 +146,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   public static function get_cache_tags(): array {
     
-    $tags = [];
+    $cache_tags = [];
     
     if($om_action = Mage::app()->getFrontController()->getAction()->getFullActionName()) {
-      $tags[] = "DHH_{$om_action}";
+      $cache_tags[] = "DHH_{$om_action}";
     }
     
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $tags[] = "PRODUCT_{$id}";
+      $cache_tags[] = "PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $tags[] = "CATEGORY_{$id}";
+      $cache_tags[] = "CATEGORY_{$id}";
     }
     
-    return $tags;
+    return $cache_tags;
   }
   
   // Determine of the current request is anonymous or logged in
@@ -191,9 +192,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /*
-    * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-    * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
-    */
+   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+   * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
+   */
   public function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $html_block_mode = false, string $debug_name = ""): bool {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
@@ -247,9 +248,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /*
-    * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-    * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
-    */
+   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+   * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
+   */
   public function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
@@ -460,23 +461,31 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $html;
   }
   
-  public function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $tags = []) {
+  public function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []) {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
-    // Minify -- Minifying after the holepunching breaks the btn-cart buttons in the listview
-    $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", (string) $html); // Prevent canonical URL shortening
+    // Prevent canonical URL shortening
+    $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", $html);
+    
+    // Shorten URLs
     $html = str_replace("value=\"https://www.chefstore.nl/", "value=\"/", $html);
     $html = str_replace("src=\"https://www.chefstore.nl/", "src=\"/", $html);
     $html = str_replace("src='https://www.chefstore.nl/", "src='/", $html);
     $html = str_replace("href=\"https://www.chefstore.nl/", "href=\"/", $html);
     $html = str_replace("setLocation('https://www.chefstore.nl/", "setLocation('/", $html);
     $html = str_replace("href='https://www.chefstore.nl/", "href='/", $html);
-    $html = str_replace(" type=\"text/javascript\"", "", $html);
+    
+    // Reverse prevent canonical URL shortening
     $html = str_replace("<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", "<link rel=\"canonical\" href=\"https://www.chefstore.nl", $html);
+    
+    // Unnecessary HTML
+    $html = str_replace(" type=\"text/javascript\"", "", $html);
+    
+    // Fix XHTML crap
     $html = str_replace(" />", ">", $html);
     
-    // HTML minifier broken:
+    // HTML minifier -- Broken:
     // /koelingen/vrieskasten/glasdeurvriezers/vrieskast-1530-l-3-glasdeuren-zwart-lichtbak-combisteel-7455-2435.html
     // https://www.chefstore.nl/service
     // $bytes_pre = strlen($html);
@@ -494,7 +503,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // }
     
     // Handle form_key (CSRF protection)
-    if($holepunch_formkey === true) {
+    if($holepunch_formkey) {
       $formKey = Mage::getSingleton("core/session")->getFormKey();
       if($formKey) {
         $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
@@ -503,7 +512,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       }
     }
     
-    if($holepunch_blocks === true) {
+    // Replace holepunched content with placeholders
+    if($holepunch_blocks) {
       $html = self::replace_between($html, "<!-- header_minicart_start -->", "<!-- header_minicart_end -->", "<!-- header_minicart_here -->");
       $html = self::replace_between($html, "<!-- header_miniquote_start -->", "<!-- header_miniquote_end -->", "<!-- header_miniquote_here -->");
       $html = self::replace_between($html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", "<!-- header_sidebar_here -->");
@@ -513,17 +523,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html = self::replace_between($html, "<!-- footer_start -->", "<!-- footer_end -->", "<!-- footer_here -->");
     }
     
-    // @todo Build JSON object
-    // $data = [
-      // "ts"        => time(),
-      // "html"      => $html,
-    // ];
-    // $json = json_encode($data);
-    
-    $tags[] = "quickndirtyfpc";
+    $cache_tags[] = "quickndirtyfpc";
     
     // Store in cache
-    if(Mage::app()->getCache()->save($html, $key, $tags, 7 * 86400)) {
+    if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {
       self::log("Cache: SAVED {$key}, ".strlen($html)." chars");
       self::_add_server_timing_header("FPC saved");
       self::_emit_server_timing_header();
@@ -592,6 +595,22 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     return null;
+  }
+  
+  static function _clean_by_keys(string|array $cache_tags) {
+    $cache_tags = (array) $cache_tags;
+    
+    if(DHH_FPC_DEBUG) {
+      $cache_keys = Mage::app()->getCache()->getIdsMatchingAnyTags($cache_tags);
+      Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
+    }
+    
+    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
+    if(DHH_FPC_DEBUG) {
+      Mage::log("Response: ".var_export($response, true), Zend_Log::DEBUG, "verbose.txt", true);
+    }
+    
+    return $response;
   }
 }
 

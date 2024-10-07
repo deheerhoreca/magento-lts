@@ -65,10 +65,14 @@ $product_title_short    = _get_product_attribute($_product, "name_short");
 $pvideo                 = _get_product_attribute($_product, "product_video");
 $tagline                = _get_product_attribute($_product, "tagline");
 $supplier_name          = (string) _get_product_attribute($_product, "supplier");
+$supplier_sys           = (string) preg_replace("/\s+/", "", strtolower($supplier_name));
 $_price                 = $_product->getPrice(); // @todo is this used?
 $_finalPrice            = $_product->getFinalPrice();
 $product_description_md = trim((string) _get_product_attribute($_product, "description"));
 $product_description    = "";
+
+$GLOBALS["add_fpc_cache_tags"] ??= [];
+$GLOBALS["add_fpc_cache_tags"] ??= ["SUPPLIER_".strtoupper($supplier_sys)];
 
 // Availability, Stock
 $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
