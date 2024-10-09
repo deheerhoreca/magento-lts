@@ -79,6 +79,31 @@ class Utils {
 
 class Cache {
   
+  // PSR-6:
+  
+  /*
+  // create a new item by trying to get it from the cache
+  $productsCount = $cache->getItem('stats.products_count');
+  
+  // assign a value to the item and save it
+  $productsCount->set(4711);
+  $cache->save($productsCount);
+  
+  // retrieve the cache item
+  $productsCount = $cache->getItem('stats.products_count');
+  if (!$productsCount->isHit()) {
+    // ... item does not exist in the cache
+  }
+  
+  // retrieve the value stored by the item
+  $total = $productsCount->get();
+  
+  // remove the cache item
+  $cache->deleteItem('stats.products_count');
+  */
+  
+  // CACHE CONTRACTS:
+  
   // $cache_key = "tm_richsnippets_product_json_{$product->getId()}";
   //
   // if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "tm_richsnippets")) {
@@ -107,18 +132,18 @@ class Cache {
   // $now = _cc()->get($cache_key, function($item) {
     // return Carbon::now();
   // });
-
+  
   // $now = _cc()->get($cache_key, function($item) {
     // $item->expiresAfter(60);
     // return Carbon::now();
   // });
-
+  
   // $var = _cc()->get($cache_key, fn() => "bier");
   // $var = _arc()->get($cache_key, fn() => "bier");
-
+  
   // Makes no sense for CLI
   public static function _apc() {
-    $GLOBALS["apcu_cache"] ??= new ApcuAdapter(namespace: "om_symfony_apcu", defaultLifetime: 3600, version: 1);
+    $GLOBALS["apcu_cache"] ??= (function_exists("apcu_enabled") && apcu_enabled()) ? new ApcuAdapter(namespace: "om_symfony_apcu", defaultLifetime: 3600, version: 1) : null;
     return $GLOBALS["apcu_cache"];
   }
   
@@ -128,9 +153,9 @@ class Cache {
     return $GLOBALS["ar_cache"];
   }
   
-  // PHP Files Cache Adapter -- actually makes things slower if it's small
+  // Filesystem Cache Adapter -- Not as fast but should be on the RAM disk then it's okay
   public static function _fsc() {
-    $GLOBALS["fs_cache"] ??= new PhpFilesAdapter(namespace: "om_symfony_fsc", defaultLifetime: 3600, directory: sys_get_temp_dir());
+    $GLOBALS["fs_cache"] ??= new FilesystemAdapter(namespace: "om_symfony_fsc", defaultLifetime: 3600, directory: sys_get_temp_dir());
     return $GLOBALS["fs_cache"];
   }
   

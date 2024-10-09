@@ -17,31 +17,30 @@ $html = <<<EOT
         <div class="col-1-4">
           <h3>Merken</h3>
           <ul>
-            <li class="pb-1"><a href="/shop?manufacturer=54">CombiSteel</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=1074">Bartscher</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=2753">Gamko</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=1619">Hendi</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=192">EcoFrost</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=310">Buffalo</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=637">KitchenAid</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=162">Saro</a></li>
-            <li class="pb-1"><a href="/shop?manufacturer=1736">Unox</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=54&title=">CombiSteel</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=1074&title=Bartscher">Bartscher</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=2753&title=Gamko">Gamko</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=1619&title=Hendi">Hendi</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=192&title=EcoFrost">EcoFrost</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=310&title=Buffalo">Buffalo</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=162&title=Saro">Saro</a></li>
+            <li class="pb-1"><a href="/shop?manufacturer=1736&title=Unox">Unox</a></li>
             <li class="pb-1"><a class="strong" href="/merken.html"><strong>Alle Merken</strong></a></li>
           </ul>
         </div>
         <div class="col-1-4">
           <h3>Series</h3>
           <ul>
-            <li class="pb-1"><a href="/shop?brand_series=2894">Bartscher AT</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2611">CombiSteel Pro 700</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2780">Dynamic Dynamix</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2695">Gastro M 650</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2726">Hendi Kitchen Line</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2727">Hendi Profi Line</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2787">KitchenAid K7 Pro</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2692">Polar C-Series</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2693">Polar G-Series</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2691">Polar U-Series</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2892&title=Bartscher-Silversteam">Bartscher Silverstream</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=3318&title=CombiSteel-Energy">CombiSteel Energy Line</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2611&title=CombiSteel-Pro-700">CombiSteel Pro 700</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2780"&titleDynamic-Dynamix=>Dynamic Dynamix</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2695&title=Gastro-M-650">Gastro M 650</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2726&title=Hendi-Kitchen-Line">Hendi Kitchen Line</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2727&title=Hendi-Profi-Line">Hendi Profi Line</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2692&title=Polar-C-serie">Polar C-Serie</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2693&title=Polar-G-serie">Polar G-Serie</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2691&title=Polar-U-serie">Polar U-Serie</a></li>
             <li class="pb-1"><a class="strong" href="/alle-series.html"><strong>Alle Series</strong></a></li>
           </ul>
         </div>
@@ -110,8 +109,9 @@ EOT;
 echo $html;
 
 // @todo replace with APCu?
-if(empty($html) === false && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html") === true) {
-  Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, ["quickndirtyfpc"], 86400);
+if(!empty($html) && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
+  $cache_tags = ["DHH_CMS"];
+  Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, $cache_tags, 3600);
 }
 ?>
 <!-- footer_end -->

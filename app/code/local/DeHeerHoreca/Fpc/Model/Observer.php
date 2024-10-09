@@ -4,8 +4,8 @@ function _dhh_ips() {
   return ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
 }
 
-const DHH_FPC_NAV_KEY     = "FPC_cms_block_topmenu";
-const DHH_FPC_FOOTER_KEY  = "FPC_cms_block_footer";
+const DHH_FPC_NAV_KEY     = "DHH_CMS_TOPMENU";
+const DHH_FPC_FOOTER_KEY  = "DHH_CMS_FOOTER";
 
 // Cannot use _dhh_debug() due to the ?nofpc requirement
 if(isset($_SERVER["REQUEST_METHOD"]) && ($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "HEAD")
@@ -74,7 +74,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       $cache_tags[] = "CATEGORY_{$category_id}";
     }
     
-    return DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys($cache_tags);
+    return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
   
   public function clearCategoryCache($observer) {
@@ -86,6 +86,6 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     $cache_tags   = ["e6b_CATEGORY_{$category_id}"];
     $cache_tags[] = "CATEGORY_{$category_id}";
-    return DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys($cache_tags);
+    return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
 }

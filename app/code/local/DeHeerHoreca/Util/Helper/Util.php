@@ -1023,7 +1023,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $product_id             = $_product->getEntityId();
     
     // $hash                   = md5(json_encode($options));
-    // $cache_key              = "stockinfo_product_{$product_id}_{$hash}";
+    // $cache_key              = "DHH_STOCKINFO_PRODUCT_{$product_id}_{$hash}";
     
     // @TODO FPC BROKEN: GETS SAVED WITHOUT LEVERTIJD FIELD (AND MAYBE OTHER FIELDS?) Then goes missing in Detailview
     
@@ -1269,7 +1269,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_data["min_sale_qty"]           = $min_sale_qty;
     
     // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "get_stock_info")) {
-    //   if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCK_ITEMS", "PRODUCT_{$product_id}"], 3600 * 7)) {
+    //   if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCKINFO", "PRODUCT_{$product_id}"], 3600 * 7)) {
     //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
     //   }
     // }

@@ -20,15 +20,22 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public static $request_is_anonymous = null;
   
   public function clearCache() {
-    $mode = Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
-    $tag = "quickndirtyfpc";
+    $cache_tags = [
+      "quickndirtyfpc",
+      "DHH_LISTVIEW_PRODUCT",
+      "DHH_cms_index_index",
+      "DHH_EKE_OGMETA",
+      "DHH_TM_RICHSNIPPETS",
+      "AMSHOPBY",
+    ];
+    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
     
-    // Beaufiul, is it not?
-    echo "<pre>";
-    echo "------- Clearing Redis FPC cache --------".PHP_EOL.PHP_EOL;
-    echo shell_exec("redis-cli --scan --pattern zc:k:e6b_FPC* | xargs redis-cli del");
-    echo PHP_EOL."----- Done clearing Redis FPC cache -----".PHP_EOL;
-    echo "</pre>";
+    // // Beaufiul, is it not?
+    // echo "<pre>";
+    // echo "------- Clearing Redis FPC cache --------".PHP_EOL.PHP_EOL;
+    // echo shell_exec("redis-cli --scan --pattern zc:k:e6b_FPC* | xargs redis-cli del");
+    // echo PHP_EOL."----- Done clearing Redis FPC cache -----".PHP_EOL;
+    // echo "</pre>";
     
     $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
     echo "<span><a href='{$url}'>Back</a></span><br><br>";
@@ -154,10 +161,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "PRODUCT_{$id}";
+      $cache_tags[] = "PRODUCT_{$id}";  // Deprecated
+      $cache_tags[] = "DHH_FPC_PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "CATEGORY_{$id}";
+      $cache_tags[] = "CATEGORY_{$id}"; // Deprecated
+      $cache_tags[] = "DHH_FPC_CATEGORY_{$id}";
     }
     
     return $cache_tags;
@@ -597,7 +606,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return null;
   }
   
-  static function _clean_by_keys(string|array $cache_tags) {
+  // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
+  // Do NOT use prefixes like zc:ti:e6b_
+  public static function clean_by_tags(string|array $cache_tags) {
     $cache_tags = (array) $cache_tags;
     
     if(DHH_FPC_DEBUG) {
@@ -611,6 +622,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     return $response;
+  }
+  
+  // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys(["foo", "bar"])
+  // Do NOT use prefixes like zc:ti:e6b_
+  // @deprecated use clean_by_tags()
+  public static function _clean_by_keys(...$args) {
+    return self::clean_by_tags($args);
   }
 }
 
