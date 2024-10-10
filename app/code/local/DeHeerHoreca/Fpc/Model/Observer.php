@@ -63,8 +63,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   }
   
   public function clearProductCache($observer) {
-    
-    $productId  = $observer->getProduct()->getId();
+    $productId = $observer->getProduct()->getId();
     
     $cache_tags = ["DHH_PRODUCT_{$productId}"];
     
@@ -76,13 +75,13 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   }
   
   public function clearCategoryCache($observer) {
-    $category_id  = $observer->getEvent()->getCategory()->getId();
+    $category_id = $observer->getEvent()->getCategory()->getId();
     
     if(empty($category_id)) {
       return true;
     }
     
-    $cache_tags   = ["DHH_CATEGORY_{$category_id}"];
+    $cache_tags = ["DHH_CATEGORY_{$category_id}"];
     return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
 }

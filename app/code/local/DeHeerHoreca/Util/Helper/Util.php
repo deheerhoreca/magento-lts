@@ -1269,7 +1269,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_data["min_sale_qty"]           = $min_sale_qty;
     
     // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "get_stock_info")) {
-    //   if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCKINFO", "PRODUCT_{$product_id}"], 3600 * 7)) {
+    //   if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, ["DHH_STOCKINFO", "DHH_PRODUCT_{$product_id}"], 3600 * 7)) {
     //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
     //   }
     // }

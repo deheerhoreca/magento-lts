@@ -6,7 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 $server = 'tcp://127.0.0.1:6379';
 $db = 0;
-$limit = 30;
+$limit = 50;
 
 array_shift($argv);
 while ($arg = array_shift($argv)) {
@@ -33,8 +33,9 @@ foreach ($client->sMembers(Cm_Cache_Backend_Redis::SET_TAGS) as $tag) {
     $tagSizes = array();
     $missing = 0;
     foreach ($ids as $id) {
-        $data = $client->hGet(Cm_Cache_Backend_Redis::PREFIX_KEY.$id, Cm_Cache_Backend_Redis::FIELD_DATA);
-        $size = strlen($data);
+        // $data = $client->hGet(Cm_Cache_Backend_Redis::PREFIX_KEY.$id, Cm_Cache_Backend_Redis::FIELD_DATA);
+        // $size = strlen($data);
+        $size = 1;
         if ($size) {
             $tagSizes[] = $size;
         } else {
@@ -89,7 +90,7 @@ function printStats($data, $key, $limit)
 }
 
 // Top 20 by total size
-printStats($tagStats, 'total size', $limit);
+// printStats($tagStats, 'total size', $limit);
 
 // Top 20 by average size
 // printStats($tagStats, 'avg size', $limit);
