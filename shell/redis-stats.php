@@ -6,7 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 $server = 'tcp://127.0.0.1:6379';
 $db = 0;
-$limit = 50;
+$limit = 30;
 
 array_shift($argv);
 while ($arg = array_shift($argv)) {
@@ -92,7 +92,7 @@ function printStats($data, $key, $limit)
 printStats($tagStats, 'total size', $limit);
 
 // Top 20 by average size
-printStats($tagStats, 'avg size', $limit);
+// printStats($tagStats, 'avg size', $limit);
 
 // Top 20 by count
 printStats($tagStats, 'count', $limit);

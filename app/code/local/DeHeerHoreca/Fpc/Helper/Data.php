@@ -21,7 +21,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   public function clearCache() {
     $cache_tags = [
-      "quickndirtyfpc",
+      "DHH_FPC",
       "DHH_LISTVIEW_PRODUCT",
       "DHH_cms_index_index",
       "DHH_EKE_OGMETA",
@@ -156,16 +156,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $cache_tags = [];
     
     if($om_action = Mage::app()->getFrontController()->getAction()->getFullActionName()) {
-      $cache_tags[] = "DHH_{$om_action}";
+      $cache_tags[] = "DHH_FPC_{$om_action}";
     }
     
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "PRODUCT_{$id}";  // Deprecated
       $cache_tags[] = "DHH_FPC_PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "CATEGORY_{$id}"; // Deprecated
       $cache_tags[] = "DHH_FPC_CATEGORY_{$id}";
     }
     
@@ -532,7 +530,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html = self::replace_between($html, "<!-- footer_start -->", "<!-- footer_end -->", "<!-- footer_here -->");
     }
     
-    $cache_tags[] = "quickndirtyfpc";
+    // $cache_tags[] = "quickndirtyfpc";
+    $cache_tags[] = "DHH_FPC";
     
     // Store in cache
     if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {

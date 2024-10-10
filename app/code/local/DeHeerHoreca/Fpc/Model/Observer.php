@@ -66,12 +66,10 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     
     $productId  = $observer->getProduct()->getId();
     
-    // @todo Why do we need to put e6b_ when cleaning, but not when writing?
-    $cache_tags = ["e6b_PRODUCT_{$productId}", "PRODUCT_{$productId}"];
+    $cache_tags = ["DHH_PRODUCT_{$productId}"];
     
     foreach($observer->getProduct()->getCategoryIds() as $category_id) {
-      $cache_tags[] = "e6b_CATEGORY_{$category_id}";
-      $cache_tags[] = "CATEGORY_{$category_id}";
+      $cache_tags[] = "DHH_CATEGORY_{$category_id}";
     }
     
     return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
@@ -84,8 +82,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       return true;
     }
     
-    $cache_tags   = ["e6b_CATEGORY_{$category_id}"];
-    $cache_tags[] = "CATEGORY_{$category_id}";
+    $cache_tags   = ["DHH_CATEGORY_{$category_id}"];
     return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
 }

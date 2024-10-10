@@ -868,35 +868,41 @@ final class Mage
             return;
         }
         
-        try {
-            $logActive = self::getStoreConfig('dev/log/active');
-            if (empty($file)) {
-                $file = self::getStoreConfig('dev/log/file');
-            }
-        } catch (Exception $e) {
-            $logActive = true;
-        }
+        // DHH CORE HACK -- Suppress rules and force log file name
+        $logActive    = true;
+        $file         = "system.log";
+        $maxLogLevel  = Zend_Log::DEBUG;
+        $forceLog     = true;
+        
+        // try {
+        //     $logActive = self::getStoreConfig('dev/log/active');
+        //     if (empty($file)) {
+        //         $file = self::getStoreConfig('dev/log/file');
+        //     }
+        // } catch (Exception $e) {
+        //     $logActive = true;
+        // }
 
-        if (!self::$_isDeveloperMode && !$logActive && !$forceLog) {
-            return;
-        }
+        // if (!self::$_isDeveloperMode && !$logActive && !$forceLog) {
+        //     return;
+        // }
 
         static $loggers = [];
 
-        try {
-            $maxLogLevel = (int) self::getStoreConfig('dev/log/max_level');
-        } catch (Throwable $e) {
-            $maxLogLevel = Zend_Log::DEBUG;
-        }
+        // try {
+        //     $maxLogLevel = (int) self::getStoreConfig('dev/log/max_level');
+        // } catch (Throwable $e) {
+        //     $maxLogLevel = Zend_Log::DEBUG;
+        // }
 
         $level  = is_null($level) ? Zend_Log::DEBUG : $level;
 
-        if (!self::$_isDeveloperMode && $level > $maxLogLevel && !$forceLog) {
-            return;
-        }
+        // if (!self::$_isDeveloperMode && $level > $maxLogLevel && !$forceLog) {
+        //     return;
+        // }
 
-        $file = empty($file) ?
-            (string) self::getConfig()->getNode('dev/log/file', Mage_Core_Model_Store::DEFAULT_CODE) : basename($file);
+        // $file = empty($file) ?
+        //     (string) self::getConfig()->getNode('dev/log/file', Mage_Core_Model_Store::DEFAULT_CODE) : basename($file);
 
         try {
             if (!isset($loggers[$file])) {
