@@ -402,12 +402,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $img_html         = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
     }
     ?>
-    <a href="<?php echo $product_url; ?>" title="<?php echo $image_label; ?>" class="product-image"<?php echo $a_target;?>>
-      <?php echo $img_html; ?>
+    <a href="<?=$product_url?>" title="<?=$image_label?>" class="product-image"<?=$a_target;?>>
+      <?=$img_html?>
     </a>
     <div class="product-info">
       <div class="info">
-        <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
+        <span class="brand-name small fw-600 gray"><?="{$brand} <span class=light-gray>{$sku_seller}</span>"?></span>
         <h2 class='product-name ellipsed ellipsed-2'>
           <a href="<?=$product_url?>" title='<?=$this->stripTags($product_name)?> kopen'<?=$a_target?>><?=$display_product_name?></a>
         </h2>
@@ -451,22 +451,20 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         ?>
         <div class="actions">
           <div class="float-left" style="padding-top: 5px;">
-            <span class="<?php echo $stock_class; ?>"><?php echo $display_stock_message; ?></span>
+            <span class="<?=$stock_class?>"><?=$display_stock_message?></span>
           </div>
           <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
-            <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?php echo $product_block->getAddToCartUrl($_product) ?>')">
-              <i class="fa fa-shopping-cart"></i>
-            </button>
+            <button type="button" title="<?=$this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?=$product_block->getAddToCartUrl($_product)?>')"><i class="fa fa-shopping-cart"></i></button>
           <?php else: ?>
-            <a title="<?php echo $this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?php echo $product_url; ?>"><?php echo $product_block->__("Productdetails") ?></a>
-          <?php endif; ?>
+            <a title="<?=$this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?=$product_url?>"><?=$product_block->__("Productdetails") ?></a>
+          <?php endif?>
         </div>
         <?php
       } else {
         ?>
         <div class="actions">
           <div class="float-left" style="padding-top: 5px;">
-            <span class="<?php echo $stock_class; ?>"><?php echo $display_stock_message; ?></span>
+            <span class="<?=$stock_class?>"><?=$display_stock_message?></span>
           </div>
         </div>
         <?php
@@ -1331,8 +1329,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $value;
   }
   
-  public static function cleanCategoryName($category_name) {
-    return trim(str_replace(["[V]", "[SKIPMENU]", "[0] "], "", (string) $category_name));
+  public static function cleanCategoryName($category_name): string {
+    return trim(str_ireplace(["[V]", "[SKIPMENU]", "[0] "], "", (string) $category_name));
   }
   
   public static function getLeaseRates($price_ex_vat, $time = "daily") {
@@ -1650,7 +1648,7 @@ if(function_exists('_cdn_img') === false) {
     
     // Applies to all CDNs
     if($lazy === true) {
-      $lazy_html = " loading=lazy";
+      $lazy_html = " loading=\"lazy\"";
     }
     if(strlen($id) > 0) {
       $id_html = " id=\"{$id}\"";

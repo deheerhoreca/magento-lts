@@ -11,7 +11,7 @@ const DHH_FPC_FOOTER_KEY  = "DHH_CMS_FOOTER";
 if(isset($_SERVER["REQUEST_METHOD"]) && ($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "HEAD")
 && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
 ) {
-  define("DHH_FPC_DEBUG", false);   // Default: false
+  define("DHH_FPC_DEBUG", true);   // Default: false
 } else {
   define("DHH_FPC_DEBUG", false);   // Default: false
 }

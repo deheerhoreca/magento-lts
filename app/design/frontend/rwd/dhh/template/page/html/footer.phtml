@@ -1,6 +1,6 @@
-<!-- footer_start -->
 <?php
 $html = <<<EOT
+<!-- footer_start -->
 <div class="footer-wrapper grid-inside" id="footer-wrapper">
   <div class="footermidwrap blanc">
     <div class="footer grid">
@@ -105,13 +105,16 @@ $html = <<<EOT
     pageLoadTransactionName: document.querySelector("html").dataset.transaction,
   })
 </script>
+<!-- footer_end -->
 EOT;
 echo $html;
 
 // @todo replace with APCu?
-if(!empty($html) && Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
-  $cache_tags = ["DHH_CMS"];
-  Mage::app()->getCache()->save($html, DHH_FPC_FOOTER_KEY, $cache_tags, 3600);
+$key = DHH_FPC_FOOTER_KEY;
+if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
+  if(Mage::app()->getCache()->save($html, $key , ["DHH_CMS"], 24 * 3600)) {
+    DeHeerHoreca_Fpc_Helper_Data::log("Cache: SAVED {$key}, ".strlen($html)." chars");
+  }
+} else {
+  DeHeerHoreca_Fpc_Helper_Data::log("Cache: NOT SAVED {$key}, ".strlen($html)." chars");
 }
-?>
-<!-- footer_end -->

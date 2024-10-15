@@ -13,7 +13,7 @@ $category                     = $this->getRequest()->getControllerName();
 $category_id                  = null;
 $carct                        = Mage::registry("current_category");
 $category_id                  = $carct->getId();
-$category_desc                = $carct->getDescription();
+$category_desc                = (string) $carct->getDescription();
 $orig_category_desc           = $category_desc;
 $amschk                       = $this->getRequest()->getRouteName();
 $haschild                     = false;
@@ -31,7 +31,7 @@ $show_toolbar                 = true;
 $_columnCount                 = 4;
 $displaySize                  = 200;
 $_imgSize                     = 1 * $displaySize;
-$show_products                = (!str_contains((string) $category_desc, "<!--no_products-->"));
+$show_products                = (!str_contains($category_desc, "<!--no_products-->"));
 $media_url                    = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $media_dir                    = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
@@ -72,9 +72,9 @@ if($carct && ($category === "category")) {
   Varien_Profiler::start("DHH_CategoryHeader");
   
   $category_id          = (int) $carct->getId();
-  $category_name        = $carct->getName();
-  $category_name        = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
-  $category_name_lwr    = strtolower((string) $category_name);
+  $category_name        = (string) $carct->getName();
+  $category_name        = (string) Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+  $category_name_lwr    = strtolower($category_name);
   $orig_category_desc   = $carct->getDescription();
   
   // Assemble category description
@@ -82,35 +82,39 @@ if($carct && ($category === "category")) {
     $category_desc      = "";
   }
   // Create a H1 if the description is empty
-  if(strlen((string) $category_desc) < 5) {
+  if(strlen($category_desc) < 5) {
     $category_desc      = "<h1>{$category_name}</h1>";
   }
   // In case of shop-by-brand, do not show another H1
   if(defined("CTDESC_H1_SENT") === true) {
-    $category_desc = str_ireplace("h1>", "h2>", (string) $category_desc);
+    $category_desc = str_ireplace("h1>", "h2>", $category_desc);
   }
   
   // Add category boilerplate to bottom
-  if($on_first_page === true && $have_active_filters === false
-  && !str_contains((string) $category_desc, "<!--no_auto_desc-->")) {      
-    $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($category_id, $_productCollection);
-    if($on_first_page === true && $have_active_filters === false && is_array($manufacturers) === true && sizeof($manufacturers) > 0) {
-      $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
-      $n = sizeof($manufacturers);
-      $i = 0;
-      foreach($manufacturers as $manufacturer) {
-        if(strlen((string) $manufacturer) < 3) continue;
-        $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
-        $i++;
-        if($i === $n-1) {
-          $category_block_bottom_html .= " en ";
-        } elseif($i < $n) {
-          $category_block_bottom_html .= ", ";
-        } else {
-          $category_block_bottom_html .= ".";
+  if($on_first_page && !$have_active_filters && !str_contains($category_desc, "<!--no_auto_desc-->")) {      
+    if($on_first_page && !$have_active_filters) {
+      $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($category_id, $_productCollection);
+      if(is_array($manufacturers) && sizeof($manufacturers) > 0) {
+        $n = sizeof($manufacturers);
+        $i = 0;
+        
+        $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
+        
+        foreach($manufacturers as $manufacturer) {
+          if(strlen((string) $manufacturer) < 3) continue;
+          $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
+          $i++;
+          if($i === $n-1) {
+            $category_block_bottom_html .= " en ";
+          } elseif($i < $n) {
+            $category_block_bottom_html .= ", ";
+          } else {
+            $category_block_bottom_html .= ".";
+          }
         }
+        
+        $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
       }
-      $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
     }
 
     // if($on_first_page === true && $have_active_filters === false) {
@@ -226,7 +230,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
           "fit"             => "contain",
           "width"           => $col_width,
           "height"          => $col_width,
-          "lazy"            => ($i < 5),
+          "lazy"            => ($i >= 5),
           "add_mod_time"    => true,
           "class"           => "trans-opacity",
           "title"           => $category_name,
@@ -274,11 +278,10 @@ if($show_products && $_productCollection->getFirstItem()) {
       
       $i++;
       $product_id = $_product->getId();
-      
       $cache_key  = "dhh_listview_product_{$product_id}";
+      $GLOBALS["read_listview_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "dhh_listview_product");
       
-      $GLOBALS["read_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "dhh_listview_product");
-      if($GLOBALS["read_cache_enabled"]) {
+      if($GLOBALS["read_listview_cache_enabled"]) {
         if($html = (string) Mage::app()->getCache()->load($cache_key)) {
           Varien_Profiler::start("DHH_ListProduct_{$product_id}_cached");
           DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
@@ -413,7 +416,7 @@ if($show_products && $_productCollection->getFirstItem()) {
               case "A+":    $enclz = "enrgclz1";  break;
               case "A":     $enclz = "enrgclz1";  break;
               case "B":     $enclz = "enrgclz2";  break;
-              case "C":     $enclz = "enrgclz3";  break;
+              case "C":     $enclz = "enrgclz2";  break;
             }
             if($enclz !== "") {
               $html .= "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$value}\">{$value}</span>";
@@ -495,7 +498,7 @@ if($show_products && $_productCollection->getFirstItem()) {
           // Simple product, sellable
           if($_product->isSaleable()) {
             $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation(\"".$this->getAddToCartUrl($_product)."\")\"><i class=\"fa fa-shopping-cart\"></i></button>";
+            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation('{$this->getAddToCartUrl($_product)}')\"><i class=\"fa fa-shopping-cart\"></i></button>";
           }
           
           // Simple product, not sellable

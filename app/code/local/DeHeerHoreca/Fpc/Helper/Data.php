@@ -87,7 +87,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   // Cleans the cached URL by removing URL parameters that do not affect the payload
   // Otherwise we would cache index.html?sqr=x separately from index.html
   // Optionally takes a URL for debug/dev
-  public function get_cache_url(string $url = ""): string {
+  public static function get_cache_url(string $url = ""): string {
     if($url === "") {
       $url = html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
     }
@@ -108,7 +108,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   // @see https://stackoverflow.com/questions/4937478/strip-off-url-parameter-with-php
-  public function strip_param_from_url($url, $params, $sort = true) {
+  public static function strip_param_from_url($url, $params, $sort = true) {
     $url        = strtok($url, "#");            // Remove the fragment
     $base_url   = strtok($url, "?");            // Get the base url
 
@@ -137,7 +137,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   // Logic also exists in DeHeerHoreca_Fpc_Model_Observer
-  public function get_cache_prefix(): string {
+  public static function get_cache_prefix(): string {
     $cache_key_prefix = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
     
     if($cache_key_prefix === "catalog_product_view") {
@@ -171,7 +171,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   // Determine of the current request is anonymous or logged in
-  public function is_request_anonymous(): bool {
+  public static function is_request_anonymous(): bool {
     
     if(!is_null(self::$request_is_anonymous)) {
       return self::$request_is_anonymous;
@@ -202,7 +202,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
    * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
    */
-  public function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $html_block_mode = false, string $debug_name = ""): bool {
+  public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $html_block_mode = false, string $debug_name = ""): bool {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
@@ -241,7 +241,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     //   return false;
     // }
     
-    if($non_anonymous_okay === false && Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
+    if(!$non_anonymous_okay && self::is_request_anonymous()) {
       self::log("Read cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
@@ -258,7 +258,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
    * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
    */
-  public function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
+  public static function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
@@ -270,6 +270,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
+    // ath: Aoe_TemplateHints
     if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])) {
       self::log("Write cache disabled (URL parameter): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
@@ -285,14 +286,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if($html_block_mode !== true) {
       $action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($action, self::$om_action_whitelist, true)) {
-        self::log("Write cache disabled (Magento action): {$debug_name}");
+        self::log("Write cache disabled (OpenMage action): {$debug_name}");
         Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
         return false;
       }
     }
     
-    if($non_anonymous_okay === false && Mage::helper("deheerhoreca_fpc/data")->is_request_anonymous() === false) {
-      self::log("Read cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
+    if(!$non_anonymous_okay && !self::is_request_anonymous()) {
+      self::log("Write cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
@@ -305,29 +306,27 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   // Optionally takes a URL for debug/dev
-  public function get_cache_key(string $cache_key_prefix = "", string $url = ""): string {
+  public static function get_cache_key(string $cache_key_prefix = "", string $url = ""): string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
-    $cache_key_url = Mage::helper("deheerhoreca_fpc/data")->get_cache_url($url);
+    $cache_key_url = self::get_cache_url($url);
     
     if(empty($cache_key_prefix)) {
-      $cache_key_prefix = Mage::helper("deheerhoreca_fpc/data")->get_cache_prefix();
+      $cache_key_prefix = self::get_cache_prefix();
     }
     
     $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
     $_cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
     
-    if(DHH_FPC_DEBUG === true) {
-      self::log("Cache URL: {$cache_key_url}");
-      self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}");
-    }
+    self::log("Cache URL: {$cache_key_url}");
+    self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}");
     
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     
     return $_cacheKey;
   }
   
-  public function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true) {
+  public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true) {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     $html = Mage::app()->getCache()->load($key);
@@ -338,9 +337,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return null;
     }
     
-    if(DHH_FPC_DEBUG) {
-      $size_raw_key = strlen((string) $html);
-    }
+    $size_raw_key = mb_strlen((string) $html);
     
     /* Hole punching */
     
@@ -350,9 +347,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       Varien_Profiler::start("DHH::FPC::Holepunch::formkey");
       $search = "<!-- fpc form_key_placeholder -->";
       $replacement = Mage::getSingleton("core/session")->getFormKey();
-      if(empty($replacement) === false) {
+      if(!empty($replacement)) {
         $html = str_replace($search, $replacement, (string) $html, $count);
-        self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
+        // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+        self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars");
       }
       Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
     }
@@ -377,7 +375,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $replacement = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
       $search = "<!-- header_minicart_here -->";
       $html = str_replace($search, $replacement, (string) $html, $count);
-      self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
+      // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars");
       Varien_Profiler::stop("DHH::FPC::Holepunch::minicart");
       
       // core_messages
@@ -391,7 +390,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // var_dump($replacement);exit;
       $search = "<!-- core_messages_here -->";
       $html = str_replace($search, $replacement, $html, $count);
-      self::log("Replaced {$search} {$count} times with ".strlen($replacement)." chars");
+      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen($replacement)." chars", $level);
       Varien_Profiler::stop("DHH::FPC::Holepunch::messages_html");
       // miniquote
       
@@ -403,7 +403,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
         ->toHtml();
       $search = "<!-- header_miniquote_here -->";
       $html = str_replace($search, $replacement, $html, $count);
-      self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
+      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars", $level);
       Varien_Profiler::stop("DHH::FPC::Holepunch::miniquote_html");
       
       // // Breadcrumbs block -- only for catalog_product_view
@@ -431,7 +432,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
           // $search = "<!-- breadcrumbs_here -->";
           // $html = str_replace($search, $breadcrumbs_html, $html, $count);
           // self::log($breadcrumbs_html);
-          // self::log("Replaced {$search} {$count} times (".strlen($breadcrumbs_html)." chars)");
+          // self::log("Replaced {$search} {$count} times (".mb_strlen($breadcrumbs_html)." chars)");
         // }
         // Varien_Profiler::stop("DHH::FPC::Holepunch::breadcrumbs_html");
       // }
@@ -441,25 +442,25 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       // Main nav
       Varien_Profiler::start("DHH::FPC::Holepunch::nav");
-      $replacement = $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
+      $replacement = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
       $search = "<!-- nav_here -->";
       $html = str_replace($search, $replacement, $html, $count);
-      self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
+      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars", $level);
       Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
       
       // Footer
       Varien_Profiler::start("DHH::FPC::Holepunch::footer");
-      $replacement = $_html = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
+      $replacement = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
       $search = "<!-- footer_here -->";
       $html = str_replace($search, $replacement, $html, $count);
-      self::log("Replaced {$search} {$count} times with ".strlen((string) $replacement)." chars");
+      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars", $level);
       Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
     }
     
-    if(DHH_FPC_DEBUG === true) {
-      $size = strlen((string) $html);
-      self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
-    }
+    $size = mb_strlen((string) $html);
+    self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
     self::_add_server_timing_header("FPC hit");
     self::_emit_server_timing_header();
     
@@ -468,7 +469,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $html;
   }
   
-  public function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []) {
+  public static function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []) {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
@@ -488,6 +489,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Unnecessary HTML
     $html = str_replace(" type=\"text/javascript\"", "", $html);
+    $html = str_replace(" type=\"text/css\"", "", $html);
     
     // Fix XHTML crap
     $html = str_replace(" />", ">", $html);
@@ -495,7 +497,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // HTML minifier -- Broken:
     // /koelingen/vrieskasten/glasdeurvriezers/vrieskast-1530-l-3-glasdeuren-zwart-lichtbak-combisteel-7455-2435.html
     // https://www.chefstore.nl/service
-    // $bytes_pre = strlen($html);
+    // $bytes_pre = mb_strlen($html);
     // $options = [
       // "collapse_whitespace" => false,
       // "disable_comments"    => true,
@@ -503,7 +505,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // try {
       // $minifier = new TinyHtmlMinifier($options);
       // $html = $minifier->minify($html);
-      // $bytes_post = strlen($html);
+      // $bytes_post = mb_strlen($html);
       // self::log("Minifier OK: {$bytes_pre} => {$bytes_post} bytes");
     // } catch(Exception $e) {
       // self::log("Minifier exception: {$e->getMessage()}");
@@ -515,6 +517,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       if($formKey) {
         $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
         $html = str_replace($formKey, $formKeyPlaceholder, $html, $count);
+        // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
         self::log("Replaced form_key {$count} times");
       }
     }
@@ -530,14 +533,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html = self::replace_between($html, "<!-- footer_start -->", "<!-- footer_end -->", "<!-- footer_here -->");
     }
     
-    // $cache_tags[] = "quickndirtyfpc";
     $cache_tags[] = "DHH_FPC";
     
     // Store in cache
     if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {
-      self::log("Cache: SAVED {$key}, ".strlen($html)." chars");
+      self::log("Cache: SAVED {$key}, ".mb_strlen($html)." chars");
       self::_add_server_timing_header("FPC saved");
       self::_emit_server_timing_header();
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return true;
     }
     
@@ -546,13 +549,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return false;
   }
   
-  public function replace_between($str, $needle_start, $needle_end, $replacement) {
+  public static function replace_between($str, $needle_start, $needle_end, $replacement) {
     
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     $pos_start  = strpos((string) $str, (string) $needle_start);
     if($pos_start === false) {
-      self::log(__METHOD__.": {$needle_start} not found!");
+      self::log(__METHOD__.": {$needle_start} not found!", Zend_Log::DEBUG);
       return $str;
     }
     
@@ -560,11 +563,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $pos_end    = strpos((string) $str, (string) $needle_end, $start);
     
     if($pos_end === false) {
-      self::log(__METHOD__.": {$needle_end} not found!");
+      self::log(__METHOD__.": {$needle_end} not found!", Zend_Log::DEBUG);
       return $str;
     }
     
-    $end        = $pos_end === false ? strlen((string) $str) : $pos_end + strlen((string) $needle_end);
+    $end        = $pos_end === false ? mb_strlen((string) $str) : $pos_end + mb_strlen((string) $needle_end);
     
     self::log(__METHOD__.": ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
     
@@ -573,13 +576,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
   }
   
-  static function log($msg): void {
-    if(DHH_FPC_DEBUG) {
-        Mage::log($msg, Zend_Log::DEBUG, "fpc.log", true);
+  public static function log($msg, $level = Zend_Log::DEBUG): void {
+    if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
+      Mage::log($msg, $level, "fpc.log", true);
     }
   }
   
-  static function _add_server_timing_header(string $string) {
+  public static function _add_server_timing_header(string $string) {
     if(headers_sent()) {
       return false;
     }
@@ -591,7 +594,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $GLOBALS["dhh_header_server_timing"][] = $string;
   }
   
-  static function _emit_server_timing_header() {
+  public static function _emit_server_timing_header() {
     if(headers_sent()) {
       return false;
     }

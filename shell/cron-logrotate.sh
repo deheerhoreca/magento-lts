@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/cron-logrotate.sh
-
-set -e      # Exit immediately if a command exits with a non-zero status
-set -u      # Treat unset variables as an error when substituting
+# ./shell/cron-logrotate.sh
 
 now=`date`
 echo "--------------------------------------------------------------------"
@@ -16,6 +13,9 @@ echo "--------------------------------------------------------------------"
 cm
 
 mkdir -p ~/tmp
+
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
 
 cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.log
@@ -31,7 +31,6 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
   dateext
   rotate 3
   missingok
-  notifempty
 }
 EOF
 
