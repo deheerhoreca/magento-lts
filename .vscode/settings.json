@@ -2,6 +2,5 @@
     "files.watcherExclude": {
         "/media/*": true,
         "/var/log/**": true
-    },
-    "php.validate.executablePath": "/opt/plesk/php/8.1/bin/php"
+    }
 }
