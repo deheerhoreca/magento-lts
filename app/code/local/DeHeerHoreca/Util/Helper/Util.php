@@ -1595,13 +1595,15 @@ if(function_exists("_getAlternativeEans") === false) {
 // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
 // - lib/intel.inc.php
 if(function_exists('_cdn_img') === false) {
-  function _cdn_img($options) {
+  function _cdn_img(array $options) {
     $url        = $options["url"]       ?? false;
     $url        = (string) htmlspecialchars((string) $url);
     
     if($url === false) {
       return false;
     }
+    
+    // $options["cm"]
     
     $identifier     = $options["identifier"]    ?? "NO_ID";
     $options["cdn"] ??= "imagekit_custom";

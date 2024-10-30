@@ -14,7 +14,7 @@ cm
 
 TARGET_PHP_INI=./php.cmd.ini
 TARGET_USER_INI=_user.ini
-PHP_VERSION=$(iphp -r "echo phpversion();")
+PHP_VERSION=$(mphp -r "echo phpversion();")
 
 # Backup php.cmd.ini
 PHP_INI_BACKUP="php.cmd.ini.bak-$(date +%F_%H%M%S)"
@@ -35,7 +35,7 @@ fi
 echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 
 # Create new php.cmd.ini
-DEFAULT_PHP_INI=$(iphp -r "echo php_ini_loaded_file();")
+DEFAULT_PHP_INI=$(mphp -r "echo php_ini_loaded_file();")
 SHARED_PHP_INI=$(pwd)/etc/php.cmd-dist.ini
 LOCAL_PHP_INI=$(pwd)/etc/php.cmd-local.ini
 NOW=`date`
