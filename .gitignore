@@ -131,7 +131,7 @@ phpstan*.neon
 /media/dhh
 /media/wysiwyg/*
 
-# UNIGNORE COREACKED FILES
+# UNIGNORE COREHACKED FILES
 
 !/app/code/community/Cm/RedisSession/Model/Session.php
 !/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
