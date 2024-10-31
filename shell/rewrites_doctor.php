@@ -11,6 +11,8 @@
 // For STORE_ID = 4: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
 
 ini_set("display_errors", "1");
+ini_set("display_startup_errors", "1");
+error_reporting(E_ALL);
 
 const DRYRUN = true;
 

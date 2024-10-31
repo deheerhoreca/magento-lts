@@ -140,6 +140,7 @@ class Mage_Shell_Indexer extends Mage_Shell_Abstract
                 }
             }
         } elseif ($this->getArg('reindex') || $this->getArg('reindexall') || $this->getArg('reindexallrequired')) {
+            ini_set("memory_limit","1G");
             if ($this->getArg('reindex')) {
                 $processes = $this->_parseIndexerString($this->getArg('reindex'));
             } else {
