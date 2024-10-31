@@ -156,6 +156,7 @@ phpstan*.neon
 /*.bak-*
 /_user.ini
 /php.cmd.ini
+/etc/php.cmd.ini
 
 /.idea/
 #/.well-known/

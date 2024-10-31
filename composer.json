@@ -10,6 +10,7 @@
         "aschroder/smtp_pro": "dev-dhh-fixes",
         "aydin-hassan/magento-core-composer-installer": "^2.1.0",
         "cmixin/business-day": "^1.18",
+        "dekor/php-array-table": "^2.0",
         "firegento/debug": "^1.5",
         "michelf/php-markdown": "^2.0",
         "mikehaertl/php-shellcommand": "^1.7",

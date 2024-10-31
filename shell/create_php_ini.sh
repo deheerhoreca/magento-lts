@@ -13,6 +13,7 @@ set -u      # Treat unset variables as an error when substituting
 cm
 
 TARGET_PHP_INI=./php.cmd.ini
+COPY_PHP_INI=./etc/php.cmd.ini
 TARGET_USER_INI=_user.ini
 PHP_VERSION=$(mphp -r "echo phpversion();")
 
@@ -45,7 +46,7 @@ echo > ${TARGET_PHP_INI}
 printf "; File: ${TARGET_PHP_INI}\n" >> ${TARGET_PHP_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_PHP_INI}
 printf "; PHP version: ${PHP_VERSION}\n" >> ${TARGET_PHP_INI}
-printf "; Created: %s\n" "$NOW\n" >> ${TARGET_PHP_INI}
+printf "; Created: %s\n" "$NOW" >> ${TARGET_PHP_INI}
 
 printf "\n; ---------------------- ${DEFAULT_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${DEFAULT_PHP_INI} >> ${TARGET_PHP_INI}
@@ -59,6 +60,9 @@ cat ${LOCAL_PHP_INI} >> ${TARGET_PHP_INI}
 # Sometimes the OS INI has no unix line endings
 dos2unix -k ${TARGET_PHP_INI}
 
+# Copy to new location
+cp ${TARGET_PHP_INI} ${COPY_PHP_INI}
+
 # Create new _user.ini
 SHARED_USER_INI=$(pwd)/etc/.user-dist.ini
 LOCAL_USER_INI=$(pwd)/etc/.user-local.ini
@@ -70,7 +74,7 @@ printf "; File: ${TARGET_USER_INI}\n" >> ${TARGET_USER_INI}
 printf "; This should be used as Additional PHP Directives in Plesk\n" >> ${TARGET_USER_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_USER_INI}
 printf "; PHP version: ${PHP_VERSION}\n" >> ${TARGET_USER_INI}
-printf "; Created: %s\n" "$NOW\n" >> ${TARGET_USER_INI}
+printf "; Created: %s\n" "$NOW" >> ${TARGET_USER_INI}
 
 printf "\n; ---------------------- ${SHARED_USER_INI} ----------------------\n\n" >> ${TARGET_USER_INI}
 cat ${SHARED_USER_INI} >> ${TARGET_USER_INI}
@@ -79,6 +83,6 @@ printf "\n; ---------------------- ${LOCAL_USER_INI} ----------------------\n\n"
 cat ${LOCAL_USER_INI} >> ${TARGET_USER_INI}
 
 # Sometimes the OS INI has no unix line endings
-dos2unix -k ${TARGET_PHP_INI}
+dos2unix -k ${TARGET_USER_INI}
 
 echo "Done"
