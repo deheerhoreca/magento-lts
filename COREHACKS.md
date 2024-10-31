@@ -30,7 +30,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Modifications/additions marked by "DHH"
     - Updated up to: v20.5.0
 - **/app/Mage.php**
-  - Changed `logException()`
+  - Changed `logException()` and `log()`
   - Updated up to: v20.5.0
 - **/app/code/core/**
   - `app/code/core/Mage/Sales/etc/config.xml`
