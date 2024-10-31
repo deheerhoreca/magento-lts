@@ -150,6 +150,9 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     
     $debug_data = [];
     
+    $total_rewrite_urls = 0;
+    $counter_skus = 0;
+    
     echo "Store ID = ".STORE_ID.PHP_EOL;
     
     switch(STORE_ID) {
