@@ -21,7 +21,7 @@ abstract class Zend_Cache
 abstract class Zend_Cache_Backend {}
 interface Zend_Cache_Backend_ExtendedInterface {}
 
-/* loading Redis cache backend */ 
+/* loading Redis cache backend */
 include_once("Cm/Cache/Backend/Redis.php");
 
 function showHelp(){
@@ -34,7 +34,9 @@ function showHelp(){
 	"Example: rediscli.php -s 127.0.0.1 -p 6379 -d 0,1\n\n";
 	exit(0);
 }
+
 /* parsing command line options */
+
 $opts  = "s:a:p:vd:";
 $options = getopt($opts);
 if(!isset($options["s"]) || !isset($options["p"]) || !isset($options["d"])) {
@@ -47,7 +49,6 @@ foreach($databases as $db) {
 	if(isset($options["v"]))
 		echo "Cleaning database $db:";
 	
-
 	try {
 		// Check if we have a password
 		if(isset($options['a']))
@@ -58,7 +59,6 @@ foreach($databases as $db) {
 		echo "\nError: ".$e->getMessage()."\n";
 		exit(1);
 	}
-
 	
 	if($cache === false ){
 		echo "\nERROR: Unable to clean database $db\n";
@@ -74,5 +74,3 @@ foreach($databases as $db) {
 		echo " [done]\n";
 	unset($cache);
 }
-
-?>

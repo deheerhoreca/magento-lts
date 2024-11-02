@@ -1,38 +1,30 @@
 <?php
-if(Mage::helper('richsnippets')->snippetsEnabled()) {
-  $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
-  if($snippetsType == '0') {
+if(Mage::helper('richsnippets')->snippetsEnabled() && Mage::getStoreConfig('richsnippets/general/snippetsType') == '0') {
     
-    $product    = Mage::registry("current_product");
-    $json       = "";
-    $cache_key  = "tm_richsnippets_product_json_{$product->getId()}_";
-    $cache_tag  = "tm_richsnippets";
-    
-    if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, $cache_tag)) {
-      $serialized = Mage::app()->getCache()->load($cache_key);
-      if(empty($serialized) === true) {
-        DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
-      } else {
-        $json = unserialize($serialized);
-      }
-    }
-    
-    if(empty($json) === false) {
-      DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen((string) $json)." chars");
-      echo "<script type=\"application/ld+json\">{$json}</script>";
+  $product      = Mage::registry("current_product");
+  $json         = "";
+  $cache_key    = "tm_richsnippets_product_json_{$product->getId()}";
+  
+  if(DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "tm_richsnippets")) {
+    $json = Mage::app()->getCache()->load($cache_key);
+    if(empty($json)) {
+      DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
     } else {
-      $json = $this->getJsonSnippetsProduct();
-      if(isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
-        $json = json_encode(json_decode((string) $json), JSON_PRETTY_PRINT); // During development
-      }
-      echo "<script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
-      
-      // Store in Magento cache
-      if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, $cache_tag)) {
-        if(Mage::app()->getCache()->save(serialize($json), $cache_key, [$cache_tag], 86400 * 7)) {
-          DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}, ".strlen((string) $json)." chars");
-        }
-      }
+      DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
+      echo "<script type=\"application/ld+json\">{$json}</script>";
+      return;
+    }
+  }
+  
+  $json = $this->getJsonSnippetsProduct();
+  if(isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+    $json = json_encode(json_decode((string) $json), JSON_PRETTY_PRINT); // During development
+  }
+  echo "<script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
+  
+  if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "tm_richsnippets")) {
+    if(Mage::app()->getCache()->save($json, $cache_key, ["DHH_TM_RICHSNIPPETS"], 86400 * 7)) {
+      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
     }
   }
 }

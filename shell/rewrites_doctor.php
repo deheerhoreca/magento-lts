@@ -11,6 +11,8 @@
 // For STORE_ID = 4: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
 
 ini_set("display_errors", "1");
+ini_set("display_startup_errors", "1");
+error_reporting(E_ALL);
 
 const DRYRUN = true;
 
@@ -147,6 +149,9 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   public function clearExtraRewrites($left) {
     
     $debug_data = [];
+    
+    $total_rewrite_urls = 0;
+    $counter_skus = 0;
     
     echo "Store ID = ".STORE_ID.PHP_EOL;
     

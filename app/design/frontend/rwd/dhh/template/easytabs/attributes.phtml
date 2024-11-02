@@ -46,7 +46,7 @@ $attr_trim_decimals   = ["inhoud_liters", "inhoud_m3", "voorraadbunker_kg",
   "annual_energy_consumption_kwh", "capaciteit_boiler", "laadhoogte", "weight_fabric",
   "gewicht_vlees_max", "water_verbruik", "water_verbruik_cyclus", "temp_resistance_from",
   "temp_resistance_to", "guide_set_distance_mm", "inhoud_vetpan_liter", "max_load_per_shelf_kg",
-  "gross_weight_gram", "amps", "etaleer_oppervlak_m2", "blade_length_mm",
+  "max_load_total_kg", "gross_weight_gram", "amps", "etaleer_oppervlak_m2", "blade_length_mm",
 ];
 
 // Allow to show "No" values for these attributes
@@ -164,6 +164,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "ijs_productie":
           case "ijs_bunker":
           case "max_load_per_shelf_kg":
+          case "max_load_total_kg":
             $postfix = " kg";
             break;
           

@@ -2,12 +2,11 @@
 
 # ~/httpdocs/deheerhoreca-magento/shell/cron-rebuild-cache.sh
 
-# set -e      # Exit immediately if a command exits with a non-zero status
-# set -u      # Treat unset variables as an error when substituting
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
 
 # This runs on prod.deheerhoreca.nl only
 if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ]; then
-  # echo "$(date -u) Not running ${0} on ${HOSTNAME} ever"
   exit 0
 fi
 
@@ -19,5 +18,3 @@ fi
 cm
 
 mphp -c php.cmd.ini shell/rebuild_cache.php
-
-# set +x

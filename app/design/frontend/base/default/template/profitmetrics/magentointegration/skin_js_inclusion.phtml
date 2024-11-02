@@ -1,0 +1,66 @@
+<?php
+/** @var Mage_Core_Block_Template $this */
+/** @var Profitmetrics_MagentoIntegration_Helper_Data $profitmetricsHelper */
+$profitmetricsHelper = Mage::helper('profitmetrics');
+?>
+<?php if ($profitmetricsHelper->isEnabled() && !$profitmetricsHelper->getIsHeadlessModeActive()): ?>
+<script type="text/javascript">
+    var includeJsFile = function (url) {
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=url; s.parentNode.insertBefore(g,s);
+    };
+
+    window._pm_TPTrackEndpoint = '<?php echo Mage::getUrl('profitmetrics/tracking/index', array('_secure' => true)); ?>';
+    window.blockScriptBeforeConsent = <?php echo $profitmetricsHelper->getBlockScriptBeforeContent() ? 'true' : 'false'; ?>;
+
+    includeJsFile('<?php echo $this->getSkinUrl($this->getData('skin_js'), array('_secure' => true)); ?>?v=1');
+</script>
+    <?php if (!$profitmetricsHelper->isOrderSuccessPage() && ($trackingCodeJs = $profitmetricsHelper->getTrackingCodeJs())): ?>
+        <?php if (strpos($trackingCodeJs, '<script') === false): ?>
+            <script type="text/javascript"><?= $trackingCodeJs ?></script>
+        <?php else: ?>
+            <?= $trackingCodeJs ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php if ($googleAdsConversionId = $profitmetricsHelper->getGoogleAdsConversionId()): ?>
+        <!-- ProfitMetrics Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $this->escapeUrl($googleAdsConversionId) ?>"></script>
+        <script>
+            function formatAWID(awID) {
+                // Ensure the AW ID is in the correct format
+                if (!awID.startsWith('AW-')) {
+                    awID = 'AW-' + awID.replace(/^AW/, '');
+                }
+                return awID;
+            }
+
+            const inputAWID = '<?= $this->quoteEscape($googleAdsConversionId) ?>';
+            const awID = formatAWID(inputAWID);
+
+            function _pm_executeAWConfig() {
+                const scriptExists = document.querySelector('script[src^=\"https://www.googletagmanager.com/gtag/js?id=\"]');
+
+                if (scriptExists && window.dataLayer) {
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag('config', awID);
+                } else {
+                    const script = document.createElement('script');
+                    script.async = true;
+                    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + awID;
+                    document.head.appendChild(script);
+                    script.addEventListener('load', function() {
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() {
+                            dataLayer.push(arguments);
+                        }
+                        gtag('js', new Date());
+                        gtag('config', awID);
+                    });
+                }
+            }
+            _pm_executeAWConfig();
+        </script>
+    <?php endif; ?>
+<?php endif; ?>

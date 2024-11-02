@@ -120,10 +120,8 @@ phpunit.xml
 /.modman/*/.git
 .phpstorm.meta.php
 
-# This is tricky to get right
-# First whitelist /media, cancelling openmage's ignores above
+# First unignore /media/*, then add blacklisted items again
 !/media/*
-# ..and then add the blacklist
 /media/amfeed
 /media/cache
 /media/attachment
@@ -132,24 +130,36 @@ phpunit.xml
 /media/sooqr
 /media/qquoteadv
 /media/catalog
-/media/tmp/
-/media/dhh/
+/media/tmp
+/media/dhh
+/media/wysiwyg/*
 
-# Store Manager
+# UNIGNORE COREHACKED FILES
+
+!/app/code/community/Cm/RedisSession/Model/Session.php
+!/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
+!/app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php
+
+# STORE MANAGER
+
 /tmp
 
-# Biller webhook
+# BILLER WEBHOOK
+
 /biller-webhook-errors.jsonl
 /biller-webhook.jsonl
 
-# Freshdesk webhook
+# FRESHDESK WEBHOOK
+
 /freshdesk-webhook.ndjson
 
-# Don't store generated configurations:
+# GENERATED CONFIGURATIONS
+
 /etc/*-local.ini
 /*.bak-*
 /_user.ini
 /php.cmd.ini
+/etc/php.cmd.ini
 
 # Plesk
 .php-version

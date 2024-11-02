@@ -13,8 +13,6 @@ echo "--------------------------------------------------------------------"
 # Set User Environment
 . ${HOME}/.profile
 
-# set -x      # Print commands and their arguments as they are executed
-
 cm
 
 cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
@@ -31,12 +29,9 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
   dateext
   rotate 2
   missingok
-  notifempty
 }
 EOF
 
 /usr/sbin/logrotate /tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-intel.tmp -v
 
 rm /tmp/logrotate-deheerhoreca-magento.conf
-
-# set +x

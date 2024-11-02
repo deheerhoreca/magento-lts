@@ -36,7 +36,7 @@ $_products = Mage::getModel("catalog/product")
   ->addFieldToFilter([["attribute" => "featured", "eq" => 1]])
   // ->addAttributeToFilter("sku", ["in" => ["CS-7455.3300", "CS-7450.0159", "CS-7450.0580", "CS-7464.0045", "CS-7072.1015"]])
   ->addAttributeToSort("popularity", "ASC")
-  ->setPageSize(($limit * 5)) // Random pick from top
+  ->setPageSize(($limit * 6)) // Random pick from top
   ->addFinalPrice(); // Necessary to respect sale price end date
 $_products->load();
 // if(_dhh_debug()) {
@@ -92,9 +92,9 @@ $_products = Mage::getModel("catalog/product")
   ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
   ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
   ->addFieldToFilter("popularity", ["notnull" => true]) // Prevent unset new products to show up
-  ->addFieldToFilter("sku", ["nin" => $done_dhh_skus]) // Prevent duplicate products on the homepage
+  ->addFieldToFilter("sku", ["nin" => $done_dhh_skus])  // Prevent duplicate products on the homepage
   ->addAttributeToSort("popularity", "ASC")
-  ->setPageSize(($limit * 4)) // Random pick from top
+  ->setPageSize(($limit * 5)) // Random pick from top
   ->addFinalPrice(); // Necessary to respect sale price end date
 
 // if(_dhh_debug()) {
@@ -263,15 +263,7 @@ if($_products->getFirstItem()) {
         echo $html;
         $title = $product_long_name;
         ?>
-        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image">
-        <?php
-          // echo "<img loading='lazy' class='trans-opacity' id='product-collection-image-{$_product->getId()}'
-            // src='{$this->helper('catalog/image')->init($_product, 'thumbnail')->resize($_imgSize)}'
-            // alt='{$this->stripTags($this->getImageLabel($_product, 'thumbnail'), null, true)}'
-            // width='{$displaySize}' height='{$displaySize}'>";
-          echo $img_html;
-        ?>
-        </a>
+        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image"><?=$img_html?></a>
         <div class="product-info" data-pop="<?=_get_product_attribute($_product, "popularity");?>">
           <div class="info">
             <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
@@ -288,7 +280,7 @@ if($_products->getFirstItem()) {
               }
             }
             
-            if(isset($tagline) === true) {
+            if(isset($tagline)) {
               echo "<div class='product-list-tagline' title='{$tagline}'>Onze Keuze</div>";
             }
             
@@ -301,12 +293,8 @@ if($_products->getFirstItem()) {
             }
             
             // Volume discount tag
-            if(empty($_product->getTierPrice()) === false) {
-              echo "<span class='small' style='line-height: 2em;'>
-                <i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
-            }
-            
-            
+            if(!empty($_product->getTierPrice()))
+              echo "<span class='small' style='line-height: 2em;'><i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
             ?>
           </div>
           <?php

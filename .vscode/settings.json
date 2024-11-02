@@ -1,0 +1,6 @@
+{
+    "files.watcherExclude": {
+        "/media/*": true,
+        "/var/log/**": true
+    }
+}

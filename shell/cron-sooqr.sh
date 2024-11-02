@@ -1,19 +1,18 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/sooqr.sh
+# ~/httpdocs/deheerhoreca-magento/shell/cron-sooqr.sh
+
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
 
 # This runs on prod.deheerhoreca.nl only
-if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ]; then
-  # echo "$(date -u) Not running ${0} on ${HOSTNAME} ever"
+if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerhoreca.nl" ]; then
   exit 0
 fi
 
 # Set User Environment
 . ${HOME}/.profile
 
-set -e      # Exit immediately if a command exits with a non-zero status
-set -u      # Treat unset variables as an error when substituting
-
-cd ~/httpdocs/deheerhoreca-magento
+cm
 
 mphp -c php.cmd.ini shell/sooqr.php --generate 1

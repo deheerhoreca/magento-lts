@@ -6,6 +6,18 @@ backwards-incompatible changes that will affect existing usage.
 
 <!-- CHANGELOG_PLACEHOLDER -->
 
+## 9.19.2 - 2024-04-09
+
+- Fix CI: Use nullable type declaration ([#859](https://github.com/php-curl-class/php-curl-class/pull/859))
+
+## 9.19.1 - 2024-02-27
+
+- Fix afterSend not being called ([#848](https://github.com/php-curl-class/php-curl-class/pull/848))
+
+## 9.19.0 - 2024-01-18
+
+- Allow displaying curl option value without specifying value ([#837](https://github.com/php-curl-class/php-curl-class/pull/837))
+
 ## 9.18.2 - 2023-09-11
 
 - Fix use of mb_strpos() causing error when polyfill is used ([#813](https://github.com/php-curl-class/php-curl-class/pull/813))

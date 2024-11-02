@@ -29,6 +29,9 @@ class AW_All_Model_Cron
 {
     public function run()
     {
+        // DHH CORE HACK -- This functionality is dead
+        return;
+        
         Mage::getModel('awall/feed_extensions')->checkExtensions();
     }
 }

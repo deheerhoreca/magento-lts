@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+    <default>
+        <reference name="before_body_end">
+            <block type="core/template"
+                   name="profitmetrics.tracking.script"
+            >
+                <action method="setTemplate" ifconfig="profitmetrics/settings/enabled">
+                    <template>profitmetrics/magentointegration/skin_js_inclusion.phtml</template>
+                </action>
+                <action method="setSkinJs">
+                    <name>js/profitmetrics/pmTPTrack.js</name>
+                </action>
+            </block>
+        </reference>
+    </default>
+
+    <checkout_onepage_success translate="label">
+        <reference name="before_body_end">
+            <block type="profitmetrics/conversion_booster_snippet"
+                   name="profitmetrics.conversion.booster.snippet">
+                <action method="setTemplate" ifconfig="profitmetrics/settings/enabled">
+                    <template>profitmetrics/magentointegration/conversion_booster_snippet.phtml</template>
+                </action>
+            </block>
+        </reference>
+    </checkout_onepage_success>
+</layout>

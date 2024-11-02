@@ -5,109 +5,131 @@ if(!$helper->isOgMetaEnabled()) {
   return;
 }
 
-$product    = Mage::registry("current_product");
-$html       = "";
-$cache_key  = "eke_ogmeta_product_{$product->getId()}_";
-$cache_tags = ["eke_ogmeta"];
+$_product      = Mage::registry("current_product");
+$html         = "";
+$cache_key    = "eke_ogmeta_product_{$_product->getId()}";
+
+// Serve from cache
 
 if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta")) {
   $html = Mage::app()->getCache()->load($cache_key);
-  if(empty($html) === true) {
-    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}, ".strlen((string) $html)." chars");
+  if(empty($html)) {
+    DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
+  } else {
+    DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
+    echo $html;
+    return;
   }
 }
 
-if(empty($html) === false) {
-  DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}, ".strlen((string) $html)." chars");
-  echo unserialize($html);
-} else {
+// Serve fresh
+
+$dhh_sku              = (string) $_product->getSku();
+$siteName             = (string) $helper->getSiteName();
+$page_title           = (string) $this->getLayout()->getBlock("head")->getTitle();
+$final_price          = number_format($_product->getFinalPrice(), 2);
+$product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
+$stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["fastmode" => true]);
+$overall_stock_status = $stock_data["overall_stock_status"] ?? "";
+// $product_image        = (string) $_product->getImageUrl();
+$productVideo         = (string) _get_product_attribute($_product, "product_video");
+
+$image_attr           = [];
+$image_raw            = (string) $_product->getImage();
+if(!empty($image_raw) && $image_raw !== "no_selection") {
+  $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+  $image_path       = "{$media_dir}/catalog/product{$_product->getData("image")}";
+  $media_url        = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+  $image_url        = "{$media_url}catalog/product{$_product->getData("image")}";
+  $cdn_img_options  = [
+    "fs_path"         => $image_path,
+    "url"             => $image_url,
+    "url_only"        => true,
+    "cm"              => "pad_resize",
+    "width"           => 2048,
+    "height"          => 2048,
+    "add_mod_time"    => true,
+    "relative_url"    => false,
+    // @todo move to named transformation omcatprddtlf
+  ];
+  $image_url = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
   
-  // ------------ START REGULAR FLOW  
-  $siteName = $helper->getSiteName();
-  $imageFile = "";
-  if(!empty($product->getSmallImage()) && $product->getSmallImage() !== "no_selection") {
-    $imageFile = "media/catalog/product".$product->getSmallImage();
-  }
-  
-  $imageAttr = [];
-  if(strlen($imageFile) > 0 && is_file($imageFile) === true) {
+  if(is_file($image_path)) {
     try {
-      $imageAttr = getimagesize($imageFile);
+      $image_attr = getimagesize($image_path);
     } catch(Exception $e) {
-      $imageAttr = [];
+      $image_attr = [];
       Mage::logException($e);
-      $msg = "{$product->getSku()} getimagesize() failed on file ".var_export($imageFile, true);
-      Mage::log($msg, Zend_Log::NOTICE, "system.log", true);
+      Mage::log("{$dhh_sku} getimagesize() failed during eke_ogmeta: ".var_export($image_path, true), Zend_Log::ERR, "system.log", true);
     }
   } else {
-    if(strlen($imageFile) > 0) {
-      $msg = "{$product->getSku()} Product image does not exist: ".var_export($imageFile, true);
-      Mage::log($msg, Zend_Log::NOTICE, "system.log", true);
-    }
-    $imageFile = $helper->getOgImage();
+    Mage::log("{$dhh_sku} Product image does not exist during eke_ogmeta: ".var_export($image_path, true), Zend_Log::ERR, "system.log", true);
   }
-  
-  $productVideo = $product->getResource()->getAttribute("product_video")->getFrontend()->getValue($product);
-  
-  $productDescription = Mage::helper("deheerhoreca_util/util")->_get_product_description($product);
-  if(strlen((string) $productDescription) > 0) {
-    $productDescription = htmlentities(strip_tags((string) $productDescription));
+}
+
+if(empty($image_url)) {
+  $image_url = $helper->getOgImage();
+}
+
+// Remove newlines, trim, limit to 200 chars
+$productDescription = (string) Mage::helper("deheerhoreca_util/util")->_get_product_description($_product);
+if($productDescription !== "") {
+  $productDescription = htmlentities(strip_tags($productDescription));
+  $productDescription = substr(trim(preg_replace("/\s\s+/", ";", $productDescription)), 0, 200);
+}
+
+$availability = match($overall_stock_status) {
+  "in_stock"      => "in_stock",
+  "backorder"     => "backorder",
+  "not_sellable"  => "out of stock",
+  "eol"           => "discontinued",
+  default         => "invalid",
+};
+
+if($availability === "invalid") {
+  Mage::log("{$dhh_sku} Has invalid value availability=".var_export($overall_stock_status, true), Zend_Log::ERR, "system.log", true);
+  $availability = "out of stock";
+}
+
+$html = <<<EOT
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:locale:alternate" content="nl_BE">
+  <meta property="og:title" content="{$page_title}">
+  <meta property="og:site_name" content="{$siteName}">
+  <meta property="og:type" content="product">
+  <meta property="og:availability" content="{$availability}">
+  <meta property="og:url" content="{$product_url}">
+  <meta property="og:image:url" content="https:{$image_url}">
+  <meta property="og:image:alt" content="{$page_title}">
+  <meta property="og:image:width" content="2048">
+  <meta property="og:image:height" content="2048">
+  <meta property="og:description" content="{$productDescription}">
+  <meta property="og:price:amount" content="{$final_price}">
+  <meta property="og:price:currency" content="EUR">
+EOT;
+
+$html .= PHP_EOL;
+
+if($image_attr !== []) {
+  if(isset($image_attr['mime'])) $html .= '  <meta property="og:image:type" content="'.$image_attr['mime'].'">'.PHP_EOL;
+  // if(isset($image_attr[0]))      $html .= '  <meta property="og:image:width" content="'.$image_attr[0].'">'.PHP_EOL;
+  // if(isset($image_attr[1]))      $html .= '  <meta property="og:image:height" content="'.$image_attr[1].'">'.PHP_EOL;
+  unset($image_attr);
+}
+
+if(!empty($productVideo)) {
+  if($productVideo = Mage::helper("deheerhoreca_util/util")->build_product_video_url($productVideo)) {
+    $html .= "  <meta property='og:video' content='{$productVideo}'>".PHP_EOL;
+    $html .= "  <meta property='og:video:secure_url' content='{$productVideo}'>".PHP_EOL;
+    unset($productVideo);
   }
-  
-  // Remove newlines, trim, limit to 200 chars
-  $productDescription   = substr(trim((string) preg_replace("/\s\s+/", ";", (string) $productDescription)), 0, 200);
-  $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product);
-  $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($product);
-  $overall_stock_status = $stock_data["overall_stock_status"];
-  
-  $availability = null;
-  switch($overall_stock_status) {
-    case "in_stock":
-      $availability = "instock";
-      break;
-    case "backorder":
-      $availability = "backorder";
-      break;
-    case "not_sellable":
-      $availability = "out of stock";
-      break;
-    case "eol":
-      $availability = "discontinued";
-      break;
-  }
-  
-  $html = "";
-  $html .= '<meta property="og:locale" content="nl_NL">'.PHP_EOL;
-  $html .= '<meta property="og:locale:alternate" content="nl_BE">'.PHP_EOL;
-  $html .= '<meta property="og:title" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
-  $html .= '<meta property="og:site_name" content="'.$siteName.'">'.PHP_EOL;
-  $html .= '<meta property="og:type" content="product">'.PHP_EOL;
-  $html .= '<meta property="og:availability" content="'.$availability.'">'.PHP_EOL;
-  $html .= '<meta property="og:url" content="'.$product_url.'">'.PHP_EOL;
-  $html .= '<meta property="og:image" content="'.$product->getImageUrl().'">'.PHP_EOL;
-  if($imageAttr !== []) {
-    if(isset($imageAttr['mime'])) $html .= '<meta property="og:image:type" content="'.$imageAttr['mime'].'">'.PHP_EOL;
-    if(isset($imageAttr[0]))      $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">'.PHP_EOL;
-    if(isset($imageAttr[1]))      $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
-  }
-  $html .= '<meta property="og:image:alt" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
-  $html .= '<meta property="og:description" content="'.$productDescription.'">'.PHP_EOL;
-  $html .= '<meta property="og:price:amount" content="'.Mage::registry("product")->getFinalPrice().'">'.PHP_EOL;
-  $html .= '<meta property="og:price:currency" content="'.Mage::app()->getStore()->getCurrentCurrencyCode().'">'.PHP_EOL;
-  if(empty($productVideo) === false) {
-    $productVideo = Mage::helper("deheerhoreca_util/util")->build_product_video_url($productVideo);
-    $html .= "<meta property='og:video' content='{$productVideo}'>".PHP_EOL;
-    $html .= "<meta property='og:video:secure_url' content='{$productVideo}'>".PHP_EOL;
-  }
-  
-  // ------------ STOP REGULAR FLOW
-  
-  echo $html;
-  
-  // Store in Magento cache
-  if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "eke_ogmeta")) {
-    if(Mage::app()->getCache()->save(serialize($html), $cache_key, $cache_tags, 86400 * 7)) {
-      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}, ".strlen($html)." chars");
-    }
+}
+
+echo $html;
+
+// Store in cache
+if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta")) {
+  if(Mage::app()->getCache()->save($html, $cache_key, ["DHH_EKE_OGMETA"], 86400 * 7)) {
+    DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
   }
 }

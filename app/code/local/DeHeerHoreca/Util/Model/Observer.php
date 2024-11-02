@@ -10,6 +10,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   // Setup Elastic APM
   public function configureElasticApm($observer) {
     
+    Varien_Profiler::start(__METHOD__);
+    
     // $action_name      = Mage::app()?->getFrontController()?->getAction()?->getFullActionName();
     // $verb             = $_SERVER["REQUEST_METHOD"] ?? "";
     // $transaction_name = $verb." ".$action_name;
@@ -17,11 +19,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     
     if(!extension_loaded("elastic_apm")) {
       Mage::log("Elastic APM extension not loaded [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
+      Varien_Profiler::stop(__METHOD__);
       return;
     }
     // After clearing opcache, there are a few requests that strangely make it past extension_loaded() but still don't have Elastic APM available, adding another check:
     if(!class_exists("\Elastic\Apm\ElasticApm")) {
       Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::NOTICE, "system.log", true);
+      Varien_Profiler::stop(__METHOD__);
       return;
     }
     
@@ -36,14 +40,15 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // Try to detect admin and set a different service_name
         if(Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() === "adminhtml") {
           $transaction->setType("admin");
-        } elseif(php_sapi_name() === "cli") {
+        } elseif(PHP_SAPI === "cli") {
           $transaction->setType("cli");
         } else {
           $transaction->setType("frontend");
         }
         
         $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
-        $transaction->context()->setLabel("sapi", php_sapi_name());
+        $transaction->context()->setLabel("sapi", PHP_SAPI);
+        Varien_Profiler::stop(__METHOD__);
         return true;
       } else {
         Mage::log("Failed to get current transaction form Elastic APM", Zend_Log::NOTICE, "system.log", true);
@@ -51,6 +56,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     } catch(Exception $e) {
       Mage::logException($e);
     }
+    
+    Varien_Profiler::stop(__METHOD__);
     
     return false;
   }
@@ -72,13 +79,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute("external_documents_json");
     $product->lockAttribute("supplier_usps_json");
     $product->lockAttribute("supplier_name");
+    $product->lockAttribute("supplier_subdescription");
   }
   
   // Also used directly in resave_all_products.php
   public static function updateProductBeforeSave($observer_or_product) {
     if($observer_or_product::class === "Varien_Event_Observer") {
-      if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS")
-      && MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS === true) {
+      if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS") && MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS) {
         return;
       }
       $product = $observer_or_product->getProduct();
@@ -92,36 +99,36 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     // if(strlen($product->getData("name_short")) < 3) {
       // $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
       // $product->setData("name_short", $new_value);
-      // if($return === false) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
+      // if(!$return) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
     // }
 
     /* END OF LIFE */
     if($product->getData("eol") === "2075") {
-      if(empty($product->getData("tagline")) === false) {
+      if(!empty($product->getData("tagline"))) {
         $product->setData("tagline", null);
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Tagline removed");
+        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Tagline removed");
       }
       if($product->getData("featured") === "1") {
         $product->setData("featured", "0");
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Featured flag removed");
+        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Featured flag removed");
       }
       if($product->getData("bargain") === "1") {
         $product->setData("bargain", "0");
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Bargain flag removed");
+        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Bargain flag removed");
       }
-      if(empty($product->getData("txtstockdate")) === false) {
+      if(!empty($product->getData("txtstockdate"))) {
         $product->setData("txtstockdate", null);
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Back in stock date removed");
+        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Back in stock date removed");
       }
-      if(empty($product->getData("product_label")) === false) {
+      if(!empty($product->getData("product_label"))) {
         $product->setData("product_label", null);
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
+        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
       }
 
       // 2023-10-10 Disabling to see if this is the cause of the visibility bug
       // if((int) $product->getVisibility() === 4 || (int) $product->getVisibility() === 2) {
         // $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
-        // if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
+        // if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
       // }
     }
 
@@ -137,7 +144,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
           // $current_value = (double) $product->getData("cost");
           // if($current_value !== $new_value) {
             // $product->setData("cost", $new_value);
-            // if($return === false) Mage::getSingleton('core/session')->addSuccess("Cost Price overwritten");
+            // if(!$return) Mage::getSingleton('core/session')->addSuccess("Cost Price overwritten");
           // }
         // }
       // }
@@ -149,7 +156,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
           // $current_value = (double) $product->getData("price_min");
           // if($current_value !== $new_value) {
             // $product->setData("price_min", $new_value);
-            // if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min overwritten");
+            // if(!$return) Mage::getSingleton("core/session")->addSuccess("price_min overwritten");
           // }
         // }
       // }
@@ -160,7 +167,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       // // Clear the value if price_supplier_msrp_disc_limit is empty
       // if(empty($product->getData("price_min")) === false) {
         // $product->setData("price_min", null);
-        // if($return === false) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
+        // if(!$return) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
       // }
     // }
 
@@ -170,7 +177,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       // $new_value = (string) $new_value;
       // if($new_value > 0 && $new_value != $product->getData("price_bol_be")) {
         // $product->setData("price_bol_be", $new_value);
-        // if($return === false) Mage::getSingleton('core/session')->addSuccess("price_bol_be auto-filled");
+        // if(!$return) Mage::getSingleton('core/session')->addSuccess("price_bol_be auto-filled");
       // }
     // }
 
@@ -180,7 +187,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       // $new_value = (string) $new_value;
       // if($new_value > 0 && $new_value != $product->getData("price_bol_nl")) {
         // $product->setData("price_bol_nl", $new_value);
-        // if($return === false) Mage::getSingleton('core/session')->addSuccess("price_bol_nl auto-filled");
+        // if(!$return) Mage::getSingleton('core/session')->addSuccess("price_bol_nl auto-filled");
       // }
     // }
 
@@ -195,14 +202,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // $new_value = (float) number_format($our_price - $product->getData("cost"), 4, null, "");
         // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_euro")) {
           // $product->setData("gross_margin_euro", $new_value);
-          // if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_euro auto-filled");
+          // if(!$return) Mage::getSingleton('core/session')->addSuccess("gross_margin_euro auto-filled");
         // }
 
         // // Gross Margin PERC
         // $new_value = (float) number_format(((($our_price - $product->getData("cost")) / $our_price) * 100), 4, null, "");
         // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_perc")) {
           // $product->setData("gross_margin_perc", $new_value);
-          // if($return === false) Mage::getSingleton('core/session')->addSuccess("gross_margin_perc auto-filled");
+          // if(!$return) Mage::getSingleton('core/session')->addSuccess("gross_margin_perc auto-filled");
         // }
       // }
     // }
@@ -227,18 +234,18 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
 
       if($new_value > 0 && $new_value != $product->getData("total_power_watt")) {
         $product->setData("total_power_watt", $new_value);
-        if($return === false) Mage::getSingleton('core/session')->addSuccess("total_power_watt auto-filled");
+        if(!$return) Mage::getSingleton('core/session')->addSuccess("total_power_watt auto-filled");
       }
     }
 
     /* Backfill EAN13 from EAN if possible */
-    if(empty($product->getData("ean")) === false && strlen((string) $product->getData("ean")) < 13) {
+    if(!empty($product->getData("ean")) && strlen((string) $product->getData("ean")) < 13) {
       $new_value = sprintf('%013d', $product->getData("ean"));
       $product->setData("ean", $new_value);
-      if($return === false) Mage::getSingleton('core/session')->addSuccess("ean zerofilled");
+      if(!$return) Mage::getSingleton('core/session')->addSuccess("ean zerofilled");
     }
 
-    if($return === true) {
+    if($return) {
       return $product;
     }
 
@@ -276,10 +283,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       if($stockItem->getOrigData() != $stockItem->getData()) {
         try {
           if($stockItem->save()) {
-            if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Stock data altered");
+            if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Stock data altered");
           }
         } catch (Excpetion $e) {
-          if($return === false) Mage::getSingleton('core/session')->addError("Failed to apply EOL business rules on stock item: {$e->getMessage()}");
+          if(!$return) Mage::getSingleton('core/session')->addError("Failed to apply EOL business rules on stock item: {$e->getMessage()}");
         }
       }
     }
@@ -295,10 +302,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       if($stockItem->getOrigData() != $stockItem->getData()) {
         try {
           if($stockItem->save()) {
-            if($return === false) Mage::getSingleton('core/session')->addSuccess("Stock is unmanaged: Setting defaults.");
+            if(!$return) Mage::getSingleton('core/session')->addSuccess("Stock is unmanaged: Setting defaults.");
           }
         } catch (Excpetion $e) {
-          if($return === false) Mage::getSingleton('core/session')->addError("Failed to apply 'unmanaged' business rules on stock item: {$e->getMessage()}");
+          if(!$return) Mage::getSingleton('core/session')->addError("Failed to apply 'unmanaged' business rules on stock item: {$e->getMessage()}");
         }
       }      
     } elseif($stockItem->getManageStock() === "1" && $stockItem->getData('use_config_manage_stock') === "0") {
@@ -306,10 +313,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $stockItem->setData('is_in_stock', 1);
         try {
           if($stockItem->save()) {
-            if($return === false) Mage::getSingleton('core/session')->addSuccess("Product is back in stock: Setting in_stock to Yes.");
+            if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is back in stock: Setting in_stock to Yes.");
           }
         } catch (Excpetion $e) {
-          if($return === false) Mage::getSingleton('core/session')->addError("Failed to update product stock status: {$e->getMessage()}");
+          if(!$return) Mage::getSingleton('core/session')->addError("Failed to update product stock status: {$e->getMessage()}");
         }
       }
     }

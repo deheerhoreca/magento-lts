@@ -32,9 +32,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Other modifications/additions marked by "DHH"
     - Updated up to: v20.5.0
   - `/.gitignore`
+    - Modifications/additions marked by "DHH"
     - Updated up to: v20.5.0
 - **/app/Mage.php**
-  - Changed `logException()`
+  - Changed `logException()` and `log()`
   - Updated up to: v20.5.0
 - **/app/code/core/**
   - `app/code/core/Mage/Sales/etc/config.xml`
@@ -119,6 +120,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 ## ./vendor/ Hacks
 - `vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php`
   - Updated up to: v20.5.0
+  - Unignored in git
 
 ## 3rd Party Hacks
 - **Anowave Sort**
@@ -165,6 +167,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Add `set_time_limit()` call
   - `app/code/community/Magmodules/Sooqr/Block/Search.php`
     - Update script URL because the module is dead
+- **Profitmetrics**
+  - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
+    - Reduce the list of orders that we send to PM
+    - Replace the ID in the PM feed to match what PM expects
 - **TM Core**
   - `app/code/community/TM/Core/Model/Notification/Feed.php`
     - Disable admin notifications
@@ -261,20 +267,29 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
   - Patched up to master on 2023-01-17 (commit 445557b)
-- **aHeadWorks AutoRelated**
+- **aHeadWorks**
   - `app/code/local/AW/Autorelated/Block/Blocks/Abstract.php`
     - Performance improvements
   - `app/code/local/AW/Autorelated/controllers/Adminhtml/Awautorelated/BlocksgridController.php`
     - Fixing security issue
+  - `app/code/local/AW/All/Model/Cron.php`
+    - Nullifying the cronjob since it leads to XML errors
 - **FireGento DynamicCategory**
   - `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
     - Adding exception check and logging to prevent fatal errors
 - **Pay.nl**
   - `app/code/community/Pay/Payment/controllers/OrderController.php`
     - Adding log to critical transaction status updates
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php`
+    - Add some logging to capture Pay API communcation
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/`
+    - Removed 3rd party `.gitignore` and added the dir to our repo to record the corehack above
 - **firegento/firegento-logger**
   - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
   - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432
+- **Geissweb EU VAT Enhanded**
+  - `app/code/local/Geissweb/Euvatgrouper/Model/Validation/Abstract.php`
+    - Add new VAT number format for BE
 
 ## Closed
 - **app/code/core/Mage/**

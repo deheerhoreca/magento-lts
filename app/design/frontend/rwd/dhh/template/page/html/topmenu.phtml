@@ -1,46 +1,37 @@
 <?php
 
-$_cacheKey = "FPC_cms_block_topmenu";
-$_cacheKey = DHH_FPC_NAV_KEY;
+$cache_key = DHH_FPC_NAV_KEY;
 
-// // $static_file = "./media/static/topmenu.html";
+// if(!DHH_FPC_ENABLED) {
+//   $write_cache = false;
+//   $read_cache = false;
+// } elseif(isset($_GET['nofpc'])) {
+//   $write_cache = false;
+//   $read_cache = false;
+// } elseif(isset($_GET['refreshfpc'])) {
+//   $write_cache = true;
+//   $read_cache = false;
+// } else {
+//   $write_cache = true;
+//   $read_cache = false;
+// }
 
-// // Outqualification
+// Override above @todo Fix
 $write_cache = true;
 $read_cache = false;
 
-// if(isset($_GET['nofpc'])) {
-  // $write_cache = false;
-  // $read_cache = false;
-// }
-// if(isset($_GET['refreshfpc'])) {
-  // $write_cache = true;
-  // $read_cache = false;
-// }
-if(DHH_FPC_ENABLED === false) {
-  $write_cache = false;
-  $read_cache = false;
+if($read_cache) {
+  $_html = Mage::app()->getCache()->load($cache_key);
 }
 
-$_html = "";
-
-// // print_r("Cache Key: {$_cacheKey}");
-
-// if($read_cache === true) {
-  // $_html = Mage::app()->getCache()->load($_cacheKey);
-// } else {
-  // // print_r("<br />Menu cache: NO CACHE");
-// }
-
-if(strlen($_html) > 0 === false) {
-  $_html = $this->getHtml('level-top');
-  // print_r("<br />Menu cache: MISS");
-  if($write_cache === true) {
-    Mage::app()->getCache()->save($_html, $_cacheKey, ["quickndirtyfpc"], 86400);
+if(empty($_html)) {
+  $_html = $this->getHtml("level-top");
+  if($write_cache) {
+    Mage::app()->getCache()->save($_html, $cache_key, ["DHH_CMS"], 3600);
   }
-} else {
-  // print_r("<br />Menu cache: HIT");
 }
+
+unset($cache_key);
 
 ?>
 <nav id="nav" class="grid-old navhdwrap">
@@ -49,14 +40,7 @@ if(strlen($_html) > 0 === false) {
   </a>
   <ol id="top-nav" class="nav-primary" style="float: left;">
     <!-- nav_start -->
-    <?php
-    echo $_html;
-    ?>
+    <?=$_html?>
     <!-- nav_end -->
   </ol>
 </nav>
-
-<?php
-//if(is_file($static_file)) {
-//  echo '<script>jQuery(document).ready(function(){jQuery(\'#top-nav\').load("/media/static/topmenu.html");});</script>';
-//}
