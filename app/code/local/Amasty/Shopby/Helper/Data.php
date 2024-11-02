@@ -707,6 +707,20 @@ class Amasty_Shopby_Helper_Data extends Amasty_Shopby_Helper_Cached
      */
     public function unserialize($string)
     {
+      
+      // DHH CORE HACK -- Amasty's BS stopped working
+      if(Chefstore\Utils::is_serialized($string) === false) {
+        return $string;
+      }
+      // Fixes possibly incorect serialized string:
+      $fixed_string = preg_replace_callback('!s:\d+:"(.*?)";!s', function($m) { return "s:" . strlen($m[1]) . ':"'.$m[1].'";'; }, $string);
+      if($string !== $fixed_string) {
+        // var_dump($string);
+        // var_dump($fixed_string);
+        return unserialize($fixed_string);
+      }
+      return unserialize($string);
+      
         if (!@class_exists('Amasty_Base_Helper_String')) {
             $message = $this->getUnserializeError();
             Mage::logException(new Exception($message));

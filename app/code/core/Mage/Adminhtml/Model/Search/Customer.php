@@ -35,6 +35,10 @@ class Mage_Adminhtml_Model_Search_Customer extends Varien_Object
     public function load()
     {
         $arr = [];
+        
+        // DHH CORE HACK
+        $this->setResults($arr);
+        return $this;
 
         if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
             $this->setResults($arr);

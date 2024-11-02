@@ -1,7 +1,7 @@
 # Hacked Code
 
 ## Notes
-- Check composer packages for modifications: `composer status`
+- Check composer packages for modifications: `mcomposer status -v`
 
 ## Rector'ed code
 Certain code dirs have been Rector'ed to fix PHP 8.1 compatibility.
@@ -19,6 +19,11 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - `mphp vendor/bin/rector process --dry-run --config=dev/rector-3rdparty.php`
 - Our own code:
   - `mphp vendor/bin/rector process  --dry-run --config=dev/rector-owncode.php`
+
+## Patches
+- Need to be executed manually: `git apply patches/CS-0001.patch -v`
+- `CS-0001`: Changed default sorting of several Admin Grids to `sku`; Did not work using `app/local/Mage`.
+- `CS-0002`: Admin Global Search performance improvements.
 
 ## Core Hacks
 - **/***
@@ -38,16 +43,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Updated up to: v20.5.0
   - `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
     - Adding debug info to log
-    - Updated up to: v20.5.0
-  - **Admin Global Search**: Performance improvements
-    - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
-    - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
-    - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
-    - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php`
-  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php`
-  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php`
-    - Changed default sort to `sku`, did not work using `app/local/Mage`
     - Updated up to: v20.5.0
   - `/app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
     - Remove ability to change the email address during new order input in admin
@@ -281,7 +276,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
   - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432
 
-### Closed
+## Closed
 - **app/code/core/Mage/**
   - `app/code/core/Mage/Customer/etc/config.xml`
     - Changing default email address for new customers created in the backend without an email address to our own domain

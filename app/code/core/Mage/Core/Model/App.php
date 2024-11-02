@@ -877,6 +877,7 @@ class Mage_Core_Model_App
             } elseif (is_string($id)) {
                 $store->load($id, 'code');
             }
+
             if (!$store->getCode()) {
                 $this->throwStoreException();
             }

@@ -1,0 +1,39 @@
+diff --git a/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php b/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php
+index 149848c29..d9d3339f9 100644
+--- a/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php
++++ b/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php
+@@ -31,7 +31,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell extends Mage_Admin
+     {
+         parent::__construct();
+         $this->setId('cross_sell_product_grid');
+-        $this->setDefaultSort('entity_id');
++        $this->setDefaultSort('sku');
+         $this->setUseAjax(true);
+         if ($this->_getProduct()->getId()) {
+             $this->setDefaultFilter(['in_products' => 1]);
+diff --git a/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php b/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php
+index 203de55e0..791c054c0 100644
+--- a/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php
++++ b/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php
+@@ -31,7 +31,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related extends Mage_Adminht
+     {
+         parent::__construct();
+         $this->setId('related_product_grid');
+-        $this->setDefaultSort('entity_id');
++        $this->setDefaultSort('sku');
+         $this->setUseAjax(true);
+         if ($this->_getProduct()->getId()) {
+             $this->setDefaultFilter(['in_products' => 1]);
+diff --git a/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php b/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php
+index 867274919..c62487dc7 100644
+--- a/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php
++++ b/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php
+@@ -31,7 +31,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Upsell extends Mage_Adminhtm
+     {
+         parent::__construct();
+         $this->setId('up_sell_product_grid');
+-        $this->setDefaultSort('entity_id');
++        $this->setDefaultSort('sku');
+         $this->setUseAjax(true);
+         if ($this->_getProduct()->getId()) {
+             $this->setDefaultFilter(['in_products' => 1]);

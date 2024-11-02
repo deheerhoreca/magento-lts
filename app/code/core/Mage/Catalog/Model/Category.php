@@ -760,16 +760,6 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
         return $this->_getData('request_path');
     }
 
-    // /**
-     // * Retrieve Name data wrapper
-     // *
-     // * @return string
-     // */
-    // public function getName()
-    // {
-        // return $this->_getData('name');
-    // }
-    
     /**
      * Retrieve Name data wrapper
      *
@@ -789,7 +779,6 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
             }
         }
         // END DHH CORE HACK
-        
         return $this->_getData('name');
     }
 

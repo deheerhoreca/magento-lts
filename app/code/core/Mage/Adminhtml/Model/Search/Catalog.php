@@ -43,22 +43,29 @@ class Mage_Adminhtml_Model_Search_Catalog extends Varien_Object
             return $this;
         }
 
-        $collection = Mage::helper('catalogsearch')->getQuery()->getSearchCollection()
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('description')
-            ->addSearchFilter($this->getQuery())
+        // DHH CORE HACK -- Limiting fields, using other collection
+        $query = $this->getQuery();
+        $collection = Mage::getResourceModel("catalog/product_collection")
+            ->addAttributeToSelect("entity_id")
+            ->addAttributeToSelect("name")
+            ->addAttributeToFilter([
+                ["attribute" => "sku",        "like" => "%{$query}%"],
+                ["attribute" => "sku_seller", "eq" => "{$query}"],
+                ["attribute" => "ean",        "eq" => "{$query}"],
+                ["attribute" => "ean13",      "eq" => "{$query}"],
+            ])
             ->setCurPage($this->getStart())
             ->setPageSize($this->getLimit())
-            ->load();
-
+            ->load()
+        ;
+        
         foreach ($collection as $product) {
-            $description = strip_tags($product->getDescription());
-            $arr[] = [
+            $arr[]          = [
                 'id'            => 'product/1/' . $product->getId(),
                 'type'          => Mage::helper('adminhtml')->__('Product'),
                 'name'          => $product->getName(),
-                'description'   => Mage::helper('core/string')->substr($description, 0, 30),
-                'url' => Mage::helper('adminhtml')->getUrl('*/catalog_product/edit', ['id' => $product->getId()]),
+                'description'   => "",
+                'url'           => Mage::helper('adminhtml')->getUrl('*/catalog_product/edit', ['id' => $product->getId()]),
             ];
         }
 
@@ -66,4 +73,5 @@ class Mage_Adminhtml_Model_Search_Catalog extends Varien_Object
 
         return $this;
     }
+
 }

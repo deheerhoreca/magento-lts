@@ -23,13 +23,6 @@
 /app/etc/modules/Cm_RedisSession.xml
 /lib/Credis
 
-# Add a base setup for running unit Tests with code coverage and send them to SonarCloud
-# https://github.com/OpenMage/magento-lts/pull/1836
-/dev/testfield
-/dev/tests/clover.xml
-/dev/tests/crap4j.xml
-/dev/tests/junit.xml
-
 # Add Gitpod online IDE config
 # https://github.com/OpenMage/magento-lts/pull/1836
 /dev/gitpod/docker-magento
@@ -40,8 +33,6 @@
 /dev/openmage/docker-magento
 /dev/openmage/.env
 /dev/openmage/Caddyfile
-/dev/tests/functional/generated
-/dev/tests/functional/vendor
 
 /media/*
 !/media/.htaccess
@@ -72,10 +63,26 @@
 .phpcs*.xml
 !.phpcs*.xml.dist
 
+# PhpStan
+.phpstan.cache
+.phpstan*.neon
 phpstan*.neon
-!phpstan.dist.*.neon
+!.phpstan.dist.neon
+!.phpstan.dist.*.neon
+
+# PhpUnit
+tests/coverage
+tests/logging
+.phpunit.result.cache
+phpunit.xml
+!phpunit.xml.dist
+
+# build
+/build
 
 # dev scripts loaded via composer
+/shell/update-copyright.php
+/shell/translations.php
 
 # DDEV
 .ddev/config.yaml
@@ -110,17 +117,13 @@ phpstan*.neon
 /skin/frontend/rwd/external/
 !/skin/frontend/rwd/external/fontawesome
 
-# Ignore downloader cache and configuration files
-/downloader/.cache/
-/downloader/cache.cfg
-/downloader/connect.cfg
-
 /.modman/*/.git
+.phpstorm.meta.php
 
 # This is tricky to get right
-# Frist whitelist /media, cancelling openmage's ignores above
+# First whitelist /media, cancelling openmage's ignores above
 !/media/*
-# ..and then just list the blacklist
+# ..and then add the blacklist
 /media/amfeed
 /media/cache
 /media/attachment
@@ -148,6 +151,10 @@ phpstan*.neon
 /_user.ini
 /php.cmd.ini
 
+# Plesk
+.php-version
+.php-ini
+
 /.idea/
 #/.well-known/
 /app/etc/modules/Aschroder_SMTPPro.xml
@@ -170,3 +177,4 @@ phpstan*.neon
 # Should be ignored (running from our own fork)
 /app/code/community/Aoe/BlackHoleSession
 /app/etc/modules/Aoe_BlackHoleSession.xml
+/firegento.php

@@ -89,15 +89,18 @@ class Amasty_Shopby_Model_Value extends Mage_Core_Model_Abstract
         if (false === $unserialized) {
             return $value;
         }
-        // $result = empty($unserialized[$storeId]) ? $unserialized[0] : $unserialized[$storeId];
-        // DHH CORE HACK -- PHP 7.4 support
-        if(isset($unserialized[$storeId])) {
-          $result = $unserialized[$storeId];
-        } elseif(isset($unserialized[0])) {
-          $result = $unserialized[0];
-        } else {
-          $result = null;
+        // DHH CORE HACK -- PHP 7.4 support:
+        if($unserialized === null) {
+          return $unserialized;
         }
+        $result = empty($unserialized[$storeId]) ? $unserialized[0] : $unserialized[$storeId];
+        // if(isset($unserialized[$storeId])) {
+          // $result = $unserialized[$storeId];
+        // } elseif(isset($unserialized[0])) {
+          // $result = $unserialized[0];
+        // } else {
+          // $result = null;
+        // }
         if (in_array($field, array('Title', 'Descr', 'MetaDescr', 'MetaKw', 'MetaTitle'))) {
             $result = Mage::helper('amshopby')->buildTemplate($result);
         }
