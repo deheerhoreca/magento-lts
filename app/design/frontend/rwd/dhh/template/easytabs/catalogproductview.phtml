@@ -254,19 +254,19 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["bartscher", "combisteel", "diamond", "domest", "gastro-inox", "gastronoble", "emga", "hendi", "saro", "scancool", "veba"];
+$suppliers_external_docs_preferred = ["bartscher", "combisteel", "diamond", "domest", "gastro-inox", "gastronoble", "maxima", "emga", "hendi", "saro", "scancool", "tefcold", "veba"];
 $suppliers_external_docs_blocked = []; // case-sensitive
 
-if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
+if(!in_array($supplier_sys, $suppliers_external_docs_blocked)) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
   $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-  if(empty($external_documents_json) === true || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
+  if(empty($external_documents_json) || !in_array(strtolower($supplier_sys), $suppliers_external_docs_preferred)) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();
 
-    if(empty($files) === false) {
+    if(!empty($files)) {
       $external_documents_json = "";
     }
   }
@@ -275,8 +275,8 @@ if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
 }
 
 // Energy Label -- only certain values are shown as a product label
-if(empty($energy_rating) === false) {
-  $enclz = null;
+if(!empty($energy_rating)) {
+  $enclz = "";
   switch($energy_rating) {
     case "A":     $enclz = "enrgclz1";  break;
     case "B":     $enclz = "enrgclz2";  break;
@@ -1021,7 +1021,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   }
                   echo "</ul>";
                   
-                  if(strtolower($supplier_name) === "combisteel" && CarbonImmutable::now()->isBefore("2024-10-31 00:00:00")) {
+                  if(0 && strtolower($supplier_name) === "combisteel" && CarbonImmutable::now()->isBefore("2024-10-31 00:00:00")) {
                     ?>
                     <div class="card mx-auto p-2 mx-3">
                     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
@@ -1030,6 +1030,22 @@ if($stock_data["overall_stock_status"] === "backorder"
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HERFST24CS</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van CombiSteel. Gebruik deze code bij het afrekenen.</p>
                         <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 oktober 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                      </div>
+                    </div>
+                    <?php
+                  } else {
+                    echo "<span style='display:none;'>{$supplier_name}</span>";
+                  }
+                  
+                  if(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-11-22 00:00:00")) {
+                    ?>
+                    <div class="card mx-auto p-2 mx-3">
+                    <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                    <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                      <div class="card-body">
+                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
+                        <p class="card-text">Korting geldt voor alle producten van HENDI. Gebruik deze code bij het afrekenen.</p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 22 november 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div>
                     <?php
