@@ -3,7 +3,7 @@
 $_helper                      = $this->helper("catalog/output");
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $show_ups_block               = false;
-$show_black_friday            = false;
+$show_black_friday            = isset($_GET["bf"]) ?: false;
 $show_actions                 = false;
 $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();
@@ -198,7 +198,7 @@ if($_products->getFirstItem()) {
       $price_html           = str_replace("€", null, $price_html);
       
       // Black friday
-      if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+      if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
         $html .= "<span class='bf-banner-list'></span>";
       } else {
         // Product label

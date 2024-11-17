@@ -23,7 +23,7 @@ $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipp
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $have_active_filters          = (bool) empty($active_filters) === false;
 $mininum_lease_price          = 400;
-$show_black_friday            = false;
+$show_black_friday            = isset($_GET["bf"]) ?: false;
 $media_path                   = Mage::getBaseDir("media");
 $current_page_nr              = Mage::app()->getRequest()->getParam("p");
 $on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
@@ -377,7 +377,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         $price_html             = str_replace("€", "", $price_html);
         
         // Black friday
-        if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+        if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
           $html .= "<span class=\"bf-banner-list\"></span>";
         } else {
           // Product label

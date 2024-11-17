@@ -37,7 +37,7 @@
         <div id="info-riverty" class="std mt-5">
           <img src="/skin/frontend/rwd/dhh/images/riverty_logo.png" alt="Riverty logo" title="Riverty" style="width:140px; height:auto; float:right; margin-top: .5em;">
           <h2>🤩Achteraf betalen met Riverty</h2>
-          <h5><i>Voor zakelijke en particuliere klanten in Nederland en België</i></h5>
+          <h5><i>Voor particuliere klanten in Nederland en België</i></h5>
           <h4>Maximaal €1.000 (zakelijk NL), €2.500 (particulier NL), €1.250 (particulier België), incl. BTW</h4>
           <div style="max-width: 600px;">
             <strong>Met Riverty betaal je zonder rente binnen 14 dagen.</strong>

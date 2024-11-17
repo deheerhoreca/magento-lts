@@ -29,14 +29,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       "AMSHOPBY",
     ];
     $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
-    
-    // // Beaufiul, is it not?
-    // echo "<pre>";
-    // echo "------- Clearing Redis FPC cache --------".PHP_EOL.PHP_EOL;
-    // echo shell_exec("redis-cli --scan --pattern zc:k:e6b_FPC* | xargs redis-cli del");
-    // echo PHP_EOL."----- Done clearing Redis FPC cache -----".PHP_EOL;
-    // echo "</pre>";
-    
     $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
     echo "<span><a href='{$url}'>Back</a></span><br><br>";
     
@@ -98,6 +90,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
       "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
       "cstag", "title", "srsltid",
+      
+      // Cloudflare
+      "forcepreload", "forcepreloadonly",
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
     
@@ -271,7 +266,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     // ath: Aoe_TemplateHints
-    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])) {
+    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])) {
       self::log("Write cache disabled (URL parameter): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
