@@ -5,6 +5,7 @@
 require __DIR__.'/../vendor/autoload.php';
 
 $server = 'tcp://127.0.0.1:6379';
+$server = 'tcp://136.144.183.232:6379';
 $db = 0;
 $limit = 50;
 
