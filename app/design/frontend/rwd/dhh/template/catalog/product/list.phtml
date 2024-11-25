@@ -23,7 +23,7 @@ $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipp
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $have_active_filters          = (bool) empty($active_filters) === false;
 $mininum_lease_price          = 400;
-$show_black_friday            = isset($_GET["bf"]) ?: false;
+$show_black_friday            = false;
 $media_path                   = Mage::getBaseDir("media");
 $current_page_nr              = Mage::app()->getRequest()->getParam("p");
 $on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;

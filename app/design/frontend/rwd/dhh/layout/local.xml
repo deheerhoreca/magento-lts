@@ -64,9 +64,9 @@
         <action method="setData"><key>cache_lifetime</key><value>86400</value></action>
       </block>
       
-      <action method="addJs" ifconfig="mailchimp/ecommerce/active">
+      <!-- <action method="addJs" ifconfig="mailchimp/ecommerce/active">
         <script>ebizmarts/mailchimp/campaignCatcher.js</script><params>async</params>
-      </action>
+      </action> -->
       
       <!-- DHH additions -->
       <action method="addItem"><type>skin_js</type><name>js/dhh.js</name></action>
@@ -209,7 +209,7 @@
   
   <!-- Homepage -->
   <cms_index_index>
-    <reference name="head"> 
+    <reference name="head">
       <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action><!-- phasing out per action -->
       <action method="removeItem"><type>skin_js</type><name>js/minicart.js</name></action>
       <action method="addItem"><type>skin_js</type><name>js/minicart.js</name><params>defer</params></action>
@@ -219,6 +219,7 @@
       <action method="removeItem"><type>skin_css</type><name>css/qquoteadv.css</name></action>
       <action method="removeItem"><type>skin_js</type><name>js/qquoteadv.js</name></action>
       <action method="addItem"><type>skin_css</type><name>css/cms_index_index.css</name></action>
+      <action method="addLinkRel"><rel>canonical</rel><href>https://www.chefstore.nl</href></action>
     </reference>
   </cms_index_index>
   

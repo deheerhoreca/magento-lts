@@ -4,7 +4,7 @@
 - @see https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
 - /js/ext-translator.js has to be updated manually and loaded after getCssJsHtml()!
 */
-$page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($this->getTitle());
+$page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string) $this->getTitle());
 ?>
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
