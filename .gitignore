@@ -176,6 +176,7 @@ phpunit.xml
 
 /.idea/
 #/.well-known/
+/.well-known/acme-challenge/
 /app/etc/modules/Aschroder_SMTPPro.xml
 /app/code/local/Aschroder/SMTPPro
 /app/design/adminhtml/default/default/template/smtppro
