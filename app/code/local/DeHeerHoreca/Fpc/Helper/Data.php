@@ -604,9 +604,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
-  // Do NOT use prefixes like zc:ti:e6b_
+  // Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
   public static function clean_by_tags(string|array $cache_tags) {
     $cache_tags = (array) $cache_tags;
+    
+    // Prepend with e6b_ if needed. Redis library does NOT do this.
+    $cache_tags = Arr::map($cache_tags, fn($tag) => Str::start($tag, "e6b_"));
     
     if(DHH_FPC_DEBUG) {
       $cache_keys = Mage::app()->getCache()->getIdsMatchingAnyTags($cache_tags);
@@ -621,8 +624,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $response;
   }
   
-  // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys(["foo", "bar"])
-  // Do NOT use prefixes like zc:ti:e6b_
   // @deprecated use clean_by_tags()
   public static function _clean_by_keys(...$args) {
     return self::clean_by_tags($args);
