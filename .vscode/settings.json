@@ -1,6 +1,12 @@
 {
     "files.watcherExclude": {
-        "/media/*": true,
-        "/var/log/**": true
+        "./media/*": true,
+        "./var/log/**": true,
+        "./.phpstorm.meta.php/**": true,
+        "**/.DS_Store": true,
+        "./.git": true
+    },
+    "files.exclude": {
+        "./media/catalog/**": true,
     }
 }
