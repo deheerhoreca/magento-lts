@@ -14582,3 +14582,7 @@
     transition: none;
   }
 }
+
+#blackfriday-banner-wrapper, #product_addtocart_form > div > div:nth-child(1) > a {
+  display: none;
+}

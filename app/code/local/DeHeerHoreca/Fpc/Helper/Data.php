@@ -611,12 +611,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Prepend with e6b_ if needed. Redis library does NOT do this.
     $cache_tags = Arr::map($cache_tags, fn($tag) => Str::start($tag, "e6b_"));
     
+    // @notice without getBackend() it does not work!
+    
     if(DHH_FPC_DEBUG) {
-      $cache_keys = Mage::app()->getCache()->getIdsMatchingAnyTags($cache_tags);
+      $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
       Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
     }
     
-    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
+    $response = Mage::app()->getCache()->getBackend()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
     if(DHH_FPC_DEBUG) {
       Mage::log("Response: ".var_export($response, true), Zend_Log::DEBUG, "verbose.txt", true);
     }
