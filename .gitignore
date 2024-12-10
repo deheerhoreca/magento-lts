@@ -160,7 +160,7 @@ phpunit.xml
 
 # FRESHDESK WEBHOOK
 
-/freshdesk-webhook.ndjson
+/freshdesk-*.ndjson
 
 # GENERATED CONFIGURATIONS
 

@@ -34,25 +34,12 @@ $mondu_lease_minimum        = 750;
 $mondu_lease_maximum        = 20000;
 $grenke_lease_minimum       = 1000;
 $grenke_lease_maximum       = 10000;
-$show_black_friday          = true;
+$show_black_friday          = false;
 $javascripts                = [];
 $brand_block_name           = "";
 $brand                      = "";
 $payment_methods_content    = "";
 $max_highlighted_attributes = 12;
-
-// Find the category this product belongs to
-// @todo is this expensive?
-// $categoryIds                = $_product->getCategoryIds();
-// if($_categories = $product->getCategoryCollection()) {
-//   // $_category = Mage::getModel("catalog/category")->load($categoryIds[0]);
-//   if($_category = $_categories->getFirstItem()) {
-//     $category_url   = (string) $_category->getUrl();
-//     $category_name  = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string) $_category->getName());
-//   }
-//   $_categories->clear();
-//   unset($_categories);
-// }
 
 // Attributes used in multiple places
 $productlabel           = _get_product_attribute($_product, "product_label");
@@ -1039,11 +1026,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                       </div>
                     </div>
                     <?php
-                  } else {
-                    echo "<span style='display:none;'>{$supplier_name}</span>";
-                  }
-                  
-                  if(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-11-22 00:00:00")) {
+                  } elseif(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-12-31 23:59:59")) {
                     ?>
                     <div class="card mx-auto p-2 mx-3">
                     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
@@ -1051,7 +1034,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van HENDI. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 22 november 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 december 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div>
                     <?php

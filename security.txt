@@ -1,4 +1,4 @@
-Contact: mailto:it@chefstore.nl
+Contact: mailto:it+security@chefstore.nl
 Expires: 2030-01-01T03:20:00.000Z
 Acknowledgments: https://raw.githubusercontent.com/OpenMage/magento-lts/main/.all-contributorsrc
 Preferred-Languages: en, nl

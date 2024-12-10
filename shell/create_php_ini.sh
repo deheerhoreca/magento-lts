@@ -12,8 +12,8 @@ set -u      # Treat unset variables as an error when substituting
 
 cm
 
-TARGET_PHP_INI=./php.cmd.ini
-COPY_PHP_INI=./etc/php.cmd.ini
+TARGET_PHP_INI=./etc/php.cmd.ini
+COPY_PHP_INI=./php.cmd.ini
 TARGET_USER_INI=_user.ini
 PHP_VERSION=$(mphp -r "echo phpversion();")
 
@@ -47,9 +47,6 @@ printf "; File: ${TARGET_PHP_INI}\n" >> ${TARGET_PHP_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_PHP_INI}
 printf "; PHP version: ${PHP_VERSION}\n" >> ${TARGET_PHP_INI}
 printf "; Created: %s\n" "$NOW" >> ${TARGET_PHP_INI}
-
-printf "\n; ---------------------- ${DEFAULT_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
-cat ${DEFAULT_PHP_INI} >> ${TARGET_PHP_INI}
 
 printf "\n; ---------------------- ${SHARED_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${SHARED_PHP_INI} >> ${TARGET_PHP_INI}

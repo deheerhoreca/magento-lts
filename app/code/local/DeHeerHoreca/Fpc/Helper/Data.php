@@ -7,6 +7,10 @@
  * @since  2013-05-23
  */
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {

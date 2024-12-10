@@ -113,6 +113,14 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Decimal extends Amasty_Shopby_Mod
         $inputVals = explode($this->_rangeSeparator, $input);
         if (count($inputVals) == 2) {
             list($index, $range) = $inputVals;
+            
+            // DHH CORE HACK
+            if(!is_numeric($range) || !is_numeric($index)) {
+                Mage::log(__FUNCTION__.": [".var_export($input, true)."] index=".var_export($index, true)." range=".var_export($range, true)." is not numeric, skipping filter");
+                return null;
+            }
+            // DHH CORE HACK
+            
             $from  = ($index-1) * $range;
             $to    = $index * $range;
             return array($from, $to);

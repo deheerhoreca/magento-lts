@@ -215,7 +215,10 @@
 
 ############################################
 ## START DHH -- CANNOT MOVE BELOW NEXT OPENMAGE RULE "never rewrite for existing files, directories and links"
-
+    
+    # Prevent further processing for special files
+    RewriteRule ^\.well-known/security\.txt$ - [L]
+    
     # Fuck off competitors -- MOVE TO CLOUDFLARE
     # gastrodeals.nl:
     RewriteCond %{HTTP:CF-CONNECTING-IP} 83.217.93.24
@@ -333,20 +336,16 @@
     Options -Indexes
     
     <FilesMatch "(security|ads)\.txt">
-        Order allow,deny
-        Allow from all
+        Require all granted
     </FilesMatch>
     <FilesMatch (?<!robots|security|ads)\.txt$>
-        Order allow,deny
-        Deny from all
+        Require all denied
     </FilesMatch>
     <Files "_htaccess">
-        Order allow,deny
-        Deny from all
+        Require all denied
     </Files>
     <FilesMatch \.(ndjson|jsonl)$>
-        Order allow,deny
-        Deny from all
+        Require all denied
     </FilesMatch>
     # END DHH
     <FilesMatch (?<!robots)\.txt$>
@@ -419,11 +418,6 @@
 ###########################################
 ## Limit access to certain files:
 
-    ## Apache 2.4 style:
-    
-    # No indexes ever
-    Options -Indexes
-
 <IfModule mod_deflate.c>
 
     ## Force compression for mangled `Accept-Encoding` request headers
@@ -485,10 +479,20 @@
     </IfModule>
 </FilesMatch>
 
-# Modify more caching headers -- Also note Rules in Cloudflare
+# Modify more headers -- Also note Rules in Cloudflare
 <IfModule mod_headers.c>
 
     Header set X-XSS-Protection "1; mode=block"
+    
+    # CORS:
+    
+    # Do not set this to FALSE. Leave it out if not TRUE
+    # Header set Access-Control-Allow-Credentials: true
+    
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
+    Header set Access-Control-Max-Age: 86400
+    # Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 
     # Any caching headers set on HTML are ignored, and all HTML is served
     # uncacheable.  PageSpeed rewrites HTML files each time they are served.  The
@@ -530,7 +534,7 @@
 
 # DEVELOPMENT SETTINGS
 <If "%{HTTP_HOST} == 'dev.chefstore.nl'">
-    SetEnv MAGE_IS_DEVELOPER_MODE "true"
+    SetEnv MAGE_IS_DEVELOPER_MODE="1"
 
     # No caching on dev -- Disable for mod_pagespeed and such
     # Header unset Etag
