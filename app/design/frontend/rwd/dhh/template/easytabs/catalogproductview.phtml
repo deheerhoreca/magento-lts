@@ -85,16 +85,17 @@ $bestelartikel          = $stock_data["bestelartikel"]            ?? "";
 $min_sale_qty           = $stock_data["min_sale_qty"];
 
 // Fulfilment, Financials
-$used_levertijd         = empty($levertijd_tmp_override) ? $levertijd : $levertijd_tmp_override;
+$used_levertijd         = (string) (empty($levertijd_tmp_override) ? $levertijd : $levertijd_tmp_override);
 $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $_finalPriceInclTax     = $_taxHelper->getPrice($_product, $_finalPrice, true);
 
 // Add +/- symbol to delivery time unless it's "op aanvraag"
-if(stristr((string) $used_levertijd, "aanvraag") === false && $used_levertijd !== "1 werkdag" && empty($used_levertijd) === false) {
-  $used_levertijd = "&plusmn; {$used_levertijd}";
-}
+// if(stristr($used_levertijd, "aanvraag") === false && $used_levertijd !== "1 werkdag" && !empty($used_levertijd)) {
+//   $used_levertijd = "&plusmn; {$used_levertijd}";
+// }
+
 if($used_levertijd === "1 werkdag") {
-  $delivery_time_tooltip = "Op werkdagen voor 15:00 besteld, de volgende werkdag bezorgd. Het is in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.";
+  $delivery_time_tooltip = "Op werkdagen voor 14:00 besteld, de volgende werkdag bezorgd. Het is in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.";
 } else {
   $delivery_time_tooltip = "We doen er alles aan om dit artikel op tijd te bezorgen. Het is in een enkel geval mogelijk dat door omstandigheden de bezorging vertraagd is. Natuurlijk houden we u altijd op de hoogte van de status van uw bestelling.";
 }
@@ -119,10 +120,10 @@ if(empty($stock_tooltip) === false) {
 $delivery_text = "";
 if($bestelartikel === "Ja") {
   $delivery_text .= "Bestelartikel</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit artikel wordt op bestelling gemaakt en geleverd</span>";
-} elseif($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder" || $manage_stock === false) {
-  if(empty($txtstockdate) === false) {
+} elseif($overall_stock_status === "not_sellable" || $overall_stock_status === "backorder" || !$manage_stock) {
+  if(!empty($txtstockdate)) {
     $delivery_text .= "Verwacht: <strong>{$txtstockdate}</strong><span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Dit is de meest accurate inschatting die wij hebben. Door omstandigheden kan dit soms wijzigen.</span>";
-  } elseif($manage_stock !== false) {
+  } elseif($manage_stock) {
     $delivery_text .= "Levertijd op aanvraag<span class='tooltip'><i class='tooltip-icon fa fa-info-circle fa-lg' aria-hidden='true'></i><span class='tooltiptext clztoptoolc'>Spoedig weer op voorraad, maar wij hebben nog geen exacte datum. U kunt een pre-order plaatsen om het product zo snel mogelijk te krijgen.</span>";
   }
 } elseif($overall_stock_status === "in_stock" && !empty($used_levertijd)) {
@@ -974,51 +975,51 @@ if($stock_data["overall_stock_status"] === "backorder"
                 if(empty($delivery_text) !== true) {
                   echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
                 }
-
+                
                 echo $our_usps_content;
                 echo $payment_methods_content;
                 echo $help_content;
-
                 echo $this->getChildHtml("extra_buttons");
               }
-
+              
               // All products
-
+              
               echo $this->getChildHtml("product_type_data");
               echo $this->getChildHtml("extrahint");
-
+              
               // Non-configurable products
-
+              
               if(!$this->hasOptions()) {
                 ?>
                 <div class="add-to-box">
                   <div class="price-info">
-                    <?php
-                      echo $this->getPriceHtml($_product);
-                      echo $this->getChildHtml("bundle_prices");
-                      echo $this->getTierPriceHtml();
-                    ?>
+                    <?=$this->getPriceHtml($_product)?>
+                    <?=$this->getChildHtml("bundle_prices")?>
+                    <?=$this->getTierPriceHtml()?>
                   </div>
                   <?php
                   echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
                   echo $buyblock_free_delivery_content;
                   echo "<ul class='fa-ul'>";
-                  if(empty($delivery_li) !== true) {
-                    echo $delivery_li;
-                  }
-                  if(empty($moq_li) !== true) {
-                    echo $moq_li;
-                  }
-                  if(empty($qs_content) !== true) {
-                    echo $qs_content;
-                  }
+                  if(!empty($delivery_li))  echo $delivery_li;
+                  if(!empty($moq_li))       echo $moq_li;
+                  if(!empty($qs_content))   echo $qs_content;
                   echo "</ul>";
                   
+                  // HOLIDAY NOTICE
+                  if(CarbonImmutable::now()->isBefore("2024-12-31 23:59:59")) { ?>
+                    <div class="mx-auto py-2"><p><em class="small">Door de feestdagen is het soms extra druk bij de bezorgdiensten</em></p></div>
+                  <?php }
+                  
+                  echo $this->getChildHtml("addtocart");
+                  echo $this->getChildHtml("addto");
+                  
+                  // SUPPLIER-LEVEL SALES COUPON NOTICES
                   if(0 && strtolower($supplier_name) === "combisteel" && CarbonImmutable::now()->isBefore("2024-10-31 00:00:00")) {
                     ?>
-                    <div class="card mx-auto p-2 mx-3">
-                    <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                    <img src="//images.chefstore.nl/media/wysiwyg/brands/combisteel.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                    <div class="card mx-auto p-2 mt-3">
+                      <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/combisteel.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HERFST24CS</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van CombiSteel. Gebruik deze code bij het afrekenen.</p>
@@ -1028,9 +1029,9 @@ if($stock_data["overall_stock_status"] === "backorder"
                     <?php
                   } elseif(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-12-31 23:59:59")) {
                     ?>
-                    <div class="card mx-auto p-2 mx-3">
-                    <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                    <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                    <div class="card mx-auto p-2 mt-3">
+                      <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van HENDI. Gebruik deze code bij het afrekenen.</p>
@@ -1038,12 +1039,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                       </div>
                     </div>
                     <?php
-                  } else {
-                    echo "<span style='display:none;'>{$supplier_name}</span>";
                   }
-
-                  echo $this->getChildHtml("addtocart");
-                  echo $this->getChildHtml("addto");
                   ?>
                 </div>
                 <?php
