@@ -455,7 +455,7 @@ ul.tabs span {
 .breadcrumbs li,
 .massaction .entry-edit fieldset .field-row,
 .rule-param-edit .element {
-  display: inline
+  display: inline !important
 }
 
 .massaction .entry-edit .field-row label {
