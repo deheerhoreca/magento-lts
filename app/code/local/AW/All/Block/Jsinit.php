@@ -101,9 +101,10 @@ class AW_All_Block_Jsinit extends Mage_Adminhtml_Block_Template
             }
             $isPlatformValid = $platform >= $this->getPlatform();
             $feedInfo = $this->getExtensionInfo($moduleName);
-            $upgradeAvailable =
-                ($this->_convertVersion($feedInfo->getLatestVersion()) - $this->_convertVersion($ver)) > 0;
-
+            // DHH CORE HACK -- STOPPED WORKING
+            // $upgradeAvailable = ($this->_convertVersion($feedInfo->getLatestVersion()) - $this->_convertVersion($ver)) > 0;
+            $upgradeAvailable = false;
+            
             if (null !== $feedInfo->getDisplayName()) {
                 $moduleName = $feedInfo->getDisplayName();
             }

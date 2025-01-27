@@ -7,6 +7,15 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
      * @var string[]
      */
     private $restrictedUserAgents = array(
+        
+        // DHH CORE HACK -- Adding bot checks from aoeblackholesession
+        "elb-healthchecker",
+        "EliasHaeussler-CacheWarmup",
+        "meta-externalagent/1.",
+        "GPTBot/1.",
+        "Elastic-Metricbeat",
+        "xCore",
+        
         "AdsBot-Google",
         "AdsBot-Google-Mobile",
         "Googlebot",
@@ -86,7 +95,7 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
         "HeadlessChrome",
         "Barkrowler",
         "Chrome-Lighthouse",
-        "https://vendorcentral.amazon.com/support/amazonproductbot"
+        "https://vendorcentral.amazon.com/support/amazonproductbot",
     );
 
     /**
@@ -94,7 +103,7 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
      */
     public function isBot()
     {
-        $userAgent = Mage::helper('core/http')->getHttpUserAgent();
+        $userAgent = (string) Mage::helper('core/http')->getHttpUserAgent();
 
         foreach ($this->restrictedUserAgents as $restrictedUserAgent) {
             if (stripos($userAgent, $restrictedUserAgent) !== false) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "996f3f5fa20d31bf07d2d39a79c799d4",
+    "content-hash": "05b4e9e12360aaee85bbe9bd08f2f614",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -231,22 +231,21 @@
         },
         {
             "name": "aschroder/smtp_pro",
-            "version": "dev-dhh-fixes",
+            "version": "2.0.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension.git",
-                "reference": "f470dddcbec68564164df69af348cee5bb440c59"
+                "url": "git@github.com:aschroder/Magento-SMTP-Pro-Email-Extension.git",
+                "reference": "5101ed278d4aba05279fc1e53c3811983be8adda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Magento-SMTP-Pro-Email-Extension/zipball/f470dddcbec68564164df69af348cee5bb440c59",
-                "reference": "f470dddcbec68564164df69af348cee5bb440c59",
+                "url": "https://api.github.com/repos/aschroder/Magento-SMTP-Pro-Email-Extension/zipball/5101ed278d4aba05279fc1e53c3811983be8adda",
+                "reference": "5101ed278d4aba05279fc1e53c3811983be8adda",
                 "shasum": ""
             },
             "require": {
                 "magento-hackathon/magento-composer-installer": "*"
             },
-            "default-branch": true,
             "type": "magento-module",
             "extra": {
                 "map": [
@@ -263,36 +262,8 @@
                         "app/design/adminhtml/default/default/template/smtppro"
                     ],
                     [
-                        "app/locale/de_DE/Aschroder_SMTPPro.csv",
-                        "app/locale/de_DE/Aschroder_SMTPPro.csv"
-                    ],
-                    [
                         "app/locale/en_US/Aschroder_SMTPPro.csv",
                         "app/locale/en_US/Aschroder_SMTPPro.csv"
-                    ],
-                    [
-                        "app/locale/fr_FR/Aschroder_SMTPPro.csv",
-                        "app/locale/fr_FR/Aschroder_SMTPPro.csv"
-                    ],
-                    [
-                        "app/locale/es_ES/Aschroder_SMTPPro.csv",
-                        "app/locale/es_ES/Aschroder_SMTPPro.csv"
-                    ],
-                    [
-                        "app/locale/nl_NL/Aschroder_SMTPPro.csv",
-                        "app/locale/nl_NL/Aschroder_SMTPPro.csv"
-                    ],
-                    [
-                        "app/locale/pt_BR/Aschroder_SMTPPro.csv",
-                        "app/locale/pt_BR/Aschroder_SMTPPro.csv"
-                    ],
-                    [
-                        "app/locale/tr_TR/Aschroder_SMTPPro.csv",
-                        "app/locale/tr_TR/Aschroder_SMTPPro.csv"
-                    ],
-                    [
-                        "app/locale/ru_RU/Aschroder_SMTPPro.csv",
-                        "app/locale/ru_RU/Aschroder_SMTPPro.csv"
                     ]
                 ]
             },
@@ -303,10 +274,7 @@
             ],
             "description": "sending Magento mail through an external smtp-server",
             "homepage": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension",
-            "support": {
-                "source": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension/tree/dhh-fixes"
-            },
-            "time": "2018-03-26T06:37:41+00:00"
+            "time": "2015-10-30T09:33:29+00:00"
         },
         {
             "name": "aydin-hassan/magento-core-composer-installer",
@@ -5315,12 +5283,13 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "aoepeople/aoe_blackholesession": 20,
-        "aoepeople/aoe_dbretry": 20,
-        "aschroder/smtp_pro": 20
+        "aoepeople/aoe_dbretry": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": ">=8.1 <=8.3"
+    },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

@@ -143,21 +143,6 @@ phpunit.xml
 /media/dhh
 /media/wysiwyg/*
 
-# UNIGNORE COREHACKED FILES
-
-!/app/code/community/Cm/RedisSession/Model/Session.php
-!/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
-!/app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php
-
-# STORE MANAGER
-
-/tmp
-
-# BILLER WEBHOOK
-
-/biller-webhook-errors.jsonl
-/biller-webhook.jsonl
-
 # FRESHDESK WEBHOOK
 
 /freshdesk-*.ndjson
@@ -177,24 +162,21 @@ phpunit.xml
 /.idea/
 #/.well-known/
 /.well-known/acme-challenge/
-/app/etc/modules/Aschroder_SMTPPro.xml
-/app/code/local/Aschroder/SMTPPro
-/app/design/adminhtml/default/default/template/smtppro
-/app/locale/de_DE/Aschroder_SMTPPro.csv
-/app/locale/en_US/Aschroder_SMTPPro.csv
-/app/locale/fr_FR/Aschroder_SMTPPro.csv
-/app/locale/es_ES/Aschroder_SMTPPro.csv
-/app/locale/nl_NL/Aschroder_SMTPPro.csv
-/app/locale/pt_BR/Aschroder_SMTPPro.csv
-/app/locale/tr_TR/Aschroder_SMTPPro.csv
-/app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/code/community/Cm/Cache/Backend/Redis.php
 
 ##################################################
 # Symlinks -- Watch out to not ignore core hacks!!
 ##################################################
 
-# Should be ignored (running from our own fork)
-/app/code/community/Aoe/BlackHoleSession
-/app/etc/modules/Aoe_BlackHoleSession.xml
-/firegento.php
+# UNIGNORE COREHACKED FILES
+!/app/code/community/Cm/RedisSession/Model/Session.php
+!/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
+!/app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php
+!/app/code/community/Aoe/BlackHoleSession
+!/app/etc/modules/Aoe_BlackHoleSession.xml
+
+# IGNORE DHH FORKS, NOT COREHACKS
+/app/etc/modules/Aschroder_SMTPPro.xml
+/app/code/local/Aschroder/SMTPPro
+/app/design/adminhtml/default/default/template/smtppro
+/app/locale/en_US/Aschroder_SMTPPro.csv

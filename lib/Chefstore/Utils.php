@@ -90,7 +90,6 @@ class Utils {
   function msleep(int $time): void {
     usleep($time * 1000);
   }
-  
 }
 
 class Cache {
@@ -236,6 +235,4 @@ class Cache {
     
     return $result;
   }
-
-  
 }

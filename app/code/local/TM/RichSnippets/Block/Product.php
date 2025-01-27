@@ -5,7 +5,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     public function __construct()
      {
          parent::__construct();
-         $this->setTemplate('tm/richsnippets/richsnippets_product.phtml');
+         $this->setTemplate("tm/richsnippets/richsnippets_product.phtml");
      }
     protected $_product = null;
 
@@ -17,8 +17,8 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     protected function _toHtml()
     {
         if (!$this->getProduct()
-            || !Mage::getStoreConfigFlag('richsnippets/general/enabled')) {
-            return '';
+            || !Mage::getStoreConfigFlag("richsnippets/general/enabled")) {
+            return "";
         }
 
         return parent::_toHtml();
@@ -27,7 +27,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     public function getProduct()
     {
         if (null === $this->_product) {
-            $this->_product = Mage::registry('product');
+            $this->_product = Mage::registry("product");
             // magento 1.4 fix
             $description = $this->_product->getShortDescription();
             if (null === $description) {
@@ -39,9 +39,9 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
 
     public function getRatingSummary(){
         $storeId = Mage::app()->getStore()->getId();
-        $summaryData = Mage::getSingleton('review/review_summary')->setStoreId($storeId)->load($this->getProduct()->getId());
-        if ($summaryData['rating_summary']){
-            return $summaryData['rating_summary'];
+        $summaryData = Mage::getSingleton("review/review_summary")->setStoreId($storeId)->load($this->getProduct()->getId());
+        if ($summaryData["rating_summary"]){
+            return $summaryData["rating_summary"];
         }
         return 0;
     }
@@ -54,9 +54,9 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     public function getReviewCount()
     {
         $storeId = Mage::app()->getStore()->getId();
-        $summaryData = Mage::getSingleton('review/review_summary')->setStoreId($storeId)->load($this->getProduct()->getId());
+        $summaryData = Mage::getSingleton("review/review_summary")->setStoreId($storeId)->load($this->getProduct()->getId());
 
-        return (int)$summaryData['reviews_count'];
+        return (int)$summaryData["reviews_count"];
     }
 
     /**
@@ -69,9 +69,9 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     public function getStockStatusUrl()
     {
         if ($this->getProduct()->isSaleable() === true){
-            $availability = 'http://schema.org/InStock';
+            $availability = "http://schema.org/InStock";
         } else {
-            $availability = 'http://schema.org/OutOfStock';
+            $availability = "http://schema.org/OutOfStock";
         }
         return $availability;
     }
@@ -86,11 +86,11 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         $productType = $product->getTypeInstance();
 
         if ($productType instanceof Mage_Bundle_Model_Product_Type) {
-            if (method_exists($priceModel, 'getTotalPrices')) {
+            if (method_exists($priceModel, "getTotalPrices")) {
                 return $priceModel->getTotalPrices($product);
             }
 
-            if (method_exists($priceModel, 'getPricesDependingOnTax')) { // Magento 1.5 and older
+            if (method_exists($priceModel, "getPricesDependingOnTax")) { // Magento 1.5 and older
                 return $priceModel->getPricesDependingOnTax($product);
             }
         }
@@ -99,7 +99,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
 
             $assocProducts = $productType->getAssociatedProductCollection($product)
                 ->addMinimalPrice()
-                ->setOrder('minimal_price', 'ASC');
+                ->setOrder("minimal_price", "ASC");
 
             $product = $assocProducts->getFirstItem();
 
@@ -131,8 +131,8 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      */
     public function getFormattedPrice($price)
     {
-        return $this->helper('core')->currency(
-            $this->helper('tax')->getPrice(
+        return $this->helper("core")->currency(
+            $this->helper("tax")->getPrice(
                 $this->getProduct(),
                 $price,
                 true        // TRUE/FALSE: price with/without VAT
@@ -153,8 +153,8 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      */
     public function getConvertedPrice($price)
     {
-        return $this->helper('core')->currency(
-            $this->helper('tax')->getPrice(
+        return $this->helper("core")->currency(
+            $this->helper("tax")->getPrice(
                 $this->getProduct(),
                 $price,
                 true        // TRUE/FALSE: price with/without VAT
@@ -197,28 +197,28 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
 
     public function getItemCondition()
     {
-        $userConditionAttribute = Mage::getStoreConfig('richsnippets/condition/condition_attribute');
+        $userConditionAttribute = Mage::getStoreConfig("richsnippets/condition/condition_attribute");
         $userConditionAttributeValue = strtolower($this->getAttributeText($userConditionAttribute));
 
         switch ($userConditionAttributeValue) {
-            case strtolower(Mage::getStoreConfig('richsnippets/condition/condition_new_option')):
-                return 'http://schema.org/NewCondition';
+            case strtolower(Mage::getStoreConfig("richsnippets/condition/condition_new_option")):
+                return "http://schema.org/NewCondition";
                 break;
 
-            case strtolower(Mage::getStoreConfig('richsnippets/condition/condition_used_option')):
-                return 'http://schema.org/UsedCondition';
+            case strtolower(Mage::getStoreConfig("richsnippets/condition/condition_used_option")):
+                return "http://schema.org/UsedCondition";
                 break;
 
-            case strtolower(Mage::getStoreConfig('richsnippets/condition/condition_damaged_option')):
-                return 'http://schema.org/DamagedCondition';
+            case strtolower(Mage::getStoreConfig("richsnippets/condition/condition_damaged_option")):
+                return "http://schema.org/DamagedCondition";
                 break;
 
-            case strtolower(Mage::getStoreConfig('richsnippets/condition/condition_refurbished_option')):
-                return 'http://schema.org/RefurbishedCondition';
+            case strtolower(Mage::getStoreConfig("richsnippets/condition/condition_refurbished_option")):
+                return "http://schema.org/RefurbishedCondition";
                 break;
 
             default:
-                return 'http://schema.org/NewCondition';
+                return "http://schema.org/NewCondition";
                 break;
         }
     }
@@ -234,32 +234,25 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     {
         /* DHH CORE HACK */
         
-        $_product     = $this->getProduct();
-        
-        $sku          = (string) $_product->getSku();
-        
-        // Max length not clear, taking 150 from observed warnings
-        $name         = (string) substr($_product->getName(), 0, 150);
+        $_product         = $this->getProduct();
+        $sku              = (string) $_product->getSku();
+        $name             = (string) substr($_product->getName(), 0, 150);  // Max length not clear, taking 150 from observed warnings
         
         // Fixed fields
         $data = [
-          '@context'              => 'http://schema.org',
-          '@type'                 => 'Product',
-          'name'                  => $name,
-          'sku'                   => $sku,
-          'image'                 => (string) Mage::helper('catalog/image')->init($_product, 'image'),
-          'brand'                 => $_product->getAttributeText('manufacturer'),
-          // 'logo'                  => "", @todo brand logo
-          'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
-          // "asin"                  => "", @todo
-          // "category"              => "", @todo
-          'offers'                => [
-            '@type'                 => 'Offer',
-            'availability'          => $this->getStockStatusUrl(),
-            'priceCurrency'         => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
-            'itemCondition'         => "http://schema.org/NewCondition",
-            "priceValidUntil"       => date('Y-m-d', strtotime("+1 year")), // DHH CORE HACK PHP 8
-            'url'                   => $_product->getProductUrl(), // Use canonical url here, don't fuck around with SEO
+          "@context"              => "http://schema.org",
+          "@type"                 => "Product",
+          "name"                  => $name,
+          "sku"                   => $sku,
+          // "image"                 => (string) Mage::helper("catalog/image")->init($_product, "image"),
+          "url"                   => $_product->getProductUrl(),              // Use canonical url here, don't fuck around with SEO
+          "offers"                => [
+            "@type"                 => "Offer",
+            "availability"          => $this->getStockStatusUrl(),
+            "priceCurrency"         => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
+            "itemCondition"         => "http://schema.org/NewCondition",
+            "priceValidUntil"       => date("Y-m-d", strtotime("+1 year")),   // DHH CORE HACK PHP 8
+            "url"                   => $_product->getProductUrl(),            // Use canonical url here, don"t fuck around with SEO
             "seller"                => [
               "@type"               => "Organization",
               "name"                => "Chefstore.nl",
@@ -268,60 +261,82 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         ];
         
         // Optional fields
-        $schema_key = "gtin";
-        $value = _get_product_attribute($_product, "ean");
-        if(strlen($value) > 0) {
-          $data[$schema_key] = $value;
-        }
-        $schema_key = "gtin13";
-        $value = _get_product_attribute($_product, "ean13");
-        if(strlen($value) > 0) {
-          $data[$schema_key] = $value;
+        
+        // image
+        $product_image_type = "thumbnail";
+        $media              = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+        $image_url          = "{$media}catalog/product{$_product->getData($product_image_type)}";
+        if(!empty($image_url)) {
+          $media_dir          = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+          $image_path         = "{$media_dir}/catalog/product{$_product->getData($product_image_type)}";
+          $cdn_img_options    = [
+            "fs_path"           => $image_path,
+            "url"               => $image_url,
+            "url_only"          => true,
+            "width"             => 2048,
+            "height"            => 2048,
+            "add_mod_time"      => true,
+            "relative_url"      => false,
+          ];
+          $data["image"]    = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
         }
         
+        // brand
+        $data["brand"] = (string) (_get_product_attribute($_product, "manufacturer") ?: "Chefstore.nl");
+        
+        // @todo:
+        // "logo"                  => "", @todo brand logo
+        // "asin"                  => "", @todo
+        // "category"              => "", @todo
+        
+        // gtin
+        $schema_attr = "gtin";
+        $om_attr = "ean";
+        if($value = _get_product_attribute($_product, $om_attr)) {
+          $data[$schema_attr] = $value;
+          unset($value);
+        }
+        
+        // gtin13
+        $schema_attr = "gtin13";
+        $om_attr = "ean13";
+        if($value = _get_product_attribute($_product, $om_attr)) {
+          $data[$schema_attr] = $value;
+          unset($value);
+        }
+        
+        // mpn
         $schema_key = "mpn";
-        $value = _get_product_attribute($_product, "mpn");
-        if(empty($value)) {
-          $value = _get_product_attribute($_product, "sku_seller");
-        }
-        if(strlen($value) > 0) {
+        if($value = _get_product_attribute($_product, "mpn") ?? _get_product_attribute($_product, "sku_seller")) {
           $data[$schema_key] = $value;
+          unset($value);
         }
         
-        // DHH CORE HACK
+        // description
         $schema_key = "description";
-        $value = Mage::helper("deheerhoreca_util/util")->_get_product_description($_product);
-        if(strlen($value) > 0) {
+        if($value = Mage::helper("deheerhoreca_util/util")->_get_product_description($_product)) {
           $value = strip_tags($value);
           if(strlen($value) > 0) {
             $data[$schema_key] = $value;
           }
+          unset($value);
         }
         
+        // width
         $schema_key = "width";
-        $value = _get_product_attribute($_product, "breedte");
-        if(strlen($value) > 0) {
+        $om_attr = "breedte";
+        if($value = _get_product_attribute($_product, $om_attr)) {
           $data[$schema_key] = [
             "@type"     => "QuantitativeValue",
             "unitCode"  => "MMT",
             "value"     => $value,
           ];
+          unset($value);
         }
+        
+        // depth
         $schema_key = "depth";
-        $value = _get_product_attribute($_product, "diepte");
-        if(empty($value)) {
-          $value = _get_product_attribute($_product, "length_mm");
-        }
-        if(strlen($value) > 0) {
-          $data[$schema_key] = [
-            "@type"     => "QuantitativeValue",
-            "unitCode"  => "MMT",
-            "value"     => $value,
-          ];
-        }
-        $schema_key = "height";
-        $value = _get_product_attribute($_product, "hoogte");
-        if(strlen($value) > 0) {
+        if($value = _get_product_attribute($_product, "diepte") ?? _get_product_attribute($_product, "length_mm")) {
           $data[$schema_key] = [
             "@type"     => "QuantitativeValue",
             "unitCode"  => "MMT",
@@ -329,6 +344,19 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           ];
         }
         
+        // height
+        $schema_key = "height";
+        $om_attr = "hoogte";
+        if($value = _get_product_attribute($_product, $om_attr)) {
+          $data[$schema_key] = [
+            "@type"     => "QuantitativeValue",
+            "unitCode"  => "MMT",
+            "value"     => $value,
+          ];
+          unset($value);
+        }
+        
+        // // size
         // @todo
         // $schema_key = "size";
         // $value = _get_product_attribute($_product, "size");
@@ -338,11 +366,12 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             // "unitCode"  => "MMT",
             // "value"     => $value,
           // ];
+          // unset($value);
         // }
         
+        // weight
         $schema_key = "weight";
-        $value = _get_product_attribute($_product, "weight");
-        if(strlen($value) > 0) {
+        if($value = _get_product_attribute($_product, "weight")) {
           $data[$schema_key] = [
             "@type"     => "QuantitativeValue",
             "unitCode"  => "KGM",
@@ -350,6 +379,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           ];
         }
         
+        // color
         $schema_key = "color";
         $value = _get_product_attribute($_product, "color");
         if(empty($value)) {
@@ -359,6 +389,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           $data[$schema_key] = $value;
         }
         
+        // material
         $schema_key = "material";
         $value = _get_product_attribute($_product, "materiaal");
         if(empty($value)) {
@@ -368,6 +399,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           $data[$schema_key] = $value;
         }
         
+        // countryOfOrigin
         $schema_key = "countryOfOrigin";
         $value = _get_product_attribute($_product, "made_in_country_2code");
         if(strlen($value) > 0) {
@@ -379,16 +411,16 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         // @todo isSimilarTo
         
         // Offer fields
-
-        if (is_array($this->getPriceValues())) {
+        if(is_array($this->getPriceValues())) {
           $getPriceValues = $this->getPriceValues();
-          $data['offers']['@type'] = 'AggregateOffer';
-          $data['offers']['lowPrice'] = $this->getConvertedPrice(min($getPriceValues));
-          $data['offers']['highPrice'] = $this->getConvertedPrice(max($getPriceValues));
+          $data["offers"]["@type"] = "AggregateOffer";
+          $data["offers"]["lowPrice"] = $this->getConvertedPrice(min($getPriceValues));
+          $data["offers"]["highPrice"] = $this->getConvertedPrice(max($getPriceValues));
         } else {
-          $data['offers']['price'] = $this->getConvertedPrice($this->getPriceValues());
+          $data["offers"]["price"] = $this->getConvertedPrice($this->getPriceValues());
         }
         
+        // warranty
         $schema_key = "warranty";
         $value = _get_product_attribute($_product, "garantie");
         $months = "";
@@ -414,10 +446,10 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         $schema_key = "priceValidUntil";
         $value      = $_product->getData("special_to_date"); // Need raw value
         if(empty($value) === false && strtotime($value) > time()) {
-          $value = date('Y-m-d', strtotime($value));
+          $value = date("Y-m-d", strtotime($value));
         }
         if(empty($value)) {
-          $value = date('Y-m-d', strtotime("+1 year")); // DHH CORE HACK PHP 8
+          $value = date("Y-m-d", strtotime("+1 year")); // DHH CORE HACK PHP 8
         }
         if(strlen($value) > 0) {
           $data["offers"][$schema_key] = $value;
@@ -448,8 +480,8 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         }
         
         $shipping_cost = ""; // DHH CORE HACK
-        if(isset($data['offers']['price']) && is_numeric($data['offers']['price'])) {
-          if(($data['offers']['price'] / 1.21) > Mage::getStoreConfig('carriers/freeshipping/free_shipping_subtotal', $this->getStoreId())) {
+        if(isset($data["offers"]["price"]) && is_numeric($data["offers"]["price"])) {
+          if(($data["offers"]["price"] / 1.21) > Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal", $this->getStoreId())) {
             $shipping_cost = 0;
           } else {
             $shipping_cost = 9.95;
@@ -513,15 +545,15 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         /* END DHH CORE HACK */
 
         if ($this->getReviewCount() > 0) {
-            $data['aggregateRating']['@type'] = 'AggregateRating';
-            $data['aggregateRating']['bestRating'] = '100';
-            $data['aggregateRating']['worstRating'] = '0';
-            $data['aggregateRating']['ratingValue'] = $this->getRatingSummary();
-            $data['aggregateRating']['reviewCount'] = $this->getReviewCount();
-            $data['aggregateRating']['ratingCount'] = $this->getReviewCount();
+            $data["aggregateRating"]["@type"] = "AggregateRating";
+            $data["aggregateRating"]["bestRating"] = "100";
+            $data["aggregateRating"]["worstRating"] = "0";
+            $data["aggregateRating"]["ratingValue"] = $this->getRatingSummary();
+            $data["aggregateRating"]["reviewCount"] = $this->getReviewCount();
+            $data["aggregateRating"]["ratingCount"] = $this->getReviewCount();
         }
 
-        return Mage::helper('core')->jsonEncode($data);
+        return Mage::helper("core")->jsonEncode($data);
     }
 
     /* Microdata code */
@@ -533,35 +565,35 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
      */
     public function getMicrodataSnippetsProduct() {
         $data = array(
-            'name'                  => $this->getProduct()->getName(),
-            'image'                 => (string)Mage::helper('catalog/image')->init($this->getProduct(), 'image')->resize(80),
-            'description'           => $this->getProduct()->getShortDescription(),
-            'sku'                   => $this->getProduct()->getSku(),
-            'offers'                => array(
-                '@type'             => 'Offer',
-                'availability'      => $this->getStockStatusUrl(),
-                'priceCurrency'     => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
-                'itemCondition'     => $this->getItemCondition()
+            "name"                  => $this->getProduct()->getName(),
+            "image"                 => (string) Mage::helper("catalog/image")->init($this->getProduct(), "image")->resize(80), // @todo replace with cdn
+            "description"           => $this->getProduct()->getShortDescription(),
+            "sku"                   => $this->getProduct()->getSku(),
+            "offers"                => array(
+                "@type"             => "Offer",
+                "availability"      => $this->getStockStatusUrl(),
+                "priceCurrency"     => Mage::app()->getStore()->getCurrentCurrency()->getCode(),
+                "itemCondition"     => $this->getItemCondition()
             )
         );
         if ($this->getReviewCount() > 0) {
-            $data['aggregateRating']['@type'] = 'AggregateRating';
-            $data['aggregateRating']['ratingValue'] = $this->getRatingSummary();
-            $data['aggregateRating']['reviewCount'] = $this->getReviewCount();
-            $data['aggregateRating']['ratingCount'] = $this->getReviewCount();
+            $data["aggregateRating"]["@type"] = "AggregateRating";
+            $data["aggregateRating"]["ratingValue"] = $this->getRatingSummary();
+            $data["aggregateRating"]["reviewCount"] = $this->getReviewCount();
+            $data["aggregateRating"]["ratingCount"] = $this->getReviewCount();
         }
 
         if (is_array($this->getPriceValues())) {
-            unset($data['offers']['price']);
+            unset($data["offers"]["price"]);
 
             $getPriceValues = $this->getPriceValues();
 
-            $data['offers']['@type'] = 'AggregateOffer';
-            $data['offers']['lowPrice'] = $this->getConvertedPrice(min($getPriceValues));
-            $data['offers']['highPrice'] = $this->getConvertedPrice(max($getPriceValues));
+            $data["offers"]["@type"] = "AggregateOffer";
+            $data["offers"]["lowPrice"] = $this->getConvertedPrice(min($getPriceValues));
+            $data["offers"]["highPrice"] = $this->getConvertedPrice(max($getPriceValues));
 
         } else {
-            $data['offers']['price'] = $this->getConvertedPrice($this->getPriceValues());
+            $data["offers"]["price"] = $this->getConvertedPrice($this->getPriceValues());
         }
 
         return $data;
@@ -576,10 +608,10 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
     public function getProductMeta() {
         if($product = $this->getProduct()) {
             $meta = array();
-            $twitter_card_enabled   = Mage::getStoreConfig('richsnippets/socialcards/twittercard');
-            $twitter_login          = Mage::getStoreConfig('richsnippets/social/twitter');
-            $currentUrl             = Mage::helper('core/url')->getCurrentUrl();
-            $productImage           = (string)Mage::helper('catalog/image')->init($product, 'image')->resize(80);
+            $twitter_card_enabled   = Mage::getStoreConfig("richsnippets/socialcards/twittercard");
+            $twitter_login          = Mage::getStoreConfig("richsnippets/social/twitter");
+            $currentUrl             = Mage::helper("core/url")->getCurrentUrl();
+            $productImage           = (string) Mage::helper("catalog/image")->init($product, "image")->resize(80); // @todo replace with cdn
 
             if(($twitter_login && $twitter_card_enabled)) {
                 $offers = $this->getFormattedPrice($this->getPriceValues());
@@ -588,29 +620,29 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
                     $offers = $this->getFormattedPrice($getPriceValues[0]);
                 }
             } else {
-                $offers = '';
+                $offers = "";
             }
             if($twitter_login && $twitter_card_enabled) {
-                $meta['twitter:card'] = 'product';
-                $meta['twitter:url'] = $currentUrl;
-                $meta['twitter:title'] = htmlspecialchars($product->getName());
+                $meta["twitter:card"] = "product";
+                $meta["twitter:url"] = $currentUrl;
+                $meta["twitter:title"] = htmlspecialchars($product->getName());
 
                 if($description = $product->getShortDescription()) {
-                    $meta['twitter:description'] = htmlspecialchars($description);
+                    $meta["twitter:description"] = htmlspecialchars($description);
                 } else {
-                    $meta['twitter:description'] = htmlspecialchars($product->getName()) . ' - ' . $offers;
+                    $meta["twitter:description"] = htmlspecialchars($product->getName()) . " - " . $offers;
                 }
 
-                $meta['twitter:image:src'] = $productImage;
-                $meta['twitter:site'] = $twitter_login;
-                $meta['twitter:creator'] = $twitter_login;
-                $meta['twitter:data1'] = $offers;
-                $meta['twitter:label1'] = 'PRICE';
+                $meta["twitter:image:src"] = $productImage;
+                $meta["twitter:site"] = $twitter_login;
+                $meta["twitter:creator"] = $twitter_login;
+                $meta["twitter:data1"] = $offers;
+                $meta["twitter:label1"] = "PRICE";
 
                 if($this->getStockStatusUrl()) {
-                    if($this->getStockStatusUrl() == 'http://schema.org/InStock') {
-                        $meta['twitter:data2'] = 'In Stock';
-                        $meta['twitter:label2'] = 'AVAILABILITY';
+                    if($this->getStockStatusUrl() == "http://schema.org/InStock") {
+                        $meta["twitter:data2"] = "In Stock";
+                        $meta["twitter:label2"] = "AVAILABILITY";
                     }
                 }
 

@@ -294,6 +294,9 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Geissweb EU VAT Enhanded**
   - `app/code/local/Geissweb/Euvatgrouper/Model/Validation/Abstract.php`
     - Add new VAT number format for BE
+- **Profitmetrics**
+  - `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
+    - Expanding list of known Bots
 
 ### Closed
 - **app/code/core/Mage/**

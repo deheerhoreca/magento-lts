@@ -246,7 +246,10 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["bartscher", "combisteel", "diamond", "domest", "gastro-inox", "gastronoble", "maxima", "emga", "hendi", "saro", "scancool", "tefcold", "veba"];
+$suppliers_external_docs_preferred = [
+  "bartscher", "combisteel", "diamond", "domest", "gastro-inox", "gastronoble", "liebherr", "maxima", "emga",
+  "hendi", "saro", "scancool", "tefcold", "veba",
+];
 $suppliers_external_docs_blocked = []; // case-sensitive
 
 if(!in_array($supplier_sys, $suppliers_external_docs_blocked)) {
@@ -1007,35 +1010,26 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo "</ul>";
                   
                   // HOLIDAY NOTICE
-                  if(CarbonImmutable::now()->isBefore("2024-12-31 23:59:59")) { ?>
+                  if(0 && CarbonImmutable::now()->isBefore("2024-12-31 23:59:59")) {
+                    ?>
                     <div class="mx-auto py-2"><p><em class="small">Door de feestdagen is het soms extra druk bij de bezorgdiensten</em></p></div>
-                  <?php }
+                    <?php
+                  }
                   
                   echo $this->getChildHtml("addtocart");
                   echo $this->getChildHtml("addto");
                   
                   // SUPPLIER-LEVEL SALES COUPON NOTICES
-                  if(0 && strtolower($supplier_name) === "combisteel" && CarbonImmutable::now()->isBefore("2024-10-31 00:00:00")) {
+                  if($supplier_sys === "liebherr" && CarbonImmutable::now()->isBefore("2025-01-31 23:59:59")) {
+                    $coupon = "LIEBHERR25";
                     ?>
                     <div class="card mx-auto p-2 mt-3">
                       <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                      <img src="//images.chefstore.nl/media/wysiwyg/brands/combisteel.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/liebherr.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="<?=$supplier_name?> Coupon Code">
                       <div class="card-body">
-                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HERFST24CS</span></h4>
-                        <p class="card-text">Korting geldt voor alle producten van CombiSteel. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 oktober 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
-                      </div>
-                    </div>
-                    <?php
-                  } elseif(strtolower($supplier_name) === "hendi" && CarbonImmutable::now()->isBefore("2024-12-31 23:59:59")) {
-                    ?>
-                    <div class="card mx-auto p-2 mt-3">
-                      <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                      <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
-                      <div class="card-body">
-                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
-                        <p class="card-text">Korting geldt voor alle producten van HENDI. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 december 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace"><?=$coupon?></span></h4>
+                        <p class="card-text">Korting geldt voor alle producten van <?=$supplier_name?>. Gebruik deze code bij het afrekenen.</p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 januari 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div>
                     <?php
