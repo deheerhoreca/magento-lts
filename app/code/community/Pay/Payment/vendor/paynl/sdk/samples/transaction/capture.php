@@ -20,8 +20,15 @@ require_once '../../vendor/autoload.php';
 require_once '../config.php';
 
 $transactionId = $_GET['transactionId'];
+$amount = $_GET['amount'];
+$tracktrace = $_GET['tracktrace'];
+
+$articleId = '1019';
+$quantityToBeCaptured = '1';
+$products[$articleId] = $quantityToBeCaptured;
+
 try {
-    $result = \Paynl\Transaction::capture($transactionId);
+    $result = \Paynl\Transaction::capture($transactionId, $amount, $tracktrace, $products);
 } catch (\Paynl\Error\Error $e) {
     echo $e->getMessage();
 }

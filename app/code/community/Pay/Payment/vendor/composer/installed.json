@@ -29,7 +29,7 @@
             },
             "time": "2023-11-13T15:33:10+00:00",
             "type": "library",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Paynl\\": "src/"
