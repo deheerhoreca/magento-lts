@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c2cb70e9c4d640a66413d22b0e194bf",
+    "content-hash": "085fa8ae1a465630fac1504fc934401a",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -193,6 +193,41 @@
                 "source": "https://github.com/AOEpeople/Aoe_DbRetry/tree/master"
             },
             "time": "2018-01-25T10:04:19+00:00"
+        },
+        {
+            "name": "aoepeople/aoe_profiler",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deheerhoreca/Aoe_Profiler.git",
+                "reference": "b8cedf5f3d531d6d48f68f5fd8c5ff740126c1de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/b8cedf5f3d531d6d48f68f5fd8c5ff740126c1de",
+                "reference": "b8cedf5f3d531d6d48f68f5fd8c5ff740126c1de",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "license": [
+                "GPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Fabrizio Branca",
+                    "email": "fabrizio.branca@aoe.com"
+                }
+            ],
+            "description": "Magento Profiler",
+            "homepage": "http://www.fabrizio-branca.de/magento-profiler.html",
+            "support": {
+                "source": "https://github.com/deheerhoreca/Aoe_Profiler/tree/master"
+            },
+            "time": "2025-01-27T23:20:53+00:00"
         },
         {
             "name": "aoepeople/aoe_templatehints",
@@ -5310,7 +5345,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "aoepeople/aoe_blackholesession": 20,
-        "aoepeople/aoe_dbretry": 20
+        "aoepeople/aoe_dbretry": 20,
+        "aoepeople/aoe_profiler": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

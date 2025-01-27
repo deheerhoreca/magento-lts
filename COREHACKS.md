@@ -144,10 +144,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `app/code/local/Magmodules/Kiyoh/Model/Stats.php`
     - Fixed a bug where PHP7.2 does not allow a `+=` on a variable that was initialized as a string
     - https://github.com/loekvangool/deheerhoreca-magento/commit/a6950b2ebc7735b8f4eedbecfc8b29e84aaac958
-- **Aoe Profiler**
-  - `app/code/community/Aoe/Profiler/Model/Run.php`
-    - Adding checks due to divide by zero errors
-    - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
 - **MagicZoomPlus**
   - `app/code/local/MagicToolbox/MagicZoomPlus/core/magictoolbox.params.class.php`, `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
     - Remove hardcoded `memory_limit set` (it was not enough for some photos)
@@ -341,6 +337,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Changing API URL for the TLS 1.2 upgrade, but works on the old URL now as well
   - `app/code/community/Pay/Payment/vendor/paynl/sdk/`
     - Removed 3rd party `.gitignore` and added the dir to our repo to record the corehack above
+  - `app/code/community/Aoe/Profiler/Model/Run.php`
+    - Adding checks due to divide by zero errors
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
+    - Replaced by our own fork
 - **app/design/adminhtml/**
   - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
     - Bugfixes

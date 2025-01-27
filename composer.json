@@ -7,6 +7,7 @@
         "amnuts/opcache-gui": "^3.5",
         "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
         "aoepeople/aoe_dbretry": "dev-master",
+        "aoepeople/aoe_profiler": "dev-master",
         "aoepeople/aoe_templatehints": "^0.4.4",
         "aschroder/smtp_pro": "^2",
         "aydin-hassan/magento-core-composer-installer": "^2.1.0",
@@ -57,6 +58,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/deheerhoreca/Aoe_Profiler"
         },
         {
             "type": "vcs",
