@@ -338,6 +338,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
       - Prevent fatal errors. Fixed upstream.
   - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
     - Fix for PHP 7.x
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/src/Config.php`
+    - Changing API URL for the TLS 1.2 upgrade, but works on the old URL now as well
 - **app/design/adminhtml/**
   - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
     - Bugfixes
