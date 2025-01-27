@@ -1,5 +1,6 @@
 <?php
 
+
 use Paynl\Merchant;
 
 class MerchantTest extends PHPUnit_Framework_TestCase

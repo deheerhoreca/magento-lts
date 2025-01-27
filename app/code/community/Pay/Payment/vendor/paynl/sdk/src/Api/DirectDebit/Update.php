@@ -91,7 +91,6 @@ class Update extends DirectDebit
     public function setMandateId($mandateId)
     {
         $this->_mandateId = $mandateId;
-        
     }
 
     /**
@@ -244,13 +243,11 @@ class Update extends DirectDebit
      */
     protected function getData()
     {
-       
-
         if (empty($this->_mandateId)) {
             throw new Required('mandateId');
         }
 
-        $this->data['mandateId'] = $this->_mandateId;
+        $this->data['mandateId'];
 
         if (!empty($this->_amount)) {
             $this->data['amount'] = $this->_amount;
@@ -314,7 +311,7 @@ class Update extends DirectDebit
      * @inheritdoc
      */
     public function doRequest($endpoint = '', $version = null)
-    {        
+    {
         return parent::doRequest('DirectDebit/update');
     }
 }

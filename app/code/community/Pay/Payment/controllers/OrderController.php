@@ -151,16 +151,21 @@ class Pay_Payment_OrderController extends Mage_Core_Controller_Front_Action
             $this->helperData->removeLock($transactionId);
         }
         
-        $mage_order_id = $_GET["extra1"] ?? "UNKNOWN_ORDER_ID"; // DHH CORE HACK
+        // DHH CORE HACK
+        $mage_order_id = $_GET["extra1"] ?? "UNKNOWN_ORDER_ID";
         if ($error) {
             echo "FALSE|" . $resultMsg;
-            // DHH CORE HACK:
             Mage::log("{$mage_order_id} Pay.nl order exchange {$transactionId} FAILED: {$resultMsg}. Params: {$_SERVER['QUERY_STRING']}", Zend_Log::ERR, "paynl.log");
         } else {
             echo "TRUE|" . $resultMsg;
-            // DHH CORE HACK:
             Mage::log("{$mage_order_id} Pay.nl order exchange {$transactionId} OK: {$resultMsg}. Params: {$_SERVER['QUERY_STRING']}", Zend_Log::DEBUG, "paynl.log");
         }
+
+        // if ($error) {
+        //     echo "FALSE|" . $resultMsg;
+        // } else {
+        //     echo "TRUE|" . $resultMsg;
+        // }
 
         die();
     }

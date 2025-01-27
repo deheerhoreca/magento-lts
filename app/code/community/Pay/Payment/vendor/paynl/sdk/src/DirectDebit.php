@@ -102,18 +102,12 @@ class DirectDebit
 
     public function update($mandateId, $options)
     {
-        
-
         if (empty($mandateId)) {
             throw new Required('mandateId');
         }
 
-        
-
         $api = new Api\Update();
         $api->setMandateId($mandateId);
-
-       
 
         if (!empty($options['amount'])) {
             $api->setAmount(round($options['amount'] * 100));
@@ -173,7 +167,6 @@ class DirectDebit
         if (!empty($options['extra3'])) {
             $api->setExtra3($options['extra3']);
         }
-        
         return $api->doRequest();
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05b4e9e12360aaee85bbe9bd08f2f614",
+    "content-hash": "7c2cb70e9c4d640a66413d22b0e194bf",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -2138,6 +2138,33 @@
                 "source": "https://github.com/paragonie/random_compat"
             },
             "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
+            "name": "paynl/magento-plugin",
+            "version": "v3.18.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:paynl/magento-plugin.git",
+                "reference": "b107c0eb9670444a1eb376bbb3c1ea7470bcc622"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paynl/magento-plugin/zipball/b107c0eb9670444a1eb376bbb3c1ea7470bcc622",
+                "reference": "b107c0eb9670444a1eb376bbb3c1ea7470bcc622",
+                "shasum": ""
+            },
+            "type": "magento-module",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Pieters",
+                    "email": "andy@pay.nl"
+                }
+            ],
+            "description": "Add PAY.'s payment methods to your magento store",
+            "time": "2024-10-16T09:53:18+00:00"
         },
         {
             "name": "pelago/emogrifier",

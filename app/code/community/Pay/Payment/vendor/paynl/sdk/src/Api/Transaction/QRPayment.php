@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Paynl\Api\Transaction;
 
 
@@ -7,7 +8,6 @@ use Paynl\Error\InvalidArgument;
 use Paynl\Error\Required;
 class QRPayment extends Transaction
 {
-    protected $version = 12;
     protected $apiTokenRequired = true;
     protected $serviceIdRequired = true;
 

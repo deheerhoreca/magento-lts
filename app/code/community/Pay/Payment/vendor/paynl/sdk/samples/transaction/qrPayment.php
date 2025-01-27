@@ -9,16 +9,7 @@ try {
         'amount' => 0.01,
         'description' => 'QR payment test',
 
-        //optional
-        'currency' => 'EUR',
-        'statsData' => array(
-            'promotorId' => '1234ab',
-            'tool' => 'tool',
-            'info' => 'info',
-            'extra1' => 'extra1',
-            'extra2' => 'extra2',
-            'extra3' => 'extra3',
-        )
+        'currency' => 'EUR'
     ));
 } catch (\Paynl\Error\Error $e) {
     die ('Error: '.$e->getMessage());

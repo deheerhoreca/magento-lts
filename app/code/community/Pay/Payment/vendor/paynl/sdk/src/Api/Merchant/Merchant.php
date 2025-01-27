@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Paynl\Api\Merchant;
 
 use Paynl\Api\Api;

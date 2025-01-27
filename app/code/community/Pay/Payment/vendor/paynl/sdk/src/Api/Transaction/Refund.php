@@ -1,4 +1,20 @@
 <?php
+/*
+ * Copyright (C) 2015 Andy Pieters <andy@pay.nl>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace Paynl\Api\Transaction;
 
@@ -14,12 +30,11 @@ class Refund extends Transaction
 {
     protected $apiTokenRequired = true;
 
-    protected $version = 15;
-
     /**
      * @var string the transactionId
      */
     private $transactionId;
+
     /**
      * @var int the amount in cents
      */
@@ -32,14 +47,6 @@ class Refund extends Transaction
      * @var \DateTime the date the refund should take place
      */
     private $processDate;
-    /**
-     * @var int (optional) The vat percentage this refund applies to (AfterPay/Focum only)
-     */
-    private $vatPercentage;
-    /**
-     * @var int (optional) The currency in which the amount is specified. If no amount is specified, the full amount is refunded and currency is not used. Standard in euro.
-     */
-    private $currency;
 
     /**
      * @param string $transactionId
@@ -47,22 +54,6 @@ class Refund extends Transaction
     public function setTransactionId($transactionId)
     {
         $this->transactionId = $transactionId;
-    }
-
-    /**
-     * @param int|float|null $vatPercentage
-     */
-    public function setVatPercentage($vatPercentage)
-    {
-        $this->vatPercentage = $vatPercentage;
-    }
-
-    /**
-     * @param string $currency
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
     }
 
     /**
@@ -110,12 +101,6 @@ class Refund extends Transaction
         if ($this->processDate instanceof \DateTime) {
             $this->data['processDate'] = $this->processDate->format('d-m-Y');
         }
-        if (!empty($this->vatPercentage)) {
-            $this->data['vatPercentage'] = $this->vatPercentage;
-        }
-        if (!empty($this->currency)) {
-            $this->data['currency'] = $this->currency;
-        }
 
         return parent::getData();
     }
@@ -138,7 +123,7 @@ class Refund extends Transaction
             isset($output['request']) &&
             $output['request']['result'] != 1 &&
             $output['request']['result'] !== 'TRUE') {
-            throw new Error\Api($output['request']['errorId'] . ' - ' . $output['request']['errorMessage']. ' '. (isset($output['description']) ? $output['description'] : ''));
+            throw new Error\Api($output['request']['errorId'] . ' - ' . $output['request']['errorMessage']. ' '. $output['description']);
         }
 
         return parent::processResult($result);

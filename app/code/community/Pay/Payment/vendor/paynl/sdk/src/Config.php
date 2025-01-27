@@ -1,4 +1,20 @@
 <?php
+/*
+ * Copyright (C) 2015 Andy Pieters <andy@pay.nl>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace Paynl;
 
@@ -7,16 +23,10 @@ use Curl\Curl;
 /**
  * Description of Pay
  *
- * @author Andy Pieters <andy@pay.nl>
+ * @author Andy Pieters <andy@andypieters.nl>
  */
 class Config
 {
-    const CORE1 = 'https://rest-api.pay.nl';
-    const CORE1_TEXT = 'Pay.nl (Default)';
-    const CORE2 = 'https://rest.achterelkebetaling.nl';
-    const CORE2_TEXT = 'Achterelkebetaling.nl';
-    const CORE3 = 'https://rest.payments.nl';
-    const CORE3_TEXT = 'Payments.nl';
 
     /**
      * @var string The token code (AT-xxxx-xxxx)
@@ -34,29 +44,14 @@ class Config
     private static $serviceId;
 
     /**
-     * @var
-     */
-    private static $ignoreOnPending = true;
-
-    /**
      * @var string The base URL for the Pay.nl API.
      */
     private static $apiBase = 'https://rest-api.pay.nl';
 
     /**
-     * @var string The base URL for the Pay.nl API.
-     */
-    private static $paymentApiBase = 'https://payment.pay.nl';
-
-    /**
      * @var int The version of the Pay.nl API to use for requests.
      */
     private static $apiVersion = 5;
-
-    /**
-     * @var bool Boolean to force using the API version set by this config.
-     */
-    private static $forceApiVersion = false;
 
     private static $curl;
 
@@ -70,17 +65,6 @@ class Config
      */
     private static $verifyPeer = true;
 
-    /**
-     * @return string[]
-     */
-    public static function getCores()
-    {
-        return [
-          self::CORE1 => self::CORE1_TEXT,
-          self::CORE2 => self::CORE2_TEXT,
-          self::CORE3 => self::CORE3_TEXT,
-        ];
-    }
 
     /**
      * @return string
@@ -114,21 +98,6 @@ class Config
         self::$verifyPeer = (boolean)$verifyPeer;
     }
 
-    /**
-     * @param bool $pending
-     */
-    public static function setIgnoreOnPending($pending)
-    {
-        self::$ignoreOnPending = (boolean)$pending;
-    }
-
-    /**
-     * @return bool
-     */
-    public static function getIgnoreOnPending()
-    {
-        return self::$ignoreOnPending;
-    }
 
     /**
      * @param string $apiBase
@@ -136,23 +105,6 @@ class Config
     public static function setApiBase($apiBase)
     {
         self::$apiBase = $apiBase;
-    }
-
-    /**
-     * @param $core
-     * @return void
-     */
-    public static function setCore($core)
-    {
-        self::setApiBase($core);
-    }
-
-    /**
-     * @param string $paymentApiBase
-     */
-    public static function setPaymentApiBase($paymentApiBase)
-    {
-        self::$paymentApiBase = $paymentApiBase;
     }
 
     /**
@@ -213,16 +165,14 @@ class Config
     public static function getApiVersion()
     {
         return self::$apiVersion;
-    }   
+    }
 
     /**
      * @param string $apiVersion The API version to use for requests.
-     * @param bool $forceUse Set to true if you want to force using this version.
      */
-    public static function setApiVersion($apiVersion, $forceUse = false)
+    public static function setApiVersion($apiVersion)
     {
         self::$apiVersion = (int) $apiVersion;
-        self::$forceApiVersion = $forceUse;
     }
 
     /**
@@ -233,25 +183,10 @@ class Config
      */
     public static function getApiUrl($endpoint, $version = null)
     {
-        if ($version === null || self::$forceApiVersion) {
-            $version = self::$apiVersion;
-        }        
-        return self::$apiBase . '/v' . $version . '/' . $endpoint . '/json';
-    }
-
-    /**
-     * @param string $endpoint The endpoint of the payment API, for example Transaction/Start
-     * @param int|null $version
-     *
-     * @return string The url to the api
-     */
-    public static function getPaymentApiUrl($endpoint, $version = null)
-    {
-        if ($version === null || self::$forceApiVersion) {
+        if ($version === null) {
             $version = self::$apiVersion;
         }
-
-        return self::$paymentApiBase . '/v' . $version . '/' . $endpoint . '/json';
+        return self::$apiBase . '/v' . $version . '/' . $endpoint . '/json';
     }
 
     /**

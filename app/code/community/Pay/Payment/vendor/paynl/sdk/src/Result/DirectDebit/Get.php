@@ -13,57 +13,46 @@ class Get extends Result
 
     public function getMandateId()
     {
-        $order = $this->getOrder();
-        return  $order['mandateId'];
+        return ($this->getOrder())['mandateId'];
     }
     public function getBankaccountNumber()
     {
-        $order = $this->getOrder();
-        return $order['bankaccountNumber'];
+        return ($this->getOrder())['bankaccountNumber'];
     }
     public function getBankaccountOwner()
     {
-        $order = $this->getOrder();
-        return $order['bankaccounOwner'];
+        return ($this->getOrder())['bankaccounOwner'];
     }
     public function getBankaccountBic()
     {
-        $order = $this->getOrder();
-        return $order['bankaccounBic'];
+        return ($this->getOrder())['bankaccounBic'];
     }
     public function getAmount()
     {
-        $order = $this->getOrder();
-        return $order['amount']/100;
+        return ($this->getOrder())['amount']/100;
     }
     public function getDescription()
     {
-        $order = $this->getOrder();
-        return $order['description'];
+        return ($this->getOrder())['description'];
     }
     public function getIpAddress()
     {
-        $order = $this->getOrder();
-        return $order['ipAddress'];
+        return ($this->getOrder())['ipAddress'];
     }
     public function getEmail()
     {
-        $order = $this->getOrder();
-        return $order['email'];
+        return ($this->getOrder())['email'];
     }
     public function getExtra1()
     {
-        $order = $this->getOrder();
-        return $order['extra1'];
+        return ($this->getOrder())['extra1'];
     }
     public function getExtra2()
     {
-        $order = $this->getOrder();
-        return isset($order['extra2'])?$order['extra2']:'';
+        return isset(($this->getOrder())['extra2'])?($this->getOrder())['extra2']:'';
     }
     public function getExtra3()
     {
-        $order = $this->getOrder();
-        return isset($order['extra3'])?$order['extra3']:'';
+        return isset(($this->getOrder())['extra3'])?($this->getOrder())['extra3']:'';
     }
 }
