@@ -12,6 +12,10 @@ $product_block                 = $this->getLayout()->createBlock("catalog/produc
 $attributes                   = DeHeerHoreca_Util_Helper_Util::getProductAttributes("listview", ["popularity", "featured"]);
 $done_dhh_skus                = [];
 
+$media_url                    = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$media_dir                    = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
+$placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
+
 // Block of semi-random recommended products
 
 $parent_categories_ids    = [];
@@ -35,17 +39,17 @@ $_products = Mage::getModel("catalog/product")
   ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
   ->addFieldToFilter([["attribute" => "featured", "eq" => 1]])
   // ->addAttributeToFilter("sku", ["in" => ["CS-7455.3300", "CS-7450.0159", "CS-7450.0580", "CS-7464.0045", "CS-7072.1015"]])
+  ->addAttributeToFilter("small_image", ["notnull" => "", "neq" => "no_selection"])
   ->addAttributeToSort("popularity", "ASC")
   ->setPageSize(($limit * 6)) // Random pick from top
   ->addFinalPrice(); // Necessary to respect sale price end date
 $_products->load();
-// if(_dhh_debug()) {
-  // echo $_products->getSelect()->__toString();
-// }
+
+// if(_dhh_debug()) echo $_products->getSelect()->__toString();
+
 Mage::getModel("catalogInventory/stock")->addItemsToProducts($_products);
 
-if($_products->getFirstItem()) {
-  ?>
+if($_products->getFirstItem()) { ?>
 
   <style>
     .category-products li.item:hover {
@@ -232,12 +236,18 @@ if($_products->getFirstItem()) {
       // Product name
       $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
       
-      // Product thumbnail
-      $media_url        = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-      $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
-      $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-      $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
-      if(is_file($image_path) === true) {
+      // Product image
+      $image            = (string) $_product->getSmallImage();
+      
+      if($image === "" || $image === "no_selection") {
+        $image = "/placeholder/{$placeholder_image}";
+      }
+      
+      $image_path       = "{$media_dir}/catalog/product{$image}";
+      $img_html         = "";
+      
+      if(is_file($image_path)) {
+        $image_url        = "{$media_url}/catalog/product{$image}";
         $col_width        = 175;
         $cdn_img_options  = [
           "identifier"      => $dhh_sku,
@@ -255,20 +265,20 @@ if($_products->getFirstItem()) {
           "dpr"             => 1.25,
           "relative_url"    => true,
         ];
-        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+        
+        $img_html = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
       }
+      
+      $product_name_esc = $this->quoteEscape($product_name);
       ?>
       <li class="item">
-        <?php
-        echo $html;
-        $title = $product_long_name;
-        ?>
-        <a href="<?php echo $productUrl; ?>" title="<?php echo $title; ?> details" class="product-image"><?=$img_html?></a>
-        <div class="product-info" data-pop="<?=_get_product_attribute($_product, "popularity");?>">
+        <?=$html?>
+        <a href="<?=$productUrl?>" title="<?=$product_name_esc?>" class="product-image"><?=$img_html?></a>
+        <div class="product-info" data-pop="<?=$this->quoteEscape(_get_product_attribute($_product, "popularity"))?>">
           <div class="info">
-            <span class="brand-name small fw-600 gray"><?php echo "{$brand} <span class=light-gray>{$sku_seller}</span>"; ?></span>
+            <span class="brand-name small fw-600 gray"><?="{$brand} <span class=light-gray>{$sku_seller}</span>"?></span>
             <h2 class='product-name ellipsed ellipsed-2'>
-              <a href='<?php echo $productUrl; ?>' title='<?php echo $product_long_name; ?> details'><?php echo $product_name; ?></a>
+              <a href="<?=$productUrl?>" title="<?=$product_name_esc?> zien"><?=$product_name?></a>
             </h2>
             <?php
             if($this->getChild('name.after')) {
@@ -308,30 +318,30 @@ if($_products->getFirstItem()) {
                   // Simple product, sellable
                   ?>
                   <div class="float-left">
-                    <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
-                    <?php echo $additional_delivery_messages; ?>
+                    <span class="<?=$stock_class?>" style='line-height: 1.5em;'><?=$stock_message?></span>
+                    <?=$additional_delivery_messages?>
                   </div>
-                  <button type="button" title="<?php echo $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
-<?php
+                  <button type="button" title="<?=$this->quoteEscape($this->__('Add to Cart'))?>" class="button btn-cart" onclick="setLocation('<?=$this->getAddToCartUrl($_product)?>')"><i class="fa fa-shopping-cart"></i></button>
+                  <?php
                 } else {
                   // Simple product, not sellable
                   ?>
                   <div class="float-left">
-                    <span class="<?php echo $stock_class; ?>" style='line-height: 1.5em;'><?php echo $stock_message; ?></span>
-                    <?php echo $additional_delivery_messages; ?>
+                    <span class="<?=$stock_class?>" style='line-height: 1.5em;'><?=$stock_message?></span>
+                    <?=$additional_delivery_messages?>
                   </div>
-                  <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-<?php
+                  <a title="<?=$this->quoteEscape($this->__("Details"))?>" class="button btn-cart" href="<?=$productUrl?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
+                  <?php
                 }
               } else {
                 // Configurable product
                 ?>
                 <div class="float-left">
                   <span class="buyblock-usp" style='line-height: 1.5em;'>Meerdere varianten</span>
-                  <?php echo $additional_delivery_messages; ?>
+                  <?=$additional_delivery_messages?>
                 </div>
-                <a title="<?php echo $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?php echo $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-<?php } ?>
+                <a title="<?=$this->quoteEscape($this->__("Details"))?>" class="button btn-cart" href="<?=$productUrl?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
+                <?php } ?>
             </div>
           <?php } ?>
         </div>
@@ -354,7 +364,7 @@ if($_products->getFirstItem()) {
               <p><i class="fa fa-check"></i>Snelle levering</p>
             </div>
           </div>
-        <ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
+        <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
         <?php
       }
     }
