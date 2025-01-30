@@ -20,7 +20,6 @@
 
 # CM Redis
 /app/code/community/Cm
-/app/etc/modules/Cm_RedisSession.xml
 /lib/Credis
 
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
@@ -169,12 +168,10 @@ phpunit.xml
 ##################################################
 
 # UNIGNORE COREHACKED FILES
-!/app/code/community/Cm/RedisSession/Model/Session.php
-!/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
-!/app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php
-!/app/code/community/Pay/Payment/controllers/OrderController.php
-!/app/code/community/Aoe/BlackHoleSession
-!/app/etc/modules/Aoe_BlackHoleSession.xml
+# !/app/code/community/Cm/RedisSession/Model/Session.php
+# !/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
+# !/app/code/community/Aoe/BlackHoleSession
+# !/app/etc/modules/Aoe_BlackHoleSession.xml
 
 # IGNORE DHH FORKS, NOT COREHACKS
 /app/etc/modules/Aschroder_SMTPPro.xml
@@ -182,14 +179,7 @@ phpunit.xml
 /app/design/adminhtml/default/default/template/smtppro
 /app/locale/en_US/Aschroder_SMTPPro.csv
 
-# /app/code/community/Pay/Payment
-# /app/design/frontend/base/default/template/pay/payment
-# /app/design/adminhtml/base/default/template/pay/payment
-# /media/pay_payment/logo.png
-# /app/etc/modules/Pay_Payment.xml
-# /app/locale/nl_NL/Pay_Payment.csv
-# /app/locale/en_US/Pay_Payment.csv
-# /app/locale/it_IT/Pay_Payment.csv
+# deheerhoreca/Aoe_Profiler
 /app/etc/modules/Aoe_Profiler.xml
 /app/code/community/Aoe/Profiler
 /app/code/community/Varien/Profiler.php
@@ -197,3 +187,17 @@ phpunit.xml
 /skin/adminhtml/default/default/aoe_profiler
 /app/design/adminhtml/default/default/layout/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_profiler
+
+# deheerhoreca/paynl-openmage
+/app/code/community/Pay/Payment
+/app/design/frontend/base/default/template/pay/payment
+/app/design/adminhtml/base/default/template/pay/payment
+/media/pay_payment/logo.png
+/app/etc/modules/Pay_Payment.xml
+/app/locale/nl_NL/Pay_Payment.csv
+/app/locale/en_US/Pay_Payment.csv
+/app/locale/it_IT/Pay_Payment.csv
+
+# deheerhoreca/Cm_RedisSession
+/app/code/community/Cm/RedisSession
+/app/etc/modules/Cm_RedisSession.xml

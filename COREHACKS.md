@@ -121,11 +121,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - Must be checked against `base/default/layout/*.xml`
   - Updated up to: v20.5.0
 
-## ./vendor/ Hacks
-- `vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php`
-  - Updated up to: v20.5.0
-  - Unignored in git
-
 ## 3rd Party Hacks
 - **Anowave Sort**
   - `app/code/local/Anowave/Sort/Model/Observer.php`
@@ -277,12 +272,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **FireGento DynamicCategory**
   - `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
     - Adding exception check and logging to prevent fatal errors
-- **Pay.nl**
-  - Module is copied from from `./vendor/paynl/magento-plugin/app/code/community/Pay/Payment/` to `./app/` to implement core hacks
-  - `app/code/community/Pay/Payment/controllers/OrderController.php`
-    - Adding log to critical transaction status updates
-  - `app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php`
-    - Add some logging to capture Pay API communcation
 - **firegento/firegento-logger**
   - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
   - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432

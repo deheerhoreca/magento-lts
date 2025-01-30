@@ -1,8 +1,9 @@
 {
     "name": "deheerhoreca/openmage",
     "type": "project",
+    "license": "proprietary",
     "require": {
-        "php": ">=8.1 <=8.3",
+        "php": ">=8.2 <=8.3",
         "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
         "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
@@ -12,15 +13,16 @@
         "aschroder/smtp_pro": "^2",
         "aydin-hassan/magento-core-composer-installer": "^2.1.0",
         "cmixin/business-day": "^1.18",
+        "colinmollenhour/magento-redis-session": "dev-master as 3.2.0",
         "dekor/php-array-table": "^2.0",
         "firegento/debug": "^1.5",
         "illuminate/support": "^10",
         "michelf/php-markdown": "^2.0",
         "mikehaertl/php-shellcommand": "^1.7",
         "n98/magerun": "^1.97",
-        "nesbot/carbon": "*",
+        "nesbot/carbon": "^2 || ^3",
         "openmage/magento-lts": "20.5.0",
-        "paynl/magento-plugin": "^3.18",
+        "paynl/magento-plugin": "dev-master",
         "rector/rector": "^1.1",
         "sabberworm/php-css-parser": "^8.5",
         "symfony/cache": "^6.4",
@@ -39,7 +41,8 @@
         "symfony/polyfill-php73": "*",
         "symfony/polyfill-php74": "*",
         "symfony/polyfill-php80": "*",
-        "symfony/polyfill-php81": "*"
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
     },
     "suggest": {
         "aoepeople/aoe_blackholesession": "Skip creating a real session for bots",
@@ -57,19 +60,32 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession"
+            "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession",
+            "only": ["aoepeople/aoe_blackholesession"]
         },
         {
             "type": "vcs",
-            "url": "https://github.com/deheerhoreca/Aoe_Profiler"
+            "url": "https://github.com/deheerhoreca/Aoe_Profiler",
+            "only": ["aoepeople/aoe_profiler"]
         },
         {
             "type": "vcs",
-            "url": "https://github.com/vianetz/aoe-scheduler-magento1"
+            "url": "https://github.com/vianetz/aoe-scheduler-magento1",
+            "only": ["aoepeople/aoe_scheduler"]
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/deheerhoreca/paynl-openmage",
+            "only": ["paynl/magento-plugin"]
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/deheerhoreca/Cm_RedisSession"
         },
         {
             "type": "composer",
-            "url": "https://packages.firegento.com"
+            "url": "https://packages.firegento.com",
+            "only": ["firegento/debug"]
         }
     ],
     "autoload": {
