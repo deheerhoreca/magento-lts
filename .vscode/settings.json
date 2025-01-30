@@ -1,12 +1,12 @@
 {
     "files.watcherExclude": {
-        "./media/*": true,
-        "./var/log/**": true,
-        "./.phpstorm.meta.php/**": true,
+        "**/media/**": true,
+        "**/var/log/**": true,
         "**/.DS_Store": true,
-        "./.git": true
+        "**/.git": true
     },
     "files.exclude": {
-        "./media/catalog/**": true,
-    }
+        "**/media/catalog/**": true
+    },
+    "intelephense.environment.documentRoot": "./deheerhoreca-intel"
 }
