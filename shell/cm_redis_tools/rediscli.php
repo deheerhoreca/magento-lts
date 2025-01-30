@@ -14,7 +14,7 @@ abstract class Zend_Cache
 	const CLEANING_MODE_NOT_MATCHING_TAG = 'notMatchingTag';
 	const CLEANING_MODE_MATCHING_ANY_TAG = 'matchingAnyTag';
 	function throwException($text) {
-		die("Exception: ".$text."\n");
+		die("Exception: ".$text.PHP_EOL);
 	}
 }
 
@@ -37,17 +37,18 @@ function showHelp(){
 
 /* parsing command line options */
 
-$opts  = "s:a:p:vd:";
-$options = getopt($opts);
+$opts  			= "s:a:p:vd:";
+$options 		= getopt($opts);
+
 if(!isset($options["s"]) || !isset($options["p"]) || !isset($options["d"])) {
 	showHelp();
-} 
-$databases=preg_split('/,/',$options["d"]);
+}
+
+$databases	=	preg_split('/,/',$options["d"]);
 
 foreach($databases as $db) {
 	$db = (int) $db;
-	if(isset($options["v"]))
-		echo "Cleaning database $db:";
+	echo "Cleaning database $db:";
 	
 	try {
 		// Check if we have a password
@@ -56,7 +57,7 @@ foreach($databases as $db) {
 		else
 			$cache = new Cm_Cache_Backend_Redis(array('server' => $options["s"], 'port' => $options["p"], 'database' => $db));
 	} catch (CredisException $e) {
-		echo "\nError: ".$e->getMessage()."\n";
+		echo "\nError: ".$e->getMessage().PHP_EOL;
 		exit(1);
 	}
 	
@@ -66,7 +67,7 @@ foreach($databases as $db) {
 	try {
 		$cache->clean(Zend_Cache::CLEANING_MODE_OLD);
 	} catch (CredisException $e) {
-		echo "\nError: ".$e->getMessage()."\n";
+		echo "\nError: ".$e->getMessage().PHP_EOL;
 		exit(1);
 	}
 	
@@ -74,3 +75,5 @@ foreach($databases as $db) {
 		echo " [done]\n";
 	unset($cache);
 }
+
+echo "Done".PHP_EOL;
