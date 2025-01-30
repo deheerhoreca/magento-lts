@@ -1454,7 +1454,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
 }
 
-if(function_exists('_get_product_attribute') === false) {
+if(!function_exists("_get_product_attribute")) {
   function _get_product_attribute($_product, string $attribute_code, bool $implode_arrays = true) {
     if(is_object($_product) === false) {
       return null;
@@ -1479,7 +1479,7 @@ if(function_exists('_get_product_attribute') === false) {
   }
 }
 
-if(function_exists('printr') === false) {
+if(!function_exists('printr')) {
   function printr($expr, $return = false) {
     $ret = null;
     if(is_array($expr) && !sizeof($expr)) {

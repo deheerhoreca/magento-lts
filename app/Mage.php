@@ -874,6 +874,11 @@ final class Mage
         $maxLogLevel  = Zend_Log::DEBUG;
         $forceLog     = true;
         
+        // DHH - Use something better than print_r
+        if(is_array($message) || is_object($message)) {
+          $message = json_encode($message, JSON_PARTIAL_OUTPUT_ON_ERROR);
+        }
+        
         // try {
         //     $logActive = self::getStoreConfig('dev/log/active');
         //     if (empty($file)) {

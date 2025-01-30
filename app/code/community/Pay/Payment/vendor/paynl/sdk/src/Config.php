@@ -46,9 +46,7 @@ class Config
     /**
      * @var string The base URL for the Pay.nl API.
      */
-    // private static $apiBase = 'https://rest-api.pay.nl';
-    // DHH CORE HACK -- TLS 1.2+ gateway
-    private static $apiBase = 'https://restapi.pay.nl';
+    private static $apiBase = 'https://rest-api.pay.nl';
 
     /**
      * @var int The version of the Pay.nl API to use for requests.

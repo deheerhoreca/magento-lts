@@ -1,12 +1,16 @@
 {
-    "files.watcherExclude": {
-        "**/media/**": true,
-        "**/var/log/**": true,
-        "**/.DS_Store": true,
-        "**/.git": true
-    },
-    "files.exclude": {
-        "**/media/catalog/**": true
-    },
-    "intelephense.environment.documentRoot": "./deheerhoreca-intel"
+  "files.watcherExclude": {
+    "**/media/**": true,
+    "**/var/log/**": true,
+    "**/.DS_Store": true,
+    "**/.git": true
+  },
+  "files.exclude": {
+    "**/media/catalog/**": true,
+  },
+  "intelephense": {
+    "environment": {
+      "documentRoot": "./",
+    }
+  }
 }

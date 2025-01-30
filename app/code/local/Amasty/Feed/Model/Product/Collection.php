@@ -200,11 +200,7 @@ class Amasty_Feed_Model_Product_Collection extends Mage_Catalog_Model_Resource_E
 //                'status',
 //                array('eq' => 1)
 //            );
-            $this->addAttributeToFilter(array(array(
-                    "attribute" => 'status',
-                    'eq' => 1
-            )), null, 'inner');
-
+            $this->addAttributeToFilter([["attribute" => 'status', 'eq' => 1]], null, 'inner');
         }
         
         
@@ -221,9 +217,7 @@ class Amasty_Feed_Model_Product_Collection extends Mage_Catalog_Model_Resource_E
                 'left'
             );
             
-            $this->addFieldToFilter('stock_status',array(
-                "eq" => 1
-            ));
+            $this->addFieldToFilter('stock_status',array("eq" => 1));
             
         } elseif ($this->_addIsInStock) {
             
@@ -501,7 +495,8 @@ class Amasty_Feed_Model_Product_Collection extends Mage_Catalog_Model_Resource_E
 //        
 //        if (is_array($this->_qtyConds)){
 //            var_dump(123);
-//            $this->addFieldToFilter('`am_stock_item`.`qty`', $this->_qtyConds);
+//            // DHH CORE HACK -- APPSEC-1063 FIX
+//            $this->addFieldToFilter("am_stock_item.qty", $this->_qtyConds);
 //        }
         
         $this->joinTable(

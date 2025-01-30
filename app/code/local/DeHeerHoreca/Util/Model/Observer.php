@@ -361,9 +361,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     global $dhh_click_log;
     
     $action     = Mage::app()->getFrontController()->getAction()->getFullActionName();
-    
-    $full_url   = Mage::helper('core/url')->getCurrentUrl();
-    $url        = Mage::getSingleton('core/url')->parseUrl($full_url);
+    $full_url   = Mage::helper("core/url")->getCurrentUrl();
+    $url        = Mage::getSingleton("core/url")->parseUrl($full_url);
     $path       = ltrim((string) $url->getPath(), "/");
     $query      = ltrim((string) $url->getQuery(), "?");
     $entity_id  = null;
@@ -390,20 +389,21 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       }
     }
     
-    if(is_numeric($entity_id) === true) {
+    if(is_numeric($entity_id)) {
       $entity_id = intval($entity_id);
     }
     
     Mage::helper("deheerhoreca_util/util")->addToClickLog("@timestamp", date("Y-m-d\TH:i:s.uP"));
     Mage::helper("deheerhoreca_util/util")->addToClickLog("client.ip", Mage::helper("deheerhoreca_util/util")->getUserIP());
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.action", $action);
+    Mage::helper("deheerhoreca_util/util")->addToClickLog("event.created", date("Y-m-d"));
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.id", $entity_id);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.module", "mage-clicks");
     Mage::helper("deheerhoreca_util/util")->addToClickLog("event.kind", "event");
     Mage::helper("deheerhoreca_util/util")->addToClickLog("url.full", $full_url);
     Mage::helper("deheerhoreca_util/util")->addToClickLog("url.domain", "www.chefstore.nl");
     Mage::helper("deheerhoreca_util/util")->addToClickLog("url.path", $path);
-    if(strlen($query) > 0) {
+    if($query !== "") {
       Mage::helper("deheerhoreca_util/util")->addToClickLog("url.query", $query);
     }
     Mage::helper("deheerhoreca_util/util")->addToClickLog("host.name", gethostname());

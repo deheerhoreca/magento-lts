@@ -76,7 +76,7 @@ class Aoe_ClassPathCache_Shell extends Mage_Shell_Abstract
         $help = 'Available actions: ' . "\n";
         $methods = get_class_methods($this);
         foreach ($methods as $method) {
-            if (substr($method, -6) == 'Action') {
+            if (str_ends_with($method, 'Action')) {
                 $help .= '    -action ' . substr($method, 0, -6);
                 $helpMethod = $method . 'Help';
                 if (method_exists($this, $helpMethod)) {

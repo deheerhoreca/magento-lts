@@ -2,12 +2,14 @@
     "name": "deheerhoreca/openmage",
     "type": "project",
     "require": {
+        "php": ">=8.1 <=8.3",
         "adbario/php-dot-notation": "^3.3",
         "amnuts/opcache-gui": "^3.5",
         "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
         "aoepeople/aoe_dbretry": "dev-master",
+        "aoepeople/aoe_profiler": "dev-master",
         "aoepeople/aoe_templatehints": "^0.4.4",
-        "aschroder/smtp_pro": "dev-dhh-fixes",
+        "aschroder/smtp_pro": "^2",
         "aydin-hassan/magento-core-composer-installer": "^2.1.0",
         "cmixin/business-day": "^1.18",
         "dekor/php-array-table": "^2.0",
@@ -18,6 +20,7 @@
         "n98/magerun": "^1.97",
         "nesbot/carbon": "*",
         "openmage/magento-lts": "20.5.0",
+        "paynl/magento-plugin": "^3.18",
         "rector/rector": "^1.1",
         "sabberworm/php-css-parser": "^8.5",
         "symfony/cache": "^6.4",
@@ -58,7 +61,11 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension"
+            "url": "https://github.com/deheerhoreca/Aoe_Profiler"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/vianetz/aoe-scheduler-magento1"
         },
         {
             "type": "composer",
@@ -67,7 +74,8 @@
     ],
     "autoload": {
       "files": [
-        "lib/Chefstore/Utils.php"
+        "lib/Chefstore/Utils.php",
+        "lib/Chefstore/Functions.php"
       ]
     },
     "minimum-stability": "dev",
