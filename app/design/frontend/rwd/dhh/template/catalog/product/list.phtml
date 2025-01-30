@@ -497,21 +497,23 @@ if($show_products && $_productCollection->getFirstItem()) {
           
           // Simple product, sellable
           if($_product->isSaleable()) {
+            $url = $productUrl;
+            // $url = $this->getAddToCartUrl($_product); // @todo fix
             $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation('{$this->getAddToCartUrl($_product)}')\"><i class=\"fa fa-shopping-cart\"></i></button>";
+            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation('{$url}')\"><i class=\"fa fa-shopping-cart\"></i></button>";
           }
           
           // Simple product, not sellable
           else {
             $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
+            <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$productUrl}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
           }
         }
         
         // Configurable product
         else {
           $html .= "<div class=\"float-left\"><span class=\"buyblock-usp\" style=\"line-height: 1.5em;\">Meerdere varianten</span>{$additional_delivery_messages}</div>
-          <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
+          <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$productUrl}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
         }
         
         $html .= "</div></div>";
