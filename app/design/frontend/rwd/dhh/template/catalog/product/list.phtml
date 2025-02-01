@@ -45,7 +45,7 @@ $category_block_bottom_html   = $this->getLayout()->createBlock("cms/block")->se
 
 Varien_Profiler::stop("DHH_PrepareProductList");
 
-if($show_products === true) {
+if($show_products) {
   /*
    * Bugfix: Using require_stock_items there was a bug that lead
    * to wrong stock info on listview during flat index rebuild.
@@ -78,7 +78,7 @@ if($carct && ($category === "category")) {
   $orig_category_desc   = $carct->getDescription();
   
   // Assemble category description
-  if($have_active_filters === true || $on_first_page === false) {
+  if($have_active_filters || $on_first_page === false) {
     $category_desc      = "";
   }
   // Create a H1 if the description is empty
@@ -86,7 +86,7 @@ if($carct && ($category === "category")) {
     $category_desc      = "<h1>{$category_name}</h1>";
   }
   // In case of shop-by-brand, do not show another H1
-  if(defined("CTDESC_H1_SENT") === true) {
+  if(defined("CTDESC_H1_SENT")) {
     $category_desc = str_ireplace("h1>", "h2>", $category_desc);
   }
   
@@ -97,9 +97,9 @@ if($carct && ($category === "category")) {
       if(is_array($manufacturers) && sizeof($manufacturers) > 0) {
         $n = sizeof($manufacturers);
         $i = 0;
-        
+
         $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
-        
+
         foreach($manufacturers as $manufacturer) {
           if(strlen((string) $manufacturer) < 3) continue;
           $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
@@ -112,7 +112,7 @@ if($carct && ($category === "category")) {
             $category_block_bottom_html .= ".";
           }
         }
-        
+
         $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
       }
     }
@@ -169,8 +169,8 @@ if($have_active_filters) {
   }
 }
 
-if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== false
-&& empty($appliedFilters) === true
+if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles
+&& empty($appliedFilters)
 && !str_contains((string) $orig_category_desc, "<!--no_cat_tiles-->")) {
   
   // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
@@ -209,7 +209,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
     echo "<ul class=\"grid-shadow-tiles-text\">".PHP_EOL;
     
     foreach($subcategories as $i => $subcategory) {
-      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
+      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS)) {
         continue;
       }
       $haschild           = true;
@@ -220,7 +220,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       $image_path         = "{$media_path}/catalog/category/{$image}";
       $img_html           = "";
       
-      if(is_file($image_path) === true) {
+      if(is_file($image_path)) {
         $image_url        = "{$media_url}/catalog/category/{$image}";
         $col_width        = 140;
         $cdn_img_options  = [
@@ -246,7 +246,7 @@ if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles !== fals
       echo "</a></li>".PHP_EOL;
     }
     echo "</ul>".PHP_EOL;
-    if($haschild === true) {
+    if($haschild) {
       echo "<style>#sidebar-nav {display: block;}</style>";
     }
   }
@@ -357,7 +357,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         $brand                  = $_product->getData("manufacturer_value");
         
         $series_or_brand        = _get_product_attribute($_product, "brand_series");
-        if(empty($series_or_brand) || in_array($series_or_brand, ["N.v.t."], true) === true) {
+        if(empty($series_or_brand) || in_array($series_or_brand, ["N.v.t."], true)) {
           $series_or_brand        = $brand;
         }      
         $sku_seller_or_mpn      = _get_product_attribute($_product, "mpn");
@@ -497,23 +497,21 @@ if($show_products && $_productCollection->getFirstItem()) {
           
           // Simple product, sellable
           if($_product->isSaleable()) {
-            $url = $productUrl;
-            // $url = $this->getAddToCartUrl($_product); // @todo fix
             $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation('{$url}')\"><i class=\"fa fa-shopping-cart\"></i></button>";
+            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation('{$this->getAddToCartUrl($_product)}')\"><i class=\"fa fa-shopping-cart\"></i></button>";
           }
           
           // Simple product, not sellable
           else {
             $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$productUrl}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
+            <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
           }
         }
         
         // Configurable product
         else {
           $html .= "<div class=\"float-left\"><span class=\"buyblock-usp\" style=\"line-height: 1.5em;\">Meerdere varianten</span>{$additional_delivery_messages}</div>
-          <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$productUrl}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
+          <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
         }
         
         $html .= "</div></div>";
@@ -521,7 +519,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         // Store in cache
         $GLOBALS["write_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "dhh_listview_product");
         if($GLOBALS["write_cache_enabled"]) {
-          $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", _get_product_attribute($_product, "supplier")));
+          $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
           $cache_tags = ["DHH_LISTVIEW_PRODUCT", "DHH_PRODUCT_{$product_id}", "DHH_SUPPLIER_{$supplier_sys_upper}"];
           if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400)) {
             DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");

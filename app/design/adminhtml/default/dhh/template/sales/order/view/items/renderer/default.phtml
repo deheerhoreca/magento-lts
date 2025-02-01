@@ -35,7 +35,7 @@ $_product   = Mage::getResourceModel("catalog/product_collection")
   ->setCurPage(1)
   ->getFirstItem();
 $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-if(strlen($_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_selection") {
+if(strlen((string) $_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_selection") {
   $image_url        = "{$media}catalog/product{$_product->getThumbnail()}";
   if(empty($image_url) === false) {
     $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);

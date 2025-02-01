@@ -35,7 +35,7 @@ if($subcategories->count() > 1) {
     $image_path         = "{$media_path}/catalog/category/{$image}";
     $img_html           = "";
 
-    if(is_file($image_path) === true) {
+    if(is_file($image_path)) {
       $image_url        = "{$media_url}/catalog/category/{$image}";
       $col_width        = 140;
       $cdn_img_options  = [
@@ -61,7 +61,7 @@ if($subcategories->count() > 1) {
     echo "</a></li>".PHP_EOL;
   }
   echo "</ul>".PHP_EOL;
-  if($haschild === true) {
+  if($haschild) {
     echo "<style>#sidebar-nav {display: block;}</style>";
   }
 

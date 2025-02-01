@@ -93,7 +93,7 @@ if(is_numeric($grand_total)) {
 <script type="module">
   window.uetq = window.uetq || [];
   window.uetq.push('event', '', {'revenue_value': <?=$grand_total_ex_vat?>, 'currency': 'EUR'});
-  
+
   var _paq = _paq || [];
   if(window.location.hostname == "www.chefstore.nl") {
     _paq.push(['trackEcommerceOrder', '<?=$order_id?>', <?=$grand_total_ex_vat?>, <?=$total_no_shipping?>, <?=$tax_total?>, <?=$shipping_total?>, <?=$discount_offered?>]);

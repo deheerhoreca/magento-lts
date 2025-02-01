@@ -13,7 +13,7 @@ if($_product = Mage::registry('current_product')) {
   $product_image = $_product->getImageUrl();
   $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
   
-  if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"]) === true) {
+  if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"])) {
     unset($crumbs["product"]);
   }
 }
@@ -76,7 +76,7 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
       
       foreach($crumbs as $_crumbName => $_crumbInfo) {
         
-        if(in_array($_crumbName, $ignored_categorie_keys) !== false) {
+        if(in_array($_crumbName, $ignored_categorie_keys)) {
           continue;
         }
         
