@@ -536,7 +536,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Store in cache
     if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {
-      self::log("Cache: SAVED {$key}, ".mb_strlen($html)." chars");
+      self::log("Cache: SAVED {$key}, ".mb_strlen((string) $html)." chars");
       self::_add_server_timing_header("FPC saved");
       self::_emit_server_timing_header();
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);

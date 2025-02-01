@@ -18,10 +18,6 @@
 # Openmage config
 /app/etc/local.xml
 
-# CM Redis
-/app/code/community/Cm
-/lib/Credis
-
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
 # https://github.com/OpenMage/magento-lts/pull/1836
 /dev/testfield
@@ -142,6 +138,11 @@ phpunit.xml
 /media/dhh
 /media/wysiwyg/*
 
+# BILLER WEBHOOK
+
+/biller-webhook-errors.jsonl
+/biller-webhook.jsonl
+
 # FRESHDESK WEBHOOK
 
 /freshdesk-*.ndjson
@@ -169,11 +170,27 @@ phpunit.xml
 # UNIGNORE COREHACKED FILES
 # !/...
 
+/app/code/community/Cm
+/lib/Credis
+
 # IGNORE DHH FORKS, NOT COREHACKS
+
+# deheerhoreca/Aoe_BlackHoleSession
+app/code/community/Aoe/BlackHoleSession
+app/etc/modules/Aoe_BlackHoleSession.xml
+
+# deheerhoreca/Magento-SMTP-Pro-Email-Extension
 /app/etc/modules/Aschroder_SMTPPro.xml
 /app/code/local/Aschroder/SMTPPro
 /app/design/adminhtml/default/default/template/smtppro
 /app/locale/en_US/Aschroder_SMTPPro.csv
+/app/locale/de_DE/Aschroder_SMTPPro.csv
+/app/locale/es_ES/Aschroder_SMTPPro.csv
+/app/locale/fr_FR/Aschroder_SMTPPro.csv
+/app/locale/nl_NL/Aschroder_SMTPPro.csv
+/app/locale/pt_BR/Aschroder_SMTPPro.csv
+/app/locale/ru_RU/Aschroder_SMTPPro.csv
+/app/locale/tr_TR/Aschroder_SMTPPro.csv
 
 # deheerhoreca/Aoe_Profiler
 /app/etc/modules/Aoe_Profiler.xml

@@ -23,7 +23,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       return;
     }
     // After clearing opcache, there are a few requests that strangely make it past extension_loaded() but still don't have Elastic APM available, adding another check:
-    if(!class_exists("\Elastic\Apm\ElasticApm")) {
+    if(!class_exists(ElasticApm::class)) {
       Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::NOTICE, "system.log", true);
       Varien_Profiler::stop(__METHOD__);
       return;
@@ -228,8 +228,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     /* POWER */
     if(empty($product->getData("vermogen")) === false
     || empty($product->getData("vermogen_kw")) === false) {
-      $vermogen    = empty($product->getData("vermogen")) === true    ? 0 : (double) $product->getData("vermogen");
-      $vermogen_kw = empty($product->getData("vermogen_kw")) === true ? 0 : (double) $product->getData("vermogen_kw");
+      $vermogen    = empty($product->getData("vermogen"))    ? 0 : (double) $product->getData("vermogen");
+      $vermogen_kw = empty($product->getData("vermogen_kw")) ? 0 : (double) $product->getData("vermogen_kw");
       $new_value   = ($vermogen + $vermogen_kw) * 1000;
 
       if($new_value > 0 && $new_value != $product->getData("total_power_watt")) {
@@ -321,7 +321,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       }
     }
     
-    if($return === true) {
+    if($return) {
       return $product;
     }
     
