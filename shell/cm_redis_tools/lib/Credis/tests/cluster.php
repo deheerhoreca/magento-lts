@@ -10,15 +10,11 @@ require '../Cluster.php';
 $start_time = microtime(true);
 
 /* Use a cluster of 3 servers, make sure they're clean */
-$cluster = new Credis_Cluster(array(
-	array('host' => '127.0.0.1', 'port' => 6379),
-	array('host' => '127.0.0.1', 'port' => 6380),
-	array('host' => '127.0.0.1', 'port' => 6381)
-), $replicas);
+$cluster = new Credis_Cluster([['host' => '127.0.0.1', 'port' => 6379], ['host' => '127.0.0.1', 'port' => 6380], ['host' => '127.0.0.1', 'port' => 6381]], $replicas);
 printf("Initialized 3 servers with $replicas replicas in %f seconds\n", microtime(true)-$start_time);
 
 /* Get all the keys to use */
-$keys = array();
+$keys = [];
 $lines = explode("\n", file_get_contents("keys.test"));
 foreach ($lines as $line) {
 	$pair = explode(':', trim($line));
@@ -34,16 +30,11 @@ foreach ($keys as $key => $value) {
 
 /* Now use a 4th server, and get the key sharding */
 echo "Adding a new server to the cluster\n";
-$cluster = new Credis_Cluster(array(
-	array('host' => '127.0.0.1', 'port' => 6379),
-	array('host' => '127.0.0.1', 'port' => 6380),
-	array('host' => '127.0.0.1', 'port' => 6381),
-	array('host' => '127.0.0.1', 'port' => 6382)
-), $replicas);
+$cluster = new Credis_Cluster([['host' => '127.0.0.1', 'port' => 6379], ['host' => '127.0.0.1', 'port' => 6380], ['host' => '127.0.0.1', 'port' => 6381], ['host' => '127.0.0.1', 'port' => 6382]], $replicas);
 
 /* Try to reset all the keys, and keep track of shards */
 $hits = 0;
-foreach ($keys as $key => $value) {
+foreach (array_keys($keys) as $key) {
 	if ($cluster->get($key)) {
 		$hits++;
 	}

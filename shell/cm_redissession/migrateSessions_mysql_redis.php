@@ -16,7 +16,7 @@ $_redis->select(0) || Zend_Cache::throwException('The redis database could not b
 /**
 * Set up the Session Model to help with compression and other misc items.
 */
-$redisSession = new \Cm_RedisSession_Model_Session_Handler();
+$redisSession = new Cm_RedisSession_Model_Session_Handler();
 
 /**
 * Get the resource model
@@ -37,8 +37,8 @@ do {
     //         ' WHERE session_expires >= ? AND session_id != ? ORDER BY session_expires ASC LIMIT '.$batchlimit;
     //$results = $readConnection->fetchAll($query, array($exptime, $lastid));
     $query = $readConnection->select()
-                        ->from(array('cs'=>$resource->getTableName('core/session')),
-                               array('session_id', 'session_expires', 'session_data'))
+                        ->from(['cs'=>$resource->getTableName('core/session')],
+                               ['session_id', 'session_expires', 'session_data'])
                         ->where("session_expires > ?", $exptime)
                         ->where("session_id != ?", $lastid)
                         ->limit($batchlimit)

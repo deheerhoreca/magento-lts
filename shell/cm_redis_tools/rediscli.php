@@ -14,7 +14,7 @@ abstract class Zend_Cache
 	const CLEANING_MODE_NOT_MATCHING_TAG = 'notMatchingTag';
 	const CLEANING_MODE_MATCHING_ANY_TAG = 'matchingAnyTag';
 	function throwException($text) {
-		die("Exception: ".$text.PHP_EOL);
+		die("Exception: ".$text."\n");
 	}
 }
 
@@ -24,7 +24,7 @@ interface Zend_Cache_Backend_ExtendedInterface {}
 /* loading Redis cache backend */
 include_once("Cm/Cache/Backend/Redis.php");
 
-function showHelp(){
+function showHelp(): never{
 	echo "Usage: rediscli.php\n".
 	"\t-s <server> - server address\n".
 	"\t-p <port> - server port\n".
@@ -37,14 +37,12 @@ function showHelp(){
 
 /* parsing command line options */
 
-$opts  			= "s:a:p:vd:";
-$options 		= getopt($opts);
-
+$opts  = "s:a:p:vd:";
+$options = getopt($opts);
 if(!isset($options["s"]) || !isset($options["p"]) || !isset($options["d"])) {
 	showHelp();
-}
-
-$databases	=	preg_split('/,/',$options["d"]);
+} 
+$databases=preg_split('/,/',$options["d"]);
 
 foreach($databases as $db) {
 	$db = (int) $db;
@@ -53,11 +51,11 @@ foreach($databases as $db) {
 	try {
 		// Check if we have a password
 		if(isset($options['a']))
-			$cache = new Cm_Cache_Backend_Redis(array('server' => $options["s"], 'port' => $options["p"], 'database' => $db, 'password' => $options["a"]));
+			$cache = new Cm_Cache_Backend_Redis(['server' => $options["s"], 'port' => $options["p"], 'database' => $db, 'password' => $options["a"]]);
 		else
-			$cache = new Cm_Cache_Backend_Redis(array('server' => $options["s"], 'port' => $options["p"], 'database' => $db));
+			$cache = new Cm_Cache_Backend_Redis(['server' => $options["s"], 'port' => $options["p"], 'database' => $db]);
 	} catch (CredisException $e) {
-		echo "\nError: ".$e->getMessage().PHP_EOL;
+		echo "\nError: ".$e->getMessage()."\n";
 		exit(1);
 	}
 	
@@ -67,7 +65,7 @@ foreach($databases as $db) {
 	try {
 		$cache->clean(Zend_Cache::CLEANING_MODE_OLD);
 	} catch (CredisException $e) {
-		echo "\nError: ".$e->getMessage().PHP_EOL;
+		echo "\nError: ".$e->getMessage()."\n";
 		exit(1);
 	}
 	

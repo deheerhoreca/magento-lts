@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__).'/CredisTest.php';
+require_once __DIR__.'/CredisTest.php';
 
 class CredisStandaloneTest extends CredisTest
 {

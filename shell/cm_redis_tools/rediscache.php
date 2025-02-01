@@ -2,8 +2,6 @@
 
 define("SET_TAGS",'zc:tags');
 
-// 'tcp://136.144.183.232:6379';
-
 $redis = new Redis();
 $redis->connect('136.144.183.232', 6379);
 $redis->select(0); // select FPC
