@@ -45,19 +45,19 @@ $collection = Mage::getModel('catalog/product')
   ->load();
 
 foreach($collection as $_product) {
-  
+
   $product = Mage::getModel('catalog/product')->load($_product->getId());
-  
+
   $price          = $product->getPrice();
   $final_price    = $product->getFinalPrice();
-  
+
   echo "SKU: {$product->getSku()}: price = {$price}, final price = {$final_price}".PHP_EOL;
   if($final_price > 0 && $price == $final_price) {
     $product
       ->setSpecialPrice('')
       ->setSpecialToDate('')
       ->setSpecialFromDate('');
-      
+
     if(DRYRUN === false) {
       $product->save();
       echo "Saved {$product->getSku()}".PHP_EOL;
@@ -65,7 +65,7 @@ foreach($collection as $_product) {
   } else {
     echo "No changes necessary".PHP_EOL;
   }
-  
+
   sleep(0);
 }
 
@@ -159,11 +159,11 @@ function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product) {
   $query = "SELECT * FROM `{$tableName}` WHERE product_id = '{$product_id}' AND category_id IS NOT NULL";
   $results = $readConnection->fetchAll($query);
   var_dump($results);
-  
+
   if(empty($results[0]["request_path"]) === false) {
     return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).$results[0]["request_path"];
   }
-  
+
   return false;
 }
 
@@ -174,7 +174,7 @@ function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
   $deepCatId = 0;
   $path = '';
   $productPath = false;
-  
+
   //var_dump($categories);
 
   foreach($categories as $category) {
@@ -184,7 +184,7 @@ function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
       $deepCatId = $category->getId();
     }
   }
-  
+
   var_dump($path);
   var_dump($deepCatId);
 
@@ -199,7 +199,7 @@ function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
 
   // Get product request path if set.
   $productRequestPath = $product->getData('request_path');
-  
+
   if($_SERVER["REMOTE_ADDR"] === "85.144.117.179") {
     //var_dump($productUrlPath);
   }
@@ -227,7 +227,7 @@ function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
       $product->setData('request_path', $productPath);
     }
   }
-  
+
   var_dump($productPath);
 
   return $product->getProductUrl();

@@ -36,7 +36,6 @@ fi
 echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 
 # Create new php.cmd.ini
-DEFAULT_PHP_INI=$(mphp -r "echo php_ini_loaded_file();")
 SHARED_PHP_INI=$(pwd)/etc/php.cmd-dist.ini
 LOCAL_PHP_INI=$(pwd)/etc/php.cmd-local.ini
 NOW=`date`

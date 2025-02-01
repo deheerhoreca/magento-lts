@@ -73,7 +73,7 @@ if(empty($supplier_ids) === false) {
   $collection->addFieldToFilter('supplier', [$ors]);
 }
 
-if(empty($dhh_sku) === true && empty($fromDate) === false && empty($toDate) === false) {
+if(empty($dhh_sku) && empty($fromDate) === false && empty($toDate) === false) {
   echo "Date From: {$fromDate}".PHP_EOL;
   echo "Date To: {$toDate}".PHP_EOL;
   $collection->addFieldToFilter('updated_at', [
@@ -84,7 +84,7 @@ if(empty($dhh_sku) === true && empty($fromDate) === false && empty($toDate) === 
 }
 
 if(empty($dhh_sku) === false) {
-  $collection->addFieldToFilter('sku', array('eq' => $dhh_sku));
+  $collection->addFieldToFilter('sku', ['eq' => $dhh_sku]);
 }
 
 $size = $collection->getSize();
@@ -95,7 +95,7 @@ foreach($collection as $product) {
     echo "{$i}/{$size}".PHP_EOL;
   }
   
-  if(DEBUG === true) {
+  if(DEBUG) {
     echo $product->getSku().PHP_EOL;
   }
   

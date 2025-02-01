@@ -2,7 +2,7 @@
 
 // @see https://github.com/colinmollenhour/Cm_Cache_Backend_Redis
 
-PHP_SAPI == 'cli' || die('<h1>:P</h1>');
+PHP_SAPI == 'cli' or die('<h1>:P</h1>');
 
 ini_set('memory_limit','1024M');
 set_time_limit(0);

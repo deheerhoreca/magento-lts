@@ -63,7 +63,7 @@ class Sooqr_Shell_GenerateFeed extends Mage_Shell_Abstract
             }
 
             Mage::getModel('core/config')->saveConfig('sooqr_connect/generate/cron_next', ($nextStore + 1), 'default', 0);
-            return array($allStores[$nextStore]);
+            return [$allStores[$nextStore]];
         }
 
         if ($generate == 'all') {
