@@ -159,7 +159,6 @@ phpunit.xml
 .php-ini
 
 /.idea/
-#/.well-known/
 /.well-known/acme-challenge/
 /app/code/community/Cm/Cache/Backend/Redis.php
 
@@ -168,10 +167,7 @@ phpunit.xml
 ##################################################
 
 # UNIGNORE COREHACKED FILES
-# !/app/code/community/Cm/RedisSession/Model/Session.php
-# !/vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php
-# !/app/code/community/Aoe/BlackHoleSession
-# !/app/etc/modules/Aoe_BlackHoleSession.xml
+# !/...
 
 # IGNORE DHH FORKS, NOT COREHACKS
 /app/etc/modules/Aschroder_SMTPPro.xml
