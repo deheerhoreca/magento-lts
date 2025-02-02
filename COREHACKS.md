@@ -1,7 +1,141 @@
 # Hacked Code
 
 ## Notes
-- Check composer packages for modifications: `composer status`
+- Check composer packages for modifications: `composer status -v`
+
+# 2025-02-02 KNOWN HACKS
+
+### grep -ri -l DHH app/code/core/ | sort
+- `app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
+- `app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Abstract.php`
+- `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
+- `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
+- `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
+- `app/code/core/Mage/Core/Model/Resource/Session.php`
+- `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
+- `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
+- `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
+- `app/code/core/Mage/Sales/etc/config.xml`
+- `app/code/core/Mage/Api/Model/Server/Wsi/Adapter/Soap.php`
+- `app/code/core/Mage/Catalog/Model/Category.php`
+- `app/code/core/Mage/Customer/Model/Customer.php`
+- `app/code/core/Mage/Page/Block/Html/Head.php`
+
+### grep -ri -l DHH app/code/community/ | sort
+- `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
+- `app/code/community/Afterpay/Afterpay/Helper/Data.php`
+- `app/code/community/Afterpay/Afterpay/Model/Abstract.php`
+- `app/code/community/Afterpay/Afterpay/Model/Api/Abstract.php`
+- `app/code/community/Afterpay/Afterpay/Model/Request/Abstract.php`
+- `app/code/community/Afterpay/Afterpay/Model/Request/Payment/Methods/Available.php`
+- `app/code/community/Afterpay/Afterpay/Model/Response/Abstract.php`
+- `app/code/community/Aoe/Scheduler/Helper/GracefulDead.php`
+- `app/code/community/Aoe/Scheduler/Model/ProcessManager.php`
+- `app/code/community/Aoe/Scheduler/Model/ScheduleManager.php`
+- `app/code/community/Aoe/Scheduler/Model/Schedule.php`
+- `app/code/community/Aoe/Scheduler/Model/Task/Test.php`
+- `app/code/community/AW/Blog/Block/Blog.php`
+- `app/code/community/Codnitive/Extifcon/Model/Core/Layout.php`
+- `app/code/community/Codnitive/Sidenav/Block/Navigation.php`
+- `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
+- `app/code/community/Geissweb/InvoiceAutoSend/Model/Observer.php`
+- `app/code/community/Geissweb/InvoiceAutoSend/Model/System/Config/Activepm.php`
+- `app/code/community/Magmodules/Channable/Helper/Data.php`
+- `app/code/community/Magmodules/Channable/Model/Channable.php`
+- `app/code/community/Magmodules/Sooqr/Block/Search.php`
+- `app/code/community/Magmodules/Sooqr/Helper/Data.php`
+- `app/code/community/Magmodules/Sooqr/Model/Adminhtml/System/Config/Backend/Design/Extra.php`
+- `app/code/community/Magmodules/Sooqr/Model/Adminhtml/System/Config/Backend/Design/Filter.php`
+- `app/code/community/Magmodules/Sooqr/Model/Sooqr.php`
+- `app/code/community/Mestrona/ForwardToConfigurable/Model/Observer.php`
+- `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid.php`
+- `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid/Renderer/Paymentmethod.php`
+- `app/code/community/Ophirah/CustomProducts/Model/Observer.php`
+- `app/code/community/Ophirah/Qquoteadv/Block/Adminhtml/Qquoteadv/Edit/Tab/Product.php`
+- `app/code/community/Ophirah/Qquoteadv/Block/Qquoteadv/View.php`
+- `app/code/community/Ophirah/Qquoteadv/Block/Renderers/Abstract.php`
+- `app/code/community/Ophirah/Qquoteadv/controllers/Adminhtml/QquoteadvController.php`
+- `app/code/community/Ophirah/Qquoteadv/etc/wsdl.xml`
+- `app/code/community/Ophirah/Qquoteadv/Helper/Data.php`
+- `app/code/community/Ophirah/Qquoteadv/Helper/Extrafield.php`
+- `app/code/community/Ophirah/Qquoteadv/Helper/Licensechecks.php`
+- `app/code/community/Ophirah/Qquoteadv/Helper/License.php`
+- `app/code/community/Ophirah/Qquoteadv/Helper/Logging.php`
+- `app/code/community/Ophirah/Qquoteadv/Model/Client.php`
+- `app/code/community/Ophirah/Qquoteadv/Model/Pdf/Qquote.php`
+- `app/code/community/Ophirah/Qquoteadv/Model/Qqadvcustomer.php`
+- `app/code/community/Ophirah/Qquoteadv/Model/Qqadvproduct.php`
+- `app/code/community/Psc/Paysafecash/Model/Cpay.php`
+- `app/code/community/Scommerce/UpdateEmail/Block/Sales/Order/View/Info.php`
+- `app/code/community/Scommerce/UpdateEmail/Block/Sales/Order/View/Info.php_ambackup`
+- `app/code/community/TM/Core/Model/Notification/Feed.php`
+- `app/code/community/Varien/Autoload.php`
+
+### grep -ri -l DHH app/code/community/ | sort
+- `app/code/local/Amasty/Base/Model/Feed.php`
+- `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
+- `app/code/local/Amasty/Feed/Model/Product/Collection.php`
+- `app/code/local/Amasty/Feed/Model/Profile.php`
+- `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php`
+- `app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php`
+- `app/code/local/Amasty/Shopby/Helper/Data.php`
+- `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Category.php`
+- `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Decimal.php`
+- `app/code/local/Amasty/Shopby/Model/Observer.php`
+- `app/code/local/Amasty/Shopby/Model/Url/Builder.php`
+- `app/code/local/Amasty/Shopby/Model/Value.php`
+- `app/code/local/Anowave/Package/Helper/Data.php`
+- `app/code/local/Anowave/Sort/Block/Catalog/Category/Tab/Product.php`
+- `app/code/local/Anowave/Sort/Block/Image.php`
+- `app/code/local/Anowave/Sort/Model/Observer.php`
+- `app/code/local/AW/All/Block/Jsinit.php`
+- `app/code/local/AW/All/Model/Cron.php`
+- `app/code/local/AW/All/Model/Feed/Extensions.php`
+- `app/code/local/AW/All/Model/Feed/Updates.php`
+- `app/code/local/AW/Autorelated/Block/Blocks/Abstract.php`
+- `app/code/local/AW/Autorelated/controllers/Adminhtml/Awautorelated/BlocksgridController.php`
+- `app/code/local/DeHeerHoreca/Fpc/Helper/Data.php`
+- `app/code/local/DeHeerHoreca/Fpc/Model/Observer/Clean.php`
+- `app/code/local/DeHeerHoreca/Fpc/Model/Observer.php`
+- `app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php`
+- `app/code/local/DeHeerHoreca/Util/etc/config.xml`
+- `app/code/local/DeHeerHoreca/Util/Helper/strftime_replacement.php`
+- `app/code/local/DeHeerHoreca/Util/Helper/Util.php`
+- `app/code/local/DeHeerHoreca/Util/Model/Observer.php`
+- `app/code/local/DeHeerHoreca/Util/Model/Resource/Product/Collection.php`
+- `app/code/local/Geissweb/Euvatgrouper/Helper/Customer.php`
+- `app/code/local/Geissweb/Euvatgrouper/Helper/Data.php`
+- `app/code/local/Geissweb/Euvatgrouper/Model/Observer.php`
+- `app/code/local/Geissweb/Euvatgrouper/Model/Tax/Config.php`
+- `app/code/local/Geissweb/Euvatgrouper/Model/Validation/Abstract.php`
+- `app/code/local/Mage/Adminhtml/Block/Catalog/Product/Helper/Form/Price.php`
+- `app/code/local/Mage/Adminhtml/Block/Sales/Order/Grid.php`
+- `app/code/local/Mage/Adminhtml/Block/Widget/Grid.php`
+- `app/code/local/Mage/Catalog/Block/Product/View/Attributes.php`
+- `app/code/local/Mage/Checkout/Block/Cart/Crosssell.php`
+- `app/code/local/Mage/ConfigurableSwatches/Helper/Mediafallback.php`
+- `app/code/local/Mage/Newsletter/Model/Subscriber.php`
+- `app/code/local/MagePal/GoogleTagManager/Block/Tm.php`
+- `app/code/local/Mage/Payment/Model/Method/Banktransfer.php`
+- `app/code/local/Mage/Sales/Model/Order/Pdf/Abstract.php`
+- `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
+- `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
+- `app/code/local/Magmodules/Kiyoh/Model/Stats.php`
+- `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
+- `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
+- `app/code/local/TM/CheckoutFields/etc/wsdl.xml`
+- `app/code/local/TM/FireCheckout/etc/wsdl.xml`
+- `app/code/local/TM/RichSnippets/Block/Product.php`
+
+### grep -ril "DHH "  dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
+- `js/amasty/amshopby/amshopby-ajax.js`
+- `js/amasty/amshopby/amshopby.js`
+- `js/aw_searchautocomplete/main.js`
+- `shell/sooqr.php`
+- `skin/frontend/rwd/dhh/css/magiczoomplus/magiczoomplus.css`
+- `skin/frontend/rwd/dhh/css/magiczoomplus/magiczoomplus.module.css`
+- `skin/frontend/rwd/dhh/js/app.js`
+- `skin/frontend/rwd/dhh/tm/firecheckout/js/components/order-review.js`
 
 ## Rector'ed code
 Certain code dirs have been Rector'ed to fix PHP 8.1 compatibility.
@@ -21,56 +155,61 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `mphp vendor/bin/rector process  --dry-run --config=dev/rector-owncode.php`
 
 ## Core Hacks
-- **/***
-  - `/.htaccess`
+- **/**
+  - `.htaccess`
     - Commented lines to fix "Option All not allowed here" errors in production
     - Other modifications/additions marked by "DHH"
     - Updated up to: v20.5.0
-  - `/.gitignore`
+  - `.gitignore`
     - Modifications/additions marked by "DHH"
     - Updated up to: v20.5.0
 - **/app/Mage.php**
   - Changed `logException()` and `log()`
   - Updated up to: v20.5.0
 - **/app/code/core/**
+  - `app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Abstract.php`
+    - Still there in 20.5.0, but fixed upstream @ https://github.com/OpenMage/magento-lts/pull/3985
+  - `app/code/core/Mage/Api/Model/Server/Wsi/Adapter/Soap.php`
+    - Still there but commented out (no functional difference, can be overwritten without issues)
   - `app/code/core/Mage/Sales/etc/config.xml`
     - Add certain attributes to the collection
     - Make pending_payment order status visible in My Orders
     - Updated up to: v20.5.0
   - `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
     - Adding debug info to log
+    - Updated up to: v20.5.0
   - **Admin Global Search**: Performance improvements
     - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
     - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
     - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php`
-  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php`
-  - `/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php`
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php`
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php`
+  - `app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php`
     - Changed default sort to `sku`, did not work using `app/local/Mage`
     - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
+  - `app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
     - Remove ability to change the email address during new order input in admin
-  - `/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
+  - `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
     - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Core/Model/Resource/Session.php`
+  - `app/code/core/Mage/Core/Model/Resource/Session.php`
     - Adding details and logging to session errors
     - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Catalog/Model/Category.php`
+  - `app/code/core/Mage/Catalog/Model/Category.php`
     - Removing `[0], [V]` from category names in frontend
     - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Customer/Model/Customer.php`
+  - `app/code/core/Mage/Customer/Model/Customer.php`
     - Overriding auto-generated password length and used chars
-  - `/app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
+  - `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
     - Printing additional debug info temporarily
     - Updated up to: v20.5.0
-  - `/app/code/core/Mage/Page/Block/Html/Head.php`
+  - `app/code/core/Mage/Page/Block/Html/Head.php`
     - Removing some of the unnecessary base URLs from HEAD assets
     - Updated up to: v20.5.0
-  - `/app/code/community/Varien/Autoload.php`
+  - `app/code/community/Varien/Autoload.php`
     - Support APCu for Aoe ClassPathCache
 - **app/design/frontend/base/**
-  - `/app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
+  - `app/design/frontend/base/default/template/payment/info/pdf/*.phtml`
     - Added because there were exceptions in the logs, more info in file
     - Updated up to: v20.5.0
 
@@ -140,7 +279,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Fixed a bug where PHP7.2 does not allow a `+=` on a variable that was initialized as a string
     - https://github.com/loekvangool/deheerhoreca-magento/commit/a6950b2ebc7735b8f4eedbecfc8b29e84aaac958
 - **MagicZoomPlus**
-  - `app/code/local/MagicToolbox/MagicZoomPlus/core/magictoolbox.params.class.php`, `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
+  - `app/code/local/MagicToolbox/MagicZoomPlus/core/magictoolbox.params.class.php`
+  - `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
     - Remove hardcoded `memory_limit set` (it was not enough for some photos)
     - https://github.com/loekvangool/deheerhoreca-magento/commit/88743b48e7a101afac77417483bfee66e434259b
 - **Magmodules Channable**
@@ -188,7 +328,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Needed to allow disabled "Bankoverschrijving" to generate invoices on Bol.com orders
     - Adding extra logging
 - **Paysafecash**
-  - `/app/code/community/Psc/Paysafecash/Model/Cpay.php:228`
+  - `app/code/community/Psc/Paysafecash/Model/Cpay.php:228`
     - Combine address fields instead of just sending one
 - **Noble AdminOrderGrid**
   - `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid.php`
@@ -211,6 +351,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Updated to a newer version
   - `js/amasty/amshopby/amshopby-ajax.js`
     - Added a Vanilla LazyLoad update statement
+  - `js/amasty/amshopby/amshopby.js`
+    - Modified breaking points
   - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php`
     - Removed some `.js` files
     - Replace info tooltips
@@ -340,7 +482,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `app/design/frontend/rwd/default/layout/page.xml`
     - Fixed in https://github.com/loekvangool/deheerhoreca-magento/commit/fa8a6498ce4c78687d1718703f62fef09cefa35c
 - **js/**
-  - `js/varien/form.js`, `js/varien/js.js`
+  - `js/varien/form.js`
+  - `js/varien/js.js`
     - Making Prototype Validator optional
     - Now part of OpenMage
 - **lib/**

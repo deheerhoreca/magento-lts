@@ -116,15 +116,16 @@ phpunit.xml
 
 # DIRS
 
-# External assets downloaded to local
+# EXTERNAL ASSETS
 /js/ext-*
 /skin/frontend/rwd/external/
 !/skin/frontend/rwd/external/fontawesome
-
 /.modman/*/.git
+/.idea/
 .phpstorm.meta.php
+/.well-known/acme-challenge/
 
-# First unignore /media/*, then add blacklisted items again
+# FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
 !/media/*
 /media/amfeed
 /media/cache
@@ -139,41 +140,51 @@ phpunit.xml
 /media/wysiwyg/*
 
 # BILLER WEBHOOK
-
 /biller-webhook-errors.jsonl
 /biller-webhook.jsonl
 
 # FRESHDESK WEBHOOK
-
 /freshdesk-*.ndjson
 
 # GENERATED CONFIGURATIONS
-
 /etc/*-local.ini
 /*.bak-*
 /_user.ini
 /php.cmd.ini
 /etc/php.cmd.ini
-
-# Plesk
 .php-version
 .php-ini
-
-/.idea/
-/.well-known/acme-challenge/
-/app/code/community/Cm/Cache/Backend/Redis.php
 
 ##################################################
 # Symlinks -- Watch out to not ignore core hacks!!
 ##################################################
 
-# UNIGNORE COREHACKED FILES
-# !/...
-
 /app/code/community/Cm
 /lib/Credis
 
-# IGNORE DHH FORKS, NOT COREHACKS
+# UNIGNORE COREHACKED FILES
+!/app/code/core/Mage/Sales/etc/config.xml
+!/app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php
+!/app/code/core/Mage/Adminhtml/Model/Search/Catalog.php
+!/app/code/core/Mage/Adminhtml/Model/Search/Customer.php
+!/app/code/core/Mage/Adminhtml/Model/Search/Order.php
+!/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php
+!/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php
+!/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Upsell.php
+!/app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php
+!/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+!/app/code/core/Mage/Core/Model/Resource/Session.php
+!/app/code/core/Mage/Catalog/Model/Category.php
+!/app/code/core/Mage/Customer/Model/Customer.php
+!/app/code/core/Mage/GoogleAnalytics/Block/Ga.php
+!/app/code/core/Mage/Page/Block/Html/Head.php
+!/app/code/community/Varien/Autoload.php
+!/app/design/frontend/base/default/template/payment/info/pdf/*.phtml
+
+#!/app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Abstract.php
+#!/app/code/core/Mage/Api/Model/Server/Wsi/Adapter/Soap.php
+
+# IGNORE DHH FORKS
 
 # deheerhoreca/Aoe_BlackHoleSession
 app/code/community/Aoe/BlackHoleSession
