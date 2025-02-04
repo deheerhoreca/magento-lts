@@ -1,13 +1,13 @@
 <?php
-$tx_name    = (string) (Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name() ?? "unknown");
-$env        = (string) (ini_get("elastic_apm.environment") ?? "unknown");
-$body_class = $this->getBodyClass();
+$tx_name        = (string) (Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name() ?? "unknown");
+$env            = (string) (ini_get("elastic_apm.environment") ?? "unknown");
+$body_class     = (string) $this->getBodyClass();
+$current_route  = (string) $this->getRequest()->getRouteName();
 ?>
 <!DOCTYPE html>
-<html lang="<?=$this->getLang();?>" id="top" class="no-js" itemscope itemtype="http://schema.org/WebPage" data-environment="<?=$env?>" data-transaction="<?=$tx_name?>">
+<html lang="<?=$this->getLang();?>" id="top" class="no-js" itemscope itemtype="http://schema.org/WebPage" data-environment="<?=$env?>" data-transaction="<?=$tx_name?>" data-route="<?=$current_route?>">
   <head>
     <?=$this->getChildHtml('head')?>
-    <script>apm_transaction="<?=Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name()?>";</script>
   </head>
   <body class="<?=$body_class?>">
     <?=$this->getChildHtml('after_body_start')?>
@@ -45,5 +45,6 @@ $body_class = $this->getBodyClass();
       </div>
     </div>
     <?=$this->getAbsoluteFooter()?>
+    <?=\Chefstore\Html::writeJsStatements()?>
   </body>
 </html>

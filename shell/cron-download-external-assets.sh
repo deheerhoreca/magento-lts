@@ -18,8 +18,11 @@ wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/eff
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/lite-youtube-embed/0.3.2/lite-yt-embed.min.js -O ./js/ext-lite-yt-embed.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js -O ./js/ext-jquery.ui.touch-punch.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js -O ./js/ext-jquery-ui.min.js
-wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js -O ./skin/frontend/rwd/dhh/js/ext-bootstrap.min.js
-wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ./skin/frontend/rwd/dhh/css/ext-bootstrap.min.css
+
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js -O ./skin/frontend/rwd/external/bootstrap.min.js
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.js -O ./skin/frontend/rwd/external/bootstrap.js
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ./skin/frontend/rwd/external/bootstrap.min.css
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.css -O ./skin/frontend/rwd/external/bootstrap.css
 
 # These need versioning outside of mod_pagespeed:extend_cache
 wget --no-verbose https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ./js/elastic-apm-rum.umd.min.js.map

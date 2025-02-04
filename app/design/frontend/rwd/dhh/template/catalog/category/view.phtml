@@ -37,11 +37,14 @@ if($this->isMixedMode()) {
     $extra_block_name     = "shopbybrand-{$brand}";
   }
   
-  $brand_name           = $this->helper("catalog/output")->categoryAttribute($_category, $_category->getName(), "name");
-  $ctdesc_h1            = "Bekijk ons <span class='orange'>{$brand_name}</span> assortiment";
-  // $this->getLayout()->getBlock('head')->setTitle("{$brand_name}"); // Too late for this
-  $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$brand_name} ".Mage::getStoreConfig('design/head/title_suffix');
-  echo "<script>document.title = ".json_encode($title)."</script>";
+  $brand_name   = $this->helper("catalog/output")->categoryAttribute($_category, $_category->getName(), "name");
+  $ctdesc_h1    = "Bekijk ons <span class='orange'>{$brand_name}</span> assortiment";
+  
+  // Too late to change the <title>
+  // $this->getLayout()->getBlock('head')->setTitle("{$brand_name}");
+  $title        = Mage::getStoreConfig('design/head/title_prefix')." Shop {$brand_name} ".Mage::getStoreConfig('design/head/title_suffix');
+  // echo "<script>document.title = ".json_encode($title)."</script>";
+  \Chefstore\Html::addEncodedJsStatement("document.title=".json_encode($title));
 }
 
 // Shop by brand
@@ -64,7 +67,8 @@ elseif($at_root_category && isset($_GET["manufacturer"]) && is_numeric($_GET["ma
   }
   // $this->getLayout()->getBlock('head')->setTitle("{$value}"); // Too late for this
   $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$value} ".Mage::getStoreConfig('design/head/title_suffix');
-  echo "<script>document.title = ".json_encode($title)."</script>";
+  // echo "<script>document.title = ".json_encode($title)."</script>";
+  \Chefstore\Html::addEncodedJsStatement("document.title=".json_encode($title));
   
   // Optional block manufacturer_ is shown above the category tiles
   $top_block_name = "shopbybrand-{$value}";

@@ -15,7 +15,7 @@ $carct                        = Mage::registry("current_category");
 $category_id                  = $carct->getId();
 $category_desc                = (string) $carct->getDescription();
 $orig_category_desc           = $category_desc;
-$amschk                       = $this->getRequest()->getRouteName();
+$amschk                       = (string) $this->getRequest()->getRouteName();
 $haschild                     = false;
 $category_thumbs_actual       = 140;
 // $parent_categories_ids        = [];
@@ -75,7 +75,7 @@ if($carct && ($category === "category")) {
   $category_name        = (string) $carct->getName();
   $category_name        = (string) Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   $category_name_lwr    = strtolower($category_name);
-  $orig_category_desc   = $carct->getDescription();
+  $orig_category_desc   = (string) $carct->getDescription();
   
   // Assemble category description
   if($have_active_filters || $on_first_page === false) {
@@ -169,9 +169,7 @@ if($have_active_filters) {
   }
 }
 
-if(empty($carct) === false && $amschk !== "amshopby" && $show_sub_tiles
-&& empty($appliedFilters)
-&& !str_contains((string) $orig_category_desc, "<!--no_cat_tiles-->")) {
+if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($appliedFilters) && !str_contains($orig_category_desc, "<!--no_cat_tiles-->")) {
   
   // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
   // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);
