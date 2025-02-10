@@ -20,7 +20,7 @@
             <active>false</active>
         </Mage_Centinel>
         <Guidance_Cachebuster>
-          <active>false</active>
+          <active>true</active>
         </Guidance_Cachebuster>
         <Mage_Usa>
           <active>false</active>

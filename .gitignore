@@ -116,7 +116,6 @@ phpunit.xml
 
 # DIRS
 
-# EXTERNAL ASSETS
 /js/ext-*
 /skin/frontend/rwd/external/
 !/skin/frontend/rwd/external/fontawesome
@@ -124,6 +123,7 @@ phpunit.xml
 /.idea/
 /.phpstorm.meta.php
 /.well-known/acme-challenge/
+/skin/assets/
 
 # FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
 !/media/*
@@ -154,6 +154,11 @@ phpunit.xml
 /etc/php.cmd.ini
 /.php-version
 /.php-ini
+
+# UNIGNORE IMPORTANT THINGS WHEREVER THEY ARE
+!.htaccess
+!_htaccess
+!.gitignore
 
 ######################################################
 # Symlinks -- Watch out to not ignore core hacks!!
