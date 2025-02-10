@@ -16,7 +16,6 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <script src="/js/ext-scriptaculous-effects.min.js"></script>
 <script src="/js/ext-jquery-ui.min.js"></script>
 <script src="/js/ext-jquery.ui.touch-punch.min.js"></script>
-<script src="/js/ext-glightbox.min.js"></script>
 <script>
   if(document.cookie.match(/^(.*;)?\s*__Host-dhh_past_first_page\s*=\s*[^;]+(.*)?$/) == null
   && window.location.href.indexOf("cart") < 0
@@ -34,7 +33,7 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2">
 <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2">
 <link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="/skin/frontend/rwd/dhh/css/ext-glightbox.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/skin/assets/glightbox/dist/css/glightbox.min.css" media="print" onload="this.media='all'">
 <?=$this->getChildHtml()?>
 <?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
 <script src="/js/ext-translator.js" defer></script>
@@ -44,9 +43,9 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <meta name="robots" content="<?=htmlspecialchars((string) $this->getRobots())?>">
 <meta name="theme-color" content="#fff">
 <meta name="application-name" content="Chefstore.nl">
+<meta name="apple-mobile-web-app-title" content="Chefstore.nl">
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Chefstore.nl">
 <link rel="manifest" href="/site.webmanifest">

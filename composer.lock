@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21bc3827f1cb85c3b6c09feda4db2ec6",
+    "content-hash": "3f95ca78604d7751143cfd430eeae100",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -360,6 +360,21 @@
                 "source": "https://github.com/AydinHassan/magento-core-composer-installer/tree/2.1.0"
             },
             "time": "2021-05-04T20:16:17+00:00"
+        },
+        {
+            "name": "bower-asset/prototypejs",
+            "version": "v1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jwestbrook/prototype.git",
+                "reference": "3c45151f88c7a47ac4694764b9dee762ddf4b5cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jwestbrook/prototype/zipball/3c45151f88c7a47ac4694764b9dee762ddf4b5cf",
+                "reference": "3c45151f88c7a47ac4694764b9dee762ddf4b5cf"
+            },
+            "type": "bower-asset"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -2101,6 +2116,30 @@
             "type": "npm-asset",
             "license": [
                 "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/jquery",
+            "version": "3.7.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.7.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/lite-youtube-embed",
+            "version": "0.3.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/lite-youtube-embed/-/lite-youtube-embed-0.3.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "Apache-2.0"
             ]
         },
         {

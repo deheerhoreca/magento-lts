@@ -12,6 +12,7 @@
     "aoepeople/aoe_templatehints": "^0.4.4",
     "aschroder/smtp_pro": "^2",
     "aydin-hassan/magento-core-composer-installer": "^2.1.0",
+    "bower-asset/prototypejs": "^1.7",
     "cmixin/business-day": "^1.18",
     "colinmollenhour/magento-redis-session": "dev-master as 3.2.0",
     "dekor/php-array-table": "^2.0",
@@ -22,6 +23,8 @@
     "n98/magerun": "^1.97",
     "nesbot/carbon": "^2 || ^3",
     "npm-asset/glightbox": "^3.3",
+    "npm-asset/jquery": "^3.7",
+    "npm-asset/lite-youtube-embed": "^0.3.3",
     "oomphinc/composer-installers-extender": "^2.0",
     "openmage/magento-lts": "20.5.0",
     "paynl/magento-plugin": "dev-master",
@@ -161,7 +164,7 @@
       "indent-style": "space"
     },
     "installer-paths": {
-      "skin/assets/{$vendor}/{$name}/": [
+      "skin/assets/{$name}/": [
         "type:bower-asset",
         "type:npm-asset"
       ]

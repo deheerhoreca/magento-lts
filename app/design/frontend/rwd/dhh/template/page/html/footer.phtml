@@ -63,7 +63,7 @@ $html = <<<EOT
         <div class="col-1-4 center">
           <h3>Klanten over Chefstore.nl:</h3>
           <a href="//www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer noopener">
-            <img id="kiyoh-image" src="//images.chefstore.nl/media/wysiwyg/kiyoh_96.svg?v=1&tr=w-300,q-80,c-at_max" alt="Chefstore.nl Reviews" class="small center" style="height:100%; width:100%" loading=lazy>
+            <img id="kiyoh-image" src="//images.chefstore.nl/media/wysiwyg/kiyoh_96.svg?v=1&tr=w-300,q-80,c-at_max" alt="Chefstore.nl Reviews" class="small center" style="height:100%; width:100%" loading="lazy">
           </a>
         </div>
       </div>
@@ -78,13 +78,12 @@ $html = <<<EOT
     <a class="mx-4" href="/algemene-voorwaarden">Algemene voorwaarden</a>
     <a class="mx-4" href="/privacy-policy">Privacy</a>
   </div>
-  <div class="text-center pt-2 pb-5">© 2017 - 2025 Chefstore.nl | KvK: 69637717</div>
+  <div class="text-center pt-2 pb-5">© 2017 - 2025 Chefstore.nl | Amsterdam, Nederland | KvK: 69637717</div>
 </div>
 
-<script>
-  const lightbox = GLightbox({
-    touchNavigation: true
-  });
+<script type="module">
+  import '/skin/assets/glightbox/dist/js/glightbox.min.js';
+  const lightbox = GLightbox({touchNavigation: true});
   var lightboxInlineIframe = GLightbox({
     selector: '.glightbox4',
     touchNavigation: false,
