@@ -13,6 +13,7 @@
     "aschroder/smtp_pro": "^2",
     "aydin-hassan/magento-core-composer-installer": "^2.1.0",
     "bower-asset/prototypejs": "^1.7",
+    "bower-asset/scriptaculous-bower": "^1.9",
     "cmixin/business-day": "^1.18",
     "colinmollenhour/magento-redis-session": "dev-master as 3.2.0",
     "dekor/php-array-table": "^2.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f95ca78604d7751143cfd430eeae100",
+    "content-hash": "9189c67ad2c3bc12e8c706efcd43d246",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -373,6 +373,39 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/jwestbrook/prototype/zipball/3c45151f88c7a47ac4694764b9dee762ddf4b5cf",
                 "reference": "3c45151f88c7a47ac4694764b9dee762ddf4b5cf"
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/prototypejs-bower",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:plynchnlm/prototypejs-bower.git",
+                "reference": "880a287e8cbdc08bd731ab3f013a1af486633f79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plynchnlm/prototypejs-bower/zipball/880a287e8cbdc08bd731ab3f013a1af486633f79",
+                "reference": "880a287e8cbdc08bd731ab3f013a1af486633f79"
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/scriptaculous-bower",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:plynchnlm/scriptaculous-bower.git",
+                "reference": "cd5b0f19ef8c777e9dbf8a1f9389d1a5091ff34d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plynchnlm/scriptaculous-bower/zipball/cd5b0f19ef8c777e9dbf8a1f9389d1a5091ff34d",
+                "reference": "cd5b0f19ef8c777e9dbf8a1f9389d1a5091ff34d"
+            },
+            "require": {
+                "bower-asset/prototypejs-bower": "1.7.0"
             },
             "type": "bower-asset"
         },
