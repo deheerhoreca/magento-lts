@@ -34,45 +34,13 @@
 # MQMQMQMMQQMMQMQMQQMQMQMQMQMMQMQMQMQIII|!!I| . . QMQQMQMQMQMQMQM^^^^!IQMQM|!!|QQMQMQMQMMQQMQMQM.^MQMQMQMQMQMQMQMQM!MQMQQM..!MQMQMQMQMQM
 # MQMQMQMQMQMQMQMQMQMQMQMQMQMQMQMMQMQII6I!!||!^^^.QMQMQMQMQMQMQMQ^^^^|MQQMQM^^^!QMQMQMQMQMQMQMMQ.^MQMQMQMQMQMQQMQMMQMQMQMQ.!MQQMQMMQMQMQ
 
-############################################
-## For more information about the robots.txt standard visit
-## http://www.robotstxt.org/orig.html
-##
-## For syntax checking visit
-## http://tool.motoricerca.info/robots-checker.phtml
-
-############################################
-## Crawl the Sitemap. Set the correct URL before uncomment
-
-# Sitemap: https://example.com/sitemap.xml
-
-############################################
-## Crawlers Setup
-
 User-agent: *
-
-## How many seconds a crawler should wait before loading and crawling page content
-## Set a custom crawl rate if you are experiencing traffic issues with your server
-## https://www.contentkingapp.com/academy/robotstxt/faq/crawl-delay-10/
-
-# Crawl-delay: 1
-
-############################################
-## Allow to crawl paging (paging inside a listing with more params are disallowed below)
-
-Allow: /*?p=*
-
-############################################
-## Do not crawl non-SEF paths and generated content (if you use a store id in URL you must prefix with * or copy for each store)
-
-Disallow: /index.php/
+Disallow: /index.php
 Disallow: /catalog/product_compare/
 Disallow: /catalog/category/view/
 Disallow: /catalog/product/view/
 Disallow: /catalog/product/gallery/
 Disallow: /catalogsearch/
-#Allow: */catalogsearch/seo_sitemap
-#Allow: */catalogsearch/term/popular
 Disallow: /checkout/
 Disallow: /control/
 Disallow: /contacts/
@@ -88,10 +56,7 @@ Disallow: /wishlist/
 Disallow: /cdn-cgi/*
 Disallow: /no-route
 Disallow: /media/static/
-
-############################################
-## Do not crawl dynamic filters. Uncomment what you need or add custom filters
-
+Disallow: /*&multipass=true*
 Disallow: /*?price=*
 Disallow: /*?___from_store=*
 Disallow: /*?___store=*
@@ -105,219 +70,13 @@ Disallow: /*?mode=*
 Disallow: /*&mode=*
 Disallow: /*?sqr=*
 Disallow: /*&sqr=*
-
-############################################
-## Do not crawl paths that can be safely ignored by search engines (no clean URLs)
-
-Disallow: /*?p=*&
 Disallow: /*.php$
 Disallow: /*?SID=
+Disallow: /*&SID=
 Disallow: /*?refreshfpc
+Disallow: /*&refreshfpc
 Disallow: /*?nofpc
+Disallow: /*&nofpc
 Disallow: /*?csredir
-
-############################################
-User-agent: AI2Bot
-User-agent: Ai2Bot-Dolma
-User-agent: Amazonbot
-User-agent: anthropic-ai
-User-agent: Applebot
-User-agent: Applebot-Extended
-User-agent: Bytespider
-User-agent: CCBot
-User-agent: ChatGPT-User
-User-agent: Claude-Web
-User-agent: ClaudeBot
-User-agent: cohere-ai
-User-agent: cohere-training-data-crawler
-User-agent: Crawlspace
-User-agent: Diffbot
-User-agent: DuckAssistBot
-User-agent: FacebookBot
-User-agent: FriendlyCrawler
-User-agent: Google-Extended
-User-agent: GoogleOther
-User-agent: GoogleOther-Image
-User-agent: GoogleOther-Video
-User-agent: GPTBot
-User-agent: iaskspider/2.0
-User-agent: ICC-Crawler
-User-agent: ImagesiftBot
-User-agent: img2dataset
-User-agent: ISSCyberRiskCrawler
-User-agent: Kangaroo Bot
-User-agent: Meta-ExternalAgent
-User-agent: Meta-ExternalFetcher
-User-agent: OAI-SearchBot
-User-agent: omgili
-User-agent: omgilibot
-User-agent: PanguBot
-User-agent: PerplexityBot
-User-agent: PetalBot
-User-agent: Scrapy
-User-agent: SemrushBot-OCOB
-User-agent: SemrushBot-SWA
-User-agent: Sidetrade indexer bot
-User-agent: Timpibot
-User-agent: VelenPublicWebCrawler
-User-agent: Webzio-Extended
-User-agent: YouBot
-Disallow: /shop?*
-
-############################################
-## Nope
-
-User-agent: simplepie
-User-agent: 80legs.com
-User-agent: curl
-User-agent: Python urllib
-User-agent: Ezooms
-User-agent: OSCE
-User-agent: Genieo
-User-agent: JobdiggerSpider
-User-agent: Baiduspider
-User-agent: Abonti
-User-agent: LinkChecker
-User-agent: Jetslide
-User-agent: SEOkicks
-User-agent: SISTRIX
-User-agent: WBSearchBot
-User-agent: Vagabondo
-User-agent: eknip
-User-agent: Mail.RU_Bot
-User-agent: KINGSpider
-User-agent: OpenindexSpider
-User-Agent: AspiegelBot
-User-agent: Rogerbot
-User-agent: Exabot
-User-agent: MJ12bot
-User-agent: Dotbot
-User-agent: Gigabot
-User-agent: BlackWidow
-User-agent: ChinaClaw
-User-agent: Custo
-User-agent: DISCo
-User-agent: Download\ Demon
-User-agent: eCatch
-User-agent: EirGrabber
-User-agent: EmailSiphon
-User-agent: EmailWolf
-User-agent: Express\ WebPictures
-User-agent: ExtractorPro
-User-agent: EyeNetIE
-User-agent: FlashGet
-User-agent: GetRight
-User-agent: GetWeb!
-User-agent: Go!Zilla
-User-agent: Go-Ahead-Got-It
-User-agent: GrabNet
-User-agent: Grafula
-User-agent: HMView
-User-agent: HTTrack
-User-agent: Image\ Stripper
-User-agent: Image\ Sucker
-User-agent: Indy\ Library
-User-agent: InterGET
-User-agent: Internet\ Ninja
-User-agent: JetCar
-User-agent: JOC\ Web\ Spider
-User-agent: larbin
-User-agent: LeechFTP
-User-agent: Mass\ Downloader
-User-agent: MIDown\ tool
-User-agent: Mister\ PiX
-User-agent: Navroad
-User-agent: NearSite
-User-agent: NetAnts
-User-agent: NetSpider
-User-agent: Net\ Vampire
-User-agent: NetZIP
-User-agent: Octopus
-User-agent: Offline\ Explorer
-User-agent: Offline\ Navigator
-User-agent: PageGrabber
-User-agent: Papa\ Foto
-User-agent: pavuk
-User-agent: pcBrowser
-User-agent: RealDownload
-User-agent: ReGet
-User-agent: SiteSnagger
-User-agent: SmartDownload
-User-agent: SuperBot
-User-agent: SuperHTTP
-User-agent: Surfbot
-User-agent: tAkeOut
-User-agent: Teleport\ Pro
-User-agent: VoidEYE
-User-agent: Web\ Image\ Collector
-User-agent: Web\ Sucker
-User-agent: WebAuto
-User-agent: WebCopier
-User-agent: WebFetch
-User-agent: WebGo\ IS
-User-agent: WebLeacher
-User-agent: WebReaper
-User-agent: WebSauger
-User-agent: Website\ eXtractor
-User-agent: Website\ Quester
-User-agent: WebStripper
-User-agent: WebWhacker
-User-agent: WebZIP
-User-agent: Wget
-User-agent: Widow
-User-agent: WWWOFFLE
-User-agent: Xaldon\ WebSpider
-User-agent: Zeus
-User-agent: BLEXBot
-User-agent: serpstatbot
-User-agent: ZoominfoBot
-User-agent: Linguee
-User-agent: MauiBot
-User-agent: BorneoBot
-User-agent: CCBot
-User-agent: A6-Indexer
-User-agent: AlphaSeoBot
-User-agent: AlphaSeoBot-SA
-User-agent: AspiegelBot
-User-agent: Blackboard Safeassign
-User-agent: BLEXBot/1.0
-User-agent: Bytespider
-User-agent: crawler4j
-User-agent: DotBot
-User-agent: Gigabot
-User-agent: LieBaoFast
-User-agent: MauiBot
-User-agent: MauiBot (crawler.feedback+wc@gmail.com) 
-User-agent: MegaIndex.ru/2.0
-User-agent: MqqBrowser
-User-agent: Nimbostratus-Bot/v1.3.2
-User-agent: Seekport Crawler
-User-agent: SeznamBot
-User-agent: SputnikBot/2.3
-User-agent: The Knowledge AI
-User-agent: TurnitinBot
-User-agent: UCBrowser
-User-agent: yacybot
-User-agent: Yeti
-User-agent: YisouSpider
-User-agent: PetalBot
-User-agent: Barkrowler/0.9
-User-agent: Sidetrade indexer bot
-User-agent: BPImageWalker/2.0
-User-agent: magpie-crawler
-User-agent: LinkWalker/3.0
-User-agent: LinkWalker/2.0
-User-agent: Coccoc
-User-agent: Coccocbot-web
-User-agent: AhrefsBot
-User-agent: SemrushBot
-User-agent: SemrushBot-SA
-User-agent: SemrushBot-BA
-User-agent: SemrushBot-SI
-User-agent: SemrushBot-SWA
-User-agent: SemrushBot-CT
-User-agent: SemrushBot-BM
-User-agent: DnBCrawler-Analytics
-User-agent: DataForSEO
-User-agent: SeekportBot
-Disallow: /
+Disallow: /*&csredir
+Disallow: /shop
