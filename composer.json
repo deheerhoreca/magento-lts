@@ -19,6 +19,7 @@
     "dekor/php-array-table": "^2.0",
     "firegento/adminmonitoring": "^1.3",
     "firegento/debug": "^1.5",
+    "hirale/openmage-debug": "^1.0",
     "illuminate/support": "^10",
     "mathieuviossat/arraytotexttable": "^1.0",
     "michelf/php-markdown": "^2.0",

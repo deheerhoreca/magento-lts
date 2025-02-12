@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9df2aefe8f309e933a9613545269f19",
+    "content-hash": "ea758fae98ee0f3af043c50d4d6f2ca8",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -1376,6 +1376,84 @@
                 "source": "https://github.com/Flyingmana/composer-config-reader/tree/20.0.1"
             },
             "time": "2020-11-08T09:03:06+00:00"
+        },
+        {
+            "name": "hirale/openmage-debug",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hirale/openmage-debug.git",
+                "reference": "2bb76d021cf74300d86d44d14e19b9f74c8a5650"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hirale/openmage-debug/zipball/2bb76d021cf74300d86d44d14e19b9f74c8a5650",
+                "reference": "2bb76d021cf74300d86d44d14e19b9f74c8a5650",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": "^8.0"
+            },
+            "type": "magento-module",
+            "extra": {
+                "map": [
+                    [
+                        "src/Sheep_Debug.xml",
+                        "app/etc/modules/Sheep_Debug.xml"
+                    ],
+                    [
+                        "src/code/Debug",
+                        "app/code/community/Sheep/Debug"
+                    ],
+                    [
+                        "src/design/layout/sheep_debug.xml",
+                        "app/design/frontend/base/default/layout/sheep_debug.xml"
+                    ],
+                    [
+                        "src/design/template/sheep_debug",
+                        "app/design/frontend/base/default/template/sheep_debug"
+                    ],
+                    [
+                        "src/skin",
+                        "skin/frontend/base/default/sheep_debug"
+                    ],
+                    [
+                        "src/design/layout/sheep_debug.xml",
+                        "app/design/adminhtml/default/default/layout/sheep_debug.xml"
+                    ],
+                    [
+                        "src/design/template/sheep_debug",
+                        "app/design/adminhtml/default/default/template/sheep_debug"
+                    ],
+                    [
+                        "src/skin",
+                        "skin/adminhtml/default/default/sheep_debug"
+                    ]
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Madalin Oprea (Mario)"
+                },
+                {
+                    "name": "Hirale"
+                }
+            ],
+            "description": "Development Debug Toolbar for OpenMage",
+            "keywords": [
+                "magento",
+                "magento1",
+                "openmage"
+            ],
+            "support": {
+                "source": "https://github.com/hirale/openmage-debug/tree/v1.0.0"
+            },
+            "time": "2024-06-11T16:47:31+00:00"
         },
         {
             "name": "illuminate/collections",
