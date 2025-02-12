@@ -185,6 +185,7 @@ phpunit.xml
 !/app/code/core/Mage/Adminhtml/Model/Search/Catalog.php
 !/app/code/core/Mage/Adminhtml/Model/Search/Customer.php
 !/app/code/core/Mage/Adminhtml/Model/Search/Order.php
+!/app/code/core/Mage/Catalog/Model/Layer/Filter/Decimal.php
 !/app/code/core/Mage/Core/Model/Resource/Session.php
 !/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
 !/app/code/core/Mage/GoogleAnalytics/Block/Ga.php
@@ -194,6 +195,8 @@ phpunit.xml
 !/app/code/core/Mage/Catalog/Model/Category.php
 !/app/code/core/Mage/Customer/Model/Customer.php
 !/app/code/core/Mage/Page/Block/Html/Head.php
+!/app/code/core/Mage/Core/Controller/Varien/Router/Standard.php
+!/app/code/core/Mage/Core/Model/App.php
 
 # grep -ri -l DHH app/code/community/ | sort
 !/app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php
@@ -312,8 +315,12 @@ phpunit.xml
 !/app/design/adminhtml/default/dhh/template/deheerhoreca_fpc/deheerhoreca_fpc.phtml
 !/app/design/adminhtml/default/dhh/template/sales/order/view/items/renderer/default.phtml
 !/app/design/frontend/base/default/template/payment/info/pdf/default.phtml
+!/app/design/frontend/rwd/default/template/checkout/onepage/shipping.phtml
 
-# grep -ril "DHH"  dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
+# grep -ril "DHH" dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
+# grep -il  "DHH" media/* | sort
+!/favicon.ico
+!/index.php
 !/js/amasty/amshopby/amshopby-ajax.js
 !/js/amasty/amshopby/amshopby.js
 !/js/aw_searchautocomplete/main.js
@@ -322,6 +329,8 @@ phpunit.xml
 !/skin/frontend/rwd/dhh/css/magiczoomplus/magiczoomplus.module.css
 !/skin/frontend/rwd/dhh/js/app.js
 !/skin/frontend/rwd/dhh/tm/firecheckout/js/components/order-review.js
+!/shell/abstract.php
+!/shell/indexer.php
 
 ##################################################
 # IGNORE SYMLINKED DHH FORKS
@@ -366,5 +375,8 @@ phpunit.xml
 # deheerhoreca/Cm_RedisSession
 /app/code/community/Cm/RedisSession
 /app/etc/modules/Cm_RedisSession.xml
-/app/code/community/Fballiano/CssjsVersioning
-/app/etc/modules/Fballiano_CssjsVersioning.xml
+/app/code/community/FireGento/AdminMonitoring
+/app/etc/modules/FireGento_AdminMonitoring.xml
+/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
+/app/design/adminhtml/default/default/template/firegento/adminmonitoring
+/app/locale/de_DE/FireGento_AdminMonitoring.csv
