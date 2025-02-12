@@ -143,7 +143,7 @@ if(empty($delivery_text) === false) {
 
 // MOQ content
 $moq_li = "";
-if(empty($min_sale_qty) !== true && $min_sale_qty > 1) {
+if(!empty($min_sale_qty) && $min_sale_qty > 1) {
   $moq_li = "<li class='my-1'><i class='fa-li fa fa-bars'></i>Ordergrootte vanaf <strong>{$min_sale_qty}</strong> stuks</li>";
 }
 
@@ -261,7 +261,7 @@ if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
   $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-  if(empty($external_documents_json) === true || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
+  if(empty($external_documents_json) || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();
@@ -322,7 +322,7 @@ if($i < $max_highlighted_attributes) {
   }
 
   // Try Width + Height
-  if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
+  if(!$dimension_pair_set && $i < $max_highlighted_attributes) {
     $codes  = ["breedte", "hoogte"];
     $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
     $title  = "Afmetingen (BxL)";
@@ -347,7 +347,7 @@ if($i < $max_highlighted_attributes) {
   }
 
   // Try Width + Depth
-  if($dimension_pair_set !== true && $i < $max_highlighted_attributes) {
+  if(!$dimension_pair_set && $i < $max_highlighted_attributes) {
     $codes  = ["breedte", "diepte"];
     $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
     $title  = "Afmetingen (BxD)";
@@ -860,8 +860,8 @@ $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_prod
 
 // If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
 if($stock_data["overall_stock_status"] === "backorder"
-&& (empty($stock_data["stock_date_days_left"]) === true || $stock_data["stock_date_days_left"] >= 7)
-&& empty($productlabel) === true
+&& (empty($stock_data["stock_date_days_left"]) || $stock_data["stock_date_days_left"] >= 7)
+&& empty($productlabel)
 && empty($alternative_products_block) === false) {
   $productlabel = "Alternatieven beschikbaar";
 }
@@ -931,7 +931,7 @@ if($stock_data["overall_stock_status"] === "backorder"
             <div class="add-to-cart-wrapper">
               <?php
 
-              if($show_black_friday === true && $saleable === true && $eol !== true) {
+              if($show_black_friday && $saleable === true && $eol !== true) {
                 ?>
                 <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
                   <div class="info-box-inner" style="max-width: unset;">
@@ -970,15 +970,15 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo $this->getChildHtml("addto");
                   ?>
                 </div>
-                
+
                 <?php
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
-                  if(empty($eol_text) !== true) {
+                  if(!empty($eol_text)) {
                     echo "<div class=eol_text>{$eol_text}</div>";
                   }
                 }
-                if(empty($delivery_text) !== true) {
+                if(!empty($delivery_text)) {
                   echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
                 }
 
@@ -1010,17 +1010,17 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
                   echo $buyblock_free_delivery_content;
                   echo "<ul class='fa-ul'>";
-                  if(empty($delivery_li) !== true) {
+                  if(!empty($delivery_li)) {
                     echo $delivery_li;
                   }
-                  if(empty($moq_li) !== true) {
+                  if(!empty($moq_li)) {
                     echo $moq_li;
                   }
-                  if(empty($qs_content) !== true) {
+                  if(!empty($qs_content)) {
                     echo $qs_content;
                   }
                   echo "</ul>";
-                  
+
                   if(strtolower($supplier_name) === "combisteel" && CarbonImmutable::now()->isBefore("2024-10-31 00:00:00")) {
                     ?>
                     <div class="card mx-auto p-2 mx-3">
@@ -1043,7 +1043,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                 </div>
                 <?php
                 if($eol === true) {
-                  if(empty($eol_text) !== true) {
+                  if(!empty($eol_text)) {
                     echo "<div class=eol_text>{$eol_text}</div>";
                   }
                 }

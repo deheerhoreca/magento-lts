@@ -44,7 +44,7 @@ function launch($attrCodeOLD, $attrCodeNEW)
     foreach ($collection as $product) {
         $data = trim((string) $product->getData($attrCodeOLD));
         if(!empty($data))
-            fputcsv($fp, array($product->getId(), $data));
+            fputcsv($fp, [$product->getId(), $data]);
     }
 
     echo "CSV Created\n";
@@ -79,7 +79,7 @@ function launch($attrCodeOLD, $attrCodeNEW)
     $installer->startSetup();
 
     $iProductEntityTypeId = Mage::getModel('catalog/product')->getResource()->getTypeId();
-    $aOption = array();
+    $aOption = [];
     $aOption['attribute_id'] = $installer->getAttributeId($iProductEntityTypeId, $attrCodeTEMP);
     for($iCount=0;$iCount<sizeof($values);$iCount++){
         $aOption['value']['option'.$iCount][0] = $values[$iCount];
@@ -111,12 +111,12 @@ function launch($attrCodeOLD, $attrCodeNEW)
         {
             [$_id, $_value] = $data;
 
-            if (empty($myArray[$_value]) or !isset($myArray[$_value]))
+            if (empty($myArray[$_value]) || !isset($myArray[$_value]))
                 $_v = null;
             else
                 $_v = $myArray[$_value];
 
-            Mage::getModel('catalog/product_action')->updateAttributes(array($_id), array($attrCodeTEMP => $_v), 0);
+            Mage::getModel('catalog/product_action')->updateAttributes([$_id], [$attrCodeTEMP => $_v], 0);
             echo $_id." Saved (".memory_get_usage().")\n";
 
         }
@@ -137,7 +137,7 @@ function launch($attrCodeOLD, $attrCodeNEW)
     // Rename temp attribute code to old attribute code
     //
 
-    $installer->updateAttribute('catalog_product', $attrCodeTEMP, array('attribute_code' => $attrCodeOLD));
+    $installer->updateAttribute('catalog_product', $attrCodeTEMP, ['attribute_code' => $attrCodeOLD]);
     echo "Temp attribute code renamed to the original attribute code\n";
 
     //
@@ -145,7 +145,7 @@ function launch($attrCodeOLD, $attrCodeNEW)
     //
 
     echo "Reindexing...";
-    $ids = array(1,2,3,4,5,6,7,8,9);
+    $ids = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     foreach($ids as $id)
     {
         $process = Mage::getModel('index/process')->load($id);
@@ -171,34 +171,17 @@ function createAttribute($name, $attributeCode, $configurable = false, $visible 
     if($setup->getAttributeId('catalog_product', $attributeCode))
         return;
 
-    $data = array(
-        'label' => $name,
-        'input' => 'text',
-        'type'  => 'varchar',
-        'global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
-        'visible' => true,
-        'unique' => false,
-        'required' => false,
-        'used_in_product_listing' => $visible,
-        'visible_on_front' => $visible,
-        'is_html_allowed_on_front' => false,
-        'user_defined' => true,
-    );
+    $data = ['label' => $name, 'input' => 'text', 'type'  => 'varchar', 'global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE, 'visible' => true, 'unique' => false, 'required' => false, 'used_in_product_listing' => $visible, 'visible_on_front' => $visible, 'is_html_allowed_on_front' => false, 'user_defined' => true];
 
     if($configurable)
     {
-        $data = array_merge($data, array(
-            'input' => 'select',
-            'is_configurable' => true,
-            'option' => array('values' => array())
-        ));
+        $data = array_merge($data, ['input' => 'select', 'is_configurable' => true, 'option' => ['values' => []]]);
     }
 
     $setup->addAttribute('catalog_product', $attributeCode, $data);
 }
 
 /**
- * @param Mage_Eav_Model_Entity_Attribute $attributeToDuplicate
  * @param $newAttributeCode
  */
 function assignToAttributeSets(Mage_Eav_Model_Entity_Attribute $attributeToDuplicate, $newAttributeCode)

@@ -24,7 +24,7 @@ interface Zend_Cache_Backend_ExtendedInterface {}
 /* loading Redis cache backend */
 include_once("Cm/Cache/Backend/Redis.php");
 
-function showHelp(){
+function showHelp(): never{
 	echo "Usage: rediscli.php\n".
 	"\t-s <server> - server address\n".
 	"\t-p <port> - server port\n".
@@ -46,15 +46,14 @@ $databases=preg_split('/,/',$options["d"]);
 
 foreach($databases as $db) {
 	$db = (int) $db;
-	if(isset($options["v"]))
-		echo "Cleaning database $db:";
+	echo "Cleaning database $db:";
 	
 	try {
 		// Check if we have a password
 		if(isset($options['a']))
-			$cache = new Cm_Cache_Backend_Redis(array('server' => $options["s"], 'port' => $options["p"], 'database' => $db, 'password' => $options["a"]));
+			$cache = new Cm_Cache_Backend_Redis(['server' => $options["s"], 'port' => $options["p"], 'database' => $db, 'password' => $options["a"]]);
 		else
-			$cache = new Cm_Cache_Backend_Redis(array('server' => $options["s"], 'port' => $options["p"], 'database' => $db));
+			$cache = new Cm_Cache_Backend_Redis(['server' => $options["s"], 'port' => $options["p"], 'database' => $db]);
 	} catch (CredisException $e) {
 		echo "\nError: ".$e->getMessage()."\n";
 		exit(1);
@@ -74,3 +73,5 @@ foreach($databases as $db) {
 		echo " [done]\n";
 	unset($cache);
 }
+
+echo "Done".PHP_EOL;

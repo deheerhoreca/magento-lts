@@ -319,9 +319,9 @@
     height: 40px;
   }
 
-  .product-view .add-to-cart-buttons {
+  /* .product-view .add-to-cart-buttons {
     margin: 1em 0;
-  }
+  } */
 
   .product-view .add-to-cart-buttons .button {
     float: left;

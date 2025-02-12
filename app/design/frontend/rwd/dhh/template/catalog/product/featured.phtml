@@ -198,7 +198,7 @@ if($_products->getFirstItem()) {
       $price_html           = str_replace("€", null, $price_html);
       
       // Black friday
-      if($show_black_friday === true && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+      if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
         $html .= "<span class='bf-banner-list'></span>";
       } else {
         // Product label
@@ -237,7 +237,7 @@ if($_products->getFirstItem()) {
       $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
       $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
-      if(is_file($image_path) === true) {
+      if(is_file($image_path)) {
         $col_width        = 175;
         $cdn_img_options  = [
           "identifier"      => $dhh_sku,
@@ -299,7 +299,7 @@ if($_products->getFirstItem()) {
           </div>
           <?php
           echo $price_html;
-          if($show_actions === true) {
+          if($show_actions) {
             ?>
             <div class="actions">
               <?php
@@ -338,7 +338,7 @@ if($_products->getFirstItem()) {
       </li>
 
       <?php
-      if($show_ups_block === true && ($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0) && $_collectionSize > $i) { ?>
+      if($show_ups_block && ($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0) && $_collectionSize > $i) { ?>
         </ul>
           <div class="new-tab-contant-text mobile-hide">
             <div class="col-md-3 new-contant">

@@ -152,7 +152,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         }
         else {
             $children = $category->getChildren();
-            if (!$this->_getHelper()->isSearchResultsPage()) {
+            if (is_object($children) && !$this->_getHelper()->isSearchResultsPage()) {
                 $childrenCount = $children->count();
             }
             else {
@@ -301,7 +301,7 @@ class Codnitive_Sidenav_Block_Navigation extends Mage_Catalog_Block_Navigation
         $onclick = '';
         if ($config->isCollapsible() || $config->isThumbImageActive()) {
             $wrapperMargin = ($config->isCollapsible() && $collapsibleIconPosition === 'left') ? 14 : 0;
-            $extraMargin = !$config->isThumbImageActive() ? 0 : (!empty($thumbnail) && ($thumbPosition === 'left')) ? $thumbWidth + 3 : 0;
+            $extraMargin = !$config->isThumbImageActive() ? 0 : ((!empty($thumbnail) && ($thumbPosition === 'left')) ? $thumbWidth + 3 : 0);
             $collWrapper = $wrapperMargin + $extraMargin;
 
             // makes parent category name clickable to open/close collapsible menus if option is enabled

@@ -18,7 +18,7 @@ try {
   foreach($allTypes as $type => $value) {
     if(in_array($type, $invalidated_ids)) {
       Mage::app()->getCacheInstance()->cleanType($type);
-      Mage::dispatchEvent('', array('type' => $type));
+      Mage::dispatchEvent('', ['type' => $type]);
       echo "Cleaned {$type}".PHP_EOL;
     } else {
       echo "Skipped {$type}".PHP_EOL;

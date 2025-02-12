@@ -4,7 +4,8 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-$server = 'tcp://127.0.0.1:6379';
+// $server = 'tcp://127.0.0.1:6379';
+$server = 'tcp://136.144.183.232:6379';
 $db = 0;
 $limit = 50;
 
@@ -24,13 +25,13 @@ while ($arg = array_shift($argv)) {
 $client = new Credis_Client($server);
 $client->select($db);
 
-$tagStats = array();
+$tagStats = [];
 foreach ($client->sMembers(Cm_Cache_Backend_Redis::SET_TAGS) as $tag) {
-    if (preg_match('/^\w{3}_MAGE$/', $tag)) {
+    if (preg_match('/^\w{3}_MAGE$/', (string) $tag)) {
         continue;
     }
     $ids = $client->sMembers(Cm_Cache_Backend_Redis::PREFIX_TAG_IDS . $tag);
-    $tagSizes = array();
+    $tagSizes = [];
     $missing = 0;
     foreach ($ids as $id) {
         // $data = $client->hGet(Cm_Cache_Backend_Redis::PREFIX_KEY.$id, Cm_Cache_Backend_Redis::FIELD_DATA);
@@ -43,14 +44,14 @@ foreach ($client->sMembers(Cm_Cache_Backend_Redis::SET_TAGS) as $tag) {
         }
     }
     if ($tagSizes) {
-        $tagStats[$tag] = array(
+        $tagStats[$tag] = [
           'count' => count($tagSizes),
           'min' => min($tagSizes),
           'max' => max($tagSizes),
           'avg size' => round(array_sum($tagSizes) / count($tagSizes)),
           'total size' => array_sum($tagSizes),
           'missing' => $missing,
-        );
+        ];
     }
 }
 
@@ -67,9 +68,9 @@ function _format_bytes($a_bytes)
 
 function printStats($data, $key, $limit)
 {
-    echo "Top $limit tags by ".ucwords($key)."\n";
+    echo "Top $limit tags by ".ucwords((string) $key)."\n";
     echo "------------------------------------------------------------------------------------\n";
-    $sort = array();
+    $sort = [];
     foreach ($data as $tag => $stats) {
         $sort[$tag] = $stats[$key];
     }
@@ -78,7 +79,7 @@ function printStats($data, $key, $limit)
     $fmt = "%-40s| %-8s| %-15s| %-15s\n";
     printf($fmt, 'Tag', 'Count', 'Avg Size', 'Total Size');
     foreach ($data as $tag => $stats) {
-        $tag = substr($tag, 4);
+        $tag = substr((string) $tag, 4);
         if (++$i > $limit) {
             break;
         }

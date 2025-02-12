@@ -125,7 +125,7 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract
             exit(1);
         }
 
-        $time = strtotime($schedule->getFinishedAt());
+        $time = strtotime((string) $schedule->getFinishedAt());
 
         if ($this->getArg('secondsFromNow')) {
             $time = time() - $time;
@@ -217,7 +217,7 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract
         $schedule->save();
 
         echo "\nStatus: " . $schedule->getStatus() . "\n";
-        echo "Messages:\n" . trim($schedule->getMessages(), "\n") . "\n";
+        echo "Messages:\n" . trim((string) $schedule->getMessages(), "\n") . "\n";
     }
 
     /**
@@ -509,10 +509,10 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract
         switch ($mode) {
             case 'always':
             case 'default':
-                $includeGroups = array_filter(array_map('trim', explode(',', $this->getArg('includeGroups'))));
-                $excludeGroups = array_filter(array_map('trim', explode(',', $this->getArg('excludeGroups'))));
-                $includeJobs = array_filter(array_map('trim', explode(',', $this->getArg('includeJobs'))));
-                $excludeJobs = array_filter(array_map('trim', explode(',', $this->getArg('excludeJobs'))));
+                $includeGroups = array_filter(array_map('trim', explode(',', (string) $this->getArg('includeGroups'))));
+                $excludeGroups = array_filter(array_map('trim', explode(',', (string) $this->getArg('excludeGroups'))));
+                $includeJobs = array_filter(array_map('trim', explode(',', (string) $this->getArg('includeJobs'))));
+                $excludeJobs = array_filter(array_map('trim', explode(',', (string) $this->getArg('excludeJobs'))));
                 Mage::dispatchEvent($mode, array(
                     'include_groups' => $includeGroups,
                     'exclude_groups' => $excludeGroups,

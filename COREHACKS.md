@@ -117,11 +117,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - Must be checked against `base/default/layout/*.xml`
   - Updated up to: v20.5.0
 
-## ./vendor/ Hacks
-- `vendor/colinmollenhour/magento-redis-session/app/code/community/Cm/RedisSession/Model/Session.php`
-  - Updated up to: v20.5.0
-  - Unignored in git
-
 ## 3rd Party Hacks
 - **Anowave Sort**
   - `app/code/local/Anowave/Sort/Model/Observer.php`
@@ -140,10 +135,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `app/code/local/Magmodules/Kiyoh/Model/Stats.php`
     - Fixed a bug where PHP7.2 does not allow a `+=` on a variable that was initialized as a string
     - https://github.com/loekvangool/deheerhoreca-magento/commit/a6950b2ebc7735b8f4eedbecfc8b29e84aaac958
-- **Aoe Profiler**
-  - `app/code/community/Aoe/Profiler/Model/Run.php`
-    - Adding checks due to divide by zero errors
-    - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
 - **MagicZoomPlus**
   - `app/code/local/MagicToolbox/MagicZoomPlus/core/magictoolbox.params.class.php`, `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
     - Remove hardcoded `memory_limit set` (it was not enough for some photos)
@@ -277,19 +268,15 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **FireGento DynamicCategory**
   - `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
     - Adding exception check and logging to prevent fatal errors
-- **Pay.nl**
-  - `app/code/community/Pay/Payment/controllers/OrderController.php`
-    - Adding log to critical transaction status updates
-  - `app/code/community/Pay/Payment/vendor/paynl/sdk/src/Api/Api.php`
-    - Add some logging to capture Pay API communcation
-  - `app/code/community/Pay/Payment/vendor/paynl/sdk/`
-    - Removed 3rd party `.gitignore` and added the dir to our repo to record the corehack above
 - **firegento/firegento-logger**
   - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
   - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432
 - **Geissweb EU VAT Enhanded**
   - `app/code/local/Geissweb/Euvatgrouper/Model/Validation/Abstract.php`
     - Add new VAT number format for BE
+- **Profitmetrics**
+  - `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
+    - Expanding list of known Bots
 
 ## Closed
 - **app/code/core/Mage/**
@@ -331,6 +318,14 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
       - Prevent fatal errors. Fixed upstream.
   - `app/code/community/Ebizmarts/MailChimp/Model/Api/Subscribers/MailchimpTags.php`
     - Fix for PHP 7.x
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/src/Config.php`
+    - Changing API URL for the TLS 1.2 upgrade, but works on the old URL now as well
+  - `app/code/community/Pay/Payment/vendor/paynl/sdk/`
+    - Removed 3rd party `.gitignore` and added the dir to our repo to record the corehack above
+  - `app/code/community/Aoe/Profiler/Model/Run.php`
+    - Adding checks due to divide by zero errors
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
+    - Replaced by our own fork
 - **app/design/adminhtml/**
   - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
     - Bugfixes

@@ -26,7 +26,7 @@ if($this->isMixedMode()) {
     $brand                = sanitizeForFilename($brand_name);  
     $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
-    if(is_file($brand_logo_file) === true) {
+    if(is_file($brand_logo_file)) {
       $brand_logo         = "/".$brand_logo_file;
     }
     
@@ -45,7 +45,7 @@ if($this->isMixedMode()) {
 }
 
 // Shop by brand
-elseif($at_root_category === true && isset($_GET["manufacturer"]) && is_numeric($_GET["manufacturer"])) {
+elseif($at_root_category && isset($_GET["manufacturer"]) && is_numeric($_GET["manufacturer"])) {
   $singleton_prod = Mage::getSingleton('catalog/product')
     ->setStoreId(Mage::app()->getStore()->getId())
     ->setData("manufacturer", $_GET["manufacturer"]); 
@@ -58,7 +58,7 @@ elseif($at_root_category === true && isset($_GET["manufacturer"]) && is_numeric(
     $brand_name           = sanitizeForFilename($brand_name);
     $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
-    if(is_file($brand_logo_file) === true) {
+    if(is_file($brand_logo_file)) {
       $brand_logo         = "/{$brand_logo_file}";
     }
   }
@@ -71,7 +71,7 @@ elseif($at_root_category === true && isset($_GET["manufacturer"]) && is_numeric(
 }
 
 // Shop by brand series
-elseif($at_root_category === true && isset($_GET["brand_series"]) && is_numeric($_GET["brand_series"])) {
+elseif($at_root_category && isset($_GET["brand_series"]) && is_numeric($_GET["brand_series"])) {
   $singleton_prod = Mage::getSingleton('catalog/product')
     ->setStoreId(Mage::app()->getStore()->getId())
     ->setData("brand_series", $_GET["brand_series"]); 
@@ -86,7 +86,7 @@ elseif($at_root_category === true && isset($_GET["brand_series"]) && is_numeric(
       $brand                = sanitizeForFilename($brand_name);  
       $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
       $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
-      if(is_file($brand_logo_file) === true) {
+      if(is_file($brand_logo_file)) {
         $brand_logo         = "/{$brand_logo_file}";
       }
     }

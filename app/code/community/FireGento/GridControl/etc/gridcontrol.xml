@@ -2,6 +2,7 @@
 
 <!---
 - Use <filter>0</filter>, not true/false
+- Column options: Mage_Adminhtml_Block_Widget_Grid_Column (/app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column.php)
 -->
 
 <gridcontrol>
@@ -10,21 +11,23 @@
     <!-- Products Grid -->
     
     <productGrid>
+      
+      <massaction>
+        <updateColumn>
+          <width>5</width>
+        </updateColumn>
+      </massaction>
 
-      <set_name>
-        <remove/>
-      </set_name>
+      <set_name><remove/></set_name>
 
       <!-- To enable, also enable addWebsiteNamesToResult() -->
       <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
-      <websites>
-        <remove/>
-      </websites>
+      <websites><remove/></websites>
       
       <entity_id>
         <!-- <remove/> -->
         <updateColumn>
-          <width>5%</width>
+          <width>5</width>
         </updateColumn>
       </entity_id>
       
@@ -37,7 +40,7 @@
       
       <name>
         <updateColumn>
-          <width>30%</width>
+          <width>25%</width>
         </updateColumn>
         <after>sku</after>
       </name>
@@ -50,7 +53,7 @@
       </type>
       
       <visibility>
-        <!-- <remove/> -->
+        <remove/>
       </visibility>
       
       <!-- <action> -->
@@ -91,19 +94,17 @@
       
       <ean>
         <add>
-          <header>EAN</header>
+          <header>EAN13</header>
           <size>10</size>
           <type>text</type>
-          <index>ean</index>
+          <index>ean13</index>
         </add>
         <after>manufacturer</after>
       </ean>
       
       <!-- To enable, also enable code block in -->
       <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
-      <qty>
-        <remove/>
-      </qty>
+      <qty><remove/></qty>
       
       <product_type>
         <add>
@@ -119,18 +120,12 @@
       <bol_category>
         <add>
           <header>Bol Category</header>
-          <size>100</size>
+          <width>175</width>
           <type>text</type>
           <index>bol_category</index>
         </add>
         <after>product_type</after>
       </bol_category>
-      
-      <massaction>
-        <updateColumn>
-          <width>5%</width>
-        </updateColumn>
-      </massaction>
 
     </productGrid>
     
@@ -231,17 +226,17 @@
         </updateColumn>
       </massaction>
       
-      <store_id>
+      <!-- <store_id>
         <remove/>
-      </store_id>
-      
-      <action>
-        <remove/>
-      </action>
+      </store_id> -->
       
       <state>
         <remove/>
       </state>
+      
+      <action>
+        <remove/>
+      </action>
       
     </sales_order_grid>
     

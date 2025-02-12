@@ -8,12 +8,12 @@ set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
 
 # Set User Environment
-. ${HOME}/.profile
+. ${HOME}/.bash_profile
 
 cm
 
-TARGET_PHP_INI=./php.cmd.ini
-COPY_PHP_INI=./etc/php.cmd.ini
+TARGET_PHP_INI=./etc/php.cmd.ini
+COPY_PHP_INI=./php.cmd.ini
 TARGET_USER_INI=_user.ini
 PHP_VERSION=$(mphp -r "echo phpversion();")
 
@@ -36,7 +36,6 @@ fi
 echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 
 # Create new php.cmd.ini
-DEFAULT_PHP_INI=$(mphp -r "echo php_ini_loaded_file();")
 SHARED_PHP_INI=$(pwd)/etc/php.cmd-dist.ini
 LOCAL_PHP_INI=$(pwd)/etc/php.cmd-local.ini
 NOW=`date`
@@ -47,9 +46,6 @@ printf "; File: ${TARGET_PHP_INI}\n" >> ${TARGET_PHP_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_PHP_INI}
 printf "; PHP version: ${PHP_VERSION}\n" >> ${TARGET_PHP_INI}
 printf "; Created: %s\n" "$NOW" >> ${TARGET_PHP_INI}
-
-printf "\n; ---------------------- ${DEFAULT_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
-cat ${DEFAULT_PHP_INI} >> ${TARGET_PHP_INI}
 
 printf "\n; ---------------------- ${SHARED_PHP_INI} ----------------------\n\n" >> ${TARGET_PHP_INI}
 cat ${SHARED_PHP_INI} >> ${TARGET_PHP_INI}

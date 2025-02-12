@@ -244,7 +244,7 @@ class Credis_Client {
      * Aliases for backwards compatibility with phpredis
      * @var array
      */
-    protected $aliasedMethods = array('delete' => 'del', 'getkeys' => 'keys', 'sremove' => 'srem');
+    protected $aliasedMethods = ['delete' => 'del', 'getkeys' => 'keys', 'sremove' => 'srem'];
 
     /**
      * Creates a Redisent connection to the Redis server on host {@link $host} and port {@link $port}.
@@ -319,17 +319,17 @@ class Credis_Client {
                     throw new CredisException('Invalid host format; expected tcp://host[:port][/persistent]');
                 }
                 $this->host = $matches[1];
-                $this->port = (int) (isset($matches[2]) ? $matches[2] : 6379);
-                $this->persistent = isset($matches[3]) ? $matches[3] : '';
+                $this->port = (int) ($matches[2] ?? 6379);
+                $this->persistent = $matches[3] ?? '';
             } else {
                 $this->host = $matches[2];
                 $this->port = NULL;
-                if (substr($this->host,0,1) != '/') {
+                if (!str_starts_with($this->host, '/')) {
                     throw new CredisException('Invalid unix socket format; expected unix:///path/to/redis.sock');
                 }
             }
         }
-        if ($this->port !== NULL && substr($this->host,0,1) == '/') {
+        if ($this->port !== NULL && str_starts_with($this->host, '/')) {
             $this->port = NULL;
         }
         if ($this->standalone) {
@@ -344,7 +344,7 @@ class Credis_Client {
                 $remote_socket .= '/'.$this->persistent;
                 $flags = $flags | STREAM_CLIENT_PERSISTENT;
             }
-            $result = $this->redis = @stream_socket_client($remote_socket, $errno, $errstr, $this->timeout !== null ? $this->timeout : 2.5, $flags);
+            $result = $this->redis = @stream_socket_client($remote_socket, $errno, $errstr, $this->timeout ?? 2.5, $flags);
         }
         else {
             if ( ! $this->redis) {
@@ -412,7 +412,7 @@ class Credis_Client {
             try {
                 $result = $this->standalone ? fclose($this->redis) : $this->redis->close();
                 $this->connected = FALSE;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 ; // Ignore exceptions on close
             }
         }
@@ -426,7 +426,7 @@ class Credis_Client {
     public function auth($password)
     {
         $this->authPassword = $password;
-        $response = $this->__call('auth', array($this->authPassword));
+        $response = $this->__call('auth', [$this->authPassword]);
         return $response;
     }
 
@@ -437,7 +437,7 @@ class Credis_Client {
     public function select($index)
     {
         $this->selectedDb = (int) $index;
-        $response = $this->__call('select', array($this->selectedDb));
+        $response = $this->__call('select', [$this->selectedDb]);
         return $response;
     }
 
@@ -446,7 +446,7 @@ class Credis_Client {
         // Lazy connection
         $this->connect();
 
-        $name = strtolower($name);
+        $name = strtolower((string) $name);
 
         // Send request via native PHP
         if($this->standalone)
@@ -484,7 +484,7 @@ class Credis_Client {
                 else if($name == 'exec') {
                     if($this->isMulti) {
                         $this->commandNames[] = $name;
-                        $this->commands .= self::_prepare_command(array($name));
+                        $this->commands .= self::_prepare_command([$name]);
                     }
 
                     // Write request
@@ -494,7 +494,7 @@ class Credis_Client {
                     $this->commands = NULL;
 
                     // Read response
-                    $response = array();
+                    $response = [];
                     foreach($this->commandNames as $command) {
                         $response[] = $this->read_reply($command);
                     }
@@ -521,7 +521,7 @@ class Credis_Client {
             if($name == 'pipeline')
             {
                 $this->usePipeline = TRUE;
-                $this->commandNames = array();
+                $this->commandNames = [];
                 $this->commands = '';
                 return $this;
             }
@@ -570,11 +570,11 @@ class Credis_Client {
                     break;
                 case 'mget':
                     if(isset($args[0]) && ! is_array($args[0])) {
-                        $args = array($args);
+                        $args = [$args];
                     }
                     break;
                 case 'lrem':
-                    $args = array($args[0], $args[2], $args[1]);
+                    $args = [$args[0], $args[2], $args[1]];
                     break;
                 default:
                     // Flatten arguments
@@ -602,7 +602,7 @@ class Credis_Client {
                         return $this;
                     } else {
                         $this->isMulti = TRUE;
-                        $this->redisMulti = call_user_func_array(array($this->redis, $name), $args);
+                        $this->redisMulti = call_user_func_array([$this->redis, $name], $args);
                     }
                 }
                 else if($name == 'exec' || $name == 'discard') {
@@ -620,11 +620,11 @@ class Credis_Client {
 
                 // Multi and pipeline return self for chaining
                 if($this->isMulti) {
-                    call_user_func_array(array($this->redisMulti, $name), $args);
+                    call_user_func_array([$this->redisMulti, $name], $args);
                     return $this;
                 }
 
-                $response = call_user_func_array(array($this->redis, $name), $args);
+                $response = call_user_func_array([$this->redis, $name], $args);
             }
             // Wrap exceptions
             catch(RedisException $e) {
@@ -640,14 +640,7 @@ class Credis_Client {
                     $response = array_values($response);
                     break;
                 case 'type':
-                    $typeMap = array(
-                      self::TYPE_NONE,
-                      self::TYPE_STRING,
-                      self::TYPE_SET,
-                      self::TYPE_LIST,
-                      self::TYPE_ZSET,
-                      self::TYPE_HASH,
-                    );
+                    $typeMap = [self::TYPE_NONE, self::TYPE_STRING, self::TYPE_SET, self::TYPE_LIST, self::TYPE_ZSET, self::TYPE_HASH];
                     $response = $typeMap[$response];
                     break;
             }
@@ -677,9 +670,9 @@ class Credis_Client {
             }
         }
 
-        $commandLen = strlen($command);
+        $commandLen = strlen((string) $command);
         for ($written = 0; $written < $commandLen; $written += $fwrite) {
-            $fwrite = fwrite($this->redis, substr($command, $written));
+            $fwrite = fwrite($this->redis, substr((string) $command, $written));
             if ($fwrite === FALSE || $fwrite == 0 ) {
                 throw new CredisException('Failed to write entire command to stream');
             }
@@ -725,7 +718,7 @@ class Credis_Client {
                 $count = substr($reply, 1);
                 if ($count == '-1') return FALSE;
 
-                $response = array();
+                $response = [];
                 for ($i = 0; $i < $count; $i++) {
                         $response[] = $this->read_reply();
                 }
@@ -746,21 +739,21 @@ class Credis_Client {
                 break;
             case 'config':
             case 'hgetall':
-                $keys = $values = array();
+                $keys = $values = [];
                 while($response) {
                     $keys[] = array_shift($response);
                     $values[] = array_shift($response);
                 }
-                $response = count($keys) ? array_combine($keys, $values) : array();
+                $response = count($keys) ? array_combine($keys, $values) : [];
                 break;
             case 'info':
                 $lines = explode(CRLF, trim($response,CRLF));
-                $response = array();
+                $response = [];
                 foreach($lines as $line) {
-                    if ( ! $line || substr($line, 0, 1) == '#') {
+                    if ( ! $line || str_starts_with($line, '#')) {
                       continue;
                     }
-                    list($key, $value) = explode(':', $line, 2);
+                    [$key, $value] = explode(':', $line, 2);
                     $response[$key] = $value;
                 }
                 break;
@@ -782,12 +775,12 @@ class Credis_Client {
      */
     private static function _prepare_command($args)
     {
-        return sprintf('*%d%s%s%s', count($args), CRLF, implode(array_map(array('self', '_map'), $args), CRLF), CRLF);
+        return sprintf('*%d%s%s%s', count($args), CRLF, implode(CRLF, array_map(['self', '_map'], $args)), CRLF);
     }
 
     private static function _map($arg)
     {
-        return sprintf('$%d%s%s', strlen($arg), CRLF, $arg);
+        return sprintf('$%d%s%s', strlen((string) $arg), CRLF, $arg);
     }
 
 }

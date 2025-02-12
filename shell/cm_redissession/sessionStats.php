@@ -1,4 +1,4 @@
-<?php PHP_SAPI == 'cli' or die('CLI only.');
+<?php PHP_SAPI == 'cli' || die('CLI only.');
 /*
 ==New BSD License==
 
@@ -51,12 +51,12 @@ $getSessionData = function ($data, $key) use ($groupBy)
 {
     switch ($groupBy) {
         case 'is_new_visitor':
-            if (preg_match("/\"$key\";b:([01])/", $data, $matches)) {
+            if (preg_match("/\"$key\";b:([01])/", (string) $data, $matches)) {
                 return $matches[1];
             }
             break;
         default: // remote_addr, http_secure, http_host, http_user_agent, request_uri, is_new_visitor
-            if (preg_match("/\"$key\";s:\\d+:\"([^\"]+)\"/", $data, $matches)) {
+            if (preg_match("/\"$key\";s:\\d+:\"([^\"]+)\"/", (string) $data, $matches)) {
                 return $matches[1];
             }
             break;
@@ -66,12 +66,12 @@ $getSessionData = function ($data, $key) use ($groupBy)
 
 $client = $redisSession->redisClient(true)->connect();
 
-$groupedData = array();
+$groupedData = [];
 $cursor = 0;
 while(1) {
     try {
-        $result = $client->__call('scan', array($cursor, 'MATCH', $sessionPattern, 'COUNT', 10000));
-        list($cursor, $keys) = $result;
+        $result = $client->__call('scan', [$cursor, 'MATCH', $sessionPattern, 'COUNT', 10000]);
+        [$cursor, $keys] = $result;
     } catch (CredisException $e) {
         if ($e->getMessage() != "unknown command 'scan'") {
             throw $e;
@@ -91,7 +91,7 @@ while(1) {
     }
 }
 
-$sortKeys = array();
+$sortKeys = [];
 foreach ($groupedData as $key => &$stats) {
     $stats['avg'] = $stats['writes'] / $stats['count'];
     $sortKeys[$key] = $sortBy == 'writes' ? $stats['avg'] : $stats['count'];

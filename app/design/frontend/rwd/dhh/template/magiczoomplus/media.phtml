@@ -195,13 +195,13 @@ if($galleryImagesCount) {
       continue;
     }
     $imagePath = $galleryImage->getPath();
-    
+
     // DHH -- See if there is a watermarked counterpart
     $wm_filename = _get_watermarked_image_filename($imagePath, $dhh_sku);
     $wm_path   = dirname((string) $imagePath)."/../../".WATERMARKED_DIR."{$wm_filename}";
-    
+
     // $msg = "";
-    if(is_file($wm_path) === true) {
+    if(is_file($wm_path)) {
       $imagePath = $wm_path;
       $imageFileOverride[$galleryImage->getFile()] = DS.WATERMARKED_DIR."{$wm_filename}";
       // $msg = "{$dhh_sku} Watermarked image found at ".var_export($wm_path, true);
@@ -209,12 +209,12 @@ if($galleryImagesCount) {
       // $msg = "{$dhh_sku} Watermarked image not found at ".var_export($wm_path, true);
     }
     // END DHH
-    
+
     // DHH EDITS:
     if(file_exists($imagePath)) {
       $imageFile    = $galleryImage->getFile();
       $isBaseImage  = ($imageFile == $productBaseImage);
-      
+
       try {
         $image_size = getimagesize($imagePath);
       } catch(Exception) {
@@ -315,7 +315,7 @@ foreach($productImages as &$productImage) {
   $bigImage         = null;
   $thumbImage       = null;
   $mediumImage      = null;
-  if(is_file($image_path) === true) {
+  if(is_file($image_path)) {
     
     $extension = strtolower((string) pathinfo($image_path, PATHINFO_EXTENSION));
     

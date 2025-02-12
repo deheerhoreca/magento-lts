@@ -1,4 +1,6 @@
-<?php PHP_SAPI == 'cli' or die('CLI only.');
+<?php use Cm\RedisSession\ConnectionFailedException;
+
+PHP_SAPI == 'cli' || die('CLI only.');
 /*
 ==New BSD License==
 
@@ -41,8 +43,8 @@ if ( ! is_readable($sessionPath) || ! ($dir = opendir($sessionPath))) {
 }
 
 try {
-  $redisSession = new \Cm_RedisSession_Model_Session_Handler();
-} catch (\Cm\RedisSession\ConnectionFailedException $e) {
+  $redisSession = new Cm_RedisSession_Model_Session_Handler();
+} catch (ConnectionFailedException) {
   die("Could not connect to redis server, please check your configuration.\n");
 }
 

@@ -33,7 +33,7 @@ Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 $write_db = Mage::getSingleton("core/resource")->getConnection("core_write");
 
 foreach($queries as $query) {
-  if(DRYRUN !== true) {
+  if(!DRYRUN) {
     $result = $write_db->query($query);
     echo "Affected rows: {$result->rowCount()}".PHP_EOL.PHP_EOL;
   } else {

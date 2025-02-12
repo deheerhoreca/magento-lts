@@ -86,7 +86,7 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
         $image_url        = Mage::helper("deheerhoreca_util/util")->_get_placeholder_image_url();
       }
       
-      if(is_file($brand_logo_file) === true) {
+      if(is_file($brand_logo_file)) {
         $image_path       = $brand_logo_file;
         $cdn_img_options  = [
           "identifier"      => "BRAND_{$brand_id}",

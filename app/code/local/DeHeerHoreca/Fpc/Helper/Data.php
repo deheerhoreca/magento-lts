@@ -7,6 +7,10 @@
  * @since  2013-05-23
  */
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
@@ -29,14 +33,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       "AMSHOPBY",
     ];
     $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
-    
-    // // Beaufiul, is it not?
-    // echo "<pre>";
-    // echo "------- Clearing Redis FPC cache --------".PHP_EOL.PHP_EOL;
-    // echo shell_exec("redis-cli --scan --pattern zc:k:e6b_FPC* | xargs redis-cli del");
-    // echo PHP_EOL."----- Done clearing Redis FPC cache -----".PHP_EOL;
-    // echo "</pre>";
-    
     $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
     echo "<span><a href='{$url}'>Back</a></span><br><br>";
     
@@ -98,6 +94,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
       "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
       "cstag", "title", "srsltid",
+      
+      // Cloudflare
+      "forcepreload", "forcepreloadonly",
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
     
@@ -271,7 +270,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     // ath: Aoe_TemplateHints
-    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])) {
+    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])) {
       self::log("Write cache disabled (URL parameter): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
@@ -537,7 +536,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Store in cache
     if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {
-      self::log("Cache: SAVED {$key}, ".mb_strlen($html)." chars");
+      self::log("Cache: SAVED {$key}, ".mb_strlen((string) $html)." chars");
       self::_add_server_timing_header("FPC saved");
       self::_emit_server_timing_header();
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
@@ -609,16 +608,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
-  // Do NOT use prefixes like zc:ti:e6b_
+  // Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
   public static function clean_by_tags(string|array $cache_tags) {
     $cache_tags = (array) $cache_tags;
     
+    // Prepend with e6b_ if needed. Redis library does NOT do this.
+    $cache_tags = Arr::map($cache_tags, fn($tag) => Str::start($tag, "e6b_"));
+    
+    // @notice without getBackend() it does not work!
+    
     if(DHH_FPC_DEBUG) {
-      $cache_keys = Mage::app()->getCache()->getIdsMatchingAnyTags($cache_tags);
+      $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
       Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
     }
     
-    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
+    $response = Mage::app()->getCache()->getBackend()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
     if(DHH_FPC_DEBUG) {
       Mage::log("Response: ".var_export($response, true), Zend_Log::DEBUG, "verbose.txt", true);
     }
@@ -626,8 +630,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $response;
   }
   
-  // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_keys(["foo", "bar"])
-  // Do NOT use prefixes like zc:ti:e6b_
   // @deprecated use clean_by_tags()
   public static function _clean_by_keys(...$args) {
     return self::clean_by_tags($args);

@@ -54,7 +54,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
 
       $entityType = Mage::getModel("eav/entity_type")->loadByCode("catalog_product");
       $attributes = $entityType->getAttributeCollection()
-        ->addFieldToFilter("attribute_code", array("eq" => "url_key"))
+        ->addFieldToFilter("attribute_code", ["eq" => "url_key"])
       ;
       $urlKeyAttribute = $attributes->getFirstItem();
       $urlKeyAttributeTable = $attributes->getTable($entityType->getEntityTable());
@@ -79,7 +79,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
           $productCollection = Mage::getModel("catalog/product")->getCollection()
             ->addAttributeToSelect("url_key")
             ->addAttributeToSelect("sku")
-            ->addAttributeToFilter("url_key", array("eq" => $duplicatedUrlKey))
+            ->addAttributeToFilter("url_key", ["eq" => $duplicatedUrlKey])
           ;
           $ids = $productCollection->getAllIds();
           $skus = $productCollection->getColumnValues("sku");
@@ -242,7 +242,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     echo $message.PHP_EOL;
     Mage::log($message, null, "atwix_rewrites_doctor.log", true);
     
-    if(DRYRUN !== true) {
+    if(!DRYRUN) {
       echo "Notice: If everything looks OK, you should remove the backup table \"{$backup_table}\"".PHP_EOL;
     }
   }
@@ -320,7 +320,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   }
 }
 
-if(DRYRUN === true) {
+if(DRYRUN) {
   echo "DRYRUN is on".PHP_EOL;
 } else {
   echo "DRYRUN is off".PHP_EOL;

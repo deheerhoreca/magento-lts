@@ -23,21 +23,21 @@
 function dhh_strftime(string $format, $timestamp = null, ?string $locale = null): string
 {
 	if (null === $timestamp) {
-		$timestamp = new \DateTime;
+		$timestamp = new DateTime;
 	}
 	elseif (is_numeric($timestamp)) {
 		$timestamp = date_create('@' . $timestamp);
 
 		if ($timestamp) {
-			$timestamp->setTimezone(new \DateTimezone(date_default_timezone_get()));
+			$timestamp->setTimezone(new DateTimezone(date_default_timezone_get()));
 		}
 	}
 	elseif (is_string($timestamp)) {
 		$timestamp = date_create($timestamp);
 	}
 
-	if (!($timestamp instanceof \DateTimeInterface)) {
-		throw new \InvalidArgumentException('$timestamp argument is neither a valid UNIX timestamp, a valid date-time string or a DateTime object.');
+	if (!($timestamp instanceof DateTimeInterface)) {
+		throw new InvalidArgumentException('$timestamp argument is neither a valid UNIX timestamp, a valid date-time string or a DateTime object.');
 	}
 
 	$locale = substr((string) $locale, 0, 5);
@@ -50,34 +50,34 @@ function dhh_strftime(string $format, $timestamp = null, ?string $locale = null)
 		'%h' => 'MMM',	// Abbreviated month name, based on the locale (an alias of %b)	Jan through Dec
 	];
 
-	$intl_formatter = function (\DateTimeInterface $timestamp, string $format) use ($intl_formats, $locale) {
+	$intl_formatter = function (DateTimeInterface $timestamp, string $format) use ($intl_formats, $locale) {
 		$tz = $timestamp->getTimezone();
-		$date_type = \IntlDateFormatter::FULL;
-		$time_type = \IntlDateFormatter::FULL;
+		$date_type = IntlDateFormatter::FULL;
+		$time_type = IntlDateFormatter::FULL;
 		$pattern = '';
 
 		// %c = Preferred date and time stamp based on locale
 		// Example: Tue Feb 5 00:45:10 2009 for February 5, 2009 at 12:45:10 AM
 		if ($format == '%c') {
-			$date_type = \IntlDateFormatter::LONG;
-			$time_type = \IntlDateFormatter::SHORT;
+			$date_type = IntlDateFormatter::LONG;
+			$time_type = IntlDateFormatter::SHORT;
 		}
 		// %x = Preferred date representation based on locale, without the time
 		// Example: 02/05/09 for February 5, 2009
 		elseif ($format == '%x') {
-			$date_type = \IntlDateFormatter::SHORT;
-			$time_type = \IntlDateFormatter::NONE;
+			$date_type = IntlDateFormatter::SHORT;
+			$time_type = IntlDateFormatter::NONE;
 		}
 		// Localized time format
 		elseif ($format == '%X') {
-			$date_type = \IntlDateFormatter::NONE;
-			$time_type = \IntlDateFormatter::MEDIUM;
+			$date_type = IntlDateFormatter::NONE;
+			$time_type = IntlDateFormatter::MEDIUM;
 		}
 		else {
 			$pattern = $intl_formats[$format];
 		}
 
-		return (new \IntlDateFormatter($locale, $date_type, $time_type, $tz, null, $pattern))->format($timestamp);
+		return (new IntlDateFormatter($locale, $date_type, $time_type, $tz, null, $pattern))->format($timestamp);
 	};
 
 	// Same order as https://www.php.net/manual/en/function.strftime.php
@@ -99,13 +99,13 @@ function dhh_strftime(string $format, $timestamp = null, ?string $locale = null)
 		// Week
 		'%U' => function ($timestamp) {
 			// Number of weeks between date and first Sunday of year
-			$day = new \DateTime(sprintf('%d-01 Sunday', $timestamp->format('Y')));
+			$day = new DateTime(sprintf('%d-01 Sunday', $timestamp->format('Y')));
 			return sprintf('%02u', 1 + ($timestamp->format('z') - $day->format('z')) / 7);
 		},
 		'%V' => 'W',
 		'%W' => function ($timestamp) {
 			// Number of weeks between date and first Monday of year
-			$day = new \DateTime(sprintf('%d-01 Monday', $timestamp->format('Y')));
+			$day = new DateTime(sprintf('%d-01 Monday', $timestamp->format('Y')));
 			return sprintf('%02u', 1 + ($timestamp->format('z') - $day->format('z')) / 7);
 		},
 
@@ -166,7 +166,7 @@ function dhh_strftime(string $format, $timestamp = null, ?string $locale = null)
 		}
 
 		if (!isset($translation_table[$match[1]])) {
-			throw new \InvalidArgumentException(sprintf('Format "%s" is unknown in time format', $match[1]));
+			throw new InvalidArgumentException(sprintf('Format "%s" is unknown in time format', $match[1]));
 		}
 
 		$replace = $translation_table[$match[1]];

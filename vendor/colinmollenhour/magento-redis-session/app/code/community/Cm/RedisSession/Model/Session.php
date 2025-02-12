@@ -68,17 +68,17 @@ class Cm_RedisSession_Model_Session implements SessionHandlerInterface
      */
     public function setSaveHandler()
     {
-        // DHH CORE HACK
-        if(headers_sent() === false) {
-            session_set_save_handler(
-                array($this, 'open'),
-                array($this, 'close'),
-                array($this, 'read'),
-                array($this, 'write'),
-                array($this, 'destroy'),
-                array($this, 'gc')
-            );
+        if(headers_sent()) {
+           return false;
         }
+        session_set_save_handler(
+            array($this, 'open'),
+            array($this, 'close'),
+            array($this, 'read'),
+            array($this, 'write'),
+            array($this, 'destroy'),
+            array($this, 'gc')
+        );
         return $this;
     }
 

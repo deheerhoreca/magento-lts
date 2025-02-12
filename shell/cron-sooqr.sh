@@ -11,7 +11,7 @@ if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheer
 fi
 
 # Set User Environment
-. ${HOME}/.profile
+. ${HOME}/.bash_profile
 
 cm
 

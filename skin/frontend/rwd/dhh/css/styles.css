@@ -10586,6 +10586,7 @@
   }
 
   .add-to-cart {
+    margin-top: .5em;
     position: relative;
   }
 
@@ -11402,8 +11403,8 @@
   .category-products ul.products-grid li.item .info {
     display: inline-block;
     margin-bottom: 3px;
-    min-height: 168px;
-    height: 168px;
+    min-height: 175px;
+    height: 175px;
     width: 100%;
     overflow: hidden;
   }
@@ -14581,4 +14582,8 @@
   .page-link {
     transition: none;
   }
+}
+
+#blackfriday-banner-wrapper, #product_addtocart_form > div > div:nth-child(1) > a {
+  display: none;
 }

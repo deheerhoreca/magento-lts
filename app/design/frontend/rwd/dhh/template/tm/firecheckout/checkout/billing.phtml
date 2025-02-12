@@ -88,7 +88,7 @@
   }
 
   // ability to disable fields programmatically from layout xml update
-  $disabledFields = $this->getDisabledFields() ? $this->getDisabledFields() : array();
+  $disabledFields = $this->getDisabledFields() ?: array();
   $fields = array_diff_key($fields, $this->getDisabledFields());
 ?>
 
@@ -184,7 +184,7 @@ if (Mage::helper('core')->isModuleOutputEnabled('FME_Fieldsmanager')) {
                         if (isset($config['value'])):
                           $value = $config['value'];
                         else:
-                          $method = 'get' . ucfirst($field);
+                          $method = 'get' . ucfirst((string) $field);
                           $value = $_address->{$method}();
                         endif;
                       ?>

@@ -11,7 +11,7 @@ $cache_key  = "eke_ogmeta_category_".Mage::getModel("catalog/layer")->getCurrent
 
 if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta_category")) {
   $html = Mage::app()->getCache()->load($cache_key);
-  if(empty($html) === true) {
+  if(empty($html)) {
     DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
   }
 }

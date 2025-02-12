@@ -4,12 +4,29 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Number;
+use Illuminate\Support\Str;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\ChainAdapter;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
 
 const DHH_DEV_IPS = ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
+
+// Setup global aliases to prevent "use" statements all over -- Needs test because this file might get included multiple times by Composer
+// Cannot be executed multiple times between our apps
+if(!defined("DHH_CLASS_ALIASES_APPLIED")) {
+  if(!is_callable("Arr"))           class_alias(Arr::class, "Arr", true);
+  if(!is_callable("Collection"))    class_alias(Collection::class, "Collection", true);
+  if(!is_callable("Number"))        class_alias(Number::class, "Number", true);
+  if(!is_callable("Str"))           class_alias(Str::class, "Str", true);
+  if(!is_callable("ItemInterface")) class_alias(ItemInterface::class, "ItemInterface", true);
+  define("DHH_CLASS_ALIASES_APPLIED", true);
+}
 
 class Utils {
   
@@ -77,7 +94,7 @@ class Utils {
           if ( '"' !== substr( $data, -2, 1 ) ) {
             return false;
           }
-        } elseif ( false === strpos( $data, '"' ) ) {
+        } elseif ( !str_contains( $data, '"' ) ) {
           return false;
         }
         // Or else fall through.
@@ -154,7 +171,6 @@ class Utils {
   function msleep(int $time): void {
     usleep($time * 1000);
   }
-  
 }
 
 class Cache {
@@ -300,6 +316,4 @@ class Cache {
     
     return $result;
   }
-
-  
 }

@@ -5,6 +5,11 @@
 set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
 
+touch ~/logs/deheerhoreca-magento/access_log
+touch ~/logs/deheerhoreca-magento/error_log
+touch ~/logs/deheerhoreca-magento/cron_error.log
+touch ~/logs/deheerhoreca-magento/cron_event.log
+
 now=`date`
 echo "--------------------------------------------------------------------"
 echo "Current date: $now"
@@ -15,7 +20,7 @@ echo "--------------------------------------------------------------------"
 
 cm
 
-cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
+cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.log
 ~/httpdocs/deheerhoreca-magento/var/log/*.jsonl
 ~/httpdocs/deheerhoreca-magento/var/log/*.ndjson
@@ -32,6 +37,6 @@ cat >/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate /tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-intel.tmp -v
+/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-magento.tmp -v
 
-rm /tmp/logrotate-deheerhoreca-magento.conf
+rm ~/tmp/logrotate-deheerhoreca-magento.conf

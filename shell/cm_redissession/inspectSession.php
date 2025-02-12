@@ -1,4 +1,4 @@
-<?php PHP_SAPI == 'cli' or die('CLI only.');
+<?php PHP_SAPI == 'cli' || die('CLI only.');
 /*
 ==New BSD License==
 
@@ -36,7 +36,7 @@ if (empty($argv[1])) {
 }
 $sessionId = $argv[1];
 
-$redisSession = new \Cm_RedisSession_Model_Session_Handler();
+$redisSession = new Cm_RedisSession_Model_Session_Handler();
 $sessionData = $redisSession->inspectSession($sessionId);
 $data = $sessionData['data'];
 unset($sessionData['data']);

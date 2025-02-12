@@ -42,22 +42,22 @@
     <?php if($this->getShowAmounts()): ?>
       <?php if($this->getLastPageNum()>1): ?>
       <p class="amount amount--has-pages">
-        <?php echo $this->__('%s-%s of %s', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+        <?=$this->__('%s-%s of %s', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum())?>
       </p>
       <?php else: ?>
       <p class="amount amount--no-pages">
-        <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+        <strong><?=$this->__('%s Item(s)', $this->getTotalNum())?></strong>
       </p>
       <?php endif; ?>
     <?php endif ?>
 
     <?php if($this->getShowPerPage()): ?>
     <div class="limiter">
-      <label><?php echo $this->__('Show') ?></label>
-      <select onchange="setLocation(this.value)" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Results per page')); ?>">
+      <label><?=$this->__('Show')?></label>
+      <select onchange="setLocation(this.value)" title="<?=Mage::helper('core')->quoteEscape($this->__('Results per page'))?>">
       <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
-        <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
-          <?php echo $_limit ?>
+        <option value="<?=$this->getLimitUrl($_key)?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
+          <?=$_limit?>
         </option>
       <?php endforeach; ?>
       </select>
@@ -72,48 +72,48 @@
       <ul class="pagination">
       <?php if (!$this->isFirstPage()): ?>
         <li class="page-item">
-          <a class="page-link<?php if(!$this->getAnchorTextForPrevious()): ?> i-previous<?php endif;?>" href="<?php echo _dhh_correct_url($this->getPreviousPageUrl()) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Previous')) ?>">
+          <a class="page-link<?php if(!$this->getAnchorTextForPrevious()): ?> i-previous<?php endif;?>" href="<?=_dhh_correct_url($this->getPreviousPageUrl())?>" title="<?=Mage::helper('core')->quoteEscape($this->__('Previous'))?>">
             <?php if(!$this->getAnchorTextForPrevious()): ?>
               <span aria-hidden="true">&laquo;</span>
             <?php else: ?>
-              <?php echo $this->getAnchorTextForPrevious() ?>
+              <?=$this->getAnchorTextForPrevious()?>
             <?php endif;?>
           </a>
         </li>
       <?php endif;?>
 
       <?php if ($this->canShowFirst()): ?>
-        <li class="page-item"><a class="page-link" href="<?php echo _dhh_correct_url($this->getFirstPageUrl()) ?>">1</a></li>
+        <li class="page-item"><a class="page-link" href="<?=_dhh_correct_url($this->getFirstPageUrl())?>">1</a></li>
       <?php endif;?>
 
       <?php if ($this->canShowPreviousJump()): ?>
-        <li class="page-item"><a class="page-link" title="" href="<?php echo _dhh_correct_url($this->getPreviousJumpUrl()) ?>">...</a></li>
+        <li class="page-item"><a class="page-link" title="" href="<?=_dhh_correct_url($this->getPreviousJumpUrl())?>">...</a></li>
       <?php endif;?>
 
       <?php foreach ($this->getFramePages() as $_page): ?>
         <?php if ($this->isPageCurrent($_page)): ?>
-          <li class="page-item active" aria-current="page"><a class="page-link" href="<?php echo _dhh_correct_url($this->getPageUrl($_page)) ?>"><?php echo $_page ?></a></li>
+          <li class="page-item active" aria-current="page"><a class="page-link" href="<?=_dhh_correct_url($this->getPageUrl($_page))?>"><?=$_page ?></a></li>
         <?php else: ?>
-          <li class="page-item"><a class="page-link" href="<?php echo _dhh_correct_url($this->getPageUrl($_page)) ?>"><?php echo $_page ?></a></li>
+          <li class="page-item"><a class="page-link" href="<?=_dhh_correct_url($this->getPageUrl($_page))?>"><?=$_page?></a></li>
         <?php endif;?>
       <?php endforeach;?>
 
 
       <?php if ($this->canShowNextJump()): ?>
-        <li class="page-item"><a class="page-link" title="" href="<?php echo _dhh_correct_url($this->getNextJumpUrl()) ?>">...</a></li>
+        <li class="page-item"><a class="page-link" title="" href="<?=_dhh_correct_url($this->getNextJumpUrl())?>">...</a></li>
       <?php endif;?>
 
       <?php if ($this->canShowLast()): ?>
-        <li class="page-item"><a class="page-link" href="<?php echo _dhh_correct_url($this->getLastPageUrl()) ?>"><?php echo $this->getLastPageNum() ?></a></li>
+        <li class="page-item"><a class="page-link" href="<?=_dhh_correct_url($this->getLastPageUrl())?>"><?=$this->getLastPageNum()?></a></li>
       <?php endif;?>
 
       <?php if (!$this->isLastPage()): ?>
         <li class="page-item">
-          <a class="page-link<?php if(!$this->getAnchorTextForNext()): ?> i-next<?php endif; ?>" href="<?php echo _dhh_correct_url($this->getNextPageUrl()) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Next')) ?>">
+          <a class="page-link<?php if(!$this->getAnchorTextForNext()): ?> i-next<?php endif; ?>" href="<?=_dhh_correct_url($this->getNextPageUrl())?>" title="<?=Mage::helper('core')->quoteEscape($this->__('Next'))?>">
             <?php if(!$this->getAnchorTextForNext()): ?>
               <span aria-hidden="true">&raquo;</span>
             <?php else: ?>
-              <?php echo $this->getAnchorTextForNext() ?>
+              <?=$this->getAnchorTextForNext()?>
             <?php endif;?>
           </a>
         </li>

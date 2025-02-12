@@ -3,7 +3,7 @@
 define("SET_TAGS",'zc:tags');
 
 $redis = new Redis();
-$redis->connect('127.0.0.1', 6379);
+$redis->connect('136.144.183.232', 6379);
 $redis->select(0); // select FPC
 
 $tags=$redis->sMembers(SET_TAGS);

@@ -22,6 +22,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
         
         // DHH CORE HACK
         $from   = date("Y-m-d", strtotime('-6 months'));
+        // $from   = new Zend_Date("YYYY-MM-dd HH:mm", strtotime("-6 months")); // No workie
         $locale = Mage::app()->getLocale()->getLocaleCode();
         $this->setDefaultFilter([
           "created_at"  => [
@@ -159,15 +160,20 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 			}
 		}
 		
+		// DHH CORE HACK
 		if(Mage::getStoreConfig('noble/default_columns/created_at')) {
-			$this->addColumn('created_at', array(
-				'header' => Mage::helper('sales')->__('Purchased On'),
-				'index' => 'created_at',
-				'type' => 'datetime',
-				'width' => '130px',
-				'filter_index' => 'main_table.created_at'
-			));
+			$this->addColumn('created_at', [
+				'header' 				=> Mage::helper('sales')->__('Purchased On'),
+				'index' 				=> 'created_at',
+				'type' 					=> 'datetime',
+				'width' 				=> '130',
+				'filter_index' 	=> 'main_table.created_at',
+				// 'filter_condition_callback' => [$this, 'dateFilter'],
+				// 'format'				=> 'Y-m-d H:i',
+				'format'				=> "YYYY-MM-dd HH:mm",
+			]);
 		}
+		// END DHH CORE HACK
 		
 		if(Mage::getStoreConfig('noble/default_columns/billing_name')) {
 			$this->addColumn('billing_name', array(
@@ -181,7 +187,8 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 			$this->addColumn('shipping_name', array(
 				'header' => Mage::helper('sales')->__('Ship to Name'),
 				'index' => 'shipping_name',
-				'filter_index' => 'main_table.shipping_name'
+				'filter_index' => 'main_table.shipping_name',
+				'width' 				=> '200',
 			));
 		}
 		
@@ -266,8 +273,9 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 		
 		if(Mage::getStoreConfig('noble/extended_columns/shipping_description')) {
 			$this->addColumn('shipping_description', array(
-				'header' => $this->__('Shipping Description'),
-				'index' => 'shipping_description'
+				'header' => $this->__('Manufacturer'),
+				'index' => 'shipping_description',
+				'filter_index' => 'sfo.tm_field4', // DHH CORE HACK
 			));
 		}
 		
@@ -371,7 +379,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 		
 		if(Mage::getStoreConfig('noble/extended_columns/payment_method')) {
 			$this->addColumn('payment_method', array(
-				'header' => Mage::helper('sales')->__('Payment method'), 
+				'header' => Mage::helper('sales')->__('Payment Method'), 
 				'index' => 'payment_method',
 				'filter_index' => 'sfop.method', 
 				'type' => 'options',

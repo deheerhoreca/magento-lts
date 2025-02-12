@@ -63,13 +63,13 @@ class Credis_Cluster
    */
   public function __construct($servers, $replicas = 128)
   {
-    $this->clients = array();
-    $this->aliases = array();
-    $this->ring = array();
+    $this->clients = [];
+    $this->aliases = [];
+    $this->ring = [];
     $clientNum = 0;
     foreach ($servers as $server)
     {
-      $client = new Credis_Client($server['host'], $server['port'], isset($server['timeout']) ? $server['timeout'] : 2.5);
+      $client = new Credis_Client($server['host'], $server['port'], $server['timeout'] ?? 2.5);
       $this->clients[] = $client;
       if (isset($server['alias'])) {
         $this->aliases[$server['alias']] = $client;
@@ -81,12 +81,7 @@ class Credis_Cluster
     }
     ksort($this->ring, SORT_NUMERIC);
     $this->nodes = array_keys($this->ring);
-    $this->dont_hash = array_flip(array(
-      'RANDOMKEY', 'DBSIZE',
-      'SELECT',    'MOVE',    'FLUSHDB',  'FLUSHALL',
-      'SAVE',      'BGSAVE',  'LASTSAVE', 'SHUTDOWN',
-      'INFO',      'MONITOR', 'SLAVEOF'
-    ));
+    $this->dont_hash = array_flip(['RANDOMKEY', 'DBSIZE', 'SELECT', 'MOVE', 'FLUSHDB', 'FLUSHALL', 'SAVE', 'BGSAVE', 'LASTSAVE', 'SHUTDOWN', 'INFO', 'MONITOR', 'SLAVEOF']);
   }
 
   /**
@@ -126,7 +121,7 @@ class Credis_Cluster
   {
     $args = func_get_args();
     $name = array_shift($args);
-    $results = array();
+    $results = [];
     foreach($this->clients as $client) {
       $results[] = $client->__call($name, $args);
     }
@@ -137,7 +132,7 @@ class Credis_Cluster
    * Get the client that the key would hash to.
    *
    * @param string $key
-   * @return \Credis_Client
+   * @return Credis_Client
    */
   public function byHash($key)
   {

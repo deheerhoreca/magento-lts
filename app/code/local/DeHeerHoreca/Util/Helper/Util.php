@@ -379,7 +379,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
     $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
-    if(is_file($image_path) === true) {
+    if(is_file($image_path)) {
       $col_width        = 200;
       $cdn_img_options  = [
         "identifier"      => $_product->getSku(),
@@ -412,7 +412,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           <a href="<?=$product_url?>" title='<?=$this->stripTags($product_name)?> kopen'<?=$a_target?>><?=$display_product_name?></a>
         </h2>
         <?php
-        if(isset($tagline) === true) {
+        if(isset($tagline)) {
           if($display === "mini") {
             echo "<div class='product-list-tagline'>Onze Keuze</div>";
           } else {
@@ -470,7 +470,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         <?php
       }
       
-      if(isset($category_info["url"]) === true) {
+      if(isset($category_info["url"])) {
         echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
       }
       ?>
@@ -706,7 +706,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // GN maat if not in a GN category
       $attribute_code  = "gn_capacity";
       $attribute_value = _get_product_attribute($_product, $attribute_code);
-      if(empty($attribute_value) === true) {
+      if(empty($attribute_value)) {
         $attribute_code  = "gn";
         $attribute_value = _get_product_attribute($_product, $attribute_code);
       }
@@ -928,7 +928,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $usps[] = "Magnetron {$attribute_value} W";
         $power_usp_done = true;
       }
-      if($power_usp_done !== true) {
+      if(!$power_usp_done) {
         $attribute_code  = "total_power_watt";
         $attribute_value = (int) _get_product_attribute($_product, $attribute_code);
         if(empty($attribute_value) === false && is_numeric($attribute_value)) {
@@ -947,7 +947,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           $power_usp_done = true;
         }
       }
-      if($power_usp_done !== true) {
+      if(!$power_usp_done) {
         $attribute_code  = "vermogen";
         $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
         $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
@@ -970,7 +970,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_code  = "vermogen_kw";
       $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
       $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-      if($power_usp_done !== true && empty($attribute_value) === false && is_numeric($attribute_value)) {
+      if(!$power_usp_done && empty($attribute_value) === false && is_numeric($attribute_value)) {
         if($attribute_value < 3) {
           $attribute_value *= 1000;
           if($attribute_value > 0) {
@@ -1127,7 +1127,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     // Code also exists in list.phtml and featured.phtml
 
-    if($eol === true) {
+    if($eol) {
       
       // EOL
       
@@ -1154,7 +1154,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $tagline              = null;
       $overall_stock_status = "not_sellable";
       
-    } elseif($bestelartikel === "Ja" || ($stock_qty <= 0 && $manage_stock === true)) {
+    } elseif($bestelartikel === "Ja" || ($stock_qty <= 0 && $manage_stock)) {
         
       // Backorder
       
@@ -1221,7 +1221,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $stock_message_short  = "Pre-order";
         $txtcltcz             = "buyblock-usp gray";
         $levertijd            = null;
-      } elseif(in_array(strtolower((string) $supplier), SUPPLIERS_HIDE_STOCK_DETAILS, true) === true) {
+      } elseif(in_array(strtolower((string) $supplier), SUPPLIERS_HIDE_STOCK_DETAILS, true)) {
         $stock_message        = "Op voorraad";      // Don't specify stock details for these suppliers
         $stock_message_short  = "Op voorraad";
       } elseif($stock_qty < 4) {
@@ -1471,7 +1471,7 @@ if(function_exists('_get_product_attribute') === false) {
     
     // $value = $attribute->getFrontend()->getValue($_product);
     $value = $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
-    if($implode_arrays === true && is_array($value) === true) {
+    if($implode_arrays && is_array($value)) {
       $value = implode(", ", $value);
     }
     
@@ -1649,7 +1649,7 @@ if(function_exists('_cdn_img') === false) {
     }
     
     // Applies to all CDNs
-    if($lazy === true) {
+    if($lazy) {
       $lazy_html = " loading=\"lazy\"";
     }
     if(strlen($id) > 0) {
@@ -1664,7 +1664,7 @@ if(function_exists('_cdn_img') === false) {
     if(strlen($style) > 0) {
       $style_html .= " style=\"{$style}\"";
     }
-    if($relative_url === true) {
+    if($relative_url) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
     if($add_mod_time === true && strlen((string) $fs_path) > 0) {
@@ -1700,7 +1700,7 @@ if(function_exists('_cdn_img') === false) {
         $src_url              = "{$cdn_base}/{$cdn_options_string}/{$url}";
         
         // Either use 2x the resolution
-        if($include_2x === true && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
+        if($include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
           $cdn_options["w"]   *= 2;
           $cdn_options["h"]   *= 2;
           $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
@@ -1744,7 +1744,7 @@ if(function_exists('_cdn_img') === false) {
         $src_url              = add_url_param($src_base_url, "tr", $cdn_options_string);
         
         // Either use 2x the resolution
-        if($include_2x === true && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
+        if($include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
           $cdn_options["w"]   *= 2;
           $cdn_options["h"]   *= 2;
           $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
@@ -1774,7 +1774,7 @@ if(function_exists('_cdn_img') === false) {
       
       case "cloudflare":
         // If desiring a relative URL, take out the BaseUrl
-        if($relative_url === true) {
+        if($relative_url) {
           $cdn_base         = "/cdn-cgi/image/";
         } else {
           $cdn_base         = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "/")."/cdn-cgi/image/";
@@ -1784,7 +1784,7 @@ if(function_exists('_cdn_img') === false) {
         $src_url          = "{$cdn_base}{$cdn_options}/{$url}";
         
         // Either use 2x the resolution, or set dpr=2
-        if($include_2x === true) {
+        if($include_2x) {
           // $width_2x       = $width * 2;
           // $height_2x      = $height * 2;
           $width_2x       = $width;
@@ -1803,7 +1803,7 @@ if(function_exists('_cdn_img') === false) {
     // printr("src_url: ".var_export($src_url, true));
     // printr(str_repeat("-", 100));
     
-    if($url_only === true) {
+    if($url_only) {
       return $src_url;
     }
     

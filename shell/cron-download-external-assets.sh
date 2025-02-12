@@ -3,7 +3,7 @@
 # ~/httpdocs/deheerhoreca-magento/shell/cron-download-external-assets.sh
 
 # Set User Environment
-. ${HOME}/.profile
+. ${HOME}/.bash_profile
 
 cm
 
