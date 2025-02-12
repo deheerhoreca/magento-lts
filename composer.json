@@ -97,7 +97,10 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/deheerhoreca/Cm_RedisSession"
+      "url": "https://github.com/deheerhoreca/Cm_RedisSession",
+      "only": [
+        "colinmollenhour/magento-redis-session"
+      ]
     },
     {
       "type": "composer",
