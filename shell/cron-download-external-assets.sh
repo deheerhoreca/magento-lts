@@ -7,19 +7,24 @@
 
 cm
 
-# New style:
-wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/css/glightbox.min.css -O ./skin/frontend/rwd/dhh/css/ext-glightbox.min.css
-wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/js/glightbox.min.js -O ./js/ext-glightbox.min.js
-wget --no-verbose https://cdn.cookie-script.com/s/9e97d160d4e7a60d64717d815a816dd9.js -O ./js/ext-cookie-script.min.js
+# Replace by npm-asset/bower-asset:
+# wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/css/glightbox.min.css -O ./skin/frontend/rwd/dhh/css/ext-glightbox.min.css
+# wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/js/glightbox.min.js -O ./js/ext-glightbox.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js -O ./js/ext-jquery.min.js
+wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js -O ./js/ext-jquery.ui.touch-punch.min.js
+wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js -O ./js/ext-jquery-ui.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js -O ./js/ext-prototype.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/builder.min.js -O ./js/ext-scriptaculous-builder.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/scriptaculous/1.9.0/effects.min.js -O ./js/ext-scriptaculous-effects.min.js
 wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/lite-youtube-embed/0.3.2/lite-yt-embed.min.js -O ./js/ext-lite-yt-embed.min.js
-wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js -O ./js/ext-jquery.ui.touch-punch.min.js
-wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js -O ./js/ext-jquery-ui.min.js
-wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js -O ./skin/frontend/rwd/dhh/js/ext-bootstrap.min.js
-wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ./skin/frontend/rwd/dhh/css/ext-bootstrap.min.css
+
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js -O ./skin/frontend/rwd/external/bootstrap.min.js
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.js -O ./skin/frontend/rwd/external/bootstrap.js
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ./skin/frontend/rwd/external/bootstrap.min.css
+wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.css -O ./skin/frontend/rwd/external/bootstrap.css
+
+wget --no-verbose https://cdn.cookie-script.com/s/9e97d160d4e7a60d64717d815a816dd9.js -O ./js/ext-cookie-script.min.js
+wget --no-verbose https://static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0 -O ./js/ext-zendesk-snippet.min.js
 
 # These need versioning outside of mod_pagespeed:extend_cache
 wget --no-verbose https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js.map -O ./js/elastic-apm-rum.umd.min.js.map

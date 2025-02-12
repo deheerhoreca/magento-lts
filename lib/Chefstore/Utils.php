@@ -28,6 +28,27 @@ if(!defined("DHH_CLASS_ALIASES_APPLIED")) {
   define("DHH_CLASS_ALIASES_APPLIED", true);
 }
 
+class Html {
+  
+  // \Chefstore\Html\addEncodedJsStatement("var x=1;");
+  // Add an already-encoded JavaScript statement for echo'ing just before </body>
+  public static function addEncodedJsStatement(string $statement): void {
+    $GLOBALS["footer_js_statements"] ??= [];
+    $GLOBALS["footer_js_statements"][] = $statement;
+  }
+  
+  // Echo any queued JavaScript statements that could wait until just before </body>
+  // Statements should be encoded before storing them!
+  public static function writeJsStatements(): void {
+    if(isset($GLOBALS["footer_js_statements"])) {
+      foreach($GLOBALS["footer_js_statements"] as $statement) {
+        echo "<script>".$statement."</script>".PHP_EOL;
+      }
+    }
+  }
+  
+}
+
 class Utils {
   
   public static $dev_ips = [
@@ -113,7 +134,7 @@ class Utils {
   // PHP var_export() with short array syntax (square brackets) indented 2 spaces.
   // NOTE: The only issue is when a string value has `=>\n[`, it will get converted to `=> [`
   // @link https://www.php.net/manual/en/function.var-export.php
-  // Chefstore\Utils::d()
+  // \Chefstore\Utils::d()
   public static function d($expression, bool $return = false) {
     $export     = var_export($expression, true);
     $patterns   = [

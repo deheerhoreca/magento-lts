@@ -1,12 +1,26 @@
 <?php
 /**
+ * OpenMage
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available at https://opensource.org/license/afl-3-0-php
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @copyright   Copyright (c) 2021-2023 The OpenMage Contributors (https://www.openmage.org)
+ * @license     https://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
  * Product list toolbar
  *
- * @see Mage_Catalog_Block_Product_List_Toolbar
+ * @var Mage_Catalog_Block_Product_List_Toolbar $this
  */
 
 $limits = $this->getAvailableLimit();
-
 $select_sort_id = isset($GLOBALS["select_sort"]) ? "select_sort_bottom" : "select_sort_top";
 $GLOBALS["select_sort"] = true;
 
@@ -15,27 +29,27 @@ if($this->getCollection()->getSize()) {
   if($this->isExpanded() && defined("DHH_SORTING_BLOCK_PRINTED") === false) { ?>
     <div class="sorter">
       <div class="sort-by">
-        <label for="<?=$select_sort_id?>"><?php echo $this->__("Sort By") ?></label>
+        <label for="<?=$select_sort_id?>"><?=$this->__("Sort By")?></label>
         <div class="selwrapper">
-        <select id="<?=$select_sort_id?>" onchange="setLocation(this.value)" title="<?=Mage::helper("core")->quoteEscape($this->__("Sort By"))?>">
+        <select id="<?=$select_sort_id?>" onchange="window.location.href=this.value" title="<?=Mage::helper("core")->quoteEscape($this->__("Sort By"))?>">
           <?php foreach($this->getAvailableOrders() as $_key=>$_order): ?>
-            <option value="<?php echo $this->getOrderUrl($_key, "asc") ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
-              <?php echo $this->__($_order) ?>
+            <option value="<?=$this->getOrderUrl($_key, "asc")?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
+              <?=$this->__($_order)?>
             </option>
           <?php endforeach; ?>
         </select>
         </div>
         <?php if($this->getCurrentDirection() == "desc"): ?>
-          <a href="<?php echo $this->getOrderUrl(null, "asc") ?>" class="no-transition sort-by-switcher sort-by-switcher--desc" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Set Ascending Direction")) ?>"><?php echo $this->__("Set Ascending Direction") ?></a>
+          <a href="<?=$this->getOrderUrl(null, "asc")?>" class="no-transition sort-by-switcher sort-by-switcher--desc" title="<?=Mage::helper("core")->quoteEscape($this->__("Set Ascending Direction"))?>"><?=$this->__("Set Ascending Direction")?></a>
         <?php else: ?>
-          <a href="<?php echo $this->getOrderUrl(null, "desc") ?>" class="no-transition sort-by-switcher sort-by-switcher--asc" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Set Descending Direction")) ?>"><?php echo $this->__("Set Descending Direction") ?></a>
+          <a href="<?=$this->getOrderUrl(null, "desc")?>" class="no-transition sort-by-switcher sort-by-switcher--asc" title="<?=Mage::helper("core")->quoteEscape($this->__("Set Descending Direction"))?>"><?=$this->__("Set Descending Direction")?></a>
         <?php endif; ?>
       </div>
     </div>
     <?php
   }
   
-  if(defined("DHH_SORTING_BLOCK_PRINTED") === false) {
+  if(!defined("DHH_SORTING_BLOCK_PRINTED")) {
     $size_human = $this->getCollection()->getSize();
     $size_postfix = "";
     if($size_human > 100) {
@@ -47,13 +61,13 @@ if($this->getCollection()->getSize()) {
   ?>
   <div class="pager">  
     <div class="count-container">
-      <?php if(sizeof($limits) > 1) { ?>
+      <?php if(count($limits) > 1) { ?>
         <div class="limiter">
-          <label><?php echo $this->__("Toon") ?></label>
-          <select onchange="setLocation(this.value)" title="<?php echo Mage::helper("core")->quoteEscape($this->__("Results per page")); ?>">
+          <label><?=$this->__("Toon")?></label>
+          <select onchange="window.location.href=this.value" title="<?=Mage::helper("core")->quoteEscape($this->__("Results per page"))?>">
           <?php foreach ($limits as $_key => $_limit): ?>
-            <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
-              <?php echo $_limit ?>
+            <option value="<?=$this->getLimitUrl($_key)?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
+              <?=$_limit?>
             </option>
           <?php endforeach; ?>
           </select>
@@ -61,11 +75,8 @@ if($this->getCollection()->getSize()) {
       <?php } ?>
     </div>
     <?php
-    // @todo fix upstream
-    $pager_html = $this->getPagerHtml();
-    // $pager_html = str_replace("?p=1&", "?", $pager_html); // Remove ?p=1 for FPC
-    $pager_html = str_replace("?p=1\"", "\"", (string) $pager_html); // Remove ?p=1 for FPC
-    // $pager_html = str_replace("&p=1", "", $pager_html); // Remove &p=1 for FPC
+    $pager_html = (string) $this->getPagerHtml();
+    $pager_html = str_replace("?p=1\"", "\"", $pager_html); // Remove ?p=1 for better FPC
     echo $pager_html;
     ?>
   </div>

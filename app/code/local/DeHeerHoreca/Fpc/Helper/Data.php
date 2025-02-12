@@ -89,11 +89,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     // List of query parameters that have no consequences for the rendered HTML
+    // csredir: chefstore.nl redirect indicator
+    // multipass: Added by LayeredNav if >1 values selected
     $ignored_url_query_keys = [
       "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
       "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
       "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
-      "cstag", "title", "srsltid",
+      "cstag", "title", "srsltid", "csredir", "multipass",
       
       // Cloudflare
       "forcepreload", "forcepreloadonly",

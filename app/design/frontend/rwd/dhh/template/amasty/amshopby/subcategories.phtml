@@ -5,6 +5,8 @@
  * @package Amasty_Shopby
  */
 
+return;
+
 /** @var Amasty_Shopby_Block_Subcategories $this */
 /** @var Mage_Catalog_Model_Resource_Category_Collection|Mage_Catalog_Model_Resource_Category_Flat_Collection $subcategories */
 $subcategories = $this->getSubcategories();
@@ -16,13 +18,13 @@ if($subcategories->count() > 1) {
   $media_path     = Mage::getBaseDir('media');
   $media_url      = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
   $media_dir      = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-
+  
   // Logic cloned:
   // - catalog/product/list.phtml
   // - amasty/amshopby/subcategories.phtml
-
+  
   echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
-
+  
   foreach($subcategories as $i => $subcategory) {
     if(!in_array((int) $subcategory->getId(), EXCLUDED_CATEGORY_IDS, true)) {
       continue;
@@ -34,7 +36,7 @@ if($subcategories->count() > 1) {
     $category_url       = $subcategory->getUrl();
     $image_path         = "{$media_path}/catalog/category/{$image}";
     $img_html           = "";
-
+    
     if(is_file($image_path)) {
       $image_url        = "{$media_url}/catalog/category/{$image}";
       $col_width        = 140;
@@ -55,7 +57,7 @@ if($subcategories->count() > 1) {
       ];
       $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     }
-
+    
     echo "<li style='max-width: 180px'>";
     echo "<a href='{$category_url}' title='{$category_name_safe}'>{$img_html}<strong>{$category_name}</strong>";
     echo "</a></li>".PHP_EOL;
@@ -64,43 +66,4 @@ if($subcategories->count() > 1) {
   if($haschild) {
     echo "<style>#sidebar-nav {display: block;}</style>";
   }
-
-  // $category_thumbs_actual = 140;
-
-  // foreach($subcategories as $i => $subcategory) {
-    // if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS) !== false) {
-      // continue;
-    // }
-    // $haschild           = true;
-    // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
-    // $category_name_safe = htmlspecialchars($category_name);
-    // $image              = $subcategory->getImage();
-    // $category_url       = $subcategory->getUrl();
-    // $img_path           = "{$media_path}/catalog/category/{$image}";
-    // $resized_img_name   = $category_thumbs_dimensions."_{$subcategory->getId()}.".pathinfo($img_path, PATHINFO_EXTENSION);;
-    // $resized_img_path   = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).DS."catalog/category/resized".DS.$resized_img_name;
-    // $resized_img_url    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/category/resized".DS.$resized_img_name;
-    // $lazy               = ($i < 5) ? "loading=lazy " : "";
-
-    // if(is_file($resized_img_path) === false && is_file($img_path) === true) {
-      // $imageObj = new Varien_Image($img_path);
-      // $imageObj->constrainOnly(true);
-      // $imageObj->keepAspectRatio(true);
-      // $imageObj->keepFrame(true);
-      // $imageObj->backgroundColor([255, 255, 255]);
-      // $imageObj->resize($category_thumbs_dimensions, $category_thumbs_dimensions);
-      // $imageObj->save($resized_img_path);
-    // }
-    // echo "<li style='max-width: 180px;'>";
-    // echo "<a href='{$category_url}' title='{$category_name_safe}'>";
-    // if(empty($image) === false) {
-      // echo "<img class='trans-opacity' src='{$resized_img_url}' alt='{$category_name}' title='{$category_name}' {$lazy}height='{$category_thumbs_actual}' width='{$category_thumbs_actual}'>";
-    // }
-    // echo "<strong>{$category_name}</strong>";
-    // echo "</a></li>".PHP_EOL;
-  // }
-  // echo "</ul>".PHP_EOL;
-  // if($haschild === true) {
-    // echo "<style>#sidebar-nav {display: block;}</style>";
-  // }
 }

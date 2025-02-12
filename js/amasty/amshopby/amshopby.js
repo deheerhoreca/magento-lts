@@ -1,11 +1,11 @@
-/* DHH CORE HACK - modified breaking points */
+/* DHH CORE HACK - modified breakpoints */
 
 if (typeof bp == 'undefined') {
     var bp = {
         xsmall: 479,
-        small: 599,
-        medium: 770,
-        large: 979,
+        small: 576,
+        medium: 768,
+        large: 992,
         xlarge: 1199
     };
 }

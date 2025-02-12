@@ -35,7 +35,7 @@ $html = <<<EOT
             <li class="pb-1"><a href="/shop?brand_series=2892&title=Bartscher-Silversteam">Bartscher Silverstream</a></li>
             <li class="pb-1"><a href="/shop?brand_series=3318&title=Combisteel-Energy">Combisteel Energy Line</a></li>
             <li class="pb-1"><a href="/shop?brand_series=2611&title=Combisteel-Pro-700">Combisteel Pro 700</a></li>
-            <li class="pb-1"><a href="/shop?brand_series=2780"&titleDynamic-Dynamix=>Dynamic Dynamix</a></li>
+            <li class="pb-1"><a href="/shop?brand_series=2780&title=Dynamic-Dynamix">Dynamic Dynamix</a></li>
             <li class="pb-1"><a href="/shop?brand_series=2695&title=Gastro-M-650">Gastro M 650</a></li>
             <li class="pb-1"><a href="/shop?brand_series=2726&title=Hendi-Kitchen-Line">Hendi Kitchen Line</a></li>
             <li class="pb-1"><a href="/shop?brand_series=2727&title=Hendi-Profi-Line">Hendi Profi Line</a></li>
@@ -49,19 +49,21 @@ $html = <<<EOT
           <a href="/over"><h3>Over Chefstore.nl</h3></a>
           <ul>
             <li class="pb-1"><a href="/blog">Blog</a></li>
-            <li class="pb-1"><a href="/klantenservice">Klantenservice</a></li>
-            <li class="pb-1"><a href="/service">Geef een serviceverzoek door</a></li>
+            <li class="pb-1"><a href="/contact">Contact</a></li>
             <li class="pb-1"><a href="/tips-achteraf-betalen">Achteraf betalen</a></li>
+            <li class="pb-1"><a href="/klantenservice">Klantenservice</a></li>
+            <li class="pb-1"><a href="/service">Nieuw Serviceverzoek</a></li>
             <li class="pb-1"><a href="/algemene-voorwaarden">Algemene voorwaarden</a></li>
+            <li class="pb-1"><a href="/retourneren">Retourbeleid</a></li>
+            <li class="pb-1"><a href="/feedback">Feedback & Bezwaar</a></li>
             <li class="pb-1"><a href="/privacy-policy">Privacy</a></li>
             <li class="pb-1"><a href="/linkpartners">Linkpartners</a></li>
-            <li class="pb-1"><a href="/contact">Contact</a></li>
           </ul>
         </div>
         <div class="col-1-4 center">
           <h3>Klanten over Chefstore.nl:</h3>
           <a href="//www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer noopener">
-            <img id="kiyoh-image" src="//images.chefstore.nl/media/wysiwyg/kiyoh_96.svg?v=1&tr=w-300,q-80,c-at_max" alt="Chefstore.nl Reviews" class="small center" style="height:100%; width:100%" loading=lazy>
+            <img id="kiyoh-image" src="//images.chefstore.nl/media/wysiwyg/kiyoh_96.svg?v=1&tr=w-300,q-80,c-at_max" alt="Chefstore.nl Reviews" class="small center" style="height:100%; width:100%" loading="lazy">
           </a>
         </div>
       </div>
@@ -76,13 +78,12 @@ $html = <<<EOT
     <a class="mx-4" href="/algemene-voorwaarden">Algemene voorwaarden</a>
     <a class="mx-4" href="/privacy-policy">Privacy</a>
   </div>
-  <div class="text-center pt-2 pb-5">© 2017 - 2025 Chefstore.nl</div>
+  <div class="text-center pt-2 pb-5">© 2017 - 2025 Chefstore.nl | Amsterdam, Nederland | KvK: 69637717</div>
 </div>
 
-<script>
-  const lightbox = GLightbox({
-    touchNavigation: true
-  });
+<script type="module">
+  import '/skin/assets/glightbox/dist/js/glightbox.min.js';
+  const lightbox = GLightbox({touchNavigation: true});
   var lightboxInlineIframe = GLightbox({
     selector: '.glightbox4',
     touchNavigation: false,
@@ -91,22 +92,8 @@ $html = <<<EOT
   });
 </script>
 
-<script type="module">
-  (function(d, s, c) {
-    var j = d.createElement(s),
-      t = d.getElementsByTagName(s)[0]
-
-    j.src = '/js/ext-elastic-apm-rum.umd.min.js?v=1'
-    j.onload = function() {
-      elasticApm.init(c)
-    }
-    t.parentNode.insertBefore(j, t)
-  })(document, 'script', {
-    serviceName: 'openmage',
-    serverUrl: '//rum.chefstore.nl:8200',
-    environment: document.querySelector("html").dataset.environment,
-    pageLoadTransactionName: document.querySelector("html").dataset.transaction,
-  })
+<script async type="module">
+  !function(e,t,n){var r=e.createElement(t),a=e.getElementsByTagName(t)[0];r.src="/js/ext-elastic-apm-rum.umd.min.js?v=5.16.3",r.onload=function(){elasticApm.init(n)},a.parentNode.insertBefore(r,a)}(document,"script",{serviceName:"openmage",serverUrl:"//rum.chefstore.nl:8200",environment:document.querySelector("html").dataset.environment,pageLoadTransactionName:document.querySelector("html").dataset.transaction});
 </script>
 <!-- footer_end -->
 EOT;
