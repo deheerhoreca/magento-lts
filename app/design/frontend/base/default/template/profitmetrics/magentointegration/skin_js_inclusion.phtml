@@ -22,9 +22,10 @@ $profitmetricsHelper = Mage::helper('profitmetrics');
             <?= $trackingCodeJs ?>
         <?php endif; ?>
     <?php endif; ?>
-    <?php if ($googleAdsConversionId = $profitmetricsHelper->getGoogleAdsConversionId()): ?>
+    <?php if (($googleAdsConversionId = $profitmetricsHelper->getGoogleAdsConversionId())): ?>
         <!-- ProfitMetrics Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $this->escapeUrl($googleAdsConversionId) ?>"></script>
+        <!-- Start ProfitMetrics - Google Ads - (v2) -->
         <script>
             function formatAWID(awID) {
                 // Ensure the AW ID is in the correct format
@@ -38,9 +39,18 @@ $profitmetricsHelper = Mage::helper('profitmetrics');
             const awID = formatAWID(inputAWID);
 
             function _pm_executeAWConfig() {
-                const scriptExists = document.querySelector('script[src^=\"https://www.googletagmanager.com/gtag/js?id=\"]');
-
-                if (scriptExists && window.dataLayer) {
+                const scriptExists = document.querySelector('script[src^="https://www.googletagmanager.com/gtag/js?id="]');
+                let foundJsDate = false;
+                if (typeof dataLayer !== 'undefined') {
+                    for (var i = 0; i <= dataLayer.length; i++) {
+                        if (typeof dataLayer[i] === 'object' && dataLayer[i].length && dataLayer[i].length > 2 && dataLayer[i][0] === 'js') {
+                            foundJsDate = true;
+                            break;
+                        }
+                    }
+                }
+                if (scriptExists && foundJsDate) {
+                    window.dataLayer = window.dataLayer || [];
                     function gtag() {
                         dataLayer.push(arguments);
                     }
@@ -48,6 +58,7 @@ $profitmetricsHelper = Mage::helper('profitmetrics');
                 } else {
                     const script = document.createElement('script');
                     script.async = true;
+                    script.id = 'profitmetrics-gawid-script-' + awID;
                     script.src = 'https://www.googletagmanager.com/gtag/js?id=' + awID;
                     document.head.appendChild(script);
                     script.addEventListener('load', function() {
@@ -62,5 +73,6 @@ $profitmetricsHelper = Mage::helper('profitmetrics');
             }
             _pm_executeAWConfig();
         </script>
+        <!-- End ProfitMetrics - Google Ads - (v2) -->
     <?php endif; ?>
 <?php endif; ?>

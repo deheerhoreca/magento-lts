@@ -311,6 +311,10 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
   - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
     - Reduce the list of orders that we send to PM
     - Replace the ID in the PM feed to match what PM expects
+  - `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
+    - Expanding list of known Bots to reduce the bloated SQL table
+  - `app/code/local/Profitmetrics/MagentoIntegration/controllers/Adminhtml/ProfitmetricsController.php`
+    - Raising max memory limit
 - **TM Core**
   - `app/code/community/TM/Core/Model/Notification/Feed.php`
     - Disable admin notifications
@@ -425,9 +429,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Geissweb EU VAT Enhanded**
   - `app/code/local/Geissweb/Euvatgrouper/Model/Validation/Abstract.php`
     - Add new VAT number format for BE
-- **Profitmetrics**
-  - `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
-    - Expanding list of known Bots
 
 ## Closed
 - **app/code/core/Mage/**

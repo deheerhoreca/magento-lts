@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Profitmetrics_MagentoIntegration>
-            <version>0.0.24</version>
+            <version>0.0.29</version>
         </Profitmetrics_MagentoIntegration>
     </modules>
 

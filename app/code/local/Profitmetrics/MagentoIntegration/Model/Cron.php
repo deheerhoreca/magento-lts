@@ -38,6 +38,10 @@ class Profitmetrics_MagentoIntegration_Model_Cron
             $channel = $productFeed->addChild('channel');
             $storeCurrency = $store->getCurrentCurrency()->getCode();
             $defaultCurrency = Mage::app()->getDefaultStoreView()->getBaseCurrency()->getCode();
+            $overwritePriceBuyCurrency = '';
+            if (Mage::helper('profitmetrics')->getOverwriteCostCurrency($store->getCode())) {
+                $overwritePriceBuyCurrency = Mage::helper('profitmetrics')->getOverwriteCostCurrency($store->getCode());
+            }
 
             /** @var Mage_Catalog_Model_Product $product */
             foreach ($this->getProductsByStore($store) as $product) {
@@ -47,6 +51,9 @@ class Profitmetrics_MagentoIntegration_Model_Cron
 
                 if ($priceBuy !== $priceBuyDefault) {
                     $priceBuyCurrency = $storeCurrency;
+                }
+                if ($overwritePriceBuyCurrency) {
+                    $priceBuyCurrency = $overwritePriceBuyCurrency;
                 }
 
                 $productItem = $channel->addChild('item');
@@ -58,6 +65,7 @@ class Profitmetrics_MagentoIntegration_Model_Cron
                 $productItem->addChild('pm:price_buy', $this->getBuyPrice($product, $store, $buyPriceAttribute), 'pm');
                 $productItem->addChild('pm:price_buy_currency', $priceBuyCurrency, 'pm');
                 $productItem->addChild('pm:num_stock', (int)$product->getQty(), 'pm');
+                $productItem->addChild('pm:sku', $helper->escapeHtml((string)$product->getSku()), 'pm');
 
                 if ($productImageUrl = $this->getProductImageUrl($product, $store)) {
                     $productItem->addChild('g:image_link', $productImageUrl, 'g');
@@ -114,8 +122,8 @@ class Profitmetrics_MagentoIntegration_Model_Cron
             }
 
             $buyPrice = isset($this->_configurableProductsDataBySimpleProductIds[$product->getId()]['buy_price'])
-                    ? $this->_configurableProductsDataBySimpleProductIds[$product->getId()]['buy_price']
-                    : $buyPrice;
+                ? $this->_configurableProductsDataBySimpleProductIds[$product->getId()]['buy_price']
+                : $buyPrice;
         }
 
         return $buyPrice;

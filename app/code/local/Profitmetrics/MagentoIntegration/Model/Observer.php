@@ -113,6 +113,7 @@ class Profitmetrics_MagentoIntegration_Model_Observer
                 }
 
                 $visitor->addData($trackingData);
+
                 $visitor->save();
             }
             $customerSession->setData(
@@ -252,6 +253,8 @@ class Profitmetrics_MagentoIntegration_Model_Observer
             'ga_session_count' => $this->getArrayParameter('ga4SessionCount', $profitMetricsCookieData),
             'landing_page' => $landingPageUrl,
             'landing_page_length' => $landingPageLength,
+            'cc_statistics' => $this->getArrayParameter('cc_statistics', $profitMetricsCookieData),
+            'cc_marketing' => $this->getArrayParameter('cc_marketing', $profitMetricsCookieData),
         ];
     }
 

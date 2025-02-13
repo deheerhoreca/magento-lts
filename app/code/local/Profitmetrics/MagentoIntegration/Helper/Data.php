@@ -19,6 +19,7 @@ class Profitmetrics_MagentoIntegration_Helper_Data extends Mage_Core_Helper_Abst
     const XML_PATH_MODULE_INSTALLATION_DATE = 'profitmetrics/advanced/installation_date';
     const PROFITMETRICS_VISITOR_ID_SESSION_KEY = 'profitmetrics_visitor_id';
     const PROFITMETRICS_UPDATE_TIMESTAMP_SESSION_KEY = 'profitmetrics_update_timestamp';
+    const XML_PATH_OVERWRITE_COST_CURRENCY = 'profitmetrics/settings/overwrite_cost_currency';
 
     protected $oldestVisitorDate;
     /** @var string */
@@ -189,5 +190,13 @@ class Profitmetrics_MagentoIntegration_Helper_Data extends Mage_Core_Helper_Abst
     public function getBlockScriptBeforeContent()
     {
         return (int) Mage::getStoreConfig(self::XML_PATH_BLOCK_SCRIPT_BEFORE_CONSENT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOverwriteCostCurrency($store = null)
+    {
+        return (string) Mage::getStoreConfig(self::XML_PATH_OVERWRITE_COST_CURRENCY, $store);
     }
 }

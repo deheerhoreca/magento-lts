@@ -144,4 +144,25 @@ class Profitmetrics_MagentoIntegration_Adminhtml_ProfitmetricsController extends
 
         $this->_redirect('adminhtml/sales_order/');
     }
+
+    /**
+     * @return Profitmetrics_MagentoIntegration_Adminhtml_ProfitmetricsController|void
+     */
+    public function generateCustomersAction()
+    {
+        ini_set("memory_limit", "4G"); //  DHH CORE HACK -- 1G crashed the script
+        
+        try {
+            $fileName = Mage::helper('profitmetrics/customerExport')->createCsv();
+            $path = Mage::getBaseDir('var') . DS . 'export';
+            $file = $path . DS . $fileName;
+            return $this->_prepareDownloadResponse(
+                $fileName, file_get_contents($file)
+            );
+
+        } catch (Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        }
+        $this->_redirect('*/*/');
+    }
 }

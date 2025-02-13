@@ -80,3 +80,4 @@ Disallow: /*&nofpc
 Disallow: /*?csredir
 Disallow: /*&csredir
 Disallow: /shop
+Disallow: /*&*&*&*

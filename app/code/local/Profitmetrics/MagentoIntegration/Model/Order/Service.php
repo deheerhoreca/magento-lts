@@ -79,7 +79,7 @@ class Profitmetrics_MagentoIntegration_Model_Order_Service
             'visitor.entity_id = main_table.profitmetrics_visitor_id',
             [
                 'gacid', 'gacid_source', 'gclid', 'fbp', 'fbc', 'cua', 'cip', 't', 'gbraid', 'wbraid', 'ga_session_id',
-                'ga_session_count', 'landing_page', 'landing_page_length'
+                'ga_session_count', 'landing_page', 'landing_page_length', 'cc_statistics', 'cc_marketing'
             ]
         );
 
@@ -99,6 +99,8 @@ class Profitmetrics_MagentoIntegration_Model_Order_Service
             'cv' => 'magento-' . Mage::getVersion() . '__' . $this->getModuleVersion(),
             'pid' => Mage::helper('profitmetrics')->getStorePublicId($order->getStore()),
             'o' => $this->getOrderSpecification($order),
+            'cc_statistics' => $order->getCcStatistics()? 'true' : 'false',
+            'cc_marketing' => $order->getCcMarketing()? 'true' : 'false',
         ];
 
         if (!Mage::helper('profitmetrics')->getIsHeadlessModeActive()) {
@@ -113,8 +115,8 @@ class Profitmetrics_MagentoIntegration_Model_Order_Service
             $parameters['t'] = urlencode((string)$order->getT());
             $parameters['gbraid'] = urlencode((string) $order->getGbraid());
             $parameters['wbraid'] = urlencode((string) $order->getWbraid());
-            $parameters['ga4_sessionid'] = urlencode((string) $order->getData('ga4_sessionid'));
-            $parameters['ga4_sessioncount'] = urlencode((string) $order->getData('ga4_sessioncount'));
+            $parameters['ga4_sessionid'] = urlencode((string) $order->getData('ga_session_id'));
+            $parameters['ga4_sessioncount'] = urlencode((string) $order->getData('ga_session_count'));
             $parameters['landing_page'] = urlencode((string) $order->getLandingPage());
             $parameters['landing_page_length'] = urlencode((string) $order->getLandingPageLength());
         }
@@ -123,9 +125,14 @@ class Profitmetrics_MagentoIntegration_Model_Order_Service
             return (string) $value !== '';
         });
         $url = Mage::helper('core/url')->addRequestParam($profitMetricsApiUrl, $parameters);
+
+        Mage::log("Profit Metrics API Url: " . $url);
+
         $client = new Zend_Http_Client($url, array(
             'maxredirects' => 0,
             'timeout'      => 120));
+
+
         $response = $client->request(Zend_Http_Client::GET);
 
         return strpos($response->getBody(), '//unknown') === false && $response->getStatus() === 200;

@@ -142,7 +142,6 @@ class Profitmetrics_MagentoIntegration_Block_Conversion_Booster_Snippet extends 
             }
         }
 
-
         return $this->conversionBoosterSnippet;
     }
 }
