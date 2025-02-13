@@ -141,14 +141,17 @@ class Guidance_Cachebuster_Model_Parser
 
         foreach (array_keys($this->getMaps()) as $url) {
             $matches = array();
-            $regex = "|${url}[^\"\'\s]*|";
-
+            // $regex = "|${url}[^\"\'\s]*";
+            // $regex = "/{$url}[^\"\'\s/d*";
+            $regex = "/{$url}([^\"\s]*)/";
+dump($regex);
             preg_match_all($regex, $html, $matches);
-
+dump($matches);
             if (isset($matches[0]) && is_array($matches[0]) && count($matches[0])) {
                 $urls[$url] = $matches[0];
             }
         }
+        dump($url);
         return $urls;
     }
 
@@ -240,6 +243,7 @@ class Guidance_Cachebuster_Model_Parser
      */
     protected function validate($url, $path)
     {
+        return $this; // DHH
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('url must be a valid url, given: ' . $url);
         }

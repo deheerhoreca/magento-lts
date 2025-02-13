@@ -86,7 +86,8 @@ class Guidance_Cachebuster_Helper_Data extends Mage_Core_Helper_Data
             $urlKeys = explode(',', $urlKeys);
 
             foreach ($urlKeys as $urlKey) {
-                $urlMap[Mage::getBaseUrl($urlKey)] = Mage::getBaseDir() . '/' . $urlKey . '/';
+                // $urlMap[Mage::getBaseUrl($urlKey)] = Mage::getBaseDir() . '/' . $urlKey . '/';
+                $urlMap["\/".$urlKey."\/"] = Mage::getBaseDir() . '/' . $urlKey . '/';
             }
         }
 
