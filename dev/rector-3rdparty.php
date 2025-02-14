@@ -53,26 +53,19 @@ use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 
 return static function (RectorConfig $rectorConfig): void {
   
-  // Specify a path that works locally as well as on CI job runners.
-  $uid        = posix_getuid();
-  $shell_user = posix_getpwuid($uid);
-  
-  $rectorConfig->indent(" ", 2);
-  $rectorConfig->parallel($seconds = 600, $maxNumberOfProcess = 6, $jobSize = 30);
+  $rectorConfig->parallel(processTimeout: 600, maxNumberOfProcess: 2, jobSize: 6);
   $rectorConfig->fileExtensions(["phtml", "php"]);
   $rectorConfig->cacheClass(FileCacheStorage::class);
   $rectorConfig->cacheDirectory("/dev/shm/openmage/rector");
-  $rectorConfig->importNames();
+  $rectorConfig->importNames();                               // Keeps short class names with "use" statements intact
+  $rectorConfig->phpVersion(PhpVersion::PHP_82);              // Only when deviating from composer.json
+  $rectorConfig->removeUnusedImports(false);                  // Maybe interesting sometimes, not by default
+  // $rectorConfig->disableParallel();                           // In case of errors, disable parallel
   
-  $rectorConfig->phpVersion(PhpVersion::PHP_81);          // Only when deviating from composer.json
-  $rectorConfig->removeUnusedImports(false);              // Maybe interesting sometimes
-
-  // In case of errors:
-  // $rectorConfig->disableParallel();
-
   $rectorConfig->paths([
     // __DIR__ . '/../app',
     // __DIR__ . '/../dev',
@@ -100,130 +93,82 @@ return static function (RectorConfig $rectorConfig): void {
     __DIR__ . "/../shell/scheduler.php",
   ]);
   
-  /* SAME RULES AS OPENMAGE PROJECT HAS FOR ITSELF */
-  
-  $rectorConfig->rules([
-    CodeQuality\BooleanNot\ReplaceMultipleBooleanNotRector::class,
-    CodeQuality\Foreach_\UnusedForeachValueToArrayKeysRector::class,
-    CodeQuality\FuncCall\ChangeArrayPushToArrayAssignRector::class,
-    CodeQuality\FuncCall\CompactToVariablesRector::class,
-    CodeQuality\Identical\SimplifyArraySearchRector::class,
-    CodeQuality\Identical\SimplifyConditionsRector::class,
-    CodeQuality\Identical\StrlenZeroToIdenticalEmptyStringRector::class,
-    CodeQuality\NotEqual\CommonNotEqualRector::class,
-    CodeQuality\LogicalAnd\LogicalToBooleanRector::class,
-    CodeQuality\Ternary\SimplifyTautologyTernaryRector::class,
-    DeadCode\ClassMethod\RemoveUselessParamTagRector::class,
-    DeadCode\ClassMethod\RemoveUselessReturnTagRector::class,
-    DeadCode\Property\RemoveUselessVarTagRector::class,
-    TypeDeclaration\ClassMethod\ReturnNeverTypeRector::class,
-  ]);
-  
   $rectorConfig->skip([
-    CodeQuality\BooleanNot\SimplifyDeMorganBinaryRector::class,
-    CodeQuality\If_\SimplifyIfReturnBoolRector::class,
-    __DIR__ . '/../shell/translations.php',
-    __DIR__ . '/../shell/update-copyright.php.php',
+    __DIR__.'/../.git',
+    __DIR__.'/../.idea',
+    __DIR__.'/../.vscode',
+    __DIR__.'/../.well-known',
+    __DIR__.'/../assets',
+    __DIR__.'/../media',
+    __DIR__.'/../var',
+    __DIR__."/../vendor",
+    __DIR__."/../**/vendor",
+    __DIR__."/../protected",
+    __DIR__."/../lib/n98-magerun",
     
-    __DIR__ . "/../vendor",
-    __DIR__ . "/../**/vendor",
-    __DIR__ . "/../app/code/community/Pay/Payment/vendor",
-    __DIR__ . "/../app/code/local/DeHeerHoreca/",
-    __DIR__ . "/../app/design/frontend/rwd/dhh/",
-    __DIR__ . "/../app/design/adminhtml/default/dhh/",
-    __DIR__ . "/../lib/Chefstore/",
+    // Usually not desirable:
+    // ReturnNeverTypeRector::class,
+    
+    /* SKIP AS NEEDED */
+    // ShortenElseIfRector::class,                               // Makes things ugly
+    // AddLiteralSeparatorToNumberRector::class,
+    // RemoveUnusedVariableAssignRector::class,
+    // RemoveDuplicatedCaseInSwitchRector::class,                // Removes comments
+    // SimplifyUselessVariableRector::class,
+    // SwitchNegatedTernaryRector::class,
+    // RemoveExtraParametersRector::class,
+    // LongArrayToShortArrayRector::class,                       // Rewritten code is a mess, but good detector for manual rewrite
+    RenameClassRector::class,                                 // Don't disable permanently, but Symfony/Laravel is bullshitting with this
+    StringToClassConstantRector::class,                       // Don't disable permanently, but Symfony/Laravel is bullshitting with this
+    RemoveDoubleAssignRector::class,                          // Can be annoying
+    RemoveAlwaysElseRector::class,                            // Doesn't always make it better
+    BooleanInIfConditionRuleFixerRector::class,               // Can be pedantic
+
+    // ALWAYS SKIP
+    RemoveAlwaysTrueIfConditionRector::class,                 // Can disrupt code that is prepared for debuggging or temporary code
+    RemoveUnusedForeachKeyRector::class,                      // Nit-picking
+    SimplifyEmptyCheckOnEmptyArrayRector::class,              // Increases complexity
+    DisallowedEmptyRuleFixerRector::class,                    // Nit-picking
+    VariableInStringInterpolationFixerRector::class,          // Breaks bash-code
+    ChangeSwitchToMatchRector::class,                         // Increases complexity
+    EncapsedStringsToSprintfRector::class,                    // Why even
+    NewlineAfterStatementRector::class,                       // Get a life
+    SplitDoubleAssignRector::class,                           // Get a life
+    SymplifyQuoteEscapeRector::class,                         // Don't fix what ain't broken
+    WrapEncapsedVariableInCurlyBracesRector::class,           // Breaks bash-code
+    CompleteMissingIfElseBracketRector::class,                // Get a life
+    SingleInArrayToCompareRector::class,                      // Get a life
+    ChangeOrIfContinueToMultiContinueRector::class,           // Bullshit
+    DeclareStrictTypesRector::class,                          // Adds strict_types without checking?
+    CompactToVariablesRector::class,                          // Makes it worse
+    FuncCallToNewRector::class,                               // Makes it worse
+    FuncCallToStaticCallRector::class,                        // Makes it worse
+    ExplicitReturnNullRector::class,                          // Pedantic drone
+    NewlineBeforeNewAssignSetRector::class,                   // Get a life
+    RemoveUnusedVariableAssignRector::class,                  // Also also
+    MinutesToSecondsInCacheRector::class,                     // Seems to do nothing and messes up whitespace
+    AbsolutizeRequireAndIncludePathRector::class,             // Causes bugs with differences between pwd and __DIR__
+    RemoveUnreachableStatementRector::class,                  // Can remove debug code, revert code or WIP code
+    SetList::TYPE_DECLARATION,
+    SetList::NAMING,
   ]);
   
+  /* OVERRIDE RULES/SETS TEMPORARILY -- DON'T FORGET TO SKIP BEFORE "RETURN;" */
   
+  // $rectorConfig->rules([SimplifyUselessVariableRector::class]);
+  // $rectorConfig->rules([StringToClassConstantRector::class]);
+  // $rectorConfig->rules([CountArrayToEmptyArrayComparisonRector::class]);
+  // $rectorConfig->rules([InlineArrayReturnAssignRector::class]);
+  // $rectorConfig->rules([SimplifyIfReturnBoolRector::class]);
+  // $rectorConfig->rules([RenameFunctionRector::class]);
+  // $rectorConfig->rules([AbsolutizeRequireAndIncludePathRector::class]);
+  // $rectorConfig->rules([PostIncDecToPreIncDecRector::class]);
+  // $rectorConfig->sets([LaravelLevelSetList::UP_TO_LARAVEL_110,]);
+  // return;
   
-
-  // $rectorConfig->paths([
-  //   __DIR__ . "/../app/code/community",
-  //   __DIR__ . "/../app/code/local",
-  //   __DIR__ . "/../lib/Afterpay",
-  //   __DIR__ . "/../lib/Amasty",
-  //   __DIR__ . "/../lib/Ebizmarts",
-  //   __DIR__ . "/../lib/FireGento",
-  //   __DIR__ . "/../lib/Google",
-  //   __DIR__ . "/../lib/Mandrill",
-  //   __DIR__ . "/../lib/MaxMind",
-  //   __DIR__ . "/../lib/Mpdf",
-  //   __DIR__ . "/../lib/n98-magerun",
-  //   __DIR__ . "/../lib/Net",
-  //   __DIR__ . "/../lib/SimpleHtmlDoom",
-  //   __DIR__ . "/../lib/TM",
-  //   __DIR__ . "/../shell/scheduler.php",
-  // ]);
+  // /* SETS */
   
-  // $rectorConfig->skip([
-  //   __DIR__ . "/../vendor",
-  //   __DIR__ . "/../**/vendor",
-  //   __DIR__ . "/../app/code/community/Pay/Payment/vendor",
-  //   __DIR__ . "/../app/code/local/DeHeerHoreca/",
-  //   __DIR__ . "/../app/design/frontend/rwd/dhh/",
-  //   __DIR__ . "/../app/design/adminhtml/default/dhh/",
-  //   __DIR__ . "/../lib/Chefstore/",
-
-  //   // Usually not desirable:
-  //   AddLiteralSeparatorToNumberRector::class,
-  //   RemoveUnusedVariableAssignRector::class,
-  //   RemoveAlwaysTrueIfConditionRector::class,
-  //   RemoveDuplicatedCaseInSwitchRector::class,
-  //   SimplifyUselessVariableRector::class,
-  //   ClosureToArrowFunctionRector::class,                    // Harder to read code
-  //   ReturnNeverTypeRector::class,
-  //   LongArrayToShortArrayRector::class,                     // Harder to read code
-
-  //   // Enable these to do only minimally invasive changes (3rd party code):
-  //   PublicConstantVisibilityRector::class,                  // Not necessary for 3rd party code
-  //   TernaryToElvisRector::class,                            // Not necessary for 3rd party code
-  //   IfIssetToCoalescingRector::class,                       // Not necessary for 3rd party code
-  //   MixedTypeRector::class,                                 // Non-sensical for 3rd party code
-  //   RemoveExtraParametersRector::class,                     // Too invasive
-  //   RemoveUnusedVariableInCatchRector::class,               // Too invasive
-    
-  //   /* ALWAYS SKIP */
-    
-  //   RemoveUnusedForeachKeyRector::class,                    // Nit-picking
-  //   SimplifyEmptyCheckOnEmptyArrayRector::class,            // Increases complexity
-  //   DisallowedEmptyRuleFixerRector::class,                  // Nit-picking
-  //   VariableInStringInterpolationFixerRector::class,        // Breaks bash-code
-  //   ChangeSwitchToMatchRector::class,                       // Increases complexity
-  //   EncapsedStringsToSprintfRector::class,                  // Why even
-  //   NewlineAfterStatementRector::class,                     // Get a life
-  //   SplitDoubleAssignRector::class,                         // Get a life
-  //   SymplifyQuoteEscapeRector::class,                       // Don't fix what ain't broken
-  //   WrapEncapsedVariableInCurlyBracesRector::class,         // Breaks bash-code
-  //   CompleteMissingIfElseBracketRector::class,              // Get a life
-  //   SingleInArrayToCompareRector::class,                    // Get a life
-  //   ChangeOrIfContinueToMultiContinueRector::class,         // Bullshit
-  //   DeclareStrictTypesRector::class,                        // Adds strict_types without checking?
-  //   ClassPropertyAssignToConstructorPromotionRector::class, // Increases complexity
-  // ]);
-
-  // // Register a single rule:
-  // // $rectorConfig->rule(Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class);
-  // // $rectorConfig->rule(Rector\Php54\Rector\Array_\LongArrayToShortArrayRector::class);
-  // // $rectorConfig->rule(Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector::class);
-  // // $rectorConfig->rule(Rector\Php80\Rector\NotIdentical\StrContainsRector::class);
-
-  // // Define sets of rules
-  // $rectorConfig->sets([
-  //   // SetList::PHP_81,
-  //   // LevelSetList::UP_TO_PHP_81,
-  //   // LevelSetList::UP_TO_PHP_82,
-  //   LevelSetList::UP_TO_PHP_83,
-  //   SetList::DEAD_CODE,
-  //   SetList::CODE_QUALITY,
-  //   SetList::CODING_STYLE,
-  //   SetList::STRICT_BOOLEANS,
-  //   SetList::GMAGICK_TO_IMAGICK,
-  //   SetList::NAMING,
-  //   SetList::PRIVATIZATION,
-  //   SetList::EARLY_RETURN,
-  //   SetList::INSTANCEOF,
-
-  //   // Broken:
-  //   // SetList::TYPE_DECLARATION,
-  // ]);
+  $rectorConfig->sets([
+    LevelSetList::UP_TO_PHP_82,
+  ]);
 };

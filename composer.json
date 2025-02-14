@@ -39,7 +39,11 @@
     "symfony/var-dumper": "^6.4"
   },
   "require-dev": {
-    "ergebnis/composer-normalize": "^2.42"
+    "driftingly/rector-laravel": "^1.2",
+    "ergebnis/composer-normalize": "^2.42",
+    "phpstan/phpstan": "^1.11",
+    "rector/rector": "*",
+    "webmozart/assert": "^1.11"
   },
   "replace": {
     "symfony/polyfill-ctype": "*",
