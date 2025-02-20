@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * OpenMage
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * @category    Mage
+ * @package     Mage_Core
+ * @copyright   Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @license     https://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+  <global>
+    <install>
+      <date>Mon, 10 Jul 2017 06:02:41 +0000</date>
+    </install>
+    <crypt>
+      <key>82b9d2df0a14a612c60a7c3492f4a7bd</key>
+    </crypt>
+    <disable_local_modules>false</disable_local_modules>
+    <resources>
+      <db>
+        <table_prefix></table_prefix>
+      </db>
+      <default_setup>
+        <connection>
+          <host>85.10.155.171</host>
+          <username>chefstore</username>
+          <password><![CDATA[*N7KJ7ntncg0wvr&]]></password>
+          <dbname>chefstore</dbname>
+          <initStatements></initStatements>
+          <model>mysql4</model>
+          <type>pdo_mysql</type>
+          <pdoType></pdoType>
+          <active>1</active>
+          <profiler>1</profiler>
+        </connection>
+      </default_setup>
+    </resources>
+    
+    <cache>
+    
+      <!-- REDIS - https://inchoo.net/magento/using-redis-cache-backend-and-session-storage-in-magento/ -->
+      <backend>Cm_Cache_Backend_Redis</backend>
+      <backend_options>
+        <server>/var/run/redis/redis.sock</server>              <!-- or absolute path to unix socket -->
+        <port>0</port>
+        <persistent>m1-db0</persistent>                         <!-- Specify unique string to enable persistent connections -->
+        <database>0</database>                                  <!-- Redis database number -->
+        <password></password>                                   <!-- Specify if your Redis server requires authentication -->
+        <force_standalone>0</force_standalone>                  <!-- 0 for phpredis, 1 for standalone PHP DHH: 1 means slow credis! -->
+        <connect_retries>3</connect_retries>                    <!-- Reduces errors due to random connection failure -->
+        <read_timeout>2</read_timeout>                          <!-- Set read timeout duration; phpredis does not currently support setting read timeouts -->
+        <automatic_cleaning_factor>0</automatic_cleaning_factor>  <!-- Disabled by default, DHH: don't enable it's slow -->
+        <compress_data>1</compress_data>                        <!-- 0-9 for compression level, recommended: 0 or 1 -->
+        <compress_tags>1</compress_tags>                        <!-- 0-9 for compression level, recommended: 0 or 1 -->
+        <compress_threshold>1024</compress_threshold>           <!-- Strings below this size will not be compressed -->
+        <compression_lib>l4z</compression_lib>                  <!-- Supports gzip, lzf, lz4 (as l4z), snappy and zstd -->
+        <use_lua>1</use_lua>                                    <!-- Set to 1 if Lua scripts should be used for some operations (recommended) -->
+      </backend_options>
+      
+    </cache>
+    
+    <session_save>redis</session_save>
+    <redis_session>
+      <log_level>4</log_level>                                  <!-- 0 (emergency), 4 (warning), 5 (notice), 6 (info), 7 (debug) -->
+      <host>/var/run/redis/redis.sock</host>
+      <port>0</port>
+      <!-- <server>127.0.0.1</server> -->
+      <!-- <port>6379</port> -->
+      <db>1</db>
+      <password></password>                                     <!-- Specify if your Redis server requires authentication -->
+      <timeout>2.5</timeout>
+      <persistent>sess-db1</persistent>
+      <compression_threshold>512</compression_threshold>        <!-- Set to 0 to disable -->
+      <compression_lib>gzip</compression_lib>                   <!-- Supports gzip, lzf, lz4 (as l4z), snappy and zstd -->
+      <max_concurrency>8</max_concurrency>                      <!-- maximum number of processes that can wait for a lock on one session -->
+      <max_lifetime>2592000</max_lifetime>                      <!-- Set the maximum session lifetime -->
+      <min_lifetime>1200</min_lifetime>                         <!-- Set the minimum session lifetime -->
+      <disable_locking>1</disable_locking>                      <!-- Disable session locking entirely. -->
+      <bot_lifetime>3600</bot_lifetime>                         <!-- Lifetime of session for bots on subsequent writes. 0 to disable -->
+      <bot_first_lifetime>600</bot_first_lifetime>              <!-- Lifetime of session for bots on the first write. 0 to disable -->
+      <first_lifetime>7200</first_lifetime>                     <!-- Lifetime of session for non-bots on the first write. 0 to disable -->
+      <fail_after>10</fail_after>                               <!-- seconds after which we bail from attempting to obtain lock (in addition to break after time) -->
+      <log_exceptions>1</log_exceptions>
+      <!-- <sentinel_servers>1</sentinel_servers> -->
+      <!-- <sentinel_master>1</sentinel_master> -->
+      <!-- <sentinel_verify_master>1</sentinel_verify_master> -->
+      <!-- <sentinel_connect_retries>1</sentinel_connect_retries> -->
+      <break_after>10</break_after>
+    </redis_session>
+    
+    <!-- END REDIS -->
+    
+    <!-- Do not remove as long as the module code exists (causes fatal) -->
+    <aoeblackholesession>
+      <!-- <bot_regex><![CDATA[/^elb-healthchecker/i]]></bot_regex> -->
+      <!-- <bot_regex><![CDATA[/^(elb-healthchecker|EliasHaeussler-CacheWarmup)/i]]></bot_regex> -->
+      <!-- <bot_regex><![CDATA[/^(elb-healthchecker|EliasHaeussler-CacheWarmup|meta-externalagent.*|.*GPTBot.*|Elastic-Metricbeat.*)/i]]></bot_regex> -->
+      <bot_regex><![CDATA[/^.*(elb-healthchecker|EliasHaeussler|meta-externalagent|GPTBot|Elastic-Metricbeat|Cloudflare-Healthchecks).*/i]]></bot_regex>
+    </aoeblackholesession>
+    
+  </global>
+
+  <admin>
+    <routers>
+      <adminhtml>
+        <args>
+          <frontName>admin4JN0</frontName>
+        </args>
+      </adminhtml>
+    </routers>
+  </admin>
+  
+  <!-- http://www.axertion.com/tutorials/2012/12/how-to-disable-magento-logging-to-the-database/ -->
+  <frontend>
+    <events>
+      <controller_action_predispatch>
+        <observers><log><type>disabled</type></log></observers>
+      </controller_action_predispatch>
+      <controller_action_postdispatch>
+        <observers><log><type>disabled</type></log></observers>
+      </controller_action_postdispatch>
+      <customer_login>
+        <observers><log><type>disabled</type></log></observers>
+      </customer_login>
+      <customer_logout>
+        <observers><log><type>disabled</type></log></observers>
+      </customer_logout>
+      <sales_quote_save_after>
+        <observers><log><type>disabled</type></log></observers>
+      </sales_quote_save_after>
+      <checkout_quote_destroy>
+        <observers><log><type>disabled</type></log></observers>
+      </checkout_quote_destroy>
+    </events>
+  </frontend>
+  
+  <!-- Add our custom adminhtml theme -->
+  <!-- https://magento.stackexchange.com/questions/79132/how-to-override-an-admin-theme-template -->
+  <stores>
+    <admin>
+      <design>
+      <theme>
+        <default>dhh</default>
+      </theme>
+      </design>
+    </admin>
+  </stores>
+</config>
