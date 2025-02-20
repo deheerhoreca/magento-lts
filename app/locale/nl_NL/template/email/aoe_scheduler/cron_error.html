@@ -1,0 +1,9 @@
+<!--@subject Cron Error @-->
+<!--@vars
+{"var error":"Error"}
+@-->
+Cron error while executing <code>{{var schedule.job_code}}</code>:
+
+{{block type='core/template' area='frontend' template='email/dhh/hostname.phtml'}}
+
+<pre>{{var error}}</pre>
