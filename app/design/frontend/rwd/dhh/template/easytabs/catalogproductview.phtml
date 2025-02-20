@@ -6,7 +6,7 @@
  * @see Mage_Review_Block_Product_View
  */
 
- use Carbon\CarbonImmutable;
+use Carbon\CarbonImmutable;
 
 $_product                   = $this->getProduct();
 $_helper                    = $this->helper("catalog/output");
@@ -254,19 +254,19 @@ if($overall_stock_status === "eol") {
 }
 
 // Product Documents (uploaded & external)
-$suppliers_external_docs_preferred = ["bartscher", "combisteel", "diamond", "domest", "gastro-inox", "gastronoble", "emga", "hendi", "saro", "scancool", "veba"];
-$suppliers_external_docs_blocked = []; // case-sensitive
+$suppliers_internal_docs_preferred  = [];
+$suppliers_external_docs_blocked    = [];
 
-if(in_array($supplier_name, $suppliers_external_docs_blocked) === false) {
+if(!in_array($supplier_sys, $suppliers_external_docs_blocked, true)) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
   $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
 
-  if(empty($external_documents_json) || in_array(strtolower($supplier_name), $suppliers_external_docs_preferred) === false) {
+  if(empty($external_documents_json) || in_array($supplier_sys, $suppliers_internal_docs_preferred, true)) {
     $files = Mage::getModel("staempfli_productattachment/file")
       ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
       ->getData();
 
-    if(empty($files) === false) {
+    if(!empty($files)) {
       $external_documents_json = "";
     }
   }
@@ -1021,15 +1021,15 @@ if($stock_data["overall_stock_status"] === "backorder"
                   }
                   echo "</ul>";
 
-                  if(strtolower($supplier_name) === "combisteel" && CarbonImmutable::now()->isBefore("2024-10-31 00:00:00")) {
+                  if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
                     ?>
                     <div class="card mx-auto p-2 mx-3">
                     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                    <img src="//images.chefstore.nl/media/wysiwyg/brands/combisteel.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                    <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
-                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HERFST24CS</span></h4>
-                        <p class="card-text">Korting geldt voor alle producten van CombiSteel. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 oktober 2024: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
+                        <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 maart 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div>
                     <?php

@@ -1,11 +1,12 @@
 <?php
 
+use Carbon\CarbonImmutable;
+use Michelf\Markdown;
+use Michelf\MarkdownExtra;
+
 require_once 'vendor/autoload.php';
 
 require_once __DIR__."/strftime_replacement.php";
-
-use Michelf\Markdown;
-use Michelf\MarkdownExtra;
 
 // These categories are not listed as subcategory tile in listviews
 const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
@@ -1380,9 +1381,17 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if(empty($_product->getProductLabel()) === false) {
       return $_product->getProductLabel();
     }
+    
     if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
       return "SALE";
-    }    
+    }
+    
+    $supplier_sys = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
+    
+    if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
+      return "-5% Extra Korting";
+    }
+    
     return "";
   }
   
@@ -1451,6 +1460,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       ($_SERVER["REQUEST_METHOD"] ?? ""),
       (Mage::app()->getFrontController()->getAction()->getFullActionName() ?? "UNKNOWN_ACTION"),
     ]));
+  }
+  
+  public static function get_sys_supplier(string $supplier): string {
+    return (string) preg_replace("/\s+/", "", strtolower($supplier));
   }
 }
 
