@@ -23,6 +23,7 @@
 
 ### grep -ri -l DHH app/code/community/ | sort
 - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
+- `app/code/community/Afterpay/Afterpay/controllers/Adminhtml/AfterpayController.php`
 - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
 - `app/code/community/Afterpay/Afterpay/Model/Abstract.php`
 - `app/code/community/Afterpay/Afterpay/Model/Api/Abstract.php`
@@ -307,6 +308,12 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Add `set_time_limit()` call
   - `app/code/community/Magmodules/Sooqr/Block/Search.php`
     - Update script URL because the module is dead
+- **paynl/magento-plugin**
+  - '/app/code/community/Pay/Payment'
+    - Has its own `composer.json` which needs to be maintained:
+      - `cm && app/code/community/Pay/Payment`
+      - `iphp -c php.ini /usr/lib64/plesk-9.0/composer.phar outdated`
+      - `iphp -c php.ini /usr/lib64/plesk-9.0/composer.phar upgrade --dry-run`
 - **Profitmetrics**
   - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
     - Reduce the list of orders that we send to PM
@@ -410,6 +417,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Remove empty lines to prevent PHP 8.1 incompatibilities
   - `app/code/community/Afterpay/Afterpay/Model/Abstract.php`
     - Prevent doing str_replace on arrays
+  - `app/code/community/Afterpay/Afterpay/controllers/Adminhtml/AfterpayController.php`
+    - Fix ACL
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
   - Patched up to master on 2023-01-17 (commit 445557b)

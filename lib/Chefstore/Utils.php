@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
+use Brick\VarExporter\VarExporter;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
@@ -187,6 +188,26 @@ class Utils {
     }
     
     return false;
+  }
+  
+  // \Chefstore\Utils::td()
+  // Tiny dump -- @url https://github.com/brick/varexporter
+  function td(mixed $input, bool $return = true) {
+    try {
+      $var = str::swap([
+        "['"    => "[\"",
+        "', '"  => "\", \"",
+        "']"    => "\"]"
+      ], VarExporter::export($input, Brick\VarExporter\VarExporter::INLINE_SCALAR_LIST));
+    } catch(ExportException $e) {
+      error("Failed to TinyDump value: {$e->__toString()}");
+      
+      return null;
+    }
+    
+    if($return) return $var;
+    
+    dump($var);
   }
   
   function msleep(int $time): void {

@@ -59,13 +59,13 @@ class Aoe_Scheduler_Model_Task_Test
 //        // $endtime = $starttime + rand(180, 360);
 //        $endtime = $starttime + $duration;
 //        $schedule
-//            ->setEta(dhh_strftime('%Y-%m-%d %H:%M:%S', $endtime))
+//            ->setEta(strftime('%Y-%m-%d %H:%M:%S', $endtime))
 //            ->save();
 //        while ($endtime > time()) {
 //            sleep(5);
 //            $schedule
 //                ->setProgressMessage('Work in progress. Time spent: ' . (time() - $starttime))
-//                ->setEta(dhh_strftime('%Y-%m-%d %H:%M:%S', $endtime))
+//                ->setEta(strftime('%Y-%m-%d %H:%M:%S', $endtime))
 //                ->save();
 //        }
 //

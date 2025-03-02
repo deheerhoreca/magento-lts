@@ -242,6 +242,8 @@ phpunit.xml
 !/app/code/community/Ophirah/Qquoteadv/Model/Pdf/Qquote.php
 !/app/code/community/Ophirah/Qquoteadv/Model/Qqadvcustomer.php
 !/app/code/community/Ophirah/Qquoteadv/Model/Qqadvproduct.php
+!/app/code/community/Pay/Payment/composer.json
+!/app/code/community/Pay/Payment/composer.lock
 !/app/code/community/Psc/Paysafecash/Model/Cpay.php
 !/app/code/community/Scommerce/UpdateEmail/Block/Sales/Order/View/Info.php
 !/app/code/community/Scommerce/UpdateEmail/Block/Sales/Order/View/Info.php_ambackup
@@ -362,24 +364,16 @@ phpunit.xml
 /app/design/adminhtml/default/default/layout/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_profiler
 
-# deheerhoreca/paynl-openmage
-/app/code/community/Pay/Payment
-/app/design/frontend/base/default/template/pay/payment
-/app/design/adminhtml/base/default/template/pay/payment
-/media/pay_payment/logo.png
-/app/etc/modules/Pay_Payment.xml
-/app/locale/nl_NL/Pay_Payment.csv
-/app/locale/en_US/Pay_Payment.csv
-/app/locale/it_IT/Pay_Payment.csv
-
 # deheerhoreca/Cm_RedisSession
 /app/code/community/Cm/RedisSession
 /app/etc/modules/Cm_RedisSession.xml
+
 /app/code/community/FireGento/AdminMonitoring
 /app/etc/modules/FireGento_AdminMonitoring.xml
 /app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
 /app/design/adminhtml/default/default/template/firegento/adminmonitoring
 /app/locale/de_DE/FireGento_AdminMonitoring.csv
+
 /app/etc/modules/Sheep_Debug.xml
 /app/code/community/Sheep/Debug
 /app/design/frontend/base/default/layout/sheep_debug.xml
@@ -388,3 +382,11 @@ phpunit.xml
 /app/design/adminhtml/default/default/layout/sheep_debug.xml
 /app/design/adminhtml/default/default/template/sheep_debug
 /skin/adminhtml/default/default/sheep_debug
+
+/app/design/frontend/base/default/template/pay/payment
+/app/design/adminhtml/base/default/template/pay/payment
+/media/pay_payment/logo.png
+/app/etc/modules/Pay_Payment.xml
+/app/locale/nl_NL/Pay_Payment.csv
+/app/locale/en_US/Pay_Payment.csv
+/app/locale/it_IT/Pay_Payment.csv
