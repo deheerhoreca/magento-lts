@@ -1,0 +1,3 @@
+adapter: fastcgi
+fastcgi: /var/www/vhosts/system/chefstore.nl/php-fpm.sock
+; fastcgi: /var/www/vhosts/system/dev.chefstore.nl/php-fpm.sock
