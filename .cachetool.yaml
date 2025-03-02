@@ -1,2 +1,0 @@
-adapter: fastcgi
-fastcgi: /var/www/vhosts/system/chefstore.nl/php-fpm.sock

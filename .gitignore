@@ -98,6 +98,7 @@ phpunit.xml
 
 # FILES
 
+/.cachetool.yaml
 .DS_Store
 ._.DS_Store
 ._*
