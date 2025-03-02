@@ -113,7 +113,7 @@ class Afterpay_Afterpay_Model_Response_Abstract extends Afterpay_Afterpay_Model_
     protected function _parseResponse()
     {
         // DHH CORE HACK -- Log API response
-        Mage::log(var_export($this->_response, true), null, "verbose.txt", true);
+        Mage::log(json_encode($this->_response));
         
         // DHH CORE HACK -- The API type is different from what is assumed here
         // $resultId = intval($this->_response->return->resultId);

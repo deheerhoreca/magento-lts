@@ -1,5 +1,157 @@
 <?php
 
+// @url https://gist.github.com/esyede/aac7275ef7b8e4dc03c41c11cfe41afb
+
+if (PHP_VERSION_ID >= 801000 && !function_exists('strftime')) {
+    function strftime($format, $timestamp = null, $locale = null)
+    {
+        if (!extension_loaded('intl')) {
+            throw new \RuntimeException('The php-intl extension needs to be loaded to be able to use this polyfill');
+        }
+
+        if (!($timestamp instanceof \DateTimeInterface)) {
+            $timestamp = is_int($timestamp) ? '@' . $timestamp : (string) $timestamp;
+
+            try {
+                $timestamp = new \DateTime($timestamp, new \DateTimeZone(date_default_timezone_get()));
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException(
+                    '$timestamp argument is neither a valid UNIX timestamp, a valid date-time string or a DateTime object.'
+                );
+            }
+        }
+
+        $locale = preg_replace('/[^\w-].*$/', '', empty($locale) ? setlocale(LC_TIME, '0') : $locale);
+        $intlFormats = ['%a' => 'EEE', '%A' => 'EEEE', '%b' => 'MMM', '%B' => 'MMMM', '%h' => 'MMM'];
+        $intlFormatter = function (\DateTimeInterface $timestamp, $format) use ($intlFormats, $locale) {
+            $tz = $timestamp->getTimezone();
+            $dateType = \IntlDateFormatter::FULL;
+            $timeType = \IntlDateFormatter::FULL;
+            $pattern = '';
+
+            switch ($format) {
+                case '%c':
+                    $dateType = \IntlDateFormatter::LONG;
+                    $timeType = \IntlDateFormatter::SHORT;
+                    break;
+
+                case '%x':
+                    $dateType = \IntlDateFormatter::SHORT;
+                    $timeType = \IntlDateFormatter::NONE;
+                    break;
+
+                case '%X':
+                    $dateType = \IntlDateFormatter::NONE;
+                    $timeType = \IntlDateFormatter::MEDIUM;
+                    break;
+
+                default:
+                    $pattern = $intlFormats[$format];
+            }
+
+            $calendar = \IntlGregorianCalendar::createInstance();
+            $calendar->setGregorianChange(PHP_INT_MIN);
+
+            return (new \IntlDateFormatter($locale, $dateType, $timeType, $tz, $calendar, $pattern))->format($timestamp);
+        };
+
+        $translationTable = [
+            '%a' => $intlFormatter,
+            '%A' => $intlFormatter,
+            '%d' => 'd',
+            '%e' => function ($timestamp) {
+                return sprintf('% 2u', $timestamp->format('j'));
+            },
+            '%j' => function ($timestamp) {
+                return sprintf('%03d', $timestamp->format('z') + 1);
+            },
+            '%u' => 'N',
+            '%w' => 'w',
+            '%U' => function ($timestamp) {
+                $day = new \DateTime(sprintf('%d-01 Sunday', $timestamp->format('Y')));
+                return sprintf('%02u', 1 + ($timestamp->format('z') - $day->format('z')) / 7);
+            },
+            '%V' => 'W',
+            '%W' => function ($timestamp) {
+                $day = new \DateTime(sprintf('%d-01 Monday', $timestamp->format('Y')));
+                return sprintf('%02u', 1 + ($timestamp->format('z') - $day->format('z')) / 7);
+            },
+            '%b' => $intlFormatter,
+            '%B' => $intlFormatter,
+            '%h' => $intlFormatter,
+            '%m' => 'm',
+            '%C' => function ($timestamp) {
+                return floor($timestamp->format('Y') / 100);
+            },
+            '%g' => function ($timestamp) {
+                return substr($timestamp->format('o'), -2);
+            },
+            '%G' => 'o',
+            '%y' => 'y',
+            '%Y' => 'Y',
+            '%H' => 'H',
+            '%k' => function ($timestamp) {
+                return sprintf('% 2u', $timestamp->format('G'));
+            },
+            '%I' => 'h',
+            '%l' => function ($timestamp) {
+                return sprintf('% 2u', $timestamp->format('g'));
+            },
+            '%M' => 'i',
+            '%p' => 'A',
+            '%P' => 'a',
+            '%r' => 'h:i:s A',
+            '%R' => 'H:i',
+            '%S' => 's',
+            '%T' => 'H:i:s',
+            '%X' => $intlFormatter,
+            '%z' => 'O',
+            '%Z' => 'T',
+            '%c' => $intlFormatter,
+            '%D' => 'm/d/Y',
+            '%F' => 'Y-m-d',
+            '%s' => 'U',
+            '%x' => $intlFormatter,
+        ];
+
+        $out = preg_replace_callback('/(?<!%)%([_#-]?)([a-zA-Z])/', function ($match) use ($translationTable, $timestamp) {
+            $prefix = $match[1];
+            $char = $match[2];
+            $pattern = '%' . $char;
+
+            if ($pattern === '%n') {
+                return "\n";
+            }
+
+            if ($pattern === '%t') {
+                return "\t";
+            }
+
+            if (!isset($translationTable[$pattern])) {
+                throw new \InvalidArgumentException(sprintf('Format "%s" is unknown in time format', $pattern));
+            }
+
+            $replace = $translationTable[$pattern];
+            $result = is_string($replace) ? $timestamp->format($replace) : $replace($timestamp, $pattern);
+
+            switch ($prefix) {
+                case '_':
+                    return preg_replace('/\G0(?=.)/', ' ', $result);
+
+                case '#':
+                case '-':
+                    return preg_replace('/^0+(?=.)/', '', $result);
+            }
+
+            return $result;
+        }, $format);
+
+        return str_replace('%%', '%', $out);
+    }
+}
+
+
+
 // @see https://gist.githubusercontent.com/bohwaz/42fc223031e2b2dd2585aab159a20f30/raw/0a47af1f2920a560a89523d75adf9badca156a96/php-8.1-strftime.php
 
 /**
@@ -20,8 +172,7 @@
  * @return string
  * @author BohwaZ <https://bohwaz.net/>
  */
-function dhh_strftime(string $format, $timestamp = null, ?string $locale = null): string
-{
+function dhh_strftime(string $format, $timestamp = null, ?string $locale = null): string {
 	if (null === $timestamp) {
 		$timestamp = new DateTime;
 	}

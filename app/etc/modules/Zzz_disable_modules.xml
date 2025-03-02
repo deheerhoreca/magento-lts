@@ -69,6 +69,9 @@
     <TM_Geoip>
       <active>false</active>
     </TM_Geoip>
+    <Magmodules_Channable>
+      <active>false</active>
+    </Magmodules_Channable>
 
     <!-- Does not work (anymore) -->
     <TM_AddressAutocomplete>
@@ -150,7 +153,7 @@
 
     <!-- Both profiler modules cannot be enabled at the same time! -->
     <Aoe_Profiler>
-      <active>false</active>
+      <active>true</active>
     </Aoe_Profiler>
     <Sheep_Debug>
       <active>false</active>
