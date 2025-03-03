@@ -311,7 +311,7 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **paynl/magento-plugin**
   - '/app/code/community/Pay/Payment'
     - Has its own `composer.json` which needs to be maintained:
-      - `cm && app/code/community/Pay/Payment`
+      - `cm && cd app/code/community/Pay/Payment`
       - `iphp -c php.ini /usr/lib64/plesk-9.0/composer.phar outdated`
       - `iphp -c php.ini /usr/lib64/plesk-9.0/composer.phar upgrade --dry-run`
 - **Profitmetrics**

@@ -24,7 +24,6 @@
     "illuminate/support": "^11",
     "michelf/php-markdown": "^2.0",
     "mikehaertl/php-shellcommand": "^1.7",
-    "n98/magerun": "^1.97",
     "nesbot/carbon": "^3",
     "npm-asset/glightbox": "^3.3",
     "npm-asset/jquery": "^3.7",
