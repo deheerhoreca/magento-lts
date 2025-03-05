@@ -31,7 +31,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Upsell extends Mage_Adminhtm
     {
         parent::__construct();
         $this->setId('up_sell_product_grid');
-        $this->setDefaultSort('sku');
+        $this->setDefaultSort('sku'); // DHH CORE HACK
         $this->setUseAjax(true);
         if ($this->_getProduct()->getId()) {
             $this->setDefaultFilter(['in_products' => 1]);
