@@ -1,581 +1,846 @@
 <?xml version="1.0"?>
 <config>
-    <tabs>
-        <tm_checkout>
-            <label>TM Checkout</label>
-            <sort_order>190</sort_order>
-        </tm_checkout>
-    </tabs>
-    <sections>
-        <checkoutfields translate="label" module="checkoutfields">
-            <label>Additional Fields</label>
-            <tab>tm_checkout</tab>
-            <frontend_type>text</frontend_type>
-            <sort_order>110</sort_order>
-            <show_in_default>1</show_in_default>
-            <show_in_website>1</show_in_website>
-            <show_in_store>1</show_in_store>
-            <groups>
-                <print translate="label" module="checkoutfields">
-                    <label>Print settings</label>
-                    <sort_order>5</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <pdf_invoice translate="label comment" module="sales">
-                            <label>PDF Invoices</label>
-                            <comment><![CDATA[To enable pdf printing, open the app/code/local/TM/CheckoutFields/etc/config.xml file<br/> and uncomment the following line(~32):<br/> &lt;!-- <order_pdf_invoice>TM_CheckoutFields_Model_Order_Pdf_Invoice</order_pdf_invoice> --&gt;]]></comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </pdf_invoice>
-                        <pdf_packingslip translate="label comment" module="sales">
-                            <label>PDF Packingslips</label>
-                            <comment><![CDATA[To enable pdf printing, open the app/code/local/TM/CheckoutFields/etc/config.xml file<br/> and uncomment the following line(~31):<br/> &lt;!-- <order_pdf_shipment>TM_CheckoutFields_Model_Order_Pdf_Shipment</order_pdf_shipment> --&gt;]]></comment>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </pdf_packingslip>
-                    </fields>
-                </print>
-                <tm_field1 translate="label" module="checkoutfields">
-                    <label>Field #1</label>
-                    <sort_order>10</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field1>
-                <tm_field2 translate="label" module="checkoutfields">
-                    <label>Field #2</label>
-                    <sort_order>20</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field2>
-                <tm_field3 translate="label" module="checkoutfields">
-                    <label>Field #3</label>
-                    <sort_order>30</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field3>
-                <tm_field4 translate="label" module="checkoutfields">
-                    <label>Field #4</label>
-                    <sort_order>40</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field4>
-                <tm_field5 translate="label" module="checkoutfields">
-                    <label>Field #5</label>
-                    <sort_order>50</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field5>
-                <tm_field6 translate="label" module="checkoutfields">
-                    <label>Field #6</label>
-                    <sort_order>60</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field6>
-                <tm_field7 translate="label" module="checkoutfields">
-                    <label>Field #7</label>
-                    <sort_order>70</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field7>
-                <tm_field8 translate="label" module="checkoutfields">
-                    <label>Field #8</label>
-                    <sort_order>80</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field8>
-                <tm_field9 translate="label" module="checkoutfields">
-                    <label>Field #9</label>
-                    <sort_order>90</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field9>
-                <tm_field10 translate="label" module="checkoutfields">
-                    <label>Field #10</label>
-                    <sort_order>100</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <status translate="label" module="checkoutfields">
-                            <label>Show Field</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_nooptreq</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </status>
-                        <type translate="label" module="adminhtml">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </type>
-                        <options translate="label comment" module="checkoutfields">
-                            <label>Options</label>
-                            <comment><![CDATA[This option affects select elements only]]></comment>
-                            <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
-                            <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </options>
-                        <label translate="label" module="catalog">
-                            <label>Label</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </label>
-                        <description translate="label" module="adminhtml">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                    </fields>
-                </tm_field10>
-            </groups>
-        </checkoutfields>
-    </sections>
+  <tabs>
+    <tm_checkout>
+      <label>TM Checkout</label>
+      <sort_order>190</sort_order>
+    </tm_checkout>
+  </tabs>
+  <sections>
+    <checkoutfields translate="label" module="checkoutfields">
+      <label>Additional Fields</label>
+      <tab>tm_checkout</tab>
+      <frontend_type>text</frontend_type>
+      <sort_order>110</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+        <print translate="label" module="checkoutfields">
+          <label>Print settings</label>
+          <sort_order>5</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+^         <show_in_store>0</show_in_store>
+          <fields>
+            <pdf_invoice translate="label comment" module="sales">
+              <label>PDF Invoices</label>
+              <comment><![CDATA[To enable pdf printing, open the app/code/local/TM/CheckoutFields/etc/config.xml file<br/> and uncomment the following line(~32):<br/> &lt;!-- <order_pdf_invoice>TM_CheckoutFields_Model_Order_Pdf_Invoice</order_pdf_invoice> --&gt;]]></comment>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </pdf_invoice>
+            <pdf_packingslip translate="label comment" module="sales">
+              <label>PDF Packingslips</label>
+              <comment><![CDATA[To enable pdf printing, open the app/code/local/TM/CheckoutFields/etc/config.xml file<br/> and uncomment the following line(~31):<br/> &lt;!-- <order_pdf_shipment>TM_CheckoutFields_Model_Order_Pdf_Shipment</order_pdf_shipment> --&gt;]]></comment>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </pdf_packingslip>
+          </fields>
+        </print>
+        <tm_field1 translate="label" module="checkoutfields">
+          <label>supplier.order_id</label>
+          <sort_order>10</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field1>
+        <tm_field2 translate="label" module="checkoutfields">
+          <label>shipment.expected_date</label>
+          <sort_order>20</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field2>
+        <tm_field3 translate="label" module="checkoutfields">
+          <label>shipment.forwarder</label>
+          <sort_order>30</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field3>
+        <tm_field4 translate="label" module="checkoutfields">
+          <label>supplier.name</label>
+          <sort_order>40</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field4>
+        <tm_field5 translate="label" module="checkoutfields">
+          <label>process.flags</label>
+          <sort_order>50</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field5>
+        <tm_field6 translate="label" module="checkoutfields">
+          <label>marketplace.order_id</label>
+          <sort_order>60</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field6>
+        <tm_field7 translate="label" module="checkoutfields">
+          <label>marketplace.name</label>
+          <sort_order>70</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+^         <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field7>
+        <tm_field8 translate="label" module="checkoutfields">
+          <label>shipment.id</label>
+          <sort_order>80</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+^         <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field8>
+        <tm_field9 translate="label" module="checkoutfields">
+          <label>supplier.packing_slip_id</label>
+          <sort_order>90</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+^         <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field9>
+        <tm_field10 translate="label" module="checkoutfields">
+          <label>Zakelijk of Particulier</label>
+          <sort_order>100</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field10>
+        <tm_field11 translate="label" module="checkoutfields">
+          <label>TBD #11</label>
+          <sort_order>110</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field11>
+        <tm_field12 translate="label" module="checkoutfields">
+          <label>TBD #12</label>
+          <sort_order>120</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field12>
+        <tm_field13 translate="label" module="checkoutfields">
+          <label>TBD #13</label>
+          <sort_order>130</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field13>
+        <tm_field14 translate="label" module="checkoutfields">
+          <label>TBD #14</label>
+          <sort_order>140</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field14>
+        <tm_field15 translate="label" module="checkoutfields">
+          <label>events</label>
+          <sort_order>150</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <status translate="label" module="checkoutfields">
+              <label>Show Field</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_nooptreq</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </status>
+            <type translate="label" module="adminhtml">
+              <label>Type</label>
+              <frontend_type>select</frontend_type>
+              <source_model>checkoutfields/adminhtml_system_config_source_fieldtype</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </type>
+            <options translate="label comment" module="checkoutfields">
+              <label>Options</label>
+              <comment><![CDATA[This option affects select elements only]]></comment>
+              <frontend_model>checkoutfields/adminhtml_system_config_form_field_options</frontend_model>
+              <backend_model>tmcore/adminhtml_system_config_backend_serialized_array</backend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </options>
+            <label translate="label" module="catalog">
+              <label>Label</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </label>
+            <description translate="label" module="adminhtml">
+              <label>Description</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </description>
+          </fields>
+        </tm_field15>
+      </groups>
+    </checkoutfields>
+  </sections>
 </config>

@@ -19,7 +19,12 @@ $installer->run("
         ADD COLUMN `tm_field7` TEXT DEFAULT NULL,
         ADD COLUMN `tm_field8` TEXT DEFAULT NULL,
         ADD COLUMN `tm_field9` TEXT DEFAULT NULL,
-        ADD COLUMN `tm_field10` TEXT DEFAULT NULL;
+        ADD COLUMN `tm_field10` TEXT DEFAULT NULL
+        ADD COLUMN `tm_field11` TEXT DEFAULT NULL,
+        ADD COLUMN `tm_field12` TEXT DEFAULT NULL,
+        ADD COLUMN `tm_field13` TEXT DEFAULT NULL,
+        ADD COLUMN `tm_field14` TEXT DEFAULT NULL,
+        ADD COLUMN `tm_field15` TEXT DEFAULT NULL;
 
 ");
 

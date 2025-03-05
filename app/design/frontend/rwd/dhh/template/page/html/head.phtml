@@ -9,34 +9,22 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?=$page_title; ?></title>
-<script src="/js/ext-jquery.min.js"></script>
-<script src="/js/ext-prototype.min.js"></script>
-<script src="/js/ext-scriptaculous-builder.min.js"></script>
-<script src="/js/ext-scriptaculous-effects.min.js"></script>
-<script src="/js/ext-jquery-ui.min.js"></script>
-<script src="/js/ext-jquery.ui.touch-punch.min.js"></script>
-<script>
-  if(document.cookie.match(/^(.*;)?\s*__Host-dhh_past_first_page\s*=\s*[^;]+(.*)?$/) == null
-  && window.location.href.indexOf("cart") < 0
-  && window.location.href.indexOf("qquoteadv") < 0 
-  && window.location.href.indexOf("afrekenen") < 0
-  && window.location.href.indexOf("customer") < 0) {
-    window.zESettings = {webWidget:{chat:{connectOnPageLoad: false}}};
-  } else {
-    window.zESettings = {webWidget:{chat:{connectOnPageLoad: true}}};
-  }
-  document.cookie = "__Host-dhh_past_first_page=foo; path=/; Secure; Max-Age=2592000; SameSite=Strict";
-</script>
-<script id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
+<title><?=$page_title?></title>
+<script src="/js/ext-jquery.ts1741106066.min.js"></script>
+<script src="/js/ext-prototype.ts1741106066.min.js"></script>
+<script src="/js/ext-scriptaculous-builder.ts1741106066.min.js"></script>
+<script src="/js/ext-scriptaculous-effects.ts1741106066.min.js"></script>
+<script src="/js/ext-jquery-ui.ts1741106066.min.js"></script>
+<script src="/js/ext-jquery.ui.touch-punch.ts1741106066.min.js"></script>
 <?=$this->getCssJsHtml()?>
-<link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2">
-<link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2">
-<link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="/skin/assets/glightbox/dist/css/glightbox.min.css" media="print" onload="this.media='all'">
+<!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2"> -->
+<!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2"> -->
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.ts1741106066.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/skin/assets/glightbox/dist/css/glightbox.ts1741106066.min.css" media="print" onload="this.media='all'">
 <?=$this->getChildHtml()?>
 <?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
-<script src="/js/ext-translator.js" defer></script>
+<script src="/js/ext-translator.ts1741106066.js" defer></script>
 <?=$this->getIncludes()?>
 <meta name="description" content="<?=htmlspecialchars((string) $this->getDescription())?>">
 <meta name="keywords" content="<?=htmlspecialchars((string) $this->getKeywords())?>">

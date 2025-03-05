@@ -11,7 +11,7 @@ $html = <<<EOT
         <i style="padding: 0 .5em" class="fa-3x fa fa-facebook-official" aria-hidden="true"></i></a>
         <a href="//www.linkedin.com/company/chefstore-nl/" title="LinkedIn" target="_blank" rel="nofollow noreferrer noopener">
         <i class="fa-3x fa fa-linkedin" aria-hidden="true"></i></a>
-        <img class="ms-3" src="//images.chefstore.nl/media/wysiwyg/banners/2023_fd_gazellen_small.png?v=1&tr=h-42,q-80,c-at_max" height=42 style="display:inline;" alt="Chefstore is FD Gazelle 2023!">
+        <img class="ms-3" src="//images.chefstore.nl/media/wysiwyg/banners/2023_fd_gazellen_small.ts1741106066.png?tr=h-42,q-85,c-at_max" height=42 style="display:inline;" alt="Chefstore is FD Gazelle 2023!">
       </div>
       <div class="column">
         <div class="col-1-4">
@@ -63,14 +63,14 @@ $html = <<<EOT
         <div class="col-1-4 center">
           <h3>Klanten over Chefstore.nl:</h3>
           <a href="//www.kiyoh.com/reviews/1044049/chefstore?from=widget&lang=nl" target="_blank" rel="nofollow noreferrer noopener">
-            <img id="kiyoh-image" src="//images.chefstore.nl/media/wysiwyg/kiyoh_96.svg?v=1&tr=w-300,q-80,c-at_max" alt="Chefstore.nl Reviews" class="small center" style="height:100%; width:100%" loading="lazy">
+            <img id="kiyoh-image" src="//images.chefstore.nl/media/wysiwyg/kiyoh_96.ts1741106066.svg?tr=w-300,q-85,c-at_max" alt="Chefstore.nl Reviews" class="small center" style="height:100%; width:100%" loading="lazy">
           </a>
         </div>
       </div>
     </div>
   </div>
   <div class="pt-4">
-    <img class="center" src="/skin/frontend/rwd/dhh/images/logo-chefstore.min.svg?v=2" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy">
+    <img class="center" src="/skin/frontend/rwd/dhh/images/logo-chefstore.ts1741106066.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy">
   </div>
   <div class="text-center py-1 h3 blue"><em>Alles voor de Chef</em></div>
   <div class="text-center py-3">Non-food horeca groothandel voor hotels, restaurants, bedrijfskantines, scholen, catering, gemeentes, grootkeukens en caf&eacute;'s</div>
@@ -82,7 +82,7 @@ $html = <<<EOT
 </div>
 
 <script type="module">
-  import '/skin/assets/glightbox/dist/js/glightbox.min.js';
+  import '/skin/assets/glightbox/dist/js/glightbox.ts1741106066.min.js';
   const lightbox = GLightbox({touchNavigation: true});
   var lightboxInlineIframe = GLightbox({
     selector: '.glightbox4',
@@ -95,12 +95,14 @@ $html = <<<EOT
 <script async type="module">
   !function(e,t,n){var r=e.createElement(t),a=e.getElementsByTagName(t)[0];r.src="/js/ext-elastic-apm-rum.umd.min.js?v=5.16.3",r.onload=function(){elasticApm.init(n)},a.parentNode.insertBefore(r,a)}(document,"script",{serviceName:"openmage",serverUrl:"//rum.chefstore.nl:8200",environment:document.querySelector("html").dataset.environment,pageLoadTransactionName:document.querySelector("html").dataset.transaction});
 </script>
+
+<script id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
 <!-- footer_end -->
 EOT;
 echo $html;
 
 // @todo replace with APCu?
-$key = DHH_FPC_FOOTER_KEY;
+$key = DHH_FPC_FOOTER_KEY; // "DHH_CMS_FOOTER"
 if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
   if(Mage::app()->getCache()->save($html, $key , ["DHH_CMS"], 24 * 3600)) {
     DeHeerHoreca_Fpc_Helper_Data::log("Cache: SAVED {$key}, ".strlen($html)." chars");

@@ -410,14 +410,15 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         // @todo isRelatedTo
         // @todo isSimilarTo
         
+        // DHH CORE HACK
         // Offer fields
-        if(is_array($this->getPriceValues())) {
-          $getPriceValues = $this->getPriceValues();
+        $prices = $this->getPriceValues();
+        if(is_array($prices) && !empty($prices)) {
           $data["offers"]["@type"] = "AggregateOffer";
           $data["offers"]["lowPrice"] = $this->getConvertedPrice(min($getPriceValues));
           $data["offers"]["highPrice"] = $this->getConvertedPrice(max($getPriceValues));
         } else {
-          $data["offers"]["price"] = $this->getConvertedPrice($this->getPriceValues());
+          $data["offers"]["price"] = $this->getConvertedPrice($prices);
         }
         
         // warranty
@@ -449,7 +450,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
           $value = date("Y-m-d", strtotime($value));
         }
         if(empty($value)) {
-          $value = date("Y-m-d", strtotime("+1 year")); // DHH CORE HACK PHP 8
+          $value = date("Y-m-d", strtotime("+1 week")); // DHH CORE HACK PHP 8
         }
         if(strlen($value) > 0) {
           $data["offers"][$schema_key] = $value;

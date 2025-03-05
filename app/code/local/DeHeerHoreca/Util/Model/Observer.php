@@ -420,14 +420,37 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   // Called during placement of an order, to clear tm_field fields
   // These fields need to be cleared during reorder (admin only)
   public function beforeOrderPlace(Varien_Event_Observer $observer): void {
+    // - tm_field1:  supplier.order_id
+    // - tm_field2:  shipment.expected_date
+    // - tm_field3:  shipment.forwarder
+    // - tm_field4:  supplier.name
+    // - tm_field5:  process.flags
+    // - tm_field6:  marketplace.order_id
+    // - tm_field7:  marketplace.name
+    // - tm_field8:  shipment.id
+    // - tm_field9:  supplier.packing_slip_id
+    // - tm_field10: B2B/B2C
+    // - tm_field11: TBD
+    // - tm_field12: TBD
+    // - tm_field13: TBD
+    // - tm_field14: TBD
+    // - tm_field15: TBD
     $_order = $observer->getEvent()->getOrder();
-    $_order->setData("tm_field1", null); // Wholesale Order ID
-    $_order->setData("tm_field2", null); // Delivery Date
-    $_order->setData("tm_field3", null); // Transportation Company
-    $_order->setData("tm_field4", null); // Wholesalers
-    $_order->setData("tm_field5", null); // Flags
-    $_order->setData("tm_field6", null); // Platform Order ID
-    $_order->setData("tm_field8", null); // Packing Slip ID
+    $_order->setData("tm_field1", null);
+    $_order->setData("tm_field2", null);
+    $_order->setData("tm_field3", null);
+    $_order->setData("tm_field4", null);
+    $_order->setData("tm_field5", null);
+    $_order->setData("tm_field6", null);
+    $_order->setData("tm_field7", null);
+    $_order->setData("tm_field8", null);
+    $_order->setData("tm_field9", null);
+    // $_order->setData("tm_field10", null); // Not this one
+    $_order->setData("tm_field11", null);
+    $_order->setData("tm_field12", null);
+    $_order->setData("tm_field13", null);
+    $_order->setData("tm_field14", null);
+    $_order->setData("tm_field15", null);
   }
   
   /**

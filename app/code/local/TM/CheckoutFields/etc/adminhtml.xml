@@ -9,7 +9,7 @@
                             <config>
                                 <children>
                                     <checkoutfields translate="title" module="checkoutfields">
-                                        <title>Checkout Fields</title>
+                                        <title>Extra Fields</title>
                                     </checkoutfields>
                                 </children>
                             </config>

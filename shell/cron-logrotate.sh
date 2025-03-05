@@ -16,7 +16,7 @@ echo "Current date: $now"
 echo "--------------------------------------------------------------------"
 
 # Set User Environment
-. ${HOME}/.profile
+. ${HOME}/.bash_profile
 
 cm
 
@@ -37,6 +37,6 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-magento.tmp -v
+/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-magento.tmp
 
 rm ~/tmp/logrotate-deheerhoreca-magento.conf
