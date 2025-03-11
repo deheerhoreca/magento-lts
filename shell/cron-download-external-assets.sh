@@ -32,10 +32,10 @@ wget --no-verbose https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/ela
 wget --no-verbose https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js -O ./js/ext-elastic-apm-rum.umd.min.js
 
 # Old style:
-mkdir -p ./skin/frontend/rwd/external/opensans
-wget --no-verbose https://gist.github.com/stefanmaric/a5043c0998d9fc35483d/raw/55afaea418aaee1d074b4a427496573c5e8e5200/open-sans.css -O ./skin/frontend/rwd/external/opensans/open-sans.css
-mkdir -p ./skin/frontend/rwd/external/clickcease/monitor
-wget --no-verbose https://www.clickcease.com/monitor/stat.js -O ./skin/frontend/rwd/external/clickcease/monitor/stat.js
+# mkdir -p ./skin/frontend/rwd/external/opensans
+# wget --no-verbose https://gist.github.com/stefanmaric/a5043c0998d9fc35483d/raw/55afaea418aaee1d074b4a427496573c5e8e5200/open-sans.css -O ./skin/frontend/rwd/external/opensans/open-sans.css
+# mkdir -p ./skin/frontend/rwd/external/clickcease/monitor
+# wget --no-verbose https://www.clickcease.com/monitor/stat.js -O ./skin/frontend/rwd/external/clickcease/monitor/stat.js
 
 # font-awesome.min.css was patched to have "font-display:swap;" do not overwrite
 # mkdir -p ./skin/frontend/rwd/external/fontawesome
