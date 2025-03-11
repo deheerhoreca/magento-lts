@@ -3,6 +3,9 @@
 - @see https://speakerdeck.com/csswizardry/get-your-head-straight
 - @see https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
 - /js/ext-translator.js has to be updated manually and loaded after getCssJsHtml()!
+<!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2"> -->
+<!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2"> -->
+<?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
 */
 $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string) $this->getTitle());
 ?>
@@ -17,13 +20,10 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <script src="/js/ext-jquery-ui.ts1741106066.min.js"></script>
 <script src="/js/ext-jquery.ui.touch-punch.ts1741106066.min.js"></script>
 <?=$this->getCssJsHtml()?>
-<!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2"> -->
-<!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2"> -->
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.ts1741106066.min.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/skin/assets/glightbox/dist/css/glightbox.ts1741106066.min.css" media="print" onload="this.media='all'">
 <?=$this->getChildHtml()?>
-<?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
 <script src="/js/ext-translator.ts1741106066.js" defer></script>
 <?=$this->getIncludes()?>
 <meta name="description" content="<?=htmlspecialchars((string) $this->getDescription())?>">
