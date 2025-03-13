@@ -118,6 +118,7 @@
 - `app/code/local/Mage/Newsletter/Model/Subscriber.php`
 - `app/code/local/MagePal/GoogleTagManager/Block/Tm.php`
 - `app/code/local/Mage/Payment/Model/Method/Banktransfer.php`
+- `app/code/local/Mage/Payment/Model/Method/Purchaseorder.php`
 - `app/code/local/Mage/Sales/Model/Order/Pdf/Abstract.php`
 - `app/code/local/Mage/Sales/Model/Order/Pdf/Invoice.php`
 - `app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php`
@@ -248,7 +249,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Updated up to: v20.5.0
     - Prevent sending newsletter signup confirmation emails
   - `app/code/local/Mage/Payment/Model/Method/Banktransfer.php`
-    - Enable Banktransfer for backend but not for frontend
+  - `app/code/local/Mage/Payment/Model/Method/Purchaseorder.php`
+    - Enabled for backend but not for frontend
     - Updated up to: v20.5.0
   - `app/code/local/Mage/Sales/Model/Order/Pdf/Abstract.php`
     - Changes to PDF

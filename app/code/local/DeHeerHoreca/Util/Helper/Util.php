@@ -1389,9 +1389,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $supplier_sys = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
     
     // Hendi promo
-    if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
-      return "-5% Extra Korting";
-    }
+    // if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
+    //  return "-5% Extra Korting";
+    // }
     
     // Diamond promo
     if($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
