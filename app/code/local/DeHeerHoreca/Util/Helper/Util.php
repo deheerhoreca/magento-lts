@@ -1690,8 +1690,11 @@ if(function_exists('_cdn_img') === false) {
     if($relative_url) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
-    if($add_mod_time === true && strlen((string) $fs_path) > 0) {
-      $url = _add_file_v_param($url, $fs_path, $identifier);
+    if($add_mod_time && strlen((string) $fs_path) > 0) {
+      // $url = _add_file_v_param($url, $fs_path, $identifier);
+      if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
+        $url = Chefstore\CacheBuster::prependExtension($url, "ts{$mtime}");
+      }
     }
     
     switch($cdn) {
