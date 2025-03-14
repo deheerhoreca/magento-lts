@@ -29,10 +29,10 @@ $billink_minimum            = 10;
 $billink_maximum            = 3500;
 $biller_minimum             = 25;
 $biller_maximum             = 10000;
-$mondu_pl_minimum           = 500;
-$mondu_pl_maximum           = 10000;
-$mondu_lease_minimum        = 750;
-$mondu_lease_maximum        = 20000;
+// $mondu_pl_minimum           = 500;
+// $mondu_pl_maximum           = 10000;
+// $mondu_lease_minimum        = 750;
+// $mondu_lease_maximum        = 20000;
 $grenke_lease_minimum       = 1000;
 $grenke_lease_maximum       = 10000;
 $show_black_friday          = false;
@@ -196,9 +196,9 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
 
   // BNPL
   $bnpl_payment_methods   = [];  
-  if($_finalPrice >= $mondu_pl_minimum && $_finalPrice <= $mondu_pl_maximum) {
-    $bnpl_payment_methods[] = "Mondu";
-  }  
+  // if($_finalPrice >= $mondu_pl_minimum && $_finalPrice <= $mondu_pl_maximum) {
+  //   $bnpl_payment_methods[] = "Mondu";
+  // }  
   if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
     $bnpl_payment_methods[] = "Biller";
   }  

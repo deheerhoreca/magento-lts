@@ -7,20 +7,6 @@
     <div style="padding: 3em;">
       <div class="std">
         
-        <div id="info-mondu" class="std">
-          <img src="/skin/frontend/rwd/dhh/images/mondu_logo.png" alt="Mondu logo" title="Mondu" style="width:140px; height:auto; float:right; margin-top: .5em;">
-          <h2>🤩Achteraf betalen met Mondu</h2>
-          <h5><i>Voor zakelijke klanten in Nederland</i></h5>
-          <h4>Maximaal €15.000 (zakelijk), incl. BTW</h4>
-          <div style="max-width: 600px;">
-            <strong>Met Mondu betaal je zonder rente binnen 30, 60 of 90 dagen, of in 6 maandelijkse termijnen</strong>
-          </div>
-          <div style="max-width: 600px;">
-            <p>Wanneer u hiervoor kiest, zorgt Mondu voor het gehele achteraf betalen proces. Mondu is speciaal gemaakt voor de zakelijke markt.</p>
-            <p><strong><u>Let op: Als u gebruik wil maken van Mondu, maak dan een Offerte aan</u></strong>.</p>
-          </div>
-        </div>
-        
         <div id="info-biller" class="std mt-5">
           <img src="/skin/frontend/rwd/dhh/images/biller-logo.png" alt="Biller logo" title="Biller" style="width:140px; height:auto; float:right; margin-top: .5em;">
           <h2>🤩Achteraf betalen met Biller</h2>
