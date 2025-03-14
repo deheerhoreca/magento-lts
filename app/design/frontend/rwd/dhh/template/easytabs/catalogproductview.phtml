@@ -14,7 +14,7 @@ $sku                        = _get_product_attribute($_product, "sku");
 $_store                     = $_product->getStore();
 $_taxHelper                 = $this->helper("tax");
 $categoryIds                = $_product->getCategoryIds();
-$skin                       = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
+$skin_baseurl               = str_replace("www.chefstore.nl", "images.chefstore.nl", (string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN));
 
 $brand_name                 = _get_product_attribute($_product, "manufacturer");
 $brand_id                   = $_product->getData("manufacturer");
@@ -29,10 +29,10 @@ $billink_minimum            = 10;
 $billink_maximum            = 3500;
 $biller_minimum             = 25;
 $biller_maximum             = 10000;
-$mondu_pl_minimum           = 500;
-$mondu_pl_maximum           = 10000;
-$mondu_lease_minimum        = 750;
-$mondu_lease_maximum        = 20000;
+// $mondu_pl_minimum           = 500;
+// $mondu_pl_maximum           = 10000;
+// $mondu_lease_minimum        = 750;
+// $mondu_lease_maximum        = 20000;
 $grenke_lease_minimum       = 1000;
 $grenke_lease_maximum       = 10000;
 $show_black_friday          = false;
@@ -189,16 +189,18 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
   $payment_methods_texts  = [];
 
   // Lease
-  if($_finalPrice >= $mondu_lease_minimum || $_finalPrice >= $grenke_lease_minimum) {
+  if(
+    // $_finalPrice >= $mondu_lease_minimum||
+    $_finalPrice >= $grenke_lease_minimum) {
     $text = "Leasen tegen scherpe tarieven";
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/lease.php'>{$text}</a>";
   }
 
   // BNPL
   $bnpl_payment_methods   = [];  
-  if($_finalPrice >= $mondu_pl_minimum && $_finalPrice <= $mondu_pl_maximum) {
-    $bnpl_payment_methods[] = "Mondu";
-  }  
+  // if($_finalPrice >= $mondu_pl_minimum && $_finalPrice <= $mondu_pl_maximum) {
+  //   $bnpl_payment_methods[] = "Mondu";
+  // }  
   if($_finalPrice >= $biller_minimum && $_finalPrice <= $biller_maximum) {
     $bnpl_payment_methods[] = "Biller";
   }  
@@ -297,7 +299,7 @@ if($i < $max_highlighted_attributes) {
 
   // Try Width + Depth + Height
   $codes  = ["breedte", "diepte", "hoogte"];
-  $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/measurement.svg";
   $title  = "Afmetingen (BxDxH)";
   $name   = "Afmetingen";
   $values = [];
@@ -324,7 +326,7 @@ if($i < $max_highlighted_attributes) {
   // Try Width + Height
   if(!$dimension_pair_set && $i < $max_highlighted_attributes) {
     $codes  = ["breedte", "hoogte"];
-    $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
+    $image  = "{$skin_baseurl}frontend/rwd/dhh/images/measurement.svg";
     $title  = "Afmetingen (BxL)";
     $values = [];
     foreach($codes as $code) {
@@ -349,7 +351,7 @@ if($i < $max_highlighted_attributes) {
   // Try Width + Depth
   if(!$dimension_pair_set && $i < $max_highlighted_attributes) {
     $codes  = ["breedte", "diepte"];
-    $image  = "{$skin}frontend/rwd/dhh/images/measurement.svg";
+    $image  = "{$skin_baseurl}frontend/rwd/dhh/images/measurement.svg";
     $title  = "Afmetingen (BxD)";
     $values = [];
     foreach($codes as $code) {
@@ -375,7 +377,7 @@ if($i < $max_highlighted_attributes) {
 // Diameter
 if($i < $max_highlighted_attributes) {
   $code   = "diameter";
-  $image  = "{$skin}frontend/rwd/dhh/images/diameter.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/diameter.svg";
   $title  = "Diameter";
   $text   = (int) $_product->getResource()->getAttribute($code)->getFrontend()->getValue($_product);
   if(empty($text) === false) {
@@ -391,7 +393,7 @@ if($i < $max_highlighted_attributes) {
 // Warranty
 if($i < $max_highlighted_attributes) {
   $code   = "garantie";
-  $image  = "{$skin}frontend/rwd/dhh/images/usps/guarantee.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/usps/guarantee.svg";
   $title  = "Garantie";
   $text   =  _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== "12 maanden") {
@@ -408,7 +410,7 @@ if($i < $max_highlighted_attributes) {
 // Made in Europe
 if($i < $max_highlighted_attributes) {
   $code         = "made_in_country_2code";
-  $image        = "{$skin}frontend/rwd/dhh/images/usps/made_in_europe3.svg";
+  $image        = "{$skin_baseurl}frontend/rwd/dhh/images/usps/made_in_europe3.svg";
   $title        = "Made In";
   $value        = _get_product_attribute($_product, $code);
   $eu_countries = ["België", "Bulgarije", "Tsjechië", "Duitsland", "Denemarken",
@@ -431,7 +433,7 @@ if($i < $max_highlighted_attributes) {
 // Lockable
 if($i < $max_highlighted_attributes) {
   $code   = "afsluitbaar";
-  $image  = "{$skin}frontend/rwd/dhh/images/key.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/key.svg";
   $title  = "Met Slot";
   $text   = _get_product_attribute($_product, $code);
   if($text === "Ja") {
@@ -448,7 +450,7 @@ if($i < $max_highlighted_attributes) {
 // Size
 if($i < $max_highlighted_attributes) {
   $code   = "size";
-  $image  = "{$skin}frontend/rwd/dhh/images/size.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/size.svg";
   $title  = "Maat";
   $text   = _get_product_attribute($_product, $code);
   if($text === "Ja") {
@@ -465,7 +467,7 @@ if($i < $max_highlighted_attributes) {
 // Cooling method
 if($i < $max_highlighted_attributes) {
   $code   = "type_koeling";
-  $image  = "{$skin}frontend/rwd/dhh/images/forced_cooling.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/forced_cooling.svg";
   $title  = "Koelmethode";
   $text   = _get_product_attribute($_product, $code);
   if($text === "Geforceerd" OR $text === "Recirculatie" OR $text === "Statisch met ventilator") {
@@ -482,7 +484,7 @@ if($i < $max_highlighted_attributes) {
 // Contents
 if($i < $max_highlighted_attributes) {
   $code   = "inhoud_liters";
-  $image  = "{$skin}frontend/rwd/dhh/images/liters.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/liters.svg";
   $title  = "Inhoud";
   $text   = _get_product_attribute($_product, $code);
   if(empty($text) === false) {
@@ -500,7 +502,7 @@ if($i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   if($nofrost_method === "Auto Defrost") {
     $highlights[] = [
-      "image" => "{$skin}frontend/rwd/dhh/images/freezer.svg",
+      "image" => "{$skin_baseurl}frontend/rwd/dhh/images/freezer.svg",
       "title" => "Ontdooisysteem",
       "text"  => $nofrost_method,
     ];
@@ -511,7 +513,7 @@ if($i < $max_highlighted_attributes) {
 // Number of shelves
 if($i < $max_highlighted_attributes) {
   $code = "aantal_roosters";
-  $image = "{$skin}frontend/rwd/dhh/images/shelf.svg";
+  $image = "{$skin_baseurl}frontend/rwd/dhh/images/shelf.svg";
   $title = "Roosters";
   $text = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false) {
@@ -529,7 +531,7 @@ if($i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   $code = "vermogen";
   $text = _get_product_attribute($_product, $code);
-  $image = "{$skin}frontend/rwd/dhh/images/watt.svg";
+  $image = "{$skin_baseurl}frontend/rwd/dhh/images/watt.svg";
   $title = "Vermogen (ELEK)";
   if(empty($text) === false) {
     if(ctype_alnum((string) $text) || is_numeric($text)) {
@@ -558,7 +560,7 @@ if($i < $max_highlighted_attributes) {
 if($i < $max_highlighted_attributes) {
   $code   = "voltage";
   $value  = $voltage;
-  $image  = "{$skin}frontend/rwd/dhh/images/volt.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/volt.svg";
   $name   = "Voltage";
   $title  = "Voltage";
   if(is_array($value)) {
@@ -581,7 +583,7 @@ if($i < $max_highlighted_attributes) {
 // Power (gas)
 if($i < $max_highlighted_attributes) {
   $code   = "vermogen_kw";
-  $image  = "{$skin}frontend/rwd/dhh/images/flame.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/flame.svg";
   $title  = "Vermogen (GAS)";
   $text   = (float) _get_product_attribute($_product, $code);
   if($text > 0) {
@@ -602,7 +604,7 @@ if($i < $max_highlighted_attributes) {
 // RPM
 if($i < $max_highlighted_attributes) {
   $code   = "aantal_omwentelingen_minuut";
-  $image  = "{$skin}frontend/rwd/dhh/images/rpm.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/rpm.svg";
   $title  = "RPM";
   $text   = _get_product_attribute($_product, $code);
   if(empty($text) === false) {
@@ -619,7 +621,7 @@ if($i < $max_highlighted_attributes) {
 // Sound level
 if($i < $max_highlighted_attributes) {
   $code   = "geluidsniveau";
-  $image  = "{$skin}frontend/rwd/dhh/images/quiet.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/quiet.svg";
   $title  = "Stil apparaat";
   $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text < 50) {
@@ -636,7 +638,7 @@ if($i < $max_highlighted_attributes) {
 // Lighting
 if($i < $max_highlighted_attributes) {
   $code   = "verlichting";
-  $image  = "{$skin}frontend/rwd/dhh/images/light.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/light.svg";
   $title  = "Verlichting";
   $text   = _get_product_attribute($_product, $code);
   if(empty($text) === false && $text === "Ja") {
@@ -653,7 +655,7 @@ if($i < $max_highlighted_attributes) {
 // Capacity bottles
 if($i < $max_highlighted_attributes) {
   $code   = "aantal_flessen";
-  $image  = "{$skin}frontend/rwd/dhh/images/wine.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/wine.svg";
   $title  = "Flesjes";
   $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== 0) {
@@ -670,7 +672,7 @@ if($i < $max_highlighted_attributes) {
 // Capacity wine bottles
 if($i < $max_highlighted_attributes) {
   $code   = "capacity_wine_bottles";
-  $image  = "{$skin}frontend/rwd/dhh/images/wine.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/wine.svg";
   $title  = "Aantal 75cl Wijnflessen";
   $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== 0) {
@@ -687,7 +689,7 @@ if($i < $max_highlighted_attributes) {
 // Capacity cooking zones
 if($i < $max_highlighted_attributes) {
   $code   = "cooking_zones";
-  $image  = "{$skin}frontend/rwd/dhh/images/stove.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/stove.svg";
   $title  = "Kookzones";
   $text   = (int) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text !== 0) {
@@ -704,7 +706,7 @@ if($i < $max_highlighted_attributes) {
 // Double glass
 if($i < $max_highlighted_attributes) {
   $code   = "glas";
-  $image  = "{$skin}frontend/rwd/dhh/images/doubleglass.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/doubleglass.svg";
   $title  = "Dubbelglas";
   $text   = _get_product_attribute($_product, $code);
   if($text === "dubbel glas") {
@@ -720,7 +722,7 @@ if($i < $max_highlighted_attributes) {
 // Refrigerant
 if($i < $max_highlighted_attributes) {
   $code   = "refrigerant";
-  $image  = "{$skin}frontend/rwd/dhh/images/refrigerant.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/refrigerant.svg";
   $title  = "Koelmiddel";
   $text   = $refrigerant;
   if(empty($text ) === false) {
@@ -736,7 +738,7 @@ if($i < $max_highlighted_attributes) {
 // Pallet transport
 if($i < $max_highlighted_attributes) {
   $code   = "transport_type";
-  $image  = "{$skin}frontend/rwd/dhh/images/usps/truck.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/usps/truck.svg";
   $name   = "Levering";
   $title  = "Wordt geleverd met een vrachtwagen";
   $value  = _get_product_attribute($_product, $code);
@@ -755,7 +757,7 @@ if($i < $max_highlighted_attributes) {
 // Product quantity
 if($i < $max_highlighted_attributes) {
   $code   = "eenheid";
-  $image  = "{$skin}frontend/rwd/dhh/images/amount.svg";
+  $image  = "{$skin_baseurl}frontend/rwd/dhh/images/amount.svg";
   $title  = "Aantal";
   $text   = (double) _get_product_attribute($_product, $code);
   if(empty($text) === false && $text > 1) {
@@ -1021,7 +1023,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   }
                   echo "</ul>";
 
-                  if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
+                  if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-03-13 00:00:00")) {
                     ?>
                     <div class="card mx-auto p-2 mx-3">
                     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
@@ -1029,11 +1031,13 @@ if($stock_data["overall_stock_status"] === "backorder"
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 maart 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 12 maart 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div>
                     <?php
-                  } elseif($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
+                  }
+                  
+                  elseif($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
                   "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW", "DI-WR-38CS-SB",
                   "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
                   "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G", "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8",

@@ -1389,9 +1389,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $supplier_sys = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
     
     // Hendi promo
-    if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
-      return "-5% Extra Korting";
-    }
+    // if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-04-01 00:00:00")) {
+    //  return "-5% Extra Korting";
+    // }
     
     // Diamond promo
     if($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
@@ -1690,8 +1690,11 @@ if(function_exists('_cdn_img') === false) {
     if($relative_url) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
-    if($add_mod_time === true && strlen((string) $fs_path) > 0) {
-      $url = _add_file_v_param($url, $fs_path, $identifier);
+    if($add_mod_time && strlen((string) $fs_path) > 0) {
+      // $url = _add_file_v_param($url, $fs_path, $identifier);
+      if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
+        $url = Chefstore\CacheBuster::prependExtension($url, "ts{$mtime}");
+      }
     }
     
     switch($cdn) {
