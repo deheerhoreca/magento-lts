@@ -189,7 +189,9 @@ if($overall_stock_status === "in_stock" || $overall_stock_status === "backorder"
   $payment_methods_texts  = [];
 
   // Lease
-  if($_finalPrice >= $mondu_lease_minimum || $_finalPrice >= $grenke_lease_minimum) {
+  if(
+    // $_finalPrice >= $mondu_lease_minimum||
+    $_finalPrice >= $grenke_lease_minimum) {
     $text = "Leasen tegen scherpe tarieven";
     $payment_methods_texts[] = "<a class='glightbox4' data-gallery=bnpl data-glightbox='effect:fade; width:600px;' href='/media/static/lease.php'>{$text}</a>";
   }
