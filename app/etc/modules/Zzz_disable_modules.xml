@@ -146,7 +146,7 @@
       <active>true</active>
     </Aschroder_SMTPPro>
 
-    <!-- Temporarily disabled. Leads to errors with opening older orders if left disabled -->
+    <!-- Leads to errors with opening older orders if left disabled -->
     <!-- <Afterpay_Afterpay> -->
     <!-- <active>false</active> -->
     <!-- </Afterpay_Afterpay> -->

@@ -17,24 +17,24 @@
         <a class="main-logo" href="/">
           <img id="main-logo" src="/skin/frontend/rwd/dhh/images/logo-chefstore.min.svg?v=2" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208">
         </a>
-        <div id="header-search" ><?php echo $this->getChildHtml("topSearch") ?></div>
+        <div id="header-search" ><?=$this->getChildHtml("topSearch")?></div>
         <div class="account-cart-wrapper">
           <span class="ms-1 ms-sm-2"><a class="glightbox4 btn btn-primary toplink-phone skip-phone top-link" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
           <span class="ms-1 ms-sm-2"><a class="skip-account top-link" href="<?php echo Mage::getUrl("customer/account"); ?>" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
-          <span class="ms-1 ms-sm-2"><?php echo $this->getChildHtml("miniquote_head"); ?></span>
-          <span class="ms-1 ms-sm-2"><?php echo $this->getChildHtml("minicart_head"); ?></span>
+          <span class="ms-1 ms-sm-2"><?=$this->getChildHtml("miniquote_head")?></span>
+          <span class="ms-1 ms-sm-2"><?=$this->getChildHtml("minicart_head")?></span>
         </div>
       </div>
     </div>
   </div>
 
   <div id="header-nav" class="skip-content">
-    <?php echo $this->getChildHtml("topMenu") ?>
+    <?=$this->getChildHtml("topMenu")?>
   </div>
   <div class="clzinfopagetop px-1">
     <div class="pageinfotpinner animate" id="topbar">
       <span class='d-none d-s-block'>
-        <a href='//kiyoh.com/reviews/1044049/chefstore?from=widget&amp;lang=nl' title='Reviews Chefstore.nl' target='_blank' rel='noreferrer nofollow noopener'>TROTS op onze score van <strong>9.8</strong></a>
+        <a href="//www.webwinkelkeur.nl/webshop/Chefstore-nl_1221967" title="Reviews Chefstore.nl" target="_blank" rel="noreferrer nofollow noopener">TROTS op onze score van <strong>9.0</strong></a>
       </span>
       <span class='align-center'>
         <a href='/promoties.html'><strong>SALE</strong></a>
@@ -44,5 +44,5 @@
       </span>
     </div>
   </div>
-  <?php echo $this->getChildHtml("topContainer"); ?>
+  <?=$this->getChildHtml("topContainer")?>
 </header>

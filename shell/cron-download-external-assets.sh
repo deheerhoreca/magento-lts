@@ -23,7 +23,6 @@ wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.js -O
 wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css -O ./skin/frontend/rwd/external/bootstrap.min.css
 wget --no-verbose https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.css -O ./skin/frontend/rwd/external/bootstrap.css
 
-wget --no-verbose https://cdn.cookie-script.com/s/9e97d160d4e7a60d64717d815a816dd9.js -O ./js/ext-cookie-script.min.js
 wget --no-verbose https://static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0 -O ./js/ext-zendesk-snippet.min.js
 
 # These need versioning outside of mod_pagespeed:extend_cache
@@ -32,17 +31,6 @@ wget --no-verbose https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/ela
 wget --no-verbose https://cdn.jsdelivr.net/npm/@elastic/apm-rum/dist/bundles/elastic-apm-rum.umd.min.js -O ./js/ext-elastic-apm-rum.umd.min.js
 
 # Old style:
-# mkdir -p ./skin/frontend/rwd/external/opensans
-# wget --no-verbose https://gist.github.com/stefanmaric/a5043c0998d9fc35483d/raw/55afaea418aaee1d074b4a427496573c5e8e5200/open-sans.css -O ./skin/frontend/rwd/external/opensans/open-sans.css
-# mkdir -p ./skin/frontend/rwd/external/clickcease/monitor
-# wget --no-verbose https://www.clickcease.com/monitor/stat.js -O ./skin/frontend/rwd/external/clickcease/monitor/stat.js
-
-# font-awesome.min.css was patched to have "font-display:swap;" do not overwrite
-# mkdir -p ./skin/frontend/rwd/external/fontawesome
-# wget --no-verbose https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css -O ./skin/frontend/rwd/external/fontawesome/font-awesome-4.7.0.min.css
-# wget --no-verbose https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0 -O ./skin/frontend/rwd/external/fontawesome/fontawesome-webfont.woff2
-# wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf -O ./skin/frontend/rwd/external/fontawesome/fontawesome-webfont.ttf
-
 mkdir -p ./skin/frontend/rwd/external/sooqr
 wget --no-verbose https://static.sooqr.com/custom/115684/1/combined.css -O ./skin/frontend/rwd/external/sooqr/combined.css
 wget --no-verbose https://static.spotlersearch.com/sooqr.js -O ./skin/frontend/rwd/external/sooqr/sooqr.min.js

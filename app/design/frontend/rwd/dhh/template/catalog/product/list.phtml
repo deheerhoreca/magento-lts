@@ -161,8 +161,12 @@ $show_sub_tiles     = true;
 if($have_active_filters) {
   foreach($active_filters as $active_filter) {
     $show_sub_tiles = true;
-    $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
-    if(in_array($attribute_code, $forwarded_filters, true) === false) {
+    try {
+      $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
+    } catch(Exception) {
+      continue; // If a non-existing filter is requested, prevent a FATAL
+    }
+    if(!in_array($attribute_code, $forwarded_filters, true)) {
       $show_sub_tiles = false;
       break;
     }
@@ -237,6 +241,8 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
           "relative_url"    => true,
         ];
         $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      } else {
+        Mage::log("Category image not found: {$image_path}");
       }
       
       echo "<li style=\"max-width: 180px\">";
