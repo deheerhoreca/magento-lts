@@ -415,8 +415,8 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         $prices = $this->getPriceValues();
         if(is_array($prices) && !empty($prices)) {
           $data["offers"]["@type"] = "AggregateOffer";
-          $data["offers"]["lowPrice"] = $this->getConvertedPrice(min($getPriceValues));
-          $data["offers"]["highPrice"] = $this->getConvertedPrice(max($getPriceValues));
+          $data["offers"]["lowPrice"] = $this->getConvertedPrice(min($prices));
+          $data["offers"]["highPrice"] = $this->getConvertedPrice(max($prices));
         } else {
           $data["offers"]["price"] = $this->getConvertedPrice($prices);
         }

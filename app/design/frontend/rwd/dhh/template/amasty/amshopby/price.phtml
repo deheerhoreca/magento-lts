@@ -1,12 +1,11 @@
 <?php
 /**
- * @author Amasty Team
- * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
- * @package Amasty_Shopby
- */
-?>
-<?php
-if (!function_exists('amshopby_render_label')) {
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Improved Layered Navigation
+*/
+
+if(!function_exists('amshopby_render_label')) {
   function amshopby_render_label($placement, $label, $value) {
     /**
      * @todo Add ability to specify placement of label (after, before)
@@ -66,7 +65,7 @@ if(in_array($this->getDisplayType(), $needs_count)) {
   elseif($show && Amasty_Shopby_Model_Catalog_Layer_Filter_Price::DT_DROPDOWN == $this->getDisplayType()) { ?>
     <li>
       <select onchange="if (this.value) window.location.href = this.value" class="amshopby-select amshopby-ajax-select">
-        <option value="" data-config='<?php echo Mage::helper('amshopby/url')->getPriceFilterConfig($attribute, '') ?>'><?php echo Mage::helper('amshopby')->__('Please Select ...'); ?></option>
+        <option value="" data-config='<?=Mage::helper('amshopby/url')->getPriceFilterConfig($attribute, '') ?>'><?=Mage::helper('amshopby')->__('Please Select ...')?></option>
         <?php
         foreach($this->getItems() as $_item) {
           $count = $_item->getCount();
@@ -133,13 +132,13 @@ if(in_array($this->getDisplayType(), $needs_count)) {
       /* Current selection only */
       if ($sliderType == 0) : ?>
           <?php if (!$useCustomSlider) : ?>
-              <div id="<?php echo $prefix?>" class="amshopby-slider">
+              <div id="<?=$prefix?>" class="amshopby-slider">
                   <div class="handle selected"></div>
-                  <span id="<?php echo $prefix?>-slider-bar" class="amshopby-slider-bar">&nbsp;</span>
+                  <span id="<?=$prefix?>-slider-bar" class="amshopby-slider-bar">&nbsp;</span>
                   <div class="handle"></div>
               </div>
           <?php else : ?>
-              <div id="<?php echo $prefix ?>-ui" class="amshopby-slider-ui"></div>
+              <div id="<?=$prefix ?>-ui" class="amshopby-slider-ui"></div>
           <?php endif; ?>
           <div class="amshopby-slider-price amshopby-slider-price-from">
               <?php
@@ -158,23 +157,23 @@ if(in_array($this->getDisplayType(), $needs_count)) {
       <?php /* With ranges */?>
       <?php if ($sliderType == 1) : ?>
           <?php if (!$useCustomSlider) : ?>
-              <div id="<?php echo $prefix?>" class="amshopby-slider">
+              <div id="<?=$prefix?>" class="amshopby-slider">
                   <div class="handle selected"></div>
-                  <span id="<?php echo $prefix?>-slider-bar" class="amshopby-slider-bar">&nbsp;</span>
+                  <span id="<?=$prefix?>-slider-bar" class="amshopby-slider-bar">&nbsp;</span>
                   <div class="handle"></div>
               </div>
           <?php else : ?>
-              <div id="<?php echo $prefix ?>-ui" class="amshopby-slider-ui"></div>
+              <div id="<?=$prefix ?>-ui" class="amshopby-slider-ui"></div>
           <?php endif; ?>
 
-          <div class="amshopby-slider-price amshopby-slider-price-from"><?php echo amshopby_render_label($valuePlacement, $valueLabel, $min) ?></div>
-          <div class="amshopby-slider-price amshopby-slider-price-to"><?php echo amshopby_render_label($valuePlacement, $valueLabel, $max) ?></div>
+          <div class="amshopby-slider-price amshopby-slider-price-from"><?=amshopby_render_label($valuePlacement, $valueLabel, $min) ?></div>
+          <div class="amshopby-slider-price amshopby-slider-price-to"><?=amshopby_render_label($valuePlacement, $valueLabel, $max) ?></div>
           <div class="amshopby-slider-price-range">
-                  <span id="<?php echo $prefix?>-from-slider"><?php echo $fromValue ?></span>&nbsp;-&nbsp;
-                  <span id="<?php echo $prefix?>-to-slider"><?php echo $toValue ?></span>
+                  <span id="<?=$prefix?>-from-slider"><?=$fromValue ?></span>&nbsp;-&nbsp;
+                  <span id="<?=$prefix?>-to-slider"><?=$toValue ?></span>
           </div>
       <?php endif; ?>
-      <input type="hidden" class="<?php echo $useCustomSlider ? 'amshopby-slider-ui-param' : 'amshopby-slider-param'; ?>" value="<?php echo $params ?>">
+      <input type="hidden" class="<?=$useCustomSlider ? 'amshopby-slider-ui-param' : 'amshopby-slider-param'?>" value="<?=$params ?>">
     </li></ol>
 <?php }
   if($this->getFromToWidget() || Amasty_Shopby_Model_Catalog_Layer_Filter_Price::DT_FROMTO == $this->getDisplayType()) {
@@ -183,16 +182,16 @@ if(in_array($this->getDisplayType(), $needs_count)) {
     }
     ?>
     <li>
-      <input type="text" size="2" value="<?php echo $this->escapeHtml($fromValue) ?>" data-value="<?php echo $this->escapeHtml($fromValue) ?>" name="<?php echo $prefix?>" class="input-text required-entry" id="<?php echo $prefix?>-from"> -
-      <input type="text" size="2" value="<?php echo $this->escapeHtml($toValue) ?>" data-value="<?php echo $this->escapeHtml($toValue) ?>" name="<?php echo $prefix?>" class="input-text required-entry" id="<?php echo $prefix?>-to">
-      <button type="submit" title="<?php echo $this->__('Find')?>" class="form-button button <?php echo $prefix?>-find" name="<?php echo $prefix?>" id="<?php echo $prefix?>-btn"><span><span><?php echo $this->__('Find')?></span></span></button>
+      <input type="text" size="2" value="<?=$this->escapeHtml($fromValue) ?>" data-value="<?=$this->escapeHtml($fromValue) ?>" name="<?=$prefix?>" class="input-text required-entry" id="<?=$prefix?>-from"> -
+      <input type="text" size="2" value="<?=$this->escapeHtml($toValue) ?>" data-value="<?=$this->escapeHtml($toValue) ?>" name="<?=$prefix?>" class="input-text required-entry" id="<?=$prefix?>-to">
+      <button type="submit" title="<?=$this->__('Find')?>" class="form-button button <?=$prefix?>-find" name="<?=$prefix?>" id="<?=$prefix?>-btn"><span><span><?=$this->__('Find')?></span></span></button>
     </li></ol>
     <?php
   } else {
     ?>
-    <input type="hidden" value="<?php echo $this->escapeHtml($fromValue) ?>"  id="<?php echo $prefix?>-from">
-    <input type="hidden" value="<?php echo $this->escapeHtml($toValue) ?>" id="<?php echo $prefix?>-to">
+    <input type="hidden" value="<?=$this->escapeHtml($fromValue) ?>"  id="<?=$prefix?>-from">
+    <input type="hidden" value="<?=$this->escapeHtml($toValue) ?>" id="<?=$prefix?>-to">
     <?php
   }
   ?>
-  <input type="hidden" id="<?php echo $prefix?>-url" value="<?php echo Mage::helper('amshopby/url')->getFullUrl(array($attribute => $prefix . '-from-' . $prefix . '-to'))?>" data-config='<?php echo Mage::helper('amshopby/url')->getPriceFilterConfig($attribute, $prefix . '-from-' . $prefix . '-to'); ?>'>
+  <input type="hidden" id="<?=$prefix?>-url" value="<?=Mage::helper('amshopby/url')->getFullUrl(array($attribute => $prefix . '-from-' . $prefix . '-to'))?>" data-config='<?=Mage::helper('amshopby/url')->getPriceFilterConfig($attribute, $prefix . '-from-' . $prefix . '-to')?>'>
