@@ -28,6 +28,8 @@
     "npm-asset/glightbox": "^3.3",
     "npm-asset/jquery": "^3.7",
     "npm-asset/lite-youtube-embed": "^0.3.3",
+    "npm-asset/elastic--apm-rum": "*",
+    "npm-asset/elastic--apm-rum-core": "*",
     "oomphinc/composer-installers-extender": "^2.0",
     "openmage/magento-lts": "20.5.0",
     "paynl/magento-plugin": "dev-master",

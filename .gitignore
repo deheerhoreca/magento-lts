@@ -97,7 +97,6 @@ phpunit.xml
 #########################################
 
 # FILES
-
 /.cachetool.yaml
 .DS_Store
 ._.DS_Store
@@ -114,9 +113,9 @@ phpunit.xml
 /algolia_*.json
 /maintenance.flag
 /maintenance.ip
+/js/elastic-apm-rum.umd.min.js.map
 
 # DIRS
-
 /js/ext-*
 /skin/frontend/rwd/external/
 !/skin/frontend/rwd/external/fontawesome
