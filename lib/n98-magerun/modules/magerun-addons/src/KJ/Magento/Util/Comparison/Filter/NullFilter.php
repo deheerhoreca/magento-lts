@@ -4,7 +4,7 @@ namespace KJ\Magento\Util\Comparison\Filter;
 use KJ\Magento\Util\Comparison\Filter;
 use KJ\Magento\Util\ThemeComparison\AbstractThemeComparisonItem;
 
-class Null extends Filter
+class NullFilter extends Filter
 {
     /**
      * Return true if item should be included in filtered result
@@ -16,5 +16,4 @@ class Null extends Filter
     {
         return true;
     }
-
 }
