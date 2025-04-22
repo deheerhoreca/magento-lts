@@ -385,7 +385,8 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
 				'type' => 'options',
 				'options' => $this->getPaymentMethodOptions(),
 				'renderer' => 'Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Paymentmethod',
-				'width' => '60'
+				// 'width' => '60'
+				'width' => '100'
 			));
 		}
 		
@@ -593,7 +594,12 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
             }
 			
 			if($optionText) {
-            	$options[$option->getMethod()] = ucfirst($optionText);
+							// DHH CORE HACK
+            	//$options[$option->getMethod()] = ucfirst($optionText);
+							$optionText = str_replace(["pay_payment_"], "Pay ", $optionText);
+							$optionText = str_replace(["mollie_"], "Mollie ", $optionText);
+							$optionText = str_replace(["_", "-"], " ", $optionText);
+							$options[$option->getMethod()] = ucwords($optionText);
 			}
         }
         return $options;

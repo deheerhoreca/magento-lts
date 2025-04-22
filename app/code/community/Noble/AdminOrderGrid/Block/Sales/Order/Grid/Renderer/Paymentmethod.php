@@ -17,7 +17,7 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Paymentmethod extends
    */
   public function render(Varien_Object $row) {
     $value = $row->getData($this->getColumn()->getIndex());
-  
+    
     // if ($value == "msp_banktransfer") {
     //   return 'MSP Banktransfer';
     // } elseif ($value == "msp_directdebit") {
@@ -45,16 +45,27 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Paymentmethod extends
     // }
     
     // DHH CORE HACK
-    $value = str_replace(["pay_payment_"], "", $value);
-    $value = str_replace("_", "-", $value);
+    $optionText = $value;
+    $optionText = str_replace(["pay_payment_"], "Pay ", $optionText);
+    $optionText = str_replace(["mollie_"], "Mollie ", $optionText);
+    $optionText = str_replace(["_", "-"], " ", $optionText);
     
     return match($value) {
       "ideal"						=> "iDEAL",
       "banktransfer"		=> "iDEAL",
       "paypal"		      => "PayPal",
-      default						=> ucfirst($value),
+      default						=> ucwords($optionText),
     };
   
-    return ucfirst($value);
+    // return ucfirst($optionText);
+  }
+  
+  // DHH CORE HACK
+  /**
+   * @return string|null
+   */
+  public function renderCss()
+  {
+      return trim($this->getColumn()->getCssClass()." nobr");
   }
 }
