@@ -40,8 +40,8 @@ Disallow: /catalog/product_compare/
 Disallow: /catalog/category/view/
 Disallow: /catalog/product/view/
 Disallow: /catalog/product/gallery/
-Disallow: /catalogsearch/
-Disallow: /checkout/
+# Disallow: /catalogsearch/
+# Disallow: /checkout/
 Disallow: /control/
 Disallow: /contacts/
 Disallow: /customer/
@@ -79,5 +79,5 @@ Disallow: /*?nofpc
 Disallow: /*&nofpc
 Disallow: /*?csredir
 Disallow: /*&csredir
-Disallow: /shop
-Disallow: /*&*&*&*
+# Disallow: /shop
+# Disallow: /*&*&*&*
