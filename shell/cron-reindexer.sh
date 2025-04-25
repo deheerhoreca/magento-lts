@@ -2,8 +2,8 @@
 
 # ~/httpdocs/deheerhoreca-magento/shell/cron-reindexer.sh
 
-# This runs on prod.deheerhoreca.nl only
-if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerhoreca.nl" ]; then
+# This runs on ma.deheerhoreca.nl only
+if [ "${HOSTNAME}" != "ma.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerhoreca.nl" ]; then
   exit 0
 fi
 
