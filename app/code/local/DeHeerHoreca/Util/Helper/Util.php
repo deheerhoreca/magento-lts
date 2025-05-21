@@ -216,11 +216,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public function markdownToHtmlSafe($string) {
     if(str_contains((string) $string, "<!--markdown-->")) {
-      $string = trim(str_replace("<!--markdown-->", null, (string) $string));
+      $string = trim(str_replace("<!--markdown-->", "", (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
     }
     if(str_contains((string) $string, "<!--markdownextra-->")) {
-      $string = trim(str_replace("<!--markdownextra-->", null, (string) $string));
+      $string = trim(str_replace("<!--markdownextra-->", "", (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($string);
     }
     return $string;
@@ -421,7 +421,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           }
         }
         
-        if(empty($product_info) === false && (empty($options["skip_info"]) || $options["skip_info"] === false)) {
+        if(!empty($product_info) && (empty($options["skip_info"]) || $options["skip_info"] === false)) {
           echo "<ul>";
           foreach($product_info as $key => $item) {
             if($key === $max_product_info_items) break;
@@ -1436,14 +1436,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $payload = urlencode((string) $payload);
     }
     return match ($which) {
-      "tools_magento1_order_id" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento1_order_id&q={$payload}",
-      "tools_magento_product_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=magento_product_sku&q={$payload}",
-      "tools_chefstore_product_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=chefstore_product_sku&q={$payload}",
-      "tools_supplier_product_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9uZXJkc3R1ZmYvb3V0L291dC5waHA=&which=supplier_product_sku&q={$payload}",
+      "tools_magento1_order_id" => "https://tools.deheerhoreca.nl/?tool=out&which=magento1_order_id&q={$payload}",
+      "tools_magento_product_sku" => "https://tools.deheerhoreca.nl/?tool=out&which=magento_product_sku&q={$payload}",
+      "tools_chefstore_product_sku" => "https://tools.deheerhoreca.nl/?tool=out&which=chefstore_product_sku&q={$payload}",
+      "tools_supplier_product_sku" => "https://tools.deheerhoreca.nl/?tool=out&which=supplier_product_sku&q={$payload}",
       "magento_order" => "https://www.chefstore.nl/index.php/admin4JN0/sales_order/view/order_id/{$payload}/",
       "magento_product" => "https://www.chefstore.nl/index.php/admin4JN0/catalog_product/edit/id/{$payload}/",
-      "tools-intel-product", "tools_intel_product" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ludGVsLXByb2R1Y3QvaW50ZWwtcHJvZHVjdC5waHA%3D&identifier={$payload}",
-      "tools_ii_sku" => "https://tools.deheerhoreca.nl/?tool=Li90b29scy9jYXRhbG9nL2ltYWdlX2luc3BlY3Rvci9pbWFnZV9pbnNwZWN0b3IucGhw&sku={$payload}",
+      "tools-intel-product", "tools_intel_product" => "https://tools.deheerhoreca.nl/?tool=products&identifier={$payload}",
+      "tools_ii_sku" => "https://tools.deheerhoreca.nl/?tool=image-inspector&sku={$payload}",
       "bol_search_product" => "https://www.bol.com/nl/s/?searchtext={$payload}",
       default => false,
     };
