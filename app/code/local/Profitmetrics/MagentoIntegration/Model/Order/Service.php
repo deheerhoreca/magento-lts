@@ -125,14 +125,9 @@ class Profitmetrics_MagentoIntegration_Model_Order_Service
             return (string) $value !== '';
         });
         $url = Mage::helper('core/url')->addRequestParam($profitMetricsApiUrl, $parameters);
-
-        Mage::log("Profit Metrics API Url: " . $url);
-
         $client = new Zend_Http_Client($url, array(
             'maxredirects' => 0,
             'timeout'      => 120));
-
-
         $response = $client->request(Zend_Http_Client::GET);
 
         return strpos($response->getBody(), '//unknown') === false && $response->getStatus() === 200;

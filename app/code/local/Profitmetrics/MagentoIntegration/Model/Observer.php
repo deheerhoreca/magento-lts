@@ -113,7 +113,6 @@ class Profitmetrics_MagentoIntegration_Model_Observer
                 }
 
                 $visitor->addData($trackingData);
-
                 $visitor->save();
             }
             $customerSession->setData(

@@ -125,6 +125,8 @@
 - `app/code/local/Magmodules/Kiyoh/Model/Stats.php`
 - `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
 - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
+- `app/code/local/Profitmetrics/MagentoIntegration/controllers/Adminhtml/ProfitmetricsController.php`
+- `app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml`
 - `app/code/local/TM/CheckoutFields/etc/wsdl.xml`
 - `app/code/local/TM/FireCheckout/etc/wsdl.xml`
 - `app/code/local/TM/RichSnippets/Block/Product.php`
@@ -324,6 +326,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Expanding list of known Bots to reduce the bloated SQL table
   - `app/code/local/Profitmetrics/MagentoIntegration/controllers/Adminhtml/ProfitmetricsController.php`
     - Raising max memory limit
+  - `app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml`
+    - Adding unique value to param for cachebusting
 - **TM Core**
   - `app/code/community/TM/Core/Model/Notification/Feed.php`
     - Disable admin notifications

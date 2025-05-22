@@ -48,25 +48,75 @@ function _pm_getcookie( cookiename ) {
 }
 
 function _pm_getGa4SessionId() {
-	const retImploded = document.cookie.split(';')
-		.filter((c) => c.indexOf('_ga_') !== -1)
-		.map((c) => c.trim().split('.'))
-		.map((c) => c[0].substring(4, c[0].indexOf('=')) + ":" + c[2]) // index 2 for session id
-		.join(',')
-	;
+	const gaCookies = document.cookie.split(';')
+	.map(cookie => cookie.trim())
+	.filter(cookie => cookie.startsWith('_ga_'));
 
-	return null != retImploded && retImploded.length > 0 ? retImploded : null;
+	const result = gaCookies.map(cookieString => {
+		const eqIndex = cookieString.indexOf('=');
+		if (eqIndex === -1) return null;
+
+		const cookieName = cookieString.substring(0, eqIndex);
+		const cookieValue = cookieString.substring(eqIndex + 1);
+		const measurementId = cookieName.substring(4);
+		let sessionId = null;
+
+		if (cookieValue.startsWith('GS2.')) {
+			const parts = cookieValue.split('.');
+			if (parts.length >= 3) {
+				const dataSegments = parts[2].split('$');
+				const sessionSegment = dataSegments.find(segment => segment.startsWith('s'));
+				if (sessionSegment) {
+					sessionId = sessionSegment.substring(1);
+				}
+			}
+		} else if (cookieValue.startsWith('GS1.')) {
+			const parts = cookieValue.split('.');
+			if (parts.length >= 3) {
+				sessionId = parts[2];
+			}
+		}
+		return sessionId ? `${measurementId}:${sessionId}` : null;
+	}).filter(Boolean);
+
+	const retImploded = result.join(',');
+	return retImploded && retImploded.length > 0 ? retImploded : null;
 }
 
 function _pm_getGa4SessionCount() {
-	const retImploded = document.cookie.split(';')
-		.filter((c) => c.indexOf('_ga_') !== -1)
-		.map((c) => c.trim().split('.'))
-		.map((c) => c[0].substring(4, c[0].indexOf('=')) + ":" + c[3]) // index 3 for session count
-		.join(',')
-	;
+	const gaCookies = document.cookie.split(';')
+	.map(cookie => cookie.trim())
+	.filter(cookie => cookie.startsWith('_ga_'));
 
-	return null != retImploded && retImploded.length > 0 ? retImploded : null;
+	const result = gaCookies.map(cookieString => {
+		const eqIndex = cookieString.indexOf('=');
+		if (eqIndex === -1) return null;
+
+		const cookieName = cookieString.substring(0, eqIndex);
+		const cookieValue = cookieString.substring(eqIndex + 1);
+		const measurementId = cookieName.substring(4);
+		let sessionCount = null;
+
+		if (cookieValue.startsWith('GS2.')) {
+			const parts = cookieValue.split('.');
+			if (parts.length >= 3) {
+				const dataSegments = parts[2].split('$');
+				const sessionSegment = dataSegments.find(segment => segment.startsWith('o'));
+				if (sessionSegment) {
+					sessionCount = sessionSegment.substring(1);
+				}
+			}
+		} else if (cookieValue.startsWith('GS1.')) {
+			const parts = cookieValue.split('.');
+			if (parts.length >= 4) {
+				sessionCount = parts[3];
+			}
+		}
+		return sessionCount ? `${measurementId}:${sessionCount}` : null;
+	}).filter(Boolean);
+
+	const retImploded = result.join(',');
+	return retImploded && retImploded.length > 0 ? retImploded : null;
 }
 
 function _pm_getStoredTPTrack() {
@@ -214,8 +264,8 @@ function init() {
 		load_pmTPTrack()
 	}
 
-// CookieBot
-// Get consent
+	// CookieBot
+	// Get consent
 	if (typeof Cookiebot !== 'undefined' && (Cookiebot?.consent?.statistics && Cookiebot?.consent?.marketing)) {
 		cc_statistics = Cookiebot.consent.statistics;
 		cc_marketing = Cookiebot.consent.marketing;
@@ -232,8 +282,8 @@ function init() {
 		});
 	}
 
-// CookieInformation
-// Get consent
+	// CookieInformation
+	// Get consent
 	if (typeof CookieInformation !== 'undefined' && (CookieInformation?.getConsentGivenFor('cookie_cat_statistic') && CookieInformation?.getConsentGivenFor('cookie_cat_marketing'))) {
 		cc_statistics = CookieInformation.getConsentGivenFor('cookie_cat_statistic');
 		cc_marketing = CookieInformation.getConsentGivenFor('cookie_cat_marketing');
@@ -249,8 +299,8 @@ function init() {
 		});
 	}
 
-// OneTrust
-// Get consent
+	// OneTrust
+	// Get consent
 	if (typeof OneTrust !== 'undefined' && (OnetrustActiveGroups?.includes("2") && OnetrustActiveGroups?.includes("4"))) {
 		cc_statistics = OnetrustActiveGroups.includes("2");
 		cc_marketing = OnetrustActiveGroups.includes("4");
@@ -266,8 +316,8 @@ function init() {
 		});
 	}
 
-// CookieYes
-// Get consent
+	// CookieYes
+	// Get consent
 	if (typeof getCkyConsent !== 'undefined' && (getCkyConsent()?.categories?.analytics && getCkyConsent()?.categories?.advertisement)) {
 		cc_statistics = getCkyConsent().categories.analytics;
 		cc_marketing = getCkyConsent().categories.advertisement;
@@ -283,8 +333,8 @@ function init() {
 		});
 	}
 
-// CookieFirst
-// Get consent
+	// CookieFirst
+	// Get consent
 	if (typeof CookieFirst !== 'undefined' && (CookieFirst?.consent?.performance && CookieFirst?.consent?.advertising)) {
 		cc_statistics = CookieFirst.consent.performance;
 		cc_marketing = CookieFirst.consent.advertising;
@@ -308,8 +358,8 @@ function init() {
 		});
 	}
 
-// CookieScript
-// Get consent
+	// CookieScript
+	// Get consent
 	if (typeof CookieScript !== 'undefined' && (CookieScript?.instance?.currentState()?.categories?.includes("performance") && CookieScript?.instance?.currentState()?.categories?.includes("targeting"))) {
 		cc_statistics = CookieScript.instance.currentState().categories.includes("performance");
 		cc_marketing = CookieScript.instance.currentState().categories.includes("targeting");
@@ -325,8 +375,8 @@ function init() {
 		});
 	}
 
-// Google Consent Mode
-// Get consent
+	// Google Consent Mode
+	// Get consent
 	if (typeof window.google_tag_data !== 'undefined' && window.google_tag_data?.ics && (window.google_tag_data?.ics?.entries?.ad_storage?.update && window.google_tag_data?.ics?.entries?.analytics_storage?.update)) {
 		cc_marketing = window.google_tag_data.ics.entries.ad_storage.update;
 		cc_statistics = window.google_tag_data.ics.entries.analytics_storage.update;

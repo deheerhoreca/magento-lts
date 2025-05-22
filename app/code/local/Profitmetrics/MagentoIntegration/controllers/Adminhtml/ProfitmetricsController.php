@@ -150,7 +150,8 @@ class Profitmetrics_MagentoIntegration_Adminhtml_ProfitmetricsController extends
      */
     public function generateCustomersAction()
     {
-        ini_set("memory_limit", "4G"); //  DHH CORE HACK -- 1G crashed the script
+        // DHH CORE HACK -- 1G crashed the script
+        ini_set("memory_limit", "4G");
         
         try {
             $fileName = Mage::helper('profitmetrics/customerExport')->createCsv();
