@@ -384,6 +384,8 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Allow certain attributes to ignore hide_one_value
   - `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Category.php`
     - Skipping count
+  - `app/code/local/Amasty/Shopby/Model/Url/Builder.php`
+    - Applying multipass=true to more situations
 - **Cart2Quote**
   - `app/code/community/Ophirah/Qquoteadv/Block/Adminhtml/Qquoteadv/Edit/Tab/Product.php`
     - Force `isAllowedCustomFields()`

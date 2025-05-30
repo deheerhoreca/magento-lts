@@ -12,5 +12,7 @@
     "environment": {
       "documentRoot": "./",
     }
-  }
+  },
+  "compareFolders.ignoreExtension": [],
+  "intelephense.environment.documentRoot": "~/httpdocs/deheerhoreca-magento"
 }

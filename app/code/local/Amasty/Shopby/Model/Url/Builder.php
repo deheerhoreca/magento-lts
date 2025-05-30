@@ -324,7 +324,14 @@ class Amasty_Shopby_Model_Url_Builder
     {
         if (self::$multiselectQueryParam) {
             $foundMultipleValues = false;
+            
             foreach ($this->query as $code => $v) {
+                
+                // DHH CORE HACK -- We want multipass in place with many filters, not just many selected options per filter
+                if(count($this->query) > 3) {
+                    $foundMultipleValues = true;
+                }
+                
                 $isMultipleSelectedArray = is_array($v) && count($v) > 1;
                 $isMultipleSelectedString = is_string($v) && preg_match('@\d+,[\d,]*\d@', $v);
                 $isDecimal = self::$urlHelper->isDecimal($code);

@@ -4,11 +4,14 @@
 
 // @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
 
-// Normal flow:
-// mphp -c ../php.cmd.ini rewrites_doctor.php update_keys       (1-5 min)
-// mphp -c ../php.cmd.ini indexer.php --reindex catalog_url     (5-10 min)
-// For STORE_ID = 1: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 10 --store 1
-// For STORE_ID = 4: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
+/**
+ * Optimize core_url_rewrite table
+ *
+ * mphp -c ../php.cmd.ini rewrites_doctor.php update_keys       (1-5 min)
+ * mphp -c ../php.cmd.ini indexer.php --reindex catalog_url     (5-10 min)
+ * For STORE_ID = 1: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 10 --store 1
+ * For STORE_ID = 4: mphp -c ../php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
+ */
 
 ini_set("display_errors", "1");
 ini_set("display_startup_errors", "1");
@@ -320,6 +323,15 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   }
 }
 
+ini_set("memory_limit", "8G");
+
+$shell = new Atwix_Shell_Rewrites_Doctor();
+
+Mage::register('custom_entry_point', true);
+Mage::setIsDeveloperMode($developer_mode);
+// Mage::app(code: "admin", type: "store", options: $mage_options);
+Mage::init(); // Mage::app() runs Mage::init(); NOTE: REMOVING THIS LINE LEADS TO AN ERROR
+
 if(DRYRUN) {
   echo "DRYRUN is on".PHP_EOL;
 } else {
@@ -334,7 +346,4 @@ if(DRYRUN) {
   fclose($handle);
 }
 
-ini_set("memory_limit", "8G");
-
-$shell = new Atwix_Shell_Rewrites_Doctor();
 $shell->run();

@@ -1,0 +1,128 @@
+# Visual Studio Code
+.vscode/*
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Add a base setup for running unit Tests with code coverage and send them to SonarCloud
+# https://github.com/OpenMage/magento-lts/pull/1836
+/dev/testfield
+/dev/tests/clover.xml
+/dev/tests/crap4j.xml
+/dev/tests/junit.xml
+
+# Add Gitpod online IDE config
+# https://github.com/OpenMage/magento-lts/pull/1836
+/dev/gitpod/docker-magento
+/dev/gitpod/.env
+
+# Add development environment setup files and README
+# https://github.com/OpenMage/magento-lts/pull/1012
+/dev/openmage/docker-magento
+/dev/openmage/.env
+/dev/openmage/Caddyfile
+/dev/tests/functional/generated
+/dev/tests/functional/vendor
+
+/media/*
+/var/*
+
+# scss-cache
+/skin/*/*/*/scss/.sass-cache
+
+# .phar (n98-magerun, ...)
+*.phar
+
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache
+
+# Ignore custom config files
+.php-cs-fixer*
+
+.phpcs*.xml
+
+# PhpStan
+.phpstan.cache
+.phpstan*.neon
+phpstan*.neon
+
+# PhpUnit
+tests/coverage
+tests/logging
+.phpunit.result.cache
+phpunit.xml
+
+# build
+/build
+
+# dev scripts loaded via composer
+/shell/update-copyright.php
+/shell/translations.php
+
+# DDEV
+.ddev/config.yaml
+.ddev/.sampleData
+
+#########################################
+# DHH ADDITIONS
+#########################################
+
+# FILES
+/.cachetool.yaml
+.DS_Store
+._.DS_Store
+._*
+/sitemap_watdachtjezelf*.xml
+/google_shopping_vijfbatmansymbol.*
+/protected/*.xml
+/protected/*.zip
+/bridge_*.php
+/google*.html
+/BingSiteAuth.xml
+/nohup.out
+/nohup*.out
+/algolia_*.json
+/maintenance.flag
+/maintenance.ip
+/js/elastic-apm-rum.umd.min.js.map
+
+# DIRS
+/js/ext-*
+/skin/frontend/rwd/external/
+/.modman/*/.git
+/.idea/
+/.phpstorm.meta.php
+/.well-known/acme-challenge/
+/skin/assets/
+
+# FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
+/media/amfeed
+/media/cache
+/media/attachment
+/media/productattachment
+/media/import
+/media/sooqr
+/media/qquoteadv
+/media/catalog
+/media/tmp
+/media/dhh
+/media/wysiwyg/*
+
+# BILLER WEBHOOK
+/biller-webhook-errors.jsonl
+/biller-webhook.jsonl
+
+# FRESHDESK WEBHOOK
+/freshdesk-*.ndjson
+
+# GENERATED CONFIGURATIONS
+/etc/*-local.ini
+/*.bak-*
+/_user.ini
+/php.cmd.ini
+/etc/php.cmd.ini
+/.php-version
+/.php-ini

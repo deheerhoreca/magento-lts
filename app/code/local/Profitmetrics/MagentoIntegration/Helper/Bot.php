@@ -15,6 +15,10 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
         "GPTBot/1.",
         "Elastic-Metricbeat",
         "xCore",
+        "SemrushBot",
+        "Amazonbot",
+        "SeekportBot",
+        "imagesift",
         
         "AdsBot-Google",
         "AdsBot-Google-Mobile",
