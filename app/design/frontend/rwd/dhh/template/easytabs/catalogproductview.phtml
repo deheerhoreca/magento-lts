@@ -59,6 +59,7 @@ if(empty($energy_rating) || $energy_rating === "N.v.t.") {
 }
 $refrigerant            = _get_product_attribute($_product, "refrigerant");
 $voltage                = _get_product_attribute($_product, "voltage");
+$product_type           = _get_product_attribute($_product, "product_type");
 $productTitle           = $_helper->productAttribute($_product, $_product->getName(), "name");
 $subdescription         = _get_product_attribute($_product, "sub_description");
 $product_title_short    = _get_product_attribute($_product, "name_short");
@@ -814,20 +815,25 @@ if(strlen($product_description_md) > 0) {
 
 // Add specific blocks to the description based on attributes
 if($refrigerant === "R290" || $refrigerant === "R290a") {
-  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r290")->toHtml()."</div>";
+  $product_description .= "<div class='px-3 py-2 border shadow-sm mt-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r290")->toHtml()."</div>";
 }
 if($refrigerant === "R600" || $refrigerant === "R600a" || $refrigerant === "R660a") {
-  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r600")->toHtml()."</div>";
+  $product_description .= "<div class='px-3 py-2 border shadow-sm mt-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r600")->toHtml()."</div>";
 }
 if($refrigerant === "R454C") {
-  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r454c")->toHtml()."</div>";
+  $product_description .= "<div class='px-3 py-2 border shadow-sm mt-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_refrigerant_r454c")->toHtml()."</div>";
 }
+
+if(in_array("Print", (array) $product_type)) {
+  $product_description .= "<div class='px-3 py-2 border shadow-sm mt-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_product_type_print")->toHtml()."</div>";
+}
+
 $value = $voltage;
 if(is_array($value)) {
   $value = implode(" ", $value);
 }
 if((stripos((string) $value, "400") !== false)) {
-  $product_description .= "<div class='py-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_voltage_400")->toHtml()."</div>";
+  $product_description .= "<div class='px-3 py-2 border shadow-sm'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_voltage_400")->toHtml()."</div>";
 }
 
 if(strlen($product_description) === 0) {
@@ -1134,13 +1140,13 @@ if($stock_data["overall_stock_status"] === "backorder"
   </div>
 
   <div class="proleftdv">
-    <?php  
+    <?php
 
     /* Product Tagline */
     if(empty($tagline) === false) {
       echo "<div class='product-detail-tagline px-2 py-1 my-2'>{$tagline}</div>";
     }
-
+    
     /* Product Video */
     if(empty($pvideo) === false) { ?>
       <div class="py-1">
@@ -1157,7 +1163,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       </div>
       <?php
     }
-
+    
     /* Product USPs */ ?>
     <?php
     if(empty($hlstr) === false) {
@@ -1168,9 +1174,9 @@ if($stock_data["overall_stock_status"] === "backorder"
       </div>
       <?php
     }
-
+    
     /* Product Description */
-
+    
     if(empty($subdescription) === false && strlen((string) $subdescription) > 20 && strlen((string) $subdescription) < 500) {
       echo "<div class='std p-2 my-2 fw-600' style='background-color:#e0f6ff; border-radius:5px;'>{$subdescription}</div>";
     }
@@ -1374,13 +1380,9 @@ if($stock_data["overall_stock_status"] === "backorder"
           ?>
         </ul>
       </div>
-<?php
-    }
-    ?>
-
-    <?php /* Automatic Related Products */ ?>
-
-    <?php
+    <?php }
+    
+    /* Automatic Related Products */
     if(empty($upsell_products_block) === false) {
       ?>
       <span class="anchor" id="upsells"></span>
@@ -1389,47 +1391,41 @@ if($stock_data["overall_stock_status"] === "backorder"
       </div>
       <?php
     }
-    ?>
-
-    <?php /* Related Products */ ?>
-
-    <?php
+    
+    /* Related Products */
     if(empty($related_products_block) === false) {
       ?>
       <span class="anchor" id="related"></span>
       <div class="probottomdv">
         <?php echo $related_products_block; ?>
       </div>
-      <?php
-    }
-    ?>
+    <?php }
 
-    <?php /* Brand Logo & Text */ ?>
-
-    <?php
-      // if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
-        // 
-        // <div class="probottomdv" id="product-brand-text">
-        // <span class="anchor" id="brand"></span>
-        // <h3 class="tableftheader">Over $brand_name</h3>
-        // <div class="brand std justify">$brand_block_name</div>
-        // 
-      // }
-      if(empty($brand_logo) === false) {
-        echo "<div class='center'>";
-        echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
-        echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' loading=lazy></a></div>";
-      }
-      echo "</div>";
-      ?>
+    /* Brand Logo & Text */
+    
+    // if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
+      // 
+      // <div class="probottomdv" id="product-brand-text">
+      // <span class="anchor" id="brand"></span>
+      // <h3 class="tableftheader">Over $brand_name</h3>
+      // <div class="brand std justify">$brand_block_name</div>
+      // 
+    // }
+    
+    if(empty($brand_logo) === false) {
+      echo "<div class='center'>";
+      echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
+      echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' loading=lazy></a></div>";
+    } ?>
+    </div>
   </div>
 </div>
-<?php
 
+<?php
 // schema.org product data -- Called here and removed from layout xml to put it in the footer
 echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/richsnippets/richsnippets_json.phtml")->toHtml();
-
 ?>
+
 <script>
   //<![CDATA[
   var productAddToCartForm = new VarienForm('product_addtocart_form');

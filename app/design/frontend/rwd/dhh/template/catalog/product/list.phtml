@@ -283,7 +283,10 @@ if($show_products && $_productCollection->getFirstItem()) {
       $i++;
       $product_id = $_product->getId();
       $cache_key  = "dhh_listview_product_{$product_id}";
-      $GLOBALS["read_listview_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "dhh_listview_product");
+      
+      // @todo Fix form_key in URLs before enabling again
+      $GLOBALS["read_listview_cache_enabled"] = false;
+      // $GLOBALS["read_listview_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "dhh_listview_product");
       
       if($GLOBALS["read_listview_cache_enabled"]) {
         if($html = (string) Mage::app()->getCache()->load($cache_key)) {
