@@ -29,6 +29,8 @@
 
 /media/*
 /var/*
+/lib/n98-magerun
+/vendor/magento-hackathon/magento-composer-installer
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
