@@ -137,19 +137,6 @@ function _get_watermarked_image_filename($optimized_image, string $dhh_sku = "UN
   return $wm_path;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* END DHH PREP */
 
 /* @var $this Mage_Catalog_Block_Product_View_Media */
@@ -664,7 +651,8 @@ if(!empty($hiddenImagesHTML)) {
 $thumb_h = 400;
 foreach($containersData as $containerId => $containerHTML) {
   $activeClass = $defaultContainerId == $containerId ? ' mt-active' : '';
-  $mainHTML .= "<div class=\"magic-slide{$activeClass}\" data-magic-slide=\"{$containerId}\" style=\"height:{$thumb_h}px;line-height:{$thumb_h}px;vertical-align:middle;\">{$containerHTML}</div>".PHP_EOL;
+  // $mainHTML .= "<div class=\"magic-slide{$activeClass}\" data-magic-slide=\"{$containerId}\" style=\"height:{$thumb_h}px;line-height:{$thumb_h}px;vertical-align:middle;\">{$containerHTML}</div>".PHP_EOL;
+  $mainHTML .= "<div class='magic-slide{$activeClass}' data-magic-slide='{$containerId}'>{$containerHTML}</div>".PHP_EOL;
 }
 
 $scroll = $magicToolboxHelper->loadScroll();

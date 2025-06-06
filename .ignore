@@ -35,21 +35,14 @@
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
 
-# .phar (n98-magerun, ...)
-*.phar
-
-# PHP-CS-Fixer cache
-.php-cs-fixer.cache
-
-# Ignore custom config files
+**.phar
+**.cache
+/js/tinymce/themes
 .php-cs-fixer*
-
 .phpcs*.xml
-
-# PhpStan
-.phpstan.cache
-.phpstan*.neon
-phpstan*.neon
+**.neon
+**.js.map
+**.min.js
 
 # PhpUnit
 tests/coverage
@@ -68,10 +61,6 @@ phpunit.xml
 .ddev/config.yaml
 .ddev/.sampleData
 
-#########################################
-# DHH ADDITIONS
-#########################################
-
 # FILES
 /.cachetool.yaml
 .DS_Store
@@ -89,7 +78,6 @@ phpunit.xml
 /algolia_*.json
 /maintenance.flag
 /maintenance.ip
-/js/elastic-apm-rum.umd.min.js.map
 
 # DIRS
 /js/ext-*

@@ -1008,11 +1008,9 @@ if($stock_data["overall_stock_status"] === "backorder"
                 ?>
                 <div class="add-to-box">
                   <div class="price-info">
-                    <?php
-                      echo $this->getPriceHtml($_product);
-                      echo $this->getChildHtml("bundle_prices");
-                      echo $this->getTierPriceHtml();
-                    ?>
+                    <?=$this->getPriceHtml($_product)?>
+                    <?=$this->getChildHtml("bundle_prices")?>
+                    <?=$this->getTierPriceHtml()?>
                   </div>
                   <?php
                   echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
@@ -1035,34 +1033,34 @@ if($stock_data["overall_stock_status"] === "backorder"
                   if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-06-16 00:00:00")) {
                     // @todo generate end date "15 juni 2025"
                     ?>
-                    <div class="card mx-auto p-2 mx-3">
-                    <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                    <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                    <div class="card mx-auto p-2 mb-2">
+                      <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
                         <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 15 juni 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
-                    </div>
-                    <?php
+                    </div><?php
                   }
                   
                   elseif($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
-                  "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW", "DI-WR-38CS-SB",
-                  "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
-                  "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G", "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8",
-                  "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"], true)) {
+                  "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N",
+                  "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW", "DI-WR-38CS-SB",
+                  "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M",
+                  "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
+                  "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G",
+                  "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8", "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"], true)) {
                     ?>
-                    <div class="card mx-auto p-2 mx-3">
-                    <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                    <img src="//images.chefstore.nl/media/wysiwyg/brands/diverso_by_diamond.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                    <div class="card mx-auto p-2 mb-2">
+                      <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/diverso_by_diamond.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
                         <h4 class="card-title">6% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">DIAMOND625</span></h4>
                         <p class="card-text">Korting geldt voor <a href="/promoties/2025-diverso-by-diamond.html">deze producten van Diverso by Diamond</a>. Gebruik deze code bij het afrekenen.</p>
                         <p class="card-text mt-2 fw-light"><em class="small">OP=OP: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
-                    </div>
-                    <?php
+                    </div><?php
                   } else {
                     echo "<span style='display:none;'>{$supplier_name}</span>";
                   }
