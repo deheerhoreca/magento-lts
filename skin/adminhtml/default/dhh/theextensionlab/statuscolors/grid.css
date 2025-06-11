@@ -11,10 +11,12 @@
 }
 
 .grid .custom-color span {
-  min-width: 150px;
+  min-width: 120px;
   white-space: nowrap;
 }
 
+/*
 .grid td:has(.custom-color) {
   
 }
+*/

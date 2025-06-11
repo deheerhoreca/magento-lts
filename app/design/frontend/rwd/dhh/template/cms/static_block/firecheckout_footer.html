@@ -1,0 +1,42 @@
+<script>
+  document.getEday = 'none';
+  
+  jQuery('#billing\\:vat_id').parent().parent().show();
+  
+  jQuery(function() {
+    if(jQuery('#billing\\:country_id').val()=='NL') {
+      jQuery('#billing\\:vat_id').parent().parent().hide();
+      jQuery('#billing\\:vat_id').val('');
+      jQuery('#billing\\:vat_id').css('background-color','#E4E4E4');
+      jQuery('#billing\\:vat_id').attr('readonly','readonly');
+    } else {
+      jQuery('#billing\\:vat_id').parent().parent().show();
+    }
+    
+    jQuery('#billing\\:country_id').change(function(){
+      var ct=jQuery(this).val();
+      if(ct=='NL'){
+        jQuery('#billing\\:vat_id').parent().parent().hide();
+        jQuery('#billing\\:vat_id').val('');
+        jQuery('#billing\\:vat_id').css('background-color','#E4E4E4');
+        jQuery('#billing\\:vat_id').attr('readonly','readonly');
+      } else {
+        jQuery('#billing\\:vat_id').parent().parent().show();
+        jQuery('#billing\\:vat_id').css('background-color','#FFFFFF');
+        jQuery('#billing\\:vat_id').removeAttr("readonly");
+      }
+    });
+  });
+  
+  jQuery(document).ready(function() {
+    jQuery('#billing\\:firstname, #billing\\:lastname, #billing\\:city').keydown(function(event) {
+      if (this.selectionStart == 0 && event.keyCode >= 65 && event.keyCode <= 90 && !(event.shiftKey) && !(event.ctrlKey) && !(event.metaKey) && !(event.altKey)) {
+        var $t = jQuery(this);
+        event.preventDefault();
+        var char = String.fromCharCode(event.keyCode);
+        $t.val(char + $t.val().slice(this.selectionEnd));
+        this.setSelectionRange(1, 1);
+      }
+    });
+  });
+</script>

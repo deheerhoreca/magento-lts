@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e00438eb5530154a0527fb4dca7e58a6",
+    "content-hash": "f1645afa5ad9f95d8bc281481d27a70a",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -1157,6 +1157,79 @@
             },
             "abandoned": true,
             "time": "2015-11-03T22:21:38+00:00"
+        },
+        {
+            "name": "empiricompany/openmage-mm_cmscontentfilemode",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magemega/openmage-mm_cmscontentfilemode.git",
+                "reference": "b3a92d8942e58e22333d44bbaeb557b9402f8027"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magemega/openmage-mm_cmscontentfilemode/zipball/b3a92d8942e58e22333d44bbaeb557b9402f8027",
+                "reference": "b3a92d8942e58e22333d44bbaeb557b9402f8027",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": "^7.4||^8.0"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "OpenMage / Magento 1.9 module extension that allows to work on static files for CMS Static Blocks / Pages content. ",
+            "homepage": "https://github.com/empiricompany/openmage-mm_cmscontentfilemode",
+            "keywords": [
+                "magento",
+                "magento1",
+                "openmage"
+            ],
+            "support": {
+                "issues": "https://github.com/magemega/openmage-mm_cmscontentfilemode/issues",
+                "source": "https://github.com/magemega/openmage-mm_cmscontentfilemode/tree/main"
+            },
+            "time": "2024-05-02T11:06:38+00:00"
+        },
+        {
+            "name": "empiricompany/openmage-mm_monacoeditor",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/empiricompany/openmage-mm_monacoeditor.git",
+                "reference": "212bbb05edb93b01f340ac8025d0fe94af51683b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/empiricompany/openmage-mm_monacoeditor/zipball/212bbb05edb93b01f340ac8025d0fe94af51683b",
+                "reference": "212bbb05edb93b01f340ac8025d0fe94af51683b",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": "^7.4||^8.0"
+            },
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "OpenMage / Magento 1.9 module extension that integrate Monaco Editor with Emmet and Tailwindcss Intellisense in CMS Static Blocks / Pages",
+            "homepage": "https://github.com/empiricompany/openmage-mm_monacoeditor",
+            "keywords": [
+                "magento",
+                "magento1",
+                "openmage"
+            ],
+            "support": {
+                "issues": "https://github.com/empiricompany/openmage-mm_monacoeditor/issues",
+                "source": "https://github.com/empiricompany/openmage-mm_monacoeditor/tree/v1.0.1"
+            },
+            "time": "2025-04-29T10:30:59+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -5229,6 +5302,7 @@
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_profiler": 20,
         "colinmollenhour/magento-redis-session": 20,
+        "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "paynl/magento-plugin": 20
     },
     "prefer-stable": true,

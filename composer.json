@@ -18,6 +18,8 @@
     "cmixin/business-day": "^1.18",
     "colinmollenhour/magento-redis-session": "dev-master as 3.2.0",
     "dekor/php-array-table": "^2.0",
+    "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
+    "empiricompany/openmage-mm_monacoeditor": "^1.0",
     "firegento/adminmonitoring": "^1.3",
     "firegento/debug": "^1.5",
     "hirale/openmage-debug": "^1.0",

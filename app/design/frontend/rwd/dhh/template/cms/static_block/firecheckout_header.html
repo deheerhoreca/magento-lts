@@ -1,0 +1,101 @@
+<style>
+  
+  .firecheckout-index-index #topbar,
+  .firecheckout-index-index #nav,
+  .firecheckout-index-index #footer-grid,
+  .firecheckout-index-index #header-search {
+    visibility: hidden;
+  }
+  
+  .shadow {
+    -webkit-border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
+    -webkit-box-shadow: rgba(0, 0, 0, .30) 0 2px 3px;
+  }
+
+  .usp-container {
+    margin: 0 auto;
+    width: 100%;
+    background: #f9f9f9 0 0;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 2px #fff inset,
+      -1px -1px 2px #fff inset;
+    border-radius: 3px/6px;
+    padding: .5em;
+  }
+
+  ul.tile-grid {
+    display: grid;
+    display: -ms-grid;
+    grid-template-columns: 100%;
+    grid-column-gap: 0;
+    -ms-grid-columns: 100%;
+    grid-template-rows: auto auto auto auto;
+    grid-row-gap: 5px;
+    -ms-grid-rows: auto 5px auto 5px auto 5px auto;
+    margin: 1em 0;
+    flex-flow: row wrap;
+  }
+
+  @media (min-width: 48em) {
+    ul.tile-grid {
+      grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
+      grid-column-gap: 15px;
+      -ms-grid-columns: calc(50% - 7.5px) 15px calc(50% - 7.5px);
+      grid-template-rows: auto auto;
+      grid-row-gap: 15px;
+      -ms-grid-rows: auto 15px auto
+    }
+  }
+
+  @media (min-width: 62em) {
+
+    ul.tile-grid li {
+      height: 50px;
+    }
+
+    ul.tile-grid li a {
+      flex-flow: column nowrap;
+      padding-bottom: 40px;
+    }
+  }
+
+  @media (min-width: 75em) {
+    ul.tile-grid {
+      grid-template-columns: calc(25% - 11.25px) calc(25% - 11.25px) calc(25% - 11.25px) calc(25% - 11.25px);
+      grid-column-gap: 15px;
+      -ms-grid-columns: calc(25% - 11.25px) 15px calc(25% - 11.25px) 15px calc(25% - 11.25px) 15px calc(25% - 11.25px);
+      grid-template-rows: auto;
+      grid-row-gap: 15px;
+      -ms-grid-rows: auto;
+    }
+  }
+
+  div.usp-icon {
+    margin: 0 .5em;
+  }
+</style>
+<div class="f">
+<ul class="tile-grid">
+<li class="usp-container">
+<div class="float-left usp-icon"><img src="/skin/frontend/rwd/dhh/images/trolley.svg" alt="Gratis verzending" width="32" height="32"></div>
+<div><span class="usp_text"><strong class="extra_special">Gratis</strong> verzending</span><br><span class="small">In Nederland &amp; Belgi&euml; vanaf &euro; 150</span></div>
+</li>
+<li class="usp-container">
+<div class="float-left usp-icon"><img src="/skin/frontend/rwd/dhh/images/euro.svg" alt="De beste prijs" width="32" height="32"></div>
+<div class="inline"><span class="usp_text">Ergens goedkoper gezien?</span><br><span class="small"><a href="/klantenservice">Vertel het ons</a></span></div>
+</li>
+<li class="usp-container">
+<div class="float-left usp-icon"><img src="/skin/frontend/rwd/dhh/images/superhero.svg" alt="Advies voor professionals" width="32" height="32"></div>
+<div class="inline"><span class="usp_text">Advies door professionals</span><br><span class="small">Klaas staat klaar</span></div>
+</li>
+<li class="usp-container">
+<div class="float-left usp-icon"><img src="/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" alt="Snelle levrering" width="32" height="32"></div>
+<div class="inline"><span class="usp_text">Snelle levering</span></div>
+</li>
+</ul>
+</div>
+<!--
+<div style="margin-bottom:1em; background-color:#fff;">
+  <strong>BTW VRIJ BESTELLEN BUITEN NEDERLAND</strong>: Op dit moment is er helaas een storing met het valideren van BTW nummers. Indien u als Belgische klant BTW vrij wilt bestellen dan kunt u uw bestelling ook per email doorgeven via <a href="mailto:service@chefstore.nl">service@chefstore.nl</a>. Wij zullen dan zorgen dat uw bestelling zonder BTW wordt verwerkt. De betaling vindt plaats via een betaallink, met ondersteuning van alle gebruikelijke betaalmethodes. Onze excuses voor het ongemak.
+</div>
+-->

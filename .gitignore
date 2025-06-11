@@ -405,3 +405,15 @@ phpunit.xml
 /app/locale/nl_NL/Pay_Payment.csv
 /app/locale/en_US/Pay_Payment.csv
 /app/locale/it_IT/Pay_Payment.csv
+/app/code/local/MM/CmsContentFileMode
+/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
+/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
+/app/design/frontend/base/default/layout/mm/tailwindcss.xml
+/lib/tailwindcss/tailwind.config.js
+/lib/tailwindcss/tailwindcss
+/app/etc/modules/MM_CmsContentFileMode.xml
+/app/code/local/MM/MonacoEditor
+/js/monacoeditor
+/app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
+/app/design/adminhtml/default/default/template/mm/monacoeditor
+/app/etc/modules/MM_MonacoEditor.xml

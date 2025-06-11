@@ -62,11 +62,11 @@
         $i++;
         $tracking_nr = $this->escapeHtml($_track->getNumber());
         if(filter_var($tracking_nr, FILTER_VALIDATE_URL)) {
-          $tracking_nr = "<a href='{$tracking_nr}' target='_blank' rel='external noreferrer noopener'>{$tracking_nr}</a>";
+          $tracking_nr = "<a href='{$tracking_nr}' target='_blank' rel='noreferrer'>{$tracking_nr}</a>";
         }
         $title = $this->escapeHtml($_track->getTitle());
         if(filter_var($title, FILTER_VALIDATE_URL)) {
-          $title = "<a href='{$title}' target='_blank' rel='external noreferrer noopener'>{$title}</a>";
+          $title = "<a href='{$title}' target='_blank' rel='noreferrer'>{$title}</a>";
         }
         ?>
         <tr class="<?php echo ($i%2==0)?'even':'odd' ?>">
