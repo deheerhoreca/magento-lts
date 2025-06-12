@@ -155,25 +155,27 @@ class Utils {
 
   // \Chefstore\Utils::printr("foo");
   public static function printr($expression, bool $return = false) {
-    if (is_object($expression) && get_class($expression) === "Illuminate\Support\Stringable") {
+    $ret = "";
+    
+    if(is_object($expression) && get_class($expression) === "Illuminate\Support\Stringable") {
       $expression = $expression->toString();
     }
     
-    if (!is_scalar($expression) && (is_array($expression) && !sizeof($expression))) {
+    if(!is_scalar($expression) && (is_array($expression) && !sizeof($expression))) {
       return;
     }
     
-    if (php_sapi_name() !== "cli") {
+    if(php_sapi_name() !== "cli") {
       $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
     }
     $ret .= print_r($expression, true);
     
-    if (php_sapi_name() !== "cli") {
+    if(php_sapi_name() !== "cli") {
       $ret .= "</pre>";
     }
     $ret .= PHP_EOL;
     
-    if ($return) {
+    if($return) {
       return $ret;
     }
     
@@ -181,8 +183,8 @@ class Utils {
   }
 
   // \Chefstore\Utils::devdump("foo");
-  public static function devdump($expression, bool $return = false): bool {
-    if (isset($_GET["nofpc"]) && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], self::$dev_ips, true)) {
+  public static function devdump($expression, bool $return = false): null|false {
+    if(isset($_GET["nofpc"]) && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], self::$dev_ips, true)) {
       d($expression, $return);
       return null;
     }
@@ -375,7 +377,7 @@ class Cache {
 
   // Makes no sense for CLI
   public static function _apc() {
-    $GLOBALS["apcu_cache"] ??= (function_exists("apcu_enabled") && apcu_enabled()) ? new ApcuAdapter(namespace: "om_symfony_apcu", defaultLifetime: 3600, version: 1) : null;
+    $GLOBALS["apcu_cache"] ??= (function_exists("apcu_enabled") && apcu_enabled()) ? new ApcuAdapter(namespace: "om_symfony_apcu", defaultLifetime: 3600, version: "1") : null;
     return $GLOBALS["apcu_cache"];
   }
 
