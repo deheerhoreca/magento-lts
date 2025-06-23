@@ -34,6 +34,8 @@
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
+/skin/assets/bootstrap/dist/css/bootstrap.min.css
+/skin/assets/bootstrap/dist/css/bootstrap*.min.css
 
 *.pem
 *.phar
