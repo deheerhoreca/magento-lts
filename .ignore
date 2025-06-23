@@ -35,16 +35,19 @@
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
 
-**.phar
-**.cache
-/js/tinymce/themes
-.php-cs-fixer*
-.phpcs*.xml
-**.neon
-**.js.map
-**.min.js
+*.pem
+*.phar
+*.cache
+*.php-cs-fixer*
+*.phpcs*.xml
+*.neon
+*.svg
+*.js.map
+*.min.js
+*.min.map
+*php.obfuscated
 
-# PhpUnit
+# PhpUnits
 tests/coverage
 tests/logging
 .phpunit.result.cache
@@ -78,6 +81,20 @@ phpunit.xml
 /algolia_*.json
 /maintenance.flag
 /maintenance.ip
+/js/magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js
+/vendor/openmage/magento-lts/js/tinymce/langs/*
+/vendor/openmage/magento-lts/js/tinymce/plugins/*
+/vendor/openmage/magento-lts/js/tinymce/themes/*
+/js/tinymce/langs/*
+/js/tinymce/plugins/*
+/js/tinymce/themes/*
+/js/elastic-apm-rum.umd.min.js.map
+/js/lib/jquery/jquery-1.12.1.min.map
+/lib/Afterpay/vendor/symfony/polyfill-intl-idn/*
+/lib/Mpdf/ttfontdata/*
+/vendor/shardj/zf1-future/library/Zend/Validate/*
+/vendor/phpseclib/phpseclib/phpseclib/Crypt/*
+/lib/Mpdf/utils/UnicodeData.txt
 
 # DIRS
 /js/ext-*
