@@ -833,7 +833,7 @@ if(is_array($value)) {
   $value = implode(" ", $value);
 }
 if((stripos((string) $value, "400") !== false)) {
-  $product_description .= "<div class='px-3 py-2 border shadow-sm'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_voltage_400")->toHtml()."</div>";
+  $product_description .= "<div class='px-3 py-2 border shadow-sm mt-3'>".$this->getLayout()->createBlock("cms/block")->setBlockId("productpage_voltage_400")->toHtml()."</div>";
 }
 
 if(strlen($product_description) === 0) {
@@ -1030,7 +1030,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   // SYNC WITH app/code/local/DeHeerHoreca/Util/Helper/Util.php
                   
                   // Extend to 2025-07-01 later:
-                  if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-06-16 00:00:00")) {
+                  if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-06-30 00:00:00")) {
                     // @todo generate end date "15 juni 2025"
                     ?>
                     <div class="card mx-auto p-2 mb-2">
@@ -1039,7 +1039,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 15 juni 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 30 juni 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div><?php
                   }

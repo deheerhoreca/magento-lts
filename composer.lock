@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f2b1389fb026292f93ec92d159a05ba",
+    "content-hash": "9f82b7dc84f18979cdda04008cde0105",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -2190,6 +2190,18 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.5.0"
             },
             "time": "2025-05-31T08:24:38+00:00"
+        },
+        {
+            "name": "npm-asset/bootstrap",
+            "version": "5.3.6",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.6.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "npm-asset/elastic--apm-rum",
