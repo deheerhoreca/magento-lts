@@ -27,8 +27,8 @@
 /dev/tests/functional/generated
 /dev/tests/functional/vendor
 
-/media/*
-/var/*
+/media
+/var
 /lib/n98-magerun
 /vendor/magento-hackathon/magento-composer-installer
 
@@ -84,18 +84,24 @@ phpunit.xml
 /maintenance.flag
 /maintenance.ip
 /js/magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js
-/vendor/openmage/magento-lts/js/tinymce/langs/*
-/vendor/openmage/magento-lts/js/tinymce/plugins/*
-/vendor/openmage/magento-lts/js/tinymce/themes/*
-/js/tinymce/langs/*
-/js/tinymce/plugins/*
-/js/tinymce/themes/*
+/vendor/openmage/magento-lts/js/tinymce/langs
+/vendor/openmage/magento-lts/js/tinymce/plugins
+/vendor/openmage/magento-lts/js/tinymce/themes
+/vendor/firegento/adminmonitoring/docs
+/vendor/voku/portable-ascii/src/voku/helper/data
+/vendor/nesbot/carbon/src/Carbon/Lang
+/vendor/shardj/zf1-future/library/Zend/Locale/Data
+/vendor/michelf/php-markdown/test
+/vendor/cmixin/business-day/src/Cmixin/Holidays
+/js/tinymce/langs
+/js/tinymce/plugins
+/js/tinymce/themes
 /js/elastic-apm-rum.umd.min.js.map
 /js/lib/jquery/jquery-1.12.1.min.map
-/lib/Afterpay/vendor/symfony/polyfill-intl-idn/*
-/lib/Mpdf/ttfontdata/*
-/vendor/shardj/zf1-future/library/Zend/Validate/*
-/vendor/phpseclib/phpseclib/phpseclib/Crypt/*
+/lib/Afterpay/vendor/symfony/polyfill-intl-idn
+/lib/Mpdf/ttfontdata
+/vendor/shardj/zf1-future/library/Zend/Validate
+/vendor/phpseclib/phpseclib/phpseclib/Crypt
 /lib/Mpdf/utils/UnicodeData.txt
 
 # DIRS
@@ -118,7 +124,7 @@ phpunit.xml
 /media/catalog
 /media/tmp
 /media/dhh
-/media/wysiwyg/*
+/media/wysiwyg
 
 # BILLER WEBHOOK
 /biller-webhook-errors.jsonl
