@@ -28,9 +28,13 @@ $shortopts .= "v";
 $shortopts .= "s";
 
 // Bootstrap OM
+require MAGENTO_ROOT."/app/bootstrap.php";
 require MAGENTO_ROOT."/app/Mage.php";
 
+// Varien_Profiler::enable();
+
 umask(0);
+
 Mage::app($om_code, $om_app)->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
 // Sanity
@@ -44,7 +48,7 @@ $args = getopt($shortopts);
 $args["i"] ?? [];
 
 echo "PID=".getmypid().PHP_EOL;
-sleep(10);
+// sleep(10);
 
 foreach((array) $args["i"] as $index) {
   
@@ -62,3 +66,7 @@ foreach((array) $args["i"] as $index) {
     exit(1);
   }
 }
+
+// if(Varien_Profiler::isEnabled()) {
+//   Mage::dispatchEvent("controller_front_send_response_after");
+// }

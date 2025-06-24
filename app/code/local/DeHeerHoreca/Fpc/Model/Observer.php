@@ -53,7 +53,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         // To allow for closing actions (AoE Profiler is one)
         Mage::dispatchEvent("controller_front_send_response_after");
         Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
-        exit;
+        exit(0);
       }
     }
     

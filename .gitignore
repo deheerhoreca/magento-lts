@@ -371,13 +371,6 @@ phpunit.xml
 /app/locale/tr_TR/Aschroder_SMTPPro.csv
 
 # deheerhoreca/Aoe_Profiler
-/app/etc/modules/Aoe_Profiler.xml
-/app/code/community/Aoe/Profiler
-/app/code/community/Varien/Profiler.php
-/app/code/community/Zend/Db/Profiler.php
-/skin/adminhtml/default/default/aoe_profiler
-/app/design/adminhtml/default/default/layout/aoe_profiler
-/app/design/adminhtml/default/default/template/aoe_profiler
 
 # deheerhoreca/Cm_RedisSession
 /app/code/community/Cm/RedisSession
@@ -417,3 +410,10 @@ phpunit.xml
 /lib/tailwindcss/tailwind.config.js
 /lib/tailwindcss/tailwindcss
 /app/etc/modules/MM_CmsContentFileMode.xml
+/app/etc/modules/Aoe_Profiler.xml
+/app/code/community/Aoe/Profiler
+/app/code/community/Varien/Profiler.php
+/app/code/community/Zend/Db/Profiler.php
+/skin/adminhtml/default/default/aoe_profiler
+/app/design/adminhtml/default/default/layout/aoe_profiler
+/app/design/adminhtml/default/default/template/aoe_profiler

@@ -200,12 +200,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Aoe_Profiler.git",
-                "reference": "b8cedf5f3d531d6d48f68f5fd8c5ff740126c1de"
+                "reference": "39658a89de0b8f75398c70c125b7bf3410d30862"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/b8cedf5f3d531d6d48f68f5fd8c5ff740126c1de",
-                "reference": "b8cedf5f3d531d6d48f68f5fd8c5ff740126c1de",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/39658a89de0b8f75398c70c125b7bf3410d30862",
+                "reference": "39658a89de0b8f75398c70c125b7bf3410d30862",
                 "shasum": ""
             },
             "require": {
@@ -227,7 +227,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_Profiler/tree/master"
             },
-            "time": "2025-01-27T23:20:53+00:00"
+            "time": "2025-06-24T13:01:43+00:00"
         },
         {
             "name": "aoepeople/aoe_templatehints",
