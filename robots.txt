@@ -57,6 +57,7 @@ Disallow: /cdn-cgi/*
 Disallow: /no-route
 Disallow: /media/static/
 Disallow: /*&multipass=true*
+Disallow: /*?multipass=true*
 Disallow: /*?price=*
 Disallow: /*?___from_store=*
 Disallow: /*?___store=*
