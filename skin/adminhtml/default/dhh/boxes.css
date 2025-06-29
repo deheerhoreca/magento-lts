@@ -792,9 +792,9 @@ ul.tabs-horiz li a.active {
 
 .notification-global {
   padding: 5px 27px 5px 47px;
-  background: url(images/error_msg_icon.gif) 27px 5px no-repeat #fff9e9;
-  border-bottom: 1px solid #eee2be;
-  border-top: 1px solid #eee2be;
+  background: url(images/error_msg_icon.gif) 27px 5px no-repeat #fff;
+  /* border-bottom: 1px solid #eee2be;
+  border-top: 1px solid #eee2be; */
   font-size: 11px;
   line-height: 16px;
   margin: 0 0 -3px;
