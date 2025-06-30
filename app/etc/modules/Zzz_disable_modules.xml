@@ -146,6 +146,11 @@
       <active>true</active>
     </Aschroder_SMTPPro>
 
+    <!-- Gave errors in logs, seems unnecessary to enable (maybe enable temporarily for specific needs) -->
+    <Hwg_Attributemanager>
+      <active>false</active>
+    </Hwg_Attributemanager>
+
     <!-- Leads to errors with opening older orders if left disabled -->
     <!-- <Afterpay_Afterpay> -->
     <!-- <active>false</active> -->

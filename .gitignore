@@ -417,3 +417,5 @@ phpunit.xml
 /skin/adminhtml/default/default/aoe_profiler
 /app/design/adminhtml/default/default/layout/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_profiler
+/app/code/community/Fballiano/CategorySortDirection
+/app/etc/modules/Fballiano_CategorySortDirection.xml

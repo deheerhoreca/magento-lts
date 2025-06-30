@@ -35,13 +35,14 @@
 # MQMQMQMQMQMQMQMQMQMQMQMQMQMQMQMMQMQII6I!!||!^^^.QMQMQMQMQMQMQMQ^^^^|MQQMQM^^^!QMQMQMQMQMQMQMMQ.^MQMQMQMQMQMQQMQMMQMQMQMQ.!MQQMQMMQMQMQ
 
 User-agent: *
+
+Crawl-delay: 1
+
 Disallow: /index.php
 Disallow: /catalog/product_compare/
 Disallow: /catalog/category/view/
 Disallow: /catalog/product/view/
 Disallow: /catalog/product/gallery/
-# Disallow: /catalogsearch/
-# Disallow: /checkout/
 Disallow: /control/
 Disallow: /contacts/
 Disallow: /customer/
@@ -74,11 +75,11 @@ Disallow: /*&sqr=*
 Disallow: /*.php$
 Disallow: /*?SID=
 Disallow: /*&SID=
+Disallow: /*?p=*&
 Disallow: /*?refreshfpc
 Disallow: /*&refreshfpc
 Disallow: /*?nofpc
 Disallow: /*&nofpc
 Disallow: /*?csredir
 Disallow: /*&csredir
-# Disallow: /shop
-# Disallow: /*&*&*&*
+Disallow: /*?*&*&*

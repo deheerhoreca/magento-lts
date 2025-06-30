@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f82b7dc84f18979cdda04008cde0105",
+    "content-hash": "96d0fbe4680423ba0df6d68401356559",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -1291,6 +1291,36 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/v4.18.0"
             },
             "time": "2024-11-01T03:51:45+00:00"
+        },
+        {
+            "name": "fballiano/openmage-category-sort-direction",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:fballiano/magento-category-sort-direction.git",
+                "reference": "7cc84643eabafd3120d577dffea007e4c6e38f17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fballiano/magento-category-sort-direction/zipball/7cc84643eabafd3120d577dffea007e4c6e38f17",
+                "reference": "7cc84643eabafd3120d577dffea007e4c6e38f17",
+                "shasum": ""
+            },
+            "type": "magento-module",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Fabrizio Balliano",
+                    "email": "fabrizio@fabrizioballiano.com",
+                    "homepage": "https://fabrizioballiano.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Allows you to decide the product sorting direction on category pages.",
+            "homepage": "https://github.com/fballiano/openmage-category-sort-direction",
+            "time": "2022-10-08T20:47:30+00:00"
         },
         {
             "name": "firegento/adminmonitoring",
