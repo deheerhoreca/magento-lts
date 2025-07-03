@@ -27,7 +27,7 @@ $queries[] = "OPTIMIZE TABLE `index_event`";
 // 
 
 require_once __DIR__."/../app/Mage.php";
-Mage::app("default");
+Mage::app("admin");
 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
 $write_db = Mage::getSingleton("core/resource")->getConnection("core_write");
