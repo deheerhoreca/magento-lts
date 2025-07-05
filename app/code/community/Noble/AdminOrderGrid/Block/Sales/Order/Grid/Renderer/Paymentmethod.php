@@ -50,14 +50,16 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Paymentmethod extends
     $optionText = str_replace(["mollie_"], "Mollie ", $optionText);
     $optionText = str_replace(["_", "-"], " ", $optionText);
     
-    return match($value) {
+    $optionText = match($value) {
       "ideal"						=> "iDEAL",
-      "banktransfer"		=> "iDEAL",
+      "banktransfer"		=> "Bankoverschrijving",
       "paypal"		      => "PayPal",
       default						=> ucwords($optionText),
     };
-  
-    // return ucfirst($optionText);
+    
+    return str_ireplace(
+      ["ideal", "kbc"], ["iDeal", "KBC"], $optionText
+    );
   }
   
   // DHH CORE HACK

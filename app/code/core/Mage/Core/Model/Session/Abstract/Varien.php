@@ -511,15 +511,15 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
      */
     public function setValidatorSessionRenewTimestamp($timestamp)
     {
-      // DHH CORE HACK -- ADDING TEST TO CLEAR INVALID SESSIONS
-      if(!session_id()) {
-          Mage::log("Destroyed corrupt session!", null, "system.log", true);
-          $_SESSION = [];
-          $this->getCookie()->delete(session_name());
-          throw new Mage_Core_Model_Session_Exception('');
-      }
-      
-      $_SESSION[self::VALIDATOR_KEY][self::VALIDATOR_SESSION_RENEW_TIMESTAMP] = $timestamp;
+        // DHH CORE HACK -- ADDING TEST TO CLEAR INVALID SESSIONS
+        if(session_status() === PHP_SESSION_ACTIVE && !session_id()) {
+            Mage::log("Destroyed corrupt session!", null, "system.log", true);
+            $_SESSION = [];
+            $this->getCookie()->delete(session_name());
+            throw new Mage_Core_Model_Session_Exception('');
+        }
+        
+        $_SESSION[self::VALIDATOR_KEY][self::VALIDATOR_SESSION_RENEW_TIMESTAMP] = $timestamp;
     }
 
     /**
