@@ -1,47 +1,70 @@
 <?php
 
-/* Ignore these categories in the breadcrumb */
-// $ignored_categorie_keys = [
+// Ignore these categories in the breadcrumb:
+$ignored_categorie_keys = [
   // "category834",      // Promotions
-// ];
-$ignored_categorie_keys = [];
-
-$store = Mage::app()->getStore();
-$store_name = $store->getFrontendName();
-
-if($_product = Mage::registry('current_product')) {
-  $product_image = $_product->getImageUrl();
-  $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
-  
-  if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"])) {
-    unset($crumbs["product"]);
-  }
-}
-
-$currentUrl = Mage::helper('core/url')->getCurrentUrl();
-
-/* Pre-processing */
-if(is_array($crumbs) && sizeof($crumbs) > 0) {
-  foreach($crumbs as $_crumbName => $_crumbInfo) {
-    
-    $_crumbInfo['title']          = (string) $_crumbInfo['title']; // required for strlen()
-    $crumbs[$_crumbName]['link']  = (string) $crumbs[$_crumbName]['link']; // required for strlen()
-    
-    if(strlen($_crumbInfo['title']) < 1) {
-      $crumbs[$_crumbName]['title'] = $crumbs[$_crumbName]['label'];
-    }
-    if($crumbs[$_crumbName]['first']) {
-      $crumbs[$_crumbName]['label'] = $store_name;
-    }
-    if($crumbs[$_crumbName]['last'] && strlen((string) $crumbs[$_crumbName]['link']) < 1) {
-      $crumbs[$_crumbName]['link'] = $currentUrl;
-    }
-  }
-}
+];
 
 if(Mage::helper('richsnippets')->snippetsEnabled()) {
+  
+  $store      = Mage::app()->getStore();
+  $store_name = $store->getFrontendName();
+
+  /* PRE-PROCESSING */
+  
+  /** @var Mage_Catalog_Model_Product $_product */
+  if($_product = Mage::registry('current_product')) {
+    
+    /** @var Mage_Catalog_Helper_Image $cat_image_helper */
+    $cat_image_helper = Mage::helper("catalog/image");
+    
+    $product_image_url = $cat_image_helper->init($_product, "image")->__toString();
+    
+    if(filled($product_image_url)) {
+      $product_image_url_cdn = Mage::helper("deheerhoreca_util/util")->_cdn_img([
+        "fs_path"         => $product_image_url,
+        "url_only"        => true,
+        "cm"              => "pad_resize",
+        "width"           => 2048,
+        "height"          => 2048,
+        "add_mod_time"    => true,
+        "relative_url"    => false,
+      ]);
+    } else {
+      $product_image_url_cdn = "";
+    }
+    
+    if(is_array($crumbs) && sizeof($crumbs) > 2 && isset($crumbs["product"])) {
+      unset($crumbs["product"]);
+    }
+  }
+  
+  if(is_array($crumbs) && sizeof($crumbs) > 0) {
+    
+    $currentUrl = Mage::helper('core/url')->getCurrentUrl();
+    
+    foreach($crumbs as $_crumbName => $_crumbInfo) {
+      
+      $_crumbInfo['title']          = (string) $_crumbInfo['title']; // required for strlen()
+      $crumbs[$_crumbName]['link']  = (string) $crumbs[$_crumbName]['link']; // required for strlen()
+      
+      if(strlen($_crumbInfo['title']) < 1) {
+        $crumbs[$_crumbName]['title'] = $crumbs[$_crumbName]['label'];
+      }
+      if($crumbs[$_crumbName]['first']) {
+        $crumbs[$_crumbName]['label'] = $store_name;
+      }
+      if($crumbs[$_crumbName]['last'] && strlen((string) $crumbs[$_crumbName]['link']) < 1) {
+        $crumbs[$_crumbName]['link'] = $currentUrl;
+      }
+    }
+  }
+  
+  
+  
   $snippetsType = Mage::getStoreConfig('richsnippets/general/snippetsType');
-  if ($snippetsType == '0') { // if JSON enabled
+  
+  if($snippetsType == '0') { // if JSON enabled
     $position = 1;
 
     $dataBreadcrumbs = array();
@@ -53,9 +76,9 @@ if(Mage::helper('richsnippets')->snippetsEnabled()) {
         $dataBreadcrumbs['itemListElement'][$position - 1]['@type']         = 'ListItem';
         $dataBreadcrumbs['itemListElement'][$position - 1]['position']      = $position;
         $dataBreadcrumbs['itemListElement'][$position - 1]['item']['name']  = $_crumbInfo['label'];
-        if($_crumbName === "product" && isset($product_image)) {
-          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['@id']   = $product_url;
-          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['image'] = $product_image;
+        if($_crumbName === "product" && isset($product_image_url_cdn)) {
+          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['@id']   = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
+          $dataBreadcrumbs['itemListElement'][$position - 1]['item']['image'] = $product_image_url_cdn;
         } else {
           $dataBreadcrumbs['itemListElement'][$position - 1]['item']['@id']   = $_crumbInfo['link'];
         }
