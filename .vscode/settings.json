@@ -6,7 +6,7 @@
     "**/.git": true
   },
   "files.exclude": {
-    "**/media/catalog/**": true,
+    "**/media/catalog/**": true
   },
   "intelephense": {
     "environment": {
@@ -14,5 +14,10 @@
     }
   },
   "compareFolders.ignoreExtension": [],
-  "intelephense.environment.documentRoot": "~/httpdocs/deheerhoreca-magento"
+  "intelephense.environment.documentRoot": "~/httpdocs/deheerhoreca-magento",
+  "search.exclude": {
+    "**/var/report": true
+  },
+  "search.useGlobalIgnoreFiles": true,
+  "search.useParentIgnoreFiles": true
 }

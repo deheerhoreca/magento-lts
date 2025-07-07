@@ -7,7 +7,7 @@
     <div style="padding: 3em;">
       <div class="std">
         <div id="info-grenke" class="std mt-5">
-          <img src="/skin/frontend/rwd/dhh/images/grenke_logo.png" alt="Grenke logo" title="Grenke" style="width:140px; height:auto; float:right; margin-top: .5em;">
+          <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/grenke_logo.png" alt="Grenke logo" title="Grenke" style="width:140px; height:auto; float:right; margin-top: .5em;">
           <h2>🤩Leasen met Grenke</h2>
           <h5><i>Voor zakelijke klanten in Nederland</i></h5>
           <h4>Maximaal €10.000 (zakelijk), incl. BTW</h4>

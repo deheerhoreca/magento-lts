@@ -28,9 +28,10 @@
 /dev/tests/functional/vendor
 
 /media
-/var
 /lib/n98-magerun
 /vendor/magento-hackathon/magento-composer-installer
+/var
+/var/report
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache

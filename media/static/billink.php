@@ -7,7 +7,7 @@
     <div style="padding: 3em;">
       <div id="info-billink" class="std">
         <div>
-          <img src="/skin/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="width:140px; height:39px; float:right; margin-top: .5em;" />
+          <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/billink_logo.png" alt="Billink logo" title="Billink" style="width:140px; height:39px; float:right; margin-top: .5em;" />
           <h2>🤩 Achteraf betalen met Billink</h2>
           <h5><i>In Nederland voor zakelijke en particuliere klanten</i></h5>
           <h4>Maximaal €3500 (zakelijk), €750 (particulier), incl. BTW</h4>
@@ -20,7 +20,7 @@
         </div>
         
         <div style="padding-top:1em;">
-          <img src="/skin/frontend/rwd/dhh/images/afterpay_logo.png" alt="AfterPay logo" title="AfterPay" style="width:140px; height:50px; float:right; margin-top: .5em;" />
+          <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/afterpay_logo.png" alt="AfterPay logo" title="AfterPay" style="width:140px; height:50px; float:right; margin-top: .5em;" />
           <h2>🤩 Achteraf betalen met AfterPay</h2>
           <h5><i>Voor zakelijke en particuliere klanten in Nederland en België</i></h5>
           <h4>Maximaal €1000 (zakelijk NL), €2500 (particulier NL), €1250 (België), incl. BTW</h4>

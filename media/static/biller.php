@@ -6,7 +6,7 @@
   <body>
     <div style="padding: 3em;">
       <div id="info-biller" class="std">
-        <img src="/skin/frontend/rwd/dhh/images/biller-logo.png" alt="Biller logo" title="Biller" style="width:140px; height:50px; float:right; margin-top: .5em;" />
+        <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/biller-logo.png" alt="Biller logo" title="Biller" style="width:140px; height:50px; float:right; margin-top: .5em;" />
         <h2>🤩&nbsp;Gratis achteraf betalen met Biller</h2>
         <h5><i>Voor zakelijke klanten in Nederland en België</i></h5>
         <h4>Maximaal €5000 (zakelijk), incl. BTW</h4>

@@ -7194,7 +7194,7 @@
   .icon-sprite,
   .ratings .rating-box,
   .ratings .rating-box .rating {
-    background-image: url(../images/icon_sprite.png);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite.png);
     text-indent: -9999px;
   }
 
@@ -7203,7 +7203,7 @@
   .skip-account .icon,
   .skip-cart .icon,
   .sorter > .sort-by .sort-by-switcher {
-    background-image: url(../images/icon_sprite.png);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite.png);
     background-repeat: no-repeat;
     text-indent: -9999px;
   }
@@ -7215,7 +7215,7 @@
 
   .ratings-table .rating-box,
   .ratings-table .rating-box .rating {
-    background-image: url(../images/icon_sprite.png);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite.png);
   }
 
   .btn-previous,
@@ -7396,7 +7396,7 @@
     min-height: 40px;
     max-width: 1200px;
     width: 100%;
-    background-image: url(../images/demo-logo.png);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/demo-logo.png);
     background-position: left;
     background-repeat: no-repeat;
     line-height: 11px;
@@ -8581,7 +8581,7 @@
 
   .products-grid .product-image:after {
     z-index: 3;
-    background-image: url(../images/opc-ajax-loader.gif);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/opc-ajax-loader.gif);
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -8807,7 +8807,7 @@
 
   .product-image-gallery:after {
     z-index: 3;
-    background-image: url(../images/opc-ajax-loader.gif);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/opc-ajax-loader.gif);
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -9519,19 +9519,19 @@
     display: inline-block;
     width: 41px;
     height: 25px;
-    background: url(../images/common-sprite2.png) no-repeat -695px -468px;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) no-repeat -695px -468px;
   }
 
   .icon-return {
     width: 22px;
     height: 26px;
-    background: url(../images/common-sprite2.png) no-repeat -773px 0;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) no-repeat -773px 0;
   }
 
   .icon-discount {
     width: 33px;
     height: 22px;
-    background: url(../images/common-sprite2.png) no-repeat -626px -252px;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) no-repeat -626px -252px;
   }
 
   #customer-reviews .fieldset .form-list input[type="text"],
@@ -10025,7 +10025,7 @@
     bottom: 0;
     left: 0;
     z-index: 10;
-    background: url(../images/bg_x.png) center no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/bg_x.png) center no-repeat;
     text-indent: -999em;
   }
 
@@ -11396,7 +11396,7 @@
     display: inline-block;
     padding-left: 10px;
     height: 10px;
-    background: url(../images/common-sprite2.png) -825px -693px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -825px -693px no-repeat;
     font-size: 10px;
   }
 
@@ -11408,7 +11408,7 @@
     display: inline-block;
     padding-left: 10px;
     height: 10px;
-    background: url(../images/common-sprite2.png) -825px -731px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -825px -731px no-repeat;
     font-size: 10px;
   }
 
@@ -11416,14 +11416,14 @@
   .myaccount-order-block.active .myaccount-cell .arrow-state {
     width: 27px;
     height: 17px;
-    background: url(../images/common-sprite2.png) -414px -489px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -414px -489px no-repeat;
   }
 
   .icon-big-gray-arrow-open,
   .myaccount-order-block .myaccount-cell .arrow-state {
     width: 27px;
     height: 17px;
-    background: url(../images/common-sprite2.png) -263px -549px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -263px -549px no-repeat;
   }
 
   .icon-range-filter {
@@ -11435,7 +11435,7 @@
   .icon-more-down {
     width: 30px;
     height: 10px;
-    background: url(../images/common-sprite2.png) -458px -370px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -458px -370px no-repeat;
   }
 
   a,
@@ -11626,7 +11626,6 @@
   ul.cms-list-checked li {
     margin-left: 4px;
     padding-left: 20px;
-    /* background-image: url(/sprite_icons.png); */
     background-position: -69px -20px !important;
     background-repeat: no-repeat;
   }
@@ -11661,7 +11660,6 @@
   article.block-text nav.category > ul > li > ul > li.sub > a {
     display: block;
     padding: 5px 0 3px 12px;
-    /* background: url(/arrow_menue.png) no-repeat 0 8px; */
     text-align: left;
     font-size: var(--text-size-small);
   }
@@ -11686,7 +11684,6 @@
   article.block-text nav.category > ul > li > ul ul > li.subsub > a {
     display: block;
     padding: 5px 0 2px 12px;
-    /* background: url(/arrow_menue_grey.png) no-repeat 0 8px; */
     font-size: var(--text-size-small);
   }
 
@@ -12186,7 +12183,7 @@
     margin-right: 5px;
     width: 48px;
     height: 48px;
-    background: url(../images/snowflake-2.svg);
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/snowflake-2.svg);
     background-size: 48px 48px;
   }
 
@@ -12752,7 +12749,6 @@
     margin-right: 8px;
     width: 24px;
     height: 24px;
-    /* background: no-repeat 50% url(/socialmedia.png); */
     vertical-align: middle;
   }
 
@@ -12856,7 +12852,7 @@
     margin-left: -7px;
     width: 14px;
     height: 26px;
-    background: url(../images/common-sprite2.png) 0 -721px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) 0 -721px no-repeat;
     cursor: pointer;
   }
 
@@ -12865,7 +12861,7 @@
   }
 
   .cms-image-slider .arrow.left:hover span {
-    background: url(../images/common-sprite2.png) -44px -721px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -44px -721px no-repeat;
   }
 
   .cms-image-slider .arrow.right,
@@ -12874,11 +12870,11 @@
   }
 
   .cms-image-slider .arrow.right span {
-    background: url(../images/common-sprite2.png) -132px -721px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -132px -721px no-repeat;
   }
 
   .cms-image-slider .arrow.right:hover span {
-    background: url(../images/common-sprite2.png) -500px -422px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -500px -422px no-repeat;
   }
 
   .cms-image-slider:before {
@@ -13386,7 +13382,7 @@
     right: 0;
     width: 12px;
     height: 9px;
-    background: url(../images/common-sprite2.png) -825px -509px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -825px -509px no-repeat;
     content: "";
   }
 
@@ -13403,7 +13399,7 @@
     right: 0;
     width: 7px;
     height: 13px;
-    background: url(../images/common-sprite2.png) -825px -467px no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) -825px -467px no-repeat;
     content: "";
   }
 
@@ -13534,17 +13530,17 @@
   }
 
   .sprite-with-caption__icon.icons.icons__cart {
-    background: url(../images/shopping-cart.svg) no-repeat 0 0/24px auto;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/shopping-cart.svg) no-repeat 0 0/24px auto;
     background-position: center center;
   }
 
   .sprite-with-caption__icon.icons.icons__customer-service {
-    background: url(../images/contact.svg) no-repeat 0 0/24px auto;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/contact.svg) no-repeat 0 0/24px auto;
     background-position: center center;
   }
 
   .sprite-with-caption__icon.icons.icons__user {
-    background: url(../images/my_account.svg) no-repeat 0 0/24px auto;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/my_account.svg) no-repeat 0 0/24px auto;
     background-position: center center;
   }
 
@@ -13553,7 +13549,7 @@
   }
 
   .sprite-with-caption__icon.icons.icons__kservice {
-    background: url(../images/operator.svg) no-repeat center center/24px auto;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/operator.svg) no-repeat center center/24px auto;
   }
 
   .kservice {
@@ -13718,7 +13714,7 @@
     margin-right: 25px;
     width: 250px;
     height: 50px;
-    background: url(../images/logo.svg) no-repeat 0 0 / auto 100%;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/logo.svg) no-repeat 0 0 / auto 100%;
     text-indent: -9999px;
   }
 
@@ -13761,7 +13757,7 @@
     margin-right: 25px;
     width: 156px;
     height: 50px;
-    /* background: url(../images/59873e143e32d5a3e644093db66d7f1b.svg) no-repeat 0 0; */
+    /* background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/59873e143e32d5a3e644093db66d7f1b.svg) no-repeat 0 0; */
     text-indent: -9999px;
   }
 
@@ -13908,7 +13904,7 @@
     left: 0;
     width: 10px;
     height: 10px;
-    background: url(../images/common-sprite2.png) no-repeat -825px -353px;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/common-sprite2.png) no-repeat -825px -353px;
     content: "";
   }
 
@@ -14313,7 +14309,7 @@
   .product-list-block ul li {
     padding-left: 26px;
     height: 20px;
-    background: url(../images/greencorrect-ico.png) no-repeat left -2px;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/greencorrect-ico.png) no-repeat left -2px;
     line-height: 1.3;
   }
 
@@ -14336,7 +14332,7 @@
     margin-bottom: 5px;
     padding-left: 22px;
     min-width: 235px;
-    background-image: url(../images/icon-2.svg);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon-2.svg);
     background-size: 16px auto;
     background-repeat: no-repeat;
     font-size: var(--text-size-small);
@@ -14430,13 +14426,13 @@
   ul.clzprobottom li.circlex {
     margin-bottom: 12px;
     padding-left: 36px;
-    background: url(../images/if_round-trip-return-repeat_2075799.png) no-repeat 0 0/21px auto;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/if_round-trip-return-repeat_2075799.png) no-repeat 0 0/21px auto;
   }
 
   ul.clzprobottom li.truck {
     padding-top: 3px;
     padding-left: 36px;
-    background: url(../images/if_truck_83054.png) no-repeat 0 0/21px auto;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/if_truck_83054.png) no-repeat 0 0/21px auto;
   }
 
   ol#block-related.mini-products-list li.item {
@@ -15085,7 +15081,7 @@
   }
 
   .info-box-not-found {
-    background: url(/skin/frontend/rwd/dhh/images/sadklaas.jpg) 90% 90% no-repeat;
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/sadklaas.jpg) 90% 90% no-repeat;
     background-size: contain !important;
   }
 
@@ -15150,7 +15146,7 @@
 
   .header-minicart .minicart-wrapper:after {
     z-index: 3;
-    background-image: url(../images/opc-ajax-loader.gif);
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/opc-ajax-loader.gif);
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -15741,7 +15737,7 @@
 
   /* BLACK FRIDAY */
 
-  .bf-banner-detail,
+  /* .bf-banner-detail,
   .bf-banner-list {
     position: absolute;
     padding: .3em 1em;
@@ -15749,7 +15745,7 @@
     z-index: 10;
     text-align: center;
     top: -1.5em;
-    background-image: url(/media/wysiwyg/banners/lb_20211123_blackfriday5.svg);
+    background-image: url(https://images.chefstore.nl/media/wysiwyg/banners/lb_20211123_blackfriday5.svg);
     background-repeat: no-repeat;
   }
 
@@ -15761,7 +15757,7 @@
   .bf-banner-list {
     width: 110px;
     height: 80px;
-  }
+  } */
 
   /* NOTIFICATION BOXES -- https://codepen.io/walesmd/pen/ZEEMLg */
 

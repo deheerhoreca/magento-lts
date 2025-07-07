@@ -6,7 +6,7 @@
   <body>
     <div style="padding: 3em;">
       <div id="info-in3" class="std">
-        <img src="/skin/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="width:120px; height:109px; float:right; margin-top: .5em;" />
+        <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/in3_logo.png" alt="In3 logo" title="In3" style="width:120px; height:109px; float:right; margin-top: .5em;" />
         <h2>🤩 In 3 keer gespreid betalen zonder rente</h2>
         <h5><i>In Nederland voor particulieren tot €3.000 incl. BTW, voor zakelijke klanten zelfs tot €30.000 incl. BTW.</i></h5>
         <div style="margin-top: 20px;"  class="center">
