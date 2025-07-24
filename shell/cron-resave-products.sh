@@ -15,4 +15,4 @@ set -u      # Treat unset variables as an error when substituting
 
 cm
 
-mphp -c php.cmd.ini shell/resave_all_products.php 
+# mphp -c php.cmd.ini shell/resave_all_products.php
