@@ -391,13 +391,6 @@ phpunit.xml
 /app/design/adminhtml/default/default/template/sheep_debug
 /skin/adminhtml/default/default/sheep_debug
 
-/app/design/frontend/base/default/template/pay/payment
-/app/design/adminhtml/base/default/template/pay/payment
-/media/pay_payment/logo.png
-/app/etc/modules/Pay_Payment.xml
-/app/locale/nl_NL/Pay_Payment.csv
-/app/locale/en_US/Pay_Payment.csv
-/app/locale/it_IT/Pay_Payment.csv
 /app/code/local/MM/MonacoEditor
 /js/monacoeditor
 /app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
@@ -419,3 +412,10 @@ phpunit.xml
 /app/design/adminhtml/default/default/template/aoe_profiler
 /app/code/community/Fballiano/CategorySortDirection
 /app/etc/modules/Fballiano_CategorySortDirection.xml
+/app/design/frontend/base/default/template/pay/payment
+/app/design/adminhtml/base/default/template/pay/payment
+/media/pay_payment/logo.png
+/app/etc/modules/Pay_Payment.xml
+/app/locale/nl_NL/Pay_Payment.csv
+/app/locale/en_US/Pay_Payment.csv
+/app/locale/it_IT/Pay_Payment.csv

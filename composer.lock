@@ -529,16 +529,16 @@
         },
         {
             "name": "cmixin/business-day",
-            "version": "1.19.7",
+            "version": "1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kylekatarnls/business-day.git",
-                "reference": "6be2b6152aae70c88eb7b9ff5a2f97ed312cb3bd"
+                "reference": "efdf1d429c8cdfb1864c6afc283fe3895b27d83e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kylekatarnls/business-day/zipball/6be2b6152aae70c88eb7b9ff5a2f97ed312cb3bd",
-                "reference": "6be2b6152aae70c88eb7b9ff5a2f97ed312cb3bd",
+                "url": "https://api.github.com/repos/kylekatarnls/business-day/zipball/efdf1d429c8cdfb1864c6afc283fe3895b27d83e",
+                "reference": "efdf1d429c8cdfb1864c6afc283fe3895b27d83e",
                 "shasum": ""
             },
             "require": {
@@ -546,6 +546,8 @@
                 "php": ">=7.1"
             },
             "require-dev": {
+                "phpstan/extension-installer": "*",
+                "phpstan/phpstan": "1.* || 2.*",
                 "phpunit/phpunit": "^7.5.20 || ^8.5.31"
             },
             "type": "library",
@@ -553,6 +555,11 @@
                 "laravel": {
                     "providers": [
                         "Cmixin\\BusinessDay\\Laravel\\ServiceProvider"
+                    ]
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
                     ]
                 },
                 "branch-alias": {
@@ -577,7 +584,7 @@
             "description": "Carbon mixin to handle business days",
             "support": {
                 "issues": "https://github.com/kylekatarnls/business-day/issues",
-                "source": "https://github.com/kylekatarnls/business-day/tree/1.19.7"
+                "source": "https://github.com/kylekatarnls/business-day/tree/1.20.0"
             },
             "funding": [
                 {
@@ -589,7 +596,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-29T08:51:21+00:00"
+            "time": "2025-07-23T12:37:19+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
@@ -1514,16 +1521,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.19.3",
+            "version": "v12.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "21a206b2b2297e838c181b482b5f8bbe7ac48f61"
+                "reference": "a048b4fbbef4742ff2eee843971bb8278239c610"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/21a206b2b2297e838c181b482b5f8bbe7ac48f61",
-                "reference": "21a206b2b2297e838c181b482b5f8bbe7ac48f61",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/a048b4fbbef4742ff2eee843971bb8278239c610",
+                "reference": "a048b4fbbef4742ff2eee843971bb8278239c610",
                 "shasum": ""
             },
             "require": {
@@ -1567,11 +1574,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-06-12T14:21:37+00:00"
+            "time": "2025-07-15T20:29:59+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.19.3",
+            "version": "v12.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1617,16 +1624,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.19.3",
+            "version": "v12.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "ad1d16d827927455d3b7e39fabac66b1afb82582"
+                "reference": "c2eef857b808810f5cb187de58e23d25c1d443d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/ad1d16d827927455d3b7e39fabac66b1afb82582",
-                "reference": "ad1d16d827927455d3b7e39fabac66b1afb82582",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/c2eef857b808810f5cb187de58e23d25c1d443d9",
+                "reference": "c2eef857b808810f5cb187de58e23d25c1d443d9",
                 "shasum": ""
             },
             "require": {
@@ -1661,11 +1668,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-06-12T15:07:31+00:00"
+            "time": "2025-07-16T13:18:38+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.19.3",
+            "version": "v12.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1711,16 +1718,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.19.3",
+            "version": "v12.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "4e5d098d1cdbf5cabff09c1903a141bd9747ae75"
+                "reference": "212103694b407b41dce5aae4fe41fbe6ee1bec49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/4e5d098d1cdbf5cabff09c1903a141bd9747ae75",
-                "reference": "4e5d098d1cdbf5cabff09c1903a141bd9747ae75",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/212103694b407b41dce5aae4fe41fbe6ee1bec49",
+                "reference": "212103694b407b41dce5aae4fe41fbe6ee1bec49",
                 "shasum": ""
             },
             "require": {
@@ -1784,7 +1791,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-06-12T15:07:56+00:00"
+            "time": "2025-07-22T13:57:22+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2658,12 +2665,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/paynl-openmage.git",
-                "reference": "37100a271bb237c5f03dd251eaf48ec7981850fe"
+                "reference": "c5f7c0b5c7be538cec7430d4c03750a732b43445"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/37100a271bb237c5f03dd251eaf48ec7981850fe",
-                "reference": "37100a271bb237c5f03dd251eaf48ec7981850fe",
+                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/c5f7c0b5c7be538cec7430d4c03750a732b43445",
+                "reference": "c5f7c0b5c7be538cec7430d4c03750a732b43445",
                 "shasum": ""
             },
             "default-branch": true,
@@ -2681,7 +2688,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/paynl-openmage/tree/master"
             },
-            "time": "2025-02-25T21:29:35+00:00"
+            "time": "2025-07-24T12:56:20+00:00"
         },
         {
             "name": "pelago/emogrifier",
@@ -3196,16 +3203,16 @@
         },
         {
             "name": "sabberworm/php-css-parser",
-            "version": "v8.8.0",
+            "version": "v8.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
-                "reference": "3de493bdddfd1f051249af725c7e0d2c38fed740"
+                "reference": "d8e916507b88e389e26d4ab03c904a082aa66bb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/3de493bdddfd1f051249af725c7e0d2c38fed740",
-                "reference": "3de493bdddfd1f051249af725c7e0d2c38fed740",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/d8e916507b88e389e26d4ab03c904a082aa66bb9",
+                "reference": "d8e916507b88e389e26d4ab03c904a082aa66bb9",
                 "shasum": ""
             },
             "require": {
@@ -3213,7 +3220,8 @@
                 "php": "^5.6.20 || ^7.0.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "5.7.27 || 6.5.14 || 7.5.20 || 8.5.41"
+                "phpunit/phpunit": "5.7.27 || 6.5.14 || 7.5.20 || 8.5.41",
+                "rawr/cross-data-providers": "^2.0.0"
             },
             "suggest": {
                 "ext-mbstring": "for parsing UTF-8 CSS"
@@ -3255,9 +3263,9 @@
             ],
             "support": {
                 "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
-                "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.8.0"
+                "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.9.0"
             },
-            "time": "2025-03-23T17:59:05+00:00"
+            "time": "2025-07-11T13:20:48+00:00"
         },
         {
             "name": "shardj/zf1-future",
@@ -5155,16 +5163,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.17",
+            "version": "2.1.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "89b5ef665716fa2a52ecd2633f21007a6a349053"
+                "reference": "473a8c30e450d87099f76313edcbb90852f9afdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/89b5ef665716fa2a52ecd2633f21007a6a349053",
-                "reference": "89b5ef665716fa2a52ecd2633f21007a6a349053",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/473a8c30e450d87099f76313edcbb90852f9afdf",
+                "reference": "473a8c30e450d87099f76313edcbb90852f9afdf",
                 "shasum": ""
             },
             "require": {
@@ -5209,25 +5217,25 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-21T20:55:28+00:00"
+            "time": "2025-07-21T19:58:24+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "2.1.0",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "d513dea45a94394b660e15c155d1fa27826f8e30"
+                "reference": "40a71441dd73fa150a66102f5ca1364c44fc8fff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d513dea45a94394b660e15c155d1fa27826f8e30",
-                "reference": "d513dea45a94394b660e15c155d1fa27826f8e30",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/40a71441dd73fa150a66102f5ca1364c44fc8fff",
+                "reference": "40a71441dd73fa150a66102f5ca1364c44fc8fff",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.17"
+                "phpstan/phpstan": "^2.1.18"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -5261,7 +5269,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.1.0"
+                "source": "https://github.com/rectorphp/rector/tree/2.1.2"
             },
             "funding": [
                 {
@@ -5269,7 +5277,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-06-24T20:26:57+00:00"
+            "time": "2025-07-17T19:30:06+00:00"
         },
         {
             "name": "webmozart/assert",
