@@ -8,7 +8,7 @@
       <div class="std">
         
         <div id="info-biller" class="std mt-5">
-          <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/biller-logo.png" alt="Biller logo" title="Biller" style="width:140px; height:auto; float:right; margin-top: .5em;">
+          <img src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/biller-logo.png" alt="Biller logo" title="Biller" style="width:140px; height:auto; float:right; margin-top: .5em;">
           <h2>🤩Achteraf betalen met Biller</h2>
           <h5><i>Voor zakelijke klanten in Nederland en België</i></h5>
           <h4>Maximaal €10.000 (zakelijk), incl. BTW</h4>
@@ -21,7 +21,7 @@
         </div>
         
         <div id="info-riverty" class="std mt-5">
-          <img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/n/frontend/rwd/dhh/images/riverty_logo.png" alt="Riverty logo" title="Riverty" style="width:140px; height:auto; float:right; margin-top: .5em;">
+          <img src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/riverty_logo.png" alt="Riverty logo" title="Riverty" style="width:140px; height:auto; float:right; margin-top: .5em;">
           <h2>🤩Achteraf betalen met Riverty</h2>
           <h5><i>Voor particuliere klanten in Nederland en België</i></h5>
           <h4>Maximaal €1.000 (zakelijk NL), €2.500 (particulier NL), €1.250 (particulier België), incl. BTW</h4>

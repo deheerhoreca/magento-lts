@@ -1,7 +1,14 @@
 <?php
 
 function _dhh_ips() {
-  return ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
+  return [
+    // "5.132.21.238",
+    // "185.127.111.251",
+    // "185.127.111.252",
+    // "87.210.61.235",
+    // "185.127.111.227",
+    // "81.59.51.217",
+  ];
 }
 
 const DHH_FPC_NAV_KEY     = "DHH_CMS_TOPMENU";
@@ -11,7 +18,7 @@ const DHH_FPC_FOOTER_KEY  = "DHH_CMS_FOOTER";
 if(isset($_SERVER["REQUEST_METHOD"]) && ($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "HEAD")
 && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
 ) {
-  define("DHH_FPC_DEBUG", true);   // Default: false
+  define("DHH_FPC_DEBUG", true);    // Default: false
 } else {
   define("DHH_FPC_DEBUG", false);   // Default: false
 }
