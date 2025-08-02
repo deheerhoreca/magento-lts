@@ -7,12 +7,13 @@
 
 // DHH -- disable this (for performance while no filters are shown on the top)
 return "";
-?>
-<?php $helper = Mage::helper('amshopby'); ?>
-<?php if($this->canShowBlock()): ?>
+
+$helper = Mage::helper('amshopby');
+
+if($this->canShowBlock()): ?>
   <div class="block block-layered-nav">
     <div class="block-title">
-      <strong><span><?php echo $this->__('Shop By') ?></span></strong>
+      <strong><span><?=$this->__('Shop By')?></span></strong>
     </div>
     <div class="block-content">
       <?php echo $this->getStateHtml() ?>
@@ -38,7 +39,7 @@ return "";
               <?php endif; ?>
             <?php endforeach; ?>
           </div>
-        <script>decorateDataList('narrow-by-list')</script>
+        <?php /* <script>decorateDataList('narrow-by-list')</script> */ ?>
       <?php endif; ?>
     </div>
   </div>

@@ -163,13 +163,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     ];
   }
   
-  public function getAvgPrice($_productCollection) {
+  public function getAvgPrice($_products) {
     $price = 0;
-    foreach($_productCollection as $_product) {
+    foreach($_products as $_product) {
       $price += $_product->getPrice();
     }
-    if(sizeof($_productCollection) === 0) return false;
-    return $price / sizeof($_productCollection);
+    if(sizeof($_products) === 0) return false;
+    return $price / sizeof($_products);
   }
   
   public function getBrandsPerCategory($category_id, $_products = null) {
@@ -177,9 +177,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $max_amount = 5;
     
     if(!$_products) {
-      $_products = Mage::getModel("catalog/category")->load($category_id)
+      $_products = Mage::getModel("catalog/category")
+        ->load($category_id)
         ->getProductCollection()
-        ->addAttributeToSelect("manufacturer")   // add all attributes - optional
+        ->addAttributeToSelect("manufacturer")
         ->addAttributeToFilter("status", 1)      // enabled
         ->addAttributeToFilter("visibility", 4)  // visibility in catalog,search
         ->setOrder('popularity', 'ASC')

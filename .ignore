@@ -30,6 +30,7 @@
 /media
 /lib/n98-magerun
 /vendor/magento-hackathon/magento-composer-installer
+/vendor/openmage/magento-lts
 /var
 /var/report
 
@@ -48,7 +49,43 @@
 *.js.map
 *.min.js
 *.min.map
-*php.obfuscated
+*.php.obfuscated
+*.css.map
+*.php.obfuscated
+*.xlf
+*.dat
+.git/
+composer.lock
+/docs.md
+/log
+/data
+/output
+/output_local
+/assets/bower-asset/font-awesome
+/vendor/elasticsearch/elasticsearch/docs
+/vendor/imagecow/imagecow/src/Crops
+/vendor/imelgrat/barcode-validator/docs
+/vendor/jlevers/selling-partner-api/resources
+/vendor/giggsey
+/vendor/nesbot/carbon/src/Carbon/Lang
+/vendor/composer
+/vendor/symplify
+/vendor/wamania
+/vendor/voku/portable-utf8/src/voku/helper/data
+/vendor/yooper/stop-words/data
+/vendor/yooper/php-text-analysis/tests
+/vendor/webklex/php-imap/tests
+/vendor/voku/portable-ascii/src/voku/helper
+/vendor/voku/stop-words/src/voku/helper/stopwords
+/vendor/*/*/tests
+/vendor/mistralys/application-localization/src/Localization
+/vendor/cmixin/business-day/src/Cmixin/Holidays
+/vendor/nikic/php-parser/lib
+/vendor/phpseclib/phpseclib
+CHANGELOG.md
+LICENSE
+LICENSE-APACHE
+LICENSE-GPL
 
 # PhpUnits
 tests/coverage

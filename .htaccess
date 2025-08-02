@@ -325,7 +325,8 @@ RewriteRule ^\.well-known/traffic-advice$ - [T=application/trafficadvice+json,EN
     ExpiresByType application/x-shockwave-flash "access plus 1 month"
     ExpiresByType image/x-icon "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
-    ExpiresDefault "access plus 2 days"
+    ExpiresDefault "access plus 1 hour"
+    Header append Cache-Control "public"
 </IfModule>
 
 ############################################
@@ -406,6 +407,7 @@ RewriteRule ^\.well-known/traffic-advice$ - [T=application/trafficadvice+json,EN
 # This is on top of the preload headers by mod_pagespeed
 
 # Remember, most important resources only:
+# Maximum 4 preconnects (Lighthouse rule)
 # If a page needs to make connections to many third-party domains, preconnecting them all can be counterproductive.
 # The rel="preconnect" hint is best used for only the most critical connections. For the others, just use
 # rel="dns-prefetch" to save time on the first step — the DNS lookup.
@@ -417,9 +419,13 @@ RewriteRule ^\.well-known/traffic-advice$ - [T=application/trafficadvice+json,EN
 # <//api.taggrs.io>;rel=dns-prefetch,
 # <//connect.facebook.net>;rel=dns-prefetch,
 # <//dynamic.spotlersearch.com>;rel=dns-prefetch,
+# <//rum.chefstore.nl:8200>;rel=dns-prefetch,
+# <//bat.bing.com>;rel=dns-prefetch,
+# <//spotlersearchanalytics.com>;rel=preconnect, <//static.spotlersearch.com>;rel=dns-prefetch,
+# <//squeezely.tech>;rel=dns-prefetch, <//t.squeezely.tech>;rel=dns-prefetch
 
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
-    Header add Link "<//images.chefstore.nl/>;rel=preconnect, <//rum.chefstore.nl:8200>;rel=preconnect, <//v2.zopim.com>;rel=preconnect, <//static.zdassets.com>;rel=preconnect, <//ekr.zdassets.com>;rel=preconnect, <//www.googletagmanager.com>;rel=preconnect, <//bat.bing.com>;rel=preconnect, <//spotlersearchanalytics.com>;rel=preconnect, <//static.spotlersearch.com>;rel=preconnect, <//squeezely.tech>;rel=preconnect, <//t.squeezely.tech>;rel=preconnect, <//td.doubleclick.net>;rel=preconnect, <//googleads.g.doubleclick.net>;rel=preconnect"
+    Header add Link "<//images.chefstore.nl/>;rel=preconnect,<//www.googletagmanager.com>;rel=preconnect,<//td.doubleclick.net>;rel=preconnect,<//googleads.g.doubleclick.net>;rel=preconnect,<//v2.zopim.com>;rel=dns-prefetch,<//static.zdassets.com>;rel=dns-prefetch,<//ekr.zdassets.com>;rel=dns-prefetch"
 </FilesMatch>
 
 ###########################################

@@ -531,11 +531,12 @@ function amshopby_external_rwd() {
             groups.push(lis);
         }
 
-        //Add "last" classes.
-        var i;
-        for (i = 0; i < groups.length; i++) {
-            groups[i].filter(':last').addClass('last');
-        }
+        // DHH: Disable
+        // //Add "last" classes.
+        // var i;
+        // for (i = 0; i < groups.length; i++) {
+        //     groups[i].filter(':last').addClass('last');
+        // }
 
         function toggleClasses(clickedItem, group) {
             var index = group.index(clickedItem);

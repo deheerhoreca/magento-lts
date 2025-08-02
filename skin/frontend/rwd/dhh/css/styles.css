@@ -15451,13 +15451,13 @@
     width: calc((100% / 4) - (3em / 4)) !important;
   }
 
-  .category-products ul.products-grid li.item.last {
+  /* .category-products ul.products-grid li.item.last {
     margin-right: 0;
   }
 
   .category-products ul.products-grid li.item.first {
     margin-left: 0;
-  }
+  } */
 
   .category-products ul.products-grid li.item {
     min-height: 32em;

@@ -1,75 +1,79 @@
 <?php
+
 /**
  * Category layered navigation
  *
  * @see Mage_Catalog_Block_Layer_View
  */
 Varien_Profiler::start("DHH_AMSHOPBY_canShowBlock");
+
+/** @var Mage_Catalog_Block_Layer_View $this */
 $canShowBlock = $this->canShowBlock();
+
 Varien_Profiler::stop("DHH_AMSHOPBY_canShowBlock");
 
 if($canShowBlock) {
   $classes = "block block-layered-nav";
   // $filters = Mage::getSingleton("catalog/layer")->getState()->getFilters();
   // if(!$filters) {
-    // $classes .= " block-layered-nav--no-filters";
+  // $classes .= " block-layered-nav--no-filters";
   // }
   echo "<div class='{$classes}'>";
+?>
+  <div class="block-content toggle-content">
+    <?php
+    Varien_Profiler::start("DHH_AMSHOPBY_getStateHtml");
+    echo $this->getStateHtml();
+    Varien_Profiler::stop("DHH_AMSHOPBY_getStateHtml");
+    Varien_Profiler::start("DHH_AMSHOPBY_canShowOptions");
+    $canshowoptions = $this->canShowOptions();
+    Varien_Profiler::stop("DHH_AMSHOPBY_canShowOptions");
+    if($canshowoptions) {
+      //        <div class="amshopby-all-filters">
     ?>
-    <div class="block-content toggle-content">
-      <?php
-      Varien_Profiler::start("DHH_AMSHOPBY_getStateHtml");
-      echo $this->getStateHtml();
-      Varien_Profiler::stop("DHH_AMSHOPBY_getStateHtml");
-      Varien_Profiler::start("DHH_AMSHOPBY_canShowOptions");
-      $canshowoptions = $this->canShowOptions();
-      Varien_Profiler::stop("DHH_AMSHOPBY_canShowOptions");
-      if($canshowoptions) {
-//        <div class="amshopby-all-filters">
-        ?>
-          <div class="block-title block-subtitle block-subtitle--filter">
-            <span class="h2 strong orange underline-orange center">Filteren</span>
-          </div>
-          <dl id="narrow-by-list" class="d-none d-xl-block">
-            <?php
-            Varien_Profiler::start("DHH_AMSHOPBY_FILTER");
-            $_filters = $this->getFilters();
-            foreach($_filters as $_filter) {
-              $sys_name = $_filter->getName();
-              Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
-              if($_filter->getItemsCount()) {
-                $name = $this->__($sys_name);
+      <div class="block-title block-subtitle block-subtitle--filter">
+        <span class="h2 strong orange underline-orange center">Filteren</span>
+      </div>
+      <dl id="narrow-by-list" class="d-none d-xl-block">
+        <?php
+        Varien_Profiler::start("DHH_AMSHOPBY_FILTER");
+        $_filters = $this->getFilters();
+        foreach($_filters as $_filter) {
+          $sys_name = $_filter->getName();
+          Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
+          if($_filter->getItemsCount()) {
+            $name = $this->__($sys_name);
 
-                // Special handling of Category filter
-                if($name === "Categorie") {
-                  // Don't display this filter if there are no subcategories
-                  $name = "Categorie"; // DHH
-                  $items = $_filter->getItems();
-                  $good_to_go = false;
-                  foreach($items as $item) {
-                    if($item->getLevel() > 1) {
-                      $good_to_go = true;
-                      break;
-                    }
-                  }
-                  if($good_to_go === false) {
-                    continue;
-                  }
+            // Special handling of Category filter
+            if($name === "Categorie") {
+              // Don't display this filter if there are no subcategories
+              $name = "Categorie"; // DHH
+              $items = $_filter->getItems();
+              $good_to_go = false;
+              foreach($items as $item) {
+                if($item->getLevel() > 1) {
+                  $good_to_go = true;
+                  break;
                 }
-                echo "<dt>{$name}</dt>".PHP_EOL;
-                echo "<dd>{$_filter->getHtml()}</dd>".PHP_EOL;
               }
-              Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
+              if($good_to_go === false) {
+                continue;
+              }
             }
-            Varien_Profiler::stop("DHH_AMSHOPBY_FILTER");
-            ?>
-          </dl>
-          <?php /* <script>decorateDataList("narrow-by-list")</script> */ ?>
-      <?php
-        // </div>
-      }
-      ?>
-    </div>
+            echo "<dt>{$name}</dt>" . PHP_EOL;
+            echo "<dd>{$_filter->getHtml()}</dd>" . PHP_EOL;
+          }
+          Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
+        }
+        Varien_Profiler::stop("DHH_AMSHOPBY_FILTER");
+        ?>
+      </dl>
+      <?php /* <script>decorateDataList("narrow-by-list")</script> */ ?>
+    <?php
+      // </div>
+    }
+    ?>
+  </div>
   </div>
 <?php
 }
