@@ -85,6 +85,9 @@
 - `app/code/local/Amasty/Shopby/Model/Observer.php`
 - `app/code/local/Amasty/Shopby/Model/Url/Builder.php`
 - `app/code/local/Amasty/Shopby/Model/Value.php`
+- `app/code/local/Amasty/Shopby/Helper/Url.php`
+- `app/code/local/Amasty/Shopby/Lib/Varien/Data/Form/Element/Multistoreinput.php`
+- `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Item.php`
 - `app/code/local/Anowave/Package/Helper/Data.php`
 - `app/code/local/Anowave/Sort/Block/Catalog/Category/Tab/Product.php`
 - `app/code/local/Anowave/Sort/Block/Image.php`

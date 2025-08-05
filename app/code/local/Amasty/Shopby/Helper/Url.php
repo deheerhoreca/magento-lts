@@ -565,14 +565,15 @@ class Amasty_Shopby_Helper_Url extends Mage_Core_Helper_Abstract
 
     /**
      * Get child_id => parents_id array
-     * @return Amasty_Shopby_Model_Mysql4_Value_Link_Collection
+     * @return array // DHH
      */
     public function getMappedOptionsWithParents()
     {
         if ($this->mappedOptionsWithParents === null) {
+            /** @var Amasty_Shopby_Helper_Attributes */ // DHH
             $attrHelper = Mage::helper('amshopby/attributes');
             $prefix = $attrHelper::MAPPED_PREFIX;
-            /** Amasty_Shopby_Model_Mysql4_Value_Link_Collection $collection */
+            /** @var Amasty_Shopby_Model_Mysql4_Value_Link_Collection $collection */ // DHH
             $collection = Mage::getModel('amshopby/value_link')
                 ->getCollection();
             $collection

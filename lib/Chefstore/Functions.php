@@ -1,9 +1,19 @@
 <?php
 
-// Product attributes only
-// Don't make $_product an (object) type hint
 if(!function_exists("om_attr_val")) {
-  function om_attr_val($_product, string $attribute_code, ?string $as = null, array $options = []) { // do not add type hint to $_product
+  
+  /**
+   * Retrieve a product attribute value.
+   * 
+   *  @todo Add null coalescing variant of this function.
+   *
+   * @param  Mage_Catalog_Model_Product|null $_product
+   * @param  string                          $attribute_code
+   * @param  string                          $as
+   * @param  array                           $options
+   * @return mixed
+   */
+  function om_attr_val(?Mage_Catalog_Model_Product $_product, string $attribute_code, string $as = "", array $options = []): mixed {
     
     if(!is_object($_product)) {
       return null;
@@ -28,7 +38,145 @@ if(!function_exists("om_attr_val")) {
 
 // Don't make $_product an (object) type hint
 if(!function_exists("om_attr_val_as_string")) {
-  function om_attr_val_as_string($_product, string $attribute_code, array $options = []): string {  // do not add type hint to $_product
+  function om_attr_val_as_string(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): string {
     return (string) om_attr_val($_product, $attribute_code);
   }
+}
+
+// Don't make $_product an (object) type hint
+if(!function_exists("om_attr_val_as_float")) {
+  function om_attr_val_as_float(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): float|null {
+    $value = om_attr_val($_product, $attribute_code);
+    if(is_numeric($value)) {
+      return float(round($value));
+    }
+    
+    return null;
+  }
+}
+
+// Don't make $_product an (object) type hint
+if(!function_exists("om_attr_val_as_int")) {
+  function om_attr_val_as_int(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): int|null {
+    $value = om_attr_val_as_float($_product, $attribute_code, $options);
+    if(is_numeric($value)) {
+      return int(round($value));
+    }
+    
+    return null;
+  }
+}
+
+/**
+ * Get an OpenMage product object with a $GLOBAL cache.
+ * 
+ * Built to tame qquote module.
+ *
+ * @param  integer|string|Mage_Catalog_Model_Product|null $product
+ * @return Mage_Catalog_Model_Product|false|null
+ */
+function dhh_get_cached_om_product(int|string|Mage_Catalog_Model_Product|null $product): Mage_Catalog_Model_Product|false|null {
+  
+  // COMMENT THIS to enable the cache (untested)
+  return Mage::getModel('catalog/product')->load($product); // Run the original code
+  
+  $GLOBALS["dhh_get_cached_om_product"] ??= [];
+  
+  if($product === null) {
+    Mage::log("dhh_get_cached_om_product::NULL", Zend_Log::DEBUG, "verbose.txt", true);
+    return null;
+  }
+  
+  if($product instanceof Mage_Catalog_Model_Product) {
+    Mage::log("dhh_get_cached_om_product::{$product->getId()} called with existing Mage_Catalog_Model_Product ", Zend_Log::DEBUG, "verbose.txt", true);
+    return $product;
+  }
+  
+  $product_id = $product;
+  
+  if(!is_numeric($product_id) || intval($product_id) < 1) {
+    Mage::log("dhh_get_cached_om_product::".json_encode($product_id).": Not a numeric product_id", Zend_Log::DEBUG, "verbose.txt", true);
+    return Mage::getModel('catalog/product')->load($product_id); // Run the original code
+  }
+  
+  $product_id = (int) $product_id;
+  
+  if(!isset($GLOBALS["dhh_get_cached_om_product"][$product_id])) {
+    Mage::log("dhh_get_cached_om_product::{$product_id}, SAVE", Zend_Log::DEBUG, "verbose.txt", true);
+    if($_product = Mage::getModel('catalog/product')->load($product_id)) {
+      $GLOBALS["dhh_get_cached_om_product"][$product_id] = $_product;
+      destruct($_product);
+    }
+  }
+  
+  Mage::log("dhh_get_cached_om_product::".json_encode($product_id).", HIT", Zend_Log::DEBUG, "verbose.txt", true);
+  
+  return $GLOBALS["dhh_get_cached_om_product"][$product_id];
+}
+
+/**
+ * Get an empty product collection.
+ *
+ * @return Mage_Catalog_Model_Resource_Product_Collection
+ */
+function getProductCollection(): Mage_Catalog_Model_Resource_Product_Collection {
+  return Mage::getResourceModel("catalog/product_collection");
+}
+
+/**
+ * Get a product URL by product entity ID, efficiently.
+ *
+ * @param  integer      $productId
+ * @return string|false
+ */
+function getProductUrlById(int $id): string|false {
+  
+  $return = false;
+  
+  if($_products = getProductCollection()
+    ->addAttributeToSelect("product_url")
+    ->addIdFilter($id)
+    ->addUrlRewrite()->load()) {
+    
+    /** @var Mage_Catalog_Model_Product */
+    if($_product = $_products->getFirstItem()) {
+      $return = $_product->getProductUrl();
+      destruct($_product);
+    }
+    
+    destruct($_products);
+  }
+  
+  Mage::log(__FUNCTION__."(".json_encode(func_get_args()).") => ".json_encode($return), Zend_Log::DEBUG, "verbose.txt", true);
+  
+  return $return;
+}
+
+/**
+ * Get a product URL by product SKU, efficiently.
+ *
+ * @param  integer      $productId
+ * @return string|false
+ */
+function getProductUrlBySku(string $sku): string|false {
+  
+  $return = false;
+  
+  if($_products = getProductCollection()
+    ->addAttributeToSelect("product_url")
+    ->addAttributeToFilter("sku", $sku)
+    ->addUrlRewrite()->load()) {
+    
+    /** @var Mage_Catalog_Model_Product */
+    if($_product = $_products->getFirstItem()) {
+      $return = $_product->getProductUrl();
+      destruct($_product);
+    }
+    
+    destruct($_products);
+  }
+  
+  Mage::log(__FUNCTION__."(".json_encode(func_get_args()).") => ".json_encode($return), Zend_Log::DEBUG, "verbose.txt", true);
+  
+  return $return;
 }

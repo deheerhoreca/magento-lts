@@ -1,174 +1,228 @@
 <?php
+
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Improved Layered Navigation
-*/
-?>
-<?php
-/**
- * @var $this Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute
+ * @author Amasty Team
+ * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @package Improved Layered Navigation
+ * @var Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute $this
  */
 
-$class = "";
-if($this->getCollapsed() && !$this->getHasSelection()) {
-  $class .= " no-display-current";
+// Build CSS classes for <ol>
+$classes = [];
+if ($this->getCollapsed() && !$this->getHasSelection()) {
+  $classes[] = 'no-display-current';
 }
-if($this->getSingleChoice()) {
-  $class .= " single-choice";
+if ($this->getSingleChoice()) {
+  $classes[] = 'single-choice';
 }
-if($this->getSortFeaturedFirst() && in_array($this->getDisplayType(), [Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY, Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS])) {
-  $class .= " sort-featured-first-".$this->getRequestValue();
+if (
+  $this->getSortFeaturedFirst() &&
+  in_array($this->getDisplayType(), [
+    Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY,
+    Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS
+  ])
+) {
+  $classes[] = 'sort-featured-first-' . $this->getRequestValue();
 }
-$class = trim((string) $class);
-echo "<ol class='{$class}'>";
-if($this->getSortFeaturedFirst()) { ?>
-  <input type="hidden" id="field_sort_featured_<?=$this->getRequestValue()?>" value="default_sort">
-<?php
-}
+$classAttr = trim(implode(' ', $classes));
 
+// Prepare items
 $items = $this->getItemsAsArray();
-
-foreach($items as &$item) {
-  $item["url"] = (string) ($item["url"] ?? "");
-  $item["url"] = str_replace("&amp;", "&", $item["url"]); // @todo fix upstream
-  // dump($url);
+foreach ($items as &$item) {
+  if(isset($item['url']))   $item['url']    = str_replace("https://www.chefstore.nl/", "/", (string) $item['url']);
+  if(isset($item['label'])) $item['label']  = (string) $item['label'];
+  if(isset($item['css']))   $item['css']    = (string) $item['css'];
 }
 unset($item);
 
-switch ($this->getDisplayType()) {
-  case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY:
-    if($this->getShowSearch()) {
-      echo '<li rel="search"><input type="text" class="amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)"></li>';
-    }
-    foreach($items as $item) {
-      if(strtolower((string) $item['label']) !== "n.v.t.") {
-
-        $count = $item["countValue"];
-        if(is_numeric($count) && $count > 1000) {
-          $count = "1000+";
-        }
-        $count = "<span class='count'>({$count})</span>";
-
-        $label = (string) $item['label'];
-        if(strlen($label) > 27) {
-          $label = substr($label, 0, 24)."...";
-        }
-
-        $checkbox_html = (stripos((string) $item['css'], "amshopby-attr-selected") !== false) ? '<span class="amshopby-choice"></span>' : '';
-        echo '<li'.
-          (isset($item['style']) ? ' '.$item['style'] : '') .
-          (isset($item['default_sort']) ? ' data-default_sort="' . $item['default_sort'] . '"': '') .
-          (isset($item['featured_sort']) ? ' data-featured_sort="' . $item['featured_sort'] . '"': '') .
-          ' data-text="' . htmlspecialchars((string) $item['label']) . '"> ' .
-          '<a class="'.$item['css'].'"' . $item['rel'] . ' href="'.$item['url'].'" data-config=\''.$item['data-config'].'\' title="'. $item['label'] .'" rel="nofollow">'. $label . $count . '</a>'.$checkbox_html.'</li>'.PHP_EOL;
-      }
-    }
-  break;
-
-  case Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_ONLY:
-    echo '<li>';
-    foreach($items as $item) {
-      if(isset($item['image_hover']) && $item['image_hover'] != '') {
-        echo '<img src="' . $item['image_hover'] . '" style="display: none;">';
-        $onHover = 'onmouseover=this.src="' . $item['image_hover'] . '"'; 
-        $onHover .= ' onmouseout=this.src="' . $item['image'] . '"';
-      } else {
-        $onHover = '';
-      }
-      echo '<a '.$item['style'].$item['rel'].' class="'.$item['css'].'" href="'.$item['url'].'" data-config=\' '.$item['data-config'].'\' ><img src="'.$item['image'].'" ' . $onHover . ' title="'. $item['label'] .'" alt="'. $item['label'] .'"></a>';
-
-    }
-    echo '</li>';
-  break;
-
-  case Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS:
-    if($this->getShowSearch()){
-      echo '<li rel="search"><input type="text" class="amshopby_attr_search"></li>';
-    }
-    foreach($items as $item) {
-      $count = $item['count'];
-      if(is_numeric($count) && $count > 1000) {
-        $count = "1000+";
-      }
-      echo '<li '.$item['style'].
-				(isset($item['default_sort']) ? ' data-default_sort="' . $item['default_sort'] . '"': '') .
-				(isset($item['featured_sort']) ? ' data-featured_sort="' . $item['featured_sort'] . '"': '') .
-				' data-text="' . htmlspecialchars((string) $item['label']) . '"><a class="'.$item['css'].'" '.$item['rel'].' href="'.$item['url'].'" data-config=\' '.$item['data-config'].'\' >';
-
-      if(isset($item['image_hover']) && $item['image_hover'] != '') {
-        echo '<img src="' . $item['image_hover'] . '" style="display: none;">';
-        $onHover = 'onmouseover=this.src="' . $item['image_hover'] . '"'; 
-        $onHover .= ' onmouseout=this.src="' . $item['image'] . '"';
-      } else {
-        $onHover = '';
-      }
-
-      if(!empty($item['image'])){
-        echo '<img src="'.$item['image'].'" ' . $onHover . ' title="'. $item['label'] .'" alt="'. $item['label'] .'">';
-      }
-      echo $item['label'] . $count . '</a>' . '</li>';
-    }
-  break;
-
-  case Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN:
-    echo '<li><select onchange="if(this.value) window.location.href = this.value" class="amshopby-select amshopby-ajax-select">';
-    echo '<option value="'.$this->getRemoveUrl().'" data-config=\' '.$this->getRemoveOptionConfig().' \'>'.Mage::helper('amshopby')->__('Selecteer ...').'</option>';
-    foreach($items as $item) {
-      $count = $item['count'];
-      if(is_numeric($count) && $count > 1000) {
-        $count = "1000+";
-      }
-      echo '<option '.$item['css'] . $item['rel'] . ' value="'.$item['url'].'" data-config=\' '.$item['data-config'].'\'>'. $item['label'] . $count . '</option>';
-    }
-    echo '</select></li>';
-  break;
-
-  case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_IN_2_COLUMNS:
-    $size  = sizeof($items);
-    $half  =  ceil($size/2);
-
-    echo '<li>';
-    echo '<div class="amshopby-column">';
-    for ($i = 0; $i < $half; $i++) {
-      $item = $items[$i];
-      $count = $item['count'];
-      if(is_numeric($count) && $count > 1000) {
-        $count = "1000+";
-      }
-      echo '<a class="'.$item['css'].'" '.$item['rel'].' href="'.$item['url'].'" data-text="' . htmlspecialchars((string) $item['label']) . '" data-config=\' '.$item['data-config'].'\' >'. $item['label'] . $count . '</a>' . '<br>';
-    }
-    echo '</div>';
-    echo '<div class="amshopby-column">';
-    for ($i = $half; $i < $size; $i++) {
-      $item = $items[$i];
-      $count = $item['count'];
-      if(is_numeric($count) && $count > 1000) {
-        $count = "1000+";
-      }
-      echo '<a class="'.$item['css'].'" '.$item['rel'].' href="'.$item['url'].'" data-text="' . htmlspecialchars((string) $item['label']) . '" data-config=\' '.$item['data-config'].'\'   >'. $item['label'] . $count . '</a>' . '<br>';
-    }
-    echo '</div>';
-    echo '</li>';
-  break;
-}
-
-if($this->getShowLessMore() && in_array($this->getDisplayType(), [
-    Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY,
-    Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_ONLY,
-    Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS,
-  ])) {
-  $total = count($items);
-  $short = $this->getMaxOptions();
-  $countSelectedOptions = $this->getCountSelectedOptions();
-
-  $add = $countSelectedOptions > $short ? $total - $countSelectedOptions : $total - $short;
-  if($add > 0) {
-    $text = sprintf($this->__('Meer opties'), $add);
-    echo "<li class='amshopby-clearer'><a id='amshopby-more-{$this->getRequestValue()}' class='amshopby-more' href='#'>{$text}</a></li>";
-  }
-  $text = $this->__('Minder opties');
-  echo "<li class='amshopby-clearer'><a id='amshopby-less-{$this->getRequestValue()}' class='amshopby-less' href='#' style='display:none'>{$text}</a></li>";
-} 
+$attribute_name = htmlspecialchars((string) $this->getRequestValue());
 ?>
+
+<ol class="<?=htmlspecialchars($classAttr)?>">
+  <?php if ($this->getSortFeaturedFirst()):?>
+    <input type="hidden" id="field_sort_featured_<?=$attribute_name?>" value="default_sort">
+  <?php endif;
+  
+  switch ($this->getDisplayType()):
+
+    case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY:
+      if ($this->getShowSearch()):?>
+        <li rel="search">
+          <input id="amshopby_attr_search_<?=$attribute_name?>" type="text" class="input-text amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)" autocomplete="off">
+        </li>
+      <?php endif;
+
+      foreach ($items as $item):
+        if (strtolower($item['label']) === 'n.v.t.') continue;
+
+        $count = $item['countValue'];
+        if (is_numeric($count) && $count > 100) $count = '100+';
+        $countHtml = "<span class='count'>(" . htmlspecialchars($count) . ")</span>";
+
+        $label = $item['label'];
+        if (mb_strlen($label) > 27) $label = mb_substr($label, 0, 24) . '...';
+
+        $checkboxHtml = (str_contains($item['css'], 'amshopby-attr-selected')) ? '<span class="amshopby-choice"></span>' : '';
+
+        $liAttrs = [];
+        if (!empty($item['style'])) $liAttrs[] = $item['style'];
+        if (isset($item['default_sort'])) $liAttrs[] = 'data-default_sort="' . htmlspecialchars($item['default_sort']) . '"';
+        if (isset($item['featured_sort'])) $liAttrs[] = 'data-featured_sort="' . htmlspecialchars($item['featured_sort']) . '"';
+        $liAttrs[] = 'data-text="' . htmlspecialchars($item['label']) . '"';
+      ?>
+        <li <?=implode(' ', $liAttrs)?>>
+          <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item['url']?>" data-config='<?=$item['data-config']?>' title="<?=htmlspecialchars($item['label'])?>"><?=htmlspecialchars($label) . $countHtml?></a>
+          <?=$checkboxHtml?>
+        </li>
+      <?php endforeach;
+      break;
+
+    case Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_ONLY:?>
+      <li>
+        <?php foreach ($items as $item):
+          $onHover = '';
+          if (!empty($item['image_hover'])) {
+            echo '<img src="' . htmlspecialchars($item['image_hover']) . '" style="display: none;">';
+            $onHover = 'onmouseover=this.src=\'' . htmlspecialchars($item['image_hover']) . '\' onmouseout=this.src=\'' . htmlspecialchars($item['image']) . '\'';
+          }
+        ?>
+          <a <?=$item['style'] . $item['rel']?>
+            class="<?=htmlspecialchars($item['css'])?>"
+            href="<?=$item['url']?>"
+            data-config='<?=$item['data-config']?>'>
+            <img src="<?=htmlspecialchars($item['image'])?>"
+              <?=$onHover?>
+              title="<?=htmlspecialchars($item['label'])?>"
+              alt="<?=htmlspecialchars($item['label'])?>">
+          </a>
+        <?php endforeach;?>
+      </li>
+      <?php break;
+
+    case Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS:
+      if ($this->getShowSearch()):?>
+        <li rel="search">
+          <input type="text" class="amshopby_attr_search">
+        </li>
+      <?php endif;
+
+      foreach ($items as $item):
+        $count = $item['count'];
+        if (is_numeric($count) && $count > 1000) $count = '1000+';
+
+        $liAttrs = [];
+        if (!empty($item['style'])) $liAttrs[] = $item['style'];
+        if (isset($item['default_sort'])) $liAttrs[] = 'data-default_sort="' . htmlspecialchars($item['default_sort']) . '"';
+        if (isset($item['featured_sort'])) $liAttrs[] = 'data-featured_sort="' . htmlspecialchars($item['featured_sort']) . '"';
+        $liAttrs[] = 'data-text="' . htmlspecialchars($item['label']) . '"';
+
+        $onHover = '';
+        if (!empty($item['image_hover'])) {
+          echo '<img src="' . htmlspecialchars($item['image_hover']) . '" style="display: none;">';
+          $onHover = 'onmouseover=this.src=\'' . htmlspecialchars($item['image_hover']) . '\' onmouseout=this.src=\'' . htmlspecialchars($item['image']) . '\'';
+        }
+      ?>
+        <li <?=implode(' ', $liAttrs)?>>
+          <a class="<?=htmlspecialchars($item['css'])?>"
+            <?=$item['rel']?>
+            href="<?=$item['url']?>"
+            data-config='<?=$item['data-config']?>'>
+            <?php if (!empty($item['image'])):?>
+              <img src="<?=htmlspecialchars($item['image'])?>"
+                <?=$onHover?>
+                title="<?=htmlspecialchars($item['label'])?>"
+                alt="<?=htmlspecialchars($item['label'])?>">
+            <?php endif;?>
+            <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
+          </a>
+        </li>
+      <?php endforeach;
+      break;
+
+    case Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN:?>
+      <li>
+        <select onchange="if(this.value) window.location.href = this.value"
+          class="amshopby-select amshopby-ajax-select">
+          <option value="<?=htmlspecialchars($this->getRemoveUrl())?>"
+            data-config='<?=$this->getRemoveOptionConfig()?>'>
+            <?=Mage::helper('amshopby')->__('Selecteer ...')?>
+          </option>
+          <?php foreach ($items as $item):
+            $count = $item['count'];
+            if (is_numeric($count) && $count > 100) $count = '100+';
+         ?>
+            <option <?=$item['css'] . $item['rel']?>
+              value="<?=$item['url']?>"
+              data-config='<?=$item['data-config']?>'>
+              <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
+            </option>
+          <?php endforeach;?>
+        </select>
+      </li>
+    <?php break;
+
+    case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_IN_2_COLUMNS:
+      $size = count($items);
+      $half = (int) ceil($size / 2);
+   ?>
+      <li>
+        <div class="amshopby-column">
+          <?php for ($i = 0; $i < $half; $i++):
+            $item = $items[$i];
+            $count = $item['count'];
+            if (is_numeric($count) && $count > 100) $count = '100+';
+         ?>
+            <a class="<?=htmlspecialchars($item['css'])?>"
+              <?=$item['rel']?>
+              href="<?=htmlspecialchars($item['url'])?>"
+              data-text="<?=htmlspecialchars($item['label'])?>"
+              data-config='<?=$item['data-config']?>'>
+              <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
+            </a><br>
+          <?php endfor;?>
+        </div>
+        <div class="amshopby-column">
+          <?php for ($i = $half; $i < $size; $i++):
+            $item = $items[$i];
+            $count = $item['count'];
+            if (is_numeric($count) && $count > 100) $count = '100+';
+         ?>
+            <a class="<?=htmlspecialchars($item['css'])?>"
+              <?=$item['rel']?>
+              href="<?=$item['url']?>"
+              data-text="<?=htmlspecialchars($item['label'])?>"
+              data-config='<?=$item['data-config']?>'>
+              <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
+            </a><br>
+          <?php endfor;?>
+        </div>
+      </li>
+  <?php break;
+  endswitch;
+
+  // Show Less/More
+  if (
+    $this->getShowLessMore() &&
+    in_array($this->getDisplayType(), [
+      Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY,
+      Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_ONLY,
+      Amasty_Shopby_Model_Source_Attribute::DT_IMAGES_AND_LABELS,
+    ])
+  ):
+    $total = count($items);
+    $short = $this->getMaxOptions();
+    $countSelectedOptions = $this->getCountSelectedOptions();
+    $add = $countSelectedOptions > $short ? $total - $countSelectedOptions : $total - $short;
+    if ($add > 0):
+      $text = $this->__('Meer opties');
+      ?>
+      <li class="amshopby-clearer">
+        <a id="amshopby-more-<?=htmlspecialchars($this->getRequestValue())?>" class="amshopby-more" href="#"><?=$text?></a>
+      </li>
+    <?php endif;
+    $text = $this->__('Minder opties');?>
+    <li class="amshopby-clearer">
+      <a id="amshopby-less-<?=htmlspecialchars($this->getRequestValue())?>" class="amshopby-less" href="#" style="display:none"><?=$text?></a>
+    </li>
+  <?php endif;?>
 </ol>

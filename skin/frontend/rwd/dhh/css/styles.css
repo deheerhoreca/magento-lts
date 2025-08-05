@@ -16690,9 +16690,14 @@
   }
   
   .table-responsive-xxl {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .info-box-cart-success {
+    background: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/topklaas.jpg) 99% 90% no-repeat;
+    background-size: contain;
+  }
 }
 
 /* Bootstrap X-Large */

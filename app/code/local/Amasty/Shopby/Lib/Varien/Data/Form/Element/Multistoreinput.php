@@ -14,21 +14,39 @@ class Amasty_Shopby_Lib_Varien_Data_Form_Element_Multistoreinput extends Varien_
         $this->addClass('input-text');
     }
 
-    public function getElementHtml()
+    // DHH CORE HACK: Make IDs unique
+    public function getElementHtml(): string
     {
-        $html = "<section>";
-        $valuesByStore = Mage::helper('amshopby')->unserialize($this->getValue() );
-        if( !$valuesByStore) $valuesByStore[0] = $this->getValue();
-        foreach (Mage::helper('amshopby')->getStores() as $_store) {
+        $valuesByStore = Mage::helper('amshopby')->unserialize($this->getValue());
+        if(!$valuesByStore) $valuesByStore[0] = $this->getValue();
+        
+        $html = "";
+        foreach(Mage::helper('amshopby')->getStores() as $_store) {
             isset($valuesByStore[$_store->getId()]) ? $value = $valuesByStore[$_store->getId()] : $value = '';
-            $store = '<label style="display:block;font-weight: bold;" >'.$_store->getName().'</label>';
-            $input = '<input style="display:block;width:150px;margin-right:10px" id="'.$this->getId().'"';
-            $input .= 'name="multistore['.$this->getName().']['.$_store->getId().']"';
-            $input .= $this->serialize($this->getHtmlAttributes());
-            $input .= 'value="'.$value.'">';
-            $html .= '<div style="float:left;">'.$store.$input.'</div>';
+            $store = "<label class='bold'>{$_store->getName()}</label>";
+            $id    = $this->getMultistoreInputId($_store->getId());
+            $input = "<input id=\"{$id}\" 'name=\"multistore['.$this->getName().']['.$_store->getId().']\" ".$this->serialize($this->getHtmlAttributes())." value=\"{$value}\">";
+            
+            $html .= $store.$input.PHP_EOL;
         }
-        return $html.'<br style="clear:both;" /></section>';
+        
+        return $html.PHP_EOL;
+    }
+    
+    /**
+     * Undocumented function
+     *
+     * @param  integer $storeId
+     * @return string
+     */
+    public function getMultistoreInputId(?int $storeId): string {
+        $id = parent::getId();
+        
+        if($storeId > 0) {
+            return $id."_".$storeId;
+        }
+        
+        return $id;
     }
 
 }

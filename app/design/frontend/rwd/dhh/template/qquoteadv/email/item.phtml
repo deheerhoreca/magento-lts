@@ -26,7 +26,8 @@
  */
 
 $item = $this->getItem();
-$product = Mage::getModel('catalog/product')->load($item->getProductId());
+// $product = Mage::getModel('catalog/product')->load($item->getProductId());
+$product = dhh_get_cached_om_product($item->getProductId());
 
 //helpers
 /** @var \Ophirah_Qquoteadv_Helper_Data $quoteadvHelper */

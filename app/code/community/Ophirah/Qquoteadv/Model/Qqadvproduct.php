@@ -105,7 +105,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
         }
 
         if (is_int($product)) {
-            return Mage::getModel('catalog/product')->load($product);
+            return dhh_get_cached_om_product($product);
         } elseif ($product instanceof Mage_Catalog_Model_Product) {
             return $product;
         } else {
@@ -200,7 +200,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
                 $quoteChildProduct = $this->collectQuoteItemChildren($quoteProduct, $quoteProductId);
             }
 
-            if (isset($quoteChildProduct) && count($quoteChildProduct) > 0) {
+            if (isset($quoteChildProduct) && count($quoteChildProduct->getSize())) { // DHH FIX
                 $quoteProduct->setChildren($quoteChildProduct);
             }
 
@@ -256,7 +256,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
     public function getCustomOptionsArray($product)
     {
         if (is_int($product)) {
-            $product = Mage::getModel('catalog/product')->load($product);
+            $product = dhh_get_cached_om_product($product);
         }
 
         if (is_object($product) && $product instanceof Mage_Catalog_Model_Product && $product->getOptions()){
@@ -304,7 +304,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
 
         // Load product if none is given
         if ($product == null) {
-            $product = Mage::getModel('catalog/product')->load($this->getProductId());
+            $product = dhh_get_cached_om_product($this->getProductId());
         }
 
         // give thumbnail default size if none is given
@@ -385,11 +385,12 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
         // Resize image if needed
         if (!$thumbsize === false) {
 
-            // get picture dimensions
-            $cacheImage = Mage::helper('catalog/image')->init($imageProduct, $imageType);
-            $newDim = Mage::helper('qquoteadv/catalog_product_data')->getItemPictureDimensions($cacheImage, $thumbsize);
-            $this->imgSize = new Varien_Object();
-            $this->imgSize->setData($newDim);
+            // DHH FIX
+            // // get picture dimensions
+            // $cacheImage = Mage::helper('catalog/image')->init($imageProduct, $imageType);
+            // $newDim = Mage::helper('qquoteadv/catalog_product_data')->getItemPictureDimensions($cacheImage, $thumbsize);
+            // $this->imgSize = new Varien_Object();
+            // $this->imgSize->setData($newDim);
         }
 
         //return image url
@@ -442,7 +443,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
                 ->load($productQuoteId)
                 ->getAttribute()
         );
-        $product = Mage::getModel('catalog/product')->load($quote_prod['product']);
+        $product = dhh_get_cached_om_product($quote_prod['product']);
         $childProductArray = $product->getTypeInstance(true)->getChildrenIds($product->getId(), false);
 
         return $childProductArray;
@@ -463,7 +464,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
             foreach ($option['value'] as $optionItem) {
                 $childId = $optionItem['id'];
                 $qty = $optionItem['qty'];
-                $childProd = Mage::getModel('catalog/product')->load($childId);
+                $childProd = dhh_get_cached_om_product($childId);
                 // Create link with parent Quote Item
                 if ($quoteProductId != null) {
                     $childProd->setParentQuoteItemId($quoteProductId);
@@ -750,9 +751,9 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
             }
 
             if (!isset($attribute['product'])) {
-                $product = Mage::getModel('catalog/product')->load($quoteProduct->getProductId());
+                $product = dhh_get_cached_om_product($quoteProduct->getProductId());
             } else {
-                $product = Mage::getModel('catalog/product')->load($attribute['product']);
+                $product = dhh_get_cached_om_product($attribute['product']);
             }
 
             // If product is configurable, super_attribute is set
@@ -805,7 +806,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
                             $childId = Mage::getModel('bundle/selection')
                                 ->load($bindeOptionId)
                                 ->getData('product_id');
-                            $prod = Mage::getModel('catalog/product')->load($childId);
+                            $prod = dhh_get_cached_om_product($childId);
                             $prodPrice = 0;
 
                             //if qty is more than one, check for tier pricings
@@ -872,7 +873,7 @@ class Ophirah_Qquoteadv_Model_Qqadvproduct extends Mage_Core_Model_Abstract
                         $prodCosts = [];
 
                         foreach ($childProdId as $childId) {
-                            $prod = Mage::getModel('catalog/product')->load($childId);
+                            $prod = dhh_get_cached_om_product($childId);
                             $prodPrice = $prod->getPrice();
                             $prodCost = $prod->getCost();
                             $prodPrices[$childId] = $prodPrice;

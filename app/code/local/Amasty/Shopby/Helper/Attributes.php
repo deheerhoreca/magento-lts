@@ -102,7 +102,7 @@ class Amasty_Shopby_Helper_Attributes extends Amasty_Shopby_Helper_Cached
         }
 
         $positions = array();
-        /** @var $attributes Mage_Eav_Model_Attribute[] */
+        /** @var Mage_Eav_Model_Attribute[] $attributes */ // DHH
         $attributes = $this->getFilterableAttributes();
 
         $customPositions = array(

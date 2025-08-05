@@ -46,7 +46,8 @@ abstract class Ophirah_Qquoteadv_Block_Qquote_Abstract extends Mage_Checkout_Blo
      */
     public function getProduct($productId)
     {
-        return Mage::getModel('catalog/product')->load($productId);
+        // return Mage::getModel('catalog/product')->load($productId);
+        return dhh_get_cached_om_product($productId); // DHH
     }
 
     /**

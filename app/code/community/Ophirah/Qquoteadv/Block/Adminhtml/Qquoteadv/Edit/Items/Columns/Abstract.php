@@ -114,7 +114,8 @@ abstract class Ophirah_Qquoteadv_Block_Adminhtml_Qquoteadv_Edit_Items_Columns_Ab
     public function setItem(Ophirah_Qquoteadv_Model_Qqadvproduct $item){
         $this->item = $item;
         $this->setProduct(
-            Mage::getModel('catalog/product')->load($item->getProductId())
+            // Mage::getModel('catalog/product')->load($item->getProductId())
+            dhh_get_cached_om_product($item->getProductId()) // DHH
         );
     }
 

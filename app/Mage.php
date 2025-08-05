@@ -865,7 +865,7 @@ final class Mage
     public static function log($message, $level = null, $file = '', $forceLog = false)
     {
         
-        // DHH CORE HACK -- Remove certain debug messages        
+        // DHH CORE HACK -- Remove certain debug messages
         $level = is_null($level) ? Zend_Log::DEBUG : $level;
         
         $GLOBALS["dhh_mage_ignored_msgs"] ??= [
@@ -886,7 +886,7 @@ final class Mage
         
         // DHH CORE HACK -- Suppress rules and force log file name
         // $logActive    = true;
-        $file         = "system.log";
+        if($file !== "verbose.txt") $file = "system.log";
         // $maxLogLevel  = Zend_Log::DEBUG;
         // $forceLog     = true;
         

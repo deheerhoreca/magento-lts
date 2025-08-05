@@ -266,6 +266,32 @@
       
     </up_sell_product_grid>
     
+    <!-- Amasty Improved Navigation: Dropdown attribute values grid tab -->
+    
+    <valuesGrid>
+    
+      <is_featured>
+        <add>
+          <align>center</align>
+          <header>Featured?</header>
+          <type>options</type>
+          <index>is_featured</index>
+          <width>50</width>
+          <options>
+            <option_1>
+              <key>1</key>
+              <value>Ja</value>
+            </option_1>
+            <option_0>
+              <key>0</key>
+              <value>Nee</value>
+            </option_0>
+          </options>
+        </add>
+      </is_featured>
+    
+    </valuesGrid>
+    
     <!-- Attribute Grid -->
     
     <attributeGrid>

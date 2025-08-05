@@ -335,11 +335,11 @@ class Ophirah_Qquoteadv_Block_Qquote extends Ophirah_Qquoteadv_Block_Qquote_Abst
     /**
      * Function that returns the product object to get the image from
      *
-     * @param $product
-     * @param null $childProduct
-     * @return $product Mage_Catalog_Model_Product |$childProduct Mage_Catalog_Model_Product
+     * @param  Mage_Catalog_Model_Product|bool|null $product
+     * @param  Mage_Catalog_Model_Product|bool|null $childProduct
+     * @return ?Mage_Catalog_Model_Product
      */
-    public function getImageProduct($product, $childProduct = null)
+    public function getImageProduct(Mage_Catalog_Model_Product|bool|null $product, Mage_Catalog_Model_Product|bool|null $childProduct = null): Mage_Catalog_Model_Product|bool|null
     {
         return Mage::helper('qquoteadv/catalog_product_data')->getImageProduct($product, $childProduct);
     }

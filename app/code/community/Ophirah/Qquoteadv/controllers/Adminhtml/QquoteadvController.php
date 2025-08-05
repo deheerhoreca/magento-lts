@@ -3325,7 +3325,8 @@ class Ophirah_Qquoteadv_Adminhtml_QquoteadvController extends Mage_Adminhtml_Con
     {
         $quoteProductId = (int)$this->getRequest()->getParam('quote_product_id');
         $quoteProduct = Mage::getModel('qquoteadv/qqadvproduct')->load($this->getRequest()->getParam('quote_product_id'));
-        $product = Mage::getModel('catalog/product')->load($quoteProduct->getData('product_id'));
+        // $product = Mage::getModel('catalog/product')->load($quoteProduct->getData('product_id'));
+        $product = dhh_get_cached_om_product($quoteProduct->getData('product_id')); // DHH
 
         Mage::dispatchEvent('ophirah_qquoteadv_admin_addQtyField_before', [$quoteProductId]);
 

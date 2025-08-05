@@ -52,11 +52,11 @@ if($this->getCollection()->getSize()) {
   if(!defined("DHH_SORTING_BLOCK_PRINTED")) {
     $size_human = $this->getCollection()->getSize();
     $size_postfix = "";
-    if($size_human > 100) {
-      $size_human = "Meer dan 100";
-      $size_postfix = ". Gebruik meer filters om gemakkelijk je ideale keuze te maken";
+    if($size_human > 250) {
+      $size_human = "250+";
+      $size_postfix = "";
     }
-    echo "<div class='sorter'><p><strong>{$size_human}</strong> producten{$size_postfix}</p></div>";
+    echo "<div class='sorter'><p><strong>{$size_human}</strong> producten gevonden{$size_postfix}</p></div>";
   }
   ?>
   <div class="pager">  

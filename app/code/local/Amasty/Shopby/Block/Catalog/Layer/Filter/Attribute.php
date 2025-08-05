@@ -24,7 +24,7 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
     /**
      * Retrieve sorted items
      *
-     * @return array
+     * @return Mage_Catalog_Model_Layer_Filter_Item[] // DHH
      */
     public function getItems()
     {
@@ -41,25 +41,25 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         return $items;
     }
 
-    public function getItemsAsArray()
+    public function getItemsAsArray(): array // DHH
     {
-        $params = Mage::app()->getRequest()->getParams();
-        $isMultipleNoindexMode = $this->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_MULTIPLE_MODE;
-        $isApplyByButton = Mage::helper('amshopby')->getIsApplyButtonEnabled();
-        $applyConfigDumb = json_encode(array());
+        // $params = Mage::app()->getRequest()->getParams();
+        // $isMultipleNoindexMode = $this->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_MULTIPLE_MODE;
+        // $isApplyByButton = Mage::helper('amshopby')->getIsApplyButtonEnabled();
+        // $applyConfigDumb = json_encode(array());
         $displayType = $this->getDisplayType();
-        $items = array();
+        $items = [];
 
         /** @var Amasty_Shopby_Model_Url_Builder $urlBuilder */
         $urlBuilder = Mage::getModel('amshopby/url_builder');
         $urlBuilder->reset();
         $urlBuilder->clearPagination();
 
+        /** @var Amasty_Shopby_Model_Catalog_Layer_Filter_Item $itemObject */
         foreach ($this->getItems() as $itemObject) {
-            /** @var Amasty_Shopby_Model_Catalog_Layer_Filter_Item  $itemObject */
             $item = array();
             $item['id'] = $itemObject->getOptionId();
-            $item['url']   = $this->htmlEscape($itemObject->getUrl($urlBuilder));
+            $item['url']   = $this->escapeHtml($itemObject->getUrl($urlBuilder)); // DHH
             $item['label'] = $itemObject->getLabel();
             $item['descr'] = $itemObject->getDescr();
 
@@ -89,7 +89,7 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             if ($itemObject->getIsSelected()) {
                 $item['css'] .= '-selected';
                 $item['is_selected'] = true;
-                if (Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN == $displayType) { //dropdown
+                if ($displayType == Amasty_Shopby_Model_Source_Attribute::DT_DROPDOWN) { //dropdown
                     $item['css'] = 'selected';
                 }
             }
@@ -97,8 +97,11 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             if ($itemObject->getCount() === 0) {
                 $item['css'] .= ' amshopby-attr-inactive';
             }
-
+            
+            $isMultipleNoindexMode ??= $this->getSeoNoindex() == Amasty_Shopby_Model_Filter::SEO_NO_INDEX_MULTIPLE_MODE;
+            
             if ($isMultipleNoindexMode) {
+                $params ??= Mage::app()->getRequest()->getParams();
                 if ($this->getSeoRel() && isset($params[$this->getRequestValue()])
                     && ($params[$this->getRequestValue()] != $item['id'])
                 ) {
@@ -111,7 +114,10 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             }
 
             $item['is_featured'] = $itemObject->getIsFeatured();
-
+            
+            $isApplyByButton ??= Mage::helper('amshopby')->getIsApplyButtonEnabled();
+            $applyConfigDumb ??= json_encode([]);
+            
             $item['data-config'] = $isApplyByButton
                 ? $itemObject->getUrlAttributeOptionConfigAsJson($urlBuilder)
                 : $applyConfigDumb;
@@ -235,10 +241,10 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
 
         $cnt     = parent::getItemsCount();
         // DHH CORE HACK -- Allow certain attributes to ignore hide_one_value
-        if(in_array($this->_filter->getAttributeModel()->getAttributeCode(), ["recommended_product"], true) === true) {
+        if(in_array($this->_filter->getAttributeModel()->getAttributeCode(), ["recommended_product"], true)) {
           $showAll = true;
         } else {
-          $showAll = !Mage::getStoreConfig('amshopby/general/hide_one_value');
+          $showAll = !Mage::getStoreConfigFlag('amshopby/general/hide_one_value');
         }
         return ($cnt > 1 || $showAll) ? $cnt : 0;
     }

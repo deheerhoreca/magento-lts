@@ -6,18 +6,17 @@
     "**/.git": true
   },
   "files.exclude": {
-    "**/media/catalog/**": true
-  },
-  "intelephense": {
-    "environment": {
-      "documentRoot": "./",
-    }
+    "media/catalog/**": true
   },
   "compareFolders.ignoreExtension": [],
-  "intelephense.environment.documentRoot": "~/httpdocs/deheerhoreca-magento",
+  "intelephense.environment.documentRoot": "./",
   "search.exclude": {
-    "**/var/report": true
+    "var/report": true,
+    "var/log": true,
+    "vendor/openmage/magento-lts": true,
+    "pub": true
   },
   "search.useGlobalIgnoreFiles": true,
-  "search.useParentIgnoreFiles": true
+  "search.useParentIgnoreFiles": true,
+  "workbench.editor.restoreViewState": true
 }

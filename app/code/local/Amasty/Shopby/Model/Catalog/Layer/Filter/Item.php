@@ -23,16 +23,17 @@ class Amasty_Shopby_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Model_L
         }
 
         $requestVar = $this->getFilter()->getRequestVar();
-
-		// Fix for old magento versions (before 1.7.0)
-		if($requestVar === "price")
-		{
-			$value = explode(",",$this->getValue());
-			if(count($value) > 1) {
-				$value = ($value[0]-1)*$value[1]."-".$value[0]*$value[1];
-				$this->setValue($value);
-			}
-		}
+        
+        // DHH:
+		// // Fix for old magento versions (before 1.7.0)
+		// if($requestVar === "price")
+		// {
+		// 	$value = explode(",",$this->getValue());
+		// 	if(count($value) > 1) {
+		// 		$value = ($value[0]-1)*$value[1]."-".$value[0]*$value[1];
+		// 		$this->setValue($value);
+		// 	}
+		// }
 
         $urlBuilder->changeQuery(array(
             $requestVar => $this->getValue(),

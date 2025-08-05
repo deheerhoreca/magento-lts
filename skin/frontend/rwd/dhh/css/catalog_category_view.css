@@ -11,6 +11,58 @@
   padding-left: 0!important;
 }
 
+
+/* Icons */
+
+.icon-sprite,
+.btn-remove2,
+.ratings .rating-box,
+.ratings .rating-box .rating,
+.sorter>.sort-by .sort-by-switcher,
+.sorter>.view-mode .grid,
+.sorter>.view-mode .list,
+.skip-nav .icon,
+.skip-search .icon,
+#search_mini_form .search-button:before,
+.skip-account .icon,
+.skip-cart .icon,
+.product-view .sharing-links a,
+.review-summary-table .rating-box .rating-number:after,
+.ratings-table .rating-box,
+.ratings-table .rating-box .rating {
+  background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite.png);
+  background-repeat: no-repeat;
+  text-indent: -9999px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2),
+(min--moz-device-pixel-ratio: 2),
+(-o-min-device-pixel-ratio: 4 / 2),
+(min-device-pixel-ratio: 2),
+(min-resolution: 192dpi),
+(min-resolution: 2dppx) {
+  .icon-sprite,
+  .btn-remove2,
+  .ratings .rating-box,
+  .ratings .rating-box .rating,
+  .sorter>.sort-by .sort-by-switcher,
+  .sorter>.view-mode .grid,
+  .sorter>.view-mode .list,
+  .skip-nav .icon,
+  .skip-search .icon,
+  #search_mini_form .search-button:before,
+  .skip-account .icon,
+  .skip-cart .icon,
+  .product-view .sharing-links a,
+  .review-summary-table .rating-box .rating-number:after,
+  .ratings-table .rating-box,
+  .ratings-table .rating-box .rating {
+    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite@2x.png);
+    background-size: 100px 1000px;
+  }
+}
+
+
 /* PRODUCT LISTVIEW */
 
 ul.products-grid li.item {
@@ -86,6 +138,7 @@ ul.products-grid li.item {
 .ctdesc p:last-child {
   margin-bottom: 0;
 }
+
 
 /* TOOLBAR */
 
@@ -215,7 +268,7 @@ ul.products-grid li.item {
 }
 
 .pager>.count-container,
-.pages li  {
+.pages li {
   float: left;
 }
 
@@ -265,17 +318,19 @@ ul.products-grid li.item {
 }
 
 .sorter>.sort-by {
+  float: left;
+  margin-right: 5px;
   height: 30px;
 }
 
 .sorter>.sort-by .sort-by-switcher {
-  display: inline-block;
   width: 30px;
   height: 30px;
+  display: inline-block;
 }
 
 .sorter>.sort-by .sort-by-switcher--asc {
-  background-position: 4px -545px;
+  background-position: 4px -542px;
 }
 
 .sorter>.sort-by .sort-by-switcher--asc:hover {
@@ -288,6 +343,12 @@ ul.products-grid li.item {
 
 .sorter>.sort-by .sort-by-switcher--desc:hover {
   background-position: -46px -567px;
+}
+
+.sorter>.sort-by .sort-by-switcher {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
 }
 
 .sorter>.view-mode {
@@ -361,6 +422,7 @@ div.main div.col-main div.category-products div.toolbar .limiter select {
   display: none;
 }
 
+
 /* MISC */
 
 @media (max-width: 61.9em) {
@@ -423,7 +485,6 @@ div.main div.col-main div.category-products div.toolbar .limiter select {
     grid-row-gap: 15px;
     -ms-grid-rows: auto;
   }
-  
   .new-tab-contant-text {
     margin: 0 1em;
   }

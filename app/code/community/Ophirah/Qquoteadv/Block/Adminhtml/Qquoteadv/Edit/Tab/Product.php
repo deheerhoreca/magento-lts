@@ -183,7 +183,7 @@ class Ophirah_Qquoteadv_Block_Adminhtml_Qquoteadv_Edit_Tab_Product extends Mage_
      */
     public function getProductInfo($productId)
     {
-        return Mage::getModel('catalog/product')->load($productId);
+        return dhh_get_cached_om_product($productId);
     }
 
     /**

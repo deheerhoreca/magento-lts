@@ -210,10 +210,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $manufacturers;
   }
   
-  // @deprecated
-  public function sanitizeForFilename($string) {
-    return sanitizeForFilename($string);
-  }
+  // // @deprecated
+  // public function sanitizeForFilename($string) {
+  //   return sanitizeForFilename($string);
+  // }
   
   public function markdownToHtmlSafe($string) {
     if(str_contains((string) $string, "<!--markdown-->")) {

@@ -1483,13 +1483,13 @@ echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/ri
 </script>
 
 <?php
-if(function_exists("sanitizeForFilename") === false) {
-  function sanitizeForFilename($string) {
-    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string) $string);
-    $output = mb_ereg_replace("([\.]{2,})", '', (string) $string);
-    return strtolower($output);
-  }
-}
+// if(function_exists("sanitizeForFilename") === false) {
+//   function sanitizeForFilename($string) {
+//     $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string) $string);
+//     $output = mb_ereg_replace("([\.]{2,})", '', (string) $string);
+//     return strtolower($output);
+//   }
+// }
 
 function _print_configurable_table($_product) {
   $children = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $_product);

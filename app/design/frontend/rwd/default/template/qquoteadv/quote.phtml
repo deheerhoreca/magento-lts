@@ -115,7 +115,7 @@
 
                     <?php
                     $attributes = unserialize($item->getAttribute());
-                    $original_product = Mage::getModel('catalog/product')->load($attributes['product']);
+                    $original_product = dhh_get_cached_om_product($attributes['product']);
                     $original_product = $this->addItemDataToProduct($original_product, $item);
                     $original_product_url = $original_product->getProductUrl();
 

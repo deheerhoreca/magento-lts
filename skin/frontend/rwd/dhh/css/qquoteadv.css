@@ -155,11 +155,11 @@ ol.c2q li.section {
   /* font-size: 13px; */
 }
 
-#submit-quote-request {
+/* #submit-quote-request {
   float: right;
   margin-top: 5px;
   clear: both;
-}
+} */
 
 #quotelist .button {
   margin: 0 1em;

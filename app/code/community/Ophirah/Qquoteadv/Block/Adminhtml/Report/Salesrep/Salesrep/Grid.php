@@ -289,7 +289,8 @@ class Ophirah_Qquoteadv_Block_Adminhtml_Report_Salesrep_Salesrep_Grid extends Ma
                 ];
 
                 //load product and get info
-                $product = Mage::getModel('catalog/product')->load($productId);
+                // $product = Mage::getModel('catalog/product')->load($productId);
+                $product = dhh_get_cached_om_product($productId); // DHH
                 $price = $product->getPrice();
                 $qty = $data->getQty();
                 $groupPrice = $data->getGroupPrice();

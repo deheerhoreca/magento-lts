@@ -23,7 +23,8 @@ if($this->isMixedMode()) {
   $brand_name           = strtolower((string) $_category->getName());
   
   if(empty($brand_name) === false) {
-    $brand                = sanitizeForFilename($brand_name);  
+    // $brand                = sanitizeForFilename($brand_name);  
+    $brand                = sanitize_alphanumeric($brand_name);  
     $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
     if(is_file($brand_logo_file)) {
@@ -58,7 +59,8 @@ elseif($at_root_category && isset($_GET["manufacturer"]) && is_numeric($_GET["ma
   // Guess the brand and try to find a logo
   if(empty($value) === false) {
     $brand_name           = $value;
-    $brand_name           = sanitizeForFilename($brand_name);
+    // $brand_name           = sanitizeForFilename($brand_name);
+    $brand_name           = sanitize_alphanumeric($brand_name);
     $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
     if(is_file($brand_logo_file)) {
@@ -81,13 +83,15 @@ elseif($at_root_category && isset($_GET["brand_series"]) && is_numeric($_GET["br
     ->setData("brand_series", $_GET["brand_series"]); 
   $value = $singleton_prod->getAttributeText("brand_series");
   $ctdesc_h1 = "Bekijk ons <span class='orange'>{$value}</span> assortiment";
-  $brand_series_slug = sanitizeForFilename($value);
+  // $brand_series_slug = sanitizeForFilename($value);
+  $brand_series_slug = sanitize_alphanumeric($value);
   
   // Guess the brand and try to find a logo
   if(empty($value) === false) {
     $brand_name           = strtok($value, " ");
     if(empty($brand_name) === false) {
-      $brand                = sanitizeForFilename($brand_name);  
+      // $brand                = sanitizeForFilename($brand_name);  
+      $brand                = sanitize_alphanumeric($brand_name);  
       $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
       $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
       if(is_file($brand_logo_file)) {

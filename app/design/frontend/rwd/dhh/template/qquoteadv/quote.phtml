@@ -47,31 +47,31 @@ if($this->getQuote()->getData() == []) { ?>
       <?php if($this->displayAssignedTo() && $this->getAdminUser() !== null) { ?>
         <input type="hidden" name="user_id" value="<?php echo $this->getAdminUser()->getId(); ?>"/>
       <?php } ?>
-    <div class="page-title">
-      <h1><?php echo $this->__('Request for Quote') ?></h1>
-      <?php if ($this->displayAssignedTo()): ?>
-        <div class="assigned-to">
-          <?php if (Mage::helper('qquoteadv')->getAdminUser() !== null): ?>
-            <?php if ($this->isAssignPreviousEnabled()): ?>
-              <?php if ($this->helper('customer')->isLoggedIn()): ?>
-                <?php
-                $customerData = Mage::getSingleton('customer/session')->getCustomer();
-                echo $this->__('Quote will be assigned to <strong>%s</strong>', Mage::helper('qquoteadv')->getAdminUser(Mage::helper('qquoteadv')->getPreviousAssignedAdmin(null, $customerData->getId()))->getName()); ?>
+      <div class="page-title">
+        <h1><?php echo $this->__('Request for Quote') ?></h1>
+        <?php if ($this->displayAssignedTo()): ?>
+          <div class="assigned-to">
+            <?php if (Mage::helper('qquoteadv')->getAdminUser() !== null): ?>
+              <?php if ($this->isAssignPreviousEnabled()): ?>
+                <?php if ($this->helper('customer')->isLoggedIn()): ?>
+                  <?php
+                  $customerData = Mage::getSingleton('customer/session')->getCustomer();
+                  echo $this->__('Quote will be assigned to <strong>%s</strong>', Mage::helper('qquoteadv')->getAdminUser(Mage::helper('qquoteadv')->getPreviousAssignedAdmin(null, $customerData->getId()))->getName()); ?>
+                <?php else: ?>
+                  <?php echo $this->__('If the end user has no previous assigned sales representative the quote will be assigned to <strong>%s</strong>.', $this->getAdminUser()->getName()); ?>
+                <?php endif; ?>
               <?php else: ?>
-                <?php echo $this->__('If the end user has no previous assigned sales representative the quote will be assigned to <strong>%s</strong>.', $this->getAdminUser()->getName()); ?>
+                <?php echo $this->__('Quote will be assigned to <strong>%s</strong>', $this->getAdminUser()->getName()); ?>
               <?php endif; ?>
-            <?php else: ?>
-              <?php echo $this->__('Quote will be assigned to <strong>%s</strong>', $this->getAdminUser()->getName()); ?>
             <?php endif; ?>
-          <?php endif; ?>
-        </div>
-      <?php endif; ?>
-      <input type='hidden' id='customer_isQuote' name='customer[is_quote]' value='1'/>
+          </div>
+        <?php endif; ?>
+        <input type='hidden' id='customer_isQuote' name='customer[is_quote]' value='1'/>
 
-      <input style="display:none;" type='submit' name='submitOrder' id="submitOrder" class='form-button' value="<?php echo $this->__('Request quote') ?>"/>
-    </div>
-    <?php echo $this->getMessagesBlock()->toHtml() ?>
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('quote_before')->toHtml(); ?>
+        <input style="display:none;" type='submit' name='submitOrder' id="submitOrder" class='form-button' value="<?php echo $this->__('Request quote') ?>"/>
+      </div>
+      <?php echo $this->getMessagesBlock()->toHtml() ?>
+      <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('quote_before')->toHtml(); ?>
     
       <table cellspacing="0" border="0" id="shopping-cart-table" class="data-table cart-table">
         <thead>
@@ -110,9 +110,14 @@ if($this->getQuote()->getData() == []) { ?>
             $childProduct = $product;
           }
           $attributes = unserialize($item->getAttribute());
-          $original_product = Mage::getModel('catalog/product')->load($attributes['product']);
-          $original_product = $this->addItemDataToProduct($original_product, $item);
-          $original_product_url = $original_product->getProductUrl();
+          
+          $original_product_url = getProductUrlById($item->getProductId());
+          
+          if(empty($original_product_url)) {
+            $original_product = Mage::getModel('catalog/product')->load($attributes['product']);
+            $original_product = $this->addItemDataToProduct($original_product, $item);
+            $original_product_url = $original_product->getProductUrl();
+          }
 
           // SCP support
           if($this->getScp()) {
@@ -290,6 +295,7 @@ if($this->getQuote()->getData() == []) { ?>
       </table>
       <?php echo $this->getChildHtml('qquote.address'); ?>
     </form>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('quote_after')->toHtml(); ?>
   </div>
 
   <script>

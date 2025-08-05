@@ -78,7 +78,8 @@ class Ophirah_Qquoteadv_Block_Renderers_Configurable extends Ophirah_Qquoteadv_B
     {
         $item = $this->getItem();
         if ($item && $item->getProductId()) {
-            return Mage::getModel('catalog/product')->load($item->getProductId());
+            // return Mage::getModel('catalog/product')->load($item->getProductId());
+            return dhh_get_cached_om_product($item->getProductId()); // DHH
         }
 
         return $this->getProduct();

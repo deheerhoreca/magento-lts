@@ -210,6 +210,12 @@ class Ophirah_Crmaddon_Block_Adminhtml_Crmaddon_Edit_Tab_Form extends Mage_Admin
      */
     public function canShowTab()
     {
+        // DHH CORE HACK: Skip if CRM Addon is not active.
+        if(Mage::getStoreConfig('qquoteadv_sales_representatives/messaging/enabled') != 1
+        || !Mage::helper('core')->isModuleEnabled('Ophirah_Crmaddon')) {
+            return false;
+        }
+        
         return true;
     }
 
