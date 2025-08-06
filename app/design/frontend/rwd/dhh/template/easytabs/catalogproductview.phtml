@@ -1029,9 +1029,9 @@ if($stock_data["overall_stock_status"] === "backorder"
                   
                   // SYNC WITH app/code/local/DeHeerHoreca/Util/Helper/Util.php
                   
-                  // Extend to 2025-07-01 later:
-                  if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-06-30 00:00:00")) {
-                    // @todo generate end date "15 juni 2025"
+                  $now = CarbonImmutable::now();
+                  
+                  if($supplier_sys === "hendi" && $now->isBefore("2025-08-31 00:00:00")) {
                     ?>
                     <div class="card mx-auto p-2 mb-2">
                       <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
@@ -1044,7 +1044,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                     </div><?php
                   }
                   
-                  elseif($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
+                  elseif($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
                   "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N",
                   "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW", "DI-WR-38CS-SB",
                   "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M",

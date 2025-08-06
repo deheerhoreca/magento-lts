@@ -886,7 +886,9 @@ final class Mage
         
         // DHH CORE HACK -- Suppress rules and force log file name
         // $logActive    = true;
-        if($file !== "verbose.txt") $file = "system.log";
+        if(!in_array($file, ["verbose.txt", "aoemodelcache.txt"], true)) {
+            $file = "system.log";
+        }
         // $maxLogLevel  = Zend_Log::DEBUG;
         // $forceLog     = true;
         

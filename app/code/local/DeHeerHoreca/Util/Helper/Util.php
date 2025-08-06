@@ -1379,9 +1379,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public static function auto_productlabel($_product, $context) {
-    if(empty($_product->getProductLabel()) === false) {
+    if(!empty($_product->getProductLabel())) {
       return $_product->getProductLabel();
-    }
+    } 
     
     if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
       return "SALE";
@@ -1392,7 +1392,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // SYNC WITH app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml
     
     // Hendi promo
-    if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-06-16 00:00:00")) {
+    if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-08-31 00:00:00")) {
      return "5% Kortingscode";
     }
     
