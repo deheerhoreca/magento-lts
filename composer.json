@@ -31,7 +31,6 @@
     "amnuts/opcache-gui": "^3.5",
     "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
     "aoepeople/aoe_dbretry": "dev-master",
-    "aoepeople/aoe_modelcache": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
     "aoepeople/aoe_templatehints": "^0.4.4",
     "aschroder/smtp_pro": "^2",

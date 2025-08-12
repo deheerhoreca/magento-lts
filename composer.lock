@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17b958663202365ca3df38a6c204aca8",
+    "content-hash": "853beef51af2d6238b6f747425a0ed47",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -193,37 +193,6 @@
                 "source": "https://github.com/AOEpeople/Aoe_DbRetry/tree/master"
             },
             "time": "2018-01-25T10:04:19+00:00"
-        },
-        {
-            "name": "aoepeople/aoe_modelcache",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:AOEpeople/Aoe_ModelCache.git",
-                "reference": "6b88db748d8aabba2e96de996b3c40905184f201"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/AOEpeople/Aoe_ModelCache/zipball/6b88db748d8aabba2e96de996b3c40905184f201",
-                "reference": "6b88db748d8aabba2e96de996b3c40905184f201",
-                "shasum": ""
-            },
-            "require": {
-                "magento-hackathon/magento-composer-installer": "*"
-            },
-            "default-branch": true,
-            "type": "magento-module",
-            "license": [
-                "OSL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Fabrizio Branca",
-                    "email": "firstname.lastname@aoe.com"
-                }
-            ],
-            "description": "Magento Model Cache",
-            "time": "2015-03-26T04:08:15+00:00"
         },
         {
             "name": "aoepeople/aoe_profiler",
@@ -5400,7 +5369,6 @@
     "stability-flags": {
         "aoepeople/aoe_blackholesession": 20,
         "aoepeople/aoe_dbretry": 20,
-        "aoepeople/aoe_modelcache": 20,
         "aoepeople/aoe_profiler": 20,
         "colinmollenhour/magento-redis-session": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
