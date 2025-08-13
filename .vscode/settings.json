@@ -1,21 +1,23 @@
 {
   "files.watcherExclude": {
-    "./media/catalog": true,
+    "**/media/**": true,
     "**/.DS_Store": true,
     "**/.git": true,
-    "**/media/**": true,
-    "**/var/log/**": true
+    "**/var/log/**": true,
+    "**/var/package/**": true,
+    "**/var/report/**": true,
+    "**/vendor/openmage/magento-lts/**": true
   },
   "compareFolders.ignoreExtension": [],
   "intelephense.environment.documentRoot": "./",
   "search.exclude": {
-    "./media/catalog": true,
-    "./pub": true,
-    "./var/cache": true,
-    "./var/log": true,
-    "./var/package": true,
-    "./var/report": true,
-    "./vendor/openmage/magento-lts": true
+    "**/var/debug/**": true,
+    "**/media/catalog/**": true,
+    "**/var/cache/**": true,
+    "**/var/log/**": true,
+    "**/var/package/**": true,
+    "**/var/report/**": true,
+    "**/vendor/openmage/magento-lts/**": true
   },
   "search.useGlobalIgnoreFiles": true,
   "search.useParentIgnoreFiles": true,
