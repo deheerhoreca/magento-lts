@@ -49,6 +49,7 @@
 - `app/code/community/Magmodules/Sooqr/Model/Adminhtml/System/Config/Backend/Design/Filter.php`
 - `app/code/community/Magmodules/Sooqr/Model/Sooqr.php`
 - `app/code/community/Mestrona/ForwardToConfigurable/Model/Observer.php`
+- `app/code/community/Mestrona/ForwardToConfigurable/Helper/Catalog/Product.php`
 - `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid.php`
 - `app/code/community/Noble/AdminOrderGrid/Block/Sales/Order/Grid/Renderer/Paymentmethod.php`
 - `app/code/community/Ophirah/CustomProducts/Model/Observer.php`

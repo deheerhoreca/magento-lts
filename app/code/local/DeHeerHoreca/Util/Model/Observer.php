@@ -2,30 +2,22 @@
 
 use \Elastic\Apm\ElasticApm;
 use \Elastic\Apm\TransactionInterface;
+use \Chefstore\Helper;
 
 class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   public function __construct() {}
   
-  // Setup Elastic APM
-  public function configureElasticApm($observer) {
-    
-    Varien_Profiler::start(__METHOD__);
-    
-    // $action_name      = Mage::app()?->getFrontController()?->getAction()?->getFullActionName();
-    // $verb             = $_SERVER["REQUEST_METHOD"] ?? "";
-    // $transaction_name = $verb." ".$action_name;
-    $transaction_name = Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name();
-    
-    if(!extension_loaded("elastic_apm")) {
-      Mage::log("Elastic APM extension not loaded [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
-      Varien_Profiler::stop(__METHOD__);
-      return;
-    }
-    // After clearing opcache, there are a few requests that strangely make it past extension_loaded() but still don't have Elastic APM available, adding another check:
-    if(!class_exists(ElasticApm::class)) {
-      Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::NOTICE, "system.log", true);
-      Varien_Profiler::stop(__METHOD__);
+  /**
+   * Setup Elastic APM.
+   * 
+   * Fired from controller_action_layout_load_before.
+   *
+   * @param  \Varien_Event_Observer $observer
+   * @return void
+   */
+  public function configureElasticApm(\Varien_Event_Observer $observer): void {
+    if(!self::isElasticApmAvailable()) {
       return;
     }
     
@@ -35,35 +27,87 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       if(is_object($transaction)) {
         
         // Set transaction.name to HTTP method + the name of the OpenMage action
-        $transaction->setName($transaction_name);
+        if($transaction_name = self::getApmTransactionName()) {
+          $transaction->setName($transaction_name);
+        }
         
-        // Try to detect admin and set a different service_name
-        if(Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() === "adminhtml") {
-          $transaction->setType("admin");
-        } elseif(PHP_SAPI === "cli") {
-          $transaction->setType("cli");
-        } else {
-          $transaction->setType("frontend");
+        // Set transaction.type to segregate the various request types
+        if($transaction_type = self::getApmTransactionType()) {
+          $transaction->setType($transaction_type);
         }
         
         $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
         $transaction->context()->setLabel("sapi", PHP_SAPI);
-        Varien_Profiler::stop(__METHOD__);
-        return true;
       } else {
-        Mage::log("Failed to get current transaction form Elastic APM", Zend_Log::NOTICE, "system.log", true);
+        Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE, "system.log", true);
       }
     } catch(Exception $e) {
       Mage::logException($e);
     }
     
-    Varien_Profiler::stop(__METHOD__);
-    
-    return false;
+    return;
   }
   
-  // Lock some attributes from editing
-  public function updateProductOnEdit($observer) {
+  /**
+   * Check if Elastic APM is loaded.
+   *
+   * @param  string|null $transaction_name
+   * @return boolean
+   */
+  public static function isElasticApmAvailable(?string $transaction_name = null): bool {
+    if(is_null($transaction_name)) {
+      $transaction_name = "no_transaction_name";
+    }
+    
+    if(!extension_loaded("elastic_apm")) {
+      Mage::log("Elastic APM extension not loaded [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
+      return false;
+    }
+    
+    // After clearing opcache, there are a few requests that strangely make it past extension_loaded() but still don't have Elastic APM available, adding another check:
+    if(!class_exists(ElasticApm::class)) {
+      Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::NOTICE, "system.log", true);
+      return false;
+    }
+    
+    return true;
+  }
+  
+  /**
+   * Get the name used for the APM root transaction, failing silently if not possible at this time.
+   *
+   * @return string|null
+   */
+  public static function getApmTransactionName(): ?string {
+    return rescue(fn() => Helper::loadOmHelperDhhUtil()->get_apm_transaction_name(), null);
+  }
+  
+  /**
+   * Try to detect admin and set a different service_name.
+   *
+   * @return string|null
+   */
+  public static function getApmTransactionType(): ?string {
+    return rescue(function(): string {
+      if(PHP_SAPI === "cli") {
+        return "cli";
+      }
+      
+      if(Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() === "adminhtml") {
+        return "admin";
+      }
+      
+      return "frontend";
+    }, null);
+  }
+  
+  /**
+   * Lock some attributes from editing.
+   *
+   * @param  \Varien_Event_Observer $observer
+   * @return void
+   */
+  public function updateProductOnEdit(\Varien_Event_Observer $observer) {
     $event = $observer->getEvent();
     $product = $event->getProduct();
     $product->lockAttribute("recommended_product");

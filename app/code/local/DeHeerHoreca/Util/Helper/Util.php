@@ -1,10 +1,10 @@
 <?php
 
-use Carbon\CarbonImmutable;
-use Michelf\Markdown;
-use Michelf\MarkdownExtra;
+use \Carbon\CarbonImmutable;
+use \Michelf\Markdown;
+use \Michelf\MarkdownExtra;
 
-require_once 'vendor/autoload.php';
+// require_once 'vendor/autoload.php';
 
 require_once __DIR__."/strftime_replacement.php";
 
@@ -79,7 +79,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public function getProductCategory(Mage_Catalog_Model_Product $product = null) {
     $category_ids = $product->getCategoryIds();
     if(empty($category_ids) === false) {
-      return Mage::getModel('catalog/category')->load(array_shift($category_ids));
+      return dhh_get_cached_category(array_shift($category_ids));
+      // return Mage::getModel('catalog/category')->load(array_shift($category_ids));
     }
     
     return false;
@@ -102,7 +103,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
 
     // Load category.
-    $category = Mage::getModel('catalog/category')->load($deepCatId);
+    // $category = Mage::getModel('catalog/category')->load($deepCatId);
+    $category = dhh_get_cached_category($deepCatId);
 
     // Remove .html from category url_path.
     $categoryPath = str_replace('.html', '',  (string) $category->getData('url_path'));
@@ -152,7 +154,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $deepCatId = (int) $category->getId();
       }
     }
-    $category = Mage::getModel('catalog/category')->load($deepCatId);
+    // $category = Mage::getModel('catalog/category')->load($deepCatId);
+    $category = dhh_get_cached_category($deepCatId);
     $category_url = $category->getData('url_path');
     $category_name = $category->getName();
     

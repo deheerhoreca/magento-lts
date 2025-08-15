@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
-use Brick\VarExporter\VarExporter;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Number;
-use Illuminate\Support\Str;
-use Symfony\Component\Cache\Adapter\ApcuAdapter;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Cache\Adapter\ChainAdapter;
-use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Contracts\Cache\ItemInterface;
+use \Brick\VarExporter\VarExporter;
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Collection;
+use \Illuminate\Support\Number;
+use \Illuminate\Support\Str;
+use \Symfony\Component\Cache\Adapter\ApcuAdapter;
+use \Symfony\Component\Cache\Adapter\ArrayAdapter;
+use \Symfony\Component\Cache\Adapter\ChainAdapter;
+use \Symfony\Component\Cache\Adapter\PhpFilesAdapter;
+use \Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use \Symfony\Contracts\Cache\ItemInterface;
 
 const DHH_DEV_IPS = ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
 
@@ -194,25 +194,34 @@ class Utils {
 
   // \Chefstore\Utils::td()
   // Tiny dump -- @url https://github.com/brick/varexporter
-  function td(mixed $input, bool $return = true) {
+  public static function td(mixed $input, bool $return = true, bool $inline = false): string|null {
+    $flags = $inline ? VarExporter::INLINE_ARRAY : VarExporter::INLINE_SCALAR_LIST;
     try {
-      $var = str::swap([
+      $var = Str::swap([
         "['"    => "[\"",
         "', '"  => "\", \"",
         "']"    => "\"]"
-      ], VarExporter::export($input, Brick\VarExporter\VarExporter::INLINE_SCALAR_LIST));
+      ], VarExporter::export($input, $flags));
     } catch (ExportException $e) {
-      error("Failed to TinyDump value: {$e->__toString()}");
-
+      \Mage::log("Failed to TinyDump value: {$e->getMessage()}");
       return null;
     }
 
-    if ($return) return $var;
+    if($return) {
+      return $var;
+    }
 
     dump($var);
+    return null;
   }
-
-  function msleep(int $time): void {
+  
+  /**
+   * Micro sleep.
+   *
+   * @param  integer $time
+   * @return void
+   */
+  public static function msleep(int $time): void {
     usleep($time * 1000);
   }
 }

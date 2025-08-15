@@ -26,8 +26,8 @@ function amshopby_start() {
   //   e.observe('click', amshopby_check_multiselect);
   // });
   
-  document.querySelectorAll(['.amshopby-attr', '.amshopby-attr-selected']).forEach(function(a) {
-    a.addEventListener("click", amshopby_check_multiselect)
+  document.querySelectorAll(['.amshopby-attr', '.amshopby-attr-selected']).forEach(function(e) {
+    e.addEventListener("click", amshopby_check_multiselect)
   });
 
   $$('.block-layered-nav .input-text').each(function(e) {
@@ -41,8 +41,8 @@ function amshopby_start() {
   //   });
   // });
 
-  document.querySelectorAll('.block-layered-nav .amshopby_attr_search').forEach(function(a) {
-    a.addEventListener("change", function() {
+  document.querySelectorAll('.block-layered-nav .amshopby_attr_search').forEach(function(e) {
+    e.addEventListener("change", function() {
       amshopby_attr_search(e);
     })
   });
@@ -407,33 +407,31 @@ function amshopby_set_location(url) {
   }
 }
 
-function amshopby_attr_highlight(li, str) {
-  /*
-   * Remove previous highlight
-   */
-  amshopby_attr_unhighlight(li);
-
-  var ch = li.childElements();
-  if(ch.length > 0) {
-    ch = ch[0];
-    if(ch.tagName == 'A') {
-      var dataText = li.readAttribute('data-text');
-      var tmp = '(' + str + ')';
-      ch.innerHTML = dataText.replace(new RegExp(tmp, 'gi'), '<span class="amshopby-hightlighted">$1</span>');
-    }
-  }
-}
+// function amshopby_attr_highlight(li, str) {
+//   amshopby_attr_unhighlight(li);
+  
+//   var ch = li.childElements();
+//   if(ch.length > 0) {
+//     ch = ch[0];
+//     if(ch.tagName == 'A') {
+//       var dataText = li.readAttribute('data-text');
+//       var tmp = '(' + str + ')';
+//       // var newText = text.replace(re, `<mark>${1}</mark>`);
+//       ch.innerHTML = dataText.replace(new RegExp(tmp, 'gi'), '<span class="amshopby-highlighted">$1</span>');
+//       // ch.innerHTML = newText;
+//     }
+//   }
+// }
 
 function amshopby_attr_unhighlight(li) {
   var ch = li.childElements();
   if(ch.length > 0) {
     ch = ch[0];
     if(ch.tagName == 'A') {
-      ch.innerHTML = ch.innerHTML.replace(/<span class=\"amshopby-hightlighted\">(.*?)<\/span>/, "$1");
+      ch.innerHTML = ch.innerHTML.replace(/<span class=\"amshopby-highlighted\">(.*?)<\/span>/, "$1");
     }
   }
 }
-
 
 function amshopby_attr_search(searchBox) {
   var str = searchBox.value.toLowerCase();
@@ -460,11 +458,11 @@ function amshopby_attr_search(searchBox) {
     if(li.hasAttribute('data-text')) {
       var val = li.getAttribute('data-text').toLowerCase();
       if(!val || val == 'search' || val.indexOf(str) > -1) {
-        if(str != '' && val.indexOf(str) > -1) {
-          amshopby_attr_highlight(li, str);
-        } else {
-          amshopby_attr_unhighlight(li);
-        }
+        // if(str != '' && val.indexOf(str) > -1) {
+        //   amshopby_attr_highlight(li, str);
+        // } else {
+        //   amshopby_attr_unhighlight(li);
+        // }
         li.show();
       } else {
         amshopby_attr_unhighlight(li);
@@ -500,7 +498,6 @@ function amshopby_set_one_heihgt() {
     }
   })
 }
-
 
 function amshopby_move_top_filter() {
   setTimeout(function() {

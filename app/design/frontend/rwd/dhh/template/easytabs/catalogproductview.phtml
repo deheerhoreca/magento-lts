@@ -42,10 +42,9 @@ $brand                      = "";
 $payment_methods_content    = "";
 $max_highlighted_attributes = 12;
 
-// Find the category this product belongs to
-// @todo is this expensive?
-if(empty($categoryIds) === false) {
-  $_category              = Mage::getModel("catalog/category")->load($categoryIds[0]);
+// Find the category this product belongs to, @todo support multiple categories
+if(!empty($categoryIds)) {
+  $_category              = dhh_get_cached_category($categoryIds[0], true);
   $categoryUrl            = $_category->getUrl();
   $categoryName           = $_category->getName();
 }
@@ -877,8 +876,8 @@ if($stock_data["overall_stock_status"] === "backorder"
 /* START RENDERING */
 
 ?>
-<script>var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);</script>
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+<script>var optionsPrice = new Product.OptionsPrice(<?= $this->getJsonConfig() ?>);</script>
+<div id="messages_product_view"><?= $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
 
   <?php /* PRODUCT IMAGES */ ?>
@@ -886,9 +885,9 @@ if($stock_data["overall_stock_status"] === "backorder"
   <div class="proleftdv">
 
     <div class="product-name">
-      <h1><?php echo $productTitle; ?></h1>
-      <div class="float-left"><a href="<?php echo $brand_link; ?>"><?php echo $brand_name; ?></a></div>
-      <?php echo $this->getReviewsSummaryHtml($_product, "short", false); ?>
+      <h1 class="m-0 p-2"><?= $productTitle ?></h1>
+      <div class="float-left"><a href="<?= $brand_link ?>"><?= $brand_name ?></a></div>
+      <?= $this->getReviewsSummaryHtml($_product, "short", false) ?>
     </div>
 
     <div class="product-img-box">
@@ -926,9 +925,9 @@ if($stock_data["overall_stock_status"] === "backorder"
 
         <?php /* Add to Cart Block */ ?>
 
-        <form action="<?php echo $this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-          <?php echo $this->getBlockHtml("formkey") ?>
-          <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+        <form action="<?= $this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+          <?= $this->getBlockHtml("formkey") ?>
+          <input type="hidden" name="product" value="<?= $_product->getId() ?>" />
           <input type="hidden" name="related_product" id="related-products-field" value="" />
           <div class="prodetailtopright">
 
@@ -1008,9 +1007,9 @@ if($stock_data["overall_stock_status"] === "backorder"
                 ?>
                 <div class="add-to-box">
                   <div class="price-info">
-                    <?=$this->getPriceHtml($_product)?>
-                    <?=$this->getChildHtml("bundle_prices")?>
-                    <?=$this->getTierPriceHtml()?>
+                    <?=$this->getPriceHtml($_product) ?>
+                    <?=$this->getChildHtml("bundle_prices") ?>
+                    <?=$this->getTierPriceHtml() ?>
                   </div>
                   <?php
                   echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
@@ -1168,7 +1167,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       ?>
       <div class="my-3 py-1 pt-1 product-highlight-box center">
         <span class="anchor" id="highlights"></span>
-        <?php echo "<ul class='product-highlights'>{$hlstr}</ul>"; ?>
+        <?= "<ul class='product-highlights'>{$hlstr}</ul>" ?>
       </div>
       <?php
     }
@@ -1183,7 +1182,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       ?>
       <div class="py-1 std justify" id="product-detail-description">
         <span class="anchor" id="description"></span>
-        <?php echo $product_description; ?>
+        <?= $product_description ?>
       </div>
       <?php
     }
@@ -1216,7 +1215,7 @@ if($stock_data["overall_stock_status"] === "backorder"
               foreach($_crossSellProducts as $_crossSellProduct) {
                 $i++;
                 ?>
-                <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
+                <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif ?>">
                   <?php
                   Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_crossSellProduct, $this, $options);
                 echo "</li>";
@@ -1235,7 +1234,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       ?>
       <span class="anchor" id="alternatives"></span>
       <div class="probottomdv">
-        <?php echo $alternative_products_block; ?>
+        <?= $alternative_products_block ?>
       </div>
       <?php
     }
@@ -1246,7 +1245,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       <div class="probottomdv">
         <span class="anchor" id="specs"></span>
         <div id="product_additional_data">
-          <?php echo $product_additional_data_block ?>
+          <?= $product_additional_data_block ?>
         </div>
       </div>
       <?php
@@ -1255,10 +1254,10 @@ if($stock_data["overall_stock_status"] === "backorder"
     /* Additional Product Attributes */
     if(strlen((string) $additional_attributes) > 10) {
       ?>
-      <h2 class="tableftheader"><?php echo $this->__("Extra productinformatie");?></h2>
+      <h2 class="tableftheader"><?= $this->__("Extra productinformatie") ?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
         <span class="anchor" id="additional"></span>
-        <div class="std"><?php echo $additional_attributes; ?></div>
+        <div class="std"><?= $additional_attributes ?></div>
       </div>
     <?php
     }
@@ -1270,7 +1269,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       $helper = $this->helper("staempfli_productattachment");
       $upload_dir = Mage::getBaseUrl("media").$helper::UPLOAD_DIR;
       ?>
-      <h2 class="tableftheader"><?php echo $this->__("Documenten");?></h2>
+      <h2 class="tableftheader"><?= $this->__("Documenten") ?></h2>
       <div class="probottomdv" id="product-documents-list">
         <span class="anchor" id="documents"></span>
         <ul class="fa-ul">
@@ -1304,7 +1303,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       $external_documents = json_decode((string) $external_documents_json, true);
       // dump($external_documents);
       ?>
-      <h2 class="tableftheader"><?php echo $this->__("Externe Documenten");?></h2>
+      <h2 class="tableftheader"><?= $this->__("Externe Documenten") ?></h2>
       <div class="probottomdv" id="product-external-documents-list">
         <span class="anchor" id="external-documents"></span>
 
@@ -1385,7 +1384,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       ?>
       <span class="anchor" id="upsells"></span>
       <div class="probottomdv">
-        <?php echo $upsell_products_block; ?>
+        <?= $upsell_products_block ?>
       </div>
       <?php
     }
@@ -1395,7 +1394,7 @@ if($stock_data["overall_stock_status"] === "backorder"
       ?>
       <span class="anchor" id="related"></span>
       <div class="probottomdv">
-        <?php echo $related_products_block; ?>
+        <?= $related_products_block ?>
       </div>
     <?php }
 

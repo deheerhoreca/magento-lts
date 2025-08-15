@@ -4,8 +4,9 @@
  * @author Amasty Team
  * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
  * @package Improved Layered Navigation
- * @var Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute $this
  */
+
+/** @var Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute $this */
 
 // Build CSS classes for <ol>
 $classes = [];
@@ -48,7 +49,7 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
     case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY:
       if ($this->getShowSearch()):?>
         <li rel="search">
-          <input id="amshopby_attr_search_<?=$attribute_name?>" type="text" class="input-text amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)" autocomplete="off">
+          <input id="amshopby_attr_search_<?=$attribute_name?>" type="text" class="input-text amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)" autocomplete="off" placeholder=">
         </li>
       <?php endif;
 

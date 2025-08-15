@@ -21,6 +21,8 @@
  * @copyright   Copyright (c) 2011-2020 arvato Finance B.V.
  */
 
+ use Illuminate\Support\Str; // DHH CORE HACK
+
 class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
@@ -100,6 +102,12 @@ class Afterpay_Afterpay_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function log($message, $force = false)
     {
+        // DHH CORE HACK
+        if(is_string($message)) {
+            $message = str_replace("\n", " --- ", $message);
+            $message = Str::squish($message);
+        }
+        // END DHH CORE HACK
         Mage::log($message, Zend_Log::DEBUG, 'Afterpay_AfterPay.log', $force);
     }
 

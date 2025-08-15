@@ -326,7 +326,7 @@ class Amasty_Shopby_Model_Observer
      */
     private function disableCacheOnSubcategoriesBlock(Varien_Event_Observer $observer)
     {
-        if ($observer->getBlock() instanceof Mage_Cms_Block_Block) {
+        if ($observer->getBlock() instanceof Mage_Cms_Block_Block && !is_null($observer->getBlock()->getCacheLifetime())) {
             $blockModel = Mage::getModel('cms/block')->load($observer->getBlock()->getBlockId());
             if (strpos((string) $blockModel->getContent(), 'amshopby/subcategories') !== false) { // DHH
                 $observer->getBlock()->setCacheLifetime(null);

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "853beef51af2d6238b6f747425a0ed47",
+    "content-hash": "6725d4f5d35d0e1ee30c6a8bc34fbdc3",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -1020,33 +1020,32 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "2.0.10",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "5817d0659c5b50c9b950feb9af7b9668e2c436bc"
+                "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/5817d0659c5b50c9b950feb9af7b9668e2c436bc",
-                "reference": "5817d0659c5b50c9b950feb9af7b9668e2c436bc",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+                "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^11.0",
-                "phpstan/phpstan": "^1.8",
-                "phpstan/phpstan-phpunit": "^1.1",
-                "phpstan/phpstan-strict-rules": "^1.3",
-                "phpunit/phpunit": "^8.5 || ^9.5",
-                "vimeo/psalm": "^4.25 || ^5.4"
+                "doctrine/coding-standard": "^12.0 || ^13.0",
+                "phpstan/phpstan": "^1.12 || ^2.0",
+                "phpstan/phpstan-phpunit": "^1.4 || ^2.0",
+                "phpstan/phpstan-strict-rules": "^1.6 || ^2.0",
+                "phpunit/phpunit": "^8.5 || ^12.2"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
+                    "Doctrine\\Inflector\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1091,7 +1090,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/inflector/issues",
-                "source": "https://github.com/doctrine/inflector/tree/2.0.10"
+                "source": "https://github.com/doctrine/inflector/tree/2.1.0"
             },
             "funding": [
                 {
@@ -1107,7 +1106,189 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-18T20:23:39+00:00"
+            "time": "2025-08-10T19:31:58+00:00"
+        },
+        {
+            "name": "elidrissidev/magento-api2basicauth",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elidrissidev/magento-api2basicauth.git",
+                "reference": "61b8790f5cb25cd44ed554ea6943c2f3a1987528"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elidrissidev/magento-api2basicauth/zipball/61b8790f5cb25cd44ed554ea6943c2f3a1987528",
+                "reference": "61b8790f5cb25cd44ed554ea6943c2f3a1987528",
+                "shasum": ""
+            },
+            "require": {
+                "openmage/magento-lts": ">=19.4.0",
+                "php": ">=7.2.0"
+            },
+            "type": "magento-module",
+            "extra": {
+                "map": [
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Grid.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Grid.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Form.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Form.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tabs.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tabs.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/General.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/General.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/Role.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/Role.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/controllers/Adminhtml/Api2basicauth/RestuserController.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/controllers/Adminhtml/Api2basicauth/RestuserController.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/adminhtml.xml",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/adminhtml.xml"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/api2.xml",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/api2.xml"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/config.xml",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/config.xml"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Helper/Data.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Helper/Data.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/Adapter/Basic.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/Adapter/Basic.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/User/Restuser.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/User/Restuser.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser/Collection.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser/Collection.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Restuser.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Restuser.php"
+                    ],
+                    [
+                        "app/code/community/Elidrissidev/Api2BasicAuth/sql/elidrissidev_api2basicauth_setup/install-1.0.0.php",
+                        "app/code/community/Elidrissidev/Api2BasicAuth/sql/elidrissidev_api2basicauth_setup/install-1.0.0.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Category/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Category/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Image/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Image/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Website/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Catalog/Model/Api2/Product/Website/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/CatalogInventory/Model/Api2/Stock/Item/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/CatalogInventory/Model/Api2/Stock/Item/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Customer/Model/Api2/Customer/Address/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Customer/Model/Api2/Customer/Address/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Customer/Model/Api2/Customer/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Customer/Model/Api2/Customer/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Address/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Address/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Comment/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Comment/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Item/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Item/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Rest/Restuser/V1.php",
+                        "app/code/local/Mage/Sales/Model/Api2/Order/Rest/Restuser/V1.php"
+                    ],
+                    [
+                        "app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml",
+                        "app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml"
+                    ],
+                    [
+                        "app/etc/modules/Elidrissidev_Api2BasicAuth.xml",
+                        "app/etc/modules/Elidrissidev_Api2BasicAuth.xml"
+                    ],
+                    [
+                        "app/locale/en_US/Elidrissidev_Api2BasicAuth.csv",
+                        "app/locale/en_US/Elidrissidev_Api2BasicAuth.csv"
+                    ]
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohamed ELIDRISSI",
+                    "email": "mohamed@elidrissi.dev",
+                    "homepage": "https://github.com/elidrissidev",
+                    "role": "Owner"
+                }
+            ],
+            "description": "HTTP Basic authentication support for Magento 1.9 and OpenMage's Api2.",
+            "keywords": [
+                "magento",
+                "magento-module",
+                "openmage",
+                "openmage-module"
+            ],
+            "support": {
+                "issues": "https://github.com/elidrissidev/Elidrissidev_Api2BasicAuth/issues",
+                "source": "https://github.com/elidrissidev/magento-api2basicauth/tree/v1.0.3"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/elidrissidev",
+                    "type": "PayPal"
+                }
+            ],
+            "time": "2022-07-03T10:19:14+00:00"
         },
         {
             "name": "eloquent/enumeration",
@@ -1521,23 +1702,24 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.21.0",
+            "version": "v12.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "a048b4fbbef4742ff2eee843971bb8278239c610"
+                "reference": "d8bdd65850b99ac4f7ebee1a49ad678a6740bec9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/a048b4fbbef4742ff2eee843971bb8278239c610",
-                "reference": "a048b4fbbef4742ff2eee843971bb8278239c610",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/d8bdd65850b99ac4f7ebee1a49ad678a6740bec9",
+                "reference": "d8bdd65850b99ac4f7ebee1a49ad678a6740bec9",
                 "shasum": ""
             },
             "require": {
                 "illuminate/conditionable": "^12.0",
                 "illuminate/contracts": "^12.0",
                 "illuminate/macroable": "^12.0",
-                "php": "^8.2"
+                "php": "^8.2",
+                "symfony/polyfill-php84": "^1.31"
             },
             "suggest": {
                 "illuminate/http": "Required to convert collections to API resources (^12.0).",
@@ -1574,11 +1756,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-07-15T20:29:59+00:00"
+            "time": "2025-08-13T02:18:00+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.21.0",
+            "version": "v12.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1624,16 +1806,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.21.0",
+            "version": "v12.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "c2eef857b808810f5cb187de58e23d25c1d443d9"
+                "reference": "458573a554b927e9594bb35baf9a7897dea03303"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/c2eef857b808810f5cb187de58e23d25c1d443d9",
-                "reference": "c2eef857b808810f5cb187de58e23d25c1d443d9",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/458573a554b927e9594bb35baf9a7897dea03303",
+                "reference": "458573a554b927e9594bb35baf9a7897dea03303",
                 "shasum": ""
             },
             "require": {
@@ -1668,11 +1850,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-07-16T13:18:38+00:00"
+            "time": "2025-08-03T15:27:01+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.21.0",
+            "version": "v12.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1718,16 +1900,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.21.0",
+            "version": "v12.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "212103694b407b41dce5aae4fe41fbe6ee1bec49"
+                "reference": "02b52c61a1eaa894e632aadbc168ed380b6d3597"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/212103694b407b41dce5aae4fe41fbe6ee1bec49",
-                "reference": "212103694b407b41dce5aae4fe41fbe6ee1bec49",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/02b52c61a1eaa894e632aadbc168ed380b6d3597",
+                "reference": "02b52c61a1eaa894e632aadbc168ed380b6d3597",
                 "shasum": ""
             },
             "require": {
@@ -1741,6 +1923,7 @@
                 "illuminate/macroable": "^12.0",
                 "nesbot/carbon": "^3.8.4",
                 "php": "^8.2",
+                "symfony/polyfill-php83": "^1.31",
                 "voku/portable-ascii": "^2.0.2"
             },
             "conflict": {
@@ -1791,7 +1974,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-07-22T13:57:22+00:00"
+            "time": "2025-08-11T14:49:28+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2172,16 +2355,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.6.0",
+            "version": "v5.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "221b0d0fdf1369c71047ad1d18bb5880017bbc56"
+                "reference": "f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/221b0d0fdf1369c71047ad1d18bb5880017bbc56",
-                "reference": "221b0d0fdf1369c71047ad1d18bb5880017bbc56",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2",
+                "reference": "f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2",
                 "shasum": ""
             },
             "require": {
@@ -2200,7 +2383,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.0-dev"
+                    "dev-master": "5.x-dev"
                 }
             },
             "autoload": {
@@ -2224,9 +2407,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.6.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.6.1"
             },
-            "time": "2025-07-27T20:03:57+00:00"
+            "time": "2025-08-13T20:13:15+00:00"
         },
         {
             "name": "npm-asset/bootstrap",
@@ -4048,6 +4231,82 @@
             "time": "2024-09-09T11:45:10+00:00"
         },
         {
+            "name": "symfony/polyfill-php84",
+            "version": "v1.32.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php84.git",
+                "reference": "000df7860439609837bbe28670b0be15783b7fbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php84/zipball/000df7860439609837bbe28670b0be15783b7fbf",
+                "reference": "000df7860439609837bbe28670b0be15783b7fbf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php84\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php84/tree/v1.32.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-02-20T12:04:08+00:00"
+        },
+        {
             "name": "symfony/service-contracts",
             "version": "v3.6.0",
             "source": {
@@ -4644,16 +4903,16 @@
     "packages-dev": [
         {
             "name": "driftingly/rector-laravel",
-            "version": "2.0.5",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/driftingly/rector-laravel.git",
-                "reference": "ac61de4f267c23249d175d7fc9149fd01528567d"
+                "reference": "5be95811801fc06126dd844beaeb6a41721ba3d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/driftingly/rector-laravel/zipball/ac61de4f267c23249d175d7fc9149fd01528567d",
-                "reference": "ac61de4f267c23249d175d7fc9149fd01528567d",
+                "url": "https://api.github.com/repos/driftingly/rector-laravel/zipball/5be95811801fc06126dd844beaeb6a41721ba3d3",
+                "reference": "5be95811801fc06126dd844beaeb6a41721ba3d3",
                 "shasum": ""
             },
             "require": {
@@ -4673,9 +4932,9 @@
             "description": "Rector upgrades rules for Laravel Framework",
             "support": {
                 "issues": "https://github.com/driftingly/rector-laravel/issues",
-                "source": "https://github.com/driftingly/rector-laravel/tree/2.0.5"
+                "source": "https://github.com/driftingly/rector-laravel/tree/2.0.6"
             },
-            "time": "2025-05-14T17:30:41+00:00"
+            "time": "2025-08-08T22:10:01+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -5240,16 +5499,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "40a71441dd73fa150a66102f5ca1364c44fc8fff"
+                "reference": "dd430c869fddf4965049c8fd6f5ee49f155cfddf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/40a71441dd73fa150a66102f5ca1364c44fc8fff",
-                "reference": "40a71441dd73fa150a66102f5ca1364c44fc8fff",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/dd430c869fddf4965049c8fd6f5ee49f155cfddf",
+                "reference": "dd430c869fddf4965049c8fd6f5ee49f155cfddf",
                 "shasum": ""
             },
             "require": {
@@ -5288,7 +5547,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.1.2"
+                "source": "https://github.com/rectorphp/rector/tree/2.1.3"
             },
             "funding": [
                 {
@@ -5296,7 +5555,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-07-17T19:30:06+00:00"
+            "time": "2025-08-13T11:43:04+00:00"
         },
         {
             "name": "webmozart/assert",

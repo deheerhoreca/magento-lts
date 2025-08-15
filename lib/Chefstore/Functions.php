@@ -68,7 +68,7 @@ if(!function_exists("om_attr_val_as_int")) {
 }
 
 /**
- * Get an OpenMage product object with a $GLOBAL cache.
+ * Get cacheable product object.
  * 
  * Built to tame qquote module.
  *
@@ -78,40 +78,109 @@ if(!function_exists("om_attr_val_as_int")) {
 function dhh_get_cached_om_product(int|string|Mage_Catalog_Model_Product|null $product): Mage_Catalog_Model_Product|false|null {
   
   // COMMENT THIS to enable the cache (untested)
-  return Mage::getModel('catalog/product')->load($product); // Run the original code
+  // return Mage::getModel('catalog/product')->load($product); // Run the original code
   
   $GLOBALS["dhh_get_cached_om_product"] ??= [];
   
   if($product === null) {
-    Mage::log("dhh_get_cached_om_product::NULL", Zend_Log::DEBUG, "verbose.txt", true);
+    // Mage::log("dhh_get_cached_om_product::NULL", Zend_Log::DEBUG, "verbose.txt", true);
     return null;
   }
   
   if($product instanceof Mage_Catalog_Model_Product) {
-    Mage::log("dhh_get_cached_om_product::{$product->getId()} called with existing Mage_Catalog_Model_Product ", Zend_Log::DEBUG, "verbose.txt", true);
+    // Mage::log("dhh_get_cached_om_product::{$product->getId()} called with existing Mage_Catalog_Model_Product ", Zend_Log::DEBUG, "verbose.txt", true);
     return $product;
   }
   
   $product_id = $product;
   
   if(!is_numeric($product_id) || intval($product_id) < 1) {
-    Mage::log("dhh_get_cached_om_product::".json_encode($product_id).": Not a numeric product_id", Zend_Log::DEBUG, "verbose.txt", true);
+    // Mage::log("dhh_get_cached_om_product::".json_encode($product_id).": Not a numeric product_id", Zend_Log::DEBUG, "verbose.txt", true);
     return Mage::getModel('catalog/product')->load($product_id); // Run the original code
   }
   
   $product_id = (int) $product_id;
   
   if(!isset($GLOBALS["dhh_get_cached_om_product"][$product_id])) {
-    Mage::log("dhh_get_cached_om_product::{$product_id}, SAVE", Zend_Log::DEBUG, "verbose.txt", true);
+    // Mage::log("dhh_get_cached_om_product::{$product_id}, SAVE", Zend_Log::DEBUG, "verbose.txt", true);
     if($_product = Mage::getModel('catalog/product')->load($product_id)) {
       $GLOBALS["dhh_get_cached_om_product"][$product_id] = $_product;
       destruct($_product);
     }
   }
   
-  Mage::log("dhh_get_cached_om_product::".json_encode($product_id).", HIT", Zend_Log::DEBUG, "verbose.txt", true);
+  // Mage::log("dhh_get_cached_om_product::".json_encode($product_id).", HIT", Zend_Log::DEBUG, "verbose.txt", true);
   
   return $GLOBALS["dhh_get_cached_om_product"][$product_id];
+}
+
+/**
+ * Get cacheable category object.
+ *
+ * @param  integer|string                   $id
+ * @param  boolean                          $forceRefresh
+ * @return Mage_Catalog_Model_Category|null
+ */
+function dhh_get_cached_category(int|string $id, bool $forceRefresh = false): Mage_Catalog_Model_Category|null {
+  $id         = (int) $id;
+  $currentUrl = dhh_get_current_url();
+  $field      = null;
+  
+  if(!$forceRefresh && Mage::helper("aoe_modelcache")->exists("catalog/category", $id)) {
+    Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+  } else {
+    Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+  }
+  
+  return Mage::helper("aoe_modelcache")->get("catalog/category", $id, $field, $forceRefresh);
+}
+
+/**
+ * Get cacheable product object.
+ *
+ * @param  integer|string                  $id
+ * @param  boolean                         $forceRefresh
+ * @return Mage_Catalog_Model_Product|null
+ */
+function dhh_get_cached_product(int|string $id, bool $forceRefresh = false): Mage_Catalog_Model_Product|null {
+  $id         = (int) $id;
+  $currentUrl = dhh_get_current_url();
+  $field      = null;
+  
+  if(!$forceRefresh && Mage::helper("aoe_modelcache")->exists("catalog/product", $id)) {
+    if(dhh_profiler_enabled()) {
+      Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+    }
+  } else {
+    if(dhh_profiler_enabled()) {
+      Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+    }
+  }
+  
+  return Mage::helper("aoe_modelcache")->get("catalog/product", $id, $field, $forceRefresh);
+}
+
+/**
+ * Get current URL from OpenMage. Set once, then cached.
+ *
+ * @return string
+ */
+function dhh_get_current_url(): string {
+  $GLOBALS[__FUNCTION__] ??= htmlspecialchars_decode(Mage::helper("core/url")->getCurrentUrl(), ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
+  return $GLOBALS[__FUNCTION__];
+}
+
+/**
+ * Returns whether the OM profiler is enabled. @todo fix for POST by not looking at the request.
+ *
+ * @return boolean
+ */
+function dhh_profiler_enabled(): bool {
+  if(!(\Mage::app()->getRequest()->getParam("profile", false))) {
+    return false;
+  }
+  
+  return true;
 }
 
 /**
@@ -147,7 +216,9 @@ function getProductUrlById(int $id): string|false {
     destruct($_products);
   }
   
-  Mage::log(__FUNCTION__."(".json_encode(func_get_args()).") => ".json_encode($return), Zend_Log::DEBUG, "verbose.txt", true);
+  if(dhh_profiler_enabled()) {
+    Mage::log(__FUNCTION__."(".json_encode(func_get_args()).") => ".json_encode($return), Zend_Log::DEBUG, "verbose.txt", true);
+  }
   
   return $return;
 }
@@ -176,7 +247,9 @@ function getProductUrlBySku(string $sku): string|false {
     destruct($_products);
   }
   
-  Mage::log(__FUNCTION__."(".json_encode(func_get_args()).") => ".json_encode($return), Zend_Log::DEBUG, "verbose.txt", true);
+  if(dhh_profiler_enabled()) {
+    Mage::log(__FUNCTION__."(".json_encode(func_get_args()).") => ".json_encode($return), Zend_Log::DEBUG, "verbose.txt", true);
+  }
   
   return $return;
 }

@@ -29,17 +29,12 @@ $_product = $this->getProduct();
         </div>
         <div class="product-img-box">
           <div class="product-name">
-            <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+            <h1 class="m-0 p-2"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
           </div>
           <?php echo $this->getChildHtml('media') ?>
         </div>
         <div class="product-shop">
-          <!-- DHH
-          <div class="product-name">
-              <span class="h1"><?php //echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></span>
-          </div>
-           DHH -->
-
+          
           <div class="price-info">
             <?php echo $this->getPriceHtml($_product); ?>
             <?php echo $this->getChildHtml('bundle_prices') ?>

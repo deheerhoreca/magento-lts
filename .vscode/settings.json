@@ -8,6 +8,11 @@
     "**/var/report/**": true,
     "**/vendor/openmage/magento-lts/**": true
   },
+  "files.exclude": {
+    "media/catalog": true,
+    "var/debug": true,
+    "var/log": true
+  },
   "compareFolders.ignoreExtension": [],
   "intelephense.environment.documentRoot": "./",
   "search.exclude": {

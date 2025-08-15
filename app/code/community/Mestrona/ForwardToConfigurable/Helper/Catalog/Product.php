@@ -4,13 +4,15 @@ class Mestrona_ForwardToConfigurable_Helper_Catalog_Product extends Mage_Catalog
 {
 
     /**
-     * Copied from Magento 1.7.0.2
+     * Copied from Magento 1.9.x
+     * 
+     * DHH CORE HACK
      *
      * Allow overriding the visibility flag
      *
      * @param int $productId
      * @param Mage_Core_Controller_Front_Action $controller
-     * @param null $params
+     * @param Varien_Object|null $params
      * @return bool|false|Mage_Catalog_Model_Product
      *
      */
@@ -21,12 +23,6 @@ class Mestrona_ForwardToConfigurable_Helper_Catalog_Product extends Mage_Catalog
             $params = new Varien_Object();
         }
 
-        // Init and load product
-        Mage::dispatchEvent('catalog_controller_product_init_before', array(
-            'controller_action' => $controller,
-            'params' => $params,
-        ));
-
         if (!$productId) {
             return false;
         }
@@ -34,6 +30,13 @@ class Mestrona_ForwardToConfigurable_Helper_Catalog_Product extends Mage_Catalog
         $product = Mage::getModel('catalog/product')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($productId);
+
+        // Init and load product
+        Mage::dispatchEvent('catalog_controller_product_init_before', [
+            'controller_action' => $controller,
+            'params' => $params,
+            'product' => $product,
+        ]);
 
 
         // [Mestrona BEGIN]
@@ -74,11 +77,12 @@ class Mestrona_ForwardToConfigurable_Helper_Catalog_Product extends Mage_Catalog
         Mage::register('product', $product);
 
         try {
-            Mage::dispatchEvent('catalog_controller_product_init', array('product' => $product));
-            Mage::dispatchEvent('catalog_controller_product_init_after',
-                array('product' => $product,
-                    'controller_action' => $controller
-                )
+            Mage::dispatchEvent('catalog_controller_product_init', ['product' => $product]);
+            Mage::dispatchEvent(
+                'catalog_controller_product_init_after',
+                ['product' => $product,
+                                'controller_action' => $controller
+                ]
             );
         } catch (Mage_Core_Exception $e) {
             Mage::logException($e);

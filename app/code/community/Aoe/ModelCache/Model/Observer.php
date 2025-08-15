@@ -1,5 +1,9 @@
 <?php
 
+use \Chefstore\Utils;
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Str;
+
 /**
  * Observer class for logging repeated model loads in Magento.
  *
@@ -8,7 +12,7 @@
  * At destruction, it writes a summary of repeated loads to the configured log file,
  * omitting models loaded only once.
  *
- * @property array<string, array<string, array<int, string>>> $data Stores model load information as [class][id][] = location.
+ * @property array<string, array<string, array<string|int, string>>> $data Stores model load information as [class][id][] = location.
  * @property int $loadedModels Counter for total loaded models.
  * @const string XML_PATH_MODEL_CACHE_ENABLED Config path to enable/disable logging.
  * @const string XML_PATH_MODEL_CACHE_LOG_FILE Config path for log file location.
@@ -74,11 +78,16 @@ class Aoe_ModelCache_Model_Observer {
    * @return void
    */
   public function __destruct() {
+    if(!dhh_profiler_enabled()) {
+      return;
+    }
+    
     $logActive = Mage::getStoreConfig(self::XML_PATH_MODEL_CACHE_ENABLED);
     if (!$logActive) {
       return;
     }
     $logFile = Mage::getStoreConfig(self::XML_PATH_MODEL_CACHE_LOG_FILE);
+    
 
     // remove every id that was called only once
     foreach ($this->data as $className => $classes) {
@@ -91,21 +100,39 @@ class Aoe_ModelCache_Model_Observer {
         }
       }
     }
-    $summary = "Repeated model loads:\n";
-    foreach ($this->data as $className => $ids) {
-      $summary .= "$className:\n";
-      foreach ($ids as $id => $locations) {
-        $summary .= "  ID: $id, Count: " . count($locations) . ", Locations: " . implode(', ', $locations) . "\n";
+    
+    if($this->data === []) {
+      return;
+    } else {
+      $summary = "Repeated model loads:".PHP_EOL;
+      $cwd = "/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/";
+      foreach ($this->data as $className => $ids) {
+        $summary .= "{$className}:".PHP_EOL;
+        foreach ($ids as $id => $locations) {
+          $locations = Arr::map($locations, fn($item) => Str::chopStart($item, $cwd));
+          $summary .= "- ID: $id, Count: " . count($locations) . ", Locations: " . implode(', ', $locations) . PHP_EOL;
+        }
       }
+      
+      // getCurrentUrl() is encoded...
+      $currentUrl = htmlspecialchars_decode(Mage::helper("core/url")->getCurrentUrl(), ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
+      
+      $report = [
+        PHP_EOL.PHP_EOL,
+        str_pad(" {$currentUrl} ", 220, "-", STR_PAD_BOTH),
+        "Total number of loaded models: ".$this->loadedModels,
+        $summary,
+        // Utils::printr($this->data, true),
+      ];
+      
+      $report = implode(PHP_EOL.PHP_EOL, $report);
+      Mage::log($report, file: $logFile);
+      
+      // Mage::log(str_pad(" {$currentUrl} ", 130, "-", STR_PAD_BOTH), file: $logFile);
+      // Mage::log($summary, file: $logFile);
+      // Mage::log('Total number of loaded models: ' . $this->loadedModels, file: $logFile);
+      // Mage::log(Utils::td($this->data, true, true), file: $logFile);
+      // Mage::log(str_repeat("-", 120), file: $logFile);
     }
-    
-    $currentUrl = Mage::helper('core/url')->getCurrentUrl();
-    
-    Mage::log(str_pad(" {$currentUrl} ", 120, "-", STR_PAD_BOTH), null, $logFile);
-    Mage::log($summary, null, $logFile);
-    Mage::log('Total number of loaded models: ' . $this->loadedModels, null, $logFile);
-    Mage::log(var_export($this->data, true), null, $logFile);
-    Mage::log('Total number of loaded models: ' . $this->loadedModels, null, $logFile);
-    Mage::log(str_repeat("-", 120), null, $logFile);
   }
 }

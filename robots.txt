@@ -40,9 +40,9 @@ Crawl-delay: 1
 
 Disallow: /index.php
 Disallow: /catalog/product_compare/
-Disallow: /catalog/category/view/
-Disallow: /catalog/product/view/
-Disallow: /catalog/product/gallery/
+# Disallow: /catalog/category/view/
+# Disallow: /catalog/product/view/
+# Disallow: /catalog/product/gallery/
 Disallow: /control/
 Disallow: /contacts/
 Disallow: /customer/
@@ -54,9 +54,9 @@ Disallow: /sales/
 Disallow: /sendfriend/
 Disallow: /tag/
 Disallow: /wishlist/
-Disallow: /cdn-cgi/*
-Disallow: /no-route
+Disallow: /cdn-cgi/
 Disallow: /media/static/
+Disallow: /no-route
 Disallow: /*&multipass=true*
 Disallow: /*?multipass=true*
 Disallow: /*?price=*
@@ -75,11 +75,10 @@ Disallow: /*&sqr=*
 Disallow: /*.php$
 Disallow: /*?SID=
 Disallow: /*&SID=
-Disallow: /*?p=*&
 Disallow: /*?refreshfpc
 Disallow: /*&refreshfpc
 Disallow: /*?nofpc
 Disallow: /*&nofpc
 Disallow: /*?csredir
 Disallow: /*&csredir
-Disallow: /*?*&*&*
+Disallow: /*?*&*&*&*

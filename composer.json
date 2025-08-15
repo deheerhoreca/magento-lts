@@ -41,6 +41,7 @@
     "cmixin/business-day": "^1.18",
     "colinmollenhour/magento-redis-session": "dev-master as 3.2.0",
     "dekor/php-array-table": "^2.0",
+    "elidrissidev/magento-api2basicauth": "^1.0",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0",
     "fballiano/openmage-category-sort-direction": "^0.2.0",
@@ -153,8 +154,7 @@
   ],
   "autoload": {
     "files": [
-      "lib/Chefstore/Utils.php",
-      "lib/Chefstore/Functions.php"
+      "lib/Chefstore/Loader.php"
     ]
   },
   "minimum-stability": "dev",

@@ -18,7 +18,18 @@
     </models>
     <events>
       
-      <!-- Elastic APM, using a very early (pre-session!) event -->
+      <!-- Set Elastic APM data -->
+      <controller_front_init_before>
+        <observers>
+          <configure_elastic_apm>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>configureElasticApm</method>
+          </configure_elastic_apm>
+        </observers>
+      </controller_front_init_before>
+      
+      <!-- Set Elastic APM data
       <controller_action_predispatch>
         <observers>
           <configure_elastic_apm>
@@ -28,7 +39,9 @@
           </configure_elastic_apm>
         </observers>
       </controller_action_predispatch>
+      -->
       
+      <!-- On admin product edit -->
       <catalog_product_edit_action>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -121,7 +134,6 @@
       </updates>
     </layout>
     <events>
-      
       
       <sales_order_place_before>
         <observers>

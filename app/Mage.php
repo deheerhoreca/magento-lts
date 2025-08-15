@@ -657,7 +657,12 @@ final class Mage
     public static function exception($module = 'Mage_Core', $message = '', $code = 0)
     {
         $className = $module . '_Exception';
-        return new $className($message, $code);
+        // DHH CORE HACK
+        // return new $className($message, $code);
+        $e = new $className($message, $code);
+        Mage::logException($e);
+        return $e;
+        // DHH CORE HACK
     }
 
     /**
