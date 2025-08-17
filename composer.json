@@ -3,7 +3,7 @@
   "type": "project",
   "license": "proprietary",
   "require": {
-    "php": ">=8.2 <=8.3",
+    "php": ">=8.2 <=8.4",
     "ext-FFI": "*",
     "ext-apcu": "*",
     "ext-bz2": "*",

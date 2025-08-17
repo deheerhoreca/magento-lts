@@ -5636,7 +5636,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2 <=8.3",
+        "php": ">=8.2 <=8.4",
         "ext-ffi": "*",
         "ext-apcu": "*",
         "ext-bz2": "*",
