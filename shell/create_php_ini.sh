@@ -40,7 +40,8 @@ SHARED_PHP_INI=$(pwd)/etc/php.cmd-dist.ini
 LOCAL_PHP_INI=$(pwd)/etc/php.cmd-local.ini
 NOW=`date`
 
-echo > ${TARGET_PHP_INI}
+# Truncate:
+: > ${TARGET_PHP_INI}
 
 printf "; File: ${TARGET_PHP_INI}\n" >> ${TARGET_PHP_INI}
 printf "; This file is created automatically, do not edit\n" >> ${TARGET_PHP_INI}
@@ -64,7 +65,8 @@ SHARED_USER_INI=$(pwd)/etc/.user-dist.ini
 LOCAL_USER_INI=$(pwd)/etc/.user-local.ini
 NOW=`date`
 
-echo > ${TARGET_USER_INI}
+# Truncate:
+: > ${TARGET_USER_INI}
 
 printf "; File: ${TARGET_USER_INI}\n" >> ${TARGET_USER_INI}
 printf "; This should be used as Additional PHP Directives in Plesk\n" >> ${TARGET_USER_INI}

@@ -116,7 +116,7 @@ $html = <<<EOT
 </script>
 
 <script async type="module">
-  !function(e,t,n){var r=e.createElement(t),a=e.getElementsByTagName(t)[0];r.src="/js/ext-elastic-apm-rum.umd.ts1741106066.min.js",r.onload=function(){elasticApm.init(n)},a.parentNode.insertBefore(r,a)}(document,"script",{serviceName:"openmage",serverUrl:"//rum.chefstore.nl:8200",environment:document.querySelector("html").dataset.environment,pageLoadTransactionName:document.querySelector("html").dataset.transaction});
+  !function(e,t,n){var r=e.createElement(t),a=e.getElementsByTagName(t)[0];r.src="/js/ext-elastic-apm-rum.umd.ts1741106066.min.js",r.onload=function(){elasticApm.init(n)},a.parentNode.insertBefore(r,a)}(document,"script",{serviceName:"openmage",serverUrl:"//rum.chefstore.nl:8200",environment:document.querySelector("html").dataset.environment,transactionSampleRate:0.1,pageLoadTransactionName:document.querySelector("html").dataset.transaction});
 </script>
 
 <script async type="module" id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
