@@ -30,7 +30,7 @@
 .review-summary-table .rating-box .rating-number:after,
 .ratings-table .rating-box,
 .ratings-table .rating-box .rating {
-  background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite.png);
+  background-image: url(../images/icon_sprite.png);
   background-repeat: no-repeat;
   text-indent: -9999px;
 }
@@ -57,7 +57,7 @@
   .review-summary-table .rating-box .rating-number:after,
   .ratings-table .rating-box,
   .ratings-table .rating-box .rating {
-    background-image: url(https://images.chefstore.nl/skin/frontend/rwd/dhh/images/icon_sprite@2x.png);
+    background-image: url(../images/icon_sprite@2x.png);
     background-size: 100px 1000px;
   }
 }
