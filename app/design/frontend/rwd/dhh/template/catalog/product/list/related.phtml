@@ -14,10 +14,10 @@ if($collection->count()) {
     "fast_stock"              => true,
   ];
   if(!isset($options["fast_stock"]) || $options["fast_stock"] === false) {
-    Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
+    Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection);
   }
   // @todo ???
-  Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
+  Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection);
   ?>
   <div id="related-products" class="product-collateral category-products">
     <?php

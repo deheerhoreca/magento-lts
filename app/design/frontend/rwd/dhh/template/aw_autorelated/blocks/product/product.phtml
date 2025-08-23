@@ -10,7 +10,7 @@ if(empty($collection) === false) {
   // if(_dhh_debug()) {
     // printr(_dhh_getselect($this->_collection));
   // }
-  Mage::getModel('catalogInventory/stock')->addItemsToProducts($collection);
+  Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection);
   ?>
   <div id="autorelated-products" class="product-collateral category-products">
     <?php

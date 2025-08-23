@@ -20,10 +20,12 @@
   "search.exclude": {
     "**/var/debug/**": true,
     "**/media/catalog/**": true,
+    "**/media/sooqr/**": true,
     "**/var/cache/**": true,
     "**/var/log/**": true,
     "**/var/package/**": true,
     "**/var/report/**": true,
+    "/google_*.xml": true,
     "**/vendor/openmage/magento-lts/**": true
   },
   "search.useGlobalIgnoreFiles": true,

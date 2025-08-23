@@ -61,7 +61,7 @@ if($show_products) {
   Varien_Profiler::start("DHH_ReAddStockItems");
   $_productCollection = $this->getLoadedProductCollection();
   $_productCollection->setFlag("require_stock_items", true);
-  Mage::getModel("catalogInventory/stock")->addItemsToProducts($_productCollection);
+  Mage::getModel("cataloginventory/stock")->addItemsToProducts($_productCollection);
   Varien_Profiler::stop("DHH_ReAddStockItems");
 }
 

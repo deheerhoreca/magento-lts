@@ -1021,15 +1021,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public function getStockInfo($_product, array $options = []) {
     Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
-    
     $dhh_sku                = $_product->getSku();
-    $product_id             = $_product->getEntityId();
     
+    // $product_id             = $_product->getEntityId();
     // $hash                   = md5(json_encode($options));
     // $cache_key              = "DHH_STOCKINFO_PRODUCT_{$product_id}_{$hash}";
-    
+    //
     // @TODO FPC BROKEN: GETS SAVED WITHOUT LEVERTIJD FIELD (AND MAYBE OTHER FIELDS?) Then goes missing in Detailview
-    
+    //
     // if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "get_stock_info")) {
     //   if($stock_data = Mage::app()->getCache()->load($cache_key)) {
     //     DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
