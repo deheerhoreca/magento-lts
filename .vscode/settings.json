@@ -1,8 +1,10 @@
 {
   "files.watcherExclude": {
-    "**/media/**": true,
     "**/.DS_Store": true,
     "**/.git": true,
+    "**/media/**": true,
+    "**/pub/**": true,
+    "**/sql/*/mysql*.php": true,
     "**/var/log/**": true,
     "**/var/package/**": true,
     "**/var/report/**": true,
