@@ -27,9 +27,19 @@ if(!isset($_GET["id"]) || empty((string) $_GET["id"])) {
   exit;
 }
 
+$id       = trim(strip_tags((string) $_GET["id"])); // Same process as JBStr::clean()
+
+// Detect certain bots and send them away
+$ua = isset($_SERVER["HTTP_USER_AGENT"]) ? trim(strip_tags((string) $_SERVER["HTTP_USER_AGENT"])) : ""; 
+if(!empty($ua) && preg_match("/(ahrefsbot)/i", $ua)) {
+  // $labyrinth_url = "/view.php?id={$id}&msg=".random_int(1000, 9999);
+  $labyrinth_url = "/?csredir=imabadbot";
+  header("Location: ".$labyrinth_url, true, 302);
+  exit;
+}
+
 $method   = "aes128";
 $iv       = str_repeat("a", openssl_cipher_iv_length($method));
-$id       = \trim(\strip_tags((string) $_GET["id"])); // Same process as JBStr::clean()
 $id       = (string) base64_decode($id);
 $url      = openssl_decrypt($id, $method, "wijdelengeenurls", 0, $iv);
 
