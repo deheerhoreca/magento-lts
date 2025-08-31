@@ -38,6 +38,7 @@
 /dev/tests/functional/generated
 /dev/tests/functional/vendor
 
+/media.bak/
 /media/*
 !/media/.htaccess
 !/media/custom_options/.htaccess
