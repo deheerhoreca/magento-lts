@@ -62,7 +62,7 @@
 
 	//	?>
 
-		  <?php// if(!in_array($_data['value'], $emptyValues)): ?>
+		  <?php // if(!in_array($_data['value'], $emptyValues)): ?>
             <tr>
                 <th class="label"><?php echo $this->htmlEscape($this->__($_data['label'])) ?></th>
                 <td class="data"><?php if($_data['code']=='hoogte_intern' || $_data['code']=='breedte_intern' || $_data['code']=='diepte_intern' || $_data['code']=='breedte' || $_data['code']=='inhoud_liters' || $_data['code']=='hoogte' || $_data['code']=='diepte' || $_data['code']=='gewicht_kg'){ echo round($valuex,2); }else{ echo $valuex; } //echo $_helper->productAttribute($_product, $_data['value'], $_data['code']);
