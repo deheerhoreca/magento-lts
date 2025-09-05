@@ -98,6 +98,7 @@ phpunit.xml
 #########################################
 
 # FILES
+/app/etc/local.*.xml.bak
 /.cachetool.yaml
 .DS_Store
 ._.DS_Store
@@ -126,19 +127,27 @@ phpunit.xml
 /.well-known/acme-challenge/
 /skin/assets/
 
+# The LINK, nor the DIR
+media
+
+# Extend the dist ignore to the whole media dir (it's now a LINK)
+# NOT /media/*, that does NOT ignore the /media/ dir itself
+/media/
+/media.local/
+
 # FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
-!/media/*
-/media/amfeed
-/media/cache
-/media/attachment
-/media/productattachment
-/media/import
-/media/sooqr
-/media/qquoteadv
-/media/catalog
-/media/tmp
-/media/dhh
-/media/wysiwyg/*
+# !/media/*
+# /media/amfeed
+# /media/cache
+# /media/attachment
+# /media/productattachment
+# /media/import
+# /media/sooqr
+# /media/qquoteadv
+# /media/catalog
+# /media/tmp
+# /media/dhh
+# /media/wysiwyg/*
 
 # BILLER WEBHOOK
 /biller-webhook-errors.jsonl
@@ -336,7 +345,6 @@ phpunit.xml
 !/app/design/frontend/rwd/default/template/checkout/onepage/shipping.phtml
 
 # grep -ril "DHH" dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort -f
-# grep -il  "DHH" media/* | sort -f
 # diff -qr app/code/core/Mage/ vendor/openmage/magento-lts/app/code/core/Mage/
 !/favicon.ico
 !/index.php
@@ -416,7 +424,6 @@ phpunit.xml
 /app/etc/modules/Fballiano_CategorySortDirection.xml
 /app/design/frontend/base/default/template/pay/payment
 /app/design/adminhtml/base/default/template/pay/payment
-/media/pay_payment/logo.png
 /app/etc/modules/Pay_Payment.xml
 /app/locale/nl_NL/Pay_Payment.csv
 /app/locale/en_US/Pay_Payment.csv
