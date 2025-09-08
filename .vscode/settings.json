@@ -60,7 +60,7 @@
     "./var/report/**": true,
     "./google_*.xml": true,
     "./vendor/openmage/magento-lts/**": true,
-     "**/.DS_Store": true,
+    "**/.DS_Store": true,
     "**/.git": true,
     "./media/**": true,
     "./pub/**": true,
@@ -79,7 +79,7 @@
   "compareFolders.ignoreExtension": [],
   "intelephense.environment.documentRoot": "./",
   "search.exclude": {
-     "**/.DS_Store": true,
+    "**/.DS_Store": true,
     "**/.git": true,
     "**/sql/*/mysql*.php": true,
     "./httpdocs/deheerhoreca-magento/media/catalog/**": true,
