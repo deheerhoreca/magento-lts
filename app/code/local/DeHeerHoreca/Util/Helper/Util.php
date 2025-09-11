@@ -240,7 +240,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return MarkdownExtra::defaultTransform($string);
   }
 
-  public function getBrandUrlSlug($string) {
+  public function getBrandUrlSlug($string): string {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
     $string   = strtr(utf8_decode((string) $string), utf8_decode($from), $to);
@@ -1380,6 +1380,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $rates;
   }
   
+  // SYNC WITH app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml
   public static function auto_productlabel($_product, $context) {
     if(!empty($_product->getProductLabel())) {
       return $_product->getProductLabel();
@@ -1391,16 +1392,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     $supplier_sys = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
     
-    // SYNC WITH app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml
-    
     // Hendi promo
     if($supplier_sys === "hendi" && CarbonImmutable::now()->isBefore("2025-08-31 00:00:00")) {
-     return "5% Kortingscode";
+      return "5% Kortingscode";
     }
     
     // Diamond promo
     if($supplier_sys === "diamond" && CarbonImmutable::now()->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
-      "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW", "DI-WR-38CS-SB",
+      "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW",
       "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
       "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G", "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8",
       "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"], true)) {

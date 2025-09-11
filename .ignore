@@ -163,6 +163,7 @@ phpunit.xml
 /media/tmp
 /media/dhh
 /media/wysiwyg
+/media.nfs
 
 # BILLER WEBHOOK
 /biller-webhook-errors.jsonl

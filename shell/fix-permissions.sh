@@ -2,19 +2,39 @@
 
 # ~/httpdocs/deheerhoreca-magento/shell/fix-permissions.sh
 
-# Set User Environment
-. ${HOME}/.bash_profile
+# ._."._."._."._."._."._."._."._."._."._."._."._."._."._. #
+
+# shellcheck source=/dev/null
+. "${HOME}/.bash_profile"
 
 cm && source ./shell/cron-bootstrap.sh
 
-cm && cd media/catalog/product
+#                          LOCAL
+# =-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-= #
 
-find . -type d ! -perm 0775 -print -exec chmod 0775 -- {} +
-find . -type f ! -perm 0644 -print -exec chmod 0644 -- {} +
+# cm && cd ./media || exit 1
+# find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
+# find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
 
-cm && cd media/catalog/category
+cm && cd ./media/catalog/product || exit 1
+find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
+find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
 
-find . -type d ! -perm 0775 -print -exec chmod 0775 -- {} +
-find . -type f ! -perm 0644 -print -exec chmod 0644 -- {} +
+cm && cd ./media/catalog/category || exit 1
+find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
+find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
+
+#                           NFS
+# =-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-= #
+
+cm && cd ./media.nfs/catalog/product || exit 1
+find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
+find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
+
+cm && cd ./media.nfs/catalog/category || exit 1
+find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
+find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
+
+# ._."._."._."._."._."._."._."._."._."._."._."._."._."._. #
 
 cm && source ./shell/cron-wrapup.sh

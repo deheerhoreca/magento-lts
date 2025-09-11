@@ -1,0 +1,422 @@
+<style>
+  h1 {
+    font-size: 60px;
+  }
+
+  h2 {
+    font-size: 40px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  p {
+    margin: 0px;
+    padding: 0px;
+    font-size: 18px;
+  }
+
+  img {
+    border-radius: 5px;
+  }
+
+  .banner-section {
+    position: relative;
+    display: inline-block;
+  }
+
+  .banner-section img {
+    object-fit: cover;
+    display: block;
+    width: 100%;
+    filter: brightness(50%);
+  }
+
+  .banner-title {
+    margin: auto;
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+  }
+
+  .button.aboutus:hover {
+    color: #fff;
+    background-color: #3aacd9;
+  }
+
+  .row {
+    width: 80%;
+    margin: auto;
+  }
+
+  .row:after,
+  .col-33:after,
+  .col-50:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .section-title {
+    margin-bottom: 20px;
+  }
+
+  .col {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    margin-top: 50px;
+  }
+
+  .col p {
+    margin-bottom: 40px;
+  }
+
+  .image-1,
+  .image-2 {
+    width: 400px;
+  }
+
+  .image-1 {
+    margin-top: -100px;
+    z-index: 1;
+  }
+
+  .image-2 {
+    position: relative;
+    float: right;
+    z-index: 10;
+  }
+
+  .tbl {
+    width: 30%;
+    float: right;
+    margin: 5px;
+  }
+
+  .tbl img {
+    width: 100%;
+  }
+
+  .image-3 {
+    margin-top: 50px;
+  }
+
+  .image-4 {
+    margin-top: 100px;
+  }
+
+  .middle-col {
+    display: flex;
+    width: 70%;
+    margin: auto;
+    margin-top: 50px;
+  }
+
+  .middle-col:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .col-30 {
+    margin: auto;
+    width: 30%;
+  }
+
+  .col-40 {
+    margin: auto;
+    width: 40%;
+  }
+
+  .col-30 img {
+    width: 200px;
+  }
+  
+  .col-60 {
+    margin: auto;
+    width: 60%;
+  }
+
+  .col-70 {
+    margin: auto;
+    width: 70%;
+  }
+
+  .service {
+    font-size: 18px;
+  }
+
+  .col-70 h2,
+  .col-70 h3 {
+    margin-bottom: 10px;
+  }
+
+  .voordelen {
+    margin-top: 80px;
+    color: #3399CC;
+    text-align: center;
+  }
+
+  .col-33 {
+    width: 33%;
+    float: left;
+    margin-top: 50px;
+  }
+
+  .block {
+    height: 300px;
+    margin: 20px;
+    padding: 20px;
+    border: 3px solid #3399CC;
+    border-radius: 5px;
+  }
+
+  .block h3,
+  .block p {
+    margin-top: 5px;
+    text-align: center;
+  }
+
+  .voordeel-image {
+    width: 25%;
+    margin: auto;
+  }
+
+  .voordeel-image img {
+    width: 100%;
+  }
+
+  .col-50 {
+    width: 50%;
+    float: left;
+    margin-top: 50px;
+  }
+
+  .col-50 .block {
+    width: 50%;
+    border: none;
+    height: unset;
+    float: left;
+    margin: 0px;
+  }
+
+  .block strong {
+    font-weight: 600;
+  }
+
+  .col-50 .block p {
+    text-align: center;
+  }
+
+  .block-middle {
+    width: 50px;
+    margin: auto;
+  }
+
+
+  /*responsive css */
+
+  @media only screen and (max-width: 1024px) {
+    .banner-title {
+      width: 60%;
+    }
+    h3 {
+      font-size: 20px;
+    }
+    p {
+      font-size: 14px;
+    }
+    .row {
+      width: 90%;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    h1 {
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    h3 {
+      font-size: 12px;
+    }
+    p {
+      font-size: 10px;
+    }
+    .service {
+      font-size: 13px;
+    }
+    .banner-title {
+      width: 100%;
+    }
+    .banner-section img {
+      height: 300px;
+    }
+    .row {
+      width: 90%;
+    }
+    .voordelen {
+      margin-top: 10px;
+    }
+    .image-1,
+    .image-2 {
+      width: 200px;
+    }
+    .middle-col {
+      width: 90%;
+    }
+    .col-33 {
+      margin-top: 0px;
+    }
+    .col-33 .block {
+      height: 225px;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .reverse {
+      display: grid;
+    }
+    .reverse-col {
+      order: 2
+    }
+    .button {
+      margin-bottom: 10px;
+    }
+    .col {
+      margin-top: unset;
+      margin-bottom: 20px;
+      width: 100%;
+      padding: 0px;
+    }
+    .image-2,
+    .image-1 {
+      all: unset;
+      float: left;
+      width: 45%;
+      padding: 5px;
+      border-radius: 15px;
+    }
+    .tbl {
+      margin: 4px;
+    }
+    .middle-col {
+      width: 100%;
+    }
+    .col-30 {
+      flex-shrink: 2;
+    }
+    .col-30 img {
+      width: 100px;
+    }
+    .col-70 {
+      flex-shrink: 1;
+    }
+    .col p {
+      font-size: 13px;
+    }
+    .block {
+      height: 250px;
+      padding: 5px;
+      margin: 6px;
+      width: 45%;
+      float: left;
+    }
+    .col-33 {
+      margin-top: 0px;
+      width: 100%;
+    }
+    .voordeel-image {
+      width: 50%;
+    }
+    .col-50 {
+      width: 100%;
+    }
+    .col-50 .block {
+      margin: 0px;
+    }
+  }
+</style>
+<div class="banner-section"><img src="/media/wysiwyg/aboutus/banner.jpg" alt="interieur chefstore.nl">
+<h2 class="banner-title">Alles voor de chef</h2>
+</div>
+<div class="row">
+<div class="col">
+<h2 class="section-title">Over ons</h2>
+<p>Chefstore.nl is d&eacute; webshop voor professionele horeca-artikelen. Wij zijn horeca-experts voor horeca-professionals, evenals particulieren. Bij Chefstore.nl hebben we een no-nonsense mentaliteit. Eerlijke service en advies en een eerlijke prijsstelling. Dat is waar we voor staan bij Chefstore.nl.</p>
+<p>Sinds geruime tijd bestel je bij Chefstore.nl premium keukenapparatuur en non-food producten voor de gehele horeca branche, waaronder keukens, cafetaria's, snackbars, kwalitaria's, cateraars en hotels. Van koeltechniek tot tafelgerei, van keukenapparatuur tot disposables, van kokskleding tot meubilair en nog veel meer.</p>
+<p>Chefstore.nl heeft een zeer breed assortiment voor u samengesteld van de beste fabrikanten. Ons zorgvuldig samengestelde assortiment bestaat uit meer dan 35.000 artikelen van uiteenlopende gerenommeerde merken. Chefstore.nl biedt horeca-apparatuur aan van o.a. Gamko, Combisteel, Polar, Hendi, Saro en nog veel meer.</p>
+<p>Ons team komt direct uit de sector en begrijpt uw behoeften. Wij bieden deskundig projectadvies, flexibele betaalmogelijkheden en op maat gemaakte offertes. Voor elke chef de juiste oplossing - altijd online beschikbaar en eenvoudig te bestellen</p>
+<a class="button aboutus" href="/">Bekijk ons assortiment</a></div>
+<div class="col"><img class="py-2 image-2" src="/media/wysiwyg/aboutus/over_onschefstore.jpg" alt="interieur chefstore.nl"> <img class="py-2 image-1" src="/media/wysiwyg/aboutus/over_onschefstore4.jpg" alt="interieur chefstore.nl"></div>
+</div>
+<div class="row reverse">
+<div class="col reverse-col">
+<div class="tbl"><img src="/media/wysiwyg/aboutus/over_onschefstore1.jpg" alt="interieur chefstore.nl"></div>
+<div class="tbl"><img class="image-3" src="/media/wysiwyg/aboutus/over_onschefstore2.jpg" alt="interieur chefstore.nl"></div>
+<div class="tbl"><img class="image-4" src="/media/wysiwyg/aboutus/over_onschefstore3.png" alt="interieur chefstore.nl"></div>
+</div>
+<div class="col">
+<p>Daarnaast zijn wij voortdurend bezig ons aanbod te verbeteren en uit te breiden om u nog beter van dienst te kunnen zijn.</p>
+<p>Wij werken met verschillende distributiepartners en houden een zeer ruime voorraad waardoor de meeste artikelen binnen 24-48uur zijn te leveren in de Benelux. Op aanvraag kunnen wij uiteraard ook naar andere landen verzenden.</p>
+<p>Vanuit ons hoofdkantoor in Amsterdam staan de professionele medewerkers van de klantenservice voor u klaar om uw vragen te beantwoorden.</p>
+</div>
+</div>
+<div class="row">
+<div class="middle-col">
+<div class="col col-40"><img style="border-radius: 50%; box-shadow: 0 10px 25px rgb(0 0 0 / 30%);" src="/media/wysiwyg/aboutus/guy.jpg" alt="support chefstore.nl"></div>
+<div class="col col-60">
+<h2>Heb je een vraag?</h2>
+<h3 class="service">Chefstore.nl, de nr non-food 1 groothandel. Wij zijn u graag van dienst.</h3>
+<p>We staan dagelijks voor u klaar van 09:00 tot 17:30 en 24uur per dag via e-mail.</p>
+</div>
+</div>
+</div>
+<div class="row">
+<h2 class="voordelen">De voordelen van Chefstore.nl</h2>
+<div class="col-33">
+<div class="block">
+<div class="voordeel-image"><img src="/media/wysiwyg/aboutus/trolley.png" alt="interieur chefstore.nl"></div>
+<h3>Zeer ruim assortiment</h3>
+<p>Ons assortiment bestaat uit meer dan 35.000 artikelen specifiek gericht op de semiprofessionele gebruiker in de keuken</p>
+</div>
+<div class="block">
+<div class="voordeel-image"><img src="/media/wysiwyg/aboutus/truck.png" alt="interieur chefstore.nl"></div>
+<h3>Snelle levering</h3>
+<p>Wij hebben een groot deel van ons assortiment altijd uit voorraad beschikbaar. Leveringen kunnen doorgaans binnen 24/48uur geleverd worden. Binnen NL en Belgie zijn leveringen vanaf EUR 150,- gratis</p>
+</div>
+</div>
+<div class="col-33">
+<div class="block">
+<div class="voordeel-image"><img src="/media/wysiwyg/aboutus/price-tag.png" alt="interieur chefstore.nl"></div>
+<h3>Altijd de beste prijs</h3>
+<p>Omdat wij groot inkopen kunnen wij u scherpe prijzen bieden. Wij vergelijken ook continue de prijzen in de markt om u het beste aanbod te kunnen doen</p>
+</div>
+<div class="block">
+<div class="voordeel-image"><img src="/media/wysiwyg/aboutus/internet-security.png" alt="interieur chefstore.nl"></div>
+<h3>Duidelijk en veilige website</h3>
+<p>Onze uitgebreide website biedt u zo een compleet mogelijk overzicht van alle artikelen en de bijbehorende specificaties. Uw gegevens en betalingen worden verstuurd via veilige verbindingen</p>
+</div>
+</div>
+<div class="col-33">
+<div class="block">
+<div class="voordeel-image"><img src="/media/wysiwyg/aboutus/support.png" alt="interieur chefstore.nl"></div>
+<h3>Advies door professionals</h3>
+<p>Door onze jarenlange ervaring en expertise hebben wij de kennis in huis om u optimaal van dienst te kunnen zijn</p>
+</div>
+<div class="block">
+<div class="voordeel-image"><img src="/media/wysiwyg/aboutus/customer-service.png" alt="interieur chefstore.nl"></div>
+<h3>Snelle en goede klantenservice</h3>
+<p>Wij zijn u ook van dienst voor en na de aankoop. Onze klantenservice is bereikbaar via email, telefoon of chat en beantwoord graag uw vragen!</p>
+</div>
+</div>
+</div>

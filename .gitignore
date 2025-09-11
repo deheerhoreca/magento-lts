@@ -134,6 +134,7 @@ media
 # NOT /media/*, that does NOT ignore the /media/ dir itself
 /media/
 /media.local/
+/media.nfs/
 
 # FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
 # !/media/*

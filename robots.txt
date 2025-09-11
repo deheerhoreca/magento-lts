@@ -34,15 +34,13 @@
 # MQMQMQMMQQMMQMQMQQMQMQMQMQMMQMQMQMQIII|!!I| . . QMQQMQMQMQMQMQM^^^^!IQMQM|!!|QQMQMQMQMMQQMQMQM.^MQMQMQMQMQMQMQMQM!MQMQQM..!MQMQMQMQMQM
 # MQMQMQMQMQMQMQMQMQMQMQMQMQMQMQMMQMQII6I!!||!^^^.QMQMQMQMQMQMQMQ^^^^|MQQMQM^^^!QMQMQMQMQMQMQMMQ.^MQMQMQMQMQMQQMQMMQMQMQMQ.!MQQMQMMQMQMQ
 
+# Global rules
 User-agent: *
-
-Crawl-delay: 1
-
-Disallow: /index.php
+Disallow: /index.php*
 Disallow: /catalog/product_compare/
-# Disallow: /catalog/category/view/
-# Disallow: /catalog/product/view/
-# Disallow: /catalog/product/gallery/
+Disallow: /catalog/category/view/
+Disallow: /catalog/product/view/
+Disallow: /catalog/product/gallery/
 Disallow: /control/
 Disallow: /contacts/
 Disallow: /customer/
@@ -56,6 +54,9 @@ Disallow: /tag/
 Disallow: /wishlist/
 Disallow: /cdn-cgi/
 Disallow: /media/static/
+Disallow: /errors/
+Disallow: /skin/
+Disallow: /lib/
 Disallow: /no-route
 Disallow: /*&multipass=true*
 Disallow: /*?multipass=true*
@@ -82,3 +83,28 @@ Disallow: /*&nofpc
 Disallow: /*?csredir
 Disallow: /*&csredir
 Disallow: /*?*&*&*&*
+Disallow: /*.php/admin*/*
+
+User-agent: baiduspider-image
+User-agent: baiduspider-video
+User-agent: msnbot-media
+User-agent: Googlebot-Image
+User-agent: Googlebot-Video
+Crawl-delay: 20
+
+User-agent: Baiduspider
+User-agent: CazoodleBot
+User-agent: Fasterfox
+User-agent: teracent-feed-processing
+User-agent: Jyxobot
+User-agent: MJ12bot
+User-agent: ShopWiki
+Disallow: /
+
+User-agent: Ingrid
+User-agent: msnbot
+User-agent: Slurp
+Crawl-delay: 20
+
+User-agent: rogerbot
+Crawl-delay: 2
