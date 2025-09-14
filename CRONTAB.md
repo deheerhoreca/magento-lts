@@ -7,6 +7,7 @@
 30   02  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-clean-redis.sh                           1>>${OLOG} 2>>${OERR}
 29   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-rebuild-cache.sh                         1>>${OLOG} 2>>${OERR}
 30   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-reindexer.sh                             1>>${OLOG} 2>>${OERR}
+02  */2  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-reindex-prices.sh                        1>>${OLOG} 2>>${OERR}
 30   04  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-reindex-dynamiccategory.sh               1>>${OLOG} 2>>${OERR}
 00   05  *  *  *    ~/httpdocs/deheerhoreca-magento/shell/cron-sooqr.sh                                 1>>${OLOG} 2>>${OERR}
 00   22  *  *  0    ~/httpdocs/deheerhoreca-magento/shell/cron-resave-products.sh                       1>>${OLOG} 2>>${OERR}
