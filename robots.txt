@@ -84,16 +84,18 @@ Disallow: /*?csredir
 Disallow: /*&csredir
 Disallow: /*?*&*&*&*
 Disallow: /*.php/admin*/*
-Crawl-delay: 2
 
 User-agent: baiduspider-image
 User-agent: baiduspider-video
 User-agent: msnbot-media
-User-agent: Googlebot-Image
-User-agent: Googlebot-Video
 User-agent: AhrefsBot
 User-agent: AhrefsSiteAudit
+User-agent: TerraCotta
 Crawl-delay: 20
+
+User-agent: Googlebot-Image
+User-agent: Googlebot-Video
+Disallow:
 
 User-agent: Baiduspider
 User-agent: CazoodleBot
