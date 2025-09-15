@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Collection;
+use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
+use \Illuminate\Support\Timebox;
+use \Illuminate\Support\Uri;
 
 // Taken from laravel/framework, did not want to install full package
 
@@ -63,7 +66,7 @@ if(!function_exists("dp")) {
    * @return mixed
    */
   function dp(array|ArrayAccess &$array, string $key, $value): mixed {
-    return data_append($array, $key, $value);
+    return data_push($array, $key, $value);
   }
 }
 
@@ -97,23 +100,39 @@ if(!function_exists("clampNumber")) {
 
 if(!function_exists("data_push")) {
   /**
-   * Add variable as an array, convert existing scalar if necessary. Allows pushing multiple values which will be merged.
+   * Append a value by dot notation.
+   * 
+   * - If the key does not exist or is NULL, it will be set to the value.
+   * - If the key exists and is an indexed array, the value(s) will be appended to it.
+   * - If a value exists and is scalar or an associative array, it will be converted to an indexed array, then merged with the new value.
    *
-   * @param  ArrayAccess|Iterable $array
-   * @param  string               $key
-   * @param  mixed                $value
-   * @return ArrayAccess|Iterable
+   * @param  array   $array
+   * @param  string  $key
+   * @param  mixed   $value
+   *
+   * @return array
    */
-  function data_push(ArrayAccess|Iterable &$array, string $key, mixed $add_value): ArrayAccess|Iterable {
-    $value = data_get($array, $key, []);
+  function data_push(array &$array, string $key, $value): array {
+    // Tried but broke product.attributes push:
+    // if(!Arr::has($array, $key) || blank($tmp = dg($array, $key))) {
+    //   return ds($array, $key, $value);
+    // }
     
-    if($value !== [] && (!is_iterable($value) || !array_is_list($value))) {
-      $value = [$value];
+    $tmp = dg($array, $key, []);
+    
+    if(!is_iterable($tmp)) {
+      $tmp = [$tmp];
+    } else {
+      $tmp = (array) $tmp;
     }
     
-    $value = array_merge($value, $add_value);
+    if(!is_iterable($value) || is_associative($value)) {
+      $tmp[] = $value;
+    } else {
+      $tmp = array_merge($tmp, $value);
+    }
     
-    return data_set($array, $key, $value);
+    return ds($array, $key, $tmp, overwrite: true);
   }
 }
 
