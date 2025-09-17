@@ -423,12 +423,6 @@ media
 /app/design/adminhtml/default/default/template/aoe_profiler
 /app/code/community/Fballiano/CategorySortDirection
 /app/etc/modules/Fballiano_CategorySortDirection.xml
-/app/design/frontend/base/default/template/pay/payment
-/app/design/adminhtml/base/default/template/pay/payment
-/app/etc/modules/Pay_Payment.xml
-/app/locale/nl_NL/Pay_Payment.csv
-/app/locale/en_US/Pay_Payment.csv
-/app/locale/it_IT/Pay_Payment.csv
 /app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php
 /app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit.php
 /app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Grid.php

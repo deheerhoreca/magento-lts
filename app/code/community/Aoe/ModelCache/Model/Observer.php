@@ -25,28 +25,28 @@ class Aoe_ModelCache_Model_Observer {
    * @var array<string, array<string, array<int, string>>>
    */
   protected array $data = [];
-
+  
   /**
    * Counter for total loaded models.
    *
    * @var int
    */
   protected int $loadedModels = 0;
-
+  
   /**
    * Config path to enable/disable logging.
    *
    * @var string
    */
   public const XML_PATH_MODEL_CACHE_ENABLED = 'dev/aoe_modelcache/log_active';
-
+  
   /**
    * Config path for log file location.
    *
    * @var string
    */
   public const XML_PATH_MODEL_CACHE_LOG_FILE = 'dev/aoe_modelcache/log_file';
-
+  
   /**
    * Records model load details if logging is enabled.
    *
@@ -58,20 +58,32 @@ class Aoe_ModelCache_Model_Observer {
     if (!$logActive) {
       return;
     }
-
+    
     $object = $event->getObject();
     $class = get_class($object);
     $id = $event->getValue();
-
+    
     $this->data[$class][$id] ??= [];
     $trace = debug_backtrace();
-    $location = $trace[5]['file'] ?? 'unknown';
-    $location .= isset($trace[5]['line']) ? ':' . $trace[5]['line'] : '';
-
+    
+    // The real caller is 5 levels up the stack
+    $location = $trace[5]["file"] ?? "unknown";
+    $location .= isset($trace[5]["line"]) ? ":" . $trace[5]["line"] : "";
+    
+    // DHH: Add max two more levels to get more context
+    if(isset($trace[6])) {
+      $location .= ", ".($trace[6]["file"] ?? "unknown");
+      $location .= isset($trace[6]["line"]) ? ":" . $trace[6]["line"] : "";
+    }
+    if(isset($trace[7])) {
+      $location .= ", ".($trace[7]["file"] ?? "unknown");
+      $location .= isset($trace[7]["line"]) ? ":" . $trace[7]["line"] : "";
+    }
+    
     $this->data[$class][$id][] = $location;
     $this->loadedModels++;
   }
-
+  
   /**
    * Processes and writes repeated load data to the log file.
    *
@@ -88,7 +100,6 @@ class Aoe_ModelCache_Model_Observer {
     }
     $logFile = Mage::getStoreConfig(self::XML_PATH_MODEL_CACHE_LOG_FILE);
     
-
     // remove every id that was called only once
     foreach ($this->data as $className => $classes) {
       foreach ($classes as $id => $lineAndFiles) {
@@ -110,7 +121,8 @@ class Aoe_ModelCache_Model_Observer {
         $summary .= "{$className}:".PHP_EOL;
         foreach ($ids as $id => $locations) {
           $locations = Arr::map($locations, fn($item) => Str::chopStart($item, $cwd));
-          $summary .= "- ID: $id, Count: " . count($locations) . ", Locations: " . implode(', ', $locations) . PHP_EOL;
+          $summary .= "- ID: $id, Count: " . count($locations) . ", Locations:\n";
+          $summary .= "  - ".implode(PHP_EOL."  - ", $locations) . PHP_EOL;
         }
       }
       
