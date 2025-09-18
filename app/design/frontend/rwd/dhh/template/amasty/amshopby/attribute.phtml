@@ -49,7 +49,7 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
     case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_ONLY:
       if ($this->getShowSearch()):?>
         <li rel="search">
-          <input id="amshopby_attr_search_<?=$attribute_name?>" type="text" class="input-text amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)" autocomplete="off" placeholder=">
+          <input id="amshopby_attr_search_<?=$attribute_name?>" type="text" class="input-text amshopby_attr_search input-text" onkeyup="amshopby_attr_search(this)" autocomplete="off" placeholder="">
         </li>
       <?php endif;
 
@@ -64,12 +64,16 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
         if (mb_strlen($label) > 27) $label = mb_substr($label, 0, 24) . '...';
 
         $checkboxHtml = (str_contains($item['css'], 'amshopby-attr-selected')) ? '<span class="amshopby-choice"></span>' : '';
-
+        
         $liAttrs = [];
         if (!empty($item['style'])) $liAttrs[] = $item['style'];
         if (isset($item['default_sort'])) $liAttrs[] = 'data-default_sort="' . htmlspecialchars($item['default_sort']) . '"';
         if (isset($item['featured_sort'])) $liAttrs[] = 'data-featured_sort="' . htmlspecialchars($item['featured_sort']) . '"';
         $liAttrs[] = 'data-text="' . htmlspecialchars($item['label']) . '"';
+        
+        if(empty($item['rel'])) {
+          $item['rel'] = "relf='nofollow'";
+        }
       ?>
         <li <?=implode(' ', $liAttrs)?>>
           <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item['url']?>" data-config='<?=$item['data-config']?>' title="<?=htmlspecialchars($item['label'])?>"><?=htmlspecialchars($label) . $countHtml?></a>

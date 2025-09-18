@@ -1010,8 +1010,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                     <?=$this->getPriceHtml($_product) ?>
                     <?=$this->getChildHtml("bundle_prices") ?>
                     <?=$this->getTierPriceHtml() ?>
-                  </div>
-                  <?php
+                  </div><?php
                   echo "<div class='{$txtcltcz}'>{$stock_message}{$stock_message_tooltip}</div>";
                   echo $buyblock_free_delivery_content;
                   echo "<ul class='fa-ul'>";
@@ -1027,29 +1026,40 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo "</ul>";
                   
                   // SYNC WITH app/code/local/DeHeerHoreca/Util/Helper/Util.php
-                  
                   $now = CarbonImmutable::now();
-                  if($supplier_sys === "hendi" && $now->isBefore("2025-08-31 00:00:00")) {
-                    ?>
+                  
+                  // if($supplier_sys === "hendi" && $now->isBefore("2025-08-31 00:00:00")) {
+                  //   ? >
+                  //   <div class="card mx-auto p-2 mb-2">
+                  //     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
+                  //     <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                  //     <div class="card-body">
+                  //       <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
+                  //       <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
+                  //       <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 augustus 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                  //     </div>
+                  //   </div>< ?php
+                  // }
+                  
+                  if($supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
-                      <img src="//images.chefstore.nl/media/wysiwyg/brands/hendi.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/bartscher.png?tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
-                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">HENDI5</span></h4>
-                        <p class="card-text">Korting geldt voor alle producten van Hendi. Gebruik deze code bij het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 augustus 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">BARTSCHER5</span></h4>
+                        <p class="card-text">Korting geldt voor alle producten van Bartscher. Gebruik deze code tijdens het afrekenen.</p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 oktober 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div><?php
                   }
                   
                   elseif($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
-                  "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N",
-                  "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW",
-                  "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M",
-                  "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
-                  "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G",
-                  "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8", "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"], true)) {
-                    ?>
+                    "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N",
+                    "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW", "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2",
+                    "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
+                    "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G",
+                    "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8", "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2",
+                  ], true)) { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
                       <img src="//images.chefstore.nl/media/wysiwyg/brands/diverso_by_diamond.png?v=1&tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
@@ -1062,10 +1072,9 @@ if($stock_data["overall_stock_status"] === "backorder"
                   } else {
                     echo "<span style='display:none;'>{$supplier_name}</span>";
                   }
-
+                  
                   echo $this->getChildHtml("addtocart");
-                  echo $this->getChildHtml("addto");
-                  ?>
+                  echo $this->getChildHtml("addto"); ?>
                 </div>
                 <?php
                 if($eol === true) {
@@ -1333,7 +1342,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                 $language       = strtoupper(" (".implode(", ", (array) $language).")");
               }
               echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer ugc'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
               echo "</li>";
             }
           }
