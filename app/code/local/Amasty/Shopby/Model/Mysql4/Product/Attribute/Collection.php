@@ -8,7 +8,10 @@
 /**
  * Copyright © 2016 Amasty. All rights reserved.
  */
-class Amasty_Shopby_Model_Mysql4_Product_Attribute_Collection extends Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection
+
+// DHH CORE HACKED
+
+class Amasty_Shopby_Model_Mysql4_Product_Attribute_Collection extends Mage_Catalog_Model_Resource_Product_Attribute_Collection
 {
     /**
      * initialize select object

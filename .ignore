@@ -27,7 +27,6 @@
 /dev/tests/functional/generated
 /dev/tests/functional/vendor
 
-/media
 /lib/n98-magerun
 /vendor/magento-hackathon/magento-composer-installer
 /vendor/openmage/magento-lts
@@ -86,6 +85,13 @@ CHANGELOG.md
 LICENSE
 LICENSE-APACHE
 LICENSE-GPL
+
+# Exclude upgrade sql from search:
+# app/code/*/*/*/sql/bundle_setup/*.php
+# app/code/*/*/*/sql/catalog_setup/*.php
+mysql4-upgrade-*.php
+upgrade-*.php
+install-*.php
 
 # PhpUnits
 tests/coverage
@@ -152,18 +158,8 @@ phpunit.xml
 /skin/assets/
 
 # FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
-/media/amfeed
-/media/cache
-/media/attachment
-/media/productattachment
-/media/import
-/media/sooqr
-/media/qquoteadv
-/media/catalog
-/media/tmp
-/media/dhh
-/media/wysiwyg
-/media.nfs
+/media/
+/media.nfs/
 
 # BILLER WEBHOOK
 /biller-webhook-errors.jsonl
