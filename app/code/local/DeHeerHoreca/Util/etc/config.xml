@@ -92,6 +92,16 @@
         </observers>
       </googleanalytics_ga4_send_data_before>
       
+      <!-- Add data to GA4 events -->
+      <catalog_product_flat_prepare_columns>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>alterProductFlatCols</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_flat_prepare_columns>
+      
     </events>
     <blocks>
       <adminhtml>

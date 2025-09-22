@@ -3,6 +3,8 @@
 use \Elastic\Apm\ElasticApm;
 use \Elastic\Apm\TransactionInterface;
 use \Chefstore\Helper;
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Str;
 
 class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
@@ -543,5 +545,91 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
 
       // dump($ga4DataTransport->getData());
     // }
+  }
+  
+  /**
+   * Change some product flat attribute column types to avoid issues with the maximum 
+   * 
+   * Observes catalog_product_flat_prepare_columns.
+   *
+   * @param  Varien_Event_Observer $observer
+   */
+  public static function alterProductFlatCols(Varien_Event_Observer &$observer): void {
+    /** @var Varien_Db_Ddl_Table $columnsObject */
+    $columnsObject  = $observer->getEvent()->getColumns();
+    $columns        = $columnsObject->getColumns();
+    ksort($columns);
+    $columns        = Arr::mapWithKeys($columns,
+      function($config, $attr_code): array {
+        $config = Arr::prepend($config, null, "orig_type");
+        $config = Arr::prepend($config, $attr_code, "attr_code");
+        
+        // Reduce Ja/Nee/N.v.t./Optioneel/NULL to a small varchar
+        if(in_array($attr_code, [
+          "has_adjustable_shelves_value",
+          "has_passthrough_value",
+          "has_induction_value",
+          "with_glass_top_value",
+          "with_heating_value",
+          "freezer_safe_value",
+          "is_food_contact_safe_value",
+          "is_tiltable_value",
+          "opstaande_rand_value",
+          "afsluitbaar_value",
+          "aftap_value",
+          "eol_value",
+          "motor_value",
+          "self_closing_value",
+          "bestelartikel_value",
+          "disposable_value",
+          "collapsible_value",
+          "zeepdoseerpomp_value",
+          "door_heating_value",
+          "eu_eco_label_value",
+          "ean",
+          "ean13",
+          "is_roll_in_value",
+          "recommended_product_value",
+          "winter_control_value",
+          "verrijdbaar_value",
+          "afvalgat_value",
+          // "energy_efficiency_class_a_g_value",       > 16 chars
+          // "energieklasse_value",                     > 16 chars
+        ])) {
+          // printr("{$attr_code} {$config["type"]} => varchar(32)");
+          $config["orig_type"] = $config["type"];
+          $config["type"] = "varchar(16)";
+        }
+        
+        // TEXT for multiselects is overkill, use a smaller VARCHAR
+        elseif(in_array($attr_code, ["power_mains"])) {
+          // printr("{$attr_code} {$config["type"]} => varchar(255)");
+          $config["orig_type"] = $config["type"];
+          $config["type"] = "varchar(255)";
+        }
+        
+        // Print some uncaught attributes which might need attention
+        elseif(
+          Str::is("has_*_value", $attr_code) ||
+          Str::is("with_*_value", $attr_code) ||
+          Str::is("is_*_value", $attr_code) ||
+          Str::is("*_safe*value", $attr_code) ||
+          Str::is("*_value", $attr_code) ||
+          $config["type"] === "text"
+        ) {
+          // printr("{$attr_code} {$config["type"]} unchanged");
+        } elseif($config["type"] === "varchar(255)") {
+          // printr("{$attr_code} {$config["type"]} unchanged");
+        } else {
+          // printr("{$attr_code} {$config["type"]} unchanged");
+        }
+        
+        return [$attr_code => $config];
+      }
+    );
+    
+    // echo array_to_table($columns, true);
+    data_forget($columns, ["*.attr_code", "*.orig_type"]);
+    $columnsObject->setColumns($columns);
   }
 }
