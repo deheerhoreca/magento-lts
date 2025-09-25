@@ -105,8 +105,9 @@ phpunit.xml
 ._*
 /sitemap_watdachtjezelf*.xml
 /google_shopping_vijfbatmansymbol.*
+/protected/*.json
 /protected/*.xml
-/protected/*.zip
+/protected/*.xml.zip
 /bridge_*.php
 /google*.html
 /BingSiteAuth.xml

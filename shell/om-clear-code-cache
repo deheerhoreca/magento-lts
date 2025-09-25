@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Clear various caches to ensure code changes are picked up
+
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
+
+. ${HOME}/.bash_profile
+
+cm
+. ./shell/cron-bootstrap.sh
+
+ELASTIC_APM_ENABLED=false mcachetool apcu:cache:clear
+ELASTIC_APM_ENABLED=false mcachetool opcache:reset
+n98 cache:clean
+ci && intel --action=push:catalog-magento1:clear_cache_by_tag --which="DHH_CMS,DHH_cms_index_index"
+
+cm
+. ./shell/cron-wrapup.sh

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Sync media feeds from media to root and protected/
+# @todo: Automated upstream instead of this script
+
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
+
+. ${HOME}/.bash_profile
+
+cm
+. ./shell/cron-bootstrap.sh
+
+rsync -rhi --times --update --stats --perms --info=progress2  ./media/feedsA9B1/*.xml*  ./
+rsync -rhi --times --update --stats --perms --info=progress2  ./media/feedsA9B1/*.xml*  ./protected/
+
+cm
+. ./shell/cron-wrapup.sh
