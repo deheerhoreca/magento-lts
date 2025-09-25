@@ -109,7 +109,7 @@
     # Insert filter on all content
     ###SetOutputFilter DEFLATE
     # Insert filter on selected content types only
-    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
 
     # Netscape 4.x has some problems...
     #BrowserMatch ^Mozilla/4 gzip-only-text/html
@@ -315,6 +315,10 @@
 ############################################
 ## Add default Expires header
 ## http://developer.yahoo.com/performance/rules.html#expires
+    # Add correct content-type for fonts, without this, .woff2 files have no content-type
+    AddType application/vnd.ms-fontobject .eot
+    AddType font/woff2 .woff2
+    
     ExpiresActive On
     ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/jpg "access plus 1 year"
@@ -327,6 +331,11 @@
     ExpiresByType application/x-shockwave-flash "access plus 1 month"
     ExpiresByType image/x-icon "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
     ExpiresDefault "access plus 1 hour"
     Header append Cache-Control "public"
 </IfModule>
@@ -431,7 +440,7 @@
 # <//images.chefstore.nl/>;rel=preconnect,<//www.googletagmanager.com>;rel=preconnect,<//td.doubleclick.net>;rel=preconnect,<//googleads.g.doubleclick.net>;rel=preconnect,
 
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2|webmanifest)$)[^\.]+?$">
-    Header add Link "<//v2.zopim.com>;rel=dns-prefetch,<//static.zdassets.com>;rel=preconnect,<//ekr.zdassets.com>;rel=preconnect"
+    Header add Link "<https://v2.zopim.com>;rel=dns-prefetch,<https://static.zdassets.com>;rel=preconnect,<https://ekr.zdassets.com>;rel=preconnect"
 </FilesMatch>
 
 ###########################################

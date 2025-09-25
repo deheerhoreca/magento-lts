@@ -257,7 +257,6 @@ class CacheBuster {
   }  
   
   public static function _addTimestampToUrl(string $url, ?string $baseUrl = null, ?string $basePath = null) {
-    
     $GLOBALS["dhh_om_fs_mapping"] ??= [
       ['value' => Mage_Core_Model_Store::URL_TYPE_JS,    'label' => "/js/"],
       ['value' => Mage_Core_Model_Store::URL_TYPE_MEDIA, 'label' => "/media/"],

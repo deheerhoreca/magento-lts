@@ -203,7 +203,7 @@ class MagicZoomPlusModuleCoreClass
             $dataImage2x = '';
         }
 
-        return "<a id=\"MagicZoomPlusImage{$id}\" {$dataImage2x} class=\"MagicZoom\" href=\"{$img}\"{$group}{$link}{$title}{$options}><img class=\"no-sirv-lazy-load\" itemprop=\"image\" src=\"{$thumb}\" {$thumb2x}  alt=\"{$alt}\"{$width}{$height} /></a>{$message}";
+        return "<a id=\"MagicZoomPlusImage{$id}\" {$dataImage2x} class=\"MagicZoom\" href=\"{$img}\"{$group}{$link}{$title}{$options}><img class=\"no-sirv-lazy-load\" itemprop=\"image\" src=\"{$thumb}\" {$thumb2x}  alt=\"{$alt}\"{$width}{$height} fetchpriority=\"high\"></a>{$message}";
     }
 
     /**

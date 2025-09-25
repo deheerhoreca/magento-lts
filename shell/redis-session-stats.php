@@ -3,8 +3,7 @@
 // Taken from: vendor/colinmollenhour/magento-redis-session/sessionStats.php
 // mphp -c etc/php.cmd.ini shell/redis-session-stats.php sess_* http_user_agent writes
 
-use Illuminate\Support\Str;
-use MathieuViossat\Util\ArrayToTextTable;
+use \Illuminate\Support\Str;
 
 if(php_sapi_name() !== "cli") {
   header("Location: /");
@@ -100,8 +99,7 @@ array_multisort($sortKeys, SORT_DESC | SORT_NUMERIC, $groupedData);
 
 // dump($groupBy);
 
-$renderer = new ArrayToTextTable($groupedData);
-echo $renderer->getTable();
+echo array_to_table($groupedData);
 
 // echo "Count\tAvgWr\t$groupBy\n";
 // foreach($groupedData as $key => $stats) {

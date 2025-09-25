@@ -1,7 +1,5 @@
 <?php
 
-// use dekor\ArrayToTextTable;
-
 // @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
 
 /**
@@ -144,7 +142,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
       Mage::log($e->getMessage(), null, "atwix_rewrites_doctor.log", true);
     }
 
-    // echo (new ArrayToTextTable($debug_data))->render().PHP_EOL;
+    // echo array_to_table($debug_data);
   }
   
   // Remove extra product url rewrites leaving $left of last

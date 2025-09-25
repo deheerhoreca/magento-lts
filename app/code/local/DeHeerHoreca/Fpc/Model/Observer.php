@@ -8,7 +8,8 @@ function _dhh_ips() {
     // "87.210.61.235",
     // "185.127.111.227",
     // "81.59.51.217",
-    "62.250.253.55",
+    // "62.250.253.55",
+    "31.201.36.137",
   ];
 }
 
@@ -38,10 +39,17 @@ if(DHH_FPC_DEBUG) {
 
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
-  public function ServeCachedHTML($observer) {
-    
+  /**
+   * Serve cached HTML if available.
+   * 
+   * Observes controller_action_predispatch event.
+   *
+   * @param  mixed $observer
+   * 
+   * @return void
+   */
+  public function ServeCachedHTML($observer): void {
     Varien_Profiler::start("DHH::FPC::ServeCachedHTML");
-    
     $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
     $read_cache = Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, false, "fpc");
     
@@ -54,8 +62,12 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     $key = Mage::helper("deheerhoreca_fpc/data")->get_cache_key();
     $html = Mage::helper("deheerhoreca_fpc/data")->get_cached_html($key, true, true);
 
-    if(empty($html) === false) {
-     if(print($html)) {
+    if(!empty($html)) {
+      
+      // This normally runs from the observer http_response_send_before, but not in case of an FPC hit:
+      $html = Fballiano_CssjsMinify_Model_Observer::minifyCssJs($html);
+      
+      if(print($html)) {
         flush();
         Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "HIT");
         // To allow for closing actions (AoE Profiler is one)
@@ -66,15 +78,19 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     
     Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "MISS");
-    
     Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
   }
   
-  public function clearProductCache($observer) {
+  /**
+   * Clear product cache on product save.
+   *
+   * @param  mixed $observer
+   * 
+   * @return bool
+   */
+  public function clearProductCache($observer): bool {
     $productId = $observer->getProduct()->getId();
-    
     $cache_tags = ["DHH_PRODUCT_{$productId}"];
-    
     foreach($observer->getProduct()->getCategoryIds() as $category_id) {
       $cache_tags[] = "DHH_CATEGORY_{$category_id}";
     }
@@ -82,14 +98,20 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
   
-  public function clearCategoryCache($observer) {
+  /**
+   * Clear category cache on category save.
+   *
+   * @param  mixed $observer
+   * 
+   * @return bool
+   */
+  public function clearCategoryCache($observer): bool {
     $category_id = $observer->getEvent()->getCategory()->getId();
-    
     if(empty($category_id)) {
       return true;
     }
-    
     $cache_tags = ["DHH_CATEGORY_{$category_id}"];
+    
     return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
 }

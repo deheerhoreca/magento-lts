@@ -1291,7 +1291,15 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $url;
   }
   
-  public static function addToClickLog($key, $val):void {
+  /**
+   * Add key/value pair to the click log.
+   *
+   * @param  mixed $key
+   * @param  mixed $val
+   * 
+   * @return void
+   */
+  public static function addToClickLog(mixed $key, mixed $val): void {
     global $dhh_click_log;
     $dhh_click_log[$key] = $val;
   }

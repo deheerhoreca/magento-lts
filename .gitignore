@@ -455,3 +455,5 @@ media
 /app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml
 /app/etc/modules/Elidrissidev_Api2BasicAuth.xml
 /app/locale/en_US/Elidrissidev_Api2BasicAuth.csv
+/app/code/community/Fballiano/CssjsMinify
+/app/etc/modules/Fballiano_CssjsMinify.xml

@@ -336,7 +336,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     if(empty($html)) {
       self::log("Cache MISS: {$key}");
-      self::_add_server_timing_header("FPC miss");
+      self::_add_server_timing_header("FPC miss: {$key}");
       return null;
     }
     
@@ -464,7 +464,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     $size = mb_strlen((string) $html);
     self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
-    self::_add_server_timing_header("FPC hit");
+    self::_add_server_timing_header("FPC hit: {$key}");
     self::_emit_server_timing_header();
     
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
@@ -541,7 +541,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Store in cache
     if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {
       self::log("Cache: SAVED {$key}, ".mb_strlen((string) $html)." chars");
-      self::_add_server_timing_header("FPC saved");
+      self::_add_server_timing_header("FPC saved: {$key}");
       self::_emit_server_timing_header();
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return true;

@@ -9,7 +9,6 @@ use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
 use \Illuminate\Support\Timebox;
 use \Illuminate\Support\Uri;
-// use \dekor\ArrayToTextTable;
 use \MathieuViossat\Util\ArrayToTextTable;
 
 /**
@@ -39,7 +38,7 @@ if(!function_exists("rescue")) {
         if (is_string($exception)) {
           $exception = new Exception($exception);
         }
-        logger("Rescued exception: {$exception->getMessage()}", "ERROR");
+        // logger("Rescued exception: {$exception->getMessage()}", "ERROR");
       }
 
       return value($rescue, $exception);
@@ -419,10 +418,10 @@ if(!function_exists("array_to_table")) {
     try {
       $output = $renderer->getTable();
     } catch(TypeError $e) {
-      logger("TypeError while printing array to table: ".$e->__toString(), "ERROR");
+      // logger("TypeError while printing array to table: ".$e->__toString(), "ERROR");
       return false;
     } catch(Exception $e) {
-      logger("Exception while printing array to table: ".$e->__toString(), "ERROR");
+      // logger("Exception while printing array to table: ".$e->__toString(), "ERROR");
       return false;
     }
     
