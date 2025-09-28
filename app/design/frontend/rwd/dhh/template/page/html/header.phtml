@@ -1,13 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @var Mage_Page_Block_Html_Header $this
  */
 // echo $this->getLayout()->createBlock("cms/block")->setBlockId("header_top")->toHtml();
 
 // if(Mage::getSingleton("customer/session")->isLoggedIn()) {
-  // $account_url = $this->helper("customer")->getAccountUrl();
+// $account_url = $this->helper("customer")->getAccountUrl();
 // } else {
-  // $account_url = Mage::getUrl("customer/account/login");
+// $account_url = Mage::getUrl("customer/account/login");
 // }
 ?>
 <header id="header" class="page-header header grid-inside scrlng">
@@ -15,21 +18,21 @@
     <div class="header__inside">
       <div class="skip-links headerrightcontents">
         <a class="main-logo" href="/">
-          <img id="main-logo" src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/logo-chefstore.min.svg?v=2" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208">
+          <img id="main-logo" src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/logo-chefstore.ts1741106066.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208">
         </a>
-        <div id="header-search" ><?=$this->getChildHtml("topSearch")?></div>
+        <div id="header-search"><?= $this->getChildHtml("topSearch") ?></div>
         <div class="account-cart-wrapper">
           <span class="ms-1 ms-sm-2"><a class="glightbox4 btn btn-primary toplink-phone skip-phone top-link" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;"><i class="fa fa-phone fa-2x fa-fw" title="Bellen"></i></a></span>
           <span class="ms-1 ms-sm-2"><a class="skip-account top-link" href="<?php echo Mage::getUrl("customer/account"); ?>" title="Account"><i class="fa fa-user-circle fa-2x fa-fw"></i></a></span>
-          <span class="ms-1 ms-sm-2"><?=$this->getChildHtml("miniquote_head")?></span>
-          <span class="ms-1 ms-sm-2"><?=$this->getChildHtml("minicart_head")?></span>
+          <span class="ms-1 ms-sm-2"><?= $this->getChildHtml("miniquote_head") ?></span>
+          <span class="ms-1 ms-sm-2"><?= $this->getChildHtml("minicart_head") ?></span>
         </div>
       </div>
     </div>
   </div>
 
   <div id="header-nav" class="skip-content">
-    <?=$this->getChildHtml("topMenu")?>
+    <?= $this->getChildHtml("topMenu") ?>
   </div>
   <div class="clzinfopagetop px-1">
     <div class="pageinfotpinner animate" id="topbar">
@@ -44,5 +47,5 @@
       </span>
     </div>
   </div>
-  <?=$this->getChildHtml("topContainer")?>
+  <?= $this->getChildHtml("topContainer") ?>
 </header>

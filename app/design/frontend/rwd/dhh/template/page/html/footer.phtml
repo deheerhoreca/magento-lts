@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 $html = <<<EOT
 <!-- footer_start -->
 <footer>
@@ -128,8 +131,8 @@ echo $html;
 $key = DHH_FPC_FOOTER_KEY; // "DHH_CMS_FOOTER"
 if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
   if(Mage::app()->getCache()->save($html, $key , ["DHH_CMS"], 24 * 3600)) {
-    DeHeerHoreca_Fpc_Helper_Data::log("Cache: SAVED {$key}, ".strlen($html)." chars");
+    DeHeerHoreca_Fpc_Helper_Data::log("Cache: SAVED {$key}, ".mb_strlen($html)." chars");
   }
 } else {
-  DeHeerHoreca_Fpc_Helper_Data::log("Cache: NOT SAVED {$key}, ".strlen($html)." chars");
+  DeHeerHoreca_Fpc_Helper_Data::log("Cache: NOT SAVED {$key}, ".mb_strlen($html)." chars");
 }

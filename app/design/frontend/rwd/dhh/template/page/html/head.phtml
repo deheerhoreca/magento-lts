@@ -1,13 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 /*
 - @see https://speakerdeck.com/csswizardry/get-your-head-straight
 - @see https://fishpig.co.uk/magento/optimisation/remove-default-magento-javascript/
-- /js/ext-translator.js has to be updated manually and loaded after getCssJsHtml()!
 <!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memtYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWqWuU6F.woff2" as="font" type="font/woff2"> -->
 <!-- <link rel="preload" href="/skin/frontend/rwd/dhh/fonts/opensans/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2" as="font" type="font/woff2"> -->
-<?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
+- /js/ext-translator.js has to be updated manually and loaded after getCssJsHtml()!
+  Regenerate: <?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
 */
+
 $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string) $this->getTitle());
+
 ?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +28,7 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.ts1741106066.min.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/skin/assets/glightbox/dist/css/glightbox.ts1741106066.min.css" media="print" onload="this.media='all'">
 <?=$this->getChildHtml()?>
-<script src="/js/ext-translator.ts1741106066.js" defer></script>
+<script src="/js/ext-translator.js" defer></script>
 <?=$this->getIncludes()?>
 <meta name="description" content="<?=htmlspecialchars((string) $this->getDescription())?>">
 <meta name="keywords" content="<?=htmlspecialchars((string) $this->getKeywords())?>">

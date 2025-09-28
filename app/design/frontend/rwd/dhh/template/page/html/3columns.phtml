@@ -1,4 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
+use \Chefstore\Html;
+
 $tx_name        = (string) (Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name() ?? "unknown");
 $env            = (string) (ini_get("elastic_apm.environment") ?? "unknown");
 $body_class     = (string) $this->getBodyClass();
@@ -45,6 +50,6 @@ $current_route  = (string) $this->getRequest()->getRouteName();
       </div>
     </div>
     <?=$this->getAbsoluteFooter()?>
-    <?=\Chefstore\Html::writeJsStatements()?>
+    <?=Html::writeJsStatements()?>
   </body>
 </html>

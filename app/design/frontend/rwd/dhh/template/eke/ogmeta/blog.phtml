@@ -1,26 +1,26 @@
 <?php
 $helper = Mage::helper("eke_ogmeta");
+
 if (!$helper->isOgMetaEnabled()) {
-    return;
+  return;
 }
+
 $image = $helper->getOgImage();
 $siteName = $helper->getSiteName();
-/*
- * DHH CORE HACK: we must supress errors since the image might not exist
- */
-//$imageAttr = getimagesize($image);
+
+// DHH: Supress errors since the image might not exist
 $imageAttr = @getimagesize($image);
 ?>
 <meta property="og:locale" content="nl_NL">
 <meta property="og:locale:alternate" content="nl_BE">
-<meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
-<meta property="og:site_name" content="<?php echo $siteName; ?>" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" />
-<meta property="og:image" content="<?php echo $image; ?>" />
-<meta property="og:image:type" content="<?php echo $imageAttr['mime']; ?>" />
-<meta property="og:image:width" content="<?php echo $imageAttr[0]; ?>" />
-<meta property="og:image:height" content="<?php echo $imageAttr[1]; ?>" />
-<meta property="og:image:alt" content="<?php echo $this->getLayout()->getBlock('head')->getTitle(); ?>" />
-<meta property="og:description" content="<?php echo $this->getLayout()->getBlock('head')->getDescription(); ?>" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="<?= $this->getLayout()->getBlock('head')->getTitle() ?>">
+<meta property="og:site_name" content="<?= $siteName ?>">
+<meta property="og:type" content="website">
+<meta property="og:url" content="<?= $this->helper('core/url')->getCurrentUrl() ?>">
+<meta property="og:image" content="<?= $image ?>">
+<meta property="og:image:type" content="<?= $imageAttr['mime'] ?>">
+<meta property="og:image:width" content="<?= $imageAttr[0] ?>">
+<meta property="og:image:height" content="<?= $imageAttr[1] ?>">
+<meta property="og:image:alt" content="<?= $this->getLayout()->getBlock('head')->getTitle() ?>">
+<meta property="og:description" content="<?= $this->getLayout()->getBlock('head')->getDescription() ?>">
+<meta name="twitter:card" content="summary">
