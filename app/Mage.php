@@ -889,9 +889,9 @@ final class Mage
             return;
         }
         
-        // DHH CORE HACK -- Suppress rules and force log file name
+        // DHH CORE HACK -- Suppress rules and force log file name for most destinations
         // $logActive    = true;
-        if(!in_array($file, ["verbose.txt", "aoemodelcache.txt"], true)) {
+        if(!in_array($file, ["verbose.txt", "aoemodelcache.txt", "paynl.log"], true)) {
             $file = "system.log";
         }
         // $maxLogLevel  = Zend_Log::DEBUG;
