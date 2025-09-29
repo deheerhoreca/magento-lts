@@ -529,7 +529,7 @@
 
     # # IMAGES
     # <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
-        # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
+    #    Etag is not disabled because we don't use mod_pagespeed extend_cache for images
     #     Header set Cache-Control "public, max-age=3600"
     # </FilesMatch>
 
