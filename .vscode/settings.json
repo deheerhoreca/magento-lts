@@ -62,7 +62,6 @@
     "**/sql/*/mysql*.php": true,
     "**/var/cache": true,
     "**/var/debug": true,
-    "**/var/log": true,
     "**/var/package": true,
     "**/var/report": true,
     "**/var/tmp": true
