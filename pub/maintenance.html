@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <title>Chefstore — Even chefs nemen een pauze</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light">
+  <!-- Hint: serve this file with HTTP 503 and Retry-After: 7200 at the webserver/proxy level -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #ff6a00;
+      --accent-2: #ff8a3d;
+      --ok: #16a34a;
+      --ring: rgba(255, 106, 0, .18);
+      --shadow: 0 6px 24px rgba(0,0,0,.08);
+      --radius: 14px;
+    }
+    * { box-sizing: border-box }
+    html,body { height: 100% }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(255,106,0,.06), transparent) no-repeat, var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 24px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      user-select: none;
+    }
+    .brand-logo { height: 40px; width: auto; display: block; }
+    .card {
+      display: grid;
+      grid-template-columns: 1fr;
+      max-width: 980px;
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .media {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.12)),
+        url("https://source.unsplash.com/1600x900/?kitchen,restaurant,break") center/cover no-repeat;
+    }
+    .content {
+      padding: clamp(18px, 4vw, 32px);
+      display: grid;
+      gap: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(22px, 2.6vw, 32px);
+      line-height: 1.15;
+      letter-spacing: .2px;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: clamp(15px, 1.6vw, 17px);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: max-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, .08);
+      color: #166534;
+      border: 1px solid rgba(22, 163, 74, .25);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .timer {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(70px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+      max-width: 520px;
+    }
+    .slot {
+      background: rgba(0,0,0,.03);
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+      gap: 2px;
+    }
+    .num { font-size: 26px; font-weight: 800; letter-spacing: .3px }
+    .lab { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px }
+    .cta-row {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;
+    }
+    .btn {
+      appearance: none; border: 0; cursor: pointer;
+      padding: 12px 16px; border-radius: 12px;
+      font-weight: 700; letter-spacing: .2px; text-decoration: none;
+      box-shadow: 0 6px 20px var(--ring);
+      color: #101316; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      transition: transform .06s ease, filter .2s ease;
+    }
+    .btn:active { transform: translateY(1px) }
+    .btn.alt {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid #d1d5db;
+      box-shadow: none;
+    }
+    footer { color: var(--muted); }
+    @media (min-width: 860px) {
+      .card { grid-template-columns: 5fr 6fr }
+      .media { height: 100%; aspect-ratio: auto; min-height: 100% }
+      .content { padding: 36px }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/" aria-label="Chefstore">
+        <img
+          class="brand-logo"
+          src="./assets/logo-chefstore.min.svg"
+          alt="Chefstore"
+          height="40"
+          width="160"
+          loading="eager"
+          decoding="async"
+        />
+      </a>
+    </header>
+
+    <main>
+      <article class="card" role="status" aria-live="polite">
+        <div class="media" role="img" aria-label="Keukenbrigade op een korte pauze"></div>
+        <div class="content">
+          <span class="pill">We zijn zo terug</span>
+          <h1>De brigade neemt een rook-/koffiepauze</h1>
+          <p class="lead">
+            De ovens blijven warm, maar onze servers krijgen even frisse lucht. Verwachte terugkomst: binnen 2 uur.
+          </p>
+
+          <div class="timer" id="timer" aria-label="Aftellen tot terug online">
+            <div class="slot"><div class="num" id="dh">02</div><div class="lab">uur</div></div>
+            <div class="slot"><div class="num" id="dm">00</div><div class="lab">min</div></div>
+            <div class="slot"><div class="num" id="ds">00</div><div class="lab">sec</div></div>
+            <div class="slot"><div class="num" id="eta">19:00</div><div class="lab">terug</div></div>
+          </div>
+
+          <div class="cta-row">
+            <a class="btn" href="mailto:service@chefstore.nl">Stuur ons een bericht</a>
+          </div>
+
+          <p class="hint">
+            Tip: ververs deze pagina af en toe — we zetten de mise en place strak en gaan weer open zodra alles staat.
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      © Chefstore. Alle rechten voorbehouden.
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      // Target: two hours from page load
+      var target = new Date(Date.now() + 2 * 60 * 60 * 1000);
+      var dh = document.getElementById("dh");
+      var dm = document.getElementById("dm");
+      var ds = document.getElementById("ds");
+      var eta = document.getElementById("eta");
+
+      function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+      function tick() {
+        var now = new Date();
+        var diff = Math.max(0, target - now);
+        var s = Math.floor(diff / 1000);
+        var h = Math.floor(s / 3600); s -= h * 3600;
+        var m = Math.floor(s / 60);   s -= m * 60;
+
+        dh.textContent = pad(h);
+        dm.textContent = pad(m);
+        ds.textContent = pad(s);
+
+        try {
+          eta.textContent = new Intl.DateTimeFormat(navigator.language || "nl-NL", {
+            hour: "2-digit", minute: "2-digit"
+          }).format(target);
+        } catch (e) {
+          eta.textContent = target.toTimeString().slice(0,5);
+        }
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</body>
+</html>
+        var h = Math.floor(s / 3600); s -= h * 3600;
+        var m = Math.floor(s / 60);   s -= m * 60;
+
+        dh.textContent = pad(h);
+        dm.textContent = pad(m);
+        ds.textContent = pad(s);
+
+        try {
+          eta.textContent = new Intl.DateTimeFormat(navigator.language || "nl-NL", {
+            hour: "2-digit", minute: "2-digit"
+          }).format(target);
+        } catch (e) {
+          eta.textContent = target.toTimeString().slice(0,5);
+        }
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</body>
+</html>
