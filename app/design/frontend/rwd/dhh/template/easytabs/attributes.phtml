@@ -8,11 +8,12 @@
 Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_PREPARE_ATTRIBUTES");
 
 // Taken from https://community.magento.com/t5/Magento-1-x-Programming/How-to-display-Attribute-Group-Name-on-Product-page/td-p/12156
-$_helper              = $this->helper("catalog/output");
-$_product             = $this->getProduct();
+$_helper    = $this->helper("catalog/output");
+$_product   = $this->getProduct();
+$supplier   = strtolower((string) $_product->getAttributeText("supplier"));
 
 // Tooltips
-$attr_tooltips        = [
+$attr_tooltips = [
   "shipping_weight_gram"  => "Dit is het gewicht van het product zoals het wordt verstuurd, in een pakket of op een pallet",
   "koeltemperatuur"       => "De behaalde temperatuur kan variëren. Factoren die van invloed zijn, zijn onder andere: koelmethode, omgevingstemperatuur, open-frequentie, ventilatie rondom het apparaat, de klimaatklasse, en de koelcyclus",
   "aantal_blikjes"        => "Het exacte aantal kan iets variëren met de exacte grootte",
@@ -25,6 +26,10 @@ $attr_tooltips["vriestemperatuur"]      = $attr_tooltips["koeltemperatuur"];
 $attr_tooltips["aantal_flessen"]        = $attr_tooltips["aantal_blikjes"];
 $attr_tooltips["capacity_wine_bottles"] = $attr_tooltips["aantal_blikjes"];
 $attr_tooltips["temp_range_to_c"]       = $attr_tooltips["temp_range_from_c"];
+
+if($supplier === "maxima") {
+  $attr_tooltips["garantie"] = "2 jaar garantie op alle Maxima producten gekocht vanaf 1 oktober 2025";
+}
 
 // No decimals, with number formatting
 $attr_remove_decimals = [
@@ -305,7 +310,6 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           
           // Conditional warranty supplement
           case "warranty_remarks":
-            $supplier = strtolower((string) $_product->getAttributeText("supplier"));
             if($supplier === "combisteel") {
               $link_url   = "/garantievoorwaarden-combisteel";
               $link_title = "Aanvullende garantievoorwaarden Combisteel";

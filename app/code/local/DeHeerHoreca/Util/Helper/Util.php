@@ -16,7 +16,7 @@ $dhh_click_log = [];
 // If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
 // Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
 const SUPPLIERS_HIDE_STOCK_DETAILS = ["apexa", "bartscher", "deheerhoreca", "espressions",
-"foster-gamko", "heatmaestro", "hoshizaki", "orionstar", "probbqshop", "liebherr", "smeg",
+"foster-gamko", "heatmaestro", "hoshizaki", "orionstar", "probbqshop", "liebherr", "smeg", "virtus",
 "youcup"];
 
 // Mage::helper("deheerhoreca_util/util")->__METHOD__()
@@ -1388,11 +1388,20 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $rates;
   }
   
-  // SYNC WITH app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml
-  public static function auto_productlabel($_product, $context) {
+  /**
+   * Determine product label automatically based on conditions.
+   * 
+   * Also used in app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml.
+   *
+   * @param  object $_product
+   * @param  mixed  $context
+   *
+   * @return string
+   */
+  public static function auto_productlabel(object $_product, mixed $context): string {
     if(!empty($_product->getProductLabel())) {
-      return $_product->getProductLabel();
-    } 
+      return (string) $_product->getProductLabel();
+    }
     
     if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
       return "SALE";
@@ -1419,6 +1428,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"
     ], true)) {
       return "5% Kortingscode";
+    }
+    
+    // Maxima warranty extension
+    if($supplier_sys === "maxima" && $now->isBefore("2025-10-15 00:00:00")) {
+      return "Nu: 24m garantie";
     }
     
     return "";
