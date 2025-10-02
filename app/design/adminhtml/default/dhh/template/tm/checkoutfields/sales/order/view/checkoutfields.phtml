@@ -1,0 +1,95 @@
+<?php
+$_order = Mage::registry('current_order');
+
+if (!$_order) {
+  return;
+}
+
+$fields = Mage::helper('checkoutfields')->getFields();
+
+// DHH: Reorganize fields in specific order
+// - tm_field1:  supplier.order_id
+// - tm_field2:  shipment.expected_date
+// - tm_field3:  shipment.forwarder
+// - tm_field4:  supplier.name
+// - tm_field5:  process.flags
+// - tm_field6:  marketplace.order_id
+// - tm_field7:  marketplace.name
+// - tm_field8:  shipment.id
+// - tm_field9:  supplier.packing_slip_id
+// - tm_field10: B2B/B2C
+// - tm_field11: TBD
+// - tm_field12: TBD
+// - tm_field13: TBD
+// - tm_field14: TBD
+// - tm_field15: events
+$fields = [
+  // Customer:
+  "tm_field10" => $fields["tm_field10"] ?? [],
+  
+  // Supplier:
+  "tm_field4"  => $fields["tm_field4"]  ?? [],
+  "tm_field1"  => $fields["tm_field1"]  ?? [],
+  "tm_field9"  => $fields["tm_field9"]  ?? [],
+  
+  // Shipment:
+  "tm_field3"  => $fields["tm_field3"]  ?? [],
+  "tm_field2"  => $fields["tm_field2"]  ?? [],
+  "tm_field8"  => $fields["tm_field8"]  ?? [],
+  
+  // Marketplace:
+  "tm_field7"  => $fields["tm_field7"]  ?? [],
+  "tm_field6"  => $fields["tm_field6"]  ?? [],
+
+  // TBD:
+  "tm_field11" => $fields["tm_field11"] ?? [],
+  "tm_field12" => $fields["tm_field12"] ?? [],
+  "tm_field13" => $fields["tm_field13"] ?? [],
+  "tm_field14" => $fields["tm_field14"] ?? [],
+  
+  // Process:
+  "tm_field5"  => $fields["tm_field5"]  ?? [],
+  "tm_field15" => $fields["tm_field15"] ?? [],
+];
+
+$fields = array_filter($fields);
+?>
+
+<div id="checkoutfields">
+  <div class="hor-scroll" style="border-top: 1px solid #e3e3e3; margin-top: 1em;">
+    <h3 style="margin-top: .5em">Chefstore.nl:</h3>
+    <table cellspacing="0" class="form-list" style="font-size: 1.1em;">
+      <?php
+      foreach ($fields as $field => $config) {
+        $value = (string)$_order->getData($field);
+        if(!strlen($value)) continue;
+        if($field === "tm_field5") {
+          $flags = explode(";", $value);
+          $value = "";
+          foreach($flags as $flag) {
+            $flag = trim(str_replace("_", " ", $flag));
+            $value .= "<li>" . $this->escapeHtml($flag) . "</li>";
+          }
+          $value = "<ul style='margin: 0; padding-left: 1.2em; list-style-type: disc;'>" . $value . "</ul>";
+        } else {
+          $value = $this->escapeHtml($value);
+        }
+        ?>
+        <tr>
+          <td class="label"><?= $this->escapeHtml($config['label']) ?></td>
+          <td class="value bold"><?= $value ?></td>
+        </tr>
+      <?php } ?>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.observe('dom:loaded', function() {
+    var div = $('sales_order_view_tabs_order_info_content').down('.box-left').down('.fieldset');
+    if(!div) {
+      return;
+    }
+    div.insert({bottom: $('checkoutfields')});
+  });
+</script>
