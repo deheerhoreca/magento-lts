@@ -10,7 +10,7 @@ touch ~/logs/deheerhoreca-magento/error_log
 touch ~/logs/deheerhoreca-magento/cron_error.log
 touch ~/logs/deheerhoreca-magento/cron_event.log
 
-now=`date`
+now=$(date)
 echo "--------------------------------------------------------------------"
 echo "Current date: $now"
 echo "--------------------------------------------------------------------"
@@ -20,6 +20,10 @@ echo "--------------------------------------------------------------------"
 
 cm
 
+# ------------------------------------------------------------------------
+# Logs indexed in Elasticsearch:
+# ------------------------------------------------------------------------
+
 cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.log
 ~/httpdocs/deheerhoreca-magento/var/log/*.jsonl
@@ -28,13 +32,30 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/logs/deheerhoreca-magento/*_log
 {
   daily
-  nocopytruncate
   dateext
-  rotate 2
+  rotate 3
+  maxage 3
   missingok
 }
 EOF
 
-/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s /tmp/logrotate.deheerhoreca-magento.tmp
+/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento.tmp
+rm ~/tmp/logrotate-deheerhoreca-magento.conf
 
+# ------------------------------------------------------------------------
+# Logs NOT indexed in Elasticsearch:
+# ------------------------------------------------------------------------
+
+cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
+~/httpdocs/deheerhoreca-magento/var/log/*.txt
+{
+  daily
+  dateext
+  rotate 14
+  maxage 14
+  missingok
+}
+EOF
+
+/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento-txt.tmp
 rm ~/tmp/logrotate-deheerhoreca-magento.conf
