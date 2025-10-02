@@ -1411,24 +1411,29 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $now = CarbonImmutable::now();
     
     // Hendi promo
-    if($supplier_sys === "hendi" && $now->isBefore("2025-08-31 00:00:00")) {
-      return "5% Kortingscode";
-    }
+    // if($supplier_sys === "hendi" && $now->isBefore("2025-09-01 00:00:00")) {
+    //   return "5% Kortingscode";
+    // }
     
     // Bartscher promo
     if($supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
       return "5% Kortingscode";
     }
     
-    // Diamond promo
-    if($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
-      "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW",
-      "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
-      "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G", "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8",
-      "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"
-    ], true)) {
+    // Combisteel promo
+    if($supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
       return "5% Kortingscode";
     }
+    
+    // // Diamond promo
+    // if($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
+    //   "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW",
+    //   "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
+    //   "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G", "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8",
+    //   "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"
+    // ], true)) {
+    //   return "5% Kortingscode";
+    // }
     
     // Maxima warranty extension
     if($supplier_sys === "maxima" && $now->isBefore("2025-10-15 00:00:00")) {
