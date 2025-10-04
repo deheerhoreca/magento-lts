@@ -39,13 +39,14 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento.tmp
+/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento.status
 rm ~/tmp/logrotate-deheerhoreca-magento.conf
 
 # ------------------------------------------------------------------------
 # Logs NOT indexed in Elasticsearch:
 # ------------------------------------------------------------------------
 
+sleep 1
 cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/httpdocs/deheerhoreca-magento/var/log/*.txt
 {
@@ -57,5 +58,5 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento-txt.tmp
+/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento-txt.status
 rm ~/tmp/logrotate-deheerhoreca-magento.conf
