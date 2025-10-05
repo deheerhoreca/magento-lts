@@ -6,7 +6,7 @@ User-agent: ClaudeBot
 User-agent: Google-Extended
 User-agent: GPTBot
 User-agent: meta-externalagent
-Disallow: /shop?
+Disallow: /shop
 
 User-agent: Baiduspider
 User-agent: CazoodleBot
