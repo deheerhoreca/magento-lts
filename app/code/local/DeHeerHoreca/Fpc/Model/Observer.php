@@ -1,17 +1,6 @@
 <?php
 
-function _dhh_ips() {
-  return [
-    // "5.132.21.238",
-    // "185.127.111.251",
-    "185.127.111.252",
-    // "87.210.61.235",
-    // "185.127.111.227",
-    // "81.59.51.217",
-    // "62.250.253.55",
-    "31.201.36.137",
-  ];
-}
+declare(strict_types=1);
 
 const DHH_FPC_NAV_KEY     = "DHH_CMS_TOPMENU";
 const DHH_FPC_FOOTER_KEY  = "DHH_CMS_FOOTER";

@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+require __DIR__."/_ip_check.php";
+
 // PHP info
 ob_start();
 phpinfo();

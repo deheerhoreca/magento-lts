@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+require __DIR__."/_ip_check.php";
+
 $credisFile = __DIR__ . DIRECTORY_SEPARATOR . 'Credis_Client.php';
 
 if (is_readable($credisFile)) {
@@ -74,7 +78,7 @@ class RedisStatus
     /**
      * Collect config values and instanciate Redis objects
      * 
-     * @return void
+     * @return array
      */
     public function getServers()
     {

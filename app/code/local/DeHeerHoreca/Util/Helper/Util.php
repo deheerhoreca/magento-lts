@@ -1,10 +1,15 @@
 <?php
 
+// declare(strict_types=1);
+
 use \Carbon\CarbonImmutable;
 use \Michelf\Markdown;
 use \Michelf\MarkdownExtra;
-
-// require_once 'vendor/autoload.php';
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Collection;
+use \Illuminate\Support\Number;
+use \Illuminate\Support\Str;
+use \Illuminate\Support\Stringable;
 
 require_once __DIR__."/strftime_replacement.php";
 
@@ -15,9 +20,11 @@ $dhh_click_log = [];
 
 // If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
 // Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
-const SUPPLIERS_HIDE_STOCK_DETAILS = ["apexa", "bartscher", "deheerhoreca", "espressions",
-"foster-gamko", "heatmaestro", "hoshizaki", "orionstar", "probbqshop", "liebherr", "smeg", "virtus",
-"youcup"];
+const SUPPLIERS_HIDE_STOCK_DETAILS = [
+  "apexa", "bartscher", "deheerhoreca", "espressions",
+  "foster-gamko", "heatmaestro", "hoshizaki", "orionstar",
+  "probbqshop", "liebherr", "smeg", "virtus","youcup",
+];
 
 // Mage::helper("deheerhoreca_util/util")->__METHOD__()
 
@@ -212,11 +219,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__);
     return $manufacturers;
   }
-  
-  // // @deprecated
-  // public function sanitizeForFilename($string) {
-  //   return sanitizeForFilename($string);
-  // }
   
   public function markdownToHtmlSafe($string) {
     if(str_contains((string) $string, "<!--markdown-->")) {
@@ -1328,12 +1330,25 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     return $ip;
   }
-  
-  public static function trim_decimals($value, $decimals = 2, $decimal_sep = ",", $thousand_sep = ".") {
+
+  /**
+   * Trim trailing zeros from a decimal number.
+   *
+   * @param  int|float|string|null  $value
+   * @param  int                    $decimals
+   * @param  string                 $decimal_sep
+   * @param  string                 $thousand_sep
+   * 
+   * @return string|null
+   */
+  public static function trim_decimals(int|float|string|null $value, int $decimals = 2, string $decimal_sep = ",", string $thousand_sep = "."): string|null {
+    if(blank($value)) {
+      return $value;
+    }
+    
     if(is_scalar($value) && is_numeric($value)) {
+      $value = (float) $value;
       $value = number_format($value, $decimals, $decimal_sep, $thousand_sep);
-      $decimal_string = ",".str_repeat("0", $decimals);
-      // $value = str_replace(",00", "", $value);
       $value = rtrim($value, "0");
       $value = rtrim($value, $decimal_sep);
     }
@@ -1341,7 +1356,15 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $value;
   }
   
-  public static function cleanCategoryName($category_name): string {
+  /**
+   * Clean category name by removing special tags like [V], [SKIPMENU], [0]
+   * which are used to control certain features on the frontend.
+   *
+   * @param  string $category_name
+   *
+   * @return string
+   */
+  public static function cleanCategoryName(string $category_name): string {
     return trim(str_ireplace(["[V]", "[SKIPMENU]", "[0] "], "", (string) $category_name));
   }
   
@@ -1512,467 +1535,5 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public static function get_sys_supplier(string $supplier): string {
     return (string) preg_replace("/\s+/", "", strtolower($supplier));
-  }
-}
-
-if(function_exists('_get_product_attribute') === false) {
-  function _get_product_attribute($_product, string $attribute_code, bool $implode_arrays = true) {
-    if(is_object($_product) === false) {
-      return null;
-    }
-    
-    $attribute = $_product->getResource()->getAttribute($attribute_code);
-    if(!$attribute) {
-      if(_dhh_debug()) {
-        echo "Attribute '{$attribute_code}' does not exist";
-      }
-      Mage::log("_get_product_attribute: Attribute '{$attribute_code}' does not exist", null, "exception.log", true);
-      return null;
-    }
-    
-    // $value = $attribute->getFrontend()->getValue($_product);
-    $value = $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
-    if($implode_arrays && is_array($value)) {
-      $value = implode(", ", $value);
-    }
-    
-    return $value;
-  }
-}
-
-if(function_exists('printr') === false) {
-  function printr($expr, $return = false) {
-    $ret = null;
-    if(is_array($expr) && !sizeof($expr)) {
-      return;
-    }
-    if(php_sapi_name() !== "cli") {
-      $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
-    }
-    $ret .= print_r($expr, true);
-    if(php_sapi_name() !== "cli") {
-      $ret .= "</pre>";
-    }
-    $ret .= PHP_EOL;
-    if($return) {
-      return $return;
-    }
-    echo $ret;
-  }
-}
-
-// @deprecated -- move to sanitize_alphanumeric()
-if(function_exists("sanitizeForFilename") === false) {
-  function sanitizeForFilename($string) {
-    // Remove anything which isn't a word, whitespace, number
-    // or any of the following caracters -_~,;[]().
-    // If you don't need to handle multi-byte characters
-    // you can use preg_replace rather than mb_ereg_replace
-    // Thanks @Łukasz Rysiak!
-    $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string) $string);
-    // Remove any runs of periods (thanks falstro!)
-    $output = mb_ereg_replace("([\.]{2,})", '', (string) $string);
-    return strtolower((string) $output);
-  }
-}
-
-if(function_exists("sanitize_alphanumeric") === false) {
-  function sanitize_alphanumeric($string, string $replacement = "-") {
-    $string = strtolower((string) preg_replace("/[^a-zA-Z0-9]+/", $replacement, (string) $string));
-    return $string;
-  }
-}
-
-if(function_exists("_dhh_debug") === false) {
-  function _dhh_debug() {
-    if(isset($_GET['nofpc'])
-    && isset($_SERVER["REMOTE_ADDR"])
-    && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips())) {
-      return true;
-    }
-    return false;
-  }
-}
-
-if(function_exists("_dhh_reflect") === false) {
-  function _dhh_reflect($function, $class = null) {
-    if($class === null) {
-      if($r = new ReflectionFunction($function)) {
-        return [
-          "file"  => $r->getFileName(),
-          "line"  => $r->getStartLine(),
-        ];
-      }
-    } else {
-      if($class = new ReflectionClass($class)) {
-        if($r = $class->getMethod($function)) {
-          return [
-            "file"  => $r->getFileName(),
-            "line"  => $r->getStartLine(),
-          ];
-        }
-      }
-    }
-    return false;
-  }
-}
-
-function _dhh_getselect($collection) {
-  return $collection->getSelect()->__toString();
-}
-
-function in_range($number, $min, $max, $inclusive = false) {
-  if(is_numeric($number) && is_numeric($min) && is_numeric($max)) {
-    return $inclusive
-      ? ($number >= $min && $number <= $max)
-      : ($number >= $min && $number < $max) ;
-  }
-  return false;
-}
-
-// Also declared in intel
-if(function_exists("_getAlternativeEans") === false) {
-  function _getAlternativeEans($ean) {
-    $eans = (array) $ean;
-    if(strlen((string) $ean) === 13) {
-      $eans[] = sprintf("%014d", $ean);
-    }
-    if(str_starts_with((string) $ean, "0")) {
-      $eans[] = substr((string) $ean, 1);
-    }
-    if(str_starts_with((string) $ean, "00")) {
-      $eans[] = substr((string) $ean, 2);
-    }
-    if(str_starts_with((string) $ean, "000")) {
-      $eans[] = substr((string) $ean, 3);
-    }
-    
-    return $eans;
-  }
-}
-
-// Generate a HTML img tag for a cloudflare image
-// Exists in OpenMage and Intel:
-// - app/code/local/DeHeerHoreca/Util/Helper/Util.php
-// - lib/intel.inc.php
-if(function_exists('_cdn_img') === false) {
-  function _cdn_img(array $options) {
-    $url        = $options["url"]       ?? false;
-    $url        = (string) htmlspecialchars((string) $url);
-    
-    if($url === false) {
-      return false;
-    }
-    
-    // $options["cm"]
-    
-    $identifier     = $options["identifier"]    ?? "NO_ID";
-    $options["cdn"] ??= "imagekit_custom";
-    $fs_path        = $options["fs_path"]       ?? null;
-    $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
-    $width          = $options["width"]         ?? 0;
-    $height         = $options["height"]        ?? 0;
-    $alt            = $options["alt"]           ?? $url;
-    $id             = $options["id"]            ?? "";
-    $fit            = $options["fit"]           ?? "scale-down";
-    $format         = $options["format"]        ?? "auto";
-    $quality        = $options["quality"]       ?? 75;
-    $url_only       = $options["url_only"]      ?? false;
-    $relative_url   = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
-    $include_2x     = $options["2x"]            ?? false; // Should not be needed if we send the "Dpr" header
-    $lazy           = $options["lazy"]          ?? false;
-    $class          = $options["class"]         ?? "";
-    $style          = $options["style"]         ?? "";
-    
-    $cdn            = (string)  $options["cdn"];
-    $width          = (int)     $width;
-    $height         = (int)     $height;
-    $alt            = (string)  $alt;
-    $id             = (string)  $id;
-    $fit            = (string)  $fit;
-    $format         = (string)  $format;
-    $quality        = (int)     $quality;
-    $url_only       = (bool)    $url_only;
-    $relative_url   = (bool)    $relative_url;
-    $include_2x     = (bool)    $include_2x;
-    $lazy           = (bool)    $lazy;
-    $class          = (string)  $class;
-    $style          = (string)  $style;
-    $id_html        = "";
-    $lazy_html      = "";
-    $class_html     = "";
-    $style_html     = "";
-    $html           = "";
-    
-    // Pre-process settings
-    if($cdn === "imagekit" || $cdn === "imagekit_custom") {
-      $relative_url = true; // Required
-    }
-    
-    // Applies to all CDNs
-    if($lazy) {
-      $lazy_html = " loading=\"lazy\"";
-    }
-    if(strlen($id) > 0) {
-      $id_html = " id=\"{$id}\"";
-    }
-    if($fit === "contain" || $fit === "scale-down" || $fit === "scale-up") {
-      $class .= " object-fit-contain";
-    }
-    if(strlen($class) > 0) {
-      $class_html = " class=\"{$class}\"";
-    }
-    if(strlen($style) > 0) {
-      $style_html .= " style=\"{$style}\"";
-    }
-    if($relative_url) {
-      $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
-    }
-    if($add_mod_time && strlen((string) $fs_path) > 0) {
-      // $url = _add_file_v_param($url, $fs_path, $identifier);
-      if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
-        $url = Chefstore\CacheBuster::prependExtension($url, "ts{$mtime}");
-      }
-    }
-    
-    switch($cdn) {
-      
-      case "none":
-        $src_url = $url;
-        $html = "<img src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-      
-      // @see https://docs.imagekit.io/features/image-transformations
-      // https://ik.imagekit.io/vzc6xuj9l/tr:w-175,h-175,q-75,c-at_max/media/catalog/product/c/o/combisteel-7450.0320-00-b-2f36.jpg?v=1639661476
-      case "imagekit":
-        $cdn_base = "//ik.imagekit.io/vzc6xuj9l";
-        $cdn_options  = [
-          "w"           => $width,
-          "h"           => $height,
-        ];
-        if($quality > 0) {
-          $cdn_options["q"] = $quality;
-        }
-        if($fit === "contain" || $fit === "scale-down") {
-          $cdn_options["c"] = "at_max";                     // max-size crop
-        }
-        if($fit === "scale-up") {
-          $cdn_options["c"] = "at_max_enlarge";             // max-size crop
-        }
-        $cdn_options_string   = "tr:".implode_array_with_keys($cdn_options, ",", "-");
-        $url                  = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
-        $src_url              = "{$cdn_base}/{$cdn_options_string}/{$url}";
-        
-        // Either use 2x the resolution
-        if($include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
-          $cdn_options["w"]   *= 2;
-          $cdn_options["h"]   *= 2;
-          $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
-          $src_url_2x         = "{$cdn_base}/{$cdn_options_string}/{$url}";
-          $srcset             = "srcset=\"{$src_url_2x} 2x\" ";
-        } else {
-          $srcset = "";
-        }
-        
-        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-      
-      // @see https://docs.imagekit.io/features/image-transformations
-      // "https://images.chefstore.nl/media/catalog/product/haha/saro-423-1400-00-a-933c.jpg?tr=w-326,h-400,q-75,c-at_max_enlarge&v=1656629340"
-      case "imagekit_custom":
-        $cdn_base     = "//images.chefstore.nl";
-        $cdn_options  = [
-          "w"           => $width,
-          "h"           => $height,
-        ];
-        if($quality > 0) {
-          $cdn_options["q"] = $quality;
-        }
-        if($fit === "contain" || $fit === "scale-down") {
-          $cdn_options["c"] = "at_max";                     // max-size crop
-        }
-        if($fit === "scale-up") {
-          $cdn_options["c"] = "at_max_enlarge";             // max-size crop
-        }
-        
-        // cm overrides c
-        if(!empty($options["cm"])) {
-          $cdn_options["cm"] = $options["cm"];
-          if(isset($cdn_options["c"])) {
-            unset($cdn_options["c"]);
-          }
-        }
-        $cdn_options_string   = implode_array_with_keys($cdn_options, ",", "-");
-        $url                  = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
-        $src_base_url         = "{$cdn_base}/{$url}";
-        $src_url              = add_url_param($src_base_url, "tr", $cdn_options_string);
-        
-        // Either use 2x the resolution
-        if($include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
-          $cdn_options["w"]   *= 2;
-          $cdn_options["h"]   *= 2;
-          $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
-          $src_url_2x         = add_url_param($src_base_url, "tr", $cdn_options_string);
-          $srcset             = "srcset=\"{$src_url_2x} 2x\" ";
-        } else {
-          $srcset = "";
-        }
-        
-        $html = "<img src=\"{$src_url}\" {$srcset}width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-      
-      // @see https://docs.optimole.com/article/1872-how-to-use-the-custom-integration-in-optimole
-      case "optimole":
-        $skip_js = true;
-        if($skip_js) {
-          // https://mlwes2arpcu4.i.optimole.com/w:800/h:600/q:85/https://andreeacristinaradacina.github.io/image.png
-          $cdn_base     = "https://mlwes2arpcu4.i.optimole.com/";
-          $cdn_options  = "w:{$width}/h:{$height}/q:{$quality}";
-          $src_url      = "{$cdn_base}{$cdn_options}/{$url}";
-          $html         = "<img src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        } else {
-          $src_url = $url;
-          $html = "<img data-opt-src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        }
-        break;
-      
-      case "cloudflare":
-        // If desiring a relative URL, take out the BaseUrl
-        if($relative_url) {
-          $cdn_base         = "/cdn-cgi/image/";
-        } else {
-          $cdn_base         = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "/")."/cdn-cgi/image/";
-        }
-        $cdn_options_base = "metadata=none,q={$quality},fit={$fit},format={$format}";
-        $cdn_options      = "{$cdn_options_base},width={$width},height={$height}";
-        $src_url          = "{$cdn_base}{$cdn_options}/{$url}";
-        
-        // Either use 2x the resolution, or set dpr=2
-        if($include_2x) {
-          // $width_2x       = $width * 2;
-          // $height_2x      = $height * 2;
-          $width_2x       = $width;
-          $height_2x      = $height;
-          $dpr            = 2;
-          $cdn_options_2x = "{$cdn_options_base},width={$width_2x},height={$height_2x},dpr={$dpr}";
-          $srcset         = "{$cdn_base}{$cdn_options_2x}/{$url} 2x";
-        }
-        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-    }
-    
-    // foreach(array_keys($options) as $option) {
-      // printr("{$option}: ".var_export($$option, true));
-    // }
-    // printr("src_url: ".var_export($src_url, true));
-    // printr(str_repeat("-", 100));
-    
-    if($url_only) {
-      return $src_url;
-    }
-    
-    return $html;
-  }
-}
-
-// Adds a ?v={timestamp} param to the URL
-// Exists in OpenMage and Intel
-if(function_exists('_add_file_v_param') === false) {
-  function _add_file_v_param(string $url, string $fs_path, string $identifier): string {
-    if(is_file($fs_path)) {
-      if($mod_time = filemtime($fs_path)) {
-        // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
-        $url .= (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . "v={$mod_time}";
-      }
-    } else {
-      if(function_exists('logger')) {
-        logger("{$identifier} Cannot add file modification time of {$fs_path} because it does not exist", "NOTICE");
-      } else {
-        Mage::log("{$identifier} Cannot add file modification time of {$fs_path} because it does not exist");
-      }
-    }
-    
-    return $url;
-  }
-}
-
-// ["foo" => "bar", "beer" => "fest"] --> "foo=bar, beer=fest"
-if(function_exists('implode_array_with_keys') === false) {
-  function implode_array_with_keys($array, $separator = ", ", $glue = "=") {
-    $ret = "";
-    foreach($array as $key => $val) {
-      $ret .= $key.$glue.$val.$separator;
-    }
-    $ret = substr($ret, 0, -(strlen((string) $separator)));
-    return $ret;
-  }
-}
-
-// @see // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
-if(function_exists('add_url_param') === false) {
-  function add_url_param(string $url, $key, $value): string {
-    $url .= (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . "{$key}={$value}";
-    return $url;
-  }
-}
-
-// Remove one or more parameters from a URL
-if(function_exists('remove_url_param') === false) {
-  function remove_url_param(string $url, $params): string {
-    $params     = (array) $params;
-    $base_url   = strtok($url, "?");             // Get the base url
-    $parsed_url = parse_url($url);              // Parse it
-    $query      = $parsed_url["query"];         // Get the query string
-    parse_str($query, $parameters);             // Convert Parameters into array
-    foreach($params as $param) {
-      if(isset($parameters[$param])) {
-        unset($parameters[$param]);             // Delete the one you want
-      }
-    }
-    $new_query = http_build_query($parameters); // Rebuilt query string
-    return "{$base_url}?{$new_query}";          // Finally url is ready
-  }
-}
-
-// Try to convert an XML string to an array, fail quietly with logging
-if(function_exists('xml_string_to_array') === false) {
-  function xml_string_to_array(string $string) {
-    if(($object = simplexml_load_string($string)) !== false) {
-      try {
-        $json = json_encode($object, 0, 512);
-      } catch (Exception $e) {
-        Mage::log("xml_string_to_array: JSON encoding failed. {$e->__toString()}", null, "exception.log", true);
-        return false;
-      }
-      try {
-        $array = json_decode($json, $associative = true, $depth = 512, JSON_THROW_ON_ERROR);
-        return $array;
-      } catch (Exception $e) {
-        Mage::log("xml_string_to_array: JSON decoding failed. {$e->__toString()}", null, "exception.log", true);
-        return false;
-      }
-    } else {
-      Mage::log(var_export($string, true), null, "exception.log", true);
-      Mage::log("xml_string_to_array: Invalid XML string given", null, "exception.log", true);
-      return false;
-    }
-  }
-}
-
-// Attempt to get the current quote ID (cart ID)
-if(function_exists("dhh_get_quote_id") === false) {
-  function dhh_get_quote_id(): string {
-    if($_SESSION) {
-      if(!empty($GLOBALS["dhh_current_quote_id"])) {
-        return $GLOBALS["dhh_current_quote_id"];
-      }
-      $id = (string) (Mage::getSingleton("checkout/session")?->getQuote()?->getId() ?? "");
-      if(!empty($id)) {
-        $GLOBALS["dhh_current_quote_id"] = $id;
-        return $GLOBALS["dhh_current_quote_id"];
-      }
-    }
-    
-    return "NO_QUOTE_ID";
   }
 }

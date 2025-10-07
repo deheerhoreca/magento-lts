@@ -1,6 +1,10 @@
 <?php
 
-define('MAGENTO_ROOT', getcwd());
+declare(strict_types=1);
+
+require __DIR__."/_ip_check.php";
+
+define('MAGENTO_ROOT', getcwd()."/..");
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 $maintenanceFile = 'maintenance.flag';
