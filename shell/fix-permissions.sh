@@ -16,13 +16,13 @@ cm && source ./shell/cron-bootstrap.sh
 # find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
 # find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
 
-cm && cd ./media/catalog/product || exit 1
+cm && cd ./media || exit 1
 find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
 find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
 
-cm && cd ./media/catalog/category || exit 1
-find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
-find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
+# cm && cd ./media || exit 1
+# find . -type d ! -perm 0777 -print -exec chmod 0777 -- {} +
+# find . -type f ! -perm 0666 -print -exec chmod 0666 -- {} +
 
 #                           NFS
 # =-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-= #
