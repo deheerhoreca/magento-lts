@@ -73,7 +73,7 @@
 - `app/code/community/TM/Core/Model/Notification/Feed.php`
 - `app/code/community/Varien/Autoload.php`
 
-### grep -ri -l DHH app/code/community/ | sort
+### grep -ri -l DHH app/code/local/ | sort
 - `app/code/local/Amasty/Base/Model/Feed.php`
 - `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
 - `app/code/local/Amasty/Feed/Model/Product/Collection.php`
@@ -130,10 +130,16 @@
 - `app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php`
 - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
 - `app/code/local/Profitmetrics/MagentoIntegration/controllers/Adminhtml/ProfitmetricsController.php`
-- `app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml`
 - `app/code/local/TM/CheckoutFields/etc/wsdl.xml`
 - `app/code/local/TM/FireCheckout/etc/wsdl.xml`
 - `app/code/local/TM/RichSnippets/Block/Product.php`
+
+### grep -ril "DHH "    app/design/adminhtml/default/default   app/design/frontend/base   | sort
+- `app/design/adminhtml/default/default/template/sales/order/create/comment.phtml`
+- `app/design/adminhtml/default/default/template/tm/firecheckout/sales/order/create/data.phtml`
+- `app/design/adminhtml/default/default/template/widget/grid.phtml.inprogress`
+- `app/design/frontend/base/default/template/payment/info/pdf/default.phtml`
+- `app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml`
 
 ### grep -ril "DHH "  dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
 - `js/amasty/amshopby/amshopby-ajax.js`

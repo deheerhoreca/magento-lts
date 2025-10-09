@@ -447,7 +447,7 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
               $image_url        = "{$media}catalog/product{$product->getData($config['image_source'])}";
               if(empty($image_url) === false) {
                 $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-                $col_width        = 120;
+                $col_width        = 125;
                 $image_path       = "{$media_dir}/catalog/product{$product->getData($config['image_source'])}";
                 $cdn_img_options  = [
                   "fs_path"         => $image_path,

@@ -215,7 +215,7 @@ if($_products->getFirstItem()) { ?>
         $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
         $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
         if(is_file($image_path)) {
-          $col_width        = 175;
+          $col_width        = 200;
           $cdn_img_options  = [
             "identifier"      => $dhh_sku,
             "fs_path"         => $image_path,

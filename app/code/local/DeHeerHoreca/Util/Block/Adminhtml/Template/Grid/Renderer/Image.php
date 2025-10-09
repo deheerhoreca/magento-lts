@@ -14,7 +14,7 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
       $image_url        = "{$media}catalog/product{$val}";
       
       if(!empty($image_url)) {
-        $col_width        = 50;
+        $col_width        = 60;
         $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
         $image_path       = "{$media_dir}/catalog/product{$val}";
         $cdn_img_options  = [
