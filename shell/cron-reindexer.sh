@@ -2,7 +2,7 @@
 
 # ~/httpdocs/deheerhoreca-magento/shell/cron-reindexer.sh
 
-PREFER_HOST=ma
+export PREFER_HOST=ma
 
 # Set User Environment
 . ${HOME}/.bash_profile
