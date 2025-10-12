@@ -869,19 +869,18 @@ final class Mage
      */
     public static function log($message, $level = null, $file = '', $forceLog = false)
     {
-        
         // DHH CORE HACK -- Remove certain debug messages
         $level = is_null($level) ? Zend_Log::DEBUG : $level;
         
         $GLOBALS["dhh_mage_ignored_msgs"] ??= [
-          "Start: aoescheduler_heartbeat",
-          "Stop: aoescheduler_heartbeat",
-          "SMTP Pro using queue override page size: 25",
-          "SMTP Pro using queue override pause: 1000000",
+            "Start: aoescheduler_heartbeat",
+            "Stop: aoescheduler_heartbeat",
+            "SMTP Pro using queue override page size: 25",
+            "SMTP Pro using queue override pause: 1000000",
         ];
         
         if($level === Zend_Log::DEBUG && is_string($message) && in_array($message, $GLOBALS["dhh_mage_ignored_msgs"], true)) {
-          return ;
+            return ;
         }
         // END DHH CORE HACK -- Remove certain debug messages
         
@@ -899,7 +898,7 @@ final class Mage
         
         // DHH - Use something better than print_r
         if(is_array($message) || is_object($message)) {
-          $message = json_encode($message, JSON_PARTIAL_OUTPUT_ON_ERROR);
+            $message = json_encode($message, JSON_PARTIAL_OUTPUT_ON_ERROR);
         }
         
         // try {
