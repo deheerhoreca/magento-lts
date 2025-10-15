@@ -201,31 +201,44 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return self::$request_is_anonymous;
   }
   
-  /*
-   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-   * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
+  /**
+   * Check if loading from cache should be bypassed for this request
+   *
+   * @return bool
+   * @throws Zend_Controller_Request_Exception
+   */
+  protected static function request_has_no_cache_headers(): bool {
+    return (
+      strstr(strtolower(Mage::app()->getRequest()->getHeader("PRAGMA")), "no-cache") ||
+      strstr(strtolower(Mage::app()->getRequest()->getHeader("CACHE_CONTROL")), "no-cache")
+    );
+  }
+  
+  /**
+   * Determine if the FPC cache is enabled for reading.
+   * 
+   * This does NOT check if the cache contains the requested page, only if reading from cache is allowed.
+   * 
+   * @param non_anonymous_okay  bool  Switch to check for anonymous requests (cart block, etc.)
+   * @param html_block_mode     bool  For HTML block caching, the controller action is not taken into account
+   *
+   * @return                    bool  TRUE if reading from cache is allowed
    */
   public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $html_block_mode = false, string $debug_name = ""): bool {
-    
-    Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    
     if(!DHH_FPC_ENABLED) {
       self::log("Read cache disabled (DHH_FPC_ENABLED): {$debug_name}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
     
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-    if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])) {
-      self::log("Read cache disabled (URL parameter): {$debug_name}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+    if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || self::request_has_no_cache_headers()) {
+      self::log("Read cache disabled (by request header or URL param: {$debug_name}");
       return false;
     }
     
     if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
       self::log("Read cache disabled (REQUEST_METHOD): {$debug_name}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
     
@@ -233,27 +246,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $om_action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($om_action, self::$om_action_whitelist, true)) {
         self::log("Read cache disabled (OM action): {$debug_name}");
-        Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
         return false;
       }
     }
     
     // Temporarily block non-FPC caching
     // if($debug_name !== "fpc") {
-    //   Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     //   return false;
     // }
     
     if(!$non_anonymous_okay && self::is_request_anonymous()) {
       self::log("Read cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
     
     self::log("Read cache enabled: {$debug_name}");
-    
-    Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    
     return true;
   }
   
@@ -262,7 +269,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
    */
   public static function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
-    
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     if(!DHH_FPC_ENABLED) {
@@ -581,7 +587,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   public static function log($msg, $level = Zend_Log::DEBUG): void {
     if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
-      Mage::log($msg, $level, "fpc.log", true);
+      Mage::log($msg, $level, "fpc.txt", true);
     }
   }
   
