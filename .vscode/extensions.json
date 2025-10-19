@@ -1,8 +1,6 @@
 {
   "recommendations": [
-    "rifi2k.format-html-in-php",
     "github.copilot",
-    "ecmel.vscode-html-css",
-    "junstyle.php-cs-fixer"
+    "ecmel.vscode-html-css"
   ]
 }

@@ -8415,10 +8415,6 @@
     clear: both;
   }
 
-  .footermidwrap h3 {
-    color: var(--color-orange);
-  }
-
   .footermidwrap {
     background-color: var(--color-antracite);
     line-height: 2em;
@@ -8429,14 +8425,14 @@
     color: #fff;
     text-decoration: none;
   }
-
+  
   .footermidwrap a:hover {
     text-decoration: none;
     color: var(--color-orange);
   }
-
+  
   /* End Footer */
-
+  
   .btn-quote,
   .btn-lease {
     margin-top: 5px !important;
