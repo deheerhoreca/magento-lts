@@ -221,7 +221,10 @@
     },
     "optimize-autoloader": true,
     "process-timeout": 3600,
-    "sort-packages": true
+    "sort-packages": true,
+    "platform": {
+      "php": "8.2"
+    }
   },
   "extra": {
     "auto-append-gitignore": false,
