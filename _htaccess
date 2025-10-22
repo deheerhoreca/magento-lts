@@ -100,7 +100,7 @@
     SecFilterScanPOST Off
 </IfModule>
 
-# <IfModule mod_deflate.c>
+<IfModule mod_deflate.c>
 
 ############################################
 ## enable apache served files compression
@@ -109,7 +109,7 @@
     # Insert filter on all content
     ###SetOutputFilter DEFLATE
     # Insert filter on selected content types only
-    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
 
     # Netscape 4.x has some problems...
     #BrowserMatch ^Mozilla/4 gzip-only-text/html
@@ -126,7 +126,7 @@
     # Make sure proxies don't deliver the wrong content
     #Header append Vary User-Agent env=!dont-vary
 
-# </IfModule>
+</IfModule>
 
 <IfModule mod_ssl.c>
 
@@ -159,8 +159,16 @@
     ## Add additional tag to the cachebusted URL because we don't have regex support in Cloudflare
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-l
     RewriteRule ^(.+)\.(ts\d{10})\.(min\.js|js|min\.css|css|png|jpeg|jpg|gif|webp|avif|eco|min\.svg|svg)$ $1.$3 [L]
     # RewriteRule ^/(media|skin|js)/(.+)\.(ts\d{10})\.(js|css|png|jpeg|jpg|gif|webp|avif|eco|min\.svg|svg)$ /$1/$2.$3 [L]
+    
+    # Redirect catalog URLs
+    # https://htaccess.madewithlove.com/
+    
+    # 2025-10-22:  /koelingen/vrieskasten  =>  /koelingen/horeca-vriezers
+    Redirect 301 /koelingen/vrieskasten/vrieskasten.html /koelingen/horeca-vriezers/vrieskasten.html
+    RewriteRule "^/?koelingen/vrieskasten/(.+)$" "/koelingen/horeca-vriezers/$1" [R=301,L]
 
 ########################################################################################
 ## END DHH
@@ -314,6 +322,10 @@
 ############################################
 ## Add default Expires header
 ## http://developer.yahoo.com/performance/rules.html#expires
+    # Add correct content-type for fonts, without this, .woff2 files have no content-type
+    AddType application/vnd.ms-fontobject .eot
+    AddType font/woff2 .woff2
+    
     ExpiresActive On
     ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/jpg "access plus 1 year"
@@ -326,6 +338,11 @@
     ExpiresByType application/x-shockwave-flash "access plus 1 month"
     ExpiresByType image/x-icon "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
     ExpiresDefault "access plus 1 hour"
     Header append Cache-Control "public"
 </IfModule>
@@ -430,7 +447,7 @@
 # <//images.chefstore.nl/>;rel=preconnect,<//www.googletagmanager.com>;rel=preconnect,<//td.doubleclick.net>;rel=preconnect,<//googleads.g.doubleclick.net>;rel=preconnect,
 
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2|webmanifest)$)[^\.]+?$">
-    Header add Link "<//v2.zopim.com>;rel=dns-prefetch,<//static.zdassets.com>;rel=preconnect,<//ekr.zdassets.com>;rel=preconnect"
+    Header add Link "<https://v2.zopim.com>;rel=dns-prefetch,<https://static.zdassets.com>;rel=preconnect,<https://ekr.zdassets.com>;rel=preconnect"
 </FilesMatch>
 
 ###########################################
@@ -519,7 +536,7 @@
 
     # # IMAGES
     # <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
-        # Etag is not disabled because we don't use mod_pagespeed extend_cache for images
+    #    Etag is not disabled because we don't use mod_pagespeed extend_cache for images
     #     Header set Cache-Control "public, max-age=3600"
     # </FilesMatch>
 

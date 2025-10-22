@@ -14,5 +14,4 @@ class Helper {
   public static function loadOmHelperDhhUtil(): \DeHeerHoreca_Util_Helper_Util {
     return \Mage::helper("deheerhoreca_util/util");
   }
-  
 }

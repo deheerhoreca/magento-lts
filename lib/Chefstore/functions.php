@@ -3,12 +3,9 @@
 declare(strict_types=1);
 
 use \Illuminate\Support\Arr;
-use \Illuminate\Support\Collection;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
-use \Illuminate\Support\Timebox;
-use \Illuminate\Support\Uri;
 use \MathieuViossat\Util\ArrayToTextTable;
 
 /**
@@ -568,7 +565,6 @@ function in_range($number, $min, $max, $inclusive = false) {
   return false;
 }
 
-// Also declared in intel
 if(function_exists("_getAlternativeEans") === false) {
   function _getAlternativeEans($ean) {
     $eans = (array) $ean;

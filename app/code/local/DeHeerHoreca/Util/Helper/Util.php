@@ -1416,35 +1416,39 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * 
    * Also used in app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml.
    *
-   * @param  object $_product
-   * @param  mixed  $context
+   * @param   Mage_Catalog_Model_Product  $_product
+   * @param   mixed                       $context
    *
-   * @return string
+   * @return  string
    */
-  public static function auto_productlabel(object $_product, mixed $context): string {
+  public static function auto_productlabel(Mage_Catalog_Model_Product $_product, mixed $context): string {
     if(!empty($_product->getProductLabel())) {
       return (string) $_product->getProductLabel();
     }
+    
+    $supplier_sys     = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
+    $_price           = $_product->getPrice();
+    $_finalPrice      = $_product->getFinalPrice();
+    $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
     
     if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
       return "SALE";
     }
     
-    $supplier_sys = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
-    $now = CarbonImmutable::now();
+    $now              = CarbonImmutable::now();
     
     // Hendi promo
-    // if($supplier_sys === "hendi" && $now->isBefore("2025-09-01 00:00:00")) {
+    // if(!$hasSpecialPrice && $supplier_sys === "hendi" && $now->isBefore("2025-09-01 00:00:00")) {
     //   return "5% Kortingscode";
     // }
     
     // Bartscher promo
-    if($supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
+    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
       return "5% Kortingscode";
     }
     
     // Combisteel promo
-    if($supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
+    if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
       return "5% Kortingscode";
     }
     

@@ -8,7 +8,9 @@
 
 use Carbon\CarbonImmutable;
 
+/** @var Mage_Catalog_Model_Product $_product */
 $_product                   = $this->getProduct();
+
 $_helper                    = $this->helper("catalog/output");
 $sku                        = _get_product_attribute($_product, "sku");
 $_store                     = $_product->getStore();
@@ -66,8 +68,9 @@ $pvideo                 = _get_product_attribute($_product, "product_video");
 $tagline                = _get_product_attribute($_product, "tagline");
 $supplier_name          = (string) _get_product_attribute($_product, "supplier");
 $supplier_sys           = (string) preg_replace("/\s+/", "", strtolower($supplier_name));
-$_price                 = $_product->getPrice(); // @todo is this used?
+$_price                 = $_product->getPrice();
 $_finalPrice            = $_product->getFinalPrice();
+$hasSpecialPrice        = $_product->getSpecialPrice() && $_finalPrice < $_price;
 $product_description_md = trim((string) _get_product_attribute($_product, "description"));
 $product_description    = "";
 
@@ -977,7 +980,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   echo $this->getChildHtml("addto");
                   ?>
                 </div>
-
+                
                 <?php
                 if($eol === true) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
@@ -988,21 +991,18 @@ if($stock_data["overall_stock_status"] === "backorder"
                 if(!empty($delivery_text)) {
                   echo "<div class='clzdelvlb'><span class='delivery-logo'>&nbsp;</span>{$delivery_text}</div>";
                 }
-
+                
                 echo $our_usps_content;
                 echo $payment_methods_content;
                 echo $help_content;
-
                 echo $this->getChildHtml("extra_buttons");
               }
-
+              
               // All products
-
               echo $this->getChildHtml("product_type_data");
               echo $this->getChildHtml("extrahint");
-
+              
               // Non-configurable products
-
               if(!$this->hasOptions()) {
                 ?>
                 <div class="add-to-box">
@@ -1028,7 +1028,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   // SYNC WITH app/code/local/DeHeerHoreca/Util/Helper/Util.php
                   $now = CarbonImmutable::now();
                   
-                  // if($supplier_sys === "hendi" && $now->isBefore("2025-08-31 00:00:00")) {
+                  // if(!$hasSpecialPrice && $supplier_sys === "hendi" && $now->isBefore("2025-08-31 00:00:00")) {
                   //   ? >
                   //   <div class="card mx-auto p-2 mb-2">
                   //     <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
@@ -1041,7 +1041,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                   //   </div>< ?php
                   // }
                   
-                  if($supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) { ?>
+                  if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
                       <img src="//images.chefstore.nl/media/wysiwyg/brands/bartscher.png?tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
@@ -1053,7 +1053,7 @@ if($stock_data["overall_stock_status"] === "backorder"
                     </div><?php
                   }
                   
-                  if($supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) { ?>
+                  if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <p class="card-text strong text-danger text-center bg-light bg-gradient"></p>
                       <img src="//images.chefstore.nl/media/wysiwyg/brands/combisteel.png?tr=w-140,c-at_max" class="card-img-top px-5" alt="Coupon Code">
@@ -1115,9 +1115,6 @@ if($stock_data["overall_stock_status"] === "backorder"
                 <?php
               }
               echo $this->getChildHtml("sharing");
-              // if($_product->getFinalPrice() < 150 && strtolower($supplier_name) === "gastronoble") {
-                // echo "<p>Deze leverancier heeft het momenteel extra druk door COVID-19, het kan zijn dat uw levertijd wordt gehaald, maar het kan ook iets uitlopen.</p>";
-              // }
               ?>
             </div>
 

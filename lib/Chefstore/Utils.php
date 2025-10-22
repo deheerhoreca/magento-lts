@@ -5,52 +5,10 @@ declare(strict_types=1);
 namespace Chefstore;
 
 use \Brick\VarExporter\VarExporter;
-use \Illuminate\Support\Arr;
-use \Illuminate\Support\Collection;
-use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
-use \Symfony\Component\Cache\Adapter\ApcuAdapter;
-use \Symfony\Component\Cache\Adapter\ArrayAdapter;
-use \Symfony\Component\Cache\Adapter\ChainAdapter;
-use \Symfony\Component\Cache\Adapter\PhpFilesAdapter;
-use \Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use \Symfony\Contracts\Cache\ItemInterface;
-
-const DHH_DEV_IPS = ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
-
-// Setup global aliases to prevent "use" statements all over -- Needs test because this file might get included multiple times by Composer
-// Cannot be executed multiple times between our apps
-if (!defined("DHH_CLASS_ALIASES_APPLIED")) {
-  if (!is_callable("Arr"))           class_alias(Arr::class, "Arr", true);
-  if (!is_callable("Collection"))    class_alias(Collection::class, "Collection", true);
-  if (!is_callable("Number"))        class_alias(Number::class, "Number", true);
-  if (!is_callable("Str"))           class_alias(Str::class, "Str", true);
-  if (!is_callable("ItemInterface")) class_alias(ItemInterface::class, "ItemInterface", true);
-  define("DHH_CLASS_ALIASES_APPLIED", true);
-}
-
-class Html {
-
-  // \Chefstore\Html\addEncodedJsStatement("var x=1;");
-  // Add an already-encoded JavaScript statement for echo'ing just before </body>
-  public static function addEncodedJsStatement(string $statement): void {
-    $GLOBALS["footer_js_statements"] ??= [];
-    $GLOBALS["footer_js_statements"][] = $statement;
-  }
-
-  // Echo any queued JavaScript statements that can wait until just before </body>
-  // Statements should be encoded before storing them!
-  public static function writeJsStatements(): void {
-    if (isset($GLOBALS["footer_js_statements"])) {
-      foreach ($GLOBALS["footer_js_statements"] as $statement) {
-        echo "<script>" . $statement . "</script>" . PHP_EOL;
-      }
-    }
-  }
-}
 
 class Utils {
-
+  
   public static $dev_ips = [
     "5.132.21.238",
     "185.127.111.227",
@@ -59,20 +17,16 @@ class Utils {
     "87.210.61.235",
     "81.59.51.217",
   ];
-
+  
   // \Chefstore\Utils::dump("foo");
   public static function dump($mixed, bool $return = false) {
-    // if(!isset($_GET['nofpc']) || !isset($_SERVER["REMOTE_ADDR"]) || !in_array($_SERVER["REMOTE_ADDR"], self::$dev_ips, true)) {
-    // return;
-    // }
-
     if (is_callable($mixed)) {
       self::printr($mixed(), $return);
     } else {
       self::printr($mixed, $return);
     }
   }
-
+  
   // \Chefstore\Utils::is_serialized("foo");
   public static function is_serialized($data, $strict = true) {
     // If it isn't a string, it isn't serialized.
@@ -131,7 +85,7 @@ class Utils {
     }
     return false;
   }
-
+  
   // PHP var_export() with short array syntax (square brackets) indented 2 spaces.
   // NOTE: The only issue is when a string value has `=>\n[`, it will get converted to `=> [`
   // @link https://www.php.net/manual/en/function.var-export.php
@@ -223,243 +177,5 @@ class Utils {
    */
   public static function msleep(int $time): void {
     usleep($time * 1000);
-  }
-}
-
-class CacheBuster {
-  
-  // function addTs(string $relative_path): string {
-  //   if(!is_file($relative_path)) {
-  //     return $relative_path;
-  //   }
-    
-  //   $pathinfo = pathinfo($relative_path);
-    
-  //   if(empty($pathinfo['extension']) || empty($pathinfo['filename']) || empty($pathinfo['basename']) || !in_array($pathinfo['extension'], ["png", "jpg", "gif"], true)) {
-  //     return $relative_path;
-  //   }
-    
-  //   $mtime    = filemtime($path);
-  //   $ts_path  = implode(".", [$pathinfo["filename"], $timestamp, $pathinfo['extension']]);
-    
-  //   return str_replace($pathinfo["basename"], $ts_path, $url);
-  // }
-  
-  // Add the filemtime to an FS path
-  // - $path MUST be a relative path, starting with the webroot
-  // - "./assets/bower-asset/font-awesome/css/all.min.css" => "/assets/bower-asset/font-awesome/css/all.ts0123456789.min.css"
-  public static function assetAddMtime(string $path): string {
-    if(is_file($path)) {
-      $path = ltrim(prependExtension($path, "ts".filemtime($path)), ".");
-    }
-    
-    return $path;
-  }  
-  
-  public static function _addTimestampToUrl(string $url, ?string $baseUrl = null, ?string $basePath = null) {
-    $GLOBALS["dhh_om_fs_mapping"] ??= [
-      ['value' => Mage_Core_Model_Store::URL_TYPE_JS,    'label' => "/js/"],
-      ['value' => Mage_Core_Model_Store::URL_TYPE_MEDIA, 'label' => "/media/"],
-      ['value' => Mage_Core_Model_Store::URL_TYPE_SKIN,  'label' => "/skin/"],
-    ];
-    
-    $url      = self::_sanitizeUrl($url);
-    $baseUrl  = self::_sanitizeUrl($baseUrl);
-    $path     = str_replace($baseUrl, $basePath, $url); 
-    $pathinfo = pathinfo($path);
-    
-    if (empty($pathinfo['extension']) || empty($pathinfo['filename']) || empty($pathinfo['basename'])
-    || !in_array($pathinfo['extension'], ["png", "jpg", "gif"], true) || !file_exists($path)) {
-      return $url;
-    }
-    
-    $timestamp = filemtime($path);
-    
-    $final = [
-      $pathinfo['filename'],
-      $timestamp,
-      $pathinfo['extension'],
-    ];
-    
-    return str_replace($pathinfo['basename'], implode('.', $final), $url);
-  }
-  
-  /**
-   * Sanitize URL by removing query, fragment, user, or pass if found
-   *
-   * @param $url
-   * @return string
-   */
-  protected static function _sanitizeUrl(string $url): string {
-    $url    = parse_url($url);
-    $scheme = isset($url['scheme']) ? $url['scheme'] . '://' : '';
-    $host   = isset($url['host']) ? $url['host'] : '';
-    $port   = isset($url['port']) ? ':' . $url['port'] : '';
-    $path   = isset($url['path']) ? $url['path'] : '';
-    return "$scheme$host$port$path";
-  }
-  
-  // \Chefstore\CacheBuster::prependExtension()
-  public static function prependExtension(string $path, string $prepend) {
-    return self::replaceExtension($path, $prepend.".".self::getExtension($path));
-  }
-  
-  // \Chefstore\CacheBuster::replaceExtension()
-  public static function replaceExtension(string $path, string $new_extension): string {
-    if(is_file($path) && $info = pathinfo($path)) {
-      return "{$info["dirname"]}/{$info["filename"]}.{$new_extension}";
-    }
-    
-    return $path;
-  }
-  
-  // \Chefstore\CacheBuster::getExtension()
-  public static function getExtension(string $path): string {
-    return pathinfo($path, PATHINFO_EXTENSION);
-  }
-}
-
-class Cache {
-
-  // PSR-6:
-
-  /*
-  // create a new item by trying to get it from the cache
-  $productsCount = $cache->getItem('stats.products_count');
-  
-  // assign a value to the item and save it
-  $productsCount->set(4711);
-  $cache->save($productsCount);
-  
-  // retrieve the cache item
-  $productsCount = $cache->getItem('stats.products_count');
-  if (!$productsCount->isHit()) {
-    // ... item does not exist in the cache
-  }
-  
-  // retrieve the value stored by the item
-  $total = $productsCount->get();
-  
-  // remove the cache item
-  $cache->deleteItem('stats.products_count');
-  */
-
-  // CACHE CONTRACTS:
-
-  // $cache_key = "tm_richsnippets_product_json_{$product->getId()}";
-  //
-  // if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "tm_richsnippets")) {
-  //   $json = Mage::app()->getCache()->load($cache_key);
-  //   if(empty($json)) {
-  //     DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
-  //   } else {
-  //     DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
-  //     echo "<script type=\"application/ld+json\">{$json}</script>";
-  //     return;
-  //   }
-  // }
-  //
-  // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "tm_richsnippets")) {
-  //
-  //   $cache_tags   = Mage::helper("deheerhoreca_fpc/data")->get_cache_tags();
-  //   $cache_tags[] = "DHH_TM_RICHSNIPPETS";
-  //
-  //   if(Mage::app()->getCache()->save($json, $cache_key, $cache_tags, 86400 * 7)) {
-  //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-  //   }
-  // }
-
-  // ************* //
-
-  // $now = _cc()->get($cache_key, function($item) {
-  // return Carbon::now();
-  // });
-
-  // $now = _cc()->get($cache_key, function($item) {
-  // $item->expiresAfter(60);
-  // return Carbon::now();
-  // });
-
-  // $var = _cc()->get($cache_key, fn() => "bier");
-  // $var = _arc()->get($cache_key, fn() => "bier");
-
-  // Makes no sense for CLI
-  public static function _apc() {
-    $GLOBALS["apcu_cache"] ??= (function_exists("apcu_enabled") && apcu_enabled()) ? new ApcuAdapter(namespace: "om_symfony_apcu", defaultLifetime: 3600, version: "1") : null;
-    return $GLOBALS["apcu_cache"];
-  }
-
-  // Note: Unserialized cache -- Wiped after every run
-  public static function _arc() {
-    $GLOBALS["ar_cache"] ??= new ArrayAdapter(defaultLifetime: 120, storeSerialized: false, maxLifetime: 0, maxItems: 0);
-    return $GLOBALS["ar_cache"];
-  }
-
-  // Filesystem Cache Adapter -- Not as fast but should be on the RAM disk then it's okay
-  public static function _fsc() {
-    $GLOBALS["fs_cache"] ??= new FilesystemAdapter(namespace: "om_symfony_fsc", defaultLifetime: 3600, directory: sys_get_temp_dir());
-    return $GLOBALS["fs_cache"];
-  }
-
-  // Creates a cache chain, APCu for CLI and Array otherwise
-  // Filesystem is too slow unless it's big or on a RAM disk. $slow_only = true enables the file system cache.
-  public static function _cc(bool $slow_only = false) {
-
-    // Slow-only cache chain
-    if ($slow_only) {
-      $GLOBALS["cs_cache"] ??= new ChainAdapter([_fsc()]);
-      return $GLOBALS["cs_cache"];
-    }
-
-    // Fast cache chain
-    if (!isset($GLOBALS["c_cache"])) {
-      $adapters = (function_exists("apcu_enabled") && apcu_enabled()) ? [_apc()] : [_arc()];
-      $GLOBALS["c_cache"] = new ChainAdapter($adapters);
-    }
-
-    return $GLOBALS["c_cache"];
-  }
-
-  // Get a fast, single cache adapter. Depends on support of the environment.
-  public static function _fc() {
-    return $GLOBALS["fast_cache"] ??= (function_exists("apcu_enabled") && apcu_enabled()) ? _apc() : _arc();
-  }
-
-  public static function _prune_apc() {
-    return _apc()->prune();
-  }
-
-  public static function _prune_arc() {
-    return _arc()->prune();
-  }
-
-  public static function _prune_fsc() {
-    return _fsc()->prune();
-  }
-
-  /* 
-  * Delete a key (if exists) from a cache adapter
-  * Usage: _c_delete(_fsc(), "foo");
-  */
-  public static function _c_delete($adapter, string $cache_key) {
-
-    // if(DRYRUN) {
-    //   if(VERBOSE) {
-    //     verbose("Dryrun: Remove cache key: {$cache_key}");
-    //   }
-    //   return true;
-    // }
-
-    if ($result = $adapter->delete($cache_key)) {
-      // im("cache_delete_key_ok");
-      // if(VERBOSE) {
-      //   verbose("Removed cache key: {$cache_key}");
-      // }
-    } else {
-      // im("cache_delete_key_nok");
-      // notice("Failed to remove cache key: {$cache_key}");
-    }
-
-    return $result;
   }
 }
