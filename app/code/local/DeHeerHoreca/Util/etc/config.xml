@@ -29,17 +29,89 @@
         </observers>
       </controller_front_init_before>
       
-      <!-- Set Elastic APM data
-      <controller_action_predispatch>
+      <!-- Implement a simple wait after sending an email to not cross Gmail limits -->
+      <email_send_after>
         <observers>
-          <configure_elastic_apm>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>emailSendAfter</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </email_send_after>
+      
+      <!-- Alter some columns of the product flat table before indexing -->
+      <catalog_product_flat_prepare_columns>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>alterProductFlatCols</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_flat_prepare_columns>
+      
+    </events>
+    <blocks>
+      <adminhtml>
+        <rewrite>
+          <catalog_product_grid>DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid</catalog_product_grid>
+          <!-- <up_sell_product_grid>DeHeerHoreca_Util_Adminhtml_Product_Edit_Tab_Upsell</up_sell_product_grid> -->
+        </rewrite>
+      </adminhtml>
+    </blocks>
+  </global>
+  <frontend>
+    <events>
+    
+      <catalog_controller_product_view>
+        <observers>
+          <reports>
+            <type>disabled</type>
+          </reports>
+        </observers>
+      </catalog_controller_product_view>
+      
+      <!-- Track a click -->
+      <controller_front_send_response_after>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
             <type>singleton</type>
             <class>deheerhoreca_util/observer</class>
-            <method>configureElasticApm</method>
-          </configure_elastic_apm>
+            <method>logClick</method>
+          </DeHeerHoreca_Util_Model_Observer>
         </observers>
-      </controller_action_predispatch>
-      -->
+      </controller_front_send_response_after>
+      
+      <!-- Add data to GA4 events -->
+      <googleanalytics_ga4_send_data_before>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>alterGa4Data</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </googleanalytics_ga4_send_data_before>
+      
+    </events>
+  </frontend>
+  <adminhtml>
+    <layout>
+      <updates>
+        <adminhtml_catalog_product_edit>
+          <file>dhh.xml</file>
+        </adminhtml_catalog_product_edit>
+      </updates>
+    </layout>
+    <events>
+      
+      <sales_order_place_before>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>beforeOrderPlace</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </sales_order_place_before>
       
       <!-- On admin product edit -->
       <catalog_product_edit_action>
@@ -71,89 +143,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_save_after>
-      
-      <!-- Implement a simple wait after sending an email to not cross Gmail limits -->
-      <email_send_after>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <class>deheerhoreca_util/observer</class>
-            <method>emailSendAfter</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </email_send_after>
-      
-      <!-- Add data to GA4 events -->
-      <googleanalytics_ga4_send_data_before>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <class>deheerhoreca_util/observer</class>
-            <method>alterGa4Data</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </googleanalytics_ga4_send_data_before>
-      
-      <!-- Add data to GA4 events -->
-      <catalog_product_flat_prepare_columns>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <class>deheerhoreca_util/observer</class>
-            <method>alterProductFlatCols</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </catalog_product_flat_prepare_columns>
-      
-    </events>
-    <blocks>
-      <adminhtml>
-        <rewrite>
-          <catalog_product_grid>DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid</catalog_product_grid>
-          <!-- <up_sell_product_grid>DeHeerHoreca_Util_Adminhtml_Product_Edit_Tab_Upsell</up_sell_product_grid> -->
-        </rewrite>
-      </adminhtml>
-    </blocks>
-  </global>
-  <frontend>
-    <events>
-      <catalog_controller_product_view>
-        <observers>
-          <reports>
-            <type>disabled</type>
-          </reports>
-        </observers>
-      </catalog_controller_product_view>
-      
-      <!-- Track a click -->
-      <controller_front_send_response_after>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <type>singleton</type>
-            <class>deheerhoreca_util/observer</class>
-            <method>logClick</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </controller_front_send_response_after>
-      
-    </events>
-  </frontend>
-  <adminhtml>
-    <layout>
-      <updates>
-        <adminhtml_catalog_product_edit>
-          <file>dhh.xml</file>
-        </adminhtml_catalog_product_edit>
-      </updates>
-    </layout>
-    <events>
-      
-      <sales_order_place_before>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <type>singleton</type>
-            <class>deheerhoreca_util/observer</class>
-            <method>beforeOrderPlace</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </sales_order_place_before>
       
       <!-- Disable admin notifications -->
       <!-- https://gist.github.com/fbrnc/3975149 -->

@@ -166,7 +166,7 @@
     # Redirect catalog URLs -- https://htaccess.madewithlove.com
 
     # 2025-10-22:  /koelingen/vrieskasten  =>  /koelingen/horeca-vriezers
-    Redirect 301 /koelingen/vrieskasten/vrieskasten.html /koelingen/horeca-vriezers/vrieskasten.html
+    Redirect 301 /koelingen/vrieskasten.html /koelingen/horeca-vriezers.html
     RewriteRule "^/?koelingen/vrieskasten/(.+)$" "/koelingen/horeca-vriezers/$1" [R=301,L]
 
 ########################################################################################

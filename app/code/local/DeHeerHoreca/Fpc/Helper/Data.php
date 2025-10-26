@@ -230,9 +230,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
+    // Protect the cache against bots in layered navigation labyrinths: allow max 2 GET params
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-    if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || self::request_has_no_cache_headers()) {
+    if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])
+    || (!$html_block_mode && is_countable($_GET) && count($_GET) > 2) || self::request_has_no_cache_headers()) {
       self::log("Read cache disabled (by request header or URL param: {$debug_name}");
       return false;
     }
@@ -277,10 +279,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
+    // Protect the cache against bots in layered navigation labyrinths: allow max 2 GET params
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     // ath: Aoe_TemplateHints
-    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])) {
+    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
+    || (!$html_block_mode && is_countable($_GET) && count($_GET) > 2)) {
       self::log("Write cache disabled (URL parameter): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;

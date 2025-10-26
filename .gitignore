@@ -117,6 +117,7 @@ phpunit.xml
 /maintenance.flag
 /maintenance.ip
 /js/elastic-apm-rum.umd.min.js.map
+/_dev.html
 
 # DIRS
 /js/ext-*
