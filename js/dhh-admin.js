@@ -6,7 +6,6 @@ if (Validation) {
     } else {
       return true;
     }
-
   });
 }
 

@@ -128,7 +128,9 @@ echo $html;
 
 // Store in cache
 if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta")) {
-  if(Mage::app()->getCache()->save($html, $cache_key, ["DHH_EKE_OGMETA"], 86400 * 7)) {
+  $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
+  $cache_tags = ["DHH_EKE_OGMETA", "DHH_PRODUCT_{$_product->getId()}", "PRODUCT_{$_product->getId()}", "DHH_SUPPLIER_{$supplier_sys_upper}"];
+  if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400 * 7)) {
     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
   }
 }

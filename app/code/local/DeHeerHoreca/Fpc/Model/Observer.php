@@ -79,7 +79,9 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    */
   public function clearProductCache($observer): bool {
     $productId = $observer->getProduct()->getId();
-    $cache_tags = ["DHH_PRODUCT_{$productId}"];
+    $cache_tags = [
+      "DHH_PRODUCT_{$productId}",
+    ];
     foreach($observer->getProduct()->getCategoryIds() as $category_id) {
       $cache_tags[] = "DHH_CATEGORY_{$category_id}";
     }

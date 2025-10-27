@@ -2,16 +2,30 @@
 
 declare(strict_types=1);
 
+use \Chefstore\Helper as ChefstoreHelper;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
 use \MathieuViossat\Util\ArrayToTextTable;
 
+require_once __DIR__."/Loader.php";
+
 /**
  * !!! Attention !!!
  * - Use !function_exists() to avoid conflicts when running as an Intel plugin
  */
+
+/********************************************************************* Chefstore\Helper **********************************************************************/
+
+/**
+ * Get the DeHeerHoreca Util helper.
+ *
+ * @return \DeHeerHoreca_Util_Helper_Util
+ */
+function getOmDhhUtilHelper(): \DeHeerHoreca_Util_Helper_Util {
+  return ChefstoreHelper::loadOmHelperDhhUtil();
+}
 
 // Laravel picks
 
@@ -37,7 +51,7 @@ if(!function_exists("rescue")) {
         }
         // logger("Rescued exception: {$exception->getMessage()}", "ERROR");
       }
-
+      
       return value($rescue, $exception);
     }
   }

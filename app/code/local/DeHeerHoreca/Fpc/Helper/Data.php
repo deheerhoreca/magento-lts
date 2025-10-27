@@ -155,7 +155,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   public static function get_cache_tags(): array {
-    
     $cache_tags = [];
     
     if($om_action = Mage::app()->getFrontController()->getAction()->getFullActionName()) {

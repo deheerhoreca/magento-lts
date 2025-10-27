@@ -265,7 +265,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   public function getProductGridHtml($_product, $product_block, $options = []) {
-    
     Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
     
     /*

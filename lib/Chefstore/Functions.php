@@ -189,7 +189,10 @@ function dhh_profiler_enabled(): bool {
  * @return Mage_Catalog_Model_Resource_Product_Collection
  */
 function getProductCollection(): Mage_Catalog_Model_Resource_Product_Collection {
-  return Mage::getResourceModel("catalog/product_collection");
+  /** @var Mage_Catalog_Model_Resource_Product_Collection */
+  $_products = Mage::getResourceModel("catalog/product_collection");
+  
+  return $_products;
 }
 
 /**
