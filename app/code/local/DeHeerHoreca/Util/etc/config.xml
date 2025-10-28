@@ -5,6 +5,7 @@
       <version>0.1.0</version>
     </DeHeerHoreca_Util>
   </modules>
+  
   <global>
     <helpers>
       <deheerhoreca_util>
@@ -17,7 +18,6 @@
       </deheerhoreca_util>
     </models>
     <events>
-      
       <!-- Set Elastic APM data -->
       <controller_front_init_before>
         <observers>
@@ -28,7 +28,6 @@
           </configure_elastic_apm>
         </observers>
       </controller_front_init_before>
-      
       <!-- Implement a simple wait after sending an email to not cross Gmail limits -->
       <email_send_after>
         <observers>
@@ -38,7 +37,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </email_send_after>
-      
       <!-- Alter some columns of the product flat table before indexing -->
       <catalog_product_flat_prepare_columns>
         <observers>
@@ -48,7 +46,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_flat_prepare_columns>
-      
     </events>
     <blocks>
       <adminhtml>
@@ -59,9 +56,10 @@
       </adminhtml>
     </blocks>
   </global>
+  
   <frontend>
     <events>
-    
+      <!-- Disable product view reports to reduce database load -->
       <catalog_controller_product_view>
         <observers>
           <reports>
@@ -69,7 +67,6 @@
           </reports>
         </observers>
       </catalog_controller_product_view>
-      
       <!-- Track a click -->
       <controller_front_send_response_after>
         <observers>
@@ -80,7 +77,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </controller_front_send_response_after>
-      
       <!-- Add data to GA4 events -->
       <googleanalytics_ga4_send_data_before>
         <observers>
@@ -90,9 +86,9 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </googleanalytics_ga4_send_data_before>
-      
     </events>
   </frontend>
+  
   <adminhtml>
     <layout>
       <updates>
@@ -102,7 +98,27 @@
       </updates>
     </layout>
     <events>
-      
+      <!-- Runs before saving a product -->
+      <catalog_product_save_before>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>updateProductBeforeSave</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_save_before>
+      <!-- Runs before saving a product -->
+      <catalog_product_save_after>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>updateProductAfterSave</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </catalog_product_save_after>
+      <!-- Before placing an order -->
       <sales_order_place_before>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
@@ -112,7 +128,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </sales_order_place_before>
-      
       <!-- On admin product edit -->
       <catalog_product_edit_action>
         <observers>
@@ -123,27 +138,6 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_edit_action>
-      
-      <catalog_product_save_before>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <type>singleton</type>
-            <class>deheerhoreca_util/observer</class>
-            <method>updateProductBeforeSave</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </catalog_product_save_before>
-      
-      <catalog_product_save_after>
-        <observers>
-          <DeHeerHoreca_Util_Model_Observer>
-            <type>singleton</type>
-            <class>deheerhoreca_util/observer</class>
-            <method>updateProductAfterSave</method>
-          </DeHeerHoreca_Util_Model_Observer>
-        </observers>
-      </catalog_product_save_after>
-      
       <!-- Disable admin notifications -->
       <!-- https://gist.github.com/fbrnc/3975149 -->
       <!-- <controller_action_predispatch> -->
