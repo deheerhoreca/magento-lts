@@ -526,9 +526,10 @@ class Aoe_Scheduler_Model_Schedule extends Mage_Cron_Model_Schedule
      */
     protected function log($message, $level = null)
     {
-        if ($logFile = Mage::getStoreConfig('system/cron/logFile')) {
-            Mage::log($message, $level, $logFile);
-        }
+        // DHH:
+        // if ($logFile = Mage::getStoreConfig('system/cron/logFile')) {
+            Mage::log($message, $level, "cron.log");
+        // }
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
+use Mage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
@@ -15,6 +16,8 @@ use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
 
 const DHH_DEV_IPS = ["5.132.21.238", "185.127.111.251", "185.127.111.252", "87.210.61.235", "185.127.111.227", "81.59.51.217"];
+
+Mage::log("Loading ".__FILE__, Zend_Log::ERR);
 
 // Setup global aliases to prevent "use" statements all over -- Needs test because this file might get included multiple times by Composer
 // Cannot be executed multiple times between our apps

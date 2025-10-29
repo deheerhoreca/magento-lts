@@ -39,7 +39,8 @@
     "bower-asset/scriptaculous-bower": "^1.9",
     "brick/varexporter": "^0.6.0",
     "cmixin/business-day": "^1.18",
-    "colinmollenhour/magento-redis-session": "dev-master as 3.2.0",
+    "colinmollenhour/cache-backend-redis": "*",
+    "colinmollenhour/magento-redis-session": "*",
     "elidrissidev/magento-api2basicauth": "^1.0",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0",
@@ -111,7 +112,6 @@
         "aoepeople/aoe_profiler",
         "aoepeople/aoe_scheduler",
         "paynl/magento-plugin",
-        "colinmollenhour/magento-redis-session",
         "fballiano/openmage-cssjs-minify",
         "firegento/adminmonitoring",
         "firegento/debug"
@@ -143,13 +143,6 @@
       "url": "https://github.com/deheerhoreca/paynl-openmage",
       "only": [
         "paynl/magento-plugin"
-      ]
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/deheerhoreca/Cm_RedisSession",
-      "only": [
-        "colinmollenhour/magento-redis-session"
       ]
     },
     {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73ec25f6d47169f6eb1c1b319d220a37",
+    "content-hash": "1cf723ff822ba19b472681efbe48df32",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -603,7 +603,7 @@
             "version": "1.17.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:colinmollenhour/Cm_Cache_Backend_Redis.git",
+                "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
                 "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1"
             },
             "dist": {
@@ -626,14 +626,7 @@
                     "Cm/Cache/Backend/Redis.php"
                 ]
             },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit tests"
-                ],
-                "php-cs-fixer": [
-                    "vendor/bin/php-cs-fixer fix --diff"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause-Modification"
             ],
@@ -644,6 +637,10 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
+            "support": {
+                "issues": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/issues",
+                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.17.1"
+            },
             "time": "2023-12-21T21:56:18+00:00"
         },
         {
@@ -695,27 +692,27 @@
         },
         {
             "name": "colinmollenhour/magento-redis-session",
-            "version": "dev-master",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/deheerhoreca/Cm_RedisSession.git",
-                "reference": "0f0c94191e817fc0ffe230fda3a7008600175f15"
+                "url": "https://github.com/colinmollenhour/Cm_RedisSession.git",
+                "reference": "d86fc3789f884cb4b04a9353022a9a8ce89efbbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Cm_RedisSession/zipball/0f0c94191e817fc0ffe230fda3a7008600175f15",
-                "reference": "0f0c94191e817fc0ffe230fda3a7008600175f15",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_RedisSession/zipball/d86fc3789f884cb4b04a9353022a9a8ce89efbbd",
+                "reference": "d86fc3789f884cb4b04a9353022a9a8ce89efbbd",
                 "shasum": ""
             },
             "require": {
                 "colinmollenhour/credis": "*",
-                "colinmollenhour/php-redis-session-abstract": "~1.4"
+                "colinmollenhour/php-redis-session-abstract": "~2.1"
             },
             "suggest": {
                 "magento-hackathon/magento-composer-installer": "Makes it possible to manage this package as a dependency"
             },
-            "default-branch": true,
             "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -727,27 +724,28 @@
             "description": "A Redis-based session handler for Magento with optimistic locking.",
             "homepage": "https://github.com/colinmollenhour/Cm_RedisSession",
             "support": {
-                "source": "https://github.com/deheerhoreca/Cm_RedisSession/tree/master"
+                "issues": "https://github.com/colinmollenhour/Cm_RedisSession/issues",
+                "source": "https://github.com/colinmollenhour/Cm_RedisSession/tree/3.3.0"
             },
-            "time": "2025-01-30T22:22:35+00:00"
+            "time": "2025-05-29T19:31:55+00:00"
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
-            "version": "v1.7.0",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                "reference": "5d93866cd53701ef8f866cb41cb5c6d7259d4416"
+                "reference": "defae6e34b0f6ce42e4be4f14f529d8932aea73a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/5d93866cd53701ef8f866cb41cb5c6d7259d4416",
-                "reference": "5d93866cd53701ef8f866cb41cb5c6d7259d4416",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/defae6e34b0f6ce42e4be4f14f529d8932aea73a",
+                "reference": "defae6e34b0f6ce42e4be4f14f529d8932aea73a",
                 "shasum": ""
             },
             "require": {
-                "colinmollenhour/credis": "~1.6",
-                "php": "^5.5 || ^7.0 || ^8.0"
+                "colinmollenhour/credis": "~1.17",
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9"
@@ -771,9 +769,9 @@
             "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
             "support": {
                 "issues": "https://github.com/colinmollenhour/php-redis-session-abstract/issues",
-                "source": "https://github.com/colinmollenhour/php-redis-session-abstract/tree/v1.7.0"
+                "source": "https://github.com/colinmollenhour/php-redis-session-abstract/tree/v2.1.2"
             },
-            "time": "2024-02-03T06:04:45+00:00"
+            "time": "2025-05-05T07:31:11+00:00"
         },
         {
             "name": "composer/installers",
@@ -2270,7 +2268,7 @@
             "version": "4.0.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:Cotya/magento-composer-installer.git",
+                "url": "https://github.com/Cotya/magento-composer-installer.git",
                 "reference": "ece5cc5bb2a0150a743619901543036597f9eb5b"
             },
             "dist": {
@@ -2311,17 +2309,7 @@
                     "MagentoHackathon\\Composer": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-0": {
-                    "MagentoHackathon\\Composer\\Magento": "tests/"
-                }
-            },
-            "archive": {
-                "exclude": [
-                    "vendor",
-                    "/tests/FullStackTest/"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0"
             ],
@@ -2358,14 +2346,18 @@
                 "magento",
                 "openmage"
             ],
+            "support": {
+                "issues": "https://github.com/Cotya/magento-composer-installer/issues",
+                "source": "https://github.com/Cotya/magento-composer-installer/tree/4.0.2"
+            },
             "funding": [
                 {
-                    "type": "patreon",
-                    "url": "https://www.patreon.com/Flyingmana"
+                    "url": "https://github.com/sponsors/Flyingmana",
+                    "type": "github"
                 },
                 {
-                    "type": "github",
-                    "url": "https://github.com/sponsors/Flyingmana"
+                    "url": "https://www.patreon.com/Flyingmana",
+                    "type": "patreon"
                 }
             ],
             "time": "2022-04-20T19:23:22+00:00"
@@ -3246,12 +3238,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/paynl-openmage.git",
-                "reference": "4e9c17ec5a612b8b449608ffe9ab38c05099e6d6"
+                "reference": "553030de5308d530f7a1ff30889ea9c97421133a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/4e9c17ec5a612b8b449608ffe9ab38c05099e6d6",
-                "reference": "4e9c17ec5a612b8b449608ffe9ab38c05099e6d6",
+                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/553030de5308d530f7a1ff30889ea9c97421133a",
+                "reference": "553030de5308d530f7a1ff30889ea9c97421133a",
                 "shasum": ""
             },
             "default-branch": true,
@@ -3269,7 +3261,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/paynl-openmage/tree/master"
             },
-            "time": "2025-08-19T22:28:03+00:00"
+            "time": "2025-10-29T20:21:02+00:00"
         },
         {
             "name": "pelago/emogrifier",
@@ -4800,16 +4792,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.4.24",
+            "version": "v6.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "f0ce0bd36a3accb4a225435be077b4b4875587f4"
+                "reference": "5621f039a71a11c87c106c1c598bdcd04a19aeea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f0ce0bd36a3accb4a225435be077b4b4875587f4",
-                "reference": "f0ce0bd36a3accb4a225435be077b4b4875587f4",
+                "url": "https://api.github.com/repos/symfony/string/zipball/5621f039a71a11c87c106c1c598bdcd04a19aeea",
+                "reference": "5621f039a71a11c87c106c1c598bdcd04a19aeea",
                 "shasum": ""
             },
             "require": {
@@ -4823,7 +4815,6 @@
                 "symfony/translation-contracts": "<2.5"
             },
             "require-dev": {
-                "symfony/error-handler": "^5.4|^6.0|^7.0",
                 "symfony/http-client": "^5.4|^6.0|^7.0",
                 "symfony/intl": "^6.2|^7.0",
                 "symfony/translation-contracts": "^2.5|^3.0",
@@ -4866,7 +4857,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.4.24"
+                "source": "https://github.com/symfony/string/tree/v6.4.26"
             },
             "funding": [
                 {
@@ -4886,7 +4877,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-10T08:14:14+00:00"
+            "time": "2025-09-11T14:32:46+00:00"
         },
         {
             "name": "symfony/translation",
@@ -6039,20 +6030,12 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "colinmollenhour/magento-redis-session",
-            "version": "9999999-dev",
-            "alias": "3.2.0",
-            "alias_normalized": "3.2.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "aoepeople/aoe_blackholesession": 20,
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_profiler": 20,
-        "colinmollenhour/magento-redis-session": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "fballiano/openmage-cssjs-minify": 20,
         "firegento/adminmonitoring": 20,
@@ -6087,5 +6070,8 @@
         "ext-zip": "*"
     },
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.2"
+    },
     "plugin-api-version": "2.6.0"
 }

@@ -482,7 +482,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   public static function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []) {
-    
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     // Prevent canonical URL shortening
@@ -562,7 +561,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   public static function replace_between($str, $needle_start, $needle_end, $replacement) {
-    
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     $pos_start  = strpos((string) $str, (string) $needle_start);
@@ -622,14 +620,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
   // Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
-  public static function clean_by_tags(string|array $cache_tags) {
+  public static function clean_by_tags(string|array $cache_tags): bool {
     $cache_tags = (array) $cache_tags;
     
     // Prepend with e6b_ if needed. Redis library does NOT do this.
     $cache_tags = Arr::map($cache_tags, fn($tag) => Str::start($tag, "e6b_"));
     
     // @notice without getBackend() it does not work!
-    
     if(DHH_FPC_DEBUG) {
       $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
       Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
@@ -643,29 +640,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $response;
   }
   
-  // @deprecated use clean_by_tags()
-  public static function _clean_by_keys(...$args) {
+  /**
+   * @deprecated use clean_by_tags()
+   *
+   * @param  mixed ...$args
+   *
+   * @return bool
+   */
+  public static function _clean_by_keys(...$args): bool {
     return self::clean_by_tags($args);
-  }
-}
-
-if(function_exists("printr") === false) {
-  function printr($expr, $return = false) {
-    $ret = null;
-    if(is_array($expr) && !sizeof($expr)) {
-      return;
-    }
-    if(php_sapi_name() !== "cli") {
-      $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
-    }
-    $ret .= print_r($expr, true);
-    if(php_sapi_name() !== "cli") {
-      $ret .= "</pre>";
-    }
-    $ret .= PHP_EOL;
-    if($return) {
-      return $return;
-    }
-    echo $ret;
   }
 }
