@@ -1085,27 +1085,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $extra_delivery_time    = 0;
     $eol                    = ($_product->getEol() === true || $_product->getEol() === "2075") ? true : false;
     $eol_replacement_sku    = $_product->getEolReplacementSku();
-    $expected_delivery      = $_product->getResource()->getAttribute("levertijd")->getFrontend()->getValue($_product);
     $levertijd              = $_product->getAttributeText("levertijd");
     $levertijd_tmp_override = $_product->getAttributeText("levertijd_tmp_override");
     $bestelartikel          = $_product->getAttributeText("bestelartikel");
-    
     // $calwekdate_min         = $calwekdate_max = null;
-    
     $supplier               = $_product->getAttributeText('supplier');
-    
-    /* Temporarily adjust levertijd during holidays */
-    
-    /*
-    if($supplier === "Hendi" || strstr($productTitle, "Hendi")) {
-      $future = strtotime("1 Jan 2020");
-      $timefromdb = time();
-      $timeleft = $future - $timefromdb;
-      $daysleft = round((($timeleft/24)/60)/60);
-      
-      $extra_delivery_time = (int) $daysleft - 2;
-    }
-    */
     
     if(strtolower((string) $levertijd_tmp_override) === "n.v.t.") {
       $levertijd_tmp_override = null;
@@ -1129,13 +1113,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         }
       }
     }
-
+    
     // Code also exists in list.phtml and featured.phtml
-
+    
     if($eol) {
-      
       // EOL
-      
       $stock_message        = "Niet meer leverbaar";
       $stock_message_short  = "Niet leverbaar";
       $stock_tooltip        = "Dit product is helaas niet meer leverbaar. We helpen u graag met het vinden van een geschikt vervangend product.";
@@ -1145,11 +1127,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $backorder_needed     = null;      
       $overall_stock_status = "eol";
       $txtstockdate         = null;
-      
     } elseif($in_stock === false || $saleable === false) {
-      
       // Not sellable
-      
       $stock_message        = "Niet op voorraad";
       $stock_message_short  = "Geen voorraad";
       $delivery_text        = "";
@@ -1158,11 +1137,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $backorder_needed     = null;
       $tagline              = null;
       $overall_stock_status = "not_sellable";
-      
     } elseif($bestelartikel === "Ja" || ($stock_qty <= 0 && $manage_stock)) {
-        
       // Backorder
-      
       $stock_message        = "Pre-order";
       $stock_message_short  = "Pre-order";
       $stock_tooltip        = "Momenteel niet op vooraad maar u kunt het pre-orderen. U bent dan de eerste die het product krijgt.";
@@ -1172,9 +1148,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $backorder_needed     =  true;
       $overall_stock_status = "backorder";
       $stock_data["bestelartikel"] = $bestelartikel;
-
     } else {
-      
       // In stock
       
       // Date calculation is disabled      
@@ -1194,7 +1168,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         // $nmwek_min = (int) trim(strtok($levertijd, 'werkdagen'));
         // $nmwek_max = $nmwek_min + 1;
       // }
-
+      
       // if(empty($nmwek_min) === false) {
         
         // $nmwek_min         += $extra_delivery_time;
@@ -1202,7 +1176,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         
         // $calwekdate_min   = date('d-m-Y', strtotime("+ {$nmwek_min} weekdays"));
         // $calwekdate_max   = date('d-m-Y', strtotime("+ {$nmwek_max} weekdays"));
-
+        
         // // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
         // $holidays         = ["01-01-2020", "10-04-2020", "12-04-2020", "13-04-2020", "27-04-2020", "21-05-2020",
                              // "01-06-2020", "25-12-2020", "26-12-2020"];
