@@ -132,6 +132,7 @@
     "**/package/**": true,
     "**/report/**": true,
     "**/tmp/**": true,
+    "**/vendor/**": true,
     "**/vendor/empiricompany/**": true,
     "**/vendor/openmage/magento-lts/**": true,
     "**/vendor/shardj/zf1-future/library/Zend/**": true,
