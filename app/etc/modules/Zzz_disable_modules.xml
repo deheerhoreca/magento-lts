@@ -14,7 +14,7 @@
       <active>false</active>
     </Mage_Centinel>
     <Guidance_Cachebuster>
-      <active>true</active>
+      <active>false</active>
     </Guidance_Cachebuster>
     <Fballiano_CssjsVersioning>
       <active>false</active>

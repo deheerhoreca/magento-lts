@@ -1405,27 +1405,22 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
     
     if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
-      return "SALE";
+      return "Actieprijs";
     }
     
-    $now              = CarbonImmutable::now();
+    $now = CarbonImmutable::now();
     
-    // Hendi promo
-    // if(!$hasSpecialPrice && $supplier_sys === "hendi" && $now->isBefore("2025-09-01 00:00:00")) {
-    //   return "5% Kortingscode";
-    // }
-    
-    // Bartscher promo
+    // "HENDI5"
     if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
-      return "5% Kortingscode";
+      return "Extra Kortingscode";
     }
-    
-    // Combisteel promo
     if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
-      return "5% Kortingscode";
+      return "Extra Kortingscode";
+    }
+    if(!$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) {
+      return "Extra Kortingscode";
     }
     
-    // // Diamond promo
     // if($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
     //   "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW",
     //   "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
@@ -1436,19 +1431,29 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // }
     
     // Maxima warranty extension
-    if($supplier_sys === "maxima" && $now->isBefore("2025-10-15 00:00:00")) {
-      return "Nu: 24m garantie";
+    if($supplier_sys === "maxima" && $now->isBefore("2026-01-01 00:00:00")) {
+      return "Nu 2 jaar garantie";
     }
     
     return "";
   }
   
   // Builds a YouTube video URL from an ID
-  public static function build_product_video_url($string) {
-    if(!str_contains("http", (string) $string)) {
+  // Sample iframe HTML:
+  // <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/qeK30-F25Ak?si=T2bkx2FSWgSNwDEB"
+  //   title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"
+  //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+  // </iframe>
+  public static function build_product_video_url($string): string {
+    $string = (string) $string;
+    if(!str_contains("http", $string)) {
       // Best way is to just store the youtube ID and build the URL
       // Attempt to reduce "Multiple video URLs discovered as belonging to this video" by adding https:
-      $string = "https://www.youtube-nocookie.com/embed/{$string}?modestbranding=1&loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
+      // $string = "https://www.youtube-nocookie.com/embed/{$string}?loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
+      
+      // 2025-11-03 Reducing custom options to see if Error 153 gets killed:
+      $string = htmlspecialchars((String) $string);
+      $string = "https://www.youtube-nocookie.com/embed/{$string}";
     }
     
     return $string;

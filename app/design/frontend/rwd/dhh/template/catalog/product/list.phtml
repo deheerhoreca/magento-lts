@@ -143,7 +143,6 @@ if($carct && ($category === "category")) {
     }
     echo "</div>".PHP_EOL;
   }
-  
   Varien_Profiler::stop("DHH_CategoryHeader");
 }
 
@@ -219,37 +218,41 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
       $category_name_safe = htmlspecialchars((string) $category_name);
       $image              = $subcategory->getImage();
       $category_url       = $subcategory->getUrl();
-      $image_path         = "{$media_path}/catalog/category/{$image}";
       $img_html           = "";
       
-      if(is_file($image_path)) {
-        $image_url        = "{$media_url}/catalog/category/{$image}";
-        $col_width        = 140;
-        $cdn_img_options  = [
-          "identifier"      => $subcategory->getId(),
-          "fs_path"         => $image_path,
-          "url"             => $image_url,
-          "fit"             => "contain",
-          "width"           => $col_width,
-          "height"          => $col_width,
-          "lazy"            => false,
-          "add_mod_time"    => true,
-          "class"           => "trans-opacity",
-          "title"           => $category_name,
-          "alt"             => $category_name,
-          "quality"         => 80,
-          "relative_url"    => true,
-        ];
-        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      if(empty($image)) {
+        Mage::log("Category {$subcategory->getId()} has no image");
       } else {
-        Mage::log("Category image not found: {$image_path}");
-      }
-      
-      echo "<li style=\"max-width: 180px\">";
-      echo "<a href=\"{$category_url}\" title=\"{$category_name_safe}\">{$img_html}<strong>{$category_name}</strong>";
-      echo "</a></li>".PHP_EOL;
+        $image_path         = "{$media_path}/catalog/category/{$image}";
+        
+        if(is_file($image_path)) {
+          $image_url        = "{$media_url}/catalog/category/{$image}";
+          $col_width        = 140;
+          $cdn_img_options  = [
+            "identifier"      => $subcategory->getId(),
+            "fs_path"         => $image_path,
+            "url"             => $image_url,
+            "fit"             => "contain",
+            "width"           => $col_width,
+            "height"          => $col_width,
+            "lazy"            => false,
+            "add_mod_time"    => true,
+            "class"           => "trans-opacity",
+            "title"           => $category_name,
+            "alt"             => $category_name,
+            "quality"         => 80,
+            "relative_url"    => true,
+          ];
+          $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+        } else {
+          Mage::log("Category {$subcategory->getId()} image not found: {$image_path}");
+        }
+      } ?>
+      <li style="max-width: 180px">
+        <a href="<?=$category_url?>" title="<?=$category_name_safe?>"><?=$img_html?><strong><?=$category_name?></strong></a>
+      </li><?php
     }
-    echo "</ul>".PHP_EOL;
+    echo "</ul>";
     if($haschild) {
       echo "<style>#sidebar-nav {display: block;}</style>";
     }
@@ -265,18 +268,15 @@ Varien_Profiler::stop("DHH_Subcategories");
 
 if($show_products && $_productCollection->getFirstItem()) {
   Varien_Profiler::start("DHH_ListProducts");
-  
   echo "<div class=\"category-products\">";
-  
   if($show_toolbar) {
     $toolbar_html = $this->getToolbarHtml();
     echo "<div class=\"top_toolbar\">{$toolbar_html}</div>";
     define("DHH_SORTING_BLOCK_PRINTED", true);
-  }
+  } ?>
   
-  echo "<ul class=\"products-grid products-grid--max-{$_columnCount}-col\">";
-  $i = 0;
-    
+  <ul class="products-grid products-grid--max-<?=$_columnCount?>-col"><?php
+    $i = 0;
     foreach($_productCollection as $_product) {
       $i++;
       $product_id = $_product->getId();
@@ -532,8 +532,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         }
         
         Varien_Profiler::stop("DHH_ListProduct_{$product_id}_uncached");
-      }
-      ?>
+      } ?>
       
       <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
         <?=$html?>
@@ -560,22 +559,18 @@ if($show_products && $_productCollection->getFirstItem()) {
       }
       
       unset($html);
-    }
-    
-    ?>
-    </ul>
-    <?php
-    if($show_toolbar) {
-      echo "<div class=\"toolbar-bottom pb-4\">{$toolbar_html}</div>";
-    }
-    
-    // Optional block category-ID is shown below the category tiles
-    if(empty($category_block_bottom_html) === false) {
-      echo "<div>{$category_block_bottom_html}</div>";
-    }
-    ?>
-  </div>
-  <?php
+    } ?>
+  </ul><?php
+  
+  if($show_toolbar) {
+    echo "<div class=\"toolbar-bottom pb-4\">{$toolbar_html}</div>";
+  }
+  
+  // Optional block category-ID is shown below the category tiles
+  if(!empty($category_block_bottom_html)) {
+    echo "<div>{$category_block_bottom_html}</div>";
+  } ?>
+  </div><?php
   
   // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
   if($this->getChild("after")) {
