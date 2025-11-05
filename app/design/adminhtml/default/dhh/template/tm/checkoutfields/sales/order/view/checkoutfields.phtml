@@ -1,7 +1,69 @@
 <?php
-$_order = Mage::registry('current_order');
 
-if (!$_order) {
+declare(strict_types=1);
+
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Str;
+
+/**
+ * Prepare an order flag for display. Flags are modified to improve readability in order detail view,
+ * while their lengths are compressed for storage and order listviews.
+ *
+ * @param  string  $system_flag   The raw flag value from the database
+ *
+ * @return array<string, string>  The prepared human-friendly flag value, along with original system value and optional CSS class
+ */
+function prepareFlag(string $system_flag): array {
+  $flag     = $system_flag;
+  $cssClass = "";
+  
+  $flag     = strtoupper(trim($flag));
+  
+  // Highlight only non-technical flags (adds focus for customer service agents)
+  $techFlags = ["SA_PE_SENT", "AO_LOCK", "AO_DONE"];
+  if(!in_array($flag, $techFlags, true)) {
+    $cssClass = "bold";
+  }
+  
+  // Expand supplier abbreviations
+  foreach(OM_SUPPLIER_CODE_NAME_MAP as $code => $name) {
+    $flag = Str::replaceStart($code, "{$name}:", $flag);
+  }
+  
+  // Expand/rename other pairs
+  // To not draw attention to technical flags, we do not expand them unless very important to customer service agents
+  $otherExpansions = [
+    // "SA_PE_SENT"    => "Purchase Event Sent",
+    // "AO_DONE"       => "Auto Order Processed",
+    "AO_LOCK"       => "Auto Order In Progress!",
+    "NO_AO"         => "Not Auto Ordered",
+    "PARTIAL_AO"    => "Partially Auto Ordered",
+    "FULL_AO"       => "Fully Auto Ordered",
+  ];
+  $flag = Str::replace(array_keys($otherExpansions), $otherExpansions, $flag);
+  
+  // Expand other abbreviations
+  $regex_expansions = [
+    // "^(SA)"                 => "Spotler ",
+    // "(?:\b|_)(PE)(?:\b|_)"  => " Purchase Event ",
+    // "(?:\b|_)(AO)(?:\b|_)"  => " Auto Order ",
+  ];
+  foreach($regex_expansions as $pattern => $replacement) {
+    $flag = preg_replace("/".$pattern."/i", $replacement, $flag);
+  }
+  
+  $flag = str($flag)->replace("_", " ")->squish()->upper()->toString();
+  
+  return [
+    "system"    => $system_flag,
+    "human"     => $flag,
+    "cssClass"  => $cssClass,
+  ];
+}
+
+$_order = Mage::registry("current_order");
+
+if(!$_order) {
   return;
 }
 
@@ -52,8 +114,7 @@ $fields = [
   "tm_field15" => $fields["tm_field15"] ?? [],
 ];
 
-$fields = array_filter($fields);
-?>
+$fields = array_filter($fields); ?>
 
 <div id="checkoutfields">
   <div class="hor-scroll" style="border-top: 1px solid #e3e3e3; margin-top: 1em;">
@@ -65,19 +126,22 @@ $fields = array_filter($fields);
         if(!strlen($value)) continue;
         if($field === "tm_field5") {
           $flags = explode(";", $value);
+          // Prep flags for display
+          $flags = array_map("prepareFlag", $flags);
           $value = "";
-          foreach($flags as $flag) {
-            $flag = trim(str_replace("_", " ", $flag));
-            $value .= "<li>" . $this->escapeHtml($flag) . "</li>";
+          foreach($flags as $flagInfo) {
+            $value .= "<li>
+              <span class='".$this->escapeHtml($flagInfo["cssClass"])."' title='".$this->escapeHtml($flagInfo["system"])."'>".$this->escapeHtml($flagInfo["human"])."</span>
+            </li>";
           }
-          $value = "<ul style='margin: 0; padding-left: 1.2em; list-style-type: disc;'>" . $value . "</ul>";
+          $value = "<ul style='margin: 0; padding-left: 1.2em; list-style-type: disc;'>".$value."</ul>";
         } else {
           $value = $this->escapeHtml($value);
         }
         ?>
         <tr>
           <td class="label"><?= $this->escapeHtml($config['label']) ?></td>
-          <td class="value bold"><?= $value ?></td>
+          <td class="value"><?= $value ?></td>
         </tr>
       <?php } ?>
     </table>
