@@ -8,10 +8,11 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
      */
     private $restrictedUserAgents = array(
         
-        // DHH CORE HACK -- Adding bot checks from aoeblackholesession:
+        // DHH CORE HACK -- Adding more known bots
         "elb-healthchecker",
         "EliasHaeussler-CacheWarmup",
         "meta-externalagent/1.",
+        "meta-webindexer/1.",
         "GPTBot/1.",
         "Elastic-Metricbeat",
         "xCore",
@@ -19,6 +20,9 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
         "Amazonbot",
         "SeekportBot",
         "imagesift",
+        "ClaudeBot",
+        "GoogleOther",
+        "OAI-SearchBot",
         
         "AdsBot-Google",
         "AdsBot-Google-Mobile",
