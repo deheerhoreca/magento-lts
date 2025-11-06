@@ -1333,11 +1333,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * Clean category name by removing special tags like [V], [SKIPMENU], [0]
    * which are used to control certain features on the frontend.
    *
-   * @param  string $category_name
+   * @param  string|null $category_name
    *
    * @return string
    */
-  public static function cleanCategoryName(string $category_name): string {
+  public static function cleanCategoryName(string|null $category_name): string {
     return trim(str_ireplace(["[V]", "[SKIPMENU]", "[0] "], "", (string) $category_name));
   }
   
@@ -1438,25 +1438,46 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return "";
   }
   
-  // Builds a YouTube video URL from an ID
-  // Sample iframe HTML:
-  // <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/qeK30-F25Ak?si=T2bkx2FSWgSNwDEB"
-  //   title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"
-  //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-  // </iframe>
-  public static function build_product_video_url($string): string {
-    $string = (string) $string;
-    if(!str_contains("http", $string)) {
-      // Best way is to just store the youtube ID and build the URL
-      // Attempt to reduce "Multiple video URLs discovered as belonging to this video" by adding https:
-      // $string = "https://www.youtube-nocookie.com/embed/{$string}?loop=0&rel=0&hl=nl&controls=1&origin=https://www.chefstore.nl";
-      
-      // 2025-11-03 Reducing custom options to see if Error 153 gets killed:
-      $string = htmlspecialchars((String) $string);
-      $string = "https://www.youtube-nocookie.com/embed/{$string}";
+  /**
+   * Build product video URL from video ID or full URL.
+   *
+   * @param  mixed  $video_id
+   *
+   * @return string
+   */
+  public static function build_product_video_url($video_id): string {
+    $video_id = (string) $video_id;
+    if(!str_contains("http", $video_id)) {
+      $video_id = htmlspecialchars((String) $video_id);
+      $video_id = "https://www.youtube-nocookie.com/embed/{$video_id}?loop=0&controls=1&origin=https://www.chefstore.nl";
     }
     
-    return $string;
+    return $video_id;
+  }
+  
+  /**
+   * Build YouTube iframe HTML from video ID or full URL.
+   *
+   * @param  mixed  $video_id
+   * @param  int    $width
+   * @param  int    $height
+   *
+   * @return string
+   */
+  public static function buildYoutubeIframe($video_id, $width = 560, $height = 315): string {
+    if(blank($video_id)) {
+      return "";
+    }
+    
+    $video_id = htmlspecialchars((string) $video_id);
+    $src_url  = self::build_product_video_url($video_id);
+    
+    $iframe_html = "<iframe width=\"{$width}\" height=\"{$height}\" src=\"{$src_url}\" "
+                  ."title=\"YouTube video player\" frameborder=\"0\" referrerpolicy=\"strict-origin-when-cross-origin\" "
+                  ."allow=\"accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen>"
+                  ."</iframe>";
+    
+    return $iframe_html;
   }
   
   // Make an attempt to fix some common issues while displaying comments in adminhtml

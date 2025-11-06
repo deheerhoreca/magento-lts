@@ -33,7 +33,7 @@ foreach($children as $child) {
   if(str_contains((string) $category_name, "[SKIPMENU]")) {
     continue;
   }
-  $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+  // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   
   if($childLevel < 2) {
     $attributes = $this->_getRenderedMenuItemAttributes($child);

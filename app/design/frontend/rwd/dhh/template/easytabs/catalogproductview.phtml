@@ -1108,8 +1108,9 @@ if($stock_data["overall_stock_status"] === "backorder"
         <div class="content center"><?php
           $pvideos = explode(";", (string) $pvideo);
           foreach($pvideos as $video_key) {
-            $yt_url = getOmDhhUtilHelper()->build_product_video_url($pvideo); ?>
-            <iframe loading=lazy width="534" height="300" src="<?=$yt_url?>" allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="border:0;max-width:100%;" frameborder="0" referrerPolicy="strict-origin-when-cross-origin"></iframe><?php
+            // $yt_url = getOmDhhUtilHelper()->build_product_video_url($pvideo);
+            // <iframe loading=lazy width="534" height="300" src="< ?=$yt_url? >" allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="border:0;max-width:100%;" frameborder="0" referrerPolicy="strict-origin-when-cross-origin"></iframe>
+            echo getOmDhhUtilHelper()->buildYoutubeIframe(trim((string) $pvideo));
           } ?>
         </div>
       </div><?php

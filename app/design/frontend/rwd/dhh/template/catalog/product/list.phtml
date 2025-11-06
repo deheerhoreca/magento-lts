@@ -68,12 +68,10 @@ if($show_products) {
 /* CATEGORY HEADER & SEO */
 
 if($carct && ($category === "category")) {
-  
   Varien_Profiler::start("DHH_CategoryHeader");
-  
   $category_id          = (int) $carct->getId();
   $category_name        = (string) $carct->getName();
-  $category_name        = (string) Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+  // $category_name        = (string) Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   $category_name_lwr    = strtolower($category_name);
   $orig_category_desc   = (string) $carct->getDescription();
   
@@ -214,7 +212,8 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
         continue;
       }
       $haschild           = true;
-      $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
+      $category_name      = $subcategory->getName();
+      // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
       $category_name_safe = htmlspecialchars((string) $category_name);
       $image              = $subcategory->getImage();
       $category_url       = $subcategory->getUrl();

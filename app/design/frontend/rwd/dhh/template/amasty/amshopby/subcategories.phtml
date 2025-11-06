@@ -30,8 +30,9 @@ if($subcategories->count() > 1) {
       continue;
     }
     $haschild           = true;
-    $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
-    $category_name_safe = htmlspecialchars((string) $category_name);
+    // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
+    $category_name      = (string) $subcategory->getName();
+    $category_name_safe = htmlspecialchars($category_name);
     $image              = $subcategory->getImage();
     $category_url       = $subcategory->getUrl();
     $image_path         = "{$media_path}/catalog/category/{$image}";
