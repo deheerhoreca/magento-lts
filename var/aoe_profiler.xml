@@ -17,7 +17,7 @@ This file is expected to be in var/aoe_profiler.xml
         'parameter': controlled via get parameter '?profile=1' or cookie (profile).
         Check System > Configuration for bookmarklets.
         -->
-        <trigger>parameter</trigger><!-- 'always', 'parameter', or 'never' -->
+        <trigger>never</trigger><!-- 'always', 'parameter', or 'never' -->
 
         <!--
         If this is set to '0' (and profiling triggered) EVERY request will be logged.
@@ -52,7 +52,8 @@ This file is expected to be in var/aoe_profiler.xml
             won't block anything). The whitelist has a higher priority than the blacklist
             -->
             <requestUriWhiteList><![CDATA[]]></requestUriWhiteList>
-            <requestUriBlackList><![CDATA[/^\/index\.php\/admin\//]]></requestUriBlackList><!-- this example blocks all admin urls -->
+            <!-- <requestUriBlackList><![CDATA[/^\/index\.php\/admin\//]]></requestUriBlackList> -->
+            <requestUriBlackList><![CDATA[]]></requestUriBlackList>
         </filters>
 
         <!--
