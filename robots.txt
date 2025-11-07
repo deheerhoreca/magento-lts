@@ -128,3 +128,5 @@ User-agent: meta-externalagent
 Disallow: /shop?*
 Disallow: /*&multipass=true*
 Disallow: /*?multipass=true*
+
+Sitemap: https://www.chefstore.nl/sitemap.xml

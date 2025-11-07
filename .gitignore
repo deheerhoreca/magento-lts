@@ -103,8 +103,8 @@ phpunit.xml
 .DS_Store
 ._.DS_Store
 ._*
-/sitemap_watdachtjezelf*.xml
-/google_shopping_vijfbatmansymbol.*
+/sitemap*.xml
+/google_shopping*.xml*
 /protected/*.json
 /protected/*.xml
 /protected/*.xml.zip
