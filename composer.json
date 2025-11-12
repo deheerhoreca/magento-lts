@@ -173,6 +173,13 @@
         "npm-asset/*",
         "bower-asset/*"
       ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/deheerhoreca/profitmetrics-magento",
+      "only": [
+        "profitmetrics/magento"
+      ]
     }
   ],
   "autoload": {
