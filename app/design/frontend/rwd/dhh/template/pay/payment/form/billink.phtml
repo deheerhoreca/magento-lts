@@ -6,16 +6,18 @@ $_code = $this->getMethodCode();
 $instructions = $this->getInstructions();
 
 $dob = $this->getDob();
-if(!empty($dob)) {
-  [$dobYear, $dobMonth, $dobDay] = explode('-', (string) $dob);
+if (! empty($dob)) {
+    list($dobYear,$dobMonth,$dobDay) = explode('-', $dob);
 } else {
-  $dobYear = '';
-  $dobMonth = '';
-  $dobDay = '';
+    $dobYear = '';
+    $dobMonth = '';
+    $dobDay = '';
 }
 
-$enablePersonal = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_personal', Mage::app()->getStore());
-$enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_business', Mage::app()->getStore());
+$enablePersonal = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_personal',
+        Mage::app()->getStore());
+$enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_business',
+        Mage::app()->getStore());
 ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
 
@@ -50,7 +52,7 @@ $enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_bus
     <?php if ($enableBusiness == 1) { ?>
         <div <?php echo $enablePersonal == 1?'style="display:none;"':''; ?> id="paynl-data-business">
             <li>
-                KVK nummer:
+                KVK nummer
             </li>
             <li>
                 <div class="input-box">
@@ -60,7 +62,7 @@ $enableBusiness = Mage::getStoreConfig('payment/pay_payment_billink/ask_data_bus
         </div>
     <?php } ?>
     <li class="input-box">
-        <input id="billink_agree" type="checkbox" value="1" name="payment[billink_agree]" /> <label for="billink_agree">Ik ga akkoord met de</label> <a target="new" href="http://billink.nl/voorwaarden/gebruikersvoorwaarden.pdf">betalingsvoorwaarden</a>
+        <input id="billink_agree" type="checkbox" value="1" name="payment[billink_agree]" /> <label for="billink_agree">Ik ga akkoord met de</label> <a target="new" href="https://www.billink.nl/gebruikersvoorwaarden">betalingsvoorwaarden</a>
     </li>
     <?php
     if(!empty($instructions)){
