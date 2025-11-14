@@ -45,8 +45,8 @@ if(!empty($image_raw) && $image_raw !== "no_selection") {
     "url"             => $image_url,
     "url_only"        => true,
     "cm"              => "pad_resize",
-    "width"           => 2048,
-    "height"          => 2048,
+    "width"           => 1024,
+    "height"          => 1024,
     "add_mod_time"    => true,
     "relative_url"    => false,
     // @todo move to named transformation omcatprddtlf
@@ -100,8 +100,8 @@ $html = <<<EOT
   <meta property="og:url" content="{$product_url}">
   <meta property="og:image:url" content="https:{$image_url}">
   <meta property="og:image:alt" content="{$page_title}">
-  <meta property="og:image:width" content="2048">
-  <meta property="og:image:height" content="2048">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
   <meta property="og:description" content="{$productDescription}">
   <meta property="og:price:amount" content="{$final_price}">
   <meta property="og:price:currency" content="EUR">
