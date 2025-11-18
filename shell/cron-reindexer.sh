@@ -9,6 +9,6 @@ export PREFER_HOST=ma
 
 cm && source ./shell/cron-bootstrap.sh
 
-mphp -c php.cmd.ini shell/indexer.php reindexallrequired
+php -c etc/php.cmd.ini shell/indexer.php reindexallrequired
 
 cm && source ./shell/cron-wrapup.sh

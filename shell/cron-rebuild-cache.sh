@@ -15,4 +15,4 @@ set -u      # Treat unset variables as an error when substituting
 
 cm
 
-mphp -c php.cmd.ini shell/rebuild_cache.php
+php -c php.cmd.ini shell/rebuild_cache.php

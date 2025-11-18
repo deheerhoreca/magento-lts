@@ -1,7 +1,7 @@
 <?php
 
 // Taken from: vendor/colinmollenhour/magento-redis-session/sessionStats.php
-// mphp -c etc/php.cmd.ini shell/redis-session-stats.php sess_* http_user_agent writes
+// php -c etc/php.cmd.ini shell/redis-session-stats.php sess_* http_user_agent writes
 
 use \Illuminate\Support\Str;
 

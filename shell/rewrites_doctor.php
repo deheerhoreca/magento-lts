@@ -5,10 +5,10 @@
 /**
  * Optimize core_url_rewrite table
  *
- * mphp -c ../etc/php.cmd.ini rewrites_doctor.php update_keys       (1-5 min)
- * mphp -c ../etc/php.cmd.ini indexer.php --reindex catalog_url     (5-10 min)
- * For STORE_ID = 1: mphp -c ../etc/php.cmd.ini rewrites_doctor.php --remove_rewrites 10 --store 1
- * For STORE_ID = 4: mphp -c ../etc/php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
+ * php -c ../etc/php.cmd.ini rewrites_doctor.php update_keys       (1-5 min)
+ * php -c ../etc/php.cmd.ini indexer.php --reindex catalog_url     (5-10 min)
+ * For STORE_ID = 1: php -c ../etc/php.cmd.ini rewrites_doctor.php --remove_rewrites 10 --store 1
+ * For STORE_ID = 4: php -c ../etc/php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
  */
 
 ini_set("display_errors", "1");

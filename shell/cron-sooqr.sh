@@ -15,7 +15,7 @@ fi
 
 cm
 
-mphp -c php.cmd.ini shell/sooqr.php --generate 1
+php -c php.cmd.ini shell/sooqr.php --generate 1
 
 dasel -f ./media/sooqr/sooqr-datafeed-5AjS-1.xml -r xml -w json > ./media/sooqr/sooqr-datafeed-5AjS-1.json
 

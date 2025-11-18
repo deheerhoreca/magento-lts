@@ -15,4 +15,4 @@ fi
 
 cm
 
-mphp -c php.cmd.ini shell/clean_mysql.php
+php -c php.cmd.ini shell/clean_mysql.php

@@ -12,6 +12,6 @@ if [ "${HOSTNAME}" != "ma.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerho
   exit 0
 fi
 
-mphp -c php.cmd.ini shell/indexer.php --reindex dynamiccategory
+php -c php.cmd.ini shell/indexer.php --reindex dynamiccategory
 
 cm && source ./shell/cron-wrapup.sh

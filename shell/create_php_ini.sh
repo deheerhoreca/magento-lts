@@ -15,7 +15,7 @@ cm
 TARGET_PHP_INI=./etc/php.cmd.ini
 COPY_PHP_INI=./php.cmd.ini
 TARGET_USER_INI=_user.ini
-PHP_VERSION=$(mphp -r "echo phpversion();")
+PHP_VERSION=$(php -c etc/php.cmd.ini -r "echo phpversion();")
 
 # Backup php.cmd.ini
 PHP_INI_BACKUP="php.cmd.ini.bak-$(date +%F_%H%M%S)"

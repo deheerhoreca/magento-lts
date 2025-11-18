@@ -3,7 +3,7 @@
 /**
  * Usage:
  * 
- * omphp shell/index.php [index]
+ * ophp shell/index.php [index]
  */
 
 // catalog_product_attribute
