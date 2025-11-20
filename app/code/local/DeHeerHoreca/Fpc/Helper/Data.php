@@ -83,15 +83,15 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   // Cleans the cached URL by removing URL parameters that do not affect the payload
   // Otherwise we would cache index.html?sqr=x separately from index.html
   // Optionally takes a URL for debug/dev
-  public static function get_cache_url(string $url = ""): string {
-    if($url === "") {
+  public static function get_cache_url(?string $url = null): string {
+    if(empty($url)) {
       $url = html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
     }
     
     // List of query parameters that have no consequences for the rendered HTML
-    // csredir: chefstore.nl redirect indicator
-    // multipass: Added by LayeredNav if >1 values selected
-    // https://www.chefstore.nl/ap....151.html?srsltid=AfmBOorjRmiZSrVf8u0GIEvRDfsB7Gua_ppUagI7Hdm3vepVS3_S6m_fUfQ&opi=95576897&sa=U&ved=0ahUKEwiO8r7t3rSNAxWx0gIHHahdBRUQ2ykIKA&usg=AOvVaw399DcsSdbrakNsaNPCwVu3
+    // @todo Keep this up to date to prevent cache fragmentation and blowup
+    // - csredir: chefstore.nl redirect indicator
+    // - multipass: Added by LayeredNav if >X values selected to control bots and caching
     $ignored_url_query_keys = [
       "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
       "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
@@ -278,10 +278,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    // Protect the cache against bots in layered navigation labyrinths: allow max 2 GET params
-    // ath = Aoe_TemplateHints flag
-    // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-    // ath: Aoe_TemplateHints
+    // - Allow max 2 GET params
+    // - ath      = Aoe_TemplateHints flag
+    // - bf       = ???
+    // - is_ajax  = amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
     || (!$html_block_mode && is_countable($_GET) && count($_GET) > 2)) {
       self::log("Write cache disabled (URL parameter): {$debug_name}");
@@ -317,12 +317,18 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return true;
   }
   
-  // Optionally takes a URL for debug/dev
-  public static function get_cache_key(string $cache_key_prefix = "", string $url = ""): string {
+  /**
+   * Create an obfuscated, repeatable, Redis-safe key with optional prefix.
+   *
+   * @param  ?string  $cache_key_prefix  Optional prefix for the cache key
+   * @param  ?string  $url               Optional URL overwrite for debug/development
+   *
+   * @return string
+   */
+  public static function get_cache_key(?string $cache_key_prefix = null, ?string $url = null): string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     $cache_key_url = self::get_cache_url($url);
-    
     if(empty($cache_key_prefix)) {
       $cache_key_prefix = self::get_cache_prefix();
     }
@@ -334,7 +340,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}");
     
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    
     return $_cacheKey;
   }
   
@@ -342,7 +347,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     $html = Mage::app()->getCache()->load($key);
-    
     if(empty($html)) {
       self::log("Cache MISS: {$key}");
       self::_add_server_timing_header("FPC miss: {$key}");
@@ -368,7 +372,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     if($holepunch_blocks === true) {
-      
       // The sidebar, is PART OF the minicart
       
       Varien_Profiler::start("DHH::FPC::Holepunch::minicart");
@@ -544,6 +547,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html = self::replace_between($html, "<!-- footer_start -->", "<!-- footer_end -->", "<!-- footer_here -->");
     }
     
+    // If we detect a whole HTML page (not a partial page), add the cache URL as a comment
+    if(strpos((string) $html, "<html") !== false && strpos((string) $html, "</html>") !== false) {
+      $cache_url = self::get_cache_url();
+      $html .= "\n<!-- FPC Cache URL: {$cache_url} -->\n";
+    }
+    
+    // Prepare cache tags
     $cache_tags[] = "DHH_FPC";
     
     // Store in cache
@@ -586,6 +596,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
   }
   
+  /**
+   * Write a single log message to the FPC plaintext log for debug purposes. Only active if DHH_FPC_DEBUG is true.
+   *
+   * @param  mixed $msg
+   * @param  mixed $level
+   */
   public static function log($msg, $level = Zend_Log::DEBUG): void {
     if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
       Mage::log($msg, $level, "fpc.txt", true);
