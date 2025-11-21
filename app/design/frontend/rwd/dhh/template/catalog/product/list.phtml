@@ -23,7 +23,7 @@ $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipp
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $have_active_filters          = (bool) empty($active_filters) === false;
 $mininum_lease_price          = 400;
-$show_black_friday            = false;
+$show_black_friday            = true;
 $media_path                   = Mage::getBaseDir("media");
 $current_page_nr              = Mage::app()->getRequest()->getParam("p");
 $on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
@@ -35,6 +35,7 @@ $show_products                = (!str_contains($category_desc, "<!--no_products-
 $media_url                    = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $media_dir                    = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
+$_dhhUtilHelper               = Mage::helper("deheerhoreca_util/util");
 
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock("catalog/product_price");
@@ -71,7 +72,7 @@ if($carct && ($category === "category")) {
   Varien_Profiler::start("DHH_CategoryHeader");
   $category_id          = (int) $carct->getId();
   $category_name        = (string) $carct->getName();
-  // $category_name        = (string) Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+  // $category_name        = (string) $_dhhUtilHelper->cleanCategoryName($category_name);
   $category_name_lwr    = strtolower($category_name);
   $orig_category_desc   = (string) $carct->getDescription();
   
@@ -91,13 +92,13 @@ if($carct && ($category === "category")) {
   // Add category boilerplate to bottom
   if($on_first_page && !$have_active_filters && !str_contains($category_desc, "<!--no_auto_desc-->")) {      
     if($on_first_page && !$have_active_filters) {
-      $manufacturers = Mage::helper("deheerhoreca_util/util")->getBrandsPerCategory($category_id, $_productCollection);
+      $manufacturers = $_dhhUtilHelper->getBrandsPerCategory($category_id, $_productCollection);
       if(is_array($manufacturers) && sizeof($manufacturers) > 0) {
         $n = sizeof($manufacturers);
         $i = 0;
-
+        
         $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
-
+        
         foreach($manufacturers as $manufacturer) {
           if(strlen((string) $manufacturer) < 3) continue;
           $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
@@ -110,14 +111,14 @@ if($carct && ($category === "category")) {
             $category_block_bottom_html .= ".";
           }
         }
-
+        
         $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
       }
     }
-
+    
     // if($on_first_page === true && $have_active_filters === false) {
       // if(empty($_productCollection) === false
-      // && Mage::helper("deheerhoreca_util/util")->getAvgPrice($_productCollection) > 500) {
+      // && $_dhhUtilHelper->getAvgPrice($_productCollection) > 500) {
         // $category_block_bottom_html .= "Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Bij Chefstore.nl kunt u ook {$category_name_lwr} leasen. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
       // } else {
         // $category_block_bottom_html .= "<p>Wij bieden u een breed assortiment keukenapparatuur voor de horeca keuken. Bekijk alle soorten {$category_name_lwr} in ons aanbod en bestel vandaag. Bijna alle items kunnen wij uit voorraad leveren en binnen 24 tot 48 uur leveren. Wenst u meer informatie of hulp bij het kiezen van {$category_name_lwr} dan kunt u altijd contact opnemen via <a href='tel:+31850441003' title='Bel ons'>085-0441003</a>, <a href=\"javascript:\$zopim.livechat.window.show();\">chat</a> of <a href='mailto:sales@chefstore.nl' title='Bel ons'>e-mail</a>.</p>";
@@ -127,7 +128,30 @@ if($carct && ($category === "category")) {
   
   // Add a H1 if there isn't one
   if(isset($category_name) && stripos((string) $category_desc, "<h1>") === false) {
-    $category_desc      = "<h1>{$category_name}</h1>{$category_desc}";
+    $category_desc = "<h1>{$category_name}</h1>{$category_desc}";
+  }
+  
+  if($show_black_friday) { ?>
+    <a class="text-reset d-none" href="/qquoteadv/index/" target="_blank">
+      <div id="blackfriday-banner-wrapper">
+        <div id="blackfriday-banner-overlay"></div>
+        <div id="blackfriday-banner-content-container" class="center p-3">
+          <div class="display-2 text-light bold" style="font-size: max(1.4rem, min(2.3vw, 2.5rem))">BLACK FRIDAY</div>
+          <div id="blackfriday-banner-content-rules" class="bg-danger text-light center py-3 px-2 mt-2">
+            <div class="strong" style="font-size: max(0.6rem, min(2.3vw, 1.8rem))">
+              On-ge-kend voordeel op het <u><em>gehele</em></u> assortiment!
+            </div>
+            <div class="" style="font-size: max(0.9rem, min(1vw, 1rem)); line-height: 1.3rem">
+              Van zondag 23 t/m vrijdag 28 november maakt u <strong>uw eigen deal</strong>.<br />Vul uw offerte mandje,
+              <strong>ontvang een offerte binnen 1 werkdag</strong> en <em>scoor</em> die deal!
+            </div>
+            <div class="strong pt-1" style="font-size: max(0.9rem, min(1vw, 1rem)); text-transform: uppercase; letter-spacing: -0.5px">
+              Maak offerte en ontvang vrijblijvend uw beste Black Friday Deal
+            </div>
+          </div>
+        </div>
+      </div>
+    </a><?php
   }
   
   if(empty($category_desc) === false) {
@@ -213,7 +237,7 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
       }
       $haschild           = true;
       $category_name      = $subcategory->getName();
-      // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
+      // $category_name      = $_dhhUtilHelper->cleanCategoryName($category_name);
       $category_name_safe = htmlspecialchars((string) $category_name);
       $image              = $subcategory->getImage();
       $category_url       = $subcategory->getUrl();
@@ -242,7 +266,7 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
             "quality"         => 80,
             "relative_url"    => true,
           ];
-          $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+          $img_html         = $_dhhUtilHelper->_cdn_img($cdn_img_options);
         } else {
           Mage::log("Category {$subcategory->getId()} image not found: {$image_path}");
         }
@@ -304,7 +328,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         $productUrl = false;
         // If a product is present in multiple categories, we don't want to change that in this view
         // This function does a best guess
-        $productUrl = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($_product);
+        $productUrl = $_dhhUtilHelper->getFullProductUrlFromRewrites($_product);
         if($productUrl === false) {
           $productUrl = $_product->getProductUrl(); // Fallback
         }
@@ -324,7 +348,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         //$price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
         $finalPrice           = (float) $_product->getFinalPrice();
         
-        $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["context" => "listview"]);
+        $stock_data           = $_dhhUtilHelper->getStockInfo($_product, ["context" => "listview"]);
         
         $stock_message        = $stock_data["stock_message"];
         $stock_class          = $stock_data["txtcltcz"];
@@ -374,7 +398,7 @@ if($show_products && $_productCollection->getFirstItem()) {
           "context"               => "listview",
           "category_name"         => $category_name ?? null,
         ];
-        $usps                   = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product, $usp_options, 8);
+        $usps                   = $_dhhUtilHelper->getProductUsps($_product, $usp_options, 8);
         
         // Price Block
         $price_html             = str_replace(",00", ",-", (string) $price_html);
@@ -382,10 +406,10 @@ if($show_products && $_productCollection->getFirstItem()) {
         
         // Black friday
         if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
-          $html .= "<span class=\"bf-banner-list\"></span>";
+          $html .= '<span class="bf-banner-list d-none"></span>';
         } else {
           // Product label
-          $productlabel = Mage::helper("deheerhoreca_util/util")->auto_productlabel($_product, "list");
+          $productlabel = $_dhhUtilHelper->auto_productlabel($_product, "list");
           if(empty($productlabel) === false) {
             $html .= "<span class=\"product-label\">{$productlabel}</span>";
           }
@@ -396,7 +420,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         if($value > 1) {
           $html .= "<span class=\"product-label-right white bg-blue border-blue border-1\">{$value} X</span>";
         }
-
+        
         // Energy rating
         $value = _get_product_attribute($_product, "energy_efficiency_class_a_g");
         if(empty($value) === false) {
@@ -406,6 +430,9 @@ if($show_products && $_productCollection->getFirstItem()) {
             case "B":     $enclz = "enrgclz2";  break;
             case "C":     $enclz = "enrgclz3";  break;
             case "D":     $enclz = "enrgclz4";  break;
+            // case "E":     $enclz = "enrgclz5";  break;
+            // case "F":     $enclz = "enrgclz5";  break;
+            // case "G":     $enclz = "enrgclz5";  break;
           }
           if($enclz !== "") {
             $html .= "<span class=\"lblenergylabel {$enclz}\" title=\"Energielabel {$value}\">{$value}</span>";
@@ -458,7 +485,7 @@ if($show_products && $_productCollection->getFirstItem()) {
             "dpr"             => 1,
             "relative_url"    => true,
           ];
-          $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+          $img_html         = $_dhhUtilHelper->_cdn_img($cdn_img_options);
         }
         
         $html .= "

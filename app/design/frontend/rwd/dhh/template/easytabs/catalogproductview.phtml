@@ -28,9 +28,9 @@ $seo_tag                    = getOmDhhUtilHelper()->getUrlSlug($brand_name);
 $brand_link                 = "/shop?manufacturer={$brand_id}&title={$seo_tag}";
 $anchors                    = [];
 $in3_minimum                = 50 / 1.21;
-$in3_maximum                = 30000 / 1.21;
+$in3_maximum                = 3000 / 1.21;
 $billink_minimum            = 10;
-$billink_maximum            = 3500;
+$billink_maximum            = 10000 / 1.21;
 $biller_minimum             = 25;
 $biller_maximum             = 10000;
 // $mondu_pl_minimum           = 500;
@@ -39,7 +39,7 @@ $biller_maximum             = 10000;
 // $mondu_lease_maximum        = 20000;
 $grenke_lease_minimum       = 1000;
 $grenke_lease_maximum       = 10000;
-$show_black_friday          = false;
+$show_black_friday          = true;
 $javascripts                = [];
 $brand_block_name           = "";
 $brand                      = "";
@@ -54,7 +54,6 @@ if(!empty($categoryIds)) {
 }
 
 // Attributes used in multiple places
-$productlabel           = _get_product_attribute($_product, "product_label");
 $nofrost_method         = _get_product_attribute($_product, "ontdooisysteem");
 $energy_rating          = _get_product_attribute($_product, "energy_efficiency_class_a_g");
 if(empty($energy_rating) || $energy_rating === "N.v.t.") {
@@ -851,13 +850,13 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
 
 /* CALCULATED/DERIVED FIELDS */
 
-// If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
-if($stock_data["overall_stock_status"] === "backorder"
-&& (empty($stock_data["stock_date_days_left"]) || $stock_data["stock_date_days_left"] >= 7)
-&& empty($productlabel)
-&& empty($alternative_products_block) === false) {
-  $productlabel = "Alternatieven beschikbaar";
-}
+// @todo improve and reenable
+// // If the backorder is expected to take >= 7 days, and we have alternatives, make a shoutout
+// if($stock_data["overall_stock_status"] === "backorder"
+// && (empty($stock_data["stock_date_days_left"]) || $stock_data["stock_date_days_left"] >= 2)
+// && empty($productlabel) && !empty($alternative_products_block)) {
+//   $productlabel = "Alternatieven beschikbaar";
+// }
 
 /* START RENDERING */ ?>
 <script>var optionsPrice = new Product.OptionsPrice(<?= $this->getJsonConfig() ?>);</script>
@@ -880,9 +879,9 @@ if($stock_data["overall_stock_status"] === "backorder"
         }
         
         // Black friday
-        if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
-          echo "<span class='bf-banner-detail'></span>";
-        }
+        // if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+        //   echo "<span class='bf-banner-detail'></span>";
+        // }
         
         // Package quantity
         $package_quantity = (int) $_product->getData("eenheid");
@@ -912,19 +911,21 @@ if($stock_data["overall_stock_status"] === "backorder"
             echo $this->getChildHtml("alert_urls");
             echo $this->getChildHtml("other"); ?>
             <div class="add-to-cart-wrapper"><?php
-              if($show_black_friday && $saleable && $eol !== true) { ?>
-                <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
-                  <div class="info-box-inner" style="max-width: unset;">
-                    <div style="float:right; margin-top: .5em;">
-                      <img src="/media/wysiwyg/banners/x_2023_11_blackfriday_corner.png" alt="Black Friday" title="Black Friday" style="width:100px; height:auto; float:right;">
-                    </div>
-                    <div>
-                      <strong>De beste Black Friday deals <i>zijn persoonlijk</i>:</strong><br>
-                      Maak een <strong>offerte</strong> om uw eigen Black Friday Deal te maken.<br>
-                      <span class="strong orange"><i>U kunt tot 16:59 Black Friday offertes indienen</i></span>
+              if($show_black_friday && $saleable && !$eol) { ?>
+                <a class="text-reset d-none" href="/qquoteadv/index/" target="_blank">
+                  <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
+                    <div class="info-box-inner" style="max-width: unset;">
+                      <div style="float:right; margin-top: .5em;">
+                        <img src="/media/wysiwyg/banners/x_2023_11_blackfriday_corner.png" alt="Black Friday" title="Black Friday" style="width:100px; height:auto; float:right;">
+                      </div>
+                      <div>
+                        <strong>De beste Black Friday deals <i>zijn persoonlijk</i>:</strong><br>
+                        Maak een <strong>offerte</strong> om uw eigen Black Friday Deal te maken.<br>
+                        <!-- <span class="strong orange"><i>U kunt tot 16:59 Black Friday offertes indienen</i></span> -->
+                      </div>
                     </div>
                   </div>
-                </div><?php
+              </a><?php
               }
               
               // Configurable products              

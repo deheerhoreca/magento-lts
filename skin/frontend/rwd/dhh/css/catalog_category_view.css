@@ -11,8 +11,7 @@
   padding-left: 0!important;
 }
 
-
-/* Icons */
+/* ICONS */
 
 .icon-sprite,
 .btn-remove2,
@@ -61,7 +60,6 @@
     background-size: 100px 1000px;
   }
 }
-
 
 /* PRODUCT LISTVIEW */
 
@@ -421,7 +419,6 @@ div.main div.col-main div.category-products div.toolbar .limiter select {
 .price-box .minimal-price-link {
   display: none;
 }
-
 
 /* MISC */
 

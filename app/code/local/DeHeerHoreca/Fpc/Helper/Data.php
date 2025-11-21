@@ -1,20 +1,14 @@
 <?php
 
-/**
- * Helper
- *
- * @author Fabrizio Branca
- * @since  2013-05-23
- */
+// declare(strict_types=1); // @todo
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Collection;
+use \Illuminate\Support\Str;
 
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
-  
   public static $om_action_whitelist  = [
     "catalog_product_view", "catalog_category_view", "blog_post_view", "blog_index_list",
     "cms_page_view", "cms_index_index",
@@ -343,83 +337,101 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $_cacheKey;
   }
   
-  public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true) {
+  /**
+   * Get cached HTML, with hole punching.
+   *
+   * @param  string  $key                The cache key.
+   * @param  bool    $holepunch_formkey  Whether to holepunch the formkey (CSRF protection).
+   * @param  bool    $holepunch_blocks   Essentially, $holepunch_blocks indicates a full HTML page which requires a lot more hole punching.
+   * 
+   * @return ?string
+   */
+  public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
-    $html = Mage::app()->getCache()->load($key);
+    $_cache   = Mage::app()->getCache();
+    $html     = $_cache->load($key);
+    
     if(empty($html)) {
       self::log("Cache MISS: {$key}");
       self::_add_server_timing_header("FPC miss: {$key}");
       return null;
     }
     
-    $size_raw_key = mb_strlen((string) $html);
+    if(!is_string($html)) {
+      $html = strval($html);
+    }
+    $size_raw_key = mb_strlen($html);
+    
+    $_layout  = Mage::app()->getLayout();
     
     /* Hole punching */
     
     // Formkey (CSRF protection)
-    
     if($holepunch_formkey === true) {
       Varien_Profiler::start("DHH::FPC::Holepunch::formkey");
       $search = "<!-- fpc form_key_placeholder -->";
-      $replacement = Mage::getSingleton("core/session")->getFormKey();
-      if(!empty($replacement)) {
-        $html = str_replace($search, $replacement, (string) $html, $count);
+      $replace = Mage::getSingleton("core/session")->getFormKey();
+      if(!empty($replace)) {
+        $html = str_replace($search, $replace, $html, $count);
         // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-        self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars");
+        self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars");
       }
       Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
     }
     
     if($holepunch_blocks === true) {
-      // The sidebar, is PART OF the minicart
+      // "<!-- FPC Cache URL: https://www.chefstore.nl/sencor-41018217-srxd-3105-cent-brush-srv-3150-60.html -->"
+      $pos_start = mb_strpos($html, "<!-- FPC Cache URL:");
+      if($pos_start !== false) {
+        $pos_end = mb_strpos($html, "-->", $pos_start);
+        if($pos_end !== false) {
+          $html = mb_substr($html, 0, $pos_start).mb_substr($html, $pos_end + 3);
+        }
+      }
       
+      // The sidebar, is PART OF the minicart
       Varien_Profiler::start("DHH::FPC::Holepunch::minicart");
-      $minicart_html = Mage::app()
-        ->getLayout()
+      $minicart_html = $_layout
         ->createBlock("checkout/cart_minicart")
         ->setTemplate("checkout/cart/minicart.phtml")
         ->toHtml();
       // Disabled for performance
       // To re-enable, also make changes to checkout/cart/minicart.phtml
-      // $sidebar_html = Mage::app()
-        // ->getLayout()
+      // $sidebar_html = $_layout
         // ->createBlock("checkout/cart_sidebar")
         // ->setTemplate("checkout/cart/minicart/items.phtml")->toHtml();
       $sidebar_html = "";
-      $replacement = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
+      $replace = self::replace_between($minicart_html, "<!-- header_sidebar_start -->", "<!-- header_sidebar_end -->", $sidebar_html);
       $search = "<!-- header_minicart_here -->";
-      $html = str_replace($search, $replacement, (string) $html, $count);
+      $html = str_replace($search, $replace, $html, $count);
       // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars");
+      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars");
       Varien_Profiler::stop("DHH::FPC::Holepunch::minicart");
       
-      // core_messages
-      
-      Varien_Profiler::start("DHH::FPC::Holepunch::messages_html");
-      $replacement = Mage::app()
-        ->getLayout()
+      // CORE_MESSAGES
+      // Varien_Profiler::start("DHH::FPC::Holepunch::messages_html");
+      $replace  = $_layout
         ->createBlock("core/messages")
-        ->setTemplate("page/html/notices.phtml")->toHtml();
-      $replacement .= Mage::app()->getLayout()->getMessagesBlock()->toHtml();
-      // var_dump($replacement);exit;
-      $search = "<!-- core_messages_here -->";
-      $html = str_replace($search, $replacement, $html, $count);
-      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-      self::log("Replaced {$search} {$count} times with ".mb_strlen($replacement)." chars", $level);
-      Varien_Profiler::stop("DHH::FPC::Holepunch::messages_html");
-      // miniquote
+        ->setTemplate("page/html/notices.phtml")
+        ->toHtml();
+      $replace .= $_layout->getMessagesBlock()->toHtml();
+      $search   = "<!-- core_messages_here -->";
+      $html     = str_replace($search, $replace, $html, $count);
+      $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
+      // Varien_Profiler::stop("DHH::FPC::Holepunch::messages_html");
       
+      // MINIQUOTE
       Varien_Profiler::start("DHH::FPC::Holepunch::miniquote_html");
-      $replacement = Mage::app()
-        ->getLayout()
+      $replace = $_layout
         ->createBlock("qquoteadv/checkout_miniquote_miniquote")
         ->setTemplate("qquoteadv/checkout/quote/miniquotehead.phtml")
         ->toHtml();
       $search = "<!-- header_miniquote_here -->";
-      $html = str_replace($search, $replacement, $html, $count);
+      $html = str_replace($search, $replace, $html, $count);
       $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars", $level);
+      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars", $level);
       Varien_Profiler::stop("DHH::FPC::Holepunch::miniquote_html");
       
       // // Breadcrumbs block -- only for catalog_product_view
@@ -428,20 +440,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // if(DHH_FPC_DEBUG === true) {
         // Varien_Profiler::start("DHH::FPC::Holepunch::breadcrumbs_html");
         // if(Mage::app()->getFrontController()->getAction()->getFullActionName() === "catalog_product_view") {
-          // $breadcrumbs_html = Mage::app()->getLayout()->getBlock("breadcrumbs");
-          // $breadcrumbs_html = Mage::app()
-            // ->getLayout()
+          // $breadcrumbs_html = $_layout->getBlock("breadcrumbs");
+          // $breadcrumbs_html = $_layout
             // ->createBlock("richsnippets/product")
             // ->setTemplate("tm/richsnippets/richsnippets_view.phtml")
             // ->toHtml();
-            
-            
-          // // $breadcrumbs_html = Mage::app()
-            // // ->getLayout()
+          // // $breadcrumbs_html = $_layout
             // // ->getBlock("catalog/breadcrumbs");
-            
-            
-          
             // // // ->setTemplate("tm/richsnippets/richsnippets_head.phtml")
             // // ->toHtml();
           // $search = "<!-- breadcrumbs_here -->";
@@ -455,32 +460,32 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // Mage::getSingleton("core/session")->addNotice(Mage::helper("core")->__("Notice ".date("c")));
       // Mage::getSingleton("core/session")->addSuccess(Mage::helper("core")->__("Notice ".date("c")));
       
-      // Main nav
-      Varien_Profiler::start("DHH::FPC::Holepunch::nav");
-      $replacement = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
-      $search = "<!-- nav_here -->";
-      $html = str_replace($search, $replacement, $html, $count);
-      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars", $level);
-      Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
+      // MAIN NAV
+      // Varien_Profiler::start("DHH::FPC::Holepunch::nav");
+      $replace  = (string) $_cache->load(DHH_FPC_NAV_KEY);
+      $search   = "<!-- nav_here -->";
+      $html     = str_replace($search, $replace, $html, $count);
+      $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
+      // Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
       
-      // Footer
-      Varien_Profiler::start("DHH::FPC::Holepunch::footer");
-      $replacement = Mage::app()->getCache()->load(DHH_FPC_FOOTER_KEY);
-      $search = "<!-- footer_here -->";
-      $html = str_replace($search, $replacement, $html, $count);
-      $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-      self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replacement)." chars", $level);
-      Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
+      // FOOTER
+      // Varien_Profiler::start("DHH::FPC::Holepunch::footer");
+      $replace  = (string) $_cache->load(DHH_FPC_FOOTER_KEY);
+      $search   = "<!-- footer_here -->";
+      $html     = str_replace($search, $replace, $html, $count);
+      $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
+      // Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
     }
     
-    $size = mb_strlen((string) $html);
+    $html = trim($html);
+    $size = mb_strlen($html);
     self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
     self::_add_server_timing_header("FPC hit: {$key}");
     self::_emit_server_timing_header();
     
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    
     return $html;
   }
   
@@ -566,33 +571,40 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    
     return false;
   }
   
-  public static function replace_between($str, $needle_start, $needle_end, $replacement) {
+  /**
+   * Replace content between two needles in a string
+   *
+   * @param  string  $str
+   * @param  string  $needle_start
+   * @param  string  $needle_end
+   * @param  string  $replacement
+   * 
+   * @return string|array
+   */
+  public static function replace_between(string $str, string $needle_start, string $needle_end, string $replacement): string|array {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
-    $pos_start  = strpos((string) $str, (string) $needle_start);
+    $pos_start = strpos((string) $str, (string) $needle_start);
     if($pos_start === false) {
       self::log(__METHOD__.": {$needle_start} not found!", Zend_Log::DEBUG);
       return $str;
     }
     
-    $start      = $pos_start === false ? 0 : $pos_start;
-    $pos_end    = strpos((string) $str, (string) $needle_end, $start);
-    
+    $start    = $pos_start === false ? 0 : $pos_start;
+    $pos_end  = strpos((string) $str, (string) $needle_end, $start);
     if($pos_end === false) {
       self::log(__METHOD__.": {$needle_end} not found!", Zend_Log::DEBUG);
       return $str;
     }
     
-    $end        = $pos_end === false ? mb_strlen((string) $str) : $pos_end + mb_strlen((string) $needle_end);
+    $end = $pos_end === false ? mb_strlen((string) $str) : $pos_end + mb_strlen((string) $needle_end);
     
     self::log(__METHOD__.": ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
     
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    
     return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
   }
   
@@ -601,6 +613,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    *
    * @param  mixed $msg
    * @param  mixed $level
+   * 
+   * @return void
    */
   public static function log($msg, $level = Zend_Log::DEBUG): void {
     if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
@@ -608,25 +622,33 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
   }
   
+  /**
+   * Add a Server-Timing header value to be emitted later.
+   *
+   * @param  string $string
+   */
   public static function _add_server_timing_header(string $string) {
     if(headers_sent()) {
       return false;
     }
-      
-    if(isset($GLOBALS["dhh_header_server_timing"]) === false) {
-      $GLOBALS["dhh_header_server_timing"] = [];
-    }
-    
+    $GLOBALS["dhh_header_server_timing"] ??= [];
     $GLOBALS["dhh_header_server_timing"][] = $string;
   }
   
-  public static function _emit_server_timing_header() {
+  /**
+   * Emit any saved HTTP headers, if possible.
+   *
+   * @return false|true|null
+   */
+  public static function _emit_server_timing_header(): bool|null {
     if(headers_sent()) {
       return false;
     }
     
-    if(isset($GLOBALS["dhh_header_server_timing"]) && is_array($GLOBALS["dhh_header_server_timing"])) {
-      header("Server-Timing: ".implode("; ", $GLOBALS["dhh_header_server_timing"]));
+    $GLOBALS["dhh_header_server_timing"] ??= [];
+    
+    if(!empty($GLOBALS["dhh_header_server_timing"])) {
+      header("Server-Timing: ".implode("; ", (array) $GLOBALS["dhh_header_server_timing"]));
       unset($GLOBALS["dhh_header_server_timing"]);
       return true;
     }
@@ -634,8 +656,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return null;
   }
   
-  // Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
-  // Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
+  /**
+   * Clean cache entries by their tags.
+   *
+   * - Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
+   * - Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
+   *
+   * @param  string|array  $cache_tags
+   *
+   * @return bool
+   */
   public static function clean_by_tags(string|array $cache_tags): bool {
     $cache_tags = (array) $cache_tags;
     

@@ -30,7 +30,7 @@ $classAttr = trim(implode(' ', $classes));
 // Prepare items
 $items = $this->getItemsAsArray();
 foreach ($items as &$item) {
-  if(isset($item['url']))   $item['url']    = str_replace("https://www.chefstore.nl/", "/", (string) $item['url']);
+  if(isset($item["url"]))   $item["url"]    = str_replace("https://www.chefstore.nl/", "/", (string) $item["url"]);
   if(isset($item['label'])) $item['label']  = (string) $item['label'];
   if(isset($item['css']))   $item['css']    = (string) $item['css'];
 }
@@ -76,7 +76,7 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
         }
       ?>
         <li <?=implode(' ', $liAttrs)?>>
-          <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item['url']?>" data-config='<?=$item['data-config']?>' title="<?=htmlspecialchars($item['label'])?>"><?=htmlspecialchars($label) . $countHtml?></a>
+          <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item["url"]?>" data-config='<?=$item['data-config']?>' title="<?=htmlspecialchars($item['label'])?>"><?=htmlspecialchars($label) . $countHtml?></a>
           <?=$checkboxHtml?>
         </li>
       <?php endforeach;
@@ -89,16 +89,9 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
           if (!empty($item['image_hover'])) {
             echo '<img src="' . htmlspecialchars($item['image_hover']) . '" style="display: none;">';
             $onHover = 'onmouseover=this.src=\'' . htmlspecialchars($item['image_hover']) . '\' onmouseout=this.src=\'' . htmlspecialchars($item['image']) . '\'';
-          }
-        ?>
-          <a <?=$item['style'] . $item['rel']?>
-            class="<?=htmlspecialchars($item['css'])?>"
-            href="<?=$item['url']?>"
-            data-config='<?=$item['data-config']?>'>
-            <img src="<?=htmlspecialchars($item['image'])?>"
-              <?=$onHover?>
-              title="<?=htmlspecialchars($item['label'])?>"
-              alt="<?=htmlspecialchars($item['label'])?>">
+          } ?>
+          <a <?=$item['style'] . $item['rel']?> class="<?=htmlspecialchars($item['css'])?>" href="<?=$item["url"]?>" data-config='<?=$item['data-config']?>'>
+            <img src="<?=htmlspecialchars($item['image'])?>" <?=$onHover?> title="<?=htmlspecialchars($item['label'])?>" alt="<?=htmlspecialchars($item['label'])?>">
           </a>
         <?php endforeach;?>
       </li>
@@ -128,17 +121,11 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
         }
       ?>
         <li <?=implode(' ', $liAttrs)?>>
-          <a class="<?=htmlspecialchars($item['css'])?>"
-            <?=$item['rel']?>
-            href="<?=$item['url']?>"
-            data-config='<?=$item['data-config']?>'>
-            <?php if (!empty($item['image'])):?>
-              <img src="<?=htmlspecialchars($item['image'])?>"
-                <?=$onHover?>
-                title="<?=htmlspecialchars($item['label'])?>"
-                alt="<?=htmlspecialchars($item['label'])?>">
-            <?php endif;?>
-            <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
+          <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item["url"]?>" data-config='<?=$item['data-config']?>'>
+          <?php if (!empty($item['image'])):?>
+            <img src="<?=htmlspecialchars($item['image'])?>" <?=$onHover?> title="<?=htmlspecialchars($item['label'])?>" alt="<?=htmlspecialchars($item['label'])?>">
+          <?php endif;?>
+          <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
           </a>
         </li>
       <?php endforeach;
@@ -151,17 +138,14 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
           <option value="<?=htmlspecialchars($this->getRemoveUrl())?>"
             data-config='<?=$this->getRemoveOptionConfig()?>'>
             <?=Mage::helper('amshopby')->__('Selecteer ...')?>
-          </option>
-          <?php foreach ($items as $item):
+          </option><?php
+          foreach ($items as $item):
             $count = $item['count'];
-            if (is_numeric($count) && $count > 100) $count = '100+';
-         ?>
-            <option <?=$item['css'] . $item['rel']?>
-              value="<?=$item['url']?>"
-              data-config='<?=$item['data-config']?>'>
+            if (is_numeric($count) && $count > 100) $count = '100+'; ?>
+            <option <?=$item['css'] . $item['rel']?> value="<?=$item["url"]?>" data-config='<?=$item['data-config']?>'>
               <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
-            </option>
-          <?php endforeach;?>
+            </option><?php
+          endforeach; ?>
         </select>
       </li>
     <?php break;
@@ -169,42 +153,28 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
     case Amasty_Shopby_Model_Source_Attribute::DT_LABELS_IN_2_COLUMNS:
       $size = count($items);
       $half = (int) ceil($size / 2);
-   ?>
+      ?>
       <li>
         <div class="amshopby-column">
           <?php for ($i = 0; $i < $half; $i++):
             $item = $items[$i];
             $count = $item['count'];
-            if (is_numeric($count) && $count > 100) $count = '100+';
-         ?>
-            <a class="<?=htmlspecialchars($item['css'])?>"
-              <?=$item['rel']?>
-              href="<?=htmlspecialchars($item['url'])?>"
-              data-text="<?=htmlspecialchars($item['label'])?>"
-              data-config='<?=$item['data-config']?>'>
-              <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
-            </a><br>
-          <?php endfor;?>
+            if (is_numeric($count) && $count > 100) $count = '100+'; ?>
+            <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item["url"]?>" data-text="<?=htmlspecialchars($item['label'])?>" data-config='<?=$item['data-config']?>'><?=htmlspecialchars($item['label']) . htmlspecialchars($count)?></a><br><?php
+          endfor; ?>
         </div>
-        <div class="amshopby-column">
-          <?php for ($i = $half; $i < $size; $i++):
+        <div class="amshopby-column"><?php
+          for ($i = $half; $i < $size; $i++):
             $item = $items[$i];
             $count = $item['count'];
-            if (is_numeric($count) && $count > 100) $count = '100+';
-         ?>
-            <a class="<?=htmlspecialchars($item['css'])?>"
-              <?=$item['rel']?>
-              href="<?=$item['url']?>"
-              data-text="<?=htmlspecialchars($item['label'])?>"
-              data-config='<?=$item['data-config']?>'>
-              <?=htmlspecialchars($item['label']) . htmlspecialchars($count)?>
-            </a><br>
-          <?php endfor;?>
+            if (is_numeric($count) && $count > 100) $count = '100+'; ?>
+            <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item["url"]?>" data-text="<?=htmlspecialchars($item['label'])?>" data-config='<?=$item['data-config']?>'><?=htmlspecialchars($item['label']) . htmlspecialchars($count)?></a><br><?php
+          endfor; ?>
         </div>
       </li>
   <?php break;
   endswitch;
-
+  
   // Show Less/More
   if (
     $this->getShowLessMore() &&

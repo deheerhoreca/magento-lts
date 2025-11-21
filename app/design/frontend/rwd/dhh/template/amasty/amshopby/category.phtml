@@ -60,32 +60,27 @@ $highest_level = 0;
     $a_class = "";
     if($_item->getLevel() === 1) {
       $a_class .= "amshopby-cat-selected";
-    }
-    ?>
-    <li class="<?php echo $class ?>">
-      <?php
-      if ($_item->getIsSelected()) {
-        if ($_multiselectEnabled) {
-          echo '<a class="amshopby-attr {$a_class}" href="'.$this->urlEscape($_item->getUrl())  .'" data-config = \''. $_item->getApplyData() .' \' title="'.$title.'" rel="nofollow">';
+    } ?>
+    <li class="<?=$class?>"><?php
+      if($_item->getIsSelected()) {
+        if($_multiselectEnabled) { ?>
+          <a class="amshopby-attr <?=$a_class?>" href="<?=$this->urlEscape($_item->getUrl())?>" data-config='<?=$_item->getApplyData()?>' title="<?=$title?>" rel="nofollow"><?php
         }
         echo $label;
-        if ($_showCount && $count) {
-          ?><span class="count">(<?php echo $count ?>)</span><?php
+        if($_showCount && $count) { ?>
+          <span class="count">(<?=$count?>)</span><?php
         }
-        if ($_multiselectEnabled) {
-          echo '</a>';
+        if($_multiselectEnabled) { ?>
+          </a><?php
         }
-      } else {
-        ?>
-        <a class="amshopby-cat <?php echo $a_class ;?>" href="<?php echo $this->urlEscape($_item->getUrl()) ?>" data-config=' <?php echo $_item->getApplyData(); ?>' title="<?php echo $title; ?>">
-          <?php
+      } else { ?>
+        <a class="amshopby-cat <?=$a_class ;?>" href="<?=$this->urlEscape($_item->getUrl())?>" data-config=' <?=$_item->getApplyData()?>' title="<?=$title?>"><?php
           echo $label;
-          if ($_showCount && $count) {
-            ?><span class="count">(<?php echo $count; ?>)</span><?php
-          }
-          ?>
-        </a>
-      <?php } ?>
+          if ($_showCount && $count) { ?>
+            <span class="count">(<?=$count?>)</span><?php
+          } ?>
+        </a><?php
+      } ?>
     </li>
   <?php endforeach ?>
 <?php elseif (Amasty_Shopby_Model_Catalog_Layer_Filter_Category::DT_STATIC2LVL == $_displayType): ?>
@@ -109,24 +104,24 @@ $highest_level = 0;
       $withoutIcon = (1 == $level && !$_item->getHasChildren());
       $icon = ($_item->getIsChildSelected()) ? 'minus': 'plus';
     ?>
-    <li class="<?php echo $class?> static-2-level <?php echo ($withoutIcon) ? 'without-icon': '';?>" <?php echo $additional?>>
-      <?php if ($showIcon): ?><span id="amshopby-cat-id-<?php echo $_item->getId()?>" class="amshopby-plusminus <?php echo $icon?>"></span><?php endif ?>
-      <a <?php if ($_item->getIsSelected()):?>class="amshopby-cat-selected"<?php endif?> href="<?php echo $this->urlEscape($_item->getUrl()) ?>"><?php echo $label ?></a>
+    <li class="<?=$class?> static-2-level <?=($withoutIcon) ? 'without-icon': '';?>" <?=$additional?>>
+      <?php if ($showIcon): ?><span id="amshopby-cat-id-<?=$_item->getId()?>" class="amshopby-plusminus <?=$icon?>"></span><?php endif ?>
+      <a <?php if ($_item->getIsSelected()):?>class="amshopby-cat-selected"<?php endif?> href="<?=$this->urlEscape($_item->getUrl()) ?>"><?=$label ?></a>
       <?php if ($_showCount && $count):?>
-        <span class="count">(<?php echo $count ?>)</span>
+        <span class="count">(<?=$count ?>)</span>
       <?php endif;?>
     </li>
   <?php endforeach ?>
 <?php elseif (Amasty_Shopby_Model_Catalog_Layer_Filter_Category::DT_DROPDOWN == $_displayType): ?>
   <li class="amshopby-category-select">
     <select onchange="if (this.value) window.location.href = value" class="amshopby-select">
-      <!-- uncomment to show Filter name in the dropdown <option value=""><?php echo $this->getName() ?></option>-->
+      <!-- uncomment to show Filter name in the dropdown <option value=""><?=$this->getName() ?></option>-->
       <option value="">&nbsp;</option>
       <?php foreach ($_items as $_item): ?>
-      <option  value="<?php echo $this->urlEscape($_item->getUrl()) ?>">
-        <?php echo $label ?>
+      <option  value="<?=$this->urlEscape($_item->getUrl()) ?>">
+        <?=$label ?>
         <?php if ($_showCount && $count):?>
-          <span class="count">(<?php echo $count ?>)</span>
+          <span class="count">(<?=$count ?>)</span>
         <?php endif;?>
       </option>
       <?php endforeach ?>

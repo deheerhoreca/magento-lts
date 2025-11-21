@@ -1155,22 +1155,6 @@
   display: table-row !important;
 }
 
-.d-table-cell {
-  display: table-cell !important;
-}
-
-.d-flex {
-  display: flex !important;
-}
-
-.d-inline-flex {
-  display: inline-flex !important;
-}
-
-.d-none {
-  display: none !important;
-}
-
 .flex-fill {
   flex: 1 1 auto !important;
 }
@@ -6050,10 +6034,6 @@
   
   .d-inline-flex {
     display: inline-flex !important;
-  }
-  
-  .d-none {
-    display: none !important;
   }
   
   .shadow {
@@ -12789,7 +12769,6 @@
     padding: 6px 10px 7px;
     width: 164px;
     border: 1px solid #bec4c4;
-    vertical-align: baseline;
   }
 
   .cmsCategoryList .icon-arrow-close,
@@ -12805,7 +12784,6 @@
     width: 164px;
     height: 17px;
     color: #2c3638;
-    vertical-align: baseline;
     text-align: left;
     font-size: 17px;
     line-height: 15px;
@@ -13837,7 +13815,6 @@
     background-color: #f2f2f2;
     background-image: none;
     color: #565d60;
-    vertical-align: top;
     text-align: left;
     text-indent: 2px;
     text-transform: lowercase;
@@ -14041,7 +14018,6 @@
   .product-img-box p.product-image {
     position: relative;
     display: inline-block;
-    float: right;
     width: 535px;
     cursor: pointer;
   }
@@ -14219,7 +14195,6 @@
   .btnrvwlnk {
     position: relative;
     display: inline-block;
-    float: right;
     margin-top: 27px;
     margin-right: 15px;
     margin-bottom: 27px;
@@ -14738,7 +14713,6 @@
     position: relative;
     top: 5px;
     display: inline-block;
-    float: right;
     width: 2em;
     height: 1.5em;
     background-color: #17a249;
@@ -15725,30 +15699,6 @@
     overflow: hidden;
   }
 
-  /* BLACK FRIDAY */
-
-  /* .bf-banner-detail,
-  .bf-banner-list {
-    position: absolute;
-    padding: .3em 1em;
-    right: 0;
-    z-index: 10;
-    text-align: center;
-    top: -1.5em;
-    background-image: url(https://www.chefstore.nl/media/wysiwyg/banners/lb_20211123_blackfriday5.svg);
-    background-repeat: no-repeat;
-  }
-
-  .bf-banner-detail {
-    width: 150px;
-    height: 130px;
-  }
-
-  .bf-banner-list {
-    width: 110px;
-    height: 80px;
-  } */
-
   /* NOTIFICATION BOXES -- https://codepen.io/walesmd/pen/ZEEMLg */
 
   .bar-notice {
@@ -15822,6 +15772,99 @@
   .object-fit-contain {
     object-fit: contain
   }
+  
+  /* BLACK FRIDAY */
+  
+  #blackfriday-banner-wrapper {
+    width: 100%;
+    min-width: 100%;
+    height: 230px;
+    min-height: 150px;
+    max-height: 230px;
+    background-color: #000;
+    background-image: url("//images.chefstore.nl/media/wysiwyg/banners/fp_20241122_blackfridaybg.png?v=1&amp;tr=w-1024,c-at_max");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-blend-mode: normal;
+    background-position: center;
+    z-index: 1;
+    position: relative;
+  }
+
+  #blackfriday-banner-overlay {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: .3;
+    z-index: 2;
+    position: absolute;
+  }
+  
+  #blackfriday-banner-content-container {
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    line-height: 2.2rem;
+    position: absolute;
+  }
+  
+  #blackfriday-banner-content-rules {
+    width: 75%;
+    min-width: min(100%, 700px);
+    height: 50%;
+    border-radius: 73% 45% 80% 36% / 63% 81% 19% 37%;
+  }
+  
+  /* #blackfriday-banner-content-rules {
+    width: 75%;
+    min-width: min(100%, 700px);
+    height: 50%;
+    border-radius: 50% 20% / 15% 40%;
+  } */
+  
+  #blackfriday-banner-wrapper-higher {
+    width: 100%;
+    min-width: 100%;
+    height: 350px;
+    min-height: 250px;
+    max-height: 350px;
+    background-color: #000;
+    background-image: url("//images.chefstore.nl/media/wysiwyg/banners/fp_20241122_blackfridaybg.png?v=1&amp;tr=w-1024,c-at_max");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-blend-mode: normal;
+    background-position: center;
+    z-index: 1;
+    position: relative;
+  }
+  
+  /* .bf-banner-detail,
+  .bf-banner-list {
+    position: absolute;
+    padding: .3em 1em;
+    right: 0;
+    z-index: 10;
+    text-align: center;
+    top: -1.5em;
+    background-image: url(https://www.chefstore.nl/media/wysiwyg/banners/lb_20211123_blackfriday5.svg);
+    background-repeat: no-repeat;
+    display: none;
+  }
+  
+  .bf-banner-detail {
+    width: 150px;
+    height: 130px;
+  }
+  
+  .bf-banner-list {
+    width: 110px;
+    height: 80px;
+  } */
+  
+  /* #blackfriday-banner-wrapper,
+  #product_addtocart_form > div > div:nth-child(1) > a {
+    display: none;
+  } */
 }
 
 .list-group {
@@ -18887,9 +18930,3 @@
     transition: none;
   }
 }
-
-/*
-  #blackfriday-banner-wrapper, #product_addtocart_form > div > div:nth-child(1) > a {
-    display: none;
-  }
-*/

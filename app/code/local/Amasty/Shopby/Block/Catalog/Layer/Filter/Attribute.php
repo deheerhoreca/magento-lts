@@ -59,7 +59,8 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         foreach ($this->getItems() as $itemObject) {
             $item = array();
             $item['id'] = $itemObject->getOptionId();
-            $item['url']   = $this->escapeHtml($itemObject->getUrl($urlBuilder)); // DHH
+            $item['url']   = $this->escapeHtml($itemObject->getUrl());           // Original
+            // $item['url']   = $this->escapeHtml($itemObject->getUrl($urlBuilder));   // DHH CORE HACK
             $item['label'] = $itemObject->getLabel();
             $item['descr'] = $itemObject->getDescr();
 
