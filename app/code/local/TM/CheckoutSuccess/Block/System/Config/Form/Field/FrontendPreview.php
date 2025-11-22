@@ -150,7 +150,10 @@ HTML;
         $url[] = 'success';
         $url[] = 'previewObjectId';
         $url[] = $objectId;
-        return implode($url, '/') . '/?___store=' . $this->getStore()->getCode();
+        // DHH CORE HACK -- Bug in impelmentation
+        // return implode($url, '/') . '/?___store=' . $this->getStore()->getCode();
+        return implode('/', $url) . '/?___store=' . $this->getStore()->getCode();
+        // END DHH CORE HACK
     }
 
     public function getLastOrder($store)

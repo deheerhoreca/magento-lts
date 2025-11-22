@@ -131,6 +131,7 @@
 - `app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php`
 - `app/code/local/Profitmetrics/MagentoIntegration/controllers/Adminhtml/ProfitmetricsController.php`
 - `app/code/local/TM/CheckoutFields/etc/wsdl.xml`
+- `app/code/local/TM/CheckoutSuccess/Block/System/Config/Form/Field/FrontendPreview.php`
 - `app/code/local/TM/FireCheckout/etc/wsdl.xml`
 - `app/code/local/TM/RichSnippets/Block/Product.php`
 
