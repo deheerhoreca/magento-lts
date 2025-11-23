@@ -13,15 +13,20 @@ class TM_FireCheckout_Model_System_Config_Source_Payment_Allmethods
 
     public function toOptionArray()
     {
+        // DHH CORE HACK
         $methods = array(array('value'=>'', 'label'=>''));
-        foreach ($this->_getPaymentMethods() as $paymentCode=>$paymentModel) {
-            $paymentTitle = method_exists($paymentModel, 'getTitle')
-                ? $paymentModel->getTitle()
-                : Mage::getStoreConfig('payment/'.$paymentCode.'/title');
-            $methods[$paymentCode] = array(
-                'label'   => $paymentTitle,
-                'value' => $paymentCode,
-            );
+        try {
+            foreach ($this->_getPaymentMethods() as $paymentCode=>$paymentModel) {
+                $paymentTitle = method_exists($paymentModel, 'getTitle')
+                    ? $paymentModel->getTitle()
+                    : Mage::getStoreConfig('payment/'.$paymentCode.'/title');
+                $methods[$paymentCode] = array(
+                    'label'   => $paymentTitle,
+                    'value' => $paymentCode,
+                );
+            }
+        } catch (Throwable $e) {
+            Mage::logException($e);
         }
 
         return $methods;

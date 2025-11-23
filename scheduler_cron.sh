@@ -178,10 +178,10 @@ if [ -n "${EXCLUDE_JOBS}" ]; then
     OPTIONS="${OPTIONS} --excludeJobs ${EXCLUDE_JOBS}"
 fi
 
-# Run the job in the foreground
 # DHH CORE HACK
+# To run the job in the foreground:
 # "${PHP_BIN}" "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS} # DHH CORE HACK
-
 COMMAND="${PHP_BIN} -c ../php.cmd.ini ${SCHEDULER} --action cron --mode ${MODE} ${OPTIONS}"
 # echo ${COMMAND}
 ${COMMAND}
+# /DHH CORE HACK

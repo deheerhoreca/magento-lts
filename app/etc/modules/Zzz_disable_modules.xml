@@ -151,10 +151,13 @@
       <active>false</active>
     </Hwg_Attributemanager>
 
-    <!-- Leads to errors with opening older orders if left disabled -->
-    <!-- <Afterpay_Afterpay> -->
-    <!-- <active>false</active> -->
-    <!-- </Afterpay_Afterpay> -->
+    <!--
+    - Leads to errors with opening older orders if disabled.
+    - 2025-11-22: Module started causing issue in the cart (even when "Disabled" in its config), disabling here fixed it.
+    -->
+    <Afterpay_Afterpay>
+      <active>false</active>
+    </Afterpay_Afterpay>
 
     <!-- Both profiler modules cannot be enabled at the same time! -->
     <Aoe_Profiler>
@@ -163,6 +166,11 @@
     <Sheep_Debug>
       <active>false</active>
     </Sheep_Debug>
+    
+    <!-- Not used -->
+    <TM_CheckoutSuccess>
+      <active>false</active>
+    </TM_CheckoutSuccess>
 
     <!-- Temporarily disable -->
     <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->
