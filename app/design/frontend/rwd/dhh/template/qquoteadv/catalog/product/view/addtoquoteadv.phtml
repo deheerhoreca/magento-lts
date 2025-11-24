@@ -25,10 +25,19 @@
  * @license     https://www.cart2quote.com/ordering-licenses(https://www.cart2quote.com)
  */
 
-if (!Mage::helper("qquoteadv")->isEnabled()) return "";
+if(!Mage::helper("qquoteadv")->isEnabled()) return "";
 
+?>
+<style>
+  .add-to-cart .btn-quote {
+    background-color: var(--color-antracite) !important;
+    color: var(--color-orange) !important;
+  }
+</style>
+<?php
 $_product             = $this->getProduct();
 $hideCartButton       = false;
+$enableLeaseBtn       = false;
 $hideQuoteButton      = Mage::helper("qquoteadv")->hideQuoteButton($_product);
 $action               = $this->helper("qquoteadv/catalog_product_data")->getAddToQuoteAction($_product->getId());
 $mininum_lease_price  = 400;
@@ -39,56 +48,65 @@ if(Mage::getConfig()->getModuleConfig("Ophirah_Not2Order")->is("active", "true")
 }
 
 // Allow to request a quote for out of stock items
-if($_product->getData("allowed_to_quotemode") == 1
-&& $hideQuoteButton === false
-&& _get_product_attribute($_product, "eol") !== "Ja"
-) {
+if($_product->getData("allowed_to_quotemode") == 1 && !$hideQuoteButton && _get_product_attribute($_product, "eol") !== "Ja") {
+  // $quoteBtnLabel = Mage::helper("qquoteadv")->__("Add to Quote");
+  // $btnIcon = "<i class='fa fa-calculator' style='font-size: 1.3em; margin-right: 10px;'></i>";
+  $quoteBtnLabel = "Make me an Offerte";
+  $btnIcon = "<i class='fa fa-tags' style='font-size: 1.3em; margin-right: 10px;'></i>";
+  // $btnIcon = "<img src='/media/wysiwyg/icons/blackfriday.svg' style='font-size: 1.3em; margin-right: 10px;'>";
   
   // Quantity form -- disabled
-  if(0 && (!$_product->isGrouped() && (!$_product->isSaleable() || $hideCartButton === true))) {
-    ?>
+  if(0 && (!$_product->isGrouped() && (!$_product->isSaleable() || $hideCartButton))) { ?>
     <div class="qty-wrapper">
-      <label for="qty"><?php echo Mage::helper("catalog")->__("Qty:"); ?></label>
-      <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1); ?>" title="<?php echo Mage::helper("catalog")->__("Qty"); ?>" class="input-text qty"/>
-    </div>
-  <?php } ?>
+      <label for="qty"><?=Mage::helper("catalog")->__("Qty:")?></label>
+      <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?=max($this->getProductDefaultQty() * 1, 1)?>" title="<?=Mage::helper("catalog")->__("Qty")?>" class="input-text qty">
+    </div><?php
+  } ?>
+  <button type="button" title="<?=$quoteBtnLabel?>" class="button btn-cart btn-quote button-smaller" onclick="<?=$action?>">
+    <?=$btnIcon.$quoteBtnLabel?>
+  </button><?php
   
-  <button type="button" title="<?php echo Mage::helper("qquoteadv")->__("Add to Quote"); ?>" class="button btn-cart btn-quote button-smaller" onclick="<?php echo $action; ?>">
-    <i class="fa fa-calculator" style="font-size: 1.3em; margin-right: 10px;"></i>
-    <?php echo Mage::helper("qquoteadv")->__("Add to Quote"); ?>
-  </button>
+  $lease_rates = Mage::helper("deheerhoreca_util/util")->getLeaseRates($_finalPrice, "daily");
   
-  <?php
-  if(isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
-    $buttonTitle_lease = "Lease aanvragen";
-    $lease_rates = Mage::helper("deheerhoreca_util/util")->getLeaseRates($_finalPrice, "daily");
-    if(empty($lease_rates) === false) {
-      $min_lease_rate = min($lease_rates);
-      $min_lease_rate_formatted = number_format($min_lease_rate, 2, ",", ".");
-      $buttonTitle_lease = "Leasen vanaf {$min_lease_rate_formatted} euro per dag";
-    }
+  if(!empty($lease_rates)) {
+    $min_lease_rate = min($lease_rates);
+    $min_lease_rate_formatted = number_format($min_lease_rate, 2, ",", ".");
+    $buttonTitle_lease = "Lease voor &euro;{$min_lease_rate_formatted} p/d";
+  }
+  
+  if($enableLeaseBtn && isset($_finalPrice) && $_finalPrice >= $mininum_lease_price) {
+    $buttonTitle_lease ??= "Lease aanvragen";
+    $btnIcon = "<i class='fa fa-calculator' style='font-size: 1.3em; margin-right: 10px;'></i>";
     ?>
-    <button type="button" title="<?php echo $buttonTitle_lease ?>" class="button btn-lease btn button-smaller" onclick="<?php echo $action; ?>">
-      <i class="fa fa-calculator" style="font-size: 1.3em; margin-right: 10px;"></i>
-      <?php echo $buttonTitle_lease; ?>
-    </button>
-    <?php
-    if(sizeof($lease_rates) > 1) {
-      echo "<a class='hide' href=\"javascript:$('lease_details').show();\"><span class='h4 center black'>+ Details Leasetarieven:</span></a>";
-      echo "<div id='lease_details' style='display:none;'>";
-      echo "<table class='text-center table table-bordered'><thead><tr><th scope=row>Maanden:</th>";
-      foreach($lease_rates as $months => $rate) {
-        echo "<th>{$months}</th>";
-      }
-      echo "</tr></thead>";
-      echo "<tbody><tr><th scope=row>€ per dag:</th>";
-      foreach($lease_rates as $months => $rate) {
-        $rate = number_format($rate, 2, ",", ".");
-        echo "<td>{$rate}</td>";
-      }
-      echo "</tr></tbody>";
-      echo "</table>";
-      echo "</div>";
-    }
+    <button type="button" title="<?=$buttonTitle_lease?>" class="button btn-lease btn button-smaller" onclick="<?=$action?>">
+      </i><?=$btnIcon.$buttonTitle_lease?>
+    </button><?php
+  }
+  
+  if(count($lease_rates) > 1) { ?>
+    <a class='hide' href="javascript:$('lease_details').show();">
+      <span class='h4 center black'>Leasen vanaf &euro;<?=$min_lease_rate_formatted?> p/d</span>
+    </a>
+    <div id='lease_details' style='display:none;'>
+      <table class='text-center table table-bordered'>
+        <thead>
+          <tr>
+            <th scope=row>Maanden:</th><?php
+            foreach($lease_rates as $months => $rate) {
+              echo "<th>{$months}</th>";
+            } ?>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope=row>€ per dag:</th><?php
+            foreach($lease_rates as $months => $rate) {
+              $rate = number_format($rate, 2, ",", ".");
+              echo "<td>{$rate}</td>";
+            } ?>
+          </tr>
+        </tbody>
+      </table>
+    </div><?php
   }
 }

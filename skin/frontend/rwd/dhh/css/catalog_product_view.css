@@ -812,6 +812,20 @@
   .products-grid .price-including-tax {
     display: none;
   }
+  
+  .btn-quote,
+  .btn-lease {
+    margin-top: 5px !important;
+    margin-left: 0 !important;
+  }
+  
+  .btn-quote {
+    background-color: #2a71db !important;
+  }
+  
+  .btn-lease {
+    background-color: #17a249 !important;
+  }
 }
 
 /* Bootstrap X-Small */

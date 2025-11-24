@@ -1,4 +1,3 @@
 {
   "intelephense.environment.documentRoot": "./",
-  "workbench.editor.restoreViewState": true,
 }

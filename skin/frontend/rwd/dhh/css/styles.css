@@ -5204,10 +5204,12 @@
     line-height: 2.2em;
     padding: 0 4px;
     display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    font-size: var(--text-size-normal);
-    height: 31px;
+    justify-content: space-evenly;
+    height: 33px;
+  }
+  
+  .pageinfotpinner > * {
+    width: 33%;
   }
 
   .clzinfopagetop {
@@ -8412,20 +8414,6 @@
   }
   
   /* End Footer */
-  
-  .btn-quote,
-  .btn-lease {
-    margin-top: 5px !important;
-    margin-left: 0 !important;
-  }
-
-  .btn-quote {
-    background-color: #2a71db !important;
-  }
-
-  .btn-lease {
-    background-color: #17a249 !important;
-  }
 
   /* EU Energy Labels */
 

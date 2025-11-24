@@ -9,7 +9,7 @@ use \Symfony\Component\Cache\Adapter\ArrayAdapter;
 use \Symfony\Component\Cache\Adapter\ChainAdapter;
 use \Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-class Cache {
+class CsCache {
   
   // PSR-6:
   

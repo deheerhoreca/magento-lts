@@ -176,7 +176,7 @@ if($_products->getFirstItem()) { ?>
         
         // Black friday
         if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
-          $html .= '<span class="bf-banner-list d-none"></span>';
+          $html .= '<span class="bf-banner-list"></span>';
         } else {
           // Product label
           $productlabel = $dhh_util_helper->auto_productlabel($_product, "list");

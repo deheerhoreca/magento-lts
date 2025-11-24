@@ -25,7 +25,7 @@ $quote_btn_html = Mage::app()->getLayout()->createBlock('qquoteadv/qquotebtn')->
 ?>
 <div class="add-to-cart">
   <?php if(isset($qty_html)) echo $qty_html; ?>
-  <div class="add-to-cart-buttons">
+  <div class="add-to-cart-buttons vstack">
     <?php if(isset($buy_btn_html)) echo $buy_btn_html; ?>
     <?php if(isset($quote_btn_html)) echo $quote_btn_html; ?>
     <?php echo $this->getChildHtml('', true, true); ?>
