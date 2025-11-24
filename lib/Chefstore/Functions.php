@@ -1,34 +1,45 @@
 <?php
 
+// @todo Enable:
+// declare(strict_types=1);
+
 if(!function_exists("om_attr_val")) {
-  
   /**
    * Retrieve a product attribute value.
-   * 
-   *  @todo Add null coalescing variant of this function.
+   * @todo Add null coalescing variant of this function.
    *
-   * @param  Mage_Catalog_Model_Product|null $_product
-   * @param  string                          $attribute_code
-   * @param  string                          $as
-   * @param  array                           $options
+   * @param  ?Mage_Catalog_Model_Product  $_product
+   * @param  string                       $attribute_code
+   * @param  ?string                      $as              "" | "string" | "int"
+   * @param  array                        $options         Unused
+   *
    * @return mixed
    */
-  function om_attr_val(?Mage_Catalog_Model_Product $_product, string $attribute_code, string $as = "", array $options = []): mixed {
-    
+  function om_attr_val(?Mage_Catalog_Model_Product $_product, string $attribute_code, ?string $as = "", array $options = []): mixed {
     if(!is_object($_product)) {
       return null;
     }
-    
     if($_attribute = $_product->getResource()->getAttribute($attribute_code)) {
       $value = $_attribute->getFrontend()->getValue($_product);
       if(!blank($as)) {
-        if($as === "string") return (string)  $value;
-        if($as === "int")    return (int)     $value;
+        if($as === "array") {
+          if(!is_scalar($value)) {
+            return [$value];
+          }
+          return (array) $value;
+        }
+        if($as === "string") {
+          if(is_iterable($value)) {
+            return implode(", ", (array) $value);
+          }
+          return (string) $value;
+        }
+        if($as === "int") {
+          return (int) $value;
+        }
       }
-      
       return $value;
     }
-    
     $dhh_sku = $_product->getSku("dhh_sku") ?? "NO_DHH_SKU";  
     Mage::log("{$dhh_sku} Unknown attribute requested: {$attribute_code}", Zend_Log::NOTICE);
     
@@ -36,14 +47,64 @@ if(!function_exists("om_attr_val")) {
   }
 }
 
-// Don't make $_product an (object) type hint
-if(!function_exists("om_attr_val_as_string")) {
-  function om_attr_val_as_string(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): string {
-    return (string) om_attr_val($_product, $attribute_code);
+if(!function_exists("om_attr_val_as_array")) {
+  /**
+   * Get OM attribute as an array.
+   * 
+   * @param  ?Mage_Catalog_Model_Product  $_product
+   * @param  string                       $attribute_code
+   * @param  array                        $options         Unused
+   * 
+   * @return array|null
+   */
+  function om_attr_val_as_array(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): array|null {
+    if($_product === null) {
+      return [];
+    }
+    
+    $_attribute = $_product->getResource()->getAttribute($attribute_code);
+    if($_attribute->getFrontendInput() === "multiselect") {
+      $frontend = $_attribute->getFrontend();
+      $values   = explode(",", $_product->getData($attribute_code));
+      $values   = Arr::map($values, fn($id) => $frontend->getOption($id));
+      return $values;
+    } else {
+      $values = om_attr_val($_product, $attribute_code, "array");
+    }
+    $ret = !empty($values) ? (array) $values : [];  // empty(), not blank()
+    
+    return $ret;
   }
 }
 
-// Don't make $_product an (object) type hint
+/**
+ * Get attribute value as string.
+ * => Don't make $_product an (object) type hint
+ * 
+ * @param  ?Mage_Catalog_Model_Product  $_product
+ * @param  string                       $attribute_code
+ * @param  ?string                      $as              "" | "string" | "int"
+ * @param  array                        $options         Unused
+ * 
+ * @return int|null
+ */
+if(!function_exists("om_attr_val_as_string")) {
+  function om_attr_val_as_string(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): string {
+    return (string) om_attr_val($_product, $attribute_code, "string");
+  }
+}
+
+/**
+ * Get attribute value as float.
+ * => Don't make $_product an (object) type hint
+ * 
+ * @param  ?Mage_Catalog_Model_Product  $_product
+ * @param  string                       $attribute_code
+ * @param  ?string                      $as              "" | "string" | "int"
+ * @param  array                        $options         Unused
+ * 
+ * @return int|null
+ */
 if(!function_exists("om_attr_val_as_float")) {
   function om_attr_val_as_float(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): float|null {
     $value = om_attr_val($_product, $attribute_code);
@@ -55,7 +116,17 @@ if(!function_exists("om_attr_val_as_float")) {
   }
 }
 
-// Don't make $_product an (object) type hint
+/**
+ * Get attribute value as int.
+ * => Don't make $_product an (object) type hint
+ * 
+ * @param  ?Mage_Catalog_Model_Product  $_product
+ * @param  string                       $attribute_code
+ * @param  ?string                      $as              "" | "string" | "int"
+ * @param  array                        $options         Unused
+ * 
+ * @return int|null
+ */
 if(!function_exists("om_attr_val_as_int")) {
   function om_attr_val_as_int(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): int|null {
     $value = om_attr_val_as_float($_product, $attribute_code, $options);

@@ -273,10 +273,8 @@ if($_products->getFirstItem()) { ?>
             </div>
             <?php
             echo $price_html;
-            if($show_actions) {
-              ?>
-              <div class="actions">
-                <?php
+            if($show_actions) { ?>
+              <div class="actions hstack w-100"><?php
                 if(!$_product->canConfigure()) {
                   if($_product->isSaleable()) {
                     // Simple product, sellable
@@ -285,8 +283,7 @@ if($_products->getFirstItem()) { ?>
                       <span class="<?= $stock_class ?>" style='line-height: 1.5em;'><?= $stock_message ?></span>
                       <?= $additional_delivery_messages ?>
                     </div>
-                    <button type="button" title="<?= $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?= $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button>
-  <?php
+                    <button type="button" title="<?= $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?= $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button><?php
                   } else {
                     // Simple product, not sellable
                     ?>
@@ -294,8 +291,7 @@ if($_products->getFirstItem()) { ?>
                       <span class="<?= $stock_class ?>" style='line-height: 1.5em;'><?= $stock_message ?></span>
                       <?= $additional_delivery_messages ?>
                     </div>
-                    <a title="<?= $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?= $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-  <?php
+                    <a title="<?= $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?= $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a><?php
                   }
                 } else {
                   // Configurable product
@@ -304,10 +300,10 @@ if($_products->getFirstItem()) { ?>
                     <span class="buyblock-usp" style='line-height: 1.5em;'>Meerdere varianten</span>
                     <?= $additional_delivery_messages ?>
                   </div>
-                  <a title="<?= $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?= $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a>
-  <?php } ?>
-              </div>
-            <?php } ?>
+                  <a title="<?= $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?= $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a><?php
+                } ?>
+              </div><?php
+            } ?>
           </div>
         </li>
 

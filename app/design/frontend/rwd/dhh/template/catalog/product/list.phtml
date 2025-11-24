@@ -383,8 +383,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         // @todo fix weird bug that gives the wrong brand for the first item
         // $brand               = _get_product_attribute($_product, "manufacturer");
         $brand                  = $_product->getData("manufacturer_value");
-        
-        $series_or_brand        = _get_product_attribute($_product, "brand_series");
+        $series_or_brand        = om_attr_val_as_string($_product, "brand_series");
         if(empty($series_or_brand) || in_array($series_or_brand, ["N.v.t."], true)) {
           $series_or_brand        = $brand;
         }      
@@ -393,22 +392,20 @@ if($show_products && $_productCollection->getFirstItem()) {
           $sku_seller_or_mpn      = _get_product_attribute($_product, "sku_seller");
         }
         $tagline                = _get_product_attribute($_product, "tagline");
-        
         $usp_options            = [
           "context"               => "listview",
           "category_name"         => $category_name ?? null,
-        ];
+        ]; 
         $usps                   = $_dhhUtilHelper->getProductUsps($_product, $usp_options, 8);
         
         // Price Block
         $price_html             = str_replace(",00", ",-", (string) $price_html);
         $price_html             = str_replace("€", "", $price_html);
         
-        // Black friday
-        if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
+        // Product labels/badges
+        if(0 && $show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
           $html .= '<span class="bf-banner-list d-none"></span>';
         } else {
-          // Product label
           $productlabel = $_dhhUtilHelper->auto_productlabel($_product, "list");
           if(empty($productlabel) === false) {
             $html .= "<span class=\"product-label\">{$productlabel}</span>";
@@ -506,7 +503,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         if(isset($tagline)) {
           $html .= "<div class=\"product-list-tagline\">Onze Keuze</div>";
         }
-          
+        
         if(!empty($usps)) {
           $html .= "<ul class=\"product-list-highlights inline-list\">";
           foreach($usps as $usp) {
@@ -515,38 +512,30 @@ if($show_products && $_productCollection->getFirstItem()) {
           $html .= "</ul>";
         }
         
-        // Volume discount tag
-        if(!empty($_product->getTierPrice())) {
-          $html .= "<span class=\"small\" style=\"line-height: 2em;\"><i class=\"fa fa-eur\" aria-hidden=\"true\"></i>&nbsp;<em>Volumekorting</em></span>";
-        }
+        // Volume discount tag -- @todo improve
+        // if(!empty($_product->getTierPrice())) {
+        //   $html .= "<span class='small' style='line-height: 2em;'><i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
+        // }
         
-        $html .= "</div>";
-        $html .= $price_html;
-        $html .= "<div class=\"actions\">";
+        $html .= "</div>{$price_html}<div class='actions hstack w-100'>";
         
         if(!$_product->canConfigure()) {
-          
-          // Simple product, sellable
           if($_product->isSaleable()) {
-            $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <button type=\"button\" title=\"".$this->quoteEscape($this->__("Add to Cart"))."\" class=\"button btn-cart\" onclick=\"setLocation('{$this->getAddToCartUrl($_product)}')\"><i class=\"fa fa-shopping-cart\"></i></button>";
+            // Simple product, sellable
+            $btnLabel = $this->quoteEscape($this->__("Add to Cart"));
+            $html .= "<div><span class='{$stock_class}'>{$stock_message}</span>{$additional_delivery_messages}</div><button type='button' title='{$btnLabel}' class='button btn-cart ms-auto' onclick=\"setLocation('{$this->getAddToCartUrl($_product)}')\"><i class='fa fa-shopping-cart'></i></button>";
+          } else {
+            // Simple product, not sellable
+            $btnLabel = $this->quoteEscape($this->__("Details"));
+            $html .= "<div><span class='{$stock_class}'>{$stock_message}</span>{$additional_delivery_messages}</div><a title='{$btnLabel}' class='button btn-cart ms-auto' href='{$_product->getProductUrl()}'><i class='fa fa-info-circle'></i></a>";
           }
-          
-          // Simple product, not sellable
-          else {
-            $html .= "<div class=\"float-left\"><span class=\"{$stock_class}\" style=\"line-height: 1.5em;\">{$stock_message}</span>{$additional_delivery_messages}</div>
-            <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
-          }
+        } else {
+          // Configurable product
+          $btnLabel = $this->quoteEscape($this->__("Details"));
+          $html .= "<div><span class='buyblock-usp'>Meerdere varianten</span>{$additional_delivery_messages}</div><a title='{$btnLabel}' class='button btn-cart ms-auto' href='{$_product->getProductUrl()}'><i class='fa fa-info-circle'></i></a>";
         }
-        
-        // Configurable product
-        else {
-          $html .= "<div class=\"float-left\"><span class=\"buyblock-usp\" style=\"line-height: 1.5em;\">Meerdere varianten</span>{$additional_delivery_messages}</div>
-          <a title=\"".$this->quoteEscape($this->__("Details"))."\" class=\"button btn-cart\" href=\"{$_product->getProductUrl()}\" style=\"padding-top: 5px;\"><i class=\"fa fa-info-circle\"></i></a>";
-        }
-        
         $html .= "</div></div>";
-  
+        
         // Store in cache
         $GLOBALS["write_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "dhh_listview_product");
         if($GLOBALS["write_cache_enabled"]) {
@@ -589,7 +578,7 @@ if($show_products && $_productCollection->getFirstItem()) {
   </ul><?php
   
   if($show_toolbar) {
-    echo "<div class=\"toolbar-bottom pb-4\">{$toolbar_html}</div>";
+    echo "<div class='toolbar-bottom pb-4'>{$toolbar_html}</div>";
   }
   
   // Optional block category-ID is shown below the category tiles

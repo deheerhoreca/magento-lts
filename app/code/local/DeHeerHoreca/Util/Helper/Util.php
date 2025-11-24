@@ -453,23 +453,20 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         echo $product_block->getReviewsSummaryHtml($_product, 'short');
       }
       
-      if($skip_actions !== true) {
-        ?>
-        <div class="actions">
-          <div class="float-left" style="padding-top: 5px;">
+      if($skip_actions !== true) { ?>
+        <div class="actions hstack w-100">
+          <div>
             <span class="<?=$stock_class?>"><?=$display_stock_message?></span>
           </div>
           <?php if(!$_product->canConfigure() && $_product->isSaleable()): ?>
-            <button type="button" title="<?=$this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart float-right" onclick="setLocation('<?=$product_block->getAddToCartUrl($_product)?>')"><i class="fa fa-shopping-cart"></i></button>
+            <button type="button" title="<?=$this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart ms-auto" onclick="setLocation('<?=$product_block->getAddToCartUrl($_product)?>')"><i class="fa fa-shopping-cart"></i></button>
           <?php else: ?>
-            <a title="<?=$this->quoteEscape($this->__("Productdetails")) ?>" class="float-right" href="<?=$product_url?>"><?=$product_block->__("Productdetails") ?></a>
-          <?php endif?>
-        </div>
-        <?php
-      } else {
-        ?>
+            <a title="<?=$this->quoteEscape($this->__("Productdetails")) ?>" href="<?=$product_url?>"><?=$product_block->__("Productdetails") ?></a>
+          <?php endif ?>
+        </div><?php
+      } else { ?>
         <div class="actions">
-          <div class="float-left" style="padding-top: 5px;">
+          <div>
             <span class="<?=$stock_class?>"><?=$display_stock_message?></span>
           </div>
         </div>
@@ -480,7 +477,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         echo "<div class='' style='text-align:right;'><a class='strong' style='margin-right:.7em' href='/{$category_info["url"]}'>Meer: {$category_info["name"]}</a><i style='padding: 5px 0 0 0;' class='float-right fa fa-arrow-right' aria-hidden='true'></i></div>";
       }
       ?>
-      
     </div>
     <?php
     Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
@@ -1398,27 +1394,31 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if(!empty($_product->getProductLabel())) {
       return (string) $_product->getProductLabel();
     }
-    
-    $supplier_sys     = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
     $_price           = $_product->getPrice();
     $_finalPrice      = $_product->getFinalPrice();
-    $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
+    $supplier_sys     = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
     
-    if(doubleval($_product->getPrice()) > doubleval($_product->getFinalPrice())) {
+    if(doubleval($_price) > doubleval($_finalPrice)) {
       return "Actieprijs";
     }
     
     $now = CarbonImmutable::now();
     
-    // "HENDI5"
-    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
-      return "Extra Kortingscode";
-    }
-    if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
-      return "Extra Kortingscode";
-    }
-    if(!$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) {
-      return "Extra Kortingscode";
+    // $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
+    //
+    // // "HENDI5"
+    // if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
+    //   return "Extra Kortingscode";
+    // }
+    // if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
+    //   return "Extra Kortingscode";
+    // }
+    // if(!$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) {
+    //   return "Extra Kortingscode";
+    // }
+    
+    if($now->isBefore("2025-12-01 00:00:00")) {
+      return "Black Friday Deal";
     }
     
     // if($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
