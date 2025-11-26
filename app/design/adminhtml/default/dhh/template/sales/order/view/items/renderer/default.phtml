@@ -26,33 +26,32 @@
 // Needed because some attributes are not part of the product yet...
 $img_html   = "";
 $col_width  = 60;
-$_product   = Mage::getResourceModel("catalog/product_collection")
-  ->addAttributeToSelect(["ean13"])
-  ->addAttributeToSelect(["small_image"])
-  ->addAttributeToSelect(["thumbnail"])
-  ->addAttributeToFilter("entity_id", $_item->getProductId())
-  ->setPageSize(1)
-  ->setCurPage(1)
-  ->getFirstItem();
+    $_product   = Mage::getResourceModel("catalog/product_collection")
+    ->addAttributeToSelect(["ean13"])
+    ->addAttributeToSelect(["thumbnail"])
+    ->addAttributeToFilter("entity_id", $_item->getProductId())
+    ->setPageSize(1)
+    ->setCurPage(1)
+    ->getFirstItem();
 $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
 if(strlen((string) $_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_selection") {
-  $image_url        = "{$media}catalog/product{$_product->getThumbnail()}";
-  if(empty($image_url) === false) {
-    $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-    $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
-    $cdn_img_options  = [
-      "identifier"      => $_item->getSku(),
-      "fs_path"         => $image_path,
-      "url"             => $image_url,
-      "width"           => $col_width,
-      "height"          => $col_width,
-      "lazy"            => true,
-      "add_mod_time"    => true,
-      "class"           => "",
-      "style"           => "object-fit:contain;",
-    ];
-    $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
-  }
+    $image_url        = "{$media}catalog/product{$_product->getThumbnail()}";
+    if(empty($image_url) === false) {
+        $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+        $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
+        $cdn_img_options  = [
+        "identifier"      => $_item->getSku(),
+        "fs_path"         => $image_path,
+        "url"             => $image_url,
+        "width"           => $col_width,
+        "height"          => $col_width,
+        "lazy"            => true,
+        "add_mod_time"    => true,
+        "class"           => "",
+        "style"           => "object-fit:contain;",
+        ];
+        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    }
 }
 // END DHH CORE HACK
 ?>
@@ -76,7 +75,7 @@ if(strlen((string) $_product->getThumbnail()) > 0 && $_product->getThumbnail() !
         $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tools_magento_product_sku", $_item->getSku());
         $bol_search_product     = "";
         if(empty($_product->getEan13()) === false) {
-          $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_product->getEan13());
+            $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_product->getEan13());
         }
         $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tools_supplier_product_sku", $_item->getSku());
         ?>
@@ -85,7 +84,7 @@ if(strlen((string) $_product->getThumbnail()) > 0 && $_product->getThumbnail() !
         <a target="_blank" rel="external" href="<?php echo $mage_product_url; ?>">Magento</a> -
         <?php
         if(empty($bol_search_product) === false) {
-          echo "<a target='_blank' rel='external' href='{$bol_search_product}'>Bol.com</a> -";
+            echo "<a target='_blank' rel='external' href='{$bol_search_product}'>Bol.com</a> -";
         }
         ?>
         <a target="_blank" rel="external" href="<?php echo $tool_supplier_product; ?>">Supplier</a>

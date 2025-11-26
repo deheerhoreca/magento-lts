@@ -14,20 +14,21 @@ use \Illuminate\Support\Str;
  * @return array<string, string>  The prepared human-friendly flag value, along with original system value and optional CSS class
  */
 function prepareFlag(string $system_flag): array {
-  $flag     = $system_flag;
-  $cssClass = "";
-  
-  $flag     = strtoupper(trim($flag));
+  $flag       = $system_flag;
+  $flag       = strtoupper(trim($flag));
+  $techFlags  = ["SA_PE_SENT", "AO_LOCK", "AO_DONE"];
   
   // Highlight only non-technical flags (adds focus for customer service agents)
-  $techFlags = ["SA_PE_SENT", "AO_LOCK", "AO_DONE"];
-  if(!in_array($flag, $techFlags, true)) {
+  if(in_array($flag, $techFlags, true)) {
+    $cssClass = "subdue";
+  } else {
     $cssClass = "bold";
   }
   
   // Expand supplier abbreviations
   foreach(OM_SUPPLIER_CODE_NAME_MAP as $code => $name) {
-    $flag = Str::replaceStart($code, "{$name}:", $flag);
+    $flag = Str::replaceStart("{$code}_", "{$name}: ", $flag);
+    $flag = Str::replaceStart("{$name}_", "{$name}: ", $flag);
   }
   
   // Expand/rename other pairs
@@ -43,14 +44,14 @@ function prepareFlag(string $system_flag): array {
   $flag = Str::replace(array_keys($otherExpansions), $otherExpansions, $flag);
   
   // Expand other abbreviations
-  $regex_expansions = [
-    // "^(SA)"                 => "Spotler ",
-    // "(?:\b|_)(PE)(?:\b|_)"  => " Purchase Event ",
-    // "(?:\b|_)(AO)(?:\b|_)"  => " Auto Order ",
-  ];
-  foreach($regex_expansions as $pattern => $replacement) {
-    $flag = preg_replace("/".$pattern."/i", $replacement, $flag);
-  }
+  // $regex_expansions = [
+  //   // "^(SA)"                 => "Spotler ",
+  //   // "(?:\b|_)(PE)(?:\b|_)"  => " Purchase Event ",
+  //   // "(?:\b|_)(AO)(?:\b|_)"  => " Auto Order ",
+  // ];
+  // foreach($regex_expansions as $pattern => $replacement) {
+  //   $flag = preg_replace("/".$pattern."/i", $replacement, $flag);
+  // }
   
   $flag = str($flag)->replace("_", " ")->squish()->upper()->toString();
   
