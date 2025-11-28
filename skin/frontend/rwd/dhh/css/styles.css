@@ -7041,7 +7041,8 @@
     text-transform: uppercase;
     text-overflow: ellipsis;
     /* background-color: var(--color-orange); */
-    background-color: #2f86ded9;
+    /* background-color: #2f86ded9; */
+    background-color: #dc3545db;
   }
 
   /* Unsorted */
