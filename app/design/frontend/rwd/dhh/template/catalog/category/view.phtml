@@ -18,33 +18,23 @@ $at_root_category = (intval(Mage::registry('current_category')->getId()) === 2);
 // Mixed mode = shop by brand
 // Mixed mode = "products and static block"
 if($this->isMixedMode()) {
+  $_category    = $this->getCurrentCategory();
+  $brand_name   = strtolower((string) $_category->getName());
   
-  $_category            = $this->getCurrentCategory();
-  $brand_name           = strtolower((string) $_category->getName());
-  
-  if(empty($brand_name) === false) {
-    // $brand                = sanitizeForFilename($brand_name);  
+  if(!empty($brand_name)) {
     $brand                = sanitize_alphanumeric($brand_name);  
     $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
     if(is_file($brand_logo_file)) {
       $brand_logo         = "/".$brand_logo_file;
     }
-    
-    // Optional block BRAND is shown above the category tiles
-    $top_block_name       = $brand;
-    
-    // Optional block shopbybrand-BRAND is shown below the category tiles
-    $extra_block_name     = "shopbybrand-{$brand}";
+    $top_block_name       = $brand;                 // Optional block BRAND is shown above the category tiles
+    $extra_block_name     = "shopbybrand-{$brand}"; // Optional block shopbybrand-BRAND is shown below the category tiles
   }
-  
   $brand_name   = $this->helper("catalog/output")->categoryAttribute($_category, $_category->getName(), "name");
   $ctdesc_h1    = "Bekijk ons <span class='orange'>{$brand_name}</span> assortiment";
-  
-  // Too late to change the <title>
-  // $this->getLayout()->getBlock('head')->setTitle("{$brand_name}");
-  $title        = Mage::getStoreConfig('design/head/title_prefix')." Shop {$brand_name} ".Mage::getStoreConfig('design/head/title_suffix');
-  // echo "<script>document.title = ".json_encode($title)."</script>";
+  // $this->getLayout()->getBlock('head')->setTitle("{$brand_name}"); // Too late for this
+  $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$brand_name} ".Mage::getStoreConfig('design/head/title_suffix');
   \Chefstore\Html::addEncodedJsStatement("document.title=".json_encode($title));
 }
 
@@ -53,13 +43,13 @@ elseif($at_root_category && isset($_GET["manufacturer"]) && is_numeric($_GET["ma
   $singleton_prod = Mage::getSingleton('catalog/product')
     ->setStoreId(Mage::app()->getStore()->getId())
     ->setData("manufacturer", $_GET["manufacturer"]); 
-  $value = $singleton_prod->getAttributeText("manufacturer");
-  $ctdesc_h1 = "Bekijk ons <span class='orange'>{$value}</span> assortiment";
+  $brandHuman = $singleton_prod->getAttributeText("manufacturer");
+  $ctdesc_h1 = "";
   
   // Guess the brand and try to find a logo
-  if(empty($value) === false) {
-    $brand_name           = $value;
-    // $brand_name           = sanitizeForFilename($brand_name);
+  if(!empty($brandHuman)) {
+    $ctdesc_h1            = "Bekijk ons <span class='orange'>{$brandHuman}</span> assortiment";
+    $brand_name           = $brandHuman;
     $brand_name           = sanitize_alphanumeric($brand_name);
     $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
     $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
@@ -67,13 +57,15 @@ elseif($at_root_category && isset($_GET["manufacturer"]) && is_numeric($_GET["ma
       $brand_logo         = "/{$brand_logo_file}";
     }
   }
-  // $this->getLayout()->getBlock('head')->setTitle("{$value}"); // Too late for this
-  $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$value} ".Mage::getStoreConfig('design/head/title_suffix');
-  // echo "<script>document.title = ".json_encode($title)."</script>";
+  // $this->getLayout()->getBlock('head')->setTitle("{$brandHuman}"); // Too late for this
+  $title = Mage::getStoreConfig('design/head/title_prefix')." Shop {$brandHuman} ".Mage::getStoreConfig('design/head/title_suffix');
   \Chefstore\Html::addEncodedJsStatement("document.title=".json_encode($title));
   
-  // Optional block manufacturer_ is shown above the category tiles
-  $top_block_name = "shopbybrand-{$value}";
+  // Optional block shopbybrand-BRAND is shown above the category tiles
+  $top_block_name     = "shopbybrand-{$brand_slug}-top";
+  
+  // Optional block shopbybrand-BRAND is shown below the category tiles
+  $bottom_html_block  = "shopbybrand-{$brand_slug}";
 }
 
 // Shop by brand series
@@ -83,14 +75,12 @@ elseif($at_root_category && isset($_GET["brand_series"]) && is_numeric($_GET["br
     ->setData("brand_series", $_GET["brand_series"]); 
   $value = $singleton_prod->getAttributeText("brand_series");
   $ctdesc_h1 = "Bekijk ons <span class='orange'>{$value}</span> assortiment";
-  // $brand_series_slug = sanitizeForFilename($value);
   $brand_series_slug = sanitize_alphanumeric($value);
   
   // Guess the brand and try to find a logo
-  if(empty($value) === false) {
+  if(!empty($value)) {
     $brand_name           = strtok($value, " ");
-    if(empty($brand_name) === false) {
-      // $brand                = sanitizeForFilename($brand_name);  
+    if(!empty($brand_name)) {
       $brand                = sanitize_alphanumeric($brand_name);  
       $brand_slug           = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
       $brand_logo_file      = "media/wysiwyg/brands/{$brand_slug}.png";
@@ -107,11 +97,11 @@ elseif($at_root_category && isset($_GET["brand_series"]) && is_numeric($_GET["br
 
 // Display some HTML if we have it
 $top_block_html = "";
-if(empty($top_block_name) === false) {
+if(!empty($top_block_name)) {
   $top_block_html = $this->getLayout()->createBlock("cms/block")->setBlockId($top_block_name)->toHtml();
 }
 $extra_block_html = "";
-if(empty($extra_block_name) === false) {
+if(!empty($extra_block_name)) {
   $extra_block_html = $this->getLayout()->createBlock("cms/block")->setBlockId($extra_block_name)->toHtml();
 }
 
@@ -135,4 +125,11 @@ if($this->isContentMode()) {
   echo $this->getCmsBlockHtml();
 } else {
   echo $this->getProductListHtml();
+}
+
+// Bottom HTML block -- Best for large SEO content
+if(!empty($bottom_html_block)) {
+  echo "<div class='ctdesc std'>";
+  echo $this->getLayout()->createBlock("cms/block")->setBlockId($bottom_html_block)->toHtml();
+  echo "</div>";
 }
