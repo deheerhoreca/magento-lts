@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cf723ff822ba19b472681efbe48df32",
+    "content-hash": "3eb16bbfe74f7111f389804a3f5909ab",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -234,7 +234,7 @@
             "version": "v0.4.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:AOEpeople/Aoe_TemplateHints.git",
+                "url": "https://github.com/AOEpeople/Aoe_TemplateHints.git",
                 "reference": "417bc451fbbe5f51e093af249a8a4b3ee54fee3b"
             },
             "dist": {
@@ -269,7 +269,7 @@
             "version": "2.0.7",
             "source": {
                 "type": "git",
-                "url": "git@github.com:aschroder/Magento-SMTP-Pro-Email-Extension.git",
+                "url": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension.git",
                 "reference": "5101ed278d4aba05279fc1e53c3811983be8adda"
             },
             "dist": {
@@ -366,7 +366,7 @@
             "version": "v1.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jwestbrook/prototype.git",
+                "url": "git@github.com:jwestbrook/prototype.git",
                 "reference": "3c45151f88c7a47ac4694764b9dee762ddf4b5cf"
             },
             "dist": {
@@ -1434,12 +1434,12 @@
             "version": "0.2.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:fballiano/magento-category-sort-direction.git",
+                "url": "https://github.com/fballiano/openmage-category-sort-direction.git",
                 "reference": "7cc84643eabafd3120d577dffea007e4c6e38f17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fballiano/magento-category-sort-direction/zipball/7cc84643eabafd3120d577dffea007e4c6e38f17",
+                "url": "https://api.github.com/repos/fballiano/openmage-category-sort-direction/zipball/7cc84643eabafd3120d577dffea007e4c6e38f17",
                 "reference": "7cc84643eabafd3120d577dffea007e4c6e38f17",
                 "shasum": ""
             },
