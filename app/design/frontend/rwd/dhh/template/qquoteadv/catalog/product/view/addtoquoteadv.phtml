@@ -27,14 +27,13 @@
 
 if(!Mage::helper("qquoteadv")->isEnabled()) return "";
 
-?>
-<style>
-  .add-to-cart .btn-quote {
-    background-color: var(--color-antracite) !important;
-    color: var(--color-orange) !important;
-  }
-</style>
-<?php
+// <style>
+//   .add-to-cart .btn-quote {
+//     background-color: var(--color-antracite) !important;
+//     color: var(--color-orange) !important;
+//   }
+// </style>
+
 $_product             = $this->getProduct();
 $hideCartButton       = false;
 $enableLeaseBtn       = false;
@@ -49,10 +48,10 @@ if(Mage::getConfig()->getModuleConfig("Ophirah_Not2Order")->is("active", "true")
 
 // Allow to request a quote for out of stock items
 if($_product->getData("allowed_to_quotemode") == 1 && !$hideQuoteButton && _get_product_attribute($_product, "eol") !== "Ja") {
-  // $quoteBtnLabel = Mage::helper("qquoteadv")->__("Add to Quote");
-  // $btnIcon = "<i class='fa fa-calculator' style='font-size: 1.3em; margin-right: 10px;'></i>";
-  $quoteBtnLabel = "Make me an Offerte";
-  $btnIcon = "<i class='fa fa-tags' style='font-size: 1.3em; margin-right: 10px;'></i>";
+  $quoteBtnLabel = Mage::helper("qquoteadv")->__("Add to Quote");
+  $btnIcon = "<i class='fa fa-calculator' style='font-size: 1.3em; margin-right: 10px;'></i>";
+  // $quoteBtnLabel = "Make me an Offerte";
+  // $btnIcon = "<i class='fa fa-tags' style='font-size: 1.3em; margin-right: 10px;'></i>";
   // $btnIcon = "<img src='/media/wysiwyg/icons/blackfriday.svg' style='font-size: 1.3em; margin-right: 10px;'>";
   
   // Quantity form -- disabled

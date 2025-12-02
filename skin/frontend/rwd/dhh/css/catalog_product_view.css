@@ -820,7 +820,12 @@
   }
   
   .btn-quote {
-    background-color: #2a71db !important;
+    /* background-color: #252e3c !important; */
+    /* background-color: #2F86DE !important; */
+    background-color: #fff !important;
+    color: var(--color-antracite);
+    border: 1px solid var(--color-cs-orange) !important;
+    box-shadow: 0 2px 3px 0 rgb(0 0 0 / .15) !important;
   }
   
   .btn-lease {
