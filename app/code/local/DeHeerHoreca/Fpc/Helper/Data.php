@@ -9,60 +9,46 @@ use \Illuminate\Support\Str;
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
+  /** @var  string[]  OpenMage action whitelist for FPC caching */
   public static $om_action_whitelist  = [
-    "catalog_product_view", "catalog_category_view", "blog_post_view", "blog_index_list",
-    "cms_page_view", "cms_index_index",
+    "catalog_product_view", "catalog_category_view", "blog_post_view",
+    "blog_index_list", "cms_page_view", "cms_index_index",
     // "amshopby_index_index", // Disabled because we need to tag it properly first
   ];
   
+  /** @var  ?bool Lazy flag indicating whether this request is anonymous or not */
   public static $request_is_anonymous = null;
   
-  public function clearCache() {
-    $cache_tags = [
-      "DHH_FPC",
-      "DHH_LISTVIEW_PRODUCT",
-      "DHH_cms_index_index",
-      "DHH_EKE_OGMETA",
-      "DHH_TM_RICHSNIPPETS",
-      "AMSHOPBY",
-    ];
-    $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
-    $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
-    echo "<span><a href='{$url}'>Back</a></span><br><br>";
-    
-    return true;
-  }
+  public const DHH_FPC_LOG_FILE = "fpc.txt";
   
-  // Revalidate all currently cached entries
-  public function revalidateCache() {
-    return;
-    
-    $cache = Varien_Autoload::getCache();
-    Varien_Autoload::setCache(array());
-    foreach($cache as $className => $path) {
-      Varien_Autoload::getFullPath($className);
-    }
-    self::log("Revalidated ".count($cache)." classes");
-  }
+  public const PLACEHOLDER_FORMKEY = "___FPC_FORM_KEY_PLACEHOLDER___";
+  public const PLACEHOLDER_FORMKEY_DEPRECATED = "<!-- fpc form_key_placeholder -->";
   
   /**
-   * Check url
-   *
+   * Clear the cache
    * @return bool
    */
-  public function checkUrl() {
-    $k = base64_decode((string) Mage::app()->getRequest()->getParam("k"));
-    $v = base64_decode((string) Mage::app()->getRequest()->getParam("v"));
-    $ek = Mage::helper("core")->decrypt($v);
-    return $k && $v && ($ek == $k);
+  public function clearCache(): bool {
+    // $cache_tags = [
+    //   "DHH_FPC",
+    //   "DHH_LISTVIEW_PRODUCT",
+    //   "DHH_cms_index_index",
+    //   "DHH_EKE_OGMETA",
+    //   "DHH_TM_RICHSNIPPETS",
+    //   "AMSHOPBY",
+    // ];
+    // $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
+    $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
+    echo "<span><a href='{$url}'>Not doing that</a></span><br><br>";
+    return true;
   }
   
   /**
    * Get url
    *
-   * @return bool
+   * @return string
    */
-  public function getUrl() {
+  public function getUrl(): string {
     $k = Mage::helper("core")->getRandomString(16);
     return Mage::getUrl(
       "deheerhorecafpc/index/clear",
@@ -74,73 +60,80 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     );
   }
   
-  // Cleans the cached URL by removing URL parameters that do not affect the payload
-  // Otherwise we would cache index.html?sqr=x separately from index.html
-  // Optionally takes a URL for debug/dev
+  /**
+   * Trim the cached URL by removing parts that do not affect the cached payload, and normalize the URL for better matching.
+   * @todo Keep this up to date to prevent cache fragmentation and blowup
+   * - csredir: chefstore.nl redirect indicator
+   * - multipass: Added by LayeredNav if >X values selected to control bots and caching
+   *
+   * @param  string|null  $url  Optional URL overwrite for debug/development, otherwise current URL is used
+   * @return string             The normalized cache URL, ready and hashing
+   */
   public static function get_cache_url(?string $url = null): string {
-    if(empty($url)) {
-      $url = html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
-    }
+    $url ??= html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
     
     // List of query parameters that have no consequences for the rendered HTML
-    // @todo Keep this up to date to prevent cache fragmentation and blowup
-    // - csredir: chefstore.nl redirect indicator
-    // - multipass: Added by LayeredNav if >X values selected to control bots and caching
     $ignored_url_query_keys = [
       "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
       "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
       "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
       "cstag", "title", "srsltid", "csredir", "multipass", "opi", "sa", "ved",
       "usg", "msclkid",
-      
-      // Cloudflare
-      "forcepreload", "forcepreloadonly",
+      "forcepreload", "forcepreloadonly",                                           // Cloudflare
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
-    
-    // Remove things that can be ignored safely
-    $url = rtrim((string) $url, "&?/");
+    $url = rtrim($url, "&?/");  // Remove things that can be ignored safely
     
     return $url;
   }
   
-  // @see https://stackoverflow.com/questions/4937478/strip-off-url-parameter-with-php
-  public static function strip_param_from_url($url, $params, $sort = true) {
+  /**
+   * Strip parameters from URL.
+   * @todo Replace with a lib.
+   * @see https://stackoverflow.com/questions/4937478/strip-off-url-parameter-with-php
+   *
+   * @param  string  $url
+   * @param  array   $params
+   * @param  bool    $sort
+   *
+   * @return string
+   */
+  private static function strip_param_from_url(string $url, array $params, bool $sort = true): string {
     $url        = strtok($url, "#");            // Remove the fragment
     $base_url   = strtok($url, "?");            // Get the base url
-
     if($base_url === $url) {                    // Shortcut if there are no parameters
       return $url;
     }
-
-    $parsed_url = parse_url($url);              // Parse it
-    $query      = $parsed_url["query"];         // Get the query string
-    parse_str($query, $parameters);             // Convert Parameters into array
-
+    
+    $parsed_url = parse_url($url);
+    $query      = $parsed_url["query"];
+    $parameters = [];
+    
+    parse_str($query, $parameters);
     foreach($params as $param) {
       if(isset($parameters[$param])) {
-        unset($parameters[$param]);             // Delete the one you want
+        unset($parameters[$param]);
       }
     }
-
+    
     if($sort) {
-      ksort($parameters);                       // Sort remaining params
+      ksort($parameters);
     }
-
+    
     $new_query = http_build_query($parameters); // Rebuilt query string
     $url = "{$base_url}?{$new_query}";
-
-    return rtrim($url, "?");                    // Trim possible trailing ?
+    
+    return rtrim($url, "&?/");
   }
   
-  // Logic also exists in DeHeerHoreca_Fpc_Model_Observer
+  /**
+   * Get cache key prefix applicable to this request.
+   *
+   * @return string
+   */
   public static function get_cache_prefix(): string {
     $cache_key_prefix = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
-    
-    if($cache_key_prefix === "catalog_product_view") {
-      $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_key_prefix .= "_".$id;
-    } elseif($cache_key_prefix === "catalog_category_view") {
+    if($cache_key_prefix === "catalog_product_view" || $cache_key_prefix === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
       $cache_key_prefix .= "_".$id;
     }
@@ -148,13 +141,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $cache_key_prefix;
   }
   
+  /**
+   * Get cache tags applicable to this request.
+   *
+   * @return array
+   */
   public static function get_cache_tags(): array {
     $cache_tags = [];
-    
     if($om_action = Mage::app()->getFrontController()->getAction()->getFullActionName()) {
       $cache_tags[] = "DHH_{$om_action}";
     }
-    
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
       $cache_tags[] = "DHH_PRODUCT_{$id}";
@@ -166,9 +162,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $cache_tags;
   }
   
-  // Determine of the current request is anonymous or logged in
+  /**
+   * Determine if a request is anonymous (not logged in, no cart items).
+   *
+   * @return bool
+   */
   public static function is_request_anonymous(): bool {
-    
     if(!is_null(self::$request_is_anonymous)) {
       return self::$request_is_anonymous;
     }
@@ -348,7 +347,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    
     $_cache   = Mage::app()->getCache();
     $html     = $_cache->load($key);
     
@@ -363,24 +361,27 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     $size_raw_key = mb_strlen($html);
     
-    $_layout  = Mage::app()->getLayout();
-    
-    /* Hole punching */
+    /* HOLE PUNCHING */
     
     // Formkey (CSRF protection)
     if($holepunch_formkey === true) {
-      Varien_Profiler::start("DHH::FPC::Holepunch::formkey");
-      $search = "<!-- fpc form_key_placeholder -->";
-      $replace = Mage::getSingleton("core/session")->getFormKey();
-      if(!empty($replace)) {
-        $html = str_replace($search, $replace, $html, $count);
-        // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-        self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars");
-      }
-      Varien_Profiler::stop("DHH::FPC::Holepunch::formkey");
+      $html = self::holepunchFormkey($html);
+      // $search = [
+      //   self::PLACEHOLDER_FORMKEY_DEPRECATED,
+      //   self::PLACEHOLDER_FORMKEY,
+      // ];
+      // $replace = Mage::getSingleton("core/session")->getFormKey();
+      // if(!empty($replace)) {
+      //   $html = str_replace($search, $replace, $html, $count);
+      //   // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+      //   self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars");
+      // }
     }
     
     if($holepunch_blocks === true) {
+      $_layout ??= Mage::app()->getLayout();
+      
+      // The FPC URL comment appended to the cached HTML
       // "<!-- FPC Cache URL: https://www.chefstore.nl/sencor-41018217-srxd-3105-cent-brush-srv-3150-60.html -->"
       $pos_start = mb_strpos($html, "<!-- FPC Cache URL:");
       if($pos_start !== false) {
@@ -391,7 +392,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       }
       
       // The sidebar, is PART OF the minicart
-      Varien_Profiler::start("DHH::FPC::Holepunch::minicart");
       $minicart_html = $_layout
         ->createBlock("checkout/cart_minicart")
         ->setTemplate("checkout/cart/minicart.phtml")
@@ -407,10 +407,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html = str_replace($search, $replace, $html, $count);
       // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
       self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars");
-      Varien_Profiler::stop("DHH::FPC::Holepunch::minicart");
       
       // CORE_MESSAGES
-      // Varien_Profiler::start("DHH::FPC::Holepunch::messages_html");
       $replace  = $_layout
         ->createBlock("core/messages")
         ->setTemplate("page/html/notices.phtml")
@@ -420,10 +418,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html     = str_replace($search, $replace, $html, $count);
       $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
       self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
-      // Varien_Profiler::stop("DHH::FPC::Holepunch::messages_html");
       
       // MINIQUOTE
-      Varien_Profiler::start("DHH::FPC::Holepunch::miniquote_html");
       $replace = $_layout
         ->createBlock("qquoteadv/checkout_miniquote_miniquote")
         ->setTemplate("qquoteadv/checkout/quote/miniquotehead.phtml")
@@ -432,13 +428,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $html = str_replace($search, $replace, $html, $count);
       $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
       self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars", $level);
-      Varien_Profiler::stop("DHH::FPC::Holepunch::miniquote_html");
-      
       // // Breadcrumbs block -- only for catalog_product_view
       // Seems impossible: the current product object is not available at this point
       
       // if(DHH_FPC_DEBUG === true) {
-        // Varien_Profiler::start("DHH::FPC::Holepunch::breadcrumbs_html");
         // if(Mage::app()->getFrontController()->getAction()->getFullActionName() === "catalog_product_view") {
           // $breadcrumbs_html = $_layout->getBlock("breadcrumbs");
           // $breadcrumbs_html = $_layout
@@ -454,29 +447,24 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
           // self::log($breadcrumbs_html);
           // self::log("Replaced {$search} {$count} times (".mb_strlen($breadcrumbs_html)." chars)");
         // }
-        // Varien_Profiler::stop("DHH::FPC::Holepunch::breadcrumbs_html");
       // }
       
       // Mage::getSingleton("core/session")->addNotice(Mage::helper("core")->__("Notice ".date("c")));
       // Mage::getSingleton("core/session")->addSuccess(Mage::helper("core")->__("Notice ".date("c")));
       
       // MAIN NAV
-      // Varien_Profiler::start("DHH::FPC::Holepunch::nav");
       $replace  = (string) $_cache->load(DHH_FPC_NAV_KEY);
       $search   = "<!-- nav_here -->";
       $html     = str_replace($search, $replace, $html, $count);
       $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
       self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
-      // Varien_Profiler::stop("DHH::FPC::Holepunch::nav");
       
       // FOOTER
-      // Varien_Profiler::start("DHH::FPC::Holepunch::footer");
       $replace  = (string) $_cache->load(DHH_FPC_FOOTER_KEY);
       $search   = "<!-- footer_here -->";
       $html     = str_replace($search, $replace, $html, $count);
       $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
       self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
-      // Varien_Profiler::stop("DHH::FPC::Holepunch::footer");
     }
     
     $html = trim($html);
@@ -489,7 +477,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     return $html;
   }
   
-  public static function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []) {
+  /**
+   * Save cached HTML, with hole punching.
+   *
+   * @todo Find a better way to minify HTML, JBZoo?
+   * @todo Shift saving to a core_app_run_after event to prevent synchronous delays
+   *
+   * @param  string $key                The cache key.
+   * @param  string $html               The HTML content to cache.
+   * @param  bool   $holepunch_formkey  Whether to hole punch the form key.
+   * @param  bool   $holepunch_blocks   Whether to hole punch blocks.
+   * @param  array  $cache_tags         Cache tags for invalidation.
+   *
+   * @return bool
+   */
+  public static function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []): bool {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     // Prevent canonical URL shortening
@@ -534,9 +536,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if($holepunch_formkey) {
       $formKey = Mage::getSingleton("core/session")->getFormKey();
       if($formKey) {
-        $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
-        $html = str_replace($formKey, $formKeyPlaceholder, $html, $count);
-        // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
+        $html = str_replace($formKey, self::PLACEHOLDER_FORMKEY, $html, $count);
         self::log("Replaced form_key {$count} times");
       }
     }
@@ -575,18 +575,30 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Replace content between two needles in a string
+   * Replace the current formkey with a placeholder before storing in cache.
    *
-   * @param  string  $str
-   * @param  string  $needle_start
-   * @param  string  $needle_end
-   * @param  string  $replacement
-   * 
-   * @return string|array
+   * @param  string  $html  The HTML content to holepunch.
+   * @return string         The holepunched HTML content.
+   */
+  public static function holepunchFormkey(string $html): string {
+    if($formKey = Mage::getSingleton("core/session")->getFormKey()) {
+      $html = str_replace($formKey, self::PLACEHOLDER_FORMKEY, $html, $count);
+      self::log("Replaced form_key for holepunching {$count} times");
+    }
+    return $html;
+  }
+  
+  /**
+   * Replace content between two markers with replacement content.
+   *
+   * @param  string  $html         The original HTML content.
+   * @param  string  $start        The start marker.
+   * @param  string  $end          The end marker.
+   * @param  string  $replacement  The replacement content.
+   *
+   * @return string
    */
   public static function replace_between(string $str, string $needle_start, string $needle_end, string $replacement): string|array {
-    Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    
     $pos_start = strpos((string) $str, (string) $needle_start);
     if($pos_start === false) {
       self::log(__METHOD__.": {$needle_start} not found!", Zend_Log::DEBUG);
@@ -601,22 +613,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     $end = $pos_end === false ? mb_strlen((string) $str) : $pos_end + mb_strlen((string) $needle_end);
-    
     self::log(__METHOD__.": ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
-    
-    Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
   }
   
   /**
    * Write a single log message to the FPC plaintext log for debug purposes. Only active if DHH_FPC_DEBUG is true.
+   * @todo Save log messages and store them in a core_app_run_after event to prevent slowdowns due to file I/O.
+   * @todo Possibly add a shutdown_function as a backup to the core_app_run_after event.
    *
-   * @param  mixed $msg
-   * @param  mixed $level
+   * @param  mixed  $msg
+   * @param  int    $level
    * 
    * @return void
    */
-  public static function log($msg, $level = Zend_Log::DEBUG): void {
+  public static function log($msg, int $level = Zend_Log::DEBUG): void {
     if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
       Mage::log($msg, $level, "fpc.txt", true);
     }
@@ -625,14 +636,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /**
    * Add a Server-Timing header value to be emitted later.
    *
-   * @param  string $string
+   * @param   string  $string
+   * @return  bool
    */
-  public static function _add_server_timing_header(string $string) {
+  public static function _add_server_timing_header(string $string): bool {
     if(headers_sent()) {
       return false;
     }
     $GLOBALS["dhh_header_server_timing"] ??= [];
     $GLOBALS["dhh_header_server_timing"][] = $string;
+    return true;
   }
   
   /**
@@ -646,7 +659,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     $GLOBALS["dhh_header_server_timing"] ??= [];
-    
     if(!empty($GLOBALS["dhh_header_server_timing"])) {
       header("Server-Timing: ".implode("; ", (array) $GLOBALS["dhh_header_server_timing"]));
       unset($GLOBALS["dhh_header_server_timing"]);
@@ -658,12 +670,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /**
    * Clean cache entries by their tags.
-   *
    * - Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
    * - Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
    *
    * @param  string|array  $cache_tags
-   *
    * @return bool
    */
   public static function clean_by_tags(string|array $cache_tags): bool {
@@ -672,7 +682,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Prepend with e6b_ if needed. Redis library does NOT do this.
     $cache_tags = Arr::map($cache_tags, fn($tag) => Str::start($tag, "e6b_"));
     
-    // @notice without getBackend() it does not work!
+    // ! without getBackend() it does not work!
     if(DHH_FPC_DEBUG) {
       $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
       Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
@@ -684,16 +694,5 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     return $response;
-  }
-  
-  /**
-   * @deprecated use clean_by_tags()
-   *
-   * @param  mixed ...$args
-   *
-   * @return bool
-   */
-  public static function _clean_by_keys(...$args): bool {
-    return self::clean_by_tags($args);
   }
 }

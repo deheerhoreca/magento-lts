@@ -116,7 +116,7 @@ class Aoe_ModelCache_Model_Observer {
       return;
     } else {
       $summary = "Repeated model loads:".PHP_EOL;
-      $cwd = "/var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/";
+      $cwd = BP.DIRECTORY_SEPARATOR;
       foreach ($this->data as $className => $ids) {
         $summary .= "{$className}:".PHP_EOL;
         foreach ($ids as $id => $locations) {

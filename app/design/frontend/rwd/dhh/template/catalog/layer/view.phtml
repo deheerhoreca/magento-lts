@@ -40,7 +40,8 @@ if($canShowBlock) {
         $_filters = $this->getFilters();
         foreach($_filters as $_filter) {
           $sys_name = $_filter->getName();
-          Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$sys_name}");
+          $attrCode = $_filter->getAttributeCode();
+          Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$attrCode}");
           if($_filter->getItemsCount()) {
             $name = $this->__($sys_name);
 
@@ -63,7 +64,7 @@ if($canShowBlock) {
             echo "<dt>{$name}</dt>" . PHP_EOL;
             echo "<dd>{$_filter->getHtml()}</dd>" . PHP_EOL;
           }
-          Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$sys_name}");
+          Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$attrCode}");
         }
         Varien_Profiler::stop("DHH_AMSHOPBY_FILTER");
         ?>

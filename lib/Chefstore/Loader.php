@@ -1,5 +1,7 @@
 <?php
 
+// Non-PSR-4 loader for our own library functions and classes -- Gets included via Composer autoloading on every request
+
 declare(strict_types=1);
 
 use \Illuminate\Support\Arr;
@@ -10,6 +12,7 @@ use \Symfony\Contracts\Cache\ItemInterface;
 
 // Setup global aliases to prevent "use" statements all over -- Needs test because this file might get included multiple times by Composer
 // Cannot be executed multiple times between our apps
+// @todo DEPRECATED, move away from global aliases
 if (!defined("DHH_CLASS_ALIASES_APPLIED")) {
   if (!is_callable("Arr"))           class_alias(Arr::class, "Arr", true);
   if (!is_callable("Collection"))    class_alias(Collection::class, "Collection", true);

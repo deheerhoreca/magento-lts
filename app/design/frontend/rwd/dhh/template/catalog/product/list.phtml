@@ -23,7 +23,7 @@ $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipp
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $have_active_filters          = (bool) empty($active_filters) === false;
 $mininum_lease_price          = 400;
-$show_black_friday            = true;
+$show_black_friday            = false;
 $media_path                   = Mage::getBaseDir("media");
 $current_page_nr              = Mage::app()->getRequest()->getParam("p");
 $on_first_page                = (empty($current_page_nr) === false && $current_page_nr > 1) ? false : true;
@@ -290,14 +290,12 @@ Varien_Profiler::stop("DHH_Subcategories");
 /* LIST PRODUCTS */
 
 if($show_products && $_productCollection->getFirstItem()) {
-  Varien_Profiler::start("DHH_ListProducts");
-  echo "<div class=\"category-products\">";
+  Varien_Profiler::start("DHH_ListProducts"); ?>
+  <div class="category-products"><?php
   if($show_toolbar) {
-    $toolbar_html = $this->getToolbarHtml();
-    echo "<div class=\"top_toolbar\">{$toolbar_html}</div>";
-    define("DHH_SORTING_BLOCK_PRINTED", true);
+    $toolbar_html = $this->getToolbarHtml(); ?>
+    <div class="top_toolbar"><?=$toolbar_html?></div><?php
   } ?>
-  
   <ul class="products-grid products-grid--max-<?=$_columnCount?>-col"><?php
     $i = 0;
     foreach($_productCollection as $_product) {
@@ -548,12 +546,8 @@ if($show_products && $_productCollection->getFirstItem()) {
         
         Varien_Profiler::stop("DHH_ListProduct_{$product_id}_uncached");
       } ?>
-      
-      <li class="item<?php if(($i - 1) % $_columnCount === 0) { ?> first<?php } elseif($i % $_columnCount === 0) { ?> last<?php } ?>">
-        <?=$html?>
-      </li>
-      
-      <?php if(($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0)) { ?>
+      <li class="item"><?=$html?></li><?php
+      if(0 && ($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0)) { ?>
         </ul>
           <div class="new-tab-contant-text mobile-hide">
             <div class="col-md-3 new-contant">
@@ -572,12 +566,12 @@ if($show_products && $_productCollection->getFirstItem()) {
         <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
         <?php
       }
-      
       unset($html);
     } ?>
   </ul><?php
   
   if($show_toolbar) {
+    $toolbar_html = $this->getToolbarHtml(); // Same block again, because the output should be different
     echo "<div class='toolbar-bottom pb-4'>{$toolbar_html}</div>";
   }
   

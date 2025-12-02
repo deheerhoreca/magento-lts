@@ -11,7 +11,7 @@ $_helper                      = $this->helper("catalog/output");
 
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $show_ups_block               = false;
-$show_black_friday            = true;
+$show_black_friday            = false;
 $show_actions                 = false;
 $store                        = Mage::app()->getStore();
 $storeId                      = $store->getId();

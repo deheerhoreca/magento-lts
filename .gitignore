@@ -125,7 +125,6 @@ phpunit.xml
 !/skin/frontend/rwd/external/fontawesome
 /.modman/*/.git
 /.idea/
-/.phpstorm.meta.php
 /.well-known/acme-challenge/
 /skin/assets/
 

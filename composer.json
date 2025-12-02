@@ -94,9 +94,9 @@
     "aoepeople/aoe_scheduler": "Advanced cron scheduling management",
     "aschroder/smtp_pro": "Support for sending emails via SMTP",
     "avstudnitz/fast-simple-import": "Imports products and customers from arrays",
-    "colinmollenhour/Perfect_Watermarks": "Replacement for OpenMage's GD2 image adapter with imagemagick",
     "colinmollenhour/cache-backend-redis": "Support for storing OpenMage's cache in Redis",
     "colinmollenhour/magento-redis-session": "Support for storing OpenMage' sessions in Redis",
+    "colinmollenhour/Perfect_Watermarks": "Replacement for OpenMage's GD2 image adapter with imagemagick",
     "fballiano/magento1-image-cleaner": "Identify and remove orphan images",
     "fballiano/openmage-lesti-fpc": "PHP bases Full Page Cache",
     "firegento/logger": "Advanced logging capabilities"
@@ -106,15 +106,15 @@
       "type": "composer",
       "url": "https://packagist.org",
       "exclude": [
-        "bower-asset/*",
-        "npm-asset/*",
         "aoepeople/aoe_blackholesession",
         "aoepeople/aoe_profiler",
         "aoepeople/aoe_scheduler",
-        "paynl/magento-plugin",
+        "bower-asset/*",
         "fballiano/openmage-cssjs-minify",
         "firegento/adminmonitoring",
-        "firegento/debug"
+        "firegento/debug",
+        "npm-asset/*",
+        "paynl/magento-plugin"
       ]
     },
     {
@@ -200,23 +200,30 @@
       "oomphinc/composer-installers-extender": true
     },
     "apcu-autoloader": true,
+    "audit": {
+      "ignore": {
+        "PKSA-t425-mpgn-4yhs": "Only until > 20.05 upgrade",
+        "PKSA-626k-1yg1-m164": "Only until > 20.05 upgrade",
+        "PKSA-w1pc-fvwg-8vsf": "Only until > 20.05 upgrade"
+      }
+    },
     "classmap-authoritative": false,
     "magento-core-deploy": {
       "excludes": [
-        ".htaccess",
+        ".all-contributorsrc",
         ".htaccess.sample",
-        "README.md",
+        ".htaccess",
+        "app/etc/local.xml.template",
+        "app/etc/local.xml",
+        "CODE_OF_CONDUCT.md",
         "index.php.sample",
         "install.php",
-        "php.ini.sample",
-        "RELEASE_NOTES.txt",
-        "app/etc/local.xml",
-        "app/etc/local.xml.template",
-        "CODE_OF_CONDUCT.md",
-        "LICENSE.txt",
         "LICENSE_AFL.txt",
-        "robots.txt.sample",
-        ".all-contributorsrc"
+        "LICENSE.txt",
+        "php.ini.sample",
+        "README.md",
+        "RELEASE_NOTES.txt",
+        "robots.txt.sample"
       ]
     },
     "optimize-autoloader": true,

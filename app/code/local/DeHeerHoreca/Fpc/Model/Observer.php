@@ -27,35 +27,27 @@ if(DHH_FPC_DEBUG) {
 }
 
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
-  
   /**
    * Serve cached HTML if available.
-   * 
    * Observes controller_action_predispatch event.
    *
    * @param  mixed $observer
-   * 
    * @return void
    */
   public function ServeCachedHTML($observer): void {
     Varien_Profiler::start("DHH::FPC::ServeCachedHTML");
-    $formKeyPlaceholder = "<!-- fpc form_key_placeholder -->";
     $read_cache = Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, false, "fpc");
-    
     if($read_cache === false) {
       Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "BYPASS");
       Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
       return;
     }
-    
     $key = Mage::helper("deheerhoreca_fpc/data")->get_cache_key();
     $html = Mage::helper("deheerhoreca_fpc/data")->get_cached_html($key, true, true);
-
+    
     if(!empty($html)) {
-      
       // This normally runs from the observer http_response_send_before, but not in case of an FPC hit:
       $html = Fballiano_CssjsMinify_Model_Observer::minifyCssJs($html);
-      
       if(print($html)) {
         flush();
         Mage::helper("deheerhoreca_util/util")->addLabelToClickLog("fpc_cache", "HIT");
@@ -74,14 +66,11 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * Clear product cache on product save.
    *
    * @param  mixed $observer
-   * 
    * @return bool
    */
   public function clearProductCache($observer): bool {
-    $productId = $observer->getProduct()->getId();
-    $cache_tags = [
-      "DHH_PRODUCT_{$productId}",
-    ];
+    $productId  = $observer->getProduct()->getId();
+    $cache_tags = ["DHH_PRODUCT_{$productId}"];
     foreach($observer->getProduct()->getCategoryIds() as $category_id) {
       $cache_tags[] = "DHH_CATEGORY_{$category_id}";
     }
@@ -93,7 +82,6 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * Clear category cache on category save.
    *
    * @param  mixed $observer
-   * 
    * @return bool
    */
   public function clearCategoryCache($observer): bool {

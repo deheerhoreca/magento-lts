@@ -16,7 +16,7 @@ require_once __DIR__."/Loader.php";
  * - Use !function_exists() to avoid conflicts when running as an Intel plugin
  */
 
-/********************************************************************* Chefstore\Helper **********************************************************************/
+/* --------------------------------------------------------------- Chefstore\Helper --------------------------------------------------------------- */
 
 /**
  * Get the DeHeerHoreca Util helper.
@@ -308,7 +308,7 @@ if(!function_exists("_dhh_ips")) {
   }
 }
 
-// LARAVEL HELPERS
+/* ---------------------------------------------------------------- Laravel Picks ----------------------------------------------------------------- */
 
 /**
  * Checks if any of the values match the pattern, case insensitive.
@@ -380,7 +380,7 @@ if(!function_exists("wild_sis")) {
   }
 }
 
-// Intel picks
+/* ----------------------------------------------------------------- Intel Picks ------------------------------------------------------------------ */
 
 if(!function_exists('printr')) {
   function printr($expr, $return = false) {
@@ -463,6 +463,7 @@ if(!function_exists("array_to_table")) {
 
 // Miscellaneous
 
+/* -------------------------------------------------------------------- Utils --------------------------------------------------------------------- */
 
 if(function_exists("_get_product_attribute") === false) {
   function _get_product_attribute($_product, string $attribute_code, bool $implode_arrays = true) {
@@ -927,4 +928,44 @@ if(function_exists("dhh_get_quote_id") === false) {
     
     return "NO_QUOTE_ID";
   }
+}
+
+/* --------------------------------------------------------------- OpenMage Helpers --------------------------------------------------------------- */
+
+/**
+ * @see Mage_Core_Helper_Abstract
+ * => No need for function_exists(): If Intel wants to use these, it should use this file directly.
+ */
+
+/**
+ * Escape quotes inside html attributes.
+ * Uses $addSlashes = FALSE by default for escaping JavaScript inside HTML attribute (onClick, onSubmit etc).
+ *
+ * @param  string  $string      The string
+ * @param  bool    $addSlashes  Whether to add slashes or not (default: FALSE)
+ *
+ * @return string
+ */
+function omHtmlAttrEscape(string $string, bool $addSlashes = false): string {
+  return Mage::helper("core")->quoteEscape($string, $addSlashes);
+}
+
+/**
+ * Escape quotes for JavaScript.
+ *
+ * @param  string|string[]  $string  The string or array of strings
+ * @return string|string[]
+ */
+function omJsQuoteEscape(string|array $string): string|array {
+  return Mage::helper("core")->jsQuoteEscape($string);
+}
+
+/**
+ * Escape HTML special characters.
+ *
+ * @param  string  $string  The string
+ * @return string
+ */
+function omHtmlEscape(string $string): string {
+  return Mage::helper("core")->htmlEscape($string);
 }

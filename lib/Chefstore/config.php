@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-/** @var string[] List of developer IPs */
+/** @var  string[]  List of developer IPs */
 const DHH_DEV_IPS = [
   "5.132.21.238",
   "185.127.111.251",
@@ -12,6 +12,7 @@ const DHH_DEV_IPS = [
   "81.59.51.217"
 ];
 
+/** @var  array<string,string>  Mapping of OpenMage supplier codes to supplier code names */
 const OM_SUPPLIER_CODE_NAME_MAP = [
   "AX"  => "apexa",
   "BA"  => "bartscher",

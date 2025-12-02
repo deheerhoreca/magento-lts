@@ -242,16 +242,17 @@ function dhh_get_current_url(): string {
 }
 
 /**
- * Returns whether the OM profiler is enabled. @todo fix for POST by not looking at the request.
+ * Returns whether the OM profiler is enabled.
+ * Uses a cheap param check to avoid the more expensive Varien_Profiler::isEnabled() call.
  *
  * @return boolean
  */
 function dhh_profiler_enabled(): bool {
-  if(!(\Mage::app()->getRequest()->getParam("profile", false))) {
-    return false;
+  if(Mage::app()->getRequest()->getParam("profile", false)) {
+    return true;
   }
   
-  return true;
+  return Varien_Profiler::isEnabled();
 }
 
 /**
@@ -273,7 +274,6 @@ function getProductCollection(): Mage_Catalog_Model_Resource_Product_Collection 
  * @return string|false
  */
 function getProductUrlById(int $id): string|false {
-  
   $return = false;
   
   if($_products = getProductCollection()
