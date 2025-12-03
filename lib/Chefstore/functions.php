@@ -385,7 +385,7 @@ if(!function_exists("wild_sis")) {
 if(!function_exists('printr')) {
   function printr($expr, $return = false) {
     $ret = null;
-    if(is_array($expr) && !sizeof($expr)) {
+    if(is_array($expr) && !count($expr)) {
       return;
     }
     if(php_sapi_name() !== "cli") {
@@ -473,9 +473,9 @@ if(function_exists("_get_product_attribute") === false) {
     
     $attribute = $_product->getResource()->getAttribute($attribute_code);
     if(!$attribute) {
-      if(_dhh_debug()) {
-        echo "Attribute '{$attribute_code}' does not exist";
-      }
+      // if(_dhh_debug()) {
+      //   echo "Attribute '{$attribute_code}' does not exist";
+      // }
       Mage::log("_get_product_attribute: Attribute '{$attribute_code}' does not exist", null, "exception.log", true);
       return null;
     }
@@ -487,27 +487,6 @@ if(function_exists("_get_product_attribute") === false) {
     }
     
     return $value;
-  }
-}
-
-if(function_exists("printr") === false) {
-  function printr($expr, $return = false) {
-    $ret = null;
-    if(is_array($expr) && !sizeof($expr)) {
-      return;
-    }
-    if(php_sapi_name() !== "cli") {
-      $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
-    }
-    $ret .= print_r($expr, true);
-    if(php_sapi_name() !== "cli") {
-      $ret .= "</pre>";
-    }
-    $ret .= PHP_EOL;
-    if($return) {
-      return $return;
-    }
-    echo $ret;
   }
 }
 
@@ -578,6 +557,19 @@ function in_range($number, $min, $max, $inclusive = false) {
       : ($number >= $min && $number < $max) ;
   }
   return false;
+}
+
+/**
+ * Dump a variable for development purposes in a production system.
+ * Check if the IP is a DHH IP, check if nofpc is set and dump the variable in a HTML comment.
+ *
+ * @param  mixed $var
+ * @return void
+ */
+function devDump(mixed $var): void {
+  if(_dhh_debug()) {
+    echo "<!-- DHH: ".var_export($var, true)." -->";
+  }
 }
 
 if(function_exists("_getAlternativeEans") === false) {

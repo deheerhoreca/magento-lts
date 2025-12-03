@@ -171,6 +171,11 @@
     <TM_CheckoutSuccess>
       <active>false</active>
     </TM_CheckoutSuccess>
+    
+    <!-- Not used -->
+    <Amasty_Feed>
+      <active>false</active>
+    </Amasty_Feed>
 
     <!-- Temporarily disable -->
     <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->

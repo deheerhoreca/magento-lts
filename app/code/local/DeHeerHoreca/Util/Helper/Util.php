@@ -1382,15 +1382,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /**
    * Determine product label automatically based on conditions.
-   * 
    * Also used in app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml.
    *
    * @param   Mage_Catalog_Model_Product  $_product
    * @param   mixed                       $context
    *
-   * @return  string
+   * @return  ?string
    */
-  public static function auto_productlabel(Mage_Catalog_Model_Product $_product, mixed $context): string {
+  public static function auto_productlabel(Mage_Catalog_Model_Product $_product, mixed $context): ?string {
     if(!empty($_product->getProductLabel())) {
       return (string) $_product->getProductLabel();
     }
@@ -1416,19 +1415,21 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // if(!$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) {
     //   return "Extra Kortingscode";
     // }
-    
-    if($now->isBefore("2025-12-01 00:00:00")) {
-      return "Black Friday Deal";
-    }
-    
-    // if($supplier_sys === "diamond" && $now->isBefore("2025-09-25 23:59:59") && in_array($_product->getSku(), [
-    //   "DI-WR-LB40-MPD4", "DI-WR-LV50-MPD5", "DI-WR-LVCD-D6", "DI-WR-GN06-1N", "DI-WR-GN12-2N", "DI-WR-GN06-1B", "DI-WR-GN12-2B", "DI-WR-38CS-SW",
-    //   "DI-WR-38CA-AW", "DI-WR-38CA-AB", "DI-WR-SP24-A/RX2", "DI-WR-SP41-A/RX2", "DI-WR-LP30-M", "DI-WR-VH12-P2", "DI-WR-VH16-G6", "DI-WR-D12-S2", "DI-WR-D16-B6",
-    //   "DI-WR-GRPN-43", "DI-WR-MGVE-45", "DI-WR-RTS/1E", "DI-WR-RTD/2E", "DI-WR-RTS/1G", "DI-WR-RTD/2G", "DI-WR-FCV4-MC", "DI-WR-FCV4-DG", "DI-WR-EF08-S8",
-    //   "DI-WR-EF16-D8", "DI-WR-EF10-S1", "DI-WR-EF20-S2"
-    // ], true)) {
-    //   return "5% Kortingscode";
+    // if($now->isBefore("2025-12-01 00:00:00")) {
+    //   return "Black Friday Deal";
     // }
+    
+    // Promo-based
+    if($now->isBefore("2025-12-25 00:00:00")) {
+      // devDump([$_product->getSku(), _get_product_attribute($_product, "manufacturer"), _get_product_attribute($_product, "promos", implode_arrays: false)]);
+      $brand = _get_product_attribute($_product, "manufacturer");
+      if($brand === "Diverso by Diamond") {
+        $promos = (array) _get_product_attribute($_product, "promos", implode_arrays: false);
+        if(in_array("2025_12_diverso_actie5", $promos, true)) { // Option ID: 4375
+          return "5% Kortingscode";
+        }
+      }
+    }
     
     // Maxima warranty extension
     if($supplier_sys === "maxima" && $now->isBefore("2026-01-01 00:00:00")) {

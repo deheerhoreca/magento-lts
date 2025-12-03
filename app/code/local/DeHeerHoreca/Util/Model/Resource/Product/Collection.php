@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // DHH extension of Mage_Catalog_Model_Resource_Product_Collection
 // To enable FLAT tables in ADMIN when needed
 // See: app/code/core/Mage/Catalog/Model/Resource/Product/Collection.php

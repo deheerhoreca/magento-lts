@@ -912,7 +912,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
             echo $this->getChildHtml("other"); ?>
             <div class="add-to-cart-wrapper"><?php
               if($show_black_friday && $saleable && !$eol) { ?>
-                <a class="text-reset" href="/qquoteadv/index/" target="_blank">
+                <a id="prd-detail-bf-banner" class="d-none text-reset" href="/qquoteadv/index/" target="_blank">
                   <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
                     <div class="info-box-inner" style="max-width: unset;">
                       <div style="float:right; margin-top: .5em;">
@@ -1013,13 +1013,28 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                     </div><?php
                   }
                   
-                  if(!$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) { ?>
+                  if(0 && !$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/maxima.png" class="card-img-top px-5" alt="Coupon Code">
                       <div class="card-body">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">MAXIMA5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van Maxima. Gebruik deze code tijdens het afrekenen.</p>
                         <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 23 november 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                      </div>
+                    </div><?php
+                  }
+                  
+                  // Use centralized logic to implement 2025_12_diverso_actie5
+                  // @todo Create function to get back running promos (With date check)
+                  $promotion = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
+                  if(!$hasSpecialPrice && $supplier_sys === "diamond"
+                    && ($promotion = getOmDhhUtilHelper()->auto_productlabel($_product, "detail")) === "5% Kortingscode") { ?>
+                    <div class="card mx-auto p-2 mb-2">
+                      <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/diverso_by_diamond.png" class="card-img-top px-5" alt="Coupon Code">
+                      <div class="card-body">
+                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">DIVERSO5</span></h4>
+                        <p class="card-text">Korting geldt voor <a href="/promoties/2025-diverso-by-diamond.html" target="_blank">een brede selectie producten</a> van Diverso by Diamond. Gebruik deze code tijdens het afrekenen.</p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 december 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div><?php
                   }

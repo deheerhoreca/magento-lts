@@ -582,48 +582,126 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $config = Arr::prepend($config, null, "orig_type");
         $config = Arr::prepend($config, $attr_code, "attr_code");
         
-        // Reduce Ja/Nee/N.v.t./Optioneel/NULL to a small varchar
+        // Reduce Ja/Nee/N.v.t./Optioneel/NULL and other short values to a small varchar
+        // => VARCHAR(255) => VARCHAR(16)
         if(in_array($attr_code, [
-          "has_adjustable_shelves_value",
-          "has_passthrough_value",
-          "has_induction_value",
-          "with_glass_top_value",
-          "with_heating_value",
-          "freezer_safe_value",
-          "is_food_contact_safe_value",
-          "is_tiltable_value",
-          "opstaande_rand_value",
           "afsluitbaar_value",
           "aftap_value",
-          "eol_value",
-          "motor_value",
-          "self_closing_value",
+          "afvalgat_value",
           "bestelartikel_value",
-          "disposable_value",
           "collapsible_value",
-          "zeepdoseerpomp_value",
+          "disposable_value",
           "door_heating_value",
-          "eu_eco_label_value",
           "ean",
           "ean13",
+          "eol_value",
+          "eu_eco_label_value",
+          "freezer_safe_value",
+          "has_adjustable_shelves_value",
+          "has_induction_value",
+          "has_passthrough_value",
+          "is_food_contact_safe_value",
           "is_roll_in_value",
+          "is_tiltable_value",
+          "motor_value",
+          "opstaande_rand_value",
           "recommended_product_value",
-          "winter_control_value",
+          "self_closing_value",
           "verrijdbaar_value",
-          "afvalgat_value",
-          // "energy_efficiency_class_a_g_value",       > 16 chars
-          // "energieklasse_value",                     > 16 chars
+          "winter_control_value",
+          "with_glass_top_value",
+          "with_heating_value",
+          "zeepdoseerpomp_value",
+          "deur_omkeerbaar_value",
+          "made_in_country_2code_value",
         ])) {
-          // printr("{$attr_code} {$config["type"]} => varchar(32)");
           $config["orig_type"] = $config["type"];
-          $config["type"] = "varchar(16)";
+          if($config["type"] === "varchar(255)") {
+            $config["type"] = "varchar(16)";
+            // printr("{$attr_code} {$config["orig_type"]} => {$config["type"]}");
+          }
+        }
+        if(in_array($attr_code, [
+          "ip_rating_value",
+          "energieklasse_value",
+          "tableware_type_value",
+          "energy_efficiency_class_a_g_value",
+          "type_pizza_oven_value",
+          "table_type_value",
+          "chair_type_value",
+          "bottom_shape_value",
+          "stock_status_value",
+          "cooling_motor_type_value",
+          "icecube_type_value",
+          "mpn",
+          "levertijd_tmp_override_value",
+          "worktable_construction_value",
+          "type_toaster_value",
+          "type_bain_marie_value",
+          "sku_seller",
+          "tray_material_value",
+          "grill_tray_type_value",
+          "supplier_value",
+          "levertijd_value",
+          "manufacturer_value",
+          "garantie_value",
+          "thumbnail_label",
+          "image_label",
+          "small_image_label",
+          "msrp_display_actual_price_type",
+        ])) {
+          $config["orig_type"] = $config["type"];
+          if($config["type"] === "varchar(255)") {
+            $config["type"] = "varchar(64)";
+            // printr("{$attr_code} {$config["orig_type"]} => {$config["type"]}");
+          }
         }
         
-        // TEXT for multiselects is overkill, use a smaller VARCHAR
-        elseif(in_array($attr_code, ["power_mains"])) {
-          // printr("{$attr_code} {$config["type"]} => varchar(255)");
+        // TEXT for multiselects is overkill, use a smaller VARCHAR(128)
+        // => TEXT => VARCHAR(128)
+        elseif(in_array($attr_code, [
+          "aisi_standard",
+          "brand_series",
+          "climate_class",
+          "colors",
+          "cooking_surface_shape",
+          "door_hinge_side",
+          "door_lid_material",
+          "frequency_hertz",
+          "gas_type_convertible_to",
+          "gender",
+          "capacity",
+          "gn_capacity",
+          "gn_options",
+          "gn",
+          "good_use_cases",
+          "highlighted_company_types",
+          "indoor_outdoor",
+          "is_compliant_with",
+          "knife_type",
+          "material_group",
+          "model",
+          "pan_type",
+          "power_mains",
+          "product_type",
+          "promos",
+          "recurring_profile",
+          "size",
+          "temperature_class",
+          "type_gas",
+          "type_induction_unit",
+          "type_koeling",
+          "type_werkblad",
+          "uitvoering_werktafel",
+          "uitvoering",
+          "voltage",
+          "with_canopy",
+        ])) {
           $config["orig_type"] = $config["type"];
-          $config["type"] = "varchar(255)";
+          if($config["type"] === "text") {
+            $config["type"] = "varchar(96)";
+            // printr("{$attr_code} {$config["orig_type"]} => {$config["type"]}");
+          }
         }
         
         // Print some uncaught attributes which might need attention
@@ -647,7 +725,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     );
     
     // echo array_to_table($columns, true);
-    data_forget($columns, ["*.attr_code", "*.orig_type"]);
+    $columns = Arr::mapWithKeys($columns, 
+      function($config, $attr_code): array {
+        unset($config["attr_code"]);
+        unset($config["orig_type"]);
+        return [$attr_code => $config];
+      }
+    );
+    
     $columnsObject->setColumns($columns);
   }
 }
