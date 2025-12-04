@@ -16,11 +16,12 @@ if(Mage::helper('richsnippets')->snippetsEnabled() && Mage::getStoreConfig('rich
   }
   
   $json = $this->getJsonSnippetsProduct();
-  if(isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+  if(Mage::getIsDeveloperMode()) {
     $json = json_encode(json_decode((string) $json), JSON_PRETTY_PRINT); // During development
   }
   echo "<script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
   
+  // @todo Defer cache save to after response
   if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "tm_richsnippets")) {
     $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
     $cache_tags = ["DHH_TM_RICHSNIPPETS", "DHH_PRODUCT_{$_product->getId()}", "PRODUCT_{$_product->getId()}", "DHH_SUPPLIER_{$supplier_sys_upper}"];
