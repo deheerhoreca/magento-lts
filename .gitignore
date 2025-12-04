@@ -118,6 +118,7 @@ phpunit.xml
 /maintenance.ip
 /js/elastic-apm-rum.umd.min.js.map
 /_dev.html
+/etc/n98-configdump.xml
 
 # DIRS
 /js/ext-*

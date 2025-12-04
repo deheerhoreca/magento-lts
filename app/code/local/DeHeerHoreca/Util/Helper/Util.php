@@ -29,7 +29,6 @@ const SUPPLIERS_HIDE_STOCK_DETAILS = [
 // Mage::helper("deheerhoreca_util/util")->__METHOD__()
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
-  
   /*
    * getFullProductUrl() runs into issues when the url including
    * category and excluding category are different in core_url_rewrite.
@@ -1403,7 +1402,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     $now = CarbonImmutable::now();
     
-    // $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
+    $hasSpecialPrice = $_product->getSpecialPrice() && $_finalPrice < $_price;
     //
     // // "HENDI5"
     // if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
@@ -1412,9 +1411,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
     //   return "Extra Kortingscode";
     // }
-    // if(!$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) {
-    //   return "Extra Kortingscode";
-    // }
+    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-12-24 00:00:00")) {
+      return "5% Kortingscode";
+    }
     // if($now->isBefore("2025-12-01 00:00:00")) {
     //   return "Black Friday Deal";
     // }

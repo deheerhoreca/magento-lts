@@ -365,17 +365,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Formkey (CSRF protection)
     if($holepunch_formkey === true) {
-      $html = self::holepunchFormkey($html);
-      // $search = [
-      //   self::PLACEHOLDER_FORMKEY_DEPRECATED,
-      //   self::PLACEHOLDER_FORMKEY,
-      // ];
-      // $replace = Mage::getSingleton("core/session")->getFormKey();
-      // if(!empty($replace)) {
-      //   $html = str_replace($search, $replace, $html, $count);
-      //   // $level = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
-      //   self::log("Replaced {$search} {$count} times with ".mb_strlen((string) $replace)." chars");
-      // }
+      $html = self::personalizeFormkey($html);
     }
     
     if($holepunch_blocks === true) {
@@ -534,11 +524,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Handle form_key (CSRF protection)
     if($holepunch_formkey) {
-      $formKey = Mage::getSingleton("core/session")->getFormKey();
-      if($formKey) {
-        $html = str_replace($formKey, self::PLACEHOLDER_FORMKEY, $html, $count);
-        self::log("Replaced form_key {$count} times");
-      }
+      $html = self::anonymizeFormkey($html);
     }
     
     // Replace holepunched content with placeholders
@@ -575,15 +561,29 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Replace the current formkey with a placeholder before storing in cache.
+   * Holepunch the formkey by replacing it with a placeholder before storing in cache.
    *
-   * @param  string  $html  The HTML content to holepunch.
-   * @return string         The holepunched HTML content.
+   * @param  string  $html  The personalized HTML content.
+   * @return string         The anonymized HTML content.
    */
-  public static function holepunchFormkey(string $html): string {
+  public static function anonymizeFormkey(string $html): string {
     if($formKey = Mage::getSingleton("core/session")->getFormKey()) {
       $html = str_replace($formKey, self::PLACEHOLDER_FORMKEY, $html, $count);
-      self::log("Replaced form_key for holepunching {$count} times");
+      self::log("Punched form_key {$count} times");
+    }
+    return $html;
+  }
+  
+  /**
+   * Fill the formkey placeholder with the current formkey value.
+   *
+   * @param  string  $html  The anonymized HTML content.
+   * @return string         The personalized HTML content.
+   */
+  public static function personalizeFormkey(string $html): string {
+    if($formKey = Mage::getSingleton("core/session")->getFormKey()) {
+      $html = str_replace(self::PLACEHOLDER_FORMKEY, $formKey, $html, $count);
+      self::log("Filled form_key {$count} times");
     }
     return $html;
   }
@@ -624,7 +624,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    *
    * @param  mixed  $msg
    * @param  int    $level
-   * 
+   *
    * @return void
    */
   public static function log($msg, int $level = Zend_Log::DEBUG): void {

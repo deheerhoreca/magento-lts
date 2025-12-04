@@ -15,6 +15,8 @@
 // Category ID 2 means in root category, therefore not in a regular category
 $at_root_category = (intval(Mage::registry('current_category')->getId()) === 2);
 
+$brand_slug = ""; // Needs to exist
+
 // Mixed mode = shop by brand
 // Mixed mode = "products and static block"
 if($this->isMixedMode()) {

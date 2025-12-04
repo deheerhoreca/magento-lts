@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chefstore;
 
 class CacheBuster {
-  
   // function addTs(string $relative_path): string {
   //   if(!is_file($relative_path)) {
   //     return $relative_path;

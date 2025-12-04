@@ -4607,6 +4607,11 @@
     text-decoration-color: var(--color-orange) !important;
   }
 
+  .text-orange {
+    color: var(--color-orange) !important;
+    text-decoration-color: var(--color-orange) !important;
+  }
+
   .white {
     color: #fff !important;
   }
@@ -5222,10 +5227,6 @@
   .clzinfopagetop,
   .clzinfopagetop a {
     color: #f3f3f3;
-  }
-
-  .clzinfopagetop a {
-    padding: 2px;
   }
 
   .clzinfopagetop a:hover {
