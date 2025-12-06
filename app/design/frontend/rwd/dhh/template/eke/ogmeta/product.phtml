@@ -1,16 +1,17 @@
 <?php
 
+// declare(strict_types=1);  // @todo
+
 $helper = Mage::helper("eke_ogmeta");
 if(!$helper->isOgMetaEnabled()) {
   return;
 }
 
-$_product      = Mage::registry("current_product");
-$html         = "";
-$cache_key    = "eke_ogmeta_product_{$_product->getId()}";
+$_product   = Mage::registry("current_product");
+$html       = "";
+$cache_key  = "eke_ogmeta_product_{$_product->getId()}";
 
 // Serve from cache
-
 if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta")) {
   $html = Mage::app()->getCache()->load($cache_key);
   if(empty($html)) {
@@ -23,7 +24,6 @@ if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke
 }
 
 // Serve fresh
-
 $dhh_sku              = (string) $_product->getSku();
 $siteName             = (string) $helper->getSiteName();
 $page_title           = (string) $this->getLayout()->getBlock("head")->getTitle();
@@ -32,7 +32,6 @@ $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUr
 $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["fastmode" => true]);
 $overall_stock_status = $stock_data["overall_stock_status"] ?? "";
 $productVideo         = (string) _get_product_attribute($_product, "product_video");
-
 $image_attr           = [];
 $image_raw            = (string) $_product->getImage();
 if(!empty($image_raw) && $image_raw !== "no_selection") {
@@ -127,9 +126,16 @@ if(!empty($productVideo)) {
 echo $html;
 
 // Store in cache
+// @todo defer
 if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta")) {
   $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
-  $cache_tags = ["DHH_EKE_OGMETA", "DHH_PRODUCT_{$_product->getId()}", "PRODUCT_{$_product->getId()}", "DHH_SUPPLIER_{$supplier_sys_upper}"];
+  $cache_tags = [
+    "DHH_EKE_OGMETA",
+    "DHH_PRODUCT_{$_product->getId()}",
+    "PRODUCT_{$_product->getId()}",
+    "DHH_SUPPLIER_{$supplier_sys_upper}",
+  ];
+  $html = \Chefstore\Html::minifyHtml($html);
   if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400 * 7)) {
     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
   }

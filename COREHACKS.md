@@ -18,6 +18,7 @@
 - `app/code/core/Mage/Sales/etc/config.xml`
 - `app/code/core/Mage/Api/Model/Server/Wsi/Adapter/Soap.php`
 - `app/code/core/Mage/Catalog/Model/Category.php`
+- `app/code/core/Mage/Catalog/Model/Layer.php`
 - `app/code/core/Mage/Customer/Model/Customer.php`
 - `app/code/core/Mage/Page/Block/Html/Head.php`
 

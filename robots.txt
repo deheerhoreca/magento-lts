@@ -62,9 +62,6 @@ User-agent: Googlebot-Image
 User-agent: Googlebot-Video
 User-agent: Storebot-Google
 User-agent: Google-InspectionTool
-User-agent: GoogleOther
-User-agent: GoogleOther-Video
-User-agent: GoogleOther-Image
 User-agent: Google-Extended
 User-agent: AdsBot-Google
 User-agent: ChatGPT-User
@@ -96,7 +93,8 @@ Disallow: /media/static/
 Disallow: /errors/
 Disallow: /lib/
 Disallow: /no-route
-Disallow: /*?*multipass=true*
+Disallow: /*&multipass*
+Disallow: /*?multipass*
 Disallow: /*?price=*
 Disallow: /*?___from_store=*
 Disallow: /*?___store=*
@@ -125,8 +123,11 @@ User-agent: ClaudeBot
 User-agent: Google-Extended
 User-agent: GPTBot
 User-agent: meta-externalagent
+User-agent: GoogleOther
+User-agent: GoogleOther-Video
+User-agent: GoogleOther-Image
 Disallow: /shop?*
-Disallow: /*&multipass=true*
-Disallow: /*?multipass=true*
+Disallow: /*&multipass*
+Disallow: /*?multipass*
 
 Sitemap: https://www.chefstore.nl/sitemap.xml

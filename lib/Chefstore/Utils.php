@@ -9,7 +9,11 @@ use \Illuminate\Support\Str;
 
 class Utils {
   
-  public static $dev_ips = [
+  /** @var callable[] Storage */
+  protected static $deferredCallables = [];
+  
+  /** @var array Development IP addresses whitelist */
+  protected static $dev_ips = [
     "5.132.21.238",
     "185.127.111.227",
     "185.127.111.251",
@@ -177,5 +181,32 @@ class Utils {
    */
   public static function msleep(int $time): void {
     usleep($time * 1000);
+  }
+  
+  /**
+   * Defer a callable to be run after the response has been sent to the browser.
+   *
+   * @param  callable $callable
+   */
+  public static function defer(callable $callable): void {
+    self::$deferredCallables[] = $callable;
+  }
+  
+  /**
+   * Run all deferred callables.
+   * => This is called only after fastcgi_finish_request(), no more output to the browser is possible.
+   *
+   * @return void
+   */
+  public static function runDeferredCallables(): void {
+    foreach(self::$deferredCallables as $callable) {
+      try {
+        $callable();
+      } catch (\Throwable $e) {
+        \Mage::log("Chefstore\Utils::runDeferredCallables() - Deferred callable failed. Details follow.");
+        \Mage::logException($e);
+      }
+    }
+    self::$deferredCallables = [];
   }
 }

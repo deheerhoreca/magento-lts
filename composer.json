@@ -67,7 +67,8 @@
     "symfony/cache": "*",
     "symfony/console": "*",
     "symfony/css-selector": "*",
-    "symfony/var-dumper": "*"
+    "symfony/var-dumper": "*",
+    "voku/html-min": "^4.5"
   },
   "require-dev": {
     "driftingly/rector-laravel": "^2",

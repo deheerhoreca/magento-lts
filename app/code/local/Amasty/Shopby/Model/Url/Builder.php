@@ -70,7 +70,7 @@ class Amasty_Shopby_Model_Url_Builder
         self::$reservedKey = trim(Mage::getStoreConfig('amshopby/seo/key'));
         self::$magentoBaseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, Mage::app()->getStore()->isCurrentlySecure());
 
-        $excludeParamsStr = trim((string) Mage::getStoreConfig('amshopby/seo/query_param_exclude')); // DHH
+        $excludeParamsStr = trim((string) Mage::getStoreConfig('amshopby/seo/query_param_exclude')); // DHH CORE HACK
         self::$excludeParams = $excludeParamsStr == '' ? array() : explode(',', $excludeParamsStr);
 
         self::$currentLandingKey = Mage::app()->getRequest()->getParam('am_landing');
@@ -323,7 +323,7 @@ class Amasty_Shopby_Model_Url_Builder
     protected function detectMultiselectParam()
     {
         // DHH CORE HACK -- We want multipass in place with many filters, not just many selected options per filter
-        if(is_countable($this->query) && count($this->query) > 3) {
+        if(is_countable($this->query) && count($this->query) > 2) {
             $this->effectiveQuery[self::$multiselectQueryParam] = 'true';
             return;
         }

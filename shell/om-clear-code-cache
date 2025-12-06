@@ -14,7 +14,7 @@ ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml apcu:cache:clear
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml opcache:reset
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool-cli.yaml opcache:reset
 n98 cache:clean
-ci && intel --action=push:catalog-magento1:clear_cache_by_tag --which="DHH_CMS,DHH_cms_index_index,BLOCK_HTML"
+ci && intel --action=push:catalog-magento1:clear_cache_by_tag --which="DHH_CMS,DHH_CMS_INDEX_INDEX,BLOCK_HTML"
 
 cm
 . ./shell/cron-wrapup.sh

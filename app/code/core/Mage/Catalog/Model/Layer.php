@@ -55,9 +55,11 @@ class Mage_Catalog_Model_Layer extends Varien_Object
     public function getStateKey()
     {
         if ($this->_stateKey === null) {
-            $this->_stateKey = 'STORE_' . Mage::app()->getStore()->getId()
-                . '_CAT_' . $this->getCurrentCategory()->getId()
-                . '_CUSTGROUP_' . Mage::getSingleton('customer/session')->getCustomerGroupId();
+            $this->_stateKey = ''
+                //   'STORE_' . Mage::app()->getStore()->getId()                                    // DHH CORE HACK -- Remove store from cache key
+                . 'CAT_' . $this->getCurrentCategory()->getId()
+                // . '_CUSTGROUP_' . Mage::getSingleton('customer/session')->getCustomerGroupId()   // DHH CORE HACK -- Remove customer group from cache key
+                ;
         }
 
         return $this->_stateKey;

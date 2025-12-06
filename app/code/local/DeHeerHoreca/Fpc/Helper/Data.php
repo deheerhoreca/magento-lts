@@ -9,19 +9,24 @@ use \Illuminate\Support\Str;
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
-  /** @var  string[]  OpenMage action whitelist for FPC caching */
+  
+  /** @var string[] OpenMage action whitelist for FPC caching */
   public static $om_action_whitelist  = [
-    "catalog_product_view", "catalog_category_view", "blog_post_view",
-    "blog_index_list", "cms_page_view", "cms_index_index",
+    "catalog_product_view",
+    "catalog_category_view",
+    "blog_post_view",
+    "blog_index_list",
+    "cms_page_view",
+    "cms_index_index",
     // "amshopby_index_index", // Disabled because we need to tag it properly first
   ];
   
-  /** @var  ?bool Lazy flag indicating whether this request is anonymous or not */
-  public static $request_is_anonymous = null;
+  /** @var ?bool Lazy flag indicating whether this request is anonymous or not */
+  public static $request_is_anonymous         = null;
   
-  public const DHH_FPC_LOG_FILE = "fpc.txt";
+  public const DHH_FPC_LOG_FILE               = "fpc.txt";
   
-  public const PLACEHOLDER_FORMKEY = "___FPC_FORM_KEY_PLACEHOLDER___";
+  public const PLACEHOLDER_FORMKEY            = "___FPC_FORM_KEY_PLACEHOLDER___";
   public const PLACEHOLDER_FORMKEY_DEPRECATED = "<!-- fpc form_key_placeholder -->";
   
   /**
@@ -143,20 +148,23 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /**
    * Get cache tags applicable to this request.
+   * => Cache tags (sets) should be uppercased
    *
    * @return array
    */
   public static function get_cache_tags(): array {
     $cache_tags = [];
-    if($om_action = Mage::app()->getFrontController()->getAction()->getFullActionName()) {
-      $cache_tags[] = "DHH_{$om_action}";
+    if($om_action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName()) {
+      $cache_tags[] = strtoupper("DHH_{$om_action}");
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
       $cache_tags[] = "DHH_PRODUCT_{$id}";
+      $cache_tags[] = "PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
       $cache_tags[] = "DHH_CATEGORY_{$id}";
+      $cache_tags[] = "CATEGORY_{$id}";
     }
     
     return $cache_tags;
@@ -320,20 +328,17 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function get_cache_key(?string $cache_key_prefix = null, ?string $url = null): string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    
     $cache_key_url = self::get_cache_url($url);
     if(empty($cache_key_prefix)) {
       $cache_key_prefix = self::get_cache_prefix();
     }
-    
     $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
-    $_cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
-    
+    $cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
     self::log("Cache URL: {$cache_key_url}");
-    self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$_cacheKey}");
-    
+    self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$cacheKey}");
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    return $_cacheKey;
+    
+    return $cacheKey;
   }
   
   /**
