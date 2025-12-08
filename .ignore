@@ -115,7 +115,7 @@ phpunit.xml
 .DS_Store
 ._.DS_Store
 ._*
-/sitemap_watdachtjezelf*.xml
+/sitemap_*.xml
 /google_shopping_vijfbatmansymbol.*
 /protected/*.xml
 /protected/*.zip
