@@ -138,15 +138,15 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_edit_action>
-      <!-- Disable admin notifications -->
-      <!-- https://gist.github.com/fbrnc/3975149 -->
-      <!-- <controller_action_predispatch> -->
-        <!-- <observers> -->
-          <!-- <adminnotification> -->
-            <!-- <type>disabled</type> -->
-          <!-- </adminnotification> -->
-        <!-- </observers> -->
-      <!-- </controller_action_predispatch> -->
+      <!-- Cloning this event into adminhtml to support fbminify in there as well -->
+      <http_response_send_before>
+        <observers>
+          <fballiano_cssjsminify>
+            <class>fballiano_cssjsminify/observer</class>
+            <method>httpResponseSendBefore</method>
+          </fballiano_cssjsminify>
+        </observers>
+      </http_response_send_before>
     </events>
   </adminhtml>
 </config>

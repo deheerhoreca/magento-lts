@@ -467,3 +467,5 @@ media
 /app/locale/nl_NL/Pay_Payment.csv
 /app/locale/en_US/Pay_Payment.csv
 /app/locale/it_IT/Pay_Payment.csv
+/app/code/local/InternetCode/Translator
+/app/etc/modules/InternetCode_Translator.xml

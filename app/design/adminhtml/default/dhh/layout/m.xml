@@ -26,13 +26,12 @@
             <block type="pdfinvoiceplus/adminhtml_pdfinvoiceplus" name="pdfinvoiceplus" />
         </reference>
     </adminhtml_pdfinvoiceplus_pdfinvoiceplus_index>
-    
     <adminhtml_pdfinvoiceplus_pdfinvoiceplus_edit>
         <reference name="head">
-             <action method="addJs">
+            <action method="addJs">
                 <script>magestore/pdfinvoiceplus/jscolor/jscolor.js</script>
             </action>
-             <action method="addJs">
+            <action method="addJs">
                 <script>magestore/pdfinvoiceplus/tooltip.js</script>
             </action>
             <action method="addJs">
@@ -111,7 +110,7 @@
             <block type="page/html_head" name="head" as="head"/>
         </reference>
     </adminhtml_pdfinvoiceplus_pdfinvoiceplus_edit>
-	<adminhtml_pdfinvoiceplus_design_edithtml>
+    <adminhtml_pdfinvoiceplus_design_edithtml>
         <reference name="head">
             <action method="addJs">
                 <script>mage/adminhtml/wysiwyg/widget.js</script>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e80c01ae9a043501bdbbb992dd94890f",
+    "content-hash": "cae412ad5cde3e0879c053688a63b9c3",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -2262,6 +2262,50 @@
             ],
             "abandoned": true,
             "time": "2024-12-05T16:44:33+00:00"
+        },
+        {
+            "name": "m-michalis/om-translator",
+            "version": "0.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/m-michalis/om-translator.git",
+                "reference": "63d7f109d8cf0fdd4898c453bdaf7ebecad8c7ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/m-michalis/om-translator/zipball/63d7f109d8cf0fdd4898c453bdaf7ebecad8c7ba",
+                "reference": "63d7f109d8cf0fdd4898c453bdaf7ebecad8c7ba",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Michalis Michalis",
+                    "email": "m@internetcode.gr"
+                }
+            ],
+            "description": "The \"Translation Management\" module simplifies translation tasks in OpenMage by providing an efficient way to create and update missing and existing translations from various modules. This module offers a user-friendly grid/edit dashboard in the Admin panel, allowing you to manage translations with ease. Additionally, it can detect and capture missing translations when browsing the frontend.",
+            "homepage": "https://github.com/m-michalis/om-translator",
+            "keywords": [
+                "csv translation",
+                "magento",
+                "openmage",
+                "openmage translator",
+                "translate openmage"
+            ],
+            "support": {
+                "issues": "https://github.com/m-michalis/om-translator/issues",
+                "source": "https://github.com/m-michalis/om-translator/tree/0.1.4"
+            },
+            "time": "2023-10-24T15:34:07+00:00"
         },
         {
             "name": "magento-hackathon/magento-composer-installer",

@@ -43,7 +43,7 @@
     <Anowave_Ecosc>
       <active>false</active>
     </Anowave_Ecosc>
-
+    
     <!-- Not used anymore -->
     <Mage_Authorizenet>
       <active>false</active>
@@ -69,12 +69,12 @@
     <Magmodules_Channable>
       <active>false</active>
     </Magmodules_Channable>
-
+    
     <!-- Does not work (anymore) -->
     <TM_AddressAutocomplete>
       <active>false</active>
     </TM_AddressAutocomplete>
-
+    
     <!-- Unneeded since we have Geissweb -->
     <Plumrocket_AutoInvoice>
       <active>false</active>
@@ -82,23 +82,23 @@
     <Plumrocket_Base>
       <active>false</active>
     </Plumrocket_Base>
-
+    
     <!-- Disabling causes issues with opening existing old orders -->
     <Shopworks_Billink>
       <active>true</active>
     </Shopworks_Billink>
-
+    
     <!-- Unneeded and causes issues with Rewrites -->
     <!-- If ever enabled again, the rewrite issue needs to be re-implemented (Amasty tool) -->
     <Ebizmarts_MailChimp>
       <active>false</active>
     </Ebizmarts_MailChimp>
-
+    
     <!-- Needed for Configurable Products only, disabling leads to errors needs investigation -->
     <Mage_ConfigurableSwatches>
       <active>true</active>
     </Mage_ConfigurableSwatches>
-
+    
     <!-- Don't disable, they are needed by cart2quote without listing it as a dependency -->
     <Mage_Tag>
       <active>true</active>
@@ -106,48 +106,48 @@
     <Mage_Downloadable>
       <active>true</active>
     </Mage_Downloadable>
-
+    
     <!-- Not needed for now -->
     <Magmodules_Kiyoh>
       <active>false</active>
     </Magmodules_Kiyoh>
-
+    
     <!-- Causes SQL errors with shipments and increment_last_id -->
     <Fooman_SameOrderInvoiceNumber>
       <active>false</active>
     </Fooman_SameOrderInvoiceNumber>
-
+    
     <!-- Disabling this breaks stuff -->
     <Mage_AdminNotification>
       <active>true</active>
     </Mage_AdminNotification>
-
+    
     <!-- We have Mage_GoogleAnalytics -->
     <MagePal_GoogleTagManager>
       <active>false</active>
     </MagePal_GoogleTagManager>
-
+    
     <!-- Leads to templatehints in sales emails, only enable when needed! -->
     <!-- Needs a patch to filter for IP -->
     <Aoe_TemplateHints>
       <active>false</active>
     </Aoe_TemplateHints>
-
+    
     <!-- TinyMCE is preferred in v20.2.0+ -->
     <Bubble_Highlighter>
       <active>false</active>
     </Bubble_Highlighter>
-
+    
     <!-- Does not work nicely, but in order to disable this we must change a rewrite in Geissweb first -->
     <Aschroder_SMTPPro>
       <active>true</active>
     </Aschroder_SMTPPro>
-
+    
     <!-- Gave errors in logs, seems unnecessary to enable (maybe enable temporarily for specific needs) -->
     <Hwg_Attributemanager>
       <active>false</active>
     </Hwg_Attributemanager>
-
+    
     <!--
     - Leads to errors with opening older orders if disabled.
     - 2025-11-22: Module started causing issue in the cart (even when "Disabled" in its config), disabling here fixed it.
@@ -155,7 +155,7 @@
     <Afterpay_Afterpay>
       <active>false</active>
     </Afterpay_Afterpay>
-
+    
     <!-- Both profiler modules cannot be enabled at the same time! -->
     <Aoe_Profiler>
       <active>true</active>
@@ -173,7 +173,7 @@
     <Amasty_Feed>
       <active>false</active>
     </Amasty_Feed>
-
+    
     <!-- Temporarily disable -->
     <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->
     <!-- <Ophirah_Crmaddon><active>false</active></Ophirah_Crmaddon> -->

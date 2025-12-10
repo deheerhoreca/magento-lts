@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layout>
-    <adminhtml_cache_index>
-        <reference name="cache.additional">
-            <block type="core/template" name="dhh_fpc" template="deheerhoreca_fpc/deheerhoreca_fpc.phtml" after="-"/>
-        </reference>
-    </adminhtml_cache_index>
-</layout>

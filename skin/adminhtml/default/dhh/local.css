@@ -1,0 +1,51 @@
+/* menu.css */
+
+#nav li.active {
+  z-index: 1000!important
+}
+
+#nav a {
+  padding: 0 7px!important
+}
+
+/* boxes.css */
+
+.notification-global {
+  padding: 5px 27px 5px 47px!important;
+  background: url(images/error_msg_icon.gif)27px 5px no-repeat #fff!important;
+  border-bottom: initial!important;
+  border-top: initial!important;
+  color: #444!important
+}
+
+.rule-param-edit .element {
+  display: inline!important
+}
+
+.grid tr.filter .range .range-line {
+  width: 100px!important
+}
+
+.grid tr.filter .range input {
+  width: 60px!important
+}
+
+input.input-color {
+  border-width: 1px!important;
+  border-style: solid!important;
+  border-color: #aaa #c8c8c8 #c8c8c8 #aaa!important;
+  background: #fff!important
+}
+
+input.input-color {
+  padding: 2px !important;
+  width: 222px !important
+}
+
+input.input-color-html5 {
+  width: 48px!important
+}
+
+#page-help-link {
+  display: unset!important
+}

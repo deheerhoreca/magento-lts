@@ -5,7 +5,6 @@
       <action method="addJs"><script>dhh-admin.js</script></action>
     </reference>
   </adminhtml_catalog_product_new>
-  
   <adminhtml_catalog_product_edit>
     <reference name="head">
       <action method="addJs"><script>dhh-admin.js</script>    </action>
