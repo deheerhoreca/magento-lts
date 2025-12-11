@@ -1,9 +1,13 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/cron-logrotate.sh
+# ~/workspace/openmage/shell/cron-logrotate.sh
 
 set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
+
+. ${HOME}/.bash_profile
+cm
+. ./shell/cron-bootstrap.sh
 
 touch ~/logs/deheerhoreca-magento/access_log
 touch ~/logs/deheerhoreca-magento/error_log
@@ -60,3 +64,5 @@ EOF
 
 /usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento-txt.status
 rm ~/tmp/logrotate-deheerhoreca-magento.conf
+
+. ./shell/cron-wrapup.sh

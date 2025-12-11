@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/cron-download-external-assets.sh
+# ~/workspace/openmage/shell/cron-download-external-assets.sh
 
-# Set User Environment
 . ${HOME}/.bash_profile
-
 cm
+. ./shell/cron-bootstrap.sh
 
 # Replace by npm-asset/bower-asset:
 # wget --no-verbose https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/css/glightbox.min.css -O ./skin/frontend/rwd/dhh/css/ext-glightbox.min.css
@@ -35,3 +34,5 @@ mkdir -p ./skin/frontend/rwd/external/sooqr
 wget --no-verbose https://static.sooqr.com/custom/115684/1/combined.css -O ./skin/frontend/rwd/external/sooqr/combined.css
 wget --no-verbose https://static.spotlersearch.com/sooqr.js -O ./skin/frontend/rwd/external/sooqr/sooqr.min.js
 wget --no-verbose https://spotlersearchanalytics.com/insights.js -O ./skin/frontend/rwd/external/sooqr/insights.min.js
+
+. ./shell/cron-wrapup.sh

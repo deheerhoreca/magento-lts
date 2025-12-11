@@ -1,18 +1,16 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/cron-rebuild-cache.sh
+: "
+~/workspace/openmage/shell/cron-rebuild-cache.sh
+"
 
-# This runs on prod.deheerhoreca.nl only
-if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerhoreca.nl" ]; then
-  exit 0
-fi
+export REQUIRE_HOST=prod
+export NO_DEV=0
 
-# Set User Environment
 . ${HOME}/.bash_profile
-
-set -e      # Exit immediately if a command exits with a non-zero status
-set -u      # Treat unset variables as an error when substituting
-
 cm
+. ./shell/cron-bootstrap.sh
 
 php -c php.cmd.ini shell/rebuild_cache.php
+
+. ./shell/cron-wrapup.sh

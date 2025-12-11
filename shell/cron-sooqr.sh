@@ -1,22 +1,21 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/cron-sooqr.sh
+: "
+~/workspace/openmage/shell/cron-sooqr.sh
+"
 
 set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
 
-# This runs on prod.deheerhoreca.nl only
-if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ]; then
-  exit 0
-fi
+export PREFER_HOST=prod
+export NO_DEV=0
 
-# Set User Environment
 . ${HOME}/.bash_profile
-
 cm
+. ./shell/cron-bootstrap.sh
 
-php -c php.cmd.ini shell/sooqr.php --generate 1
-
+php -c etc/php.cmd.ini shell/sooqr.php --generate 1
 dasel -f ./media/sooqr/sooqr-datafeed-5AjS-1.xml -r xml -w json > ./media/sooqr/sooqr-datafeed-5AjS-1.json
-
 chmod 0666 ./media/sooqr/*
+
+. ./shell/cron-wrapup.sh
