@@ -49,3 +49,7 @@ input.input-color-html5 {
 #page-help-link {
   display: unset!important
 }
+
+.note-list li {
+  word-break: break-all !important;
+}
