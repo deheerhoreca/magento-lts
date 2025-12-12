@@ -31,7 +31,6 @@
 /vendor/magento-hackathon/magento-composer-installer
 /vendor/openmage/magento-lts
 /var
-/var/report
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
@@ -117,13 +116,8 @@ phpunit.xml
 ._*
 /sitemap_*.xml
 /google_shopping_vijfbatmansymbol.*
-/protected/*.xml
-/protected/*.zip
-/bridge_*.php
+/protected/
 /google*.html
-/BingSiteAuth.xml
-/nohup.out
-/nohup*.out
 /algolia_*.json
 /maintenance.flag
 /maintenance.ip
@@ -159,7 +153,6 @@ phpunit.xml
 
 # FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
 /media/
-/media.nfs/
 
 # BILLER WEBHOOK
 /biller-webhook-errors.jsonl
