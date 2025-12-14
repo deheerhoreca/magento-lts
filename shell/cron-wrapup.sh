@@ -9,4 +9,8 @@ CURRENT_CRON_CMD="${ABBR_SCRIPT_PATH} ${*}"
 # Wait for the above checks to complete before printing the start message -- Max 110 chars
 if ${THIS_IS_CRON}; then
   printf "%s  STOP   %s\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"
+else
+  # Uncomment during development:
+  printf "%s  STOP   %s\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"
+  :
 fi

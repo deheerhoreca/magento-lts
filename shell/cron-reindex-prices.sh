@@ -1,10 +1,10 @@
 #!/bin/bash
 
-: "
+: '
 ~/workspace/openmage/shell/cron-reindex-prices.sh
-"
+'
 
-export REQUIRE_HOST=ma
+export PREFER_HOST=ma
 export NO_DEV=0
 
 . ${HOME}/.bash_profile

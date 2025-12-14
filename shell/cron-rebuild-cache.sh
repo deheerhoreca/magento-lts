@@ -11,6 +11,6 @@ export NO_DEV=0
 cm
 . ./shell/cron-bootstrap.sh
 
-php -c php.cmd.ini shell/rebuild_cache.php
+php -c etc/php.cmd.ini shell/rebuild_cache.php
 
 . ./shell/cron-wrapup.sh

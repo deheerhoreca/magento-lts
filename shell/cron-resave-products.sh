@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# ~/httpdocs/deheerhoreca-magento/shell/cron-resave-products.sh
+: '
+~/workspace/openmage/shell/cron-resave-products.sh
+'
 
 # This runs on prod.deheerhoreca.nl only
 if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerhoreca.nl" ]; then
@@ -15,4 +17,4 @@ set -u      # Treat unset variables as an error when substituting
 
 cm
 
-# php -c php.cmd.ini shell/resave_all_products.php
+# php -c etc/php.cmd.ini shell/resave_all_products.php

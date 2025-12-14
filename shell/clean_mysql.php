@@ -24,8 +24,6 @@ $queries[] = "OPTIMIZE TABLE `dataflow_batch_import`";
 $queries[] = "DELETE FROM index_event WHERE created_at < NOW() - INTERVAL 365 DAY";
 $queries[] = "OPTIMIZE TABLE `index_event`";
 
-// 
-
 require_once __DIR__."/../app/Mage.php";
 Mage::app("admin");
 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
