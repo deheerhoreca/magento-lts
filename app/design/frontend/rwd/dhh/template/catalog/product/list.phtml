@@ -538,7 +538,12 @@ if($show_products && $_productCollection->getFirstItem()) {
         $GLOBALS["write_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "dhh_listview_product");
         if($GLOBALS["write_cache_enabled"]) {
           $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
-          $cache_tags = ["DHH_LISTVIEW_PRODUCT", "PRODUCT_{$product_id}", "DHH_PRODUCT_{$product_id}", "DHH_SUPPLIER_{$supplier_sys_upper}"];
+          $cache_tags = [
+            "DHH_LISTVIEW_PRODUCT",
+            "PRODUCT_{$product_id}",
+            // "DHH_PRODUCT_{$product_id}",
+            "DHH_SUPPLIER_{$supplier_sys_upper}"
+          ];
           if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400)) {
             DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
           }

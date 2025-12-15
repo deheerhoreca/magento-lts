@@ -24,7 +24,12 @@ if(Mage::helper('richsnippets')->snippetsEnabled() && Mage::getStoreConfig('rich
   // @todo Defer cache save to after response
   if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "tm_richsnippets")) {
     $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
-    $cache_tags = ["DHH_TM_RICHSNIPPETS", "DHH_PRODUCT_{$_product->getId()}", "PRODUCT_{$_product->getId()}", "DHH_SUPPLIER_{$supplier_sys_upper}"];
+    $cache_tags = [
+      "DHH_TM_RICHSNIPPETS",
+      // "DHH_PRODUCT_{$_product->getId()}",
+      "PRODUCT_{$_product->getId()}",
+      "DHH_SUPPLIER_{$supplier_sys_upper}",
+    ];
     if(Mage::app()->getCache()->save($json, $cache_key, $cache_tags, 86400 * 7)) {
       DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
     }

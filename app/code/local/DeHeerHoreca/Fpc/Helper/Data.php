@@ -8,6 +8,9 @@ use \Illuminate\Support\Str;
 
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
+// @todo Use lib/Afterpay/vendor/guzzlehttp/guzzle/src/UriTemplate.php to normalize URLs
+// @todo Normalize faulty "?amp%3B": https://www.chefstore.nl/koelingen/koelwerkbanken-saladettes.html?amp%3Bgn_capacity=2537&material_group=2191
+
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /** @var string[] OpenMage action whitelist for FPC caching */
@@ -34,35 +37,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    */
   public function clearCache(): bool {
-    // $cache_tags = [
-    //   "DHH_FPC",
-    //   "DHH_LISTVIEW_PRODUCT",
-    //   "DHH_cms_index_index",
-    //   "DHH_EKE_OGMETA",
-    //   "DHH_TM_RICHSNIPPETS",
-    //   "AMSHOPBY",
-    // ];
-    // $response = Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
     $url = Mage::helper("adminhtml")->getUrl("adminhtml/cache/index");
     echo "<span><a href='{$url}'>Not doing that</a></span><br><br>";
     return true;
-  }
-  
-  /**
-   * Get url
-   *
-   * @return string
-   */
-  public function getUrl(): string {
-    $k = Mage::helper("core")->getRandomString(16);
-    return Mage::getUrl(
-      "deheerhorecafpc/index/clear",
-      array(
-        "k"      => base64_encode((string) $k),
-        "v"      => base64_encode((string) Mage::helper("core")->encrypt($k)),
-        "_store" => Mage::app()->getDefaultStoreView()->getCode()
-      )
-    );
   }
   
   /**
@@ -87,7 +64,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       "forcepreload", "forcepreloadonly",                                           // Cloudflare
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
-    $url = rtrim($url, "&?/");  // Remove things that can be ignored safely
+    
+    $url = rtrim($url, "&?/");                // Useless postfixes can be ignored safely
+    
+    $url = str_replace("?amp%3B", "?", $url); // Fix faulty encoding
     
     return $url;
   }
@@ -159,11 +139,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "DHH_PRODUCT_{$id}";
+      // $cache_tags[] = "DHH_PRODUCT_{$id}";
       $cache_tags[] = "PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "DHH_CATEGORY_{$id}";
+      // $cache_tags[] = "DHH_CATEGORY_{$id}";
       $cache_tags[] = "CATEGORY_{$id}";
     }
     
@@ -279,11 +259,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    // - Allow max 2 GET params
-    // - ath      = Aoe_TemplateHints flag
-    // - bf       = ???
-    // - is_ajax  = amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
-    if(isset($_GET["nofpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
+    // - Disallow &multipass GET param (layered nav labyrinths overload cache)
+    // - Allow max 2 GET params (layered nav labyrinths overload cache)
+    // - ath        = Aoe_TemplateHints flag (undesirable debug content)
+    // - bf         = ???
+    // - is_ajax    = Amasty layered nav AJAX request, not cachable yet
+    if(isset($_GET["nofpc"]) || isset($_GET["multipass"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
     || (!$html_block_mode && is_countable($_GET) && count($_GET) > 2)) {
       self::log("Write cache disabled (URL parameter): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
@@ -544,7 +525,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     // If we detect a whole HTML page (not a partial page), add the cache URL as a comment
-    if(strpos((string) $html, "<html") !== false && strpos((string) $html, "</html>") !== false) {
+    if(str_contains($html, "<html") && str_contains($html, "</html>")) {
       $cache_url = self::get_cache_url();
       $html .= "\n<!-- FPC Cache URL: {$cache_url} -->\n";
     }
@@ -682,10 +663,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    */
   public static function clean_by_tags(string|array $cache_tags): bool {
-    $cache_tags = (array) $cache_tags;
-    
     // Prepend with e6b_ if needed. Redis library does NOT do this.
-    $cache_tags = Arr::map($cache_tags, fn($tag) => Str::start($tag, "e6b_"));
+    $cache_tags = Arr::map((array) $cache_tags, fn($tag) => Str::start($tag, "e6b_"));
     
     // ! without getBackend() it does not work!
     if(DHH_FPC_DEBUG) {
@@ -699,5 +678,24 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     return $response;
+  }
+  
+  /**
+   * Get url. Unused.
+   * 
+   * @deprecated
+   *
+   * @return string
+   */
+  public function getUrl(): string {
+    $k = Mage::helper("core")->getRandomString(16);
+    return Mage::getUrl(
+      "deheerhorecafpc/index/clear",
+      array(
+        "k"      => base64_encode((string) $k),
+        "v"      => base64_encode((string) Mage::helper("core")->encrypt($k)),
+        "_store" => Mage::app()->getDefaultStoreView()->getCode()
+      )
+    );
   }
 }

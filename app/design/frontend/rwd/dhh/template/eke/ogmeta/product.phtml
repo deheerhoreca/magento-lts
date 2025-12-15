@@ -131,7 +131,7 @@ if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta"
   $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
   $cache_tags = [
     "DHH_EKE_OGMETA",
-    "DHH_PRODUCT_{$_product->getId()}",
+    // "DHH_PRODUCT_{$_product->getId()}",
     "PRODUCT_{$_product->getId()}",
     "DHH_SUPPLIER_{$supplier_sys_upper}",
   ];
