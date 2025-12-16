@@ -598,8 +598,9 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_W
             	//$options[$option->getMethod()] = ucfirst($optionText);
 							$optionText = str_replace(["pay_payment_"], "Pay ", $optionText);
 							$optionText = str_replace(["mollie_"], "Mollie ", $optionText);
+							$optionText = str_replace(["capayablegespreid"], "iDEAL in3 Particulier ", $optionText);
 							$optionText = str_replace(["_", "-"], " ", $optionText);
-							$options[$option->getMethod()] = ucwords($optionText);
+							$options[$option->getMethod()] = trim(ucwords($optionText));
 			}
         }
         return $options;

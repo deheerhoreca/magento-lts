@@ -217,7 +217,7 @@ gtag('set', 'user_id', '{$customer->getId()}');
             // DHH CORE HACK -- EXTRA DEBUG LOGS:
             // $toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar');
             if(!($toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar'))) {
-                Mage::log("URL: ".var_export(Mage::helper('core/url')->getCurrentUrl(), true), 5, "exception.log", true);
+                // Mage::log("URL: ".var_export(Mage::helper('core/url')->getCurrentUrl(), true), 5, "exception.log", true);
                 return ""; // These URLs are outdated and invalid (saved by scrapers), just turn off GA4 for these
             }
 

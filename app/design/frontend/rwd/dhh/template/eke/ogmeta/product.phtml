@@ -123,6 +123,7 @@ if(!empty($productVideo)) {
   }
 }
 
+$html = \Chefstore\Html::minifyHtml($html);
 echo $html;
 
 // Store in cache
@@ -135,8 +136,11 @@ if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta"
     "PRODUCT_{$_product->getId()}",
     "DHH_SUPPLIER_{$supplier_sys_upper}",
   ];
-  $html = \Chefstore\Html::minifyHtml($html);
-  if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400 * 7)) {
-    DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-  }
+  
+  $closure = fn() => DeHeerHoreca_Fpc_Helper_Data::saveToCache($cache_key, $html, $cache_tags, 86400 * 7);
+  \Chefstore\Utils::deferClosure($closure);
+  
+  // if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400 * 7)) {
+  //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
+  // }
 }

@@ -1,9 +1,13 @@
 <?php
-if(Mage::helper('richsnippets')->snippetsEnabled() && Mage::getStoreConfig('richsnippets/general/snippetsType') == '0') {
+
+declare(strict_types=1);
+
+if(Mage::helper("richsnippets")->snippetsEnabled() && Mage::getStoreConfig("richsnippets/general/snippetsType") == "0") {
   $_product      = Mage::registry("current_product");
   $json         = "";
   $cache_key    = "tm_richsnippets_product_json_{$_product->getId()}";
   
+  // Serve from cache
   if(DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "tm_richsnippets")) {
     $json = Mage::app()->getCache()->load($cache_key);
     if(empty($json)) {
@@ -15,10 +19,8 @@ if(Mage::helper('richsnippets')->snippetsEnabled() && Mage::getStoreConfig('rich
     }
   }
   
+  // Serve fresh
   $json = $this->getJsonSnippetsProduct();
-  if(Mage::getIsDeveloperMode()) {
-    $json = json_encode(json_decode((string) $json), JSON_PRETTY_PRINT); // During development
-  }
   echo "<script type=\"application/ld+json\">{$json}</script>".PHP_EOL;
   
   // @todo Defer cache save to after response
@@ -30,8 +32,12 @@ if(Mage::helper('richsnippets')->snippetsEnabled() && Mage::getStoreConfig('rich
       "PRODUCT_{$_product->getId()}",
       "DHH_SUPPLIER_{$supplier_sys_upper}",
     ];
-    if(Mage::app()->getCache()->save($json, $cache_key, $cache_tags, 86400 * 7)) {
-      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-    }
+    
+    $closure = fn() => DeHeerHoreca_Fpc_Helper_Data::saveToCache($cache_key, $json, $cache_tags, 86400 * 7);
+    \Chefstore\Utils::deferClosure($closure);
+    
+    // if(Mage::app()->getCache()->save($json, $cache_key, $cache_tags, 86400 * 7)) {
+    //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
+    // }
   }
 }

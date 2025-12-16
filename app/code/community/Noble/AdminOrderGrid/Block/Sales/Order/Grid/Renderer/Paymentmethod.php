@@ -49,12 +49,13 @@ class Noble_AdminOrderGrid_Block_Sales_Order_Grid_Renderer_Paymentmethod extends
     $optionText = str_replace(["pay_payment_"], "Pay ", $optionText);
     $optionText = str_replace(["mollie_"], "Mollie ", $optionText);
     $optionText = str_replace(["_", "-"], " ", $optionText);
+    $optionText = str_replace(["capayablegespreid"], "iDEAL in3 Particulier ", $optionText);
     
     $optionText = match($value) {
       "ideal"						=> "iDEAL",
       "banktransfer"		=> "Bankoverschrijving",
       "paypal"		      => "PayPal",
-      default						=> ucwords($optionText),
+      default						=> trim(ucwords($optionText)),
     };
     
     return str_ireplace(

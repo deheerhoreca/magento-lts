@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
+use Closure;
+use Mage;
+use Throwable;
+use \Brick\VarExporter\Exception\ExportException;
 use \Brick\VarExporter\VarExporter;
 use \Illuminate\Support\Str;
 
 class Utils {
   
-  /** @var callable[] Storage */
-  protected static $deferredCallables = [];
+  /** @var Closure[] Storage */
+  protected static $deferredClosures = [];
   
   /** @var array Development IP addresses whitelist */
   protected static $dev_ips = [
@@ -161,7 +165,7 @@ class Utils {
         "']"    => "\"]"
       ], VarExporter::export($input, $flags));
     } catch (ExportException $e) {
-      \Mage::log("Failed to TinyDump value: {$e->getMessage()}");
+      Mage::log("Failed to TinyDump value: {$e->getMessage()}");
       return null;
     }
 
@@ -184,29 +188,30 @@ class Utils {
   }
   
   /**
-   * Defer a callable to be run after the response has been sent to the browser.
+   * Defer a closure to be run after the response has been sent to the browser.
    *
-   * @param  callable $callable
+   * @param  Closure $closure
    */
-  public static function defer(callable $callable): void {
-    self::$deferredCallables[] = $callable;
+  public static function deferClosure(Closure $closure): void {
+    self::$deferredClosures[] = $closure;
   }
   
   /**
-   * Run all deferred callables.
+   * Run all deferred Closures.
    * => This is called only after fastcgi_finish_request(), no more output to the browser is possible.
    *
    * @return void
    */
-  public static function runDeferredCallables(): void {
-    foreach(self::$deferredCallables as $callable) {
+  public static function runDeferredClosures(): void {
+    foreach(self::$deferredClosures as $key => $closure) {
       try {
-        $callable();
-      } catch (\Throwable $e) {
-        \Mage::log("Chefstore\Utils::runDeferredCallables() - Deferred callable failed. Details follow.");
-        \Mage::logException($e);
+        $closure();
+        unset(self::$deferredClosures[$key]);
+      } catch(Throwable $e) {
+        Mage::log("Chefstore\Utils::runDeferredClosures() - Deferred closure failed. Details follow.");
+        Mage::logException($e);
       }
     }
-    self::$deferredCallables = [];
+    self::$deferredClosures = [];
   }
 }

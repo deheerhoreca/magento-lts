@@ -293,7 +293,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     self::log("Write cache enabled: {$debug_name}");
-    
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     
     return true;
@@ -339,6 +338,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if(empty($html)) {
       self::log("Cache MISS: {$key}");
       self::_add_server_timing_header("FPC miss: {$key}");
+      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return null;
     }
     
@@ -468,7 +468,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    */
   public static function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []): bool {
-    Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
+    Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
     
     // Prevent canonical URL shortening
     $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", $html);
@@ -538,12 +538,33 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       self::log("Cache: SAVED {$key}, ".mb_strlen((string) $html)." chars");
       self::_add_server_timing_header("FPC saved: {$key}");
       self::_emit_server_timing_header();
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-      return true;
+      $return = true;
     }
     
-    Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-    return false;
+    Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    return $return ?? false;
+  }
+  
+  /**
+   * Generic method (no hole punching) to save data to cache. Use anywhere as deferred closure.
+   *
+   * @param  string  $key         The cache key.
+   * @param  mixed   $data        The data to cache.
+   * @param  array   $cache_tags  Cache tags for invalidation.
+   * @param  int     $lifetime    Cache lifetime in seconds.
+   *
+   * @return bool
+   */
+  public static function saveToCache(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400): bool {
+    Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
+    
+    if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+      self::log("Cache: SAVED {$key}");
+      $return = true;
+    }
+    
+    Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    return $return ?? false;
   }
   
   /**

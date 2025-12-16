@@ -16,7 +16,7 @@ require_once __DIR__."/Loader.php";
  * - Use !function_exists() to avoid conflicts when running as an Intel plugin
  */
 
-/* --------------------------------------------------------------- Chefstore\Helper --------------------------------------------------------------- */
+/* ---------------------------------------------------------- Chefstore\Helper ---------------------------------------------------------- */
 
 /**
  * Get the DeHeerHoreca Util helper.
@@ -308,30 +308,38 @@ if(!function_exists("_dhh_ips")) {
   }
 }
 
-/* ---------------------------------------------------------------- Laravel Picks ----------------------------------------------------------------- */
+/* ----------------------------------------------------------- Laravel Picks ------------------------------------------------------------ */
 
 /**
- * Checks if any of the values match the pattern, case insensitive.
- *
- * @param  string                             $pattern
- * @param  float|string|null|iterable<string> $values
- * @param  bool                               $ignoreCase
+ * Checks if any of the values match any of the patterns.
  * 
- * @return bool
+ * Supports passing multiple values as an array or iterable. Case insensitive by default. Supports wildcards in patterns.
+ *
+ * @param  string|iterable<string>|float|int|null                        $pattern     The pattern to match against. Can be a
+ *                                                                                    string or an array of strings.
+ * 
+ * @param  float|string|Stringable|null|iterable<string|Stringable>|bool $values      Can be a single value or an iterable
+ *                                                                                    of values, one level deep. `mixed` to
+ *                                                                                    allow for a variety of types.
+ * 
+ * @param  bool                                                          $ignoreCase  Defaults to TRUE
+ *
+ * @return bool                                                          TRUE if any value matches the pattern.
  */
 if(!function_exists("sis")) {
-  function sis(mixed $pattern, float|string|null|array $values, bool $ignoreCase = true): bool {
-    if($values === null) {
+  function sis(string|iterable|float|int|null $pattern, float|string|Stringable|null|array|bool $values, bool $ignoreCase = true): bool {
+    if($values === null || $pattern === null || is_bool($values)) {
       return false;
     }
-    
     if(!is_iterable($values)) {
       $values = [$values];
     }
     
+    $pattern = array_map(fn($p) => strval($p), is_iterable($pattern) ? (array) $pattern : [$pattern]);
+    
     foreach($values as $value) {
       if($value instanceof Stringable) {
-        $value = (string) $value;
+        $value = $value->toString();
       }
       
       if(Str::is($pattern, $value, $ignoreCase)) {
@@ -346,18 +354,20 @@ if(!function_exists("sis")) {
 /**
  * Checks if any of the values match any of the patterns, always wrapping all patterns in wildcards.
  *
- * @param  string|iterable<string>            $patterns
- * @param  float|string|null|iterable<string> $values
- * @param  bool                               $ignoreCase
+ * @param  string|iterable<string>                             $pattern     The pattern to match against. Can be a string or an array of strings.
+ * @param  float|string|Stringable|null|iterable<string>|bool  $values      Can be a single value or an iterable of values, one level deep. `mixed` to allow for a variety of types.
+ * @param  bool                                                $ignoreCase  Defaults to TRUE
  * 
  * @return bool
  */
 if(!function_exists("wild_sis")) {
-  function wild_sis(string|array $patterns, float|string|null|array $values, bool $ignoreCase = true): bool {
+  function wild_sis(string|iterable $patterns, float|string|Stringable|null|array $values, bool $ignoreCase = true): bool {
     if($values === null) {
       return false;
     }
-    
+    if(is_bool($values)) {
+      return false;
+    }
     if(!is_iterable($values)) {
       $values = [$values];
     }
@@ -371,6 +381,10 @@ if(!function_exists("wild_sis")) {
     $patterns = Arr::map($patterns, fn($p) => Str::wrap($p, "*"));
     
     foreach($values as $value) {
+      if($value instanceof Stringable) {
+        $value = $value->toString();
+      }
+      
       if(Str::is($patterns, $value, $ignoreCase)) {
         return true;
       }
@@ -380,7 +394,7 @@ if(!function_exists("wild_sis")) {
   }
 }
 
-/* ----------------------------------------------------------------- Intel Picks ------------------------------------------------------------------ */
+/* ------------------------------------------------------------ Intel Picks ------------------------------------------------------------- */
 
 if(!function_exists('printr')) {
   function printr($expr, $return = false) {
@@ -461,9 +475,7 @@ if(!function_exists("array_to_table")) {
   }
 }
 
-// Miscellaneous
-
-/* -------------------------------------------------------------------- Utils --------------------------------------------------------------------- */
+/* ---------------------------------------------------------- Utils ----------------------------------------------------------- */
 
 if(function_exists("_get_product_attribute") === false) {
   function _get_product_attribute($_product, string $attribute_code, bool $implode_arrays = true) {
@@ -922,7 +934,7 @@ if(function_exists("dhh_get_quote_id") === false) {
   }
 }
 
-/* --------------------------------------------------------------- OpenMage Helpers --------------------------------------------------------------- */
+/* ---------------------------------------------------------- OpenMage Helpers ---------------------------------------------------------- */
 
 /**
  * @see Mage_Core_Helper_Abstract

@@ -1,5 +1,8 @@
 <?php
 
+// declare(strict_types=1); // @todo Not ready for this yet
+
+use \Chefstore\Utils;
 use \Elastic\Apm\ElasticApm;
 use \Elastic\Apm\TransactionInterface;
 use \Chefstore\Helper;
@@ -375,7 +378,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   }
   
   // Adds an EOL = No filter to any listview unless it's explicitly set to Yes
-  public function addEolFilter($observer) {
+  public function addEolFilter(Varien_Event_Observer $observer) {
     // $productCollection = $observer->getEvent()->getCollection();
 
     // /* If the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
@@ -517,16 +520,35 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   }
   
   /**
-   * event observer called after emails are sent
+   * Sleep for 1 second after sending an email to avoid overwhelming the SMTP server.
+   * Observes: email_send_after.
+   * 
+   * Data:
+   * [
+   *   'to'         => $this->getToEmail(),
+   *   'subject'    => $this->getSubject(),
+   *   'email_body' => $this->getBody()
+   * ]
+   *
+   * @param  Varien_Event_Observer  $observer
+   * @return void
    */
-  public function emailSendAfter(Varien_Event_Observer $observer) {
-    // 2024-01-21 Starting with 1 second sleep and monitoring for Gmail limit errors
-    $n = 1;
-    sleep($n);
-    Mage::log("Slept for {$n} seconds after sending email", null, "system.log", true);
+  public function emailSendAfter(Varien_Event_Observer $observer): void {
+    sleep(1);
+    Mage::log("Slept for 1 seconds after sending email", null, "system.log", true);
   }
   
-  public function alterGa4Data(Varien_Event_Observer &$observer) {
+  /**
+   * Place to alter GA4 data before writing to JS.
+   * Observes: googleanalytics_ga4_send_data_before
+   * 
+   * Data:
+   * ['ga4_data_transport' => $ga4DataTransport]
+   *
+   * @param  Varien_Event_Observer  $observer
+   * @return void
+   */
+  public function alterGa4Data(Varien_Event_Observer $observer): void {
     // if(_dhh_debug()) {
       // dump($observer);
       // $ga4Event = $observer->getEvent()->getGa4DataTransport()->getData()[0] ?? false;
@@ -734,5 +756,17 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     );
     
     $columnsObject->setColumns($columns);
+  }
+  
+  /**
+   * Observes: core_app_run_after.
+   *
+   * @param  Varien_Event_Observer  $observer
+   * @return void
+   */
+  public static function coreAppRunAfter(Varien_Event_Observer $observer): void {
+    // Mage::log("core_app_run_after fired", null, "system.log", true);
+    Utils::runDeferredClosures();
+    // Mage::log("core_app_run_after done", null, "system.log", true);
   }
 }

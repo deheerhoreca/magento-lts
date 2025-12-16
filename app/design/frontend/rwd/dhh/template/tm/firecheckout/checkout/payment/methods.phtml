@@ -1,0 +1,280 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * List of BNPL payment methods.
+ * @var string[]
+ */
+$bnplMethods = [
+    "pay_payment_billink",
+    "pay_payment_afterpayint",
+    "pay_payment_capayablegespreid",
+];
+
+/**
+ * DHH SKUs that attract BNPL fraud.
+ * @var string[]
+ */
+$highRiskSkus = [
+    "GN-GM947",
+    "GN-GM948",
+    "GN-GM949",
+    "BA-190031",
+    "BA-190033",
+    "BA-190052",
+    "BA-190096",
+    "BA-190095",
+    "BA-190080",
+    "HD-209950",
+    "VT-DRCCB",
+    "VT-DRCCZ",
+    "VT-EFB0024",
+];
+
+/**
+ * DHH SKUs that attract BNPL fraud.
+ * @var string[]
+ */
+$highRiskSProductNameSubstrings = [
+    "kitchenaid",
+    "kenwood",
+    "bonamat",
+    "rowlett",
+    "volautomatisch koffie",
+];
+
+$fmeFieldsmanager = false;
+if (Mage::helper("core")->isModuleOutputEnabled("FME_Fieldsmanager")) {
+    $fmeFieldsmanager = $this->getLayout()->createBlock("fieldsmanager/checkout_payment_methods");
+}
+
+// aheadworks points
+$awPoints = method_exists($this, "getSummaryForCustomer");
+if ($awPoints) {
+    $summaryForCustomer = $this->getSummaryForCustomer();
+    $textForPoints = Mage::helper("points/config")->getPointUnitName();
+    $defaultValue = Mage::app()->getRequest()->getParam("payment[points_amount]");
+}
+
+// mageworx customercredit
+$customerCredit = method_exists($this, "isPartialPayment");
+if ($customerCredit) {
+    $isPartial = $this->isPartialPayment();
+    $isCheckedCustomercredit = Mage::getSingleton("checkout/session")->getUseInternalCredit();
+    if ($isPartial==2 && $isCheckedCustomercredit) $this->getQuote()->getPayment()->setMethod("customercredit");
+}
+
+$billsafe = false;
+
+// ----- DHH ----- //
+
+$methods = $this->getMethods();
+$oneMethod = count($methods) <= 1;
+// devDump($methods);
+
+// $cart = Mage::getModel("checkout/cart")->getQuote()->getData();
+// if(in_array($_SERVER["REMOTE_ADDR"], _dhh_ips())) {
+//     devDump($cart);
+// }
+
+$highRiskPatternFound = false;
+
+// Loop cart items and match against known fraudulent order products
+$session = Mage::getSingleton("checkout/session");
+$cartItems = $session?->getQuote()?->getAllItems();
+if(!empty($cartItems)) {
+    foreach($cartItems as $item) {
+        /** @var Mage_Sales_Model_Quote_Item $item */
+        if($item->getBasePrice() >= 500 &&
+        (in_array($item->getSku(), $highRiskSkus) || wild_sis($highRiskSProductNameSubstrings, $item->getName()))) {
+            $highRiskPatternFound = true;
+            break;
+        }
+        // devDump($item->debug());
+        devDump($item->toArray());
+    }
+}
+
+// $cart = Mage::helper("checkout/cart")->getCart();
+// devDump($cart->getItems());
+
+// Remove BNPL payment methods if fraudulent pattern found in the cart
+$flagBnplRemoved = false;
+if($highRiskPatternFound) {
+    $origMethods = $methods;
+    $methods = array_filter($methods, fn($method) => !in_array($method->getCode(), $bnplMethods));
+    if(count($methods) < count($origMethods)) {
+        $flagBnplRemoved = true;
+    }
+}
+
+$customerMsgHtml = "";
+if($flagBnplRemoved) {
+    $customerMsgHtml = <<<HTML
+        <ul class="messages">
+            <li class="success-msg">
+                <ul>
+                    <li><span><ins>We krijgen voor een klein aantal producten dagelijkse nepbestellingen</ins>, daarom is Achteraf Betalen helaas niet beschikbaar. <strong>Alle andere betaalmethoden wel</strong>, en als u de fraudegevoelige producten uit uw cart haalt kunt u weer achteraf betalen (Uw order splitsen). Vragen hierover? Neem aub contact op via <span class="user-select-all">sales@chefstore.nl</span> of telefoon.</span></li>
+                </ul>
+            </li>
+        </ul>
+    HTML;
+}
+
+if (!$methods) : ?>
+    <p><?=$this->helper("checkout")->__("Sorry, no quotes are available for this order at this time.") ?></p><?php
+else :
+    echo $customerMsgHtml;
+    if($fmeFieldsmanager) { ?>
+        <dl><?=$fmeFieldsmanager->getfieldshtml(1); ?></dl><?php
+    }
+    ?>
+    <dl class="sp-methods">
+    <?php if ($awPoints && $this->pointsSectionAvailable()): ?>
+    <dt>
+        <input type="checkbox" name="payment[use_points]" id="use_points"<?=(Mage::getSingleton("checkout/session")->getData("use_points")) ? " checked=\"checked\"" : "" ?>/>
+        <label for="use_points"><?=$this->__("Use my %s", $textForPoints) ?></label>
+    </dt>
+    <dt>
+        <input type="text" name="payment[points_amount]" value ="<?=$defaultValue; ?>" id="points_amount" />
+        <label for="points_amount"><?=Mage::helper("points")->__("of %s %s (%s) available", $summaryForCustomer->getPoints(), $textForPoints, $this->getMoneyForPoints()) ?></label>
+    </dt>
+    <?php endif; ?>
+        
+    <?php foreach ($methods as $_method):
+    $_code = $_method->getCode();
+    if ("billsafe" == $_code) $billsafe = true;
+    if ($_code=="customercredit" && ($isPartial == -2 || $isPartial == -3)) continue; // hide customer credit
+    ?>
+    <dt id="dt_method_<?=$_code?>">
+    <?php if (sizeof($methods) > 1): ?>
+        <?php if ($_code=="customercredit" && $isPartial==1): ?>
+            <input id="p_method_<?=$_code ?>" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="checkbox" onclick="payment.switchMethod("<?=$_code ?>");" <?php if ($isCheckedCustomercredit) { ?>checked="checked"<?php } ?> />
+        <?php elseif ($_code=="customercredit" && $isPartial==-3): ?>
+            <input id="p_method_<?=$_code ?>_disabled" disabled="disabled" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="checkbox" />
+        <?php elseif ($_code=="customercredit" && $isPartial==-1): ?>
+            <input id="p_method_<?=$_code ?>_disabled" disabled="disabled" value="1" type="checkbox" name="payment[use_internal_credit]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="checkbox" />
+        <?php elseif ($_code=="customercredit" && $isPartial==0) : ?>
+            <input id="p_method_<?=$_code ?>_disabled" disabled="disabled" value="<?=$_code ?>" type="radio" name="payment[method]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="radio" />
+        <?php else: ?>
+            <input id="p_method_<?=$_code ?>" value="<?=$_code ?>" type="radio" name="payment[method]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="radio" onclick="payment.switchMethod("<?=$_code ?>")"<?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> />
+        <?php endif; ?>
+    <?php else: ?>
+        <span class="no-display"><input id="p_method_<?=$_code ?>" value="<?=$_code ?>" type="radio" name="payment[method]" checked="checked" /></span>
+    <?php endif; ?>
+        <label for="p_method_<?=$_code ?>">
+            <?=$this->getMethodTitle($_method) ?>
+            <?php if ($_code=="customercredit" && (Mage::helper("mageworx_customercredit")->isEnabledCodes() || $this->needShowRechageLink())):?>
+                (<a href="<?=$this->getUrl("customercredit/") ?>" target="_blank"><?=Mage::helper("mageworx_customercredit")->__("Recharge") ?></a>)
+            <?php endif; ?>
+            <?=$this->getMethodLabelAfterHtml($_method) ?>
+        </label>
+        <?php if (($_code=="customercredit") && Mage::getStoreConfig("mageworx_customercredit/main/enable_custom_value")): ?>
+            <?=$this->getChildHtml("payment.custom.value"); ?>
+        <?php endif; ?>
+    </dt>
+    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+    <dd>
+        <?=$html; ?>
+    </dd>
+    <?php endif;
+    endforeach; ?>
+    </dl>
+    
+    <?php if ($fmeFieldsmanager) : ?>
+    <dl>
+        <?=$fmeFieldsmanager->getfieldshtml(2); ?>
+        <?=$fmeFieldsmanager->getfieldshtml(3); ?>
+    </dl>
+    <?php endif; ?>
+    
+    <?php if (Mage::helper("core")->isModuleOutputEnabled("Netresearch_Billsafe") && !$billsafe) : ?>
+        <p style="margin: 25px 0 10px;">
+            <?=$this->getBillsafeLogo(); ?>
+            <?=$this->__("BillSAFE payment is not available for this order"); ?>
+        </p>
+    <?php endif ?>
+    
+    <script type="text/javascript">
+    //<![CDATA[
+    <?=$this->getChildChildHtml("scripts"); ?>
+    payment.init();
+    //]]>
+    </script>
+    <?php $buyerprotect = $this->getChildHtml("buyerprotect");
+    if (!empty($buyerprotect)) :
+        echo $buyerprotect;
+    ?>
+        <script type="text/javascript">
+        //<![CDATA[
+        var trustedCheckbox = $("trusted_shops");
+        trustedCheckbox.observe("click", function() {
+            checkout.update("<?=$this->getUrl("firecheckout/index/buyerprotect", array("_secure"=>true)) ?>");
+        });
+        $("trusted_shops-product").observe("change", function() {
+            if (!trustedCheckbox.checked) {
+                return;
+            }
+            checkout.update("<?=$this->getUrl("firecheckout/index/buyerprotect", array("_secure"=>true)) ?>");
+        });
+        //]]>
+        </script>
+    <?php endif ?>
+<?php endif; ?>
+
+<?php if ($awPoints && $this->pointsSectionAvailable()): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        var customerPoints = <?=$summaryForCustomer->getPoints() ?>;
+        var neededPoints = <?=$this->getNeededPoints() ?>;
+        var limitedPoints = <?=$this->getLimitedPoints() ?>;
+
+        $("use_points").disabled = $("points_amount").disabled = false;
+        $("points_amount").value = Math.abs(Math.min(customerPoints, neededPoints, limitedPoints)).toFixed(0);
+
+        <?php if ($amount = Mage::getSingleton("checkout/session")->getPointsAmount()) : ?>
+            $("points_amount").value = <?=$amount ?>;
+        <?php endif; ?>
+
+        var pointsCheckbox = $("use_points");
+        pointsCheckbox.observe("click", function() {
+            checkout.update("<?=$this->getUrl("firecheckout/index/awpoints", array("_secure"=>true)) ?>");
+        });
+        var pointsAmountChanged = function(){
+            var points_amount = $("points_amount").value;
+            if (isNaN(points_amount)) points_amount = 0;
+            points_amount = Math.min(Math.abs(points_amount), customerPoints, neededPoints, limitedPoints);
+
+            $("points_amount").value = Math.abs(points_amount).toFixed(0);
+
+            if (!pointsCheckbox.checked) {
+                return;
+            }
+            checkout.update("<?=$this->getUrl("firecheckout/index/awpoints", array("_secure"=>true)) ?>");
+        }
+        $("points_amount").observe("change", pointsAmountChanged);
+        //]]>
+    </script>
+<?php endif; ?>
+
+<?php if ($customerCredit) : ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        el = $("p_method_customercredit");
+        if (el) el.disabled = false;
+        <?php if ($isPartial==1 && $isCheckedCustomercredit) { ?>payment.switchMethod("customercredit");<?php } ?>
+
+        el && el.observe("click", function(e) {
+            checkout.update(checkout.urls.payment_method);
+        });
+        //]]>
+    </script>
+<?php endif ?>
+
+<?php $emjaTax = $this->getChildHtml("emja_taxrelief"); ?>
+<?php if ($emjaTax) : ?>
+<dl>
+    <?=$emjaTax; ?>
+</dl>
+<?php endif ?>

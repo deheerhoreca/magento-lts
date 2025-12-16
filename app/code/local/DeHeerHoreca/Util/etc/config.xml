@@ -46,6 +46,14 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </catalog_product_flat_prepare_columns>
+      <core_app_run_after>
+        <observers>
+          <DeHeerHoreca_Util_Model_Observer>
+            <class>deheerhoreca_util/observer</class>
+            <method>coreAppRunAfter</method>
+          </DeHeerHoreca_Util_Model_Observer>
+        </observers>
+      </core_app_run_after>
     </events>
     <blocks>
       <adminhtml>
@@ -56,7 +64,6 @@
       </adminhtml>
     </blocks>
   </global>
-  
   <frontend>
     <events>
       <!-- Disable product view reports to reduce database load -->
@@ -88,7 +95,6 @@
       </googleanalytics_ga4_send_data_before>
     </events>
   </frontend>
-  
   <adminhtml>
     <layout>
       <updates>

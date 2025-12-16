@@ -172,7 +172,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     ];
   }
   
-  public function getAvgPrice($_products) {
+  /**
+   * Undocumented function
+   *
+   * @param  array $_products
+   */
+  public function getAvgPrice(array $_products) {
     $price = 0;
     foreach($_products as $_product) {
       $price += $_product->getPrice();
@@ -181,7 +186,15 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $price / sizeof($_products);
   }
   
-  public function getBrandsPerCategory($category_id, $_products = null) {
+  /**
+   * Get most used brands for a category ID.
+   *
+   * @param  int                                              $category_id
+   * @param  ?Mage_Catalog_Model_Resource_Product_Collection  $_products
+   *
+   * @return array
+   */
+  public function getBrandsPerCategory(int $category_id, ?Mage_Catalog_Model_Resource_Product_Collection $_products = null): array {
     Varien_Profiler::start('DHH_'.self::class."::".__METHOD__);
     $max_amount = 5;
     
@@ -1015,9 +1028,15 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $usps; 
   }
   
-  public function getStockInfo($_product, array $options = []) {
+  /**
+   * 
+   *
+   * @param  mixed $_product
+   * @param  array $options
+   */
+  public function getStockInfo($_product, array $options = []): array {
     Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
-    $dhh_sku                = $_product->getSku();
+    $dhh_sku    = $_product->getSku();
     
     // $product_id             = $_product->getEntityId();
     // $hash                   = md5(json_encode($options));
@@ -1035,10 +1054,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     //   }
     // }
     
-    $fastmode               = $options["fastmode"]            ?? false;
-    $context                = $options["context"]             ?? "";
-    
-    $stock_data             = [];
+    $fastmode   = $options["fastmode"]            ?? false;
+    $context    = $options["context"]             ?? "";
+    $stock_data = [];
     
     // Fast mode, only report overall_stock_status
     if($fastmode && !empty(_get_product_attribute($_product, "stock_status"))) {
@@ -1046,9 +1064,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       switch($stock_status_sys) {
         case "direct leverbaar":
           $stock_data["overall_stock_status"] = "in_stock";
+          Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
           return $stock_data;
         case "n.v.t.":
           $stock_data["overall_stock_status"] = "backorder";
+          Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
           return $stock_data;
         default:
           // Follow normal flow for now
@@ -1146,7 +1166,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     } else {
       // In stock
       
-      // Date calculation is disabled      
+      // Date calculation is disabled
       // If enabled some day, levertijd_tmp_override should be added here as well
       
       // @todo add support for "1 werkdag"

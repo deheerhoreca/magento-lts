@@ -48,7 +48,7 @@
             </updates>
         </layout>
         <events>
-            <catalog_product_save_after>
+            <catalog_product_save_commit_after>
                 <observers>
                     <DeHeerHoreca_Fpc_Model_Observer>
                         <type>singleton</type>
@@ -56,8 +56,8 @@
                         <method>clearProductCache</method>
                     </DeHeerHoreca_Fpc_Model_Observer>
                 </observers>
-            </catalog_product_save_after>
-            <catalog_category_prepare_save>
+            </catalog_product_save_commit_after>
+            <catalog_category_save_commit_after>
                 <observers>
                     <DeHeerHoreca_Fpc_Model_Observer>
                         <type>singleton</type>
@@ -65,7 +65,7 @@
                         <method>clearCategoryCache</method>
                     </DeHeerHoreca_Fpc_Model_Observer>
                 </observers>
-            </catalog_category_prepare_save>
+            </catalog_category_save_commit_after>
         </events>
     </adminhtml>
 </config>
