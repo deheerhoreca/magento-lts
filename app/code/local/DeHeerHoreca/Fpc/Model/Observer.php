@@ -29,7 +29,7 @@ if(DHH_FPC_DEBUG) {
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   /**
    * Serve cached HTML if available.
-   * Observes controller_action_predispatch event.
+   * Observes: controller_action_predispatch event.
    *
    * @param  mixed $observer
    * @return void
@@ -64,11 +64,12 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Clear product cache on product save.
+   * Observes: catalog_product_save_commit_after
    *
-   * @param  mixed $observer
+   * @param  Varien_Event_Observer $observer
    * @return bool
    */
-  public function s($observer): bool {
+  public function clearProductCache(Varien_Event_Observer $observer): bool {
     $productId  = $observer->getProduct()->getId();
     $cache_tags = [
       // "DHH_PRODUCT_{$productId}",
@@ -84,11 +85,12 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Clear category cache on category save.
+   * Observes: catalog_category_save_commit_after
    *
-   * @param  mixed $observer
+   * @param  Varien_Event_Observer $observer
    * @return bool
    */
-  public function clearCategoryCache($observer): bool {
+  public function clearCategoryCache(Varien_Event_Observer $observer): bool {
     $category_id = $observer->getEvent()->getCategory()->getId();
     if(empty($category_id)) {
       return true;
