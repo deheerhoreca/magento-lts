@@ -232,28 +232,49 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $manufacturers;
   }
   
-  public function markdownToHtmlSafe($string) {
-    if(str_contains((string) $string, "<!--markdown-->")) {
+  /**
+   * Translate Markdown to HTML if the string contains the <!--markdown--> marker
+   * @todo Deprecate <!--markdown--> in favor of <!--markdownextra-->
+   *
+   * @param   mixed   $string  Markdown or Markdown Extra content
+   * @return  string
+   */
+  public function markdownToHtmlSafe(string $string): string {
+    $string = (string) $string;
+    if(str_contains($string, "<!--markdown-->")) {
       $string = trim(str_replace("<!--markdown-->", "", (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
     }
-    if(str_contains((string) $string, "<!--markdownextra-->")) {
+    if(str_contains($string, "<!--markdownextra-->")) {
       $string = trim(str_replace("<!--markdownextra-->", "", (string) $string));
       return Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($string);
     }
     return $string;
   }
   
-  public function markdownToHtml($string) {
-    if(!is_string($string)) $string = ""; # Prevent type issues with defaultTransform()
+  /**
+   * Translate Markdown to HTML
+   * @todo Deprecate in favor of markdownExtraToHtml()
+   *
+   * @param   mixed   $string
+   * @return  ?string
+   */
+  public function markdownToHtml(?string $string): string {
+    $string ??= ""; # Prevent type issues with defaultTransform()
     return Markdown::defaultTransform($string);
   }
   
-  public function markdownExtraToHtml($string) {
-    if(!is_string($string)) $string = ""; # Prevent type issues with defaultTransform()
+  /**
+   * Translate Markdown Extra to HTML
+   *
+   * @param   mixed   $string
+   * @return  ?string
+   */
+  public function markdownExtraToHtml(?string $string): string {
+    $string ??= ""; # Prevent type issues with defaultTransform()
     return MarkdownExtra::defaultTransform($string);
   }
-
+  
   public function getBrandUrlSlug($string): string {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';

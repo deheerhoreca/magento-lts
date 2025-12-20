@@ -22,8 +22,8 @@ if (!defined("DHH_CLASS_ALIASES_APPLIED")) {
   define("DHH_CLASS_ALIASES_APPLIED", true);
 }
 
+require_once __DIR__."/functions.php"; // BEFORE config.php
 require_once __DIR__."/config.php";
-require_once __DIR__."/functions.php";
 require_once __DIR__."/CsCache.php";
 require_once __DIR__."/ElasticApmHelper.php";
 require_once __DIR__."/Helper.php";

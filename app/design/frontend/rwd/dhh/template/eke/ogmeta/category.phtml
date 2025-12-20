@@ -1,5 +1,7 @@
 <?php
 
+// declare(strict_types=1); // @todo
+
 $helper = Mage::helper("eke_ogmeta");
 if(!$helper->isOgMetaEnabled()) {
   return;
@@ -18,9 +20,9 @@ if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke
 
 if(empty($html) === false) {
   DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
-  echo unserialize($html);
+  // echo unserialize($html);
+  echo $html;
 } else {
-  
   // DHH CORE HACK: we can do better than this...
   $categoryImage = Mage::getModel("catalog/layer")->getCurrentCategory()->getImage();
   if(strlen((string) $categoryImage) < 1) {
@@ -32,7 +34,7 @@ if(empty($html) === false) {
   }
   $siteName = $helper->getSiteName();
   
-  // DHH We must supress errors since the image might not exist
+  // DHH We must suppress errors since the image might not exist
   if($image_file !== null) {
     $imageAttr = getimagesize($image_file);
     try {
@@ -43,34 +45,38 @@ if(empty($html) === false) {
     }
   }
   
+  $url          = $this->helper("core/url")->getCurrentUrl();
+  $title        = $this->getLayout()->getBlock("head")->getTitle();
+  $description  = $this->getLayout()->getBlock("head")->getDescription();
+  
   $html = "";
-  $html .= '<meta property="og:locale" content="nl_NL">'.PHP_EOL;
-  $html .= '<meta property="og:locale:alternate" content="nl_BE">'.PHP_EOL;
-  $html .= '<meta property="og:title" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
-  $html .= '<meta property="og:site_name" content="'.$siteName.'">'.PHP_EOL;
-  $html .= '<meta property="og:type" content="product.group">'.PHP_EOL;
-  $html .= '<meta property="og:url" content="'.$this->helper("core/url")->getCurrentUrl().'">'.PHP_EOL;
-  $html .= '<meta property="og:description" content="'.$this->getLayout()->getBlock("head")->getDescription().'">'.PHP_EOL;
-  $html .= '<meta property="og:image" content="'.$image_url.'">'.PHP_EOL;
-  if(empty($imageAttr["mime"]) === false) {
-    $html .= '<meta property="og:image:type" content="'.$imageAttr["mime"].'">'.PHP_EOL;
+  $html .= '<meta property="og:locale" content="nl_NL">';
+  $html .= '<meta property="og:locale:alternate" content="nl_BE">';
+  $html .= '<meta property="og:title" content="'.$title.'">';
+  $html .= '<meta property="og:site_name" content="'.$siteName.'">';
+  $html .= '<meta property="og:type" content="product.group">';
+  $html .= '<meta property="og:url" content="'.$url.'">';
+  $html .= '<meta property="og:description" content="'.$description.'">';
+  $html .= '<meta property="og:image" content="'.$image_url.'">';
+  if(!empty($imageAttr["mime"])) {
+    $html .= '<meta property="og:image:type" content="'.$imageAttr['mime'].'">';
   }
-  if(empty($imageAttr[0]) === false) {
-    $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">'.PHP_EOL;
+  if(!empty($imageAttr[0])) {
+    $html .= '<meta property="og:image:width" content="'.$imageAttr[0].'">';
   }
-  if(empty($imageAttr[1]) === false) {
-    $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">'.PHP_EOL;
+  if(!empty($imageAttr[1])) {
+    $html .= '<meta property="og:image:height" content="'.$imageAttr[1].'">';
   }
-  $html .= '<meta property="og:image:alt" content="'.$this->getLayout()->getBlock("head")->getTitle().'">'.PHP_EOL;
-  $html .= '<meta name="twitter:card" content="summary">'.PHP_EOL;
-  // ------------ STOP REGULAR FLOW
+  $html .= '<meta property="og:image:alt" content="'.$title.'">';
+  $html .= '<meta name="twitter:card" content="summary">';
   
   echo $html;
   
   // Store in Magento cache
   if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta")) {
-    if(Mage::app()->getCache()->save(serialize($html), $cache_key, ["DHH_EKE_OGMETA"], 86400 * 7)) {
-      DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key} chars");
-    }
+    DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $html, ["DHH_EKE_OGMETA"], 86400 * 7);
+    // if(Mage::app()->getCache()->save(serialize($html), $cache_key, ["DHH_EKE_OGMETA"], 86400 * 7)) {
+    //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key} chars");
+    // }
   }
 }

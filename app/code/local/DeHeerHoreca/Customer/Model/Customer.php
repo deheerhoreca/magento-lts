@@ -40,7 +40,7 @@ class DeHeerHoreca_Customer_Model_Customer extends DeHeerHoreca_Customer_Model_C
     // Taken from https://magento.stackexchange.com/questions/46404/ce1-9-1-please-make-sure-your-password-match-issue-during-user-registration
     // To match passwords in both Create account and Checkout register pages start
     if(Mage::app()->getRequest()->getServer('HTTP_REFERER') == Mage::getUrl('customer/account/create') 
-     OR Mage::app()->getRequest()->getServer('HTTP_REFERER') == Mage::getUrl('customer/account/edit')) {
+      OR Mage::app()->getRequest()->getServer('HTTP_REFERER') == Mage::getUrl('customer/account/edit')) {
       $confirmation = $this->getPasswordConfirmation();
     } else{
       $confirmation = $this->getConfirmation();

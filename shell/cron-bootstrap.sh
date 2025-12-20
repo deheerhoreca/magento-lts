@@ -32,7 +32,7 @@ ABBR_SCRIPT_PATH=${SCRIPT_PATH#*"${THE_CWD}"}
 CURRENT_CRON_CMD="${ABBR_SCRIPT_PATH} ${*}"
 
 # Check preferred host against current host and CRON
-if [[ -n "${PREFER_HOST}" && ${THIS_IS_CRON} ]]; then
+if [[ -n "${PREFER_HOST}" && "${THIS_IS_CRON}" != "false" ]]; then
   if [[ "${HOSTNAME}" != "${PREFER_HOST}.deheerhoreca.nl" && "${HOSTNAME}" != "dev.deheerhoreca.nl" ]]; then
     printf "%s  NOOP   %s  prefers to run on %s.deheerhoreca.nl\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}" "${PREFER_HOST}"
     exit 0
@@ -42,7 +42,7 @@ fi
 # Check required host against current host regardless of CRON
 if [ -n "${REQUIRE_HOST}" ]; then
   if [[ "${HOSTNAME}" != "${REQUIRE_HOST}.deheerhoreca.nl" && "${HOSTNAME}" != "dev.deheerhoreca.nl" ]]; then
-    if [[ ! ${THIS_IS_CRON} ]]; then
+    if [[ "${THIS_IS_CRON}" != "false" ]]; then
       printf "%s  NOOP   %s  only runs on %s.deheerhoreca.nl\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}" "${REQUIRE_HOST}"
     else
       # Uncomment during development:
@@ -54,7 +54,7 @@ if [ -n "${REQUIRE_HOST}" ]; then
 fi
 
 # Wait for the above checks to complete before printing the start message
-if ${THIS_IS_CRON}; then
+if "${THIS_IS_CRON}" != "false"; then
   printf "%s  NOOP   %s  is skipped in development environments\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"
 fi
 

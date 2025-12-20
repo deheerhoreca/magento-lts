@@ -1,16 +1,30 @@
-<?php 
+<?php
+/**
+ * OpenMage
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available at https://opensource.org/license/osl-3-0-php
+ *
+ * @category   Mage
+ * @package    Mage_Adminhtml
+ * @copyright  Copyright (c) 2006-2020 Magento, Inc. (https://www.magento.com)
+ * @copyright  Copyright (c) 2021-2023 The OpenMage Contributors (https://www.openmage.org)
+ * @license    https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
 class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Catalog_Product_Grid
 {
     protected function _prepareColumns()
     {
         $this->addColumn("image", array(
-          "header"    => "",
-          "align"     => "center",
-          "index"     => "image",
-          "width"     => "60px",
-          "filter"    => false,
-          "sort"      => false,
-          "renderer"  => "DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image"
+            "header"    => "",
+            "align"     => "center",
+            "index"     => "image",
+            "width"     => "60px",
+            "filter"    => false,
+            "sort"      => false,
+            "renderer"  => "DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image"
         )); 
         return parent::_prepareColumns();
     }
@@ -46,14 +60,14 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
                 'inner',
                 $adminStore
             );
-            $collection->joinAttribute(
-                'custom_name',
-                'catalog_product/name',
-                'entity_id',
-                null,
-                'inner',
-                $store->getId()
-            );
+            // $collection->joinAttribute(
+            //     'custom_name',
+            //     'catalog_product/name',
+            //     'entity_id',
+            //     null,
+            //     'inner',
+            //     $store->getId()
+            // );
             $collection->joinAttribute(
                 'status',
                 'catalog_product/status',
@@ -78,8 +92,7 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
                 'left',
                 $store->getId()
             );
-        }
-        else {
+        } else {
             $collection->addAttributeToSelect('price');
             $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
             $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');

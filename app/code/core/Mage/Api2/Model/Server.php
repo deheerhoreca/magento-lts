@@ -198,6 +198,8 @@ class Mage_Api2_Model_Server
     {
         /** @var Mage_Api2_Model_Acl_Global $globalAcl */
         $globalAcl = Mage::getModel('api2/acl_global');
+        
+        Mage::log("API2 ACL check: User Type '{$apiUser->getType()}', Resource Type '{$request->getResourceType()}', Operation '{$request->getOperation()}'", Zend_Log::INFO);
 
         if (!$globalAcl->isAllowed($apiUser, $request->getResourceType(), $request->getOperation())) {
             throw new Mage_Api2_Exception('Access denied', self::HTTP_FORBIDDEN);

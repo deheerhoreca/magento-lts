@@ -16,44 +16,37 @@ $itemPositionClassPrefix  = $parentPositionClass ? $parentPositionClass . '-' : 
 $base_url                 = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 
 foreach($children as $child) {
-  
   if($childLevel > 2) return;
   
   $child->setLevel($childLevel);
-  // $child->setIsFirst($counter === 1);
-  // $child->setIsLast($counter === $topLeveChildrenCount);
   $child->setPositionClass($itemPositionClassPrefix . $counter);
   
-  $url = str_replace($base_url, "/", (string) $child->getUrl());
-
+  $url                = str_replace($base_url, "/", (string) $child->getUrl());
   $outermostClassCode = 'level'. $childLevel;
   $_hasChildren       = $child->hasChildren();
   $has_children_class = ($_hasChildren && $childLevel < 1) ? ' has-children' : '';
   $category_name      = $this->escapeHtml($this->__($child->getName()));
+  
   if(str_contains((string) $category_name, "[SKIPMENU]")) {
     continue;
   }
-  // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($category_name);
   
   if($childLevel < 2) {
-    $attributes = $this->_getRenderedMenuItemAttributes($child);
-    // if($childlevel === 0) {
-      // $attributes = "class='level0'";
-    // }
-    $attributes = "class='level{$childLevel}'";
-    $html .= "<li {$attributes}>";
+    $attributes  = $this->_getRenderedMenuItemAttributes($child);
+    $attributes  = "class='level{$childLevel}'";
+    $html       .= "<li {$attributes}>";
   }
+  
   $html .= "<a title=\"{$category_name}\" href='{$url}' >{$category_name}</a>";
-
+  
   if($_hasChildren) {
-    if($childLevel < 1) $html .= PHP_EOL."<ul class='level{$childLevel}'>";
+    if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";
     $html .= $this->render($child, $childrenWrapClass);
-    if($childLevel < 1) $html .= PHP_EOL."</ul>";
+    if($childLevel < 1) $html .= "</ul>";
   }
-
+  
   if($childLevel < 2) $html .= "</li>";
   
-  $html .= PHP_EOL;
   $counter++;
 }
 

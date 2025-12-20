@@ -51,3 +51,29 @@ const OM_SUPPLIER_CODE_NAME_MAP = [
   "VT"  => "virtus",
   "YC"  => "youcup",
 ];
+
+/* ---------------------------------------------------- DHH FPC ---------------------------------------------------- */
+
+const DHH_FPC_NAV_KEY     = "DHH_CMS_TOPMENU";
+const DHH_FPC_FOOTER_KEY  = "DHH_CMS_FOOTER";
+
+// Cannot use _dhh_debug() due to the ?nofpc requirement
+if(isset($_SERVER["REQUEST_METHOD"]) && ($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "HEAD")
+&& isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true)
+) {
+  define("DHH_FPC_DEBUG", false);   // Default: false
+} else {
+  define("DHH_FPC_DEBUG", false);   // Default: false
+}
+
+if(isset($_SERVER["HTTP_HOST"]) && str_starts_with((string) $_SERVER["HTTP_HOST"], "dev.")) {
+  define("DHH_FPC_ENABLED", false); // Default: false
+} else {
+  define("DHH_FPC_ENABLED", true);  // Default: true
+}
+
+if(DHH_FPC_DEBUG) {
+  $verb = $_SERVER["REQUEST_METHOD"] ?? null;
+  DeHeerHoreca_Fpc_Helper_Data::log("---------------------------------------------------------------------");
+  DeHeerHoreca_Fpc_Helper_Data::log("{$verb} ".Mage::helper("core/url")->getCurrentUrl());
+}

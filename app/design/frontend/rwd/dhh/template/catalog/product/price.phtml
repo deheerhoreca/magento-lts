@@ -78,19 +78,19 @@ if(function_exists('_fixPrice') === false) {
 
 if(function_exists('_displayMsrp') === false) {
   function _displayMsrp($msrp_formatted, $msrpStoreLabel, $id) {
-    return "<div class='old-price'><span>{$msrpStoreLabel}: </span><span class='price strike' id='old-price-{$id}'><!--sse-->{$msrp_formatted}<!--/sse--></span></div>";
+    return "<div class='old-price'><span>{$msrpStoreLabel}: </span><span class='price strike' id='old-price-{$id}'>{$msrp_formatted}</span></div>";
   }
 }
 
 if(function_exists('_displayRegularPriceDuringSpecialPrice') === false) {
   function _displayRegularPriceDuringSpecialPrice($price_formatted) {
-    return "<div class='my-2 old-price bit-bigger'><span>Normaal: </span><span class='price strike'><!--sse-->{$price_formatted}<!--/sse--></span></div>";
+    return "<div class='my-2 old-price bit-bigger'><span>Normaal: </span><span class='price strike'>{$price_formatted}</span></div>";
   }
 }
 
 if(function_exists('_displayDiscount') === false) {
   function _displayDiscount($_discount_abs_formatted, $discount_perc, $id) {
-    return "<div class='productdetail__discount'>Bespaar <span class=strong><!--sse-->{$_discount_abs_formatted}<!--/sse--></span></div>";
+    return "<div class='productdetail__discount'>Bespaar <span class=strong>{$_discount_abs_formatted}</span></div>";
   }
 }
 
@@ -310,7 +310,7 @@ if($_product->getAttributeText("eol") !== "Ja") {
             }
             // <span class="label">$this->helper('tax')->__('Excl. Tax:')</span>
             ?>
-            <span class="price"><!--sse--><?php echo $tmp; ?><!--/sse--></span>
+            <span class="price"><?php echo $tmp; ?></span>
           </span>
 
           <?php
@@ -599,14 +599,14 @@ if($_product->getAttributeText("eol") !== "Ja") {
           <div class="special-price">
             <span class="price-excluding-tax">
               <span class="price">
-                <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?><!--/sse-->
+                <?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?>
               </span>
             </span>
             <?php
             if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
               <span class="price-including-tax italic small">
                 <span class="price">
-                  <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?><!--/sse-->
+                  <?php echo _fixPrice($_coreHelper->formatPrice($_finalPriceInclTax, false)) ?>
                 </span>
               <span class="label">incl. btw</span>
               </span>
@@ -618,9 +618,9 @@ if($_product->getAttributeText("eol") !== "Ja") {
           ?>
           <div class="special-price">
             <span class="price-label"><?php echo $_specialPriceStoreLabel ?></span>
-            <span class="price"><!--sse-->
+            <span class="price">
             <?php echo _fixPrice($_coreHelper->formatPrice($_finalPrice, false)) ?>
-            <!--/sse--></span>
+            </span>
           </div>
         <?php
         }
@@ -693,14 +693,14 @@ if($_product->getAttributeText("eol") !== "Ja") {
             <span class="price-excluding-tax">
               <span class="label"><?php echo $this->helper('tax')->__('Excl. Tax:') ?></span>
               <span class="price">
-                <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_exclTax, false)) ?><!--/sse-->
+                <?php echo _fixPrice($_coreHelper->formatPrice($_exclTax, false)) ?>
               </span>
             </span>
             <?php
             if($controller_name !== "category" && $controller_name !== "cart" && $controller_name !== "index") { ?>
               <span class="price-including-tax italic small">
                 <span class="price">
-                  <!--sse--><?php echo _fixPrice($_coreHelper->formatPrice($_inclTax, false)) ?><!--/sse-->
+                  <?php echo _fixPrice($_coreHelper->formatPrice($_inclTax, false)) ?>
                 </span>
               <span class="label">incl. btw</span>
               </span>

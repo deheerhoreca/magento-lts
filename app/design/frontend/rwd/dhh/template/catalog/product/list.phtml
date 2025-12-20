@@ -6,7 +6,7 @@
  */
 /* @var $this Mage_Catalog_Block_Product_List */
 
-Varien_Profiler::start("DHH_PrepareProductList");
+Varien_Profiler::start("DHH::PrepareProductList");
 
 $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
@@ -44,7 +44,7 @@ $_dhhUtilHelper               = Mage::helper("deheerhoreca_util/util");
 $category_block_top_html      = $this->getLayout()->createBlock("cms/block")->setBlockId("category-{$category_id}-top")->toHtml();
 $category_block_bottom_html   = $this->getLayout()->createBlock("cms/block")->setBlockId("category-{$category_id}-bottom")->toHtml();
 
-Varien_Profiler::stop("DHH_PrepareProductList");
+Varien_Profiler::stop("DHH::PrepareProductList");
 
 if($show_products) {
   /*
@@ -59,17 +59,17 @@ if($show_products) {
    *
    * DHH_ReAddStockItems profiles to single-digit ms delay
    */
-  Varien_Profiler::start("DHH_ReAddStockItems");
+  Varien_Profiler::start("DHH::ReAddStockItems");
   $_productCollection = $this->getLoadedProductCollection();
   $_productCollection->setFlag("require_stock_items", true);
   Mage::getModel("cataloginventory/stock")->addItemsToProducts($_productCollection);
-  Varien_Profiler::stop("DHH_ReAddStockItems");
+  Varien_Profiler::stop("DHH::ReAddStockItems");
 }
 
 /* CATEGORY HEADER & SEO */
 
 if($carct && ($category === "category")) {
-  Varien_Profiler::start("DHH_CategoryHeader");
+  Varien_Profiler::start("DHH::CategoryHeader");
   $category_id          = (int) $carct->getId();
   $category_name        = (string) $carct->getName();
   // $category_name        = (string) $_dhhUtilHelper->cleanCategoryName($category_name);
@@ -98,7 +98,6 @@ if($carct && ($category === "category")) {
         $i = 0;
         
         $category_block_bottom_html .= "<p>Chefstore.nl verkoopt o.a. ";
-        
         foreach($manufacturers as $manufacturer) {
           if(strlen((string) $manufacturer) < 3) continue;
           $category_block_bottom_html .= "{$manufacturer} {$category_name_lwr}";
@@ -111,7 +110,6 @@ if($carct && ($category === "category")) {
             $category_block_bottom_html .= ".";
           }
         }
-        
         $category_block_bottom_html .= " Veelal uit voorraad en dus vaak binnen 24 of 48 uur al leverbaar.</p>";
       }
     }
@@ -165,18 +163,17 @@ if($carct && ($category === "category")) {
     }
     echo "</div>".PHP_EOL;
   }
-  Varien_Profiler::stop("DHH_CategoryHeader");
+  Varien_Profiler::stop("DHH::CategoryHeader");
 }
 
 /* SUBCATEGORIES */
 
-Varien_Profiler::start("DHH_Subcategories");
-
+Varien_Profiler::start("DHH::Subcategories");
 $forwarded_filters  = [
   // "brand",
   "brand_series",
 ];
-$show_sub_tiles     = true;
+$show_sub_tiles = true;
 
 // Hide subcategories if filters are active, except for some attributes where we forward them to the subcategory
 if($have_active_filters) {
@@ -195,10 +192,8 @@ if($have_active_filters) {
 }
 
 if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($appliedFilters) && !str_contains($orig_category_desc, "<!--no_cat_tiles-->")) {
-  
   // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
   // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);
-  
   $subcategories = $carct->getCollection()
     ->addIdFilter($carct->getChildren())
     ->addAttributeToSelect("name")
@@ -284,13 +279,12 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
 
 // Optional block category-ID is shown below the category tiles
 echo $category_block_top_html;
-
-Varien_Profiler::stop("DHH_Subcategories");
+Varien_Profiler::stop("DHH::Subcategories");
 
 /* LIST PRODUCTS */
 
 if($show_products && $_productCollection->getFirstItem()) {
-  Varien_Profiler::start("DHH_ListProducts"); ?>
+  Varien_Profiler::start("DHH::ListProducts"); ?>
   <div class="category-products"><?php
   if($show_toolbar) {
     $toolbar_html = $this->getToolbarHtml(); ?>
@@ -301,24 +295,21 @@ if($show_products && $_productCollection->getFirstItem()) {
     foreach($_productCollection as $_product) {
       $i++;
       $product_id = $_product->getId();
-      $cache_key  = "dhh_listview_product_{$product_id}";
+      $cache_key  = "dhh__listprd__{$product_id}";
       
-      // @todo Fix form_key in URLs before enabling again
-      $GLOBALS["read_listview_cache_enabled"] = false;
-      // $GLOBALS["read_listview_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "dhh_listview_product");
-      
+      // Serve from cache if enabled and possible -- Note the local application of form_key holepunch
+      $GLOBALS["read_listview_cache_enabled"] ??= DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "dhh_listview_product");
       if($GLOBALS["read_listview_cache_enabled"]) {
         if($html = (string) Mage::app()->getCache()->load($cache_key)) {
-          Varien_Profiler::start("DHH_ListProduct_{$product_id}_cached");
+          $html = DeHeerHoreca_Fpc_Helper_Data::personalizeFormkey($html);
           DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
-          Varien_Profiler::stop("DHH_ListProduct_{$product_id}_cached");
         } else {
           DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
         }
       }
       
       if(empty($html)) {
-        Varien_Profiler::start("DHH_ListProduct_{$product_id}_uncached");
+        Varien_Profiler::start("DHH::ListProduct_{$product_id}_uncached");
         // $hideQuoteButton = Mage::helper("qquoteadv")->hideQuoteButton($_product);
         $html = "";
         $dhh_sku = $_product->getSku();
@@ -345,9 +336,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         $price_html           = $this->getPriceHtml($_product, true); // ListView version
         //$price_html           = $productBlock->getPriceHtml($_product, true); // FeaturedProdcts version
         $finalPrice           = (float) $_product->getFinalPrice();
-        
         $stock_data           = $_dhhUtilHelper->getStockInfo($_product, ["context" => "listview"]);
-        
         $stock_message        = $stock_data["stock_message"];
         $stock_class          = $stock_data["txtcltcz"];
         $stock_qty            = $stock_data["stock_qty"];
@@ -535,7 +524,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         $html .= "</div></div>";
         
         // Store in cache
-        $GLOBALS["write_cache_enabled"] ??= Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "dhh_listview_product");
+        $GLOBALS["write_cache_enabled"] ??= DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "dhh_listview_product");
         if($GLOBALS["write_cache_enabled"]) {
           $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
           $cache_tags = [
@@ -544,12 +533,19 @@ if($show_products && $_productCollection->getFirstItem()) {
             // "DHH_PRODUCT_{$product_id}",
             "DHH_SUPPLIER_{$supplier_sys_upper}"
           ];
-          if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400)) {
-            DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-          }
+          
+          // Save to cache if enabled and possible
+          // => Note the local application of form_key holepunch
+          // => Note the cloned variable to not holepunch the original $html printed below
+          $cachedHtml = DeHeerHoreca_Fpc_Helper_Data::anonymizeFormkey($html);
+          $cachedHtml = \Chefstore\Html::minifyHtml($cachedHtml);
+          DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $cachedHtml, $cache_tags, 86400 * 7, minifyHtml: false);
+          // if(Mage::app()->getCache()->save($cachedHtml, $cache_key, $cache_tags, 86400)) {
+          //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
+          // }
         }
         
-        Varien_Profiler::stop("DHH_ListProduct_{$product_id}_uncached");
+        Varien_Profiler::stop("DHH::ListProduct_{$product_id}_uncached");
       } ?>
       <li class="item"><?=$html?></li><?php
       if(0 && ($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0)) { ?>
@@ -597,5 +593,5 @@ if($show_products && $_productCollection->getFirstItem()) {
     }
   }
   
-  Varien_Profiler::stop("DHH_ListProducts");
+  Varien_Profiler::stop("DHH::ListProducts");
 }

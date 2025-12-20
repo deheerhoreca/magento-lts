@@ -75,7 +75,7 @@
         </observers>
       </catalog_controller_product_view>
       <!-- Track a click -->
-      <controller_front_send_response_after>
+      <core_app_run_after>
         <observers>
           <DeHeerHoreca_Util_Model_Observer>
             <type>singleton</type>
@@ -83,7 +83,7 @@
             <method>logClick</method>
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
-      </controller_front_send_response_after>
+      </core_app_run_after>
       <!-- Add data to GA4 events -->
       <googleanalytics_ga4_send_data_before>
         <observers>

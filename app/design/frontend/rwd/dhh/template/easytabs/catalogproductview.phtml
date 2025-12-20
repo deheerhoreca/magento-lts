@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @see Mage_Review_Block_Product_View
  */
 
-use Carbon\CarbonImmutable;
+use \Carbon\CarbonImmutable;
 
 /** @var Mage_Catalog_Model_Product $_product */
 $_product                   = $this->getProduct();
@@ -764,13 +764,14 @@ $hlstr = "";
 foreach($highlights as $key => $highlight) {
   $name = $highlight["name"] ?? $highlight["title"];
   if(!empty($name)) $name .= ":";
-  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' alt='{$highlight["title"]}' loading=lazy width=40 height=40><span class='value'>{$highlight["text"]}</span></li>".PHP_EOL;
+  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' alt='{$highlight["title"]}' loading=lazy width=40 height=40><span class='value'>{$highlight["text"]}</span></li>";
 }
 
 // Retrieve cross sell product collection
 Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_GET_CROSSSELL_SKUS");
 $cross_sell_ids = $_product->getCrossSellProductIds();
 if(sizeof($cross_sell_ids) > 0) {
+  // $_crossSellProducts = $_product->getCrossSellProductCollection();
   $_crossSellProducts = Mage::getResourceModel("catalog/product_collection")
     ->addAttributeToFilter("entity_id", ["in" => $cross_sell_ids])
     ->addAttributeToFilter("eol", ["neq" => 2075])
@@ -780,7 +781,7 @@ if(sizeof($cross_sell_ids) > 0) {
 }
 Varien_Profiler::stop("DHH_PRODUCT_DETAILVIEW_GET_CROSSSELL_SKUS");
 
-$additional_attributes = getOmDhhUtilHelper()->markdownExtraToHtml($_product->getData("additional_attributes"));
+$additional_attributes = (string) getOmDhhUtilHelper()->markdownExtraToHtml($_product->getData("additional_attributes"));
 
 /* PRODUCT DESCRIPTION */
 
@@ -836,16 +837,16 @@ if(empty($alternative_products_block) && empty($related_products_block)) {
 }
 
 /* ANCHOR LINKS */
-if(!empty($pvideo))                        $anchors["video"]               = "Productvideo";
-if(strlen($product_description) > 10)               $anchors["description"]         = "Productbeschrijving";
-if(!empty($_crossSellProducts))            $anchors["accessoires"]         = "Vaak samen gekocht";
-if(!empty($alternative_products_block))    $anchors["alternatives"]        = "Alternatieven";
-if(!empty($product_additional_data_block)) $anchors["specs"]               = "Specificaties";
-if(strlen((string) $additional_attributes) > 10)    $anchors["additional"]          = "Extra Productinformatie";
-if(!empty($files))                         $anchors["documents"]           = "Downloads";
-if(!empty($external_documents_json))       $anchors["external-documents"]  = "Externe Downloads";
-if(!empty($upsell_products_block))         $anchors["upsells"]             = "Bekijk ook eens";
-if(!empty($related_products_block))        $anchors["related"]             = "Gerelateerde producten";
+if(!empty($pvideo))                        $anchors["video"]                = "Productvideo";
+if(strlen($product_description) > 10)      $anchors["description"]          = "Productbeschrijving";
+if(!empty($_crossSellProducts))            $anchors["accessoires"]          = "Vaak samen gekocht";
+if(!empty($alternative_products_block))    $anchors["alternatives"]         = "Alternatieven";
+if(!empty($product_additional_data_block)) $anchors["specs"]                = "Specificaties";
+if(strlen($additional_attributes) > 10)    $anchors["additional"]           = "Extra Productinformatie";
+if(!empty($files))                         $anchors["documents"]            = "Downloads";
+if(!empty($external_documents_json))       $anchors["external-documents"]   = "Externe Downloads";
+if(!empty($upsell_products_block))         $anchors["upsells"]              = "Bekijk ook eens";
+if(!empty($related_products_block))        $anchors["related"]              = "Gerelateerde producten";
 
 $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
 
@@ -860,16 +861,16 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
 // }
 
 /* START RENDERING */ ?>
-<script>var optionsPrice = new Product.OptionsPrice(<?= $this->getJsonConfig() ?>);</script>
-<div id="messages_product_view"><?= $this->getMessagesBlock()->toHtml() ?></div>
+<script>var optionsPrice = new Product.OptionsPrice(<?=$this->getJsonConfig() ?>);</script>
+<div id="messages_product_view"><?=$this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
   
   <?php /* PRODUCT IMAGES */ ?>
   <div class="proleftdv">
     <div class="product-name">
-      <h1 class="m-0 p-2"><?= $productTitle ?></h1>
-      <div class="float-left"><a href="<?= $brand_link ?>"><?= $brand_name ?></a></div>
-      <?= $this->getReviewsSummaryHtml($_product, "short", false) ?>
+      <h1 class="m-0 p-2"><?=$productTitle ?></h1>
+      <div class="float-left"><a href="<?=$brand_link ?>"><?=$brand_name ?></a></div>
+      <?=$this->getReviewsSummaryHtml($_product, "short", false) ?>
     </div>
     
     <div class="product-img-box">
@@ -904,9 +905,9 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       <div class="product-shop">
         
         <?php /* Add to Cart Block */ ?>
-        <form action="<?= $this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-          <?= $this->getBlockHtml("formkey") ?>
-          <input type="hidden" name="product" value="<?= $_product->getId() ?>" />
+        <form action="<?=$this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+          <?=$this->getBlockHtml("formkey") ?>
+          <input type="hidden" name="product" value="<?=$_product->getId() ?>" />
           <input type="hidden" name="related_product" id="related-products-field" value="" />
           <div class="prodetailtopright"><?php
             echo $this->getChildHtml("alert_urls");
@@ -931,22 +932,22 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
               
               // Configurable products              
               if($saleable === true && $this->hasOptions()) { ?>
-                <?= $this->getChildChildHtml("container1", "", true, true) ?>
+                <?=$this->getChildChildHtml("container1", "", true, true) ?>
                 <div class="add-to-box">
                   <div class="price-info">
                       <div class="d-none"><?php // The _clone version needs to be present for JS update to work, but we don"t want it shown ?>
-                        <?= $this->getlayout()->createBlock("catalog/product_view")->setTemplate("catalog/product/view/price_clone.phtml")->toHtml() ?>
+                        <?=$this->getlayout()->createBlock("catalog/product_view")->setTemplate("catalog/product/view/price_clone.phtml")->toHtml() ?>
                       </div>
-                      <?= $this->getPriceHtml($_product) ?>
-                      <?= $this->getChildHtml("bundle_prices") ?>
-                      <?= $this->getTierPriceHtml() ?>
+                      <?=$this->getPriceHtml($_product) ?>
+                      <?=$this->getChildHtml("bundle_prices") ?>
+                      <?=$this->getTierPriceHtml() ?>
                   </div>
-                  <?= $buyblock_free_delivery_content ?>
-                  <?= $this->getChildHtml("addtocart") ?> 
-                  <?= $this->getChildHtml("addto") ?>
+                  <?=$buyblock_free_delivery_content ?>
+                  <?=$this->getChildHtml("addtocart") ?> 
+                  <?=$this->getChildHtml("addto") ?>
                 </div><?php
                 
-                if($eol === true) {
+                if($eol) {
                   echo "<div>Dit product is helaas niet meer leverbaar.</div>";
                   if(!empty($eol_text)) {
                     echo "<div class=eol_text>{$eol_text}</div>";
@@ -1025,7 +1026,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                     </div><?php
                   }
                   
-                  // @todo Create function to get back running promos (With date check)
+                  // @todo Create function to get back running promos (With date check). Use in autoproductlabels() too
                   if(!$hasSpecialPrice && sis(["diamond"], $supplier_sys) && $productlabel === "5% Kortingscode") { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/<?=$brand_slug?>.png" class="card-img-top px-5" alt="Coupon Code">
@@ -1047,6 +1048,19 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                       </div>
                     </div><?php
                   }
+                  
+                  if($now->isBefore("2026-01-01 00:00:00")) { ?>
+                    <div class="card mx-auto p-1 mb-2">
+                      <div class="card-body">
+                        <h4 class="card-title">Levering tijdens de <span class="d-inline productdetail__discount">feestdagen</span></h4>
+                        <p class="card-text">Tussen 18 december 2025 en 9 januari 2026 kunnen de levertijden langer zijn in verband met de feestdagen.</p>
+                        <p class="card-text mt-2 fw-light">
+                          <em class="small">De verwachte levertijden hierboven houden rekening met de vakantieperiode. Enkele importeurs, waaronder Combisteel en Hendi, en uiteraard Chefstore.nl, werken door en kunnen dus bijna met dezelfde snelheid leveren.</em>
+                        </p>
+                      </div>
+                    </div><?php
+                  }
+                  
                   echo $this->getChildHtml("addtocart");
                   echo $this->getChildHtml("addto"); ?>
                 </div><?php
@@ -1110,9 +1124,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
         <div class="content center"><?php
           $pvideos = explode(";", (string) $pvideo);
           foreach($pvideos as $video_key) {
-            // $yt_url = getOmDhhUtilHelper()->build_product_video_url($pvideo);
-            // <iframe loading=lazy width="534" height="300" src="< ?=$yt_url? >" allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="border:0;max-width:100%;" frameborder="0" referrerPolicy="strict-origin-when-cross-origin"></iframe>
-            echo getOmDhhUtilHelper()->buildYoutubeIframe(trim((string) $pvideo));
+            echo getOmDhhUtilHelper()->buildYoutubeIframe(trim((string) $video_key));
           } ?>
         </div>
       </div><?php
@@ -1122,7 +1134,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
     if(!empty($hlstr)) { ?>
       <div class="my-3 py-1 pt-1 product-highlight-box center">
         <span class="anchor" id="highlights"></span>
-        <?= "<ul class='product-highlights'>{$hlstr}</ul>" ?>
+        <?="<ul class='product-highlights'>{$hlstr}</ul>" ?>
       </div><?php
     }
     
@@ -1133,14 +1145,13 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
     if(strlen($product_description) > 10) { ?>
       <div class="py-1 std justify" id="product-detail-description">
         <span class="anchor" id="description"></span>
-        <?= $product_description ?>
+        <?=$product_description ?>
       </div><?php
     }
     
     // Cross Sell Products
     if(!empty($_crossSellProducts) && $_crossSellProducts->getSize() > 0) {
-      Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_SHOW_CROSSSELL_SKUS");
-      ?>
+      Varien_Profiler::start("DHH_PRODUCT_DETAILVIEW_SHOW_CROSSSELL_SKUS"); ?>
       <div class="probottomdv">
         <div class="topproducts_containter">
           <span class="anchor" id="accessoires"></span>
@@ -1178,7 +1189,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
     if(!empty($alternative_products_block)) { ?>
       <span class="anchor" id="alternatives"></span>
       <div class="probottomdv">
-        <?= $alternative_products_block ?>
+        <?=$alternative_products_block ?>
       </div><?php
     }
     
@@ -1187,17 +1198,17 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       <div class="probottomdv">
         <span class="anchor" id="specs"></span>
         <div id="product_additional_data">
-          <?= $product_additional_data_block ?>
+          <?=$product_additional_data_block ?>
         </div>
       </div><?php
     }
     
     /* Additional Product Attributes */
-    if(strlen((string) $additional_attributes) > 10) { ?>
-      <h2 class="tableftheader"><?= $this->__("Extra productinformatie") ?></h2>
+    if(strlen($additional_attributes) > 10) { ?>
+      <h2 class="tableftheader"><?=$this->__("Extra productinformatie") ?></h2>
       <div class="probottomdv content product-specs" id="additional-attributes">
         <span class="anchor" id="additional"></span>
-        <div class="std"><?= $additional_attributes ?></div>
+        <div class="std"><?=$additional_attributes ?></div>
       </div><?php
     }
     
@@ -1206,7 +1217,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       $helper = $this->helper("staempfli_productattachment");
       $upload_dir = Mage::getBaseUrl("media").$helper::UPLOAD_DIR;
       ?>
-      <h2 class="tableftheader"><?= $this->__("Documenten") ?></h2>
+      <h2 class="tableftheader"><?=$this->__("Documenten") ?></h2>
       <div class="probottomdv" id="product-documents-list">
         <span class="anchor" id="documents"></span>
         <ul class="fa-ul">
@@ -1240,7 +1251,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       $external_documents = json_decode((string) $external_documents_json, true);
       // dump($external_documents);
       ?>
-      <h2 class="tableftheader"><?= $this->__("Externe Documenten") ?></h2>
+      <h2 class="tableftheader"><?=$this->__("Externe Documenten") ?></h2>
       <div class="probottomdv" id="product-external-documents-list">
         <span class="anchor" id="external-documents"></span>
 
@@ -1271,7 +1282,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                 $language       = strtoupper(" (".implode(", ", (array) $language).")");
               }
               echo "<li style='line-height:2.5em;'>";
-              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer ugc'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              echo "<a title='{$name}' class='document-link' href='{$url_encrypted}' target='_blank' rel='noopener noreferrer ugc'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>";
               echo "</li>";
             }
           }
@@ -1307,7 +1318,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                 // }
               // }
               // echo "<li style='line-height:2.5em;'>";
-              // echo "<a title='{$name}' class='document-link' href='{$document_url}' target='_blank' rel='noopener noreferrer'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>".PHP_EOL;
+              // echo "<a title='{$name}' class='document-link' href='{$document_url}' target='_blank' rel='noopener noreferrer'><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}{$language}<i style='margin-left: 5px; font-size: 80%; vertical-align: super;' class='fa fa-external-link' aria-hidden='true'></i></a>";
               // echo "</li>";
             // }
           // }
@@ -1316,36 +1327,23 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       </div>
     <?php }
     
-    /* Automatic Related Products */
+    // Upsell products OR (Automatic) Related Products
     if(!empty($upsell_products_block)) {
       ?>
       <span class="anchor" id="upsells"></span>
       <div class="probottomdv">
-        <?= $upsell_products_block ?>
+        <?=$upsell_products_block ?>
       </div>
       <?php
     }
     
-    /* Related Products */
-    if(!empty($related_products_block)) {
-      ?>
+    // Related Products
+    if(!empty($related_products_block)) { ?>
       <span class="anchor" id="related"></span>
-      <div class="probottomdv">
-        <?= $related_products_block ?>
-      </div>
+      <div class="probottomdv"><?=$related_products_block?></div>
     <?php }
 
-    /* Brand Logo & Text */
-    
-    // if(strlen($brand_block_html) > 10) { // sometimes it's just &nbsp;
-      // 
-      // <div class="probottomdv" id="product-brand-text">
-      // <span class="anchor" id="brand"></span>
-      // <h3 class="tableftheader">Over $brand_name</h3>
-      // <div class="brand std justify">$brand_block_name</div>
-      // 
-    // }
-    
+    // Brand Logo & Text
     if(!empty($brand_logo)) {
       echo "<div class='center'>";
       echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
@@ -1358,6 +1356,11 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
 <?php
 // schema.org product data -- Called here and removed from layout xml to put it in the footer
 echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/richsnippets/richsnippets_json.phtml")->toHtml();
+
+// Disable full page cache save for products that are end-of-life
+if(isset($eol) && $eol === true) {
+  $GLOBALS["disable_fpc_save"] = true;
+}
 ?>
 
 <script>
@@ -1371,11 +1374,12 @@ echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/ri
       if (url) {
         form.action = url;
       }
+      
       var e = null;
       try {
         this.form.submit();
-      } catch (e) {
-      }
+      } catch (e) {}
+      
       this.form.action = oldUrl;
       if (e) {
         throw e;
@@ -1386,89 +1390,75 @@ echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/ri
       }
     // }
   }.bind(productAddToCartForm);
-
+  
   productAddToCartForm.submitLight = function(button, url){
-    // if(typeof Validation !== 'function' || this.validator) {
-      // var nv = Validation.methods;
-      // delete Validation.methods['required-entry'];
-      // delete Validation.methods['validate-one-required'];
-      // delete Validation.methods['validate-one-required-by-name'];
-      // // Remove custom datetime validators
-      // for (var methodName in Validation.methods) {
-        // if (methodName.match(/^validate-datetime-.*/i)) {
-          // delete Validation.methods[methodName];
-        // }
-      // }
-      // if (this.validator.validate()) {
-        if (url) {
-            this.form.action = url;
-        }
-        this.form.submit();
-      // }
-      // Object.extend(Validation.methods, nv);
-    // }
+    if (url) {
+      this.form.action = url;
+    }
+    this.form.submit();
   }.bind(productAddToCartForm);
-  //]]>
-  <?php
+  //]]><?php
   if($javascripts !== []) {
     foreach($javascripts as $javascript_statement) {
-      echo $javascript_statement.PHP_EOL.PHP_EOL;
+      echo $javascript_statement;
     }
-  }
-  ?>
-</script>
+  } ?>
+</script><?php
 
-<?php
-// if(function_exists("sanitizeForFilename") === false) {
-//   function sanitizeForFilename($string) {
-//     $output = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', (string) $string);
-//     $output = mb_ereg_replace("([\.]{2,})", '', (string) $string);
-//     return strtolower($output);
-//   }
-// }
-
-function _print_configurable_table($_product) {
-  $children = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $_product);
+/**
+ * Print a table of configurable product options
+ *
+ * @param  mixed $_product
+ */
+function _print_configurable_table($_product): string {
+  $children = Mage::getModel("catalog/product_type_configurable")->getUsedProducts(null, $_product);
   $table = [];
-
+  
   // Get a list of attributes that are used in this configurable product
   $_attributes = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
   $used_conf_attributes = [];
   foreach($_attributes as $_attribute) {
     $used_conf_attributes[$_attribute["label"]] = $_attribute["attribute_code"];
   }
-
-  foreach ($children as $_child) {
+  
+  foreach($children as $_child) {
     $stock_data = getOmDhhUtilHelper()->getStockInfo($_child);
     $row = ["SKU" => $_child->getSku()];
     foreach($used_conf_attributes as $label => $code) {
       $row[$label] = $_child->getAttributeText($code);
     }
-    $row["Voorraad"] = "<div class='{$stock_data['txtcltcz']}'>{$stock_data["stock_message"]}</div>";
+    $row["Voorraad"] = "<div class=\"{$stock_data["txtcltcz"]}\">{$stock_data["stock_message"]}</div>";
     $table[] = $row;
   }
-
+  
   return html_table($table);
 }
 
+/**
+ * Generate an HTML table from an array of data
+ *
+ * @param  array $data
+ */
 function html_table(array $data): string {  
-  if(sizeof($data) === 0) return "";
-
+  if(sizeof($data) === 0) {
+    return "";
+  }
+  
   $rows = $cells = [];
-
   $cols = array_keys(array_slice($data, 0, 1)[0]);
-
+  
   foreach($cols as $col) {
     $cells[] = "<th>{$col}</th>";
   }
-  $head = "<tr>" . implode('', $cells) . "</tr>";
-
-  foreach ($data as $row) {
+  $head = "<tr>".implode("", $cells)."</tr>";
+  
+  foreach($data as $row) {
     $cells = [];
-    foreach ($row as $cell) {
+    foreach($row as $cell) {
       $cells[] = "<td>{$cell}</td>";
     }
-    $rows[] = "<tr>" . implode('', $cells) . "</tr>";
+    $rows[] = "<tr>".implode("", $cells)."</tr>";
   }
-  return "<table class='table table-striped table-border'><thead>{$head}</thead><tbody>" . implode('', $rows) . "</tbody></table>";
+  
+  return "<table class=\"table table-striped table-bordered\"><thead>{$head}</thead><tbody>".implode("", $rows)."</tbody></table>";
 }

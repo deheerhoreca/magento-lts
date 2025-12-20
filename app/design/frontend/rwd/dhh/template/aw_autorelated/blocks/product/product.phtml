@@ -1,39 +1,29 @@
 <?php
-$abstractBlock = $this->helper('awautorelated')->getAbstractProductBlock();
-$collection    = $this->getCollection();
+$abstractBlock  = $this->helper('awautorelated')->getAbstractProductBlock();
+$collection     = $this->getCollection();
+$_columnCount   = 3;
+$i              = 0;
+$max_items      = $_columnCount;
 
-$_columnCount = 3;
-$i            = 0;
-$max_items    = $_columnCount;
-
-if(empty($collection) === false) {
-  // if(_dhh_debug()) {
-    // printr(_dhh_getselect($this->_collection));
-  // }
-  Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection);
-  ?>
+if(!empty($collection)) {
+  Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection); ?>
   <div id="autorelated-products" class="product-collateral category-products">
-    <?php
-    echo "<h2 class='tableftheader'>Bekijk ook eens</h2>";
-    echo "<ul class='products-grid products-grid-mini'>";
-    foreach($collection as $_product) {
-      if($i === $max_items) break;
-      $i++;
-      ?>
-      <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
-        <?php
-        $options = [
-          "image_size"              => 125,
-          "_blank"                  => false,
-          "use_short_product_names" => true,
-          "display"                 => "mini",
-          "skip_actions"            => true,
-        ];
-        echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $abstractBlock, $options);
-      echo "</li>";
-    }
-    ?>
-  </ul></div>
-  <?php
+    <h2 class='tableftheader'>Bekijk ook eens</h2>
+    <ul class='products-grid products-grid-mini'><?php
+      foreach($collection as $_product) {
+        if($i === $max_items) break;
+        $i++; ?>
+        <li class="item"><?php
+          $options = [
+            "image_size"              => 125,
+            "_blank"                  => false,
+            "use_short_product_names" => true,
+            "display"                 => "mini",
+            "skip_actions"            => true,
+          ];
+          echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $abstractBlock, $options); ?>
+        </li><?php
+      } ?>
+    </ul>
+  </div><?php
 }
-?>

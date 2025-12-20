@@ -164,10 +164,15 @@
     # RewriteRule ^/(media|skin|js)/(.+)\.(ts\d{10})\.(js|css|png|jpeg|jpg|gif|webp|avif|eco|min\.svg|svg)$ /$1/$2.$3 [L]
 
     # Redirect catalog URLs -- https://htaccess.madewithlove.com
+    # 1. Change the URL key of a category without a "permanent redirect"
+    # 2. Products and category work immediately
 
-    # 2025-10-22:  /koelingen/vrieskasten  =>  /koelingen/horeca-vriezers
+    # /koelingen/vrieskasten*  =>  /koelingen/horeca-vriezers*
     Redirect 301 /koelingen/vrieskasten.html /koelingen/horeca-vriezers.html
     RewriteRule "^/?koelingen/vrieskasten/(.+)$" "/koelingen/horeca-vriezers/$1" [R=301,L]
+    
+    Redirect 301 /koelingen/ijsblokjesmachines/crushed-ijs.html /koelingen/ijsblokjesmachines/crushed-ice-machines.html
+    RewriteRule "^/?koelingen/ijsblokjesmachines/crushed-ijs/(.+)$" "/koelingen/ijsblokjesmachines/crushed-ice-machines/$1" [R=301,L]
 
 ########################################################################################
 ## END DHH

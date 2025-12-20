@@ -13,26 +13,22 @@ if($collection->count()) {
     "skip_actions"            => true,
     "fast_stock"              => true,
   ];
+  
   if(!isset($options["fast_stock"]) || $options["fast_stock"] === false) {
     Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection);
   }
   // @todo ???
-  Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection);
-  ?>
+  Mage::getModel('cataloginventory/stock')->addItemsToProducts($collection); ?>
   <div id="related-products" class="product-collateral category-products">
-    <?php
-    echo "<h2 class='tableftheader'>Gerelateerde Producten</h2>";
-    echo "<ul class='products-grid products-grid-mini'>";
-    foreach($collection as $_product) {
-      if($i === $max_items) break;
-      $i++;
-      ?>
-      <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
-        <?php
-        echo Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options);
-      echo "</li>";
-    }
-    ?>
-  </ul></div>
-  <?php
+    <h2 class='tableftheader'>Gerelateerde Producten</h2>
+    <ul class='products-grid products-grid-mini'><?php
+      foreach($collection as $_product) {
+        if($i === $max_items) break;
+        $i++; ?>
+        <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
+          <?=getOmDhhUtilHelper()->getProductGridHtml($_product, $this, $options)?>
+        </li><?php
+      } ?>
+    </ul>
+  </div><?php
 }

@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 $output = __DIR__."/freshdesk-webhook.ndjson";
-
-$json = file_get_contents("php://input");
-$data = json_decode($json, true);
-
-$data = [
+$json   = file_get_contents("php://input");
+$data   = json_decode($json, true);
+$data   = [
   "@timestamp"    => date("c"),
   "remote_addr"   => $_SERVER['REMOTE_ADDR'],
   "forwarded_for" => ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? null),
@@ -14,7 +14,6 @@ $data = [
 ];
 
 // Store event in log
-// print_r($json);
 $json = json_encode($data).PHP_EOL;
 
 try {

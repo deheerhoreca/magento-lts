@@ -6,12 +6,12 @@
         </DeHeerHoreca_Customer>
     </modules>
     <global>
-       <models>
-          <customer>
-              <rewrite>
-                  <customer>DeHeerHoreca_Customer_Model_Customer</customer>
-              </rewrite>
-          </customer>
-       </models>
+        <models>
+            <customer>
+                <rewrite>
+                    <customer>DeHeerHoreca_Customer_Model_Customer</customer>
+                </rewrite>
+            </customer>
+        </models>
     </global>
 </config>

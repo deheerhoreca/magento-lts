@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use \Chefstore\Helper as ChefstoreHelper;
+use \Brick\VarExporter\VarExporter;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
@@ -475,6 +476,63 @@ if(!function_exists("array_to_table")) {
   }
 }
 
+/**
+ * Tiny dumps a variable in a condensed format.
+ *
+ * @see https://github.com/brick/varexporter
+ *
+ * @param  mixed    $input
+ * @param  boolean  $return
+ * @param  boolean  $inline
+ *
+ * @return string|null
+ */
+if(!function_exists("td")) {
+  function td(mixed $input, bool $return = false, bool $inline = false): string|null {
+    $flags = $inline ? VarExporter::INLINE_ARRAY : VarExporter::INLINE_SCALAR_LIST;
+    try {
+      $var = Str::swap([
+        "  '"     => "  \"",
+        "', '"    => "\", \"",
+        "' => '"  => "\" => \"",
+        "' => "   => "\" => ",
+        " => '"   => " => \"",
+        "['"      => "[\"",
+        "']"      => "\"]",
+        "null"    => "NULL",
+      ], VarExporter::export($input, $flags));
+    } catch (ExportException $e) {
+      logger("Failed to TinyDump: {$e->getMessage()}", "ERROR");
+      return null;
+    }
+    
+    if($return) {
+      return $var;
+    }
+    printr($var);
+    
+    return null;
+  }
+}
+
+/**
+ * Return compact dump inline as a string. Supports direct values or a key to mimic data_*() functions.
+ *
+ * @param mixed        $input    The variable to dump, or an array/object to get the value from via $key
+ * @param string|null  $key      Optional key to get from $input if it's an array or ArrayAccess, supports dot notation
+ * @param mixed        $default  Optional value if the key is not found, defaults to NULL
+ * 
+ * @return string
+ */
+if(!function_exists("di")) {
+  function di(mixed $input, ?string $key = null, mixed $default = null): string {
+    if(filled($key) && ($input instanceof ArrayAccess || is_array($input))) {
+      $input = dg($input, $key, $default);
+    }
+    return td($input, true, true);
+  }
+}
+
 /* ---------------------------------------------------------- Utils ----------------------------------------------------------- */
 
 if(function_exists("_get_product_attribute") === false) {
@@ -604,27 +662,71 @@ if(function_exists("_getAlternativeEans") === false) {
   }
 }
 
-// Generate a HTML img tag for a cloudflare image
-// Exists in OpenMage and Intel:
-// - app/code/local/DeHeerHoreca/Util/Helper/Util.php
-// - lib/intel.inc.php
-if(function_exists("_cdn_img") === false) {
-  function _cdn_img(array $options) {
-    $url        = $options["url"]       ?? false;
-    $url        = (string) htmlspecialchars((string) $url);
+if(!function_exists("_cdn_img")) {
+  /**
+   * Generates an <img> tag or just the URL for an image served via a CDN with specified transformations.
+   *
+   * Exists in OpenMage and Intel, keep aligned:
+   * - openmage/lib/Chefstore/functions.php
+   * - intel/lib/intel.inc.php
+   *
+   * HTML generation options:
+   * ----------------------------------------------------------------------------------------------------------------------------
+   * "url"           : (string)    The base URL of the image. (required)
+   * "identifier"    : (string)    An identifier used for cache busting.
+   * "cdn"           : (string)    The CDN to use. Options: "none", "imagekit", "imagekit_custom". Default: "imagekit_custom"
+   * "fs_path"       : (string)    The filesystem path to the image, used for adding modification time as cache buster.
+   * "add_mod_time"  : (bool)      Whether to add the file modification time as a cache buster. Default: false.
+   * "alt"           : (string)    The alt text for the image. Default: the URL.
+   * "id"            : (string)    The id attribute for the <img> tag.
+   * "format"        : (string)    The desired image format. Default: "auto".
+   * "url_only"      : (bool)      If true, only the URL is returned instead of an <img> tag. Default: false.
+   * "relative_url"  : (bool)      If true, the base URL (domain name) is removed from the image URL. Default: false.
+   * "2x"            : (bool)      Whether to include a 2x resolution image in the srcset attributes
+   * "lazy"          : (bool)      Whether to add loading="lazy" attribute. Default: false.
+   * "class"         : (string)    Additional CSS classes for the <img>
+   * "style"         : (string)    Additional inline styles for the <img>
+   *
+   * ImageKit URL options:
+   * ----------------------------------------------------------------------------------------------------
+   * "xform"         : (string)    Named transformation to use (overrides other ImageKit URL options)
+   * "width"         : (int)       The desired width of the image.
+   * "height"        : (int)       The desired height of the image.
+   * "fit"           : (string)    How the image should fit within the specified dimensions.
+   *                               Options: "scale-down", "contain", "scale-up". Default: "scale-down".
+   * "quality"       : (int)       The desired image quality (1-100). Default: 75.
+   *
+   *
+   * Named transformations are preferred at all times, for higher cache hit rates in CDN and ImageKit and browsers.
+   * ----------------------------------------------------------------------------------------------------------------------------
+   * Named transform	        Actual transform string
+   * ----------------------------------------------------------------------------------------------------------------------------
+   * ik_ml_thumbnail          tr:w-440,h-440,fo-center,cm-pad_resize
+   * omcatprdlstfr            tr:w-125,h-125,q-75,c-at_max
+   * omcatprdlst              tr:w-200,h-200,q-75,c-at_max
+   * omcatctglst              tr:w-140,h-140,q-80,c-at_max
+   * omcatprddtlt             tr:w-172,h-400,q-75,c-at_max_enlarge
+   * omcatprddtlf             tr:w-2048,h-2048,q-80,c-at_max_enlarge
+   * ombrndlgos               tr:w-140,h-40,cm-pad_resize
+   * omexfull                 tr:w-1536,h-1536,q-80,c-at_max_enlarge
+   * logosmall                tr:w-210,h-60,c-at_max
+   *
+   * @param array $options
+   *
+   * @return string|false
+   */
+  function _cdn_img(array $options): string|false {
+    $url = htmlspecialchars((string) ($options["url"] ?? ""));
     
-    if($url === false) {
+    if(blank($url)) {
       return false;
     }
     
-    // $options["cm"]
-    
-    $identifier     = $options["identifier"]    ?? "NO_ID";
-    $options["cdn"] ??= "imagekit_custom";
-    $fs_path        = $options["fs_path"]       ?? null;
+    $identifier       = $options["identifier"] ?? "NO_ID";
+    $fs_path        = (string) data_get($options, "fs_path", "");
     $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
-    $width          = $options["width"]         ?? 0;
-    $height         = $options["height"]        ?? 0;
+    $width          = $options["width"]         ?? null;
+    $height         = $options["height"]        ?? null;
     $alt            = $options["alt"]           ?? $url;
     $id             = $options["id"]            ?? "";
     $fit            = $options["fit"]           ?? "scale-down";
@@ -636,10 +738,9 @@ if(function_exists("_cdn_img") === false) {
     $lazy           = $options["lazy"]          ?? false;
     $class          = $options["class"]         ?? "";
     $style          = $options["style"]         ?? "";
+    $namedXform     = dg($options, "xform", null);
     
-    $cdn            = (string)  $options["cdn"];
-    $width          = (int)     $width;
-    $height         = (int)     $height;
+    $cdn            = (string)  dg($options, "cdn", "imagekit");
     $alt            = (string)  $alt;
     $id             = (string)  $id;
     $fit            = (string)  $fit;
@@ -682,42 +783,55 @@ if(function_exists("_cdn_img") === false) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
     if($add_mod_time && strlen((string) $fs_path) > 0) {
-      // $url = _add_file_v_param($url, $fs_path, $identifier);
-      if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
+      if(defined("APP_SHORT") && APP_SHORT === "intel" && is_file($fs_path) && $mtime = filemtime($fs_path)) {
         $url = Chefstore\CacheBuster::prependExtension($url, "ts{$mtime}");
+      } else {
+        if(function_exists("_add_file_v_param")) {
+          $url = _add_file_v_param($url, $fs_path, $identifier);
+        } else {
+          $url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path, $identifier);
+        }
       }
     }
     
+    $src_url = "";
+    
+    $widthAttr  = ($width > 0) ? "width=\"{$width}\"" : "";
+    $heightAttr = ($height > 0) ? "height=\"{$height}\"" : "";
+    
     switch($cdn) {
-      
       case "none":
         $src_url = $url;
-        $html = "<img src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        $html = "<img src=\"{$url}\" {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
         break;
       
       // @see https://docs.imagekit.io/features/image-transformations
-      // https://ik.imagekit.io/vzc6xuj9l/tr:w-175,h-175,q-75,c-at_max/media/catalog/product/c/o/combisteel-7450.0320-00-b-2f36.jpg?v=1639661476
       case "imagekit":
-        $cdn_base = "//ik.imagekit.io/vzc6xuj9l";
-        $cdn_options  = [
-          "w"           => $width,
-          "h"           => $height,
-        ];
-        if($quality > 0) {
-          $cdn_options["q"] = $quality;
-        }
-        if($fit === "contain" || $fit === "scale-down") {
-          $cdn_options["c"] = "at_max";                     // max-size crop
-        }
-        if($fit === "scale-up") {
-          $cdn_options["c"] = "at_max_enlarge";             // max-size crop
-        }
-        $cdn_options_string   = "tr:".implode_array_with_keys($cdn_options, ",", "-");
-        $url                  = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
-        $src_url              = "{$cdn_base}/{$cdn_options_string}/{$url}";
+      case "imagekit_custom":
+        $cdn_base = "//images.chefstore.nl";
         
-        // Either use 2x the resolution
-        if($include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
+        // A named transformation takes precedence over individual options
+        if(filled($namedXform)) {
+          $cdn_options_string = "tr:n-{$namedXform}";
+        } else {
+          $cdn_options = ["w" => $width, "h" => $height];
+          if($quality > 0) $cdn_options["q"] = $quality;
+          if($fit === "contain" || $fit === "scale-down") {
+            $cdn_options["c"] = "at_max";                     // max-size crop
+          }
+          if($fit === "scale-up") {
+            $cdn_options["c"] = "at_max_enlarge";             // max-size crop
+          }
+          $cdn_options_string = "tr:".implode_array_with_keys($cdn_options, ",", "-");
+        }
+        
+        devDump($cdn_options_string);
+        
+        $url      = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
+        $src_url  = "{$cdn_base}/{$cdn_options_string}/{$url}";
+        
+        // Either use 2x the resolution -- only when no named transformation is used
+        if(blank($namedXform) && $include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
           $cdn_options["w"]   *= 2;
           $cdn_options["h"]   *= 2;
           $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
@@ -727,98 +841,9 @@ if(function_exists("_cdn_img") === false) {
           $srcset = "";
         }
         
-        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-      
-      // @see https://docs.imagekit.io/features/image-transformations
-      // "https://images.chefstore.nl/media/catalog/product/haha/saro-423-1400-00-a-933c.jpg?tr=w-326,h-400,q-75,c-at_max_enlarge&v=1656629340"
-      case "imagekit_custom":
-        $cdn_base     = "//images.chefstore.nl";
-        $cdn_options  = [
-          "w"           => $width,
-          "h"           => $height,
-        ];
-        if($quality > 0) {
-          $cdn_options["q"] = $quality;
-        }
-        if($fit === "contain" || $fit === "scale-down") {
-          $cdn_options["c"] = "at_max";                     // max-size crop
-        }
-        if($fit === "scale-up") {
-          $cdn_options["c"] = "at_max_enlarge";             // max-size crop
-        }
-        
-        // cm overrides c
-        if(!empty($options["cm"])) {
-          $cdn_options["cm"] = $options["cm"];
-          if(isset($cdn_options["c"])) {
-            unset($cdn_options["c"]);
-          }
-        }
-        $cdn_options_string   = implode_array_with_keys($cdn_options, ",", "-");
-        $url                  = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
-        $src_base_url         = "{$cdn_base}/{$url}";
-        $src_url              = add_url_param($src_base_url, "tr", $cdn_options_string);
-        
-        // Either use 2x the resolution
-        if($include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
-          $cdn_options["w"]   *= 2;
-          $cdn_options["h"]   *= 2;
-          $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
-          $src_url_2x         = add_url_param($src_base_url, "tr", $cdn_options_string);
-          $srcset             = "srcset=\"{$src_url_2x} 2x\" ";
-        } else {
-          $srcset = "";
-        }
-        
-        $html = "<img src=\"{$src_url}\" {$srcset}width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-      
-      // @see https://docs.optimole.com/article/1872-how-to-use-the-custom-integration-in-optimole
-      case "optimole":
-        $skip_js = true;
-        if($skip_js) {
-          // https://mlwes2arpcu4.i.optimole.com/w:800/h:600/q:85/https://andreeacristinaradacina.github.io/image.png
-          $cdn_base     = "https://mlwes2arpcu4.i.optimole.com/";
-          $cdn_options  = "w:{$width}/h:{$height}/q:{$quality}";
-          $src_url      = "{$cdn_base}{$cdn_options}/{$url}";
-          $html         = "<img src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        } else {
-          $src_url = $url;
-          $html = "<img data-opt-src=\"{$src_url}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        }
-        break;
-      
-      case "cloudflare":
-        // If desiring a relative URL, take out the BaseUrl
-        if($relative_url) {
-          $cdn_base         = "/cdn-cgi/image/";
-        } else {
-          $cdn_base         = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "/")."/cdn-cgi/image/";
-        }
-        $cdn_options_base = "metadata=none,q={$quality},fit={$fit},format={$format}";
-        $cdn_options      = "{$cdn_options_base},width={$width},height={$height}";
-        $src_url          = "{$cdn_base}{$cdn_options}/{$url}";
-        
-        // Either use 2x the resolution, or set dpr=2
-        if($include_2x) {
-          // $width_2x       = $width * 2;
-          // $height_2x      = $height * 2;
-          $width_2x       = $width;
-          $height_2x      = $height;
-          $dpr            = 2;
-          $cdn_options_2x = "{$cdn_options_base},width={$width_2x},height={$height_2x},dpr={$dpr}";
-          $srcset         = "{$cdn_base}{$cdn_options_2x}/{$url} 2x";
-        }
-        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" width=\"{$width}\" height=\"{$height}\" alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
         break;
     }
-    
-    // foreach(array_keys($options) as $option) {
-      // printr("{$option}: ".var_export($$option, true));
-    // }
-    // printr("src_url: ".var_export($src_url, true));
-    // printr(str_repeat("-", 100));
     
     if($url_only) {
       return $src_url;
@@ -972,4 +997,15 @@ function omJsQuoteEscape(string|array $string): string|array {
  */
 function omHtmlEscape(string $string): string {
   return Mage::helper("core")->htmlEscape($string);
+}
+
+/**
+ * Strip newlines and extra spaces from a string.
+ *
+ * @param  string|null $string
+ * @return string|null
+ */
+function omStrStripNewlines(?string $string): string|null {
+  if(is_null($string)) return null;
+  return str_replace(["\r\n", "\n", "\r"], " ", trim($string));
 }

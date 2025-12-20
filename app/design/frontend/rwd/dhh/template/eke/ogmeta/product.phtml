@@ -2,6 +2,8 @@
 
 // declare(strict_types=1);  // @todo
 
+use \Illuminate\Support\Str;
+
 $helper = Mage::helper("eke_ogmeta");
 if(!$helper->isOgMetaEnabled()) {
   return;
@@ -9,7 +11,8 @@ if(!$helper->isOgMetaEnabled()) {
 
 $_product   = Mage::registry("current_product");
 $html       = "";
-$cache_key  = "eke_ogmeta_product_{$_product->getId()}";
+// $cache_key  = "eke_ogmeta_product_{$_product->getId()}";
+$cache_key  = "dhh::og::prd::{$_product->getId()}";
 
 // Serve from cache
 if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta")) {
@@ -26,7 +29,7 @@ if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke
 // Serve fresh
 $dhh_sku              = (string) $_product->getSku();
 $siteName             = (string) $helper->getSiteName();
-$page_title           = (string) $this->getLayout()->getBlock("head")->getTitle();
+$page_title           = Str::limit((string) $this->getLayout()->getBlock("head")->getTitle(), 60, "...", true);
 $final_price          = number_format($_product->getFinalPrice(), 2);
 $product_url          = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
 $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product, ["fastmode" => true]);
@@ -69,11 +72,11 @@ if(empty($image_url)) {
   $image_url = $helper->getOgImage();
 }
 
-// Remove newlines, trim, limit to 200 chars
+// Remove newlines, trim, limit to 160 chars
 $productDescription = (string) Mage::helper("deheerhoreca_util/util")->_get_product_description($_product);
 if($productDescription !== "") {
-  $productDescription = htmlentities(strip_tags($productDescription));
-  $productDescription = substr(trim((string) preg_replace("/\s\s+/", ";", $productDescription)), 0, 200);
+  $productDescription = strip_tags($productDescription);
+  $productDescription = str($productDescription)->stripTags()->squish()->limit(160, "...", true)->toString();
 }
 
 $availability = match($overall_stock_status) {
@@ -104,9 +107,13 @@ $html = <<<EOT
   <meta property="og:description" content="{$productDescription}">
   <meta property="og:price:amount" content="{$final_price}">
   <meta property="og:price:currency" content="EUR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="chefstore.nl">
+  <meta property="twitter:url" content="{$product_url}">
+  <meta name="twitter:title" content="{$page_title}">
+  <meta name="twitter:description" content="{$productDescription}">
+  <meta name="twitter:image" content="https:{$image_url}">
 EOT;
-
-$html .= PHP_EOL;
 
 if($image_attr !== []) {
   if(isset($image_attr['mime'])) $html .= '  <meta property="og:image:type" content="'.$image_attr['mime'].'">'.PHP_EOL;
@@ -123,6 +130,7 @@ if(!empty($productVideo)) {
   }
 }
 
+// $html = omStrStripNewlines($html);
 $html = \Chefstore\Html::minifyHtml($html);
 echo $html;
 
@@ -137,9 +145,7 @@ if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta"
     "DHH_SUPPLIER_{$supplier_sys_upper}",
   ];
   
-  $closure = fn() => DeHeerHoreca_Fpc_Helper_Data::saveToCache($cache_key, $html, $cache_tags, 86400 * 7);
-  \Chefstore\Utils::deferClosure($closure);
-  
+  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $html, $cache_tags, 86400 * 7);
   // if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400 * 7)) {
   //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
   // }

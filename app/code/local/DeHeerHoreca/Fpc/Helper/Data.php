@@ -2,6 +2,7 @@
 
 // declare(strict_types=1); // @todo
 
+use \Chefstore\Utils;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Collection;
 use \Illuminate\Support\Str;
@@ -9,7 +10,12 @@ use \Illuminate\Support\Str;
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 // @todo Use lib/Afterpay/vendor/guzzlehttp/guzzle/src/UriTemplate.php to normalize URLs
+
 // @todo Normalize faulty "?amp%3B": https://www.chefstore.nl/koelingen/koelwerkbanken-saladettes.html?amp%3Bgn_capacity=2537&material_group=2191
+
+// @todo Perhaps just use these methods?
+//    Mage::app()->saveCache();
+//    Mage::app()->cleanCache();
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
@@ -52,7 +58,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return string             The normalized cache URL, ready and hashing
    */
   public static function get_cache_url(?string $url = null): string {
-    $url ??= html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
+    // $url ??= html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
+    $url ??= htmlspecialchars_decode((string) Mage::helper("core/url")->getCurrentUrl(), ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
     
     // List of query parameters that have no consequences for the rendered HTML
     $ignored_url_query_keys = [
@@ -64,9 +71,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       "forcepreload", "forcepreloadonly",                                           // Cloudflare
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
-    
     $url = rtrim($url, "&?/");                // Useless postfixes can be ignored safely
-    
     $url = str_replace("?amp%3B", "?", $url); // Fix faulty encoding
     
     return $url;
@@ -199,14 +204,15 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * 
    * This does NOT check if the cache contains the requested page, only if reading from cache is allowed.
    * 
-   * @param non_anonymous_okay  bool  Switch to check for anonymous requests (cart block, etc.)
-   * @param html_block_mode     bool  For HTML block caching, the controller action is not taken into account
+   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+   * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
+   * @param debug_name          string  Debug name for logging
    *
-   * @return                    bool  TRUE if reading from cache is allowed
+   * @return                    bool    TRUE if reading from cache is allowed
    */
-  public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $html_block_mode = false, string $debug_name = ""): bool {
+  public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $debug_name = ""): bool {
     if(!DHH_FPC_ENABLED) {
-      self::log("Read cache disabled (DHH_FPC_ENABLED): {$debug_name}");
+      self::log("READ disabled (DHH_FPC_ENABLED): {$debug_name}");
       return false;
     }
     
@@ -214,20 +220,20 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])
-    || (!$html_block_mode && is_countable($_GET) && count($_GET) > 2) || self::request_has_no_cache_headers()) {
-      self::log("Read cache disabled (by request header or URL param: {$debug_name}");
+    || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1) || self::request_has_no_cache_headers()) {
+      self::log("READ disabled (by request header or URL param: {$debug_name}");
       return false;
     }
     
     if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
-      self::log("Read cache disabled (REQUEST_METHOD): {$debug_name}");
+      self::log("READ disabled (REQUEST_METHOD): {$debug_name}");
       return false;
     }
     
-    if(!$html_block_mode) {
+    if(!$isHtmlBlock) {
       $om_action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($om_action, self::$om_action_whitelist, true)) {
-        self::log("Read cache disabled (OM action): {$debug_name}");
+        self::log("READ disabled (OM action): {$debug_name}");
         return false;
       }
     }
@@ -238,23 +244,28 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // }
     
     if(!$non_anonymous_okay && self::is_request_anonymous()) {
-      self::log("Read cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
+      self::log("READ disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
       return false;
     }
     
-    self::log("Read cache enabled: {$debug_name}");
+    self::log("READ enabled: {$debug_name}");
     return true;
   }
   
-  /*
+  /**
+   * Determine if the FPC cache is enabled for writing.
+   *
    * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-   * @param html_block_mode     bool    For HTML block caching, the controller action is not taken into account
+   * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
+   * @param debug_name          string  Debug name for logging
+   *
+   * @return                    bool    TRUE if writing to cache is allowed
    */
-  public static function is_write_cache_enabled($non_anonymous_okay = false, $html_block_mode = false, $debug_name = ""): bool {
+  public static function is_write_cache_enabled($non_anonymous_okay = false, $isHtmlBlock = false, $debug_name = ""): bool {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     
     if(!DHH_FPC_ENABLED) {
-      self::log("Write cache disabled (DHH_FPC_ENABLED): {$debug_name}");
+      self::log("WRITE disabled (DHH_FPC_ENABLED): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
@@ -265,41 +276,41 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // - bf         = ???
     // - is_ajax    = Amasty layered nav AJAX request, not cachable yet
     if(isset($_GET["nofpc"]) || isset($_GET["multipass"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
-    || (!$html_block_mode && is_countable($_GET) && count($_GET) > 2)) {
-      self::log("Write cache disabled (URL parameter): {$debug_name}");
+    || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1)) {
+      self::log("WRITE disabled (URL parameter): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
     
-    if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
-      self::log("Write cache disabled (REQUEST_METHOD): {$debug_name}");
+    if(PHP_SAPI !== "cli" && (!in_array($_SERVER["REQUEST_METHOD"], ["GET", "HEAD"]))) {
+      self::log("WRITE disabled (REQUEST_METHOD): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
     
-    if($html_block_mode !== true) {
+    if($isHtmlBlock !== true) {
       $action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($action, self::$om_action_whitelist, true)) {
-        self::log("Write cache disabled (OpenMage action): {$debug_name}");
+        self::log("WRITE disabled (OpenMage action): {$debug_name}");
         Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
         return false;
       }
     }
     
     if(!$non_anonymous_okay && !self::is_request_anonymous()) {
-      self::log("Write cache disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
+      self::log("WRITE disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return false;
     }
     
-    self::log("Write cache enabled: {$debug_name}");
+    self::log("WRITE enabled: {$debug_name}");
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     
     return true;
   }
   
   /**
-   * Create an obfuscated, repeatable, Redis-safe key with optional prefix.
+   * Create an obfuscated, repeatable, Redis-safe key with optional prefix. For whole HTML pages only.
    *
    * @param  ?string  $cache_key_prefix  Optional prefix for the cache key
    * @param  ?string  $url               Optional URL overwrite for debug/development
@@ -307,16 +318,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return string
    */
   public static function get_cache_key(?string $cache_key_prefix = null, ?string $url = null): string {
-    Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     $cache_key_url = self::get_cache_url($url);
-    if(empty($cache_key_prefix)) {
+    if(blank($cache_key_prefix)) {
       $cache_key_prefix = self::get_cache_prefix();
     }
     $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
     $cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
-    self::log("Cache URL: {$cache_key_url}");
-    self::log("Cache URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$cacheKey}");
-    Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+    self::log("URL: {$cache_key_url}");
+    self::log("URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$cacheKey}");
     
     return $cacheKey;
   }
@@ -336,7 +345,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $html     = $_cache->load($key);
     
     if(empty($html)) {
-      self::log("Cache MISS: {$key}");
+      self::log("MISS: {$key}");
       self::_add_server_timing_header("FPC miss: {$key}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return null;
@@ -445,7 +454,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     $html = trim($html);
     $size = mb_strlen($html);
-    self::log("Cache HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
+    self::log("HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
     self::_add_server_timing_header("FPC hit: {$key}");
     self::_emit_server_timing_header();
     
@@ -457,7 +466,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * Save cached HTML, with hole punching.
    *
    * @todo Find a better way to minify HTML, JBZoo?
-   * @todo Shift saving to a core_app_run_after event to prevent synchronous delays
    *
    * @param  string $key                The cache key.
    * @param  string $html               The HTML content to cache.
@@ -525,6 +533,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     // If we detect a whole HTML page (not a partial page), add the cache URL as a comment
+    $cache_url = "";
     if(str_contains($html, "<html") && str_contains($html, "</html>")) {
       $cache_url = self::get_cache_url();
       $html .= "\n<!-- FPC Cache URL: {$cache_url} -->\n";
@@ -534,8 +543,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $cache_tags[] = "DHH_FPC";
     
     // Store in cache
-    if(Mage::app()->getCache()->save($html, $key, $cache_tags, 7 * 86400)) {
-      self::log("Cache: SAVED {$key}, ".mb_strlen((string) $html)." chars");
+    if(self::saveToCacheDeferred($key, $html, $cache_tags, 7 * 86400, minifyHtml: false)) {
       self::_add_server_timing_header("FPC saved: {$key}");
       self::_emit_server_timing_header();
       $return = true;
@@ -546,25 +554,75 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Generic method (no hole punching) to save data to cache. Use anywhere as deferred closure.
+   * Generic method (no hole punching) to save data to cache. Not meant for full HTML pages.
    *
    * @param  string  $key         The cache key.
    * @param  mixed   $data        The data to cache.
    * @param  array   $cache_tags  Cache tags for invalidation.
    * @param  int     $lifetime    Cache lifetime in seconds.
+   * @param  bool    $minifyHtml  Whether to conservatively minify as HTML before saving.
    *
-   * @return bool
+   * @return bool    TRUE if saving to cache was successful.
    */
-  public static function saveToCache(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400): bool {
+  public static function saveToCache(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): bool {
     Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
     
+    if($minifyHtml === true && is_string($data)) {
+      $data = \Chefstore\Html::minifyHtml($data);
+    }
+    
     if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
-      self::log("Cache: SAVED {$key}");
+      self::log("SAVED {$key}");
       $return = true;
     }
     
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
     return $return ?? false;
+  }
+  
+  /**
+   * Generic method (no hole punching) to save data to cache, after the response is sent. Not meant for full HTML pages.
+   *
+   * @param  string  $key         The cache key.
+   * @param  mixed   $data        The data to cache.
+   * @param  array   $cache_tags  Cache tags for invalidation.
+   * @param  int     $lifetime    Cache lifetime in seconds.
+   * @param  bool    $minifyHtml  Whether to conservatively minify as HTML before saving.
+   *
+   * @return true    The deferred saving was scheduled.
+   */
+  public static function saveToCacheDeferred(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): true {
+    Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
+    
+    $closure = fn() => self::saveToCache($key, $data, $cache_tags, $lifetime, $minifyHtml);
+    Utils::deferClosure($closure);
+    self::log("(Deferred) SAVE {$key}");
+    
+    Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    return true;
+  }
+  
+  /**
+   * Clean cache entries by their tags, after the response is sent.
+   * 
+   * @param  array  $cache_tags  The cache tags to clean by.
+   * @return true                The deferred cleaning was scheduled.
+   */
+  public static function cleanCacheByTagsDeferred(array $cache_tags): true {
+    Varien_Profiler::start("DHH::FPC::".__METHOD__);
+    
+    if(empty($cache_tags)) {
+      Mage::log("No cache tags provided to ".__METHOD__, Zend_Log::WARN);
+      Varien_Profiler::stop("DHH::FPC::".__METHOD__);
+      return true;
+    }
+    
+    $closure = fn() => self::clean_by_tags($cache_tags);
+    Utils::deferClosure($closure);
+    self::log("(Deferred) CLEAN tags: ".di($cache_tags), Zend_Log::INFO);
+    
+    Varien_Profiler::stop("DHH::FPC::".__METHOD__);
+    return true;
   }
   
   /**
@@ -667,7 +725,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     $GLOBALS["dhh_header_server_timing"] ??= [];
     if(!empty($GLOBALS["dhh_header_server_timing"])) {
-      header("Server-Timing: ".implode("; ", (array) $GLOBALS["dhh_header_server_timing"]));
+      header("Server-Timing: ".di($GLOBALS["dhh_header_server_timing"]));
       unset($GLOBALS["dhh_header_server_timing"]);
       return true;
     }
@@ -686,16 +744,18 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public static function clean_by_tags(string|array $cache_tags): bool {
     // Prepend with e6b_ if needed. Redis library does NOT do this.
     $cache_tags = Arr::map((array) $cache_tags, fn($tag) => Str::start($tag, "e6b_"));
+    $cache_tags = array_values(array_unique($cache_tags)); // In mass updates, might have duplicates
+    self::log("CLEAN tags: ".di($cache_tags), Zend_Log::INFO);
     
     // ! without getBackend() it does not work!
     if(DHH_FPC_DEBUG) {
       $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
-      Mage::log("Cleaning cache tags: ".var_export($cache_tags, true).". Matched keys: ".var_export($cache_keys, true), Zend_Log::DEBUG, "verbose.txt", true);
+      self::log("CLEAN tags: ".di($cache_tags).". Matched keys: ".di($cache_keys), Zend_Log::INFO);
     }
     
     $response = Mage::app()->getCache()->getBackend()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $cache_tags);
     if(DHH_FPC_DEBUG) {
-      Mage::log("Response: ".var_export($response, true), Zend_Log::DEBUG, "verbose.txt", true);
+      self::log("Response: ".di($response), Zend_Log::INFO);
     }
     
     return $response;

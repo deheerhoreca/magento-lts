@@ -275,6 +275,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
             "url_only"          => true,
             "width"             => 2048,
             "height"            => 2048,
+            "omcatprdlst"       => "omcatprdlst",
             "add_mod_time"      => true,
             "relative_url"      => false,
           ];

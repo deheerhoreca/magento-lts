@@ -120,28 +120,21 @@ $html = <<<EOT
         <div class="text-center pt-2 pb-5 fw-light small">© 2017 - 2025 Chefstore.nl | Amsterdam, Nederland | KvK: 69637717</div>
       </div>
     </footer>
-
     <script async type="module">
       import '/skin/assets/glightbox/dist/js/glightbox.ts1741106066.min.js';
       const lightbox = GLightbox({});
       var lightboxInlineIframe = GLightbox({ selector: '.glightbox4' });
     </script>
-
     <script async type="module">
       !function (e, t, n) { var r = e.createElement(t), a = e.getElementsByTagName(t)[0]; r.src = "/js/ext-elastic-apm-rum.umd.ts1741106066.min.js", r.onload = function () { elasticApm.init(n) }, a.parentNode.insertBefore(r, a) }(document, "script", { serviceName: "openmage", serverUrl: "//rum.chefstore.nl:8200", environment: document.querySelector("html").dataset.environment, transactionSampleRate: 0.1, pageLoadTransactionName: document.querySelector("html").dataset.transaction });
     </script>
-
     <script async type="module" id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
     <!-- footer_end -->
 EOT;
+
+$html = \Chefstore\Html::minifyHtml($html);
 echo $html;
 
-// @todo replace with APCu?
-$key = DHH_FPC_FOOTER_KEY; // "DHH_CMS_FOOTER"
 if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
-  if(Mage::app()->getCache()->save($html, $key , ["DHH_CMS"], 24 * 3600)) {
-    DeHeerHoreca_Fpc_Helper_Data::log("Cache: SAVED {$key}, ".mb_strlen($html)." chars");
-  }
-} else {
-  DeHeerHoreca_Fpc_Helper_Data::log("Cache: NOT SAVED {$key}, ".mb_strlen($html)." chars");
+  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred(DHH_FPC_FOOTER_KEY, $html, ["DHH_CMS"], 86400 * 7, minifyHtml: false);
 }

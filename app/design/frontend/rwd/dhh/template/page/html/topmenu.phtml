@@ -1,48 +1,31 @@
 <?php
 
+// ! getHtml() returns FALSE, avoid filled()/blank()
+
 declare(strict_types=1);
 
-$cache_key = DHH_FPC_NAV_KEY;
+$read_cache   = DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "topmenu");
+$write_cache  = DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "topmenu");
+$_html        = "";
 
-// if(!DHH_FPC_ENABLED) {
-//   $write_cache = false;
-//   $read_cache = false;
-// } elseif(isset($_GET['nofpc'])) {
-//   $write_cache = false;
-//   $read_cache = false;
-// } elseif(isset($_GET['refreshfpc'])) {
-//   $write_cache = true;
-//   $read_cache = false;
-// } else {
-//   $write_cache = true;
-//   $read_cache = false;
-// }
-
-// Override above @todo Fix
-$write_cache = true;
-$read_cache = false;
-
-if($read_cache) {
-  $_html = Mage::app()->getCache()->load($cache_key);
-}
-
-if(empty($_html)) {
-  $_html = $this->getHtml("level-top");
-  if($write_cache) {
-    Mage::app()->getCache()->save($_html, $cache_key, ["DHH_CMS"], 3600);
+if(!$read_cache) {
+  $_html = (string) $this->getHtml("level-top");
+} else {
+  $_html = Mage::app()->getCache()->load(DHH_FPC_NAV_KEY);
+  if(empty($_html)) {
+    $_html = (string) $this->getHtml("level-top");
+  } else {
+    $write_cache = false; // No need to write if we read from cache
   }
 }
 
-unset($cache_key);
+if(!empty($_html)) {
+  $_html = \Chefstore\Html::minifyHtml($_html);
+}
 
-?>
-<nav id="nav" class="grid-old navhdwrap">
-  <a href="#header-nav" class="skip-link skip-nav no-decoration">
-    <i class="fa fa-bars fa-2x"></i>
-  </a>
-  <ol id="top-nav" class="nav-primary" style="float: left;">
-    <!-- nav_start -->
-    <?=$_html?>
-    <!-- nav_end -->
-  </ol>
-</nav>
+if($write_cache && !empty($_html)) {
+  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred(DHH_FPC_NAV_KEY, $_html, ["DHH_CMS"], 86400, minifyHtml: false);
+  // Mage::app()->getCache()->save($_html, DHH_FPC_NAV_KEY, ["DHH_CMS"], 86400);
+} ?>
+
+<nav id="nav" class="grid-old navhdwrap"><a href="#header-nav" class="skip-link skip-nav no-decoration"><i class="fa fa-bars fa-2x"></i></a><ol id="top-nav" class="nav-primary" style="float: left;"><!-- nav_start --><?=$_html?><!-- nav_end --></ol></nav>
