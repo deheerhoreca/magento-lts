@@ -1404,7 +1404,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * 
+   * Profile all SQL queries executed during this request and log them to a file.
    */
   function profileSqlQueries(): void {
     Mage::log("At ".__METHOD__, Zend_Log::INFO, "sql_profiler.txt", true);

@@ -48,7 +48,6 @@
     "fballiano/openmage-cssjs-minify": "dev-dhh",
     "firegento/adminmonitoring": "dev-develop",
     "firegento/debug": "^1.5",
-    "hirale/openmage-debug": "^1.0",
     "illuminate/support": "^12",
     "m-michalis/om-translator": "^0.1.4",
     "mathieuviossat/arraytotexttable": "^1.0.11",
@@ -186,7 +185,9 @@
   ],
   "autoload": {
     "files": [
-      "lib/Chefstore/Loader.php"
+      "lib/Chefstore/Loader.php",
+      "vendor/aoepeople/aoe_profiler/app/code/community/Zend/Db/Profiler.php",
+      "vendor/aoepeople/aoe_profiler/app/code/community/Varien/Profiler.php"
     ]
   },
   "minimum-stability": "dev",
