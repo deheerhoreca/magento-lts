@@ -48,6 +48,7 @@
     "fballiano/openmage-cssjs-minify": "dev-dhh",
     "firegento/adminmonitoring": "dev-develop",
     "firegento/debug": "^1.5",
+    "guidance/guidance_simplepage": "^0.4.0",
     "illuminate/support": "^12",
     "m-michalis/om-translator": "^0.1.4",
     "mathieuviossat/arraytotexttable": "^1.0.11",
@@ -158,6 +159,13 @@
       "url": "https://github.com/deheerhoreca/firegento-adminmonitoring",
       "only": [
         "firegento/adminmonitoring"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/sb-nola-radar/Guidance_Simplepage",
+      "only": [
+        "guidance/guidance_simplepage"
       ]
     },
     {

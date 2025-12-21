@@ -157,12 +157,10 @@
     </Afterpay_Afterpay>
     
     <!-- Both profiler modules cannot be enabled at the same time! -->
+    <!-- ! Remember that Aoe_Profiler is invoked directly in composer.json -->
     <Aoe_Profiler>
       <active>true</active>
     </Aoe_Profiler>
-    <Sheep_Debug>
-      <active>false</active>
-    </Sheep_Debug>
     
     <!-- Not used -->
     <TM_CheckoutSuccess>
@@ -178,6 +176,16 @@
     <Raveinfosys_Deleteorder>
       <active>false</active>
     </Raveinfosys_Deleteorder>
+    
+    <!-- Not used - Warning adds 100+ queries to a simple listview - Probably slows down dynamic categories through rewriting Salesrule classes -->
+    <AW_Autorelated>
+      <active>false</active>
+    </AW_Autorelated>
+    
+    <!-- Not woroking, security risk while enabled -->
+    <Elidrissidev_Api2BasicAuth>
+      <active>false</active>
+    </Elidrissidev_Api2BasicAuth>
     
     <!-- Temporarily disable -->
     <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->

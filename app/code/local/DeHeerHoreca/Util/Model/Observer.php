@@ -415,6 +415,16 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     getOmDhhUtilHelper()->logClick();
   }
   
+  /**
+   * Log and profile all SQL queries if the profiler is enabled.
+   * Observes: core_app_run_after.
+   *
+   * @return void
+   */
+  public function profileSqlQueries(): void {
+    getOmDhhUtilHelper()->profileSqlQueries();
+  }
+  
   // Called during placement of an order, to clear tm_field fields
   // These fields need to be cleared during reorder (admin only)
   public function beforeOrderPlace(Varien_Event_Observer $observer): void {

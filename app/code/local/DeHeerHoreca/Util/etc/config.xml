@@ -54,6 +54,17 @@
           </DeHeerHoreca_Util_Model_Observer>
         </observers>
       </core_app_run_after>
+      <!-- Log profiler SQL queries -->
+      <!-- > core_app_run_after will not work for this, the profile data is destroyed by that point or something like that -->
+      <controller_front_send_response_after>
+        <observers>
+          <profile_sql_queries>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>profileSqlQueries</method>
+          </profile_sql_queries>
+        </observers>
+      </controller_front_send_response_after>
     </events>
     <blocks>
       <adminhtml>
@@ -74,16 +85,6 @@
           </reports>
         </observers>
       </catalog_controller_product_view>
-      <!-- Log profiler SQL queries -->
-      <controller_action_postdispatch>
-        <observers>
-          <profile_sql_queries>
-            <type>singleton</type>
-            <class>deheerhoreca_util/observer</class>
-            <method>profileSqlQueries</method>
-          </profile_sql_queries>
-        </observers>
-      </controller_action_postdispatch>
       <!-- Track a click -->
       <core_app_run_after>
         <observers>

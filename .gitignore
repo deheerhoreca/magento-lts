@@ -461,3 +461,7 @@ media
 /app/locale/it_IT/Pay_Payment.csv
 /app/code/local/InternetCode/Translator
 /app/etc/modules/InternetCode_Translator.xml
+/app/code/community/Guidance/Simplepage
+/app/design/frontend/base/default/layout/guidance_simplepage.xml
+/app/design/frontend/base/default/template/guidance_simplepage
+/app/etc/modules/Guidance_Simplepage.xml

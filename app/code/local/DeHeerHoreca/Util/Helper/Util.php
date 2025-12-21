@@ -1404,18 +1404,23 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Profile all SQL queries executed during this request and log them to a file.
+   * Profile SQL queries and log them to a file.
    */
   function profileSqlQueries(): void {
-    Mage::log("At ".__METHOD__, Zend_Log::INFO, "sql_profiler.txt", true);
-    $_profiler = Mage::getSingleton("core/resource")->getConnection("core_read")->getProfiler();
-    if($_profiler->getEnabled()) {
+    if(method_exists('Varien_Profiler', 'isEnabled') && Varien_Profiler::isEnabled() && Varien_Profiler::checkThresholds()) {
+      /** @var Zend_Db_Profiler */
+      $_profiler        = Mage::getSingleton("core/resource")->getConnection("core_read")->getProfiler();
       $totalElapsedSecs = $_profiler->getTotalElapsedSecs();
       $totalElapsedMs   = round($totalElapsedSecs * 1000, 2);
       
-      $output  = "";
-      $output .= "Number of database queries: ".$_profiler->getTotalNumQueries();
-      $output .= "Total time spent on queries: ".$totalElapsedMs." ms";
+      $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
+      $full_url       = omDecodeUrl(Mage::helper("core/url")->getCurrentUrl());
+      $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
+      $urlPath        = ltrim((string) $url->getPath(), "/");
+      $urlQuery       = ltrim((string) $url->getQuery(), "?");
+      $_customer      = Mage::getSingleton('customer/session')->isLoggedIn() ? Mage::getSingleton('customer/session')->getCustomer() : null;
+      $customerId     = $_customer ? $_customer->getId() : null;
+      $customerEmail  = $_customer ? $_customer->getEmail() : null;
       
       $queries = [];
       foreach($_profiler->getQueryProfiles() as $i => $query) {
@@ -1430,7 +1435,31 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         ];
       }
       
-      $output .= "\n\nQueries:\n".print_r($queries, true);
+      $queries = "";
+      foreach($_profiler->getQueryProfiles() as $i => $query) {
+        $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '';
+        /** @var Zend_Db_Profiler_Query $query*/
+        $queries .= "-- [".($i + 1)."] Took ".round($query->getElapsedSecs() * 1000, 2)." ms | Type: ".$query->getQueryType()."\n";
+        $queries .= $query->getQuery()."\n";
+        if(empty($params) === false) {
+          $queries .= "-- PARAMS: ".$params."\n";
+        }
+        $queries .= "-- ----------------------------\n";
+      }
+      
+      $output = PHP_EOL.
+      "-- ============================================ {$urlPath}?{$urlQuery} ============================================\n".
+      "-- Action:       {$action}\n".
+      "-- URL:          {$full_url}\n".
+      "-- Path:         {$urlPath}\n".
+      "-- Query:        {$urlQuery}\n".
+      "-- User ID:      {$customerId}\n".
+      "-- User Email:   {$customerEmail}\n\n".
+      "-- Number of database queries: ".$_profiler->getTotalNumQueries()."\n".
+      "-- Total time spent on queries: ".$totalElapsedMs." ms\n\n".
+      "-- QUERIES:\n".
+      "-- =====================================\n".
+      $queries."\n";
       Mage::log($output, Zend_Log::INFO, "sql_profiler.txt", true);
     }
   }

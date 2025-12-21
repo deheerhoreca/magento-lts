@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1221faa14ca1ab70c2fc2e8dca4b478",
+    "content-hash": "468c059aff051d6ade063ea41253204e",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -1648,6 +1648,39 @@
                 "source": "https://github.com/Flyingmana/composer-config-reader/tree/20.0.1"
             },
             "time": "2020-11-08T09:03:06+00:00"
+        },
+        {
+            "name": "guidance/guidance_simplepage",
+            "version": "v0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sb-nola-radar/Guidance_Simplepage.git",
+                "reference": "b5e5570b251873e05ac0913a2bf60070378a49f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sb-nola-radar/Guidance_Simplepage/zipball/b5e5570b251873e05ac0913a2bf60070378a49f3",
+                "reference": "b5e5570b251873e05ac0913a2bf60070378a49f3",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "type": "magento-module",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Gordon Knoppe",
+                    "email": "gknop@guidance.com"
+                }
+            ],
+            "description": "A Magento module which adds a new page layout called \"Simple Page\" which can be used by content editors to create CMS pages with complete control over the output.",
+            "support": {
+                "source": "https://github.com/sb-nola-radar/Guidance_Simplepage/tree/v0.4"
+            },
+            "time": "2015-05-11T12:20:26+00:00"
         },
         {
             "name": "illuminate/collections",
@@ -6354,5 +6387,5 @@
     "platform-overrides": {
         "php": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
