@@ -10,12 +10,8 @@ use \Illuminate\Support\Str;
 // require_once __DIR__."/TinyHtmlMinifier.class.php";
 
 // @todo Use lib/Afterpay/vendor/guzzlehttp/guzzle/src/UriTemplate.php to normalize URLs
-
 // @todo Normalize faulty "?amp%3B": https://www.chefstore.nl/koelingen/koelwerkbanken-saladettes.html?amp%3Bgn_capacity=2537&material_group=2191
-
-// @todo Perhaps just use these methods?
-//    Mage::app()->saveCache();
-//    Mage::app()->cleanCache();
+// @todo Perhaps just use these methods? Mage::app()->saveCache(); Mage::app()->cleanCache();
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
@@ -72,7 +68,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
     $url = rtrim($url, "&?/");                // Useless postfixes can be ignored safely
-    $url = str_replace("?amp%3B", "?", $url); // Fix faulty encoding
+    
+    // Fix faulty encoding, and urlencode some characters
+    $url = str_replace(
+      ["?amp%3B", ","  ],
+      [   "?",    "%2C"],
+      $url);
     
     return $url;
   }
@@ -333,11 +334,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /**
    * Get cached HTML, with hole punching.
    *
-   * @param  string  $key                The cache key.
-   * @param  bool    $holepunch_formkey  Whether to holepunch the formkey (CSRF protection).
-   * @param  bool    $holepunch_blocks   Essentially, $holepunch_blocks indicates a full HTML page which requires a lot more hole punching.
+   * @param  string       $key                The cache key.
+   * @param  bool         $holepunch_formkey  Whether to holepunch the formkey (CSRF protection).
+   * @param  bool         $holepunch_blocks   Essentially, $holepunch_blocks indicates a full HTML page which requires a lot more hole punching.
    * 
-   * @return ?string
+   * @return string|null  The cached HTML, or null if not found.
    */
   public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);

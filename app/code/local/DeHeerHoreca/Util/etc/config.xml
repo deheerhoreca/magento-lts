@@ -74,6 +74,16 @@
           </reports>
         </observers>
       </catalog_controller_product_view>
+      <!-- Log profiler SQL queries -->
+      <controller_action_postdispatch>
+        <observers>
+          <profile_sql_queries>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>profileSqlQueries</method>
+          </profile_sql_queries>
+        </observers>
+      </controller_action_postdispatch>
       <!-- Track a click -->
       <core_app_run_after>
         <observers>

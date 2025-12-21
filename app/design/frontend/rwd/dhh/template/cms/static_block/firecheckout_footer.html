@@ -1,8 +1,6 @@
 <script>
   document.getEday = 'none';
-  
   jQuery('#billing\\:vat_id').parent().parent().show();
-  
   jQuery(function() {
     if(jQuery('#billing\\:country_id').val()=='NL') {
       jQuery('#billing\\:vat_id').parent().parent().hide();
@@ -12,7 +10,6 @@
     } else {
       jQuery('#billing\\:vat_id').parent().parent().show();
     }
-    
     jQuery('#billing\\:country_id').change(function(){
       var ct=jQuery(this).val();
       if(ct=='NL'){
@@ -27,7 +24,6 @@
       }
     });
   });
-  
   jQuery(document).ready(function() {
     jQuery('#billing\\:firstname, #billing\\:lastname, #billing\\:city').keydown(function(event) {
       if (this.selectionStart == 0 && event.keyCode >= 65 && event.keyCode <= 90 && !(event.shiftKey) && !(event.ctrlKey) && !(event.metaKey) && !(event.altKey)) {
@@ -39,4 +35,10 @@
       }
     });
   });
+</script>
+<script id='merchantWidgetScript' src="//www.gstatic.com/shopping/merchant/merchantwidget.js" defer></script>
+<script>merchantWidgetScript.addEventListener('load', function(){
+  merchantwidget.start({merchant_id: 118653784, position: 'LEFT_BOTTOM',sideMargin: 21,bottomMargin: 15,mobileSideMargin: 11,mobileBottomMargin: 19});
+});
+window.___gcfg = {lang: 'nl'};
 </script>

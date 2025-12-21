@@ -36,8 +36,7 @@ foreach ($items as &$item) {
 }
 unset($item);
 
-$attribute_name = htmlspecialchars((string) $this->getRequestValue());
-?>
+$attribute_name = htmlspecialchars((string) $this->getRequestValue()); ?>
 
 <ol class="<?=htmlspecialchars($classAttr)?>">
   <?php if ($this->getSortFeaturedFirst()):?>
@@ -72,9 +71,8 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
         $liAttrs[] = 'data-text="' . htmlspecialchars($item['label']) . '"';
         
         if(empty($item['rel'])) {
-          $item['rel'] = "relf='nofollow'";
-        }
-      ?>
+          $item['rel'] = "rel='nofollow'";
+        } ?>
         <li <?=implode(' ', $liAttrs)?>>
           <a class="<?=htmlspecialchars($item['css'])?>" <?=$item['rel']?> href="<?=$item["url"]?>" data-config='<?=$item['data-config']?>' title="<?=htmlspecialchars($item['label'])?>"><?=htmlspecialchars($label) . $countHtml?></a>
           <?=$checkboxHtml?>

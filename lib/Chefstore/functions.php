@@ -959,6 +959,17 @@ if(function_exists("dhh_get_quote_id") === false) {
   }
 }
 
+/**
+ * OpenMage's getCurrentURL() returns it encoded. This function reverses it.
+ * > It still retains &amp; and %2C etc.
+ * 
+ * @param   string  $url
+ * @return  string
+ */
+function omDecodeUrl(string $url): string {
+  return htmlspecialchars_decode($url, ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
+}
+
 /* ---------------------------------------------------------- OpenMage Helpers ---------------------------------------------------------- */
 
 /**

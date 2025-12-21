@@ -16,8 +16,6 @@ require_once __DIR__."/strftime_replacement.php";
 // These categories are not listed as subcategory tile in listviews
 const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
 
-$dhh_click_log = [];
-
 // If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
 // Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
 const SUPPLIERS_HIDE_STOCK_DETAILS = [
@@ -29,6 +27,9 @@ const SUPPLIERS_HIDE_STOCK_DETAILS = [
 // Mage::helper("deheerhoreca_util/util")->__METHOD__()
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
+  
+  private static $dhh_click_log = [];
+  
   /*
    * getFullProductUrl() runs into issues when the url including
    * category and excluding category are different in core_url_rewrite.
@@ -1311,16 +1312,135 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public static function addToClickLog(mixed $key, mixed $val): void {
-    global $dhh_click_log;
-    $dhh_click_log[$key] = $val;
+    self::$dhh_click_log[$key] = $val;
   }
   
-  public static function addLabelToClickLog($key, $val):void {
-    global $dhh_click_log;
-    $dhh_click_log["labels"][$key] = $val;
+  /**
+   * Add label key/value pair to the click log.
+   *
+   * @param  mixed $key
+   * @param  mixed $val
+   * 
+   * @return void
+   */
+  public static function addLabelToClickLog(mixed $key, mixed $val): void {
+    self::$dhh_click_log["labels"][$key] = $val;
   }
   
-  public static function getUserIP() {
+  /**
+   * Log clicks to a JSONL file, while blocking some known bots.
+   * > Runs after page is rendered and output is sent.
+   *
+   * @return void
+   */
+  public function logClick(): void {
+    $dhh_click_log = self::$dhh_click_log ?? [];
+    
+    // Detect bots, re-using ProfitMetrics bot detection
+    /** @var Profitmetrics_MagentoIntegration_Helper_Bot */
+    $_profitmetrics_helper = Mage::helper("profitmetrics/bot");
+    if($_profitmetrics_helper->isBot()) {
+      return; // Do not log bots
+      $dhh_click_log["labels"]["bot"] = "true";
+    } else {
+      $dhh_click_log["labels"]["bot"] = "false";
+    }
+    
+    $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
+    $full_url       = omDecodeUrl(Mage::helper("core/url")->getCurrentUrl());
+    $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
+    $path           = ltrim((string) $url->getPath(), "/");
+    $query          = ltrim((string) $url->getQuery(), "?");
+    $_customer      = Mage::getSingleton('customer/session')->isLoggedIn() ? Mage::getSingleton('customer/session')->getCustomer() : null;
+    $customerId     = $_customer ? $_customer->getId() : null;
+    $customerEmail  = $_customer ? $_customer->getEmail() : null;
+    
+    // current_* is fastest, but in case of an FPC HIT we cannot use them
+    if(isset($dhh_click_log["labels"]["fpc_cache"]) && $dhh_click_log["labels"]["fpc_cache"] !== "HIT") {
+      switch($action) {
+        case "catalog_product_view":
+          $dhh_click_log["labels"]["product_id"] ??= (int) Mage::registry('current_product')->getId();
+          break;
+        case "catalog_category_view":
+          $dhh_click_log["labels"]["category_id"] ??= (int) Mage::registry('current_category')->getId();
+          break;
+      }
+    } else {
+      $oRewrite = Mage::getModel("core/url_rewrite")->setStoreId(1)->loadByRequestPath($path);
+      switch($action) {
+        case "catalog_product_view":
+          $dhh_click_log["labels"]["product_id"] ??= (int) $oRewrite->getProductId();
+          break;
+        case "catalog_category_view":
+          $dhh_click_log["labels"]["category_id"] ??= (int) $oRewrite->getCategoryId();
+          break;
+      }
+    }
+    $_helper        = getOmDhhUtilHelper();
+    $dhh_click_log  = array_replace([
+      "@timestamp"          => date("Y-m-d\TH:i:s.uP"),
+      "client.ip"           => $_helper->getUserIP(),
+      "ecs.version"         => "1.11.0",
+      "event.action"        => $action,
+      "event.kind"          => "event",
+      "event.module"        => "mage-clicks",
+      "host.name"           => gethostname(),
+      "url.domain"          => "www.chefstore.nl",
+      "url.full"            => $full_url,
+      "url.path"            => $path,
+      "url.query"           => $query,
+      "user_agent.original" => Mage::helper("core/http")->getHttpUserAgent(),
+      "user.hash"           => $customerId,
+      "user.id"             => $customerEmail,
+      "user.email"          => $customerEmail,
+    ], $dhh_click_log);
+    
+    try {
+      $json = json_encode($dhh_click_log);
+      file_put_contents("./var/log/clicks.jsonl", $json.PHP_EOL, FILE_APPEND);
+    } catch(Exception $e) {
+      Mage::logException($e);
+    }
+  }
+  
+  /**
+   * 
+   */
+  function profileSqlQueries(): void {
+    Mage::log("At ".__METHOD__, Zend_Log::INFO, "sql_profiler.txt", true);
+    $_profiler = Mage::getSingleton("core/resource")->getConnection("core_read")->getProfiler();
+    if($_profiler->getEnabled()) {
+      $totalElapsedSecs = $_profiler->getTotalElapsedSecs();
+      $totalElapsedMs   = round($totalElapsedSecs * 1000, 2);
+      
+      $output  = "";
+      $output .= "Number of database queries: ".$_profiler->getTotalNumQueries();
+      $output .= "Total time spent on queries: ".$totalElapsedMs." ms";
+      
+      $queries = [];
+      foreach($_profiler->getQueryProfiles() as $i => $query) {
+        $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '';
+        
+        /** @var Zend_Db_Profiler_Query $query*/
+        $queries[] = [
+          "took_ms"   => round($query->getElapsedSecs() * 1000, 2),
+          "type"      => $query->getQueryType(),
+          "query"     => $query->getQuery(),
+          "params"    => $params,
+        ];
+      }
+      
+      $output .= "\n\nQueries:\n".print_r($queries, true);
+      Mage::log($output, Zend_Log::INFO, "sql_profiler.txt", true);
+    }
+  }
+  
+  /**
+   * Get the user's IP address.
+   *
+   * @return string
+   */
+  public static function getUserIP(): string {
     if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
       $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
       $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
@@ -1339,7 +1459,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     return $ip;
   }
-
+  
   /**
    * Trim trailing zeros from a decimal number.
    *

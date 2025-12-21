@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
 <config>
-    <modules>
-        <Anowave_Ecosc>
-            <active>true</active>
-            <codePool>local</codePool>
-            <depends>
-            	<Anowave_Ec />
-            </depends>
-        </Anowave_Ecosc>
-    </modules>
+   <modules>
+      <Anowave_Ecosc>
+         <active>true</active>
+         <codePool>local</codePool>
+         <depends>
+            <Anowave_Ec/>
+         </depends>
+      </Anowave_Ecosc>
+   </modules>
 </config>

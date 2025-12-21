@@ -407,80 +407,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Log clicks to a JSONL file, while blocking some known bots.
-   * 
+   * Observes: core_app_run_after.
+   *
    * @return void
    */
   public function logClick(): void {
-    global $dhh_click_log;
-    
-    // // Skip bots, re-using ProfitMetrics bot detection
-    // /** @var Profitmetrics_MagentoIntegration_Helper_Bot */
-    // $_profitmetrics_helper = Mage::helper("profitmetrics/bot");
-    // if($_profitmetrics_helper->isBot()) {
-    //   $dhh_click_log["label"]["bot"] = "true";
-    // } else {
-    //   $dhh_click_log["label"]["bot"] = "false";
-    // }
-    
-    $action     = Mage::app()->getFrontController()->getAction()->getFullActionName();
-    $full_url   = Mage::helper("core/url")->getCurrentUrl();
-    $url        = Mage::getSingleton("core/url")->parseUrl($full_url);
-    $path       = ltrim((string) $url->getPath(), "/");
-    $query      = ltrim((string) $url->getQuery(), "?");
-    $entity_id  = null;
-    
-    // current_* is fastest, but in case of an FPC HIT we cannot use them
-    if(isset($dhh_click_log["label"]["fpc_cache"]) && $dhh_click_log["label"]["fpc_cache"] !== "HIT") {
-      switch($action) {
-        case "catalog_product_view":
-          $entity_id = Mage::registry('current_product')->getId();
-          break;
-        case "catalog_category_view":
-          $entity_id = Mage::registry('current_category')->getId();
-          break;
-      }
-    } else {
-      $oRewrite = Mage::getModel('core/url_rewrite')->setStoreId(1)->loadByRequestPath($path);
-      switch($action) {
-        case "catalog_product_view":
-          $entity_id = $oRewrite->getProductId();
-          break;
-        case "catalog_category_view":
-          $entity_id = $oRewrite->getCategoryId();
-          break;
-      }
-    }
-    
-    if(is_numeric($entity_id)) {
-      $entity_id = intval($entity_id);
-    }
-    
-    /** @var DeHeerHoreca_Util_Helper_Util */
-    $_helper  = Mage::helper("deheerhoreca_util/util");
-    
-    $dhh_click_log["@timestamp"] = date("Y-m-d\TH:i:s.uP");
-    $dhh_click_log["client.ip"] = $_helper->getUserIP();
-    $dhh_click_log["event.action"] = $action;
-    $dhh_click_log["event.created"] = date("Y-m-d");
-    $dhh_click_log["event.id"] = $entity_id;
-    $dhh_click_log["event.module"] = "mage-clicks";
-    $dhh_click_log["event.kind"] = "event";
-    $dhh_click_log["url.full"] = $full_url;
-    $dhh_click_log["url.domain"] = "www.chefstore.nl";
-    $dhh_click_log["url.path"]  = $path;
-    if($query !== "") {
-      $dhh_click_log["url.query"] = $query;
-    }
-    $dhh_click_log["host.name"] = gethostname();
-    $dhh_click_log["user_agent.original"] = Mage::helper('core/http')->getHttpUserAgent();
-    $dhh_click_log["ecs.version"] = "1.11.0";
-    
-    try {
-      $json = json_encode($dhh_click_log);
-      file_put_contents("./var/log/clicks.jsonl", $json.PHP_EOL, FILE_APPEND);
-    } catch(Exception $e) {
-      Mage::logException($e);
-    }
+    getOmDhhUtilHelper()->logClick();
   }
   
   // Called during placement of an order, to clear tm_field fields

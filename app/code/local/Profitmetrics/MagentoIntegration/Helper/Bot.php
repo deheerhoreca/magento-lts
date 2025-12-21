@@ -23,6 +23,8 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
         "ClaudeBot",
         "GoogleOther",
         "OAI-SearchBot",
+        "PerplexityBot",
+        "Cloudflare-Healthchecks",
         
         "AdsBot-Google",
         "AdsBot-Google-Mobile",
