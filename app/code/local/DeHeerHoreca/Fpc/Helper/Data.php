@@ -126,7 +126,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $cache_key_prefix = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
     if($cache_key_prefix === "catalog_product_view" || $cache_key_prefix === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_key_prefix .= "_".$id;
+      $cache_key_prefix .= "__".$id;
     }
     
     return $cache_key_prefix;
@@ -202,9 +202,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /**
    * Determine if the FPC cache is enabled for reading.
-   * 
+   *
    * This does NOT check if the cache contains the requested page, only if reading from cache is allowed.
-   * 
+   *
    * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
    * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
    * @param debug_name          string  Debug name for logging
@@ -264,7 +264,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function is_write_cache_enabled($non_anonymous_okay = false, $isHtmlBlock = false, $debug_name = ""): bool {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    
     if(!DHH_FPC_ENABLED) {
       self::log("WRITE disabled (DHH_FPC_ENABLED): {$debug_name}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
@@ -314,19 +313,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * Create an obfuscated, repeatable, Redis-safe key with optional prefix. For whole HTML pages only.
    *
    * @param  ?string  $cache_key_prefix  Optional prefix for the cache key
-   * @param  ?string  $url               Optional URL overwrite for debug/development
+   * @param  ?string  $url               Optional URL override for debug/development, by default the current URL is used
    *
    * @return string
    */
   public static function get_cache_key(?string $cache_key_prefix = null, ?string $url = null): string {
-    $cache_key_url = self::get_cache_url($url);
-    if(blank($cache_key_prefix)) {
-      $cache_key_prefix = self::get_cache_prefix();
-    }
-    $cache_key_url_hash = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
-    $cacheKey = "FPC_{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
-    self::log("URL: {$cache_key_url}");
-    self::log("URL hash: {$cache_key_url_hash}, Cache Key Prefix: {$cache_key_prefix}, Cache Key: zc:k:e6b_{$cacheKey}");
+    $cache_key_url        = self::get_cache_url($url);
+    $cache_key_prefix   ??= self::get_cache_prefix();
+    $cache_key_url_hash   = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
+    $cacheKey             = "dhh__{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
+    self::log("Normalized cache URL: {$cache_key_url}, Hash: {$cache_key_url_hash}, Cache Key: zc:k:e6b_{$cacheKey}");
     
     return $cacheKey;
   }
@@ -337,7 +333,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @param  string       $key                The cache key.
    * @param  bool         $holepunch_formkey  Whether to holepunch the formkey (CSRF protection).
    * @param  bool         $holepunch_blocks   Essentially, $holepunch_blocks indicates a full HTML page which requires a lot more hole punching.
-   * 
+   *
    * @return string|null  The cached HTML, or null if not found.
    */
   public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
