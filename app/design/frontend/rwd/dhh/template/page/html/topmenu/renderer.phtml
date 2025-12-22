@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /** @var Mage_Page_Block_Html_Topmenu_Renderer $this */
 /** @var Varien_Data_Tree_Node $menuTree */
 /** @var string $childrenWrapClass */
@@ -37,7 +40,7 @@ foreach($children as $child) {
     $html       .= "<li {$attributes}>";
   }
   
-  $html .= "<a title=\"{$category_name}\" href='{$url}' >{$category_name}</a>";
+  $html .= "<a href='{$url}' >{$category_name}</a>";
   
   if($_hasChildren) {
     if($childLevel < 1) $html .= "<ul class='level{$childLevel}'>";

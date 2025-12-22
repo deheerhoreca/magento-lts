@@ -177,7 +177,7 @@
       <active>false</active>
     </Raveinfosys_Deleteorder>
     
-    <!-- Not used - Warning adds 100+ queries to a simple listview - Probably slows down dynamic categories through rewriting Salesrule classes -->
+    <!-- Not used - Probably slows down dynamic categories through rewriting Salesrule classes -->
     <AW_Autorelated>
       <active>false</active>
     </AW_Autorelated>

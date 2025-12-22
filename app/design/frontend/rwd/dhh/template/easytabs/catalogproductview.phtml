@@ -832,9 +832,11 @@ if(strlen($product_description) === 0) {
 $related_products_block         = $this->getChildHtml("related_products");
 $product_additional_data_block  = $this->getChildHtml("product_additional_data");
 $alternative_products_block     = $this->getChildHtml("upsell_products");
-if(empty($alternative_products_block) && empty($related_products_block)) {
-  $upsell_products_block = $this->getLayout()->createBlock("awautorelated/blocks")->setBlockId(1)->toHtml();
-}
+
+// Module is disabled
+// if(empty($alternative_products_block) && empty($related_products_block)) {
+//   $upsell_products_block = $this->getLayout()->createBlock("awautorelated/blocks")->setBlockId(1)->toHtml();
+// }
 
 /* ANCHOR LINKS */
 if(!empty($pvideo))                        $anchors["video"]                = "Productvideo";
