@@ -794,8 +794,7 @@ if(!function_exists("_cdn_img")) {
       }
     }
     
-    $src_url = "";
-    
+    $src_url    = "";
     $widthAttr  = ($width > 0) ? "width=\"{$width}\"" : "";
     $heightAttr = ($height > 0) ? "height=\"{$height}\"" : "";
     
@@ -974,7 +973,7 @@ function omDecodeUrl(string $url): string {
 
 /**
  * @see Mage_Core_Helper_Abstract
- * => No need for function_exists(): If Intel wants to use these, it should use this file directly.
+ * => No need for function_exists(): If Intel wants to use these, it should define them itself.
  */
 
 /**
