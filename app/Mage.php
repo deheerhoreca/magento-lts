@@ -526,7 +526,12 @@ final class Mage
     public static function dispatchEvent($name, array $data = [])
     {
         Varien_Profiler::start('DISPATCH EVENT:' . $name);
-        $result = self::app()->dispatchEvent($name, $data);
+        // $result = self::app()->dispatchEvent($name, $data);
+        $closure = fn() => self::app()->dispatchEvent($name, $data);
+        $millis = null;
+        $result = millis($closure, $millis);
+        if($millis > .1) echo "Dispatched event '$name' in {$millis} ms\n";
+        // cd($data);
         Varien_Profiler::stop('DISPATCH EVENT:' . $name);
         return $result;
     }

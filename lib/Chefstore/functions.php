@@ -5,6 +5,7 @@ declare(strict_types=1);
 use \Chefstore\Helper as ChefstoreHelper;
 use \Brick\VarExporter\VarExporter;
 use \Illuminate\Support\Arr;
+use \Illuminate\Support\Benchmark as LaravelBenchmark;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
@@ -393,6 +394,20 @@ if(!function_exists("wild_sis")) {
     
     return false;
   }
+}
+
+/**
+ * Measure the execution time of a callback in milliseconds.
+ *
+ * @param   Closure       $callback
+ * @param   float|null   &$millis
+ *
+ * @return  mixed
+ */
+function millis(Closure $callback, ?float &$millis = null): mixed {
+  [$result, $millis] = LaravelBenchmark::value($callback);
+  $millis = round($millis, 2);
+  return $result;
 }
 
 /* ------------------------------------------------------------ Intel Picks ------------------------------------------------------------- */

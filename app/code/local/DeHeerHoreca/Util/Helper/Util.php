@@ -3,13 +3,13 @@
 // declare(strict_types=1);
 
 use \Carbon\CarbonImmutable;
-use \Michelf\Markdown;
-use \Michelf\MarkdownExtra;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Collection;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
+use \Michelf\Markdown;
+use \Michelf\MarkdownExtra;
 
 require_once __DIR__."/strftime_replacement.php";
 
@@ -276,6 +276,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return MarkdownExtra::defaultTransform($string);
   }
   
+  /**
+   * Generate a URL slug from a brand name.
+   * @deprecated
+   *
+   * @param  mixed  $string
+   * @return string
+   */
   public function getBrandUrlSlug($string): string {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
@@ -287,6 +294,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $string;
   }
   
+  /**
+   * Generate a URL slug from a string.
+   * @deprecated
+   *
+   * @param  mixed  $string
+   * @return string
+   */
   public function getUrlSlug($string) {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
@@ -518,7 +532,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   // Get the minimum list of attributes to display something
   public static function getProductAttributes(string $which, array $add = []): array {
-    
     $attributes = [];
     
     // This should include all attributes that have used_in_product_listing set to true

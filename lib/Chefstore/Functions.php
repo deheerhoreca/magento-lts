@@ -147,7 +147,6 @@ if(!function_exists("om_attr_val_as_int")) {
  * @return Mage_Catalog_Model_Product|false|null
  */
 function dhh_get_cached_om_product(int|string|Mage_Catalog_Model_Product|null $product): Mage_Catalog_Model_Product|false|null {
-  
   // COMMENT THIS to enable the cache (untested)
   // return Mage::getModel('catalog/product')->load($product); // Run the original code
   
