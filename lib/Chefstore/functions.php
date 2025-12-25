@@ -598,10 +598,16 @@ if(function_exists("sanitize_alphanumeric") === false) {
 }
 
 if(function_exists("_dhh_debug") === false) {
-  function _dhh_debug() {
-    if(isset($_GET["nofpc"])
-    && isset($_SERVER["REMOTE_ADDR"])
-    && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips())) {
+  /**
+   * Check if debugging is enabled for the current user/IP/_ENV.
+   */
+  function _dhh_debug(): bool {
+    if(isset($_ENV["DHH_DEBUG_ENABLED"])
+    || (
+      isset($_GET["nofpc"])
+      && isset($_SERVER["REMOTE_ADDR"])
+      && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips()))
+    ) {
       return true;
     }
     return false;

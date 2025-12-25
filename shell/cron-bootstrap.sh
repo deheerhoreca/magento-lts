@@ -53,9 +53,10 @@ if [ -n "${REQUIRE_HOST}" ]; then
   fi
 fi
 
-# Wait for the above checks to complete before printing the start message
-if "${THIS_IS_CRON}" != "false"; then
+# Do not allow to run a script on a development host, during CRON, if NO_DEV=1 (which is the default) is set in the job's shell script
+if [ ${HOSTNAME} = "dev.deheerhoreca.nl" ] && [ ${NO_DEV} = 1 ] && [ "${THIS_IS_CRON}" != "false" ]; then
   printf "%s  NOOP   %s  is skipped in development environments\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"
+  exit 0
 fi
 
 printf "%s  START  %s\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"

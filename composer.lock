@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "468c059aff051d6ade063ea41253204e",
+    "content-hash": "91225ea7309fbfc251fb68e76b7d1b09",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -59,6 +59,37 @@
                 "source": "https://github.com/adbario/php-dot-notation/tree/3.3.0"
             },
             "time": "2023-02-24T20:27:50+00:00"
+        },
+        {
+            "name": "aligent/cacheobserver",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aligent/CacheObserver.git",
+                "reference": "75daed7cb82ec66956dcfc9a54cf6f27c3c3bd9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aligent/CacheObserver/zipball/75daed7cb82ec66956dcfc9a54cf6f27c3c3bd9a",
+                "reference": "75daed7cb82ec66956dcfc9a54cf6f27c3c3bd9a",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "Magento extension to add cache keys and tags to blocks that are not cached by default.",
+            "homepage": "https://github.com/aligent/CacheObserver",
+            "support": {
+                "issues": "https://github.com/aligent/CacheObserver/issues",
+                "source": "https://github.com/aligent/CacheObserver/tree/models"
+            },
+            "abandoned": true,
+            "time": "2015-02-09T04:56:12+00:00"
         },
         {
             "name": "amnuts/opcache-gui",
@@ -370,6 +401,40 @@
                 "source": "https://github.com/AydinHassan/magento-core-composer-installer/tree/2.1.0"
             },
             "time": "2021-05-04T20:16:17+00:00"
+        },
+        {
+            "name": "aydus/headorder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:aydus/HeadOrder.git",
+                "reference": "8a3642c586f112141122816eecfb650cf3621f50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aydus/HeadOrder/zipball/8a3642c586f112141122816eecfb650cf3621f50",
+                "reference": "8a3642c586f112141122816eecfb650cf3621f50",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": ">=5.3"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Tay",
+                    "email": "davidt@aydus.com",
+                    "role": "Author/Maintainer"
+                }
+            ],
+            "description": "Order Javascript and CSS files in the head block.",
+            "homepage": "https://github.com/aydus/HeadOrder.git",
+            "time": "2015-06-30T22:24:58+00:00"
         },
         {
             "name": "bower-asset/prototypejs",
@@ -6350,6 +6415,7 @@
         "aoepeople/aoe_blackholesession": 20,
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_profiler": 20,
+        "aydus/headorder": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "fballiano/openmage-cssjs-minify": 20,
         "firegento/adminmonitoring": 20,

@@ -196,10 +196,12 @@ function dhh_get_cached_category(int|string $id, bool $forceRefresh = false): Ma
   $currentUrl = dhh_get_current_url();
   $field      = null;
   
-  if(!$forceRefresh && Mage::helper("aoe_modelcache")->exists("catalog/category", $id)) {
-    Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
-  } else {
-    Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+  if(_dhh_debug()) {
+    if(!$forceRefresh && Mage::helper("aoe_modelcache")->exists("catalog/category", $id)) {
+      Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+    } else {
+      Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+    }
   }
   
   return Mage::helper("aoe_modelcache")->get("catalog/category", $id, $field, $forceRefresh);

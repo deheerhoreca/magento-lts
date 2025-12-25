@@ -5,35 +5,34 @@ declare(strict_types=1);
 namespace Chefstore;
 
 class CacheBuster {
-  // function addTs(string $relative_path): string {
-  //   if(!is_file($relative_path)) {
-  //     return $relative_path;
-  //   }
-    
-  //   $pathinfo = pathinfo($relative_path);
-    
-  //   if(empty($pathinfo['extension']) || empty($pathinfo['filename']) || empty($pathinfo['basename']) || !in_array($pathinfo['extension'], ["png", "jpg", "gif"], true)) {
-  //     return $relative_path;
-  //   }
-    
-  //   $mtime    = filemtime($path);
-  //   $ts_path  = implode(".", [$pathinfo["filename"], $timestamp, $pathinfo['extension']]);
-    
-  //   return str_replace($pathinfo["basename"], $ts_path, $url);
-  // }
   
-  // Add the filemtime to an FS path
-  // - $path MUST be a relative path, starting with the webroot
-  // - "./assets/bower-asset/font-awesome/css/all.min.css" => "/assets/bower-asset/font-awesome/css/all.ts0123456789.min.css"
+  /**
+   * Add the filemtime to an FS path for cache busting.
+   *
+   * Example:
+   * Input: "./assets/bower-asset/font-awesome/css/all.min.css"
+   * Output: "/assets/bower-asset/font-awesome/css/all.ts0123456789.min.css"
+   *
+   * @param   string  $path  MUST be a relative path, starting with the webroot
+   * @return  string
+   */
   public static function assetAddMtime(string $path): string {
     if(is_file($path)) {
-      $path = ltrim(prependExtension($path, "ts".filemtime($path)), ".");
+      $path = ltrim(self::prependExtension($path, "ts".filemtime($path)), ".");
     }
-    
     return $path;
   }  
   
-  public static function _addTimestampToUrl(string $url, ?string $baseUrl = null, ?string $basePath = null) {
+  /**
+   * Add timestamp to URL for cache busting.
+   *
+   * @param  string      $url
+   * @param  string|null $baseUrl
+   * @param  string|null $basePath
+   *
+   * @return string
+   */
+  public static function _addTimestampToUrl(string $url, ?string $baseUrl = null, ?string $basePath = null): string {
     $GLOBALS["dhh_om_fs_mapping"] ??= [
       ['value' => Mage_Core_Model_Store::URL_TYPE_JS,    'label' => "/js/"],
       ['value' => Mage_Core_Model_Store::URL_TYPE_MEDIA, 'label' => "/media/"],
@@ -42,7 +41,7 @@ class CacheBuster {
     
     $url      = self::_sanitizeUrl($url);
     $baseUrl  = self::_sanitizeUrl($baseUrl);
-    $path     = str_replace($baseUrl, $basePath, $url); 
+    $path     = str_replace($baseUrl, $basePath, $url);
     $pathinfo = pathinfo($path);
     
     if (empty($pathinfo['extension']) || empty($pathinfo['filename']) || empty($pathinfo['basename'])
@@ -64,8 +63,8 @@ class CacheBuster {
   /**
    * Sanitize URL by removing query, fragment, user, or pass if found
    *
-   * @param $url
-   * @return string
+   * @param   string  $url
+   * @return  string
    */
   protected static function _sanitizeUrl(string $url): string {
     $url    = parse_url($url);
@@ -73,15 +72,28 @@ class CacheBuster {
     $host   = isset($url['host']) ? $url['host'] : '';
     $port   = isset($url['port']) ? ':' . $url['port'] : '';
     $path   = isset($url['path']) ? $url['path'] : '';
+    
     return "$scheme$host$port$path";
   }
   
-  // \Chefstore\CacheBuster::prependExtension()
+  /**
+   * Prepend to file extension
+   *
+   * @param   string  $path
+   * @param   string  $prepend
+   * @return  string
+   */
   public static function prependExtension(string $path, string $prepend) {
     return self::replaceExtension($path, $prepend.".".self::getExtension($path));
   }
   
-  // \Chefstore\CacheBuster::replaceExtension()
+  /**
+   * Replace file extension
+   *
+   * @param   string  $path
+   * @param   string  $new_extension
+   * @return  string
+   */
   public static function replaceExtension(string $path, string $new_extension): string {
     if(is_file($path) && $info = pathinfo($path)) {
       return "{$info["dirname"]}/{$info["filename"]}.{$new_extension}";
@@ -90,7 +102,12 @@ class CacheBuster {
     return $path;
   }
   
-  // \Chefstore\CacheBuster::getExtension()
+  /**
+   * Get file extension
+   *
+   * @param   string  $path
+   * @return  string
+   */
   public static function getExtension(string $path): string {
     return pathinfo($path, PATHINFO_EXTENSION);
   }

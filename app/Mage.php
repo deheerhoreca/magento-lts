@@ -530,7 +530,7 @@ final class Mage
         $closure = fn() => self::app()->dispatchEvent($name, $data);
         $millis = null;
         $result = millis($closure, $millis);
-        if($millis > .1) echo "Dispatched event '$name' in {$millis} ms\n";
+        // if($millis > .1) echo "Dispatched event '$name' in {$millis} ms\n";
         // cd($data);
         Varien_Profiler::stop('DISPATCH EVENT:' . $name);
         return $result;

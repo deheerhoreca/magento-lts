@@ -184,6 +184,11 @@ media
 # UNIGNORE ALL COREHACKED FILES TO ENSURE GIT TRACKING
 ######################################################
 
+# Unignore all dirs that will have 100% custom files
+!/app/code/local/Mage
+!/app/design/adminhtml/default/dhh
+!/app/design/frontend/rwd/dhh
+
 # diff -qr . vendor/openmage/magento-lts
 # diff -qr vendor/openmage/magento-lts .
 
@@ -465,3 +470,7 @@ media
 /app/design/frontend/base/default/layout/guidance_simplepage.xml
 /app/design/frontend/base/default/template/guidance_simplepage
 /app/etc/modules/Guidance_Simplepage.xml
+/app/code/community/Aligent/CacheObserver
+/app/etc/modules/Aligent_CacheObserver.xml
+/app/code/community/Aydus/HeadOrder
+/app/etc/modules/Aydus_HeadOrder.xml
