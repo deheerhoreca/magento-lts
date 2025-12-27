@@ -4,9 +4,10 @@
  *
  * @see Mage_Catalog_Block_Product_List
  */
-/* @var $this Mage_Catalog_Block_Product_List */
 
 Varien_Profiler::start("DHH::PrepareProductList");
+
+/** @var Mage_Catalog_Block_Product_List $this */
 
 $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
@@ -540,9 +541,6 @@ if($show_products && $_productCollection->getFirstItem()) {
           $cachedHtml = DeHeerHoreca_Fpc_Helper_Data::anonymizeFormkey($html);
           $cachedHtml = \Chefstore\Html::minifyHtml($cachedHtml);
           DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $cachedHtml, $cache_tags, 86400 * 7, minifyHtml: false);
-          // if(Mage::app()->getCache()->save($cachedHtml, $cache_key, $cache_tags, 86400)) {
-          //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-          // }
         }
         
         Varien_Profiler::stop("DHH::ListProduct_{$product_id}_uncached");

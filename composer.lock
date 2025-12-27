@@ -4,62 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91225ea7309fbfc251fb68e76b7d1b09",
+    "content-hash": "5611fc2e7355ad137976a3417b95d777",
     "packages": [
-        {
-            "name": "adbario/php-dot-notation",
-            "version": "3.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adbario/php-dot-notation.git",
-                "reference": "a94ce4493d19ea430baa8d7d210a2c9bd7129fc2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adbario/php-dot-notation/zipball/a94ce4493d19ea430baa8d7d210a2c9bd7129fc2",
-                "reference": "a94ce4493d19ea430baa8d7d210a2c9bd7129fc2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.4 || ^8.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^1.8",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Adbar\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Riku Särkinen",
-                    "email": "riku@adbar.io"
-                }
-            ],
-            "description": "PHP dot notation access to arrays",
-            "homepage": "https://github.com/adbario/php-dot-notation",
-            "keywords": [
-                "ArrayAccess",
-                "dotnotation"
-            ],
-            "support": {
-                "issues": "https://github.com/adbario/php-dot-notation/issues",
-                "source": "https://github.com/adbario/php-dot-notation/tree/3.3.0"
-            },
-            "time": "2023-02-24T20:27:50+00:00"
-        },
         {
             "name": "aligent/cacheobserver",
             "version": "1.0.1",
@@ -90,68 +36,6 @@
             },
             "abandoned": true,
             "time": "2015-02-09T04:56:12+00:00"
-        },
-        {
-            "name": "amnuts/opcache-gui",
-            "version": "3.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/amnuts/opcache-gui.git",
-                "reference": "a70fe575c9014cf08f68fe17f9cb3dccc4f13197"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/amnuts/opcache-gui/zipball/a70fe575c9014cf08f68fe17f9cb3dccc4f13197",
-                "reference": "a70fe575c9014cf08f68fe17f9cb3dccc4f13197",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-zend-opcache": "*",
-                "php": ">=7.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Amnuts\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andrew Collington",
-                    "email": "andy@amnuts.com",
-                    "homepage": "https://blog.amnuts.com/",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/amnuts/opcache-gui/graphs/contributors"
-                }
-            ],
-            "description": "A clean, effective and responsive interface for Zend OPcache, with real(ish)-time monitoring, filtering and the ability to invalidate files",
-            "keywords": [
-                "Opcache",
-                "cache",
-                "gui",
-                "interface",
-                "opcodes"
-            ],
-            "support": {
-                "email": "andy@amnuts.com",
-                "issues": "https://github.com/amnuts/opcache-gui/issues",
-                "source": "https://github.com/amnuts/opcache-gui/tree/3.6.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/amnuts",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-07-28T00:19:58+00:00"
         },
         {
             "name": "aoepeople/aoe_blackholesession",

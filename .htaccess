@@ -451,7 +451,7 @@
 # <//images.chefstore.nl/>;rel=preconnect,<//www.googletagmanager.com>;rel=preconnect,<//td.doubleclick.net>;rel=preconnect,<//googleads.g.doubleclick.net>;rel=preconnect,
 
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2|webmanifest)$)[^\.]+?$">
-    Header add Link "<https://v2.zopim.com>;rel=dns-prefetch,<https://static.zdassets.com>;rel=preconnect,<https://ekr.zdassets.com>;rel=preconnect"
+    Header add Link "<https://v2.zopim.com>; rel=dns-prefetch, <https://static.zdassets.com>; rel=preconnect, <https://ekr.zdassets.com>; rel=preconnect"
 </FilesMatch>
 
 ###########################################
@@ -492,7 +492,7 @@
         Header set Permissions-Policy "ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
         
         # Imagekit and security. Disable microphone and geolocation for all including iframes:
-        Header set Permissions-Policy "microphone=(), geolocation=(), ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
+        # Header set Permissions-Policy "microphone=(), geolocation=(), ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
     </IfModule>
 </FilesMatch>
 
@@ -568,9 +568,9 @@
 #        Require ip 149.210.249.150 5.132.21.238 87.210.61.235 81.59.51.217 62.194.92.226 87.212.157.180 185.127.111.0/24 85.158.206.20 87.208.26.238
 #    </RequireAll>
 
-    <IfModule pagespeed_module>
-        ModPagespeed off
-    </IfModule>
+    # <IfModule pagespeed_module>
+    #     ModPagespeed off
+    # </IfModule>
 </If>
 # END DEVELOPMENT SETTINGS
 
@@ -579,6 +579,9 @@
     <IfModule mod_headers.c>
         Header set Referrer-Policy "strict-origin-when-cross-origin"
     </IfModule>
+    # <IfModule pagespeed_module>
+    #     ModPagespeed off
+    # </IfModule>
 </Else>
 # END PRODUCTION SETTINGS
 

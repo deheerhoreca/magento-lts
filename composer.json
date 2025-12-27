@@ -27,9 +27,7 @@
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
     "ext-zip": "*",
-    "adbario/php-dot-notation": "^3.3",
     "aligent/cacheobserver": "^1.0",
-    "amnuts/opcache-gui": "^3.5",
     "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
     "aoepeople/aoe_dbretry": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
@@ -91,19 +89,6 @@
     "symfony/polyfill-php80": "*",
     "symfony/polyfill-php81": "*",
     "symfony/polyfill-php82": "*"
-  },
-  "suggest": {
-    "aoepeople/aoe_blackholesession": "Skip creating a real session for bots",
-    "aoepeople/aoe_jscsststamp": "Automatic Versioning of JS and CSS files",
-    "aoepeople/aoe_scheduler": "Advanced cron scheduling management",
-    "aschroder/smtp_pro": "Support for sending emails via SMTP",
-    "avstudnitz/fast-simple-import": "Imports products and customers from arrays",
-    "colinmollenhour/cache-backend-redis": "Support for storing OpenMage's cache in Redis",
-    "colinmollenhour/magento-redis-session": "Support for storing OpenMage' sessions in Redis",
-    "colinmollenhour/Perfect_Watermarks": "Replacement for OpenMage's GD2 image adapter with imagemagick",
-    "fballiano/magento1-image-cleaner": "Identify and remove orphan images",
-    "fballiano/openmage-lesti-fpc": "PHP bases Full Page Cache",
-    "firegento/logger": "Advanced logging capabilities"
   },
   "repositories": [
     {

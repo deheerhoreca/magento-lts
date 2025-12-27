@@ -19,7 +19,6 @@ $_store                     = $_product->getStore();
 $_taxHelper                 = $this->helper("tax");
 $categoryIds                = $_product->getCategoryIds();
 $skin_baseurl               = str_replace("www.chefstore.nl", "images.chefstore.nl", (string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN));
-
 $brand_name                 = _get_product_attribute($_product, "manufacturer");
 $brand_id                   = $_product->getData("manufacturer");
 $brand_logo                 = "";
@@ -905,8 +904,6 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
   <div class="product-essential">
     <div id="sticky-container">
       <div class="product-shop">
-        
-        <?php /* Add to Cart Block */ ?>
         <form action="<?=$this->getSubmitUrl($_product, array("_secure" => $this->_isSecure())) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
           <?=$this->getBlockHtml("formkey") ?>
           <input type="hidden" name="product" value="<?=$_product->getId() ?>" />
@@ -1101,18 +1098,15 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
               <?php
             } ?>
           </div>
-        </form>
-        <?php
-
+        </form><?php
         // Configurable products
         if($saleable === true && $this->hasOptions()) {
           echo $this->getChildChildHtml("container2", "", true, true);
-        }
-        ?>
+        } ?>
       </div>
     </div>
   </div>
-
+  
   <div class="proleftdv"><?php
     // Product Tagline
     if(!empty($tagline)) {
@@ -1256,13 +1250,10 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       <h2 class="tableftheader"><?=$this->__("Externe Documenten") ?></h2>
       <div class="probottomdv" id="product-external-documents-list">
         <span class="anchor" id="external-documents"></span>
-
-        <ul class="fa-ul">
-          <?php
-
+        <ul class="fa-ul"><?php
           $method = "aes128";
           $iv = str_repeat("a", openssl_cipher_iv_length($method));
-
+          
           foreach($external_documents as $external_document) {
             if(empty($external_document["url"])) {
               continue;
@@ -1288,7 +1279,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
               echo "</li>";
             }
           }
-
+          
           // NG
           // $entity_id = $_product->getEntityId();
           // foreach($external_documents as $i => $external_document) {
@@ -1310,7 +1301,6 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                 // "pdf"           => "fa-file-pdf-o",
                 // default         => "fa-file-o",
               // };
-
               // if(!empty($language)) {
                 // if(is_scalar($language)) {
                   // $language = " (".strtoupper($language).")";
@@ -1326,25 +1316,21 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
           // }
           ?>
         </ul>
-      </div>
-    <?php }
+      </div><?php
+    }
     
     // Upsell products OR (Automatic) Related Products
-    if(!empty($upsell_products_block)) {
-      ?>
+    if(!empty($upsell_products_block)) { ?>
       <span class="anchor" id="upsells"></span>
-      <div class="probottomdv">
-        <?=$upsell_products_block ?>
-      </div>
-      <?php
+      <div class="probottomdv"><?=$upsell_products_block?></div><?php
     }
     
     // Related Products
     if(!empty($related_products_block)) { ?>
       <span class="anchor" id="related"></span>
-      <div class="probottomdv"><?=$related_products_block?></div>
-    <?php }
-
+      <div class="probottomdv"><?=$related_products_block?></div><?php
+    }
+    
     // Brand Logo & Text
     if(!empty($brand_logo)) {
       echo "<div class='center'>";
@@ -1353,9 +1339,8 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
     } ?>
     </div>
   </div>
-</div>
+</div><?php
 
-<?php
 // schema.org product data -- Called here and removed from layout xml to put it in the footer
 echo $this->getlayout()->createBlock("richsnippets/product")->setTemplate("tm/richsnippets/richsnippets_json.phtml")->toHtml();
 

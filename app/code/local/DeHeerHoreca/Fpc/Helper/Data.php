@@ -145,11 +145,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      // $cache_tags[] = "DHH_PRODUCT_{$id}";
       $cache_tags[] = "PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      // $cache_tags[] = "DHH_CATEGORY_{$id}";
       $cache_tags[] = "CATEGORY_{$id}";
     }
     

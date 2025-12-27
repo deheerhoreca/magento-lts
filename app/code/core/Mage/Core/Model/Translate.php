@@ -107,6 +107,7 @@ class Mage_Core_Model_Translate
      */
     public function init($area, $forceReload = false)
     {
+        Varien_Profiler::start("mage::core::model:translate::init ".json_encode(func_get_args()));
         $this->setConfig([self::CONFIG_KEY_AREA => $area]);
 
         $this->_translateInline = Mage::getSingleton('core/translate_inline')
@@ -116,6 +117,7 @@ class Mage_Core_Model_Translate
             if ($this->_canUseCache()) {
                 $this->_data = $this->_loadCache();
                 if ($this->_data !== false) {
+                    Varien_Profiler::stop("mage::core::model:translate::init ".json_encode(func_get_args()));
                     return $this;
                 }
             }
@@ -135,7 +137,7 @@ class Mage_Core_Model_Translate
         if (!$forceReload && $this->_canUseCache()) {
             $this->_saveCache();
         }
-
+        Varien_Profiler::stop("mage::core::model:translate::init ".json_encode(func_get_args()));
         return $this;
     }
 

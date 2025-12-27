@@ -659,7 +659,7 @@ function in_range($number, $min, $max, $inclusive = false) {
  */
 function devDump(mixed $var): void {
   if(_dhh_debug()) {
-    echo "<!-- DHH: ".var_export($var, true)." -->";
+    echo "<!-- DHH: ".var_export($var, true)." -->".PHP_EOL;
   }
 }
 
@@ -845,7 +845,7 @@ if(!function_exists("_cdn_img")) {
           $cdn_options_string = "tr:".implode_array_with_keys($cdn_options, ",", "-");
         }
         
-        devDump($cdn_options_string);
+        // devDump($cdn_options_string);
         
         $url      = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
         $src_url  = "{$cdn_base}/{$cdn_options_string}/{$url}";
