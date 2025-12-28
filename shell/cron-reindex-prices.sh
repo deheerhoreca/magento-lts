@@ -13,6 +13,6 @@ cm
 
 # Product prices are not always updating for reporting (intel), even when Index on Save is enabled. Reindex prices regularly:
 # n98 index:reindex catalog_product_price
-php -c etc/php.cmd.ini shell/indexer.php --reindex catalog_product_price
+openmage shell/indexer.php --reindex catalog_product_price
 
 . ./shell/cron-wrapup.sh

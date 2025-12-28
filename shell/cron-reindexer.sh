@@ -4,9 +4,6 @@
 ~/workspace/openmage/shell/cron-reindexer.sh
 '
 
-set -e      # Exit immediately if a command exits with a non-zero status
-set -u      # Treat unset variables as an error when substituting
-
 export PREFER_HOST=ma
 export NO_DEV=0
 

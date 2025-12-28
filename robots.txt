@@ -62,6 +62,7 @@ User-agent: AhrefsBot
 User-agent: AhrefsSiteAudit
 User-agent: Applebot
 User-agent: ChatGPT-User
+User-agent: Claude-User
 User-agent: DuckAssistBot
 User-agent: Google-Extended
 User-agent: Google-InspectionTool
@@ -122,12 +123,14 @@ User-agent: Applebot-Extended
 User-agent: Bytespider
 User-agent: CCBot
 User-agent: ClaudeBot
+User-agent: Claude-SearchBot
 User-agent: Google-Extended
 User-agent: GoogleOther
 User-agent: GoogleOther-Image
 User-agent: GoogleOther-Video
 User-agent: GPTBot
 User-agent: meta-externalagent
+User-agent: Pinterestbot
 Disallow: /*?multipass*
 Disallow: /*&multipass*
 Disallow: /shop?*
