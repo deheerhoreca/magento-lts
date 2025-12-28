@@ -27,7 +27,6 @@
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
     "ext-zip": "*",
-    "aligent/cacheobserver": "^1.0",
     "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
     "aoepeople/aoe_dbretry": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",

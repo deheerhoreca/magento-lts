@@ -4,39 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5611fc2e7355ad137976a3417b95d777",
+    "content-hash": "ece9ffc58804c661e63b0a45872c9aa2",
     "packages": [
-        {
-            "name": "aligent/cacheobserver",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aligent/CacheObserver.git",
-                "reference": "75daed7cb82ec66956dcfc9a54cf6f27c3c3bd9a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aligent/CacheObserver/zipball/75daed7cb82ec66956dcfc9a54cf6f27c3c3bd9a",
-                "reference": "75daed7cb82ec66956dcfc9a54cf6f27c3c3bd9a",
-                "shasum": ""
-            },
-            "require": {
-                "magento-hackathon/magento-composer-installer": "*"
-            },
-            "type": "magento-module",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "OSL-3.0"
-            ],
-            "description": "Magento extension to add cache keys and tags to blocks that are not cached by default.",
-            "homepage": "https://github.com/aligent/CacheObserver",
-            "support": {
-                "issues": "https://github.com/aligent/CacheObserver/issues",
-                "source": "https://github.com/aligent/CacheObserver/tree/models"
-            },
-            "abandoned": true,
-            "time": "2015-02-09T04:56:12+00:00"
-        },
         {
             "name": "aoepeople/aoe_blackholesession",
             "version": "dev-dhh-fixes",
