@@ -12,7 +12,7 @@ cm
 . ./shell/cron-bootstrap.sh
 
 openmage shell/sooqr.php --generate 1
-dasel -f ./media/sooqr/sooqr-datafeed-5AjS-1.xml -r xml -w json > ./media/sooqr/sooqr-datafeed-5AjS-1.json
+dasel -i xml -o json < ./media/sooqr/sooqr-datafeed-5AjS-1.xml > ./media/sooqr/sooqr-datafeed-5AjS-1.json
 chmod 0666 ./media/sooqr/*
 
 . ./shell/cron-wrapup.sh

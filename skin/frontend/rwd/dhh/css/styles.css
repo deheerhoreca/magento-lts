@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/*!
+/*
  * Bootstrap Grid v5.3.5 (https://getbootstrap.com/)
  * Copyright 2011-2025 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
@@ -5245,6 +5245,11 @@
     padding-top: .5em;
     padding-bottom: .5em;
     font-size: 16px;
+  }
+
+  .h1 em, h1 em {
+    color: var(--color-orange);
+    font-style: normal; /* override italics */
   }
 
   .h1 {

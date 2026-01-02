@@ -10,17 +10,15 @@ cm
 . ./shell/cron-bootstrap.sh
 
 touch ~/logs/deheerhoreca-magento/access_log
-touch ~/logs/deheerhoreca-magento/error_log
 touch ~/logs/deheerhoreca-magento/cron_error.log
 touch ~/logs/deheerhoreca-magento/cron_event.log
+touch ~/logs/deheerhoreca-magento/error_log
+touch ~/logs/deheerhoreca-magento/php_error.log
 
 now=$(date)
 echo "--------------------------------------------------------------------"
 echo "Current date: $now"
 echo "--------------------------------------------------------------------"
-
-# Set User Environment
-. ${HOME}/.bash_profile
 
 cm
 
@@ -29,9 +27,9 @@ cm
 # ------------------------------------------------------------------------
 
 cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
-~/httpdocs/deheerhoreca-magento/var/log/*.log
-~/httpdocs/deheerhoreca-magento/var/log/*.jsonl
-~/httpdocs/deheerhoreca-magento/var/log/*.ndjson
+~/workspace/openmage/var/log/*.log
+~/workspace/openmage/var/log/*.jsonl
+~/workspace/openmage/var/log/*.ndjson
 ~/logs/deheerhoreca-magento/*.log
 ~/logs/deheerhoreca-magento/*_log
 {
@@ -52,17 +50,24 @@ rm ~/tmp/logrotate-deheerhoreca-magento.conf
 
 sleep 1
 cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
-~/httpdocs/deheerhoreca-magento/var/log/*.txt
+~/workspace/openmage/var/log/*.txt
 {
   daily
   dateext
-  rotate 14
-  maxage 14
+  rotate 7
+  maxage 7
   missingok
 }
 EOF
 
 /usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento-txt.status
 rm ~/tmp/logrotate-deheerhoreca-magento.conf
+
+# Create some files now, to make sure they get included in the tail command
+touch ~/logs/deheerhoreca-magento/access_log
+touch ~/logs/deheerhoreca-magento/cron_error.log
+touch ~/logs/deheerhoreca-magento/cron_event.log
+touch ~/logs/deheerhoreca-magento/error_log
+touch ~/logs/deheerhoreca-magento/php_error.log
 
 . ./shell/cron-wrapup.sh

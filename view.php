@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 use \Elastic\Apm\ElasticApm;
-use \Chefstore\ElasticApmHelper;
 
-require_once __DIR__."/lib/Chefstore/ElasticApmHelper.php";
+// require_once __DIR__."/lib/Chefstore/ElasticApmHelper.php";
 
 if(extension_loaded("elastic_apm") && class_exists(ElasticApm::class)) {
   try {
@@ -18,7 +17,7 @@ if(extension_loaded("elastic_apm") && class_exists(ElasticApm::class)) {
       $transaction->context()->setLabel("sapi", PHP_SAPI);
     }
   } catch(\Throwable $e) {
-    // Do nothing
+    Mage::logException($e); // Log but don't break the redirect
   }
 }
 

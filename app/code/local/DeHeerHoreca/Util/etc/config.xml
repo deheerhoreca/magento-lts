@@ -18,8 +18,14 @@
       </deheerhoreca_util>
     </models>
     <events>
-      <!-- Set Elastic APM data -->
-      <controller_front_init_before>
+      <!--
+      Set Elastic APM data
+      - Called "front" but also fires in adminhtml.
+      - controller_front_init_before is too early to get the current transaction name
+      - controller_action_predispatch covers both frontend and adminhtml
+      - @todo API requests
+      -->
+      <controller_action_predispatch>
         <observers>
           <configure_elastic_apm>
             <type>singleton</type>
@@ -27,7 +33,7 @@
             <method>configureElasticApm</method>
           </configure_elastic_apm>
         </observers>
-      </controller_front_init_before>
+      </controller_action_predispatch>
       <!-- Implement a simple wait after sending an email to not cross Gmail limits -->
       <email_send_after>
         <observers>
@@ -65,6 +71,15 @@
           </profile_sql_queries>
         </observers>
       </controller_front_send_response_after>
+      <http_response_send_before>
+        <observers>
+          <DeHeerHoreca_minifyAjaxResponse>
+            <type>singleton</type>
+            <class>deheerhoreca_util/observer</class>
+            <method>minifyAjaxResponse</method>
+          </DeHeerHoreca_minifyAjaxResponse>
+        </observers>
+      </http_response_send_before>
     </events>
     <blocks>
       <adminhtml>

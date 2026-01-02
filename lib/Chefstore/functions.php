@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use \Chefstore\Helper as ChefstoreHelper;
 use \Brick\VarExporter\VarExporter;
+use \Chefstore\Helper as ChefstoreHelper;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Benchmark as LaravelBenchmark;
 use \Illuminate\Support\Number;
@@ -602,19 +602,32 @@ if(function_exists("_dhh_debug") === false) {
    * Check if debugging is enabled for the current user/IP/_ENV.
    */
   function _dhh_debug(): bool {
-    if(isset($_ENV["DHH_DEBUG_ENABLED"])
-    || (
-      isset($_GET["nofpc"])
-      && isset($_SERVER["REMOTE_ADDR"])
-      && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips()))
-    ) {
-      return true;
-    }
-    return false;
+    static $result = null;
+    $result ??= isset($_ENV["DHH_DEBUG_ENABLED"]) || (isset($_GET["nofpc"]) && isDevIp());
+    return $result;
   }
 }
 
-if(function_exists("_dhh_reflect") === false) {
+/**
+ * Check if the current user/IP is a DHH developer IP. For allowing debug dumps and logs in production.
+ *
+ * @return bool
+ */
+function isDevIp(): bool {
+  static $result = null;
+  $result ??= isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true);
+  return $result;
+}
+
+if(!function_exists("_dhh_reflect")) {
+  /**
+   * Reflect a function or method to get its file and line number.
+   *
+   * @param  string      $function  The function name
+   * @param  string|null $class     The class name (optional)
+   *
+   * @return array|false            Array with "file" and "line" keys, or FALSE on failure
+   */
   function _dhh_reflect($function, $class = null) {
     if($class === null) {
       if($r = new ReflectionFunction($function)) {
@@ -637,11 +650,27 @@ if(function_exists("_dhh_reflect") === false) {
   }
 }
 
-function _dhh_getselect($collection) {
+/**
+ * Get the SQL SELECT statement from a collection.
+ *
+ * @param  Mage_Core_Model_Resource_Db_Collection_Abstract  $collection
+ * @return string
+ */
+function _dhh_getselect(Mage_Core_Model_Resource_Db_Collection_Abstract $collection) {
   return $collection->getSelect()->__toString();
 }
 
-function in_range($number, $min, $max, $inclusive = false) {
+/**
+ * Check if a number is in a given range.
+ *
+ * @param  float|int  $number
+ * @param  float|int  $min
+ * @param  float|int  $max
+ * @param  bool       $inclusive
+ *
+ * @return bool
+ */
+function in_range(float|int $number, float|int $min, float|int $max, bool $inclusive = false): bool {
   if(is_numeric($number) && is_numeric($min) && is_numeric($max)) {
     return $inclusive
       ? ($number >= $min && $number <= $max)
@@ -663,8 +692,35 @@ function devDump(mixed $var): void {
   }
 }
 
-if(function_exists("_getAlternativeEans") === false) {
-  function _getAlternativeEans($ean) {
+/**
+ * Write a log while in production. Checks if the IP is a DHH IP and log the message to verbose.txt.
+ * > Does not require ?nofpc.
+ *
+ * @param  array|object|string  $message   The message to log
+ * @param  ?int                 $level     Log level, defaults to Zend_Log::DEBUG
+ * @param  string|null          $file      Log file name, defaults to "verbose.txt". Logging to *.log is discouraged as it will be picked up by monitoring.
+ * @param  bool                 $forceLog  Whether to force logging even if logging is disabled in Magento configuration (default: TRUE)
+ *
+ * @return void
+ */
+function devLog(string $message, int $level = null, ?string $file = "verbose.txt", bool $forceLog = true): void {
+  if(isDevIp()) {
+    $level ??= Zend_Log::DEBUG;
+    Mage::log($message, $level, $file, $forceLog);
+  }
+}
+
+if(!function_exists("_getAlternativeEans")) {
+  /**
+   * Given an EAN, return an array of alternative EANs by adding/removing leading zeros.
+   *
+   * @param  string|int $ean
+   * @return array
+   */
+  function _getAlternativeEans(string|int|null $ean): array {
+    if($ean === null) {
+      return [];
+    }
     $eans = (array) $ean;
     if(strlen((string) $ean) === 13) {
       $eans[] = sprintf("%014d", $ean);

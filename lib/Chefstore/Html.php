@@ -93,4 +93,14 @@ class Html {
     
     return $html;
   }
+  
+  /**
+   * Check if a string contains HTML tags, cheaply.
+   *
+   * @param  string $string
+   * @return bool
+   */
+  public static function containsHtml($string): bool {
+    return preg_match("/<[^<]+>/", $string, $m) !== 0;
+  }
 }

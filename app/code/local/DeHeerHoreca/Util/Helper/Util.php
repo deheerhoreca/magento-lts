@@ -30,32 +30,38 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   private static $dhh_click_log = [];
   
-  /*
+  /**
    * getFullProductUrl() runs into issues when the url including
    * category and excluding category are different in core_url_rewrite.
    * This function attempts to get the URL fast and easy from core_url_rewrite.
    * It should be fallbacked with $product->getProductUrl()
+   *
+   * `ALTER TABLE `prokoeling`.`core_url_rewrite` DROP INDEX `DHH_PRODUCT_ID_GETFULLPRODUCTURLFROMREWRITES`, ADD 
+   *   INDEX `DHH_PRODUCT_ID_GETFULLPRODUCTURLFROMREWRITES` (`product_id`, `category_id`, `store_id`, `is_system`, `request_path`) USING BTREE;`
    */
-   // ALTER TABLE `prokoeling`.`core_url_rewrite` DROP INDEX `DHH_PRODUCT_ID_GETFULLPRODUCTURLFROMREWRITES`, ADD 
-   // INDEX `DHH_PRODUCT_ID_GETFULLPRODUCTURLFROMREWRITES` (`product_id`, `category_id`, `store_id`, `is_system`, `request_path`) USING BTREE;
-  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product, $single = true, int $store_id = -1) {
-    $resource       = Mage::getSingleton('core/resource');
-    $readConnection = $resource->getConnection('core_read');
-    $tableName      = (string)  $resource->getTableName('core_url_rewrite');
-    $product_id     = (int)     $product->getId();
-    $base_url       = (string)  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
-    if($store_id < 0) {
-      $store_id = (int) Mage::app()->getStore()->getStoreId();
-    }
-    $query          = "SELECT `request_path` FROM `{$tableName}` WHERE product_id='{$product_id}' AND store_id = '{$store_id}' ORDER BY `category_id` IS NULL, '1' ASC, `is_system` DESC";
+  public function getFullProductUrlFromRewrites(Mage_Catalog_Model_Product $product, bool $single = true, int $store_id = -1): string|array|false {
+    static $resource        = null;
+    static $readConnection  = null;
+    static $tableName       = null;
+    static $base_url        = null;
+    $resource       ??= Mage::getSingleton("core/resource");
+    $readConnection ??= $resource->getConnection("core_read");
+    $tableName      ??= (string)  $resource->getTableName("core_url_rewrite");
+    $base_url       ??= (string)  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+    $product_id       = (int)     $product->getId();
+    $store_id         = $store_id < 0 ? (int) Mage::app()->getStore()->getStoreId() : $store_id;
+    
+    $query = "SELECT `request_path` FROM `{$tableName}`
+      WHERE product_id='{$product_id}' AND store_id = '{$store_id}'
+      ORDER BY `category_id` IS NULL, '1' ASC, `is_system` DESC";
     
     // Single mode: Return the first URL -- Assume we prefer a URL with a category
     // Custom sorting to prefer system-defined ("primary" category), and in-category URLs, with fallback
-    if($single === true) {
-      $query    .= " LIMIT 1";
-      $results  = $readConnection->fetchAll($query);
-      if(empty($results[0]["request_path"]) === false) {
-        return $base_url.$results[0]["request_path"];
+    if($single) {
+      $query .= " LIMIT 1";
+      $requestPath = $readConnection->fetchOne($query);
+      if(filled($requestPath)) {
+        return $base_url.$requestPath;
       }
       return false;
     }
@@ -74,7 +80,16 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return false;
   }
   
-  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product, $single = true, int $store_id = -1) {
+  /**
+   * Get full product URL, preferring URL from rewrites table, with fallback to OpenMage's internal getProductUrl() method.
+   *
+   * @param  Mage_Catalog_Model_Product $product
+   * @param  bool                       $single
+   * @param  int                        $store_id
+   *
+   * @return string
+   */
+  public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product, bool $single = true, int $store_id = -1): string {
     $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product, $single, $store_id);
     if($url === false) {
       $url = $product->getProductUrl(); // fallback
@@ -83,24 +98,29 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $url;
   }
   
+  /**
+   * Get one category from a product (the first one).
+   * @todo Filter out undesired in case of multiple categories.
+   *
+   * @param  Mage_Catalog_Model_Product $product
+   * @return Mage_Catalog_Model_Category|false
+   */
   public function getProductCategory(Mage_Catalog_Model_Product $product = null) {
     $category_ids = $product->getCategoryIds();
-    if(empty($category_ids) === false) {
+    if(!empty($category_ids)) {
       return dhh_get_cached_category(array_shift($category_ids));
-      // return Mage::getModel('catalog/category')->load(array_shift($category_ids));
     }
     
     return false;
   }
   
   public function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
-
     // Force display deepest child category as request path.
     $categories = $product->getCategoryCollection();
     $deepCatId = 0;
     $path = '';
     $productPath = false;
-
+    
     foreach($categories as $category) {
       // Look for the deepest path and save.
       if (substr_count((string) $category->getData('path'), '/') > substr_count((string) $path, '/')) {
@@ -108,17 +128,16 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $deepCatId = $category->getId();
       }
     }
-
+    
     // Load category.
-    // $category = Mage::getModel('catalog/category')->load($deepCatId);
     $category = dhh_get_cached_category($deepCatId);
-
+    
     // Remove .html from category url_path.
     $categoryPath = str_replace('.html', '',  (string) $category->getData('url_path'));
-
+    
     // Get product url path if set.
     $productUrlPath = $product->getData('url_path');
-
+    
     // Get product request path if set.
     $productRequestPath = $product->getData('request_path');
     
@@ -126,7 +145,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if ($productUrlPath === null && $productRequestPath === null) {
       $productUrlPath = $product->getData('url_key');
     }
-
+    
     // Now grab only the product path including suffix (if any).
     if ($productUrlPath) {
       $path = explode('/', (string) $productUrlPath);
@@ -135,7 +154,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $path = explode('/', (string) $productRequestPath);
       $productPath = array_pop($path);
     }
-
+    
     // Now set product request path to be our full product url including deepest category url path.
     if ($productPath !== false) {
       if ($categoryPath) {
@@ -145,7 +164,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $product->setData('request_path', $productPath);
       }
     }
-
+    
     return $product->getProductUrl();
   }
   
@@ -1341,6 +1360,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   /**
+   * Get the current URL from OpenMage, but decoded and cached.
+   *
+   * @return string
+   */
+  public static function getCurrentUrl(): string {
+    static $url = null;
+    if($url === null) {
+      $url = omDecodeUrl(Mage::helper("core/url")->getCurrentUrl());
+    }
+    return $url;
+  }
+  
+  /**
    * Log clicks to a JSONL file, while blocking some known bots.
    * > Runs after page is rendered and output is sent.
    *
@@ -1360,7 +1392,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
-    $full_url       = omDecodeUrl(Mage::helper("core/url")->getCurrentUrl());
+    $full_url       = self::getCurrentUrl();
     $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
     $path           = ltrim((string) $url->getPath(), "/");
     $query          = ltrim((string) $url->getQuery(), "?");
@@ -1427,7 +1459,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $totalElapsedMs   = round($totalElapsedSecs * 1000, 2);
       
       $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
-      $full_url       = omDecodeUrl(Mage::helper("core/url")->getCurrentUrl());
+      $full_url       = self::getCurrentUrl();
       $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
       $urlPath        = ltrim((string) $url->getPath(), "/");
       $urlQuery       = ltrim((string) $url->getQuery(), "?");
@@ -1730,13 +1762,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   public static function _cdn_img($options) {
     return _cdn_img($options);
-  }
-  
-  public static function get_apm_transaction_name(): string {
-    return (string) trim(implode(" ", [
-      ($_SERVER["REQUEST_METHOD"] ?? ""),
-      (Mage::app()->getFrontController()->getAction()->getFullActionName() ?? "UNKNOWN_ACTION"),
-    ]));
   }
   
   public static function get_sys_supplier(string $supplier): string {

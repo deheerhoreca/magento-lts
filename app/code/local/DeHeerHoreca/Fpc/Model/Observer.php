@@ -38,7 +38,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         // Copying from Mage_Core_Model_App::run() finilization code here:
         // -------------------------------------------------------------------------------------
         // Finish the request explicitly, no output allowed beyond this point
-        if (php_sapi_name() == 'fpm-fcgi' && function_exists('fastcgi_finish_request')) {
+        if (php_sapi_name() == "fpm-fcgi" && function_exists("fastcgi_finish_request")) {
             fastcgi_finish_request();
         } else {
           flush();
@@ -48,7 +48,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         }
         
         try {
-          Mage::dispatchEvent('core_app_run_after', ['app' => Mage::app()]); // ! DHH: Altered line
+          Mage::dispatchEvent("core_app_run_after", ["app" => Mage::app()]); // ! DHH: Altered line
         } catch (Throwable $e) {
           Mage::logException($e);
         }
@@ -59,7 +59,6 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     
     $dhhHelperUtil->addLabelToClickLog("fpc_cache", "MISS");
-    
     Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
   }
   
@@ -85,7 +84,6 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     
     return DeHeerHoreca_Fpc_Helper_Data::cleanCacheByTagsDeferred($cache_tags);
-    // return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
   }
   
   /**
@@ -133,6 +131,27 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     ];
     
     return DeHeerHoreca_Fpc_Helper_Data::cleanCacheByTagsDeferred($cache_tags);
-    // return DeHeerHoreca_Fpc_Helper_Data::clean_by_tags($cache_tags);
+  }
+  
+  /**
+   * Implements https://github.com/OpenMage/magento-lts/issues/1105 without installing that old extension.
+   * Observes: controller_action_layout_load_before
+   *
+   * Removes per-item layout handles from cacheable pages, like PRODUCT_123 and CATEGORY_456.
+   * This prevents OpenMage from creating a large number of cache entries and cache tags for each product/category page.
+   * This effectively disables custom design layouts per product/category, regardless of full page cache being enabled or not.
+   * But this feature is not used and its fields are disabled in the product edit form.
+   *
+   * @param Varien_Event_Observer $observer
+   * @return void
+   */
+  public static function removePerItemLayoutHandleInCache(Varien_Event_Observer $observer): void {
+    $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
+    foreach($handles as $key => $handle) {
+      if(preg_match("/^PRODUCT_\d+$/", $handle) || preg_match("/^CATEGORY_\d+$/", $handle)) {
+        $observer->getEvent()->getLayout()->getUpdate()->removeHandle($handle);
+      }
+    }
+    $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
   }
 }

@@ -15,6 +15,17 @@ use \Illuminate\Support\Str;
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
+  /** @var ?bool Lazy flag indicating whether this request is anonymous or not */
+  public static $request_is_anonymous         = null;
+  
+  public const DHH_FPC_LOG_FILE               = "fpc.txt";
+  
+  public const PLACEHOLDER_FORMKEY            = "___FPC_FORM_KEY_PLACEHOLDER___";
+  public const PLACEHOLDER_FORMKEY_DEPRECATED = "<!-- fpc form_key_placeholder -->";
+  
+  public const REDIS_CACHE_TAG_PREFIX         = "zc:ti:dd6";
+  public const REDIS_CACHE_KEY_PREFIX         = "zc:k:dd6";
+  
   /** @var string[] OpenMage action whitelist for FPC caching */
   public static $om_action_whitelist  = [
     "catalog_product_view",
@@ -25,14 +36,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     "cms_index_index",
     // "amshopby_index_index", // Disabled because we need to tag it properly first
   ];
-  
-  /** @var ?bool Lazy flag indicating whether this request is anonymous or not */
-  public static $request_is_anonymous         = null;
-  
-  public const DHH_FPC_LOG_FILE               = "fpc.txt";
-  
-  public const PLACEHOLDER_FORMKEY            = "___FPC_FORM_KEY_PLACEHOLDER___";
-  public const PLACEHOLDER_FORMKEY_DEPRECATED = "<!-- fpc form_key_placeholder -->";
   
   /**
    * Clear the cache
@@ -141,7 +144,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public static function get_cache_tags(): array {
     $cache_tags = [];
     if($om_action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName()) {
-      $cache_tags[] = strtoupper("DHH_{$om_action}");
+      $cache_tags[] = strtoupper("DHH_{$om_action}"); // DHH tag
+      $cache_tags[] = strtoupper($om_action);         // Native tag
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
@@ -320,7 +324,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $cache_key_prefix   ??= self::get_cache_prefix();
     $cache_key_url_hash   = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
     $cacheKey             = "dhh__{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
-    self::log("Normalized cache URL: {$cache_key_url}, Hash: {$cache_key_url_hash}, Cache Key: zc:k:e6b_{$cacheKey}");
+    self::log("Normalized cache URL: {$cache_key_url}, Hash: {$cache_key_url_hash}, Cache Key: ".self::REDIS_CACHE_KEY_PREFIX."_{$cacheKey}");
     
     return $cacheKey;
   }
@@ -731,14 +735,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /**
    * Clean cache entries by their tags.
    * - Usage: DeHeerHoreca_Fpc_Helper_Data::_clean_by_tags(["foo", "bar"])
-   * - Do NOT use prefixes like zc:ti:, adds "e6b_" if needed
+   * - Do NOT use prefixes like zc:ti:, adds "dd6_" if needed
    *
    * @param  string|array  $cache_tags
    * @return bool
    */
   public static function clean_by_tags(string|array $cache_tags): bool {
-    // Prepend with e6b_ if needed. Redis library does NOT do this.
-    $cache_tags = Arr::map((array) $cache_tags, fn($tag) => Str::start($tag, "e6b_"));
+    // Prepend with dd6_ if needed. Redis library does NOT do this.
+    $cache_tags = Arr::map((array) $cache_tags, fn($tag) => Str::start($tag, "dd6_"));
     $cache_tags = array_values(array_unique($cache_tags)); // In mass updates, might have duplicates
     self::log("CLEAN tags: ".di($cache_tags), Zend_Log::INFO);
     

@@ -18,14 +18,14 @@ if (!defined("DHH_CLASS_ALIASES_APPLIED")) {
   if (!is_callable("Collection"))    class_alias(Collection::class, "Collection", true);
   if (!is_callable("Number"))        class_alias(Number::class, "Number", true);
   if (!is_callable("Str"))           class_alias(Str::class, "Str", true);
-  if (!is_callable("ItemInterface")) class_alias(ItemInterface::class, "ItemInterface", true);
+  // if (!is_callable("ItemInterface")) class_alias(ItemInterface::class, "ItemInterface", true);
   define("DHH_CLASS_ALIASES_APPLIED", true);
 }
 
 require_once __DIR__."/functions.php"; // BEFORE config.php
 require_once __DIR__."/config.php";
 require_once __DIR__."/CsCache.php";
-require_once __DIR__."/ElasticApmHelper.php";
+// require_once __DIR__."/ElasticApmHelper.php";
 require_once __DIR__."/Helper.php";
 require_once __DIR__."/Html.php";
 require_once __DIR__."/Observability.php";

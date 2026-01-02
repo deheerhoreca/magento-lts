@@ -6,108 +6,73 @@ use \Chefstore\Utils;
 use \Elastic\Apm\ElasticApm;
 use \Elastic\Apm\TransactionInterface;
 use \Chefstore\Helper;
+use \Chefstore\Html;
+use \Chefstore\Observability;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Str;
 
 class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
-  public function __construct() {}
-  
   /**
    * Setup Elastic APM.
    * 
-   * Fired from controller_action_layout_load_before.
+   * Observes: controller_action_layout_load_before.
    *
    * @param  \Varien_Event_Observer $observer
    * @return void
    */
   public function configureElasticApm(\Varien_Event_Observer $observer): void {
-    if(!self::isElasticApmAvailable()) {
+    static $initialized = false;
+    if($initialized) {
+      return;
+    }
+    devLog(__METHOD__);
+    if(!Observability::isElasticApmAvailable()) {
+      devLog("Elastic APM not available");
       return;
     }
     
     // Careful execution with try block:
     try {
+      /** @var TransactionInterface */
       $transaction = ElasticApm::getCurrentTransaction();
       if(is_object($transaction)) {
         
         // Set transaction.name to HTTP method + the name of the OpenMage action
-        if($transaction_name = self::getApmTransactionName()) {
+        if($transaction_name = Observability::getApmTransactionName()) {
           $transaction->setName($transaction_name);
+          devLog("Set APM transaction name to '{$transaction_name}'");
         }
         
         // Set transaction.type to segregate the various request types
-        if($transaction_type = self::getApmTransactionType()) {
+        if($transaction_type = Observability::getApmTransactionType()) {
           $transaction->setType($transaction_type);
+          devLog("Set APM transaction type to '{$transaction_type}'");
         }
         
         $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
         $transaction->context()->setLabel("sapi", PHP_SAPI);
+        
+        $initialized = true;
+        $currentUrl = getOmDhhUtilHelper()->getCurrentUrl();
+        devLog("Elastic APM initialized: {$currentUrl}");
       } else {
-        Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE, "system.log", true);
+        Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE);
+        devLog("Failed to get current Elastic APM transaction");
+        return;
       }
     } catch(Exception $e) {
       Mage::logException($e);
+      Mage::log("Failed to init Elastic APM: {$e->getMessage()}", Zend_Log::NOTICE);
+      devLog("Failed to init Elastic APM: {$e->getMessage()}");
+      return;
     }
     
     return;
   }
   
   /**
-   * Check if Elastic APM is loaded.
-   *
-   * @param  string|null $transaction_name
-   * @return boolean
-   */
-  public static function isElasticApmAvailable(?string $transaction_name = null): bool {
-    if(is_null($transaction_name)) {
-      $transaction_name = "no_transaction_name";
-    }
-    
-    if(!extension_loaded("elastic_apm")) {
-      Mage::log("Elastic APM extension not loaded [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE, "system.log", true);
-      return false;
-    }
-    
-    // After clearing opcache, there are a few requests that strangely make it past extension_loaded() but still don't have Elastic APM available, adding another check:
-    if(!class_exists(ElasticApm::class)) {
-      Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::NOTICE, "system.log", true);
-      return false;
-    }
-    
-    return true;
-  }
-  
-  /**
-   * Get the name used for the APM root transaction, failing silently if not possible at this time.
-   *
-   * @return string|null
-   */
-  public static function getApmTransactionName(): ?string {
-    return rescue(fn() => Helper::loadOmHelperDhhUtil()->get_apm_transaction_name(), null);
-  }
-  
-  /**
-   * Try to detect admin and set a different service_name.
-   *
-   * @return string|null
-   */
-  public static function getApmTransactionType(): ?string {
-    return rescue(function(): string {
-      if(PHP_SAPI === "cli") {
-        return "cli";
-      }
-      
-      if(Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() === "adminhtml") {
-        return "admin";
-      }
-      
-      return "frontend";
-    }, null);
-  }
-  
-  /**
-   * Lock some attributes from editing.
+   * Lock (disable) some attributes when editing a Product.
    *
    * @param  \Varien_Event_Observer $observer
    * @return void
@@ -129,6 +94,17 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute("supplier_usps_json");
     $product->lockAttribute("supplier_name");
     $product->lockAttribute("supplier_subdescription");
+    $product->lockAttribute("news_from_date");
+    $product->lockAttribute("is_recurring");
+    
+    // Because we disable custom design on product view pages (at least we killed the cache tag explosion), we should not use custom design at all:
+    $product->lockAttribute("page_layout");
+    $product->lockAttribute("custom_design");
+    $product->lockAttribute("custom_design_from");
+    $product->lockAttribute("custom_design_to");
+    $product->lockAttribute("custom_layout_update");
+    $product->lockAttribute("custom_apply_to_products");
+    $product->lockAttribute("options_container");
   }
   
   // Also used directly in resave_all_products.php
@@ -143,14 +119,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       $return = true;
       $product = $observer_or_product;
     }
-
+    
     // SHORT NAME -- 2023-10-10 Disabling, better done from intel
     // if(strlen($product->getData("name_short")) < 3) {
       // $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
       // $product->setData("name_short", $new_value);
       // if(!$return) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
     // }
-
+    
     /* END OF LIFE */
     if($product->getData("eol") === "2075") {
       if(!empty($product->getData("tagline"))) {
@@ -273,37 +249,36 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $product->setData("recommended_product", "0");
       }
     }
-
+    
     /* POWER */
     if(empty($product->getData("vermogen")) === false
     || empty($product->getData("vermogen_kw")) === false) {
       $vermogen    = empty($product->getData("vermogen"))    ? 0 : (double) $product->getData("vermogen");
       $vermogen_kw = empty($product->getData("vermogen_kw")) ? 0 : (double) $product->getData("vermogen_kw");
       $new_value   = ($vermogen + $vermogen_kw) * 1000;
-
+      
       if($new_value > 0 && $new_value != $product->getData("total_power_watt")) {
         $product->setData("total_power_watt", $new_value);
         if(!$return) Mage::getSingleton('core/session')->addSuccess("total_power_watt auto-filled");
       }
     }
-
+    
     /* Backfill EAN13 from EAN if possible */
     if(!empty($product->getData("ean")) && strlen((string) $product->getData("ean")) < 13) {
       $new_value = sprintf('%013d', $product->getData("ean"));
       $product->setData("ean", $new_value);
       if(!$return) Mage::getSingleton('core/session')->addSuccess("ean zerofilled");
     }
-
+    
     if($return) {
       return $product;
     }
-
+    
     /* NOTHING BELOW THIS */
   }
   
   // Also used directly in resave_all_products.php
   public static function updateProductAfterSave($observer_or_product) {
-    
     if($observer_or_product::class === "Varien_Event_Observer") {
       if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS") && constant("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS") === true) {
         return;
@@ -355,7 +330,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         } catch (Excpetion $e) {
           if(!$return) Mage::getSingleton('core/session')->addError("Failed to apply 'unmanaged' business rules on stock item: {$e->getMessage()}");
         }
-      }      
+      }
     } elseif($stockItem->getManageStock() === "1" && $stockItem->getData('use_config_manage_stock') === "0") {
       if($stockItem->getData('qty') > 0 && $stockItem->getData('is_in_stock') === "0") {
         $stockItem->setData('is_in_stock', 1);
@@ -373,36 +348,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       return $product;
     }
     
-    // exit;
     return;
-  }
-  
-  // Adds an EOL = No filter to any listview unless it's explicitly set to Yes
-  public function addEolFilter(Varien_Event_Observer $observer) {
-    // $productCollection = $observer->getEvent()->getCollection();
-
-    // /* If the EOL filter is not set to "Yes", apply a default filter that removes EOL products */
-    // if(Mage::helper('core')->isModuleEnabled('Amasty_Shopby')) {
-      // $eol_filter = Mage::helper('amshopby')->getRequestValues("eol") ?? false;
-      // if(empty($eol_filter[0]) === false && 
-        // ($eol_filter[0] === "2075" || $eol_filter[0] === "1910")) { // Prod and Dev IDs
-        // // EOL filter set to "Yes", do nothing
-      // } else {
-        // $productCollection->addAttributeToFilter([
-          // ['attribute' => "eol",  ['null' => true]],
-          // ['attribute' => "eol", ['eq'   => '2074']],
-          // ['attribute' => "eol", ['eq'   => 'NO FIELD']],
-        // ], '', 'left');
-      // }
-    // }
-
-    // $observer->getEvent()->setCollection($productCollection);    
-
-    // if($_SERVER["REMOTE_ADDR"] === "185.127.111.251" && isset($_GET['nofpc'])) {
-      // echo $productCollection->getSelect()->__toString();
-      // $filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
-      // echo $productCollection->getSize();
-    // }
   }
   
   /**
@@ -425,8 +371,14 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     getOmDhhUtilHelper()->profileSqlQueries();
   }
   
-  // Called during placement of an order, to clear tm_field fields
-  // These fields need to be cleared during reorder (admin only)
+  /**
+   * Called during placement of an order, to clear tm_field fields
+   * These fields need to be cleared during reorder (admin only)
+   * Observes: sales_order_place_before
+   *
+   * @param  Varien_Event_Observer  $observer
+   * @return void
+   */
   public function beforeOrderPlace(Varien_Event_Observer $observer): void {
     // - tm_field1:  supplier.order_id
     // - tm_field2:  shipment.expected_date
@@ -477,7 +429,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    */
   public function emailSendAfter(Varien_Event_Observer $observer): void {
     sleep(1);
-    Mage::log("Slept for 1 seconds after sending email", null, "system.log", true);
+    Mage::log("Slept for 1 seconds after sending email");
   }
   
   /**
@@ -698,6 +650,79 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     );
     
     $columnsObject->setColumns($columns);
+  }
+  
+  /**
+   * Observes: http_response_send_before
+   *
+   * @param  Varien_Event_Observer $observer
+   */
+  public function minifyAjaxResponse(Varien_Event_Observer $observer): void {
+    if(Mage::app()->getRequest()->isAjax() !== true) {
+      return;
+    }
+    if(!isDevIp()) {
+      return;
+    }
+    
+    /** @var Mage_Core_Controller_Response_Http */
+    $response = $observer->getResponse();
+    $body = $response->getBody();
+    if(is_string($body)) {
+      if(true || json_validate($body)) { // Disabled validation for speed
+        try {
+          $data = json_decode($body, true);
+        } catch(Throwable $e) {
+          Mage::logException($e);
+          devLog("Failed to decode AJAX response body JSON: ".$e->getMessage());
+          return;
+        }
+        if(is_array($data)) {
+          $changed = false;
+          $data = Arr::map($data, function($partContent, $partName) use (&$changed): mixed {
+            $knownHtmlParts = [
+              "page",     // Seen in amshopby AJAX responses
+              // "blocks",   // Seen in amshopby AJAX responses; Content is another level deeper, @todo
+              "content",  // Seen in adminhtml mage core
+            ];
+            if(in_array($partName, $knownHtmlParts, true) && is_string($partContent) && Html::containsHtml($partContent)) {
+              // $tmpFile = sys_get_temp_dir()."/dhh_util_minify_ajax_{$partName}_before.html";
+              // file_put_contents($tmpFile, $partContent);
+              // devLog("Wrote to {$tmpFile}");
+              $origPartContent = $partContent;
+              try {
+                $partContent = Html::minifyHtml($partContent);
+                devLog("Minified AJAX response part '{$partName}': ".(strlen($origPartContent))." -> ".(strlen($partContent))." bytes");
+                // $tmpFile = sys_get_temp_dir()."/dhh_util_minify_ajax_{$partName}_after.html";
+                // file_put_contents($tmpFile, $partContent);
+                // devLog("Wrote to {$tmpFile}");
+                $changed = true;
+                return $partContent;
+              } catch(Throwable $e) {
+                Mage::logException($e);
+                devLog("Failed to minify AJAX response part '{$partName}': ".$e->getMessage());
+              }
+              return $origPartContent;
+            }
+            return $partContent;  // Don't fail, don't change response
+          });
+          if($changed) {
+            $body = json_encode($data);
+            // devLog(var_export($body, true));
+            devLog("AJAX Response body JSON minified");
+            $response->setBody($body);
+          } else {
+            devLog("AJAX Response body JSON not changed");
+          }
+        } else {
+          devLog("AJAX Response body JSON is not an array");
+        }
+      } else {
+        devLog("AJAX Response body is not valid JSON");
+      }
+    } else {
+      devLog("AJAX Response body is not a string");
+    }
   }
   
   /**

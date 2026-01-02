@@ -526,12 +526,13 @@ final class Mage
     public static function dispatchEvent($name, array $data = [])
     {
         Varien_Profiler::start('DISPATCH EVENT:' . $name);
-        // $result = self::app()->dispatchEvent($name, $data);
-        $closure = fn() => self::app()->dispatchEvent($name, $data);
-        $millis = null;
-        $result = millis($closure, $millis);
+        devLog($name);
+        $result = self::app()->dispatchEvent($name, $data);
+        // $closure = fn() => self::app()->dispatchEvent($name, $data);
+        // $millis = null;
+        // $result = millis($closure, $millis);
         // if($millis > 5.0) {
-        //     Mage::log("Dispatched event '$name' in {$millis} ms", null, "verbose.txt", true);
+        //     devLog("Dispatched event '$name' in {$millis} ms");
         //     // cd($data);
         // }
         Varien_Profiler::stop('DISPATCH EVENT:' . $name);

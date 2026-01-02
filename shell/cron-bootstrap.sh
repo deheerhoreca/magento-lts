@@ -3,6 +3,9 @@
 # Set User Environment
 . ${HOME}/.bash_profile
 
+## DEV:
+. /etc/profile.d/phpenv.sh
+
 # Set some bash flags that also apply to the rest of the parent script
 set -e          # Exit immediately if a command exits with a non-zero status
 set -u          # Treat unset variables as an error when substituting

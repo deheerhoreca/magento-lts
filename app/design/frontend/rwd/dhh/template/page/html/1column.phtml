@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use \Chefstore\Html;
 
-$tx_name        = (string) (Mage::helper("deheerhoreca_util/util")->get_apm_transaction_name() ?? "unknown");
+$tx_name        = \Chefstore\Observability::getApmTransactionName();
 $env            = (string) (ini_get("elastic_apm.environment") ?? "unknown");
 $body_class     = (string) $this->getBodyClass();
 $current_route  = (string) $this->getRequest()->getRouteName();

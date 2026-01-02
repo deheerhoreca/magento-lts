@@ -6,6 +6,9 @@ namespace Chefstore;
 
 use \Mage;
 
+/**
+ * @deprecated, see Observability
+ */
 class ElasticApmHelper {
   
   /**
@@ -17,12 +20,17 @@ class ElasticApmHelper {
    * @return void
    */
   public function configureElasticApm(\Varien_Event_Observer $observer): void {
-    if(!self::isElasticApmAvailable()) {
-      return;
-    }
-    
     // Careful execution with try block:
     try {
+      if(!self::isElasticApmAvailable()) {
+        return;
+      }
+      
+      // Avoid initializing APM for intel CLI runs that already have APM initialized
+      if(defined("APP_SHORT") && APP_SHORT === "intel") {
+        return;
+      }
+      
       $transaction = ElasticApm::getCurrentTransaction();
       if(is_object($transaction)) {
         

@@ -37,6 +37,15 @@
                     </DeHeerHoreca_Fpc_Model_Observer>
                 </observers>
             </controller_action_predispatch>
+            <controller_action_layout_load_before>
+                <observers>
+                    <customer_is_logged_in_observer>
+                        <type>singleton</type>
+                        <class>deheerhoreca_fpc/observer</class>
+                        <method>removePerItemLayoutHandleInCache</method>
+                    </customer_is_logged_in_observer>
+                </observers>
+            </controller_action_layout_load_before>
         </events>
     </frontend>
     <adminhtml>
