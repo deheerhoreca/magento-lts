@@ -472,3 +472,6 @@ media
 /app/etc/modules/Guidance_Simplepage.xml
 /app/code/community/Aydus/HeadOrder
 /app/etc/modules/Aydus_HeadOrder.xml
+/app/code/community/Aoe/CacheStats
+/app/etc/modules/Aoe_CacheStats.xml
+/app/etc/aoe_cachestats.xml
