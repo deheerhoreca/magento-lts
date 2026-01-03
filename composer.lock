@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0071674baeafa03cd0bf34d91f438c68",
+    "content-hash": "38ac8eb216ad623037e23530e0cd1750",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -40,6 +40,40 @@
                 "source": "https://github.com/deheerhoreca/Aoe_BlackHoleSession/tree/dhh-fixes"
             },
             "time": "2024-06-14T11:35:23+00:00"
+        },
+        {
+            "name": "aoepeople/aoe_cachestats",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deheerhoreca/Aoe_CacheStats.git",
+                "reference": "7919fef6b1f3b048e254cfa3ae64cdf0fcab08b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/7919fef6b1f3b048e254cfa3ae64cdf0fcab08b5",
+                "reference": "7919fef6b1f3b048e254cfa3ae64cdf0fcab08b5",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "license": [
+                "GPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Fabrizio Branca",
+                    "email": "mail@firstname-lastname.de"
+                }
+            ],
+            "description": "Gathers cache statistics",
+            "support": {
+                "source": "https://github.com/deheerhoreca/Aoe_CacheStats/tree/master"
+            },
+            "time": "2026-01-03T15:02:43+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
@@ -84,12 +118,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Aoe_Profiler.git",
-                "reference": "39658a89de0b8f75398c70c125b7bf3410d30862"
+                "reference": "d6120fb62b0c9b474910df6e7abe32e9c3d6e5bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/39658a89de0b8f75398c70c125b7bf3410d30862",
-                "reference": "39658a89de0b8f75398c70c125b7bf3410d30862",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/d6120fb62b0c9b474910df6e7abe32e9c3d6e5bb",
+                "reference": "d6120fb62b0c9b474910df6e7abe32e9c3d6e5bb",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +145,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_Profiler/tree/master"
             },
-            "time": "2025-06-24T13:01:43+00:00"
+            "time": "2026-01-02T21:39:53+00:00"
         },
         {
             "name": "aoepeople/aoe_templatehints",
@@ -260,12 +294,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:aydus/HeadOrder.git",
+                "url": "https://github.com/ExtensionsStore/HeadOrder.git",
                 "reference": "8a3642c586f112141122816eecfb650cf3621f50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aydus/HeadOrder/zipball/8a3642c586f112141122816eecfb650cf3621f50",
+                "url": "https://api.github.com/repos/ExtensionsStore/HeadOrder/zipball/8a3642c586f112141122816eecfb650cf3621f50",
                 "reference": "8a3642c586f112141122816eecfb650cf3621f50",
                 "shasum": ""
             },
@@ -287,6 +321,10 @@
             ],
             "description": "Order Javascript and CSS files in the head block.",
             "homepage": "https://github.com/aydus/HeadOrder.git",
+            "support": {
+                "source": "https://github.com/ExtensionsStore/HeadOrder/tree/master",
+                "issues": "https://github.com/ExtensionsStore/HeadOrder/issues"
+            },
             "time": "2015-06-30T22:24:58+00:00"
         },
         {
@@ -309,7 +347,7 @@
             "version": "1.7.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:plynchnlm/prototypejs-bower.git",
+                "url": "https://github.com/plynchnlm/prototypejs-bower.git",
                 "reference": "880a287e8cbdc08bd731ab3f013a1af486633f79"
             },
             "dist": {
@@ -324,7 +362,7 @@
             "version": "1.9.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:plynchnlm/scriptaculous-bower.git",
+                "url": "https://github.com/plynchnlm/scriptaculous-bower.git",
                 "reference": "cd5b0f19ef8c777e9dbf8a1f9389d1a5091ff34d"
             },
             "dist": {
@@ -457,16 +495,16 @@
         },
         {
             "name": "cmixin/business-day",
-            "version": "1.20.3",
+            "version": "1.20.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kylekatarnls/business-day.git",
-                "reference": "414302dde988a7c130fd703320c088c33caef59f"
+                "reference": "997aada4914dfb8c21a408a966f851019a012141"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kylekatarnls/business-day/zipball/414302dde988a7c130fd703320c088c33caef59f",
-                "reference": "414302dde988a7c130fd703320c088c33caef59f",
+                "url": "https://api.github.com/repos/kylekatarnls/business-day/zipball/997aada4914dfb8c21a408a966f851019a012141",
+                "reference": "997aada4914dfb8c21a408a966f851019a012141",
                 "shasum": ""
             },
             "require": {
@@ -512,7 +550,7 @@
             "description": "Carbon mixin to handle business days",
             "support": {
                 "issues": "https://github.com/kylekatarnls/business-day/issues",
-                "source": "https://github.com/kylekatarnls/business-day/tree/1.20.3"
+                "source": "https://github.com/kylekatarnls/business-day/tree/1.20.4"
             },
             "funding": [
                 {
@@ -524,7 +562,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-24T10:22:25+00:00"
+            "time": "2025-12-18T07:55:02+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
@@ -1398,12 +1436,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/openmage-cssjs-minify.git",
-                "reference": "72fd2bec01c3cd4d15e9f79b2ebbfc660f198d6b"
+                "reference": "341430f2ab3b3d6fb1e2a5d188185e9d5bdf826a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/openmage-cssjs-minify/zipball/72fd2bec01c3cd4d15e9f79b2ebbfc660f198d6b",
-                "reference": "72fd2bec01c3cd4d15e9f79b2ebbfc660f198d6b",
+                "url": "https://api.github.com/repos/deheerhoreca/openmage-cssjs-minify/zipball/341430f2ab3b3d6fb1e2a5d188185e9d5bdf826a",
+                "reference": "341430f2ab3b3d6fb1e2a5d188185e9d5bdf826a",
                 "shasum": ""
             },
             "require": {
@@ -1449,7 +1487,7 @@
                     "url": "https://paypal.me/fabrizioballiano"
                 }
             ],
-            "time": "2025-09-25T20:09:22+00:00"
+            "time": "2026-01-02T22:09:15+00:00"
         },
         {
             "name": "firegento/adminmonitoring",
@@ -1602,16 +1640,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.42.0",
+            "version": "v12.44.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "16657effa6a5a4e728f9aeb3e38fb4fa9ba70e7d"
+                "reference": "62b357e85711932da73f90a606d80ac09027d54c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/16657effa6a5a4e728f9aeb3e38fb4fa9ba70e7d",
-                "reference": "16657effa6a5a4e728f9aeb3e38fb4fa9ba70e7d",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/62b357e85711932da73f90a606d80ac09027d54c",
+                "reference": "62b357e85711932da73f90a606d80ac09027d54c",
                 "shasum": ""
             },
             "require": {
@@ -1619,6 +1657,7 @@
                 "illuminate/contracts": "^12.0",
                 "illuminate/macroable": "^12.0",
                 "php": "^8.2",
+                "symfony/polyfill-php83": "^1.33",
                 "symfony/polyfill-php84": "^1.33",
                 "symfony/polyfill-php85": "^1.33"
             },
@@ -1657,11 +1696,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-12-06T18:08:25+00:00"
+            "time": "2025-12-21T14:16:59+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.42.0",
+            "version": "v12.44.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1707,7 +1746,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.42.0",
+            "version": "v12.43.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1755,7 +1794,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.42.0",
+            "version": "v12.43.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1801,7 +1840,7 @@
         },
         {
             "name": "illuminate/reflection",
-            "version": "v12.42.0",
+            "version": "v12.43.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/reflection.git",
@@ -1852,16 +1891,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.42.0",
+            "version": "v12.44.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "d35411be5657e0b5560a5885f3c9140e4cbe0be5"
+                "reference": "82c5c520506618fdbf6eceb1164c770ed722d35a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/d35411be5657e0b5560a5885f3c9140e4cbe0be5",
-                "reference": "d35411be5657e0b5560a5885f3c9140e4cbe0be5",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/82c5c520506618fdbf6eceb1164c770ed722d35a",
+                "reference": "82c5c520506618fdbf6eceb1164c770ed722d35a",
                 "shasum": ""
             },
             "require": {
@@ -1928,7 +1967,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-12-09T15:26:52+00:00"
+            "time": "2025-12-21T14:15:54+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2872,10 +2911,10 @@
         },
         {
             "name": "npm-asset/lite-youtube-embed",
-            "version": "0.3.3",
+            "version": "0.3.4",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/lite-youtube-embed/-/lite-youtube-embed-0.3.3.tgz"
+                "url": "https://registry.npmjs.org/lite-youtube-embed/-/lite-youtube-embed-0.3.4.tgz"
             },
             "type": "npm-asset",
             "license": [
@@ -3335,16 +3374,16 @@
         },
         {
             "name": "phpseclib/mcrypt_compat",
-            "version": "2.0.6",
+            "version": "2.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/mcrypt_compat.git",
-                "reference": "e5924504997b4f90772034cefd89dc2f4ec189dc"
+                "reference": "cd248c07cc7b09dc73d568199eff5e8ddc4aff0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/e5924504997b4f90772034cefd89dc2f4ec189dc",
-                "reference": "e5924504997b4f90772034cefd89dc2f4ec189dc",
+                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/cd248c07cc7b09dc73d568199eff5e8ddc4aff0d",
+                "reference": "cd248c07cc7b09dc73d568199eff5e8ddc4aff0d",
                 "shasum": ""
             },
             "require": {
@@ -3399,20 +3438,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-26T14:52:18+00:00"
+            "time": "2024-11-10T00:56:59+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.47",
+            "version": "3.0.48",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "9d6ca36a6c2dd434765b1071b2644a1c683b385d"
+                "reference": "64065a5679c50acb886e82c07aa139b0f757bb89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/9d6ca36a6c2dd434765b1071b2644a1c683b385d",
-                "reference": "9d6ca36a6c2dd434765b1071b2644a1c683b385d",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/64065a5679c50acb886e82c07aa139b0f757bb89",
+                "reference": "64065a5679c50acb886e82c07aa139b0f757bb89",
                 "shasum": ""
             },
             "require": {
@@ -3493,7 +3532,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.47"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.48"
             },
             "funding": [
                 {
@@ -3509,7 +3548,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-06T01:07:24+00:00"
+            "time": "2025-12-15T11:51:42+00:00"
         },
         {
             "name": "psr/cache",
@@ -3887,16 +3926,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v7.4.1",
+            "version": "v7.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "21e0755783bbbab58f2bb6a7a57896d21d27a366"
+                "reference": "642117d18bc56832e74b68235359ccefab03dd11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/21e0755783bbbab58f2bb6a7a57896d21d27a366",
-                "reference": "21e0755783bbbab58f2bb6a7a57896d21d27a366",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/642117d18bc56832e74b68235359ccefab03dd11",
+                "reference": "642117d18bc56832e74b68235359ccefab03dd11",
                 "shasum": ""
             },
             "require": {
@@ -3967,7 +4006,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v7.4.1"
+                "source": "https://github.com/symfony/cache/tree/v7.4.3"
             },
             "funding": [
                 {
@@ -3987,7 +4026,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-04T18:11:45+00:00"
+            "time": "2025-12-28T10:45:24+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -4963,16 +5002,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v6.4.30",
+            "version": "v6.4.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "d1fdeefd0707d15eb150c04e8837bf0b15ebea39"
+                "reference": "81579408ecf7dc5aa2d8462a6d5c3a430a80e6f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/d1fdeefd0707d15eb150c04e8837bf0b15ebea39",
-                "reference": "d1fdeefd0707d15eb150c04e8837bf0b15ebea39",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/81579408ecf7dc5aa2d8462a6d5c3a430a80e6f2",
+                "reference": "81579408ecf7dc5aa2d8462a6d5c3a430a80e6f2",
                 "shasum": ""
             },
             "require": {
@@ -5038,7 +5077,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v6.4.30"
+                "source": "https://github.com/symfony/translation/tree/v6.4.31"
             },
             "funding": [
                 {
@@ -5058,7 +5097,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-24T13:57:00+00:00"
+            "time": "2025-12-18T11:37:55+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -5536,53 +5575,17 @@
     ],
     "packages-dev": [
         {
-            "name": "aoepeople/aoe_cachestats",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/AOEpeople/Aoe_CacheStats.git",
-                "reference": "9e72e06d3cda9fab0860091ba9134396d7a1995d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/AOEpeople/Aoe_CacheStats/zipball/9e72e06d3cda9fab0860091ba9134396d7a1995d",
-                "reference": "9e72e06d3cda9fab0860091ba9134396d7a1995d",
-                "shasum": ""
-            },
-            "require": {
-                "magento-hackathon/magento-composer-installer": "*"
-            },
-            "default-branch": true,
-            "type": "magento-module",
-            "license": [
-                "GPLv3"
-            ],
-            "authors": [
-                {
-                    "name": "Fabrizio Branca",
-                    "email": "mail@firstname-lastname.de"
-                }
-            ],
-            "description": "Gathers cache statistics",
-            "support": {
-                "source": "https://github.com/AOEpeople/Aoe_CacheStats/tree/master",
-                "issues": "https://github.com/AOEpeople/Aoe_CacheStats/issues"
-            },
-            "abandoned": true,
-            "time": "2015-11-13T18:41:10+00:00"
-        },
-        {
             "name": "driftingly/rector-laravel",
-            "version": "2.1.7",
+            "version": "2.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/driftingly/rector-laravel.git",
-                "reference": "2a64c96fa363bc85e4e6d4162c6a6bb7a78fd122"
+                "reference": "aee9d4a1d489e7ec484fc79f33137f8ee051b3f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/driftingly/rector-laravel/zipball/2a64c96fa363bc85e4e6d4162c6a6bb7a78fd122",
-                "reference": "2a64c96fa363bc85e4e6d4162c6a6bb7a78fd122",
+                "url": "https://api.github.com/repos/driftingly/rector-laravel/zipball/aee9d4a1d489e7ec484fc79f33137f8ee051b3f7",
+                "reference": "aee9d4a1d489e7ec484fc79f33137f8ee051b3f7",
                 "shasum": ""
             },
             "require": {
@@ -5603,9 +5606,9 @@
             "description": "Rector upgrades rules for Laravel Framework",
             "support": {
                 "issues": "https://github.com/driftingly/rector-laravel/issues",
-                "source": "https://github.com/driftingly/rector-laravel/tree/2.1.7"
+                "source": "https://github.com/driftingly/rector-laravel/tree/2.1.9"
             },
-            "time": "2025-12-10T11:30:42+00:00"
+            "time": "2025-12-25T23:31:36+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -6181,16 +6184,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.2.14",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "6d56bb0e94d4df4f57a78610550ac76ab403657d"
+                "reference": "f7166355dcf47482f27be59169b0825995f51c7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/6d56bb0e94d4df4f57a78610550ac76ab403657d",
-                "reference": "6d56bb0e94d4df4f57a78610550ac76ab403657d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f7166355dcf47482f27be59169b0825995f51c7d",
+                "reference": "f7166355dcf47482f27be59169b0825995f51c7d",
                 "shasum": ""
             },
             "require": {
@@ -6229,7 +6232,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.14"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.0"
             },
             "funding": [
                 {
@@ -6237,7 +6240,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-09T10:57:55+00:00"
+            "time": "2025-12-25T22:00:18+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -6343,5 +6346,5 @@
     "platform-overrides": {
         "php": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

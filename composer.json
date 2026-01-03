@@ -28,6 +28,7 @@
     "ext-pdo_mysql": "*",
     "ext-zip": "*",
     "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
+    "aoepeople/aoe_cachestats": "dev-master",
     "aoepeople/aoe_dbretry": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
     "aoepeople/aoe_templatehints": "^0.4.4",
@@ -71,7 +72,6 @@
     "voku/html-min": "^4.5"
   },
   "require-dev": {
-    "aoepeople/aoe_cachestats": "dev-master",
     "driftingly/rector-laravel": "^2",
     "ergebnis/composer-normalize": "^2.42",
     "phpstan/phpstan": "*",
@@ -181,14 +181,14 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/ExtensionsStore/HeadOrder/",
+      "url": "https://github.com/ExtensionsStore/HeadOrder",
       "only": [
         "aydus/headorder"
       ]
     },
     {
       "type": "vcs",
-      "url": "https://github.com/AOEpeople/Aoe_CacheStats/",
+      "url": "https://github.com/deheerhoreca/Aoe_CacheStats",
       "only": [
         "aoepeople/aoe_cachestats"
       ]

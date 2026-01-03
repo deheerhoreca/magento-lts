@@ -161,6 +161,11 @@
       <active>true</active>
     </Aoe_Profiler>
     
+    <!-- Enbable during development only -->
+    <Aoe_CacheStats>
+      <active>false</active>
+    </Aoe_CacheStats>
+    
     <!-- Not used -->
     <TM_CheckoutSuccess>
       <active>false</active>
