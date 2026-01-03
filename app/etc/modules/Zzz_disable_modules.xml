@@ -166,10 +166,11 @@
       <active>false</active>
     </TM_CheckoutSuccess>
     
-    <!-- Not used -->
+    <!-- Not used; 2026-01-03: Uninstalled
     <Amasty_Feed>
       <active>false</active>
     </Amasty_Feed>
+    -->
     
     <!-- Not used -->
     <Raveinfosys_Deleteorder>
