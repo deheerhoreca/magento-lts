@@ -71,6 +71,7 @@
     "voku/html-min": "^4.5"
   },
   "require-dev": {
+    "aoepeople/aoe_cachestats": "dev-master",
     "driftingly/rector-laravel": "^2",
     "ergebnis/composer-normalize": "^2.42",
     "phpstan/phpstan": "*",
@@ -102,7 +103,9 @@
         "firegento/adminmonitoring",
         "firegento/debug",
         "npm-asset/*",
-        "paynl/magento-plugin"
+        "paynl/magento-plugin",
+        "aydus/headorder",
+        "aoepeople/aoe_cachestats"
       ]
     },
     {
@@ -174,6 +177,20 @@
       "url": "https://github.com/deheerhoreca/profitmetrics-magento",
       "only": [
         "profitmetrics/magento"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/ExtensionsStore/HeadOrder/",
+      "only": [
+        "aydus/headorder"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/AOEpeople/Aoe_CacheStats/",
+      "only": [
+        "aoepeople/aoe_cachestats"
       ]
     }
   ],

@@ -156,7 +156,6 @@
       <active>false</active>
     </Afterpay_Afterpay>
     
-    <!-- Both profiler modules cannot be enabled at the same time! -->
     <!-- ! Remember that Aoe_Profiler is invoked directly in composer.json -->
     <Aoe_Profiler>
       <active>true</active>

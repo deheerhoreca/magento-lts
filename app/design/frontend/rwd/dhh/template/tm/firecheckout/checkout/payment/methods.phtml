@@ -146,6 +146,11 @@ else :
     $_code = $_method->getCode();
     if ("billsafe" == $_code) $billsafe = true;
     if ($_code=="customercredit" && ($isPartial == -2 || $isPartial == -3)) continue; // hide customer credit
+    
+    $checkedHtml = '';
+    if($this->getSelectedMethodCode() === $_code) {
+        $checkedHtml = ' checked="checked"';
+    }
     ?>
     <dt id="dt_method_<?=$_code?>">
     <?php if (sizeof($methods) > 1): ?>
@@ -158,7 +163,7 @@ else :
         <?php elseif ($_code=="customercredit" && $isPartial==0) : ?>
             <input id="p_method_<?=$_code ?>_disabled" disabled="disabled" value="<?=$_code ?>" type="radio" name="payment[method]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="radio" />
         <?php else: ?>
-            <input id="p_method_<?=$_code ?>" value="<?=$_code ?>" type="radio" name="payment[method]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="radio" onclick="payment.switchMethod("<?=$_code ?>")"<?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> />
+            <input id="p_method_<?=$_code ?>" value="<?=$_code ?>" type="radio" name="payment[method]" title="<?=$this->htmlEscape($_method->getTitle()) ?>" class="radio" onclick="payment.switchMethod('<?=$_code ?>')"<?=$checkedHtml?> />
         <?php endif; ?>
     <?php else: ?>
         <span class="no-display"><input id="p_method_<?=$_code ?>" value="<?=$_code ?>" type="radio" name="payment[method]" checked="checked" /></span>

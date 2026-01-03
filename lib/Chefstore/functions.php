@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use \Brick\VarExporter\VarExporter;
 use \Chefstore\Helper as ChefstoreHelper;
+use \Chefstore\Observability;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Benchmark as LaravelBenchmark;
 use \Illuminate\Support\Number;
@@ -304,8 +305,9 @@ if(!function_exists("data_coalesce")) {
 if(!function_exists("_dhh_ips")) {
   function _dhh_ips(): array {
     return [
-      "185.127.111.252",
+      "185.127.111.252",    // prod
       "31.201.36.137",
+      "141.138.142.200",    // voyager
     ];
   }
 }
@@ -1095,4 +1097,27 @@ function omHtmlEscape(string $string): string {
 function omStrStripNewlines(?string $string): string|null {
   if(is_null($string)) return null;
   return str_replace(["\r\n", "\n", "\r"], " ", trim($string));
+}
+
+/**
+ * Starts measuring time. Only one benchmark can be active at a time if internal storage is used.
+ *
+ * @param  bool            $store  Whether to store the start time internally (default: TRUE). If FALSE, the current hrtime() is returned.
+ * @return null|float|int
+ */
+function omStartTimer(bool $store = true): null|float|int {
+  return Observability::start($store);
+}
+
+/**
+ * Stops measuring time and returns the elapsed time in formatted milliseconds since startTimer() was called, or null if startTimer() was not called.
+ * Renamed from stopTimer() to avoid conflicts with Intel.
+ *
+ * @param  bool              $formatted  Whether to return formatted string (default: TRUE)
+ * @param  float|int|null    $start      Optional start time to calculate elapsed time from. If null, uses the internally stored start time.
+ *
+ * @return string|float|null
+ */
+function omStopTimer(bool $formatted = true, float|int|null $start = null): string|float|null {
+  return Observability::stop($formatted, $start);
 }

@@ -26,7 +26,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     if($initialized) {
       return;
     }
-    devLog(__METHOD__);
+    // devLog(__METHOD__);
     if(!Observability::isElasticApmAvailable()) {
       devLog("Elastic APM not available");
       return;
@@ -41,13 +41,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // Set transaction.name to HTTP method + the name of the OpenMage action
         if($transaction_name = Observability::getApmTransactionName()) {
           $transaction->setName($transaction_name);
-          devLog("Set APM transaction name to '{$transaction_name}'");
+          // devLog("Set APM transaction name to '{$transaction_name}'");
         }
         
         // Set transaction.type to segregate the various request types
         if($transaction_type = Observability::getApmTransactionType()) {
           $transaction->setType($transaction_type);
-          devLog("Set APM transaction type to '{$transaction_type}'");
+          // devLog("Set APM transaction type to '{$transaction_type}'");
         }
         
         $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
@@ -55,16 +55,16 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         
         $initialized = true;
         $currentUrl = getOmDhhUtilHelper()->getCurrentUrl();
-        devLog("Elastic APM initialized: {$currentUrl}");
+        // devLog("Elastic APM initialized: {$currentUrl}");
       } else {
         Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE);
-        devLog("Failed to get current Elastic APM transaction");
+        // devLog("Failed to get current Elastic APM transaction");
         return;
       }
     } catch(Exception $e) {
       Mage::logException($e);
       Mage::log("Failed to init Elastic APM: {$e->getMessage()}", Zend_Log::NOTICE);
-      devLog("Failed to init Elastic APM: {$e->getMessage()}");
+      // devLog("Failed to init Elastic APM: {$e->getMessage()}");
       return;
     }
     
@@ -658,9 +658,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * @param  Varien_Event_Observer $observer
    */
   public function minifyAjaxResponse(Varien_Event_Observer $observer): void {
+    return; // Disabled for now -- Minifying is too expensive unless saved to cache (also needs deferred)
+    
     if(Mage::app()->getRequest()->isAjax() !== true) {
       return;
     }
+    
     if(!isDevIp()) {
       return;
     }
@@ -681,9 +684,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
           $changed = false;
           $data = Arr::map($data, function($partContent, $partName) use (&$changed): mixed {
             $knownHtmlParts = [
-              "page",     // Seen in amshopby AJAX responses
-              // "blocks",   // Seen in amshopby AJAX responses; Content is another level deeper, @todo
-              "content",  // Seen in adminhtml mage core
+              // Seen in amshopby AJAX responses
+              // "page",      // Disabled for now -- Minifying is too expensive (~50 ms for a amasty shopby response for 10% reduction)
+              // "blocks",    // Seen in amshopby AJAX responses; Content is another level deeper, @todo
+              
+              // Seen in adminhtml mage core
+              "content",      // Minifying is expensive (~250 ms for a adminhtml categories tree response for 50% reduction)
             ];
             if(in_array($partName, $knownHtmlParts, true) && is_string($partContent) && Html::containsHtml($partContent)) {
               // $tmpFile = sys_get_temp_dir()."/dhh_util_minify_ajax_{$partName}_before.html";
@@ -691,8 +697,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
               // devLog("Wrote to {$tmpFile}");
               $origPartContent = $partContent;
               try {
+                // $start = omStartTimer();
                 $partContent = Html::minifyHtml($partContent);
-                devLog("Minified AJAX response part '{$partName}': ".(strlen($origPartContent))." -> ".(strlen($partContent))." bytes");
+                // $took = omStopTimer();
+                // devLog("Minified AJAX response part '{$partName}': ".(strlen($origPartContent))." -> ".(strlen($partContent))." bytes in {$took}");
                 // $tmpFile = sys_get_temp_dir()."/dhh_util_minify_ajax_{$partName}_after.html";
                 // file_put_contents($tmpFile, $partContent);
                 // devLog("Wrote to {$tmpFile}");

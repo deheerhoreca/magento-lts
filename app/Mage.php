@@ -526,14 +526,16 @@ final class Mage
     public static function dispatchEvent($name, array $data = [])
     {
         Varien_Profiler::start('DISPATCH EVENT:' . $name);
-        devLog($name);
+        // if(isDevIp()) {
+        //     $start = omStartTimer();
+        // }
         $result = self::app()->dispatchEvent($name, $data);
-        // $closure = fn() => self::app()->dispatchEvent($name, $data);
-        // $millis = null;
-        // $result = millis($closure, $millis);
-        // if($millis > 5.0) {
-        //     devLog("Dispatched event '$name' in {$millis} ms");
-        //     // cd($data);
+        // if(isDevIp()) {
+        //     $took = omStopTimer(false, $start);
+        //     if($took > 5) {
+        //         // devLog(var_export($data, true));
+        //         devLog("{$name} event dispatched in ".di($took)." ms");
+        //     }
         // }
         Varien_Profiler::stop('DISPATCH EVENT:' . $name);
         return $result;

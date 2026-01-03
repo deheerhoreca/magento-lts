@@ -1,3 +1,11 @@
+### IN ORDER TO effectively ignore paths when the command is fired from a parent directory,
+### the ignore patterns must be relative to the repository root, AND NOT START WITH A SLASH.
+### This of course increases the risk of false positives, but it is necessary to be able to
+### have clickable links in IDEs when working from ~/workspace.
+###
+### So, the most important paths in this file DO NOT start with a slash, but if the path is
+### very short/generic, we do start with a slash to reduce false positives.
+
 # Visual Studio Code
 .vscode/*
 
@@ -9,33 +17,31 @@
 
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
 # https://github.com/OpenMage/magento-lts/pull/1836
-/dev/testfield
-/dev/tests/clover.xml
-/dev/tests/crap4j.xml
-/dev/tests/junit.xml
+dev/testfield
+dev/tests/clover.xml
+dev/tests/crap4j.xml
+dev/tests/junit.xml
 
 # Add Gitpod online IDE config
 # https://github.com/OpenMage/magento-lts/pull/1836
-/dev/gitpod/docker-magento
-/dev/gitpod/.env
+dev/gitpod/docker-magento
+dev/gitpod/.env
 
 # Add development environment setup files and README
 # https://github.com/OpenMage/magento-lts/pull/1012
-/dev/openmage/docker-magento
-/dev/openmage/.env
-/dev/openmage/Caddyfile
-/dev/tests/functional/generated
-/dev/tests/functional/vendor
+dev/openmage/docker-magento
+dev/openmage/.env
+dev/openmage/Caddyfile
+dev/tests/functional/generated
+dev/tests/functional/vendor
 
-/lib/n98-magerun
-/vendor/magento-hackathon/magento-composer-installer
-/vendor/openmage/magento-lts
-/var
+lib/n98-magerun
+var/*
 
 # scss-cache
-/skin/*/*/*/scss/.sass-cache
-/skin/assets/bootstrap/dist/css/bootstrap.min.css
-/skin/assets/bootstrap/dist/css/bootstrap*.min.css
+skin/*/*/*/scss/.sass-cache
+skin/assets/bootstrap/dist/css/bootstrap.min.css
+skin/assets/bootstrap/dist/css/bootstrap*.min.css
 
 *.pem
 *.phar
@@ -55,31 +61,29 @@
 .git/
 composer.lock
 /docs.md
-/log
-/data
-/output
-/output_local
-/assets/bower-asset/font-awesome
-/vendor/elasticsearch/elasticsearch/docs
-/vendor/imagecow/imagecow/src/Crops
-/vendor/imelgrat/barcode-validator/docs
-/vendor/jlevers/selling-partner-api/resources
-/vendor/giggsey
-/vendor/nesbot/carbon/src/Carbon/Lang
-/vendor/composer
-/vendor/symplify
-/vendor/wamania
-/vendor/voku/portable-utf8/src/voku/helper/data
-/vendor/yooper/stop-words/data
-/vendor/yooper/php-text-analysis/tests
-/vendor/webklex/php-imap/tests
-/vendor/voku/portable-ascii/src/voku/helper
-/vendor/voku/stop-words/src/voku/helper/stopwords
-/vendor/*/*/tests
-/vendor/mistralys/application-localization/src/Localization
-/vendor/cmixin/business-day/src/Cmixin/Holidays
-/vendor/nikic/php-parser/lib
-/vendor/phpseclib/phpseclib
+assets/bower-asset/font-awesome
+vendor/elasticsearch/elasticsearch/docs
+vendor/imagecow/imagecow/src/Crops
+vendor/imelgrat/barcode-validator/docs
+vendor/jlevers/selling-partner-api/resources
+vendor/giggsey
+vendor/nesbot/carbon/src/Carbon/Lang
+vendor/composer
+vendor/symplify
+vendor/wamania
+vendor/voku/portable-utf8/src/voku/helper/data
+vendor/yooper/stop-words/data
+vendor/yooper/php-text-analysis/tests
+vendor/webklex/php-imap/tests
+vendor/voku/portable-ascii/src/voku/helper
+vendor/voku/stop-words/src/voku/helper/stopwords
+vendor/*/*/tests
+vendor/mistralys/application-localization/src/Localization
+vendor/cmixin/business-day/src/Cmixin/Holidays
+vendor/nikic/php-parser/lib
+vendor/phpseclib/phpseclib
+vendor/magento-hackathon/magento-composer-installer
+vendor/openmage/magento-lts
 CHANGELOG.md
 LICENSE
 LICENSE-APACHE
@@ -99,11 +103,11 @@ tests/logging
 phpunit.xml
 
 # build
-/build
+build
 
 # dev scripts loaded via composer
-/shell/update-copyright.php
-/shell/translations.php
+shell/update-copyright.php
+shell/translations.php
 
 # DDEV
 .ddev/config.yaml
@@ -114,58 +118,57 @@ phpunit.xml
 .DS_Store
 ._.DS_Store
 ._*
-/sitemap_*.xml
-/google_shopping_vijfbatmansymbol.*
-/protected/
-/google*.html
-/algolia_*.json
+sitemap_*.xml
+google_shopping_vijfbatmansymbol.*
+/protected/*.xml
+/protected/*.json
+google*.html
+algolia_*.json
 /maintenance.flag
 /maintenance.ip
-/js/magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js
-/vendor/openmage/magento-lts/js/tinymce/langs
-/vendor/openmage/magento-lts/js/tinymce/plugins
-/vendor/openmage/magento-lts/js/tinymce/themes
-/vendor/firegento/adminmonitoring/docs
-/vendor/voku/portable-ascii/src/voku/helper/data
-/vendor/nesbot/carbon/src/Carbon/Lang
-/vendor/shardj/zf1-future/library/Zend/Locale/Data
-/vendor/michelf/php-markdown/test
-/vendor/cmixin/business-day/src/Cmixin/Holidays
-/js/tinymce/langs
-/js/tinymce/plugins
-/js/tinymce/themes
-/js/elastic-apm-rum.umd.min.js.map
-/js/lib/jquery/jquery-1.12.1.min.map
-/lib/Afterpay/vendor/symfony/polyfill-intl-idn
-/lib/Mpdf/ttfontdata
-/vendor/shardj/zf1-future/library/Zend/Validate
-/vendor/phpseclib/phpseclib/phpseclib/Crypt
-/lib/Mpdf/utils/UnicodeData.txt
+js/magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js
+vendor/openmage/magento-lts/js/tinymce/langs
+vendor/openmage/magento-lts/js/tinymce/plugins
+vendor/openmage/magento-lts/js/tinymce/themes
+vendor/firegento/adminmonitoring/docs
+vendor/voku/portable-ascii/src/voku/helper/data
+vendor/nesbot/carbon/src/Carbon/Lang
+vendor/shardj/zf1-future/library/Zend/Locale/Data
+vendor/michelf/php-markdown/test
+vendor/cmixin/business-day/src/Cmixin/Holidays
+js/tinymce/langs
+js/tinymce/plugins
+js/tinymce/themes
+js/elastic-apm-rum.umd.min.js.map
+js/lib/jquery/jquery-1.12.1.min.map
+lib/Afterpay/vendor/symfony/polyfill-intl-idn
+lib/Mpdf/ttfontdata
+vendor/shardj/zf1-future/library/Zend/Validate
+vendor/phpseclib/phpseclib/phpseclib/Crypt
+lib/Mpdf/utils/UnicodeData.txt
+/js/ext-*.js
+skin/frontend/rwd/external/
+.modman/*/.git
+.idea/
+.phpstorm.meta.php
+.well-known/acme-challenge/
+skin/assets/*
 
-# DIRS
-/js/ext-*
-/skin/frontend/rwd/external/
-/.modman/*/.git
-/.idea/
-/.phpstorm.meta.php
-/.well-known/acme-challenge/
-/skin/assets/
-
-# FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
 /media/
+/openmage/media/
 
 # BILLER WEBHOOK
-/biller-webhook-errors.jsonl
-/biller-webhook.jsonl
+biller-webhook-errors.jsonl
+biller-webhook.jsonl
 
 # FRESHDESK WEBHOOK
-/freshdesk-*.ndjson
+freshdesk-*.ndjson
 
 # GENERATED CONFIGURATIONS
-/etc/*-local.ini
-/*.bak-*
-/_user.ini
-/php.cmd.ini
-/etc/php.cmd.ini
-/.php-version
-/.php-ini
+etc/*-local.ini
+*.bak-*
+_user.ini
+php.cmd.ini
+etc/php.cmd.ini
+.php-version
+.php-ini
