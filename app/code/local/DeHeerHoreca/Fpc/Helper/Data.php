@@ -26,6 +26,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public const REDIS_CACHE_TAG_PREFIX         = "zc:ti:dd6";
   public const REDIS_CACHE_KEY_PREFIX         = "zc:k:dd6";
   
+  /** @var array List of extra tags to add to the cache for this request */
+  public static $addTags = [];
+  
   /** @var string[] OpenMage action whitelist for FPC caching */
   public static $om_action_whitelist  = [
     "catalog_product_view",
@@ -136,10 +139,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
+   * Add tags to the list of tags to associate with this request.
+   * Duplicate tags will be filtered after all tags are added.
+   *
+   * @param array $tags
+   * @return void
+   */
+  public static function addTags(array $tags): void {
+    self::$addTags = array_merge(self::$addTags, $tags);
+  }
+  
+  /**
    * Get cache tags applicable to this request.
    * => Cache tags (sets) should be uppercased
    *
-   * @return array
+   * @return  array
    */
   public static function get_cache_tags(): array {
     $cache_tags = [];
@@ -154,6 +168,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
       $cache_tags[] = "CATEGORY_{$id}";
     }
+    
+    $cache_tags = collect($cache_tags)->merge(self::$addTags)->unique()->values()->all();
     
     return $cache_tags;
   }

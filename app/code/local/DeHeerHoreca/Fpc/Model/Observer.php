@@ -3,6 +3,14 @@
 declare(strict_types=1);
 
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
+  
+  /**
+   * @return DeHeerHoreca_Fpc_Helper_Data
+   */
+  public function helper(): DeHeerHoreca_Fpc_Helper_Data {
+    return Mage::helper("deheerhoreca_fpc/data");
+  }
+  
   /**
    * Serve cached HTML if available.
    * Observes: controller_action_predispatch event.
@@ -146,6 +154,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * @return void
    */
   public static function removePerItemLayoutHandleInCache(Varien_Event_Observer $observer): void {
+    return; // Disabled for now, to test if it causes any issues.
     $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
     foreach($handles as $key => $handle) {
       if(preg_match("/^PRODUCT_\d+$/", $handle) || preg_match("/^CATEGORY_\d+$/", $handle)) {
@@ -153,5 +162,20 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       }
     }
     $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
+  }
+  
+  /**
+   * Observe all models so that a cached page can be associated with all model instances
+   * loaded in the course of page rendering.
+   *
+   * @see https://github.com/colinmollenhour/Cm_Diehard/blob/master/code/Model/Observer.php
+   *
+   * @param Varien_Event_Observer $observer
+   * @return void
+   */
+  public function modelLoadAfter(Varien_Event_Observer $observer) {
+    if($tags = $observer->getObject()->getCacheIdTags()) {
+      $this->helper()->addTags($tags);
+    }
   }
 }

@@ -47,12 +47,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Aoe_CacheStats.git",
-                "reference": "7919fef6b1f3b048e254cfa3ae64cdf0fcab08b5"
+                "reference": "add67bcc547c02cf9b7ecebc89049c4ac7949372"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/7919fef6b1f3b048e254cfa3ae64cdf0fcab08b5",
-                "reference": "7919fef6b1f3b048e254cfa3ae64cdf0fcab08b5",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/add67bcc547c02cf9b7ecebc89049c4ac7949372",
+                "reference": "add67bcc547c02cf9b7ecebc89049c4ac7949372",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_CacheStats/tree/master"
             },
-            "time": "2026-01-03T15:02:43+00:00"
+            "time": "2026-01-04T22:08:30+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
