@@ -463,6 +463,9 @@ media
 /app/etc/modules/Guidance_Simplepage.xml
 /app/code/community/Aydus/HeadOrder
 /app/etc/modules/Aydus_HeadOrder.xml
+/app/code/community/Aoe/CacheStats
+/app/etc/modules/Aoe_CacheStats.xml
+/app/etc/aoe_cachestats.xml
 /app/etc/modules/Aoe_Profiler.xml
 /app/code/community/Aoe/Profiler
 /app/code/community/Varien/Profiler.php
@@ -472,6 +475,3 @@ media
 /app/design/adminhtml/default/default/template/aoe_profiler
 /app/code/community/Fballiano/CssjsMinify
 /app/etc/modules/Fballiano_CssjsMinify.xml
-/app/code/community/Aoe/CacheStats
-/app/etc/modules/Aoe_CacheStats.xml
-/app/etc/aoe_cachestats.xml
