@@ -29,7 +29,8 @@ if(Mage::helper("richsnippets")->snippetsEnabled() && Mage::getStoreConfig("rich
     $cache_tags = [
       "DHH_TM_RICHSNIPPETS",
       // "DHH_PRODUCT_{$_product->getId()}",
-      "PRODUCT_{$_product->getId()}",
+      // "PRODUCT_{$_product->getId()}",
+      "CATALOG_PRODUCT_{$_product->getId()}",
       "DHH_SUPPLIER_{$supplier_sys_upper}",
     ];
     

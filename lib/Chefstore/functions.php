@@ -1121,3 +1121,27 @@ function omStartTimer(bool $store = true): null|float|int {
 function omStopTimer(bool $formatted = true, float|int|null $start = null): string|float|null {
   return Observability::stop($formatted, $start);
 }
+
+/**
+ * Print a backtrace from anywhere. Returns an array of callers.
+ *
+ * @param  int          $levels  The amount of levels to go back.
+ * @return array|false
+ */
+if(!function_exists("whoCalledMe")) {
+  function whoCalledMe(int $levels = 1): array|false {
+    return Observability::whoCalledMe($levels);
+  }
+}
+
+/**
+ * Print a backtrace from anywhere.
+ *
+ * @param  int  $levels  The max amount of levels to go back.
+ * @return void
+ */
+if(!function_exists("printWhoCalledMe")) {
+  function printWhoCalledMe(int $levels = 1): string {
+    return Observability::printWhoCalledMe($levels);
+  }
+}

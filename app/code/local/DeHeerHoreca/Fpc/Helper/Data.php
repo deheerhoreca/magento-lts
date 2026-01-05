@@ -40,6 +40,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // "amshopby_index_index", // Disabled because we need to tag it properly first
   ];
   
+  protected static $_cache = null;
+  
   /**
    * Clear the cache
    * @return bool
@@ -163,10 +165,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "PRODUCT_{$id}";
+      // $cache_tags[] = "PRODUCT_{$id}";
+      $cache_tags[] = "CATALOG_PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "CATEGORY_{$id}";
+      // $cache_tags[] = "CATEGORY_{$id}";
+      $cache_tags[] = "CATALOG_CATEGORY_{$id}";
     }
     
     $cache_tags = collect($cache_tags)->merge(self::$addTags)->unique()->values()->all();
@@ -757,8 +761,21 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    */
   public static function clean_by_tags(string|array $cache_tags): bool {
+    
+    // if(self::$_cache === null) {
+    //   /** @var Mage_Core_Model_Cache */
+    //   self::$_cache = Mage::app()->getCacheInstance();
+    // }
+    
+    static $cache_id_prefix = null;
+    if($cache_id_prefix === null) {
+      $cache_id_prefix = Mage::app()->getCache()->getOption(["id_prefix"]);
+    }
+    
+    return Mage::app()->getCache()->clean("matchingTag", $cache_tags);
+    
     // Prepend with dd6_ if needed. Redis library does NOT do this.
-    $cache_tags = Arr::map((array) $cache_tags, fn($tag) => Str::start($tag, "dd6_"));
+    $cache_tags = Arr::map((array) $cache_tags, fn($tag) => Str::start($tag, $cache_id_prefix));
     $cache_tags = array_values(array_unique($cache_tags)); // In mass updates, might have duplicates
     self::log("CLEAN tags: ".di($cache_tags), Zend_Log::INFO);
     

@@ -78,17 +78,20 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * @return bool
    */
   public function clearProductCache(Varien_Event_Observer $observer): bool {
+    return true;
     $entityId = $observer->getProduct()->getId();
     if(empty($entityId)) {
       return true;
     }
     $cache_tags = [
       // "DHH_PRODUCT_{$entityId}",
-      "PRODUCT_{$entityId}",
+      // "PRODUCT_{$entityId}",
+      "CATALOG_PRODUCT_{$entityId}",
     ];
     foreach($observer->getProduct()->getCategoryIds() as $category_id) {
       // $cache_tags[] = "DHH_CATEGORY_{$category_id}";
-      $cache_tags[] = "CATEGORY_{$category_id}";
+      // $cache_tags[] = "CATEGORY_{$category_id}";
+      $cache_tags[] = "CATALOG_CATEGORY_{$category_id}";
     }
     
     return DeHeerHoreca_Fpc_Helper_Data::cleanCacheByTagsDeferred($cache_tags);
@@ -109,12 +112,14 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     $cache_tags = [];
     foreach($product_ids as $entityId) {
       // $cache_tags[] = "DHH_PRODUCT_{$entityId}";
-      $cache_tags[] = "PRODUCT_{$entityId}";
+      // $cache_tags[] = "PRODUCT_{$entityId}";
+      $cache_tags[] = "CATALOG_PRODUCT_{$entityId}";
       
       $product = Mage::getModel("catalog/product")->load($entityId);
       foreach($product->getCategoryIds() as $category_id) {
         // $cache_tags[] = "DHH_CATEGORY_{$category_id}";
-        $cache_tags[] = "CATEGORY_{$category_id}";
+        // $cache_tags[] = "CATEGORY_{$category_id}";
+        $cache_tags[] = "CATALOG_CATEGORY_{$category_id}";
       }
     }
     
@@ -129,13 +134,15 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * @return bool
    */
   public function clearCategoryCache(Varien_Event_Observer $observer): bool {
+    return true;
     $entityId = $observer->getEvent()->getCategory()->getId();
     if(empty($entityId)) {
       return true;
     }
     $cache_tags = [
       // "DHH_CATEGORY_{$entityId}",
-      "CATEGORY_{$entityId}",
+      // "CATEGORY_{$entityId}",
+      "CATALOG_CATEGORY_{$entityId}",
     ];
     
     return DeHeerHoreca_Fpc_Helper_Data::cleanCacheByTagsDeferred($cache_tags);

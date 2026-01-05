@@ -147,4 +147,58 @@ class Observability {
       return "frontend";
     }, null);
   }
+  
+  /**
+   * Print a backtrace from anywhere. Returns an array of callers.
+   *
+   * @param  int          $levels  The amount of levels to go back
+   * @return array|false
+   */
+  public static function whoCalledMe(int $levels = 1): array|false {
+    ++$levels;
+    $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT|DEBUG_BACKTRACE_IGNORE_ARGS, $levels);
+    $callers = [];
+    
+    for($i = 1; $i < $levels; $i++) { // $i=1 skips the call to this function
+      if(isset($backtrace[$i]) && isset($backtrace[$i]["file"]) && isset($backtrace[$i]["line"])) {
+        $callers[] = [
+          "file" => $backtrace[$i]["file"],
+          "line" => $backtrace[$i]["line"],
+          "function" => $backtrace[$i]["function"] ?? null,
+          "class" => $backtrace[$i]["class"] ?? null,
+          "type" => $backtrace[$i]["type"] ?? null,
+        ];
+      }
+    }
+    
+    return $callers ?: false;
+  }
+  
+  /**
+   * Print a backtrace from anywhere.
+   *
+   * @param  int    $levels  The max amount of levels to go back
+   * @return string
+   */
+  public static function printWhoCalledMe(int $levels = 1): string {
+    $callers = self::whoCalledMe($levels);
+    if($callers === false) {
+      return "No backtrace available";
+    }
+    
+    foreach($callers as $i => $caller) {
+      $function_part = "";
+      if($caller["class"] !== null) {
+        $function_part .= $caller["class"].$caller["type"];
+      }
+      if($caller["function"] !== null) {
+        $function_part .= $caller["function"]."()";
+      }
+      $function_part = str_pad($function_part, 55, " ", STR_PAD_RIGHT);
+      $counter = str_pad("#".($i + 1), 3, "0", STR_PAD_LEFT);
+      $strings[] = $counter." ".$function_part." ".$caller["file"].":".$caller["line"];
+    }
+    
+    return implode(PHP_EOL, $strings);
+  }
 }
