@@ -18,10 +18,10 @@ require_once 'app/Mage.php';
 umask(0);
 Mage::app('admin');
 
-// // Don't show installed modules to public
-// if (!Mage::helper('core')->isDevAllowed()) {
-//     exit;
-// }
+// Don't show installed modules to public
+if (!Mage::helper('core')->isDevAllowed()) {
+    exit;
+}
 
 $fileName = 'config.xml';
 $modules = Mage::getConfig()->getNode('modules')->children();
