@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Str;
+
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
@@ -175,13 +178,21 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * Observe all models so that a cached page can be associated with all model instances
    * loaded in the course of page rendering.
    *
+   * Observes: model_load_after
+   *
+   * Doing a strtoupper() to fix a bug we have seen where tags are given lowercase and the
+   * conversion to uppercase is not happening to all tags consistently.
+   *
    * @see https://github.com/colinmollenhour/Cm_Diehard/blob/master/code/Model/Observer.php
    *
    * @param Varien_Event_Observer $observer
    * @return void
    */
-  public function modelLoadAfter(Varien_Event_Observer $observer) {
+  public function modelLoadAfter(Varien_Event_Observer $observer): void {
     if($tags = $observer->getObject()->getCacheIdTags()) {
+      $tags = Arr::map($tags, function($tag) {
+        return Str::upper($tag);
+      });
       $this->helper()->addTags($tags);
     }
   }

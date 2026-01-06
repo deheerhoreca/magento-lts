@@ -1,22 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopping cart template
  *
  * @var $this Mage_Checkout_Block_Cart
  */
 
-//echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_banner')->toHtml();
-
+// echo $this->getLayout()->createBlock("cms/block")->setBlockId("cart_page_banner")->toHtml();
 echo $this->getLayout()
   ->createBlock("cms/block")
   ->setBlockId("firecheckout_header")
   ->toHtml();
-
 $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
   ? "display-both-prices"
   : "display-single-price";
 ?>
-
 <div class="cart <?=$_priceDisplay?>">
   <div class="page-title title-buttons">
     <h1><?=$this->__("Shopping Cart")?></h1>
@@ -59,8 +59,8 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
                 <?=$this->__("Qty")?>
                 <?php
                   /*
-                  if ($this->helper('wishlist')->isAllowInCart()) : ?>
-                    <span><?=$this->__('Move to Wishlist') ?></span>
+                  if ($this->helper("wishlist")->isAllowInCart()) : ?>
+                    <span><?=$this->__("Move to Wishlist") ?></span>
                   <?php endif
                   */
                 ?>
@@ -107,10 +107,8 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
           </tbody>
         </table>
     </form>
-    <?php
-    echo $this->getLayout()->createBlock("core/template")->setTemplate("qquoteadv/checkout_quotebtn.phtml")->toHtml();
-    echo $this->getLayout()->createBlock("cms/block")->setBlockId("cart_left_bottom")->toHtml();
-    ?>
+    <?= $this->getLayout()->createBlock("core/template")->setTemplate("qquoteadv/checkout_quotebtn.phtml")->toHtml() ?>
+    <?= $this->getLayout()->createBlock("cms/block")->setBlockId("cart_left_bottom")->toHtml() ?>
 	</div>
 </div>
 
@@ -130,34 +128,24 @@ $_priceDisplay = $this->helper("tax")->displayCartBothPrices()
         ?>
       </div>
       <div class="cart-totals-wrapper">
-        <div class="cart-totals">
-          <?=$this->getChildHtml("totals")?>
-          <?php if (!$this->hasError()): ?>
-            <ul class="checkout-types bottom">
-              <?php foreach ($this->getMethods("methods") as $method) {
-                if ($methodHtml = $this->getMethodHtml($method)) {
-                  echo '<li class="method-' .
-                    preg_replace("/[^_a-zA-Z0-9-]/", "-", (string) $method) .
-                    '">' .
-                    $methodHtml .
-                    "</li>";
+        <div class="cart-totals"><?php
+          echo $this->getChildHtml("totals");
+          if(!$this->hasError()): ?>
+            <ul class="checkout-types bottom"><?php
+              foreach($this->getMethods("methods") as $method) {
+                if($methodHtml = $this->getMethodHtml($method)) {
+                  echo '<li class="method-'.preg_replace("/[^_a-zA-Z0-9-]/", "-", (string) $method).'">'.$methodHtml."</li>";
                 }
               } ?>
-            </ul>              
+            </ul>
           <?php endif; ?>
         </div>
       </div>
-
-    <?php
-//echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_right_bottom_1')->toHtml();
-?>
-  </div>
-  <?=$this->getLayout()
-    ->createBlock("cms/block")
-    ->setBlockId("cart_page_right_bottom_2")
-    ->toHtml()?>
+      <?=$this->getLayout()->createBlock("cms/block")->setBlockId("cart_page_right_bottom_1")->toHtml()?>
+    </div>
+    <?=$this->getLayout()->createBlock("cms/block")->setBlockId("cart_page_right_bottom_2")->toHtml()?>
 </div>
-	<div style="clear: both; height: 9px;">&nbsp;</div>
-		<?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('cart_page_bottom')->toHtml();
-  echo $this->getChildHtml("crosssell")?>
+<div style="clear: both; height: 9px;">&nbsp;</div><?php
+  echo $this->getLayout()->createBlock("cms/block")->setBlockId("cart_page_bottom")->toHtml();
+  echo $this->getChildHtml("crosssell") ?>
 </div>
