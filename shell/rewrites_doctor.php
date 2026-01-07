@@ -5,17 +5,17 @@
 /**
  * Optimize core_url_rewrite table
  *
- * php -c ../etc/php.cmd.ini rewrites_doctor.php update_keys       (1-5 min)
- * php -c ../etc/php.cmd.ini indexer.php --reindex catalog_url     (5-10 min)
- * For STORE_ID = 1: php -c ../etc/php.cmd.ini rewrites_doctor.php --remove_rewrites 10 --store 1
- * For STORE_ID = 4: php -c ../etc/php.cmd.ini rewrites_doctor.php --remove_rewrites 1 --store 4
+ * openmage shell/rewrites_doctor.php update_keys       (1-5 min)
+ * openmage shell/indexer.php --reindex catalog_url     (5-10 min)
+ * For STORE_ID = 1: openmage shell/rewrites_doctor.php --remove_rewrites 10 --store 1
+ * For STORE_ID = 4: openmage shell/rewrites_doctor.php --remove_rewrites 1 --store 4
  */
 
 ini_set("display_errors", "1");
 ini_set("display_startup_errors", "1");
 error_reporting(E_ALL);
-const DRYRUN = true;
-// const DRYRUN = false;
+// const DRYRUN = true;
+const DRYRUN = false;
 
 require_once __DIR__."/abstract.php";
 
@@ -102,10 +102,11 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
                 $product->setData("url_key", $new_key);
                 
                 if(!DRYRUN) {
-                  // $product->getResource()->saveAttribute($dataobject, "url_key");
-                  if(!$product->save()) {
-                    echo "Error: Failed to save {$product->getSku()}".PHP_EOL;
-                  }
+                  $product->getResource()->saveAttribute($product, "url_key");
+                    // Stopped working due to OpenMage changes:
+                    // if(!$product->save()) {
+                    //   echo "Error: Failed to save {$product->getSku()}".PHP_EOL;
+                    // }
                 }
                 
                 ++$counter;

@@ -392,11 +392,6 @@ media
 # deheerhoreca/Aoe_Profiler
 
 # deheerhoreca/firegento-adminmonitoring
-/app/code/community/FireGento/AdminMonitoring
-/app/etc/modules/FireGento_AdminMonitoring.xml
-/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
-/app/design/adminhtml/default/default/template/firegento/adminmonitoring
-/app/locale/de_DE/FireGento_AdminMonitoring.csv
 
 
 /app/code/local/MM/MonacoEditor
@@ -475,3 +470,8 @@ media
 /app/design/adminhtml/default/default/template/aoe_profiler
 /app/code/community/Fballiano/CssjsMinify
 /app/etc/modules/Fballiano_CssjsMinify.xml
+/app/code/community/FireGento/AdminMonitoring
+/app/etc/modules/FireGento_AdminMonitoring.xml
+/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
+/app/design/adminhtml/default/default/template/firegento/adminmonitoring
+/app/locale/de_DE/FireGento_AdminMonitoring.csv

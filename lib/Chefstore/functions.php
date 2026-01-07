@@ -10,7 +10,6 @@ use \Illuminate\Support\Benchmark as LaravelBenchmark;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
-use \MathieuViossat\Util\ArrayToTextTable;
 
 require_once __DIR__."/Loader.php";
 
@@ -436,60 +435,30 @@ if(!function_exists('printr')) {
 }
 
 /**
- * Wrapper for the ArrayToTextTable class to print an array as a table.
+ * Wrapper for \cli\Table() to print an array as a table.
  *
  * @param  array|object $data
  * @param  boolean      $return
  * @param  array        $render_options
  * @param  int          $col_wrap
- * @return string|null|false
+ *
+ * @return string|null
  */
 if(!function_exists("array_to_table")) {
-  function array_to_table(array|object $data, bool $return = true, array $render_options = [], int $col_wrap = 60): string|null|false {
+  function array_to_table(array|object $data, bool $return = true, array $render_options = [], int $col_wrap = 60): string|null {
     if(blank($data)) {
       return null;
+    }
+    
+    $table = new \cli\Table($data);
+    
+    if(!$return) {
+      $table->display();
+      echo PHP_EOL;
       return null;
     }
     
-    // Make sure no subarrays exist -- @todo Arr::flatten() ?
-    foreach($data as $key => &$value) {
-      if(is_array($value)) {
-        $value = \Arr::map($value, fn($item, $key) => implode("", (array) $item));
-      }
-    }
-    
-    // Cannot cache formatter as it uses $col_wrap
-    $formatter = function(&$value, $key, $renderer) use ($col_wrap) {
-      if($value === true)       $value = "TRUE";
-      elseif($value === false)  $value = "FALSE";
-      elseif($value === null)   $value = "NULL";
-      
-      if(is_string($value) && mb_strlen($value) > $col_wrap) {
-        $value = wordwrap($value, ($col_wrap - 5), cut_long_words: true);
-      }
-    };
-    
-    $renderer = new ArrayToTextTable($data);
-    $renderer->setUpperKeys(true);
-    $renderer->setFormatter($formatter);
-    
-    try {
-      $output = $renderer->getTable();
-    } catch(TypeError $e) {
-      // logger("TypeError while printing array to table: ".$e->__toString(), "ERROR");
-      return false;
-    } catch(Exception $e) {
-      // logger("Exception while printing array to table: ".$e->__toString(), "ERROR");
-      return false;
-    }
-    
-    if($return) {
-      return $output;
-    }
-    
-    printr($output);
-    
-    return null;
+    return implode("\n", $table->getDisplayLines()).PHP_EOL;
   }
 }
 
