@@ -21,7 +21,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * @param  \Varien_Event_Observer $observer
    * @return void
    */
-  public function configureElasticApm(\Varien_Event_Observer $observer): void {
+  public static function configureElasticApm(\Varien_Event_Observer $observer): void {
     static $initialized = false;
     if($initialized) {
       return;

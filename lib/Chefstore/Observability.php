@@ -120,11 +120,17 @@ class Observability {
    *
    * @return string
    */
-  public static function getApmTransactionName(): string {
-    return (string) trim(implode(" ", [
-      $_SERVER["REQUEST_METHOD"] ?? "",
-      Mage::app()?->getFrontController()?->getAction()?->getFullActionName() ?? "UNKNOWN_ACTION",
-    ]));
+  public static function getApmTransactionName(): ?string {
+    return rescue(function(): string {
+      $httpVerb = $_SERVER["REQUEST_METHOD"] ?? "NOVERB";
+      if($httpVerb === "HEAD") {
+        $httpVerb = "GET";  // Normalize HEAD to GET for APM naming purposes
+      }
+      return (string) trim(implode(" ", [
+        $httpVerb,
+        (Mage::app()->getFrontController()->getAction()->getFullActionName() ?? "UNKNOWN_ACTION"),
+      ]));
+    }, null);
   }
   
   /**

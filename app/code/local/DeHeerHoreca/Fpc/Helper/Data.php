@@ -29,7 +29,10 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /** @var array List of extra tags to add to the cache for this request */
   public static $addTags = [];
   
-  /** @var string[] OpenMage action whitelist for FPC caching */
+  /**
+   * OpenMage action whitelist for FPC caching
+   * @var string[]
+   */
   public static $om_action_whitelist  = [
     "catalog_product_view",
     "catalog_category_view",
@@ -153,23 +156,23 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /**
    * Get cache tags applicable to this request.
-   * => Cache tags (sets) should be uppercased
+   *
+   * => Cache tags (sets) should be uppercased.
+   * => Tags should follow OpenMage's native conventions where possible.
    *
    * @return  array
    */
   public static function get_cache_tags(): array {
     $cache_tags = [];
     if($om_action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName()) {
-      $cache_tags[] = strtoupper("DHH_{$om_action}"); // DHH tag
+      // $cache_tags[] = strtoupper("DHH_{$om_action}"); // DHH tag
       $cache_tags[] = strtoupper($om_action);         // Native tag
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      // $cache_tags[] = "PRODUCT_{$id}";
       $cache_tags[] = "CATALOG_PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      // $cache_tags[] = "CATEGORY_{$id}";
       $cache_tags[] = "CATALOG_CATEGORY_{$id}";
     }
     
@@ -233,9 +236,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    *
    * @return                    bool    TRUE if reading from cache is allowed
    */
-  public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $debug_name = ""): bool {
+  public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $type = ""): bool {
+    static $decision = [];
+    if(isset($decision[$type])) {
+      return $decision[$type];
+    }
+    
     if(!DHH_FPC_ENABLED) {
-      self::log("READ disabled (DHH_FPC_ENABLED): {$debug_name}");
+      self::log("READ disabled (DHH_FPC_ENABLED): {$type}");
       return false;
     }
     
@@ -244,51 +252,57 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])
     || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1) || self::request_has_no_cache_headers()) {
-      self::log("READ disabled (by request header or URL param: {$debug_name}");
+      self::log("READ disabled (by request header or URL param: {$type}");
+      $decision[$type] = false;
       return false;
     }
     
     if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
-      self::log("READ disabled (REQUEST_METHOD): {$debug_name}");
+      self::log("READ disabled (REQUEST_METHOD): {$type}");
+      $decision[$type] = false;
       return false;
     }
     
     if(!$isHtmlBlock) {
       $om_action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($om_action, self::$om_action_whitelist, true)) {
-        self::log("READ disabled (OM action): {$debug_name}");
+        self::log("READ disabled (OM action): {$type}");
+        $decision[$type] = false;
         return false;
       }
     }
     
-    // Temporarily block non-FPC caching
-    // if($debug_name !== "fpc") {
-    //   return false;
-    // }
-    
     if(!$non_anonymous_okay && self::is_request_anonymous()) {
-      self::log("READ disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
+      self::log("READ disabled (Anonymous not allowed and request is not anonymous): {$type}");
+      $decision[$type] = false;
       return false;
     }
     
-    self::log("READ enabled: {$debug_name}");
+    self::log("READ enabled: {$type}");
+    $decision[$type] = true;
     return true;
   }
   
   /**
    * Determine if the FPC cache is enabled for writing.
    *
-   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-   * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
-   * @param debug_name          string  Debug name for logging
+   * @param  $non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+   * @param  $isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
+   * @param  $type                string  The type of content being cached (for logging and decision purposes)
    *
    * @return                    bool    TRUE if writing to cache is allowed
    */
-  public static function is_write_cache_enabled($non_anonymous_okay = false, $isHtmlBlock = false, $debug_name = ""): bool {
+  public static function is_write_cache_enabled(bool $non_anonymous_okay, bool $isHtmlBlock, string $type): bool {
+    static $decision = [];
+    if(isset($decision[$type])) {
+      return $decision[$type];
+    }
+    
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
     if(!DHH_FPC_ENABLED) {
-      self::log("WRITE disabled (DHH_FPC_ENABLED): {$debug_name}");
+      self::log("WRITE disabled (DHH_FPC_ENABLED): {$type}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+      $decision[$type] = false;
       return false;
     }
     
@@ -299,34 +313,39 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // - is_ajax    = Amasty layered nav AJAX request, not cachable yet
     if(isset($_GET["nofpc"]) || isset($_GET["multipass"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
     || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1)) {
-      self::log("WRITE disabled (URL parameter): {$debug_name}");
+      self::log("WRITE disabled (URL parameter): {$type}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+      $decision[$type] = false;
       return false;
     }
     
     if(PHP_SAPI !== "cli" && (!in_array($_SERVER["REQUEST_METHOD"], ["GET", "HEAD"]))) {
-      self::log("WRITE disabled (REQUEST_METHOD): {$debug_name}");
+      self::log("WRITE disabled (REQUEST_METHOD): {$type}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+      $decision[$type] = false;
       return false;
     }
     
     if($isHtmlBlock !== true) {
       $action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($action, self::$om_action_whitelist, true)) {
-        self::log("WRITE disabled (OpenMage action): {$debug_name}");
+        self::log("WRITE disabled (OpenMage action): {$type}");
         Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+        $decision[$type] = false;
         return false;
       }
     }
     
     if(!$non_anonymous_okay && !self::is_request_anonymous()) {
-      self::log("WRITE disabled (Anonymous not allowed and request is not anonymous): {$debug_name}");
+      self::log("WRITE disabled (Anonymous not allowed and request is not anonymous): {$type}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+      $decision[$type] = false;
       return false;
     }
     
-    self::log("WRITE enabled: {$debug_name}");
+    self::log("WRITE enabled: {$type}");
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+    $decision[$type] = true;
     
     return true;
   }
@@ -365,7 +384,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     if(empty($html)) {
       self::log("MISS: {$key}");
-      self::_add_server_timing_header("FPC miss: {$key}");
+      // self::_add_server_timing_header("FPC miss: {$key}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return null;
     }
@@ -476,8 +495,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     self::log("HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
     self::_add_server_timing_header("FPC hit: {$key}");
     self::_emit_server_timing_header();
-    
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+    
     return $html;
   }
   
@@ -559,16 +578,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     // Prepare cache tags
-    $cache_tags[] = "DHH_FPC";
+    // $cache_tags[] = "DHH_FPC"; // Removed: Simplifying cache tag management by relying on OM native tags as much as possible
     
     // Store in cache
     if(self::saveToCacheDeferred($key, $html, $cache_tags, 7 * 86400, minifyHtml: false)) {
-      self::_add_server_timing_header("FPC saved: {$key}");
+      self::_add_server_timing_header("FPC: SAVE {$key}");
       self::_emit_server_timing_header();
       $return = true;
     }
-    
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    
     return $return ?? false;
   }
   
@@ -729,6 +748,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     $GLOBALS["dhh_header_server_timing"] ??= [];
     $GLOBALS["dhh_header_server_timing"][] = $string;
+    
     return true;
   }
   
