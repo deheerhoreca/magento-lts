@@ -17,15 +17,16 @@ $bnplMethods = [
  * @var string[]
  */
 $highRiskSkus = [
-    "GN-GM947",
-    "GN-GM948",
-    "GN-GM949",
     "BA-190031",
     "BA-190033",
     "BA-190052",
-    "BA-190096",
-    "BA-190095",
     "BA-190080",
+    "BA-190095",
+    "BA-190096",
+    "EM-521004",
+    "GN-GM947",
+    "GN-GM948",
+    "GN-GM949",
     "HD-209950",
     "VT-DRCCB",
     "VT-DRCCZ",
@@ -78,15 +79,14 @@ $oneMethod = count($methods) <= 1;
 //     devDump($cart);
 // }
 
-$highRiskPatternFound = false;
-
 // Loop cart items and match against known fraudulent order products
+$highRiskPatternFound = false;
 $session = Mage::getSingleton("checkout/session");
 $cartItems = $session?->getQuote()?->getAllItems();
 if(!empty($cartItems)) {
     foreach($cartItems as $item) {
         /** @var Mage_Sales_Model_Quote_Item $item */
-        if($item->getBasePrice() >= 500 &&
+        if($item->getBasePrice() >= 480 &&
         (in_array($item->getSku(), $highRiskSkus) || wild_sis($highRiskSProductNameSubstrings, $item->getName()))) {
             $highRiskPatternFound = true;
             break;
@@ -115,7 +115,7 @@ if($flagBnplRemoved) {
         <ul class="messages">
             <li class="success-msg">
                 <ul>
-                    <li><span><ins>We krijgen voor een klein aantal producten dagelijkse nepbestellingen</ins>, daarom is Achteraf Betalen helaas niet beschikbaar. <strong>Alle andere betaalmethoden wel</strong>, en als u de fraudegevoelige producten uit uw cart haalt kunt u weer achteraf betalen (Uw order splitsen). Vragen hierover? Neem aub contact op via <span class="user-select-all">sales@chefstore.nl</span> of telefoon.</span></li>
+                    <li><span><ins>We krijgen voor een klein aantal producten dagelijkse nepbestellingen</ins>. Omdat u één van deze producten wilt aanschaffen is Achteraf Betalen helaas niet beschikbaar voor uw bestelling. <strong>Alle andere betaalmethoden</strong> werken als normaal, en als u de fraudegevoelige producten uit uw cart haalt kunt u weer achteraf betalen (Uw order splitsen). Vragen hierover? Neem aub contact op via <span class="user-select-all">sales@chefstore.nl</span> of telefoon.</span></li>
                 </ul>
             </li>
         </ul>

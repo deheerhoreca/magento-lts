@@ -967,8 +967,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
               echo $this->getChildHtml("extrahint");
               
               // Non-configurable products
-              if(!$this->hasOptions()) {
-                ?>
+              if(!$this->hasOptions()) { ?>
                 <div class="add-to-box">
                   <div class="price-info">
                     <?=$this->getPriceHtml($_product)?>
@@ -990,15 +989,16 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                   echo "</ul>";
                   
                   // ! SYNC WITH `./app/code/local/DeHeerHoreca/Util/Helper/Util.php`
+                  // "hendi5"
                   $now = CarbonImmutable::now();
                   
-                  if(0 && !$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) { ?>
+                  if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) { ?>
                     <div class="card mx-auto p-2 mb-2">
                       <div class="card-body">
                         <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/bartscher.png" class="card-img-top px-5" alt="Maxima coupon code">
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">BARTSCHER5</span></h4>
                         <p class="card-text">Korting geldt voor alle producten van <?=$brand_name?>. Gebruik deze code tijdens het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 oktober 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 januari 2026: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div><?php
                   }
@@ -1033,17 +1033,6 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                         <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">DIVERSO5</span></h4>
                         <p class="card-text">Korting geldt voor <a href="/promoties/2025-diverso-by-diamond.html" target="_blank">een brede selectie producten</a> van <?=$brand_name?>. Gebruik deze code tijdens het afrekenen.</p>
                         <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 december 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
-                      </div>
-                    </div><?php
-                  }
-                  
-                  if(!$hasSpecialPrice && sis(["bartscher"], $supplier_sys) && $productlabel === "5% Kortingscode") { ?>
-                    <div class="card mx-auto p-2 mb-2">
-                      <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/<?=$brand_slug?>.png" class="card-img-top px-5" alt="Coupon Code">
-                      <div class="card-body">
-                        <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">BARTSCHER5</span></h4>
-                        <p class="card-text">Korting geldt voor alle producten van <?=$brand_name?>. Gebruik deze code tijdens het afrekenen.</p>
-                        <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 24 december 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                       </div>
                     </div><?php
                   }

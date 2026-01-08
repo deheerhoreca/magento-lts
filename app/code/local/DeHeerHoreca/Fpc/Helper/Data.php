@@ -237,13 +237,15 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return                    bool    TRUE if reading from cache is allowed
    */
   public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $type = ""): bool {
-    static $decision = [];
-    if(isset($decision[$type])) {
-      return $decision[$type];
-    }
+    // @todo verify:
+    // static $decision = [];
+    // if(isset($decision[$type])) {
+    //   return $decision[$type];
+    // }
     
     if(!DHH_FPC_ENABLED) {
       self::log("READ disabled (DHH_FPC_ENABLED): {$type}");
+      $decision[$type] = false;
       return false;
     }
     
@@ -306,11 +308,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
     }
     
-    // - Disallow &multipass GET param (layered nav labyrinths overload cache)
-    // - Allow max 2 GET params (layered nav labyrinths overload cache)
-    // - ath        = Aoe_TemplateHints flag (undesirable debug content)
-    // - bf         = ???
-    // - is_ajax    = Amasty layered nav AJAX request, not cachable yet
+    // >  Disallow &multipass GET param (layered nav labyrinths overload cache)
+    // >  "isAjax" and "ajax" are used by OpenMage core for AJAX requests, leave those alone
+    // >  Allow max 2 GET params (layered nav labyrinths overload cache)
+    // >  ath        = Aoe_TemplateHints flag (undesirable debug content)
+    // >  bf         = ???
+    // >  is_ajax    = Amasty layered nav AJAX request only, not cachable yet
+    // >  Maybe later: $isAjax = Mage::app()->getRequest()->isAjax();
     if(isset($_GET["nofpc"]) || isset($_GET["multipass"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
     || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1)) {
       self::log("WRITE disabled (URL parameter): {$type}");

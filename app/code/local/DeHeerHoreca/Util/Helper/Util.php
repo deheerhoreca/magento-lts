@@ -1646,7 +1646,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
     //   return "Extra Kortingscode";
     // }
-    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-12-24 00:00:00")) {
+    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) {
       return "5% Kortingscode";
     }
     // if($now->isBefore("2025-12-01 00:00:00")) {
@@ -1666,7 +1666,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     // Maxima warranty extension
-    if($supplier_sys === "maxima" && $now->isBefore("2026-01-01 00:00:00")) {
+    if($supplier_sys === "maxima" && $now->isBefore("2026-02-01 00:00:00")) {
       return "Nu 2 jaar garantie";
     }
     
