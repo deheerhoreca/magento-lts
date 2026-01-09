@@ -132,9 +132,9 @@ $html = <<<EOT
     <!-- footer_end -->
 EOT;
 
-$html = \Chefstore\Html::minifyHtml($html);
+// $html = \Chefstore\Html::minifyHtml($html);
 echo $html;
 
 if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {
-  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred(DHH_FPC_FOOTER_KEY, $html, ["DHH_CMS"], 86400 * 7, minifyHtml: false);
+  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred(DHH_FPC_FOOTER_KEY, $html, ["DHH_CMS"], 86400 * 7, minifyHtml: true);
 }

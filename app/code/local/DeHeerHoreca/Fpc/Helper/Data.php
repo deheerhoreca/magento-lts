@@ -7,8 +7,6 @@ use \Illuminate\Support\Arr;
 use \Illuminate\Support\Collection;
 use \Illuminate\Support\Str;
 
-// require_once __DIR__."/TinyHtmlMinifier.class.php";
-
 // @todo Use lib/Afterpay/vendor/guzzlehttp/guzzle/src/UriTemplate.php to normalize URLs
 // @todo Normalize faulty "?amp%3B": https://www.chefstore.nl/koelingen/koelwerkbanken-saladettes.html?amp%3Bgn_capacity=2537&material_group=2191
 // @todo Perhaps just use these methods? Mage::app()->saveCache(); Mage::app()->cleanCache();
@@ -25,6 +23,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   public const REDIS_CACHE_TAG_PREFIX         = "zc:ti:dd6";
   public const REDIS_CACHE_KEY_PREFIX         = "zc:k:dd6";
+  
+  /** @var array<string,string|string[]> */
+  private static array $httpHeaders           = [];
   
   /** @var array List of extra tags to add to the cache for this request */
   public static $addTags = [];
@@ -213,16 +214,17 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Check if loading from cache should be bypassed for this request
+   * Check if loading from cache should be bypassed for this request, based on request headers.
+   * Used by the cache warmer tool in Intel to force cache refreshes, or as needed by browser dev tools.
    *
    * @return bool
    * @throws Zend_Controller_Request_Exception
    */
   protected static function request_has_no_cache_headers(): bool {
-    return (
-      strstr(strtolower(Mage::app()->getRequest()->getHeader("PRAGMA")), "no-cache") ||
-      strstr(strtolower(Mage::app()->getRequest()->getHeader("CACHE_CONTROL")), "no-cache")
-    );
+    return sis("no-cache", [
+      Mage::app()?->getRequest()?->getHeader("PRAGMA"),
+      Mage::app()?->getRequest()?->getHeader("CACHE_CONTROL")
+    ]);
   }
   
   /**
@@ -388,7 +390,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     if(empty($html)) {
       self::log("MISS: {$key}");
-      // self::_add_server_timing_header("FPC miss: {$key}");
+      self::addServerTimingHeader("FPC miss: {$key}");
       Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       return null;
     }
@@ -497,8 +499,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $html = trim($html);
     $size = mb_strlen($html);
     self::log("HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
-    self::_add_server_timing_header("FPC hit: {$key}");
-    self::_emit_server_timing_header();
+    self::addServerTimingHeader("FPC hit: {$key}");
+    self::emitHttpHeaders();
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     
     return $html;
@@ -541,23 +543,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Fix XHTML crap
     $html = str_replace(" />", ">", $html);
     
-    // HTML minifier -- Broken:
-    // /koelingen/vrieskasten/glasdeurvriezers/vrieskast-1530-l-3-glasdeuren-zwart-lichtbak-combisteel-7455-2435.html
-    // https://www.chefstore.nl/service
-    // $bytes_pre = mb_strlen($html);
-    // $options = [
-      // "collapse_whitespace" => false,
-      // "disable_comments"    => true,
-    // ];
-    // try {
-      // $minifier = new TinyHtmlMinifier($options);
-      // $html = $minifier->minify($html);
-      // $bytes_post = mb_strlen($html);
-      // self::log("Minifier OK: {$bytes_pre} => {$bytes_post} bytes");
-    // } catch(Exception $e) {
-      // self::log("Minifier exception: {$e->getMessage()}");
-    // }
-    
     // Handle form_key (CSRF protection)
     if($holepunch_formkey) {
       $html = self::anonymizeFormkey($html);
@@ -586,8 +571,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Store in cache
     if(self::saveToCacheDeferred($key, $html, $cache_tags, 7 * 86400, minifyHtml: false)) {
-      self::_add_server_timing_header("FPC: SAVE {$key}");
-      self::_emit_server_timing_header();
+      self::addServerTimingHeader("FPC: SAVE {$key}");
+      self::emitHttpHeaders();
       $return = true;
     }
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
@@ -635,12 +620,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function saveToCacheDeferred(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): true {
     Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
-    
     $closure = fn() => self::saveToCache($key, $data, $cache_tags, $lifetime, $minifyHtml);
     Utils::deferClosure($closure);
     self::log("(Deferred) SAVE {$key}");
-    
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    
     return true;
   }
   
@@ -744,16 +728,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * Add a Server-Timing header value to be emitted later.
    *
    * @param   string  $string
-   * @return  bool
+   * @return  void
    */
-  public static function _add_server_timing_header(string $string): bool {
-    if(headers_sent()) {
-      return false;
-    }
-    $GLOBALS["dhh_header_server_timing"] ??= [];
-    $GLOBALS["dhh_header_server_timing"][] = $string;
-    
-    return true;
+  private static function addServerTimingHeader(string $string): void {
+    self::$httpHeaders["Server-Timing"] ??= [];
+    self::$httpHeaders["Server-Timing"][] = $string;
   }
   
   /**
@@ -761,17 +740,24 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    *
    * @return false|true|null
    */
-  public static function _emit_server_timing_header(): bool|null {
+  public static function emitHttpHeaders(): bool|null {
+    if(empty(self::$httpHeaders)) {
+      return null;
+    }
     if(headers_sent()) {
       return false;
     }
     
-    $GLOBALS["dhh_header_server_timing"] ??= [];
-    if(!empty($GLOBALS["dhh_header_server_timing"])) {
-      header("Server-Timing: ".di($GLOBALS["dhh_header_server_timing"]));
-      unset($GLOBALS["dhh_header_server_timing"]);
-      return true;
+    // Disable Nginx response buffering
+    // @see https://github.com/colinmollenhour/Cm_Diehard/blob/9deec69dad2a33afc850cc7f0022bbdb158dbeb5/code/Model/Backend/Local.php
+    Mage::app()->getResponse()->setHeader("X-Accel-Buffering", "no", replace: true);
+    ini_set('zlib.output_compression', 'Off');
+    
+    foreach(self::$httpHeaders as $header_name => $header_values) {
+      $header_value = implode(", ", (array) $header_values);
+      Mage::app()->getResponse()->setHeader($header_name, $header_value, true);
     }
+    self::$httpHeaders = [];
     
     return null;
   }

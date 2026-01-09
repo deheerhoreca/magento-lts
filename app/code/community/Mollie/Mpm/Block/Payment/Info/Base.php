@@ -173,7 +173,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
     {
         try {
             $details = json_decode($this->getInfo()->getAdditionalInformation('details'), true);
-            return $details['consumerName'];
+            return $details['consumerName'] ?? null;
         } catch (\Exception $exception) {
             return null;
         }
@@ -183,7 +183,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
     {
         try {
             $details = json_decode($this->getInfo()->getAdditionalInformation('details'), true);
-            return $details['consumerAccount'];
+            return $details['consumerAccount'] ?? null;
         } catch (\Exception $exception) {
             return null;
         }
@@ -193,7 +193,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
     {
         try {
             $details = json_decode($this->getInfo()->getAdditionalInformation('details'), true);
-            return $details['consumerBic'];
+            return $details['consumerBic'] ?? null;
         } catch (\Exception $exception) {
             return null;
         }

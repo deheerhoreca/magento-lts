@@ -571,6 +571,7 @@ if(function_exists("sanitize_alphanumeric") === false) {
 if(function_exists("_dhh_debug") === false) {
   /**
    * Check if debugging is enabled for the current user/IP/_ENV.
+   * @return bool
    */
   function _dhh_debug(): bool {
     static $result = null;
@@ -657,7 +658,7 @@ function in_range(float|int $number, float|int $min, float|int $max, bool $inclu
  * @param  mixed $var
  * @return void
  */
-function devDump(mixed $var): void {
+function devDump(mixed ...$var): void {
   if(_dhh_debug()) {
     echo "<!-- DHH: ".var_export($var, true)." -->".PHP_EOL;
   }

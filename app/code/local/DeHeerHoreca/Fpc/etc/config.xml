@@ -28,6 +28,7 @@
             </deheerhoreca_fpc>
         </routers>
         <events>
+            <!-- Serve cached HTML as early as possible, but late enough to have all necessary state in place -->
             <controller_action_predispatch>
                 <observers>
                     <DeHeerHoreca_Fpc_Model_Observer>
@@ -37,6 +38,8 @@
                     </DeHeerHoreca_Fpc_Model_Observer>
                 </observers>
             </controller_action_predispatch>
+            
+            <!-- Opportunity to modify layout before it is loaded -->
             <controller_action_layout_load_before>
                 <observers>
                     <customer_is_logged_in_observer>
@@ -46,6 +49,7 @@
                     </customer_is_logged_in_observer>
                 </observers>
             </controller_action_layout_load_before>
+            
             <!-- Collect all loaded cache tags to associate with page -->
             <model_load_after>
                 <observers>
@@ -56,6 +60,17 @@
                     </fpc_extra_cache_tags>
                 </observers>
             </model_load_after>
+            
+            <!-- Send HTTP headers before response is sent -->
+            <http_response_send_before>
+                <observers>
+                    <diehard>
+                        <type>singleton</type>
+                        <class>deheerhoreca_fpc/observer</class>
+                        <method>httpResponseSendBefore</method>
+                    </diehard>
+                </observers>
+            </http_response_send_before>
         </events>
     </frontend>
     <adminhtml>

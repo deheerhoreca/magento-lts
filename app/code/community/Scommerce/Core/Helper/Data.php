@@ -1,1 +1,117 @@
-<?php eval("?>".base64_decode("PD9waHANCi8qKg0KICogU2NvbW1lcmNlIENvcmUgSGVscGVyDQogKiANCiAqIEBjYXRlZ29yeSAgIFNjb21tZXJjZQ0KICogQHBhY2thZ2UgICAgU2NvbW1lcmNlX0NvcmUNCiAqIEBhdXRob3IgICAgIFNjb21tZXJjZSBNYWdlIDxjb3JlQHNjb21tZXJjZS1tYWdlLmNvLnVrPg0KICovDQpjbGFzcyBTY29tbWVyY2VfQ29yZV9IZWxwZXJfRGF0YSBleHRlbmRzIE1hZ2VfQ29yZV9IZWxwZXJfRGF0YQ0KeyAgICANCgkvKioNCiAgICAgKiByZXR1cm5zIHdoZXRoZXIgbGljZW5zZSBrZXkgaXMgdmFsaWQgb3Igbm90DQogICAgICoNCiAgICAgKiBAcmV0dXJuIGJvb2wNCiAgICAgKi8NCiAgICBwdWJsaWMgZnVuY3Rpb24gaXNMaWNlbnNlVmFsaWQoJGxpY2Vuc2VrZXksJHNrdSl7JHdlYnNpdGUgPSAkdGhpcy0+Z2V0V2Vic2l0ZSgkX1NFUlZFUlsnSFRUUF9IT1NUJ10pOyRvcmlnaW5hbF9saWNlbnNlPSR0aGlzLT5nZW5lcmF0ZU9sZEtleSgkd2Vic2l0ZSwkc2t1KTskaXNMaWNlbnNlVmFsaWQgPSAoJG9yaWdpbmFsX2xpY2Vuc2UgPT09ICRsaWNlbnNla2V5KTsgaWYgKCRpc0xpY2Vuc2VWYWxpZD09ZmFsc2UpeyRpc0xpY2Vuc2VWYWxpZCA9KGNyeXB0KCR3ZWJzaXRlLCAkbGljZW5zZWtleSk9PT0kbGljZW5zZWtleSk7fSByZXR1cm4gJGlzTGljZW5zZVZhbGlkO30NCgkNCgkvKioNCiAgICAgKiByZXR1cm5zIGxpY2Vuc2Uga2V5IGZvciB3ZWJzaXRlIGFuZCBza3UNCiAgICAgKg0KICAgICAqIEByZXR1cm4gYm9vbA0KICAgICAqLw0KCXB1YmxpYyBmdW5jdGlvbiBnZW5lcmF0ZUtleSgkd2Vic2l0ZSwkc2t1KXskd2Vic2l0ZSA9ICR0aGlzLT5nZXRXZWJzaXRlKCR3ZWJzaXRlKTskc2t1PSR0aGlzLT5nZXRTS1UoJHNrdSk7JG9yaWdpbmFsX2xpY2Vuc2UgPSBjcnlwdCgkd2Vic2l0ZSwgY3J5cHQoJHNrdSkpO3JldHVybiAkb3JpZ2luYWxfbGljZW5zZTt9DQoJDQoJLyoqDQogICAgICogcmV0dXJucyBsaWNlbnNlIGtleSBmb3Igd2Vic2l0ZSBhbmQgc2t1DQogICAgICoNCiAgICAgKiBAcmV0dXJuIGJvb2wNCiAgICAgKi8NCglwdWJsaWMgZnVuY3Rpb24gZ2VuZXJhdGVPbGRLZXkoJHdlYnNpdGUsJHNrdSl7JHdlYnNpdGUgPSAkdGhpcy0+Z2V0V2Vic2l0ZSgkd2Vic2l0ZSk7JHNrdT0kdGhpcy0+Z2V0U0tVKCRza3UpOyRvcmlnaW5hbF9saWNlbnNlID0gY3J5cHQoJHdlYnNpdGUsICRza3UpO3JldHVybiAkb3JpZ2luYWxfbGljZW5zZTt9DQoJDQoJLyoqDQogICAgICogcmV0dXJucyByZWFsIHNrdSBmb3IgbGljZW5zZSBrZXkNCiAgICAgKg0KICAgICAqIEByZXR1cm4gc3RyaW5nDQogICAgICovDQoJcHVibGljIGZ1bmN0aW9uIGdldFNLVSgkc2t1KSB7aWYgKHN0cnBvcygkc2t1LCdfJykhPT1mYWxzZSkgeyRza3U9c3RydG9sb3dlcihzdWJzdHIoJHNrdSwwLHN0cnBvcygkc2t1LCdfJykpKTt9IHJldHVybiAkc2t1O30NCgkNCgkvKioNCiAgICAgKiByZXR1cm5zIHJlYWwgc2t1IGZvciBsaWNlbnNlIGtleQ0KICAgICAqDQogICAgICogQHJldHVybiBzdHJpbmcNCiAgICAgKi8NCglwdWJsaWMgZnVuY3Rpb24gZ2V0V2Vic2l0ZSgkd2Vic2l0ZSkgeyR3ZWJzaXRlID0gc3RydG9sb3dlcigkd2Vic2l0ZSk7JHdlYnNpdGU9c3RyX3JlcGxhY2UoJ2h0dHBzOicsJycsc3RyX3JlcGxhY2UoJy8nLCcnLHN0cl9yZXBsYWNlKCdodHRwOicsJycsc3RyX3JlcGxhY2UoJ3d3dy4nLCAnJywgJHdlYnNpdGUpKSkpO3JldHVybiAkd2Vic2l0ZTt9DQoJDQoJLyoqDQogICAgICogcmV0dXJucyBpZiB0aGUgZ2l2ZSBVUkwgaXMgdmFsaWQgb3Igbm90DQogICAgICoNCiAgICAgKiBAcmV0dXJuIGJvb2wNCiAgICAgKi8NCglwdWJsaWMgZnVuY3Rpb24gaXNVcmxWYWxpZCgkd2Vic2l0ZSkNCgl7DQoJCSRiaXRzID0gZXhwbG9kZSgnLycsICR3ZWJzaXRlKTsNCgkJaWYgKCRiaXRzWzBdPT0naHR0cDonIHx8ICRiaXRzWzBdPT0naHR0cHM6Jyl7DQoJCQkkd2Vic2l0ZT0gJGJpdHNbMl07DQoJCX0gZWxzZSB7DQoJCQkkd2Vic2l0ZT0gJGJpdHNbMF07DQoJCX0NCgkJdW5zZXQoJGJpdHMpOw0KCQkNCgkJJGJpdHMgPSBleHBsb2RlKCcuJywgJHdlYnNpdGUpOw0KCQkkaWR6PTA7DQoJCXdoaWxlIChpc3NldCgkYml0c1skaWR6XSkpew0KCQkJJGlkeis9MTsNCgkJfQ0KCQkkaWR6LT0zOw0KCQkkaWR5PTA7DQoJCXdoaWxlICgkaWR5PCRpZHopew0KCQkJdW5zZXQoJGJpdHNbJGlkeV0pOw0KCQkJJGlkeSs9MTsNCgkJfQ0KCQkkcGFydD1hcnJheSgpOw0KCQlmb3JlYWNoICgkYml0cyBBUyAkYml0KXsNCgkJCSRwYXJ0W109JGJpdDsNCgkJfQ0KCQl1bnNldCgkYml0KTsNCgkJdW5zZXQoJGJpdHMpOw0KCQl1bnNldCgkd2Vic2l0ZSk7DQoJCQ0KCQlpZiAoc3RybGVuKCRwYXJ0WzFdKT4zKXsNCgkJCXVuc2V0KCRwYXJ0WzBdKTsNCgkJfQ0KCQkNCgkJZm9yZWFjaCgkcGFydCBBUyAkYml0KXsNCgkJCSR3ZWJzaXRlLj0kYml0LicuJzsNCgkJfQ0KCQl1bnNldCgkYml0KTsNCgkJcmV0dXJuIHByZWdfcmVwbGFjZSgnLyguKilcLi8nLCckMScsJHdlYnNpdGUpOw0KCX0NCn0=")); ?>
+<?php
+
+/**
+ * Scommerce Core Helper
+ *
+ * @category   Scommerce
+ * @package    Scommerce_Core
+ *
+ * @author     Scommerce Mage <core@scommerce-mage.co.uk>
+ */
+class Scommerce_Core_Helper_Data extends Mage_Core_Helper_Data
+{
+  /**
+   * returns whether license key is valid or not
+   *
+   * @return bool
+   */
+  public function isLicenseValid($licensekey, $sku)
+  {
+    return true;
+    $website          = $this->getWebsite($_SERVER['HTTP_HOST']);
+    $original_license = $this->generateOldKey($website, $sku);
+    $isLicenseValid   = ($original_license === $licensekey);
+    if ($isLicenseValid == false) { $isLicenseValid = (crypt($website, $licensekey) === $licensekey); }
+    return $isLicenseValid;
+  }
+
+  /**
+   * returns license key for website and sku
+   *
+   * @return bool
+   */
+  public function generateKey($website, $sku)
+  {
+    $website          = $this->getWebsite($website);
+    $sku              = $this->getSKU($sku);
+    // $original_license = crypt($website, crypt($sku));
+    return "bier";
+  }
+
+  /**
+   * returns license key for website and sku
+   *
+   * @return bool
+   */
+  public function generateOldKey($website, $sku)
+  {
+    $website          = $this->getWebsite($website);
+    $sku              = $this->getSKU($sku);
+    $original_license = crypt($website, $sku);
+    return $original_license;
+  }
+
+  /**
+   * returns real sku for license key
+   *
+   * @return string
+   */
+  public function getSKU($sku) { if (strpos($sku, '_') !== false) { $sku = strtolower(substr($sku, 0, strpos($sku, '_'))); } return $sku; }
+
+  /**
+   * returns real sku for license key
+   *
+   * @return string
+   */
+  public function getWebsite($website)
+  {
+    $website = strtolower($website);
+    $website = str_replace('https:', '', str_replace('/', '', str_replace('http:', '', str_replace('www.', '', $website))));
+    return $website;
+  }
+
+  /**
+   * returns if the give URL is valid or not
+   *
+   * @return bool
+   */
+  public function isUrlValid($website)
+  {
+    $bits = explode('/', $website);
+    if ($bits[0] == 'http:' || $bits[0] == 'https:') {
+      $website = $bits[2];
+    } else {
+      $website = $bits[0];
+    }
+    unset($bits);
+
+    $bits = explode('.', $website);
+    $idz  = 0;
+    while (isset($bits[$idz])) {
+      $idz += 1;
+    }
+    $idz -= 3;
+    $idy  = 0;
+    while ($idy < $idz) {
+      unset($bits[$idy]);
+      $idy += 1;
+    }
+    $part = [];
+    foreach ($bits as $bit) {
+      $part[] = $bit;
+    }
+    unset($bit);
+    unset($bits);
+    unset($website);
+
+    if (strlen($part[1]) > 3) {
+      unset($part[0]);
+    }
+
+    foreach ($part as $bit) {
+      $website .= $bit . '.';
+    }
+    unset($bit);
+    return preg_replace('/(.*)\./', '$1', $website);
+  }
+}

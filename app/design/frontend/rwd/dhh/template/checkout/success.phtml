@@ -1,27 +1,104 @@
 <?php
-# KEEP IN SYNC:
-# - app/design/frontend/rwd/dhh/template/paysafecash/success.phtml @deprecated
-# - app/design/frontend/rwd/dhh/template/checkout/success.phtml
-?>
 
-<?php
-$order_id             = $this->getOrderId();
-$_order               = Mage::getModel("sales/order")->loadByIncrementId($order_id);
-$grand_total          = $_order->getGrandTotal() ?? null;
-$shipping_total       = $_order->getShippingAmount();
-$tax_info             = $_order->getFullTaxInfo();
-$tax_total            = $tax_info[0]["amount"] ?? null;
-$discount_offered     = json_encode(!(empty($_order->getCouponCode())));
-$grand_total_ex_vat   = null;
-$order_email          = $_order->getCustomerEmail();
+declare(strict_types=1);
 
-if(is_numeric($grand_total)) {
-  $total_no_shipping = ($grand_total - $shipping_total);
+// KEEP IN SYNC:
+// - app/design/frontend/rwd/dhh/template/paysafecash/success.phtml @deprecated
+// - app/design/frontend/rwd/dhh/template/checkout/success.phtml
+
+$orderId = (string) $this->getOrderId();
+
+$_order = null;
+if($orderId !== "") {
+  $_order = Mage::getModel("sales/order")->loadByIncrementId($orderId);
 }
 
-if(is_numeric($grand_total)) {
-  $grand_total_ex_vat = $grand_total / 1.21;
+$grandTotal = $_order ? (float) $_order->getGrandTotal() : 0.0;
+$shippingTotal = $_order ? (float) $_order->getShippingAmount() : 0.0;
+
+$taxInfo = $_order ? (array) $_order->getFullTaxInfo() : [];
+$taxTotal = isset($taxInfo[0]["amount"]) ? (float) $taxInfo[0]["amount"] : 0.0;
+
+$discountOffered = $_order && !empty($_order->getCouponCode());
+
+$grandTotalExVat = $grandTotal > 0 ? ($grandTotal / 1.21) : 0.0;
+$totalNoShipping = max(0.0, $grandTotal - $shippingTotal);
+
+$orderEmail = $_order ? (string) $_order->getCustomerEmail() : "";
+
+$orderShippingCountry = $_order ? (string) $_order->getShippingAddress()->getCountry() : "";
+
+// For now, hardcore estimated delivery date for 1 week ahead, in "YYYY-MM-DD" format:
+$estimatedDeliveryDate = date("Y-m-d", strtotime("+1 week"));
+
+$orderItems = $_order?->getItemsCollection() ?? null;
+$productIds = $orderItems->getColumnValues("product_id");
+$productCollection = Mage::getModel("catalog/product")->getCollection()
+  ->addAttributeToSelect("ean")
+  ->addFieldToFilter("entity_id", ["in" => $productIds]);
+$gtins = [];
+foreach($productCollection as $product) {
+  $gtin = (string) $product->getData("ean");
+  if(filled($gtin)) {
+    $gtins[] = ["gtin" => $gtin];
+  }
 }
+
+$items = [];
+if($orderId !== "") {
+  if($this->getCanViewOrder()) {
+    $items[] = "<li>".$this->__("Your order # is: %s.",
+      sprintf("<a href='%s'>%s</a>", $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($orderId)))."</li>";
+  } else {
+    $items[] = "<li><strong>".$this->__("Your order # is: %s.", $this->escapeHtml($orderId))."</strong></li>";
+  }
+  $items[] = "<li>Je krijgt een e-mail op <span class='strong' id='customer_email'>{$this->escapeHtml($orderEmail)}</span> met je orderbevestiging, en we houden je op de hoogte. Vragen? Reply, of mail naar service@chefstore.nl</li>";
+  
+  if($this->getCanViewOrder() && $this->getCanPrintOrder()) {
+    $items[] = "<li>".$this->__(
+      "Click <a href='%s' onclick=\"this.target='_blank'\">here to print</a> a copy of your order confirmation.",
+      $this->getPrintUrl()).$this->getChildHtml()."</li>";
+  }
+}
+
+if($this->getAgreementRefId()) {
+  $items[] = "<li>".$this->__("Your billing agreement # is: %s.",
+    sprintf("<a href=\"%s\">%s</a>",
+    $this->escapeHtml($this->getAgreementUrl()),
+    $this->escapeHtml($this->getAgreementRefId())))."</li>";
+}
+
+$profiles = $this->getRecurringProfiles();
+if($profiles) {
+  $profileLis = [];
+  foreach ($profiles as $profile) {
+    $profileIdHtml = $this->getCanViewProfiles()
+      ? sprintf(
+        "<a href=\"%s\">%s</a>",
+        $this->escapeHtml($this->getProfileUrl($profile)),
+        $this->escapeHtml($this->getObjectData($profile, "reference_id"))
+      )
+      : $this->escapeHtml($this->getObjectData($profile, "reference_id"));
+    
+    $profileLis[] = "<li>"
+      . $this->__(
+        "Payment profile # %s: \"%s\".",
+        $profileIdHtml,
+        $this->escapeHtml($this->getObjectData($profile, "schedule_description"))
+      )
+      . "</li>";
+  }
+  $items[] = "<li>"
+    . "  " . $this->__("Your recurring payment profiles:") . ""
+    . "  <ul class=\"disc\">"
+    . "    " . implode("    ", $profileLis) . ""
+    . "  </ul>"
+    . "</li>";
+}
+
+$successItemsHtml       = $items ? implode($items) : "";
+$continueShoppingTitle  = Mage::helper("core")->quoteEscape($this->__("Continue Shopping"));
+$continueShoppingUrl    = $this->escapeHtml($this->getUrl());
 ?>
 
 <style>
@@ -32,6 +109,7 @@ if(is_numeric($grand_total)) {
     }
   }
 </style>
+
 <div class="info-box info-box-cart-success">
   <div class="info-box-inner">
     <h1 class="xxl">Bedankt!</h1>
@@ -40,66 +118,72 @@ if(is_numeric($grand_total)) {
     <ol class="disc-list">
       <li>We sturen je order direct naar het magazijn of de leverancier</li>
       <li>Indien nodig nemen wij contact op om de details van de order en/of de levering door te nemen</li>
-      <li>Indien het pakket mee kan met de postbode, dan zal het via regulier pakketvervoer komen. Het kan ook zijn dat het item met een transporteur wordt bezorgd. De meeste transporteurs ondersteunen Track &amp; Trace, en die krijg je van ons zodra wij hem hebben.</li>
-
-    <?php if ($this->getOrderId()):?>
-      <?php if ($this->getCanViewOrder()) :?>
-        <li><?=$this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId())))?></li>
-      <?php else :?>
-        <li><strong><?=$this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId()))?></strong></p>
-      <?php endif;?>
-        <li>Je krijgt een e-mail op <span class="strong" id="customer_email"><?=$order_email?></span> met je orderbevestiging, en we houden je op de hoogte. Vragen? Reply, of mail naar service@chefstore.nl</li>
-      <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
-        <li>
-          <?=$this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl())?>
-          <?=$this->getChildHtml()?>
-        </li>
-      <?php endif;?>
-    <?php endif;?>
-
-    <?php if ($this->getAgreementRefId()):?>
-      <p><?=$this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
-    <?php endif;?>
-
-    <?php if ($profiles = $this->getRecurringProfiles()):?>
-      <p><?=$this->__('Your recurring payment profiles:');?></p>
-      <ul class="disc">
-        <?php foreach($profiles as $profile):?>
-          <?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
-          <li><?=$this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
-        <?php endforeach;?>
-      </ul>
-    <?php endif;?>
+      <li>
+        Indien het pakket mee kan met de postbode, dan zal het via regulier pakketvervoer komen. Het kan ook zijn
+        dat het item met een transporteur wordt bezorgd. De meeste transporteurs ondersteunen Track &amp; Trace,
+        en die krijg je van ons zodra wij hem hebben.
+      </li><?= $successItemsHtml ?>
     </ol>
-
-    <button type="button" style="margin: 2em auto;" class="center button" title="<?=Mage::helper('core')->quoteEscape($this->__('Continue Shopping'))?>" onclick="window.location='<?=$this->getUrl()?>'">
-      Naar Chefstore.nl
-    </button>
-
+    <button type="button" class="center button" style="margin: 2em auto;" title="<?= $continueShoppingTitle ?>" onclick="window.location.href = '<?= $continueShoppingUrl ?>';">Naar Chefstore.nl</button>
   </div>
 </div>
 
-<?php /* Clickcease.com Conversion tracking */ ?>
-
 <script type="module">
-  var ccConVal = <?=json_encode($grand_total_ex_vat)?>;
-  var script = document.createElement("script");
-  script.async = true;
-  script.src = '//www.clickcease.com/monitor/cccontrack.js';
-  var elem = document.head;
-  elem.appendChild(script);
-</script>
-
-<script type="module">
-  window.uetq = window.uetq || [];
-  window.uetq.push('event', '', {'revenue_value': <?=$grand_total_ex_vat?>, 'currency': 'EUR'});
-
-  var _paq = _paq || [];
-  if(window.location.hostname == "www.chefstore.nl") {
-    _paq.push(['trackEcommerceOrder', '<?=$order_id?>', <?=$grand_total_ex_vat?>, <?=$total_no_shipping?>, <?=$tax_total?>, <?=$shipping_total?>, <?=$discount_offered?>]);
-    <?php
-    // This already happens earlier, probably not needed
-    // _paq.push(['trackPageView']);
-    ?>
+  // Track order conversion for production site only
+  if(window.location.hostname === "www.chefstore.nl") {
+    // Matomo e-commerce tracking
+    window._paq = window._paq || [];
+    const _paq = window._paq;
+    _paq.push([
+      "trackEcommerceOrder",
+      <?= json_encode($orderId) ?>,
+      <?= json_encode($grandTotalExVat) ?>,
+      <?= json_encode($totalNoShipping) ?>,
+      <?= json_encode($taxTotal) ?>,
+      <?= json_encode($shippingTotal) ?>,
+      <?= json_encode($discountOffered) ?>
+    ]);
+    
+    // Clickcease.com Conversion tracking
+    const ccConVal = <?= json_encode($grandTotalExVat) ?>;
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.clickcease.com/monitor/cccontrack.js";
+    document.head.appendChild(script);
+    
+    // Microsoft UET conversion tracking
+    window.uetq = window.uetq || [];
+    window.uetq.push("event", "", {
+      revenue_value: <?= json_encode($grandTotalExVat) ?>,
+      currency: "EUR"
+    });
   }
 </script>
+
+<?php /* BEGIN GCR Opt-in Module Code */ ?>
+<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+<script>
+  window.renderOptIn = function() {
+    window.gapi.load('surveyoptin', function() {
+      window.gapi.surveyoptin.render(
+        {
+          "merchant_id": 118653784,
+          "order_id": <?= $orderId ?>,
+          "email": <?= json_encode($orderEmail) ?>,
+          "delivery_country": <?= json_encode($orderShippingCountry) ?>,
+          "estimated_delivery_date": <?= json_encode($estimatedDeliveryDate) ?>,
+          "opt_in_style": "BOTTOM_TRAY",
+          "products": <?= json_encode($gtins) ?>
+        });
+    });
+  }
+</script>
+<?php /* END GCR Opt-in Module Code */ ?>
+
+<?php /* BEGIN GCR Language Code */ ?>
+<script>
+  window.___gcfg = {
+    lang: 'ml'
+  };
+</script>
+<?php /* END GCR Language Code */ ?>

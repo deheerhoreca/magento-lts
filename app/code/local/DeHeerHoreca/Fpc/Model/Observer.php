@@ -7,6 +7,10 @@ use \Illuminate\Support\Str;
 
 class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
+  static ?DeHeerHoreca_Util_Helper_Util $dhhHelperUtil = null;
+  
+  static ?DeHeerHoreca_Fpc_Helper_Data $dhhHelperFpc  = null;
+  
   /**
    * @return DeHeerHoreca_Fpc_Helper_Data
    */
@@ -23,31 +27,35 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    */
   public function ServeCachedHTML(Varien_Event_Observer $observer): void {
     Varien_Profiler::start("DHH::FPC::ServeCachedHTML");
-    $dhhHelperUtil = getOmDhhUtilHelper();
-    $dhhHelperFpc  = Mage::helper("deheerhoreca_fpc/data");
+    self::$dhhHelperUtil ??= Mage::helper("deheerhoreca_util/util");
+    self::$dhhHelperFpc  ??= Mage::helper("deheerhoreca_fpc/data");
     
     // If FPC is disabled, skip:
-    if(!$dhhHelperFpc->is_read_cache_enabled(true, false, "fpc")) {
-      $dhhHelperUtil->addLabelToClickLog("fpc_cache", "BYPASS");
+    if(!self::$dhhHelperFpc->is_read_cache_enabled(true, false, "fpc")) {
+      self::$dhhHelperUtil->addLabelToClickLog("fpc_cache", "BYPASS");
       Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
       return;
     }
     
-    $key  = $dhhHelperFpc->get_cache_key();
-    $html = $dhhHelperFpc->get_cached_html($key, true, true);
+    $key  = self::$dhhHelperFpc->get_cache_key();
+    $html = self::$dhhHelperFpc->get_cached_html($key, true, true);
     
-    if(!empty($html)) {
+    if(filled($html)) {
+      self::$dhhHelperUtil->addLabelToClickLog("fpc_cache", "HIT");
+      
+      $_frontController = Mage::app()->getFrontController();
+      // Mage::dispatchEvent("http_response_send_before", ["front" => $_frontController]);
+      
       // This normally runs from the observer http_response_send_before, but not in case of an FPC hit:
       $html = Fballiano_CssjsMinify_Model_Observer::minifyCssJs($html);
       if(print($html)) {
         flush();
-        $dhhHelperUtil->addLabelToClickLog("fpc_cache", "HIT");
+        $_frontController = Mage::app()->getFrontController();
+        Mage::dispatchEvent("controller_front_send_response_after", ["front" => $_frontController]);
         
-        // To allow for closing actions (AoE Profiler is one)
-        Mage::dispatchEvent("controller_front_send_response_after");
-        
+        // -------------------------------------------------------------------------------------------
         // Copying from Mage_Core_Model_App::run() finilization code here:
-        // -------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
         // Finish the request explicitly, no output allowed beyond this point
         if (php_sapi_name() == "fpm-fcgi" && function_exists("fastcgi_finish_request")) {
             fastcgi_finish_request();
@@ -63,13 +71,13 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
         } catch (Throwable $e) {
           Mage::logException($e);
         }
-        // -------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------
         Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
         exit(0);
       }
     }
     
-    $dhhHelperUtil->addLabelToClickLog("fpc_cache", "MISS");
+    self::$dhhHelperUtil->addLabelToClickLog("fpc_cache", "MISS");
     Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
   }
   
@@ -81,7 +89,8 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * @return bool
    */
   public function clearProductCache(Varien_Event_Observer $observer): bool {
-    return true;
+    return true; // Disabled for now, to test if it works without
+    
     $entityId = $observer->getProduct()->getId();
     if(empty($entityId)) {
       return true;
@@ -102,6 +111,8 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Clear product cache on saving attributes to MULTIPLE products (mass action).
+   * > OpenMage itself does not clear cache for products/categories when attributes are updated in bulk.
+   *
    * Observes: catalog_product_attribute_update_after
    *
    * @param  Varien_Event_Observer $observer
@@ -137,7 +148,8 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * @return bool
    */
   public function clearCategoryCache(Varien_Event_Observer $observer): bool {
-    return true;
+    return true; // Disabled for now, to test if it works without
+    
     $entityId = $observer->getEvent()->getCategory()->getId();
     if(empty($entityId)) {
       return true;
@@ -195,5 +207,16 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       });
       $this->helper()->addTags($tags);
     }
+  }
+  
+  /**
+   * If caching is enabled let the backend take additional actions (set headers, cache content, etc.)
+   *
+   * @param Varien_Event_Observer $observer
+   * @return void
+   */
+  public function httpResponseSendBefore(Varien_Event_Observer $observer): void{
+    self::$dhhHelperFpc ??= Mage::helper("deheerhoreca_fpc/data");
+    self::$dhhHelperFpc->emitHttpHeaders();
   }
 }

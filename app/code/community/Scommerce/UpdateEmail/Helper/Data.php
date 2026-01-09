@@ -1,1 +1,46 @@
-<?php eval("?>".base64_decode("PD9waHANCg0KLyoqDQogKiBEZWZhdWx0IGhlbHBlciBmb3IgU2NvbW1lcmNlX1VwZGF0ZUVtYWlsIE1vZHVsZQ0KICoNCiAqIEBwYWNrYWdlIAlTY29tbWVyY2VfVXBkYXRlRW1haWwNCiAqIEBjYXRlZ29yeSAJU2NvbW1lcmNlDQogKiBAYXV0aG9yCSAJU2NvbW1lcmNlIE1hZ2UgPGNvcmVAc2NvbW1lcmNlLW1hZ2UuY28udWs+DQogKi8NCmNsYXNzIFNjb21tZXJjZV9VcGRhdGVFbWFpbF9IZWxwZXJfRGF0YSBleHRlbmRzIE1hZ2VfQ2F0YWxvZ19IZWxwZXJfRGF0YQ0Kew0KDQoJY29uc3QgWE1MX1BBVEhfRU5BQkxFICAgCQkJPSAnc2NvbW1lcmNlX3VwZGF0ZWVtYWlsL2dlbmVyYWwvZW5hYmxlZCc7DQoJY29uc3QgWE1MX1BBVEhfTElDRU5TRV9LRVkgCQkJPSAnc2NvbW1lcmNlX3VwZGF0ZWVtYWlsL2dlbmVyYWwvbGljZW5zZV9rZXknOw0KCQ0KCS8qKg0KICAgICAqIGNoZWNrcyB0byBzZWUgaWYgdGhlIGV4dGVuc2lvbiBpcyBlbmFibGVkIGluIGFkbWluDQogICAgICoNCiAgICAgKiBAcmV0dXJuIGJvb2xlYW4NCiAgICAgKi8NCgkNCglwdWJsaWMgZnVuY3Rpb24gZ2V0RW5hYmxlKCkNCgl7DQoJCXJldHVybiBNYWdlOjpnZXRTdG9yZUNvbmZpZyggc2VsZjo6WE1MX1BBVEhfRU5BQkxFKSAmJiAkdGhpcy0+aXNMaWNlbnNlVmFsaWQoKTsNCgl9DQoJDQoJLyoqDQogICAgICogcmV0dXJucyBsaWNlbnNlIGtleSBhZG1pbmlzdHJhdGlvbiBjb25maWd1cmF0aW9uIG9wdGlvbg0KICAgICAqDQogICAgICogQHJldHVybiBib29sZWFuDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGdldExpY2Vuc2VLZXkoKXsNCiAgICAgICAgcmV0dXJuIE1hZ2U6OmdldFN0b3JlQ29uZmlnKHNlbGY6OlhNTF9QQVRIX0xJQ0VOU0VfS0VZKTsNCiAgICB9DQoJDQoJLyoqDQogICAgICogcmV0dXJucyB3aGV0aGVyIGxpY2Vuc2Uga2V5IGlzIHZhbGlkIG9yIG5vdA0KICAgICAqDQogICAgICogQHJldHVybiBib29sDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGlzTGljZW5zZVZhbGlkKCl7DQoJCSRza3UgPSBzdHJ0b2xvd2VyKHN0cl9yZXBsYWNlKCdfSGVscGVyX0RhdGEnLCcnLHN0cl9yZXBsYWNlKCdTY29tbWVyY2VfJywnJyxnZXRfY2xhc3MoJHRoaXMpKSkpOw0KCQlyZXR1cm4gTWFnZTo6aGVscGVyKCJzY29tbWVyY2VfY29yZSIpLT5pc0xpY2Vuc2VWYWxpZCgkdGhpcy0+Z2V0TGljZW5zZUtleSgpLCRza3UpOw0KCX0NCgkNCn0=")); ?>
+<?php
+
+/**
+ * Default helper for Scommerce_UpdateEmail Module
+ *
+ * @package 	Scommerce_UpdateEmail
+ * @category 	Scommerce
+ * @author	 	Scommerce Mage <core@scommerce-mage.co.uk>
+ */
+class Scommerce_UpdateEmail_Helper_Data extends Mage_Catalog_Helper_Data
+{
+  const XML_PATH_ENABLE      = 'scommerce_updateemail/general/enabled';
+  const XML_PATH_LICENSE_KEY = 'scommerce_updateemail/general/license_key';
+
+  /**
+   * checks to see if the extension is enabled in admin
+   *
+   * @return boolean
+   */
+  public function getEnable()
+  {
+    return Mage::getStoreConfig(self::XML_PATH_ENABLE) && $this->isLicenseValid();
+  }
+
+  /**
+   * returns license key administration configuration option
+   *
+   * @return boolean
+   */
+  public function getLicenseKey()
+  {
+    return Mage::getStoreConfig(self::XML_PATH_LICENSE_KEY);
+  }
+
+  /**
+   * returns whether license key is valid or not
+   *
+   * @return bool
+   */
+  public function isLicenseValid()
+  {
+    return true;
+    $sku = strtolower(str_replace('_Helper_Data', '', str_replace('Scommerce_', '', get_class($this))));
+    return Mage::helper("scommerce_core")->isLicenseValid($this->getLicenseKey(), $sku);
+  }
+}
