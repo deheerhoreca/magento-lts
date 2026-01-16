@@ -177,10 +177,15 @@
       <active>false</active>
     </AW_Autorelated>
     
-    <!-- Not woroking, security risk while enabled -->
+    <!-- Not working, security risk while enabled -->
     <Elidrissidev_Api2BasicAuth>
       <active>false</active>
     </Elidrissidev_Api2BasicAuth>
+    
+    <!-- Replaced with supplier attachments -->
+    <Staempfli_ProductAttachment>
+      <active>false</active>
+    </Staempfli_ProductAttachment>
     
     <!-- Temporarily disable -->
     <!-- <Ophirah_Core><active>false</active></Ophirah_Core> -->

@@ -331,6 +331,7 @@ media
 !/app/code/local/MagePal/GoogleTagManager/Block/Tm.php
 !/app/code/local/MagicToolbox/MagicScroll/core/magictoolbox.params.class.php
 !/app/code/local/Magmodules/Kiyoh/Model/Stats.php
+!/app/code/local/MM/CmsContentFileMode/Model/Observer.php
 !/app/code/local/Profitmetrics/MagentoIntegration/controllers/Adminhtml/ProfitmetricsController.php
 !/app/code/local/Profitmetrics/MagentoIntegration/Helper/Bot.php
 !/app/code/local/Profitmetrics/MagentoIntegration/Model/Order/Service.php
@@ -468,10 +469,10 @@ media
 /skin/adminhtml/default/default/aoe_profiler
 /app/design/adminhtml/default/default/layout/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_profiler
-/app/code/community/Fballiano/CssjsMinify
-/app/etc/modules/Fballiano_CssjsMinify.xml
 /app/code/community/FireGento/AdminMonitoring
 /app/etc/modules/FireGento_AdminMonitoring.xml
 /app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
 /app/design/adminhtml/default/default/template/firegento/adminmonitoring
 /app/locale/de_DE/FireGento_AdminMonitoring.csv
+/app/code/community/Fballiano/CssjsMinify
+/app/etc/modules/Fballiano_CssjsMinify.xml

@@ -20,7 +20,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Serve cached HTML if available.
-   * Observes: controller_action_predispatch event.
+   * Observes: controller_action_predispatch.
    *
    * @param  mixed $observer
    * @return void
@@ -43,38 +43,47 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     if(filled($html)) {
       self::$dhhHelperUtil->addLabelToClickLog("fpc_cache", "HIT");
       
-      $_frontController = Mage::app()->getFrontController();
-      // Mage::dispatchEvent("http_response_send_before", ["front" => $_frontController]);
+      // ! Right now there are no implementations of controller_front_send_response_before, but if there were:
+      // ! Those would not run on FPC hits unless we dispatch them here manually.
+      
+      // Also runs http_response_send_before:
+      Mage::app()->getResponse()->setHttpResponseCode(200);
+      Mage::app()->getResponse()->setBody($html);
+      Mage::app()->getResponse()->sendResponse();
+      // Mage::app()->getFrontController()->getResponse()->setBody($html)->sendResponse();
+      
+      // $_frontController = Mage::app()->getFrontController();
+      // Mage::dispatchEvent("http_response_send_before", ["front" => $_frontController]); // <-- Does NOT work outside of normal response flow!
       
       // This normally runs from the observer http_response_send_before, but not in case of an FPC hit:
-      $html = Fballiano_CssjsMinify_Model_Observer::minifyCssJs($html);
-      if(print($html)) {
+      // $this->httpResponseSendBefore();
+      // $html = Fballiano_CssjsMinify_Model_Observer::minifyCssJs($html);
+      
+      // flush();
+      $_frontController = Mage::app()->getFrontController();
+      Mage::dispatchEvent("controller_front_send_response_after", ["front" => $_frontController]);
+      
+      // -------------------------------------------------------------------------------------------
+      // Copying from Mage_Core_Model_App::run() finilization code here:
+      // -------------------------------------------------------------------------------------------
+      // Finish the request explicitly, no output allowed beyond this point
+      if(php_sapi_name() == "fpm-fcgi" && function_exists("fastcgi_finish_request")) {
+          fastcgi_finish_request();
+      } else {
         flush();
-        $_frontController = Mage::app()->getFrontController();
-        Mage::dispatchEvent("controller_front_send_response_after", ["front" => $_frontController]);
-        
-        // -------------------------------------------------------------------------------------------
-        // Copying from Mage_Core_Model_App::run() finilization code here:
-        // -------------------------------------------------------------------------------------------
-        // Finish the request explicitly, no output allowed beyond this point
-        if (php_sapi_name() == "fpm-fcgi" && function_exists("fastcgi_finish_request")) {
-            fastcgi_finish_request();
-        } else {
-          flush();
-        }
-        if (session_status() === PHP_SESSION_ACTIVE) {
-          session_write_close();
-        }
-        
-        try {
-          Mage::dispatchEvent("core_app_run_after", ["app" => Mage::app()]); // ! DHH: Altered line
-        } catch (Throwable $e) {
-          Mage::logException($e);
-        }
-        // -------------------------------------------------------------------------------------------
-        Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
-        exit(0);
       }
+      if(session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+      }
+      
+      try {
+        Mage::dispatchEvent("core_app_run_after", ["app" => Mage::app()]); // ! DHH: Altered line
+      } catch (Throwable $e) {
+        Mage::logException($e);
+      }
+      // -------------------------------------------------------------------------------------------
+      Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
+      exit(0);
     }
     
     self::$dhhHelperUtil->addLabelToClickLog("fpc_cache", "MISS");
@@ -212,10 +221,10 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   /**
    * If caching is enabled let the backend take additional actions (set headers, cache content, etc.)
    *
-   * @param Varien_Event_Observer $observer
+   * @param  Varien_Event_Observer|null  $observer
    * @return void
    */
-  public function httpResponseSendBefore(Varien_Event_Observer $observer): void{
+  public function httpResponseSendBefore(?Varien_Event_Observer $observer = null): void{
     self::$dhhHelperFpc ??= Mage::helper("deheerhoreca_fpc/data");
     self::$dhhHelperFpc->emitHttpHeaders();
   }

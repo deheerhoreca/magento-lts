@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "546221a98d4c9923e6862b78b587a932",
+    "content-hash": "c86dbf2e7e1a8b28da6204605805c2f3",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -328,54 +328,6 @@
             "time": "2015-06-30T22:24:58+00:00"
         },
         {
-            "name": "bower-asset/prototypejs",
-            "version": "v1.7.1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:jwestbrook/prototype.git",
-                "reference": "3c45151f88c7a47ac4694764b9dee762ddf4b5cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jwestbrook/prototype/zipball/3c45151f88c7a47ac4694764b9dee762ddf4b5cf",
-                "reference": "3c45151f88c7a47ac4694764b9dee762ddf4b5cf"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/prototypejs-bower",
-            "version": "1.7.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plynchnlm/prototypejs-bower.git",
-                "reference": "5da3d86b77b94ec7eb5b92b8b5e0a7a241adae43"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/plynchnlm/prototypejs-bower/zipball/5da3d86b77b94ec7eb5b92b8b5e0a7a241adae43",
-                "reference": "5da3d86b77b94ec7eb5b92b8b5e0a7a241adae43"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/scriptaculous-bower",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:plynchnlm/scriptaculous-bower.git",
-                "reference": "881e5499c2ffc187beb3348965903062a6cf85f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/plynchnlm/scriptaculous-bower/zipball/881e5499c2ffc187beb3348965903062a6cf85f6",
-                "reference": "881e5499c2ffc187beb3348965903062a6cf85f6"
-            },
-            "require": {
-                "bower-asset/prototypejs-bower": ">=1.7.0,<2.0.0"
-            },
-            "type": "bower-asset"
-        },
-        {
             "name": "brick/varexporter",
             "version": "0.7.0",
             "source": {
@@ -495,16 +447,16 @@
         },
         {
             "name": "cmixin/business-day",
-            "version": "1.20.5",
+            "version": "1.20.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kylekatarnls/business-day.git",
-                "reference": "54bc05bf24d203e59b1949acb205528502431af2"
+                "reference": "4e13fc2180e0001e3d3e96495e920c63b5eb8370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kylekatarnls/business-day/zipball/54bc05bf24d203e59b1949acb205528502431af2",
-                "reference": "54bc05bf24d203e59b1949acb205528502431af2",
+                "url": "https://api.github.com/repos/kylekatarnls/business-day/zipball/4e13fc2180e0001e3d3e96495e920c63b5eb8370",
+                "reference": "4e13fc2180e0001e3d3e96495e920c63b5eb8370",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +502,7 @@
             "description": "Carbon mixin to handle business days",
             "support": {
                 "issues": "https://github.com/kylekatarnls/business-day/issues",
-                "source": "https://github.com/kylekatarnls/business-day/tree/1.20.5"
+                "source": "https://github.com/kylekatarnls/business-day/tree/1.20.6"
             },
             "funding": [
                 {
@@ -562,7 +514,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-06T17:44:05+00:00"
+            "time": "2026-01-15T18:41:43+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
@@ -1436,12 +1388,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/openmage-cssjs-minify.git",
-                "reference": "341430f2ab3b3d6fb1e2a5d188185e9d5bdf826a"
+                "reference": "9916cf21639c9f79486bacd72fb0008ecc912829"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/openmage-cssjs-minify/zipball/341430f2ab3b3d6fb1e2a5d188185e9d5bdf826a",
-                "reference": "341430f2ab3b3d6fb1e2a5d188185e9d5bdf826a",
+                "url": "https://api.github.com/repos/deheerhoreca/openmage-cssjs-minify/zipball/9916cf21639c9f79486bacd72fb0008ecc912829",
+                "reference": "9916cf21639c9f79486bacd72fb0008ecc912829",
                 "shasum": ""
             },
             "require": {
@@ -1487,7 +1439,7 @@
                     "url": "https://paypal.me/fabrizioballiano"
                 }
             ],
-            "time": "2026-01-02T22:09:15+00:00"
+            "time": "2026-01-12T16:10:27+00:00"
         },
         {
             "name": "firegento/adminmonitoring",
@@ -1640,16 +1592,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.45.2",
+            "version": "v12.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "875d406ead77f9fa66e99894bbe5d205d95a88d3"
+                "reference": "d3f104a32fdfbf416cd1a839dad0e2c670a03f4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/875d406ead77f9fa66e99894bbe5d205d95a88d3",
-                "reference": "875d406ead77f9fa66e99894bbe5d205d95a88d3",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/d3f104a32fdfbf416cd1a839dad0e2c670a03f4e",
+                "reference": "d3f104a32fdfbf416cd1a839dad0e2c670a03f4e",
                 "shasum": ""
             },
             "require": {
@@ -1696,11 +1648,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-01-06T14:58:44+00:00"
+            "time": "2026-01-07T21:26:29+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.45.2",
+            "version": "v12.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1746,7 +1698,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.45.2",
+            "version": "v12.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1794,7 +1746,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.45.2",
+            "version": "v12.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1840,7 +1792,7 @@
         },
         {
             "name": "illuminate/reflection",
-            "version": "v12.45.2",
+            "version": "v12.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/reflection.git",
@@ -1891,16 +1843,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.45.2",
+            "version": "v12.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "14bfa6aa9a89fa6366c70d266d6d490f0a349c15"
+                "reference": "1757ae693f552f82179ebcdb0a4983a56e645f27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/14bfa6aa9a89fa6366c70d266d6d490f0a349c15",
-                "reference": "14bfa6aa9a89fa6366c70d266d6d490f0a349c15",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/1757ae693f552f82179ebcdb0a4983a56e645f27",
+                "reference": "1757ae693f552f82179ebcdb0a4983a56e645f27",
                 "shasum": ""
             },
             "require": {
@@ -1967,7 +1919,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-01-07T14:57:38+00:00"
+            "time": "2026-01-13T14:50:24+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -5993,16 +5945,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "f7166355dcf47482f27be59169b0825995f51c7d"
+                "reference": "9afc1bb43571b25629f353c61a9315b5ef31383a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f7166355dcf47482f27be59169b0825995f51c7d",
-                "reference": "f7166355dcf47482f27be59169b0825995f51c7d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9afc1bb43571b25629f353c61a9315b5ef31383a",
+                "reference": "9afc1bb43571b25629f353c61a9315b5ef31383a",
                 "shasum": ""
             },
             "require": {
@@ -6041,7 +5993,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.0"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.1"
             },
             "funding": [
                 {
@@ -6049,7 +6001,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-25T22:00:18+00:00"
+            "time": "2026-01-13T15:13:58+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -6112,12 +6064,6 @@
     ],
     "aliases": [
         {
-            "package": "bower-asset/scriptaculous-bower",
-            "version": "9999999-dev",
-            "alias": "1.9.0",
-            "alias_normalized": "1.9.0.0"
-        },
-        {
             "package": "magento-hackathon/magento-composer-installer",
             "version": "dev-main",
             "alias": "4.0.2-dev",
@@ -6131,7 +6077,6 @@
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_profiler": 20,
         "aydus/headorder": 20,
-        "bower-asset/scriptaculous-bower": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "fballiano/openmage-cssjs-minify": 20,
         "firegento/adminmonitoring": 20,

@@ -1,15 +1,16 @@
 <style>
-  
   .firecheckout-index-index #topbar,
   .firecheckout-index-index #nav,
   .firecheckout-index-index #footer-grid,
   .firecheckout-index-index #header-search {
     visibility: hidden;
   }
-  
+
   .shadow {
     -webkit-border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
-    -webkit-box-shadow: rgba(0, 0, 0, .30) 0 2px 3px;
+    border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
   }
 
   .usp-container {
@@ -17,10 +18,9 @@
     width: 100%;
     background: #f9f9f9 0 0;
     border: 1px solid #ccc;
-    box-shadow: 1px 1px 2px #fff inset,
-      -1px -1px 2px #fff inset;
+    box-shadow: 1px 1px 2px #fff inset, -1px -1px 2px #fff inset;
     border-radius: 3px/6px;
-    padding: .5em;
+    padding: 0.5em;
   }
 
   ul.tile-grid {
@@ -43,12 +43,11 @@
       -ms-grid-columns: calc(50% - 7.5px) 15px calc(50% - 7.5px);
       grid-template-rows: auto auto;
       grid-row-gap: 15px;
-      -ms-grid-rows: auto 15px auto
+      -ms-grid-rows: auto 15px auto;
     }
   }
 
   @media (min-width: 62em) {
-
     ul.tile-grid li {
       height: 50px;
     }
@@ -71,28 +70,33 @@
   }
 
   div.usp-icon {
-    margin: 0 .5em;
+    margin: 0 0.5em;
   }
 </style>
 <div class="f">
-<ul class="tile-grid">
-<li class="usp-container">
-<div class="float-left usp-icon"><img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/trolley.svg" alt="Gratis verzending" width="32" height="32"></div>
-<div><span class="usp_text"><strong class="extra_special">Gratis</strong> verzending</span><br><span class="small">In Nederland &amp; Belgi&euml; vanaf &euro; 150</span></div>
-</li>
-<li class="usp-container">
-<div class="float-left usp-icon"><img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/euro.svg" alt="De beste prijs" width="32" height="32"></div>
-<div class="inline"><span class="usp_text">Ergens goedkoper gezien?</span><br><span class="small"><a href="/klantenservice">Vertel het ons</a></span></div>
-</li>
-<li class="usp-container">
-<div class="float-left usp-icon"><img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/superhero.svg" alt="Advies voor professionals" width="32" height="32"></div>
-<div class="inline"><span class="usp_text">Advies door professionals</span><br><span class="small">Klaas staat klaar</span></div>
-</li>
-<li class="usp-container">
-<div class="float-left usp-icon"><img src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" alt="Snelle levrering" width="32" height="32"></div>
-<div class="inline"><span class="usp_text">Snelle levering</span></div>
-</li>
-</ul>
+  <ul class="tile-grid">
+    <li class="usp-container">
+      <div class="float-left usp-icon"><img src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/trolley.svg" alt="Gratis verzending" width="32" height="32"></div>
+      <div>
+        <span class="usp_text"><strong class="extra_special">Gratis</strong> verzending</span><br><span class="small">In Nederland &amp; Belgi&euml; vanaf &euro; 150</span>
+      </div>
+    </li>
+    <li class="usp-container">
+      <div class="float-left usp-icon"><img src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/euro.svg" alt="De beste prijs" width="32" height="32"></div>
+      <div class="inline">
+        <span class="usp_text">Ergens goedkoper gezien?</span><br><span class="small"><a class="glightbox4" href="/media/static/contact.php" data-glightbox="effect:fade; width:600px;">Vertel het ons</a></span>
+        
+      </div>
+    </li>
+    <li class="usp-container">
+      <div class="float-left usp-icon"><img src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/superhero.svg" alt="Advies voor professionals" width="32" height="32"></div>
+      <div class="inline"><span class="usp_text">Advies door professionals</span><br><span class="small">Klaas staat klaar</span></div>
+    </li>
+    <li class="usp-container">
+      <div class="float-left usp-icon"><img src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/fast_delivery_truck.svg" alt="Snelle levering" width="32" height="32"></div>
+      <div class="inline"><span class="usp_text">Snelle levering</span></div>
+    </li>
+  </ul>
 </div>
 <!--
 <div style="margin-bottom:1em; background-color:#fff;">

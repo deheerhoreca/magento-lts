@@ -500,7 +500,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $size = mb_strlen($html);
     self::log("HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
     self::addServerTimingHeader("FPC hit: {$key}");
-    self::emitHttpHeaders();
     Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     
     return $html;
@@ -572,7 +571,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Store in cache
     if(self::saveToCacheDeferred($key, $html, $cache_tags, 7 * 86400, minifyHtml: false)) {
       self::addServerTimingHeader("FPC: SAVE {$key}");
-      self::emitHttpHeaders();
+      // self::emitHttpHeaders();
       $return = true;
     }
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
@@ -719,7 +718,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public static function log($msg, int $level = Zend_Log::DEBUG): void {
-    if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
+    if(
+      DHH_FPC_DEBUG ||
+      // isDevIp() ||
+      $level !== Zend_Log::DEBUG
+    ) {
       Mage::log($msg, $level, "fpc.txt", true);
     }
   }
@@ -745,18 +748,22 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return null;
     }
     if(headers_sent()) {
+      Mage::log("Cannot emit HTTP headers from DHH FPC Helper, headers already sent!", Zend_Log::WARN, "fpc.txt", true);
       return false;
     }
     
     // Disable Nginx response buffering
     // @see https://github.com/colinmollenhour/Cm_Diehard/blob/9deec69dad2a33afc850cc7f0022bbdb158dbeb5/code/Model/Backend/Local.php
     Mage::app()->getResponse()->setHeader("X-Accel-Buffering", "no", replace: true);
-    ini_set('zlib.output_compression', 'Off');
+    ini_set("zlib.output_compression", "Off");
     
     foreach(self::$httpHeaders as $header_name => $header_values) {
       $header_value = implode(", ", (array) $header_values);
-      Mage::app()->getResponse()->setHeader($header_name, $header_value, true);
+      // self::log("Emitting HTTP header: {$header_name}: {$header_value}", Zend_Log::DEBUG);
+      Mage::app()->getFrontController()->getResponse()->setHeader($header_name, $header_value, replace: false);
+      // Mage::app()->getResponse()->setHeader($header_name, $header_value, replace: false);
     }
+    // self::log("Current HTTP headers: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::DEBUG);
     self::$httpHeaders = [];
     
     return null;
@@ -771,7 +778,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    */
   public static function clean_by_tags(string|array $cache_tags): bool {
-    
     // if(self::$_cache === null) {
     //   /** @var Mage_Core_Model_Cache */
     //   self::$_cache = Mage::app()->getCacheInstance();

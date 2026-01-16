@@ -5,27 +5,31 @@
 ###
 ### So, the most important paths in this file DO NOT start with a slash, but if the path is
 ### very short/generic, we do start with a slash to reduce false positives.
+###
+### For Silver Searcher, do NOT use double asterisks at the beginning of a line, as it
+### treats them differently than single asterisks. Use single asterisks at the beginning
+### of a line instead.
 
 # Visual Studio Code
-.vscode/*
+*/.vscode/*
 
 # Local History for Visual Studio Code
-.history/
+*/.history/*
 
 # Built Visual Studio Code Extensions
-*.vsix
+**.vsix
 
 # Add a base setup for running unit Tests with code coverage and send them to SonarCloud
 # https://github.com/OpenMage/magento-lts/pull/1836
-dev/testfield
-dev/tests/clover.xml
-dev/tests/crap4j.xml
-dev/tests/junit.xml
+*/dev/testfield
+*/dev/tests/clover.xml
+*/dev/tests/crap4j.xml
+*/dev/tests/junit.xml
 
 # Add Gitpod online IDE config
 # https://github.com/OpenMage/magento-lts/pull/1836
-dev/gitpod/docker-magento
-dev/gitpod/.env
+*/dev/gitpod/docker-magento
+*/dev/gitpod/.env
 
 # Add development environment setup files and README
 # https://github.com/OpenMage/magento-lts/pull/1012
@@ -35,140 +39,152 @@ dev/openmage/Caddyfile
 dev/tests/functional/generated
 dev/tests/functional/vendor
 
-lib/n98-magerun
-var/*
-
-# scss-cache
-skin/*/*/*/scss/.sass-cache
-skin/assets/bootstrap/dist/css/bootstrap.min.css
-skin/assets/bootstrap/dist/css/bootstrap*.min.css
-
-*.pem
-*.phar
-*.cache
-*.php-cs-fixer*
-*.phpcs*.xml
-*.neon
-*.svg
-*.js.map
-*.min.js
-*.min.map
-*.php.obfuscated
-*.css.map
-*.php.obfuscated
-*.xlf
-*.dat
-.git/
-composer.lock
-/docs.md
-assets/bower-asset/font-awesome
-vendor/elasticsearch/elasticsearch/docs
-vendor/imagecow/imagecow/src/Crops
-vendor/imelgrat/barcode-validator/docs
-vendor/jlevers/selling-partner-api/resources
-vendor/giggsey
-vendor/nesbot/carbon/src/Carbon/Lang
-vendor/composer
-vendor/symplify
-vendor/wamania
-vendor/voku/portable-utf8/src/voku/helper/data
-vendor/yooper/stop-words/data
-vendor/yooper/php-text-analysis/tests
-vendor/webklex/php-imap/tests
-vendor/voku/portable-ascii/src/voku/helper
-vendor/voku/stop-words/src/voku/helper/stopwords
-vendor/*/*/tests
-vendor/mistralys/application-localization/src/Localization
-vendor/cmixin/business-day/src/Cmixin/Holidays
-vendor/nikic/php-parser/lib
-vendor/phpseclib/phpseclib
-vendor/magento-hackathon/magento-composer-installer
-vendor/openmage/magento-lts
-CHANGELOG.md
-LICENSE
-LICENSE-APACHE
-LICENSE-GPL
+lib/n98-magerun/*
+var/log
+var/profitmetrics
+var/report
+var/tm
+*/.git/*
+**.asc
+**.asciidoc
+**.base64
+**.cache
+**.css.map
+**.dat
+**.es5.js.map
+**.js.map
+**.min.css
+**.min.css.map
+**.min.js
+**.min.js.map
+**.min.map
+**.min.mjs
+**.min.mjs.map
+**.mmdb
+**.neon
+**.pem
+**.phar
+**.php-cs-fixer*
+**.php.obfuscated
+**.phpcs*.xml
+**.svg
+**.ts.map
+**.wip.php
+**.xlf
+**/vendor
+**/vendor/composer/installed.json
+**/assets/bower-asset/font-awesome
+**/CHANGELOG.md
+**/composer.lock
+**/LICENSE
+**/LICENSE-APACHE
+**/LICENSE-GPL
+**/skin/*/*/*/scss/.sass-cache
+**/skin/assets/bootstrap/dist/css/bootstrap.min.css
+*/skin/assets/bootstrap/dist/css/bootstrap*.min.css
+*/vendor/*/*/tests
+*/vendor/cmixin/business-day/src/Cmixin/Holidays
+*/vendor/composer
+*/vendor/elasticsearch/elasticsearch/docs
+*/vendor/giggsey
+*/vendor/imagecow/imagecow/src/Crops
+*/vendor/imelgrat/barcode-validator/docs
+*/vendor/jlevers/selling-partner-api/resources
+*/vendor/magento-hackathon/magento-composer-installer
+*/vendor/mistralys/application-localization/src/Localization
+*/vendor/nesbot/carbon/src/Carbon/Lang
+*/vendor/nikic/php-parser/lib
+*/vendor/openmage/magento-lts
+*/vendor/phpseclib/phpseclib
+*/vendor/symplify
+*/vendor/voku/portable-ascii/src/voku/helper
+*/vendor/voku/portable-utf8/src/voku/helper/data
+*/vendor/voku/stop-words/src/voku/helper/stopwords
+*/vendor/wamania
+*/vendor/webklex/php-imap/tests
+*/vendor/yooper/php-text-analysis/tests
+*/vendor/yooper/stop-words/data
+*/vendor/empiricompany/openmage-mm_cmscontentfilemode/lib/tailwindcss/*
 
 # Exclude upgrade sql from search:
 # app/code/*/*/*/sql/bundle_setup/*.php
 # app/code/*/*/*/sql/catalog_setup/*.php
-mysql4-upgrade-*.php
-upgrade-*.php
-install-*.php
+*/mysql4-upgrade-*.php
+*/upgrade-*.php
+*/install-*.php
 
 # PhpUnits
-tests/coverage
-tests/logging
-.phpunit.result.cache
-phpunit.xml
+*/tests/coverage
+*/tests/logging
+*/.phpunit.result.cache
+*/phpunit.xml
 
 # build
-build
+*/build
 
 # dev scripts loaded via composer
-shell/update-copyright.php
-shell/translations.php
+*/shell/update-copyright.php
+*/shell/translations.php
 
 # DDEV
-.ddev/config.yaml
-.ddev/.sampleData
+*/.ddev/config.yaml
+*/.ddev/.sampleData
 
 # FILES
-/.cachetool.yaml
-.DS_Store
-._.DS_Store
-._*
-sitemap_*.xml
-google_shopping_vijfbatmansymbol.*
-/protected/*.xml
-/protected/*.json
-google*.html
-algolia_*.json
-/maintenance.flag
-/maintenance.ip
-js/magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js
-vendor/openmage/magento-lts/js/tinymce/langs
-vendor/openmage/magento-lts/js/tinymce/plugins
-vendor/openmage/magento-lts/js/tinymce/themes
-vendor/firegento/adminmonitoring/docs
-vendor/voku/portable-ascii/src/voku/helper/data
-vendor/nesbot/carbon/src/Carbon/Lang
-vendor/shardj/zf1-future/library/Zend/Locale/Data
-vendor/michelf/php-markdown/test
-vendor/cmixin/business-day/src/Cmixin/Holidays
-js/tinymce/langs
-js/tinymce/plugins
-js/tinymce/themes
-js/elastic-apm-rum.umd.min.js.map
-js/lib/jquery/jquery-1.12.1.min.map
-lib/Afterpay/vendor/symfony/polyfill-intl-idn
-lib/Mpdf/ttfontdata
-vendor/shardj/zf1-future/library/Zend/Validate
-vendor/phpseclib/phpseclib/phpseclib/Crypt
-lib/Mpdf/utils/UnicodeData.txt
-/js/ext-*.js
-skin/frontend/rwd/external/
-.modman/*/.git
-.idea/
-.phpstorm.meta.php
-.well-known/acme-challenge/
-skin/assets/*
-
-/media/
-/openmage/media/
+*/._.DS_Store
+*/._*
+*/.DS_Store
+*/.idea/
+*/.modman/*/.git
+*/.phpstorm.meta.php
+*/.well-known/acme-challenge/
+*/.cachetool.yaml
+*/js/ext-*.js
+*/maintenance.flag
+*/maintenance.ip
+*/protected/*.json
+*/protected/*.xml
+*/algolia_*.json
+*/google_shopping_vijfbatmansymbol.*
+*/google*.html
+*/js/elastic-apm-rum.umd.min.js.map
+*/js/lib/jquery/jquery-1.12.1.min.map
+*/js/magestore/pdfinvoiceplus/jquery_tiny_mce/tiny_mce.js
+*/js/tinymce/langs
+*/js/tinymce/plugins
+*/js/tinymce/themes
+*/lib/Afterpay/vendor/symfony/polyfill-intl-idn
+*/lib/Mpdf/ttfontdata
+*/lib/Mpdf/utils/UnicodeData.txt
+*/sitemap_*.xml
+*/skin/assets/*
+*/skin/frontend/rwd/external/
+*/vendor/cmixin/business-day/src/Cmixin/Holidays
+*/vendor/firegento/adminmonitoring/docs
+*/vendor/michelf/php-markdown/test
+*/vendor/nesbot/carbon/src/Carbon/Lang
+*/vendor/openmage/magento-lts/js/tinymce/langs
+*/vendor/openmage/magento-lts/js/tinymce/plugins
+*/vendor/openmage/magento-lts/js/tinymce/themes
+*/vendor/phpseclib/phpseclib/phpseclib/Crypt
+*/vendor/shardj/zf1-future/library/Zend/Locale/Data
+*/vendor/shardj/zf1-future/library/Zend/Validate
+*/vendor/voku/portable-ascii/src/voku/helper/data
+*/openmage/media/
+media/
 
 # BILLER WEBHOOK
-biller-webhook-errors.jsonl
-biller-webhook.jsonl
+*/biller-webhook-errors.jsonl
+*/biller-webhook.jsonl
 
 # FRESHDESK WEBHOOK
-freshdesk-*.ndjson
+*/freshdesk-*.ndjson
 
 # GENERATED CONFIGURATIONS
-etc/*-local.ini
-*.bak-*
-_user.ini
-php.cmd.ini
-etc/php.cmd.ini
-.php-version
-.php-ini
+*/etc/*-local.ini
+**.bak-*
+*/_user.ini
+*/php.cmd.ini
+*/etc/php.cmd.ini
+*/.php-version
+*/.php-ini

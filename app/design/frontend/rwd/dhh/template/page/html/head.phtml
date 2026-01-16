@@ -16,9 +16,10 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?=$page_title?></title>
 <script src="/js/ext-jquery.js"></script>
-<script src="/js/ext-prototype.js"></script>
-<script src="/js/ext-scriptaculous-builder.js"></script>
-<script src="/js/ext-scriptaculous-effects.js"></script>
+<script src="/js/ext-prototype.js"></script><?php
+// > Moved to page.xml and local.xml, where they belong
+// <script src="/js/ext-scriptaculous-builder.js"></script> -->
+// <script src="/js/ext-scriptaculous-effects.js"></script> --> ?>
 <script src="/js/ext-jquery-ui.js"></script>
 <script src="/js/ext-jquery.ui.touch-punch.min.js"></script>
 <?=$this->getCssJsHtml()?>
@@ -26,7 +27,7 @@ $page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string)
 <link rel="stylesheet" href="/skin/frontend/rwd/dhh/fonts/font-awesome-4.7.0/css/font-awesome.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/skin/assets/glightbox/dist/css/glightbox.ts1741106066.min.css" media="print" onload="this.media='all'">
 <?=$this->getChildHtml()?>
-<script src="/js/ext-translator.js" defer></script>
+<?php /* <script src="/js/ext-translator.js" defer></script> */ ?>
 <?=$this->getIncludes()?>
 <meta name="description" content="<?=htmlspecialchars((string) $this->getDescription())?>">
 <meta name="keywords" content="<?=htmlspecialchars((string) $this->getKeywords())?>">

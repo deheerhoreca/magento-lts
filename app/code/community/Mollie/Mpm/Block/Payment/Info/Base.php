@@ -153,8 +153,9 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
             if (isset($details->cardLabel)) {
                 return $details->cardLabel;
             }
-        } catch (\Exception $e) {
-            $this->mollieHelper->addTolog('error', $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->mollieHelper->addTolog('error', $exception->getMessage());
+            return null;
         }
 
         return '';
@@ -165,6 +166,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
         try {
             return $this->getInfo()->getAdditionalInformation('selected_issuer');
         } catch (\Exception $exception) {
+            $this->mollieHelper->addTolog('error', $exception->getMessage());
             return null;
         }
     }
@@ -175,6 +177,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
             $details = json_decode($this->getInfo()->getAdditionalInformation('details'), true);
             return $details['consumerName'] ?? null;
         } catch (\Exception $exception) {
+            $this->mollieHelper->addTolog('error', $exception->getMessage());
             return null;
         }
     }
@@ -185,6 +188,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
             $details = json_decode($this->getInfo()->getAdditionalInformation('details'), true);
             return $details['consumerAccount'] ?? null;
         } catch (\Exception $exception) {
+            $this->mollieHelper->addTolog('error', $exception->getMessage());
             return null;
         }
     }
@@ -195,6 +199,7 @@ class Mollie_Mpm_Block_Payment_Info_Base extends Mage_Payment_Block_Info
             $details = json_decode($this->getInfo()->getAdditionalInformation('details'), true);
             return $details['consumerBic'] ?? null;
         } catch (\Exception $exception) {
+            $this->mollieHelper->addTolog('error', $exception->getMessage());
             return null;
         }
     }

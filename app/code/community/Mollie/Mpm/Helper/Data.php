@@ -216,8 +216,17 @@ class Mollie_Mpm_Helper_Data extends Mage_Core_Helper_Abstract
             } else {
                 $log = $type . ': ' . $data;
             }
+            
+            /**
+             * @var mixed $type "info"|"error"|TBD
+             */
+            $mageSeverity = match($type) {
+                'info'  => Zend_Log::INFO,
+                'error' => Zend_Log::ERR,
+                default => Zend_Log::NOTICE,
+            };
 
-            Mage::log($log, null, 'mollie.log');
+            Mage::log($log, $mageSeverity, 'mollie.log');
         }
     }
 

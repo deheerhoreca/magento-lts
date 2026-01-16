@@ -347,7 +347,7 @@
     ExpiresByType font/otf "access plus 1 year"
     ExpiresByType font/woff "access plus 1 year"
     ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType text/html "access plus 300 seconds"
     ExpiresDefault "access plus 1 hour"
     
     # Leads to private + public together, which is nonsense
@@ -451,9 +451,10 @@
 # After chrome dev console AI:
 # Additionally, several preconnect hints were found for origins that were not utilized during the page load: ...
 # Unused preconnect hints can negatively impact performance.
-# <//images.chefstore.nl/>;rel=preconnect,<//www.googletagmanager.com>;rel=preconnect,<//td.doubleclick.net>;rel=preconnect,<//googleads.g.doubleclick.net>;rel=preconnect,
+# <//www.googletagmanager.com>;rel=preconnect,<//td.doubleclick.net>;rel=preconnect,<//googleads.g.doubleclick.net>;rel=preconnect,
 
 <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2|webmanifest)$)[^\.]+?$">
+    Header add Link '<https://images.chefstore.nl>;rel="preconnect"'
     Header add Link '<https://v2.zopim.com>;rel="preconnect"'
     Header add Link '<https://static.zdassets.com>;rel="preconnect"'
     Header add Link '<https://ekr.zdassets.com>;rel="preconnect"'
@@ -463,7 +464,6 @@
 ## Limit access to certain files:
 
 <IfModule mod_deflate.c>
-
     ## Force compression for mangled `Accept-Encoding` request headers
     <IfModule mod_setenvif.c>
         <IfModule mod_headers.c>
@@ -516,24 +516,7 @@
     Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
     Header set Access-Control-Max-Age: 86400
     # Header set Access-Control-Allow-Headers "Content-Type, Authorization"
-    
-    # Any caching headers set on HTML are ignored, and all HTML is served
-    # uncacheable.  PageSpeed rewrites HTML files each time they are served.  The
-    # first time mod_pagespeed sees an HTML file, it generally won't optimize it
-    # fully.  It will optimize better after the second view.  Caching defeats this
-    # behavior.
-    
-    # Images, styles, and JavaScript are all cache-extended for
-    # a year by rewriting URLs to include a content hash.  mod_pagespeed
-    # can only do this if the resources are cacheable in the first place.
-    # The origin caching policy, set here to 10 minutes, dictates how
-    # frequently mod_pagespeed must re-read the content files and recompute
-    # the content-hash.  As long as the content doesn't actually change,
-    # the content-hash will remain the same, and the resources stored
-    # in browser caches will stay relevant.
 
-    # - Remember, cache control is about how long mod_pagespeed will cache assets (if enabled)
-    # - As we use ModPagespeedLoadFromFile, this is deprecated.
     # - Static files might be served by nginx!
 
     # # CSS/JS
@@ -544,24 +527,23 @@
 
     # # IMAGES
     # <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp)$">
-    #    Etag is not disabled because we don't use mod_pagespeed extend_cache for images
     #     Header set Cache-Control "public, max-age=3600"
     # </FilesMatch>
 
     # TEXT, ARCHIVES
     # <FilesMatch "\.(html|htm|php|xml|zip)$">
     #     Header unset Etag
-    #     Header set Cache-control "max-age=0, no-cache"
+    #     Header set Cache-control "private, max-age=300, no-cache"
     # </FilesMatch>
+
+    <FilesMatch "\.ico$">
+        Header set Cache-control max-age=3600
+    </FilesMatch>
 </IfModule>
 
 # DEVELOPMENT SETTINGS
 <If "%{HTTP_HOST} == 'dev.chefstore.nl'">
     SetEnv MAGE_IS_DEVELOPER_MODE "1"
-    
-    # No caching on dev -- Disable for mod_pagespeed and such
-    # Header unset Etag
-    # Header set Cache-control "max-age=0, no-cache"
     
     <IfModule mod_headers.c>
         Header set Referrer-Policy "no-referrer"

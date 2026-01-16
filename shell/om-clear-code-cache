@@ -7,14 +7,24 @@ set -u      # Treat unset variables as an error when substituting
 
 . ${HOME}/.bash_profile
 
-cm
+cm || exit 1
 . ./shell/cron-bootstrap.sh
 
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml apcu:cache:clear
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml opcache:reset
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool-cli.yaml opcache:reset
-n98-magerun.phar cache:clean
-rm -r /dev/shm/openmage-php-opcache/* && touch /dev/shm/openmage-php-opcache/CACHEDIR.TAG
+echo "Cleared APCu and Opcache caches via cachetool"
 
-cm
+n98-magerun.phar cache:clean
+echo "Cleared OpenMage caches"
+
+rm -r /dev/shm/openmage-php-opcache/* && touch /dev/shm/openmage-php-opcache/CACHEDIR.TAG
+echo "Cleared PHP opcache in /dev/shm/openmage-php-opcache/"
+
+cm || exit 1
+rm media/min/*.js media/min/*.css
+touch media/min/CACHEDIR.TAG
+echo "Cleared minified CSS/JS files in media/min/"
+
+cm || exit 1
 . ./shell/cron-wrapup.sh
