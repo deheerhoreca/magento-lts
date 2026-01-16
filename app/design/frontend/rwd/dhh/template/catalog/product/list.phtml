@@ -255,6 +255,7 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
             "width"           => $col_width,
             "height"          => $col_width,
             "lazy"            => false,
+            "fetchpriority"   => "high",
             "add_mod_time"    => true,
             "class"           => "trans-opacity",
             "title"           => $category_name,
@@ -303,6 +304,7 @@ if($show_products && $_productCollection->getFirstItem()) {
       if($GLOBALS["read_listview_cache_enabled"]) {
         if($html = (string) Mage::app()->getCache()->load($cache_key)) {
           $html = DeHeerHoreca_Fpc_Helper_Data::personalizeFormkey($html);
+          // @todo Fill or replace the URL to avoid linking to another category
           DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
         } else {
           DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
@@ -315,6 +317,9 @@ if($show_products && $_productCollection->getFirstItem()) {
         $html = "";
         $dhh_sku = $_product->getSku();
         
+        // @todo When caching this HTML item, the URL must be hole punched to avoid linking to another category
+        // @todo If this block is shown outside of a category (search results, homepage, upsell item, etc.), there
+        // @todo must be a deep URL available to link to the product correctly
         $productUrl = false;
         // If a product is present in multiple categories, we don't want to change that in this view
         // This function does a best guess
@@ -462,6 +467,7 @@ if($show_products && $_productCollection->getFirstItem()) {
             "width"           => $col_width,
             "height"          => $col_width,
             "lazy"            => true,
+            "fetchpriority"   => "high",
             "add_mod_time"    => true,
             "class"           => "trans-opacity",
             "title"           => $product_name,
@@ -536,12 +542,12 @@ if($show_products && $_productCollection->getFirstItem()) {
             "DHH_SUPPLIER_{$supplier_sys_upper}"
           ];
           
-          // Save to cache if enabled and possible
+          // Save to cache if enabled (deferred to after output)
           // => Note the local application of form_key holepunch
           // => Note the cloned variable to not holepunch the original $html printed below
           $cachedHtml = DeHeerHoreca_Fpc_Helper_Data::anonymizeFormkey($html);
-          $cachedHtml = \Chefstore\Html::minifyHtml($cachedHtml);
-          DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $cachedHtml, $cache_tags, 86400 * 7, minifyHtml: false);
+          // $cachedHtml = \Chefstore\Html::minifyHtml($cachedHtml);
+          DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $cachedHtml, $cache_tags, 86400 * 7, minifyHtml: true);
         }
         
         Varien_Profiler::stop("DHH::ListProduct_{$product_id}_uncached");

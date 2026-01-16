@@ -719,6 +719,12 @@ if(!function_exists("_cdn_img")) {
    * - openmage/lib/Chefstore/functions.php
    * - intel/lib/intel.inc.php
    *
+   * @todo Add support for loading=eager, fetchpriority=high. Change "lazy" to "loading" with options "lazy", "eager", "auto".
+   * @todo Support (bool) "lazy" for backward compatibility. If both "lazy" and "loading" are set, "loading" takes precedence. Log a NOTICE to Mage::log() for openmage $context, or logger() otherwise
+   * @todo Support fetchpriority attribute. Default to "auto" which falls back to the "lazy" attribute and derives an appropriate value.
+   * @todo If no fetchpriority and no loading attribute are given, do not add any attribute to the HTML.
+   * @todo If $url_only is true, forego creating HTML output
+   *
    * HTML generation options:
    * ----------------------------------------------------------------------------------------------------------------------------
    * "url"           : (string)    The base URL of the image. (required)
@@ -733,6 +739,7 @@ if(!function_exists("_cdn_img")) {
    * "relative_url"  : (bool)      If true, the base URL (domain name) is removed from the image URL. Default: false.
    * "2x"            : (bool)      Whether to include a 2x resolution image in the srcset attributes
    * "lazy"          : (bool)      Whether to add loading="lazy" attribute. Default: false.
+   * "fetchpriority" : (string)    The fetchpriority attribute value. Options: "high", "low", "auto". Default: "auto". Only "high" and "low" are added to the HTML.
    * "class"         : (string)    Additional CSS classes for the <img>
    * "style"         : (string)    Additional inline styles for the <img>
    *
@@ -784,7 +791,8 @@ if(!function_exists("_cdn_img")) {
     $url_only       = $options["url_only"]      ?? false;
     $relative_url   = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
     $include_2x     = $options["2x"]            ?? false; // Should not be needed if we send the "Dpr" header
-    $lazy           = $options["lazy"]          ?? false;
+    $lazy           = $options["lazy"]          ?? null;
+    $fetchpriority  = $options["fetchpriority"] ?? "auto";
     $class          = $options["class"]         ?? "";
     $style          = $options["style"]         ?? "";
     $namedXform     = dg($options, "xform", null);
@@ -798,7 +806,8 @@ if(!function_exists("_cdn_img")) {
     $url_only       = (bool)    $url_only;
     $relative_url   = (bool)    $relative_url;
     $include_2x     = (bool)    $include_2x;
-    $lazy           = (bool)    $lazy;
+    $lazy           = ($lazy !== null) ? (bool) $lazy : null;
+    $fetchpriority  = (string)  $fetchpriority;
     $class          = (string)  $class;
     $style          = (string)  $style;
     $id_html        = "";
@@ -806,15 +815,23 @@ if(!function_exists("_cdn_img")) {
     $class_html     = "";
     $style_html     = "";
     $html           = "";
+    $context        = defined("APP_SHORT") ? "intel" : "openmage"; // intel|openmage
     
     // Pre-process settings
     if($cdn === "imagekit" || $cdn === "imagekit_custom") {
       $relative_url = true; // Required
     }
+    $fetchpriority = strtolower($fetchpriority);
+    if($fetchpriority === "auto") {
+      $fetchpriority = $lazy ? "low" : "auto";
+    }
     
     // Applies to all CDNs
-    if($lazy) {
+    if($lazy === true) {
       $lazy_html = " loading=\"lazy\"";
+    }
+    if($fetchpriority === "high" || $fetchpriority === "low") {
+      $lazy_html .= " fetchpriority=\"{$fetchpriority}\"";
     }
     if(strlen($id) > 0) {
       $id_html = " id=\"{$id}\"";
@@ -832,7 +849,7 @@ if(!function_exists("_cdn_img")) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }
     if($add_mod_time && strlen((string) $fs_path) > 0) {
-      if(defined("APP_SHORT") && APP_SHORT === "intel" && is_file($fs_path) && $mtime = filemtime($fs_path)) {
+      if($context === "intel" && is_file($fs_path) && $mtime = filemtime($fs_path)) {
         $url = Chefstore\CacheBuster::prependExtension($url, "ts{$mtime}");
       } else {
         if(function_exists("_add_file_v_param")) {

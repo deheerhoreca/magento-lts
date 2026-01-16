@@ -766,7 +766,7 @@ $hlstr = "";
 foreach($highlights as $key => $highlight) {
   $name = $highlight["name"] ?? $highlight["title"];
   if(!empty($name)) $name .= ":";
-  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' alt='{$highlight["title"]}' loading=lazy width=40 height=40><span class='value'>{$highlight["text"]}</span></li>";
+  $hlstr .= "<li><span class='small gray mb-2'>{$name}</span><img class='no-transition' id='hl-{$key}' src='{$highlight["image"]}' title='{$highlight["title"]}' alt='{$highlight["title"]}' loading=lazy fetchpriority=low width=40 height=40><span class='value'>{$highlight["text"]}</span></li>";
 }
 
 // Retrieve cross sell product collection
@@ -1327,7 +1327,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
     if(!empty($brand_logo)) {
       echo "<div class='center'>";
       echo "<a target='_blank' title='{$brand_name}' href='/{$brand_link}'>";
-      echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' loading=lazy></a></div>";
+      echo "<img alt='".ucfirst($brand)." logo' title='".ucfirst($brand)."' id='brand_logo_small' src='{$brand_logo}' loading=lazy fetchpriority=high></a></div>";
     } ?>
     </div>
   </div>
