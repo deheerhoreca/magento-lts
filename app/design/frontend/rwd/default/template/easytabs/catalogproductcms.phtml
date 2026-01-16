@@ -8,7 +8,7 @@ if(!empty($cmsblockid)){
 			<?php
 			$productx = Mage::registry('current_product');
 $idp = $productx->getId();
-if (($files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($idp, Mage::app()->getStore()->getStoreId(), false, true)->getData()) && count($files) > 0):
+if (false && ($files = Mage::getModel('staempfli_productattachment/file')->getFilesByProductId($idp, Mage::app()->getStore()->getStoreId(), false, true)->getData()) && count($files) > 0):
     $helper = $this->helper('staempfli_productattachment');
     $dir = Mage::getBaseUrl('media').$helper::UPLOAD_DIR;
     ?>

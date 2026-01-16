@@ -253,16 +253,19 @@ $suppliers_external_docs_blocked    = [];
 
 if(!in_array($supplier_sys, $suppliers_external_docs_blocked, true)) {
   // @todo something strange is going on -- external_documents_json is not part of the product after loading
-  $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
-  
-  if(empty($external_documents_json) || in_array($supplier_sys, $suppliers_internal_docs_preferred, true)) {
-    $files = Mage::getModel("staempfli_productattachment/file")
-      ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
-      ->getData();
-    if(!empty($files)) {
-      $external_documents_json = "";
-    }
+  $external_documents_json = $_product->getData("external_documents_json");
+  if(empty($external_documents_json)) {
+    $external_documents_json = Mage::getResourceModel("catalog/product")->getAttributeRawValue($_product->getId(), "external_documents_json", $_store->getId());
   }
+  
+  // if(empty($external_documents_json) || in_array($supplier_sys, $suppliers_internal_docs_preferred, true)) {
+  //   $files = Mage::getModel("staempfli_productattachment/file")
+  //     ->getFilesByProductId($this->getProduct()->getId(), Mage::app()->getStore()->getStoreId(), false, true)
+  //     ->getData();
+  //   if(!empty($files)) {
+  //     $external_documents_json = "";
+  //   }
+  // }
 } else {
   $external_documents_json = "";
 }
