@@ -228,6 +228,37 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
+   * Implements shared parts of is_read_cache_enabled()/is_write_cache_enabled().
+   * A value of FALSE does NOT mean the cache is enabled, TRUE means it is disabled.
+   *
+   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+   * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
+   * @param debug_name          string  Debug name for logging
+   *
+   * @return bool
+   */
+  private static function isAnyCacheDisabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $type = ""): bool {
+    if(!DHH_FPC_ENABLED) {
+      self::log("FPC cache disabled (by DHH_FPC_ENABLED)");
+      return true;
+    }
+    
+    // Disallow listview product blocks. The URLs are messed up.
+    if($type === "dhh_listview_product") {
+      self::log("FPC cache disabled (by type): {$type}");
+      return true;
+    }
+    
+    // Disallow non-GET/HEAD requests
+    if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
+      self::log("FPC cache disabled (by REQUEST_METHOD): {$_SERVER["REQUEST_METHOD"]}");
+      return true;
+    }
+    
+    return false;
+  }
+  
+  /**
    * Determine if the FPC cache is enabled for reading.
    *
    * This does NOT check if the cache contains the requested page, only if reading from cache is allowed.
@@ -236,17 +267,24 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
    * @param debug_name          string  Debug name for logging
    *
+   * Known types:
+   * - dhh_listview_product
+   * - get_stock_info
+   * - eke_ogmeta
+   * - topmenu
+   * - footer_html
+   * - full_page_cache
+   * - tm_richsnippets
+   *
    * @return                    bool    TRUE if reading from cache is allowed
    */
   public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $type = ""): bool {
-    // @todo verify:
-    // static $decision = [];
-    // if(isset($decision[$type])) {
-    //   return $decision[$type];
-    // }
+    static $decision = [];
+    if(isset($decision[$type])) {
+      return $decision[$type];
+    }
     
-    if(!DHH_FPC_ENABLED) {
-      self::log("READ disabled (DHH_FPC_ENABLED): {$type}");
+    if(self::isAnyCacheDisabled($non_anonymous_okay, $isHtmlBlock, $type)) {
       $decision[$type] = false;
       return false;
     }
@@ -257,12 +295,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])
     || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1) || self::request_has_no_cache_headers()) {
       self::log("READ disabled (by request header or URL param: {$type}");
-      $decision[$type] = false;
-      return false;
-    }
-    
-    if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
-      self::log("READ disabled (REQUEST_METHOD): {$type}");
       $decision[$type] = false;
       return false;
     }
@@ -294,18 +326,25 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @param  $isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
    * @param  $type                string  The type of content being cached (for logging and decision purposes)
    *
+   * Known types:
+   * - dhh_listview_product
+   * - get_stock_info
+   * - eke_ogmeta
+   * - topmenu
+   * - footer_html
+   * - full_page_cache
+   * - tm_richsnippets
+   *
    * @return                    bool    TRUE if writing to cache is allowed
    */
   public static function is_write_cache_enabled(bool $non_anonymous_okay, bool $isHtmlBlock, string $type): bool {
-    static $decision = [];
+    // @todo verify:
+      static $decision = [];
     if(isset($decision[$type])) {
       return $decision[$type];
     }
     
-    Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    if(!DHH_FPC_ENABLED) {
-      self::log("WRITE disabled (DHH_FPC_ENABLED): {$type}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+    if(self::isAnyCacheDisabled($non_anonymous_okay, $isHtmlBlock, $type)) {
       $decision[$type] = false;
       return false;
     }
@@ -320,14 +359,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if(isset($_GET["nofpc"]) || isset($_GET["multipass"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"]) || isset($_GET["bf"])
     || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1)) {
       self::log("WRITE disabled (URL parameter): {$type}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
-      $decision[$type] = false;
-      return false;
-    }
-    
-    if(PHP_SAPI !== "cli" && (!in_array($_SERVER["REQUEST_METHOD"], ["GET", "HEAD"]))) {
-      self::log("WRITE disabled (REQUEST_METHOD): {$type}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       $decision[$type] = false;
       return false;
     }
@@ -336,7 +367,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($action, self::$om_action_whitelist, true)) {
         self::log("WRITE disabled (OpenMage action): {$type}");
-        Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
         $decision[$type] = false;
         return false;
       }
@@ -344,13 +374,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     if(!$non_anonymous_okay && !self::is_request_anonymous()) {
       self::log("WRITE disabled (Anonymous not allowed and request is not anonymous): {$type}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
       $decision[$type] = false;
       return false;
     }
     
     self::log("WRITE enabled: {$type}");
-    Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
     $decision[$type] = true;
     
     return true;

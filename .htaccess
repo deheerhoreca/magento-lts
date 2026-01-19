@@ -490,22 +490,24 @@
     RewriteRule ^(.*)index.php$ /$1 [R=301,L]
 </IfModule>
 
-# ImageKit -- remove now that it is on another subdomain?
-<FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
-    <IfModule mod_headers.c>
-        Header set Accept-CH "DPR, Width, Downlink, Viewport-Width, Save-Data, Sec-CH-UA"
-        Header set Permissions-Policy "ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
+# # ImageKit -- remove now that it is on another subdomain?
+# <FilesMatch ".+\.(?!(jpg|jpeg|png|gif|ico|svg|webp|css|js|woff|woff2)$)[^\.]+?$">
+#     <IfModule mod_headers.c>
+#         Header set Accept-CH "DPR, Width, Downlink, Viewport-Width, Save-Data, Sec-CH-UA"
+#         Header set Permissions-Policy "ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
         
-        # Imagekit and security. Disable microphone and geolocation for all including iframes:
-        # Header set Permissions-Policy "microphone=(), geolocation=(), ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
-    </IfModule>
-</FilesMatch>
+#         # Imagekit and security. Disable microphone and geolocation for all including iframes:
+#         # Header set Permissions-Policy "microphone=(), geolocation=(), ch-dpr=(*), ch-width=(*), ch-viewport-width=(*), ch-save-data=(*)"
+#     </IfModule>
+# </FilesMatch>
 
 # Modify more headers -- Also note Rules in Cloudflare!
 <IfModule mod_headers.c>
     # Generic security best practices:
     Header set X-XSS-Protection "1; mode=block"
 	Header set X-Frame-Options "SAMEORIGIN"
+    Header set Accept-CH "DPR, Sec-CH-DPR, Sec-CH-Width"
+    Header set Permissions-Policy "ch-dpr=(*), ch-width=(*), ch-viewport-width=(*)"
     
     # CORS:
     

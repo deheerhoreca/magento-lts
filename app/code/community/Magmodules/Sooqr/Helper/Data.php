@@ -300,17 +300,17 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
         
         /* DHH CORE HACK */
         if(is_string($value)) {
-          // We use price fields a lot to make filters possible, remove again for Sooqr
-          $value = str_replace(" EUR", null, $value);
-          
-          // Remove N.v.t. values
-          if(strtolower($value) === "n.v.t.") {
-            $value = "";
-          }
+            // We use price fields a lot to make filters possible, remove again for Sooqr
+            $value = str_replace(" EUR", "", $value);
+            
+            // Remove N.v.t. values
+            if(strtolower($value) === "n.v.t.") {
+                $value = "";
+            }
         }
         // We need to have this field as an INT in Sooqr to make it sortable
         if($field === "popularity") {
-          $value = intval($value);
+            $value = intval($value);
         }
 
         $dataRow[$data['label']] = $value;
@@ -443,25 +443,25 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             }
             // DHH CORE HACK -- Needs config in https://www.chefstore.nl/index.php/admin4JN0/system_config/edit/section/sooqr_connect/
             if(empty($imageData['image'][$config['image_source']]) === false) {
-              $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-              $image_url        = "{$media}catalog/product{$product->getData($config['image_source'])}";
-              if(empty($image_url) === false) {
-                $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-                $col_width        = 125;
-                $image_path       = "{$media_dir}/catalog/product{$product->getData($config['image_source'])}";
-                $cdn_img_options  = [
-                  "fs_path"         => $image_path,
-                  "url"             => $image_url,
-                  "url_only"        => true,
-                  "width"           => $col_width,
-                  "height"          => $col_width,
-                  "add_mod_time"    => true,
-                  "class"           => "",
-                  "relative_url"    => true,
-                ];
-                $img_url          = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
-                $imageData['image'][$config['image_source']] = $img_url;
-              }
+                $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                $image_url        = "{$media}catalog/product{$product->getData($config['image_source'])}";
+                if(empty($image_url) === false) {
+                    $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                    $col_width        = 125;
+                    $image_path       = "{$media_dir}/catalog/product{$product->getData($config['image_source'])}";
+                    $cdn_img_options  = [
+                    "fs_path"         => $image_path,
+                    "url"             => $image_url,
+                    "url_only"        => true,
+                    "width"           => $col_width,
+                    "height"          => $col_width,
+                    "add_mod_time"    => true,
+                    "class"           => "",
+                    "relative_url"    => true,
+                    ];
+                    $img_url          = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+                    $imageData['image'][$config['image_source']] = $img_url;
+                }
             }
             // END DHH CORE HACK
             if (!empty($config['images'])) {
@@ -912,7 +912,7 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
                 break;
             case 'multiselect':
                 if (is_array($product->getAttributeText($source))) {
-                    $attributetext = implode(',', $product->getAttributeText($source));
+                    $attributetext = implode(',', (array) $product->getAttributeText($source));
                 } else {
                     $attributetext = $product->getAttributeText($source);
                 }
@@ -934,13 +934,13 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
                 break;
             default:
                 if (isset($product[$source])) {
-                  // DHH CORE HACK -- REMOVE XML INCOMPATIBLE STUFF
-                  $value = $product[$source];
-                  // $value = htmlspecialchars($value, ENT_XML1);                  
-                  $value = str_replace(["^", "\u005E", "\u005e"], " ", $value); // U+005E
-                  // @see https://stackoverflow.com/questions/12229572/php-generated-xml-shows-invalid-char-value-27-message
-                  $value = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value);
-                  // var_dump($value);
+                    // DHH CORE HACK -- REMOVE XML INCOMPATIBLE STUFF
+                    $value = $product[$source];
+                    // $value = htmlspecialchars($value, ENT_XML1);                  
+                    $value = str_replace(["^", "\u005E", "\u005e"], " ", $value); // U+005E
+                    // @see https://stackoverflow.com/questions/12229572/php-generated-xml-shows-invalid-char-value-27-message
+                    $value = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value);
+                    // var_dump($value);
                 }
                 break;
         }

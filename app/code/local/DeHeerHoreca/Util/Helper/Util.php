@@ -51,12 +51,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $product_id       = (int)     $product->getId();
     $store_id         = $store_id < 0 ? (int) Mage::app()->getStore()->getStoreId() : $store_id;
     
+    // Prefers category-based URLs over non-category URLs (to fill the breadcrumbs properly)
+    // Custom sorting to prefer system-defined ("primary" category), and in-category URLs, with fallback to others
+    // Added another `category_id` sort, with the assumption that older category IDs are "better"
     $query = "SELECT `request_path` FROM `{$tableName}`
       WHERE product_id='{$product_id}' AND store_id = '{$store_id}'
-      ORDER BY `category_id` IS NULL, '1' ASC, `is_system` DESC";
+      ORDER BY `category_id` IS NULL, '1' ASC, `is_system` DESC, category_id ASC";
     
     // Single mode: Return the first URL -- Assume we prefer a URL with a category
-    // Custom sorting to prefer system-defined ("primary" category), and in-category URLs, with fallback
     if($single) {
       $query .= " LIMIT 1";
       $requestPath = $readConnection->fetchOne($query);
@@ -67,10 +69,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     // Return all URLs -- Use sorting to prefer the same URL as above
-    // $query    = "SELECT request_path FROM `{$tableName}` WHERE product_id = '{$product_id}' AND store_id = '{$store_id}'";
     $query    .= " LIMIT 10";
     if($results = $readConnection->fetchAll($query)) {
-      $urls     = [];
+      $urls = [];
       foreach($results as $result) {
         $urls[] = $base_url.$result["request_path"];
       }

@@ -323,7 +323,8 @@ if($show_products && $_productCollection->getFirstItem()) {
         $productUrl = false;
         // If a product is present in multiple categories, we don't want to change that in this view
         // This function does a best guess
-        $productUrl = $_dhhUtilHelper->getFullProductUrlFromRewrites($_product);
+        // > Disabled, doesn't work right
+        // $productUrl = $_dhhUtilHelper->getFullProductUrlFromRewrites($_product);
         if($productUrl === false) {
           $productUrl = $_product->getProductUrl(); // Fallback
         }
@@ -454,14 +455,14 @@ if($show_products && $_productCollection->getFirstItem()) {
           $thumbnail        = "/placeholder/{$placeholder_image}";
         }
         $image_url        = "{$media_url}/catalog/product{$thumbnail}";
-        $image_path       = "{$media_dir}/catalog/product{$thumbnail}";
+        // $image_path       = "{$media_dir}/catalog/product{$thumbnail}";
         $img_html         = "";
         
-        if(is_file($image_path)) {
+        // if(is_file($image_path)) {
           $col_width        = 200;
           $cdn_img_options  = [
             "identifier"      => $dhh_sku,
-            "fs_path"         => $image_path,
+            // "fs_path"         => $image_path,
             "url"             => $image_url,
             "fit"             => "contain",
             "width"           => $col_width,
@@ -472,12 +473,13 @@ if($show_products && $_productCollection->getFirstItem()) {
             "class"           => "trans-opacity",
             "title"           => $product_name,
             "alt"             => $product_name,
-            "quality"         => 75,
-            "dpr"             => 1,
-            "relative_url"    => true,
+            // "quality"         => 75,
+            // "dpr"             => 1,
+            "relative_url"    => false,
+            "xform"           => "omcatprdlst", // w-200,h-200,q-80,c-at_max_enlarge,dpr-auto
           ];
           $img_html         = $_dhhUtilHelper->_cdn_img($cdn_img_options);
-        }
+        // }
         
         $html .= "
           <a href=\"{$productUrl}\" data-product-id=\"{$product_id}\" title=\"{$product_long_name}\" class=\"product-image\">{$img_html}</a>
@@ -531,8 +533,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         $html .= "</div></div>";
         
         // Store in cache
-        $GLOBALS["write_cache_enabled"] ??= DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "dhh_listview_product");
-        if($GLOBALS["write_cache_enabled"]) {
+        if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "dhh_listview_product")) {
           $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
           $cache_tags = [
             "DHH_LISTVIEW_PRODUCT",
@@ -546,7 +547,6 @@ if($show_products && $_productCollection->getFirstItem()) {
           // => Note the local application of form_key holepunch
           // => Note the cloned variable to not holepunch the original $html printed below
           $cachedHtml = DeHeerHoreca_Fpc_Helper_Data::anonymizeFormkey($html);
-          // $cachedHtml = \Chefstore\Html::minifyHtml($cachedHtml);
           DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $cachedHtml, $cache_tags, 86400 * 7, minifyHtml: true);
         }
         

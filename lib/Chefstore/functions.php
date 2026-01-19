@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use \Brick\VarExporter\VarExporter;
 use \Chefstore\Helper as ChefstoreHelper;
+use \Chefstore\CacheBuster;
 use \Chefstore\Observability;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Benchmark as LaravelBenchmark;
@@ -135,6 +136,157 @@ if(!function_exists("dp")) {
 if(!function_exists("dy")) {
   function dy(array|ArrayAccess &$array, $key, $default = null): mixed {
     return Arr::pull($array, $key, $default);
+  }
+}
+
+
+/**
+ * Yank a value from the array by key, or $default, or NULL if blank or cannot be converted. Supports key with dots.
+ * > Watch out for by-reference issues.
+ *
+ * @param  array        $array
+ * @param  string|int   $key
+ * @param  string|null  $default  Defaults to NULL.
+ *
+ * @return string|null
+ */
+if(!function_exists("dyAsNullStr")) {
+  function dyAsNullStr(array &$array, string|int $key, string|null $default = null): string|null {
+    $value = dy($array, $key, $default);
+    return asNullStr($value);
+  }
+}
+
+/**
+ * Yank a value from the array by key, or $default, coerced to string by asString(). Supports key with dots.
+ * > Watch out for by-reference issues.
+ * > Checks for Stringable, __toString(), etc. and attempts to cast.
+ *
+ * @param  array       $array
+ * @param  string|int  $key
+ * @param  string      $default  Defaults to an empty string.
+ *
+ * @return string
+ */
+if(!function_exists("dyAsStr")) {
+  function dyAsStr(array &$array, string|int $key, string $default = ""): string {
+    $value = dy($array, $key, $default);
+    return asString($value);
+  }
+}
+
+/**
+ * Yank a value from the array by key, or $default, coerced to bool by JBzoo/Filter. Supports key with dots.
+ * > Watch out for by-reference issues.
+ * > Supports various string representations of booleans (e.g. "yes", "no", "1", "0", "true", "false", etc.)
+ *
+ * @param  array       $array
+ * @param  string|int  $key
+ * @param  bool        $default  A default MUST be provided.
+ *
+ * @return bool
+ */
+if(!function_exists("dyAsBool")) {
+  function dyAsBool(array &$array, string|int $key, bool $default): bool {
+    $value = dy($array, $key, $default);
+    return filled($value) ? bool($value) : null;
+  }
+}
+
+/**
+ * Yank a value from the array by key, or $default, coerced to bool by JBzoo/Filter. Supports key with dots.
+ * > Watch out for by-reference issues.
+ * > Supports various string representations of booleans (e.g. "yes", "no", "1", "0", "true", "false", etc.)
+ *
+ * @param  array       $array
+ * @param  string|int  $key
+ * @param  bool|null   $default  Defaults to NULL.
+ *
+ * @return bool|null
+ */
+if(!function_exists("dyAsNullBool")) {
+  function dyAsNullBool(array &$array, string|int $key, bool|null $default = null): bool|null {
+    $value = dy($array, $key, $default);
+    return filled($value) ? bool($value) : null;
+  }
+}
+
+/**
+ * Yank a value from the array by key, or $default, coerced to int by JBzoo/Filter. Supports key with dots.
+ * > Watch out for by-reference issues.
+ * > Smart convert any string to int.
+ *
+ * @param  array       $array
+ * @param  string|int  $key
+ * @param  int         $default  A default MUST be provided.
+ *
+ * @return int
+ */
+if(!function_exists("dyAsInt")) {
+  function dyAsInt(array &$array, string|int $key, int $default): int {
+    $value = dy($array, $key, $default);
+    return int($value);
+  }
+}
+
+/**
+ * Yank a value from the array by key, or $default, coerced to int by JBzoo/Filter, or NULL if blank. Supports key with dots.
+ * > Watch out for by-reference issues.
+ * > Smart convert any string to int.
+ *
+ * @param  array       $array
+ * @param  string|int  $key
+ * @param  int|null    $default  Defaults to NULL.
+ *
+ * @return int|null
+ */
+if(!function_exists("dyAsNullInt")) {
+  function dyAsNullInt(array &$array, string|int $key, int|null $default = null): int|null {
+    $value = dy($array, $key, $default);
+    if(blank($value)) {
+      return null;
+    }
+    return int($value);
+  }
+}
+
+/**
+ * Get a value as a string, or NULL if blank or cannot be converted.
+ *
+ * @param   mixed  $value
+ * @return  string|null
+ */
+if(!function_exists("asNullStr")) {
+  function asNullStr(mixed $value): string|null {
+    if(blank($value)) {
+      return null;
+    }
+    return asString($value);
+  }
+}
+
+/**
+ * Coerce a value into a string, or NULL. Will never or throw, just return "".
+ * Checks for Stringable, __toString(), etc. and attempts to cast.
+ * @todo Support all string-ish things that we use in Intel, (Laravel, Symfony, JBZoo, AppUtils, Stringy, Arrayy, ...).
+ *
+ * @param  mixed        $value
+ * @return string
+ */
+if(!function_exists("asString")) {
+  function asString(mixed $value): string {
+    if(blank($value)) {
+      return "";
+    }
+    
+    try {
+      if(method_exists($value, "toString")) {
+        return $value->toString();
+      }
+      return (string) $value;
+    } catch(Throwable) {
+      return "";
+    }
   }
 }
 
@@ -752,20 +904,8 @@ if(!function_exists("_cdn_img")) {
    *                               Options: "scale-down", "contain", "scale-up". Default: "scale-down".
    * "quality"       : (int)       The desired image quality (1-100). Default: 75.
    *
-   *
    * Named transformations are preferred at all times, for higher cache hit rates in CDN and ImageKit and browsers.
-   * ----------------------------------------------------------------------------------------------------------------------------
-   * Named transform	        Actual transform string
-   * ----------------------------------------------------------------------------------------------------------------------------
-   * ik_ml_thumbnail          tr:w-440,h-440,fo-center,cm-pad_resize
-   * omcatprdlstfr            tr:w-125,h-125,q-75,c-at_max
-   * omcatprdlst              tr:w-200,h-200,q-75,c-at_max
-   * omcatctglst              tr:w-140,h-140,q-80,c-at_max
-   * omcatprddtlt             tr:w-172,h-400,q-75,c-at_max_enlarge
-   * omcatprddtlf             tr:w-2048,h-2048,q-80,c-at_max_enlarge
-   * ombrndlgos               tr:w-140,h-40,cm-pad_resize
-   * omexfull                 tr:w-1536,h-1536,q-80,c-at_max_enlarge
-   * logosmall                tr:w-210,h-60,c-at_max
+   * Named transformations can be defined in the ImageKit dashboard, and are defined in this function as well.
    *
    * @param array $options
    *
@@ -778,7 +918,7 @@ if(!function_exists("_cdn_img")) {
       return false;
     }
     
-    $identifier       = $options["identifier"] ?? "NO_ID";
+    $identifier     = $options["identifier"] ?? "NO_ID";
     $fs_path        = (string) data_get($options, "fs_path", "");
     $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
     $width          = $options["width"]         ?? null;
@@ -792,10 +932,11 @@ if(!function_exists("_cdn_img")) {
     $relative_url   = $options["relative_url"]  ?? false; // Remove the base url (domain name) from the image url
     $include_2x     = $options["2x"]            ?? false; // Should not be needed if we send the "Dpr" header
     $lazy           = $options["lazy"]          ?? null;
-    $fetchpriority  = $options["fetchpriority"] ?? "auto";
-    $class          = $options["class"]         ?? "";
+    $fetchpriority  = dyAsStr($options, "fetchpriority") ?? "auto";
+    $class          = dyAsStr($options, "class");
     $style          = $options["style"]         ?? "";
-    $namedXform     = dg($options, "xform", null);
+    $namedXform     = dyAsNullStr($options, "xform", null);
+    $seo            = dyAsNullStr($options, "seo", null);
     
     $cdn            = (string)  dg($options, "cdn", "imagekit");
     $alt            = (string)  $alt;
@@ -807,7 +948,6 @@ if(!function_exists("_cdn_img")) {
     $relative_url   = (bool)    $relative_url;
     $include_2x     = (bool)    $include_2x;
     $lazy           = ($lazy !== null) ? (bool) $lazy : null;
-    $fetchpriority  = (string)  $fetchpriority;
     $class          = (string)  $class;
     $style          = (string)  $style;
     $id_html        = "";
@@ -821,36 +961,21 @@ if(!function_exists("_cdn_img")) {
     if($cdn === "imagekit" || $cdn === "imagekit_custom") {
       $relative_url = true; // Required
     }
-    $fetchpriority = strtolower($fetchpriority);
-    if($fetchpriority === "auto") {
-      $fetchpriority = $lazy ? "low" : "auto";
+    
+    // Generic URL modifications
+    
+    // Fill fs_path when cachebusting is enabled without an explicit fs_path -- BEFORE adding cache buster
+    if($add_mod_time && blank($fs_path)) {
+      $fs_path = CacheBuster::pathByUrl($url);
+      if(!is_file($fs_path)) {
+        $fs_path = null;
+      }
     }
     
-    // Applies to all CDNs
-    if($lazy === true) {
-      $lazy_html = " loading=\"lazy\"";
-    }
-    if($fetchpriority === "high" || $fetchpriority === "low") {
-      $lazy_html .= " fetchpriority=\"{$fetchpriority}\"";
-    }
-    if(strlen($id) > 0) {
-      $id_html = " id=\"{$id}\"";
-    }
-    if($fit === "contain" || $fit === "scale-down" || $fit === "scale-up") {
-      $class .= " object-fit-contain";
-    }
-    if(strlen($class) > 0) {
-      $class_html = " class=\"{$class}\"";
-    }
-    if(strlen($style) > 0) {
-      $style_html .= " style=\"{$style}\"";
-    }
-    if($relative_url) {
-      $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
-    }
-    if($add_mod_time && strlen((string) $fs_path) > 0) {
+    // Add file modification time as cache buster
+    if($add_mod_time && filled($fs_path)) {
       if($context === "intel" && is_file($fs_path) && $mtime = filemtime($fs_path)) {
-        $url = Chefstore\CacheBuster::prependExtension($url, "ts{$mtime}");
+        $url = CacheBuster::prependExtension($url, "ts{$mtime}");
       } else {
         if(function_exists("_add_file_v_param")) {
           $url = _add_file_v_param($url, $fs_path, $identifier);
@@ -860,20 +985,17 @@ if(!function_exists("_cdn_img")) {
       }
     }
     
-    $src_url    = "";
-    $widthAttr  = ($width > 0) ? "width=\"{$width}\"" : "";
-    $heightAttr = ($height > 0) ? "height=\"{$height}\"" : "";
+    // Make URL relative if requested
+    if($relative_url) {
+      $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
+    }
     
+    // URL modifications based on CDN
     switch($cdn) {
-      case "none":
-        $src_url = $url;
-        $html = "<img src=\"{$url}\" {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
-      
       // @see https://docs.imagekit.io/features/image-transformations
       case "imagekit":
       case "imagekit_custom":
-        $cdn_base = "//images.chefstore.nl";
+        $cdn_base = "https://images.chefstore.nl"; // Remove "http://" only at the very last to not hinder pathinfo()
         
         // A named transformation takes precedence over individual options
         if(filled($namedXform)) {
@@ -889,32 +1011,103 @@ if(!function_exists("_cdn_img")) {
           }
           $cdn_options_string = "tr:".implode_array_with_keys($cdn_options, ",", "-");
         }
-        
-        // devDump($cdn_options_string);
-        
         $url      = str_ireplace(["https://www.chefstore.nl/"], "", $url); // url comes in as "https://www.chefstore.nl/media/..."
         $src_url  = "{$cdn_base}/{$cdn_options_string}/{$url}";
         
-        // Either use 2x the resolution -- only when no named transformation is used
+        // Add SEO part to filename -- AFTER building the CDN URL
+        // Add "ik-seo" prefix of the path. Use the filename as a directory postfix. Use the SEO tag as the new filename. Keep the extension.
+        // Example:
+        // SEO tag: buffaflo-ad446-motor
+        // Input:   https://www.chefstore.nl/media/catalog/product/g/a/gastronoble-AD446-00-b-786e/buffaflo-ad446-motor.jpg
+        // Output:  https://images.chefstore.nl/ik-seo/tr:n-omcatprdlstfr/media/catalog/product/g/a/gastronoble-AD446-00-b-786e/buffaflo-ad446-motor.jpg
+        if(filled($seo)) {
+          $seo            = Str::slug($seo, "-");
+          $uri            = Uri::of($src_url);
+          $filenameNoExt  = pathinfo($uri->path(), PATHINFO_FILENAME);
+          $path           = $uri->pathSegments()->prepend("ik-seo")->slice(0, -1)->push($filenameNoExt)->all();
+          $dirname        = implode("/", $path);
+          $extension      = pathinfo($src_url, PATHINFO_EXTENSION);
+          $src_url        = "{$cdn_base}/{$dirname}/{$seo}.{$extension}";
+        }
+        break;
+    }
+    
+    // Return just the URL when requested, don't spend time on HTML generation
+    if($url_only) {
+      return $src_url;
+    }
+    
+    // Lookup the named transformation definition to take decisions on output HTML
+    // @see https://docs.imagekit.io/features/image-transformations
+    $namedXformDefinition = match($namedXform) {
+      "ik_ml_thumbnail" => "tr:w-440,h-440,fo-center,cm-pad_resize",             // ImageKit ML thumbnail, immutable.
+      "omcatprdlstfr"   => "tr:w-125,h-125,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog product list page (frontend) + Spotler Search results
+      "omcatprdlst"     => "tr:w-200,h-200,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog product list page (backend)
+      "omcatctglst"     => "tr:w-140,h-140,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog category list page
+      "omcatprddtlt"    => "tr:w-172,h-400,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog product detail page (thumbnail)
+      "omcatprddtlf"    => "tr:w-2048,h-2048,q-80,c-at_max_enlarge,dpr-auto",    // OpenMage catalog product detail page (full)
+      "ombrndlgos"      => "tr:w-140,h-40,cm-at_max_enlarge,dpr-auto",           // OpenMage brand logos
+      "omexfull"        => "tr:w-1536,h-1536,q-80,c-at_max_enlarge",             // OpenMage example full size
+      "logosmall"       => "tr:w-210,h-60,c-at_max_enlarge,dpr-auto,dpr-auto",   // Small logos
+      default           => "",
+    };
+    
+    // Adjust HTML attributes based on settings
+    
+    $fetchpriority = strtolower($fetchpriority);
+    if($fetchpriority === "auto") {
+      $fetchpriority = $lazy ? "low" : "auto";
+    }
+    
+    if(str_contains($namedXformDefinition, "c-at_max_enlarge")) {
+      $fit = "scale-up";
+    } elseif(str_contains($namedXformDefinition, "c-at_max")) {
+      $fit = "contain";
+    }
+    if($lazy) {
+      $lazy_html = " loading=\"lazy\"";
+    }
+    if($fetchpriority === "high" || $fetchpriority === "low") {
+      $lazy_html .= " fetchpriority=\"{$fetchpriority}\"";
+    }
+    if(filled($id)) {
+      $id_html = " id=\"{$id}\"";
+    }
+    if($fit === "contain" || $fit === "scale-down" || $fit === "scale-up") {
+      $class .= " object-fit-contain";
+    }
+    if(filled($class)) {
+      $class_html = " class=\"{$class}\"";
+    }
+    if(filled($style)) {
+      $style_html .= " style=\"{$style}\"";
+    }
+    
+    $widthAttr  = ($width > 0) ? "width=\"{$width}\"" : "";
+    $heightAttr = ($height > 0) ? "height=\"{$height}\"" : "";
+    
+    switch($cdn) {
+      case "none": return "<img src=\"{$url}\" {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
+      
+      case "imagekit":
+      case "imagekit_custom":
+        $cdn_base = "//images.chefstore.nl";
+        // Use 2x the resolution when no named transformation is used
         if(blank($namedXform) && $include_2x && is_numeric($cdn_options["w"]) && is_numeric($cdn_options["h"])) {
           $cdn_options["w"]   *= 2;
           $cdn_options["h"]   *= 2;
           $cdn_options_string = implode_array_with_keys($cdn_options, ",", "-");
           $src_url_2x         = "{$cdn_base}/{$cdn_options_string}/{$url}";
           $srcset             = "srcset=\"{$src_url_2x} 2x\" ";
+          $srcsetAttr         = "srcset=\"{$srcset}\"";
         } else {
-          $srcset = "";
+          $srcsetAttr = "";
         }
         
-        $html = "<img src=\"{$src_url}\" srcset=\"{$srcset}\" {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
-        break;
+        return "<img src=\"{$src_url}\" {$srcsetAttr} {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
     }
     
-    if($url_only) {
-      return $src_url;
-    }
-    
-    return $html;
+    return false;
   }
 }
 
