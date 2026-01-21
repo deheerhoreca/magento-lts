@@ -71,7 +71,6 @@ var/tm
 **.ts.map
 **.wip.php
 **.xlf
-**/vendor
 **/vendor/composer/installed.json
 **/assets/bower-asset/font-awesome
 **/CHANGELOG.md

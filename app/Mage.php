@@ -527,12 +527,12 @@ final class Mage
     {
         Varien_Profiler::start('DISPATCH EVENT:' . $name);
         // if(isDevIp()) {
-        //     $start = omStartTimer();
+        //     $start = omStartTimer(false);
         // }
         $result = self::app()->dispatchEvent($name, $data);
         // if(isDevIp()) {
         //     $took = omStopTimer(false, $start);
-        //     if($took > 5) {
+        //     if($took > 1) {
         //         // devLog(var_export($data, true));
         //         devLog("{$name} event dispatched in ".di($took)." ms");
         //     }

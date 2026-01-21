@@ -5,6 +5,7 @@ declare(strict_types=1);
 use \Brick\VarExporter\VarExporter;
 use \Chefstore\Helper as ChefstoreHelper;
 use \Chefstore\CacheBuster;
+use \Chefstore\CsCache;
 use \Chefstore\Observability;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Benchmark as LaravelBenchmark;
@@ -1226,6 +1227,23 @@ if(function_exists("dhh_get_quote_id") === false) {
  */
 function omDecodeUrl(string $url): string {
   return htmlspecialchars_decode($url, ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
+}
+
+if(!function_exists("fastHash")) {
+  /**
+   * Generate a fast hash, using xxHash algorithm. Not cryptographically secure.
+   * > Note: Only one of [seed, secret] can be used at a time.
+   *
+   * @param  string|Stringable  $input  The input string.
+   * @param  string|null        $secret Optional secret key (32 bytes). If null, a default secret is used.
+   *
+   * @return string             The generated fast hash (32 bytes).
+   */
+  function fastHash(string|Stringable $input, ?string $secret = null): string {
+    static $secret = "d9057eeb452a94261937c511274201be20c11f56bff1bd2c592ff37481d7a221cf7cad9859fe5f05d5bfc05d1e8d94132f6a1c783f891edd0f43206bc54f84f30415eaff1a";
+    $options = ["secret" => $secret];
+    return hash("xxh128", (string) $input, options: $options);
+  }
 }
 
 /* ---------------------------------------------------------- OpenMage Helpers ---------------------------------------------------------- */

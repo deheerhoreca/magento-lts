@@ -62,6 +62,7 @@
     "oomphinc/composer-installers-extender": "^2.0.1",
     "openmage/magento-lts": "20.5.0",
     "paynl/magento-plugin": "dev-master",
+    "robinn/phpcacheadmin": "*",
     "sabberworm/php-css-parser": "^8.9",
     "symfony/cache": ">=7.4.3",
     "symfony/console": ">=6.4.31",

@@ -10,21 +10,29 @@ set -u      # Treat unset variables as an error when substituting
 cm || exit 1
 . ./shell/cron-bootstrap.sh
 
+# Clear APCu and Opcache via cachetool
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml apcu:cache:clear
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml opcache:reset
 ELASTIC_APM_ENABLED=false cachetool --config=.cachetool-cli.yaml opcache:reset
 echo "Cleared APCu and Opcache caches via cachetool"
 
+# Clear Magento/OpenMage caches
 n98-magerun.phar cache:clean
 echo "Cleared OpenMage caches"
 
+# Clear PHP opcache stored in shared memory
 rm -r /dev/shm/openmage-php-opcache/* && touch /dev/shm/openmage-php-opcache/CACHEDIR.TAG
 echo "Cleared PHP opcache in /dev/shm/openmage-php-opcache/"
 
+# Remove minified CSS/JS files that are over 14 days old
 cm || exit 1
-rm media/min/*.js media/min/*.css
-touch media/min/CACHEDIR.TAG
-echo "Cleared minified CSS/JS files in media/min/"
+if [ -d "media/min" ]; then
+	find media/min -type f \( -name '*.js' -o -name '*.css' \) -mtime +14 -print -exec rm -f {} \;
+	touch media/min/CACHEDIR.TAG
+	echo "Trimmed minified CSS/JS files in media/min/ (removed files older than 14 days)"
+else
+	echo "Directory media/min does not exist, skipping trimming of minified files"
+fi
 
 cm || exit 1
 . ./shell/cron-wrapup.sh

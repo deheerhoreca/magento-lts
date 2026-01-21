@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c86dbf2e7e1a8b28da6204605805c2f3",
+    "content-hash": "2e6b23afc92597bc236ed56cde087f25",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -3494,6 +3494,77 @@
             "time": "2021-10-29T13:26:27+00:00"
         },
         {
+            "name": "robinn/phpcacheadmin",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobiNN1/phpCacheAdmin.git",
+                "reference": "784ffb540eea26020ac063845c200980ebfb1b12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobiNN1/phpCacheAdmin/zipball/784ffb540eea26020ac063845c200980ebfb1b12",
+                "reference": "784ffb540eea26020ac063845c200980ebfb1b12",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "twig/twig": "^3.22"
+            },
+            "require-dev": {
+                "clue/phar-composer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^11 || ^12.5"
+            },
+            "suggest": {
+                "ext-apcu": "Required for the APCu dashboard.",
+                "ext-redis": "Required for use the Redis dashboard.",
+                "ext-sqlite3": "Required for metrics.",
+                "ext-zend-opcache": "Required for use the OPCache dashboard.",
+                "ext-zlib": "Required for encoding/decoding with gz* functions.",
+                "predis/predis": "Required for use the Redis dashboard, when Redis extension is not installed."
+            },
+            "type": "project",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "RobiNN\\Pca\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Róbert Kelčák",
+                    "email": "robo@kelcak.com",
+                    "homepage": "https://kelcak.com"
+                }
+            ],
+            "description": "A web dashboard for your favorite caching system.",
+            "keywords": [
+                "Opcache",
+                "admin",
+                "apcu",
+                "cache",
+                "dashboard",
+                "gui",
+                "memcache",
+                "memcached",
+                "phpcacheadmin",
+                "realpath",
+                "redis"
+            ],
+            "support": {
+                "issues": "https://github.com/RobiNN1/phpCacheAdmin/issues",
+                "source": "https://github.com/RobiNN1/phpCacheAdmin/tree/2.4.0"
+            },
+            "time": "2026-01-02T13:37:50+00:00"
+        },
+        {
             "name": "sabberworm/php-css-parser",
             "version": "v8.9.0",
             "source": {
@@ -5047,6 +5118,85 @@
                 }
             ],
             "time": "2025-09-11T10:15:23+00:00"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v3.22.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "946ddeafa3c9f4ce279d1f34051af041db0e16f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/946ddeafa3c9f4ce279d1f34051af041db0e16f2",
+                "reference": "946ddeafa3c9f4ce279d1f34051af041db0e16f2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1.0",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-ctype": "^1.8",
+                "symfony/polyfill-mbstring": "^1.3"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "psr/container": "^1.0|^2.0",
+                "symfony/phpunit-bridge": "^5.4.9|^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Resources/core.php",
+                    "src/Resources/debug.php",
+                    "src/Resources/escaper.php",
+                    "src/Resources/string_loader.php"
+                ],
+                "psr-4": {
+                    "Twig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Twig Team",
+                    "role": "Contributors"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "https://twig.symfony.com",
+            "keywords": [
+                "templating"
+            ],
+            "support": {
+                "issues": "https://github.com/twigphp/Twig/issues",
+                "source": "https://github.com/twigphp/Twig/tree/v3.22.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-12-14T11:28:47+00:00"
         },
         {
             "name": "voku/html-min",
