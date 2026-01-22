@@ -6,7 +6,7 @@ set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
 
 . ${HOME}/.bash_profile
-cm
+cm || exit 1
 . ./shell/cron-bootstrap.sh
 
 touch ~/logs/deheerhoreca-magento/access_log
@@ -27,11 +27,10 @@ cm
 # ------------------------------------------------------------------------
 
 cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
-~/workspace/openmage/var/log/*.log
-~/workspace/openmage/var/log/*.jsonl
-~/workspace/openmage/var/log/*.ndjson
-~/logs/deheerhoreca-magento/*.log
-~/logs/deheerhoreca-magento/*_log
+~/workspace/openmage/var/log/*log
+~/workspace/openmage/var/log/*jsonl
+~/workspace/openmage/var/log/*ndjson
+~/logs/deheerhoreca-magento/*log
 {
   daily
   dateext
@@ -50,7 +49,7 @@ rm ~/tmp/logrotate-deheerhoreca-magento.conf
 
 sleep 1
 cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
-~/workspace/openmage/var/log/*.txt
+~/workspace/openmage/var/log/*txt
 {
   daily
   dateext
