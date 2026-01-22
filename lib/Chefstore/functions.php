@@ -628,7 +628,7 @@ if(!function_exists("array_to_table")) {
  */
 if(!function_exists("td")) {
   function td(mixed $input, bool $return = false, bool $inline = false): string|null {
-    $flags = $inline ? VarExporter::INLINE_ARRAY : VarExporter::INLINE_SCALAR_LIST;
+    $flags = $inline ? VarExporter::INLINE_ARRAY : 0; // Was: VarExporter::INLINE_SCALAR_LIST
     try {
       $var = Str::swap([
         "  '"     => "  \"",
