@@ -2,14 +2,24 @@
 
 declare(strict_types=1);
 
+use \Illuminate\Support\Str;
+
+/** @var Mage_Checkout_Block_Onepage_Payment_Methods $this */
+
+/**
+ * Enable customer message when BNPL methods are removed due to fraud detection.
+ * @var bool
+ */
+$enableCustomerBnplMessage = false;
+
 /**
  * List of BNPL payment methods.
  * @var string[]
  */
 $bnplMethods = [
-    "pay_payment_billink",
-    "pay_payment_afterpayint",
-    "pay_payment_capayablegespreid",
+    "pay_payment_billink",              // A common fraud-attracting BNPL method
+    // "pay_payment_afterpayint",       // Strong fraud protection, keep enabled
+    // "pay_payment_capayablegespreid", // Strong fraud protection, keep enabled
 ];
 
 /**
@@ -45,6 +55,19 @@ $highRiskSProductNameSubstrings = [
     "volautomatisch koffie",
 ];
 
+/**
+ * Email domains that attract BNPL fraud.
+ * @var string[]
+ */
+$highRiskEmailDomains = [
+    "@outlook.com",
+    "@hotmail.com",
+    "@live.com",
+    "@yahoo.com",
+    "@gmail.com",
+    // "@deheerhoreca.nl", // For testing only
+];
+
 $fmeFieldsmanager = false;
 if (Mage::helper("core")->isModuleOutputEnabled("FME_Fieldsmanager")) {
     $fmeFieldsmanager = $this->getLayout()->createBlock("fieldsmanager/checkout_payment_methods");
@@ -68,49 +91,46 @@ if ($customerCredit) {
 
 $billsafe = false;
 
-// ----- DHH ----- //
-
-$methods = $this->getMethods();
-$oneMethod = count($methods) <= 1;
-// devDump($methods);
-
-// $cart = Mage::getModel("checkout/cart")->getQuote()->getData();
-// if(in_array($_SERVER["REMOTE_ADDR"], _dhh_ips())) {
-//     devDump($cart);
-// }
+// Check for fraudulent email domain
+$quoteEmail = $this->getQuote()?->getCustomerEmail();
+$quoteEmail = \Chefstore\Helper::normalizeEmailAddress($quoteEmail);
+// devDump("quote email: ", $quoteEmail);
+$highRiskPatternFound = Str::endsWith((string) $quoteEmail, $highRiskEmailDomains);
 
 // Loop cart items and match against known fraudulent order products
-$highRiskPatternFound = false;
-$session = Mage::getSingleton("checkout/session");
-$cartItems = $session?->getQuote()?->getAllItems();
-if(!empty($cartItems)) {
-    foreach($cartItems as $item) {
-        /** @var Mage_Sales_Model_Quote_Item $item */
-        if($item->getBasePrice() >= 480 &&
-        (in_array($item->getSku(), $highRiskSkus) || wild_sis($highRiskSProductNameSubstrings, $item->getName()))) {
-            $highRiskPatternFound = true;
-            break;
+if(!$highRiskPatternFound) {
+    $session = Mage::getSingleton("checkout/session");
+    $cartItems = $session?->getQuote()?->getAllItems();
+    if(!empty($cartItems)) {
+        foreach($cartItems as $item) {
+            /** @var Mage_Sales_Model_Quote_Item $item */
+            if($item->getBasePrice() >= 480 &&
+            (in_array($item->getSku(), $highRiskSkus) || wild_sis($highRiskSProductNameSubstrings, $item->getName()))) {
+                $highRiskPatternFound = true;
+                break;
+            }
+            // devDump($item->debug());
+            // devDump($item->toArray());
         }
-        // devDump($item->debug());
-        devDump($item->toArray());
     }
 }
 
-// $cart = Mage::helper("checkout/cart")->getCart();
-// devDump($cart->getItems());
+$methods = $this->getMethods();
+$oneMethod = count($methods) <= 1;
 
-// Remove BNPL payment methods if fraudulent pattern found in the cart
+// Remove BNPL payment methods if possibile fraudulent pattern found in the cart.
+// Also track if any BNPL method was removed: Skip the customer message if the method were not present to begin with.
 $flagBnplRemoved = false;
 if($highRiskPatternFound) {
     $origMethods = $methods;
-    $methods = array_filter($methods, fn($method) => !in_array($method->getCode(), $bnplMethods));
+    $methods = array_filter($methods, fn($method) => !in_array($method->getCode(), $bnplMethods, true));
     if(count($methods) < count($origMethods)) {
         $flagBnplRemoved = true;
     }
 }
 
 $customerMsgHtml = "";
-if($flagBnplRemoved) {
+if($flagBnplRemoved && $enableCustomerBnplMessage) {
     $customerMsgHtml = <<<HTML
         <ul class="messages">
             <li class="success-msg">

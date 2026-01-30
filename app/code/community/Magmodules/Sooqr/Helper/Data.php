@@ -445,22 +445,14 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             if(empty($imageData['image'][$config['image_source']]) === false) {
                 $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
                 $image_url        = "{$media}catalog/product{$product->getData($config['image_source'])}";
-                if(empty($image_url) === false) {
-                    $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-                    $col_width        = 125;
-                    $image_path       = "{$media_dir}/catalog/product{$product->getData($config['image_source'])}";
+                if(!empty($image_url)) {
                     $cdn_img_options  = [
-                    "fs_path"         => $image_path,
-                    "url"             => $image_url,
-                    "url_only"        => true,
-                    "width"           => $col_width,
-                    "height"          => $col_width,
-                    "add_mod_time"    => true,
-                    "class"           => "",
-                    "relative_url"    => true,
+                        "url"             => $image_url,
+                        "url_only"        => true,
+                        "xform"           => "omcatprdlstfr",
+                        "add_mod_time"    => true,
                     ];
-                    $img_url          = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
-                    $imageData['image'][$config['image_source']] = $img_url;
+                    $imageData['image'][$config['image_source']] = _cdn_img($cdn_img_options);
                 }
             }
             // END DHH CORE HACK

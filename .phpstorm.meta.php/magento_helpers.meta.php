@@ -72,7 +72,6 @@ namespace PHPSTORM_META {
             'extifcon/data' => \Codnitive_Extifcon_Helper_Data::class,
             'deheerhoreca_fpc' => \DeHeerHoreca_Fpc_Helper_Data::class,
             'deheerhoreca_fpc/data' => \DeHeerHoreca_Fpc_Helper_Data::class,
-            'deheerhoreca_util/strftime_replacement' => \DeHeerHoreca_Util_Helper_Strftime_Replacement::class,
             'deheerhoreca_util/util' => \DeHeerHoreca_Util_Helper_Util::class,
             'dealer4dealer_xcore' => \Dealer4dealer_Xcore_Helper_Data::class,
             'dealer4dealer_xcore/data' => \Dealer4dealer_Xcore_Helper_Data::class,

@@ -19,6 +19,18 @@
     </models>
     <events>
       <!--
+      Very early event, used to set PHP config for admin pages
+      - @todo Even earlier events did not work using the "deheerhoreca_util/observer" notation. Prefer full class name for all events?
+      -->
+      <adminhtml_controller_action_predispatch_start>
+        <observers>
+          <set_adminhtml_php_config>
+            <class>DeHeerHoreca_Util_Model_Observer</class>
+            <method>adminhtmlControllerActionPredispatchStart</method>
+          </set_adminhtml_php_config>
+        </observers>
+      </adminhtml_controller_action_predispatch_start>
+      <!--
       Set Elastic APM data
       - Called "front" but also fires in adminhtml.
       - controller_front_init_before is too early to get the current transaction name

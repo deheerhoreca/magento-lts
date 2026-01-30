@@ -19,12 +19,8 @@ if(!$read_cache) {
   }
 }
 
-if(!empty($_html)) {
-  $_html = \Chefstore\Html::minifyHtml($_html);
-}
-
 if($write_cache && !empty($_html)) {
-  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred(DHH_FPC_NAV_KEY, $_html, ["DHH_CMS"], 86400, minifyHtml: false);
+  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred(DHH_FPC_NAV_KEY, $_html, ["DHH_CMS"], 86400, minifyHtml: true);
   // Mage::app()->getCache()->save($_html, DHH_FPC_NAV_KEY, ["DHH_CMS"], 86400);
 } ?>
 

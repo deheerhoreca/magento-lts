@@ -1,81 +1,85 @@
 <?php
 
-
 declare(strict_types=1);
 
-use Rector\Config\RectorConfig;
-use Rector\CodeQuality\Rector as CodeQuality;
-use Rector\DeadCode\Rector as DeadCode;
-use Rector\TypeDeclaration\Rector as TypeDeclaration;
-use Rector\ValueObject\PhpVersion;
-use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use Rector\Set\ValueObject\SetList;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Symfony\Set\SymfonySetList;
-use RectorLaravel\Set\LaravelSetList;
-use RectorLaravel\Set\LaravelLevelSetList;
-use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
-use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
-use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
-use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
-use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
-use Rector\Php82\Rector\Encapsed\VariableInStringInterpolationFixerRector;
-use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
-use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
-use Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
-use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
-use Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
-use Rector\CodeQuality\Rector\If_\CombineIfRector;
-use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
-use Rector\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector;
-use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
-use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
-use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
-use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
-use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
-use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
-use Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector;
-use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
-use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
-use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
-use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
-use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
-use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
-use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
-use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
-use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
-use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
-use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
-use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
-use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
-use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
-use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
-use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
-use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
-use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
-use Rector\Php82\Rector\FuncCall\Utf8DecodeEncodeToMbConvertEncodingRector;
-use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
-use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
-use RectorLaravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
-use Rector\Transform\Rector\String_\StringToClassConstantRector;
-use Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector;
-use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
-use Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
-use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
-use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
-use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
-use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
-use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
-use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
-use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
-use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
-use Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
-use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
+use \Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use \Rector\CodeQuality\Rector as CodeQuality;
+use \Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
+use \Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
+use \Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
+use \Rector\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector;
+use \Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
+use \Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
+use \Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
+use \Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
+use \Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
+use \Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
+use \Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector;
+use \Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
+use \Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
+use \Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
+use \Rector\CodeQuality\Rector\If_\CombineIfRector;
+use \Rector\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector;
+use \Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
+use \Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
+use \Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
+use \Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
+use \Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
+use \Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
+use \Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
+use \Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
+use \Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
+use \Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
+use \Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
+use \Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
+use \Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
+use \Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
+use \Rector\Config\RectorConfig;
+use \Rector\DeadCode\Rector as DeadCode;
+use \Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
+use \Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
+use \Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
+use \Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
+use \Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
+use \Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
+use \Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
+use \Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
+use \Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
+use \Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
+use \Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
+use \Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
+use \Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
+use \Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
+use \Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
+use \Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
+use \Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
+use \Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
+use \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use \Rector\Php82\Rector\Encapsed\VariableInStringInterpolationFixerRector;
+use \Rector\Php82\Rector\FuncCall\Utf8DecodeEncodeToMbConvertEncodingRector;
+use \Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
+use \Rector\Renaming\Rector\Name\RenameClassRector;
+use \Rector\Set\ValueObject\LevelSetList;
+use \Rector\Set\ValueObject\SetList;
+use \Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use \Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
+use \Rector\Symfony\Set\SymfonySetList;
+use \Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
+use \Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
+use \Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
+use \Rector\Transform\Rector\String_\StringToClassConstantRector;
+use \Rector\TypeDeclaration\Rector as TypeDeclaration;
+use \Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
+use \Rector\ValueObject\PhpVersion;
+use \RectorLaravel\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector;
+use \RectorLaravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
+use \RectorLaravel\Set\LaravelLevelSetList;
+use \RectorLaravel\Set\LaravelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
-  
+  $rectorConfig->bootstrapFiles([
+    __DIR__."/../vendor/autoload.php",
+  ]);
   $rectorConfig->parallel(processTimeout: 600, maxNumberOfProcess: 2, jobSize: 6);
   $rectorConfig->fileExtensions(["phtml", "php"]);
   $rectorConfig->cacheClass(FileCacheStorage::class);
@@ -120,7 +124,6 @@ return static function (RectorConfig $rectorConfig): void {
     StringToClassConstantRector::class,                       // Don't disable permanently, but Symfony/Laravel is bullshitting with this
     RemoveDoubleAssignRector::class,                          // Can be annoying
     RemoveAlwaysElseRector::class,                            // Doesn't always make it better
-    BooleanInIfConditionRuleFixerRector::class,               // Can be pedantic
 
     // ALWAYS SKIP
     RemoveAlwaysTrueIfConditionRector::class,                 // Can disrupt code that is prepared for debuggging or temporary code
@@ -132,7 +135,6 @@ return static function (RectorConfig $rectorConfig): void {
     EncapsedStringsToSprintfRector::class,                    // Why even
     NewlineAfterStatementRector::class,                       // Get a life
     SplitDoubleAssignRector::class,                           // Get a life
-    SymplifyQuoteEscapeRector::class,                         // Don't fix what ain't broken
     WrapEncapsedVariableInCurlyBracesRector::class,           // Breaks bash-code
     CompleteMissingIfElseBracketRector::class,                // Get a life
     SingleInArrayToCompareRector::class,                      // Get a life
@@ -144,7 +146,6 @@ return static function (RectorConfig $rectorConfig): void {
     ExplicitReturnNullRector::class,                          // Pedantic drone
     NewlineBeforeNewAssignSetRector::class,                   // Get a life
     RemoveUnusedVariableAssignRector::class,                  // Also also
-    MinutesToSecondsInCacheRector::class,                     // Seems to do nothing and messes up whitespace
     AbsolutizeRequireAndIncludePathRector::class,             // Causes bugs with differences between pwd and __DIR__
     RemoveUnreachableStatementRector::class,                  // Can remove debug code, revert code or WIP code
     SetList::TYPE_DECLARATION,
@@ -161,7 +162,7 @@ return static function (RectorConfig $rectorConfig): void {
   // $rectorConfig->rules([RenameFunctionRector::class]);
   // $rectorConfig->rules([AbsolutizeRequireAndIncludePathRector::class]);
   // $rectorConfig->rules([PostIncDecToPreIncDecRector::class]);
-  $rectorConfig->sets([LaravelLevelSetList::UP_TO_LARAVEL_110,]);
+  // $rectorConfig->sets([LaravelLevelSetList::UP_TO_LARAVEL_110,]);
   return;
 
   /* SAFE RULES */
@@ -212,22 +213,23 @@ return static function (RectorConfig $rectorConfig): void {
   $rectorConfig->sets([
     
     /* OK */
-    LevelSetList::UP_TO_PHP_82,
-    LaravelLevelSetList::UP_TO_LARAVEL_110,
-    SymfonySetList::SYMFONY_64,
-    SymfonySetList::SYMFONY_71,
+    LevelSetList::UP_TO_PHP_83,
+    // LevelSetList::UP_TO_PHP_82,
+    // LaravelLevelSetList::UP_TO_LARAVEL_110,
+    // SymfonySetList::SYMFONY_64,
+    // SymfonySetList::SYMFONY_71,
     
-    /* OPTIONAL */
-    SetList::DEAD_CODE,
-    SetList::CODE_QUALITY,
-    SetList::CODING_STYLE,
-    SetList::STRICT_BOOLEANS,
-    SetList::GMAGICK_TO_IMAGICK,
-    SetList::PRIVATIZATION,
-    SetList::EARLY_RETURN,
-    SetList::INSTANCEOF,
-    SetList::PHP_POLYFILLS,
-    SetList::RECTOR_PRESET,
+    // /* OPTIONAL */
+    // SetList::DEAD_CODE,
+    // SetList::CODE_QUALITY,
+    // SetList::CODING_STYLE,
+    // SetList::STRICT_BOOLEANS,
+    // SetList::GMAGICK_TO_IMAGICK,
+    // SetList::PRIVATIZATION,
+    // SetList::EARLY_RETURN,
+    // SetList::INSTANCEOF,
+    // SetList::PHP_POLYFILLS,
+    // SetList::RECTOR_PRESET,
     
     // LaravelSetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL,
     // LaravelSetList::LARAVEL_ARRAYACCESS_TO_METHOD_CALL,

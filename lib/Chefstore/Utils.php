@@ -7,7 +7,7 @@ namespace Chefstore;
 use Closure;
 use Mage;
 use Throwable;
-use \Brick\VarExporter\Exception\ExportException;
+use \Brick\VarExporter\ExportException;
 use \Brick\VarExporter\VarExporter;
 use \Illuminate\Support\Str;
 
@@ -26,17 +26,31 @@ class Utils {
     "81.59.51.217",
   ];
   
-  // \Chefstore\Utils::dump("foo");
-  public static function dump($mixed, bool $return = false) {
-    if (is_callable($mixed)) {
-      self::printr($mixed(), $return);
-    } else {
-      self::printr($mixed, $return);
+  /**
+   * Dump a variable or the result of a callable.
+   *
+   * @param  mixed $mixed
+   * @param  bool  $return
+   *
+   * @return string|null
+   */
+  public static function dump($mixed, bool $return = false): string|null {
+    if(is_callable($mixed)) {
+      return self::printr($mixed(), $return);
     }
+    
+    return self::printr($mixed, $return);
   }
   
-  // \Chefstore\Utils::is_serialized("foo");
-  public static function is_serialized($data, $strict = true) {
+  /**
+   * Check if a value is serialized.
+   *
+   * @param  mixed $data
+   * @param  bool  $strict
+   *
+   * @return bool
+   */
+  public static function is_serialized($data, $strict = true): bool {
     // If it isn't a string, it isn't serialized.
     if (! is_string($data)) {
       return false;
@@ -94,11 +108,18 @@ class Utils {
     return false;
   }
   
-  // PHP var_export() with short array syntax (square brackets) indented 2 spaces.
-  // NOTE: The only issue is when a string value has `=>\n[`, it will get converted to `=> [`
-  // @link https://www.php.net/manual/en/function.var-export.php
-  // \Chefstore\Utils::d()
-  public static function d($expression, bool $return = false) {
+  /**
+   * PHP var_export() with short array syntax (square brackets) indented 2 spaces.
+   * NOTE: The only issue is when a string value has `=>\n[`, it will get converted to `=> [`
+   *
+   * @link https://www.php.net/manual/en/function.var-export.php
+   *
+   * @param  mixed $expression
+   * @param  bool  $return
+   *
+   * @return string|null
+   */
+  public static function d($expression, bool $return = false): string|null {
     $export = var_export($expression, true);
     $patterns = [
       "/array \(/" => '[',
@@ -107,16 +128,24 @@ class Utils {
       "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
     ];
     $export = preg_replace(array_keys($patterns), array_values($patterns), $export);
-
+    
     if($return) {
       return $export;
     }
-
+    
     self::printr($export);
+    return null;
   }
-
-  // \Chefstore\Utils::printr("foo");
-  public static function printr($expression, bool $return = false) {
+  
+  /**
+   * Pretty Print using print_r().
+   *
+   * @param  mixed $expression
+   * @param  bool  $return
+   *
+   * @return string|null
+   */
+  public static function printr($expression, bool $return = false): string|null {
     $ret = "";
     
     if(is_object($expression) && get_class($expression) === "Illuminate\Support\Stringable") {
@@ -124,7 +153,7 @@ class Utils {
     }
     
     if(!is_scalar($expression) && (is_array($expression) && !sizeof($expression))) {
-      return;
+      return null;
     }
     
     if(php_sapi_name() !== "cli") {
@@ -142,20 +171,36 @@ class Utils {
     }
     
     echo $ret;
+    return null;
   }
-
-  // \Chefstore\Utils::devdump("foo");
+  
+  /**
+   * Development Dump: Dumps variable only if accessed from a whitelisted IP and "nofpc" GET parameter is set.
+   *
+   * @param  mixed      $expression
+   * @param  bool       $return
+   * @return null|false
+   */
   public static function devdump($expression, bool $return = false): null|false {
     if(isset($_GET["nofpc"]) && isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], self::$dev_ips, true)) {
       d($expression, $return);
       return null;
     }
-
+    
     return false;
   }
-
-  // \Chefstore\Utils::td()
-  // Tiny dump -- @url https://github.com/brick/varexporter
+  
+  /**
+   * Tiny Dump using Brick\VarExporter to get a compact PHP-code representation of any variable.
+   *
+   * @see https://github.com/brick/varexporter
+   *
+   * @param  mixed       $input
+   * @param  bool        $return
+   * @param  bool        $inline
+   *
+   * @return string|null
+   */
   public static function td(mixed $input, bool $return = true, bool $inline = false): string|null {
     $flags = $inline ? VarExporter::INLINE_ARRAY : VarExporter::INLINE_SCALAR_LIST;
     try {
@@ -191,6 +236,7 @@ class Utils {
    * Defer a closure to be run after the response has been sent to the browser.
    *
    * @param  Closure $closure
+   * @return void
    */
   public static function deferClosure(Closure $closure): void {
     self::$deferredClosures[] = $closure;

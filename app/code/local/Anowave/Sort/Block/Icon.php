@@ -18,7 +18,7 @@
  * @copyright 	Copyright (c) 2017 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
- 
+
 class Anowave_Sort_Block_Icon extends Mage_Core_Block_Template 
 {
 	

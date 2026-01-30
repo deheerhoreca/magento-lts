@@ -27,7 +27,7 @@ echo "Cleared PHP opcache in /dev/shm/openmage-php-opcache/"
 # Remove minified CSS/JS files that are over 14 days old
 cm || exit 1
 if [ -d "media/min" ]; then
-	find media/min -type f \( -name '*.js' -o -name '*.css' \) -mtime +14 -print -exec rm -f {} \;
+	find media/min -type f \( -name '*.js' -o -name '*.css' -o -name '*.br' \) -mtime +14 -print -exec rm -f {} \;
 	touch media/min/CACHEDIR.TAG
 	echo "Trimmed minified CSS/JS files in media/min/ (removed files older than 14 days)"
 else

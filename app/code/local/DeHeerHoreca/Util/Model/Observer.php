@@ -14,14 +14,27 @@ use \Illuminate\Support\Str;
 class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   /**
+   * Early admin-only observer to setup admin-only PHP config, and in the future maybe more.
+   * > Observes: adminhtml_controller_action_predispatch_start
+   * > Only for adminhtml area.
+   * > Very early event, not many things are initialized yet.
+   *
+   * @param  Varien_Event_Observer $observer
+   * @return void
+   */
+  public function adminhtmlControllerActionPredispatchStart(Varien_Event_Observer $observer): void {
+    ini_set("memory_limit", "1G");  // Set higher memory limit for admin pages, necessary for some actions.
+  }
+  
+  /**
    * Setup Elastic APM.
    * 
    * Observes: controller_action_layout_load_before.
    *
-   * @param  \Varien_Event_Observer $observer
+   * @param  Varien_Event_Observer $observer
    * @return void
    */
-  public static function configureElasticApm(\Varien_Event_Observer $observer): void {
+  public static function configureElasticApm(Varien_Event_Observer $observer): void {
     static $initialized = false;
     if($initialized) {
       return;
@@ -41,13 +54,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         // Set transaction.name to HTTP method + the name of the OpenMage action
         if($transaction_name = Observability::getApmTransactionName()) {
           $transaction->setName($transaction_name);
-          // devLog("Set APM transaction name to '{$transaction_name}'");
+          // devLog("Set APM transaction name to {$transaction_name}");
         }
         
         // Set transaction.type to segregate the various request types
         if($transaction_type = Observability::getApmTransactionType()) {
           $transaction->setType($transaction_type);
-          // devLog("Set APM transaction type to '{$transaction_type}'");
+          // devLog("Set APM transaction type to {$transaction_type}");
         }
         
         $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
@@ -74,10 +87,10 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   /**
    * Lock (disable) some attributes when editing a Product.
    *
-   * @param  \Varien_Event_Observer $observer
+   * @param  Varien_Event_Observer $observer
    * @return void
    */
-  public function updateProductOnEdit(\Varien_Event_Observer $observer) {
+  public function updateProductOnEdit(Varien_Event_Observer $observer) {
     $event = $observer->getEvent();
     $product = $event->getProduct();
     $product->lockAttribute("recommended_product");
@@ -107,7 +120,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     $product->lockAttribute("options_container");
   }
   
-  // Also used directly in resave_all_products.php
+  /**
+   * Update product before save. Applies some safe business rules on product data.
+   * > Also used directly in resave_all_products.php
+   * > @todo Implement in Intel, using batches?
+   *
+   * @param  mixed $observer_or_product
+   */
   public static function updateProductBeforeSave($observer_or_product) {
     if($observer_or_product::class === "Varien_Event_Observer") {
       if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS") && constant("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS")) {
@@ -120,127 +139,32 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       $product = $observer_or_product;
     }
     
-    // SHORT NAME -- 2023-10-10 Disabling, better done from intel
-    // if(strlen($product->getData("name_short")) < 3) {
-      // $new_value = $product->getAttributeText("supplier")." ".$product->getData("sku_seller");
-      // $product->setData("name_short", $new_value);
-      // if(!$return) Mage::getSingleton('core/session')->addSuccess("Auto-filled name_short");
-    // }
-    
     /* END OF LIFE */
     if($product->getData("eol") === "2075") {
       if(!empty($product->getData("tagline"))) {
         $product->setData("tagline", null);
-        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Tagline removed");
+        if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is EOL: Tagline removed");
       }
       if($product->getData("featured") === "1") {
         $product->setData("featured", "0");
-        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Featured flag removed");
+        if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is EOL: Featured flag removed");
       }
       if($product->getData("bargain") === "1") {
         $product->setData("bargain", "0");
-        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Bargain flag removed");
+        if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is EOL: Bargain flag removed");
       }
       if(!empty($product->getData("txtstockdate"))) {
         $product->setData("txtstockdate", null);
-        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Back in stock date removed");
+        if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is EOL: Back in stock date removed");
       }
       if(!empty($product->getData("product_label"))) {
         $product->setData("product_label", null);
-        if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Product label removed");
+        if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is EOL: Product label removed");
       }
-
-      // 2023-10-10 Disabling to see if this is the cause of the visibility bug
-      // if((int) $product->getVisibility() === 4 || (int) $product->getVisibility() === 2) {
-        // $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH);
-        // if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Visibility set to Search only");
-      // }
     }
-
-    /* PRICING */
-
-    // Disabled, intel is better for this
-
-    // // Fill cost from msrp and price_supplier_discount_perc
-    // if(empty($product->getData("msrp")) === false) {
-      // if(empty($product->getData("price_supplier_discount_perc")) === false) {
-        // $new_value = (float) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_discount_perc") / 100)), 2);
-        // if($new_value > 0) {
-          // $current_value = (double) $product->getData("cost");
-          // if($current_value !== $new_value) {
-            // $product->setData("cost", $new_value);
-            // if(!$return) Mage::getSingleton('core/session')->addSuccess("Cost Price overwritten");
-          // }
-        // }
-      // }
-
-      // // Fill price_min from msrp and price_supplier_msrp_disc_limit
-      // if(empty($product->getData("price_supplier_msrp_disc_limit")) === false) {
-        // $new_value = (double) round($product->getData("msrp") * (1 - ($product->getData("price_supplier_msrp_disc_limit") / 100)), 2);
-        // if($new_value > 0) {
-          // $current_value = (double) $product->getData("price_min");
-          // if($current_value !== $new_value) {
-            // $product->setData("price_min", $new_value);
-            // if(!$return) Mage::getSingleton("core/session")->addSuccess("price_min overwritten");
-          // }
-        // }
-      // }
-    // }
-
-
-    // if(empty($product->getData("price_supplier_msrp_disc_limit")) === true) {
-      // // Clear the value if price_supplier_msrp_disc_limit is empty
-      // if(empty($product->getData("price_min")) === false) {
-        // $product->setData("price_min", null);
-        // if(!$return) Mage::getSingleton("core/session")->addSuccess("price_min emptied");
-      // }
-    // }
-
-    // if(empty($product->getData("price_bol_be_auto")) === false && $product->getData("price_bol_be_auto") === "1") {
-      // $new_value = (float) $product->getData("special_price") * 1.21;
-      // $new_value = round($new_value, 0);
-      // $new_value = (string) $new_value;
-      // if($new_value > 0 && $new_value != $product->getData("price_bol_be")) {
-        // $product->setData("price_bol_be", $new_value);
-        // if(!$return) Mage::getSingleton('core/session')->addSuccess("price_bol_be auto-filled");
-      // }
-    // }
-
-    // if(empty($product->getData("price_bol_nl_auto")) === false && $product->getData("price_bol_nl_auto") === "1") {
-      // $new_value = (float) $product->getData("special_price") * 1.21;
-      // $new_value = round($new_value, 0);
-      // $new_value = (string) $new_value;
-      // if($new_value > 0 && $new_value != $product->getData("price_bol_nl")) {
-        // $product->setData("price_bol_nl", $new_value);
-        // if(!$return) Mage::getSingleton('core/session')->addSuccess("price_bol_nl auto-filled");
-      // }
-    // }
-
-    // if(empty($product->getData("cost")) === false && $product->getData("cost") > 0) {
-      // $our_price = (float) $product->getData("price");
-      // if(empty($product->getData("special_price")) === false) {
-        // $our_price = (float) $product->getData("special_price");
-      // }
-
-      // if($our_price > 0) {
-        // // Gross Margin EUR
-        // $new_value = (float) number_format($our_price - $product->getData("cost"), 4, null, "");
-        // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_euro")) {
-          // $product->setData("gross_margin_euro", $new_value);
-          // if(!$return) Mage::getSingleton('core/session')->addSuccess("gross_margin_euro auto-filled");
-        // }
-
-        // // Gross Margin PERC
-        // $new_value = (float) number_format(((($our_price - $product->getData("cost")) / $our_price) * 100), 4, null, "");
-        // if($new_value > 0 && $new_value != (float) $product->getData("gross_margin_perc")) {
-          // $product->setData("gross_margin_perc", $new_value);
-          // if(!$return) Mage::getSingleton('core/session')->addSuccess("gross_margin_perc auto-filled");
-        // }
-      // }
-    // }
-
+    
     /* MERCHANDISING */
-    if(empty($product->getData("tagline")) === false) {
+    if(!empty($product->getData("tagline"))) {
       if($product->getData("recommended_product") !== "1826") {
         $product->setData("recommended_product", "1826");
       }
@@ -251,23 +175,22 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     }
     
     /* POWER */
-    if(empty($product->getData("vermogen")) === false
-    || empty($product->getData("vermogen_kw")) === false) {
+    if(!empty($product->getData("vermogen")) || !empty($product->getData("vermogen_kw"))) {
       $vermogen    = empty($product->getData("vermogen"))    ? 0 : (double) $product->getData("vermogen");
       $vermogen_kw = empty($product->getData("vermogen_kw")) ? 0 : (double) $product->getData("vermogen_kw");
       $new_value   = ($vermogen + $vermogen_kw) * 1000;
       
       if($new_value > 0 && $new_value != $product->getData("total_power_watt")) {
         $product->setData("total_power_watt", $new_value);
-        if(!$return) Mage::getSingleton('core/session')->addSuccess("total_power_watt auto-filled");
+        if(!$return) Mage::getSingleton("core/session")->addSuccess("total_power_watt auto-filled");
       }
     }
     
     /* Backfill EAN13 from EAN if possible */
     if(!empty($product->getData("ean")) && strlen((string) $product->getData("ean")) < 13) {
-      $new_value = sprintf('%013d', $product->getData("ean"));
+      $new_value = sprintf("%013d", $product->getData("ean"));
       $product->setData("ean", $new_value);
-      if(!$return) Mage::getSingleton('core/session')->addSuccess("ean zerofilled");
+      if(!$return) Mage::getSingleton("core/session")->addSuccess("ean zerofilled");
     }
     
     if($return) {
@@ -277,7 +200,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     /* NOTHING BELOW THIS */
   }
   
-  // Also used directly in resave_all_products.php
+  /**
+   * Update product after save. Applies some safe business rules on product data.
+   * > Also used directly in resave_all_products.php
+   *
+   * @param  mixed $observer_or_product
+   */
   public static function updateProductAfterSave($observer_or_product) {
     if($observer_or_product::class === "Varien_Event_Observer") {
       if(defined("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS") && constant("MAGE_SKIP_DHH_PRODUCT_OBSERVER_EVENTS") === true) {
@@ -295,51 +223,51 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     
     /* END OF LIFE */
     if($product->getAttributeText("eol") === "Ja") {
-      $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId);
-      $stockItem->setData('use_config_manage_stock', 0);
-      $stockItem->setData('use_config_backorders', 0);
-      $stockItem->setData('manage_stock', 1);
-      $stockItem->setData('is_in_stock', 0);
-      $stockItem->setData('qty', 0);
-      $stockItem->setData('backorders', 0);
+      $stockItem = Mage::getModel("cataloginventory/stock_item")->loadByProduct($productId);
+      $stockItem->setData("use_config_manage_stock", 0);
+      $stockItem->setData("use_config_backorders", 0);
+      $stockItem->setData("manage_stock", 1);
+      $stockItem->setData("is_in_stock", 0);
+      $stockItem->setData("qty", 0);
+      $stockItem->setData("backorders", 0);
       
       if($stockItem->getOrigData() != $stockItem->getData()) {
         try {
           if($stockItem->save()) {
-            if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is EOL: Stock data altered");
+            if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is EOL: Stock data altered");
           }
-        } catch (Excpetion $e) {
-          if(!$return) Mage::getSingleton('core/session')->addError("Failed to apply EOL business rules on stock item: {$e->getMessage()}");
+        } catch(Exception $e) {
+          if(!$return) Mage::getSingleton("core/session")->addError("Failed to apply EOL business rules on stock item: {$e->getMessage()}");
         }
       }
     }
     
     /* STOCK */    
-    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId);
+    $stockItem = Mage::getModel("cataloginventory/stock_item")->loadByProduct($productId);
     // echo "<pre>"; var_dump($stockItem->getData());exit;
     
-    if($stockItem->getManageStock() === 0 && $stockItem->getData('use_config_manage_stock') === "0") {
-      $stockItem->setData('is_in_stock', 1);
-      // $stockItem->setData('qty', 100);
+    if($stockItem->getManageStock() === 0 && $stockItem->getData("use_config_manage_stock") === "0") {
+      $stockItem->setData("is_in_stock", 1);
+      // $stockItem->setData("qty", 100);
       
       if($stockItem->getOrigData() != $stockItem->getData()) {
         try {
           if($stockItem->save()) {
-            if(!$return) Mage::getSingleton('core/session')->addSuccess("Stock is unmanaged: Setting defaults.");
+            if(!$return) Mage::getSingleton("core/session")->addSuccess("Stock is unmanaged: Setting defaults.");
           }
-        } catch (Excpetion $e) {
-          if(!$return) Mage::getSingleton('core/session')->addError("Failed to apply 'unmanaged' business rules on stock item: {$e->getMessage()}");
+        } catch(Exception $e) {
+          if(!$return) Mage::getSingleton("core/session")->addError("Failed to apply \"unmanaged\" business rules on stock item: {$e->getMessage()}");
         }
       }
-    } elseif($stockItem->getManageStock() === "1" && $stockItem->getData('use_config_manage_stock') === "0") {
-      if($stockItem->getData('qty') > 0 && $stockItem->getData('is_in_stock') === "0") {
-        $stockItem->setData('is_in_stock', 1);
+    } elseif($stockItem->getManageStock() === "1" && $stockItem->getData("use_config_manage_stock") === "0") {
+      if($stockItem->getData("qty") > 0 && $stockItem->getData("is_in_stock") === "0") {
+        $stockItem->setData("is_in_stock", 1);
         try {
           if($stockItem->save()) {
-            if(!$return) Mage::getSingleton('core/session')->addSuccess("Product is back in stock: Setting in_stock to Yes.");
+            if(!$return) Mage::getSingleton("core/session")->addSuccess("Product is back in stock: Setting in_stock to Yes.");
           }
-        } catch (Excpetion $e) {
-          if(!$return) Mage::getSingleton('core/session')->addError("Failed to update product stock status: {$e->getMessage()}");
+        } catch(Exception $e) {
+          if(!$return) Mage::getSingleton("core/session")->addError("Failed to update product stock status: {$e->getMessage()}");
         }
       }
     }
@@ -380,21 +308,6 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * @return void
    */
   public function beforeOrderPlace(Varien_Event_Observer $observer): void {
-    // - tm_field1:  supplier.order_id
-    // - tm_field2:  shipment.expected_date
-    // - tm_field3:  shipment.forwarder
-    // - tm_field4:  supplier.name
-    // - tm_field5:  process.flags
-    // - tm_field6:  marketplace.order_id
-    // - tm_field7:  marketplace.name
-    // - tm_field8:  shipment.id
-    // - tm_field9:  supplier.packing_slip_id
-    // - tm_field10: B2B/B2C
-    // - tm_field11: TBD
-    // - tm_field12: TBD
-    // - tm_field13: TBD
-    // - tm_field14: TBD
-    // - tm_field15: TBD
     $_order = $observer->getEvent()->getOrder();
     $_order->setData("tm_field1", null);
     $_order->setData("tm_field2", null);
@@ -419,9 +332,9 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * 
    * Data:
    * [
-   *   'to'         => $this->getToEmail(),
-   *   'subject'    => $this->getSubject(),
-   *   'email_body' => $this->getBody()
+   *   "to"         => $this->getToEmail(),
+   *   "subject"    => $this->getSubject(),
+   *   "email_body" => $this->getBody()
    * ]
    *
    * @param  Varien_Event_Observer  $observer
@@ -437,48 +350,42 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * Observes: googleanalytics_ga4_send_data_before
    * 
    * Data:
-   * ['ga4_data_transport' => $ga4DataTransport]
+   * ["ga4_data_transport" => $ga4DataTransport]
    *
    * @param  Varien_Event_Observer  $observer
    * @return void
    */
   public function alterGa4Data(Varien_Event_Observer $observer): void {
-    // if(_dhh_debug()) {
-      // dump($observer);
-      // $ga4Event = $observer->getEvent()->getGa4DataTransport()->getData()[0] ?? false;
-
-      // if($varien_event = $observer->getEvent()) {
-        // dump($varien_event);
-        // if($ga4DataTransport = $varien_event->getData("ga4_data_transport")) {
-          // dump($ga4DataTransport);
-
-        // }
-        // $event_name = $ga4Event[0] ?? null;
-        // dump($event_name);
-        // $event_data = $ga4Event[1] ?? null;
-        // dump($event_data);
-
-        // if($event_name !== "purchase") {
-          // return;
-        // }
-      // }
-
-      // if(Mage::getSingleton('customer/session')->isLoggedIn()) {
-        // if($customer = Mage::getSingleton('customer/session')->getCustomer()) {
-          // $email = $customer->getEmail();
-          // $email = trim($email);
-          // $email = strtolower($email);
-
-          // $userData     = [
-            // "email"       => $email,
-          // ];
-
-          // $result[] = ['set', 'user_data', $userData];
-        // }
-      // }
-
-      // dump($ga4DataTransport->getData());
-    // }
+    return; // Disable for now
+    if(_dhh_debug()) {
+      dump($observer);
+      $ga4Event = $observer->getEvent()->getGa4DataTransport()->getData()[0] ?? false;
+      if($varien_event = $observer->getEvent()) {
+        devDump($varien_event);
+        if($ga4DataTransport = $varien_event->getData("ga4_data_transport")) {
+          devDump($ga4DataTransport);
+        }
+        $event_name = $ga4Event[0] ?? null;
+        dump($event_name);
+        $event_data = $ga4Event[1] ?? null;
+        dump($event_data);
+        if($event_name !== "purchase") {
+          return;
+        }
+      }
+      if(Mage::getSingleton("customer/session")->isLoggedIn()) {
+        if($customer = Mage::getSingleton("customer/session")->getCustomer()) {
+          $email = $customer->getEmail();
+          $email = trim($email);
+          $email = strtolower($email);
+          $userData     = [
+            "email"       => $email,
+          ];
+          $result[] = ["set", "user_data", $userData];
+        }
+      }
+      dump($ga4DataTransport->getData());
+    }
   }
   
   /**
@@ -700,7 +607,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
                 // $start = omStartTimer();
                 $partContent = Html::minifyHtml($partContent);
                 // $took = omStopTimer();
-                // devLog("Minified AJAX response part '{$partName}': ".(strlen($origPartContent))." -> ".(strlen($partContent))." bytes in {$took}");
+                // devLog("Minified AJAX response part "{$partName}": ".(strlen($origPartContent))." -> ".(strlen($partContent))." bytes in {$took}");
                 // $tmpFile = sys_get_temp_dir()."/dhh_util_minify_ajax_{$partName}_after.html";
                 // file_put_contents($tmpFile, $partContent);
                 // devLog("Wrote to {$tmpFile}");
@@ -708,11 +615,11 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
                 return $partContent;
               } catch(Throwable $e) {
                 Mage::logException($e);
-                devLog("Failed to minify AJAX response part '{$partName}': ".$e->getMessage());
+                devLog("Failed to minify AJAX response part {$partName}: ".$e->getMessage());
               }
               return $origPartContent;
             }
-            return $partContent;  // Don't fail, don't change response
+            return $partContent;  // Don"t fail, don"t change response
           });
           if($changed) {
             $body = json_encode($data);

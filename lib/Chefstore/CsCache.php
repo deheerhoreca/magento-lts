@@ -18,6 +18,7 @@ use \Symfony\Component\Cache\Exception\CacheException;
 use \Symfony\Component\Cache\Marshaller\DefaultMarshaller;
 use \Symfony\Component\Cache\Marshaller\DeflateMarshaller;
 use \Symfony\Component\Cache\Marshaller\MarshallerInterface;
+use \Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * PSR-6:
@@ -133,7 +134,7 @@ class CsCache {
     static $adapter = null;
     return ($adapter ??= new ApcuAdapter(
       namespace : "openmage",
-      defaultLifetime: 180,
+      defaultLifetime: 600,
       version: null,
       marshaller: self::getMarshaller("default")
     ));
@@ -191,10 +192,14 @@ class CsCache {
    * @return DefaultMarshaller|DeflateMarshaller
    */
   public static function getMarshaller(?string $type = null): DefaultMarshaller | DeflateMarshaller {
+    // ! Setup igbinary in php.ini, not here -- Leads to issues where some parts of OpenMage address the cache outside of our control.
+    $useIgbinary = false;
+    // $useIgbinary = extension_loaded("igbinary");
+    
     if($type === "deflate") {
-      return new DeflateMarshaller(new DefaultMarshaller(useIgbinarySerialize: extension_loaded("igbinary")));
+      return new DeflateMarshaller(new DefaultMarshaller(useIgbinarySerialize: $useIgbinary));
     }
-    return new DefaultMarshaller(useIgbinarySerialize: extension_loaded("igbinary"));
+    return new DefaultMarshaller(useIgbinarySerialize: $useIgbinary);
   }
   
   /**

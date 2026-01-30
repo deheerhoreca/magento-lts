@@ -16,26 +16,19 @@ class DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image extends Mag
     $val = (string) $row->getData($this->getColumn()->getId());
     
     if($val !== "" && $val !== "no_selection") {
-      $media     = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-      $image_url = "{$media}catalog/product{$val}";
+      $media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+      $image_url        = "{$media}catalog/product{$val}";
+      $cdn_img_options  = [
+        "add_mod_time"    => true,
+        "height"          => 55,
+        "identifier"      => $row->getData("sku"),
+        "lazy"            => true,
+        "url"             => $image_url,
+        "width"           => 55,
+        "xform"           => "omcatprdlstfr",
+      ];
       
-      if (!empty($image_url)) {
-        $col_width       = 60;
-        $media_dir       = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $image_path      = "{$media_dir}/catalog/product{$val}";
-        $cdn_img_options = [
-          "identifier"   => $row->getData("sku"),
-          "fs_path"      => $image_path,
-          "url"          => $image_url,
-          "width"        => $col_width,
-          "height"       => $col_width,
-          "lazy"         => true,
-          "add_mod_time" => true,
-          "cm"           => "pad_resize",
-        ];
-        
-        return (string) Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
-      }
+      return (string) _cdn_img($cdn_img_options);
     }
     
     return $out;

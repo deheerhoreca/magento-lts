@@ -1,0 +1,12 @@
+{
+    "name": "chefstore/pca",
+    "authors": [
+        {
+            "name": "Loek",
+            "email": "loek@deheerhoreca.nl"
+        }
+    ],
+    "require": {
+        "robinn/phpcacheadmin": "^2.4"
+    }
+}

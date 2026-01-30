@@ -81,6 +81,7 @@
 - `app/code/local/Amasty/Feed/Model/Profile.php`
 - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php`
 - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php`
+- `app/code/local/Amasty/Shopby/Helper/Cached.php`
 - `app/code/local/Amasty/Shopby/Helper/Data.php`
 - `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Category.php`
 - `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Decimal.php`

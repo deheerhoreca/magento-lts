@@ -51,6 +51,7 @@
 
 # composer
 /vendor
+/protected/pca/vendor/
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
@@ -287,6 +288,7 @@ media
 !/app/code/local/Amasty/Feed/Model/Profile.php
 !/app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php
 !/app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php
+!/app/code/local/Amasty/Shopby/Helper/Cached.php
 !/app/code/local/Amasty/Shopby/Helper/Data.php
 !/app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Category.php
 !/app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Decimal.php
@@ -400,13 +402,6 @@ media
 /app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
 /app/design/adminhtml/default/default/template/mm/monacoeditor
 /app/etc/modules/MM_MonacoEditor.xml
-/app/code/local/MM/CmsContentFileMode
-/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
-/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
-/app/design/frontend/base/default/layout/mm/tailwindcss.xml
-/lib/tailwindcss/tailwind.config.js
-/lib/tailwindcss/tailwindcss
-/app/etc/modules/MM_CmsContentFileMode.xml
 /app/code/community/Fballiano/CategorySortDirection
 /app/etc/modules/Fballiano_CategorySortDirection.xml
 /app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php
@@ -476,3 +471,10 @@ media
 /app/locale/de_DE/FireGento_AdminMonitoring.csv
 /app/code/community/Fballiano/CssjsMinify
 /app/etc/modules/Fballiano_CssjsMinify.xml
+/app/code/local/MM/CmsContentFileMode
+/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
+/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
+/app/design/frontend/base/default/layout/mm/tailwindcss.xml
+/lib/tailwindcss/tailwind.config.js
+/lib/tailwindcss/tailwindcss
+/app/etc/modules/MM_CmsContentFileMode.xml

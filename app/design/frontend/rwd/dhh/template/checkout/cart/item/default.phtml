@@ -25,6 +25,7 @@ $image_path             = "{$media_dir}/catalog/product{$_product->getThumbnail(
 if(is_file($image_path)) {
   $cdn_img_options  = [
     "identifier"      => $_product->getSku(),
+    "xform"           => "omcatprdlstfr",
     "fs_path"         => $image_path,
     "url"             => $image_url,
     "width"           => $thumb_size,
@@ -32,20 +33,21 @@ if(is_file($image_path)) {
     "add_mod_time"    => true,
     "relative_url"    => true,
     "url_only"        => true,
-    "cm"              => "pad_resize",
   ];
-  $img_url         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+  $img_url = _cdn_img($cdn_img_options);
 } else {
   // Failure should not happen, but this is a fallback
-  $img_url          = $this->getProductThumbnail()->resize($thumb_dimensions, $thumb_dimensions);
+  $img_url = $this->getProductThumbnail()->resize($thumb_dimensions, $thumb_dimensions);
 }
 
+// @todo add width and height attributes to img tag for better CLS score
+// width="< ?=$thumb_size ? >" height="< ?=$thumb_size? >"
 ?>
 <tr>
   <td class="product-cart-image py-2">
     <?php if ($this->hasProductUrl()):?>
     <?php endif;?>
-      <img id="<?=$img_id?>" src="<?=$img_url?>" alt="<?=$image_label?>" width="<?=$thumb_size?>" height="<?=$thumb_size?>">
+      <img id="<?=$img_id?>" src="<?=$img_url?>" alt="<?=$image_label?>">
     <?php if ($this->hasProductUrl()):?>
     <?php endif;?>
 

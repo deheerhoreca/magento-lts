@@ -321,7 +321,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @param  mixed  $string
    * @return string
    */
-  public function getUrlSlug($string) {
+  public function getUrlSlug($string): string {
     $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
     $string   = strtr(utf8_decode((string) $string), utf8_decode($from), $to);
@@ -332,27 +332,35 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $string;
   }
   
-  public function getProductGridHtml($_product, $product_block, $options = []) {
+  /**
+   * Render a product grid HTML snippet for a product, with various options.
+   * Currently renders all such grids except for the main category listview.
+   *
+   * $options = [
+   *   "image_size"              => 150,           // Image screen size, in pixels
+   *   "display"                 => normal|mini,   // normal|mini
+   *   "skip_usps"               => false,         // Don't show USPs
+   *   "skip_actions"            => false,         // Don't show actions/buttons
+   *   "_blank"                  => false,         // Open in a new window
+   *   "show_category_link"      => false,         // Show a link to the category
+   *   "prefer_rewrite_table"    => false,         // Get product URL preferring the rewrite table
+   *   "use_short_product_names" => false,         // Use brand + MPN instead of product name @deprecated
+   *   "fast_stock"              => false,         // Base stock data on stock_status product field only
+   * ];
+   * 
+   * "display" usage:
+   * -----------------------------------------------------------------------------------------------------
+   * - mini: related, autorelated, upsell
+   * - normal: listview
+   *
+   * @param  mixed $_product
+   * @param  mixed $product_block
+   * @param  array $options
+   *
+   * @return void
+   */
+  public function getProductGridHtml($_product, $product_block, $options = []): void {
     Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
-    
-    /*
-    $options = [
-      "image_size"              => 150,           // Image screen size, in pixels
-      "display"                 => normal|mini,   // normal|mini
-      "skip_usps"               => false,         // Don't show USPs
-      "skip_actions"            => false,         // Don't show actions/buttons
-      "_blank"                  => false,         // Open in a new window
-      "show_category_link"      => false,         // Show a link to the category
-      "prefer_rewrite_table"    => false,         // Get product URL preferring the rewrite table
-      "use_short_product_names" => false,         // Use brand + MPN instead of product name @deprecated
-      "fast_stock"              => false,         // Base stock data on stock_status product field only
-    ];
-    
-    Display usage:
-    - mini: related, autorelated, upsell
-    - normal: listview
-    */
-    
     $product_name             = $_product->getData("name");
     $image_label              = $product_name;
     $display_product_name     = $product_name;
@@ -366,7 +374,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $skip_actions             = $options["skip_actions"]            ?? false;
     $show_category_link       = $options["show_category_link"]      ?? false;
     $prefer_rewrite_table     = $options["prefer_rewrite_table"]    ?? false;
-    $use_short_product_names  = $options["use_short_product_names"] ?? false;
+    // $use_short_product_names  = $options["use_short_product_names"] ?? false;
     $fast_stock               = $options["fast_stock"]              ?? false;
     
     $max_product_usps         = ($display === "mini")               ? 4 : 10;
@@ -388,7 +396,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $product_url = $_product->getProductUrl();
     }
     
-    $image_dimensions       = 1 * $image_size;
     $max_product_info_items = 3;
     $tagline                = $_product->getTagline();
     $price_html             = $product_block->getPriceHtml($_product, true);
@@ -396,7 +403,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $price_html             = str_replace("€", "", $price_html);
     $stock_status           = strtolower((string) _get_product_attribute($_product, "stock_status"));
     
-    if($fast_stock === true && empty($stock_status === false)) {
+    if($fast_stock && !empty($stock_status)) {
       $stock_message          = $stock_status === "direct leverbaar" ? "Op voorraad" : "Pre-order";
       $stock_message_short    = $stock_message;
       $overall_stock_status   = $stock_status === "direct leverbaar" ? "in_stock" : "backorder";
@@ -406,18 +413,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $stock_message          = $stock_data["stock_message"];
       $stock_message_short    = $stock_data["stock_message_short"];
       $stock_class            = $stock_data["txtcltcz"];
-
+      
       // @todo below variables are not used/needed, simplify
       // $in_stock               = $stock_data["in_stock"];
       // $stock_qty              = $stock_data["stock_qty"];
-      $backorders             = $stock_data["backorders"];
-      $saleable               = $stock_data["saleable"];
-      $eol                    = $stock_data["eol"];
-      $eol_replacement_sku    = $stock_data["eol_replacement_sku"];
-      $manage_stock           = $stock_data["manage_stock"];
-      $extra_delivery_time    = $stock_data["extra_delivery_time"];
+      // $backorders             = $stock_data["backorders"];
+      // $saleable               = $stock_data["saleable"];
+      // $eol                    = $stock_data["eol"];
+      // $eol_replacement_sku    = $stock_data["eol_replacement_sku"];
+      // $manage_stock           = $stock_data["manage_stock"];
+      // $extra_delivery_time    = $stock_data["extra_delivery_time"];
       $overall_stock_status   = $stock_data["overall_stock_status"];
-      $txtstockdate           = $stock_data["txtstockdate"];
+      // $txtstockdate           = $stock_data["txtstockdate"];
       // $levertijd              = $stock_data["levertijd"];
       // $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
     }
@@ -454,28 +461,27 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
     if(is_file($image_path)) {
-      $col_width        = 200;
       $cdn_img_options  = [
-        "identifier"      => $_product->getSku(),
+        "add_mod_time"    => true,
+        "alt"             => $image_label,
+        "class"           => "center",
         "fs_path"         => $image_path,
+        "height"          => $image_size,
+        "id"              => $img_id,
+        "identifier"      => $_product->getSku(),
+        "lazy"            => true,
+        "relative_url"    => true,
+        "title"           => $image_label,
         "url"             => $image_url,
         "width"           => $image_size,
-        "height"          => $image_size,
-        "lazy"            => true,
-        "add_mod_time"    => true,
-        "class"           => "center",
-        "title"           => $image_label,
-        "alt"             => $image_label,
-        "id"              => $img_id,
-        "relative_url"    => true,
+        "xform"           => "omcatprdlstfr",
       ];
-      $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      $img_html = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
     } else {
       // Failure should not happen, but this is a fallback
-      $img_url          = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_dimensions);
-      $img_html         = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
-    }
-    ?>
+      $img_url  = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_size);
+      $img_html = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
+    } ?>
     <a href="<?=$product_url?>" title="<?=$image_label?>" class="product-image"<?=$a_target;?>>
       <?=$img_html?>
     </a>
@@ -514,8 +520,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           echo "</ul>";
         }
         ?>
-      </div>
-      <?php
+      </div><?php
       echo $price_html;
       if(0 && $_product->getRatingSummary()) {
         echo $product_block->getReviewsSummaryHtml($_product, 'short');
@@ -603,12 +608,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   // Sync with list.phtml
   // NOTICE: Add used attributes to getProductAttributes()
   public function getProductUsps($_product, $options = [], $max_count = 100): array {
-    
     // Options
     $parent_categories_ids  = $options["parent_categories_ids"] ?? [];    // @todo what is this?
     $context                = $options["context"]               ?? [];    // @todo implement
     $category_name          = $options["category_name"]         ?? null;  // The name of the category
-    
     $usps                   = [];
     
     while(1) {
@@ -1617,7 +1620,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /**
    * Determine product label automatically based on conditions.
-   * Also used in app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml.
+   * Also used in `./app/design/frontend/rwd/dhh/template/easytabs/catalogproductview.phtml`.
+   * 
+   * "HENDI5" as a keyword to find this function.
    *
    * @param   Mage_Catalog_Model_Product  $_product
    * @param   mixed                       $context
@@ -1639,14 +1644,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $now = CarbonImmutable::now();
     
     $hasSpecialPrice = $_product->getSpecialPrice() && $_finalPrice < $_price;
-    //
-    // // "HENDI5"
-    // if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2025-11-01 00:00:00")) {
-    //   return "Extra Kortingscode";
-    // }
-    // if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2025-11-01 00:00:00")) {
-    //   return "Extra Kortingscode";
-    // }
+    
+    if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2026-02-28 00:00:00")) {
+      return "5% Kortingscode";
+    }
     if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) {
       return "5% Kortingscode";
     }
@@ -1655,16 +1656,16 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // }
     
     // Promo-based
-    if($now->isBefore("2025-12-25 00:00:00")) {
-      // devDump([$_product->getSku(), _get_product_attribute($_product, "manufacturer"), _get_product_attribute($_product, "promos", implode_arrays: false)]);
-      $brand = _get_product_attribute($_product, "manufacturer");
-      if($brand === "Diverso by Diamond") {
-        $promos = (array) _get_product_attribute($_product, "promos", implode_arrays: false);
-        if(in_array("2025_12_diverso_actie5", $promos, true)) { // Option ID: 4375
-          return "5% Kortingscode";
-        }
-      }
-    }
+    // if($now->isBefore("2025-12-25 00:00:00")) {
+    //   // devDump([$_product->getSku(), _get_product_attribute($_product, "manufacturer"), _get_product_attribute($_product, "promos", implode_arrays: false)]);
+    //   $brand = _get_product_attribute($_product, "manufacturer");
+    //   if($brand === "Diverso by Diamond") {
+    //     $promos = (array) _get_product_attribute($_product, "promos", implode_arrays: false);
+    //     if(in_array("2025_12_diverso_actie5", $promos, true)) { // Option ID: 4375
+    //       return "5% Kortingscode";
+    //     }
+    //   }
+    // }
     
     // Maxima warranty extension
     if($supplier_sys === "maxima" && $now->isBefore("2026-02-01 00:00:00")) {
@@ -1727,45 +1728,82 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $comment;
   }
   
-  // Centralize building DHH URLs
-  // Exists in OpenMage and Intel:
-  // - app/code/local/DeHeerHoreca/Util/Helper/Util.php
-  // - lib/intel.inc.php
-  public static function get_url(string $which, $payload = null) {
-    if(strlen((string) $payload)) {
-      $payload = urlencode((string) $payload);
-    }
-    return match ($which) {
-      "tools_magento1_order_id" => "https://tools.deheerhoreca.nl/?tool=out&which=magento1_order_id&q={$payload}",
-      "tools_magento_product_sku" => "https://tools.deheerhoreca.nl/?tool=out&which=magento_product_sku&q={$payload}",
-      "tools_chefstore_product_sku" => "https://tools.deheerhoreca.nl/?tool=out&which=chefstore_product_sku&q={$payload}",
-      "tools_supplier_product_sku" => "https://tools.deheerhoreca.nl/?tool=out&which=supplier_product_sku&q={$payload}",
-      "magento_order" => "https://www.chefstore.nl/index.php/admin4JN0/sales_order/view/order_id/{$payload}/",
-      "magento_product" => "https://www.chefstore.nl/index.php/admin4JN0/catalog_product/edit/id/{$payload}/",
-      "tools-intel-product", "tools_intel_product" => "https://tools.deheerhoreca.nl/?tool=products&identifier={$payload}",
-      "tools_ii_sku" => "https://tools.deheerhoreca.nl/?tool=image-inspector&sku={$payload}",
-      "bol_search_product" => "https://www.bol.com/nl/s/?searchtext={$payload}",
-      default => false,
+  /**
+   * Centralize building various DHH URLs, mostly for Tools.
+   *
+   * Exists in OpenMage and Intel, keep in sync:
+   * - app/code/local/DeHeerHoreca/Util/Helper/Util.php
+   * - lib/intel.inc.php
+   *
+   * @param  string       $which
+   * @param  mixed        $payload
+   *
+   * @return string|false
+   */
+  public static function get_url(string $which, $payload = null): string|false {
+    $payload = urlencode(asString($payload));
+    return match($which) {
+      "tools_magento1_order_id"                     => "https://storechef.nl/?tool=out&which=om_order_id&q={$payload}",
+      "tools_magento_product_sku"                   => "https://storechef.nl/?tool=out&which=om_product_sku&q={$payload}",
+      "tools_chefstore_product_sku"                 => "https://storechef.nl/?tool=out&which=chefstore_product_sku&q={$payload}",
+      "tools_chefstore_product_id"                  => "https://storechef.nl/?tool=out&which=chefstore_product_id&q={$payload}",
+      "tools_supplier_product_sku"                  => "https://storechef.nl/?tool=out&which=supplier_product_sku&q={$payload}",
+      "magento_order", "om_order_id"                => "https://www.chefstore.nl/index.php/admin4JN0/sales_order/view/order_id/{$payload}/",
+      "magento_product", "om_admin_product_id"      => "https://storechef.nl/?tool=out&which=om_product_id&q={$payload}",
+      "tools-intel-product", "tools_intel_product"  => "https://storechef.nl/?tool=products&identifier={$payload}",
+      "tools_ii_sku"                                => "https://storechef.nl/?tool=image-inspector&sku={$payload}",
+      "bol_search_product"                          => "https://www.bol.com/nl/s/?searchtext={$payload}",
+      "chefstore_nl_search"                         => "https://www.chefstore.nl/#sqr:(q[{$payload}])",
+      default                                       => false,
     };
   }
   
-  public static function _get_placeholder_image_path() {
+  /**
+   * Returns the path to the placeholder product image.
+   *
+   * @return string
+   */
+  public static function _get_placeholder_image_path(): string {
     $media_dir  = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_path = "{$media_dir}/catalog/product/placeholder/".Mage::getStoreConfig("catalog/placeholder/image_placeholder");
     return $image_path;
   }
   
-  public static function _get_placeholder_image_url() {
+  /**
+   * Returns the URL to the placeholder product image.
+   *
+   * @return string
+   */
+  public static function _get_placeholder_image_url(): string {
     $media_url  = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
     $image_url  = "{$media_url}/catalog/product/placeholder/".Mage::getStoreConfig("catalog/placeholder/image_placeholder");
     return $image_url;
   }
   
-  public static function _cdn_img($options) {
+  /**
+   * Wrapper for _cdn_img function.
+   *
+   * @param  array<string,mixed>  $options
+   * @return string|null
+   */
+  public static function _cdn_img(array $options): string|null {
     return _cdn_img($options);
   }
   
+  /**
+   * Get normalized system supplier name.
+   *
+   * @param  string  $supplier
+   * @return string
+   */
   public static function get_sys_supplier(string $supplier): string {
-    return (string) preg_replace("/\s+/", "", strtolower($supplier));
+    /** @var array<string,string> */
+    static $cache = [];
+    if(isset($cache[$supplier])) {
+      return $cache[$supplier];
+    }
+    
+    $cache[$supplier] = (string) preg_replace("/\s+/", "", strtolower($supplier));
+    return $cache[$supplier];
   }
 }

@@ -58,7 +58,9 @@ class Amasty_Shopby_Helper_Cached extends Mage_Core_Helper_Abstract
 
         $isSearch = Mage::app()->getRequest()->getModuleName() == 'catalogsearch' ? 'search' : 'catalog';
 
-        return 'amshopby_ ' . $isSearch . '_store' . $storeId . '_' . $key;
+        // DHH CORE HACK -- REMOVE SPACE AFTER amshopby_
+        return 'amshopby_' . $isSearch . '_store' . $storeId . '_' . $key;
+        // return 'amshopby_ ' . $isSearch . '_store' . $storeId . '_' . $key;
     }
 
     private function isCacheEnabled() {

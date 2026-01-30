@@ -1,9 +1,8 @@
-<?xml version="1.0"?>
 <config>
-    <modules>
-        <Raveinfosys_Deleteorder>
-            <active>true</active>
-            <codePool>community</codePool>
-        </Raveinfosys_Deleteorder>
-    </modules>
-</config> 
+   <modules>
+      <Raveinfosys_Deleteorder>
+         <active>true</active>
+         <codePool>community</codePool>
+      </Raveinfosys_Deleteorder>
+   </modules>
+</config>

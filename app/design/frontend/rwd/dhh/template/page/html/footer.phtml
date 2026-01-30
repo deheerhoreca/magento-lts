@@ -2,6 +2,13 @@
 
 declare(strict_types=1);
 
+/* 
+------------------------------------------
+Disabled Elastic APM script:
+------------------------------------------
+<script async type="module">!function (e, t, n) { var r = e.createElement(t), a = e.getElementsByTagName(t)[0]; r.src = "/js/ext-elastic-apm-rum.umd.ts1741106066.min.js", r.onload = function () { elasticApm.init(n) }, a.parentNode.insertBefore(r, a) }(document, "script", { serviceName: "openmage", serverUrl: "//rum.chefstore.nl:8200", environment: document.querySelector("html").dataset.environment, transactionSampleRate: 0.1, pageLoadTransactionName: document.querySelector("html").dataset.transaction });</script>
+*/
+
 $html = <<<EOT
     <!-- footer_start -->
     <footer>
@@ -41,15 +48,15 @@ $html = <<<EOT
                   <h3>Merken</h3>
                 </a>
                 <ul>
-                  <li class="pb-1"><a href="/shop?manufacturer=1632&title=Arktic">Arktic</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=310&title=Buffalo">Buffalo</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=54&title=">Combisteel</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=1619&title=Hendi">Hendi</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=3880&title=Liebherr">Liebherr</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=4128&title=Maxima">Maxima</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=53&title=Polar">Polar</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=162&title=Saro">Saro</a></li>
-                  <li class="pb-1"><a href="/shop?manufacturer=4132&title=Tefcold">Tefcold</a></li>
+                  <li class="pb-1"><a href="/l/merken/arktic.html">Arktic</a></li>
+                  <li class="pb-1"><a href="/l/merken/buffalo.html">Buffalo</a></li>
+                  <li class="pb-1"><a href="/l/merken/combisteel.html">Combisteel</a></li>
+                  <li class="pb-1"><a href="/l/merken/hendi.html">Hendi</a></li>
+                  <li class="pb-1"><a href="/l/merken/liebherr-professional.html">Liebherr</a></li>
+                  <li class="pb-1"><a href="/l/merken/maxima.html">Maxima</a></li>
+                  <li class="pb-1"><a href="/l/merken/polar.html">Polar</a></li>
+                  <li class="pb-1"><a href="/l/merken/saro.html">Saro</a></li>
+                  <li class="pb-1"><a href="/l/merken/tefcold.html">Tefcold</a></li>
                   <li class="pb-1"><a class="strong" href="/merken.html"><strong>Alle Merken</strong></a></li>
                 </ul>
               </div>
@@ -105,7 +112,7 @@ $html = <<<EOT
           </div>
         </div>
         <div class="pt-4">
-          <img class="center" src="https://images.chefstore.nl/skin/frontend/rwd/dhh/images/logo-chefstore.ts1741106066.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy" fetchpriority="low">
+          <img class="center" src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/logo-chefstore.ts1741106066.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy" fetchpriority="low">
         </div>
         <div class="text-center py-1 h3 blue">
           <em>&#193;lles voor de Chef</em>
@@ -120,19 +127,12 @@ $html = <<<EOT
         <div class="text-center pt-2 pb-5 fw-light small">© 2017 - 2025 Chefstore.nl | Amsterdam, Nederland | KvK: 69637717</div>
       </div>
     </footer>
-    <script async type="module">
-      import '/skin/assets/glightbox/dist/js/glightbox.ts1741106066.min.js';
-      const lightbox = GLightbox({});
-      var lightboxInlineIframe = GLightbox({ selector: '.glightbox4' });
-    </script>
-    <script async type="module">
-      !function (e, t, n) { var r = e.createElement(t), a = e.getElementsByTagName(t)[0]; r.src = "/js/ext-elastic-apm-rum.umd.ts1741106066.min.js", r.onload = function () { elasticApm.init(n) }, a.parentNode.insertBefore(r, a) }(document, "script", { serviceName: "openmage", serverUrl: "//rum.chefstore.nl:8200", environment: document.querySelector("html").dataset.environment, transactionSampleRate: 0.1, pageLoadTransactionName: document.querySelector("html").dataset.transaction });
-    </script>
+    <script async type="module">import '/skin/assets/glightbox/dist/js/glightbox.ts1741106066.min.js'; const lightbox = GLightbox({}); var lightboxInlineIframe = GLightbox({ selector: '.glightbox4' });</script>
     <script async type="module" id="ze-snippet" src="//static.zdassets.com/ekr/snippet.js?key=6a6d58da-d9c1-4d6a-98f5-5873329abca0"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"aa45f67d65b64446beda8aca0bfd6f98"}'></script>
     <!-- footer_end -->
 EOT;
 
-// $html = \Chefstore\Html::minifyHtml($html);
 echo $html;
 
 if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "footer_html")) {

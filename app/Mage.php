@@ -526,17 +526,19 @@ final class Mage
     public static function dispatchEvent($name, array $data = [])
     {
         Varien_Profiler::start('DISPATCH EVENT:' . $name);
-        // if(isDevIp()) {
-        //     $start = omStartTimer(false);
-        // }
+        if(isDevIp()) {
+            $start = omStartTimer(false);
+        }
+        // if(isDevIp()) Mage::log("Dispatching event: ".$name);
         $result = self::app()->dispatchEvent($name, $data);
-        // if(isDevIp()) {
-        //     $took = omStopTimer(false, $start);
-        //     if($took > 1) {
-        //         // devLog(var_export($data, true));
-        //         devLog("{$name} event dispatched in ".di($took)." ms");
-        //     }
-        // }
+        if(isDevIp()) {
+            $took = omStopTimer(false, $start);
+            if($took > 5) {
+                // devLog(var_export($data, true));
+                $took = number_format($took, 2);
+                devLog("{$name} event dispatched in ".di($took)." ms");
+            }
+        }
         Varien_Profiler::stop('DISPATCH EVENT:' . $name);
         return $result;
     }
@@ -884,9 +886,11 @@ final class Mage
         
         $GLOBALS["dhh_mage_ignored_msgs"] ??= [
             "Start: aoescheduler_heartbeat",
+            "Start: core_email_queue_send_all",
             "Stop: aoescheduler_heartbeat",
+            "Stop: core_email_queue_send_all",
             "SMTP Pro using queue override page size: 25",
-            "SMTP Pro using queue override pause: 1000000",
+            "SMTP Pro using queue override pause: 500000",
         ];
         
         if($level === Zend_Log::DEBUG && is_string($message) && in_array($message, $GLOBALS["dhh_mage_ignored_msgs"], true)) {

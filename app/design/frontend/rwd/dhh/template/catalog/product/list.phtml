@@ -409,7 +409,7 @@ if($show_products && $_productCollection->getFirstItem()) {
         // Package quantity
         $value = intval(_get_product_attribute($_product, "eenheid"));
         if($value > 1) {
-          $html .= "<span class=\"product-label-right white bg-blue border-blue border-1\">{$value} X</span>";
+          $html .= "<span class=\"product-label product-label-right bg-blue\">{$value}x</span>";
         }
         
         // Energy rating

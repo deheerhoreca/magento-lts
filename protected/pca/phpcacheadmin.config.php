@@ -1,0 +1,188 @@
+<?php
+
+/**
+ * This file is part of the phpCacheAdmin.
+ * Copyright (c) Róbert Kelčák (https://kelcak.com/)
+ */
+
+declare(strict_types=1);
+
+putenv("PCA_PHP_MEMORY_LIMIT=2G");
+ini_set("memory_limit", "1G");
+
+return [
+  /**
+   * The order of the items also changes the position of the
+   * sidebar links, the first item is also the default dashboard.
+   *
+   * You can comment out (or delete) any dashboard.
+   */
+  "dashboards" => [
+    RobiNN\Pca\Dashboards\Server\ServerDashboard::class,
+    RobiNN\Pca\Dashboards\Redis\RedisDashboard::class,
+    // RobiNN\Pca\Dashboards\Memcached\MemcachedDashboard::class,
+    RobiNN\Pca\Dashboards\OPCache\OPCacheDashboard::class,
+    RobiNN\Pca\Dashboards\APCu\APCuDashboard::class,
+    RobiNN\Pca\Dashboards\Realpath\RealpathDashboard::class,
+  ],
+  "redis"      => [
+    [
+      "name"      => "production",
+      // "host"      => "127.0.0.1",
+      /*"nodes" => [
+        // List of cluster nodes.
+        "127.0.0.1:7000",
+        "127.0.0.1:7001",
+        "127.0.0.1:7002",
+      ],*/
+      // "port" => 6379, // Optional when the default port is used.
+      // "scheme"    => "tls", // Connection scheme (optional).
+      // "ssl"       => [
+      //     // SSL options for TLS https://www.php.net/manual/en/context.ssl.php - requires Redis >= 6.0 (optional).
+      //     "cafile"      => "private.pem",
+      //     "verify_peer" => true,
+      // ],
+      "database"  => 0, // Default database (optional).
+      // "username"  => "", // ACL - requires Redis >= 6.0 (optional).
+      // "password"  => "", // Optional.
+      // "authfile"  => "/run/secrets/file_name",      // File with a password, e.g., Docker secrets (optional).
+      "path"      => "/var/run/redis/redis.sock",   // Unix domain socket (optional).
+      // "databases" => 4, // Number of databases, use this if the CONFIG command is disabled (optional).
+      // "scansize"  => 1000, // Number of keys, the server will use the SCAN command instead of KEYS (optional).
+      "separator" => "_", // Separator for tree view (optional)
+    ],
+  ],
+  // "memcached"     => [
+  //     [
+  //         "name" => "Localhost", // The server name, optional.
+  //         "host" => "127.0.0.1", // Optional when a path is specified.
+  //         "port" => 11211, // Optional when the default port is used.
+  //         //"path" => "/var/run/memcached/memcached.sock", // Unix domain socket (optional).
+  //         //"separator" => ":", // Separator for tree view (optional)
+  //     ],
+  // ],
+  // "apcu-separator" => ":", // Separator for tree view (optional)
+  // "apcuseparator" => ":", // Separator for tree view (optional)
+  // Example of authentication with http auth.
+  /*"auth"          => static function (): void {
+    $username = "admin";
+    $password = "pass";
+
+    if (
+      !isset($_SERVER["PHP_AUTH_USER"], $_SERVER["PHP_AUTH_PW"]) ||
+      $_SERVER["PHP_AUTH_USER"] !== $username || $_SERVER["PHP_AUTH_PW"] !== $password
+    ) {
+      header("WWW-Authenticate: Basic realm="phpCacheAdmin Login"");
+      header("HTTP/1.0 401 Unauthorized");
+
+      exit("Incorrect username or password!");
+    }
+
+    // Use this section for the logout. It will display a link in the sidebar.
+    if (isset($_GET["logout"])) {
+      $is_https = (
+        (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] === "on" || $_SERVER["HTTPS"] === 1)) ||
+        (isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] === "https")
+      );
+
+      header("Location: http".($is_https ? "s" : "")."://reset:reset@".($_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]));
+    }
+  },*/
+  // Decoding / Encoding functions
+  "converters" => [
+    "gzcompress" => [
+      "view" => static fn(string $value): ?string => @gzuncompress($value) !== false ? gzuncompress($value) : null,
+      "save" => static fn(string $value): string => gzcompress($value),
+    ],
+    "gzencode"   => [
+      "view" => static fn(string $value): ?string => @gzdecode($value) !== false ? gzdecode($value) : null,
+      "save" => static fn(string $value): string => gzencode($value),
+    ],
+    "gzdeflate"  => [
+      "view" => static fn(string $value): ?string => @gzinflate($value) !== false ? gzinflate($value) : null,
+      "save" => static fn(string $value): string => gzdeflate($value),
+    ],
+    "zlib"       => [
+      "view" => static fn(string $value): ?string => @zlib_decode($value) !== false ? zlib_decode($value) : null,
+      "save" => static fn(string $value): string => zlib_encode($value, ZLIB_ENCODING_DEFLATE),
+    ],
+    "gz_magento" => [
+      "view" => static function (string $value): ?string {
+        // https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/blob/master/Cm/Cache/Backend/Redis.php (_encodeData method)
+        $value = str_starts_with($value, "gz:\x1f\x8b") ? substr($value, 5) : $value;
+        return @gzuncompress($value) !== false ? gzuncompress($value) : null;
+      },
+      "save" => static fn(string $value): string => "gz:\x1f\x8b" . gzcompress($value),
+    ],
+    "lz4_openmage_cache" => [
+      "view" => static function (string $value): ?string {
+        // https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/blob/master/Cm/Cache/Backend/Redis.php (_encodeData method)
+        $value = str_starts_with($value, "l4:\x1f\x8b") ? substr($value, 5) : $value;
+        return @lz4_uncompress($value) !== false ? lz4_uncompress($value) : null;
+      },
+      "save" => static fn(string $value): string => "l4:\x1f\x8b" . lz4_compress($value),
+    ],
+    "lz4_openmage_session" => [
+      "view" => static function (string $value): ?string {
+        // https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/blob/master/Cm/Cache/Backend/Redis.php (_encodeData method)
+        $value = str_starts_with($value, "lz:\x1f\x8b") ? substr($value, 5) : $value;
+        return @lz4_uncompress($value) !== false ? lz4_uncompress($value) : null;
+      },
+      "save" => static fn(string $value): string => "lz:\x1f\x8b" . lz4_compress($value),
+    ],
+    "lz4_openmage_session" => [
+      "view" => static function (string $value): ?string {
+        // https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/blob/master/Cm/Cache/Backend/Redis.php (_encodeData method)
+        $value = str_starts_with($value, "lz:\x1f\x8b") ? substr($value, 5) : $value;
+        return @lz4_uncompress($value) !== false ? lz4_uncompress($value) : null;
+      },
+      "save" => static fn(string $value): string => "lz:\x1f\x8b" . lz4_compress($value),
+    ],
+    // > if enabled in php.ini, this should be transparent and not needed:
+    // "igbinary" => [
+    //   "view" => static function (string $value): ?string {
+    //     $unserialized_value = @igbinary_unserialize($value);
+    //     return print_r($unserialized_value, true);
+    //   },
+    //   "save" => static fn(string $value): string => igbinary_serialize($value),
+    // ],
+  ],
+  // Formatting functions, it runs after decoding
+  "formatters" => [
+    "unserialize" => static function (string $value): ?string {
+      $unserialized_value = @unserialize($value, [ "allowed_classes" => false ]);
+      if ($unserialized_value !== false && is_array($unserialized_value)) {
+        try {
+          return json_encode($unserialized_value, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+          return null;
+        }
+      }
+      return null;
+    },
+    // "timestamp" => static function (mixed $value): mixed {
+    // 	if (is_scalar($value) && is_numeric($value) && strlen((string) $value) === 10) {
+    // 		$timestamp = (int) $value;
+    // 		$datetime = Carbon::createFromTimestamp($timestamp, TZ);
+    // 		$timeDiff = cb_date_diff($datetime);
+    // 		return "{$value} ({$datetime->toDateTimeString()}, {$timeDiff} ago)";
+    // 	}
+    // 	return null;
+    // },
+  ],
+  // Customizations
+  "decimal-sep"    => ".",
+  "hash"           => "driebier", 												// Any random string to secure metrics DB file
+  "list-view"      => "table", 														// table/tree
+  "listview"       => "table", 														// table/tree
+  "metricsdir"     => __DIR__."/../../media",	      			// Metrics database storage path
+  "metricsrefresh" => 60, 																// In seconds, refresh interval for metrics - default 60
+  "metricstab"     => 1440, 															// Default tab in metrics, 60 - Last hour, 1440 - Last day, ...
+  "panelrefresh"   => 30, 																// In seconds, refresh interval for panels - default 30
+  "pcapath"        => "vendor/robinn/phpcacheadmin/",  	  // Path to the package when installed via composer. User for assets. Seen from /phpcacheadmin/index.php
+  "thousands-sep"  => ",",
+  "time-format"    => "Y-m-d H:i:s",
+  "timezone"       => "Europe/Amsterdam", 								// Leave empty (or commented out) to get it automatically obtained.
+  "twigcache"      => "/tmp/twig",												// Metrics database storage
+  "url"            => "/protected/pca/phpcacheadmin.php", // URL to php-cache-admin folder, seen from browser root
+];

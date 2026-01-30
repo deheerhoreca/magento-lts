@@ -1,0 +1,59 @@
+#!/bin/bash
+
+: '
+# PLESK instructions to set correct permissions such that regular users can tail the logs:
+
+mkdir -p ~/logs/intel
+mkdir -p ~/workspace/openmage/var/log
+
+# To prepare the FS for reading all relevant logs without needing sudo:
+sudo chmod -R g+rx /var/log/nginx/ /var/log/httpd/ /var/log/redis/
+sudo chmod -R g+rx /var/log/nginx/ /var/log/httpd/ /var/log/redis/
+
+# To find and set correct permissions on existing files and dirs:
+find /var/log/nginx/ /var/log/httpd/ /var/log/redis/ -type f -print0 -newermt '24 hour ago' | xargs -0 chmod -v g+r
+find /var/log/nginx/ /var/log/httpd/ /var/log/redis/ -type d -print0 -newermt '24 hour ago' | xargs -0 chmod -v g+rx
+'
+
+set -e      # Exit immediately if a command exits with a non-zero status
+set -u      # Treat unset variables as an error when substituting
+
+# Fixes bug that loses scroll lock in the terminal
+sleep .01
+
+find                                                        \
+  ~/workspace/openmage/var/log/  /var/log/redis/redis*      \
+  /var/log/httpd/*error*  /var/log/nginx/*error*            \
+  ~/logs/**                                                 \
+  -newermt '24 hours ago' -type f                           \
+  ! -name "*.1" ! -name "*.2" ! -name "*.3" ! -name "*.4"   \
+  ! -name "*.5" ! -name "*.6" ! -name "*.7"                 \
+  ! -name "*.backup"                                        \
+  ! -name "*.gz" ! -name "*access_*" ! -name "*.webstat*"   \
+  ! -name "*.processed" ! -name "*-2025*" ! -name "*-2026*" \
+  ! -name "actions.json"                                    \
+  ! -name "c2q_deprecated.log"                              \
+  ! -name "c2q_email.log"                                   \
+  ! -name "clicks.jsonl" ! -name aoe_cachestats.txt         \
+  ! -name "*metrics.ndjson"                                 \
+  ! -name "*-emailhandler.log"                              \
+  ! -name "*-emailhandler.monolog.ndjson"                   \
+  ! -name "*-emailhandler.ndjson"                           \
+  ! -name "*-emailhandler.stats"                            \
+  ! -name "*-intel_metrics.ndjson*"                         \
+  ! -name "*-intel.json"                                    \
+  ! -name "*-intel.log"                                     \
+  ! -name "*-intel.monolog.ndjson"                          \
+  ! -name "*-intel.ndjson"                                  \
+  ! -name "*-tools.log"                                     \
+  ! -name "*-tools.monolog.ndjson"                          \
+  ! -name "elasticsearch-php-profile.log"                   \
+  ! -name "msmtp.log"                                       \
+  ! -name "slow.log*" ! -name "sql_profiler.txt*"           \
+  ! -name "tools_metrics.ndjson*"                           \
+  ! -name "tools.monolog.ndjson"                            \
+  ! -name "tools.monolog.ndjson*"                           \
+  ! -path "*/logs/intel/*"                                  \
+  ! -path "*/logs/tools/*"                                  \
+  ! -path "/var/log/mysql/general.log"                      \
+  -printf "%T@ %p\n" | sort -nu | cut -d " " -f 2 | xargs tail -f -n30

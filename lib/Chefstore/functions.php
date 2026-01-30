@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
+use \Brick\VarExporter\ExportException;
 use \Brick\VarExporter\VarExporter;
-use \Chefstore\Helper as ChefstoreHelper;
 use \Chefstore\CacheBuster;
 use \Chefstore\CsCache;
+use \Chefstore\Helper as ChefstoreHelper;
 use \Chefstore\Observability;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Benchmark as LaravelBenchmark;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
+use \Illuminate\Support\Uri;
 
 require_once __DIR__."/Loader.php";
 
@@ -909,18 +911,17 @@ if(!function_exists("_cdn_img")) {
    * Named transformations can be defined in the ImageKit dashboard, and are defined in this function as well.
    *
    * @param array $options
-   *
-   * @return string|false
+   * @return string|null
    */
-  function _cdn_img(array $options): string|false {
+  function _cdn_img(array $options): string|null {
     $url = htmlspecialchars((string) ($options["url"] ?? ""));
     
     if(blank($url)) {
-      return false;
+      return null;
     }
     
     $identifier     = $options["identifier"] ?? "NO_ID";
-    $fs_path        = (string) data_get($options, "fs_path", "");
+    $fs_path        = dyAsNullStr($options, "fs_path", "");
     $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
     $width          = $options["width"]         ?? null;
     $height         = $options["height"]        ?? null;
@@ -955,7 +956,6 @@ if(!function_exists("_cdn_img")) {
     $lazy_html      = "";
     $class_html     = "";
     $style_html     = "";
-    $html           = "";
     $context        = defined("APP_SHORT") ? "intel" : "openmage"; // intel|openmage
     
     // Pre-process settings
@@ -975,9 +975,10 @@ if(!function_exists("_cdn_img")) {
     
     // Add file modification time as cache buster
     if($add_mod_time && filled($fs_path)) {
-      if($context === "intel" && is_file($fs_path) && $mtime = filemtime($fs_path)) {
+      if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
         $url = CacheBuster::prependExtension($url, "ts{$mtime}");
       } else {
+        // @todo Log about the unavailability of CacheBuster
         if(function_exists("_add_file_v_param")) {
           $url = _add_file_v_param($url, $fs_path, $identifier);
         } else {
@@ -1041,15 +1042,15 @@ if(!function_exists("_cdn_img")) {
     // Lookup the named transformation definition to take decisions on output HTML
     // @see https://docs.imagekit.io/features/image-transformations
     $namedXformDefinition = match($namedXform) {
-      "ik_ml_thumbnail" => "tr:w-440,h-440,fo-center,cm-pad_resize",             // ImageKit ML thumbnail, immutable.
-      "omcatprdlstfr"   => "tr:w-125,h-125,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog product list page (frontend) + Spotler Search results
-      "omcatprdlst"     => "tr:w-200,h-200,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog product list page (backend)
-      "omcatctglst"     => "tr:w-140,h-140,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog category list page
-      "omcatprddtlt"    => "tr:w-172,h-400,q-80,c-at_max_enlarge,dpr-auto",      // OpenMage catalog product detail page (thumbnail)
-      "omcatprddtlf"    => "tr:w-2048,h-2048,q-80,c-at_max_enlarge,dpr-auto",    // OpenMage catalog product detail page (full)
-      "ombrndlgos"      => "tr:w-140,h-40,cm-at_max_enlarge,dpr-auto",           // OpenMage brand logos
-      "omexfull"        => "tr:w-1536,h-1536,q-80,c-at_max_enlarge",             // OpenMage example full size
-      "logosmall"       => "tr:w-210,h-60,c-at_max_enlarge,dpr-auto,dpr-auto",   // Small logos
+      "ik_ml_thumbnail" => "tr:w-440,h-440,fo-center,cm-pad_resize",            // ImageKit ML thumbnail, immutable.
+      "omcatprdlstfr"   => "tr:w-125,h-125,q-80,cm-pad_resize,dpr-auto",        // OpenMage catalog product list page (frontend) + Spotler Search results
+      "omcatprdlst"     => "tr:w-200,h-200,q-80,c-at_max_enlarge,dpr-auto",     // OpenMage catalog product list page (backend)
+      "omcatctglst"     => "tr:w-140,h-140,q-80,c-at_max_enlarge,dpr-auto",     // OpenMage catalog category list page
+      "omcatprddtlt"    => "tr:w-172,h-400,q-80,c-at_max_enlarge,dpr-auto",     // OpenMage catalog product detail page (thumbnail)
+      "omcatprddtlf"    => "tr:w-2048,h-2048,q-80,c-at_max_enlarge,dpr-auto",   // OpenMage catalog product detail page (full)
+      "ombrndlgos"      => "tr:w-140,h-40,cm-at_max_enlarge,dpr-auto",          // OpenMage brand logos
+      "omexfull"        => "tr:w-1536,h-1536,q-80,c-at_max_enlarge",            // OpenMage example full size
+      "logosmall"       => "tr:w-210,h-60,c-at_max_enlarge,dpr-auto,dpr-auto",  // Small logos
       default           => "",
     };
     
@@ -1060,7 +1061,7 @@ if(!function_exists("_cdn_img")) {
       $fetchpriority = $lazy ? "low" : "auto";
     }
     
-    if(str_contains($namedXformDefinition, "c-at_max_enlarge")) {
+    if(str_contains($namedXformDefinition, "c-at_max_enlarge") || str_contains($namedXformDefinition, "cm-pad_resize")) {
       $fit = "scale-up";
     } elseif(str_contains($namedXformDefinition, "c-at_max")) {
       $fit = "contain";
@@ -1108,7 +1109,9 @@ if(!function_exists("_cdn_img")) {
         return "<img src=\"{$src_url}\" {$srcsetAttr} {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
     }
     
-    return false;
+    Mage::log("_cdn_img: Unknown CDN type '{$cdn}' for identifier '{$identifier}'", Zend_Log::ERR, "exception.log", true);
+    
+    return null;
   }
 }
 

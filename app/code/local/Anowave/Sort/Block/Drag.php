@@ -18,7 +18,7 @@
  * @copyright 	Copyright (c) 2017 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
- 
+
 class Anowave_Sort_Block_Drag extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
 	public function render(Varien_Object $row)

@@ -37,8 +37,8 @@
     "aydus/headorder": "dev-master",
     "brick/varexporter": "^0.7",
     "cmixin/business-day": "^1.20.5",
-    "colinmollenhour/cache-backend-redis": ">=1.17.1",
-    "colinmollenhour/magento-redis-session": ">=3.3",
+    "colinmollenhour/cache-backend-redis": "^1.17.1",
+    "colinmollenhour/magento-redis-session": "^3.3.0",
     "elidrissidev/magento-api2basicauth": "^1.0.3",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0.1",
@@ -54,20 +54,19 @@
     "mikehaertl/php-shellcommand": "^1.7",
     "nesbot/carbon": "^3.11",
     "npm-asset/bootstrap": "^5.3.8",
-    "npm-asset/elastic--apm-rum": ">=5.17",
-    "npm-asset/elastic--apm-rum-core": ">=5.23",
+    "npm-asset/elastic--apm-rum": "^5.17",
+    "npm-asset/elastic--apm-rum-core": "^5.23",
     "npm-asset/glightbox": "^3.3.1",
     "npm-asset/jquery": "^3.7.1",
     "npm-asset/lite-youtube-embed": "^0.3.4",
     "oomphinc/composer-installers-extender": "^2.0.1",
     "openmage/magento-lts": "20.5.0",
     "paynl/magento-plugin": "dev-master",
-    "robinn/phpcacheadmin": "*",
     "sabberworm/php-css-parser": "^8.9",
-    "symfony/cache": ">=7.4.3",
-    "symfony/console": ">=6.4.31",
-    "symfony/css-selector": ">=7.4",
-    "symfony/var-dumper": ">=7.4.3",
+    "symfony/cache": "^7.4.3",
+    "symfony/console": "^6.4.31",
+    "symfony/css-selector": "^7.4",
+    "symfony/var-dumper": "^7.4.3",
     "voku/html-min": "^4.5.1",
     "wp-cli/php-cli-tools": "^0.12.6"
   },
@@ -96,16 +95,18 @@
       "url": "https://packagist.org",
       "exclude": [
         "aoepeople/aoe_blackholesession",
+        "aoepeople/aoe_cachestats",
         "aoepeople/aoe_profiler",
         "aoepeople/aoe_scheduler",
+        "aydus/headorder",
         "bower-asset/*",
+        "empiricompany/openmage-mm_cmscontentfilemode",
         "fballiano/openmage-cssjs-minify",
         "firegento/adminmonitoring",
         "firegento/debug",
         "npm-asset/*",
         "paynl/magento-plugin",
-        "aydus/headorder",
-        "aoepeople/aoe_cachestats"
+        "profitmetrics/magento"
       ]
     },
     {
@@ -191,6 +192,13 @@
       "url": "https://github.com/deheerhoreca/Aoe_CacheStats",
       "only": [
         "aoepeople/aoe_cachestats"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/loekvangool/openmage-mm_cmscontentfilemode",
+      "only": [
+        "empiricompany/openmage-mm_cmscontentfilemode"
       ]
     }
   ],

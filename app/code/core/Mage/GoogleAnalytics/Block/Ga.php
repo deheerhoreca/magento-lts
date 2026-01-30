@@ -215,10 +215,17 @@ gtag('set', 'user_id', '{$customer->getId()}');
             $productCollection->addAttributeToSelect('sku');
 
             // DHH CORE HACK -- EXTRA DEBUG LOGS:
+            // These URLs are outdated and invalid (saved by scrapers), just turn off GA4 for these.
+            // It is caused when previously multiselect amshopbpy filters are used when they are single-value filters...
+            // It SHOULD be stupid scrapers that re-request URLs that are no longer found on the site.
+            
+            // Previous:
             // $toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar');
+            
+            // New with check:
             if(!($toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar'))) {
-                Mage::log("URL: ".var_export(Mage::helper('core/url')->getCurrentUrl(), true), Zend_Log::INFO);
-                return ""; // These URLs are outdated and invalid (saved by scrapers), just turn off GA4 for these
+                Mage::log("URL: ".var_export(Mage::helper('core/url')->getCurrentUrl(), true), Zend_Log::DEBUG);
+                return "";
             }
             // DHH CORE HACK -- END
 
