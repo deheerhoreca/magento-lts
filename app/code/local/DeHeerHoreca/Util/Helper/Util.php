@@ -8,6 +8,7 @@ use \Illuminate\Support\Collection;
 use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
+use \Jaybizzle\CrawlerDetect\CrawlerDetect;
 use \Michelf\Markdown;
 use \Michelf\MarkdownExtra;
 
@@ -1385,15 +1386,24 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public function logClick(): void {
     $dhh_click_log = self::$dhh_click_log ?? [];
     
-    // Detect bots, re-using ProfitMetrics bot detection
-    /** @var Profitmetrics_MagentoIntegration_Helper_Bot */
-    $_profitmetrics_helper = Mage::helper("profitmetrics/bot");
-    if($_profitmetrics_helper->isBot()) {
+    // Deteect bots with Crawler-Detect library
+    $CrawlerDetect = new CrawlerDetect();
+    if($CrawlerDetect->isCrawler()) {
       return; // Do not log bots
       $dhh_click_log["labels"]["bot"] = "true";
     } else {
       $dhh_click_log["labels"]["bot"] = "false";
     }
+    
+    // // Detect bots, re-using ProfitMetrics bot detection
+    // /** @var Profitmetrics_MagentoIntegration_Helper_Bot */
+    // $_profitmetrics_helper = Mage::helper("profitmetrics/bot");
+    // if($_profitmetrics_helper->isBot()) {
+    //   return; // Do not log bots
+    //   $dhh_click_log["labels"]["bot"] = "true";
+    // } else {
+    //   $dhh_click_log["labels"]["bot"] = "false";
+    // }
     
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
     $full_url       = self::getCurrentUrl();

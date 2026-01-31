@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+DIR="${HOME}/workspace/openmage/media/min/"
+
+if [[ "$DIR" == "" ]]; then
+  echo "Usage: $(basename $0) <path>"
+  exit 1
+fi
+
+for file in $(find "$DIR" -type f -iname '*.css' -or -iname '*.js' -or -iname '*.json' -or -iname '*.svg' -or -iname '*.xml'); do
+  # echo -n "Compressing ${file}... "
+  /home/linuxbrew/.linuxbrew/bin/brotli -q 11 --force -o "${file}.br" "${file}"
+  /home/linuxbrew/.linuxbrew/bin/zstd -19 -k -f "${file}"
+  /home/linuxbrew/.linuxbrew/bin/gzip --keep --best --force "${file}"
+  echo "."
+done

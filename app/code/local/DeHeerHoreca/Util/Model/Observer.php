@@ -2,12 +2,12 @@
 
 // declare(strict_types=1); // @todo Not ready for this yet
 
-use \Chefstore\Utils;
-use \Elastic\Apm\ElasticApm;
-use \Elastic\Apm\TransactionInterface;
 use \Chefstore\Helper;
 use \Chefstore\Html;
 use \Chefstore\Observability;
+use \Chefstore\Utils;
+use \Elastic\Apm\ElasticApm;
+use \Elastic\Apm\TransactionInterface;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Str;
 
@@ -15,7 +15,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Early admin-only observer to setup admin-only PHP config, and in the future maybe more.
-   * > Observes: adminhtml_controller_action_predispatch_start
+   * > Observes: adminhtml_controller_action_predispatch_start.
    * > Only for adminhtml area.
    * > Very early event, not many things are initialized yet.
    *
@@ -28,8 +28,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Setup Elastic APM.
-   * 
-   * Observes: controller_action_layout_load_before.
+   * > Observes: controller_action_layout_load_before.
    *
    * @param  Varien_Event_Observer $observer
    * @return void
@@ -39,7 +38,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     if($initialized) {
       return;
     }
-    // devLog(__METHOD__);
+    
+    // Silently skip if Elastic APM is disabled in php.ini
+    if(ini_get("elastic_apm.enabled") != "1") {
+      return;
+    }
+    
+    // Check if Elastic APM is available:
     if(!Observability::isElasticApmAvailable()) {
       devLog("Elastic APM not available");
       return;
@@ -68,16 +73,13 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         
         $initialized = true;
         $currentUrl = getOmDhhUtilHelper()->getCurrentUrl();
-        // devLog("Elastic APM initialized: {$currentUrl}");
       } else {
         Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE);
-        // devLog("Failed to get current Elastic APM transaction");
         return;
       }
     } catch(Exception $e) {
       Mage::logException($e);
       Mage::log("Failed to init Elastic APM: {$e->getMessage()}", Zend_Log::NOTICE);
-      // devLog("Failed to init Elastic APM: {$e->getMessage()}");
       return;
     }
     
@@ -281,7 +283,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Log clicks to a JSONL file, while blocking some known bots.
-   * Observes: core_app_run_after.
+   * > Observes: core_app_run_after.
    *
    * @return void
    */
