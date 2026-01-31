@@ -60,6 +60,8 @@ function getArticleContent(tooltipElement, articleId, articleList) {
  * Request a article list from Zendesk.
  */
 function getArticleList(){
+    return; // DHH CORE HACK: deprecated and causing JS console error.
+
     var baseURL = $('ttfu').readAttribute('href');
 
     new Ajax.Request(baseURL + "/qquoteadv/requestArticle", {

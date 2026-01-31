@@ -363,13 +363,14 @@ media
 !/js/amasty/amshopby/amshopby-ajax.js
 !/js/amasty/amshopby/amshopby.js
 !/js/aw_searchautocomplete/main.js
+!/shell/abstract.php
+!/shell/indexer.php
 !/shell/sooqr.php
+!/skin/adminhtml/base/default/js/qquoteadv/tooltiphelper.js
 !/skin/frontend/rwd/dhh/css/magiczoomplus/magiczoomplus.css
 !/skin/frontend/rwd/dhh/css/magiczoomplus/magiczoomplus.module.css
 !/skin/frontend/rwd/dhh/js/app.js
 !/skin/frontend/rwd/dhh/tm/firecheckout/js/components/order-review.js
-!/shell/abstract.php
-!/shell/indexer.php
 
 ##################################################
 # IGNORE SYMLINKED DHH FORKS

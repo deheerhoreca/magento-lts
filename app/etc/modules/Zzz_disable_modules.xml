@@ -82,12 +82,6 @@
       <active>true</active>
     </Shopworks_Billink>
     
-    <!-- Unneeded and causes issues with Rewrites -->
-    <!-- If ever enabled again, the rewrite issue needs to be re-implemented (Amasty tool) -->
-    <Ebizmarts_MailChimp>
-      <active>false</active>
-    </Ebizmarts_MailChimp>
-    
     <!-- Needed for Configurable Products only, disabling leads to errors needs investigation -->
     <Mage_ConfigurableSwatches>
       <active>true</active>

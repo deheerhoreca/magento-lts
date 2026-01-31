@@ -15,12 +15,17 @@
 #   Include /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/_htaccess
 # </Directory>
 #
-# Implement .htaccess files found in other dirs:
-# cm && find . -name .htaccess
+# ! Implement .htaccess files found in other dirs, before disabling AllowOverride:
+# - /protected/.htaccess
+# - /media/downloadable/.htaccess
+# - ...
+# To find them all, use:  cm && find . -name .htaccess
+#
 #<Directory "media/downloadable/">
 #    Order deny,allow
 #    Deny from all
 #</Directory>
+
 
 ############################################
 ## GoDaddy specific options
