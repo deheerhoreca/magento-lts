@@ -220,6 +220,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
    * If caching is enabled let the backend take additional actions (set headers, cache content, etc.)
+   * > Observes: http_response_send_before -- frontend only
    *
    * @param  Varien_Event_Observer|null  $observer
    * @return void

@@ -599,7 +599,6 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // Store in cache
     if(self::saveToCacheDeferred($key, $html, $cache_tags, 7 * 86400, minifyHtml: false)) {
       self::addServerTimingHeader("FPC: SAVE {$key}");
-      // self::emitHttpHeaders();
       $return = true;
     }
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
@@ -772,6 +771,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return false|true|null
    */
   public static function emitHttpHeaders(): bool|null {
+    // To avoid issues with proxies and CDNs, always set Last-Modified on HTML pages.
+    // If the cart is loaded via AJAX, we might reconsider.
+    // Any experiment with caching HTML in Cloudflare has been abandoned for now.
+    self::$httpHeaders["Last-Modified"] ??= date("r");
+    self::$httpHeaders["Cache-Control"] ??= "no-cache, private, max-age=30";
+    
     if(empty(self::$httpHeaders)) {
       return null;
     }
@@ -782,16 +787,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // Disable Nginx response buffering
     // @see https://github.com/colinmollenhour/Cm_Diehard/blob/9deec69dad2a33afc850cc7f0022bbdb158dbeb5/code/Model/Backend/Local.php
-    Mage::app()->getResponse()->setHeader("X-Accel-Buffering", "no", replace: true);
+    // Mage::app()->getResponse()->setHeader("X-Accel-Buffering", "no", replace: true);
+    self::$httpHeaders["X-Accel-Buffering"] = "no";
     ini_set("zlib.output_compression", "Off");
     
+    devLog("HTTP headers before emitHttpHeaders: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::INFO);
     foreach(self::$httpHeaders as $header_name => $header_values) {
       $header_value = implode(", ", (array) $header_values);
-      // self::log("Emitting HTTP header: {$header_name}: {$header_value}", Zend_Log::DEBUG);
       Mage::app()->getFrontController()->getResponse()->setHeader($header_name, $header_value, replace: false);
-      // Mage::app()->getResponse()->setHeader($header_name, $header_value, replace: false);
     }
-    // self::log("Current HTTP headers: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::DEBUG);
+    devLog("HTTP headers after emitHttpHeaders: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::INFO);
     self::$httpHeaders = [];
     
     return null;

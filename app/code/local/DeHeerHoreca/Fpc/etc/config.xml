@@ -64,11 +64,11 @@
             <!-- Send HTTP headers before response is sent -->
             <http_response_send_before>
                 <observers>
-                    <diehard>
+                    <dhh_fpc_http_response_send_before>
                         <type>singleton</type>
                         <class>deheerhoreca_fpc/observer</class>
                         <method>httpResponseSendBefore</method>
-                    </diehard>
+                    </dhh_fpc_http_response_send_before>
                 </observers>
             </http_response_send_before>
         </events>

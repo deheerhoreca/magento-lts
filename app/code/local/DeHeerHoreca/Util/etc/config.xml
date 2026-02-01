@@ -20,7 +20,7 @@
     <events>
       <!--
       Very early event, used to set PHP config for admin pages
-      - @todo Even earlier events did not work using the "deheerhoreca_util/observer" notation. Prefer full class name for all events?
+      @todo Even earlier events did not work using the "deheerhoreca_util/observer" notation. Prefer full class name for all events?
       -->
       <adminhtml_controller_action_predispatch_start>
         <observers>

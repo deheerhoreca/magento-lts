@@ -130,12 +130,15 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
 
         // DHH CORE HACK:
         if(!headers_sent($file, $line)) {
-          call_user_func_array('session_set_cookie_params', array_values($cookieParams));
+            call_user_func_array('session_set_cookie_params', array_values($cookieParams));
         } else {
-          $msg = "Failed to set session cookie params, headers already sent. Output started at {$file}:{$line}. URL: ".Mage::helper('core/url')->getCurrentUrl();
-          if(defined("INTEL_MAINTENANCE_MODE")) Mage::log($msg, null, 'system.log', true);
-          else Mage::log($msg, null, 'exception.log', true);
-          return $this;
+            if(Mage::app()->getRequest()->getModuleName() === "api" || Mage::app()->getRequest()->getModuleName() === "api2") {
+                return $this;
+            }
+            $msg = "Failed to set session cookie params, headers already sent. Output started at {$file}:{$line}. URL: ".Mage::helper('core/url')->getCurrentUrl();
+            if(defined("INTEL_MAINTENANCE_MODE")) Mage::log($msg, null, 'system.log', true);
+            else Mage::log($msg, null, 'exception.log', true);
+            return $this;
         }
         // call_user_func_array('session_set_cookie_params', array_values($cookieParams));
         // END DHH CORE HACK
