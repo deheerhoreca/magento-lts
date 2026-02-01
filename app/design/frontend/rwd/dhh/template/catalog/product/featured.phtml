@@ -124,8 +124,8 @@ if($_products->getFirstItem()) { ?>
         $dhh_sku = $_product->getSku();
         
         // If a product is present in multiple categories, we don't want to change that in this view
-        //$productUrl = $dhh_util_helper->getFullProductUrlFromRewrites($_product);
-        $productUrl = $_product->getProductUrl(); // Fallback
+        $productUrl = $dhh_util_helper->getFullProductUrlSafe($_product, true, 1);
+        // $productUrl = $_product->getProductUrl(); // Fallback
         
         // $price_html           = $this->getPriceHtml($_product, true); // ListView version
         $price_html           = $product_block->getPriceHtml($_product, true); // FeaturedProdcts version
@@ -228,11 +228,12 @@ if($_products->getFirstItem()) { ?>
             "class"           => "trans-opacity",
             "title"           => $product_name,
             "alt"             => $product_name,
-            "quality"         => 75,
-            "dpr"             => 1.25,
-            "relative_url"    => true,
+            // "quality"         => 75,
+            // "dpr"             => 1.25,
+            "relative_url"    => false,
+            "xform"           => "omcatprdlst", // w-200,h-200,q-80,c-at_max_enlarge,dpr-auto
           ];
-          $img_html         = $dhh_util_helper->_cdn_img($cdn_img_options);
+          $img_html         = _cdn_img($cdn_img_options);
         }
         ?>
         <li class="item">

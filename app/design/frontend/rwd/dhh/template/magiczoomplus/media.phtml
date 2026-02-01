@@ -303,12 +303,11 @@ foreach($productImages as &$productImage) {
   $thumbImage       = null;
   $mediumImage      = null;
   if(is_file($image_path)) {
-    
     $extension = strtolower((string) pathinfo($image_path, PATHINFO_EXTENSION));
     
     $cdn_img_options["width"] = 2048;
     $cdn_img_options["height"] = 2048;
-    $cdn_img_options["quality"] = 85;
+    $cdn_img_options["quality"] = 80;
     // @todo $cdn_img_options["2x"] = true;
     $cdn_img_options["fit"] = "scale-up";
     
@@ -316,22 +315,22 @@ foreach($productImages as &$productImage) {
     if($extension === "gif") {
       $cdn_img_options["width"]   /= 2;
       $cdn_img_options["height"]  /= 2;
-      // $cdn_img_options["quality"] = 85;
+      // $cdn_img_options["quality"] = 80;
     }
     
-    $bigImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    $bigImage = _cdn_img($cdn_img_options);
     
     [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('selector', $productImage['image-size']);
     $cdn_img_options["width"] = $w;
     $cdn_img_options["height"] = $h;
-    $cdn_img_options["quality"] = 75;
-    $thumbImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    $cdn_img_options["quality"] = 80;
+    $thumbImage = _cdn_img($cdn_img_options);
     
     [$w, $h] = $magicToolboxHelper->magicToolboxGetSizes('thumb', $productImage['image-size']);
     $cdn_img_options["width"] = $w;
     $cdn_img_options["height"] = $h;
-    $cdn_img_options["quality"] = 75;
-    $mediumImage = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+    $cdn_img_options["quality"] = 80;
+    $mediumImage = _cdn_img($cdn_img_options);
   }
   
   // Fallback to resize()

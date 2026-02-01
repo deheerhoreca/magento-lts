@@ -437,8 +437,6 @@ media
 /app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml
 /app/etc/modules/Elidrissidev_Api2BasicAuth.xml
 /app/locale/en_US/Elidrissidev_Api2BasicAuth.csv
-/app/code/community/Cm/RedisSession
-/app/etc/modules/Cm_RedisSession.xml
 /app/code/community/Pay/Payment
 /app/design/frontend/base/default/template/pay/payment
 /app/design/adminhtml/base/default/template/pay/payment
@@ -479,3 +477,7 @@ media
 /lib/tailwindcss/tailwind.config.js
 /lib/tailwindcss/tailwindcss
 /app/etc/modules/MM_CmsContentFileMode.xml
+/app/etc/modules/Aoe_DbRetry.xml
+/app/code/community/Aoe/DbRetry
+/app/code/community/Cm/RedisSession
+/app/etc/modules/Cm_RedisSession.xml

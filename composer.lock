@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7690237407e01b5579b40f8ccc3ce82a",
+    "content-hash": "ac0a46e34ce9942eef0eefd51ff2f73f",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -80,13 +80,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AOEpeople/Aoe_DbRetry.git",
-                "reference": "70eedfefa24530243d4df949f9ae09654ab16b18"
+                "url": "https://github.com/deheerhoreca/Aoe_DbRetry.git",
+                "reference": "8212bede63000d4b9057e52bb0a05f958dfcd0cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AOEpeople/Aoe_DbRetry/zipball/70eedfefa24530243d4df949f9ae09654ab16b18",
-                "reference": "70eedfefa24530243d4df949f9ae09654ab16b18",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_DbRetry/zipball/8212bede63000d4b9057e52bb0a05f958dfcd0cd",
+                "reference": "8212bede63000d4b9057e52bb0a05f958dfcd0cd",
                 "shasum": ""
             },
             "require": {
@@ -95,7 +95,6 @@
             },
             "default-branch": true,
             "type": "magento-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0"
             ],
@@ -107,10 +106,9 @@
             ],
             "description": "Magento DB adapter that will retry lost connections and deadlocks",
             "support": {
-                "issues": "https://github.com/AOEpeople/Aoe_DbRetry/issues",
-                "source": "https://github.com/AOEpeople/Aoe_DbRetry/tree/master"
+                "source": "https://github.com/deheerhoreca/Aoe_DbRetry/tree/master"
             },
-            "time": "2018-01-25T10:04:19+00:00"
+            "time": "2025-12-31T17:05:05+00:00"
         },
         {
             "name": "aoepeople/aoe_profiler",
@@ -185,6 +183,7 @@
                 "issues": "https://github.com/AOEpeople/Aoe_TemplateHints/issues",
                 "source": "https://github.com/AOEpeople/Aoe_TemplateHints/tree/master"
             },
+            "abandoned": true,
             "time": "2017-03-23T15:56:07+00:00"
         },
         {
@@ -610,16 +609,16 @@
         },
         {
             "name": "colinmollenhour/magento-redis-session",
-            "version": "3.3.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/colinmollenhour/Cm_RedisSession.git",
-                "reference": "d86fc3789f884cb4b04a9353022a9a8ce89efbbd"
+                "url": "https://github.com/deheerhoreca/Cm_RedisSession.git",
+                "reference": "1804bb9e37c874e11abf0679237d4bd8c20babb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_RedisSession/zipball/d86fc3789f884cb4b04a9353022a9a8ce89efbbd",
-                "reference": "d86fc3789f884cb4b04a9353022a9a8ce89efbbd",
+                "url": "https://api.github.com/repos/deheerhoreca/Cm_RedisSession/zipball/1804bb9e37c874e11abf0679237d4bd8c20babb9",
+                "reference": "1804bb9e37c874e11abf0679237d4bd8c20babb9",
                 "shasum": ""
             },
             "require": {
@@ -629,8 +628,8 @@
             "suggest": {
                 "magento-hackathon/magento-composer-installer": "Makes it possible to manage this package as a dependency"
             },
+            "default-branch": true,
             "type": "magento-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -642,10 +641,9 @@
             "description": "A Redis-based session handler for Magento with optimistic locking.",
             "homepage": "https://github.com/colinmollenhour/Cm_RedisSession",
             "support": {
-                "issues": "https://github.com/colinmollenhour/Cm_RedisSession/issues",
-                "source": "https://github.com/colinmollenhour/Cm_RedisSession/tree/3.3.0"
+                "source": "https://github.com/deheerhoreca/Cm_RedisSession/tree/master"
             },
-            "time": "2025-05-29T19:31:55+00:00"
+            "time": "2026-02-01T16:18:02+00:00"
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
@@ -5942,11 +5940,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.37",
+            "version": "2.1.38",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/28cd424c5ea984128c95cfa7ea658808e8954e49",
-                "reference": "28cd424c5ea984128c95cfa7ea658808e8954e49",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dfaf1f530e1663aa167bc3e52197adb221582629",
+                "reference": "dfaf1f530e1663aa167bc3e52197adb221582629",
                 "shasum": ""
             },
             "require": {
@@ -5991,7 +5989,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-24T08:21:55+00:00"
+            "time": "2026-01-30T17:12:46+00:00"
         },
         {
             "name": "rector/rector",
@@ -6114,6 +6112,12 @@
     ],
     "aliases": [
         {
+            "package": "colinmollenhour/magento-redis-session",
+            "version": "9999999-dev",
+            "alias": "3.3.0",
+            "alias_normalized": "3.3.0.0"
+        },
+        {
             "package": "magento-hackathon/magento-composer-installer",
             "version": "dev-main",
             "alias": "4.0.2-dev",
@@ -6127,6 +6131,7 @@
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_profiler": 20,
         "aydus/headorder": 20,
+        "colinmollenhour/magento-redis-session": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "fballiano/openmage-cssjs-minify": 20,
         "firegento/adminmonitoring": 20,

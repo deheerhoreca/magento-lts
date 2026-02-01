@@ -101,7 +101,7 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
           "alt"             => $label_enc,
           "relative_url"    => true,
         ];
-        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+        $img_html         = _cdn_img($cdn_img_options);
       }
     }
     

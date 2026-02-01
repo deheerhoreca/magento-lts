@@ -26,31 +26,28 @@
 // Needed because some attributes are not part of the product yet...
 $img_html   = "";
 $col_width  = 60;
-    $_product   = Mage::getResourceModel("catalog/product_collection")
+$_product   = Mage::getResourceModel("catalog/product_collection")
     ->addAttributeToSelect(["ean13"])
     ->addAttributeToSelect(["thumbnail"])
     ->addAttributeToFilter("entity_id", $_item->getProductId())
     ->setPageSize(1)
     ->setCurPage(1)
     ->getFirstItem();
-$media            = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+$media = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
 if(strlen((string) $_product->getThumbnail()) > 0 && $_product->getThumbnail() !== "no_selection") {
-    $image_url        = "{$media}catalog/product{$_product->getThumbnail()}";
-    if(empty($image_url) === false) {
-        $media_dir        = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
+    $image_url = "{$media}catalog/product{$_product->getThumbnail()}";
+    if(!empty($image_url)) {
         $cdn_img_options  = [
-        "identifier"      => $_item->getSku(),
-        "fs_path"         => $image_path,
-        "url"             => $image_url,
-        "width"           => $col_width,
-        "height"          => $col_width,
-        "lazy"            => true,
-        "add_mod_time"    => true,
-        "class"           => "",
-        "style"           => "object-fit:contain;",
+            "identifier"      => $_product->getSku(),
+            "url"             => $image_url,
+            "width"           => $col_width,
+            "height"          => $col_width,
+            "lazy"            => true,
+            "add_mod_time"    => true,
+            "xform"           => "omcatprdlstfr",
+            "style"           => "object-fit:contain;",
         ];
-        $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+        $img_html = _cdn_img($cdn_img_options);
     }
 }
 // END DHH CORE HACK

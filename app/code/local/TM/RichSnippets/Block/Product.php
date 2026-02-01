@@ -267,19 +267,17 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         $media              = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
         $image_url          = "{$media}catalog/product{$_product->getData($product_image_type)}";
         if(!empty($image_url)) {
-          $media_dir          = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-          $image_path         = "{$media_dir}/catalog/product{$_product->getData($product_image_type)}";
+          // $media_dir          = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+          // $image_path         = "{$media_dir}/catalog/product{$_product->getData($product_image_type)}";
           $cdn_img_options    = [
-            "fs_path"           => $image_path,
+            // "fs_path"           => $image_path,
             "url"               => $image_url,
             "url_only"          => true,
-            "width"             => 2048,
-            "height"            => 2048,
-            "omcatprdlst"       => "omcatprdlst",
+            "xform"             => "omcatprddtlh",
             "add_mod_time"      => true,
             "relative_url"      => false,
           ];
-          $data["image"]    = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+          $data["image"]    = _cdn_img($cdn_img_options);
         }
         
         // brand

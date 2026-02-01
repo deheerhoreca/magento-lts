@@ -263,7 +263,7 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
             "quality"         => 80,
             "relative_url"    => true,
           ];
-          $img_html         = $_dhhUtilHelper->_cdn_img($cdn_img_options);
+          $img_html         = _cdn_img($cdn_img_options);
         } else {
           Mage::log("Category {$subcategory->getId()} image not found: {$image_path}");
         }
@@ -478,7 +478,7 @@ if($show_products && $_productCollection->getFirstItem()) {
             "relative_url"    => false,
             "xform"           => "omcatprdlst", // w-200,h-200,q-80,c-at_max_enlarge,dpr-auto
           ];
-          $img_html         = $_dhhUtilHelper->_cdn_img($cdn_img_options);
+          $img_html         = _cdn_img($cdn_img_options);
         // }
         
         $html .= "

@@ -38,7 +38,7 @@
     "brick/varexporter": "^0.7",
     "cmixin/business-day": "^1.20.5",
     "colinmollenhour/cache-backend-redis": "^1.17.1",
-    "colinmollenhour/magento-redis-session": "^3.3.0",
+    "colinmollenhour/magento-redis-session": "dev-master as 3.3.0",
     "elidrissidev/magento-api2basicauth": "^1.0.3",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0.1",
@@ -96,6 +96,7 @@
       "url": "https://packagist.org",
       "exclude": [
         "aoepeople/aoe_blackholesession",
+        "aoepeople/aoe_dbretry",
         "aoepeople/aoe_cachestats",
         "aoepeople/aoe_profiler",
         "aoepeople/aoe_scheduler",
@@ -107,7 +108,8 @@
         "firegento/debug",
         "npm-asset/*",
         "paynl/magento-plugin",
-        "profitmetrics/magento"
+        "profitmetrics/magento",
+        "colinmollenhour/magento-redis-session"
       ]
     },
     {
@@ -126,9 +128,23 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/deheerhoreca/Aoe_DbRetry",
+      "only": [
+        "aoepeople/aoe_dbretry"
+      ]
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/vianetz/aoe-scheduler-magento1",
       "only": [
         "aoepeople/aoe_scheduler"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/deheerhoreca/Cm_RedisSession",
+      "only": [
+        "colinmollenhour/magento-redis-session"
       ]
     },
     {

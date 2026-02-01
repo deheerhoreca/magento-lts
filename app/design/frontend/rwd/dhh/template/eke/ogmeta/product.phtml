@@ -46,14 +46,12 @@ if(!empty($image_raw) && $image_raw !== "no_selection") {
     "fs_path"         => $image_path,
     "url"             => $image_url,
     "url_only"        => true,
+    "xform"           => "omcatprddtlh",
     "cm"              => "pad_resize",
-    "width"           => 1024,
-    "height"          => 1024,
     "add_mod_time"    => true,
     "relative_url"    => false,
-    // @todo move to named transformation omcatprddtlf
   ];
-  $image_url = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+  $image_url = _cdn_img($cdn_img_options);
   
   if(is_file($image_path)) {
     try {
@@ -100,7 +98,7 @@ $html = <<<EOT
   <meta property="og:type" content="product">
   <meta property="og:availability" content="{$availability}">
   <meta property="og:url" content="{$product_url}">
-  <meta property="og:image:url" content="https:{$image_url}">
+  <meta property="og:image:url" content="{$image_url}">
   <meta property="og:image:alt" content="{$page_title}">
   <meta property="og:image:width" content="1024">
   <meta property="og:image:height" content="1024">
@@ -112,7 +110,7 @@ $html = <<<EOT
   <meta property="twitter:url" content="{$product_url}">
   <meta name="twitter:title" content="{$page_title}">
   <meta name="twitter:description" content="{$productDescription}">
-  <meta name="twitter:image" content="https:{$image_url}">
+  <meta name="twitter:image" content="{$image_url}">
 EOT;
 
 if($image_attr !== []) {

@@ -1048,6 +1048,7 @@ if(!function_exists("_cdn_img")) {
       "omcatctglst"     => "tr:w-140,h-140,q-80,c-at_max_enlarge,dpr-auto",     // OpenMage catalog category list page
       "omcatprddtlt"    => "tr:w-172,h-400,q-80,c-at_max_enlarge,dpr-auto",     // OpenMage catalog product detail page (thumbnail)
       "omcatprddtlf"    => "tr:w-2048,h-2048,q-80,c-at_max_enlarge,dpr-auto",   // OpenMage catalog product detail page (full)
+      "omcatprddtlh"    => "tr:w-1200,h-1200,q-80,c-at_max_enlarge,dpr-auto",   // OpenMage catalog product detail page (half)
       "ombrndlgos"      => "tr:w-140,h-40,cm-at_max_enlarge,dpr-auto",          // OpenMage brand logos
       "omexfull"        => "tr:w-1536,h-1536,q-80,c-at_max_enlarge",            // OpenMage example full size
       "logosmall"       => "tr:w-210,h-60,c-at_max_enlarge,dpr-auto,dpr-auto",  // Small logos
@@ -1219,6 +1220,15 @@ if(function_exists("dhh_get_quote_id") === false) {
     
     return "NO_QUOTE_ID";
   }
+}
+
+/**
+ * Alias for OpenMage's getCurrentUrl(), but decoded.
+ * 
+ * @return string
+ */
+function getDecodedCurrentUrl(): string {
+  return omDecodeUrl(Mage::helper("core/url")->getCurrentUrl());
 }
 
 /**

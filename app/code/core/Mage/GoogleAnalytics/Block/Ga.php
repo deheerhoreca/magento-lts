@@ -224,7 +224,7 @@ gtag('set', 'user_id', '{$customer->getId()}');
             
             // New with check:
             if(!($toolbarBlock = Mage::app()->getLayout()->getBlock('product_list_toolbar'))) {
-                Mage::log("URL: ".var_export(Mage::helper('core/url')->getCurrentUrl(), true), Zend_Log::DEBUG);
+                Mage::log("URL: ".getDecodedCurrentUrl(), Zend_Log::DEBUG);
                 return "";
             }
             // DHH CORE HACK -- END

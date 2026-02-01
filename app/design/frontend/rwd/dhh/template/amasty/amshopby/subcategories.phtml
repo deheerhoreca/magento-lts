@@ -56,7 +56,7 @@ if($subcategories->count() > 1) {
         "quality"         => 80,
         "relative_url"    => true,
       ];
-      $img_html         = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      $img_html         = _cdn_img($cdn_img_options);
     }
     
     echo "<li style='max-width: 180px'>";

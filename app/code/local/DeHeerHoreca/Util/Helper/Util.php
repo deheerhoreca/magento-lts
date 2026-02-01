@@ -62,6 +62,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // Single mode: Return the first URL -- Assume we prefer a URL with a category
     if($single) {
       $query .= " LIMIT 1";
+      devDump($query);
       $requestPath = $readConnection->fetchOne($query);
       if(filled($requestPath)) {
         return $base_url.$requestPath;
@@ -477,7 +478,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         "width"           => $image_size,
         "xform"           => "omcatprdlstfr",
       ];
-      $img_html = Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      $img_html = _cdn_img($cdn_img_options);
     } else {
       // Failure should not happen, but this is a fallback
       $img_url  = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_size);

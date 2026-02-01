@@ -36,7 +36,7 @@ class Anowave_Sort_Block_Image extends Mage_Adminhtml_Block_Widget_Grid_Column_R
         "xform"           => "omcatprdlstfr",
       ];
       
-      return Mage::helper("deheerhoreca_util/util")->_cdn_img($cdn_img_options);
+      return _cdn_img($cdn_img_options);
     }
     
 		return "";
