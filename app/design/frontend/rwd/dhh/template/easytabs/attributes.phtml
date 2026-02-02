@@ -105,7 +105,6 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
   // if(_dhh_debug()) printr($_additionalgroup);
   
   foreach($_additionalgroup as $_additional) {
-    
     foreach($_additional["items"] as $_data) {
       $values         = $_data["value"];
       $code           = $_data["code"];
@@ -315,6 +314,9 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             if($supplier === "combisteel") {
               $link_url   = "/garantievoorwaarden-combisteel";
               $link_title = "Aanvullende garantievoorwaarden Combisteel";
+            } elseif($supplier === "maxima") {
+              $link_url   = "/garantievoorwaarden-maxima";
+              $link_title = "Aanvullende garantievoorwaarden Maxima";
             }
             break;
           
