@@ -131,7 +131,6 @@ var/tm
 
 # FILES
 */._.DS_Store
-*/._*
 */.DS_Store
 */.idea/
 */.modman/*/.git

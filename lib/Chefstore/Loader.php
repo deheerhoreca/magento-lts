@@ -28,5 +28,4 @@ require_once __DIR__."/CsCache.php";
 require_once __DIR__."/Helper.php";
 require_once __DIR__."/Html.php";
 require_once __DIR__."/Observability.php";
-require_once __DIR__."/Functions.php";
 require_once __DIR__."/Utils.php";
