@@ -1,6 +1,6 @@
 <?php
 
-// declare(strict_types=1);
+declare(strict_types=1);
 
 use \Carbon\CarbonImmutable;
 use \Illuminate\Support\Arr;
@@ -62,7 +62,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // Single mode: Return the first URL -- Assume we prefer a URL with a category
     if($single) {
       $query .= " LIMIT 1";
-      devDump($query);
       $requestPath = $readConnection->fetchOne($query);
       if(filled($requestPath)) {
         return $base_url.$requestPath;
@@ -121,13 +120,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // Force display deepest child category as request path.
     $categories = $product->getCategoryCollection();
     $deepCatId = 0;
-    $path = '';
+    $path = "";
     $productPath = false;
     
     foreach($categories as $category) {
       // Look for the deepest path and save.
-      if (substr_count((string) $category->getData('path'), '/') > substr_count((string) $path, '/')) {
-        $path = $category->getData('path');
+      if (substr_count((string) $category->getData("path"), "/") > substr_count((string) $path, "/")) {
+        $path = $category->getData("path");
         $deepCatId = $category->getId();
       }
     }
@@ -136,25 +135,25 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $category = dhh_get_cached_category($deepCatId);
     
     // Remove .html from category url_path.
-    $categoryPath = str_replace('.html', '',  (string) $category->getData('url_path'));
+    $categoryPath = str_replace(".html", "",  (string) $category->getData("url_path"));
     
     // Get product url path if set.
-    $productUrlPath = $product->getData('url_path');
+    $productUrlPath = $product->getData("url_path");
     
     // Get product request path if set.
-    $productRequestPath = $product->getData('request_path');
+    $productRequestPath = $product->getData("request_path");
     
     // If URL path is not found, try using the URL key.
     if ($productUrlPath === null && $productRequestPath === null) {
-      $productUrlPath = $product->getData('url_key');
+      $productUrlPath = $product->getData("url_key");
     }
     
     // Now grab only the product path including suffix (if any).
     if ($productUrlPath) {
-      $path = explode('/', (string) $productUrlPath);
+      $path = explode("/", (string) $productUrlPath);
       $productPath = array_pop($path);
     } elseif ($productRequestPath) {
-      $path = explode('/', (string) $productRequestPath);
+      $path = explode("/", (string) $productRequestPath);
       $productPath = array_pop($path);
     }
     
@@ -162,9 +161,9 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if ($productPath !== false) {
       if ($categoryPath) {
         // Only use the category path is one is found.
-        $product->setData('request_path', $categoryPath . '/' . $productPath);
+        $product->setData("request_path", $categoryPath . "/" . $productPath);
       } else {
-        $product->setData('request_path', $productPath);
+        $product->setData("request_path", $productPath);
       }
     }
     
@@ -178,14 +177,14 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
 
     foreach($categories as $category) {
       // Look for the deepest path and save.
-      if (substr_count((string) $category->getData('path'), '/') > substr_count((string) $path, '/')) {
-        $path = $category->getData('path');
+      if (substr_count((string) $category->getData("path"), "/") > substr_count((string) $path, "/")) {
+        $path = $category->getData("path");
         $deepCatId = (int) $category->getId();
       }
     }
-    // $category = Mage::getModel('catalog/category')->load($deepCatId);
+    // $category = Mage::getModel("catalog/category")->load($deepCatId);
     $category = dhh_get_cached_category($deepCatId);
-    $category_url = $category->getData('url_path');
+    $category_url = $category->getData("url_path");
     $category_name = $category->getName();
     
     return [
@@ -218,7 +217,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return array
    */
   public function getBrandsPerCategory(int $category_id, ?Mage_Catalog_Model_Resource_Product_Collection $_products = null): array {
-    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__);
+    Varien_Profiler::start("DHH_".self::class."::".__METHOD__);
     $max_amount = 5;
     
     if(!$_products) {
@@ -228,7 +227,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         ->addAttributeToSelect("manufacturer")
         ->addAttributeToFilter("status", 1)      // enabled
         ->addAttributeToFilter("visibility", 4)  // visibility in catalog,search
-        ->setOrder('popularity', 'ASC')
+        ->setOrder("popularity", "ASC")
         ->setPageSize(100);
     }
     
@@ -243,7 +242,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $manufacturer_ids = array_keys($manufacturer_ids);
       
       if(empty($manufacturer_ids) === false) {
-        $_product = $_products->getFirstItem() ?? Mage::getModel('catalog/product');
+        $_product = $_products->getFirstItem() ?? Mage::getModel("catalog/product");
         foreach($manufacturer_ids as $attribute_option_id) {
           $_product->setData("manufacturer", $attribute_option_id);
           $manufacturers[] = $_product->getAttributeText("manufacturer");
@@ -251,7 +250,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       }
     }
     
-    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__);
+    Varien_Profiler::stop("DHH_".self::class."::".__METHOD__);
     return $manufacturers;
   }
   
@@ -306,12 +305,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return string
    */
   public function getBrandUrlSlug($string): string {
-    $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
-    $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
+    $from     = "àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ";
+    $to       = "aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY";
     $string   = strtr(utf8_decode((string) $string), utf8_decode($from), $to);
     $string   = strtolower($string);
-    $string   = str_replace([" ", "-", "/", "&", "'"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
-    $string   = str_replace(["___", "__"], Mage::getStoreConfig('amshopby/seo/special_char'), $string);
+    $string   = str_replace([" ", "-", "/", "&", "'"], Mage::getStoreConfig("amshopby/seo/special_char"), $string);
+    $string   = str_replace(["___", "__"], Mage::getStoreConfig("amshopby/seo/special_char"), $string);
     
     return $string;
   }
@@ -324,11 +323,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return string
    */
   public function getUrlSlug($string): string {
-    $from     = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
-    $to       = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
+    $from     = "àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ";
+    $to       = "aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY";
     $string   = strtr(utf8_decode((string) $string), utf8_decode($from), $to);
-    $string   = preg_replace('/[^\w\d\-\ ]/', '', $string);
-    $string   = str_replace(' ', '-', (string) $string);
+    $string   = preg_replace("/[^\w\d\-\ ]/", "", $string);
+    $string   = str_replace(" ", "-", (string) $string);
     $string   = trim($string);
     
     return $string;
@@ -341,7 +340,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * $options = [
    *   "image_size"              => 150,           // Image screen size, in pixels
    *   "display"                 => normal|mini,   // normal|mini
-   *   "skip_usps"               => false,         // Don't show USPs
+   *   "skip_usps"               => false,         // Don"t show USPs
    *   "skip_actions"            => false,         // Don't show actions/buttons
    *   "_blank"                  => false,         // Open in a new window
    *   "show_category_link"      => false,         // Show a link to the category
@@ -362,7 +361,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public function getProductGridHtml($_product, $product_block, $options = []): void {
-    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
+    Varien_Profiler::start("DHH_".self::class."::".__METHOD__."_{$_product->getSku()}");
     $product_name             = $_product->getData("name");
     $image_label              = $product_name;
     $display_product_name     = $product_name;
@@ -382,7 +381,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $max_product_usps         = ($display === "mini")               ? 4 : 10;
     
     if(empty($a_target) === false) {
-      $a_target = " target='{$a_target}'";
+      $a_target = " target=\"{$a_target}\"";
     }
     
     // Get data
@@ -481,24 +480,24 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $img_html = _cdn_img($cdn_img_options);
     } else {
       // Failure should not happen, but this is a fallback
-      $img_url  = $product_block->helper('catalog/image')->init($_product, "thumbnail")->resize($image_size);
-      $img_html = "<img loading='lazy' class='center' id='{$img_id}' src='{$img_url}' alt='{$image_label}' width='{$image_size}' height='{$image_size}'>";
+      $img_url  = $product_block->helper("catalog/image")->init($_product, "thumbnail")->resize($image_size);
+      $img_html = "<img loading=\"lazy\" class=\"center\" id=\"{$img_id}\" src=\"{$img_url}\" alt=\"{$image_label}\" width=\"{$image_size}\" height=\"{$image_size}\">";
     } ?>
     <a href="<?=$product_url?>" title="<?=$image_label?>" class="product-image"<?=$a_target;?>>
       <?=$img_html?>
     </a>
     <div class="product-info">
       <div class="info">
-        <span class="brand-name small fw-600 gray"><?="{$brand} <span class=light-gray>{$sku_seller}</span>"?></span>
-        <h2 class='product-name ellipsed ellipsed-2'>
-          <a href="<?=$product_url?>" title='<?=$this->stripTags($product_name)?> kopen'<?=$a_target?>><?=$display_product_name?></a>
+        <span class="brand-name small fw-600 gray"><?="{$brand} <span class=\"light-gray\">{$sku_seller}</span>"?></span>
+        <h2 class="product-name ellipsed ellipsed-2">
+          <a href="<?=$product_url?>" title="<?=$this->stripTags($product_name)?> kopen"<?=$a_target?>><?=$display_product_name?></a>
         </h2>
         <?php
         if(isset($tagline)) {
           if($display === "mini") {
-            echo "<div class='product-list-tagline'>Onze Keuze</div>";
+            echo "<div class=\"product-list-tagline\">Onze Keuze</div>";
           } else {
-            echo "<div class='product-list-tagline'>{$tagline}</div>";
+            echo "<div class=\"product-list-tagline\">{$tagline}</div>";
           }
         }
         
@@ -681,7 +680,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_value = _get_product_attribute($_product, $attribute_code);
       if($attribute_value > 0) {
         $attribute_value = intval($attribute_value);
-        $usps[] = "{$attribute_value}x flesssen";
+        $usps[] = "{$attribute_value}x flessen";
       }
       
       if(sizeof($usps) >= $max_count) break;
@@ -691,7 +690,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_value = _get_product_attribute($_product, $attribute_code);
       if($attribute_value > 0) {
         $attribute_value = intval($attribute_value);
-        $usps[] = "{$attribute_value}x flesssen";
+        $usps[] = "{$attribute_value}x flessen";
       }
       
       if(sizeof($usps) >= $max_count) break;
@@ -710,8 +709,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_code  = "aantal_m3_uur";
       $attribute_value = doubleval(_get_product_attribute($_product, $attribute_code));
       $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-      if($attribute_value > 0) {
-        $usps[] = round($attribute_value, 2)." m3/u";
+      if(is_numeric($attribute_value) && $attribute_value > 0) { 
+        $usps[] = round((float) $attribute_value, 2)." m3/u";
       }
       
       if(sizeof($usps) >= $max_count) break;
@@ -994,13 +993,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_value = (int) _get_product_attribute($_product, $attribute_code);
       if(empty($attribute_value) === false) {
         $usps[] = "Grill {$attribute_value} W";
-        $power_usp_done = true;
       }
       $attribute_code  = "magnetron_output_watt";
       $attribute_value = (int) _get_product_attribute($_product, $attribute_code);
       if(empty($attribute_value) === false) {
         $usps[] = "Magnetron {$attribute_value} W";
-        $power_usp_done = true;
       }
       if(!$power_usp_done) {
         $attribute_code  = "total_power_watt";
@@ -1025,39 +1022,39 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         $attribute_code  = "vermogen";
         $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
         $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-        if(empty($attribute_value) === false && is_numeric($attribute_value)) {
-          if($attribute_value < 3) {
-            $attribute_value *= 1000;
-            if($attribute_value > 0) {
-              $usps[] = "{$attribute_value} Watt";
-            }
-          } else {
-            $attribute_value = number_format($attribute_value, 1, ",", ".");
-            $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-            if($attribute_value > 0) {
+        if(!empty($attribute_value)) {
+          if(is_numeric($attribute_value)) {
+            if($attribute_value < 3) {
+              $attribute_value *= 1000;
+              if($attribute_value > 0) {
+                $usps[] = "{$attribute_value} Watt";
+                $power_usp_done = true;
+              }
+            } else {
               $usps[] = "{$attribute_value} kW";
+              $power_usp_done = true;
             }
           }
-          $power_usp_done = true;
         }
       }
-      $attribute_code  = "vermogen_kw";
-      $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
-      $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-      if(!$power_usp_done && empty($attribute_value) === false && is_numeric($attribute_value)) {
-        if($attribute_value < 3) {
-          $attribute_value *= 1000;
-          if($attribute_value > 0) {
-            $usps[] = "{$attribute_value} Watt";
-          }
-        } else {
-          $attribute_value = number_format($attribute_value, 1, ",", ".");
-          $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
-          if($attribute_value > 0) {
-            $usps[] = "{$attribute_value} kW";
+      if(!$power_usp_done) {
+        $attribute_code  = "vermogen_kw";
+        $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
+        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        if(!empty($attribute_value)) {
+          if(is_numeric($attribute_value)) {
+            if($attribute_value < 3) {
+              $attribute_value *= 1000;
+              if($attribute_value > 0) {
+                $usps[] = "{$attribute_value} Watt";
+                $power_usp_done = true;
+              }
+            } else {
+              $usps[] = "{$attribute_value} kW";
+              $power_usp_done = true;
+            }
           }
         }
-        $power_usp_done = true;
       }
       unset($power_usp_done);
       
@@ -1095,7 +1092,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @param  array $options
    */
   public function getStockInfo($_product, array $options = []): array {
-    Varien_Profiler::start('DHH_'.self::class."::".__METHOD__."_{$_product->getSku()}");
+    Varien_Profiler::start("DHH_".self::class."::".__METHOD__."_{$_product->getSku()}");
     $dhh_sku    = $_product->getSku();
     
     // $product_id             = $_product->getEntityId();
@@ -1107,7 +1104,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     // if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "get_stock_info")) {
     //   if($stock_data = Mage::app()->getCache()->load($cache_key)) {
     //     DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
-    //     Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
+    //     Varien_Profiler::stop("DHH_".self::class."::".__METHOD__."_{$dhh_sku}");
     //     return json_decode($stock_data, true);
     //   } else {
     //     DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
@@ -1124,11 +1121,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       switch($stock_status_sys) {
         case "direct leverbaar":
           $stock_data["overall_stock_status"] = "in_stock";
-          Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
+          Varien_Profiler::stop("DHH_".self::class."::".__METHOD__."_{$dhh_sku}");
           return $stock_data;
         case "n.v.t.":
           $stock_data["overall_stock_status"] = "backorder";
-          Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
+          Varien_Profiler::stop("DHH_".self::class."::".__METHOD__."_{$dhh_sku}");
           return $stock_data;
         default:
           // Follow normal flow for now
@@ -1164,7 +1161,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $levertijd_tmp_override = $_product->getAttributeText("levertijd_tmp_override");
     $bestelartikel          = $_product->getAttributeText("bestelartikel");
     // $calwekdate_min         = $calwekdate_max = null;
-    $supplier               = $_product->getAttributeText('supplier');
+    $supplier               = $_product->getAttributeText("supplier");
     
     if(strtolower((string) $levertijd_tmp_override) === "n.v.t.") {
       $levertijd_tmp_override = null;
@@ -1230,17 +1227,17 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // If enabled some day, levertijd_tmp_override should be added here as well
       
       // @todo add support for "1 werkdag"
-      // if($levertijd === '2-3 weken') {
+      // if($levertijd === "2-3 weken") {
         // $nmwek_min = 10;
         // $nmwek_max = 15;
-      // } elseif($levertijd === '3-4 weken') {
+      // } elseif($levertijd === "3-4 weken") {
         // $nmwek_min = 15;
         // $nmwek_max = 20;
-      // } elseif($levertijd === '4-5 weken') {
+      // } elseif($levertijd === "4-5 weken") {
         // $nmwek_min = 20;
         // $nmwek_max = 25;
       // } elseif(strstr($levertijd, "werkdagen") !== false) {
-        // $nmwek_min = (int) trim(strtok($levertijd, 'werkdagen'));
+        // $nmwek_min = (int) trim(strtok($levertijd, "werkdagen"));
         // $nmwek_max = $nmwek_min + 1;
       // }
       
@@ -1249,22 +1246,22 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         // $nmwek_min         += $extra_delivery_time;
         // $nmwek_max         += $extra_delivery_time;
         
-        // $calwekdate_min   = date('d-m-Y', strtotime("+ {$nmwek_min} weekdays"));
-        // $calwekdate_max   = date('d-m-Y', strtotime("+ {$nmwek_max} weekdays"));
+        // $calwekdate_min   = date("d-m-Y", strtotime("+ {$nmwek_min} weekdays"));
+        // $calwekdate_max   = date("d-m-Y", strtotime("+ {$nmwek_max} weekdays"));
         
         // // Skip holidays: https://stackoverflow.com/questions/5532002/next-business-day-of-given-date-in-php
         // $holidays         = ["01-01-2020", "10-04-2020", "12-04-2020", "13-04-2020", "27-04-2020", "21-05-2020",
                              // "01-06-2020", "25-12-2020", "26-12-2020"];
-        // $tz_obj           = new DateTimeZone('Europe/Amsterdam');
+        // $tz_obj           = new DateTimeZone("Europe/Amsterdam");
         // $today            = new DateTime("now", $tz_obj);
-        // $current_hour     = $today->format('H');
+        // $current_hour     = $today->format("H");
         // $i                = 0;
         
         // while(in_array($calwekdate_min, $holidays) !== false) {
           // $i++;
         // }
-        // $calwekdate_min   = date('d-m-Y', strtotime($calwekdate_min . ' +' . $i . ' weekday'));
-        // $calwekdate_max   = date('d-m-Y', strtotime($calwekdate_max . ' +' . ($i + 1) . ' weekday'));
+        // $calwekdate_min   = date("d-m-Y", strtotime($calwekdate_min . " +" . $i . " weekday"));
+        // $calwekdate_max   = date("d-m-Y", strtotime($calwekdate_max . " +" . ($i + 1) . " weekday"));
       // }
       
       $txtcltcz             = "buyblock-usp";
@@ -1327,12 +1324,12 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     //   }
     // }
     
-    Varien_Profiler::stop('DHH_'.self::class."::".__METHOD__."_{$dhh_sku}");
+    Varien_Profiler::stop("DHH_".self::class."::".__METHOD__."_{$dhh_sku}");
     return $stock_data;
   }
 
   public function addParamToUrl($url, $param) {
-    if(str_contains((string) $url,'?')) {
+    if(str_contains((string) $url,"?")) {
       $url .= "&{$param}";
     } else {
       $url .= "?{$param}";
@@ -1387,31 +1384,28 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   public function logClick(): void {
     $dhh_click_log = self::$dhh_click_log ?? [];
     
-    // Deteect bots with Crawler-Detect library
-    $CrawlerDetect = new CrawlerDetect();
-    if($CrawlerDetect->isCrawler()) {
+    // Detect EliasHaeussler-CacheWarmup bot ourselves, as Crawler-Detect does not detect it
+    $userAgent = Mage::helper("core/http")->getHttpUserAgent();
+    if(strstr((string) $userAgent, "CacheWarmup") !== false) {
       return; // Do not log bots
-      $dhh_click_log["labels"]["bot"] = "true";
+      // $dhh_click_log["labels"]["bot"] = "true";
     } else {
-      $dhh_click_log["labels"]["bot"] = "false";
+      // Detect bots with Crawler-Detect library
+      $CrawlerDetect = new CrawlerDetect();
+      if($CrawlerDetect->isCrawler()) {
+        return; // Do not log bots
+        // $dhh_click_log["labels"]["bot"] = "true";
+      } else {
+        $dhh_click_log["labels"]["bot"] = "false";
+      }
     }
-    
-    // // Detect bots, re-using ProfitMetrics bot detection
-    // /** @var Profitmetrics_MagentoIntegration_Helper_Bot */
-    // $_profitmetrics_helper = Mage::helper("profitmetrics/bot");
-    // if($_profitmetrics_helper->isBot()) {
-    //   return; // Do not log bots
-    //   $dhh_click_log["labels"]["bot"] = "true";
-    // } else {
-    //   $dhh_click_log["labels"]["bot"] = "false";
-    // }
     
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
     $full_url       = self::getCurrentUrl();
     $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
     $path           = ltrim((string) $url->getPath(), "/");
     $query          = ltrim((string) $url->getQuery(), "?");
-    $_customer      = Mage::getSingleton('customer/session')->isLoggedIn() ? Mage::getSingleton('customer/session')->getCustomer() : null;
+    $_customer      = Mage::getSingleton("customer/session")->isLoggedIn() ? Mage::getSingleton("customer/session")->getCustomer() : null;
     $customerId     = $_customer ? $_customer->getId() : null;
     $customerEmail  = $_customer ? $_customer->getEmail() : null;
     
@@ -1419,10 +1413,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if(isset($dhh_click_log["labels"]["fpc_cache"]) && $dhh_click_log["labels"]["fpc_cache"] !== "HIT") {
       switch($action) {
         case "catalog_product_view":
-          $dhh_click_log["labels"]["product_id"] ??= (int) Mage::registry('current_product')->getId();
+          $dhh_click_log["labels"]["product_id"] ??= (int) Mage::registry("current_product")->getId();
           break;
         case "catalog_category_view":
-          $dhh_click_log["labels"]["category_id"] ??= (int) Mage::registry('current_category')->getId();
+          $dhh_click_log["labels"]["category_id"] ??= (int) Mage::registry("current_category")->getId();
           break;
       }
     } else {
@@ -1467,7 +1461,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * Profile SQL queries and log them to a file.
    */
   function profileSqlQueries(): void {
-    if(method_exists('Varien_Profiler', 'isEnabled') && Varien_Profiler::isEnabled() && Varien_Profiler::checkThresholds()) {
+    if(method_exists("Varien_Profiler", "isEnabled") && Varien_Profiler::isEnabled() && Varien_Profiler::checkThresholds()) {
       /** @var Zend_Db_Profiler */
       $_profiler        = Mage::getSingleton("core/resource")->getConnection("core_read")->getProfiler();
       $totalElapsedSecs = $_profiler->getTotalElapsedSecs();
@@ -1478,26 +1472,26 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
       $urlPath        = ltrim((string) $url->getPath(), "/");
       $urlQuery       = ltrim((string) $url->getQuery(), "?");
-      $_customer      = Mage::getSingleton('customer/session')->isLoggedIn() ? Mage::getSingleton('customer/session')->getCustomer() : null;
+      $_customer      = Mage::getSingleton("customer/session")->isLoggedIn() ? Mage::getSingleton("customer/session")->getCustomer() : null;
       $customerId     = $_customer ? $_customer->getId() : null;
       $customerEmail  = $_customer ? $_customer->getEmail() : null;
       
-      $queries = [];
-      foreach($_profiler->getQueryProfiles() as $i => $query) {
-        $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '';
+      // $queries = [];
+      // foreach($_profiler->getQueryProfiles() as $i => $query) {
+      //   $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : "";
         
-        /** @var Zend_Db_Profiler_Query $query*/
-        $queries[] = [
-          "took_ms"   => round($query->getElapsedSecs() * 1000, 2),
-          "type"      => $query->getQueryType(),
-          "query"     => $query->getQuery(),
-          "params"    => $params,
-        ];
-      }
+      //   /** @var Zend_Db_Profiler_Query $query*/
+      //   $queries[] = [
+      //     "took_ms"   => round($query->getElapsedSecs() * 1000, 2),
+      //     "type"      => $query->getQueryType(),
+      //     "query"     => $query->getQuery(),
+      //     "params"    => $params,
+      //   ];
+      // }
       
       $queries = "";
       foreach($_profiler->getQueryProfiles() as $i => $query) {
-        $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '';
+        $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : "";
         /** @var Zend_Db_Profiler_Query $query*/
         $queries .= "-- [".($i + 1)."] Took ".round($query->getElapsedSecs() * 1000, 2)." ms | Type: ".$query->getQueryType()."\n";
         $queries .= $query->getQuery()."\n";
@@ -1525,18 +1519,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Get the user's IP address.
+   * Get the user IP address.
    *
    * @return string
    */
   public static function getUserIP(): string {
     if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
-      $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-      $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+      $_SERVER["REMOTE_ADDR"] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+      $_SERVER["HTTP_CLIENT_IP"] = $_SERVER["HTTP_CF_CONNECTING_IP"];
     }
-    $client  = $_SERVER['HTTP_CLIENT_IP']       ?? "";
-    $forward = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? "";
-    $remote  = $_SERVER['REMOTE_ADDR']          ?? "";
+    $client  = $_SERVER["HTTP_CLIENT_IP"]       ?? "";
+    $forward = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? "";
+    $remote  = $_SERVER["REMOTE_ADDR"]          ?? "";
 
     if(empty($client) === false && filter_var($client, FILTER_VALIDATE_IP)) {
       $ip = $client;

@@ -240,6 +240,7 @@
     },
     "apcu-autoloader": true,
     "audit": {
+      "block-insecure": false,
       "ignore": {
         "PKSA-t425-mpgn-4yhs": "Only until > 20.05 upgrade",
         "PKSA-626k-1yg1-m164": "Only until > 20.05 upgrade",
