@@ -17,15 +17,16 @@ require_once __DIR__."/strftime_replacement.php";
 // These categories are not listed as subcategory tile in listviews
 const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
 
-// If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
-// Note: In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
+/**
+ * If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
+ * > In _get_default_stock_profile(), fake_managed suppliers should be in SUPPLIERS_HIDE_STOCK_DETAILS in OpenMage
+ * @var string[]
+ */
 const SUPPLIERS_HIDE_STOCK_DETAILS = [
   "apexa", "bartscher", "deheerhoreca", "espressions",
   "foster-gamko", "heatmaestro", "hoshizaki", "orionstar",
   "probbqshop", "liebherr", "smeg", "virtus","youcup",
 ];
-
-// Mage::helper("deheerhoreca_util/util")->__METHOD__()
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
@@ -116,7 +117,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return false;
   }
   
-  public function getFullProductUrl(Mage_Catalog_Model_Product $product = null) {
+  /**
+   * Get full product URL, forcing the deepest category in the URL path.
+   *
+   * @param  Mage_Catalog_Model_Product $product
+   * @return string
+   */
+  public function getFullProductUrl(Mage_Catalog_Model_Product $product = null): string {
     // Force display deepest child category as request path.
     $categories = $product->getCategoryCollection();
     $deepCatId = 0;
@@ -170,11 +177,17 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $product->getProductUrl();
   }
   
-  public function getCategoryFromProduct(Mage_Catalog_Model_Product $product) {
+  /**
+   * Get category info from product, preferring the deepest category.
+   *
+   * @param  Mage_Catalog_Model_Product $product
+   * @return array
+   */
+  public function getCategoryFromProduct(Mage_Catalog_Model_Product $product): array {
     $categories = $product->getCategoryCollection();
     $deepCatId = 0;
     $path = null;
-
+    
     foreach($categories as $category) {
       // Look for the deepest path and save.
       if (substr_count((string) $category->getData("path"), "/") > substr_count((string) $path, "/")) {
@@ -585,13 +598,26 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return array_unique($attributes);
   }
   
-  // @deprecated
+  /**
+   * @todo remove after confirming no references exist.
+   *
+   * @deprecated
+   *
+   * @param  mixed $_product
+   * @param  array $options
+   */
   public function getProductInfo($_product, $options = []) {
     return [];
   }
   
-  // Central place to keep fallback logic of product description
-  public static function _get_product_description(object $_product) {
+  /**
+   * Central place to keep fallback logic of product description.
+   * @todo Use this function throughout OpenMage (excluding core and 3rd party code)
+   *
+   * @param  Mage_Catalog_Model_Product  $_product
+   * @return string|false
+   */
+  public static function _get_product_description(Mage_Catalog_Model_Product $_product): string|false {
     $value = $_product->getDescription();
     if(strlen((string) $value) < 10) {
       $value = $_product->getSupplierDescription();
@@ -606,9 +632,20 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return false;
   }
   
-  // Sync with list.phtml
-  // NOTICE: Add used attributes to getProductAttributes()
-  public function getProductUsps($_product, $options = [], $max_count = 100): array {
+  /**
+   * Get product USPs from various attributes.
+   * > Sync with list.phtml
+   * > Add used attributes to getProductAttributes() to make them available.
+   *
+   * @todo Invoke from list.phtml instead of duplicating code. Align both sides first.
+   *
+   * @param  Mage_Catalog_Model_Product  $_product
+   * @param  array                       $options
+   * @param  int                         $max_count
+   *
+   * @return array
+   */
+  public function getProductUsps(Mage_Catalog_Model_Product $_product, array $options = [], $max_count = 100): array {
     // Options
     $parent_categories_ids  = $options["parent_categories_ids"] ?? [];    // @todo what is this?
     $context                = $options["context"]               ?? [];    // @todo implement
@@ -616,7 +653,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $usps                   = [];
     
     while(1) {
-    
       // Size
       $attribute_code  = "size";
       $attribute_value = _get_product_attribute($_product, $attribute_code);
@@ -1580,10 +1616,25 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return trim(str_ireplace(["[V]", "[SKIPMENU]", "[0] "], "", (string) $category_name));
   }
   
-  public static function getLeaseRates($price_ex_vat, $time = "daily") {
+  /**
+   * Get lease rates estimates based on price excluding VAT, time in months and a fixed rate table.
+   * Will return an array with rates for 15, 24, 36, 48 and 60 months if applicable. Minimum price is 400.
+   *
+   * @param  int|float|string|null  $price_ex_vat  The excluding VAT price, either a total or a single unit price.
+   * @param  string                 $time          The time period to express the rates in, either "daily" or "monthly".
+   *
+   * @return array<int, float>
+   */
+  public static function getLeaseRates(int|float|string|null $price_ex_vat, string $time = "daily"): array {
     $rates = [];
     
-    // Using 400 for 500 to be a bit flexible
+    if(blank($price_ex_vat) || !is_numeric($price_ex_vat) || $price_ex_vat < 400) {
+      return $rates;
+    }
+    
+    $price_ex_vat = (float) $price_ex_vat;
+    
+    // Using 400 for 500 to be a bit flexible (prevent overpromising the rates)
     
         if(in_range($price_ex_vat, 400  , 2500  )) $rates[15] = $price_ex_vat * (7.73 / 100);
     elseif(in_range($price_ex_vat, 2501 , 5000  )) $rates[15] = $price_ex_vat * (7.60 / 100);
@@ -1722,9 +1773,23 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     return $iframe_html;
   }
   
-  // Make an attempt to fix some common issues while displaying comments in adminhtml
-  public static function _correct_admin_comment($comment) {
-    
+  /**
+   * Make an attempt to fix some common issues while displaying comments in adminhtml,
+   * without taking too much risks (e.g. by removing all HTML tags).
+   * 
+   * The main goal is to prevent layout breaking due to unclosed tags or excessive
+   * line breaks, while still allowing basic formatting with <br> tags and newlines.
+   *
+   * The corrections applied are:
+   * - Replace various <br> variants with a single <br>
+   * - Convert newlines to <br> (except for existing <br>)
+   * - Remove excessive <br> tags (more than 2 in a row)
+   * - Ensure the result is a string (in case of null or other types)
+   *
+   * @param  mixed   $comment
+   * @return string  The comment witih some safe corrections applied.
+   */
+  public static function _correct_admin_comment($comment): string {
     $comment = str_replace(["<br>\n", "<br \>", "<br\>"], "<br>", (string) $comment);
     $comment = nl2br($comment, false);
     $comment = str_replace(["\n"], "", $comment);
