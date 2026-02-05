@@ -23,9 +23,8 @@ const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
  * @var string[]
  */
 const SUPPLIERS_HIDE_STOCK_DETAILS = [
-  "apexa", "bartscher", "deheerhoreca", "espressions",
-  "foster-gamko", "heatmaestro", "hoshizaki", "orionstar",
-  "probbqshop", "liebherr", "smeg", "virtus","youcup",
+  "apexa", "bartscher", "deheerhoreca", "espressions", "foster-gamko", "heatmaestro", "hoshizaki",
+  "liebherr", "orionstar", "probbqshop", "smeg", "virtus","youcup",
 ];
 
 class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
