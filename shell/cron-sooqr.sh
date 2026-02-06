@@ -8,7 +8,7 @@ export PREFER_HOST=prod
 export NO_DEV=0
 
 . ${HOME}/.bash_profile
-cm
+cm || exit 1
 . ./shell/cron-bootstrap.sh
 
 openmage shell/sooqr.php --generate 1

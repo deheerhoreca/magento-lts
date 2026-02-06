@@ -113,6 +113,7 @@ Disallow: /sales/
 Disallow: /sendfriend/
 Disallow: /shop?*&*&*
 Disallow: /tag/
+Disallow: /view.php?*
 Disallow: /wishlist/
 
 User-agent: rogerbot
