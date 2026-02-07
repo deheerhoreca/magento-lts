@@ -220,20 +220,30 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    * @throws Zend_Controller_Request_Exception
    */
-  protected static function request_has_no_cache_headers(): bool {
-    return sis("no-cache", [
-      Mage::app()?->getRequest()?->getHeader("PRAGMA"),
-      Mage::app()?->getRequest()?->getHeader("CACHE_CONTROL")
-    ]);
+  public static function request_has_no_cache_headers(): bool {
+    static $has_no_cache_headers = null;
+    
+    if($has_no_cache_headers === null) {
+      // Keep returning FALSE without setting the cache until we can see the Accept header (which is very common).
+      if(blank(Mage::app()?->getRequest()?->getHeader("Accept"))) {
+        return false;
+      }
+      $has_no_cache_headers = sis("no-cache", [
+        Mage::app()?->getRequest()?->getHeader("Pragma"),
+        Mage::app()?->getRequest()?->getHeader("Cache-Control")
+      ]);
+    }
+    
+    return $has_no_cache_headers;
   }
   
   /**
    * Implements shared parts of is_read_cache_enabled()/is_write_cache_enabled().
-   * A value of FALSE does NOT mean the cache is enabled, TRUE means it is disabled.
+   * A value of FALSE means all DHH caches are NOT disabled, TRUE means they ARE disabled.
    *
-   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-   * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
-   * @param debug_name          string  Debug name for logging
+   * @param $non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
+   * @param $isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
+   * @param $type                string  Cache type for logging and decision purposes.
    *
    * @return bool
    */
@@ -249,7 +259,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return true;
     }
     
-    // Disallow non-GET/HEAD requests
+    // Dissallow only GET/HEAD requests while not in CLI mode.
     if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
       self::log("FPC cache disabled (by REQUEST_METHOD): {$_SERVER["REQUEST_METHOD"]}");
       return true;
@@ -263,9 +273,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    *
    * This does NOT check if the cache contains the requested page, only if reading from cache is allowed.
    *
-   * @param non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.)
-   * @param isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter
-   * @param debug_name          string  Debug name for logging
+   * @param $non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.).
+   * @param $isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter.
+   * @param $type                string  Cache type for logging and decision purposes.
    *
    * Known types:
    * - dhh_listview_product

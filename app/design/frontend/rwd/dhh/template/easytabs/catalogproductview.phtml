@@ -39,7 +39,6 @@ $biller_maximum             = 10000;
 $grenke_lease_minimum       = 1000;
 $grenke_lease_maximum       = 10000;
 $show_black_friday          = false;
-$javascripts                = [];
 $brand_block_name           = "";
 $brand                      = "";
 $eol_text                   = "";
@@ -163,11 +162,11 @@ $help_content = "<h4 class='black mt-3'>Hulp nodig?</h4>
 <ul class='fa-ul'>
   <li class=my-1>
     <i class='fa-li fa fa-question'></i>
-    <a class='glightbox4' data-gallery=q data-glightbox='effect:fade; width:600px;' href='//form.jotform.com/213136047906049?sku=".urlencode((string) $sku)."&product=".urlencode((string) $productTitle)."'>Stel een vraag</a>
+    <a class='glightbox4' data-gallery=q data-glightbox='effect:fade; width:600px;' href='//form.jotform.com/213136047906049?sku=".urlencode((string) $sku)."&product=".urlencode((string) $productTitle)."' rel='nofollow'>Stel een vraag</a>
   </li>
   <li class=my-1>
     <i class='fa-li fa fa-phone' title='Bellen'></i>
-    <a class='glightbox4' data-gallery=c data-glightbox='effect:fade; width:600px;' href='/media/static/contact.php'>Contact opnemen</a>
+    <a class='glightbox4' data-gallery=c data-glightbox='effect:fade; width:600px;' href='/media/static/contact.php' rel='nofollow'>Contact opnemen</a>
   </li>
 </ul>";
 
@@ -916,7 +915,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
             echo $this->getChildHtml("other"); ?>
             <div class="add-to-cart-wrapper"><?php
               if($show_black_friday && $saleable && !$eol) { ?>
-                <a id="prd-detail-bf-banner" class="d-none text-reset" href="/qquoteadv/index/" target="_blank">
+                <a id="prd-detail-bf-banner" class="d-none text-reset" href="/qquoteadv/index/" target="_blank" rel="nofollow">
                   <div class="info-box" style="height: auto; background-color: var(--color-antracite); color: var(--color-light-gray); border-color: var(--color-antracite); min-height: 100px; padding: .5em;">
                     <div class="info-box-inner" style="max-width: unset;">
                       <div style="float:right; margin-top: .5em;">
@@ -1081,7 +1080,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                 <strong>Navigatie:</strong>
                 <ul class="internal-product-nav disc-list"><?php
                 foreach($anchors as $key => $anchor) {
-                  echo "<li><a href='#{$key}'>{$anchor}</a></li>";
+                  echo "<li><a href='#{$key}' rel=\"nofollow\">{$anchor}</a></li>";
                 } ?>
                 </ul><?php
                 if(!empty($categoryUrl) && !empty($categoryName)) {
@@ -1202,45 +1201,9 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
       </div><?php
     }
     
-    /* Documents */
-    if(!empty($files)) {
-      $helper = $this->helper("staempfli_productattachment");
-      $upload_dir = Mage::getBaseUrl("media").$helper::UPLOAD_DIR;
-      ?>
-      <h2 class="tableftheader"><?=$this->__("Documenten") ?></h2>
-      <div class="probottomdv" id="product-documents-list">
-        <span class="anchor" id="documents"></span>
-        <ul class="fa-ul">
-          <?php
-
-          foreach($files as $document) {
-            if(empty($document["path"])) {
-              continue;
-            }
-            $url      = "{$upload_dir}/{$document['path']}";
-            $name     = $document["title"]    ?? ($document["filename"] ?? "-");
-            $filetype = $document["type"]     ?? null;
-            $fa_icon = match ($filetype) {
-              'pdf' => 'fa-file-pdf-o',
-              default => 'fa-file-o',
-            };
-            echo "<li style='line-height:2.5em;'>";
-            echo "<a title='{$url}' class='document-link' href='{$url}' target='_blank' ><i class='fa-li fa {$fa_icon}' style='line-height:2.5em;'></i>{$name}</a>";
-            echo "</li>";
-          }
-          ?>
-        </ul>
-      </div>
-      <?php
-    }
-    ?>
-
-    <?php /* External Documents */ ?>
-    <?php
+    /* External Documents */
     if(!empty($external_documents_json) && $external_documents_json !== "[]") {
-      $external_documents = json_decode((string) $external_documents_json, true);
-      // dump($external_documents);
-      ?>
+      $external_documents = json_decode((string) $external_documents_json, true); ?>
       <h2 class="tableftheader"><?=$this->__("Externe Documenten") ?></h2>
       <div class="probottomdv" id="product-external-documents-list">
         <span class="anchor" id="external-documents"></span>
@@ -1378,20 +1341,16 @@ if(isset($eol) && $eol === true) {
     }
     this.form.submit();
   }.bind(productAddToCartForm);
-  //]]><?php
-  if($javascripts !== []) {
-    foreach($javascripts as $javascript_statement) {
-      echo $javascript_statement;
-    }
-  } ?>
+  //]]>
 </script><?php
 
 /**
  * Print a table of configurable product options
  *
  * @param  mixed $_product
+ * @return string
  */
-function _print_configurable_table($_product): string {
+function _print_configurable_table(Mage_Catalog_Model_Product $_product): string {
   $children = Mage::getModel("catalog/product_type_configurable")->getUsedProducts(null, $_product);
   $table = [];
   
@@ -1419,6 +1378,7 @@ function _print_configurable_table($_product): string {
  * Generate an HTML table from an array of data
  *
  * @param  array $data
+ * @return string
  */
 function html_table(array $data): string {  
   if(sizeof($data) === 0) {

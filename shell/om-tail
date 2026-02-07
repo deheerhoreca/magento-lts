@@ -56,4 +56,4 @@ find                                                        \
   ! -path "*/logs/intel/*"                                  \
   ! -path "*/logs/tools/*"                                  \
   ! -path "/var/log/mysql/general.log"                      \
-  -printf "%T@ %p\n" | sort -nu | cut -d " " -f 2 | xargs tail -f -n30
+  -printf "%T@ %p\n" | sort -nu | cut -d " " -f 2 | xargs tail -F -n30
