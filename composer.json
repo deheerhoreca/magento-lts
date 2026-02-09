@@ -46,6 +46,7 @@
     "fballiano/openmage-cssjs-minify": "dev-dhh",
     "firegento/adminmonitoring": "dev-develop",
     "firegento/debug": "^1.5",
+    "firegento/logger": "dev-develop",
     "guidance/guidance_simplepage": "^0.4.0",
     "illuminate/support": "^12.45.1",
     "jaybizzle/crawler-detect": "^1.3",
@@ -109,7 +110,8 @@
         "npm-asset/*",
         "paynl/magento-plugin",
         "profitmetrics/magento",
-        "colinmollenhour/magento-redis-session"
+        "colinmollenhour/magento-redis-session",
+        "firegento/logger"
       ]
     },
     {
@@ -166,6 +168,13 @@
       "url": "https://github.com/deheerhoreca/firegento-adminmonitoring",
       "only": [
         "firegento/adminmonitoring"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/firegento/firegento-logger",
+      "only": [
+        "firegento/logger"
       ]
     },
     {

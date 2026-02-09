@@ -179,7 +179,6 @@ media
 ######################################################
 
 /app/code/community/Cm
-/lib/Credis
 
 ######################################################
 # UNIGNORE ALL COREHACKED FILES TO ENSURE GIT TRACKING
@@ -481,3 +480,20 @@ media
 /app/code/community/Aoe/DbRetry
 /app/code/community/Cm/RedisSession
 /app/etc/modules/Cm_RedisSession.xml
+/app/code/community/Cm/Cache/Backend/Redis.php
+/lib/Credis
+/app/code/community/FireGento/Logger
+/app/etc/modules/FireGento_Logger.xml
+/app/design/adminhtml/default/default/layout/firegento_logger.xml
+/app/design/adminhtml/default/default/template/firegento_logger
+/app/design/frontend/base/default/layout/firegento_logger.xml
+/app/design/frontend/base/default/template/firegento_logger
+/lib/Airbrake
+/lib/XMPPHP
+/lib/Graylog2-gelf-php
+/lib/rsyslog
+/lib/chromelogger
+/lib/sentry
+/shell/logger.php
+/skin/adminhtml/default/default/firegento_logger.css
+/app/locale/en_US/template/email/firegento_logger
