@@ -149,10 +149,7 @@ class Observability {
       if(PHP_SAPI === "cli") {
         return "cli";
       }
-      
-      if(Mage::app()?->getStore()?->isAdmin()
-        || Mage::getDesign()?->getArea() === "adminhtml"
-        || str_contains(getOmDhhUtilHelper()->getCurrentUrl(), "/admin4JN0/")) {
+      if(Mage::app()?->getStore()?->isAdmin() || Mage::getDesign()?->getArea() === "adminhtml" || str_contains(getDecodedCurrentUrl(), "/admin4JN0/")) {
         return "adminhtml";
       }
       

@@ -1260,6 +1260,69 @@ if(!function_exists("fastHash")) {
   }
 }
 
+/**
+ * Check critical PHP settings against the current state. Log at WARNING level when this run approached within 20%.
+ * @return void
+ */
+function omCheckCriticalPhpSettings(): void {
+  // Do not run when embedded in Intel or Tools
+  if(defined("APP_SHORT")) {
+    return;
+  }
+  
+  $critical_settings = [
+    "memory_limit" => [
+      "current" => memory_get_peak_usage(),
+      "limit"   => ini_parse_quantity(strtolower(ini_get("memory_limit"))), // ini_parse_quantity() requires lowercase input
+    ],
+    "max_execution_time" => [
+      "current" => round((hrtime(true) - START_HRTIME) / 1000000000),
+      "limit"   => ini_get("max_execution_time"),
+    ],
+  ];
+  
+  foreach($critical_settings as $setting => $values) {
+    $current  = $values["current"];
+    $limit    = $setting === "memory_limit" ? humanReadableSizeToBytes($values["limit"]) : (int) $values["limit"];
+    $unit     = $setting === "memory_limit" ? "bytes" : "seconds";
+    
+    // A time limit of 0 is fine, or memory limit of -1
+    if($limit > 0) {
+      if($current >= 0.8 * $limit) {
+        Mage::log("Approaching {$setting} limit: current usage is {$current} {$unit}, limit is {$limit} {$unit}", Zend_Log::WARN);
+      } else {
+        // Mage::log("{$setting} usage is within limits: current usage is {$current} {$unit}, limit is {$limit} {$unit}", Zend_Log::INFO);
+      }
+    }
+  }
+}
+
+/**
+ * Convert a human-readable file size (e.g., "10K", "5M") to bytes.
+ *
+ * @param   string|int $value
+ * @return  int
+ */
+if(!function_exists("humanReadableSizeToBytes")) {
+  function humanReadableSizeToBytes(string|int $value): int {
+    $matches = [];
+    \preg_match('/^\s*(?P<number>\d+)\s*(?:(?P<prefix>[kmgt]?)b?)?\s*$/i', (string) $value, $matches);
+    $bytes = \intval($matches['number'] ?? 0);
+    $prefix = \strtolower(\strval($matches['prefix'] ?? ''));
+    switch ($prefix) {
+        case 't': $bytes *= 1024;
+        // no break
+        case 'g': $bytes *= 1024;
+        // no break
+        case 'm': $bytes *= 1024;
+        // no break
+        case 'k': $bytes *= 1024;
+    }
+    
+    return $bytes;
+  };
+}
+
 /* ---------------------------------------------------------- OpenMage Helpers ---------------------------------------------------------- */
 
 /**
@@ -1599,15 +1662,11 @@ function dhh_get_current_url(): string {
 
 /**
  * Returns whether the OM profiler is enabled.
- * Uses a cheap param check to avoid the more expensive Varien_Profiler::isEnabled() call.
+ * Note that the downstream function caches its result, so this is not expensive to call multiple times.
  *
  * @return boolean
  */
 function dhh_profiler_enabled(): bool {
-  if(Mage::app()->getRequest()->getParam("profile", false)) {
-    return true;
-  }
-  
   return Varien_Profiler::isEnabled();
 }
 

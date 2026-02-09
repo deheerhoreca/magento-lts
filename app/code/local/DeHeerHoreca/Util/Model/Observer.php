@@ -29,6 +29,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   /**
    * Setup Elastic APM.
    * > Observes: controller_action_layout_load_before.
+   * > @todo Rename to something more general since it covers more than APM.
    *
    * @param  Varien_Event_Observer $observer
    * @return void
@@ -37,6 +38,12 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     static $initialized = false;
     if($initialized) {
       return;
+    }
+    
+    // Also register a shutdown function in this early observer.
+    if(!defined("APP_SHORT")) { // Do not run when embedded in Intel or Tools
+      if(!defined("START_HRTIME")) define("START_HRTIME", hrtime(true)); // Close enough for this purpose
+      register_shutdown_function("omCheckCriticalPhpSettings");
     }
     
     // Silently skip if Elastic APM is disabled in php.ini
@@ -72,7 +79,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
         $transaction->context()->setLabel("sapi", PHP_SAPI);
         
         $initialized = true;
-        $currentUrl = getOmDhhUtilHelper()->getCurrentUrl();
+        // $currentUrl = getDecodedCurrentUrl();
       } else {
         Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE);
         return;
@@ -649,8 +656,6 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * @return void
    */
   public static function coreAppRunAfter(Varien_Event_Observer $observer): void {
-    // Mage::log("core_app_run_after fired", null, "system.log", true);
     Utils::runDeferredClosures();
-    // Mage::log("core_app_run_after done", null, "system.log", true);
   }
 }

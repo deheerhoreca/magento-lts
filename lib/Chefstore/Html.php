@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
-use Mage;
-use Throwable;
+use Mage, Throwable, Zend_Log;
 use voku\helper\HtmlMin;
 
 class Html {
@@ -88,7 +87,9 @@ class Html {
     try {
       return $htmlMin->minify($html);
     } catch(Throwable $e) {
-      Mage::log("HTML minification failed: ".$e->getMessage());
+      Mage::log("HTML minification failed: ".$e->getMessage(), Zend_Log::WARN);
+      Mage::log("HTML minification failed: ".$e->getMessage().". Payload follows. [".getDecodedCurrentUrl()."]", Zend_Log::WARN, "verbose.txt");
+      Mage::log($html, Zend_Log::WARN, "verbose.txt");
     }
     
     return $html;

@@ -1,40 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 $_product           = $this->getProduct();
-$_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
+// $_wishlistSubmitUrl = $this->helper("wishlist")->getAddUrl($_product);
+?>
 
 <div class="add-to-cart-sharing">
-  <h4 class='h4 black mt-3'>Delen:</h4>
-  <ul class="sharing-links">
-    <?php
+  <h4 class="h4 black mt-3">Delen:</h4>
+  <ul class="sharing-links"><?php
     if($this->canEmailToFriend()) { ?>
       <li>
-        <a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>" class="link-email-friend" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Email to a Friend')) ?>">
+        <a href="<?= $this->helper("catalog/product")->getEmailToFriendUrl($_product) ?>" class="link-email-friend" title="<?= Mage::helper("core")->quoteEscape($this->__("Email to a Friend")) ?>">
           <i class="fa fa-envelope-o" aria-hidden="true" style="color: #929a9c;"></i>
         </a>
-      </li>
-      <?php
+      </li><?php
     }
     
-    $_helper          = $this->helper('catalog/output');
-    $_productName     = $_helper->productAttribute($_product, $_product->getName(), 'name');
-    $_productUrl      = $_product->getProductUrl();
-    $wa_url           = Mage::helper("deheerhoreca_util/util")->addParamToUrl($_productUrl, "utm_channel=social&utm_source=whatsapp_share");
-    $fb_url           = Mage::helper("deheerhoreca_util/util")->addParamToUrl($_productUrl, "utm_channel=social&utm_source=facebook_share");
-    $em_url           = Mage::helper("deheerhoreca_util/util")->addParamToUrl($_productUrl, "utm_channel=social&utm_source=email_share");
-    ?>
+    $_helper      = $this->helper("catalog/output");
+    $_productName = $_helper->productAttribute($_product, $_product->getName(), "name");
+    $_productUrl  = $_product->getProductUrl();
+    $wa_url       = Mage::helper("core/url")->addRequestParam($_productUrl, ["utm_channel" => "social", "utm_source" => "whatsapp_share"]);
+    $em_url       = Mage::helper("core/url")->addRequestParam($_productUrl, ["utm_channel" => "social", "utm_source" => "email_share"]); ?>
     <li>
-      <a href="//api.whatsapp.com/send/?phone&text=<?php echo urlencode("Gezien op Chefstore.nl: {$wa_url}") ?>" target="_blank" title="Deel dit via WhatsApp" rel="noreferrer nofollow">
+      <a href="//api.whatsapp.com/send/?phone&text=<?= urlencode("Chefstore.nl: {$wa_url}") ?>" target="_blank" title="Deel dit via WhatsApp" rel="noreferrer nofollow noopener">
         <i class="fa fa-whatsapp" aria-hidden="true" style="color: #25D366;"></i>
       </a>
     </li>
     <li>
-      <a class="ml-2" href="//www.facebook.com/sharer.php?u=<?php echo $fb_url; ?>" target="_blank" title="Deel dit via Facebook" rel="noreferrer nofollow">
-        <i class="fa fa-facebook black" aria-hidden="true"></i>
-      </a>
-    </li>
-    <li>
-      <a class="ml-2" href="mailto:?subject=<?php echo urlencode((string) $_productName); ?>&body=<?php echo urlencode("Gezien op Chefstore.nl: {$em_url}") ?>" target="_blank" title="Deel dit via E-mail" rel="noreferrer nofollow">
+      <a class="ml-2" href="mailto:?subject=<?= urlencode((string) $_productName); ?>&body=<?= urlencode("Op Chefstore.nl: {$em_url}") ?>" target="_blank" title="Deel dit via E-mail" rel="noreferrer nofollow noopener">
         <i class="fa fa-envelope-o black" aria-hidden="true"></i>
       </a>
     </li>

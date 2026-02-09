@@ -18,7 +18,9 @@
         </updateColumn>
       </massaction>
 
-      <set_name><remove/></set_name>
+      <set_name>
+        <remove/>
+      </set_name>
 
       <!-- To enable, also enable addWebsiteNamesToResult() -->
       <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
@@ -45,20 +47,20 @@
         <after>sku</after>
       </name>
       
-      <type>
+      <!-- <type>
         <updateColumn>
           <width>100</width>
         </updateColumn>
         <after>name</after>
-      </type>
+      </type> -->
       
       <visibility>
         <remove/>
       </visibility>
       
-      <!-- <action> -->
-        <!-- <remove/> -->
-      <!-- </action> -->
+      <action>
+        <remove/>
+      </action>
 
       <eol>
         <add>

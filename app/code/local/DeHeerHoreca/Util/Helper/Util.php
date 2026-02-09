@@ -1362,16 +1362,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     Varien_Profiler::stop("DHH_".self::class."::".__METHOD__."_{$dhh_sku}");
     return $stock_data;
   }
-
-  public function addParamToUrl($url, $param) {
-    if(str_contains((string) $url,"?")) {
-      $url .= "&{$param}";
-    } else {
-      $url .= "?{$param}";
-    }
-    
-    return $url;
-  }
   
   /**
    * Add key/value pair to the click log.
@@ -1436,7 +1426,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
-    $full_url       = self::getCurrentUrl();
+    $full_url       = getDecodedCurrentUrl();
     $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
     $path           = ltrim((string) $url->getPath(), "/");
     $query          = ltrim((string) $url->getQuery(), "?");
@@ -1501,28 +1491,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $_profiler        = Mage::getSingleton("core/resource")->getConnection("core_read")->getProfiler();
       $totalElapsedSecs = $_profiler->getTotalElapsedSecs();
       $totalElapsedMs   = round($totalElapsedSecs * 1000, 2);
-      
-      $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
-      $full_url       = self::getCurrentUrl();
-      $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
-      $urlPath        = ltrim((string) $url->getPath(), "/");
-      $urlQuery       = ltrim((string) $url->getQuery(), "?");
-      $_customer      = Mage::getSingleton("customer/session")->isLoggedIn() ? Mage::getSingleton("customer/session")->getCustomer() : null;
-      $customerId     = $_customer ? $_customer->getId() : null;
-      $customerEmail  = $_customer ? $_customer->getEmail() : null;
-      
-      // $queries = [];
-      // foreach($_profiler->getQueryProfiles() as $i => $query) {
-      //   $params = !empty($query->getQueryParams()) ? json_encode($query->getQueryParams(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : "";
-        
-      //   /** @var Zend_Db_Profiler_Query $query*/
-      //   $queries[] = [
-      //     "took_ms"   => round($query->getElapsedSecs() * 1000, 2),
-      //     "type"      => $query->getQueryType(),
-      //     "query"     => $query->getQuery(),
-      //     "params"    => $params,
-      //   ];
-      // }
+      $action           = Mage::app()->getFrontController()->getAction()->getFullActionName();
+      $full_url         = getDecodedCurrentUrl();
+      $url              = Mage::getSingleton("core/url")->parseUrl($full_url);
+      $urlPath          = ltrim((string) $url->getPath(), "/");
+      $urlQuery         = ltrim((string) $url->getQuery(), "?");
       
       $queries = "";
       foreach($_profiler->getQueryProfiles() as $i => $query) {
@@ -1540,10 +1513,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       "-- ============================================ {$urlPath}?{$urlQuery} ============================================\n".
       "-- Action:       {$action}\n".
       "-- URL:          {$full_url}\n".
-      "-- Path:         {$urlPath}\n".
-      "-- Query:        {$urlQuery}\n".
-      "-- User ID:      {$customerId}\n".
-      "-- User Email:   {$customerEmail}\n\n".
       "-- Number of database queries: ".$_profiler->getTotalNumQueries()."\n".
       "-- Total time spent on queries: ".$totalElapsedMs." ms\n\n".
       "-- QUERIES:\n".

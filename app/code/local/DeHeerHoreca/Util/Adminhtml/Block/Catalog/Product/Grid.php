@@ -37,7 +37,9 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('attribute_set_id')
-            ->addAttributeToSelect('type_id');
+            ->addAttributeToSelect('type_id')
+            ->addAttributeToSelect('brand_series')
+        ;
         
         // DHH: Not needed
         // if (Mage::helper('catalog')->isModuleEnabled('Mage_CatalogInventory')) {

@@ -10,9 +10,9 @@
 #
 # PLESK CONFIG SHOULD CONTAIN:
 #
-# <Directory /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento>
+# <Directory /var/www/vhosts/chefstore.nl/workspace/openmage>
 #   AllowOverride None
-#   Include /var/www/vhosts/chefstore.nl/httpdocs/deheerhoreca-magento/_htaccess
+#   Include /var/www/vhosts/chefstore.nl/workspace/openmage/_htaccess
 # </Directory>
 #
 # ! Implement .htaccess files found in other dirs, before disabling AllowOverride:

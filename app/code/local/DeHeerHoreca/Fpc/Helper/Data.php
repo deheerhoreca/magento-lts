@@ -801,12 +801,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     self::$httpHeaders["X-Accel-Buffering"] = "no";
     ini_set("zlib.output_compression", "Off");
     
-    devLog("HTTP headers before emitHttpHeaders: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::INFO);
+    // devLog("HTTP headers before emitHttpHeaders: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::INFO);
     foreach(self::$httpHeaders as $header_name => $header_values) {
       $header_value = implode(", ", (array) $header_values);
       Mage::app()->getFrontController()->getResponse()->setHeader($header_name, $header_value, replace: false);
     }
-    devLog("HTTP headers after emitHttpHeaders: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::INFO);
+    // devLog("HTTP headers after emitHttpHeaders: ".di(Mage::app()->getResponse()->getHeaders()), Zend_Log::INFO);
     self::$httpHeaders = [];
     
     return null;

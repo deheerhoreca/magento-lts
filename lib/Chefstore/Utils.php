@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Chefstore;
 
-use Closure;
-use Mage;
-use Throwable;
+use Closure, Mage, Throwable, Zend_Log;
 use \Brick\VarExporter\ExportException;
 use \Brick\VarExporter\VarExporter;
 use \Illuminate\Support\Str;
