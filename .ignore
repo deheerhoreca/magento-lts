@@ -182,7 +182,7 @@ media/
 */etc/*-local.ini
 **.bak-*
 */_user.ini
-*/php.cmd.ini
-*/etc/php.cmd.ini
+*/php.ini
+*/etc/php.ini
 */.php-version
 */.php-ini

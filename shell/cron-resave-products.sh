@@ -17,4 +17,4 @@ set -u      # Treat unset variables as an error when substituting
 
 cm
 
-# php -c etc/php.cmd.ini shell/resave_all_products.php
+# php -c etc/php.ini shell/resave_all_products.php

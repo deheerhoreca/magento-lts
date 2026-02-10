@@ -181,7 +181,7 @@ fi
 # DHH CORE HACK
 # To run the job in the foreground:
 # "${PHP_BIN}" "${SCHEDULER}" --action cron --mode ${MODE} ${OPTIONS} # DHH CORE HACK
-COMMAND="${PHP_BIN} -c ../php.cmd.ini ${SCHEDULER} --action cron --mode ${MODE} ${OPTIONS}"
+COMMAND="${PHP_BIN} -c ../php.ini ${SCHEDULER} --action cron --mode ${MODE} ${OPTIONS}"
 # echo ${COMMAND}
 ${COMMAND}
 # /DHH CORE HACK

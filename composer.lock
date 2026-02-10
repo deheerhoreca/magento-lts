@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3d792a5c5e1be02247ca401be0c47b9",
+    "content-hash": "e1d47295e08835135131c9bb29c451cc",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -188,21 +188,22 @@
         },
         {
             "name": "aschroder/smtp_pro",
-            "version": "2.0.7",
+            "version": "dev-dhh",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension.git",
-                "reference": "5101ed278d4aba05279fc1e53c3811983be8adda"
+                "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension.git",
+                "reference": "c0ce2a328ecca265c3ac6646411a24545cfde82e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aschroder/Magento-SMTP-Pro-Email-Extension/zipball/5101ed278d4aba05279fc1e53c3811983be8adda",
-                "reference": "5101ed278d4aba05279fc1e53c3811983be8adda",
+                "url": "https://api.github.com/repos/deheerhoreca/Magento-SMTP-Pro-Email-Extension/zipball/c0ce2a328ecca265c3ac6646411a24545cfde82e",
+                "reference": "c0ce2a328ecca265c3ac6646411a24545cfde82e",
                 "shasum": ""
             },
             "require": {
                 "magento-hackathon/magento-composer-installer": "*"
             },
+            "default-branch": true,
             "type": "magento-module",
             "extra": {
                 "map": [
@@ -219,12 +220,39 @@
                         "app/design/adminhtml/default/default/template/smtppro"
                     ],
                     [
+                        "app/locale/de_DE/Aschroder_SMTPPro.csv",
+                        "app/locale/de_DE/Aschroder_SMTPPro.csv"
+                    ],
+                    [
                         "app/locale/en_US/Aschroder_SMTPPro.csv",
                         "app/locale/en_US/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/fr_FR/Aschroder_SMTPPro.csv",
+                        "app/locale/fr_FR/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/es_ES/Aschroder_SMTPPro.csv",
+                        "app/locale/es_ES/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/nl_NL/Aschroder_SMTPPro.csv",
+                        "app/locale/nl_NL/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/pt_BR/Aschroder_SMTPPro.csv",
+                        "app/locale/pt_BR/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/tr_TR/Aschroder_SMTPPro.csv",
+                        "app/locale/tr_TR/Aschroder_SMTPPro.csv"
+                    ],
+                    [
+                        "app/locale/ru_RU/Aschroder_SMTPPro.csv",
+                        "app/locale/ru_RU/Aschroder_SMTPPro.csv"
                     ]
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "aschroder"
@@ -233,10 +261,9 @@
             "description": "sending Magento mail through an external smtp-server",
             "homepage": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension",
             "support": {
-                "issues": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension/issues",
-                "source": "https://github.com/aschroder/Magento-SMTP-Pro-Email-Extension/tree/2.0.7"
+                "source": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension/tree/dhh"
             },
-            "time": "2015-10-30T09:33:29+00:00"
+            "time": "2026-02-10T15:05:30+00:00"
         },
         {
             "name": "aydin-hassan/magento-core-composer-installer",
@@ -6166,6 +6193,7 @@
         "aoepeople/aoe_cachestats": 20,
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_profiler": 20,
+        "aschroder/smtp_pro": 20,
         "aydus/headorder": 20,
         "colinmollenhour/magento-redis-session": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,

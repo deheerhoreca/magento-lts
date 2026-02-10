@@ -13,6 +13,6 @@ export -f cm
 # Run a OpenMage command -- Note that the PHP entry point script is not part of the alias
 function openmage() {
   cm || exit 1
-  command php -c etc/php.cmd.ini "$@"
+  command php -c etc/php.ini "$@"
 }
 export -f openmage

@@ -611,12 +611,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /**
    * Central place to keep fallback logic of product description.
-   * @todo Use this function throughout OpenMage (excluding core and 3rd party code)
+   * @todo Use this function throughout OpenMage (excluding core and 3rd party code).
+   * @todo Expand to the latest description fields.
    *
    * @param  Mage_Catalog_Model_Product  $_product
-   * @return string|false
+   * @return string
    */
-  public static function _get_product_description(Mage_Catalog_Model_Product $_product): string|false {
+  public static function _get_product_description(Mage_Catalog_Model_Product $_product): string {
     $value = $_product->getDescription();
     if(strlen((string) $value) < 10) {
       $value = $_product->getSupplierDescription();
@@ -628,7 +629,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       return $value;
     }
     
-    return false;
+    return "";
   }
   
   /**
@@ -1402,7 +1403,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /**
    * Log clicks to a JSONL file, while blocking some known bots.
-   * > Runs after page is rendered and output is sent.
+   * > Runs after page is rendered and output is sent, no need to use a deferred function.
    *
    * @return void
    */
@@ -1411,7 +1412,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     // Detect EliasHaeussler-CacheWarmup bot ourselves, as Crawler-Detect does not detect it
     $userAgent = Mage::helper("core/http")->getHttpUserAgent();
-    if(strstr((string) $userAgent, "CacheWarmup") !== false) {
+    if(sis(["CacheWarmup", "xCore (https://xcore.nl)"], $userAgent)) {
       return; // Do not log bots
       // $dhh_click_log["labels"]["bot"] = "true";
     } else {
@@ -1474,9 +1475,23 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       "user.email"          => $customerEmail,
     ], $dhh_click_log);
     
+    // Set up a primary and a fallback log dir, check existence and writability of primary, if not possible use fallback
+    $clickLogCandidates = [
+      $_SERVER['HOME']."/logs/deheerhoreca-magento",
+      Mage::getBaseDir("var")."/log",
+    ];
+    $clickLog = null;
+    foreach($clickLogCandidates as $candidate) {
+      if(is_dir($candidate) && is_writable($candidate)) {
+        $clickLog = rtrim($candidate, "/");
+        break;
+      }
+    }
+    
     try {
       $json = json_encode($dhh_click_log);
-      file_put_contents("./var/log/clicks.jsonl", $json.PHP_EOL, FILE_APPEND);
+      $clickLog .= "/clicks.jsonl";
+      file_put_contents($clickLog, $json.PHP_EOL, FILE_APPEND);
     } catch(Exception $e) {
       Mage::logException($e);
     }

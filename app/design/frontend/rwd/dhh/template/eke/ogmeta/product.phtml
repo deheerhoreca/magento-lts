@@ -74,7 +74,7 @@ if(empty($image_url)) {
 $productDescription = (string) Mage::helper("deheerhoreca_util/util")->_get_product_description($_product);
 if($productDescription !== "") {
   $productDescription = strip_tags($productDescription);
-  $productDescription = str($productDescription)->stripTags()->squish()->limit(160, "...", true)->toString();
+  $productDescription = omHtmlAttrEscape(str($productDescription)->stripTags()->squish()->limit(160, "...", true)->toString());
 }
 
 $availability = match($overall_stock_status) {

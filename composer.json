@@ -32,7 +32,7 @@
     "aoepeople/aoe_dbretry": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
     "aoepeople/aoe_templatehints": "^0.4.4",
-    "aschroder/smtp_pro": "^2.0.7",
+    "aschroder/smtp_pro": "dev-dhh",
     "aydin-hassan/magento-core-composer-installer": "^2.1.0",
     "aydus/headorder": "dev-master",
     "brick/varexporter": "^0.7",
@@ -101,6 +101,7 @@
         "aoepeople/aoe_cachestats",
         "aoepeople/aoe_profiler",
         "aoepeople/aoe_scheduler",
+        "aschroder/smtp_pro",
         "aydus/headorder",
         "bower-asset/*",
         "empiricompany/openmage-mm_cmscontentfilemode",
@@ -140,6 +141,13 @@
       "url": "https://github.com/vianetz/aoe-scheduler-magento1",
       "only": [
         "aoepeople/aoe_scheduler"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension",
+      "only": [
+        "aschroder/smtp_pro"
       ]
     },
     {

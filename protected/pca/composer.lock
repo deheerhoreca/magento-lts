@@ -8,26 +8,26 @@
     "packages": [
         {
             "name": "robinn/phpcacheadmin",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RobiNN1/phpCacheAdmin.git",
-                "reference": "784ffb540eea26020ac063845c200980ebfb1b12"
+                "reference": "b5d89cbabc8c2266df46238d78e7d97ed35df0e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RobiNN1/phpCacheAdmin/zipball/784ffb540eea26020ac063845c200980ebfb1b12",
-                "reference": "784ffb540eea26020ac063845c200980ebfb1b12",
+                "url": "https://api.github.com/repos/RobiNN1/phpCacheAdmin/zipball/b5d89cbabc8c2266df46238d78e7d97ed35df0e0",
+                "reference": "b5d89cbabc8c2266df46238d78e7d97ed35df0e0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
-                "twig/twig": "^3.22"
+                "twig/twig": "^3.23"
             },
             "require-dev": {
                 "clue/phar-composer": "^1.4",
                 "phpstan/phpstan": "^2.1",
-                "phpunit/phpunit": "^11 || ^12.5"
+                "phpunit/phpunit": "^11 || ^12.5 || ^13.0"
             },
             "suggest": {
                 "ext-apcu": "Required for the APCu dashboard.",
@@ -73,9 +73,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RobiNN1/phpCacheAdmin/issues",
-                "source": "https://github.com/RobiNN1/phpCacheAdmin/tree/2.4.0"
+                "source": "https://github.com/RobiNN1/phpCacheAdmin/tree/2.4.1"
             },
-            "time": "2026-01-02T13:37:50+00:00"
+            "time": "2026-02-06T19:41:40+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

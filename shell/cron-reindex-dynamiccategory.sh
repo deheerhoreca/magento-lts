@@ -11,6 +11,6 @@ export NO_DEV=0
 cm
 . ./shell/cron-bootstrap.sh
 
-php -c etc/php.cmd.ini shell/indexer.php --reindex dynamiccategory
+php -c etc/php.ini shell/indexer.php --reindex dynamiccategory
 
 . ./shell/cron-wrapup.sh

@@ -12,16 +12,16 @@ set -u      # Treat unset variables as an error when substituting
 
 cm
 
-TARGET_PHP_INI=./etc/php.cmd.ini
-COPY_PHP_INI=./php.cmd.ini
+TARGET_PHP_INI=./etc/php.ini
+COPY_PHP_INI=./php.ini
 TARGET_USER_INI=_user.ini
-PHP_VERSION=$(php -c etc/php.cmd.ini -r "echo phpversion();") || {
+PHP_VERSION=$(php -c etc/php.ini -r "echo phpversion();") || {
   echo "Fatal error: Unable to determine PHP version"
   exit 1
 }
 
-# Backup php.cmd.ini
-PHP_INI_BACKUP="php.cmd.ini.bak-$(date +%F_%H%M%S)"
+# Backup php.ini
+PHP_INI_BACKUP="php.ini.bak-$(date +%F_%H%M%S)"
 cp ${TARGET_PHP_INI} ${PHP_INI_BACKUP}
 if [ $? -ne 0 ]; then
   echo "Fatal error: Failed to backup ${TARGET_PHP_INI}. Keeping current configuration."
@@ -38,9 +38,9 @@ if [ $? -ne 0 ]; then
 fi
 echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 
-# Create new php.cmd.ini
-SHARED_PHP_INI=$(pwd)/etc/php.cmd-dist.ini
-LOCAL_PHP_INI=$(pwd)/etc/php.cmd-local.ini
+# Create new php.ini
+SHARED_PHP_INI=$(pwd)/etc/php-dist.ini
+LOCAL_PHP_INI=$(pwd)/etc/php-local.ini
 NOW=`date`
 
 # Truncate:

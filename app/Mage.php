@@ -535,8 +535,8 @@ final class Mage
             $took = omStopTimer(false, $start);
             if($took > 5) {
                 // devLog(var_export($data, true));
-                $took = number_format($took, 2);
-                devLog("{$name} event dispatched in ".di($took)." ms");
+                $took = str_pad(number_format($took, 2), 6, " ", STR_PAD_LEFT);
+                devLog("Event dispatched in ".di($took)." ms: {$name}");
             }
         }
         Varien_Profiler::stop('DISPATCH EVENT:' . $name);
@@ -904,7 +904,15 @@ final class Mage
         
         // DHH CORE HACK -- Suppress rules and force log file name for most destinations
         // $logActive    = true;
-        if(!in_array($file, ["verbose.txt", "aoemodelcache.txt", "cron.log", "paynl.log", "mollie.log", "fpc.txt", "sql_profiler.txt"], true)) {
+        if(!in_array($file, [
+            "verbose.txt", 
+            "aoemodelcache.txt",
+            "cron.log",
+            "paynl.log",
+            "mollie.log",
+            "fpc.txt",
+            "firegento.log",
+            "sql_profiler.txt"], true)) {
             $file = "system.log";
         }
         // $maxLogLevel  = Zend_Log::DEBUG;
@@ -947,14 +955,15 @@ final class Mage
 
         try {
             if (!isset($loggers[$file])) {
-                // Validate file extension before save. Allowed file extensions: log, txt, html, csv
-                $_allowedFileExtensions = explode(
-                    ',',
-                    (string) self::getConfig()->getNode('dev/log/allowedFileExtensions', Mage_Core_Model_Store::DEFAULT_CODE)
-                );
-                if (! ($extension = pathinfo($file, PATHINFO_EXTENSION)) || ! in_array($extension, $_allowedFileExtensions)) {
-                    return;
-                }
+                // // Validate file extension before save. Allowed file extensions: log, txt, html, csv
+                // $_allowedFileExtensions = explode(
+                //     ',',
+                //     (string) self::getConfig()->getNode('dev/log/allowedFileExtensions', Mage_Core_Model_Store::DEFAULT_CODE)
+                // );
+                // if (! ($extension = pathinfo($file, PATHINFO_EXTENSION)) || ! in_array($extension, $_allowedFileExtensions)) {
+                //     // Mage::log("Invalid log file extension '{$extension}' for file '{$file}'. Allowed extensions: " . implode(', ', $_allowedFileExtensions), Zend_Log::ERR);
+                //     return;
+                // }
 
                 $logDir = self::getBaseDir('var') . DS . 'log';
                 $logFile = $logDir . DS . $file;
