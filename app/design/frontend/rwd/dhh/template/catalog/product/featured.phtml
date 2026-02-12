@@ -39,12 +39,10 @@ $_products = Mage::getModel("catalog/product")->getCollection()
   ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
   ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
   ->addFieldToFilter([["attribute" => "featured", "eq" => 1]])
-  // ->addAttributeToFilter("sku", ["in" => ["CS-7455.3300", "CS-7450.0159", "CS-7450.0580", "CS-7464.0045", "CS-7072.1015"]])
-  ->addAttributeToSort("popularity", "ASC")
-  ->setPageSize(($limit * 6))                 // Random pick from top
-  ->addFinalPrice()                           // Necessary to respect sale price end date
-  ->setFlag("require_stock_items", true)
-  ->load();
+  ->addFinalPrice() // Necessary to respect sale price end date
+  ->setPage(1, $limit);
+$_products->getSelect()->order("rand()");
+$_products->load();
 $mage_stock_model->addItemsToProducts($_products);
 
 if($_products->getFirstItem()) { ?>
@@ -54,9 +52,9 @@ if($_products->getFirstItem()) { ?>
       $i = 0;
       $total = $_products->getSize();
       foreach($_products as $_product) {
-        if($total > $limit && mt_rand(0, 100) > 75) {
-          continue; // Poor man's random
-        }
+        // if($total > $limit && mt_rand(0, 100) > 75) {
+        //   continue; // Poor man's random
+        // }
         $done_dhh_skus[] = $_product->getSku();
         echo "<li class='item'>";
         $dhh_util_helper->getProductGridHtml($_product, $product_block, $options);

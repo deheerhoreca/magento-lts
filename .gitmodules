@@ -1,0 +1,3 @@
+[submodule "skin/frontend/rwd/dhh/pay-images"]
+	path = skin/frontend/rwd/dhh/pay-images
+	url = https://github.com/paynl/pay-images

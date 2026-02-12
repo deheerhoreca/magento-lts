@@ -50,8 +50,8 @@
 !/var/.htaccess
 
 # composer
-/vendor
-/protected/pca/vendor/
+/vendor/*
+/protected/pca/vendor/*
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
@@ -130,28 +130,12 @@ phpunit.xml
 /.well-known/acme-challenge/
 /skin/assets/
 
+# Extend the dist ignore to the whole media dir (it's now a LINK)
+# ----------------------------------------------------------------
 # The LINK, nor the DIR
 media
-
-# Extend the dist ignore to the whole media dir (it's now a LINK)
 # NOT /media/*, that does NOT ignore the /media/ dir itself
 /media/
-/media.local/
-/media.nfs/
-
-# FIRST UNIGNORE /MEDIA/*, THEN IGNORE MOST AGAIN
-# !/media/*
-# /media/amfeed
-# /media/cache
-# /media/attachment
-# /media/productattachment
-# /media/import
-# /media/sooqr
-# /media/qquoteadv
-# /media/catalog
-# /media/tmp
-# /media/dhh
-# /media/wysiwyg/*
 
 # BILLER WEBHOOK
 /biller-webhook-errors.jsonl
@@ -176,6 +160,18 @@ media
 ######################################################
 
 /app/code/community/Cm
+
+##############################################################
+# UNIGNORE EMBEDDED COMPOSER FILES
+# Only where composer had installed vendor/**/vendor WITH composer.lock files,
+# to ensure git tracking of those files, and not ignore them by the general /vendor/* rule.
+# Will require "git add -f" as well.
+# > find vendor -name composer.lock
+# > find vendor -name vendor
+#############################################################
+
+!/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.lock
+!/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.json
 
 ######################################################
 # UNIGNORE ALL COREHACKED FILES TO ENSURE GIT TRACKING
@@ -369,14 +365,10 @@ media
 !/skin/frontend/rwd/dhh/tm/firecheckout/js/components/order-review.js
 
 ##################################################
-# IGNORE SYMLINKED DHH FORKS
+# ADDED BY COMPOSER OPENMAGE PLUGIN INSTALLER
 ##################################################
-
-# deheerhoreca/Aoe_BlackHoleSession
 /app/code/community/Aoe/BlackHoleSession
 /app/etc/modules/Aoe_BlackHoleSession.xml
-
-# deheerhoreca/Magento-SMTP-Pro-Email-Extension
 /app/locale/de_DE/Aschroder_SMTPPro.csv
 /app/locale/es_ES/Aschroder_SMTPPro.csv
 /app/locale/fr_FR/Aschroder_SMTPPro.csv
@@ -384,12 +376,6 @@ media
 /app/locale/pt_BR/Aschroder_SMTPPro.csv
 /app/locale/ru_RU/Aschroder_SMTPPro.csv
 /app/locale/tr_TR/Aschroder_SMTPPro.csv
-
-# deheerhoreca/Aoe_Profiler
-
-# deheerhoreca/firegento-adminmonitoring
-
-
 /app/code/local/MM/MonacoEditor
 /js/monacoeditor
 /app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
