@@ -884,16 +884,18 @@ final class Mage
         // DHH CORE HACK -- Remove certain debug messages
         $level = is_null($level) ? Zend_Log::DEBUG : $level;
         
-        $GLOBALS["dhh_mage_ignored_msgs"] ??= [
+        static $dhh_mage_ignored_msgs = null;
+        $dhh_mage_ignored_msgs ??= [
             "Start: aoescheduler_heartbeat",
             "Start: core_email_queue_send_all",
             "Stop: aoescheduler_heartbeat",
             "Stop: core_email_queue_send_all",
             "SMTP Pro using queue override page size: 25",
             "SMTP Pro using queue override pause: 500000",
+            "Pending schedule for * already exists * times. Skipping.",
         ];
         
-        if($level === Zend_Log::DEBUG && is_string($message) && in_array($message, $GLOBALS["dhh_mage_ignored_msgs"], true)) {
+        if($level === Zend_Log::DEBUG && is_string($message) && sis($dhh_mage_ignored_msgs, $message)) {
             return ;
         }
         // END DHH CORE HACK -- Remove certain debug messages

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+: '
+Compresses all assets in the specified directory using Brotli, Zstd, and Gzip.
+Useful for web servers to serve compressed assets to clients without needing to compress on-the-fly.
+Usage: om-compress-assets
+'
+
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -10,8 +16,11 @@ if [[ "$DIR" == "" ]]; then
   exit 1
 fi
 
+# For all targeted extensions, compress the file using Brotli, Zstd, and Gzip if it does not already exist. The original file is kept.
 for file in $(find "$DIR" -type f -iname '*.css' -or -iname '*.js' -or -iname '*.json' -or -iname '*.svg' -or -iname '*.xml'); do
-  # echo -n "Compressing ${file}... "
+  if [[ -f "${file}.br" && -f "${file}.zst" && -f "${file}.gz" ]]; then
+    continue
+  fi
   /home/linuxbrew/.linuxbrew/bin/brotli -q 11 --force -o "${file}.br" "${file}"
   /home/linuxbrew/.linuxbrew/bin/zstd -19 -k -f "${file}"
   /home/linuxbrew/.linuxbrew/bin/gzip --keep --best --force "${file}"

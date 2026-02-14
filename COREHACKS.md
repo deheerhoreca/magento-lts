@@ -139,7 +139,8 @@
 - `app/design/frontend/base/default/template/payment/info/pdf/default.phtml`
 - `app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml`
 
-### grep -ril "DHH "  dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
+### grep -ril "DHH "  ./*.* dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
+- `scheduler_cron.sh`
 - `js/amasty/amshopby/amshopby-ajax.js`
 - `js/amasty/amshopby/amshopby.js`
 - `js/aw_searchautocomplete/main.js`
@@ -369,13 +370,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - **Amasty Base**
   - `app/code/local/Amasty/Base/Model/Feed.php`
     - Disable admin spam
-- **Amasty Feeds**
-  - `app/code/local/Amasty/Feed/Model/Profile.php`
-    - https://amasty.com/knowledge-base/product-feed-output-https-links-to-image-urls.html
-    - Include an HTTPS link to an image URL in a product feed
-    - https://github.com/loekvangool/deheerhoreca-magento/commit/05dc4f8ab5a39f4a9f47663b3a4e225d4bce932d
-  - `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
-    - Make sure dynamic category IDs don't make it into the feeds
 - **Amasty ShopBy**
   - `js/amasty/amshopby/jquery-ui.min.js`
     - Updated to a newer version
@@ -435,9 +429,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Prevent doing str_replace on arrays
   - `app/code/community/Afterpay/Afterpay/controllers/Adminhtml/AfterpayController.php`
     - Fix ACL
-- **Staempfli ProductAttachment**
-  - https://github.com/staempfli/magento-product-attachment
-  - Patched up to master on 2023-01-17 (commit 445557b)
 - **aHeadWorks**
   - `app/code/local/AW/Autorelated/Block/Blocks/Abstract.php`
     - Performance improvements
@@ -503,6 +494,16 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Adding checks due to divide by zero errors
     - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
     - Replaced by our own fork
+- **Amasty Feeds**
+  - `app/code/local/Amasty/Feed/Model/Profile.php`
+    - https://amasty.com/knowledge-base/product-feed-output-https-links-to-image-urls.html
+    - Include an HTTPS link to an image URL in a product feed
+    - https://github.com/loekvangool/deheerhoreca-magento/commit/05dc4f8ab5a39f4a9f47663b3a4e225d4bce932d
+  - `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
+    - Make sure dynamic category IDs don't make it into the feeds
+- **Staempfli ProductAttachment**
+  - https://github.com/staempfli/magento-product-attachment
+  - Patched up to master on 2023-01-17 (commit 445557b)
 - **app/design/adminhtml/**
   - `app/design/adminhtml/default/default/template/sales/order/view/items/renderer/default.phtml`
     - Bugfixes

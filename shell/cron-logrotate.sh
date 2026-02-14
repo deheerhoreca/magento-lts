@@ -31,6 +31,7 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 ~/workspace/openmage/var/log/*jsonl
 ~/workspace/openmage/var/log/*ndjson
 ~/logs/deheerhoreca-magento/*log
+~/logs/deheerhoreca-magento/*.jsonl
 {
   daily
   dateext
