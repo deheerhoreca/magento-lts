@@ -183,14 +183,15 @@
         </observers>
       </catalog_product_edit_action>
       <!-- Cloning this event into adminhtml to support fbminify in there as well -->
-      <http_response_send_before>
-        <observers>
-          <fballiano_cssjsminify>
-            <class>fballiano_cssjsminify/observer</class>
-            <method>httpResponseSendBefore</method>
-          </fballiano_cssjsminify>
-        </observers>
-      </http_response_send_before>
+      <!-- @todo Fix bug with minified WYSIWYG editor files before reactivation -->
+      <!-- <http_response_send_before> -->
+        <!-- <observers> -->
+          <!-- <fballiano_cssjsminify> -->
+            <!-- <class>fballiano_cssjsminify/observer</class> -->
+            <!-- <method>httpResponseSendBefore</method> -->
+          <!-- </fballiano_cssjsminify> -->
+        <!-- </observers> -->
+      <!-- </http_response_send_before> -->
     </events>
   </adminhtml>
 </config>

@@ -18,7 +18,6 @@ $storeId                      = $store->getId();
 $catalog                      = $this->getLayout()->createBlock("catalog/product_list")->setStoreId($storeId);
 $product_block                = $this->getLayout()->createBlock("catalog/product_price");
 $attributes                   = $dhh_util_helper::getProductAttributes("listview", ["popularity", "featured"]);
-$done_dhh_skus                = [];
 
 // Block of semi-random recommended products
 $parent_categories_ids    = [];
@@ -27,12 +26,12 @@ $displaySize              = 175;
 $_imgSize                 = 1 * $displaySize;
 $limit                    = 5;
 $options                  = [
-  "image_size"              => 125,
   "_blank"                  => false,
-  "use_short_product_names" => true,
   "display"                 => "normal",
-  "skip_actions"            => true,
   "fast_stock"              => true,
+  "skip_actions"            => true,
+  "skip_usps"               => false,
+  "use_short_product_names" => true,
 ];
 $_products = Mage::getModel("catalog/product")->getCollection()
   ->addAttributeToSelect($attributes)
@@ -47,26 +46,17 @@ $mage_stock_model->addItemsToProducts($_products);
 
 if($_products->getFirstItem()) { ?>
   <div id="promo-products" class="category-products mt-5 pb-0 mb-3">
-    <ul class="products-grid products-grid--max-<?=$_columnCount?>-col">
-      <?php
+    <ul class="products-grid products-grid--max-<?=$_columnCount?>-col"><?php
       $i = 0;
-      $total = $_products->getSize();
       foreach($_products as $_product) {
-        // if($total > $limit && mt_rand(0, 100) > 75) {
-        //   continue; // Poor man's random
-        // }
-        $done_dhh_skus[] = $_product->getSku();
         echo "<li class='item'>";
         $dhh_util_helper->getProductGridHtml($_product, $product_block, $options);
         echo "</li>";
-        
         $i++;
         if($i === $limit) break;
-      }
-      ?>
+      } ?>
     </ul>
-  </div>
-  <?php
+  </div><?php
 }
 unset($_products);
 
@@ -84,260 +74,49 @@ unset($_products);
  * We now use both as an experiment...
  */
 
-$limit                  = 8;
+$limit                  = 10;
 $parent_categories_ids  = [];
-$_columnCount           = 4;
+$_columnCount           = 5;
 $displaySize            = 175;
 $_imgSize               = 1 * $displaySize;
-
 $_products = Mage::getModel("catalog/product")->getCollection()
   ->addAttributeToSelect($attributes)
-  ->addFieldToFilter([["attribute" => "status", "eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED]])
-  ->addFieldToFilter([["attribute" => "stock_status", "eq" => 2746]])
-  ->addFieldToFilter("popularity", ["notnull" => true]) // Prevent unset new products to show up
-  ->addFieldToFilter("sku", ["nin" => $done_dhh_skus])  // Prevent duplicate products on the homepage
-  ->addAttributeToSort("popularity", "ASC")
-  ->setPageSize(($limit * 6))     // Random pick from top
-  ->addFinalPrice()               // Necessary to respect sale price end date
-  ->setFlag("require_stock_items", true)
-  ->load();
+  ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
+  ->addAttributeToFilter("stock_status", ["eq" => 2746])
+  ->addAttributeToFilter("popularity", ["notnull" => true])   // Prevent unset new products to show up
+  ->addAttributeToFilter("featured", ["neq" => 1])
+  ->addAttributeToSort("popularity", "ASC")               // Can't move away from popularity sort because the subset is way too big otherwise.
+  ->addFinalPrice()                                       // Necessary to respect sale price end date
+  ->setPage(1, $limit * 5);                               // Get more products than needed to have some variety in the random selection
+$_products->load();
 $mage_stock_model->addItemsToProducts($_products);
 
 if($_products->getFirstItem()) { ?>
-  <div class="category-products mt-3">
-    <div style="border-bottom: 1px solid var(--bs-gray-500); border-top: 1px solid var(--bs-gray-500); background-color: var(--color-light-gray);" class="my-1 py-1">
-      <h2 class="center py-1 my-1">Hardlopers:</h2>
-    </div>
+  <div style="border-bottom: 1px solid var(--bs-gray-500); border-top: 1px solid var(--bs-gray-500); background-color: var(--color-light-gray);" class="my-1 py-1">
+    <h2 class="center py-1 my-1">Hardlopers:</h2>
+  </div>
+  
+  <div id="promo-products" class="category-products mt-5 pb-0 mb-3">
     <ul class="products-grid products-grid--max-<?=$_columnCount?>-col"><?php
       $i = 0;
       foreach($_products as $_product) {
-        if(mt_rand(0, 100) > 35) {
-          continue; // Poor man's random
-        }
+        echo "<li class='item'>";
+        $dhh_util_helper->getProductGridHtml($_product, $product_block, $options);
+        echo "</li>";
         $i++;
-        if($i > $limit) {
-          break;
-        }
-        $html = "";
-        $dhh_sku = $_product->getSku();
-        
-        // If a product is present in multiple categories, we don't want to change that in this view
-        $productUrl = $dhh_util_helper->getFullProductUrlSafe($_product, true, 1);
-        // $productUrl = $_product->getProductUrl(); // Fallback
-        
-        // $price_html           = $this->getPriceHtml($_product, true); // ListView version
-        $price_html           = $product_block->getPriceHtml($_product, true); // FeaturedProdcts version
-        $finalPrice           = (float) $_product->getFinalPrice();
-        $stock_data           = $dhh_util_helper->getStockInfo($_product, ["context" => "listview"]);
-        $stock_message        = $stock_data["stock_message"];
-        $stock_class          = $stock_data["txtcltcz"];
-        $stock_qty            = $stock_data["stock_qty"];
-        $in_stock             = $stock_data["in_stock"];
-        $backorders           = $stock_data["backorders"];
-        $saleable             = $stock_data["saleable"];
-        $eol                  = $stock_data["eol"];
-        $eol_replacement_sku  = $stock_data["eol_replacement_sku"];
-        $manage_stock         = $stock_data["manage_stock"];
-        $extra_delivery_time  = $stock_data["extra_delivery_time"];
-        $overall_stock_status = $stock_data["overall_stock_status"];
-        $txtstockdate         = $stock_data["txtstockdate"];
-        $levertijd            = $stock_data["levertijd"];
-        
-        $additional_delivery_messages = null;
-        
-        switch($overall_stock_status) {
-          case "in_stock":
-            if($finalPrice >= $freeshipping_from) {
-              $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
-            }
-            break;
-          case "backorder":
-            if($finalPrice >= $freeshipping_from) {
-              $additional_delivery_messages .= "<br><span class='buyblock-usp' style='line-height: 1.5em;'><strong>Gratis</strong> bezorgd</span>";
-            }
-            $stock_class = "buyblock-usp";
-            break;
-        }
-        
-        $brand                = _get_product_attribute($_product, "manufacturer");
-        $sku_seller           = _get_product_attribute($_product, "sku_seller");
-        $tagline              = _get_product_attribute($_product, "tagline");
-        
-        $usp_options          = [
-          "context"             => "featured",
-        ];
-        $usps                 = $dhh_util_helper->getProductUsps($_product, $usp_options, 6);
-        
-        // Price Block
-        $price_html           = str_replace(",00", ",-", (string) $price_html);
-        $price_html           = str_replace("€", "", $price_html);
-        
-        // Black friday
-        if($show_black_friday && ($overall_stock_status === "in_stock" || $overall_stock_status === "backorder")) {
-          $html .= '<span class="bf-banner-list"></span>';
-        } else {
-          // Product label
-          $productlabel = $dhh_util_helper->auto_productlabel($_product, "list");
-          if(empty($productlabel) === false) {
-            $html .= "<span class='product-label'>{$productlabel}</span>";
-          }
-        }
-
-        // Energy rating
-        $value = _get_product_attribute($_product, "energy_efficiency_class_a_g");
-        if(empty($value) === false) {
-          $enclz = null;
-          switch ($value) {
-            case 'A':     $enclz = 'enrgclz1';  break;
-            case 'B':     $enclz = 'enrgclz2';  break;
-            case 'C':     $enclz = 'enrgclz3';  break;
-            case 'D':     $enclz = 'enrgclz4';  break;
-          }
-          if($enclz !== null) {
-            $html .= "<span class='lblenergylabel {$enclz}' title='Energielabel {$value}'>{$value}</span>";
-          }
-        }
-        
-        // Package quantity
-        $value = intval(_get_product_attribute($_product, "eenheid"));
-        if($value > 1) {
-          $html .= "<span class='product-label product-label-right bg-blue'>{$value}x</span>";
-        }
-        
-        // Product name
-        $product_name = $product_long_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
-        
-        // Product thumbnail
-        $media_url        = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-        $image_url        = "{$media_url}/catalog/product{$_product->getThumbnail()}";
-        $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
-        $image_path       = "{$media_dir}/catalog/product{$_product->getThumbnail()}";
-        if(is_file($image_path)) {
-          $col_width        = 200;
-          $cdn_img_options  = [
-            "identifier"      => $dhh_sku,
-            "fs_path"         => $image_path,
-            "url"             => $image_url,
-            "fit"             => "contain",
-            "width"           => $col_width,
-            "height"          => $col_width,
-            "lazy"            => true,
-            "add_mod_time"    => true,
-            "class"           => "trans-opacity",
-            "title"           => $product_name,
-            "alt"             => $product_name,
-            // "quality"         => 75,
-            // "dpr"             => 1.25,
-            "relative_url"    => false,
-            "xform"           => "omcatprdlst", // w-200,h-200,q-80,c-at_max_enlarge,dpr-auto
-          ];
-          $img_html         = _cdn_img($cdn_img_options);
-        }
-        ?>
-        <li class="item">
-          <?= $html ?>
-          <a href="<?= $productUrl ?>" title="<?= $this->quoteEscape($product_long_name) ?> details" class="product-image"><?=$img_html?></a>
-          <div class="product-info" data-pop="<?=_get_product_attribute($_product, "popularity");?>">
-            <div class="info">
-              <span class="brand-name small fw-600 gray"><?= "{$brand} <span class=light-gray>{$sku_seller}</span>" ?></span>
-              <h2 class='product-name ellipsed ellipsed-2'>
-                <a href='<?= $productUrl ?>' title='<?= $product_long_name ?> details'><?= $product_name ?></a>
-              </h2>
-              <?php
-              if($this->getChild('name.after')) {
-                $_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
-                foreach ($_nameAfterChildren as $_nameAfterChildName) {
-                  $_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
-                  $_nameAfterChild->setProduct($_product);
-                  echo $_nameAfterChild->toHtml();
-                }
-              }
-              
-              if(isset($tagline)) {
-                echo "<div class='product-list-tagline' title='{$tagline}'>Onze Keuze</div>";
-              }
-              
-              if(sizeof($usps) > 0) {
-                echo "<ul class='product-list-highlights inline-list'>";
-                foreach($usps as $usp) {
-                  echo "<li>{$usp}</li>";
-                }
-                echo "</ul>";
-              }
-              
-              // Volume discount tag
-              if(!empty($_product->getTierPrice()))
-                echo "<span class='small' style='line-height: 2em;'><i class='fa fa-eur' aria-hidden='true'></i>&nbsp;<em>Volumekorting</em></span>";
-              ?>
-            </div>
-            <?php
-            echo $price_html;
-            if($show_actions) { ?>
-              <div class="actions hstack w-100"><?php
-                if(!$_product->canConfigure()) {
-                  if($_product->isSaleable()) {
-                    // Simple product, sellable
-                    ?>
-                    <div class="float-left">
-                      <span class="<?= $stock_class ?>" style='line-height: 1.5em;'><?= $stock_message ?></span>
-                      <?= $additional_delivery_messages ?>
-                    </div>
-                    <button type="button" title="<?= $this->quoteEscape($this->__('Add to Cart')) ?>" class="button btn-cart" onclick="setLocation('<?= $this->getAddToCartUrl($_product) ?>')"><i class="fa fa-shopping-cart"></i></button><?php
-                  } else {
-                    // Simple product, not sellable
-                    ?>
-                    <div class="float-left">
-                      <span class="<?= $stock_class ?>" style='line-height: 1.5em;'><?= $stock_message ?></span>
-                      <?= $additional_delivery_messages ?>
-                    </div>
-                    <a title="<?= $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?= $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a><?php
-                  }
-                } else {
-                  // Configurable product
-                  ?>
-                  <div class="float-left">
-                    <span class="buyblock-usp" style='line-height: 1.5em;'>Meerdere varianten</span>
-                    <?= $additional_delivery_messages ?>
-                  </div>
-                  <a title="<?= $this->quoteEscape($this->__("Details")) ?>" class="button btn-cart" href="<?= $_product->getProductUrl() ?>" style="padding-top: 5px;"><i class="fa fa-info-circle"></i></a><?php
-                } ?>
-              </div><?php
-            } ?>
-          </div>
-        </li>
-
-        <?php
-        if($show_ups_block && ($i === $_columnCount || ($i - $_columnCount) % ($_columnCount*2) === 0) && $_collectionSize > $i) { ?>
-          </ul>
-            <div class="new-tab-contant-text mobile-hide">
-              <div class="col-md-3 new-contant">
-                <p><i class="fa fa-check"></i>Altijd de beste prijs</p>
-                <p><i class="fa fa-check"></i>Advies door professionals</p>
-              </div>
-              <div class="col-md-3 new-contant">
-                <p><i class="fa fa-check"></i>Wij vergelijken de prijzen</p>
-                <p><i class="fa fa-check"></i>Gratis verzending vanaf &euro;150,-</p>
-              </div>
-              <div class="col-md-3 new-contant">
-                <p><i class="fa fa-check"></i>Professionele apparatuur</p>
-                <p><i class="fa fa-check"></i>Snelle levering</p>
-              </div>
-            </div>
-          <ul class="products-grid products-grid--max-<?= $_columnCount ?>-col">
-        <?php }
+        if($i === $limit) break;
       } ?>
     </ul>
-  </div>
-  <?php
-  
-  // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
-  if($this->getChild('after')) {
-    $_afterChildren = $this->getChild('after')->getSortedChildren();
-    foreach ($_afterChildren as $_afterChildName) {
-      $_afterChild = $this->getChild('after')->getChild($_afterChildName);
-      //set product collection on after blocks
-      $_afterChild->setProductCollection($_products);
-      echo $_afterChild->toHtml();
-    }
+  </div><?php
+}
+
+// Provides a block where additional page components may be attached, primarily good for in-page JavaScript
+if($this->getChild('after')) {
+  $_afterChildren = $this->getChild('after')->getSortedChildren();
+  foreach ($_afterChildren as $_afterChildName) {
+    $_afterChild = $this->getChild('after')->getChild($_afterChildName);
+    //set product collection on after blocks
+    $_afterChild->setProductCollection($_products);
+    echo $_afterChild->toHtml();
   }
 }

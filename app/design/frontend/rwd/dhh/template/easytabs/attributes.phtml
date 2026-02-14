@@ -317,13 +317,16 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
             } elseif($supplier === "maxima") {
               $link_url   = "/garantievoorwaarden-maxima";
               $link_title = "Aanvullende garantievoorwaarden Maxima";
+            } elseif($supplier === "gastro-inox") {
+              $link_url   = "/garantievoorwaarden-gastro-inox";
+              $link_title = "Aanvullende garantievoorwaarden Gastro-Inox";
             }
             break;
           
           default:
             $value = $_helper->productAttribute($_product, $value, $code);
         }
-      
+        
         /* Post-process individual attributes */
         if(isset($attr_hide_zero[$code]) && $value == 0) {
           continue;

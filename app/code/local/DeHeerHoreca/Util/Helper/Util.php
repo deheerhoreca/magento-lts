@@ -357,18 +357,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    *   "_blank"                  => false,         // Open in a new window
    *   "show_category_link"      => false,         // Show a link to the category
    *   "prefer_rewrite_table"    => false,         // Get product URL preferring the rewrite table
-   *   "use_short_product_names" => false,         // Use brand + MPN instead of product name @deprecated
    *   "fast_stock"              => false,         // Base stock data on stock_status product field only
    * ];
-   * 
+   *
    * "display" usage:
    * -----------------------------------------------------------------------------------------------------
    * - mini: related, autorelated, upsell
    * - normal: listview
    *
-   * @param  mixed $_product
-   * @param  mixed $product_block
-   * @param  array $options
+   * @todo Return a string, do not output directly from this function.
+   *
+   * @param  mixed  $_product
+   * @param  mixed  $product_block
+   * @param  array  $options
    *
    * @return void
    */
@@ -379,7 +380,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $display_product_name     = $product_name;
     $brand                    = $_product->getAttributeText("manufacturer");
     $sku_seller               = $_product->getData("sku_seller");
-    
     $display                  = $options["display"]                 ?? "normal";
     $a_target                 = $options["_blank"]                  ?? null;
     $image_size               = $options["image_size"]              ?? 150;
@@ -387,12 +387,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $skip_actions             = $options["skip_actions"]            ?? false;
     $show_category_link       = $options["show_category_link"]      ?? false;
     $prefer_rewrite_table     = $options["prefer_rewrite_table"]    ?? false;
-    // $use_short_product_names  = $options["use_short_product_names"] ?? false;
     $fast_stock               = $options["fast_stock"]              ?? false;
+    $max_product_usps         = ($display === "mini")               ? 4 : 8;
     
-    $max_product_usps         = ($display === "mini")               ? 4 : 10;
-    
-    if(empty($a_target) === false) {
+    if(!empty($a_target)) {
       $a_target = " target=\"{$a_target}\"";
     }
     
@@ -491,7 +489,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       ];
       $img_html = _cdn_img($cdn_img_options);
     } else {
-      // Failure should not happen, but this is a fallback
       $img_url  = $product_block->helper("catalog/image")->init($_product, "thumbnail")->resize($image_size);
       $img_html = "<img loading=\"lazy\" class=\"center\" id=\"{$img_id}\" src=\"{$img_url}\" alt=\"{$image_label}\" width=\"{$image_size}\" height=\"{$image_size}\">";
     } ?>
@@ -675,6 +672,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       if(sizeof($usps) >= $max_count) break;
       
       // Uitvoering
+      // @todo Only in categories with varying types (gas and electric mixed)
       $attribute_code  = "uitvoering";
       $attribute_value = _get_product_attribute($_product, $attribute_code);
       if(empty($attribute_value) === false) {
