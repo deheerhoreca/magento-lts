@@ -493,3 +493,5 @@ media
 /skin/adminhtml/default/default/aoe_scheduler
 /scheduler_cron.sh
 /dev/tests/aoe_scheduler
+/app/code/community/Aoe/ModelCache
+/app/etc/modules/Aoe_ModelCache.xml

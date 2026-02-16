@@ -136,7 +136,7 @@
     
     <!-- Enbable during development only -->
     <Aoe_CacheStats>
-      <active>true</active>
+      <active>false</active>
     </Aoe_CacheStats>
     
     <!-- Not used -->

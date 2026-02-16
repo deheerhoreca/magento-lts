@@ -30,6 +30,7 @@
     "aoepeople/aoe_blackholesession": "dev-dhh-fixes",
     "aoepeople/aoe_cachestats": "dev-master",
     "aoepeople/aoe_dbretry": "dev-master",
+    "aoepeople/aoe_modelcache": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
     "aoepeople/aoe_scheduler": "*",
     "aoepeople/aoe_templatehints": "^0.4.4",
@@ -100,6 +101,7 @@
         "aoepeople/aoe_blackholesession",
         "aoepeople/aoe_dbretry",
         "aoepeople/aoe_cachestats",
+        "aoepeople/aoe_modelcache",
         "aoepeople/aoe_profiler",
         "aoepeople/aoe_scheduler",
         "aschroder/smtp_pro",
@@ -121,6 +123,13 @@
       "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession",
       "only": [
         "aoepeople/aoe_blackholesession"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/deheerhoreca/Aoe_ModelCache",
+      "only": [
+        "aoepeople/aoe_modelcache"
       ]
     },
     {

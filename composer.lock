@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "636c0a729b9396b119838697791d23a1",
+    "content-hash": "8abe3cf01a66a3d5c4027631a9c845b3",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -109,6 +109,40 @@
                 "source": "https://github.com/deheerhoreca/Aoe_DbRetry/tree/master"
             },
             "time": "2025-12-31T17:05:05+00:00"
+        },
+        {
+            "name": "aoepeople/aoe_modelcache",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deheerhoreca/Aoe_ModelCache.git",
+                "reference": "7acb04355a5f94397818399956698a3500b03bf0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_ModelCache/zipball/7acb04355a5f94397818399956698a3500b03bf0",
+                "reference": "7acb04355a5f94397818399956698a3500b03bf0",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Fabrizio Branca",
+                    "email": "firstname.lastname@aoe.com"
+                }
+            ],
+            "description": "Magento Model Cache",
+            "support": {
+                "source": "https://github.com/deheerhoreca/Aoe_ModelCache/tree/master"
+            },
+            "time": "2026-02-15T23:46:21+00:00"
         },
         {
             "name": "aoepeople/aoe_profiler",
@@ -6243,6 +6277,7 @@
         "aoepeople/aoe_blackholesession": 20,
         "aoepeople/aoe_cachestats": 20,
         "aoepeople/aoe_dbretry": 20,
+        "aoepeople/aoe_modelcache": 20,
         "aoepeople/aoe_profiler": 20,
         "aschroder/smtp_pro": 20,
         "aydus/headorder": 20,
