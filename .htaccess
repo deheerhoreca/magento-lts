@@ -34,7 +34,7 @@
     #php_flag zlib.output_compression on
 
 ###########################################
-# disable user agent verification to not break multiple image upload
+## disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
 
@@ -62,18 +62,11 @@
     #php_flag zlib.output_compression on
 
 ###########################################
-# disable user agent verification to not break multiple image upload
+## disable user agent verification to not break multiple image upload
+## feel free to disable the next line if you are on PHP 8.3 or later, as it will have no effect anymore
 
     php_flag suhosin.session.cryptua off
 
-</IfModule>
-
-<IfModule mod_security.c>
-###########################################
-# disable POST processing to not break multiple image upload
-
-    SecFilterEngine Off
-    SecFilterScanPOST Off
 </IfModule>
 
 <IfModule mod_deflate.c>
@@ -224,7 +217,8 @@
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/pdf "access plus 1 month"
     ExpiresByType text/x-javascript "access plus 1 month"
-    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
     ExpiresByType image/x-icon "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresDefault "access plus 2 days"
