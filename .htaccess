@@ -14,6 +14,7 @@
 
 ############################################
 ## php7 settings
+## note that if you're using PHP-FPM, both php_value and php_flag will have no effect and they need to be added to php.ini instead
 
 <IfModule mod_php7.c>
 
@@ -42,6 +43,7 @@
 
 ############################################
 ## php8 settings
+## note that if you're using PHP-FPM, both php_value and php_flag will have no effect and they need to be added to php.ini instead
 
 <IfModule mod_php.c>
 
