@@ -1,5 +1,11 @@
 #!/bin/bash -l
 
+export NO_DEV=0
+
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
+
 set -euo pipefail
 IFS=$'\n\t'
 

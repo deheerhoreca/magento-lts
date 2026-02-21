@@ -7,10 +7,10 @@
 export PREFER_HOST=ma
 export NO_DEV=0
 
-. ${HOME}/.bash_profile
-cm
-. ./shell/cron-bootstrap.sh
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
-openmage shell/indexer.php --reindex catalogsearch_fulltext
+openmage shell/om-indexer --reindex catalogsearch_fulltext
 
 . ./shell/cron-wrapup.sh

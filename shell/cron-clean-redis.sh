@@ -7,9 +7,9 @@
 export REQUIRE_HOST=prod
 export NO_DEV=0
 
-. ${HOME}/.bash_profile
-cm
-. ./shell/cron-bootstrap.sh
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 openmage shell/cm_redis_tools/rediscli.php -s 127.0.0.1 -p 6379 -d 0
 # openmage shell/cm_redis_tools/rediscli.php -s 127.0.0.1 -p 6379 -d 1

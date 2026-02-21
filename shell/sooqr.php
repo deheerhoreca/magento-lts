@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Magmodules.eu - http://www.magmodules.eu
  *
@@ -13,114 +14,104 @@
  *
  * @category      Magmodules
  * @package       Magmodules_Sooqr
+ *
  * @author        Magmodules <info@magmodules.eu>
  * @copyright     Copyright (c) 2019 (http://www.magmodules.eu)
  * @license       http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-// DHH CORE HACK
+declare (strict_types = 1);
+
 set_time_limit(7200);
 
 require_once 'abstract.php';
 
-class Sooqr_Shell_GenerateFeed extends Mage_Shell_Abstract
-{
-
-    public const XPATH_ENABLED = 'sooqr_connect/generate/enabled';
-    public const XPATH_RESULT = 'sooqr_connect/generate/feed_result';
-
-    /**
-     *
-     */
-    public function run()
-    {
-        if ($generate = $this->getArg('generate')) {
-            $storeIds = $this->getStoreIds($generate);
-            foreach ($storeIds as $storeId) {
-                $timeStart = microtime(true);
-                $feed = Mage::getModel('sooqr/sooqr')->generateFeed($storeId, 'cli');
-                echo $this->getResults($storeId, $feed, $timeStart) . PHP_EOL;
-            }
-        } else {
-            echo $this->usageHelp();
-        }
+class Sooqr_Shell_GenerateFeed extends Mage_Shell_Abstract {
+  
+  public const XPATH_ENABLED = 'sooqr_connect/generate/enabled';
+  
+  public const XPATH_RESULT  = 'sooqr_connect/generate/feed_result';
+  
+  public function run() {
+    if ($generate = $this->getArg('generate')) {
+      $storeIds = $this->getStoreIds($generate);
+      foreach ($storeIds as $storeId) {
+        $timeStart = microtime(true);
+        $feed      = Mage::getModel('sooqr/sooqr')->generateFeed($storeId, 'cli');
+        echo $this->getResults($storeId, $feed, $timeStart).PHP_EOL;
+      }
+    } else {
+      echo $this->usageHelp();
     }
+  }
 
-    /**
-     * Returns all available storeIds for feed generation.
-     *
-     * @param $generate
-     *
-     * @return array
-     */
-    public function getStoreIds($generate)
-    {
-        $allStores = Mage::helper('sooqr')->getStoreIds(self::XPATH_ENABLED);
-        if ($generate == 'next') {
-            $nextStore = Mage::helper('sooqr')->getUncachedConfigValue('sooqr_connect/generate/cron_next');
-            if (empty($nextStore) || ($nextStore >= count($allStores))) {
-                $nextStore = 0;
-            }
-
-            Mage::getModel('core/config')->saveConfig('sooqr_connect/generate/cron_next', ($nextStore + 1), 'default', 0);
-            return [$allStores[$nextStore]];
-        }
-
-        if ($generate == 'all') {
-            return $allStores;
-        }
-
-        return explode(',', trim((string) $generate));
+  /**
+   * Returns all available storeIds for feed generation.
+   *
+   * @param  $generate
+   * @return array
+   */
+  public function getStoreIds($generate) {
+    $allStores = Mage::helper('sooqr')->getStoreIds(self::XPATH_ENABLED);
+    if ($generate == 'next') {
+      $nextStore = Mage::helper('sooqr')->getUncachedConfigValue('sooqr_connect/generate/cron_next');
+      if (empty($nextStore) || ($nextStore >= count($allStores))) {
+        $nextStore = 0;
+      }
+      Mage::getModel('core/config')->saveConfig('sooqr_connect/generate/cron_next', ($nextStore + 1), 'default', 0);
+      return [$allStores[$nextStore]];
     }
-
-    /**
-     * Parse and saves result.
-     *
-     * @param $storeId
-     * @param $result
-     * @param $timeStart
-     *
-     * @return string
-     */
-    public function getResults($storeId, $result, $timeStart)
-    {
-        if (!empty($result)) {
-            $html = sprintf(
-                '<a href="%s" target="_blank">%s</a><br/><small>On: %s (cli) - Products: %s/%s - Time: %s</small>',
-                $result['url'],
-                $result['url'],
-                $result['date'],
-                $result['qty'],
-                $result['pages'],
-                Mage::helper('sooqr')->getTimeUsage($timeStart)
-            );
-            Mage::getModel('core/config')->saveConfig(self::XPATH_RESULT, $html, 'stores', $storeId);
-
-            return sprintf(
-                'Generated %s - Products: %s/%s - Time: %s',
-                $result['url'],
-                $result['qty'],
-                $result['pages'],
-                Mage::helper('sooqr')->getTimeUsage($timeStart)
-            );
-        } else {
-            return 'No feed found, please check storeId or is module is enabled';
-        }
+    if ($generate == 'all') {
+      return $allStores;
     }
+    
+    return explode(',', trim((string) $generate));
+  }
 
-    /**
-     * Retrieve Usage Help Message.
-     */
-    public function usageHelp()
-    {
-        return <<<USAGE
-Usage:  php -f sooqr.php -- [options]
-  --generate all      Generate all stores
-  --generate next     Generate next available store     
-  --generate <id>     Generate store <id> (comma seperated supported)
-USAGE;
+  /**
+   * Parse and saves result.
+   *
+   * @param  $storeId
+   * @param  $result
+   * @param  $timeStart
+   * @return string
+   */
+  public function getResults($storeId, $result, $timeStart) {
+    if (! empty($result)) {
+      $html = sprintf(
+        '<a href="%s" target="_blank">%s</a><br/><small>On: %s (cli) - Products: %s/%s - Time: %s</small>',
+        $result['url'],
+        $result['url'],
+        $result['date'],
+        $result['qty'],
+        $result['pages'],
+        Mage::helper('sooqr')->getTimeUsage($timeStart)
+      );
+      Mage::getModel('core/config')->saveConfig(self::XPATH_RESULT, $html, 'stores', $storeId);
+      
+      return sprintf(
+        'Generated %s - Products: %s/%s - Time: %s',
+        $result['url'],
+        $result['qty'],
+        $result['pages'],
+        Mage::helper('sooqr')->getTimeUsage($timeStart)
+      );
+    } else {
+      return 'No feed found, please check storeId or is module is enabled';
     }
+  }
 
+  /**
+   * Retrieve Usage Help Message.
+   */
+  public function usageHelp() {
+    return <<<USAGE
+            Usage:  php -f sooqr.php -- [options]
+              --generate all      Generate all stores
+              --generate next     Generate next available store
+              --generate <id>     Generate store <id> (comma seperated supported)
+            USAGE;
+  }
 }
 
 $shell = new Sooqr_Shell_GenerateFeed();

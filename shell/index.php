@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Usage:
- * 
- * ophp shell/index.php [index]
- */
-
 // catalog_product_attribute
 // catalog_product_price
 // catalog_url
@@ -16,6 +10,8 @@
 // cataloginventory_stock
 // dynamiccategory
 // tag_summary 
+
+declare(strict_types=1);
 
 define("MAGENTO_ROOT", __DIR__."/..");
 
@@ -44,14 +40,10 @@ if (isset($_SERVER["REQUEST_METHOD"])) {
 }
 
 $args = getopt($shortopts);
-
-$args["i"] ?? [];
-
+$args["i"] ??= [];
 echo "PID=".getmypid().PHP_EOL;
-// sleep(10);
 
 foreach((array) $args["i"] as $index) {
-  
   $index = preg_replace("/[\W]/", "", $index);
   $indexer ??= Mage::getSingleton("index/indexer");
   
@@ -66,7 +58,3 @@ foreach((array) $args["i"] as $index) {
     exit(1);
   }
 }
-
-// if(Varien_Profiler::isEnabled()) {
-//   Mage::dispatchEvent("controller_front_send_response_after");
-// }

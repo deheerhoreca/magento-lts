@@ -2,7 +2,10 @@
 
 // Rebuild invalidated caches
 
+declare(strict_types=1);
+
 require_once __DIR__."/../app/Mage.php";
+
 umask(0);
 Mage::app('default');
 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);

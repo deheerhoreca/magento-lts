@@ -11,16 +11,17 @@
             "version": "dev-dhh-fixes",
             "source": {
                 "type": "git",
-                "url": "https://github.com/deheerhoreca/Aoe_BlackHoleSession.git",
-                "reference": "56a225ffc7c406e2b84b67df98c40195d9af74b9"
+                "url": "git@github.com:deheerhoreca/Aoe_BlackHoleSession.git",
+                "reference": "a1705720b47ae8cf05a82a369694754e79b5db08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_BlackHoleSession/zipball/56a225ffc7c406e2b84b67df98c40195d9af74b9",
-                "reference": "56a225ffc7c406e2b84b67df98c40195d9af74b9",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_BlackHoleSession/zipball/a1705720b47ae8cf05a82a369694754e79b5db08",
+                "reference": "a1705720b47ae8cf05a82a369694754e79b5db08",
                 "shasum": ""
             },
             "require": {
+                "jaybizzle/crawler-detect": "^1.3",
                 "magento-hackathon/magento-composer-installer": "*"
             },
             "default-branch": true,
@@ -39,20 +40,20 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_BlackHoleSession/tree/dhh-fixes"
             },
-            "time": "2024-06-14T11:35:23+00:00"
+            "time": "2026-02-16T22:30:36+00:00"
         },
         {
             "name": "aoepeople/aoe_cachestats",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/deheerhoreca/Aoe_CacheStats.git",
-                "reference": "add67bcc547c02cf9b7ecebc89049c4ac7949372"
+                "url": "git@github.com:deheerhoreca/Aoe_CacheStats.git",
+                "reference": "0a417e181c9564870f9ea94b0f43385687092ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/add67bcc547c02cf9b7ecebc89049c4ac7949372",
-                "reference": "add67bcc547c02cf9b7ecebc89049c4ac7949372",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/0a417e181c9564870f9ea94b0f43385687092ff1",
+                "reference": "0a417e181c9564870f9ea94b0f43385687092ff1",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +74,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_CacheStats/tree/master"
             },
-            "time": "2026-01-04T22:08:30+00:00"
+            "time": "2026-02-15T23:37:31+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
@@ -277,12 +278,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension.git",
-                "reference": "c0ce2a328ecca265c3ac6646411a24545cfde82e"
+                "reference": "2202512c928aeb485687d109762dc0f493bd07ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Magento-SMTP-Pro-Email-Extension/zipball/c0ce2a328ecca265c3ac6646411a24545cfde82e",
-                "reference": "c0ce2a328ecca265c3ac6646411a24545cfde82e",
+                "url": "https://api.github.com/repos/deheerhoreca/Magento-SMTP-Pro-Email-Extension/zipball/2202512c928aeb485687d109762dc0f493bd07ff",
+                "reference": "2202512c928aeb485687d109762dc0f493bd07ff",
                 "shasum": ""
             },
             "require": {
@@ -348,7 +349,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Magento-SMTP-Pro-Email-Extension/tree/dhh"
             },
-            "time": "2026-02-10T15:05:30+00:00"
+            "time": "2026-02-17T11:59:39+00:00"
         },
         {
             "name": "aydin-hassan/magento-core-composer-installer",
@@ -1554,16 +1555,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.51.0",
+            "version": "v12.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "1fd7db2203ce5a935fffd2ad40955248fb9f581c"
+                "reference": "f35c084f0d9bc57895515cb4d0665797c66285fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/1fd7db2203ce5a935fffd2ad40955248fb9f581c",
-                "reference": "1fd7db2203ce5a935fffd2ad40955248fb9f581c",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/f35c084f0d9bc57895515cb4d0665797c66285fd",
+                "reference": "f35c084f0d9bc57895515cb4d0665797c66285fd",
                 "shasum": ""
             },
             "require": {
@@ -1610,11 +1611,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-02-09T13:43:38+00:00"
+            "time": "2026-02-16T14:10:38+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.51.0",
+            "version": "v12.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1660,16 +1661,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.51.0",
+            "version": "v12.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "3d4eeab332c04a9eaea90968c19a66f78745e47a"
+                "reference": "620d82bad07f55fcb7f5125f44c9d9b93335fb8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/3d4eeab332c04a9eaea90968c19a66f78745e47a",
-                "reference": "3d4eeab332c04a9eaea90968c19a66f78745e47a",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/620d82bad07f55fcb7f5125f44c9d9b93335fb8c",
+                "reference": "620d82bad07f55fcb7f5125f44c9d9b93335fb8c",
                 "shasum": ""
             },
             "require": {
@@ -1704,11 +1705,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-01-28T15:26:27+00:00"
+            "time": "2026-02-10T18:16:44+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.51.0",
+            "version": "v12.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1754,7 +1755,7 @@
         },
         {
             "name": "illuminate/reflection",
-            "version": "v12.51.0",
+            "version": "v12.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/reflection.git",
@@ -1805,16 +1806,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.51.0",
+            "version": "v12.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "fcc84cf4fba138f1835d6a5978ac4434f11a55aa"
+                "reference": "6e9de455bcb232372db11531b72a01d4eca83ef2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/fcc84cf4fba138f1835d6a5978ac4434f11a55aa",
-                "reference": "fcc84cf4fba138f1835d6a5978ac4434f11a55aa",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/6e9de455bcb232372db11531b72a01d4eca83ef2",
+                "reference": "6e9de455bcb232372db11531b72a01d4eca83ef2",
                 "shasum": ""
             },
             "require": {
@@ -1881,7 +1882,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-02-10T16:02:09+00:00"
+            "time": "2026-02-14T23:03:41+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -6041,16 +6042,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.6",
+            "version": "2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "ca9ebb81d280cd362ea39474dabd42679e32ca6b"
+                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/ca9ebb81d280cd362ea39474dabd42679e32ca6b",
-                "reference": "ca9ebb81d280cd362ea39474dabd42679e32ca6b",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9c46ad17f57963932c9788fd1b0f1d07ff450370",
+                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370",
                 "shasum": ""
             },
             "require": {
@@ -6089,7 +6090,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.6"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.7"
             },
             "funding": [
                 {
@@ -6097,7 +6098,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-06T14:25:06+00:00"
+            "time": "2026-02-19T14:44:16+00:00"
         },
         {
             "name": "webmozart/assert",

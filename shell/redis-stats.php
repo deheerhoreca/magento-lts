@@ -1,6 +1,8 @@
 <?php
 
-// From: https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/blob/master/stats.php
+// @see https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/blob/master/stats.php
+
+declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 

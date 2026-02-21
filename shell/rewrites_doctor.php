@@ -1,7 +1,5 @@
 <?php
 
-// @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
-
 /**
  * Optimize core_url_rewrite table
  *
@@ -9,7 +7,10 @@
  * openmage shell/indexer.php --reindex catalog_url     (5-10 min)
  * For STORE_ID = 1: openmage shell/rewrites_doctor.php --remove_rewrites 10 --store 1
  * For STORE_ID = 4: openmage shell/rewrites_doctor.php --remove_rewrites 1 --store 4
+ * @see https://www.atwix.com/magento/duplicated-product-url-keys-in-community-edition/
  */
+
+declare(strict_types=1);
 
 ini_set("display_errors", "1");
 ini_set("display_startup_errors", "1");
@@ -25,14 +26,11 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   public const MAX_SLUG_LENGTH  = 60;
   
   public function run() {
-
     if ($left = $this->getArg("remove_rewrites")) {
       define("STORE_ID", $this->getArg("store"));
-
       if (empty(STORE_ID)) {
         die("use --store X");
       }
-
       $this->clearExtraRewrites($left);
     } elseif ($this->getArg("update_keys")) {
       $this->updateDuplicatedKeys();
@@ -41,7 +39,6 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
     } else {
       echo $this->usageHelp();
     }
-
   }
   
   // Update duplicated url keys by adding product SKU to the duplicated key
@@ -149,7 +146,7 @@ class Atwix_Shell_Rewrites_Doctor extends Mage_Shell_Abstract {
   }
   
   // Remove extra product url rewrites leaving $left of last
-  // @var $left
+  // @var $left int - number of last rewrites to keep for each product
   public function clearExtraRewrites($left) {
     $debug_data = [];
     $total_rewrite_urls = 0;

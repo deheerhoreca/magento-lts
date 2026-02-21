@@ -1,6 +1,8 @@
 <?php
 
-const DRYRUN      = false;
+declare(strict_types=1);
+
+const DRYRUN      = true;
 const DEBUG       = true;
 
 if (php_sapi_name() !== "cli") {

@@ -8,9 +8,11 @@ ${HOME}/workspace/openmage/shell/cron-logrotate.sh
 # set -e      # Exit immediately if a command exits with a non-zero status      <-- Do not enable
 set -u      # Treat unset variables as an error when substituting
 
-. ${HOME}/.profile
-cm || exit 1
-. ./shell/cron-bootstrap.sh
+export NO_DEV=0
+
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 touch ${HOME}/logs/deheerhoreca-magento/access_log
 touch ${HOME}/logs/deheerhoreca-magento/cron_error.log

@@ -1,6 +1,8 @@
 <?php
 
-exit;
+declare(strict_types=1);
+
+exit; // Disabled
 
 error_reporting(E_ALL | E_STRICT);
 define('MAGENTO_ROOT', getcwd()."/..");

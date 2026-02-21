@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set User Environment
-. ${HOME}/.bash_profile
+. ${HOME}/.profile
 
 ## DEV:
 . /etc/profile.d/phpenv.sh

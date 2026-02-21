@@ -38,3 +38,10 @@ function openmage() {
   command php -c etc/php.ini "$@"
 }
 export -f openmage
+
+# The OpenMage indexer
+function omindexer() {
+  cm || exit 1
+  openmage shell/indexer.php "$@"
+}
+export -f omindexer

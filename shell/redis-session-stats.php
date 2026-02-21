@@ -3,6 +3,8 @@
 // Taken from: vendor/colinmollenhour/magento-redis-session/sessionStats.php
 // php -c etc/php.ini shell/redis-session-stats.php sess_* http_user_agent writes
 
+declare(strict_types=1);
+
 use \Illuminate\Support\Str;
 
 if(php_sapi_name() !== "cli") {

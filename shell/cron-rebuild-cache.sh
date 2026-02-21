@@ -1,16 +1,16 @@
 #!/bin/bash
 
-: "
+: '
 ~/workspace/openmage/shell/cron-rebuild-cache.sh
-"
+'
 
 export REQUIRE_HOST=prod
 export NO_DEV=0
 
-. ${HOME}/.bash_profile
-cm
-. ./shell/cron-bootstrap.sh
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
-php -c etc/php.ini shell/rebuild_cache.php
+openmage shell/rebuild_cache.php
 
 . ./shell/cron-wrapup.sh

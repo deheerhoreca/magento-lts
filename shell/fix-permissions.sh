@@ -6,10 +6,11 @@ fix-permissions.sh
 
 # ._."._."._."._."._."._."._."._."._."._."._."._."._."._. #
 
-# shellcheck source=/dev/null
-. "${HOME}/.bash_profile"
+export NO_DEV=0
 
-cm && source ./shell/cron-bootstrap.sh
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 # =-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-= #
 #                           @OPA                          #

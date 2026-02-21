@@ -4,17 +4,13 @@
 ~/workspace/openmage/shell/cron-resave-products.sh
 '
 
-# This runs on prod.deheerhoreca.nl only
-if [ "${HOSTNAME}" != "prod.deheerhoreca.nl" ] && [ "${HOSTNAME}" != "dev.deheerhoreca.nl" ]; then
-  exit 0
-fi
+export NO_DEV=0
 
-# Set User Environment
-. ${HOME}/.bash_profile
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
-
-cm
 
 # php -c etc/php.ini shell/resave_all_products.php
