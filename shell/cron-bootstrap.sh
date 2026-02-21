@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Set User Environment
-. ${HOME}/.profile
+# . ${HOME}/.profile
 
 ## DEV:
 . /etc/profile.d/phpenv.sh
@@ -9,12 +9,6 @@
 # Set some bash flags that also apply to the rest of the parent script
 set -e          # Exit immediately if a command exits with a non-zero status
 set -u          # Treat unset variables as an error when substituting
-
-# BC only. Use phpenv to control PHP versions:
-alias mphp=php
-alias iphp=php
-alias tphp=php
-alias ephp=php
 
 cm
 
