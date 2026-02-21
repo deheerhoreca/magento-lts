@@ -1,19 +1,22 @@
 #!/bin/bash
 
-# ~/workspace/openmage/shell/cron-logrotate.sh
+: '
+${HOME}/workspace/openmage/shell/cron-logrotate.sh
+'
 
-set -e      # Exit immediately if a command exits with a non-zero status
+# set -x      # Print commands and their arguments as they are executed
+# set -e      # Exit immediately if a command exits with a non-zero status      <-- Do not enable
 set -u      # Treat unset variables as an error when substituting
 
-. ${HOME}/.bash_profile
+. ${HOME}/.profile
 cm || exit 1
 . ./shell/cron-bootstrap.sh
 
-touch ~/logs/deheerhoreca-magento/access_log
-touch ~/logs/deheerhoreca-magento/cron_error.log
-touch ~/logs/deheerhoreca-magento/cron_event.log
-touch ~/logs/deheerhoreca-magento/error_log
-touch ~/logs/deheerhoreca-magento/php_error.log
+touch ${HOME}/logs/deheerhoreca-magento/access_log
+touch ${HOME}/logs/deheerhoreca-magento/cron_error.log
+touch ${HOME}/logs/deheerhoreca-magento/cron_event.log
+touch ${HOME}/logs/deheerhoreca-magento/error_log
+touch ${HOME}/logs/deheerhoreca-magento/php_error.log
 
 now=$(date)
 echo "--------------------------------------------------------------------"
@@ -26,12 +29,12 @@ cm
 # Logs indexed in Elasticsearch:
 # ------------------------------------------------------------------------
 
-cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
-~/workspace/openmage/var/log/*log
-~/workspace/openmage/var/log/*jsonl
-~/workspace/openmage/var/log/*ndjson
-~/logs/deheerhoreca-magento/*log
-~/logs/deheerhoreca-magento/*.jsonl
+cat > ${HOME}/tmp/logrotate-deheerhoreca-magento.conf << EOF
+${HOME}/workspace/openmage/var/log/*log
+${HOME}/workspace/openmage/var/log/*jsonl
+${HOME}/workspace/openmage/var/log/*ndjson
+${HOME}/logs/deheerhoreca-magento/*log
+${HOME}/logs/deheerhoreca-magento/*.jsonl
 {
   daily
   dateext
@@ -41,16 +44,16 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento.status
-rm ~/tmp/logrotate-deheerhoreca-magento.conf
+/usr/sbin/logrotate ${HOME}/tmp/logrotate-deheerhoreca-magento.conf -s ${HOME}/tmp/logrotate-deheerhoreca-magento.status
+rm ${HOME}/tmp/logrotate-deheerhoreca-magento.conf
 
 # ------------------------------------------------------------------------
 # Logs NOT indexed in Elasticsearch:
 # ------------------------------------------------------------------------
 
 sleep 1
-cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
-~/workspace/openmage/var/log/*txt
+cat > ${HOME}/tmp/logrotate-deheerhoreca-magento.conf << EOF
+${HOME}/workspace/openmage/var/log/*txt
 {
   daily
   dateext
@@ -60,14 +63,14 @@ cat > ~/tmp/logrotate-deheerhoreca-magento.conf << EOF
 }
 EOF
 
-/usr/sbin/logrotate ~/tmp/logrotate-deheerhoreca-magento.conf -s ~/tmp/logrotate-deheerhoreca-magento-txt.status
-rm ~/tmp/logrotate-deheerhoreca-magento.conf
+/usr/sbin/logrotate ${HOME}/tmp/logrotate-deheerhoreca-magento.conf -s ${HOME}/tmp/logrotate-deheerhoreca-magento-txt.status
+rm ${HOME}/tmp/logrotate-deheerhoreca-magento.conf
 
 # Create some files now, to make sure they get included in the tail command
-touch ~/logs/deheerhoreca-magento/access_log
-touch ~/logs/deheerhoreca-magento/cron_error.log
-touch ~/logs/deheerhoreca-magento/cron_event.log
-touch ~/logs/deheerhoreca-magento/error_log
-touch ~/logs/deheerhoreca-magento/php_error.log
+touch ${HOME}/logs/deheerhoreca-magento/access_log
+touch ${HOME}/logs/deheerhoreca-magento/cron_error.log
+touch ${HOME}/logs/deheerhoreca-magento/cron_event.log
+touch ${HOME}/logs/deheerhoreca-magento/error_log
+touch ${HOME}/logs/deheerhoreca-magento/php_error.log
 
 . ./shell/cron-wrapup.sh

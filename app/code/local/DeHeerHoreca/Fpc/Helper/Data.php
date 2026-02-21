@@ -25,16 +25,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public const REDIS_CACHE_KEY_PREFIX         = "zc:k:dd6";
   
   /** @var array<string,string|string[]> */
-  private static array $httpHeaders           = [];
+  private static array $httpHeaders = [];
   
   /** @var array List of extra tags to add to the cache for this request */
   public static $addTags = [];
   
-  /**
-   * OpenMage action whitelist for FPC caching
-   * @var string[]
-   */
-  public static $om_action_whitelist  = [
+  /** @var string[] OpenMage action whitelist for FPC caching */
+  public static $om_action_whitelist = [
     "catalog_product_view",
     "catalog_category_view",
     "blog_post_view",
@@ -270,23 +267,15 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /**
    * Determine if the FPC cache is enabled for reading.
-   *
    * This does NOT check if the cache contains the requested page, only if reading from cache is allowed.
    *
    * @param $non_anonymous_okay  bool    Switch to check for anonymous requests (cart block, etc.).
    * @param $isHtmlBlock         bool    For HTML block caching, the controller action is not used as a filter.
    * @param $type                string  Cache type for logging and decision purposes.
+   *                                     Known types: dhh_listview_product, get_stock_info, eke_ogmeta,
+   *                                     topmenu, footer_html, full_page_cache, tm_richsnippets.
    *
-   * Known types:
-   * - dhh_listview_product
-   * - get_stock_info
-   * - eke_ogmeta
-   * - topmenu
-   * - footer_html
-   * - full_page_cache
-   * - tm_richsnippets
-   *
-   * @return                    bool    TRUE if reading from cache is allowed
+   * @return                     bool    TRUE if reading from cache is allowed
    */
   public static function is_read_cache_enabled(bool $non_anonymous_okay = false, bool $isHtmlBlock = false, string $type = ""): bool {
     static $decision = [];
@@ -294,19 +283,27 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return $decision[$type];
     }
     
+    // Check if the cache is disabled globally for both reading and writing, for this type:
     if(self::isAnyCacheDisabled($non_anonymous_okay, $isHtmlBlock, $type)) {
       $decision[$type] = false;
-      return false;
+      return $decision[$type];
+    }
+    
+    // Check for no-cache headers in the request -- But only if it's a development IP (we saw bots running with those headers)
+    if(isDevIp() && self::request_has_no_cache_headers()) {
+      self::log("READ disabled (request has no-cache headers): {$type}. ".Mage::app()?->getRequest()?->getHeader("Pragma")." ".Mage::app()?->getRequest()?->getHeader("Cache-Control"));
+      $decision[$type] = false;
+      return $decision[$type];
     }
     
     // Protect the cache against bots in layered navigation labyrinths: allow max 2 GET params
     // ath = Aoe_TemplateHints flag
     // is_ajax is by amasty layered nav, and right now we cannot save that HTML (does not pass the page/ phtmls)
     if(isset($_GET["nofpc"]) || isset($_GET["refreshfpc"]) || isset($_GET["is_ajax"]) || isset($_GET["ath"])
-    || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1) || self::request_has_no_cache_headers()) {
+    || (!$isHtmlBlock && is_countable($_GET) && count($_GET) > 1)) {
       self::log("READ disabled (by request header or URL param: {$type}");
       $decision[$type] = false;
-      return false;
+      return $decision[$type];
     }
     
     if(!$isHtmlBlock) {
@@ -314,19 +311,19 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       if(!in_array($om_action, self::$om_action_whitelist, true)) {
         self::log("READ disabled (OM action): {$type}");
         $decision[$type] = false;
-        return false;
+        return $decision[$type];
       }
     }
     
     if(!$non_anonymous_okay && self::is_request_anonymous()) {
       self::log("READ disabled (Anonymous not allowed and request is not anonymous): {$type}");
       $decision[$type] = false;
-      return false;
+      return $decision[$type];
     }
     
     self::log("READ enabled: {$type}");
     $decision[$type] = true;
-    return true;
+    return $decision[$type];
   }
   
   /**
@@ -376,7 +373,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if($isHtmlBlock !== true) {
       $action = (string) Mage::app()->getFrontController()->getAction()->getFullActionName();
       if(!in_array($action, self::$om_action_whitelist, true)) {
-        self::log("WRITE disabled (OpenMage action): {$type}");
+        self::log("WRITE disabled (OpenMage action {$action}): {$type}");
         $decision[$type] = false;
         return false;
       }
@@ -407,7 +404,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $cache_key_prefix   ??= self::get_cache_prefix();
     $cache_key_url_hash   = substr(base_convert(md5($cache_key_url), 16, 32), 0, 12);
     $cacheKey             = "dhh__{$cache_key_prefix}_".base64_encode($cache_key_url_hash);
-    self::log("Normalized cache URL: {$cache_key_url}, Hash: {$cache_key_url_hash}, Cache Key: ".self::REDIS_CACHE_KEY_PREFIX."_{$cacheKey}");
+    self::log("Normalized cache URL: {$cache_key_url}");
+    self::log("Hash: {$cache_key_url_hash}");
+    self::log("Cache Key: ".self::REDIS_CACHE_KEY_PREFIX."_{$cacheKey}");
     
     return $cacheKey;
   }
@@ -745,7 +744,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   }
   
   /**
-   * Write a single log message to the FPC plaintext log for debug purposes. Only active if DHH_FPC_DEBUG is true.
+   * Write a single log message to the FPC plaintext log for debug purposes. Only active if DHH_FPC_DEBUG=true or the log level is elevated.
    * @todo Save log messages and store them in a core_app_run_after event to prevent slowdowns due to file I/O.
    * @todo Possibly add a shutdown_function as a backup to the core_app_run_after event.
    *
@@ -755,11 +754,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public static function log($msg, int $level = Zend_Log::DEBUG): void {
-    if(
-      DHH_FPC_DEBUG ||
-      // isDevIp() ||
-      $level !== Zend_Log::DEBUG
-    ) {
+    if(DHH_FPC_DEBUG || $level !== Zend_Log::DEBUG) {
       Mage::log($msg, $level, "fpc.txt", true);
     }
   }

@@ -15,6 +15,7 @@ $dhh_ips = [
 ];
 
 if(!isset($_SERVER["REMOTE_ADDR"]) || !in_array($_SERVER["REMOTE_ADDR"], $dhh_ips, true)) {
-  header("Location: /");
+  // header("Location: /");
+  header("HTTP/1.0 403 Forbidden");
   exit;
 }

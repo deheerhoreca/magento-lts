@@ -27,6 +27,7 @@ $_imgSize                 = 1 * $displaySize;
 $limit                    = 5;
 $options                  = [
   "_blank"                  => false,
+  "prefer_rewrite_table"    => true,
   "display"                 => "normal",
   "fast_stock"              => true,
   "skip_actions"            => true,
@@ -92,10 +93,7 @@ $_products->load();
 $mage_stock_model->addItemsToProducts($_products);
 
 if($_products->getFirstItem()) { ?>
-  <div style="border-bottom: 1px solid var(--bs-gray-500); border-top: 1px solid var(--bs-gray-500); background-color: var(--color-light-gray);" class="my-1 py-1">
-    <h2 class="center py-1 my-1">Hardlopers:</h2>
-  </div>
-  
+  <h2 class="center py-1 my-3">Hardlopers</h2><hr>
   <div id="promo-products" class="category-products mt-5 pb-0 mb-3">
     <ul class="products-grid products-grid--max-<?=$_columnCount?>-col"><?php
       $i = 0;

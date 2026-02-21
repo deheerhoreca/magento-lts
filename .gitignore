@@ -52,6 +52,7 @@
 # composer
 /vendor/*
 /protected/pca/vendor/*
+/protected/pca/twigcache/*
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
@@ -120,6 +121,13 @@ phpunit.xml
 /js/elastic-apm-rum.umd.min.js.map
 /_dev.html
 /etc/n98-configdump.xml
+/biller-webhook-errors.jsonl
+/biller-webhook.jsonl
+/freshdesk-*.ndjson
+/etc/*-local.ini
+/*.bak-*
+/_user.ini
+/etc/php.ini
 
 # DIRS
 /js/ext-*
@@ -132,68 +140,200 @@ phpunit.xml
 
 # Extend the dist ignore to the whole media dir (it's now a LINK)
 # ----------------------------------------------------------------
-# The LINK, nor the DIR
+# The LINK, not the DIR
 media
 # NOT /media/*, that does NOT ignore the /media/ dir itself
 /media/
 
-# BILLER WEBHOOK
-/biller-webhook-errors.jsonl
-/biller-webhook.jsonl
-
-# FRESHDESK WEBHOOK
-/freshdesk-*.ndjson
-
-# GENERATED CONFIGURATIONS
-/etc/*-local.ini
-/*.bak-*
-/_user.ini
-/etc/php.ini
-
-# UNIGNORE IMPORTANT THINGS WHEREVER THEY ARE
+# Unignore important files including in subdirs
 !.htaccess
 !_htaccess
 !.gitignore
 
-######################################################
-# Symlinks -- Watch out to not ignore core hacks!!
-######################################################
-
-/app/code/community/Cm
-
-##############################################################
-# UNIGNORE EMBEDDED COMPOSER FILES
-# Only where composer had installed vendor/**/vendor WITH composer.lock files,
-# to ensure git tracking of those files, and not ignore them by the general /vendor/* rule.
-# Will require "git add -f" as well.
-# > find vendor -name composer.lock
-# > find vendor -name vendor
-#############################################################
-
-!/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.lock
-!/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.json
-
-######################################################
-# UNIGNORE ALL COREHACKED FILES TO ENSURE GIT TRACKING
-######################################################
-
-# Unignore all dirs that will have 100% custom files
+# Unignore dirs that will only hold override files
 !/app/code/local/Mage
 !/app/design/adminhtml/default/dhh
 !/app/design/frontend/rwd/dhh
 
-# diff -qr . vendor/openmage/magento-lts
-# diff -qr vendor/openmage/magento-lts .
+######################################################################
+# UNIGNORE EMBEDDED COMPOSER FILES
+#
+# Only where composer had installed vendor/**/vendor WITH composer.lock files,
+# to ensure git tracking of those files, and not ignore them by the general /vendor/* rule.
+# Will require "git add -f" as well.
+#
+# Useful commands:
+# > find vendor -name composer.lock
+# > find vendor -name vendor
+######################################################################
 
-# grep -ril "DHH" app/*.* | sort -f
+!/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.lock
+!/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.json
+
+######################################################################
+# UNIGNORE ALL COREHACKED FILES TO ENSURE GIT TRACKING
+#
+# - CORE HACKS AGAINST COMPOSER-MANAGED PACKAGES are tracked by git
+#   through composer patch files OR by adding the hacked files to git and
+#   documenting them in COREHACKS.md.
+#
+# - HACKS TO 3RD PARTY PACKAGES THAT ARE NOT MANAGED BY COMPOSER do
+#   NOT need patches. For those, either use a forked VCS repo or, if
+#   no more updates are expected from any 3rd party, just add them
+#   directly to the codebase and track them with git, and document
+#   them in COREHACKS.md.
+#
+# Useful commands:
+#
+# 1. Find symlinks in places where OpenMage installs its extensions:
+#    > find app/code/ lib/ -type l | sort -f
+#    Core hacks in symlinked files MUST BE implemented through the patch system
+#    described in AGENTS.md (cweagans/composer-patches). Un-ignoring a single file
+#    does nothing if the file's parent is a symlink to a file in vendor/ that is not tracked by git.
+#
+# 2. Find all files with DHH or CORE HACK in them:
+#    > grep -rilI -e DHH -e "CORE HACK" . | sort -f
+#
+# 3. Find all differences with the original Magento LTS codebase:
+#    > diff -qr . vendor/openmage/magento-lts | grep "differs" | sort -f
+#    > diff -qr vendor/openmage/magento-lts . | grep "differs" | sort -f
+######################################################################
+
+######################################################################
+# SYMLINKS -- Any hacks have to be in ./patches/, NOT via git
+######################################################################
+
+# find . -type l ! -path './vendor/*' ! -path './media/*' | sort -f
+/app/code/community/Aoe/BlackHoleSession
+/app/code/community/Aoe/CacheStats
+/app/code/community/Aoe/DbRetry
+/app/code/community/Aoe/ModelCache
+/app/code/community/Aoe/Profiler
+/app/code/community/Aoe/Scheduler
+/app/code/community/Aoe/TemplateHints
+/app/code/community/Aydus/HeadOrder
+/app/code/community/Cm/Cache/Backend/Redis.php
+/app/code/community/Cm/RedisSession
+/app/code/community/Fballiano/CategorySortDirection
+/app/code/community/Fballiano/CssjsMinify
+/app/code/community/FireGento/AdminMonitoring
+/app/code/community/FireGento/Debug
+/app/code/community/FireGento/Logger
+/app/code/community/Guidance/Simplepage
+/app/code/community/Pay/Payment
+/app/code/community/Varien/Profiler.php
+/app/code/community/Zend/Db/Profiler.php
+/app/code/local/Aschroder/SMTPPro
+/app/code/local/InternetCode/Translator
+/app/code/local/MM/CmsContentFileMode
+/app/code/local/MM/MonacoEditor
+/app/design/adminhtml/base/default/template/pay/payment
+/app/design/adminhtml/default/default/layout/aoe_profiler
+/app/design/adminhtml/default/default/layout/aoe_scheduler
+/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
+/app/design/adminhtml/default/default/layout/firegento_debug.xml
+/app/design/adminhtml/default/default/layout/firegento_logger.xml
+/app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
+/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
+/app/design/adminhtml/default/default/template/aoe_profiler
+/app/design/adminhtml/default/default/template/aoe_scheduler
+/app/design/adminhtml/default/default/template/firegento/adminmonitoring
+/app/design/adminhtml/default/default/template/firegento/debug
+/app/design/adminhtml/default/default/template/firegento_logger
+/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
+/app/design/adminhtml/default/default/template/mm/monacoeditor
+/app/design/adminhtml/default/default/template/smtppro
+/app/design/frontend/base/default/layout/firegento_logger.xml
+/app/design/frontend/base/default/layout/guidance_simplepage.xml
+/app/design/frontend/base/default/layout/mm/tailwindcss.xml
+/app/design/frontend/base/default/template/firegento_logger
+/app/design/frontend/base/default/template/guidance_simplepage
+/app/design/frontend/base/default/template/pay/payment
+/app/etc/aoe_cachestats.xml
+/app/etc/modules/Aoe_BlackHoleSession.xml
+/app/etc/modules/Aoe_CacheStats.xml
+/app/etc/modules/Aoe_DbRetry.xml
+/app/etc/modules/Aoe_ModelCache.xml
+/app/etc/modules/Aoe_Profiler.xml
+/app/etc/modules/Aoe_Scheduler.xml
+/app/etc/modules/Aoe_TemplateHints.xml
+/app/etc/modules/Aschroder_SMTPPro.xml
+/app/etc/modules/Aydus_HeadOrder.xml
+/app/etc/modules/Cm_RedisSession.xml
+/app/etc/modules/Fballiano_CategorySortDirection.xml
+/app/etc/modules/Fballiano_CssjsMinify.xml
+/app/etc/modules/FireGento_AdminMonitoring.xml
+/app/etc/modules/FireGento_Debug.xml
+/app/etc/modules/FireGento_Logger.xml
+/app/etc/modules/Guidance_Simplepage.xml
+/app/etc/modules/InternetCode_Translator.xml
+/app/etc/modules/MM_CmsContentFileMode.xml
+/app/etc/modules/MM_MonacoEditor.xml
+/app/etc/modules/Pay_Payment.xml
+/app/locale/de_CH/FireGento_Debug.csv
+/app/locale/de_DE/Aoe_Scheduler.csv
+/app/locale/de_DE/Aschroder_SMTPPro.csv
+/app/locale/de_DE/FireGento_AdminMonitoring.csv
+/app/locale/de_DE/FireGento_Debug.csv
+/app/locale/en_US/Aschroder_SMTPPro.csv
+/app/locale/en_US/FireGento_Debug.csv
+/app/locale/en_US/Pay_Payment.csv
+/app/locale/en_US/template/email/aoe_scheduler
+/app/locale/en_US/template/email/firegento_logger
+/app/locale/es_ES/Aschroder_SMTPPro.csv
+/app/locale/fr_FR/Aschroder_SMTPPro.csv
+/app/locale/fr_FR/FireGento_Debug.csv
+/app/locale/it_IT/Pay_Payment.csv
+/app/locale/nl_NL/Aschroder_SMTPPro.csv
+/app/locale/nl_NL/Pay_Payment.csv
+/app/locale/pt_BR/Aoe_Scheduler.csv
+/app/locale/pt_BR/Aschroder_SMTPPro.csv
+/app/locale/pt_BR/template/email/aoe_scheduler
+/app/locale/ru_RU/Aschroder_SMTPPro.csv
+/app/locale/sv_SE/Aoe_Scheduler.csv
+/app/locale/tr_TR/Aschroder_SMTPPro.csv
+/dev/tests/aoe_scheduler
+/js/monacoeditor
+/lib/Airbrake
+/lib/chromelogger
+/lib/Credis
+/lib/FireGento/ChromePhp
+/lib/FireGento/FireLogger
+/lib/FireGento/FirePHP
+/lib/Graylog2-gelf-php
+/lib/rsyslog
+/lib/sentry
+/lib/tailwindcss/tailwind.config.js
+/lib/tailwindcss/tailwindcss
+/lib/XMPPHP
+/pub/admin/errors
+/pub/admin/js
+/pub/admin/media
+/pub/admin/skin
+/pub/default/.htaccess
+/pub/default/errors
+/pub/default/js
+/pub/default/media
+/pub/default/skin
+/scheduler_cron.sh
+/shell/logger.php
+/shell/scheduler.php
+/skin/adminhtml/default/default/aoe_profiler
+/skin/adminhtml/default/default/aoe_scheduler
+/skin/adminhtml/default/default/firegento/debug
+/skin/adminhtml/default/default/firegento_logger.css
+/skin/frontend/base/default/aoe_templatehints
+
+# grep -rilI -e DHH -e "CORE HACK" app/*.* | sort -f
 !/app/Mage.php
 
-# grep -ril "DHH" app/locale | sort -f
+# grep -rilI -e DHH -e "CORE HACK" app/locale | sort -f
+# diff -qr app/locale/ vendor/openmage/magento-lts/app/locale/
 !/app/locale/nl_NL/template/email/aoe_scheduler/cron_error.html
 !/app/locale/nl_NL/template/email/qquoteadv/qquoteadv_accepted.html
 !/app/locale/nl_NL/template/email/qquoteadv/qquoteadv_request_details.html
 
-# grep -ri -l DHH app/code/core/ | sort -f
+# grep -rilI -e DHH -e "CORE HACK" app/code/core/ | sort -f
 # diff -qr app/code/core/Mage/ vendor/openmage/magento-lts/app/code/core/Mage/
 !/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Crosssell.php
 !/app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Related.php
@@ -334,7 +474,7 @@ media
 !/app/code/local/TM/FireCheckout/etc/wsdl.xml
 !/app/code/local/TM/RichSnippets/Block/Product.php
 
-# grep -ril "DHH" app/design/frontend/base app/design/frontend/rwd/default/ app/design/adminhtml/default/default | sort -f
+# grep -rilI -e DHH -e "CORE HACK" app/design/frontend/base app/design/frontend/rwd/default/ app/design/adminhtml/default/default app/design/adminhtml/base/default | sort -f
 !/app/design/adminhtml/base/default/template/ec/system/google/auth.phtml
 !/app/design/adminhtml/default/default/template/sales/order/create/comment.phtml
 !/app/design/adminhtml/default/default/template/tm/firecheckout/sales/order/create/data.phtml
@@ -348,14 +488,13 @@ media
 !/app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml
 !/app/design/frontend/rwd/default/template/checkout/onepage/shipping.phtml
 
-# grep -ril "DHH" dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort -f
-# diff -qr app/code/core/Mage/ vendor/openmage/magento-lts/app/code/core/Mage/
+# grep -rilI -e DHH -e "CORE HACK" dev/ etc/ errors/ js/ lib/ skin/ shell/ | sort -f
+# diff -qr lib/ vendor/openmage/magento-lts/lib/
 !/favicon.ico
 !/index.php
 !/js/amasty/amshopby/amshopby-ajax.js
 !/js/amasty/amshopby/amshopby.js
 !/js/aw_searchautocomplete/main.js
-!/shell/abstract.php
 !/shell/indexer.php
 !/shell/sooqr.php
 !/skin/adminhtml/base/default/js/qquoteadv/tooltiphelper.js
@@ -364,134 +503,7 @@ media
 !/skin/frontend/rwd/dhh/js/app.js
 !/skin/frontend/rwd/dhh/tm/firecheckout/js/components/order-review.js
 
-##################################################
+############################################################
 # ADDED BY COMPOSER OPENMAGE PLUGIN INSTALLER
-##################################################
-/app/code/community/Aoe/BlackHoleSession
-/app/etc/modules/Aoe_BlackHoleSession.xml
-/app/locale/de_DE/Aschroder_SMTPPro.csv
-/app/locale/es_ES/Aschroder_SMTPPro.csv
-/app/locale/fr_FR/Aschroder_SMTPPro.csv
-/app/locale/nl_NL/Aschroder_SMTPPro.csv
-/app/locale/pt_BR/Aschroder_SMTPPro.csv
-/app/locale/ru_RU/Aschroder_SMTPPro.csv
-/app/locale/tr_TR/Aschroder_SMTPPro.csv
-/app/code/local/MM/MonacoEditor
-/js/monacoeditor
-/app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
-/app/design/adminhtml/default/default/template/mm/monacoeditor
-/app/etc/modules/MM_MonacoEditor.xml
-/app/code/community/Fballiano/CategorySortDirection
-/app/etc/modules/Fballiano_CategorySortDirection.xml
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Grid.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Form.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tabs.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/General.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/Role.php
-/app/code/community/Elidrissidev/Api2BasicAuth/controllers/Adminhtml/Api2basicauth/RestuserController.php
-/app/code/community/Elidrissidev/Api2BasicAuth/etc/adminhtml.xml
-/app/code/community/Elidrissidev/Api2BasicAuth/etc/api2.xml
-/app/code/community/Elidrissidev/Api2BasicAuth/etc/config.xml
-/app/code/community/Elidrissidev/Api2BasicAuth/Helper/Data.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/Adapter/Basic.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/User/Restuser.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser/Collection.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser.php
-/app/code/community/Elidrissidev/Api2BasicAuth/Model/Restuser.php
-/app/code/community/Elidrissidev/Api2BasicAuth/sql/elidrissidev_api2basicauth_setup/install-1.0.0.php
-/app/code/local/Mage/Catalog/Model/Api2/Product/Category/Rest/Restuser/V1.php
-/app/code/local/Mage/Catalog/Model/Api2/Product/Image/Rest/Restuser/V1.php
-/app/code/local/Mage/Catalog/Model/Api2/Product/Rest/Restuser/V1.php
-/app/code/local/Mage/Catalog/Model/Api2/Product/Website/Rest/Restuser/V1.php
-/app/code/local/Mage/CatalogInventory/Model/Api2/Stock/Item/Rest/Restuser/V1.php
-/app/code/local/Mage/Customer/Model/Api2/Customer/Address/Rest/Restuser/V1.php
-/app/code/local/Mage/Customer/Model/Api2/Customer/Rest/Restuser/V1.php
-/app/code/local/Mage/Sales/Model/Api2/Order/Address/Rest/Restuser/V1.php
-/app/code/local/Mage/Sales/Model/Api2/Order/Comment/Rest/Restuser/V1.php
-/app/code/local/Mage/Sales/Model/Api2/Order/Item/Rest/Restuser/V1.php
-/app/code/local/Mage/Sales/Model/Api2/Order/Rest/Restuser/V1.php
-/app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml
-/app/etc/modules/Elidrissidev_Api2BasicAuth.xml
-/app/locale/en_US/Elidrissidev_Api2BasicAuth.csv
-/app/code/community/Pay/Payment
-/app/design/frontend/base/default/template/pay/payment
-/app/design/adminhtml/base/default/template/pay/payment
-/media/pay_payment/logo.png
-/app/etc/modules/Pay_Payment.xml
-/app/locale/nl_NL/Pay_Payment.csv
-/app/locale/en_US/Pay_Payment.csv
-/app/locale/it_IT/Pay_Payment.csv
-/app/code/local/InternetCode/Translator
-/app/etc/modules/InternetCode_Translator.xml
-/app/code/community/Guidance/Simplepage
-/app/design/frontend/base/default/layout/guidance_simplepage.xml
-/app/design/frontend/base/default/template/guidance_simplepage
-/app/etc/modules/Guidance_Simplepage.xml
-/app/code/community/Aydus/HeadOrder
-/app/etc/modules/Aydus_HeadOrder.xml
-/app/code/community/Aoe/CacheStats
-/app/etc/modules/Aoe_CacheStats.xml
-/app/etc/aoe_cachestats.xml
-/app/etc/modules/Aoe_Profiler.xml
-/app/code/community/Aoe/Profiler
-/app/code/community/Varien/Profiler.php
-/app/code/community/Zend/Db/Profiler.php
-/skin/adminhtml/default/default/aoe_profiler
-/app/design/adminhtml/default/default/layout/aoe_profiler
-/app/design/adminhtml/default/default/template/aoe_profiler
-/app/code/community/FireGento/AdminMonitoring
-/app/etc/modules/FireGento_AdminMonitoring.xml
-/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
-/app/design/adminhtml/default/default/template/firegento/adminmonitoring
-/app/locale/de_DE/FireGento_AdminMonitoring.csv
-/app/code/community/Fballiano/CssjsMinify
-/app/etc/modules/Fballiano_CssjsMinify.xml
-/app/code/local/MM/CmsContentFileMode
-/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
-/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
-/app/design/frontend/base/default/layout/mm/tailwindcss.xml
-/lib/tailwindcss/tailwind.config.js
-/lib/tailwindcss/tailwindcss
-/app/etc/modules/MM_CmsContentFileMode.xml
-/app/etc/modules/Aoe_DbRetry.xml
-/app/code/community/Aoe/DbRetry
-/app/code/community/Cm/RedisSession
-/app/etc/modules/Cm_RedisSession.xml
-/app/code/community/Cm/Cache/Backend/Redis.php
-/lib/Credis
-/app/code/community/FireGento/Logger
-/app/etc/modules/FireGento_Logger.xml
-/app/design/adminhtml/default/default/layout/firegento_logger.xml
-/app/design/adminhtml/default/default/template/firegento_logger
-/app/design/frontend/base/default/layout/firegento_logger.xml
-/app/design/frontend/base/default/template/firegento_logger
-/lib/Airbrake
-/lib/XMPPHP
-/lib/Graylog2-gelf-php
-/lib/rsyslog
-/lib/chromelogger
-/lib/sentry
-/shell/logger.php
-/skin/adminhtml/default/default/firegento_logger.css
-/app/locale/en_US/template/email/firegento_logger
-/app/etc/modules/Aschroder_SMTPPro.xml
-/app/code/local/Aschroder/SMTPPro
-/app/design/adminhtml/default/default/template/smtppro
-/app/locale/en_US/Aschroder_SMTPPro.csv
-/app/code/community/Aoe/Scheduler
-/app/etc/modules/Aoe_Scheduler.xml
-/shell/scheduler.php
-/app/locale/sv_SE/Aoe_Scheduler.csv
-/app/locale/de_DE/Aoe_Scheduler.csv
-/app/locale/pt_BR/Aoe_Scheduler.csv
-/app/locale/en_US/template/email/aoe_scheduler
-/app/locale/pt_BR/template/email/aoe_scheduler
-/app/design/adminhtml/default/default/template/aoe_scheduler
-/app/design/adminhtml/default/default/layout/aoe_scheduler
-/skin/adminhtml/default/default/aoe_scheduler
-/scheduler_cron.sh
-/dev/tests/aoe_scheduler
-/app/code/community/Aoe/ModelCache
-/app/etc/modules/Aoe_ModelCache.xml
+# Better to use the "Symlinks" approach documented above
+############################################################

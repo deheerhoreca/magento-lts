@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @author Amasty Team
  * @copyright Copyright (c) 2019 Amasty (https://www.amasty.com)
  * @package Amasty_Shopby
  */
 
+// ! This block is effectively disabled
 return;
 
 /** @var Amasty_Shopby_Block_Subcategories $this */
@@ -19,18 +21,16 @@ if($subcategories->count() > 1) {
   $media_url      = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
   $media_dir      = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
   
-  // Logic cloned:
+  // Subcategory display code exists in multiple places:
   // - catalog/product/list.phtml
   // - amasty/amshopby/subcategories.phtml
-  
-  echo "<ul class='grid-shadow-tiles-text'>".PHP_EOL;
+  ?><ul class="grid-shadow-tiles-text" id="listview-subcat-tiles"><?php
   
   foreach($subcategories as $i => $subcategory) {
     if(!in_array((int) $subcategory->getId(), EXCLUDED_CATEGORY_IDS, true)) {
       continue;
     }
     $haschild           = true;
-    // $category_name      = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($subcategory->getName());
     $category_name      = (string) $subcategory->getName();
     $category_name_safe = htmlspecialchars($category_name);
     $image              = $subcategory->getImage();

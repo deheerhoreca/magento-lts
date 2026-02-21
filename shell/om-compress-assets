@@ -1,28 +1,41 @@
-#!/bin/bash
-
-: '
-Compresses all assets in the specified directory using Brotli, Zstd, and Gzip.
-Useful for web servers to serve compressed assets to clients without needing to compress on-the-fly.
-Usage: om-compress-assets
-'
+#!/bin/bash -l
 
 set -euo pipefail
 IFS=$'\n\t'
 
-DIR="${HOME}/workspace/openmage/media/min/"
+# Ensure the trailing slash exists for find
+DIR="${HOME}/workspace/openmage/media/min"
 
-if [[ "$DIR" == "" ]]; then
-  echo "Usage: $(basename $0) <path>"
+if [[ ! -d "$DIR" ]]; then
+  echo "Error: Directory $DIR does not exist."
   exit 1
 fi
 
-# For all targeted extensions, compress the file using Brotli, Zstd, and Gzip if it does not already exist. The original file is kept.
-for file in $(find "$DIR" -type f -iname '*.css' -or -iname '*.js' -or -iname '*.json' -or -iname '*.svg' -or -iname '*.xml'); do
-  if [[ -f "${file}.br" && -f "${file}.zst" && -f "${file}.gz" ]]; then
+# Find all relevant assets
+# Optimization: only process files that don't have a matching .br (or are newer than their .br)
+find "$DIR" -type f \( -iname "*.css" -o -iname "*.js" -o -iname "*.json" -o -iname "*.svg" -o -iname "*.xml" \) | while read -r file; do
+  
+  # Skip if compressed version exists AND is NOT older than source (handles identical mtime)
+  if [[ -f "${file}.br" && -f "${file}.gz" && ! "${file}.br" -ot "${file}" ]]; then
     continue
   fi
+  
+  echo "Compressing: ${file}"
+  
+  # Brotli (Level 11 is slow, but worth it for static assets)
   /home/linuxbrew/.linuxbrew/bin/brotli -q 11 --force -o "${file}.br" "${file}"
-  /home/linuxbrew/.linuxbrew/bin/zstd -19 -k -f "${file}"
-  /home/linuxbrew/.linuxbrew/bin/gzip --keep --best --force "${file}"
-  echo "."
+  
+  # Zstd (Level 19)
+  /home/linuxbrew/.linuxbrew/bin/zstd -19 -k -f "${file}" > /dev/null 2>&1
+  
+  # Gzip (Best)
+  gzip --keep --best --force "${file}"
+  
+  # --- CRITICAL: Sync mtime ---
+  # This tells Nginx the compressed file is up-to-date with the source
+  touch -r "${file}" "${file}.br"
+  touch -r "${file}" "${file}.gz"
+  touch -r "${file}" "${file}.zst"
 done
+
+echo "Compression complete and mtimes synchronized."

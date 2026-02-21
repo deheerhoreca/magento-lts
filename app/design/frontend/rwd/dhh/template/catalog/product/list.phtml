@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Product list template
  *
@@ -11,15 +12,17 @@ Varien_Profiler::start("DHH::PrepareProductList");
 
 $_helper                      = $this->helper("catalog/output");
 $category                     = $this->getRequest()->getControllerName();
-$category_id                  = null;
+
+/** @var Mage_Catalog_Model_Category $carct */
 $carct                        = Mage::registry("current_category");
-$category_id                  = $carct->getId();
+
+$category_id                  = $carct?->getId();
+$category_parent_ids          = $carct?->getParentIds() ?? [];
 $category_desc                = (string) $carct->getDescription();
 $orig_category_desc           = $category_desc;
 $amschk                       = (string) $this->getRequest()->getRouteName();
 $haschild                     = false;
 $category_thumbs_actual       = 140;
-// $parent_categories_ids        = [];
 $freeshipping_from            = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
 $active_filters               = Mage::getSingleton("catalog/layer")->getState()->getFilters();
 $have_active_filters          = (bool) empty($active_filters) === false;
@@ -69,11 +72,10 @@ if($show_products) {
 
 /* CATEGORY HEADER & SEO */
 
-if($carct && ($category === "category")) {
+if($carct && $category === "category") {
   Varien_Profiler::start("DHH::CategoryHeader");
   $category_id          = (int) $carct->getId();
   $category_name        = (string) $carct->getName();
-  // $category_name        = (string) $_dhhUtilHelper->cleanCategoryName($category_name);
   $category_name_lwr    = strtolower($category_name);
   $orig_category_desc   = (string) $carct->getDescription();
   
@@ -153,7 +155,7 @@ if($carct && ($category === "category")) {
     </a><?php
   }
   
-  if(empty($category_desc) === false) {
+  if(!empty($category_desc)) {
     echo "<div class=\"ctdesc\" id=\"ctdesc\">";
     // Optionally cut off description and show a 'More' button
     if(str_contains((string) $category_desc, "<!--no_more_btn-->") || strlen((string) $category_desc) < 1000) {
@@ -170,33 +172,41 @@ if($carct && ($category === "category")) {
 /* SUBCATEGORIES */
 
 Varien_Profiler::start("DHH::Subcategories");
-$forwarded_filters  = [
-  // "brand",
-  "brand_series",
-];
-$show_sub_tiles = true;
 
-// Hide subcategories if filters are active, except for some attributes where we forward them to the subcategory
-if($have_active_filters) {
-  foreach($active_filters as $active_filter) {
-    $show_sub_tiles = true;
-    try {
-      $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
-    } catch(Exception) {
-      continue; // If a non-existing filter is requested, prevent a FATAL
-    }
-    if(!in_array($attribute_code, $forwarded_filters, true)) {
-      $show_sub_tiles = false;
-      break;
+// Decide whether to show subcategory tiles, based on category settings and active filters
+while(true) {
+  // Skip showing subcategories if one of its parents is in PARENT_CATEGORY_IDS_WITHOUT_SUBCATEGORY_LISTVIEW_TILES
+  if(!empty($category_parent_ids) && array_intersect($category_parent_ids, PARENT_CATEGORY_IDS_WITHOUT_SUBCATEGORY_LISTVIEW_TILES)) {
+    $show_sub_tiles = false;
+    break;
+  }
+  
+  // Hide subcategories if filters are active, except for some attributes where we forward them to the subcategory
+  if($have_active_filters) {
+    $forwarded_filters  = ["brand_series"];
+    foreach($active_filters as $active_filter) {
+      try {
+        $attribute_code = $active_filter->getFilter()->getAttributeModel()->getAttributeCode();
+      } catch(Exception) {
+        // If a non-existing filter is requested in the URL, prevent a FATAL (don't trust user input).
+        continue;
+      }
+      if(!in_array($attribute_code, $forwarded_filters, true)) {
+        $show_sub_tiles = false;
+        break 2;
+      }
     }
   }
+  
+  $show_sub_tiles = true;
+  break;
 }
 
 if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($appliedFilters) && !str_contains($orig_category_desc, "<!--no_cat_tiles-->")) {
-  // require_once MAGENTO_ROOT."/app/code/local/DeHeerHoreca/Util/Helper/Util.php";
-  // $allowed_children = array_diff($carct->getChildren(), EXCLUDED_CATEGORY_IDS);
+  /** @var \Mage_Catalog_Model_Resource_Category_Collection $subcategories */
   $subcategories = $carct->getCollection()
     ->addIdFilter($carct->getChildren())
+    ->addFieldToFilter('entity_id', ["nin" => EXCLUDED_CATEGORY_IDS])
     ->addAttributeToSelect("name")
     ->addAttributeToSelect("image")
     ->addAttributeToFilter("is_active", 1)
@@ -205,7 +215,6 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
   
   // @todo don't show subcategories if there only is one, but only on shop by brand/series pages
   if($subcategories->count() >= 1) {
-    
     // Copy a selection of filters to the new category, if they exist
     // @todo should use the real methods of building the url instead
     // if(_dhh_debug()) {
@@ -221,19 +230,14 @@ if(!empty($carct) && $amschk !== "amshopby" && $show_sub_tiles && empty($applied
       // }
     // }
     
-    // Logic cloned:
+    // Subcategory display code exists in multiple places:
     // - catalog/product/list.phtml
     // - amasty/amshopby/subcategories.phtml
-    
-    echo "<ul class=\"grid-shadow-tiles-text\">".PHP_EOL;
+    ?><ul class="grid-shadow-tiles-text" id="listview-subcat-tiles"><?php
     
     foreach($subcategories as $i => $subcategory) {
-      if(in_array($subcategory->getId(), EXCLUDED_CATEGORY_IDS)) {
-        continue;
-      }
       $haschild           = true;
       $category_name      = $subcategory->getName();
-      // $category_name      = $_dhhUtilHelper->cleanCategoryName($category_name);
       $category_name_safe = htmlspecialchars((string) $category_name);
       $image              = $subcategory->getImage();
       $category_url       = $subcategory->getUrl();

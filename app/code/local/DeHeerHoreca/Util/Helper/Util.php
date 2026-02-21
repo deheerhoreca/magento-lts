@@ -3,19 +3,15 @@
 declare(strict_types=1);
 
 use \Carbon\CarbonImmutable;
-use \Illuminate\Support\Arr;
-use \Illuminate\Support\Collection;
-use \Illuminate\Support\Number;
-use \Illuminate\Support\Str;
-use \Illuminate\Support\Stringable;
 use \Jaybizzle\CrawlerDetect\CrawlerDetect;
 use \Michelf\Markdown;
 use \Michelf\MarkdownExtra;
+use \Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__."/strftime_replacement.php";
 
 // These categories are not listed as subcategory tile in listviews
-const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
+// const EXCLUDED_CATEGORY_IDS = [656, 864, 834, 828, 232];
 
 /**
  * If we have an unmanaged/fake_managed product, we cannot really say when it will be available again
@@ -398,11 +394,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if($skip_usps !== true) {
       $product_usps = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product);
     }
-    if($show_category_link === true) {
+    if($show_category_link) {
       $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
     }
-    if($prefer_rewrite_table === true) {
-      $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product);
+    if($prefer_rewrite_table) {
+      $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product, true, 1);
     } else {
       $product_url = $_product->getProductUrl();
     }
@@ -1406,23 +1402,15 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public function logClick(): void {
-    $dhh_click_log = self::$dhh_click_log ?? [];
+    $dhh_click_log = self::$dhh_click_log;
+    self::$dhh_click_log["labels"] ??= [];
     
-    // Detect EliasHaeussler-CacheWarmup bot ourselves, as Crawler-Detect does not detect it
-    $userAgent = Mage::helper("core/http")->getHttpUserAgent();
-    if(sis(["CacheWarmup", "xCore (https://xcore.nl)"], $userAgent)) {
-      return; // Do not log bots
-      // $dhh_click_log["labels"]["bot"] = "true";
-    } else {
-      // Detect bots with Crawler-Detect library
-      $CrawlerDetect = new CrawlerDetect();
-      if($CrawlerDetect->isCrawler()) {
-        return; // Do not log bots
-        // $dhh_click_log["labels"]["bot"] = "true";
-      } else {
-        $dhh_click_log["labels"]["bot"] = "false";
-      }
+    // Skip click logging for bots
+    if(self::isBot()) {
+      return;
     }
+    
+    self::$dhh_click_log["labels"]["bot"] = "false";
     
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
     $full_url       = getDecodedCurrentUrl();
@@ -1434,30 +1422,30 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $customerEmail  = $_customer ? $_customer->getEmail() : null;
     
     // current_* is fastest, but in case of an FPC HIT we cannot use them
-    if(isset($dhh_click_log["labels"]["fpc_cache"]) && $dhh_click_log["labels"]["fpc_cache"] !== "HIT") {
+    if(isset(self::$dhh_click_log["labels"]["fpc_cache"]) && self::$dhh_click_log["labels"]["fpc_cache"] !== "HIT") {
       switch($action) {
         case "catalog_product_view":
-          $dhh_click_log["labels"]["product_id"] ??= (int) Mage::registry("current_product")->getId();
+          self::$dhh_click_log["labels"]["product_id"] ??= (int) Mage::registry("current_product")->getId();
           break;
         case "catalog_category_view":
-          $dhh_click_log["labels"]["category_id"] ??= (int) Mage::registry("current_category")->getId();
+          self::$dhh_click_log["labels"]["category_id"] ??= (int) Mage::registry("current_category")->getId();
           break;
       }
     } else {
       $oRewrite = Mage::getModel("core/url_rewrite")->setStoreId(1)->loadByRequestPath($path);
       switch($action) {
         case "catalog_product_view":
-          $dhh_click_log["labels"]["product_id"] ??= (int) $oRewrite->getProductId();
+          self::$dhh_click_log["labels"]["product_id"] ??= (int) $oRewrite->getProductId();
           break;
         case "catalog_category_view":
-          $dhh_click_log["labels"]["category_id"] ??= (int) $oRewrite->getCategoryId();
+          self::$dhh_click_log["labels"]["category_id"] ??= (int) $oRewrite->getCategoryId();
           break;
       }
     }
-    $_helper        = getOmDhhUtilHelper();
-    $dhh_click_log  = array_replace([
+    
+    self::$dhh_click_log  = array_replace([
       "@timestamp"          => date("Y-m-d\TH:i:s.uP"),
-      "client.ip"           => $_helper->getUserIP(),
+      "client.ip"           => getOmDhhUtilHelper()->getUserIP(),
       "ecs.version"         => "1.11.0",
       "event.action"        => $action,
       "event.kind"          => "event",
@@ -1471,7 +1459,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       "user.hash"           => $customerId,
       "user.id"             => $customerEmail,
       "user.email"          => $customerEmail,
-    ], $dhh_click_log);
+    ], self::$dhh_click_log);
     
     // Set up a primary and a fallback log dir, check existence and writability of primary, if not possible use fallback
     $clickLogCandidates = [
@@ -1487,7 +1475,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     try {
-      $json = json_encode($dhh_click_log);
+      $json = json_encode(self::$dhh_click_log);
       $clickLog .= "/clicks.jsonl";
       file_put_contents($clickLog, $json.PHP_EOL, FILE_APPEND);
     } catch(Exception $e) {
@@ -1856,5 +1844,99 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     $cache[$supplier] = (string) preg_replace("/\s+/", "", strtolower($supplier));
     return $cache[$supplier];
+  }
+  
+  /**
+   * Get the current Symfony request, decoded and cached.
+   * More standardized options than OpenMage's own Request object (Mage_Core_Controller_Request_Http).
+   *
+   * @return Request
+   */
+  public static function getRequest(): Request {
+    static $request = null;
+    $request ??= Request::createFromGlobals();
+    return $request;
+  }
+  
+  /**
+   * Centralized function that will interpret various imperfect signals and conclude whether
+   * the current request is from a bot, what kind of bot, etc. Used to make caching and logging
+   * decisions.
+   *
+   * Signals we can use:
+   * 1. Incoming HTTP headers by Cloudflare with their bot detection results:
+   *    - "cf-bot-score" => array:1 [0 => "99"]                       // Bot Management scores (1 = bot, 99 = human)
+   *    - "cf-verified-bot" => array:1 [0 => "false"]                 // Whether Cloudflare verified this as a known good bot (e.g. Googlebot)
+   *    - "cf-verified-bot-category" => array:1 [0 => "undefined"]    // Which kind of friendly bot, if applicable
+   *  2. Crawler-Detect library
+   *  3. Our own list of bots based on user agent substrings (e.g. "xCore (https://xcore.nl)")
+   *
+   * Decision:
+   * - If Cloudflare verified bot is true, it's a friendly bot.
+   * - If Cloudflare bot score is 1, it's a bot.
+   * - If our own user agent checks identify it as a known bot, it's a bot.
+   * - If Crawler-Detect identifies it as a crawler, it's a bot.
+   * - Set any unknowns to NULL.
+   *
+   * @return array{is_bot: bool|null, bot_score: int|null, friendly_bot: bool|null}
+   */
+  public static function getBotInfo(): array {
+    static $botInfo = [];
+    
+    if(blank($botInfo)) {
+      $botInfo = [
+        "is_bot"        => null,
+        "bot_score"     => null,
+        "friendly_bot"  => null,
+      ];
+      
+      while(true) {
+        // Cloudflare friendly bot detection
+        $headers = self::getRequest()->headers->all();
+        if(isset($headers["cf-verified-bot"][0])) {
+          $verifiedBot = strtolower($headers["cf-verified-bot"][0]);
+          if($verifiedBot === "true") {
+            $botInfo["is_bot"] = true;
+            $botInfo["friendly_bot"] = true;
+            break;
+          }
+        }
+        
+        // Cloudflare bot score
+        if(isset($headers["cf-bot-score"][0]) && is_numeric($headers["cf-bot-score"][0])) {
+          $botInfo["bot_score"] = (int) $headers["cf-bot-score"][0];
+          $botInfo["is_bot"]    = $botInfo["bot_score"] == 1; // Non-strict: header is a string
+          break;
+        }
+        
+        // Our own user agent checks for known bots that Crawler-Detect misses
+        // Using Crawler-Detect's getUserAgent() for improved parsing and normalization of the user agent string
+        $CrawlerDetect = new CrawlerDetect();
+        if(sis(["*CacheWarmup*", "xCore (https://xcore.nl)"], $CrawlerDetect->getUserAgent())) {
+          $botInfo["is_bot"] = true;
+          break;
+        }
+        
+        // Crawler-Detect comprehensive bot detection based on user agent
+        if($CrawlerDetect->isCrawler()) {
+          $botInfo["is_bot"] = true;
+          break;
+        }
+        
+        break;
+      }
+    }
+    
+    return $botInfo;
+  }
+  
+  /**
+   * Shorthand when a simple yes/no is needed.
+   *
+   * @return bool
+   */
+  public static function isBot(): bool {
+    $botInfo = self::getBotInfo();
+    return $botInfo["is_bot"] === true;
   }
 }

@@ -14,6 +14,9 @@ use \Illuminate\Support\Number;
 use \Illuminate\Support\Str;
 use \Illuminate\Support\Stringable;
 use \Illuminate\Support\Uri;
+use \Symfony\Component\VarDumper\Cloner\VarCloner;
+use \Symfony\Component\VarDumper\Dumper\CliDumper;
+use \Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
 require_once __DIR__."/Loader.php";
 
@@ -142,7 +145,6 @@ if(!function_exists("dy")) {
     return Arr::pull($array, $key, $default);
   }
 }
-
 
 /**
  * Yank a value from the array by key, or $default, or NULL if blank or cannot be converted. Supports key with dots.
@@ -465,6 +467,51 @@ if(!function_exists("_dhh_ips")) {
       "141.138.142.200",    // voyager
     ];
   }
+}
+
+/* ---------------------------------------------------------- Symfony\VarDumper --------------------------------------------------------- */
+
+/**
+ * OpenMage Dump -- Opinionated wrapper around Symfony VarDumper for OpenMage.
+ *
+ * - Switches between CliDumper and HtmlDumper based on the SAPI.
+ * - Limits the number of items, depth, and string length for better readability.
+ * - Does not support customization of the dump, it's a shorthand.
+ *
+ * @param  mixed ...$vars
+ * @return void
+ */
+function omd(mixed ...$vars): void {
+  static $cloner = null;
+  if($cloner === null) {
+    $cloner = new VarCloner();
+    $cloner->setMaxItems(50);
+    $cloner->setMinDepth(3);
+    $cloner->setMaxString(500);
+  }
+  
+  static $dumper = null;
+  if($dumper === null) {
+    if(PHP_SAPI !== "cli") {
+      $dumper = new HtmlDumper();
+      $separator = "<br>";
+      $options = [
+        'maxDepth'        => 3,
+        'maxStringLength' => 250,
+      ];
+    } else {
+      $dumper = new CliDumper();
+      $separator = PHP_EOL.PHP_EOL;
+      $options = null;
+    }
+  }
+  
+  $strings = [];
+  foreach($vars as $var) {
+    $strings[] = $dumper->dump($cloner->cloneVar($var), true, $options);
+  }
+  
+  echo implode($separator, $strings);
 }
 
 /* ----------------------------------------------------------- Laravel Picks ------------------------------------------------------------ */
@@ -1614,15 +1661,26 @@ function dhh_get_cached_category(int|string $id, bool $forceRefresh = false): Ma
   $currentUrl = dhh_get_current_url();
   $field      = null;
   
-  if(_dhh_debug()) {
-    if(!$forceRefresh && Mage::helper("aoe_modelcache")->exists("catalog/category", $id)) {
-      Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
-    } else {
-      Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
-    }
+  static $modelcacheHelper = null;
+  if($modelcacheHelper === null) {
+    $modelcacheHelper = Mage::helper("aoe_modelcache");
   }
   
-  return Mage::helper("aoe_modelcache")->get("catalog/category", $id, $field, $forceRefresh);
+  // Defensive: During high load and a cache clear, the model cache helper might not be available. 
+  if($modelcacheHelper) {
+    if(_dhh_debug()) {
+      if(!$forceRefresh && $modelcacheHelper->exists("catalog/category", $id)) {
+        Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+      } else {
+        Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+      }
+    }
+    
+    return $modelcacheHelper->get("catalog/category", $id, $field, $forceRefresh);
+  }
+  
+  // Fallback to a native OpenMage load.
+  return Mage::getModel("catalog/category")->load($id);
 }
 
 /**
@@ -1637,17 +1695,26 @@ function dhh_get_cached_product(int|string $id, bool $forceRefresh = false): Mag
   $currentUrl = dhh_get_current_url();
   $field      = null;
   
-  if(!$forceRefresh && Mage::helper("aoe_modelcache")->exists("catalog/product", $id)) {
-    if(dhh_profiler_enabled()) {
-      Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
-    }
-  } else {
-    if(dhh_profiler_enabled()) {
-      Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
-    }
+  static $modelcacheHelper = null;
+  if($modelcacheHelper === null) {
+    $modelcacheHelper = Mage::helper("aoe_modelcache");
   }
   
-  return Mage::helper("aoe_modelcache")->get("catalog/product", $id, $field, $forceRefresh);
+  // Defensive: During high load and a cache clear, the model cache helper might not be available. 
+  if($modelcacheHelper) {
+    if(_dhh_debug()) {
+      if(!$forceRefresh && $modelcacheHelper->exists("catalog/product", $id)) {
+        Mage::log(__FUNCTION__."::{$id} HIT   [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+      } else {
+        Mage::log(__FUNCTION__."::{$id} SAVE  [{$currentUrl}]", Zend_Log::DEBUG, "verbose.txt", true);
+      }
+    }
+    
+    return $modelcacheHelper->get("catalog/product", $id, $field, $forceRefresh);
+  }
+  
+  // Fallback to a native OpenMage load.
+  return Mage::getModel("catalog/product")->load($id);
 }
 
 /**

@@ -183,6 +183,6 @@ return [
   "thousands-sep"  => ",",
   "time-format"    => "Y-m-d H:i:s",
   "timezone"       => "Europe/Amsterdam", 								// Leave empty (or commented out) to get it automatically obtained.
-  "twigcache"      => "/tmp/twig",												// Metrics database storage
+  "twigcache"      => __DIR__."/twigcache",
   "url"            => "/protected/pca/phpcacheadmin.php", // URL to php-cache-admin folder, seen from browser root
 ];

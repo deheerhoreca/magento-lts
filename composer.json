@@ -41,7 +41,6 @@
     "cmixin/business-day": "^1.20.5",
     "colinmollenhour/cache-backend-redis": "^1.17.1",
     "colinmollenhour/magento-redis-session": "dev-master as 3.3.0",
-    "elidrissidev/magento-api2basicauth": "^1.0.3",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0.1",
     "fballiano/openmage-category-sort-direction": "^0.2.0",
@@ -70,6 +69,7 @@
     "symfony/cache": "^7.4.3",
     "symfony/console": "^6.4.31",
     "symfony/css-selector": "^7.4",
+    "symfony/http-foundation": "^7.4",
     "symfony/var-dumper": "^7.4.3",
     "voku/html-min": "^4.5.1",
     "wp-cli/php-cli-tools": "^0.12.6"

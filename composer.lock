@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8abe3cf01a66a3d5c4027631a9c845b3",
+    "content-hash": "04a582eaeb6e2dbfc7d7932cf8266dca",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -1084,188 +1084,6 @@
                 }
             ],
             "time": "2025-08-10T19:31:58+00:00"
-        },
-        {
-            "name": "elidrissidev/magento-api2basicauth",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elidrissidev/magento-api2basicauth.git",
-                "reference": "61b8790f5cb25cd44ed554ea6943c2f3a1987528"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elidrissidev/magento-api2basicauth/zipball/61b8790f5cb25cd44ed554ea6943c2f3a1987528",
-                "reference": "61b8790f5cb25cd44ed554ea6943c2f3a1987528",
-                "shasum": ""
-            },
-            "require": {
-                "openmage/magento-lts": ">=19.4.0",
-                "php": ">=7.2.0"
-            },
-            "type": "magento-module",
-            "extra": {
-                "map": [
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Grid.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Grid.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Form.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Form.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tabs.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tabs.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/General.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/General.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/Role.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Block/Adminhtml/Restuser/Edit/Tab/Role.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/controllers/Adminhtml/Api2basicauth/RestuserController.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/controllers/Adminhtml/Api2basicauth/RestuserController.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/adminhtml.xml",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/adminhtml.xml"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/api2.xml",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/api2.xml"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/config.xml",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/etc/config.xml"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Helper/Data.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Helper/Data.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/Adapter/Basic.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/Adapter/Basic.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/User/Restuser.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Auth/User/Restuser.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser/Collection.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser/Collection.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Resource/Restuser.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Restuser.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/Model/Restuser.php"
-                    ],
-                    [
-                        "app/code/community/Elidrissidev/Api2BasicAuth/sql/elidrissidev_api2basicauth_setup/install-1.0.0.php",
-                        "app/code/community/Elidrissidev/Api2BasicAuth/sql/elidrissidev_api2basicauth_setup/install-1.0.0.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Category/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Category/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Image/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Image/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Website/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Catalog/Model/Api2/Product/Website/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/CatalogInventory/Model/Api2/Stock/Item/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/CatalogInventory/Model/Api2/Stock/Item/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Customer/Model/Api2/Customer/Address/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Customer/Model/Api2/Customer/Address/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Customer/Model/Api2/Customer/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Customer/Model/Api2/Customer/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Address/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Address/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Comment/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Comment/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Item/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Item/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Rest/Restuser/V1.php",
-                        "app/code/local/Mage/Sales/Model/Api2/Order/Rest/Restuser/V1.php"
-                    ],
-                    [
-                        "app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml",
-                        "app/design/adminhtml/default/default/layout/elidrissidev_api2basicauth.xml"
-                    ],
-                    [
-                        "app/etc/modules/Elidrissidev_Api2BasicAuth.xml",
-                        "app/etc/modules/Elidrissidev_Api2BasicAuth.xml"
-                    ],
-                    [
-                        "app/locale/en_US/Elidrissidev_Api2BasicAuth.csv",
-                        "app/locale/en_US/Elidrissidev_Api2BasicAuth.csv"
-                    ]
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mohamed ELIDRISSI",
-                    "email": "mohamed@elidrissi.dev",
-                    "homepage": "https://github.com/elidrissidev",
-                    "role": "Owner"
-                }
-            ],
-            "description": "HTTP Basic authentication support for Magento 1.9 and OpenMage's Api2.",
-            "keywords": [
-                "magento",
-                "magento-module",
-                "openmage",
-                "openmage-module"
-            ],
-            "support": {
-                "issues": "https://github.com/elidrissidev/Elidrissidev_Api2BasicAuth/issues",
-                "source": "https://github.com/elidrissidev/magento-api2basicauth/tree/v1.0.3"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/elidrissidev",
-                    "type": "PayPal"
-                }
-            ],
-            "time": "2022-07-03T10:19:14+00:00"
         },
         {
             "name": "eloquent/enumeration",
@@ -4308,6 +4126,88 @@
                 }
             ],
             "time": "2024-09-25T14:21:43+00:00"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "v7.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "446d0db2b1f21575f1284b74533e425096abdfb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/446d0db2b1f21575f1284b74533e425096abdfb6",
+                "reference": "446d0db2b1f21575f1284b74533e425096abdfb6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-mbstring": "^1.1"
+            },
+            "conflict": {
+                "doctrine/dbal": "<3.6",
+                "symfony/cache": "<6.4.12|>=7.0,<7.1.5"
+            },
+            "require-dev": {
+                "doctrine/dbal": "^3.6|^4",
+                "predis/predis": "^1.1|^2.0",
+                "symfony/cache": "^6.4.12|^7.1.5|^8.0",
+                "symfony/clock": "^6.4|^7.0|^8.0",
+                "symfony/dependency-injection": "^6.4|^7.0|^8.0",
+                "symfony/expression-language": "^6.4|^7.0|^8.0",
+                "symfony/http-kernel": "^6.4|^7.0|^8.0",
+                "symfony/mime": "^6.4|^7.0|^8.0",
+                "symfony/rate-limiter": "^6.4|^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Defines an object-oriented layer for the HTTP specification",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/http-foundation/tree/v7.4.5"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-01-27T16:16:02+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",

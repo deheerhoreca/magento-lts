@@ -11,8 +11,6 @@ class CacheBuster {
   
   /**
    * Add the filemtime to an FS path for cache busting.
-   *
-   * Example:
    * Input: "./assets/bower-asset/font-awesome/css/all.min.css"
    * Output: "/assets/bower-asset/font-awesome/css/all.ts0123456789.min.css"
    *
@@ -84,6 +82,7 @@ class CacheBuster {
    *
    * @param   string  $path
    * @param   string  $prepend
+   *
    * @return  string
    */
   public static function prependExtension(string $path, string $prepend) {
@@ -95,6 +94,7 @@ class CacheBuster {
    *
    * @param   string  $path
    * @param   string  $new_extension
+   *
    * @return  string
    */
   public static function replaceExtension(string $path, string $new_extension): string {
@@ -130,6 +130,8 @@ class CacheBuster {
   
   /**
    * Convert an OpenMage URL to a file system path.
+   * Input: "https://www.chefstore.nl/skin/frontend/enterprise/default/css/styles.css"
+   * Output: "/var/www/vhosts/chefstore.nl/workspace/openmage/skin/frontend/enterprise/default/css/styles.css"
    *
    * @param  string  $url
    * @return string

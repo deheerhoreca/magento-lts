@@ -30,8 +30,15 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     self::$dhhHelperUtil ??= Mage::helper("deheerhoreca_util/util");
     self::$dhhHelperFpc  ??= Mage::helper("deheerhoreca_fpc/data");
     
+    // Log a separator for this request if FPC debug mode is enabled
+    if(DHH_FPC_DEBUG) {
+      $verb = $_SERVER["REQUEST_METHOD"] ?? null;
+      self::$dhhHelperFpc::log("---------------------------------------------------------------------");
+      self::$dhhHelperFpc::log("{$verb} ".self::$dhhHelperUtil::getCurrentUrl());
+    }
+    
     // If FPC is disabled, skip:
-    if(!self::$dhhHelperFpc->is_read_cache_enabled(true, false, "fpc")) {
+    if(self::$dhhHelperFpc->is_read_cache_enabled(true, false, "fpc") === false) {
       self::$dhhHelperUtil->addLabelToClickLog("fpc_cache", "BYPASS");
       Varien_Profiler::stop("DHH::FPC::ServeCachedHTML");
       return;

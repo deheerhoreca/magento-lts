@@ -5,24 +5,26 @@
 
 # 2025-02-02 KNOWN HACKS
 
-### grep -ri -l DHH app/code/core/ | sort
+### grep -rl -e DHH -e "CORE HACK" app/code/core/ | sort -f
+### diff -qr app/code/core/Mage/ vendor/openmage/magento-lts/app/code/core/Mage/ | sort -f
+### diff -qr app/code/core/Mage/ app/code/local/Mage/ | sort -f
 - `app/code/core/Mage/Adminhtml/Block/Sales/Order/Create/Form/Account.php`
 - `app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Abstract.php`
 - `app/code/core/Mage/Adminhtml/Model/Search/Catalog.php`
 - `app/code/core/Mage/Adminhtml/Model/Search/Customer.php`
 - `app/code/core/Mage/Adminhtml/Model/Search/Order.php`
-- `app/code/core/Mage/Core/Model/Resource/Session.php`
-- `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
-- `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
-- `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
-- `app/code/core/Mage/Sales/etc/config.xml`
 - `app/code/core/Mage/Api/Model/Server/Wsi/Adapter/Soap.php`
 - `app/code/core/Mage/Catalog/Model/Category.php`
 - `app/code/core/Mage/Catalog/Model/Layer.php`
+- `app/code/core/Mage/Core/Model/Resource/Session.php`
+- `app/code/core/Mage/Core/Model/Session/Abstract/Varien.php`
 - `app/code/core/Mage/Customer/Model/Customer.php`
+- `app/code/core/Mage/GoogleAnalytics/Block/Ga.php`
 - `app/code/core/Mage/Page/Block/Html/Head.php`
+- `app/code/core/Mage/Sales/etc/config.xml`
+- `app/code/core/Mage/Sales/Model/Resource/Collection/Abstract.php`
 
-### grep -ri -l DHH app/code/community/ | sort
+### grep -rl -e DHH -e "CORE HACK" app/code/community/ | sort -f
 - `app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php`
 - `app/code/community/Afterpay/Afterpay/controllers/Adminhtml/AfterpayController.php`
 - `app/code/community/Afterpay/Afterpay/Helper/Data.php`
@@ -69,11 +71,8 @@
 - `app/code/community/TM/Core/Model/Notification/Feed.php`
 - `app/code/community/Varien/Autoload.php`
 
-### grep -ri -l DHH app/code/local/ | sort
+### grep -rl -e DHH -e "CORE HACK" app/code/local/ | sort -f
 - `app/code/local/Amasty/Base/Model/Feed.php`
-- `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
-- `app/code/local/Amasty/Feed/Model/Product/Collection.php`
-- `app/code/local/Amasty/Feed/Model/Profile.php`
 - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php`
 - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/View.php`
 - `app/code/local/Amasty/Shopby/Helper/Cached.php`
@@ -132,14 +131,14 @@
 - `app/code/local/TM/FireCheckout/etc/wsdl.xml`
 - `app/code/local/TM/RichSnippets/Block/Product.php`
 
-### grep -ril "DHH "    app/design/adminhtml/default/default   app/design/frontend/base   | sort
+### grep -rli -e DHH -e "CORE HACK" app/design/adminhtml/default/default   app/design/frontend/base   | sort -f
 - `app/design/adminhtml/default/default/template/sales/order/create/comment.phtml`
 - `app/design/adminhtml/default/default/template/tm/firecheckout/sales/order/create/data.phtml`
 - `app/design/adminhtml/default/default/template/widget/grid.phtml.inprogress`
 - `app/design/frontend/base/default/template/payment/info/pdf/default.phtml`
 - `app/design/frontend/base/default/template/profitmetrics/magentointegration/skin_js_inclusion.phtml`
 
-### grep -ril "DHH "  ./*.* dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort
+### grep -rli -e DHH -e "CORE HACK" ./*.* dev/  etc/ errors/ js/ lib/ protected/ skin/ shell/ | sort -f
 - `scheduler_cron.sh`
 - `js/amasty/amshopby/amshopby-ajax.js`
 - `js/amasty/amshopby/amshopby.js`
@@ -494,13 +493,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Adding checks due to divide by zero errors
     - https://github.com/loekvangool/deheerhoreca-magento/commit/57eb2806ab96c6a8082ce051d5d48406df1a2726
     - Replaced by our own fork
-- **Amasty Feeds**
-  - `app/code/local/Amasty/Feed/Model/Profile.php`
-    - https://amasty.com/knowledge-base/product-feed-output-https-links-to-image-urls.html
-    - Include an HTTPS link to an image URL in a product feed
-    - https://github.com/loekvangool/deheerhoreca-magento/commit/05dc4f8ab5a39f4a9f47663b3a4e225d4bce932d
-  - `app/code/local/Amasty/Feed/Model/Mysql4/Product/Collection.php`
-    - Make sure dynamic category IDs don't make it into the feeds
 - **Staempfli ProductAttachment**
   - https://github.com/staempfli/magento-product-attachment
   - Patched up to master on 2023-01-17 (commit 445557b)
