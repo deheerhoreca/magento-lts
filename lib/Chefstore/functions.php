@@ -83,7 +83,22 @@ if(!function_exists("value")) {
   }
 }
 
-// Laravel aliases
+// Laravel aliases, gateways, shortcuts, etc.
+
+/**
+ * Data get. Supports key with dots. WARNING: will return NULL instead of $default.
+ *
+ * @param  array|ArrayAccess $target
+ * @param  mixed $key
+ * @param  mixed $default
+ * 
+ * @return mixed
+ */
+if(!function_exists("dg")) {
+  function dg(array|ArrayAccess $target, mixed $key, mixed $default = null): mixed {
+    return data_get($target, $key, $default);
+  }
+}
 
 /**
  * Data get. Supports key with dots. WARNING: will return NULL instead of $default.
