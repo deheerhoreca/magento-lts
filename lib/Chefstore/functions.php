@@ -1824,3 +1824,7 @@ function getProductUrlBySku(string $sku): string|false {
   
   return $return;
 }
+
+function omIsCli(): bool {
+  return \PHP_SAPI === 'cli' && \defined('STDOUT') && \defined('STDERR');
+}
