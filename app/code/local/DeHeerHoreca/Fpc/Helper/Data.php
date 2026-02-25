@@ -219,9 +219,9 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function request_has_no_cache_headers(): bool {
     static $has_no_cache_headers = null;
-		
-		// @todo Switch to:
-		// if($has_no_cache_headers === null) {
+    
+    // @todo Switch to:
+    // if($has_no_cache_headers === null) {
     //   $has_no_cache_headers = sis("no-cache", [
     //     $_SERVER["HTTP_CACHE_CONTROL"] 	?? "",
     //     $_SERVER["HTTP_PRAGMA"] 				?? ""
@@ -640,16 +640,13 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if($minifyHtml === true && is_string($data)) {
       $data = \Chefstore\Html::minifyHtml($data);
     }
-		
-		if(omCacheSave($key, $data, $cache_tags, $lifetime)) {
+    
+    // ! There was a bug when using omCacheSave() here IF also using saveToCacheDeferred(). Perhaps too many indirect calls?
+    // ! This is why we use Mage::app() here, to execute the logic more directly, it works:
+    if(Mage::app()->saveCache($data, $key, $cache_tags, $lifetime)) {
       self::log("SAVED {$key}");
       $return = true;
     }
-    
-    // if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
-    //   self::log("SAVED {$key}");
-    //   $return = true;
-    // }
     
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
     return $return ?? false;

@@ -243,6 +243,8 @@ class Utils {
   /**
    * Run all deferred Closures.
    * => This is called only after fastcgi_finish_request(), no more output to the browser is possible.
+   * => We have seen bugs where deferred closures did not work when multiple levels of calls were used.
+   * =>   It's safer to not use gateway functions and directly call the desired logic.
    *
    * @return void
    */
@@ -252,7 +254,7 @@ class Utils {
         $closure();
         unset(self::$deferredClosures[$key]);
       } catch(Throwable $e) {
-        Mage::log("Chefstore\Utils::runDeferredClosures() - Deferred closure failed. Details follow.");
+        Mage::log("Chefstore\Utils::runDeferredClosures() - Deferred closure failed. Details follow.", Zend_Log::ERR);
         Mage::logException($e);
       }
     }

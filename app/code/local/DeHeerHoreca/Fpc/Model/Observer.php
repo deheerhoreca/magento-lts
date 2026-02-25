@@ -74,7 +74,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       // Copying from Mage_Core_Model_App::run() finilization code here:
       // -------------------------------------------------------------------------------------------
       // Finish the request explicitly, no output allowed beyond this point
-      if(php_sapi_name() == "fpm-fcgi" && function_exists("fastcgi_finish_request")) {
+      if(php_sapi_name() !== "cli" && function_exists("fastcgi_finish_request")) {
           fastcgi_finish_request();
       } else {
         flush();
