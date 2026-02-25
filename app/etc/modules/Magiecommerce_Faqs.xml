@@ -1,8 +1,0 @@
-<config>
-    <modules>
-        <Magiecommerce_Faqs>
-            <active>true</active>
-            <codePool>local</codePool>            
-        </Magiecommerce_Faqs>
-    </modules>
-</config>

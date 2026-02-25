@@ -484,6 +484,24 @@ if(!function_exists("_dhh_ips")) {
   }
 }
 
+/* ---------------------------------------------------------- Chefstore\CsCache --------------------------------------------------------- */
+
+function omCacheGet($id): string|false {
+	return CsCache::load($id);
+}
+
+function omCacheSave($id, $data, $tags = [], $lifetime = null): true {
+	return CsCache::save($id, $data, $tags, $lifetime);
+}
+
+function omCacheDelete($id): true {
+	return CsCache::delete($id);
+}
+
+function omCacheClean(array $tags): true {
+	return CsCache::clean($tags);
+}
+
 /* ---------------------------------------------------------- Symfony\VarDumper --------------------------------------------------------- */
 
 /**
@@ -929,6 +947,20 @@ if(!function_exists("_getAlternativeEans")) {
   }
 }
 
+/**
+ * Get the URL of a product image, given the value of $row->getData("image") or similar.
+ *
+ * Example:
+ * - Input:  "i/m/image.jpg"
+ * - Output: "https://yourstore.com/media/catalog/product/i/m/image.jpg"
+ *
+ * @param  mixed  $path
+ * @return string
+ */
+function omGetProductImageUrl($path): string {
+	return rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/")."/catalog/product/".ltrim($path, "/");
+}
+
 if(!function_exists("_cdn_img")) {
   /**
    * Generates an <img> tag or just the URL for an image served via a CDN with specified transformations.
@@ -984,7 +1016,7 @@ if(!function_exists("_cdn_img")) {
     }
     
     $identifier     = $options["identifier"] ?? "NO_ID";
-    $fs_path        = dyAsNullStr($options, "fs_path", "");
+    $fs_path        = dyAsNullStr($options, "fs_path", null);
     $add_mod_time   = $options["add_mod_time"]  ?? false; // Requires fs_path
     $width          = $options["width"]         ?? null;
     $height         = $options["height"]        ?? null;
@@ -1021,36 +1053,34 @@ if(!function_exists("_cdn_img")) {
     $style_html     = "";
     $context        = defined("APP_SHORT") ? "intel" : "openmage"; // intel|openmage
     
-    // Pre-process settings
+    // Process settings
     if($cdn === "imagekit" || $cdn === "imagekit_custom") {
       $relative_url = true; // Required
     }
     
-    // Generic URL modifications
-    
-    // Fill fs_path when cachebusting is enabled without an explicit fs_path -- BEFORE adding cache buster
-    if($add_mod_time && blank($fs_path)) {
-      $fs_path = CacheBuster::pathByUrl($url);
-      if(!is_file($fs_path)) {
-        $fs_path = null;
-      }
-    }
-    
     // Add file modification time as cache buster
-    if($add_mod_time && filled($fs_path)) {
-      if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
-        $url = CacheBuster::prependExtension($url, "ts{$mtime}");
-      } else {
-        // @todo Log about the unavailability of CacheBuster
-        if(function_exists("_add_file_v_param")) {
-          $url = _add_file_v_param($url, $fs_path, $identifier);
-        } else {
-          $url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path, $identifier);
-        }
-      }
+    if($add_mod_time) {
+			// Fill fs_path when cachebusting is enabled without an explicit fs_path -- BEFORE adding cache buster
+			if(blank($fs_path)) {
+				$fs_path ??= CacheBuster::pathByUrl($url);
+			}
+			
+			// Add modification time as cache buster
+			if(filled($fs_path)) {
+				if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
+					$url = CacheBuster::prependExtension($url, "ts{$mtime}");
+				} else {
+					// @todo Remove this, stop adding query params for cache busting (it again does is_file() so it should not happen in the first place)
+					if(function_exists("_add_file_v_param")) {
+						$url = _add_file_v_param($url, $fs_path, $identifier);
+					} else {
+						$url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path, $identifier);
+					}
+				}
+			}
     }
     
-    // Make URL relative if requested
+    // Make URL relative
     if($relative_url) {
       $url = str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), "", $url);
     }

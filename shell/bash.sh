@@ -6,7 +6,7 @@
 # when Amp opens one and inherits the parent shell's functions. Errors such as:
 # - /bin/bash: error importing function definition for `BASH_FUNC_io'
 # - /bin/bash: dos2unix_openmage: line 1: syntax error: unexpected end of file
-unset -f dos2unix_openmage cm openmage 2>/dev/null
+unset -f dos2unix_openmage cm openmage omindexer 2>/dev/null
 
 function dos2unix_openmage {
   cm

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OpenMage
  *
@@ -17,6 +18,8 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
 {
     protected function _prepareColumns()
     {
+				
+				
         $this->addColumn("image", array(
             "header"    => "",
             "align"     => "center",
@@ -26,7 +29,18 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
             "sort"      => false,
             "renderer"  => "DeHeerHoreca_Util_Block_Adminhtml_Template_Grid_Renderer_Image"
         )); 
-        return parent::_prepareColumns();
+				
+				parent::_prepareColumns();
+				
+				$this->addColumn("product_type", [
+						"header"  	=> "Type",
+						"width"   	=> "100px",
+						"type"    	=> "options",
+						"index"   	=> "product_type",
+						"options" 	=> Mage::getSingleton("firegento_gridcontrol/utility")->getDropdownAttributeLabelOptionArray("product_type"),
+				]);
+				
+        return $this;
     }
     
     // Keep in sync with Mage_Adminhtml_Block_Catalog_Product_Grid::_prepareCollection()
@@ -39,6 +53,7 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
             ->addAttributeToSelect('attribute_set_id')
             ->addAttributeToSelect('type_id')
             ->addAttributeToSelect('brand_series')
+            ->addAttributeToSelect('product_type')
         ;
         
         // DHH: Not needed
@@ -94,19 +109,28 @@ class DeHeerHoreca_Util_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminh
                 'left',
                 $store->getId()
             );
+            $collection->joinAttribute(
+								'product_type',
+								'catalog_product/product_type',
+								'entity_id',
+								null,
+								'inner'
+						);
         } else {
             $collection->addAttributeToSelect('price');
             $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
             $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         }
         
-        /* DHH */ $collection->joinAttribute('image', 'catalog_product/image', 'entity_id', null, 'left');
-
+        $collection->joinAttribute('image', 'catalog_product/image', 'entity_id', null, 'left');
+				
         $this->setCollection($collection);
-
-        /* DHH */ //parent::_prepareCollection();
-        /* DHH */ Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();
-        /* DHH */ // $this->getCollection()->addWebsiteNamesToResult();
+				
+				// DHH: Calling the parent will remove all our custom collection modifications, so we skip it and call the grandparent directly.
+        // parent::_prepareCollection();
+				
+        Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();
+        // $this->getCollection()->addWebsiteNamesToResult();
         return $this;
     }
 }

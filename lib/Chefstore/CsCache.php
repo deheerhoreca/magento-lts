@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chefstore;
 
 use \Closure;
+use \Mage;
 use \Stringable;
 use \Symfony\Component\Cache\Adapter\AdapterInterface;
 use \Symfony\Component\Cache\Adapter\ApcuAdapter;
@@ -21,6 +22,15 @@ use \Symfony\Component\Cache\Marshaller\MarshallerInterface;
 use \Symfony\Contracts\Cache\ItemInterface;
 
 /**
+ * BASIC OPENMAGE CACHE USAGE:
+ * These calls make sure our modified Cache class is used (for stats and APCu two-level caching)
+ * 
+ * Mage::app()->loadCache($cache_key);
+ * Mage::app()->saveCache($data, $cache_key, $cache_tags, $lifetime);
+ * Mage::app()->removeCache($cache_key);
+ * Mage::app()->cleanCache($cache_tags);
+ * 
+ * ********************************************************************************************************
  * PSR-6:
  * 
  * // create a new item by trying to get it from the cache
@@ -68,14 +78,15 @@ use \Symfony\Contracts\Cache\ItemInterface;
  * }
  *
  * ********************************************************************************************************
- *
+ * SYMFONY CACHE SHORTCUTS:
+ * 
  * $now = _cc()->get($cache_key, function($item) {
- * return Carbon::now();
+ *   return Carbon::now();
  * });
  * 
  * $now = _cc()->get($cache_key, function($item) {
- * $item->expiresAfter(60);
- * return Carbon::now();
+ *   $item->expiresAfter(60);
+ *   return Carbon::now();
  * });
  * 
  * $var = _cc()->get($cache_key, fn() => "bier");
@@ -229,7 +240,7 @@ class CsCache {
       return $closure($item);
     }, $beta);
   }
-
+	
   /**
    * Get a cached value from a cache adapter, or generate it using a callback, without specifying the key.
    * Arguments intentionally shortened to reduce distraction when reading code.
@@ -303,4 +314,55 @@ class CsCache {
     
     return $result;
   }
+	
+	// Native OpenMage gateway functions:
+	
+	/**
+	 * Load a cache by key via native OpenMage method.
+	 * Will hit 2-level cache.
+	 *
+	 * @param  mixed $id
+	 */
+	public static function get($id): string|false {
+		return Mage::app()->loadCache($id);
+	}
+	
+	/**
+	 * Save a cache by key via native OpenMage method.
+	 * Will hit 2-level cache.
+	 *
+	 * @param  mixed $id
+	 * @param  mixed $data
+	 * @param  array $tags
+	 * @param  mixed $lifetime
+	 * @return true
+	 */
+	public static function save($id, $data, $tags = [], $lifetime = null): true {
+		Mage::app()->saveCache($data, $id, $tags, $lifetime);
+		return true; // The OpenMage function does not report success
+	}
+	
+	/**
+	 * Delete a cache by key via native OpenMage method.
+	 * Will hit 2-level cache.
+	 *
+	 * @param  mixed $id
+	 * @return true
+	 */
+	public static function delete($id): true {
+		Mage::app()->removeCache($id);
+		return true;
+	}
+	
+	/**
+	 * Clean cache by tags via native OpenMage method.
+	 * Will hit 2-level cache.
+	 *
+	 * @param  array $tags
+	 * @return true
+	 */
+	public static function clean($tags = []): true {
+		Mage::app()->cleanCache($tags);
+		return true;
+	}
 }

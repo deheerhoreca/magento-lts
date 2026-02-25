@@ -22,6 +22,7 @@ if (!defined("DHH_CLASS_ALIASES_APPLIED")) {
 
 require_once __DIR__."/functions.php";          // BEFORE config.php
 require_once __DIR__."/config.php";
+require_once __DIR__."/CacheBuster.php";
 require_once __DIR__."/CsCache.php";
 require_once __DIR__."/Helper.php";
 require_once __DIR__."/Html.php";

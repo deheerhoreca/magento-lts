@@ -1,8 +1,0 @@
-<config>
-   <modules>
-      <Aoe_ClassPathCache>
-         <active>true</active>
-         <codePool>community</codePool>
-      </Aoe_ClassPathCache>
-   </modules>
-</config>

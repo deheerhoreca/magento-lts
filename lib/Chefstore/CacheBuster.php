@@ -129,11 +129,12 @@ class CacheBuster {
   }
   
   /**
-   * Convert an OpenMage URL to a file system path.
+   * Convert an OpenMage URL to a file system path. Does NOT check if the file exists.
+	 *
    * Input: "https://www.chefstore.nl/skin/frontend/enterprise/default/css/styles.css"
    * Output: "/var/www/vhosts/chefstore.nl/workspace/openmage/skin/frontend/enterprise/default/css/styles.css"
    *
-   * @param  string  $url
+   * @param  string  $url  The URL must be a full URL, including the base URL of the store.
    * @return string
    */
   public static function pathByUrl(string $url): string {

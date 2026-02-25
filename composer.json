@@ -148,7 +148,7 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/vianetz/aoe-scheduler-magento1",
+      "url": "https://github.com/deheerhoreca/aoe-scheduler-magento1",
       "only": [
         "aoepeople/aoe_scheduler"
       ]
@@ -265,7 +265,7 @@
       "magento-hackathon/magento-composer-installer": true,
       "oomphinc/composer-installers-extender": true
     },
-    "apcu-autoloader": true,
+    "apcu-autoloader": false,
     "audit": {
       "block-insecure": false,
       "ignore": {
@@ -274,7 +274,7 @@
         "PKSA-w1pc-fvwg-8vsf": "Only until > 20.05 upgrade"
       }
     },
-    "classmap-authoritative": false,
+    "classmap-authoritative": true,
     "magento-core-deploy": {
       "excludes": [
         ".all-contributorsrc",

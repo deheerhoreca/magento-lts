@@ -219,6 +219,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function request_has_no_cache_headers(): bool {
     static $has_no_cache_headers = null;
+		
+		// @todo Switch to:
+		// if($has_no_cache_headers === null) {
+    //   $has_no_cache_headers = sis("no-cache", [
+    //     $_SERVER["HTTP_CACHE_CONTROL"] 	?? "",
+    //     $_SERVER["HTTP_PRAGMA"] 				?? ""
+    //   ]);
+    // }
     
     if($has_no_cache_headers === null) {
       // Keep returning FALSE without setting the cache until we can see the Accept header (which is very common).
@@ -256,7 +264,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       return true;
     }
     
-    // Dissallow only GET/HEAD requests while not in CLI mode.
+    // Dissallow non-GET/HEAD requests while not in CLI mode.
     if(PHP_SAPI !== "cli" && ($_SERVER["REQUEST_METHOD"] !== "GET" && $_SERVER["REQUEST_METHOD"] !== "HEAD")) {
       self::log("FPC cache disabled (by REQUEST_METHOD): {$_SERVER["REQUEST_METHOD"]}");
       return true;
@@ -422,7 +430,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    */
   public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
     Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
-    $_cache   = Mage::app()->getCache();
+    $_cache   = Mage::app()->getCache();							// Circumvents our modified Cache class
     $html     = $_cache->load($key);
     
     if(empty($html)) {
@@ -519,14 +527,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       // Mage::getSingleton("core/session")->addSuccess(Mage::helper("core")->__("Notice ".date("c")));
       
       // MAIN NAV
-      $replace  = (string) $_cache->load(DHH_FPC_NAV_KEY);
+      $replace  = (string) Mage::app()->loadCache(DHH_FPC_NAV_KEY); // Supports 2-level APCu caching
       $search   = "<!-- nav_here -->";
       $html     = str_replace($search, $replace, $html, $count);
       $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
       self::log("Replaced {$search} {$count} times with ".mb_strlen($replace)." chars", $level);
       
       // FOOTER
-      $replace  = (string) $_cache->load(DHH_FPC_FOOTER_KEY);
+      $replace  = (string) Mage::app()->loadCache(DHH_FPC_FOOTER_KEY); // Supports 2-level APCu caching
       $search   = "<!-- footer_here -->";
       $html     = str_replace($search, $replace, $html, $count);
       $level    = $count > 0 ? Zend_Log::DEBUG : Zend_Log::WARN;
@@ -632,11 +640,16 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     if($minifyHtml === true && is_string($data)) {
       $data = \Chefstore\Html::minifyHtml($data);
     }
-    
-    if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+		
+		if(omCacheSave($key, $data, $cache_tags, $lifetime)) {
       self::log("SAVED {$key}");
       $return = true;
     }
+    
+    // if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+    //   self::log("SAVED {$key}");
+    //   $return = true;
+    // }
     
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
     return $return ?? false;

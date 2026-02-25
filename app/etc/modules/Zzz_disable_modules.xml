@@ -25,15 +25,6 @@
     <Mage_Wishlist>
       <active>false</active>
     </Mage_Wishlist>
-    <HM_Faq>
-      <active>false</active>
-    </HM_Faq>
-    <Flagbit_Faq>
-      <active>false</active>
-    </Flagbit_Faq>
-    <Magiecommerce_Faqs>
-      <active>false</active>
-    </Magiecommerce_Faqs>
     <Anowave_Ec>
       <active>false</active>
     </Anowave_Ec>
@@ -133,12 +124,7 @@
     <Aoe_Profiler>
       <active>true</active>
     </Aoe_Profiler>
-    
-    <!-- Enbable during development only -->
-    <Aoe_CacheStats>
-      <active>false</active>
-    </Aoe_CacheStats>
-    
+		
     <!-- Not used -->
     <TM_CheckoutSuccess>
       <active>false</active>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04a582eaeb6e2dbfc7d7932cf8266dca",
+    "content-hash": "b8e7f1699a92dd89267bc86addc76b91",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:deheerhoreca/Aoe_BlackHoleSession.git",
-                "reference": "a1705720b47ae8cf05a82a369694754e79b5db08"
+                "reference": "45bb90d8e2d1216d87a192a5c4201d9c0c898063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_BlackHoleSession/zipball/a1705720b47ae8cf05a82a369694754e79b5db08",
-                "reference": "a1705720b47ae8cf05a82a369694754e79b5db08",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_BlackHoleSession/zipball/45bb90d8e2d1216d87a192a5c4201d9c0c898063",
+                "reference": "45bb90d8e2d1216d87a192a5c4201d9c0c898063",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +40,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_BlackHoleSession/tree/dhh-fixes"
             },
-            "time": "2026-02-16T22:30:36+00:00"
+            "time": "2026-02-24T01:18:23+00:00"
         },
         {
             "name": "aoepeople/aoe_cachestats",
@@ -48,12 +48,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:deheerhoreca/Aoe_CacheStats.git",
-                "reference": "0a417e181c9564870f9ea94b0f43385687092ff1"
+                "reference": "75b525c2bae7fc81e3c556da41b3c4a59fdf8205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/0a417e181c9564870f9ea94b0f43385687092ff1",
-                "reference": "0a417e181c9564870f9ea94b0f43385687092ff1",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/75b525c2bae7fc81e3c556da41b3c4a59fdf8205",
+                "reference": "75b525c2bae7fc81e3c556da41b3c4a59fdf8205",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_CacheStats/tree/master"
             },
-            "time": "2026-02-15T23:37:31+00:00"
+            "time": "2026-02-24T22:57:57+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
@@ -151,12 +151,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Aoe_Profiler.git",
-                "reference": "d6120fb62b0c9b474910df6e7abe32e9c3d6e5bb"
+                "reference": "d28a18a9775faa4e6752603d043fb57bc06c8b3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/d6120fb62b0c9b474910df6e7abe32e9c3d6e5bb",
-                "reference": "d6120fb62b0c9b474910df6e7abe32e9c3d6e5bb",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/d28a18a9775faa4e6752603d043fb57bc06c8b3f",
+                "reference": "d28a18a9775faa4e6752603d043fb57bc06c8b3f",
                 "shasum": ""
             },
             "require": {
@@ -178,20 +178,20 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_Profiler/tree/master"
             },
-            "time": "2026-01-02T21:39:53+00:00"
+            "time": "2026-02-24T22:46:28+00:00"
         },
         {
             "name": "aoepeople/aoe_scheduler",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/vianetz/aoe-scheduler-magento1.git",
-                "reference": "84b746b15c77ab994796cbc4066256a1ccab7e73"
+                "url": "git@github.com:deheerhoreca/aoe-scheduler-magento1.git",
+                "reference": "6ce5d49c7ef051fbb18c7b4c2cf9cc2ccfb12525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vianetz/aoe-scheduler-magento1/zipball/84b746b15c77ab994796cbc4066256a1ccab7e73",
-                "reference": "84b746b15c77ab994796cbc4066256a1ccab7e73",
+                "url": "https://api.github.com/repos/deheerhoreca/aoe-scheduler-magento1/zipball/6ce5d49c7ef051fbb18c7b4c2cf9cc2ccfb12525",
+                "reference": "6ce5d49c7ef051fbb18c7b4c2cf9cc2ccfb12525",
                 "shasum": ""
             },
             "require": {
@@ -227,9 +227,9 @@
             "description": "Magento Cron Scheduler",
             "homepage": "https://github.com/AOEpeople/Aoe_Scheduler",
             "support": {
-                "source": "https://github.com/vianetz/aoe-scheduler-magento1/tree/master"
+                "source": "https://github.com/deheerhoreca/aoe-scheduler-magento1/tree/master"
             },
-            "time": "2025-02-17T17:39:14+00:00"
+            "time": "2026-02-25T00:19:20+00:00"
         },
         {
             "name": "aoepeople/aoe_templatehints",
@@ -1555,7 +1555,7 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
@@ -1615,7 +1615,7 @@
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -1661,16 +1661,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "620d82bad07f55fcb7f5125f44c9d9b93335fb8c"
+                "reference": "099fd9b56ccaf776facaa27699b960a3f2451127"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/620d82bad07f55fcb7f5125f44c9d9b93335fb8c",
-                "reference": "620d82bad07f55fcb7f5125f44c9d9b93335fb8c",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/099fd9b56ccaf776facaa27699b960a3f2451127",
+                "reference": "099fd9b56ccaf776facaa27699b960a3f2451127",
                 "shasum": ""
             },
             "require": {
@@ -1705,11 +1705,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-02-10T18:16:44+00:00"
+            "time": "2026-02-20T14:37:40+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1755,7 +1755,7 @@
         },
         {
             "name": "illuminate/reflection",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/reflection.git",
@@ -1806,16 +1806,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.52.0",
+            "version": "v12.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "6e9de455bcb232372db11531b72a01d4eca83ef2"
+                "reference": "18d7d75366ddb9eded3b7f05173f791da47faf34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/6e9de455bcb232372db11531b72a01d4eca83ef2",
-                "reference": "6e9de455bcb232372db11531b72a01d4eca83ef2",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/18d7d75366ddb9eded3b7f05173f791da47faf34",
+                "reference": "18d7d75366ddb9eded3b7f05173f791da47faf34",
                 "shasum": ""
             },
             "require": {
@@ -1882,7 +1882,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-02-14T23:03:41+00:00"
+            "time": "2026-02-23T15:44:06+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -2547,13 +2547,13 @@
         },
         {
             "name": "npm-asset/elastic--apm-rum",
-            "version": "5.17.2",
+            "version": "5.17.3",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/@elastic/apm-rum/-/apm-rum-5.17.2.tgz"
+                "url": "https://registry.npmjs.org/@elastic/apm-rum/-/apm-rum-5.17.3.tgz"
             },
             "require": {
-                "npm-asset/elastic--apm-rum-core": ">=5.25.0,<6.0.0"
+                "npm-asset/elastic--apm-rum-core": ">=5.25.1,<6.0.0"
             },
             "type": "npm-asset",
             "license": [
@@ -2562,10 +2562,10 @@
         },
         {
             "name": "npm-asset/elastic--apm-rum-core",
-            "version": "5.25.0",
+            "version": "5.25.1",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/@elastic/apm-rum-core/-/apm-rum-core-5.25.0.tgz"
+                "url": "https://registry.npmjs.org/@elastic/apm-rum-core/-/apm-rum-core-5.25.1.tgz"
             },
             "require": {
                 "npm-asset/error-stack-parser": ">=1.3.5,<2.0.0",
@@ -5989,11 +5989,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.39",
+            "version": "2.1.40",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c6f73a2af4cbcd99c931d0fb8f08548cc0fa8224",
-                "reference": "c6f73a2af4cbcd99c931d0fb8f08548cc0fa8224",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
+                "reference": "9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
                 "shasum": ""
             },
             "require": {
@@ -6038,20 +6038,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-11T14:48:56+00:00"
+            "time": "2026-02-23T15:04:35+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370"
+                "reference": "bbd37aedd8df749916cffa2a947cfc4714d1ba2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9c46ad17f57963932c9788fd1b0f1d07ff450370",
-                "reference": "9c46ad17f57963932c9788fd1b0f1d07ff450370",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/bbd37aedd8df749916cffa2a947cfc4714d1ba2c",
+                "reference": "bbd37aedd8df749916cffa2a947cfc4714d1ba2c",
                 "shasum": ""
             },
             "require": {
@@ -6090,7 +6090,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.7"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.8"
             },
             "funding": [
                 {
@@ -6098,7 +6098,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-19T14:44:16+00:00"
+            "time": "2026-02-22T09:45:50+00:00"
         },
         {
             "name": "webmozart/assert",

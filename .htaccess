@@ -249,36 +249,19 @@
 ############################################
 ## START DHH -- CANNOT MOVE BELOW NEXT OPENMAGE RULE "never rewrite for existing files, directories and links"
 
-    # Fuck off competitors -- MOVE TO CLOUDFLARE
-    # gastrodeals.nl:
-    RewriteCond %{HTTP:CF-CONNECTING-IP} 83.217.93.24
-    RewriteRule .* https://www.intertoys.nl [R=302,L]
-    # Fraudsters:
-    RewriteCond %{HTTP:CF-CONNECTING-IP} 5.159.34.104
-    RewriteRule .* https://www.disney.com [R=301,L]
-    RewriteCond %{HTTP:CF-CONNECTING-IP} ^(82\.180\.146\.181|91\.92\.255\.184|62\.163\.245\.96)$
-    RewriteRule .* https://www.bol.com/nl/nl/p/hacken-voor-dummies/9200000107966600/ [R=301,L]
-
     # Redirect /document/asdf to document.php
     RewriteRule ^document/.*$ document.php
 
     # Redirects file.php to view.php
     RewriteRule "^file.php.*$" "/view.php?csredir=hta" [R=301,NC,L,QSA]
 
+    # Landing URL from flyers
+    Redirect /hallochef /promoties.html
+
     # Do not listen to /index.php? requests, redirect them
     RedirectMatch 301 /index.php/((?!admin).*)$1 /$1
     RewriteCond %{THE_REQUEST} ^.*/index.php
     RewriteRule ^(.*)index.php$ /$1 [R=301,L]
-
-    # OpenMage exposes this stuff, weird
-    RewriteRule ^/errors/report.php(.*)$ /?csredir=hta [R=301,NC,L,QSD]
-    RewriteRule ^/errors/(.*)$ /?csredir=hta [R=301,NC,QSD]
-
-    # Redirects script kiddies
-    RewriteRule (.*)amfeed/main/(.*)$ https://www.bol.com/nl/nl/p/hacken-voor-dummies/9200000107966600/ [R=301,NC,L]
-
-    # Landing URL from flyers
-    Redirect /hallochef /promoties.html
 
 ############################################
 ## END DHH

@@ -1406,7 +1406,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     self::$dhh_click_log["labels"] ??= [];
     
     // Skip click logging for bots
-    if(self::isBot()) {
+    if($this->isBot()) {
       return;
     }
     
@@ -1880,7 +1880,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    *
    * @return array{is_bot: bool|null, bot_score: int|null, friendly_bot: bool|null}
    */
-  public static function getBotInfo(): array {
+  public function getBotInfo(): array {
     static $botInfo = [];
     
     if(blank($botInfo)) {
@@ -1935,8 +1935,8 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    *
    * @return bool
    */
-  public static function isBot(): bool {
-    $botInfo = self::getBotInfo();
+  public function isBot(): bool {
+    $botInfo = $this->getBotInfo();
     return $botInfo["is_bot"] === true;
   }
 }

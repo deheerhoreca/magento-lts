@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 
-<!---
+<!--
 - Use <filter>0</filter>, not true/false
 - Column options: Mage_Adminhtml_Block_Widget_Grid_Column (/app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column.php)
+- @see https://docs.openmage.org/blog/2025/03/11/brief-guide-on-grid-column/#basic-attributes
 -->
 
 <gridcontrol>
   <grids>
     
     <!-- Products Grid -->
-    
     <productGrid>
       
       <massaction>
@@ -17,14 +17,16 @@
           <width>5</width>
         </updateColumn>
       </massaction>
-
+      
       <set_name>
         <remove/>
       </set_name>
-
+      
       <!-- To enable, also enable addWebsiteNamesToResult() -->
       <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
-      <websites><remove/></websites>
+      <websites>
+        <remove/>
+      </websites>
       
       <entity_id>
         <!-- <remove/> -->
@@ -61,7 +63,7 @@
       <action>
         <remove/>
       </action>
-
+      
       <eol>
         <add>
           <header>EOL</header>
@@ -72,7 +74,7 @@
         </add>
         <after>status</after>
       </eol>
-
+      
       <manufacturer>
         <add>
           <header>Merk</header>
@@ -106,29 +108,35 @@
       
       <!-- To enable, also enable code block in -->
       <!-- app/code/local/DeHeerHoreca/Util/Adminhtml/Block/Catalog/Product/Grid.php -->
-      <qty><remove/></qty>
+      <qty>
+        <remove/>
+      </qty>
       
-      <product_type>
+      <!-- <product_type>
         <add>
           <header>Type</header>
-          <size>100</size>
+          <width>100</width>
           <type>options</type>
           <index>product_type</index>
           <options>firegento_gridcontrol/utility::getDropdownAttributeLabelOptionArray(product_type)</options>
         </add>
         <after>ean</after>
-      </product_type>
+      </product_type> -->
+<!--       
+      <product_type>
+        <after>ean</after>
+      </product_type> -->
       
       <bol_category>
         <add>
           <header>Bol Category</header>
-          <width>175</width>
+          <width>150</width>
           <type>text</type>
           <index>bol_category</index>
         </add>
         <after>product_type</after>
       </bol_category>
-
+      
     </productGrid>
     
     <!-- Category Products Grid -->
@@ -186,7 +194,7 @@
         <!-- </add> -->
         <!-- <after>eol</after> -->
       <!-- </supplier> -->
-
+      
       <manufacturer>
         <add>
           <header>Merk</header>
@@ -217,7 +225,7 @@
     
     <!-- Perhaps better to use the Noble module to make changes -->
     <!-- Noble module also interferes with the grid! -->
-
+    
     <sales_order_grid>
     
       <massaction>
@@ -241,6 +249,47 @@
       </action>
       
     </sales_order_grid>
+    
+    <qquoteGrid>
+			
+			<increment_id>
+        <updateColumn>
+          <width>50px</width>
+        </updateColumn>
+      </increment_id>
+			
+			<created_at>
+        <updateColumn>
+          <width>70px</width>
+        </updateColumn>
+      </created_at>
+			
+      <status>
+        <after>user_id</after>
+        <updateColumn>
+          <width>150px</width>
+        </updateColumn>
+      </status>
+    
+			<company>
+        <updateColumn>
+          <width>230px</width>
+        </updateColumn>
+      </company>
+			
+      <city>
+        <remove/>
+      </city>
+		
+      <followup>
+        <remove/>
+      </followup>
+			
+      <action>
+        <remove/>
+      </action>
+      
+    </qquoteGrid>
     
     <!-- Product Sub Grids in Admin -->
     
@@ -324,7 +373,7 @@
         </add>
         <after>attribute_code</after>
       </position>
-    
+      
       <frontend_label>
         <add>
           <header>Label</header>
@@ -345,7 +394,7 @@
         </add>
         <after>frontend_label</after>
       </frontend_input>
-    
+      
       <!-- <is_html_allowed_on_front> -->
         <!-- <add> -->
           <!-- <align>center</align> -->
@@ -440,6 +489,5 @@
       </is_comparable>
     
     </attributeGrid>
-    
   </grids>
 </gridcontrol>

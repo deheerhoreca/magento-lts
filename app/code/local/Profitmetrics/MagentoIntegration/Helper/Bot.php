@@ -113,6 +113,12 @@ class Profitmetrics_MagentoIntegration_Helper_Bot extends Mage_Core_Helper_Abstr
      */
     public function isBot()
     {
+				// DHH CORE HACK -- Stronger bot detection
+				$_helper = Mage::helper("deheerhoreca_util/util");
+				if($_helper->isBot()) {
+					return true;
+				}
+				
         $userAgent = Mage::helper('core/http')->getHttpUserAgent();
 
         foreach ($this->restrictedUserAgents as $restrictedUserAgent) {
