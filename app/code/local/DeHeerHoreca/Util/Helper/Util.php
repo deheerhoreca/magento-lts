@@ -1416,10 +1416,22 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $full_url       = getDecodedCurrentUrl();
     $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
     $path           = ltrim((string) $url->getPath(), "/");
+    $extension      = blank($path) ? null : pathinfo($path, PATHINFO_EXTENSION);
     $query          = ltrim((string) $url->getQuery(), "?");
+    $port           = $url->getPort();
     $_customer      = Mage::getSingleton("customer/session")->isLoggedIn() ? Mage::getSingleton("customer/session")->getCustomer() : null;
     $customerId     = $_customer ? $_customer->getId() : null;
     $customerEmail  = $_customer ? $_customer->getEmail() : null;
+    
+    if(blank($path)) {
+      $path = null;
+    }
+    if(blank($query)) {
+      $query = null;
+    }
+    if(blank($port)) {
+      $port = null;
+    }
     
     // current_* is fastest, but in case of an FPC HIT we cannot use them
     if(isset(self::$dhh_click_log["labels"]["fpc_cache"]) && self::$dhh_click_log["labels"]["fpc_cache"] !== "HIT") {
@@ -1443,22 +1455,25 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       }
     }
     
-    self::$dhh_click_log  = array_replace([
-      "@timestamp"          => date("Y-m-d\TH:i:s.uP"),
-      "client.ip"           => getOmDhhUtilHelper()->getUserIP(),
-      "ecs.version"         => "1.11.0",
-      "event.action"        => $action,
-      "event.kind"          => "event",
-      "event.module"        => "mage-clicks",
-      // "host.name"           => gethostname(), // Filled by Filebeat, prevent duplicate
-      "url.domain"          => "www.chefstore.nl",
-      "url.full"            => $full_url,
-      "url.path"            => $path,
-      "url.query"           => $query,
-      "user_agent.original" => Mage::helper("core/http")->getHttpUserAgent(),
-      "user.hash"           => $customerId,
-      "user.id"             => $customerEmail,
-      "user.email"          => $customerEmail,
+    self::$dhh_click_log    = array_replace([
+      "@timestamp"            => date("Y-m-d\TH:i:s.uP"),
+      "client.ip"             => getOmDhhUtilHelper()->getUserIP(),
+      "ecs.version"           => "1.11.0",
+      "event.action"          => $action,
+      "event.kind"            => "event",
+      "event.module"          => "mage-clicks",
+      // "host.name"          => gethostname(), // Filled by Filebeat, prevent duplicate
+      "url.domain"            => "www.chefstore.nl",
+      "url.extension"         => $extension,
+      "url.full"              => $full_url,
+      "url.path"              => $path,
+      "url.port"              => $port,
+      "url.query"             => $query,
+      "url.registered_domain" => "chefstore.nl",
+      "user_agent.original"   => Mage::helper("core/http")->getHttpUserAgent(),
+      "user.email"            => $customerEmail,
+      "user.hash"             => $customerId,
+      "user.id"               => $customerEmail,
     ], self::$dhh_click_log);
     
     // Set up a primary and a fallback log dir, check existence and writability of primary, if not possible use fallback
@@ -1475,7 +1490,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     try {
-      $json = json_encode(self::$dhh_click_log);
+      $json = json_encode(array_filter(self::$dhh_click_log));
       $clickLog .= "/clicks.jsonl";
       file_put_contents($clickLog, $json.PHP_EOL, FILE_APPEND);
     } catch(Exception $e) {
