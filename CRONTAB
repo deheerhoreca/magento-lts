@@ -1,11 +1,11 @@
 # OPENMAGE
- *    *  *  *  *  ! test -e ~/workspace/openmage/maintenance.flag && cd ~/workspace/openmage && /bin/bash ./scheduler_cron.sh --mode always  1>>${OLOG} 2>>${OERR}
- *    *  *  *  *  ! test -e ~/workspace/openmage/maintenance.flag && cd ~/workspace/openmage && /bin/bash ./scheduler_cron.sh --mode default 1>>${OLOG} 2>>${OERR}
+*/2  *   *  *  *  cd ~/workspace/openmage && ! test -e maintenance.flag && . ~/.profile && ./scheduler_cron.sh --mode always  1>>${OLOG} 2>>${OERR}
+*/2  *   *  *  *  cd ~/workspace/openmage && ! test -e maintenance.flag && . ~/.profile && ./scheduler_cron.sh --mode default 1>>${OLOG} 2>>${OERR}
 59   23  *  *  *  ~/workspace/openmage/shell/cron-logrotate.sh                1>>${OLOG} 2>&1
 55   21  *  *  *  ~/workspace/openmage/shell/cron-clean-mysql.sh              1>>${OLOG} 2>>${OERR}
 00   01  *  *  0  ~/workspace/openmage/shell/cron-download-external-assets.sh 1>>${OLOG} 2>>${OERR}
 30   02  *  *  *  ~/workspace/openmage/shell/cron-clean-redis.sh              1>>${OLOG} 2>>${OERR}
-# 29   05  *  *  *  ~/workspace/openmage/shell/cron-rebuild-cache.sh            1>>${OLOG} 2>>${OERR}
+#29   05  *  *  *  ~/workspace/openmage/shell/cron-rebuild-cache.sh            1>>${OLOG} 2>>${OERR}
 30   05  *  *  *  ~/workspace/openmage/shell/cron-reindexer.sh                1>>${OLOG} 2>>${OERR}
 30   04  *  *  *  ~/workspace/openmage/shell/cron-reindex-dynamiccategory.sh  1>>${OLOG} 2>>${OERR}
 02  */2  *  *  *  ~/workspace/openmage/shell/cron-reindex-prices.sh           1>>${OLOG} 2>>${OERR}

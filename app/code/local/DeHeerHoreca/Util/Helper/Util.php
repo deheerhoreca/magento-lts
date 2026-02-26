@@ -1450,7 +1450,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       "event.action"        => $action,
       "event.kind"          => "event",
       "event.module"        => "mage-clicks",
-      "host.name"           => gethostname(),
+      // "host.name"           => gethostname(), // Filled by Filebeat, prevent duplicate
       "url.domain"          => "www.chefstore.nl",
       "url.full"            => $full_url,
       "url.path"            => $path,
@@ -1902,19 +1902,21 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
           }
         }
         
-        // Cloudflare bot score
-        if(isset($headers["cf-bot-score"][0]) && is_numeric($headers["cf-bot-score"][0])) {
-          $botInfo["bot_score"] = (int) $headers["cf-bot-score"][0];
-          $botInfo["is_bot"]    = $botInfo["bot_score"] == 1; // Non-strict: header is a string
-          break;
-        }
-        
         // Our own user agent checks for known bots that Crawler-Detect misses
         // Using Crawler-Detect's getUserAgent() for improved parsing and normalization of the user agent string
         $CrawlerDetect = new CrawlerDetect();
         if(sis(["*CacheWarmup*", "xCore (https://xcore.nl)"], $CrawlerDetect->getUserAgent())) {
           $botInfo["is_bot"] = true;
           break;
+        }
+        
+        // Cloudflare bot score -- AFTER our custom checks
+        if(isset($headers["cf-bot-score"][0]) && is_numeric($headers["cf-bot-score"][0])) {
+          $botInfo["bot_score"] = (int) $headers["cf-bot-score"][0];
+          if($botInfo["bot_score"] == 1) { // Non-strict: header is a string
+            $botInfo["is_bot"]    = true;
+            break;
+          }
         }
         
         // Crawler-Detect comprehensive bot detection based on user agent

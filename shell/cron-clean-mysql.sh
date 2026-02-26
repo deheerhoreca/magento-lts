@@ -1,7 +1,7 @@
 #!/bin/bash
 
 : '
-cron-clean-mysql.sh
+~/workspace/openmage/shell/cron-clean-mysql.sh
 '
 
 export PREFER_HOST=ma

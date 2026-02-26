@@ -1,15 +1,17 @@
 <?php
 
-// declare(strict_types=1); // @todo
+/*
+@todo Use lib/Afterpay/vendor/guzzlehttp/guzzle/src/UriTemplate.php to normalize URLs?
+@todo Normalize faulty "?amp%3B": https://www.chefstore.nl/koelingen/koelwerkbanken-saladettes.html?amp%3Bgn_capacity=2537&material_group=2191
+@todo Perhaps just use these methods? Mage::app()->saveCache(); Mage::app()->cleanCache();
+*/
+
+declare(strict_types=1); // @todo
 
 use \Chefstore\Utils;
 use \Illuminate\Support\Arr;
 use \Illuminate\Support\Collection;
 use \Illuminate\Support\Str;
-
-// @todo Use lib/Afterpay/vendor/guzzlehttp/guzzle/src/UriTemplate.php to normalize URLs
-// @todo Normalize faulty "?amp%3B": https://www.chefstore.nl/koelingen/koelwerkbanken-saladettes.html?amp%3Bgn_capacity=2537&material_group=2191
-// @todo Perhaps just use these methods? Mage::app()->saveCache(); Mage::app()->cleanCache();
 
 class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
@@ -429,14 +431,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return string|null  The cached HTML, or null if not found.
    */
   public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
-    Varien_Profiler::start("DHH::FPC::".self::class."::".__METHOD__);
+    Varien_Profiler::start("DHH::FPC::get_cached_html");
     $_cache   = Mage::app()->getCache();							// Circumvents our modified Cache class
     $html     = $_cache->load($key);
     
     if(empty($html)) {
       self::log("MISS: {$key}");
       self::addServerTimingHeader("FPC miss: {$key}");
-      Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+      Varien_Profiler::stop("DHH::FPC::get_cached_html");
       return null;
     }
     
@@ -545,7 +547,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     $size = mb_strlen($html);
     self::log("HIT: {$key} (Net: {$size_raw_key} bytes, Gross: {$size} bytes)");
     self::addServerTimingHeader("FPC hit: {$key}");
-    Varien_Profiler::stop("DHH::FPC::".self::class."::".__METHOD__);
+    Varien_Profiler::stop("DHH::FPC::get_cached_html");
     
     return $html;
   }
@@ -564,7 +566,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool
    */
   public static function save_cached_html(string $key, string $html, bool $holepunch_formkey = true, bool $holepunch_blocks = true, array $cache_tags = []): bool {
-    Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
+    Varien_Profiler::start("DHH::FPC::save_cached_html  {$key}");
     
     // Prevent canonical URL shortening
     $html = str_replace("<link rel=\"canonical\" href=\"https://www.chefstore.nl", "<link rel=\"canonical\" href=\"https://wwww.chefstore.nl", $html);
@@ -618,7 +620,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       self::addServerTimingHeader("FPC: SAVE {$key}");
       $return = true;
     }
-    Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    Varien_Profiler::stop("DHH::FPC::save_cached_html  {$key}");
     
     return $return ?? false;
   }
@@ -635,25 +637,25 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return bool    TRUE if saving to cache was successful.
    */
   public static function saveToCache(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): bool {
-    Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
+    Varien_Profiler::start("DHH::FPC::saveToCache  {$key}");
     
     if($minifyHtml === true && is_string($data)) {
       $data = \Chefstore\Html::minifyHtml($data);
     }
     
-    // ! There was a bug when using omCacheSave() here IF also using saveToCacheDeferred(). Perhaps too many indirect calls?
-    // ! This is why we use Mage::app() here, to execute the logic more directly, it works:
-    if(Mage::app()->saveCache($data, $key, $cache_tags, $lifetime)) {
-      self::log("SAVED {$key}");
-      $return = true;
-    }
-    
-    // if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+    // // ! There was a bug when using omCacheSave() here IF also using saveToCacheDeferred(). Perhaps too many indirect calls?
+    // // ! This is why we use Mage::app() here, to execute the logic more directly, it works:
+    // if(Mage::app()->saveCache($data, $key, $cache_tags, $lifetime)) {
     //   self::log("SAVED {$key}");
     //   $return = true;
     // }
     
-    Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+      self::log("SAVED {$key}");
+      $return = true;
+    }
+    
+    Varien_Profiler::stop("DHH::FPC::saveToCache  {$key}");
     return $return ?? false;
   }
   
@@ -669,11 +671,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return true    The deferred saving was scheduled.
    */
   public static function saveToCacheDeferred(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): true {
-    Varien_Profiler::start("DHH::FPC::".__METHOD__."::{$key}");
+    Varien_Profiler::start("DHH::FPC::saveToCacheDeferred  {$key}");
     $closure = fn() => self::saveToCache($key, $data, $cache_tags, $lifetime, $minifyHtml);
     Utils::deferClosure($closure);
     self::log("(Deferred) SAVE {$key}");
-    Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
+    Varien_Profiler::stop("DHH::FPC::saveToCacheDeferred  {$key}");
     
     return true;
   }
@@ -685,11 +687,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return true                The deferred cleaning was scheduled.
    */
   public static function cleanCacheByTagsDeferred(array $cache_tags): true {
-    Varien_Profiler::start("DHH::FPC::".__METHOD__);
+    Varien_Profiler::start("DHH::FPC::cleanCacheByTagsDeferred");
     
     if(empty($cache_tags)) {
-      Mage::log("No cache tags provided to ".__METHOD__, Zend_Log::WARN);
-      Varien_Profiler::stop("DHH::FPC::".__METHOD__);
+      Mage::log("No cache tags provided to cleanCacheByTagsDeferred()", Zend_Log::WARN);
+      Varien_Profiler::stop("DHH::FPC::cleanCacheByTagsDeferred");
       return true;
     }
     
@@ -697,7 +699,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     Utils::deferClosure($closure);
     self::log("(Deferred) CLEAN tags: ".di($cache_tags), Zend_Log::INFO);
     
-    Varien_Profiler::stop("DHH::FPC::".__METHOD__);
+    Varien_Profiler::stop("DHH::FPC::cleanCacheByTagsDeferred");
     return true;
   }
   
@@ -742,19 +744,19 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public static function replace_between(string $str, string $needle_start, string $needle_end, string $replacement): string|array {
     $pos_start = strpos((string) $str, (string) $needle_start);
     if($pos_start === false) {
-      self::log(__METHOD__.": {$needle_start} not found!", Zend_Log::DEBUG);
+      self::log("replace_between(): {$needle_start} not found!", Zend_Log::DEBUG);
       return $str;
     }
     
     $start    = $pos_start === false ? 0 : $pos_start;
     $pos_end  = strpos((string) $str, (string) $needle_end, $start);
     if($pos_end === false) {
-      self::log(__METHOD__.": {$needle_end} not found!", Zend_Log::DEBUG);
+      self::log("replace_between(): {$needle_end} not found!", Zend_Log::DEBUG);
       return $str;
     }
     
     $end = $pos_end === false ? mb_strlen((string) $str) : $pos_end + mb_strlen((string) $needle_end);
-    self::log(__METHOD__.": ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
+    self::log("replace_between(): ".htmlentities((string) $needle_start).":: Start = {$start}, End = {$end}");
     return substr_replace((string) $str, (string) $replacement, $start, $end - $start);
   }
   
