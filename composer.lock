@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8e7f1699a92dd89267bc86addc76b91",
+    "content-hash": "0fe137bf9753ccda09b1193047e997be",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -48,12 +48,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:deheerhoreca/Aoe_CacheStats.git",
-                "reference": "75b525c2bae7fc81e3c556da41b3c4a59fdf8205"
+                "reference": "db1f0cf412f286cf33ce625864fb0847938a36d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/75b525c2bae7fc81e3c556da41b3c4a59fdf8205",
-                "reference": "75b525c2bae7fc81e3c556da41b3c4a59fdf8205",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/db1f0cf412f286cf33ce625864fb0847938a36d7",
+                "reference": "db1f0cf412f286cf33ce625864fb0847938a36d7",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_CacheStats/tree/master"
             },
-            "time": "2026-02-24T22:57:57+00:00"
+            "time": "2026-02-25T16:21:23+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
@@ -151,12 +151,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Aoe_Profiler.git",
-                "reference": "d28a18a9775faa4e6752603d043fb57bc06c8b3f"
+                "reference": "d10abfc6f20efeef4dd74fa785261985dd55def1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/d28a18a9775faa4e6752603d043fb57bc06c8b3f",
-                "reference": "d28a18a9775faa4e6752603d043fb57bc06c8b3f",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/d10abfc6f20efeef4dd74fa785261985dd55def1",
+                "reference": "d10abfc6f20efeef4dd74fa785261985dd55def1",
                 "shasum": ""
             },
             "require": {
@@ -178,7 +178,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_Profiler/tree/master"
             },
-            "time": "2026-02-24T22:46:28+00:00"
+            "time": "2026-02-25T20:46:12+00:00"
         },
         {
             "name": "aoepeople/aoe_scheduler",
@@ -1315,12 +1315,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/openmage-cssjs-minify.git",
-                "reference": "9916cf21639c9f79486bacd72fb0008ecc912829"
+                "reference": "25284256aa51178ccf8a35c446658c82e6d26aa2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/openmage-cssjs-minify/zipball/9916cf21639c9f79486bacd72fb0008ecc912829",
-                "reference": "9916cf21639c9f79486bacd72fb0008ecc912829",
+                "url": "https://api.github.com/repos/deheerhoreca/openmage-cssjs-minify/zipball/25284256aa51178ccf8a35c446658c82e6d26aa2",
+                "reference": "25284256aa51178ccf8a35c446658c82e6d26aa2",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1366,7 @@
                     "url": "https://paypal.me/fabrizioballiano"
                 }
             ],
-            "time": "2026-01-12T16:10:27+00:00"
+            "time": "2026-02-25T16:23:33+00:00"
         },
         {
             "name": "firegento/adminmonitoring",
@@ -2000,6 +2000,48 @@
                 "source": "https://github.com/jsonrainbow/json-schema/tree/5.3.1"
             },
             "time": "2025-12-12T08:56:22+00:00"
+        },
+        {
+            "name": "m-michalis/advancedproductfilter",
+            "version": "0.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/m-michalis/advancedproductfilter.git",
+                "reference": "bfcd40d8568d1342a205e5dd504e936ba83e6b58"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/m-michalis/advancedproductfilter/zipball/bfcd40d8568d1342a205e5dd504e936ba83e6b58",
+                "reference": "bfcd40d8568d1342a205e5dd504e936ba83e6b58",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Michalis Michalis",
+                    "email": "m@internetcode.gr"
+                }
+            ],
+            "description": "Adminhtml Advanced Product Filter for OpenMage 20.x & Magento 1.9.x similar to promo rules.",
+            "homepage": "https://github.com/m-michalis/advancedproductfilder",
+            "keywords": [
+                "magento",
+                "openmage",
+                "product filter"
+            ],
+            "support": {
+                "issues": "https://github.com/m-michalis/advancedproductfilter/issues",
+                "source": "https://github.com/m-michalis/advancedproductfilter/tree/v0.1.5"
+            },
+            "time": "2024-10-03T06:17:56+00:00"
         },
         {
             "name": "m-michalis/om-translator",

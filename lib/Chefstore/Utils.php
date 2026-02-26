@@ -260,4 +260,12 @@ class Utils {
     }
     self::$deferredClosures = [];
   }
+  
+  /**
+   * Last chance to run any remaining deferred Closures.
+   * Should have ran using OpenMage observers.
+   */
+  function __destruct() {
+    self::runDeferredClosures();
+  }
 }

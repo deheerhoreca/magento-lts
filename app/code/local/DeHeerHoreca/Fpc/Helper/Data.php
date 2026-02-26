@@ -648,6 +648,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $return = true;
     }
     
+    // if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+    //   self::log("SAVED {$key}");
+    //   $return = true;
+    // }
+    
     Varien_Profiler::stop("DHH::FPC::".__METHOD__."::{$key}");
     return $return ?? false;
   }
