@@ -32,7 +32,7 @@
     "aoepeople/aoe_dbretry": "dev-master",
     "aoepeople/aoe_modelcache": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
-    "aoepeople/aoe_scheduler": "*",
+    "aoepeople/aoe_scheduler": "dev-master",
     "aoepeople/aoe_templatehints": "^0.4.4",
     "aschroder/smtp_pro": "dev-dhh",
     "aydin-hassan/magento-core-composer-installer": "^2.1.0",

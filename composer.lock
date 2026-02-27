@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de1127174eb6820f298c53d6bd8bf3ef",
+    "content-hash": "373e1028f8154d73ac60b0fe2e5221b1",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -6252,6 +6252,7 @@
         "aoepeople/aoe_dbretry": 20,
         "aoepeople/aoe_modelcache": 20,
         "aoepeople/aoe_profiler": 20,
+        "aoepeople/aoe_scheduler": 20,
         "aschroder/smtp_pro": 20,
         "aydus/headorder": 20,
         "colinmollenhour/magento-redis-session": 20,
