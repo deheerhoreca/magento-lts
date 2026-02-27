@@ -474,6 +474,7 @@ media
 /app/code/community/Aoe/Profiler
 /app/code/community/Aoe/Scheduler
 /app/code/community/Fballiano/CssjsMinify
+/app/code/community/FireGento/DynamicCategory
 /app/code/community/Varien/Profiler.php
 /app/code/community/Zend/Db/Profiler.php
 /app/code/local/Aschroder/SMTPPro
@@ -482,6 +483,7 @@ media
 /app/design/adminhtml/default/default/layout/aoe_scheduler
 /app/design/adminhtml/default/default/template/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_scheduler
+/app/design/adminhtml/default/default/template/dynamiccategory/fieldset.phtml
 /app/design/adminhtml/default/default/template/InternetCode/AdvancedProductFilter/js_after_grid.phtml
 /app/design/adminhtml/default/default/template/smtppro
 /app/etc/aoe_cachestats.xml
@@ -491,14 +493,17 @@ media
 /app/etc/modules/Aoe_Scheduler.xml
 /app/etc/modules/Aschroder_SMTPPro.xml
 /app/etc/modules/Fballiano_CssjsMinify.xml
+/app/etc/modules/FireGento_DynamicCategory.xml
 /app/etc/modules/InternetCode_AdvancedProductFilter.xml
 /app/locale/de_DE/Aoe_Scheduler.csv
 /app/locale/de_DE/Aschroder_SMTPPro.csv
+/app/locale/de_DE/FireGento_DynamicCategory.csv
 /app/locale/en_US/Aschroder_SMTPPro.csv
 /app/locale/en_US/template/email/aoe_scheduler
 /app/locale/es_ES/Aschroder_SMTPPro.csv
 /app/locale/fr_FR/Aschroder_SMTPPro.csv
 /app/locale/nl_NL/Aschroder_SMTPPro.csv
+/app/locale/nl_NL/FireGento_DynamicCategory.csv
 /app/locale/pt_BR/Aoe_Scheduler.csv
 /app/locale/pt_BR/Aschroder_SMTPPro.csv
 /app/locale/pt_BR/template/email/aoe_scheduler

@@ -36,7 +36,6 @@
 - `app/code/community/AW/Blog/Block/Blog.php`
 - `app/code/community/Codnitive/Extifcon/Model/Core/Layout.php`
 - `app/code/community/Codnitive/Sidenav/Block/Navigation.php`
-- `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
 - `app/code/community/Geissweb/InvoiceAutoSend/Model/Observer.php`
 - `app/code/community/Geissweb/InvoiceAutoSend/Model/System/Config/Activepm.php`
 - `app/code/community/Magmodules/Channable/Helper/Data.php`
@@ -435,9 +434,6 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
     - Fixing security issue
   - `app/code/local/AW/All/Model/Cron.php`
     - Nullifying the cronjob since it leads to XML errors
-- **FireGento DynamicCategory**
-  - `app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php`
-    - Adding exception check and logging to prevent fatal errors
 - **firegento/firegento-logger**
   - Installed the fork from https://github.com/colinmollenhour/firegento-logger by ZIP file on 2024-02-12
   - Last commit https://github.com/colinmollenhour/firegento-logger/commit/b6ddf42df6c6726fade7698d102b8b6284f74432

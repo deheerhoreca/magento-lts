@@ -47,6 +47,7 @@
     "fballiano/openmage-cssjs-minify": "dev-dhh",
     "firegento/adminmonitoring": "dev-develop",
     "firegento/debug": "^1.5",
+    "firegento/dynamiccategory": "dev-develop",
     "firegento/logger": "dev-develop",
     "guidance/guidance_simplepage": "^0.4.0",
     "illuminate/support": "^12.45.1",
@@ -112,6 +113,7 @@
         "empiricompany/openmage-mm_cmscontentfilemode",
         "fballiano/openmage-cssjs-minify",
         "firegento/adminmonitoring",
+        "firegento/dynamiccategory",
         "firegento/debug",
         "firegento/logger",
         "npm-asset/*",
@@ -194,6 +196,13 @@
       "url": "https://github.com/firegento/firegento-logger",
       "only": [
         "firegento/logger"
+      ]
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/deheerhoreca/firegento-dynamiccategory",
+      "only": [
+        "firegento/dynamiccategory"
       ]
     },
     {

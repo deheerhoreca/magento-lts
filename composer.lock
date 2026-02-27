@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fe137bf9753ccda09b1193047e997be",
+    "content-hash": "de1127174eb6820f298c53d6bd8bf3ef",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -1429,6 +1429,36 @@
             "description": "Diagnostic extension for Magento. Checks modules, rewrites, and displays the log files in the backend.",
             "homepage": "https://github.com/firegento/firegento-debug",
             "time": "2015-10-29T08:41:53+00:00"
+        },
+        {
+            "name": "firegento/dynamiccategory",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:deheerhoreca/firegento-dynamiccategory.git",
+                "reference": "7af44f4c592e62e00a0870fb72cce2946da05dde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deheerhoreca/firegento-dynamiccategory/zipball/7af44f4c592e62e00a0870fb72cce2946da05dde",
+                "reference": "7af44f4c592e62e00a0870fb72cce2946da05dde",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "default-branch": true,
+            "type": "magento-module",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "This extension enables you to dynamically add products to categories based on product attributes.",
+            "homepage": "https://github.com/firegento/firegento-dynamiccategory",
+            "support": {
+                "source": "https://github.com/deheerhoreca/firegento-dynamiccategory/tree/develop",
+                "issues": "https://github.com/deheerhoreca/firegento-dynamiccategory/issues"
+            },
+            "time": "2026-02-27T14:58:45+00:00"
         },
         {
             "name": "firegento/logger",
@@ -6228,6 +6258,7 @@
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "fballiano/openmage-cssjs-minify": 20,
         "firegento/adminmonitoring": 20,
+        "firegento/dynamiccategory": 20,
         "firegento/logger": 20,
         "magento-hackathon/magento-composer-installer": 20,
         "paynl/magento-plugin": 20
