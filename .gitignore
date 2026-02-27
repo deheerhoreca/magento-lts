@@ -333,7 +333,6 @@ media
 !/app/code/community/AW/Blog/Block/Blog.php
 !/app/code/community/Codnitive/Extifcon/Model/Core/Layout.php
 !/app/code/community/Codnitive/Sidenav/Block/Navigation.php
-!/app/code/community/FireGento/DynamicCategory/Model/Entity/Attribute/Backend/Rule.php
 !/app/code/community/Geissweb/InvoiceAutoSend/Model/Observer.php
 !/app/code/community/Geissweb/InvoiceAutoSend/Model/System/Config/Activepm.php
 !/app/code/community/Guidance/Cachebuster/Model/Parser.php
