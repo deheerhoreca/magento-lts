@@ -1363,7 +1363,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    *
    * @param  mixed $key
    * @param  mixed $val
-   * 
+   *
    * @return void
    */
   public static function addToClickLog(mixed $key, mixed $val): void {
@@ -1379,6 +1379,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public static function addLabelToClickLog(mixed $key, mixed $val): void {
+    self::$dhh_click_log["labels"] ??= [];
     self::$dhh_click_log["labels"][$key] = $val;
   }
   
@@ -1402,17 +1403,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return void
    */
   public function logClick(): void {
-    $dhh_click_log = self::$dhh_click_log;
     self::$dhh_click_log["labels"] ??= [];
     
     // Skip click logging for bots
     if($this->isBot()) {
       return;
+      // self::$dhh_click_log["labels"]["bot"] = "true";
+    } else {
+      self::$dhh_click_log["labels"]["bot"] = "false";
     }
     
-    self::$dhh_click_log["labels"]["bot"] = "false";
-    
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
+    // $module         = Mage::app()->getFrontController()->getRequest()->getModuleName() ?? explode("_", $action)[0] ?? null;
     $full_url       = getDecodedCurrentUrl();
     $url            = Mage::getSingleton("core/url")->parseUrl($full_url);
     $path           = ltrim((string) $url->getPath(), "/");
@@ -1434,6 +1436,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     // current_* is fastest, but in case of an FPC HIT we cannot use them
+    // @todo Get product_id/category_id from the FPC logic that already knows the right value at this point
     if(isset(self::$dhh_click_log["labels"]["fpc_cache"]) && self::$dhh_click_log["labels"]["fpc_cache"] !== "HIT") {
       switch($action) {
         case "catalog_product_view":
@@ -1455,14 +1458,16 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       }
     }
     
-    self::$dhh_click_log    = array_replace([
+    self::$dhh_click_log = array_replace([
       "@timestamp"            => date("Y-m-d\TH:i:s.uP"),
       "client.ip"             => getOmDhhUtilHelper()->getUserIP(),
       "ecs.version"           => "1.11.0",
       "event.action"          => $action,
+      "event.category"        => "web",
       "event.kind"            => "event",
-      "event.module"          => "mage-clicks",
-      // "host.name"          => gethostname(), // Filled by Filebeat, prevent duplicate
+      // "event.module"          => $module,    // Forced by Elasticsearch stream, ingest fails if filled.
+      "event.type"            => "access",
+      // "host.name"          => gethostname(), // Filled by Filebeat, prevent duplicate.
       "url.domain"            => "www.chefstore.nl",
       "url.extension"         => $extension,
       "url.full"              => $full_url,

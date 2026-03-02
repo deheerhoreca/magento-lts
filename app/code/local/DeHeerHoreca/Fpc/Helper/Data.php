@@ -65,8 +65,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    * @return string             The normalized cache URL, ready and hashing
    */
   public static function get_cache_url(?string $url = null): string {
-    // $url ??= html_entity_decode((string) Mage::helper("core/url")->getCurrentUrl());
-    $url ??= htmlspecialchars_decode((string) Mage::helper("core/url")->getCurrentUrl(), ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
+    $url ??= getDecodedCurrentUrl();
     
     // List of query parameters that have no consequences for the rendered HTML
     $ignored_url_query_keys = [
