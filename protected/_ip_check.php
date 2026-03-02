@@ -14,8 +14,13 @@ $dhh_ips = [
   "31.201.36.137",
 ];
 
-if(!isset($_SERVER["REMOTE_ADDR"]) || !in_array($_SERVER["REMOTE_ADDR"], $dhh_ips, true)) {
+$effective_ip = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? null;
+
+if(!isset($effective_ip) || !in_array($effective_ip, $dhh_ips, true)) {
   // header("Location: /");
+  // echo $_SERVER["REMOTE_ADDR"];
+  // echo $_SERVER["HTTP_CF_CONNECTING_IP"];
+  // echo $_SERVER["HTTP_X_FORWARDED_FOR"];
   header("HTTP/1.0 403 Forbidden");
   exit;
 }

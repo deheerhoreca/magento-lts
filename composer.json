@@ -97,6 +97,11 @@
   },
   "repositories": [
     {
+      "name": "profitmetrics",
+      "type": "composer",
+      "url": "https://release.profitmetrics.io"
+    },
+    {
       "type": "composer",
       "url": "https://packagist.org",
       "exclude": [

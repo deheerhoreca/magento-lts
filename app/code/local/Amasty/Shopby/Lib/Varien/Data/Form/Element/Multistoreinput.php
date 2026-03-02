@@ -18,7 +18,9 @@ class Amasty_Shopby_Lib_Varien_Data_Form_Element_Multistoreinput extends Varien_
     public function getElementHtml(): string
     {
         $valuesByStore = Mage::helper('amshopby')->unserialize($this->getValue());
-        if(!$valuesByStore) $valuesByStore[0] = $this->getValue();
+        if(!$valuesByStore) {
+          $valuesByStore = [0 => $this->getValue()]; // DHH CORE HACK: PHP8
+        }
         
         $html = "";
         foreach(Mage::helper('amshopby')->getStores() as $_store) {

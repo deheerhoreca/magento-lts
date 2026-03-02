@@ -243,7 +243,9 @@ class Profitmetrics_MagentoIntegration_Model_Observer
             'fbp' => $this->getArrayParameter('fbp', $profitMetricsCookieData),
             'fbc' => $facebookClickId,
             'cua' => Mage::helper('core/http')->getHttpUserAgent(),
-            'cip' => Mage::helper('core/http')->getRemoteAddr(false),
+            // DHH CORE HACK: Regardless of Apache config, use the right IP address.
+            // 'cip' => Mage::helper('core/http')->getRemoteAddr(false),
+            'cip' => dhhEffectiveIp(),
             't' => $visitorData ? json_encode($visitorData, true) : '',
             'timestamp' => $timestamp,
             'gbraid' => $gbraid,

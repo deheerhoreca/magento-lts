@@ -23,7 +23,10 @@ class Amasty_Shopby_Block_Adminhtml_Filter_Grid extends Mage_Adminhtml_Block_Wid
 
     protected function _prepareColumns()
     {
-        $yesno = array(Mage::helper('catalog')->__('No'), Mage::helper('catalog')->__('Yes'));
+        $yesno = [
+          0 => "No",
+          1 => "Yes",
+        ];
         /** @var Amasty_Shopby_Helper_Data $helper */
         $helper = Mage::helper('amshopby');
 
@@ -42,7 +45,7 @@ class Amasty_Shopby_Block_Adminhtml_Filter_Grid extends Mage_Adminhtml_Block_Wid
         ));
 
         $this->addColumn('frontend_label', array(
-            'header'    => Mage::helper('amshopby')->__('Attribute'),
+            'header'    => Mage::helper('amshopby')->__('Label'),
             'align'     => 'left',
             'index'     => 'frontend_label',
         ));
@@ -50,20 +53,66 @@ class Amasty_Shopby_Block_Adminhtml_Filter_Grid extends Mage_Adminhtml_Block_Wid
         /** @var Amasty_Shopby_Model_Source_Position $positionSource */
         $positionSource = Mage::getSingleton('amshopby/source_position');
         $this->addColumn('block_pos', array(
-            'header'    => Mage::helper('amshopby')->__('Show in the Block'),
+            'header'    => Mage::helper('amshopby')->__('Show in'),
             'align'     => 'left',
             'index'     => 'block_pos',
             'type'      => 'options',
             'options'   => $positionSource->getHash(),
         ));
 
+        $this->addColumn('backend_type', array(
+            'header'    => Mage::helper('amshopby')->__('Backend Type'),
+            'align'     => 'left',
+            'index'     => 'backend_type',
+        ));
+        
+        // DHH CORE HACK -- Make this column filterable/searchable
+        // But the Display Options are actually depending on the backend type.
+        
+        // $sourceName = ($this->getBackendType() == 'decimal') ? 'price' : 'attribute';
+        
+        // @see app/code/local/Amasty/Shopby/Model/Source/Attribute.php
+        $sourceName = 'attribute';
+        $modelName = 'amshopby/source_' . $sourceName;
+        $source = Mage::getModel($modelName);
+        $displayTypeOptions = $source->toOptionArray();
+        $displayTypeOptionsAttribute = array_combine(array_column($displayTypeOptions, 'value'), array_column($displayTypeOptions, 'label'));
+        // printr($displayTypeOptionsAttribute);
+        
+        // @see app/code/local/Amasty/Shopby/Model/Source/Price.php
+        $sourceName = 'price';
+        $modelName = 'amshopby/source_' . $sourceName;
+        $source = Mage::getModel($modelName);
+        $displayTypeOptions = $source->toOptionArray();
+        $displayTypeOptionsPrice = array_combine(array_column($displayTypeOptions, 'value'), array_column($displayTypeOptions, 'label'));
+        // printr($displayTypeOptionsPrice);
+        
+        // Merge the options -- Usually the same label, but sometimes the same key for different values..
+        $displayTypeOptions = [];
+        $keys = array_unique(array_merge(array_keys($displayTypeOptionsAttribute), array_keys($displayTypeOptionsPrice)));
+        // printr($keys);
+        foreach ($keys as $key) {
+            $displayTypeOptions[$key] = [];
+            if (isset($displayTypeOptionsAttribute[$key])) {
+                $displayTypeOptions[$key][] = $displayTypeOptionsAttribute[$key];
+            }
+            if (isset($displayTypeOptionsPrice[$key])) {
+                $displayTypeOptions[$key][] = $displayTypeOptionsPrice[$key];
+            }
+            // printr($displayTypeOptions[$key]);
+            $displayTypeOptions[$key] = array_unique($displayTypeOptions[$key]);
+            $displayTypeOptions[$key] = implode(" / ", $displayTypeOptions[$key]);
+        }
+        
         $this->addColumn('display_type', array(
-            'header'    => Mage::helper('amshopby')->__('Display Type'),
+            'header'    => 'Display (Attribute / Decimal)',
             'align'     => 'left',
             'index'     => 'display_type',
             'getter'    => 'getDisplayTypeString',
-            'filter'    => false,
-            'sortable'  => false,
+            // 'filter'    => true,
+            // 'sortable'  => true,
+            'type'      => 'options',
+            'options'   => $displayTypeOptions,
         ));
 
         $this->addColumn('hide_counts', array(
@@ -80,6 +129,14 @@ class Amasty_Shopby_Block_Adminhtml_Filter_Grid extends Mage_Adminhtml_Block_Wid
             'index'     => 'collapsed',
             'type'        => 'options',
             'options'    => $yesno,
+        ));
+
+        $this->addColumn('single_choice', array(
+            'header'    => Mage::helper('amshopby')->__('Single Choice Only'),
+            'align'     => 'left',
+            'index'     => 'single_choice',
+            'type'      => 'options',
+            'options'   => $yesno,
         ));
 
         $this->addColumn('attribute_code', array(

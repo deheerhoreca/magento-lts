@@ -817,13 +817,27 @@ if(function_exists("_dhh_debug") === false) {
 }
 
 /**
+ * Regardless of Apache config and used modules, get the client IP through the Cloudflare proxy headers.
+ *
+ * @return string|null
+ */
+function dhhEffectiveIp(): string|null {
+  return $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? null;
+}
+
+/**
  * Check if the current user/IP is a DHH developer IP. For allowing debug dumps and logs in production.
  *
  * @return bool
  */
 function isDevIp(): bool {
   static $result = null;
-  $result ??= isset($_SERVER["REMOTE_ADDR"]) && in_array($_SERVER["REMOTE_ADDR"], _dhh_ips(), true);
+  if($result !== null) {
+    return $result;
+  }
+  
+  $effective_ip = dhhEffectiveIp();
+  $result = isset($effective_ip) && in_array($effective_ip, _dhh_ips(), true);
   return $result;
 }
 
