@@ -1,28 +1,25 @@
 #!/bin/bash
 
-# Clear various caches to ensure code changes are picked up
+: '
+om-clear-code-cache
+Clear various caches to ensure code changes are picked up
 
-set -e      # Exit immediately if a command exits with a non-zero status
+- Sequence: First use safe bash commands to clear FS paths, only then use cachetool.
+- The cachetool commands will fail harmlessly except on the production server, but we need the
+  other commands to succeed on all hosts.
+'
+
+# set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
 
-. ${HOME}/.bash_profile
-
-cm || exit 1
-. ./shell/cron-bootstrap.sh
-
-# Clear APCu and Opcache via cachetool
-ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml apcu:cache:clear
-ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml opcache:reset
-ELASTIC_APM_ENABLED=false cachetool --config=.cachetool-cli.yaml opcache:reset
-echo "Cleared APCu and Opcache caches via cachetool"
-
-# Clear Magento/OpenMage caches
-n98-magerun.phar cache:clean
-echo "Cleared OpenMage caches"
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 # Clear PHP opcache stored in shared memory
 rm -r /dev/shm/openmage-php-opcache/* && touch /dev/shm/openmage-php-opcache/CACHEDIR.TAG
 echo "Cleared PHP opcache in /dev/shm/openmage-php-opcache/"
+
 
 # Remove minified CSS/JS files that are over 14 days old
 cm || exit 1
@@ -34,5 +31,18 @@ else
 	echo "Directory media/min does not exist, skipping trimming of minified files"
 fi
 
+
+# Clear APCu and Opcache via cachetool
+ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml apcu:cache:clear
+ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml opcache:reset
+ELASTIC_APM_ENABLED=false cachetool --config=.cachetool-cli.yaml opcache:reset
+echo "Cleared APCu and Opcache caches via cachetool"
+
+
+# Clear Magento/OpenMage caches
+n98-magerun.phar cache:clean
+echo "Cleared OpenMage caches"
+
+# Wrap up
 cm || exit 1
 . ./shell/cron-wrapup.sh
