@@ -176,10 +176,8 @@ media
 
 # find . -type l ! -path './vendor/*' ! -path './media/*' | sort -f
 /app/code/community/Aoe/BlackHoleSession
-/app/code/community/Aoe/CacheStats
 /app/code/community/Aoe/DbRetry
 /app/code/community/Aoe/ModelCache
-/app/code/community/Aoe/Profiler
 /app/code/community/Aoe/Scheduler
 /app/code/community/Aoe/TemplateHints
 /app/code/community/Aydus/HeadOrder
@@ -193,22 +191,18 @@ media
 /app/code/community/FireGento/Logger
 /app/code/community/Guidance/Simplepage
 /app/code/community/Pay/Payment
-/app/code/community/Varien/Profiler.php
-/app/code/community/Zend/Db/Profiler.php
 /app/code/local/Aschroder/SMTPPro
 /app/code/local/InternetCode/AdvancedProductFilter
 /app/code/local/InternetCode/Translator
 /app/code/local/MM/CmsContentFileMode
 /app/code/local/MM/MonacoEditor
 /app/design/adminhtml/base/default/template/pay/payment
-/app/design/adminhtml/default/default/layout/aoe_profiler
 /app/design/adminhtml/default/default/layout/aoe_scheduler
 /app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
 /app/design/adminhtml/default/default/layout/firegento_debug.xml
 /app/design/adminhtml/default/default/layout/firegento_logger.xml
 /app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
 /app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
-/app/design/adminhtml/default/default/template/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_scheduler
 /app/design/adminhtml/default/default/template/dynamiccategory/fieldset.phtml
 /app/design/adminhtml/default/default/template/firegento_logger
@@ -224,12 +218,9 @@ media
 /app/design/frontend/base/default/template/firegento_logger
 /app/design/frontend/base/default/template/guidance_simplepage
 /app/design/frontend/base/default/template/pay/payment
-/app/etc/aoe_cachestats.xml
 /app/etc/modules/Aoe_BlackHoleSession.xml
-/app/etc/modules/Aoe_CacheStats.xml
 /app/etc/modules/Aoe_DbRetry.xml
 /app/etc/modules/Aoe_ModelCache.xml
-/app/etc/modules/Aoe_Profiler.xml
 /app/etc/modules/Aoe_Scheduler.xml
 /app/etc/modules/Aoe_TemplateHints.xml
 /app/etc/modules/Aschroder_SMTPPro.xml
@@ -297,7 +288,6 @@ media
 /scheduler_cron.sh
 /shell/logger.php
 /shell/scheduler.php
-/skin/adminhtml/default/default/aoe_profiler
 /skin/adminhtml/default/default/aoe_scheduler
 /skin/adminhtml/default/default/firegento_logger.css
 /skin/adminhtml/default/default/firegento/debug
@@ -514,3 +504,13 @@ media
 # ADDED BY COMPOSER OPENMAGE PLUGIN INSTALLER
 # Better to use the "Symlinks" approach documented above
 ############################################################
+/app/code/community/Aoe/CacheStats
+/app/etc/modules/Aoe_CacheStats.xml
+/app/etc/aoe_cachestats.xml
+/app/etc/modules/Aoe_Profiler.xml
+/app/code/community/Aoe/Profiler
+/app/code/community/Varien/Profiler.php
+/app/code/community/Zend/Db/Profiler.php
+/skin/adminhtml/default/default/aoe_profiler
+/app/design/adminhtml/default/default/layout/aoe_profiler
+/app/design/adminhtml/default/default/template/aoe_profiler

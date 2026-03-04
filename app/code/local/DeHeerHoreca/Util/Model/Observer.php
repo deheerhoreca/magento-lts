@@ -370,9 +370,9 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       dump($observer);
       $ga4Event = $observer->getEvent()->getGa4DataTransport()->getData()[0] ?? false;
       if($varien_event = $observer->getEvent()) {
-        devDump($varien_event);
+        // devDump($varien_event);
         if($ga4DataTransport = $varien_event->getData("ga4_data_transport")) {
-          devDump($ga4DataTransport);
+          // devDump($ga4DataTransport);
         }
         $event_name = $ga4Event[0] ?? null;
         dump($event_name);

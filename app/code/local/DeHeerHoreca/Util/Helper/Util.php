@@ -1686,15 +1686,19 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       return "Actieprijs";
     }
     
-    $now = CarbonImmutable::now();
+    $now              = CarbonImmutable::now();
+    $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
     
-    $hasSpecialPrice = $_product->getSpecialPrice() && $_finalPrice < $_price;
-    
-    if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2026-02-28 00:00:00")) {
-      return "5% Kortingscode";
-    }
-    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) {
-      return "5% Kortingscode";
+    if(!$hasSpecialPrice) {
+      // if($supplier_sys === "combisteel" && $now->isBefore("2026-02-28 00:00:00")) {
+      //   return "5% Kortingscode";
+      // }
+      // elseif($supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) {
+      //   return "5% Kortingscode";
+      // }
+      if($supplier_sys === "hendi" && $now->isBefore("2026-04-01 00:00:00")) {
+        return "5% Kortingscode";
+      }
     }
     // if($now->isBefore("2025-12-01 00:00:00")) {
     //   return "Black Friday Deal";

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "373e1028f8154d73ac60b0fe2e5221b1",
+    "content-hash": "0815bc0f19a2b841bd70c175d7fc5ed9",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -48,12 +48,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:deheerhoreca/Aoe_CacheStats.git",
-                "reference": "db1f0cf412f286cf33ce625864fb0847938a36d7"
+                "reference": "20739a51de732db232d6c520c33850588be4e1b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/db1f0cf412f286cf33ce625864fb0847938a36d7",
-                "reference": "db1f0cf412f286cf33ce625864fb0847938a36d7",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_CacheStats/zipball/20739a51de732db232d6c520c33850588be4e1b1",
+                "reference": "20739a51de732db232d6c520c33850588be4e1b1",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_CacheStats/tree/master"
             },
-            "time": "2026-02-25T16:21:23+00:00"
+            "time": "2026-03-04T13:32:21+00:00"
         },
         {
             "name": "aoepeople/aoe_dbretry",
@@ -151,12 +151,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/Aoe_Profiler.git",
-                "reference": "d10abfc6f20efeef4dd74fa785261985dd55def1"
+                "reference": "aab026a1c863484b5df5cd16d6f6cffb9679da3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/d10abfc6f20efeef4dd74fa785261985dd55def1",
-                "reference": "d10abfc6f20efeef4dd74fa785261985dd55def1",
+                "url": "https://api.github.com/repos/deheerhoreca/Aoe_Profiler/zipball/aab026a1c863484b5df5cd16d6f6cffb9679da3a",
+                "reference": "aab026a1c863484b5df5cd16d6f6cffb9679da3a",
                 "shasum": ""
             },
             "require": {
@@ -178,7 +178,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/Aoe_Profiler/tree/master"
             },
-            "time": "2026-02-25T20:46:12+00:00"
+            "time": "2026-02-26T23:34:23+00:00"
         },
         {
             "name": "aoepeople/aoe_scheduler",

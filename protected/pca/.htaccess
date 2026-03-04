@@ -1,0 +1,9 @@
+<FilesMatch \.(xml|zip|php)$>
+  AuthType Basic
+  AuthName "Authentication Required"
+  AuthUserFile /var/www/vhosts/chefstore.nl/workspace/openmage/protected/.htpasswd
+  <RequireAny>
+    Require ip 136.144.183.232
+    Require valid-user
+  </RequireAny>
+</FilesMatch>

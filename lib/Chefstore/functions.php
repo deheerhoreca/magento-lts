@@ -477,9 +477,10 @@ if(!function_exists("data_coalesce")) {
 if(!function_exists("_dhh_ips")) {
   function _dhh_ips(): array {
     return [
-      "185.127.111.252",    // prod
-      "31.201.36.137",
+      "185.127.111.252",    // HQ
+      "31.201.36.137",      // HQ2
       "141.138.142.200",    // voyager
+      "136.144.183.232",    // prod
     ];
   }
 }

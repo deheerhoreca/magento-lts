@@ -7,6 +7,6 @@
         }
     ],
     "require": {
-        "robinn/phpcacheadmin": "^2.4"
+        "robinn/phpcacheadmin": "dev-master"
     }
 }

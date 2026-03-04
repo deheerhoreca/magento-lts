@@ -7,6 +7,15 @@ use \Illuminate\Support\Str;
 /** @var Mage_Checkout_Block_Onepage_Payment_Methods $this */
 
 /**
+ * Anti-fraud measures: Remove certain BNPL payment methods based on SKU, email address domain, or manufacturer.
+ * > Requires the right sections of FireCheckout to be reloaded based on the conditions that we set here:
+ * > - @see https://www.chefstore.nl/index.php/admin4JN0/system_config/edit/section/firecheckout/
+ * > - The "Payment Methods" section should be reloaded based on Shipping Address, SKU.
+ * > - Otherwise, the user can use a non-problematic email address or cart and then change the email address
+ * >   or cart contents in order to bypass the payment method restrictions.
+ */
+
+/**
  * Enable customer message when BNPL methods are removed due to fraud detection.
  * @var bool
  */
@@ -94,8 +103,11 @@ $billsafe = false;
 // Check for fraudulent email domain
 $quoteEmail = $this->getQuote()?->getCustomerEmail();
 $quoteEmail = \Chefstore\Helper::normalizeEmailAddress($quoteEmail);
-// devDump("quote email: ", $quoteEmail);
-$highRiskPatternFound = Str::endsWith((string) $quoteEmail, $highRiskEmailDomains);
+// devLog(di($_REQUEST));
+// devLog("Quote email after normalization: {$quoteEmail}");
+if($highRiskPatternFound = Str::endsWith((string) $quoteEmail, $highRiskEmailDomains)) {
+  // devLog("High risk email domain detected: {$quoteEmail}");
+}
 
 // Loop cart items and match against known fraudulent order products
 if(!$highRiskPatternFound) {
@@ -107,6 +119,7 @@ if(!$highRiskPatternFound) {
             if($item->getBasePrice() >= 480 &&
             (in_array($item->getSku(), $highRiskSkus) || wild_sis($highRiskSProductNameSubstrings, $item->getName()))) {
                 $highRiskPatternFound = true;
+                // devLog("High risk product detected in cart: SKU={$item->getSku()}, Name={$item->getName()}, Price={$item->getBasePrice()}");
                 break;
             }
             // devDump($item->debug());
@@ -126,7 +139,12 @@ if($highRiskPatternFound) {
     $methods = array_filter($methods, fn($method) => !in_array($method->getCode(), $bnplMethods, true));
     if(count($methods) < count($origMethods)) {
         $flagBnplRemoved = true;
+        // devLog("BNPL payment method(s) removed due to high risk pattern detection. Original methods: " . implode(", ", array_map(fn($m) => $m->getCode(), $origMethods)) . ". Remaining methods: " . implode(", ", array_map(fn($m) => $m->getCode(), $methods)));
+    } else {
+      // devLog("High risk pattern detected, but no payment methods disabled.");
     }
+} else {
+  // devLog("No high risk pattern detected.");
 }
 
 $customerMsgHtml = "";

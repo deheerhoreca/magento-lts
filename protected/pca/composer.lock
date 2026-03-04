@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c1e991ac13e517c7a2c0ebfa9605ac1",
+    "content-hash": "2784bef490292ab3cc725c85e99462c4",
     "packages": [
         {
             "name": "robinn/phpcacheadmin",
-            "version": "2.4.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RobiNN1/phpCacheAdmin.git",
-                "reference": "b5d89cbabc8c2266df46238d78e7d97ed35df0e0"
+                "reference": "3fa9ec66358954fbdc3575136d3e8434bdf2cdab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RobiNN1/phpCacheAdmin/zipball/b5d89cbabc8c2266df46238d78e7d97ed35df0e0",
-                "reference": "b5d89cbabc8c2266df46238d78e7d97ed35df0e0",
+                "url": "https://api.github.com/repos/RobiNN1/phpCacheAdmin/zipball/3fa9ec66358954fbdc3575136d3e8434bdf2cdab",
+                "reference": "3fa9ec66358954fbdc3575136d3e8434bdf2cdab",
                 "shasum": ""
             },
             "require": {
@@ -37,6 +37,7 @@
                 "ext-zlib": "Required for encoding/decoding with gz* functions.",
                 "predis/predis": "Required for use the Redis dashboard, when Redis extension is not installed."
             },
+            "default-branch": true,
             "type": "project",
             "autoload": {
                 "files": [
@@ -73,9 +74,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RobiNN1/phpCacheAdmin/issues",
-                "source": "https://github.com/RobiNN1/phpCacheAdmin/tree/2.4.1"
+                "source": "https://github.com/RobiNN1/phpCacheAdmin/tree/master"
             },
-            "time": "2026-02-06T19:41:40+00:00"
+            "time": "2026-02-28T20:00:42+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -395,7 +396,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "robinn/phpcacheadmin": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {},

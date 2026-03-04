@@ -96,6 +96,12 @@ $levertijd_tmp_override = $stock_data["levertijd_tmp_override"];
 $bestelartikel          = $stock_data["bestelartikel"] ?? "";
 $min_sale_qty           = $stock_data["min_sale_qty"];
 
+/** @var string[] Helper to convert strings to human-friendly Dutch dates */
+$nlMonths = [
+  1 => 'januari', 2 => 'februari', 3 => 'maart', 4 => 'april', 5 => 'mei', 6 => 'juni',
+  7 => 'juli', 8 => 'augustus', 9 => 'september', 10 => 'oktober', 11 => 'november', 12 => 'december'
+];
+
 // Fulfilment, Financials
 $used_levertijd         = empty($levertijd_tmp_override) ? $levertijd : $levertijd_tmp_override;
 $freeshipping_from      = (float) Mage::getStoreConfig("carriers/freeshipping/free_shipping_subtotal");
@@ -995,35 +1001,36 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                     // "hendi5"
                     $now = CarbonImmutable::now();
                     
-                    if(!$hasSpecialPrice && $supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) { ?>
-                      <div class="card mx-auto p-2 mb-2">
-                        <div class="card-body">
-                          <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/bartscher.png" class="card-img-top px-5" alt="Maxima coupon code">
-                          <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">BARTSCHER5</span></h4>
-                          <p class="card-text">Korting geldt voor alle producten van <?=$brand_name?>. Gebruik deze code tijdens het afrekenen.</p>
-                          <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 31 januari 2026: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
-                        </div>
-                      </div><?php
-                    }
+                    // $supplierCode   = "bartscher";
+                    // $promoEndDate   = "2026-02-01 00:00:00";
+                    // $promoCode      = "BARTSCHER5";
+                    // $endDateTs      = strtotime($promoEndDate);
+                    // $endDateHumanNL = $endDateTs ? date("j", $endDateTs)." ".$nlMonths[(int) date("n", $endDateTs)]." ".date("Y", $endDateTs) : "";
                     
-                    if(!$hasSpecialPrice && $supplier_sys === "combisteel" && $now->isBefore("2026-02-28 00:00:00")) { ?>
-                      <div class="card mx-auto p-2 mb-2">
-                        <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/combisteel.png" class="card-img-top px-5" alt="Coupon Code">
-                        <div class="card-body">
-                          <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">COMBISTEEL5</span></h4>
-                          <p class="card-text">Korting geldt voor alle producten van <?=$brand_name?>. Gebruik deze code tijdens het afrekenen.</p>
-                          <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 28 februari 2026: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
-                        </div>
-                      </div><?php
-                    }
+                    // $supplierCode   = "combisteel";
+                    // $promoEndDate   = "2026-02-28 00:00:00";
+                    // $promoCode      = "COMBISTEEL5";
+                    // $endDateTs      = strtotime($promoEndDate);
+                    // $endDateHumanNL = $endDateTs ? date("j", $endDateTs)." ".$nlMonths[(int) date("n", $endDateTs)]." ".date("Y", $endDateTs) : "";
                     
-                    if(0 && !$hasSpecialPrice && $supplier_sys === "maxima" && $now->isBefore("2025-11-24 00:00:00")) { ?>
+                    // $supplierCode   = "maxima";
+                    // $promoEndDate   = "2025-11-24 00:00:00";
+                    // $promoCode      = "MAXIMA5";
+                    // $endDateTs      = strtotime($promoEndDate);
+                    // $endDateHumanNL = $endDateTs ? date("j", $endDateTs)." ".$nlMonths[(int) date("n", $endDateTs)]." ".date("Y", $endDateTs) : "";
+                    
+                    $supplierCode   = "hendi";
+                    $promoEndDate   = "2026-04-01 00:00:00";
+                    $promoCode      = "HENDI5";
+                    $endDateTs      = strtotime($promoEndDate);
+                    $endDateHumanNL = $endDateTs ? date("j", $endDateTs)." ".$nlMonths[(int) date("n", $endDateTs)]." ".date("Y", $endDateTs) : "";
+                    if(!$hasSpecialPrice && $supplier_sys === $supplierCode && $now->isBefore($promoEndDate)) { ?>
                       <div class="card mx-auto p-2 mb-2">
-                        <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/maxima.png" class="card-img-top px-5" alt="Coupon Code">
+                        <img src="//images.chefstore.nl/media/wysiwyg/brands/tr:n-logosmall/<?=$supplierCode?>.png" class="card-img-top px-5" alt="Coupon Code">
                         <div class="card-body">
-                          <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace">MAXIMA5</span></h4>
+                          <h4 class="card-title">5% EXTRA KORTING met <span class="d-inline productdetail__discount font-monospace"><?=$promoCode?></span></h4>
                           <p class="card-text">Korting geldt voor alle producten van <?=$brand_name?>. Gebruik deze code tijdens het afrekenen.</p>
-                          <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m 23 november 2025: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
+                          <p class="card-text mt-2 fw-light"><em class="small">Geldig t/m <?=$endDateHumanNL?>: Bestel op tijd! Niet i.c.m. andere aanbiedingen.</em></p>
                         </div>
                       </div><?php
                     }
