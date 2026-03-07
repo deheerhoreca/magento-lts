@@ -11,6 +11,7 @@ This is useful to keep the stats on the dashboards more in line with the actual 
 
 declare(strict_types=1);
 
+define("CRON", isset($_SERVER["FAKE_CRON"]) || (!isset($_SERVER["SSH_CLIENT"]) && (\PHP_SAPI === 'cli' && \defined('STDOUT') && \defined('STDERR')) && !isset($_SERVER["NOTCRON"])));
 define("SET_TAGS", "zc:tags");
 
 $redis = new Redis();
@@ -44,28 +45,25 @@ foreach($tags as $tag) {
     if(!array_key_exists($tag_member, $known_keys) || !$known_keys[$tag_member]) {
       $members_count++;
       $membership_count++;
-      // echo " ";
+      if(!CRON) echo " ";
     } else {
       $to_remove[] = $tag_member;
-      // echo "-";
+      if(!CRON) echo "-";
     }
 	}
   
   if($to_remove !== []) {
     $removed = $redis->sRem($tag, ...$to_remove);
-    // echo $removed."x";
+    // if(!CRON) echo $removed."x";
     $pruned_members_count += $removed;
     $to_remove = [];
   }
 	
 	if($members_count == 0) {
-		// echo "0";
 		$empty_tags_count++;
-	} else {
-		// echo "+";
 	}
   
-  // echo ".";
+  if(!CRON) echo ".";
 }
 
 $existing_keys = array_filter($known_keys);

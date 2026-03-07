@@ -43,5 +43,18 @@ find "$DIR" -type f \( -iname "*.css" -o -iname "*.js" -o -iname "*.json" -o -in
   touch -r "${file}" "${file}.gz"
   touch -r "${file}" "${file}.zst"
 done
-
 echo "Compression complete and mtimes synchronized."
+
+# Remove minified CSS/JS files that are over 14 days old
+cm || die "Failed to go to the openmage directory"
+if [ -d "media/min" ]; then
+  find media/min -type f \( -name '*.js' -o -name '*.css' -o -name '*.br' \) -mtime +14 -print -exec rm -f {} \;
+  touch media/min/CACHEDIR.TAG
+  echo "Trimmed minified CSS/JS files in media/min/ (removed files older than 14 days)"
+else
+  echo "Directory media/min does not exist, skipping trimming of minified files"
+fi
+
+# Wrap up
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-wrapup.sh
