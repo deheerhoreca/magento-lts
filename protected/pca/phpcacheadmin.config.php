@@ -28,7 +28,7 @@ return [
   "redis"      => [
     [
       "name"      => "production",
-      // "host"      => "127.0.0.1",
+      "host"      => "136.144.183.232",
       /*"nodes" => [
         // List of cluster nodes.
         "127.0.0.1:7000",
@@ -46,7 +46,7 @@ return [
       // "username"  => "", // ACL - requires Redis >= 6.0 (optional).
       // "password"  => "", // Optional.
       // "authfile"  => "/run/secrets/file_name",      // File with a password, e.g., Docker secrets (optional).
-      "path"      => "/var/run/redis/redis.sock",   // Unix domain socket (optional).
+      // "path"      => "/var/run/redis/redis.sock",   // Unix domain socket (optional).
       // "databases" => 4, // Number of databases, use this if the CONFIG command is disabled (optional).
       // "scansize"  => 1000, // Number of keys, the server will use the SCAN command instead of KEYS (optional).
       "separator" => "_", // Separator for tree view (optional)

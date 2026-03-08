@@ -187,7 +187,6 @@ media
 /app/code/community/Fballiano/CssjsMinify
 /app/code/community/FireGento/AdminMonitoring
 /app/code/community/FireGento/Debug
-/app/code/community/FireGento/DynamicCategory
 /app/code/community/FireGento/Logger
 /app/code/community/Guidance/Simplepage
 /app/code/community/Pay/Payment
@@ -204,7 +203,6 @@ media
 /app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
 /app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
 /app/design/adminhtml/default/default/template/aoe_scheduler
-/app/design/adminhtml/default/default/template/dynamiccategory/fieldset.phtml
 /app/design/adminhtml/default/default/template/firegento_logger
 /app/design/adminhtml/default/default/template/firegento/adminmonitoring
 /app/design/adminhtml/default/default/template/firegento/debug
@@ -230,7 +228,6 @@ media
 /app/etc/modules/Fballiano_CssjsMinify.xml
 /app/etc/modules/FireGento_AdminMonitoring.xml
 /app/etc/modules/FireGento_Debug.xml
-/app/etc/modules/FireGento_DynamicCategory.xml
 /app/etc/modules/FireGento_Logger.xml
 /app/etc/modules/Guidance_Simplepage.xml
 /app/etc/modules/InternetCode_AdvancedProductFilter.xml
@@ -243,7 +240,6 @@ media
 /app/locale/de_DE/Aschroder_SMTPPro.csv
 /app/locale/de_DE/FireGento_AdminMonitoring.csv
 /app/locale/de_DE/FireGento_Debug.csv
-/app/locale/de_DE/FireGento_DynamicCategory.csv
 /app/locale/en_US/Aschroder_SMTPPro.csv
 /app/locale/en_US/FireGento_Debug.csv
 /app/locale/en_US/Pay_Payment.csv
@@ -254,7 +250,6 @@ media
 /app/locale/fr_FR/FireGento_Debug.csv
 /app/locale/it_IT/Pay_Payment.csv
 /app/locale/nl_NL/Aschroder_SMTPPro.csv
-/app/locale/nl_NL/FireGento_DynamicCategory.csv
 /app/locale/nl_NL/Pay_Payment.csv
 /app/locale/pt_BR/Aoe_Scheduler.csv
 /app/locale/pt_BR/Aschroder_SMTPPro.csv
@@ -514,3 +509,9 @@ media
 /skin/adminhtml/default/default/aoe_profiler
 /app/design/adminhtml/default/default/layout/aoe_profiler
 /app/design/adminhtml/default/default/template/aoe_profiler
+/app/code/community/FireGento/DynamicCategory
+/app/design/adminhtml/default/default/template/dynamiccategory/fieldset.phtml
+/app/etc/modules/FireGento_DynamicCategory.xml
+/app/locale/de_CH/FireGento_DynamicCategory.csv
+/app/locale/de_DE/FireGento_DynamicCategory.csv
+/app/locale/nl_NL/FireGento_DynamicCategory.csv

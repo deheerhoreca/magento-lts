@@ -1436,12 +1436,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:deheerhoreca/firegento-dynamiccategory.git",
-                "reference": "7af44f4c592e62e00a0870fb72cce2946da05dde"
+                "reference": "4aa49fc1eb702580d068f01bf4b83bac420d0006"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/firegento-dynamiccategory/zipball/7af44f4c592e62e00a0870fb72cce2946da05dde",
-                "reference": "7af44f4c592e62e00a0870fb72cce2946da05dde",
+                "url": "https://api.github.com/repos/deheerhoreca/firegento-dynamiccategory/zipball/4aa49fc1eb702580d068f01bf4b83bac420d0006",
+                "reference": "4aa49fc1eb702580d068f01bf4b83bac420d0006",
                 "shasum": ""
             },
             "require": {
@@ -1458,7 +1458,7 @@
                 "source": "https://github.com/deheerhoreca/firegento-dynamiccategory/tree/develop",
                 "issues": "https://github.com/deheerhoreca/firegento-dynamiccategory/issues"
             },
-            "time": "2026-02-27T14:58:45+00:00"
+            "time": "2026-03-07T23:19:27+00:00"
         },
         {
             "name": "firegento/logger",
