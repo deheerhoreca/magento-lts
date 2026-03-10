@@ -252,8 +252,8 @@
     # Redirect /document/asdf to document.php
     RewriteRule ^document/.*$ document.php
 
-    # Redirects file.php to view.php
-    RewriteRule "^file.php.*$" "/view.php?csredir=hta" [R=301,NC,L,QSA]
+    # Redirects file.php to view.php, retain query string, and do not match file.php-foo
+    RewriteRule ^file\.php$ view.php [QSA,L]
 
     # Landing URL from flyers
     Redirect /hallochef /promoties.html

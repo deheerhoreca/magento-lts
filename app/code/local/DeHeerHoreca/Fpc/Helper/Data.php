@@ -23,8 +23,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public const PLACEHOLDER_FORMKEY            = "___FPC_FORM_KEY_PLACEHOLDER___";
   public const PLACEHOLDER_FORMKEY_DEPRECATED = "<!-- fpc form_key_placeholder -->";
   
-  public const REDIS_CACHE_TAG_PREFIX         = "zc:ti:dd6";
-  public const REDIS_CACHE_KEY_PREFIX         = "zc:k:dd6";
+  public const REDIS_CACHE_TAG_PREFIX         = "zc:ti:om";
+  public const REDIS_CACHE_KEY_PREFIX         = "zc:k:om";
   
   /** @var array<string,string|string[]> */
   private static array $httpHeaders = [];
@@ -155,9 +155,8 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   
   /**
    * Get cache tags applicable to this request.
-   *
-   * => Cache tags (sets) should be uppercased.
-   * => Tags should follow OpenMage's native conventions where possible.
+   * > Cache tags (sets) should be uppercased.
+   * > Tags should follow OpenMage's native conventions where possible.
    *
    * @return  array
    */
@@ -169,10 +168,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     if($om_action === "catalog_product_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "CATALOG_PRODUCT_{$id}";
+      $cache_tags[] = strtoupper(Mage_Catalog_Model_Product::CACHE_TAG)."_{$id}";
+      // $cache_tags[] = "PRODUCT_{$id}";
     } elseif($om_action === "catalog_category_view") {
       $id = (int) Mage::app()->getFrontController()->getAction()->getRequest()->getParam("id");
-      $cache_tags[] = "CATALOG_CATEGORY_{$id}";
+      // $cache_tags[] = "CATALOG_CATEGORY_{$id}";
+      $cache_tags[] = strtoupper(Mage_Catalog_Model_Category::CACHE_TAG)."_{$id}";
     }
     
     $cache_tags = collect($cache_tags)->merge(self::$addTags)->unique()->values()->all();
@@ -429,10 +430,11 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
    *
    * @return string|null  The cached HTML, or null if not found.
    */
-  public static function get_cached_html(string $key, $holepunch_formkey = true, $holepunch_blocks = true): ?string {
+  public static function get_cached_html(string $key, bool $holepunch_formkey = true, bool $holepunch_blocks = true): ?string {
     Varien_Profiler::start("DHH::FPC::get_cached_html");
-    $_cache   = Mage::app()->getCache();							// Circumvents our modified Cache class
-    $html     = $_cache->load($key);
+    // $_cache   = Mage::app()->getCache();							// Circumvents our modified Cache class
+    // $html     = $_cache->load($key);
+    $html     = omCacheGet($key);
     
     if(empty($html)) {
       self::log("MISS: {$key}");
@@ -642,17 +644,17 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       $data = \Chefstore\Html::minifyHtml($data);
     }
     
-    // // ! There was a bug when using omCacheSave() here IF also using saveToCacheDeferred(). Perhaps too many indirect calls?
-    // // ! This is why we use Mage::app() here, to execute the logic more directly, it works:
-    // if(Mage::app()->saveCache($data, $key, $cache_tags, $lifetime)) {
-    //   self::log("SAVED {$key}");
-    //   $return = true;
-    // }
-    
-    if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+    // Save via our own function to enable CacheStats and 2-level caching with APCu.
+    if(omCacheSave($data, $key, $cache_tags, $lifetime)) {
       self::log("SAVED {$key}");
       $return = true;
     }
+    
+    // // This circumvents our modified Cache class, preventing APCu caching:
+    // if(Mage::app()->getCache()->save($data, $key, $cache_tags, $lifetime)) {
+    //   self::log("SAVED {$key}");
+    //   $return = true;
+    // }
     
     Varien_Profiler::stop("DHH::FPC::saveToCache  {$key}");
     return $return ?? false;

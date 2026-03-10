@@ -20,51 +20,77 @@ $redis->select(0);  // select FPC
 
 $tags                 = $redis->sMembers(SET_TAGS);
 $tags_count           = count($tags);
-$empty_tags_count     = 0;
 $known_keys           = [];
 $membership_count     = 0;
-$pruned_members_count = 0;
+$removedMembersCount  = 0;
+$empty_tags_deleted   = 0;
 
 // Get all keys in one go to avoid multiple roundtrips to Redis.
 // Expensive, but ultimately faster than checking each key individually in the loop below.
 $all_keys             = $redis->keys("zc:k:*");
 $known_keys           = array_fill_keys($all_keys, true);
 
+asort($all_keys);
+asort($tags);
+ksort($known_keys);
+
+// print_r($known_keys);exit;
+
+$toRemoveFromTagsSet = [];
+
 foreach($tags as $tag) {
-	$tag              = "zc:ti:".$tag;
-	$tag_members      = $redis->sMembers($tag);
+	$fullTag          = "zc:ti:".$tag;
+	$tag_members      = $redis->sMembers($fullTag);
 	$members_count    = 0;
   $set_member_count = count($tag_members);
   $to_remove        = [];
   
+  // Non-existing SET or empty SET, can be safely removed from SET_TAGS
+  if($set_member_count === 0) {
+    $toRemoveFromTagsSet[] = $tag;
+    if(!CRON) echo "*";
+    // $redis->del($fullTag);
+    // if(!CRON) print_r("\nEmpty tag: {$tag}\n");
+    continue;
+  }
+  
+  $membership_count += $set_member_count;
+  
 	foreach($tag_members as $tag_member) {
-		// if(!isset($known_keys[$tag_member])) {
-    //   $known_keys[$tag_member] = $redis->exists("zc:k:{$tag_member}");
-    //   usleep(500); // .5ms breather
-    // }
-    if(!array_key_exists($tag_member, $known_keys) || !$known_keys[$tag_member]) {
-      $members_count++;
-      $membership_count++;
-      if(!CRON) echo " ";
-    } else {
+    $full_key = "zc:k:".$tag_member;
+    
+    if(!array_key_exists($full_key, $known_keys) || !$known_keys[$full_key]) {
       $to_remove[] = $tag_member;
       if(!CRON) echo "-";
+      // if(!CRON) print_r("\nMissing set member: {$tag_member}\n");
+    } else {
+      $members_count++;
+      if(!CRON) echo " ";
     }
 	}
   
   if($to_remove !== []) {
-    $removed = $redis->sRem($tag, ...$to_remove);
-    // if(!CRON) echo $removed."x";
-    $pruned_members_count += $removed;
+    $removed = $redis->sRem($fullTag, ...$to_remove);
+    // $removed = count($to_remove);
+    $removedMembersCount += $removed;
     $to_remove = [];
   }
 	
-	if($members_count == 0) {
-		$empty_tags_count++;
-	}
+	// if($members_count == 0) {
+  //   $redis->del($tag);
+  //   if(!CRON) print_r("Empty tag: {$tag}");
+	// }
   
-  if(!CRON) echo ".";
+  // if(!CRON) echo ".";
+}
+
+// Remove empty/missing tags from SET_TAGS SET
+if($toRemoveFromTagsSet !== []) {
+  $toRemoveFromTagsSet  = array_unique($toRemoveFromTagsSet);
+  $empty_tags_count     = count($toRemoveFromTagsSet);
+  $empty_tags_deleted   = $redis->sRem(SET_TAGS, ...$toRemoveFromTagsSet);
+  if(!CRON) print_r("\nRemoved {$empty_tags_deleted} empty tags from ".SET_TAGS.": ".implode(", ", $toRemoveFromTagsSet)."\n");
 }
 
 $existing_keys = array_filter($known_keys);
-echo "\n\nTags: {$tags_count}, empty tags: {$empty_tags_count}, known cache keys: ".count($existing_keys).", memberships: ".$membership_count.", missing memberships pruned: {$pruned_members_count}\n";
+echo "\n\nTags count: {$tags_count}, empty tags deleted from zc:tags: {$empty_tags_deleted}, keys count: ".count($existing_keys).", memberships count: ".$membership_count.", missing members removed: {$removedMembersCount}\n";

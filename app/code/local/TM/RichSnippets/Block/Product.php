@@ -461,22 +461,22 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         }
         
         switch($value) {
-          case "1 werkdag":       $min_days = 0; $max_days = 1; break;
-          case "1-2 werkdagen":   $min_days = 1; $max_days = 2; break;
-          case "1-3 werkdagen":   $min_days = 1; $max_days = 3; break;
-          case "1-5 werkdagen":   $min_days = 1; $max_days = 5; break;
-          case "2-3 werkdagen":   $min_days = 2; $max_days = 3; break;
-          case "3-4 werkdagen":   $min_days = 3; $max_days = 4; break;
-          case "3-10 werkdagen":  $min_days = 3; $max_days = 10; break;
-          case "4-5 werkdagen":   $min_days = 4; $max_days = 5; break;
-          case "5-6 werkdagen":   $min_days = 5; $max_days = 6; break;
-          case "6-8 werkdagen":   $min_days = 6; $max_days = 8; break;
-          case "7-10 werkdagen":  $min_days = 7; $max_days = 10; break;
-          case "8-12 werkdagen":  $min_days = 8; $max_days = 12; break;
+          case "1 werkdag":       $min_days = 0;  $max_days = 1;  break;
+          case "1-2 werkdagen":   $min_days = 1;  $max_days = 2;  break;
+          case "1-3 werkdagen":   $min_days = 1;  $max_days = 3;  break;
+          case "1-5 werkdagen":   $min_days = 1;  $max_days = 5;  break;
+          case "2-3 werkdagen":   $min_days = 2;  $max_days = 3;  break;
+          case "3-4 werkdagen":   $min_days = 3;  $max_days = 4;  break;
+          case "3-10 werkdagen":  $min_days = 3;  $max_days = 10; break;
+          case "4-5 werkdagen":   $min_days = 4;  $max_days = 5;  break;
+          case "5-6 werkdagen":   $min_days = 5;  $max_days = 6;  break;
+          case "6-8 werkdagen":   $min_days = 6;  $max_days = 8;  break;
+          case "7-10 werkdagen":  $min_days = 7;  $max_days = 10; break;
+          case "8-12 werkdagen":  $min_days = 8;  $max_days = 12; break;
           case "10-15 werkdagen": $min_days = 10; $max_days = 15; break;
           case "3-4 weken":       $min_days = 15; $max_days = 20; break;
           case "4-5 weken":       $min_days = 20; $max_days = 25; break;
-          default:                $min_days = 1; $max_days = 5; break;
+          default:                $min_days = 1;  $max_days = 5;  break;
         }
         
         $shipping_cost = ""; // DHH CORE HACK

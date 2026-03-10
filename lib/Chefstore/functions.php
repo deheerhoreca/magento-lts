@@ -487,20 +487,40 @@ if(!function_exists("_dhh_ips")) {
 
 /* ---------------------------------------------------------- Chefstore\CsCache --------------------------------------------------------- */
 
+/**
+ * Load a cache item by key via the native OpenMage method.
+ * Will hit 2-level cache and CacheStats.
+ *
+ * @param  mixed  $id   The cache key, WITHOUT prefixes.
+ * @return string|false The cached value, or false if not found.
+ *
+ * @see Mage_Core_Model_Cache::load() for more details.
+ */
 function omCacheGet($id): string|false {
-	return CsCache::load($id);
+  return CsCache::get($id);
 }
 
-function omCacheSave($id, $data, $tags = [], $lifetime = null): true {
-	return CsCache::save($id, $data, $tags, $lifetime);
+/**
+ * Save a cache by key via native OpenMage method.
+ * Will hit 2-level cache and CacheStats.
+ *
+ * @param  mixed  $data
+ * @param  mixed  $key
+ * @param  array  $tags
+ * @param  mixed  $lifetime
+ *
+ * @return true
+ */
+function omCacheSave($data, $key, $tags = [], $lifetime = null): true {
+  return CsCache::save($data, $key, $tags, $lifetime);
 }
 
 function omCacheDelete($id): true {
-	return CsCache::delete($id);
+  return CsCache::delete($id);
 }
 
 function omCacheClean(array $tags): true {
-	return CsCache::clean($tags);
+  return CsCache::clean($tags);
 }
 
 /* ---------------------------------------------------------- Symfony\VarDumper --------------------------------------------------------- */
@@ -973,7 +993,7 @@ if(!function_exists("_getAlternativeEans")) {
  * @return string
  */
 function omGetProductImageUrl($path): string {
-	return rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/")."/catalog/product/".ltrim($path, "/");
+  return rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/")."/catalog/product/".ltrim($path, "/");
 }
 
 if(!function_exists("_cdn_img")) {
@@ -1075,24 +1095,24 @@ if(!function_exists("_cdn_img")) {
     
     // Add file modification time as cache buster
     if($add_mod_time) {
-			// Fill fs_path when cachebusting is enabled without an explicit fs_path -- BEFORE adding cache buster
-			if(blank($fs_path)) {
-				$fs_path ??= CacheBuster::pathByUrl($url);
-			}
-			
-			// Add modification time as cache buster
-			if(filled($fs_path)) {
-				if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
-					$url = CacheBuster::prependExtension($url, "ts{$mtime}");
-				} else {
-					// @todo Remove this, stop adding query params for cache busting (it again does is_file() so it should not happen in the first place)
-					if(function_exists("_add_file_v_param")) {
-						$url = _add_file_v_param($url, $fs_path, $identifier);
-					} else {
-						$url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path, $identifier);
-					}
-				}
-			}
+      // Fill fs_path when cachebusting is enabled without an explicit fs_path -- BEFORE adding cache buster
+      if(blank($fs_path)) {
+        $fs_path ??= CacheBuster::pathByUrl($url);
+      }
+      
+      // Add modification time as cache buster
+      if(filled($fs_path)) {
+        if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
+          $url = CacheBuster::prependExtension($url, "ts{$mtime}");
+        } else {
+          // @todo Remove this, stop adding query params for cache busting (it again does is_file() so it should not happen in the first place)
+          if(function_exists("_add_file_v_param")) {
+            $url = _add_file_v_param($url, $fs_path, $identifier);
+          } else {
+            $url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path, $identifier);
+          }
+        }
+      }
     }
     
     // Make URL relative

@@ -317,12 +317,15 @@ class CsCache {
 	
 	// Native OpenMage gateway functions:
 	
-	/**
-	 * Load a cache by key via native OpenMage method.
-	 * Will hit 2-level cache.
-	 *
-	 * @param  mixed $id
-	 */
+  /**
+   * Load a cache item by key via the native OpenMage method.
+   * Will hit 2-level cache and CacheStats.
+   *
+   * @param  mixed  $id   The cache key, WITHOUT prefixes.
+   * @return string|false The cached value, or false if not found.
+   *
+   * @see Mage_Core_Model_Cache::load() for more details.
+   */
 	public static function get($id): string|false {
 		return Mage::app()->loadCache($id);
 	}
@@ -331,15 +334,16 @@ class CsCache {
 	 * Save a cache by key via native OpenMage method.
 	 * Will hit 2-level cache.
 	 *
-	 * @param  mixed $id
-	 * @param  mixed $data
-	 * @param  array $tags
-	 * @param  mixed $lifetime
+	 * @param  mixed  $data
+	 * @param  mixed  $key
+	 * @param  array  $tags
+	 * @param  mixed  $lifetime
+   *
 	 * @return true
 	 */
-	public static function save($id, $data, $tags = [], $lifetime = null): true {
-		Mage::app()->saveCache($data, $id, $tags, $lifetime);
-		return true; // The OpenMage function does not report success
+	public static function save($data, $key, $tags = [], $lifetime = null): true {
+		Mage::app()->saveCache($data, $key, $tags, $lifetime);
+		return true; // The OpenMage function does not report success.
 	}
 	
 	/**

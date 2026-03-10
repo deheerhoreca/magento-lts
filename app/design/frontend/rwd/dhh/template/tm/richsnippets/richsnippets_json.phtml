@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
+/** @var TM_RichSnippets_Block_Product $this */
+
 if(Mage::helper("richsnippets")->snippetsEnabled() && Mage::getStoreConfig("richsnippets/general/snippetsType") == "0") {
-  $_product      = Mage::registry("current_product");
-  $json         = "";
-  $cache_key    = "dhh::sm::prd::{$_product->getId()}";
+  $_product       = Mage::registry("current_product");
+  $json           = "";
+  $cache_key      = "dhh_richsnippet_product_{$_product->getId()}";
+  $dhhHelperFpc ??= Mage::helper("deheerhoreca_fpc/data");
   
   // Serve from cache
   if(DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "tm_richsnippets")) {
-    $json = Mage::app()->getCache()->load($cache_key);
+    // $json = Mage::app()->getCache()->load($cache_key);
+    $json = omCacheGet($cache_key);
     if(empty($json)) {
       DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
     } else {
@@ -23,20 +27,14 @@ if(Mage::helper("richsnippets")->snippetsEnabled() && Mage::getStoreConfig("rich
   $json = (string) $this->getJsonSnippetsProduct();
   echo "<script type=\"application/ld+json\">{$json}</script>";
   
-  // @todo Defer cache save to after response
+  // Defer cache SAVE
   if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "tm_richsnippets")) {
     $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
     $cache_tags = [
-      "DHH_TM_RICHSNIPPETS",
-      // "DHH_PRODUCT_{$_product->getId()}",
-      // "PRODUCT_{$_product->getId()}",
-      "CATALOG_PRODUCT_{$_product->getId()}",
       "DHH_SUPPLIER_{$supplier_sys_upper}",
+      "DHH_TM_RICHSNIPPETS",
+      strtoupper(Mage_Catalog_Model_Product::CACHE_TAG)."_{$_product->getId()}",
     ];
-    
     DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $json, $cache_tags, 86400 * 7, minifyHtml: false);
-    // if(Mage::app()->getCache()->save($json, $cache_key, $cache_tags, 86400 * 7)) {
-    //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-    // }
   }
 }

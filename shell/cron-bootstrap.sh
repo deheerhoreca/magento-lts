@@ -1,7 +1,10 @@
 #!/bin/bash -l
 
-# Set User Environment
-# . ${HOME}/.profile
+# Include .profile if running non-interactively
+if [[ $- != *i* ]]; then
+	# shellcheck disable=SC1091
+	. ${HOME}/.profile
+fi
 
 ## DEV:
 . /etc/profile.d/phpenv.sh

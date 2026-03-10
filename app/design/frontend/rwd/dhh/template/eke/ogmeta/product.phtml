@@ -11,12 +11,11 @@ if(!$helper->isOgMetaEnabled()) {
 
 $_product   = Mage::registry("current_product");
 $html       = "";
-// $cache_key  = "eke_ogmeta_product_{$_product->getId()}";
-$cache_key  = "dhh::og::prd::{$_product->getId()}";
+$cache_key  = "dhh_ogmeta_product_{$_product->getId()}";
 
 // Serve from cache
-if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "eke_ogmeta")) {
-  $html = Mage::app()->getCache()->load($cache_key);
+if(DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "eke_ogmeta")) {
+  $html = omCacheGet($cache_key);
   if(empty($html)) {
     DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
   } else {
@@ -128,24 +127,16 @@ if(!empty($productVideo)) {
   }
 }
 
-// $html = omStrStripNewlines($html);
 $html = \Chefstore\Html::minifyHtml($html);
 echo $html;
 
-// Store in cache
-// @todo defer
+// Defer cache SAVE
 if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "eke_ogmeta")) {
   $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
   $cache_tags = [
     "DHH_EKE_OGMETA",
-    // "DHH_PRODUCT_{$_product->getId()}",
-    // "PRODUCT_{$_product->getId()}",
-    "CATALOG_PRODUCT_{$_product->getId()}",
     "DHH_SUPPLIER_{$supplier_sys_upper}",
+    strtoupper(Mage_Catalog_Model_Product::CACHE_TAG)."_{$_product->getId()}",
   ];
-  
-  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $html, $cache_tags, 86400 * 7);
-  // if(Mage::app()->getCache()->save($html, $cache_key, $cache_tags, 86400 * 7)) {
-  //   DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
-  // }
+  DeHeerHoreca_Fpc_Helper_Data::saveToCacheDeferred($cache_key, $html, $cache_tags, 86400 * 7, minifyHtml: false);
 }

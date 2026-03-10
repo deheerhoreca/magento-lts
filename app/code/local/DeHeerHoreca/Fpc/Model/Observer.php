@@ -113,13 +113,13 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     $cache_tags = [
       // "DHH_PRODUCT_{$entityId}",
-      // "PRODUCT_{$entityId}",
-      "CATALOG_PRODUCT_{$entityId}",
+      "PRODUCT_{$entityId}",        // @todo Find out why OpenMage stores the LAYOUT_* cache key here, against Mage_Catalog_Model_Product::CACHE_TAG, and if it can be changed to that.
+      strtoupper(Mage_Catalog_Model_Product::CACHE_TAG)."_{$_product->getId()}",
     ];
     foreach($observer->getProduct()->getCategoryIds() as $category_id) {
       // $cache_tags[] = "DHH_CATEGORY_{$category_id}";
       // $cache_tags[] = "CATEGORY_{$category_id}";
-      $cache_tags[] = "CATALOG_CATEGORY_{$category_id}";
+      // $cache_tags[] = "CATALOG_CATEGORY_{$category_id}";
     }
     
     return DeHeerHoreca_Fpc_Helper_Data::cleanCacheByTagsDeferred($cache_tags);
@@ -142,14 +142,14 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     $cache_tags = [];
     foreach($product_ids as $entityId) {
       // $cache_tags[] = "DHH_PRODUCT_{$entityId}";
-      // $cache_tags[] = "PRODUCT_{$entityId}";
-      $cache_tags[] = "CATALOG_PRODUCT_{$entityId}";
+      $cache_tags[] = "PRODUCT_{$entityId}";
+      $cache_tags[] = strtoupper(Mage_Catalog_Model_Product::CACHE_TAG)."_{$entityId}";
       
       $product = Mage::getModel("catalog/product")->load($entityId);
       foreach($product->getCategoryIds() as $category_id) {
         // $cache_tags[] = "DHH_CATEGORY_{$category_id}";
-        // $cache_tags[] = "CATEGORY_{$category_id}";
-        $cache_tags[] = "CATALOG_CATEGORY_{$category_id}";
+        $cache_tags[] = "CATEGORY_{$category_id}";
+        $cache_tags[] = strtoupper(Mage_Catalog_Model_Category::CACHE_TAG)."_{$category_id}";
       }
     }
     
@@ -172,8 +172,9 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
     }
     $cache_tags = [
       // "DHH_CATEGORY_{$entityId}",
-      // "CATEGORY_{$entityId}",
-      "CATALOG_CATEGORY_{$entityId}",
+      "CATEGORY_{$entityId}",
+      // "CATALOG_CATEGORY_{$entityId}",
+      strtoupper(Mage_Catalog_Model_Category::CACHE_TAG)."_{$entityId}",
     ];
     
     return DeHeerHoreca_Fpc_Helper_Data::cleanCacheByTagsDeferred($cache_tags);
@@ -181,7 +182,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   
   /**
    * Implements https://github.com/OpenMage/magento-lts/issues/1105 without installing that old extension.
-   * Observes: controller_action_layout_load_before
+   * > Observes: controller_action_layout_load_before
    *
    * Removes per-item layout handles from cacheable pages, like PRODUCT_123 and CATEGORY_456.
    * This prevents OpenMage from creating a large number of cache entries and cache tags for each product/category page.
@@ -193,13 +194,13 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    */
   public static function removePerItemLayoutHandleInCache(Varien_Event_Observer $observer): void {
     return; // Disabled for now, to test if it causes any issues.
-    $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
-    foreach($handles as $key => $handle) {
-      if(preg_match("/^PRODUCT_\d+$/", $handle) || preg_match("/^CATEGORY_\d+$/", $handle)) {
-        $observer->getEvent()->getLayout()->getUpdate()->removeHandle($handle);
-      }
-    }
-    $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
+    // $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
+    // foreach($handles as $key => $handle) {
+    //   if(preg_match("/^PRODUCT_\d+$/", $handle) || preg_match("/^CATEGORY_\d+$/", $handle)) {
+    //     $observer->getEvent()->getLayout()->getUpdate()->removeHandle($handle);
+    //   }
+    // }
+    // $handles = $observer->getEvent()->getLayout()->getUpdate()->getHandles();
   }
   
   /**
