@@ -49,8 +49,6 @@ foreach($tags as $tag) {
   if($set_member_count === 0) {
     $toRemoveFromTagsSet[] = $tag;
     if(!CRON) echo "*";
-    // $redis->del($fullTag);
-    // if(!CRON) print_r("\nEmpty tag: {$tag}\n");
     continue;
   }
   
@@ -70,24 +68,18 @@ foreach($tags as $tag) {
 	}
   
   if($to_remove !== []) {
+    // $removed = count($to_remove); // (during dryrun)
     $removed = $redis->sRem($fullTag, ...$to_remove);
-    // $removed = count($to_remove);
     $removedMembersCount += $removed;
     $to_remove = [];
   }
-	
-	// if($members_count == 0) {
-  //   $redis->del($tag);
-  //   if(!CRON) print_r("Empty tag: {$tag}");
-	// }
-  
-  // if(!CRON) echo ".";
 }
 
 // Remove empty/missing tags from SET_TAGS SET
 if($toRemoveFromTagsSet !== []) {
   $toRemoveFromTagsSet  = array_unique($toRemoveFromTagsSet);
   $empty_tags_count     = count($toRemoveFromTagsSet);
+  // $empty_tags_deleted   = $empty_tags_count; // Assuming all tags in $toRemoveFromTagsSet are deleted (during dryrun)
   $empty_tags_deleted   = $redis->sRem(SET_TAGS, ...$toRemoveFromTagsSet);
   if(!CRON) print_r("\nRemoved {$empty_tags_deleted} empty tags from ".SET_TAGS.": ".implode(", ", $toRemoveFromTagsSet)."\n");
 }

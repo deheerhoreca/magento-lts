@@ -499,9 +499,6 @@ media
 # ADDED BY COMPOSER OPENMAGE PLUGIN INSTALLER
 # Better to use the "Symlinks" approach documented above
 ############################################################
-/app/code/community/Aoe/CacheStats
-/app/etc/modules/Aoe_CacheStats.xml
-/app/etc/aoe_cachestats.xml
 /app/etc/modules/Aoe_Profiler.xml
 /app/code/community/Aoe/Profiler
 /app/code/community/Varien/Profiler.php
@@ -515,3 +512,6 @@ media
 /app/etc/modules/FireGento_DynamicCategory.xml
 /app/locale/de_DE/FireGento_DynamicCategory.csv
 /app/locale/nl_NL/FireGento_DynamicCategory.csv
+/app/code/community/Aoe/CacheStats
+/app/etc/modules/Aoe_CacheStats.xml
+/app/etc/aoe_cachestats.xml
