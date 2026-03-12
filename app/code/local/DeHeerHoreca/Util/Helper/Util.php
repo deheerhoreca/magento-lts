@@ -1929,7 +1929,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
         // Our own user agent checks for known bots that Crawler-Detect misses
         // Using Crawler-Detect's getUserAgent() for improved parsing and normalization of the user agent string
         $CrawlerDetect = new CrawlerDetect();
-        if(sis(["*CacheWarmup*", "xCore (https://xcore.nl)"], $CrawlerDetect->getUserAgent())) {
+        if(sis([
+          "*CacheWarmup*",                  // eliashaeussler/cache-warmup
+          "xCore (https://xcore.nl)",       // xCore
+          "*d375291ef0fd010b*",             // Cloudflare load balancing health check
+        ], $CrawlerDetect->getUserAgent())) {
           $botInfo["is_bot"] = true;
           break;
         }
@@ -1959,7 +1963,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   /**
    * Shorthand when a simple yes/no is needed.
    *
-   * @return bool
+   * @return  bool  True on definite bot, false on definite non-bot, or indeterminate.
    */
   public function isBot(): bool {
     $botInfo = $this->getBotInfo();
