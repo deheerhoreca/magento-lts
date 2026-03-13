@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phive xmlns="https://phar.io/phive">
+  <phar name="n98-magerun" version="^3.0.1" installed="3.0.1" location="./shell/n98-magerun" copy="false"/>
+</phive>
