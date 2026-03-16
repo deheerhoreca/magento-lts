@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# cm && shell/create_php_ini.sh
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/om-generate-phpini                                           # 2 sec
+-----------------------------------------------------------------------------------------------------------------'
 
 # This script takes the system-configured php.ini for the PHP version that is applicable to this app, and adds our modifications into a new php.ini
 
-set -e      # Exit immediately if a command exits with a non-zero status
+# set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting
 
 # Set User Environment

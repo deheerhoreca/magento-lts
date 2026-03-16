@@ -1,8 +1,8 @@
 #!/bin/bash
 
-: '
-~/workspace/openmage/shell/cron-reindex-prices.sh
-'
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/cron-reindex-prices.sh                                       # 33 sec
+-----------------------------------------------------------------------------------------------------------------'
 
 export PREFER_HOST=ma
 export NO_DEV=0
@@ -13,6 +13,6 @@ cm || die "Failed to go to the openmage directory"
 
 # Product prices are not always updating for reporting (intel), even when Index on Save is enabled. Reindex prices regularly:
 # n98 index:reindex catalog_product_price
-openmage shell/om-indexer --reindex catalog_product_price
+openmage shell/indexer.php --reindex catalog_product_price
 
 . ./shell/cron-wrapup.sh

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-: '
-~/workspace/openmage/shell/cron-rebuild-cache.sh
-'
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/cron-rebuild-cache.sh
+-----------------------------------------------------------------------------------------------------------------'
 
 export REQUIRE_HOST=prod
 export NO_DEV=0

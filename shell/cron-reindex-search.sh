@@ -1,8 +1,8 @@
 #!/bin/bash
 
-: '
-~/workspace/openmage/shell/cron-reindex-prices.sh
-'
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/cron-reindex-search.sh                                       # 18 sec
+-----------------------------------------------------------------------------------------------------------------'
 
 export PREFER_HOST=ma
 export NO_DEV=0
@@ -11,6 +11,6 @@ export NO_DEV=0
 cm || die "Failed to go to the openmage directory"
 . ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
-openmage shell/om-indexer --reindex catalogsearch_fulltext
+openmage shell/indexer.php --reindex catalogsearch_fulltext
 
 . ./shell/cron-wrapup.sh

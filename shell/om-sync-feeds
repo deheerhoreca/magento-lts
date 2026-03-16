@@ -1,18 +1,19 @@
 #!/bin/bash
 
-# Sync media feeds from media to root and protected/
-# @todo: Automated upstream instead of this script
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/om-sync-feeds                                                # 0 sec
 
-set -e      # Exit immediately if a command exits with a non-zero status
-set -u      # Treat unset variables as an error when substituting
+- Sync media feeds from media to root and protected/
+- @todo: Automated upstream instead of this script
+-----------------------------------------------------------------------------------------------------------------'
 
-. ${HOME}/.bash_profile
+export NO_DEV=1
 
-cm
-. ./shell/cron-bootstrap.sh
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 rsync -rhi --times --update --stats --perms --info=progress2  ./media/feedsA9B1/*.xml*  ./
 rsync -rhi --times --update --stats --perms --info=progress2  ./media/feedsA9B1/*.xml*  ./protected/
 
-cm
 . ./shell/cron-wrapup.sh

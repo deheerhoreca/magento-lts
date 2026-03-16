@@ -1,8 +1,8 @@
 #!/bin/bash
 
-: '
-~/workspace/openmage/shell/cron-clean-redis.sh
-'
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/cron-clean-redis.sh
+-----------------------------------------------------------------------------------------------------------------'
 
 export REQUIRE_HOST=prod
 export NO_DEV=0

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-: '
-~/workspace/openmage/shell/cron-download-external-assets.sh
-'
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/cron-download-external-assets.sh
+-----------------------------------------------------------------------------------------------------------------'
 
 export NO_DEV=0
 

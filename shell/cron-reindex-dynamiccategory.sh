@@ -1,8 +1,8 @@
 #!/bin/bash
 
-: '
-~/workspace/openmage/shell/cron-reindex-dynamiccategory.sh
-'
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/cron-reindex-dynamiccategory.sh                              # 33 min
+-----------------------------------------------------------------------------------------------------------------'
 
 export PREFER_HOST=ma
 export NO_DEV=0
