@@ -336,7 +336,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
   }
   
   /**
-   * Sleep for 1 second after sending an email to avoid overwhelming the SMTP server.
+   * Sleep for 0.5 sec after sending an email to avoid overwhelming the SMTP server.
    * Observes: email_send_after.
    * 
    * Data:
@@ -350,8 +350,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
    * @return void
    */
   public function emailSendAfter(Varien_Event_Observer $observer): void {
-    sleep(1);
-    Mage::log("Slept for 1 seconds after sending email");
+    msleep(500);
   }
   
   /**

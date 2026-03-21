@@ -1450,6 +1450,18 @@ if(!function_exists("humanReadableSizeToBytes")) {
   };
 }
 
+if(!function_exists("msleep")) {
+  /**
+   * Sleep for a given time in milliseconds.
+   *
+   * @param  int  $time
+   * @return void
+   */
+  function msleep(int $time): void {
+    usleep($time * 1000);
+  }
+}
+
 /* ---------------------------------------------------------- OpenMage Helpers ---------------------------------------------------------- */
 
 /**

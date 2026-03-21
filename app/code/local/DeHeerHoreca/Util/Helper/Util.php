@@ -1505,8 +1505,10 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   
   /**
    * Profile SQL queries and log them to a file.
+   * 
+   * @return void
    */
-  function profileSqlQueries(): void {
+  public function profileSqlQueries(): void {
     if(method_exists("Varien_Profiler", "isEnabled") && Varien_Profiler::isEnabled() && Varien_Profiler::checkThresholds()) {
       /** @var Zend_Db_Profiler */
       $_profiler        = Mage::getSingleton("core/resource")->getConnection("core_read")->getProfiler();
