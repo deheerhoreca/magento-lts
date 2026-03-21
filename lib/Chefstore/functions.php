@@ -1524,25 +1524,25 @@ function omStopTimer(bool $formatted = true, float|int|null $start = null): stri
   return Observability::stop($formatted, $start);
 }
 
-/**
- * Print a backtrace from anywhere. Returns an array of callers.
- *
- * @param  int          $levels  The amount of levels to go back.
- * @return array|false
- */
 if(!function_exists("whoCalledMe")) {
+  /**
+   * Print a backtrace from anywhere. Returns an array of callers.
+   *
+   * @param  int          $levels  The amount of levels to go back.
+   * @return array|false
+   */
   function whoCalledMe(int $levels = 1): array|false {
     return Observability::whoCalledMe($levels);
   }
 }
 
-/**
- * Print a backtrace from anywhere.
- *
- * @param  int  $levels  The max amount of levels to go back.
- * @return void
- */
 if(!function_exists("printWhoCalledMe")) {
+  /**
+   * Print a backtrace from anywhere.
+   *
+   * @param  int  $levels  The max amount of levels to go back.
+   * @return void
+   */
   function printWhoCalledMe(int $levels = 1): string {
     return Observability::printWhoCalledMe($levels);
   }
@@ -1551,6 +1551,7 @@ if(!function_exists("printWhoCalledMe")) {
 if(!function_exists("om_attr_val")) {
   /**
    * Retrieve a product attribute value.
+   * => Don't make $_product an (object) type hint only, accept NULL
    * @todo Add null coalescing variant of this function.
    *
    * @param  ?Mage_Catalog_Model_Product  $_product
@@ -1595,6 +1596,7 @@ if(!function_exists("om_attr_val")) {
 if(!function_exists("om_attr_val_as_array")) {
   /**
    * Get OM attribute as an array.
+   * => Don't make $_product an (object) type hint only, accept NULL
    * 
    * @param  ?Mage_Catalog_Model_Product  $_product
    * @param  string                       $attribute_code
@@ -1622,35 +1624,35 @@ if(!function_exists("om_attr_val_as_array")) {
   }
 }
 
-/**
- * Get attribute value as string.
- * => Don't make $_product an (object) type hint
- * 
- * @param  ?Mage_Catalog_Model_Product  $_product
- * @param  string                       $attribute_code
- * @param  ?string                      $as              "" | "string" | "int"
- * @param  array                        $options         Unused
- * 
- * @return int|null
- */
 if(!function_exists("om_attr_val_as_string")) {
+  /**
+   * Get attribute value as string.
+   * => Don't make $_product an (object) type hint only, accept NULL
+   * 
+   * @param  ?Mage_Catalog_Model_Product  $_product
+   * @param  string                       $attribute_code
+   * @param  ?string                      $as              "" | "string" | "int"
+   * @param  array                        $options         Unused
+   * 
+   * @return int|null
+   */
   function om_attr_val_as_string(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): string {
     return (string) om_attr_val($_product, $attribute_code, "string");
   }
 }
 
-/**
- * Get attribute value as float.
- * => Don't make $_product an (object) type hint
- * 
- * @param  ?Mage_Catalog_Model_Product  $_product
- * @param  string                       $attribute_code
- * @param  ?string                      $as              "" | "string" | "int"
- * @param  array                        $options         Unused
- * 
- * @return int|null
- */
 if(!function_exists("om_attr_val_as_float")) {
+  /**
+   * Get attribute value as float.
+   * => Don't make $_product an (object) type hint only, accept NULL
+   * 
+   * @param  ?Mage_Catalog_Model_Product  $_product
+   * @param  string                       $attribute_code
+   * @param  ?string                      $as              "" | "string" | "int"
+   * @param  array                        $options         Unused
+   * 
+   * @return int|null
+   */
   function om_attr_val_as_float(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): float|null {
     $value = om_attr_val($_product, $attribute_code);
     if(is_numeric($value)) {
@@ -1661,18 +1663,18 @@ if(!function_exists("om_attr_val_as_float")) {
   }
 }
 
-/**
- * Get attribute value as int.
- * => Don't make $_product an (object) type hint
- * 
- * @param  ?Mage_Catalog_Model_Product  $_product
- * @param  string                       $attribute_code
- * @param  ?string                      $as              "" | "string" | "int"
- * @param  array                        $options         Unused
- * 
- * @return int|null
- */
 if(!function_exists("om_attr_val_as_int")) {
+  /**
+   * Get attribute value as int.
+   * => Don't make $_product an (object) type hint only, accept NULL
+   * 
+   * @param  ?Mage_Catalog_Model_Product  $_product
+   * @param  string                       $attribute_code
+   * @param  ?string                      $as              "" | "string" | "int"
+   * @param  array                        $options         Unused
+   * 
+   * @return int|null
+   */
   function om_attr_val_as_int(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): int|null {
     $value = om_attr_val_as_float($_product, $attribute_code, $options);
     if(is_numeric($value)) {
