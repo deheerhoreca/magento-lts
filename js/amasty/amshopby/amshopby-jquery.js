@@ -69,6 +69,13 @@ function amshopby_jquery_init () {
     });
 }
 
+/* DHH CORE HACK - Clone js/amasty/amshopby/jquery.noconflict.js in here to fix uninitialized $amQuery issue */
+if (typeof amQuery != 'undefined') {
+    var $amQuery = amQuery.noConflict();
+} else {
+    var $amQuery = jQuery.noConflict();
+}
+
 (function ($) {
     $('document').ready(function () {
         amshopby_jquery_init();
