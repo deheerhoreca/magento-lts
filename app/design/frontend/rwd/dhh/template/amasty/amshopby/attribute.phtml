@@ -6,6 +6,11 @@
  * @package Improved Layered Navigation
  */
 
+declare(strict_types=1);
+
+use \Illuminate\Support\Arr;
+use \Illuminate\Support\Str;
+
 /** @var Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute $this */
 
 // Build CSS classes for <ol>
@@ -29,15 +34,22 @@ $classAttr = trim(implode(' ', $classes));
 
 // Prepare items
 $items = $this->getItemsAsArray();
-foreach ($items as &$item) {
+$items = Arr::map($items, function($item) {
+  if(dg($item, "countValue")) {
+    $item['countValue'] = (int) $item['countValue'];
+  }
   if(isset($item["url"]))   $item["url"]    = str_replace("https://www.chefstore.nl/", "/", (string) $item["url"]);
   if(isset($item['label'])) $item['label']  = (string) $item['label'];
   if(isset($item['css']))   $item['css']    = (string) $item['css'];
-}
-unset($item);
+  
+  return $item;
+});
+$items = array_values(array_filter($items)); // Reindex and remove nulls
+// devDump($items);
+// $coveredSkus = array_sum((array_column($items, 'countValue')));
+$attribute_name = htmlspecialchars((string) $this->getRequestValue());
 
-$attribute_name = htmlspecialchars((string) $this->getRequestValue()); ?>
-
+?>
 <ol class="<?=htmlspecialchars($classAttr)?>">
   <?php if ($this->getSortFeaturedFirst()):?>
     <input type="hidden" id="field_sort_featured_<?=$attribute_name?>" value="default_sort">
@@ -57,7 +69,7 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue()); ?>
 
         $count = $item['countValue'];
         if (is_numeric($count) && $count > 100) $count = '100+';
-        $countHtml = "<span class='count'>(" . htmlspecialchars($count) . ")</span>";
+        $countHtml = "<span class='count'>{$count}</span>";
 
         $label = $item['label'];
         if (mb_strlen($label) > 27) $label = mb_substr($label, 0, 24) . '...';
@@ -66,9 +78,9 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue()); ?>
         
         $liAttrs = [];
         if (!empty($item['style'])) $liAttrs[] = $item['style'];
-        if (isset($item['default_sort'])) $liAttrs[] = 'data-default_sort="' . htmlspecialchars($item['default_sort']) . '"';
-        if (isset($item['featured_sort'])) $liAttrs[] = 'data-featured_sort="' . htmlspecialchars($item['featured_sort']) . '"';
-        $liAttrs[] = 'data-text="' . htmlspecialchars($item['label']) . '"';
+        if (isset($item['default_sort'])) $liAttrs[] = 'data-default_sort="' . htmlspecialchars((string) $item['default_sort']) . '"';
+        if (isset($item['featured_sort'])) $liAttrs[] = 'data-featured_sort="' . htmlspecialchars((string) $item['featured_sort']) . '"';
+        $liAttrs[] = 'data-text="' . htmlspecialchars((string) $item['label']) . '"';
         
         if(empty($item['rel'])) {
           $item['rel'] = "rel='nofollow'";

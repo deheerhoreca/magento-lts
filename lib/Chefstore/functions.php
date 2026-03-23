@@ -926,8 +926,8 @@ function in_range(float|int $number, float|int $min, float|int $max, bool $inclu
  * Dump a variable for development purposes in a production system.
  * Check if the IP is a DHH IP, check if nofpc is set and dump the variable in a HTML comment.
  *
- * @param  mixed $var
- * @return void
+ * @param   mixed  $var
+ * @return  void
  */
 function devDump(mixed ...$var): void {
   if(_dhh_debug()) {
