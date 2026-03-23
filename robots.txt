@@ -83,6 +83,7 @@ Allow: /
 
 User-agent: AhrefsBot
 User-agent: AhrefsSiteAudit
+User-agent: Applebot-Extended
 User-agent: Baiduspider
 User-agent: baiduspider-image
 User-agent: baiduspider-video
