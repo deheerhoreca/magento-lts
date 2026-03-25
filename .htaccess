@@ -10,9 +10,12 @@
 #
 # PLESK CONFIG SHOULD CONTAIN:
 #
+# # "+FollowSymlinks -SymLinksIfOwnerMatch" are necessary to allow symlinks for ./media/
+# # Also, the apache user must have +rx permissions on the target of the symlink, and all parent dirs.
 # <Directory /var/www/vhosts/chefstore.nl/workspace/openmage>
-#   AllowOverride None
-#   Include /var/www/vhosts/chefstore.nl/workspace/openmage/_htaccess
+#     # AllowOverride None
+#     # Include /var/www/vhosts/chefstore.nl/workspace/openmage/_htaccess
+#     Options +FollowSymlinks -SymLinksIfOwnerMatch
 # </Directory>
 #
 # ! Implement .htaccess files found in other dirs, before disabling AllowOverride:
