@@ -4,6 +4,7 @@
 ${HOME}/workspace/openmage/shell/om-compress-assets                                           # 10 sec
 -----------------------------------------------------------------------------------------------------------------'
 
+export PREFER_HOST=prod
 export NO_DEV=0
 
 . ${HOME}/.profile || die "Failed to load ~/.profile"
