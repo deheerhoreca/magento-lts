@@ -778,22 +778,25 @@ if(!function_exists("di")) {
 
 /* ---------------------------------------------------------- Utils ----------------------------------------------------------- */
 
-if(function_exists("_get_product_attribute") === false) {
-  function _get_product_attribute($_product, string $attribute_code, bool $implode_arrays = true) {
-    if(is_object($_product) === false) {
+if(!function_exists("_get_product_attribute")) {
+  function _get_product_attribute(Mage_Catalog_Model_Product|null $_product, string $attribute_code, bool $implode_arrays = true): mixed {
+    if(!is_object($_product)) {
+      return null;
+    }
+    
+    if(!$_product->hasData($attribute_code)) {
+      $caller = whoCalledMe(3); // Skip 3 to go up 1 from here
+      Mage::log("_get_product_attribute: Product does not have data for attribute '{$attribute_code}'. Caller: ".di($caller), Zend_Log::WARN);
       return null;
     }
     
     $attribute = $_product->getResource()->getAttribute($attribute_code);
     if(!$attribute) {
-      // if(_dhh_debug()) {
-      //   echo "Attribute '{$attribute_code}' does not exist";
-      // }
-      Mage::log("_get_product_attribute: Attribute '{$attribute_code}' does not exist", null, "exception.log", true);
+      $caller = whoCalledMe(3); // Skip 3 to go up 1 from here
+      Mage::log("_get_product_attribute: Attribute '{$attribute_code}' does not exist. Caller: ".di($caller), Zend_Log::WARN);
       return null;
     }
     
-    // $value = $attribute->getFrontend()->getValue($_product);
     $value = $_product->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($_product);
     if($implode_arrays && is_array($value)) {
       $value = implode(", ", $value);
@@ -804,7 +807,7 @@ if(function_exists("_get_product_attribute") === false) {
 }
 
 // @deprecated -- move to sanitize_alphanumeric()
-if(function_exists("sanitizeForFilename") === false) {
+if(!function_exists("sanitizeForFilename")) {
   function sanitizeForFilename($string) {
     // Remove anything which is not a word, whitespace, number
     // or any of the following caracters -_~,;[]().
@@ -818,14 +821,14 @@ if(function_exists("sanitizeForFilename") === false) {
   }
 }
 
-if(function_exists("sanitize_alphanumeric") === false) {
+if(!function_exists("sanitize_alphanumeric")) {
   function sanitize_alphanumeric($string, string $replacement = "-") {
     $string = strtolower((string) preg_replace("/[^a-zA-Z0-9]+/", $replacement, (string) $string));
     return $string;
   }
 }
 
-if(function_exists("_dhh_debug") === false) {
+if(!function_exists("_dhh_debug")) {
   /**
    * Check if debugging is enabled for the current user/IP/_ENV.
    * @return bool
@@ -1246,7 +1249,7 @@ if(!function_exists("_cdn_img")) {
 
 // Adds a ?v={timestamp} param to the URL
 // Exists in OpenMage and Intel
-if(function_exists("_add_file_v_param") === false) {
+if(!function_exists("_add_file_v_param")) {
   function _add_file_v_param(string $url, string $fs_path, string $identifier): string {
     if(is_file($fs_path)) {
       if($mod_time = filemtime($fs_path)) {
@@ -1266,7 +1269,7 @@ if(function_exists("_add_file_v_param") === false) {
 }
 
 // ["foo" => "bar", "beer" => "fest"] --> "foo=bar, beer=fest"
-if(function_exists("implode_array_with_keys") === false) {
+if(!function_exists("implode_array_with_keys")) {
   function implode_array_with_keys($array, $separator = ", ", $glue = "=") {
     $ret = "";
     foreach($array as $key => $val) {
@@ -1278,7 +1281,7 @@ if(function_exists("implode_array_with_keys") === false) {
 }
 
 // @see // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
-if(function_exists("add_url_param") === false) {
+if(!function_exists("add_url_param")) {
   function add_url_param(string $url, $key, $value): string {
     $url .= (parse_url($url, PHP_URL_QUERY) ? "&" : "?") . "{$key}={$value}";
     return $url;
@@ -1286,7 +1289,7 @@ if(function_exists("add_url_param") === false) {
 }
 
 // Remove one or more parameters from a URL
-if(function_exists("remove_url_param") === false) {
+if(!function_exists("remove_url_param")) {
   function remove_url_param(string $url, $params): string {
     $params     = (array) $params;
     $base_url   = strtok($url, "?");             // Get the base url
@@ -1304,7 +1307,7 @@ if(function_exists("remove_url_param") === false) {
 }
 
 // Try to convert an XML string to an array, fail quietly with logging
-if(function_exists("xml_string_to_array") === false) {
+if(!function_exists("xml_string_to_array")) {
   function xml_string_to_array(string $string) {
     if(($object = simplexml_load_string($string)) !== false) {
       try {
@@ -1333,7 +1336,7 @@ if(function_exists("xml_string_to_array") === false) {
  * 
  * @return string
  */
-if(function_exists("dhh_get_quote_id") === false) {
+if(!function_exists("dhh_get_quote_id")) {
   function dhh_get_quote_id(): string {
     if($_SESSION) {
       if(!empty($GLOBALS["dhh_current_quote_id"])) {
@@ -1540,8 +1543,8 @@ if(!function_exists("whoCalledMe")) {
   /**
    * Print a backtrace from anywhere. Returns an array of callers.
    *
-   * @param  int          $levels  The amount of levels to go back.
-   * @return array|false
+   * @param   int  $levels  The amount of levels to go back. Default 1 (the direct caller), 0 for the entire stack.
+   * @return  array<array{file: string, line: int, function: string|null, class: string|null, type: string|null}>|false
    */
   function whoCalledMe(int $levels = 1): array|false {
     return Observability::whoCalledMe($levels);

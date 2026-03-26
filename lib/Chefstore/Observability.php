@@ -161,7 +161,7 @@ class Observability {
    * Print a backtrace from anywhere. Returns an array of callers.
    *
    * @param  int          $levels  The amount of levels to go back
-   * @return array|false
+   * @return array<array{file: string, line: int, function: string|null, class: string|null, type: string|null}>|false
    */
   public static function whoCalledMe(int $levels = 1): array|false {
     ++$levels;

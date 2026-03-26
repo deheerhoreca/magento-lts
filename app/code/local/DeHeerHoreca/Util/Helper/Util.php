@@ -562,6 +562,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
   }
   
   // Get the minimum list of attributes to display something
+  /**
+   * 
+   *
+   * @param  string $which
+   * @param  array  $add
+   * @return array
+   */
   public static function getProductAttributes(string $which, array $add = []): array {
     $attributes = [];
     
@@ -569,7 +576,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     if($which === "listview") {
       $attributes = [
         "sku", "sku_seller", "manufacturer", "supplier", "name", "price", "special_price", "stock_status",
-              
+        
         "breedte", "hoogte", "diepte", "size", "uitvoering",
         "type_koeling", "aantal_blikjes", "aantal_flessen", "capacity_wine_bottles", "voorraadbunker_kg", "icecube_type",
         "ijs_productie", "custom_highlights", "volume_net_liter", "inhoud_liters", "total_power_watt", "vermogen",
@@ -1691,32 +1698,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $now              = CarbonImmutable::now();
     $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
     
+    // ! SYNC WITH `./app/code/local/DeHeerHoreca/Util/Helper/Util.php` -- "hendi5"
     if(!$hasSpecialPrice) {
-      // if($supplier_sys === "combisteel" && $now->isBefore("2026-02-28 00:00:00")) {
-      //   return "5% Kortingscode";
-      // }
-      // elseif($supplier_sys === "bartscher" && $now->isBefore("2026-02-01 00:00:00")) {
-      //   return "5% Kortingscode";
-      // }
-      if($supplier_sys === "hendi" && $now->isBefore("2026-04-01 00:00:00")) {
-        return "5% Kortingscode";
+      $runningPromos = Chefstore\Catalog::getRunningPromos($_product);
+      if($runningPromos->isNotEmpty()) {
+        return $runningPromos->first()["labelShort"] ?? "Promocode";
       }
     }
-    // if($now->isBefore("2025-12-01 00:00:00")) {
-    //   return "Black Friday Deal";
-    // }
-    
-    // Promo-based
-    // if($now->isBefore("2025-12-25 00:00:00")) {
-    //   // devDump([$_product->getSku(), _get_product_attribute($_product, "manufacturer"), _get_product_attribute($_product, "promos", implode_arrays: false)]);
-    //   $brand = _get_product_attribute($_product, "manufacturer");
-    //   if($brand === "Diverso by Diamond") {
-    //     $promos = (array) _get_product_attribute($_product, "promos", implode_arrays: false);
-    //     if(in_array("2025_12_diverso_actie5", $promos, true)) { // Option ID: 4375
-    //       return "5% Kortingscode";
-    //     }
-    //   }
-    // }
     
     // Maxima warranty extension
     if($supplier_sys === "maxima" && $now->isBefore("2026-02-01 00:00:00")) {
