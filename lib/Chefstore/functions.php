@@ -22,7 +22,8 @@ require_once __DIR__."/Loader.php";
 
 /**
  * !!! Attention !!!
- * - Use !function_exists() to avoid conflicts when running as an Intel plugin
+ * @todo  Review duplicated functions between Intel and OpenMage and consider removing them from Intel (when OpenMage-specific).
+ * @todo  For all remaining conficting functions, use `!function_exists()` to avoid conflicts when running as an Intel plugin.
  */
 
 /* ---------------------------------------------------------- Chefstore\Helper ---------------------------------------------------------- */
@@ -1833,6 +1834,7 @@ function dhh_get_cached_category(int|string $id, bool $forceRefresh = false): Ma
   
   static $modelcacheHelper = null;
   if($modelcacheHelper === null) {
+    /** @var Aoe_ModelCache_Helper_Data $modelcacheHelper */
     $modelcacheHelper = Mage::helper("aoe_modelcache");
   }
   
@@ -1867,6 +1869,7 @@ function dhh_get_cached_product(int|string $id, bool $forceRefresh = false): Mag
   
   static $modelcacheHelper = null;
   if($modelcacheHelper === null) {
+    /** @var Aoe_ModelCache_Helper_Data $modelcacheHelper */
     $modelcacheHelper = Mage::helper("aoe_modelcache");
   }
   
