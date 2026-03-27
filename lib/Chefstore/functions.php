@@ -33,7 +33,16 @@ require_once __DIR__."/Loader.php";
  * @return \DeHeerHoreca_Util_Helper_Util
  */
 function getOmDhhUtilHelper(): \DeHeerHoreca_Util_Helper_Util {
-  return ChefstoreHelper::loadOmHelperDhhUtil();
+  return \Mage::helper("deheerhoreca_util/util");
+}
+
+/**
+ * Get the DeHeerHoreca Util helper.
+ *
+ * @return \DeHeerHoreca_Fpc_Helper_Data
+ */
+function getOmDhhFpcHelper(): \DeHeerHoreca_Fpc_Helper_Data {
+  return \Mage::helper("deheerhoreca_fpc/data");
 }
 
 // Laravel picks
@@ -50,7 +59,7 @@ if(!function_exists("rescue")) {
    * @param  bool|callable(\Throwable): bool  $report
    * @return TValue|TFallback
    */
-  function rescue(callable $callback, $rescue = null, $report = true) {
+  function rescue(callable $callback, $rescue = null, $report = true): mixed {
     try {
         return $callback();
     } catch (Throwable $exception) {
@@ -78,7 +87,7 @@ if(!function_exists("value")) {
    * @param  TArgs  ...$args
    * @return TValue
    */
-  function value($value, ...$args) {
+  function value($value, ...$args): mixed {
     return $value instanceof Closure ? $value(...$args) : $value;
   }
 }
@@ -354,7 +363,7 @@ if(!function_exists("data_push")) {
       $tmp = (array) $tmp;
     }
     
-    if(!is_iterable($value) || is_associative($value)) {
+    if(!is_iterable($value) || Arr::isAssoc($value)) {
       $tmp[] = $value;
     } else {
       $tmp = array_merge($tmp, $value);
@@ -671,10 +680,17 @@ function millis(Closure $callback, ?float &$millis = null): mixed {
 /* ------------------------------------------------------------ Intel Picks ------------------------------------------------------------- */
 
 if(!function_exists('printr')) {
-  function printr($expr, $return = false) {
+  /**
+   * 
+   *
+   * @param  mixed       $expr
+   * @param  bool        $return
+   * @return string|null
+   */
+  function printr($expr, $return = false): string|null {
     $ret = null;
     if(is_array($expr) && !count($expr)) {
-      return;
+      return null;
     }
     if(php_sapi_name() !== "cli") {
       $ret .= "<pre style='white-space: pre-wrap; word-wrap:break-word;'>";
@@ -685,9 +701,10 @@ if(!function_exists('printr')) {
     }
     $ret .= PHP_EOL;
     if($return) {
-      return $return;
+      return $ret;
     }
     echo $ret;
+    return null;
   }
 }
 
@@ -779,14 +796,32 @@ if(!function_exists("di")) {
 /* ---------------------------------------------------------- Utils ----------------------------------------------------------- */
 
 if(!function_exists("_get_product_attribute")) {
+  /**
+   * Product attributes only.
+   * @deprecated use om_attr_val() instead.
+   *
+   * @todo Add null coalescing variant of this function.
+   * @todo look at _selectAttributes
+   * @todo look at Mage_Catalog_Helper_Output::getAttributeValue()
+   * @todo Investigate usage of $implode_arrays and perhaps update om_attr_val() to support it as well.
+   *
+   * @param  Mage_Catalog_Model_Product|null $_product
+   * @param  string                          $attribute_code
+   * @param  string                          $as
+   * @param  array                           $options
+   *
+   * @return mixed
+   */
   function _get_product_attribute(Mage_Catalog_Model_Product|null $_product, string $attribute_code, bool $implode_arrays = true): mixed {
     if(!is_object($_product)) {
       return null;
     }
     
+    // Check if the product has data for the attribute code.
+    // @todo Turn on logging and investiage. Can we actually tell that we're trying to access an attribute that doesn't exist or wasn't loaded?
     if(!$_product->hasData($attribute_code)) {
       $caller = whoCalledMe(3); // Skip 3 to go up 1 from here
-      #Mage::log("_get_product_attribute: Product does not have data for attribute '{$attribute_code}'. Caller: ".di($caller), Zend_Log::WARN);
+      // Mage::log("_get_product_attribute: Product does not have data for attribute '{$attribute_code}'. Caller: ".di($caller), Zend_Log::WARN);
       return null;
     }
     
@@ -806,9 +841,15 @@ if(!function_exists("_get_product_attribute")) {
   }
 }
 
-// @deprecated -- move to sanitize_alphanumeric()
 if(!function_exists("sanitizeForFilename")) {
-  function sanitizeForFilename($string) {
+  /**
+   * Sanitize a string to be safe for use as a filename.
+   * @deprecated Import Intel's cleanString() and use that, or URL slug, or...
+   *
+   * @param  mixed $string
+   * @return string
+   */
+  function sanitizeForFilename($string): string {
     // Remove anything which is not a word, whitespace, number
     // or any of the following caracters -_~,;[]().
     // If you do not need to handle multi-byte characters
@@ -822,7 +863,14 @@ if(!function_exists("sanitizeForFilename")) {
 }
 
 if(!function_exists("sanitize_alphanumeric")) {
-  function sanitize_alphanumeric($string, string $replacement = "-") {
+  /**
+   * @deprecated Import Intel's cleanString() and use that.
+   *
+   * @param  mixed  $string
+   * @param  string $replacement
+   * @return string
+   */
+  function sanitize_alphanumeric($string, string $replacement = "-"): string {
     $string = strtolower((string) preg_replace("/[^a-zA-Z0-9]+/", $replacement, (string) $string));
     return $string;
   }
@@ -874,7 +922,7 @@ if(!function_exists("_dhh_reflect")) {
    *
    * @return array|false            Array with "file" and "line" keys, or FALSE on failure
    */
-  function _dhh_reflect($function, $class = null) {
+  function _dhh_reflect($function, $class = null): array|false {
     if($class === null) {
       if($r = new ReflectionFunction($function)) {
         return [
@@ -902,7 +950,7 @@ if(!function_exists("_dhh_reflect")) {
  * @param  Mage_Core_Model_Resource_Db_Collection_Abstract  $collection
  * @return string
  */
-function _dhh_getselect(Mage_Core_Model_Resource_Db_Collection_Abstract $collection) {
+function _dhh_getselect(Mage_Core_Model_Resource_Db_Collection_Abstract $collection): string {
   return $collection->getSelect()->__toString();
 }
 
@@ -1108,12 +1156,9 @@ if(!function_exists("_cdn_img")) {
         if(is_file($fs_path) && $mtime = filemtime($fs_path)) {
           $url = CacheBuster::prependExtension($url, "ts{$mtime}");
         } else {
-          // @todo Remove this, stop adding query params for cache busting (it again does is_file() so it should not happen in the first place)
-          if(function_exists("_add_file_v_param")) {
-            $url = _add_file_v_param($url, $fs_path, $identifier);
-          } else {
-            $url = Mage::helper("deheerhoreca_util/util")->_add_file_v_param($url, $fs_path, $identifier);
-          }
+          // @todo Remove this, stop adding query params for cache busting and use CacheBuster::prependExtension() instead
+          // @todo Generally, reduce is_file() calls on networked filesystems in non-admin/non-cron (so user facing online) runs.
+          $url = _add_file_v_param($url, $fs_path, $identifier);
         }
       }
     }
@@ -1247,13 +1292,20 @@ if(!function_exists("_cdn_img")) {
   }
 }
 
-// Adds a ?v={timestamp} param to the URL
-// Exists in OpenMage and Intel
 if(!function_exists("_add_file_v_param")) {
+  /**
+   * Adds a ?v={timestamp} param to a URL. Exists in OpenMage and Intel.
+   * @todo Remove from intel, use OpenMage's function directly.
+   *
+   * @param  string  $url
+   * @param  string  $fs_path
+   * @param  string  $identifier
+   *
+   * @return string
+   */
   function _add_file_v_param(string $url, string $fs_path, string $identifier): string {
     if(is_file($fs_path)) {
       if($mod_time = filemtime($fs_path)) {
-        // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
         $url .= (parse_url($url, PHP_URL_QUERY) ? "&" : "?") . "v={$mod_time}";
       }
     } else {
@@ -1268,9 +1320,18 @@ if(!function_exists("_add_file_v_param")) {
   }
 }
 
-// ["foo" => "bar", "beer" => "fest"] --> "foo=bar, beer=fest"
 if(!function_exists("implode_array_with_keys")) {
-  function implode_array_with_keys($array, $separator = ", ", $glue = "=") {
+  /**
+   * Implode an array into a string with both keys and values, with customizable separators.
+   * Example: implode_array_with_keys(["w" => 100, "h" => 200], ",", "-") returns "w-100,h-200"
+   *
+   * @param  array   $array      The array to implode
+   * @param  string  $separator  The separator between key-value pairs (default: ", ")
+   * @param  string  $glue       The glue between keys and values (default: "=")
+   *
+   * @return string
+   */
+  function implode_array_with_keys($array, $separator = ", ", $glue = "="): string {
     $ret = "";
     foreach($array as $key => $val) {
       $ret .= $key.$glue.$val.$separator;
@@ -1308,7 +1369,7 @@ if(!function_exists("remove_url_param")) {
 
 // Try to convert an XML string to an array, fail quietly with logging
 if(!function_exists("xml_string_to_array")) {
-  function xml_string_to_array(string $string) {
+  function xml_string_to_array(string $string): array|false {
     if(($object = simplexml_load_string($string)) !== false) {
       try {
         $json = json_encode($object, 0, 512);
@@ -1338,7 +1399,7 @@ if(!function_exists("xml_string_to_array")) {
  */
 if(!function_exists("dhh_get_quote_id")) {
   function dhh_get_quote_id(): string {
-    if($_SESSION) {
+    if(isset($_SESSION) && $_SESSION !== null) {
       if(!empty($GLOBALS["dhh_current_quote_id"])) {
         return $GLOBALS["dhh_current_quote_id"];
       }
@@ -1502,7 +1563,7 @@ function omJsQuoteEscape(string|array $string): string|array {
  * @return string
  */
 function omHtmlEscape(string $string): string {
-  return Mage::helper("core")->htmlEscape($string);
+  return Mage::helper("core")->escapeHtml($string);
 }
 
 /**
@@ -1567,7 +1628,10 @@ if(!function_exists("om_attr_val")) {
   /**
    * Retrieve a product attribute value.
    * => Don't make $_product an (object) type hint only, accept NULL
+   *
    * @todo Add null coalescing variant of this function.
+   * @todo look at _selectAttributes
+   * @todo look at Mage_Catalog_Helper_Output::getAttributeValue()
    *
    * @param  ?Mage_Catalog_Model_Product  $_product
    * @param  string                       $attribute_code
@@ -1580,6 +1644,15 @@ if(!function_exists("om_attr_val")) {
     if(!is_object($_product)) {
       return null;
     }
+    
+    // Check if the product has data for the attribute code.
+    // @todo Turn on logging and investiage. Can we actually tell that we're trying to access an attribute that doesn't exist or wasn't loaded?
+    if(!$_product->hasData($attribute_code)) {
+      $caller = whoCalledMe(3); // Skip 3 to go up 1 from here
+      // Mage::log("_get_product_attribute: Product does not have data for attribute '{$attribute_code}'. Caller: ".di($caller), Zend_Log::WARN);
+      return null;
+    }
+    
     if($_attribute = $_product->getResource()->getAttribute($attribute_code)) {
       $value = $_attribute->getFrontend()->getValue($_product);
       if(!blank($as)) {
@@ -1755,7 +1828,7 @@ function dhh_get_cached_om_product(int|string|Mage_Catalog_Model_Product|null $p
  */
 function dhh_get_cached_category(int|string $id, bool $forceRefresh = false): Mage_Catalog_Model_Category|null {
   $id         = (int) $id;
-  $currentUrl = dhh_get_current_url();
+  $currentUrl = getDecodedCurrentUrl();
   $field      = null;
   
   static $modelcacheHelper = null;
@@ -1789,7 +1862,7 @@ function dhh_get_cached_category(int|string $id, bool $forceRefresh = false): Ma
  */
 function dhh_get_cached_product(int|string $id, bool $forceRefresh = false): Mage_Catalog_Model_Product|null {
   $id         = (int) $id;
-  $currentUrl = dhh_get_current_url();
+  $currentUrl = getDecodedCurrentUrl();
   $field      = null;
   
   static $modelcacheHelper = null;
@@ -1812,16 +1885,6 @@ function dhh_get_cached_product(int|string $id, bool $forceRefresh = false): Mag
   
   // Fallback to a native OpenMage load.
   return Mage::getModel("catalog/product")->load($id);
-}
-
-/**
- * Get current URL from OpenMage. Set once, then cached.
- *
- * @return string
- */
-function dhh_get_current_url(): string {
-  $GLOBALS[__FUNCTION__] ??= htmlspecialchars_decode(Mage::helper("core/url")->getCurrentUrl(), ENT_COMPAT | ENT_HTML5 | ENT_HTML401);
-  return $GLOBALS[__FUNCTION__];
 }
 
 /**
@@ -1883,7 +1946,6 @@ function getProductUrlById(int $id): string|false {
  * @return string|false
  */
 function getProductUrlBySku(string $sku): string|false {
-  
   $return = false;
   
   if($_products = getProductCollection()
@@ -1907,6 +1969,11 @@ function getProductUrlBySku(string $sku): string|false {
   return $return;
 }
 
+/**
+ * Determine whether this script is running in a CLI context.
+ *
+ * @return bool
+ */
 function omIsCli(): bool {
   return \PHP_SAPI === 'cli' && \defined('STDOUT') && \defined('STDERR');
 }

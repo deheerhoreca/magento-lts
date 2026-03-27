@@ -313,7 +313,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         
         // description
         $schema_key = "description";
-        if($value = Mage::helper("deheerhoreca_util/util")->_get_product_description($_product)) {
+        if($value = getOmDhhUtilHelper()->_get_product_description($_product)) {
           $value = strip_tags($value);
           if(strlen($value) > 0) {
             $data[$schema_key] = $value;
@@ -532,7 +532,7 @@ class TM_RichSnippets_Block_Product extends Mage_Core_Block_Template
         ];
         
         // Stock fields
-        $stock_data           = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+        $stock_data           = getOmDhhUtilHelper()->getStockInfo($_product);
         $overall_stock_status = $stock_data["overall_stock_status"];
         
         switch($overall_stock_status) {

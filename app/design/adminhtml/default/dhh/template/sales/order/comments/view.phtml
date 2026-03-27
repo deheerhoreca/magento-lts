@@ -57,7 +57,7 @@
             <br/>
             <?php
             $comment = $this->escapeHtml($_comment->getComment(), array('b', 'br', 'strong', 'i', 'u', 'a'));
-            $comment = Mage::helper("deheerhoreca_util/util")->_correct_admin_comment($comment);
+            $comment = getOmDhhUtilHelper()->_correct_admin_comment($comment);
             echo $comment;
             ?>
         </li>

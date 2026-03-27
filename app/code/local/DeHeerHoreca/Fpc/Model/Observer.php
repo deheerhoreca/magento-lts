@@ -12,10 +12,12 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
   static ?DeHeerHoreca_Fpc_Helper_Data $dhhHelperFpc  = null;
   
   /**
+   * @deprecated Use getOmDhhFpcHelper() instead.
+   * @todo Remove.
    * @return DeHeerHoreca_Fpc_Helper_Data
    */
   public function helper(): DeHeerHoreca_Fpc_Helper_Data {
-    return Mage::helper("deheerhoreca_fpc/data");
+    return getOmDhhFpcHelper();
   }
   
   /**
@@ -27,14 +29,14 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    */
   public function ServeCachedHTML(Varien_Event_Observer $observer): void {
     Varien_Profiler::start("DHH::FPC::ServeCachedHTML");
-    self::$dhhHelperUtil ??= Mage::helper("deheerhoreca_util/util");
-    self::$dhhHelperFpc  ??= Mage::helper("deheerhoreca_fpc/data");
+    self::$dhhHelperUtil ??= getOmDhhUtilHelper();
+    self::$dhhHelperFpc  ??= getOmDhhFpcHelper();
     
     // Log a separator for this request if FPC debug mode is enabled
     if(DHH_FPC_DEBUG) {
       $verb = $_SERVER["REQUEST_METHOD"] ?? null;
       self::$dhhHelperFpc::log("---------------------------------------------------------------------");
-      self::$dhhHelperFpc::log("{$verb} ".self::$dhhHelperUtil::getCurrentUrl());
+      self::$dhhHelperFpc::log("{$verb} ".getDecodedCurrentUrl());
     }
     
     // If FPC is disabled, skip:
@@ -222,7 +224,7 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
       $tags = Arr::map($tags, function($tag) {
         return Str::upper($tag);
       });
-      $this->helper()->addTags($tags);
+      getOmDhhFpcHelper()->addTags($tags);
     }
   }
   
@@ -234,7 +236,6 @@ class DeHeerHoreca_Fpc_Model_Observer extends Varien_Event_Observer {
    * @return void
    */
   public function httpResponseSendBefore(?Varien_Event_Observer $observer = null): void{
-    self::$dhhHelperFpc ??= Mage::helper("deheerhoreca_fpc/data");
-    self::$dhhHelperFpc->emitHttpHeaders();
+    getOmDhhFpcHelper()->emitHttpHeaders();
   }
 }

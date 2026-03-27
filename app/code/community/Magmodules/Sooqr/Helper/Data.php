@@ -328,7 +328,7 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
     public function getProductUrl($product, $config, $parent, $parentAttributes)
     {
         // DHH CORE HACK
-        $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($product, true, 1);
+        $url = getOmDhhUtilHelper()->getFullProductUrlSafe($product, true, 1);
         
         // $url = '';
         // if (!empty($parent)) {
@@ -1409,7 +1409,7 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             }
             
             // DHH CORE HACK
-            $name = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($name);
+            $name = getOmDhhUtilHelper()->cleanCategoryName($name);
 
             if ($exclude != 1) {
                 $_categories[$cat->getId()] = array(

@@ -11,7 +11,7 @@ declare(strict_types=1);
   Regenerate: <?php // echo $this->helper("core/js")->getTranslatorScript(); ?>
 */
 
-$page_title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName((string) $this->getTitle()); ?>
+$page_title = getOmDhhUtilHelper()->cleanCategoryName((string) $this->getTitle()); ?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?=$page_title?></title>

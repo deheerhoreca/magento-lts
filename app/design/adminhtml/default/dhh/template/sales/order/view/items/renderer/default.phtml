@@ -67,14 +67,14 @@ if(strlen((string) $_product->getThumbnail()) > 0 && $_product->getThumbnail() !
         </div>
         <?php endif ?>
         <?php // DHH CORE HACK
-        $chefstore_product_url  = Mage::helper("deheerhoreca_util/util")->get_url("tools_chefstore_product_sku", $_item->getSku());
-        $intel_product_url      = Mage::helper("deheerhoreca_util/util")->get_url("tools_intel_product", $_item->getSku());
-        $mage_product_url       = Mage::helper("deheerhoreca_util/util")->get_url("tools_magento_product_sku", $_item->getSku());
+        $chefstore_product_url  = getOmDhhUtilHelper()->get_url("tools_chefstore_product_sku", $_item->getSku());
+        $intel_product_url      = getOmDhhUtilHelper()->get_url("tools_intel_product", $_item->getSku());
+        $mage_product_url       = getOmDhhUtilHelper()->get_url("tools_magento_product_sku", $_item->getSku());
         $bol_search_product     = "";
         if(empty($_product->getEan13()) === false) {
-            $bol_search_product     = Mage::helper("deheerhoreca_util/util")->get_url("bol_search_product", $_product->getEan13());
+            $bol_search_product     = getOmDhhUtilHelper()->get_url("bol_search_product", $_product->getEan13());
         }
-        $tool_supplier_product  = Mage::helper("deheerhoreca_util/util")->get_url("tools_supplier_product_sku", $_item->getSku());
+        $tool_supplier_product  = getOmDhhUtilHelper()->get_url("tools_supplier_product_sku", $_item->getSku());
         ?>
         <a target="_blank" rel="external" href="<?php echo $chefstore_product_url; ?>">Chefstore.nl</a> - 
         <a target="_blank" rel="external" href="<?php echo $intel_product_url; ?>">Intel</a> -

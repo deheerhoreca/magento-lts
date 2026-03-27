@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 /** @var TM_RichSnippets_Block_Product $this */
 
-if(Mage::helper("richsnippets")->snippetsEnabled() && Mage::getStoreConfig("richsnippets/general/snippetsType") == "0") {
+/** @var TM_Richsnippets_Helper_Data $_helper */
+$_helper = Mage::helper("richsnippets");
+
+if($_helper->snippetsEnabled() && Mage::getStoreConfig("richsnippets/general/snippetsType") == "0") {
   $_product       = Mage::registry("current_product");
   $json           = "";
   $cache_key      = "dhh_richsnippet_product_{$_product->getId()}";
-  $dhhHelperFpc ??= Mage::helper("deheerhoreca_fpc/data");
   
   // Serve from cache
   if(DeHeerHoreca_Fpc_Helper_Data::is_read_cache_enabled(true, true, "tm_richsnippets")) {
@@ -29,7 +31,7 @@ if(Mage::helper("richsnippets")->snippetsEnabled() && Mage::getStoreConfig("rich
   
   // Defer cache SAVE
   if(DeHeerHoreca_Fpc_Helper_Data::is_write_cache_enabled(true, true, "tm_richsnippets")) {
-    $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) _get_product_attribute($_product, "supplier")));
+    $supplier_sys_upper = strtoupper((string) preg_replace("/\s+/", "", (string) om_attr_val($_product, "supplier", "string")));
     $cache_tags = [
       "DHH_SUPPLIER_{$supplier_sys_upper}",
       "DHH_TM_RICHSNIPPETS",

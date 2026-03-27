@@ -74,21 +74,21 @@ usort($manufacturers, fn($a, $b) => $a['label'] <=> $b['label']);
     $brand_logo   = "";
     $brand_name   = strtok($label, " "); // Best effort
     $brand_id     = $manufacturer["value"];
-    $seo_tag      = Mage::helper("deheerhoreca_util/util")->getUrlSlug($label);
+    $seo_tag      = getOmDhhUtilHelper()->getUrlSlug($label);
     $shop_link    = "/shop?{$attribute_code}={$brand_id}&title={$seo_tag}";
     $label_enc    = htmlspecialchars((string) $label);
     $img_html     = "";
     
     if(empty($brand_name) === false) {
-      $brand_slug       = Mage::helper("deheerhoreca_util/util")->getBrandUrlSlug($brand_name);
+      $brand_slug       = getOmDhhUtilHelper()->getBrandUrlSlug($brand_name);
       $media_url        = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $image_url        = "{$media_url}/wysiwyg/brands/{$brand_slug}.png";
       $media_dir        = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
       $brand_logo_file  = "{$media_dir}/wysiwyg/brands/{$brand_slug}.png";
       
       if(is_file($brand_logo_file) === false) {
-        $brand_logo_file  = Mage::helper("deheerhoreca_util/util")->_get_placeholder_image_path();
-        $image_url        = Mage::helper("deheerhoreca_util/util")->_get_placeholder_image_url();
+        $brand_logo_file  = getOmDhhUtilHelper()->_get_placeholder_image_path();
+        $image_url        = getOmDhhUtilHelper()->_get_placeholder_image_url();
       }
       
       if(is_file($brand_logo_file)) {

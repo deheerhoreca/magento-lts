@@ -23,7 +23,7 @@ if($collection->count()) {
         if($i === $max_items) break;
         $i++; ?>
         <li class="item<?php if(($i-1) % $_columnCount == 0): ?> first<?php elseif($i % $_columnCount == 0): ?> last<?php endif; ?>">
-          <?= Mage::helper("deheerhoreca_util/util")->getProductGridHtml($_product, $this, $options) ?>
+          <?= getOmDhhUtilHelper()->getProductGridHtml($_product, $this, $options) ?>
         </li><?php
       } ?>
     </ul>

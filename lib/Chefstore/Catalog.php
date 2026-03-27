@@ -46,7 +46,7 @@ class Catalog {
     
     // Filter promos based on product attributes (supplierCode and brandCode)
     $runningPromos = $runningPromos->filter(function($promo) use ($_product) {
-      $supplierCode = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
+      $supplierCode = getOmDhhUtilHelper()->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
       if(!$promo["supplierCode"] || !sis($promo["supplierCode"], $supplierCode)) {
         return false;
       }

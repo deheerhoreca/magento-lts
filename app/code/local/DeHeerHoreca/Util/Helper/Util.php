@@ -88,7 +88,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
    * @return string
    */
   public function getFullProductUrlSafe(Mage_Catalog_Model_Product $product, bool $single = true, int $store_id = -1): string {
-    $url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlFromRewrites($product, $single, $store_id);
+    $url = getOmDhhUtilHelper()->getFullProductUrlFromRewrites($product, $single, $store_id);
     if($url === false) {
       $url = $product->getProductUrl(); // fallback
     }
@@ -273,11 +273,11 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $string = (string) $string;
     if(str_contains($string, "<!--markdown-->")) {
       $string = trim(str_replace("<!--markdown-->", "", (string) $string));
-      return Mage::helper("deheerhoreca_util/util")->markdownToHtml($string);
+      return getOmDhhUtilHelper()->markdownToHtml($string);
     }
     if(str_contains($string, "<!--markdownextra-->")) {
       $string = trim(str_replace("<!--markdownextra-->", "", (string) $string));
-      return Mage::helper("deheerhoreca_util/util")->markdownExtraToHtml($string);
+      return getOmDhhUtilHelper()->markdownExtraToHtml($string);
     }
     return $string;
   }
@@ -392,13 +392,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     
     // Get data
     if($skip_usps !== true) {
-      $product_usps = Mage::helper("deheerhoreca_util/util")->getProductUsps($_product);
+      $product_usps = getOmDhhUtilHelper()->getProductUsps($_product);
     }
     if($show_category_link) {
-      $category_info = Mage::helper("deheerhoreca_util/util")->getCategoryFromProduct($_product);
+      $category_info = getOmDhhUtilHelper()->getCategoryFromProduct($_product);
     }
     if($prefer_rewrite_table) {
-      $product_url = Mage::helper("deheerhoreca_util/util")->getFullProductUrlSafe($_product, true, 1);
+      $product_url = getOmDhhUtilHelper()->getFullProductUrlSafe($_product, true, 1);
     } else {
       $product_url = $_product->getProductUrl();
     }
@@ -416,7 +416,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $overall_stock_status   = $stock_status === "direct leverbaar" ? "in_stock" : "backorder";
       $stock_class            = $stock_status === "direct leverbaar" ? "buyblock-usp fw-normal" : "clzsoldout";
     } else {
-      $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($_product);
+      $stock_data             = getOmDhhUtilHelper()->getStockInfo($_product);
       $stock_message          = $stock_data["stock_message"];
       $stock_message_short    = $stock_data["stock_message_short"];
       $stock_class            = $stock_data["txtcltcz"];
@@ -745,7 +745,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // Capacity: M3/hour
       $attribute_code  = "aantal_m3_uur";
       $attribute_value = doubleval(_get_product_attribute($_product, $attribute_code));
-      $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+      $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
       if(is_numeric($attribute_value) && $attribute_value > 0) { 
         $usps[] = round((float) $attribute_value, 2)." m3/u";
       }
@@ -991,7 +991,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       // Dimensions: Diameter
       $attribute_value = doubleval(_get_product_attribute($_product, "diameter")) / 10;
       if($attribute_value > 0) {
-        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
         $usps[] = "Ø {$attribute_value} cm";
       }
       
@@ -1001,13 +1001,13 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_code = "blade_length_mm";
       $attribute_value = doubleval(_get_product_attribute($_product, $attribute_code)) / 10;
       if($attribute_value > 0) {
-        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
         $usps[] = "Lemmet {$attribute_value} cm";
       } else {
         $attribute_code = "length_mm";
         $attribute_value = doubleval(_get_product_attribute($_product, $attribute_code)) / 10;
         if($attribute_value > 0) {
-          $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+          $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
           $usps[] = "Lengte {$attribute_value} cm";
         }
       }
@@ -1018,7 +1018,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       $attribute_code = "etaleer_oppervlak_m2";
       $attribute_value = doubleval(_get_product_attribute($_product, $attribute_code));
       if($attribute_value > 0) {
-        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
         $usps[] = "Etaleeropp. {$attribute_value} m2";
       }
       
@@ -1058,7 +1058,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       if(!$power_usp_done) {
         $attribute_code  = "vermogen";
         $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
-        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
         if(!empty($attribute_value)) {
           if(is_numeric($attribute_value)) {
             if($attribute_value < 3) {
@@ -1077,7 +1077,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
       if(!$power_usp_done) {
         $attribute_code  = "vermogen_kw";
         $attribute_value = (double) _get_product_attribute($_product, $attribute_code);
-        $attribute_value = Mage::helper("deheerhoreca_util/util")->trim_decimals($attribute_value);
+        $attribute_value = getOmDhhUtilHelper()->trim_decimals($attribute_value);
         if(!empty($attribute_value)) {
           if(is_numeric($attribute_value)) {
             if($attribute_value < 3) {
@@ -1138,7 +1138,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     //
     // @TODO FPC BROKEN: GETS SAVED WITHOUT LEVERTIJD FIELD (AND MAYBE OTHER FIELDS?) Then goes missing in Detailview
     //
-    // if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "get_stock_info")) {
+    // if(getOmDhhFpcHelper()->is_read_cache_enabled(true, true, "get_stock_info")) {
     //   if($stock_data = Mage::app()->getCache()->load($cache_key)) {
     //     DeHeerHoreca_Fpc_Helper_Data::log("HIT {$cache_key}");
     //     Varien_Profiler::stop("DHH_".self::class."::".__METHOD__."_{$dhh_sku}");
@@ -1354,7 +1354,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $stock_data["levertijd_tmp_override"] = $levertijd_tmp_override;
     $stock_data["min_sale_qty"]           = $min_sale_qty;
     
-    // if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "get_stock_info")) {
+    // if(getOmDhhFpcHelper()->is_write_cache_enabled(true, true, "get_stock_info")) {
     //  $cacheTags = ["DHH_STOCKINFO", "PRODUCT_{$product_id}"]
     //   if(Mage::app()->getCache()->save(json_encode($stock_data), $cache_key, $cacheTags, 3600 * 7)) {
     //     DeHeerHoreca_Fpc_Helper_Data::log("SAVED {$cache_key}");
@@ -1419,6 +1419,18 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     } else {
       self::$dhh_click_log["labels"]["bot"] = "false";
     }
+    
+    // Some more contextual calls available in OpenMage:
+    // $request = Mage::app()->getFrontController()->getRequest();
+    // $area = Mage::getDesign()->getArea() == 'adminhtml'; // backend|frontend
+    // $user = Mage::getSingleton('admin/session')->getUser();
+    // $customer = Mage::getSingleton('customer/session')->getCustomer();
+    // $request->getControllerModule();
+    // $request->getControllerModule();
+    // $request->getClientIp();
+    // $request->getControllerName();
+    // $request->getActionName();
+    // $request->getMethod();
     
     $action         = Mage::app()->getFrontController()->getAction()->getFullActionName();
     // $module         = Mage::app()->getFrontController()->getRequest()->getModuleName() ?? explode("_", $action)[0] ?? null;
@@ -1689,7 +1701,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     $_price           = $_product->getPrice();
     $_finalPrice      = $_product->getFinalPrice();
-    $supplier_sys     = Mage::helper("deheerhoreca_util/util")->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
+    $supplier_sys     = getOmDhhUtilHelper()->get_sys_supplier((string) _get_product_attribute($_product, "supplier"));
     
     if(doubleval($_price) > doubleval($_finalPrice)) {
       return "Actieprijs";

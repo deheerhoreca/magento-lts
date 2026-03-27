@@ -134,7 +134,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           case "manufacturer":
           case "brand_series":
             if(empty($_data["option_id"]) === false) {
-              $seo_tag    = Mage::helper("deheerhoreca_util/util")->getUrlSlug($value);
+              $seo_tag    = getOmDhhUtilHelper()->getUrlSlug($value);
               $link_url   = "/shop?{$_data["code"]}={$_data["option_id"]}&title={$seo_tag}";
               $link_title = "Bekijk meer producten van {$value}";
             }
@@ -335,7 +335,7 @@ if($_additionalgroup = $this->getAdditionalDataCustom($skipped_attributes)) {
           $value = (int) number_format($value, 0, ",", "");
         }
         if(isset($attr_trim_decimals[$code])) {
-          $value = Mage::helper("deheerhoreca_util/util")->trim_decimals($value);
+          $value = getOmDhhUtilHelper()->trim_decimals($value);
         }
         switch($code) {
           case "number_of_cooling_zones":

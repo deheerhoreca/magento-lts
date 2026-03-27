@@ -215,7 +215,7 @@ if($_quoteadv && count($collection) > 0):
             $childProduct = $product;
           }
           
-          $stock_data             = Mage::helper("deheerhoreca_util/util")->getStockInfo($product);
+          $stock_data             = getOmDhhUtilHelper()->getStockInfo($product);
           $overall_stock_status   = $stock_data["overall_stock_status"];
           $manage_stock           = $stock_data["manage_stock"];
           $message                = $this->__("By deleting an item, you will create a new quote request. Do you want to do this?");

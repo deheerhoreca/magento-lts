@@ -39,7 +39,7 @@ $show_products                = (!str_contains($category_desc, "<!--no_products-
 $media_url                    = rtrim((string) Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $media_dir                    = rtrim((string) Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA), "/");
 $placeholder_image            = Mage::getStoreConfig("catalog/placeholder/image_placeholder");
-$_dhhUtilHelper               = Mage::helper("deheerhoreca_util/util");
+$_dhhUtilHelper               = getOmDhhUtilHelper();
 
 // Product price block
 // $productBlock                 = $this->getLayout()->createBlock("catalog/product_price");

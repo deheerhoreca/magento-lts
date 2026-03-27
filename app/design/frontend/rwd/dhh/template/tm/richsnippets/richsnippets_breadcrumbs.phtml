@@ -77,7 +77,7 @@ if($_helper->snippetsEnabled()) {
         $dataBreadcrumbs["itemListElement"][$position - 1]["position"]      = $position;
         $dataBreadcrumbs["itemListElement"][$position - 1]["item"]["name"]  = $_crumbInfo["label"];
         if($_crumbName === "product" && !empty($product_image_url_cdn)) {
-          $dataBreadcrumbs["itemListElement"][$position - 1]["item"]["@id"]   = Mage::helper("deheerhoreca_util/util")->getFullProductUrl($_product);
+          $dataBreadcrumbs["itemListElement"][$position - 1]["item"]["@id"]   = getOmDhhUtilHelper()->getFullProductUrl($_product);
           $dataBreadcrumbs["itemListElement"][$position - 1]["item"]["image"] = $product_image_url_cdn;
         } else {
           $dataBreadcrumbs["itemListElement"][$position - 1]["item"]["@id"]   = $_crumbInfo["link"];
@@ -100,11 +100,11 @@ if($_helper->snippetsEnabled()) {
         }
         
         $label = $this->htmlEscape($_crumbInfo["label"]);
-        $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
+        $label = getOmDhhUtilHelper()->cleanCategoryName($label);
         $label = trim((string) $label);
         
         $title = $this->htmlEscape($_crumbInfo["title"]);
-        $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
+        $title = getOmDhhUtilHelper()->cleanCategoryName($title);
         $title = trim((string) $title);
         
         if($_crumbName === "home") { ?>
@@ -131,11 +131,11 @@ if($_helper->snippetsEnabled()) {
   //       <ul itemscope itemtype="http://schema.org/BreadcrumbList"><? php
   //         foreach($crumbs as $_crumbName=>$_crumbInfo) {
   //           $label = $this->htmlEscape($_crumbInfo["label"]);
-  //           $label = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($label);
+  //           $label = getOmDhhUtilHelper()->cleanCategoryName($label);
   //           $label = trim((string) $label);
   //
   //           $title = $this->htmlEscape($_crumbInfo["title"]);
-  //           $title = Mage::helper("deheerhoreca_util/util")->cleanCategoryName($title);
+  //           $title = getOmDhhUtilHelper()->cleanCategoryName($title);
   //           $title = trim((string) $title);
   //
   //           echo "<li class='{$_crumbName}'";

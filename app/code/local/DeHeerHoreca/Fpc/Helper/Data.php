@@ -69,12 +69,14 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // List of query parameters that have no consequences for the rendered HTML
     $ignored_url_query_keys = [
-      "sqr", "profile", "___store", "refreshfpc", "__cf_chl_jschl_tk__",
+      // OpenMage:
+      "sqr", "profile", "___store", "refreshfpc", "usg", "msclkid",
       "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
-      "gclid", "gbraid", "wbraid", "cfhtmlcache", "mc_cid", "mc_eid",
+      "gclid", "gbraid", "wbraid", "mc_cid", "mc_eid",
       "cstag", "title", "srsltid", "csredir", "multipass", "opi", "sa", "ved",
-      "usg", "msclkid",
-      "forcepreload", "forcepreloadonly",                                           // Cloudflare
+      
+      // Cloudflare:
+      "forcepreload", "forcepreloadonly", "backend", "cfhtmlcache", "__cf_chl_jschl_tk__",
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
     $url = rtrim($url, "&?/");                // Useless postfixes can be ignored safely

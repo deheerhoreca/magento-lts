@@ -56,7 +56,7 @@ use \Symfony\Contracts\Cache\ItemInterface;
  * 
  * $cache_key = "tm_richsnippets_product_json_{$product->getId()}";
  * 
- * if(Mage::helper("deheerhoreca_fpc/data")->is_read_cache_enabled(true, true, "tm_richsnippets")) {
+ * if(getOmDhhFpcHelper()->is_read_cache_enabled(true, true, "tm_richsnippets")) {
  *   $json = Mage::app()->getCache()->load($cache_key);
  *   if(empty($json)) {
  *     DeHeerHoreca_Fpc_Helper_Data::log("MISS {$cache_key}");
@@ -67,9 +67,9 @@ use \Symfony\Contracts\Cache\ItemInterface;
  *   }
  * }
  * 
- * if(Mage::helper("deheerhoreca_fpc/data")->is_write_cache_enabled(true, true, "tm_richsnippets")) {
+ * if(getOmDhhFpcHelper()->is_write_cache_enabled(true, true, "tm_richsnippets")) {
  * 
- *   $cache_tags   = Mage::helper("deheerhoreca_fpc/data")->get_cache_tags();
+ *   $cache_tags   = getOmDhhFpcHelper()->get_cache_tags();
  *   $cache_tags[] = "DHH_TM_RICHSNIPPETS";
  * 
  *   if(Mage::app()->getCache()->save($json, $cache_key, $cache_tags, 86400 * 7)) {

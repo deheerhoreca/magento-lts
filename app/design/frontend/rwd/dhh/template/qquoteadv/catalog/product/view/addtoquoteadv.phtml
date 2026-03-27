@@ -65,7 +65,7 @@ if($_product->getData("allowed_to_quotemode") == 1 && !$hideQuoteButton && _get_
     <?=$btnIcon.$quoteBtnLabel?>
   </button><?php
   
-  $lease_rates = Mage::helper("deheerhoreca_util/util")->getLeaseRates($_finalPrice, "daily");
+  $lease_rates = getOmDhhUtilHelper()->getLeaseRates($_finalPrice, "daily");
   
   if(!empty($lease_rates)) {
     $min_lease_rate = min($lease_rates);
