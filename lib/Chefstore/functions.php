@@ -786,7 +786,7 @@ if(!function_exists("_get_product_attribute")) {
     
     if(!$_product->hasData($attribute_code)) {
       $caller = whoCalledMe(3); // Skip 3 to go up 1 from here
-      Mage::log("_get_product_attribute: Product does not have data for attribute '{$attribute_code}'. Caller: ".di($caller), Zend_Log::WARN);
+      #Mage::log("_get_product_attribute: Product does not have data for attribute '{$attribute_code}'. Caller: ".di($caller), Zend_Log::WARN);
       return null;
     }
     
