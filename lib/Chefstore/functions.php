@@ -1901,6 +1901,31 @@ function dhh_profiler_enabled(): bool {
 }
 
 /**
+ * Normalize a human supplier name to its system name.
+ *
+ * @param  string|Stringable|null $supplier
+ * @return string|null
+ */
+function dhhNormalizeSupplier(string|null $supplier): string|null {
+  if(blank($supplier)) {
+    return null;
+  }
+  static $cache = [];
+  if(isset($cache[$supplier])) {
+    return $cache[$supplier];
+  }
+  $supplierSys = strtolower((string) $supplier);
+  $supplierSys = match($supplierSys) {
+    "de heer horeca"        => "deheerhoreca",
+    "de jong luchttechniek" => "dejongluchttechniek",
+    "orionstar robotics"    => "orionstar",
+    default                 => $supplierSys,
+  };
+  $cache[$supplier] = $supplierSys;
+  return $supplierSys;
+}
+
+/**
  * Get an empty product collection.
  *
  * @return Mage_Catalog_Model_Resource_Product_Collection
