@@ -22,7 +22,6 @@ $product_block                = $this->getLayout()->createBlock("catalog/product
 $attributes                   = $dhh_util_helper::getProductAttributes("listview", ["popularity", "featured"]);
 
 // Block of semi-random recommended products
-$parent_categories_ids    = [];
 $_columnCount             = 5;
 $displaySize              = 175;
 $_imgSize                 = 1 * $displaySize;
@@ -77,12 +76,11 @@ unset($_products);
  * We now use both as an experiment...
  */
 
-$limit                  = 10;
-$parent_categories_ids  = [];
-$_columnCount           = 5;
-$displaySize            = 175;
-$_imgSize               = 1 * $displaySize;
-$_products = Mage::getModel("catalog/product")->getCollection()
+$limit          = 10;
+$_columnCount   = 5;
+$displaySize    = 175;
+$_imgSize       = 1 * $displaySize;
+$_products      = Mage::getModel("catalog/product")->getCollection()
   ->addAttributeToSelect($attributes)
   ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
   ->addAttributeToFilter("stock_status", ["eq" => 2746])
