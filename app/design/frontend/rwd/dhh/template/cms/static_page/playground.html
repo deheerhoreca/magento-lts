@@ -1,0 +1,691 @@
+<!--
+Loaded as static HTML page @ https://www.chefstore.nl/playground
+Inherits the 1-column layaout of the RWD/DHH theme.
+- Inherits: /var/www/vhosts/chefstore.nl/workspace/openmage/skin/frontend/rwd/dhh/css/styles.css
+-->
+
+<!-- Insert new/altered CSS here temporarily due ensure browser uses the intended definitions (load balancing cannot guarantee consistency of uncommitted changes)-->
+<style>
+  .lh-1 {
+    line-height: 1 !important;
+  }
+
+  .lh-sm {
+    line-height: 1.25 !important;
+  }
+
+  .lh-base {
+    line-height: 1.5 !important;
+  }
+
+  .lh-lg {
+    line-height: 2 !important;
+  }
+
+  .text-start {
+    text-align: left !important;
+  }
+
+  .text-end {
+    text-align: right !important;
+  }
+
+  .text-center {
+    text-align: center !important;
+  }
+
+  .text-decoration-none {
+    text-decoration: none !important;
+  }
+
+  .text-decoration-underline {
+    text-decoration: underline !important;
+  }
+
+  .text-decoration-line-through {
+    text-decoration: line-through !important;
+  }
+
+  .text-lowercase {
+    text-transform: lowercase !important;
+  }
+
+  .text-uppercase {
+    text-transform: uppercase !important;
+  }
+
+  .text-capitalize {
+    text-transform: capitalize !important;
+  }
+
+  .text-wrap {
+    white-space: normal !important;
+  }
+
+  .text-nowrap {
+    white-space: nowrap !important;
+  }
+
+  /********* BEGIN BOOTSTRAP 5.3.8 MODAL *********/
+
+  .modal {
+    --bs-modal-zindex: 1055;
+    --bs-modal-width: 500px;
+    --bs-modal-padding: 1rem;
+    --bs-modal-margin: 0.5rem;
+    --bs-modal-color: var(--bs-body-color);
+    --bs-modal-bg: var(--bs-body-bg);
+    --bs-modal-border-color: var(--bs-border-color-translucent);
+    --bs-modal-border-width: var(--bs-border-width);
+    --bs-modal-border-radius: var(--bs-border-radius-lg);
+    --bs-modal-box-shadow: var(--bs-box-shadow-sm);
+    --bs-modal-inner-border-radius: calc(var(--bs-border-radius-lg) - (var(--bs-border-width)));
+    --bs-modal-header-padding-x: 1rem;
+    --bs-modal-header-padding-y: 1rem;
+    --bs-modal-header-padding: 1rem 1rem;
+    --bs-modal-header-border-color: var(--bs-border-color);
+    --bs-modal-header-border-width: var(--bs-border-width);
+    --bs-modal-title-line-height: 1.5;
+    --bs-modal-footer-gap: 0.5rem;
+    --bs-modal-footer-bg: ;
+    --bs-modal-footer-border-color: var(--bs-border-color);
+    --bs-modal-footer-border-width: var(--bs-border-width);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--bs-modal-zindex);
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+  }
+
+  .modal-dialog {
+    position: relative;
+    width: auto;
+    margin: var(--bs-modal-margin);
+    pointer-events: none;
+  }
+  .modal.fade .modal-dialog {
+    transform: translate(0, -50px);
+    transition: transform 0.3s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .modal.fade .modal-dialog {
+      transition: none;
+    }
+  }
+  .modal.show .modal-dialog {
+    transform: none;
+  }
+  .modal.modal-static .modal-dialog {
+    transform: scale(1.02);
+  }
+
+  .modal-dialog-scrollable {
+    height: calc(100% - var(--bs-modal-margin) * 2);
+  }
+  .modal-dialog-scrollable .modal-content {
+    max-height: 100%;
+    overflow: hidden;
+  }
+  .modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+  }
+
+  .modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - var(--bs-modal-margin) * 2);
+  }
+
+  .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--bs-modal-color);
+    pointer-events: auto;
+    background-color: var(--bs-modal-bg);
+    background-clip: padding-box;
+    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+    border-radius: var(--bs-modal-border-radius);
+    outline: 0;
+  }
+
+  .modal-backdrop {
+    --bs-backdrop-zindex: 1050;
+    --bs-backdrop-bg: #000;
+    --bs-backdrop-opacity: 0.5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--bs-backdrop-zindex);
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bs-backdrop-bg);
+  }
+  .modal-backdrop.fade {
+    opacity: 0;
+  }
+  .modal-backdrop.show {
+    opacity: var(--bs-backdrop-opacity);
+  }
+
+  .modal-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: var(--bs-modal-header-padding);
+    border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
+    border-top-left-radius: var(--bs-modal-inner-border-radius);
+    border-top-right-radius: var(--bs-modal-inner-border-radius);
+  }
+  .modal-header .btn-close {
+    padding: calc(var(--bs-modal-header-padding-y) * 0.5) calc(var(--bs-modal-header-padding-x) * 0.5);
+    margin-top: calc(-0.5 * var(--bs-modal-header-padding-y));
+    margin-right: calc(-0.5 * var(--bs-modal-header-padding-x));
+    margin-bottom: calc(-0.5 * var(--bs-modal-header-padding-y));
+    margin-left: auto;
+  }
+
+  .modal-title {
+    margin-bottom: 0;
+    line-height: var(--bs-modal-title-line-height);
+  }
+
+  .modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: var(--bs-modal-padding);
+  }
+
+  .modal-footer {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: calc(var(--bs-modal-padding) - var(--bs-modal-footer-gap) * 0.5);
+    background-color: var(--bs-modal-footer-bg);
+    border-top: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
+    border-bottom-right-radius: var(--bs-modal-inner-border-radius);
+    border-bottom-left-radius: var(--bs-modal-inner-border-radius);
+  }
+  .modal-footer > * {
+    margin: calc(var(--bs-modal-footer-gap) * 0.5);
+  }
+
+  @media (min-width: 576px) {
+    .modal {
+      --bs-modal-margin: 1.75rem;
+      --bs-modal-box-shadow: var(--bs-box-shadow);
+    }
+    .modal-dialog {
+      max-width: var(--bs-modal-width);
+      margin-right: auto;
+      margin-left: auto;
+    }
+    .modal-sm {
+      --bs-modal-width: 300px;
+    }
+  }
+  @media (min-width: 992px) {
+    .modal-lg,
+    .modal-xl {
+      --bs-modal-width: 800px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .modal-xl {
+      --bs-modal-width: 1140px;
+    }
+  }
+  .modal-fullscreen {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  .modal-fullscreen .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .modal-fullscreen .modal-header,
+  .modal-fullscreen .modal-footer {
+    border-radius: 0;
+  }
+  .modal-fullscreen .modal-body {
+    overflow-y: auto;
+  }
+
+  @media (max-width: 575.98px) {
+    .modal-fullscreen-sm-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+    .modal-fullscreen-sm-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+    .modal-fullscreen-sm-down .modal-header,
+    .modal-fullscreen-sm-down .modal-footer {
+      border-radius: 0;
+    }
+    .modal-fullscreen-sm-down .modal-body {
+      overflow-y: auto;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .modal-fullscreen-md-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+    .modal-fullscreen-md-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+    .modal-fullscreen-md-down .modal-header,
+    .modal-fullscreen-md-down .modal-footer {
+      border-radius: 0;
+    }
+    .modal-fullscreen-md-down .modal-body {
+      overflow-y: auto;
+    }
+  }
+  @media (max-width: 991.98px) {
+    .modal-fullscreen-lg-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+    .modal-fullscreen-lg-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+    .modal-fullscreen-lg-down .modal-header,
+    .modal-fullscreen-lg-down .modal-footer {
+      border-radius: 0;
+    }
+    .modal-fullscreen-lg-down .modal-body {
+      overflow-y: auto;
+    }
+  }
+  @media (max-width: 1199.98px) {
+    .modal-fullscreen-xl-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+    .modal-fullscreen-xl-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+    .modal-fullscreen-xl-down .modal-header,
+    .modal-fullscreen-xl-down .modal-footer {
+      border-radius: 0;
+    }
+    .modal-fullscreen-xl-down .modal-body {
+      overflow-y: auto;
+    }
+  }
+  @media (max-width: 1399.98px) {
+    .modal-fullscreen-xxl-down {
+      width: 100vw;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+    .modal-fullscreen-xxl-down .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+    .modal-fullscreen-xxl-down .modal-header,
+    .modal-fullscreen-xxl-down .modal-footer {
+      border-radius: 0;
+    }
+    .modal-fullscreen-xxl-down .modal-body {
+      overflow-y: auto;
+    }
+  }
+
+  /********* END BOOTSTRAP 5.3.8 MODAL *********/
+
+  /********* END BOOTSTRAP 5.3.8 BTN-CLOSE *********/
+
+  .btn-close {
+    --bs-btn-close-color: #000;
+    --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414'/%3e%3c/svg%3e");
+    --bs-btn-close-opacity: 0.5;
+    --bs-btn-close-hover-opacity: 0.75;
+    --bs-btn-close-focus-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    --bs-btn-close-focus-opacity: 1;
+    --bs-btn-close-disabled-opacity: 0.25;
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em 0.25em;
+    color: var(--bs-btn-close-color);
+    background: transparent var(--bs-btn-close-bg) center/1em auto no-repeat;
+    filter: var(--bs-btn-close-filter);
+    border: 0;
+    border-radius: 0.375rem;
+    opacity: var(--bs-btn-close-opacity);
+  }
+  .btn-close:hover {
+    color: var(--bs-btn-close-color);
+    text-decoration: none;
+    opacity: var(--bs-btn-close-hover-opacity);
+  }
+  .btn-close:focus {
+    outline: 0;
+    box-shadow: var(--bs-btn-close-focus-shadow);
+    opacity: var(--bs-btn-close-focus-opacity);
+  }
+  .btn-close:disabled,
+  .btn-close.disabled {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    opacity: var(--bs-btn-close-disabled-opacity);
+  }
+
+  .btn-close-white {
+    --bs-btn-close-filter: invert(1) grayscale(100%) brightness(200%);
+  }
+
+  /********* END BOOTSTRAP 5.3.8 BTN-CLOSE *********/
+
+  /********* BEGIN BOOTSTRAP 5.3.8 FADE *********/
+
+  .fade {
+    transition: opacity 0.15s linear;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fade {
+      transition: none;
+    }
+  }
+  .fade:not(.show) {
+    opacity: 0;
+  }
+
+  /********* END BOOTSTRAP 5.3.8 FADE *********/
+
+  .cms-page-view .std img {
+    max-width: 100%;
+  }
+
+  .cms-no-route .std h1,
+  .cms-no-route .std h2,
+  .cms-page-view .std h1,
+  .cms-page-view .std h2 {
+    color: var(--color-blue);
+  }
+
+  #contactForm:after,
+  .cms-page-view .col-left:after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+
+  .cms-home .std .messages li,
+  .cms-page-view .std .messages li {
+    margin-left: 0;
+    list-style: none;
+    font-style: normal;
+  }
+
+  .cms-page-view .main-container ul {
+    list-style: inside;
+  }
+
+  /* Improves display of product texts, but can cause issues with embedded content like modals if not limited to direct children */
+  .cms-page-view .std > li,
+  .cms-page-view .std > p li,
+  .cms-page-view .std > p {
+    font-size: var(--text-size-normal);
+    line-height: 24px;
+  }
+
+  .std,
+  .std > p {
+    margin-top: var(--text-paragraph-margin);
+    line-height: 1.6em;
+  }
+
+  .std ol,
+  .std ul {
+    margin-bottom: 1.5em;
+  }
+
+  .std ol li {
+    margin-left: 2em;
+  }
+
+  .content .std ul {
+    list-style: disc;
+    margin-left: 1.2em;
+    list-style-position: outside;
+  }
+
+  .std .note {
+    color: #a0a0a0;
+    font-size: var(--text-size-small);
+  }
+</style>
+<div
+  class="modal fade show"
+  id="qeldInfoModal"
+  tabindex="-1"
+  aria-labelledby="qeldInfoModalLabel"
+  aria-modal="true"
+  role="dialog"
+  style="display: block; background: rgba(0, 0, 0, 0.45)"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl px-2">
+    <div class="modal-content overflow-hidden border bg-white shadow-lg" style="border-color: #d5d5d5; border-radius: 1.5rem">
+      <div class="modal-header border-0 px-4 px-md-5 py-4 text-white" style="background: #2d2d2d">
+        <div>
+          <p class="mb-2 text-uppercase fw-semibold small" style="letter-spacing: 0.08em; color: #ed7e2f">Zakelijke financiering</p>
+          <h1 class="modal-title h2 fw-bold mb-2">Meer informatie over Qeld</h1>
+          <p class="mb-0" style="max-width: 700px; color: #e0e0e0">
+            Snel extra financiële ruimte voor je horecabedrijf, bijvoorbeeld voor apparatuur, inrichting of werkkapitaal.
+          </p>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-3" data-bs-dismiss="modal" aria-label="Sluiten"></button>
+      </div>
+
+      <div class="modal-body px-4 px-md-5 py-4 py-md-5" style="background: #f3f3f3">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="h-100 p-4 border bg-white" style="background: #e8f4fb !important; border-color: #b8dff0 !important; border-radius: 1rem">
+              <p class="small fw-semibold mb-2" style="color: #3aacd9">Via Chefstore.nl</p>
+              <p class="display-6 fw-bold mb-2 text-dark">€3.000 tot €50.000</p>
+              <p class="mb-0 text-secondary">Zakelijke financiering met een looptijd van 6 tot 18 maanden.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="h-100 p-4 border bg-white" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+              <p class="small fw-semibold mb-2" style="color: #2d2d2d">Snel duidelijkheid</p>
+              <p class="display-6 fw-bold mb-2 text-dark">Binnen 1 werkdag</p>
+              <p class="mb-0 text-secondary">Na goedkeuring is uitbetaling in veel gevallen al binnen 24 uur mogelijk.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 mt-md-5">
+          <h2 class="h4 fw-bold text-dark mb-3">Waarom kiezen voor Qeld?</h2>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
+                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
+                >
+                  ✓
+                </div>
+                <p class="mb-0 text-body-secondary">Aanvragen is gratis en vrijblijvend</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
+                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
+                >
+                  ✓
+                </div>
+                <p class="mb-0 text-body-secondary">Snelle online aanvraag in een paar stappen</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
+                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
+                >
+                  ✓
+                </div>
+                <p class="mb-0 text-body-secondary">Vaste maandelijkse kosten</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
+                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
+                >
+                  ✓
+                </div>
+                <p class="mb-0 text-body-secondary">Vervroegd aflossen zonder extra kosten</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
+                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
+                >
+                  ✓
+                </div>
+                <p class="mb-0 text-body-secondary">Geschikt voor investeringen en extra werkkapitaal</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
+                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
+                >
+                  ✓
+                </div>
+                <p class="mb-0 text-body-secondary">Voor Nederlandse en Belgische ondernemers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 mt-md-5 p-4 border" style="background: #e8f4fb; border-color: #b8dff0 !important; border-radius: 1rem">
+          <h2 class="h4 fw-bold text-dark mb-3">Zo werkt het</h2>
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
+                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
+                >
+                  1
+                </div>
+                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Vraag online aan</h3>
+                <p class="mb-0 text-secondary small">Je aanvraag is gratis en vrijblijvend.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
+                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
+                >
+                  2
+                </div>
+                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Ontvang snel reactie</h3>
+                <p class="mb-0 text-secondary small">Qeld beoordeelt je aanvraag en reageert binnen 1 werkdag.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
+                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
+                >
+                  3
+                </div>
+                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Onderteken digitaal</h3>
+                <p class="mb-0 text-secondary small">Ga je akkoord, dan regel je dit veilig online.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
+                <div
+                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
+                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
+                >
+                  4
+                </div>
+                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Snel beschikken</h3>
+                <p class="mb-0 text-secondary small">In veel gevallen staat het geld binnen 24 uur klaar.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 mt-md-5 p-4 d-flex flex-column flex-md-row gap-3 align-items-md-center justify-content-md-between text-white"
+          style="background: #2d2d2d; border-radius: 1rem"
+        >
+          <div>
+            <h2 class="h4 fw-bold mb-1">Interesse in financiering via Qeld?</h2>
+            <p class="mb-0 small" style="color: #929a9c">Je gaat door naar de aanvraagomgeving van Qeld voor meer informatie of een vrijblijvende aanvraag.</p>
+          </div>
+          <div class="d-flex gap-2 flex-shrink-0">
+            <button type="button" class="btn btn-outline-light fw-semibold px-3 px-md-4" data-bs-dismiss="modal">Sluiten</button>
+            <a href="https://www.qeld.nl/partners/chef-store" class="btn fw-semibold text-white px-3 px-md-4" style="background: #ed7e2f; border-color: #ed7e2f"
+              >Naar Qeld</a
+            >
+          </div>
+        </div>
+
+        <p class="mt-3 mb-0 small text-secondary">
+          Let op: financiering wordt verstrekt door Qeld. Goedkeuring, voorwaarden en uitbetaling zijn afhankelijk van de beoordeling door Qeld.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var modalEl = document.getElementById("qeldInfoModal");
+    if (modalEl && window.bootstrap) {
+      var modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  });
+</script>

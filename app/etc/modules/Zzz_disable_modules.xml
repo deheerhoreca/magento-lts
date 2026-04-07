@@ -147,9 +147,9 @@
     </AW_Autorelated>
     
     <!-- Not working, security risk while enabled -->
-    <Elidrissidev_Api2BasicAuth>
-      <active>false</active>
-    </Elidrissidev_Api2BasicAuth>
+    <!-- <Elidrissidev_Api2BasicAuth> -->
+      <!-- <active>false</active> -->
+    <!-- </Elidrissidev_Api2BasicAuth> -->
     
     <!-- Replaced with supplier attachments -->
     <Staempfli_ProductAttachment>

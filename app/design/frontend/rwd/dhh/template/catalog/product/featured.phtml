@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /** @var DeHeerHoreca_Util_Helper_Util */
 $dhh_util_helper              = Mage::helper('deheerhoreca_util/util');
 
@@ -84,17 +86,17 @@ $_products = Mage::getModel("catalog/product")->getCollection()
   ->addAttributeToSelect($attributes)
   ->addAttributeToFilter("status", ["eq" => Mage_Catalog_Model_Product_Status::STATUS_ENABLED])
   ->addAttributeToFilter("stock_status", ["eq" => 2746])
-  ->addAttributeToFilter("popularity", ["notnull" => true])   // Prevent unset new products to show up
-  ->addAttributeToFilter("featured", ["neq" => 1])
-  ->addAttributeToSort("popularity", "ASC")               // Can't move away from popularity sort because the subset is way too big otherwise.
-  ->addFinalPrice()                                       // Necessary to respect sale price end date
-  ->setPage(1, $limit * 5);                               // Get more products than needed to have some variety in the random selection
+  ->addAttributeToFilter("popularity", ["notnull" => true]) // Do not match new products that have no data yet
+  ->addAttributeToFilter("featured", ["neq" => 1])          // Do not match products that are already in the other frontpage block
+  ->addAttributeToSort("popularity", "ASC")                 // Can't move away from popularity sort because the subset is way too big otherwise.
+  ->addPriceData()                                          // Necessary to respect sale price end date
+  ->setPage(1, $limit * 5);                                 // Get more products than needed to have some variety in the random selection
 $_products->load();
 $mage_stock_model->addItemsToProducts($_products);
 
 if($_products->getFirstItem()) { ?>
-  <h2 class="center py-1 my-3">Hardlopers</h2><hr>
-  <div id="promo-products" class="category-products mt-5 pb-0 mb-3">
+  <div id="popular-products" class="category-products mt-5 pb-0 mb-3">
+    <h2 class="center py-1 my-3">Hardlopers</h2><hr>
     <ul class="products-grid products-grid--max-<?=$_columnCount?>-col"><?php
       $i = 0;
       foreach($_products as $_product) {
@@ -102,7 +104,9 @@ if($_products->getFirstItem()) { ?>
         $dhh_util_helper->getProductGridHtml($_product, $product_block, $options);
         echo "</li>";
         $i++;
-        if($i === $limit) break;
+        if($i === $limit) {
+          break;
+        }
       } ?>
     </ul>
   </div><?php
@@ -111,9 +115,9 @@ if($_products->getFirstItem()) { ?>
 // Provides a block where additional page components may be attached, primarily good for in-page JavaScript
 if($this->getChild('after')) {
   $_afterChildren = $this->getChild('after')->getSortedChildren();
-  foreach ($_afterChildren as $_afterChildName) {
+  foreach($_afterChildren as $_afterChildName) {
     $_afterChild = $this->getChild('after')->getChild($_afterChildName);
-    //set product collection on after blocks
+    // set product collection on after blocks
     $_afterChild->setProductCollection($_products);
     echo $_afterChild->toHtml();
   }

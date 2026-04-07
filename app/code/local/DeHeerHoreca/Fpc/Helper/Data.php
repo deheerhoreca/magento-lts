@@ -58,8 +58,19 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /**
    * Trim the cached URL by removing parts that do not affect the cached payload, and normalize the URL for better matching.
    * @todo Keep this up to date to prevent cache fragmentation and blowup
-   * - csredir: chefstore.nl redirect indicator
-   * - multipass: Added by LayeredNav if >X values selected to control bots and caching
+   *
+   * Partial list of known URL parameters that do not affect the HTML payload, and should be ignored for caching purposes:
+   * -----------------------------------------------------------------------------------------------------------------------
+   * - csredir: chefstore.nl redirect indicator.
+   * - cfaltconfig: Cloudflare alternative config flag (Page Rules, Rules, etc.)
+   * - multipass: Added by LayeredNav if >X values selected to control bots and caching.
+   * - sqr: Sooqr search query of the previous page, does not affect the HTML payload.
+   * - profile: Server-side OpenMage profiling flag, does not affect the HTML payload.
+   * - ___store: OpenMage store switcher parameter, does not affect the HTML payload.
+   * - refreshfpc: Used by our cache warmer to force refresh the cache, keep away from cache payload and key.
+   * - usg, msclkid, utm_source, utm_medium, utm_campaign, utm_content, utm_term, gclid, mc_cid, mc_eid: No effect on the HTML payload.
+   * - multipass: Added by LayeredNav if >X values selected to control bots and caching. Keep out of cache key.
+   * - cstag: Chefstore SEO tag, does not affect the HTML payload, cached key should match regardless of presence.
    *
    * @param  string|null  $url  Optional URL overwrite for debug/development, otherwise current URL is used
    * @return string             The normalized cache URL, ready and hashing
@@ -77,6 +88,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
       
       // Cloudflare:
       "forcepreload", "forcepreloadonly", "backend", "cfhtmlcache", "__cf_chl_jschl_tk__",
+      "cfaltconfig",
     ];
     $url = self::strip_param_from_url($url, $ignored_url_query_keys);
     $url = rtrim($url, "&?/");                // Useless postfixes can be ignored safely
@@ -855,7 +867,12 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     // ! without getBackend() it does not work!
     if(DHH_FPC_DEBUG) {
-      $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
+      /** @var Mage_Core_Model_Cache */
+      $omCache = Mage::app()->getCacheInstance();
+      /** @var Cm_Cache_Backend_Redis $om_cache */
+      $omCacheFrontend = $omCache->getFrontend();
+      // $cache_keys = Mage::app()->getCache()->getBackend()->getIdsMatchingAnyTags($cache_tags);
+      $cache_keys = $omCacheFrontend->getIdsMatchingAnyTags($cache_tags);
       self::log("CLEAN tags: ".di($cache_tags).". Matched keys: ".di($cache_keys), Zend_Log::INFO);
     }
     
