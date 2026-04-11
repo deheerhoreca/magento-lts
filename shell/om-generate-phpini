@@ -32,7 +32,7 @@ fi
 echo "Existing ${TARGET_PHP_INI} backed up to ${PHP_INI_BACKUP}";
 
 # Backup _user.ini
-USER_INI_BACKUP="${TARGET_USER_INI}.bak-$(date +%F_%H%M%S)"
+USER_INI_BACKUP="./etc/${TARGET_USER_INI}.bak-$(date +%F_%H%M%S)"
 cp ${TARGET_USER_INI} ${USER_INI_BACKUP}
 if [ $? -ne 0 ]; then
   echo "Fatal error: Failed to backup ${TARGET_USER_INI}. Keeping current configuration."
