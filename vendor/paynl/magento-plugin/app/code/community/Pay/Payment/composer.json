@@ -1,10 +1,5 @@
 {
     "require": {
         "paynl/sdk": "^1.4"
-    },
-    "config": {
-        "apcu-autoloader": true,
-        "classmap-authoritative": false,
-        "optimize-autoloader": true
     }
 }

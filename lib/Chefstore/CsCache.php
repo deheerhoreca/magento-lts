@@ -42,7 +42,7 @@ use \Symfony\Contracts\Cache\ItemInterface;
  * 
  * // retrieve the cache item
  * $productsCount = $cache->getItem('stats.products_count');
- * if (!$productsCount->isHit()) {
+ * if(!$productsCount->isHit()) {
  *   // ... item does not exist in the cache
  * }
  * 
@@ -127,9 +127,9 @@ class CsCache {
    * @param  string|Stringable $key
    * @return string
    */
-  public static function ensureValidKey(string | Stringable $key): string {
+  public static function ensureValidKey(string|Stringable $key): string {
     if($key instanceof Stringable) {
-      $key = $key->toString();
+      $key = $key->__toString();
     }
     $GLOBALS["validCacheKeys"][$key] ??= str($key)->ascii()->lower()->replace(str_split(" !\"#$%&\'()*+,-/:;<=>?@[\\]^_`{|}~"), "_", true)->toString();
     return $GLOBALS["validCacheKeys"][$key];
@@ -141,7 +141,7 @@ class CsCache {
    *
    * @return ApcuAdapter
    */
-  public static function _apc(): ApcuAdapter | null {
+  public static function _apc(): ApcuAdapter|null {
     static $adapter = null;
     return ($adapter ??= new ApcuAdapter(
       namespace : "openmage",
@@ -167,13 +167,13 @@ class CsCache {
   // Filesystem is too slow unless it's big or on a RAM disk. $slow_only = true enables the file system cache.
   public static function _cc(bool $slow_only = false) {
     // Slow-only cache chain
-    if ($slow_only) {
-      $GLOBALS["cs_cache"] ??= new ChainAdapter([_fsc()]);
+    if($slow_only) {
+      $GLOBALS["cs_cache"] ??= new ChainAdapter([self::_fsc()]);
       return $GLOBALS["cs_cache"];
     }
     
     // Fast cache chain
-    if (!isset($GLOBALS["c_cache"])) {
+    if(!isset($GLOBALS["c_cache"])) {
       $adapters = (function_exists("apcu_enabled") && apcu_enabled()) ? [self::_apc()] : [self::_arc()];
       $GLOBALS["c_cache"] = new ChainAdapter($adapters);
     }
@@ -188,7 +188,7 @@ class CsCache {
    *
    * @return ApcuAdapter|ArrayAdapter
    */
-  public static function _fc(): ApcuAdapter | ArrayAdapter {
+  public static function _fc(): ApcuAdapter|ArrayAdapter {
     static $adapter = null;
     return ($adapter ??= (function_exists("apcu_enabled") && apcu_enabled() ? self::_apc() : self::_arc()));
   }
@@ -202,7 +202,7 @@ class CsCache {
    * @param  string|null                           $type The marshaller type: "deflate" or null for default
    * @return DefaultMarshaller|DeflateMarshaller
    */
-  public static function getMarshaller(?string $type = null): DefaultMarshaller | DeflateMarshaller {
+  public static function getMarshaller(?string $type = null): DefaultMarshaller|DeflateMarshaller {
     // ! Setup igbinary in php.ini, not here -- Leads to issues where some parts of OpenMage address the cache outside of our control.
     $useIgbinary = false;
     // $useIgbinary = extension_loaded("igbinary");
@@ -231,7 +231,7 @@ class CsCache {
     $beta       = $fresh ? INF : 0;
     $instance ??= self::_fc();
     return $instance->get($key, function(ItemInterface $item) use ($closure, $t, $tag): mixed {
-      if (null !== $t) {
+      if(null !== $t) {
         $item->expiresAfter($t);
       }
       if(null !== $tag) {
@@ -256,15 +256,6 @@ class CsCache {
   function retain(Closure $closure, ?object $instance = null, string|iterable|null $tag = null, bool $fresh = false, ?int $t = null): mixed {
     $key = null;
     return cached($key, $closure, $instance, $tag, $fresh, $t);
-  }
-  
-  /**
-   * Prune the APC cache instance
-   *
-   * @return bool
-   */
-  public static function _prune_apc(): bool {
-    return self::_apc()->prune();
   }
   
   /**
@@ -293,8 +284,7 @@ class CsCache {
    *
    * @return bool
    */
-  public static function _c_delete($adapter, string $cache_key) {
-    
+  public static function _c_delete(AdapterInterface $adapter, string $cache_key) {
     // if(DRYRUN) {
     //   if(VERBOSE) {
     //     verbose("Dryrun: Remove cache key: {$cache_key}");
@@ -302,7 +292,7 @@ class CsCache {
     //   return true;
     // }
     
-    if ($result = $adapter->delete($cache_key)) {
+    if($result = $adapter->deleteItem($cache_key)) {
       // im("cache_delete_key_ok");
       // if(VERBOSE) {
       //   verbose("Removed cache key: {$cache_key}");

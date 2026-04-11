@@ -198,7 +198,7 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/firegento/firegento-logger",
+      "url": "https://github.com/deheerhoreca/firegento-logger",
       "only": [
         "firegento/logger"
       ]
