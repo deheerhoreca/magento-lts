@@ -23,7 +23,7 @@ PHP_VERSION=$(php -c etc/php.ini -r "echo phpversion();") || {
 }
 
 # Backup php.ini
-PHP_INI_BACKUP="php.ini.bak-$(date +%F_%H%M%S)"
+PHP_INI_BACKUP="./etc/php.ini.bak-$(date +%F_%H%M%S)"
 cp ${TARGET_PHP_INI} ${PHP_INI_BACKUP}
 if [ $? -ne 0 ]; then
   echo "Fatal error: Failed to backup ${TARGET_PHP_INI}. Keeping current configuration."

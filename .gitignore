@@ -125,8 +125,9 @@ phpunit.xml
 /biller-webhook.jsonl
 /freshdesk-*.ndjson
 /etc/*-local.ini
-/*.bak-*
+/etc/*.bak-*
 /_user.ini
+/php.ini
 /etc/php.ini
 n98-magerun
 
