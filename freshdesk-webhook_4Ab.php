@@ -2,39 +2,73 @@
 
 declare(strict_types=1);
 
+function appendNdjsonWithLock(
+    string $path,
+    string $line,
+    int $timeoutMicros = 5_000_000,
+    int $retryDelayMicros = 100_000
+): void
+{
+    $handle = fopen($path, 'c');
+    if ($handle === false) {
+        throw new RuntimeException(sprintf('Unable to open output file: %s', $path));
+    }
+
+    try {
+        $deadline = microtime(true) + ($timeoutMicros / 1_000_000);
+        $lockAcquired = false;
+
+        do {
+            if (flock($handle, LOCK_EX | LOCK_NB)) {
+                $lockAcquired = true;
+                break;
+            }
+
+            usleep($retryDelayMicros);
+        } while (microtime(true) < $deadline);
+
+        if (!$lockAcquired) {
+            throw new RuntimeException(sprintf('Timed out waiting for output file lock: %s', $path));
+        }
+
+        if (fseek($handle, 0, SEEK_END) !== 0) {
+            throw new RuntimeException(sprintf('Unable to seek output file: %s', $path));
+        }
+
+        if (fwrite($handle, $line) === false) {
+            throw new RuntimeException(sprintf('Unable to write output file: %s', $path));
+        }
+
+        fflush($handle);
+    } finally {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+    }
+}
+
 // Primarily store in remote storage, as well as local storage.
 $pri_output = "/mnt/bigstorage/intel/output/integration/freshdesk/freshdesk-webhook.ndjson";
-$sec_output = __DIR__."/freshdesk-webhook.ndjson";
-$output_err = __DIR__."/freshdesk-webhook-error.ndjson";
+$output_err = __DIR__ . "/freshdesk-webhook-error.ndjson";
 
-$json       = file_get_contents("php://input");
-$data       = json_decode($json, true);
-$data       = [
-  "@timestamp"    => date("c"),
-  "remote_addr"   => $_SERVER['REMOTE_ADDR'],
-  "forwarded_for" => ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? null),
-  "payload"       => (array) $data,
-  "process"       => [],
+$json = file_get_contents("php://input");
+$data = [
+    "@timestamp" => date("c"),
+    "remote_addr" => $_SERVER['REMOTE_ADDR'],
+    "forwarded_for" => ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? null),
+    "payload" => (array) json_decode($json, true),
+    "process" => [],
 ];
-
-// Store event in log
-$json = json_encode($data).PHP_EOL;
+$json = json_encode($data) . PHP_EOL;
 
 try {
-  // Local storage first
-  touch($sec_output);
-  file_put_contents($sec_output, $json, FILE_APPEND);
-  touch($pri_output);
-  file_put_contents($pri_output, $json, FILE_APPEND);
-  http_response_code(202);
-  echo "OK";
-  exit(0);
-} catch(Exception $e) {
-  // Write the captured data to the error log
-  file_put_contents($output_err, $json, FILE_APPEND);
-  $json = json_encode($e->getMessage());
-  // Also log the exception message
-  file_put_contents($output_err, $json, FILE_APPEND);
+    appendNdjsonWithLock($pri_output, $json);
+    http_response_code(202);
+    echo "OK";
+    exit(0);
+} catch (Throwable $e) {
+    appendNdjsonWithLock($output_err, $json);
+    $json = json_encode($e->getMessage()) . PHP_EOL;
+    appendNdjsonWithLock($output_err, $json);
 }
 
 http_response_code(500);
