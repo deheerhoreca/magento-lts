@@ -111,6 +111,11 @@
       "sourceType": "github",
       "computedHash": "afc5c573950d6ffa132ee589a9c2067fbb91cc235a309086b3e93546b0e73bef"
     },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
+    },
     "git-workflow": {
       "source": "jezweb/claude-skills",
       "sourceType": "github",
