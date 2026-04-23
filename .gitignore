@@ -132,13 +132,15 @@ phpunit.xml
 n98-magerun
 
 # DIRS
-/js/ext-*
-/skin/frontend/rwd/external/
 !/skin/frontend/rwd/external/fontawesome
-/.modman/*/.git
+/.agents/skills/
+/.claude/skills/
 /.idea/
+/.modman/*/.git
 /.well-known/acme-challenge/
+/js/ext-*
 /skin/assets/
+/skin/frontend/rwd/external/
 
 # Extend the dist ignore to the whole media dir (it's now a LINK)
 # ----------------------------------------------------------------
