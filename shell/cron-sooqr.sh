@@ -12,9 +12,14 @@ cm || die "Failed to go to the openmage directory"
 . ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
 
 # Run the Sooqr XML datafeed generation
-#openmage shell/sooqr.php --generate 1
+errors=$(openmage shell/sooqr.php --generate 1 2>&1)
+if [ -n "$errors" ]; then
+  log_line "Errors occurred during Sooqr datafeed generation: ${errors}" "ERROR"
+else
+  log_line "Sooqr datafeed generation completed successfully." "INFO"
+fi
 
-# Convert the generated XML to JSON using dasel, capturing any errors
+# Convert the generated XML to JSON using yq, capturing any errors
 errors=$(yq -p=xml -o=json ./media/sooqr/sooqr-datafeed-5AjS-1.xml > ./media/sooqr/sooqr-datafeed-5AjS-1.json 2>&1)
 if [ -n "$errors" ]; then
   log_line "Errors occurred during XML to JSON conversion: ${errors}" "ERROR"
@@ -24,5 +29,10 @@ fi
 
 # Set permissions on the generated files so they can be accessed by the webserver
 chmod +r ./media/sooqr/sooqr-datafeed-5AjS-1.json
+if [ $? -ne 0 ]; then
+  log_line "Failed to set permissions on JSON file, but file was written." "WARNING"
+else
+  log_line "Permissions set on JSON file successfully." "INFO"
+fi
 
 . ./shell/cron-wrapup.sh

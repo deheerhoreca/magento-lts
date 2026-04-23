@@ -74,6 +74,7 @@
     "symfony/http-foundation": "^7.4",
     "symfony/var-dumper": "^7.4.3",
     "voku/html-min": "^4.5.1",
+    "voku/portable-ascii": "^2.1",
     "wp-cli/php-cli-tools": "^0.12.6"
   },
   "require-dev": {

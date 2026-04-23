@@ -1117,8 +1117,6 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $usps = array_filter($usps);    
     $usps = array_diff($usps, ["N.v.t."]);
     
-    // if(_dhh_debug()) printr(var_dump($usps));
-    
     return $usps; 
   }
   

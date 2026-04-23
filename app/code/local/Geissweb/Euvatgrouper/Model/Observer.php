@@ -862,7 +862,7 @@ class Geissweb_Euvatgrouper_Model_Observer extends Mage_Checkout_Model_Observer
                         && in_array($customer->getGroupId(), $dataHelper->getExcludedTaxGroups())
                     ) {
                         if ($this->_debug) {
-                            Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Is excluded tax group: ".var_dump($customer->getGroupId(), true), null, 'euvatenhanced.log');
+                            Mage::log(DHH_UUID." ".DHH_QUOTE_ID." ".__METHOD__." Is excluded tax group: ".di($customer->getGroupId()), null, 'euvatenhanced.log');
                         }
 
                         $request->setCustomerClassId($taxExemptClassId);

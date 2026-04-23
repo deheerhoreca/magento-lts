@@ -26,14 +26,14 @@ class Geissweb_InvoiceAutoSend_Model_Observer
 	{
 		try {
 			/**
-			 * @var $invoice Mage_Sales_Model_Order_Invoice
+			 * @var Mage_Sales_Model_Order_Invoice $invoice
 			 */
       // DHH CORE HACK: ADDING EXTRA LOGGING
 			$invoice = $observer->getEvent()->getInvoice();
       $pm = $invoice->getOrder()->getPayment()->getMethod();
       $included = Mage::helper('invoiceautosend')->getIncludedPaymentMethods();
       
-      Mage::log("method={$pm} included=".implode(",", $included)." email_sent:".var_dump($invoice->getEmailSent()), null, "invoiceautosend.log", true);
+      Mage::log("method={$pm} included=".implode(",", $included)." email_sent:".di($invoice->getEmailSent()), null, "invoiceautosend.log", true);
 
 			if($invoice->getEmailSent() == null && in_array($pm, $included)) {
         Mage::log("Sending invoice", null, "invoiceautosend.log", true);

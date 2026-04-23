@@ -767,7 +767,9 @@ class Magmodules_Sooqr_Model_Sooqr extends Magmodules_Sooqr_Model_Common
         foreach ($pages as $page) {
             $cmspages[] = array(
                 'content_type' => 'cms',
-                'id'           => 'CMS-' . $page->getId(),
+                // DHH CORE HACK: Sooqr is configured to use sku as the ID field, this should not be hardcoded here.
+                // 'id'        => 'CMS-' . $page->getId(),
+                'sku'          => 'CMS-' . $page->getId(),
                 'title'        => $page->getTitle(),
                 'content'      => $this->helper->cleanData($page->getContent(), 'striptags'),
                 'url'          => $config['website_url'] . $page->getIdentifier()

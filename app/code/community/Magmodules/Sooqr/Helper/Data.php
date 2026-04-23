@@ -1084,6 +1084,47 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
      */
     public function cleanData($st, $action = '')
     {
+        // $origSt = $st;
+
+        // DHH CORE HACK -- BE MORE AGGRESSIVE WHEN CLEANING DATA FOR XML:
+        if (is_string($st) && strlen($st) > 10) {
+
+            // Normalize UTF-8 characters to their ASCII representation, as they can be missed by search engines and are not helpful for matching queries.
+            $st = voku\helper\ASCII::clean($st, true, false, true, true);
+
+            // Poor man's way to only hit data that is not presented by Sooqr, only used to find matches to the queries
+            if (strlen($st) > 100) {
+                // Sooqr does not replace newlines with any separator, compounding words together (!).
+                $st = str_ireplace(["\r", "\n", "\t"], ". ", $st);
+
+                // Remove things like visual separators as they do not add value to a search engine corpus.
+                $st = str_ireplace(["</li>", "<li>", "; ", "</ol>", "<ol>"], ". ", $st);
+                $st = str_ireplace([" | ", " - ", " / "], " ", $st);
+
+                // Replace common contractions in EN with their full forms, as they can be missed by search engines and are not helpful for matching queries.
+                $st = str_ireplace(
+                    ["don't", "doesn't", "can't", "won't", "isn't", "aren't", "wasn't", "weren't", "haven't", "hasn't", "hadn't"],
+                    ["do not", "does not", "cannot", "will not", "is not", "are not", "was not", "were not", "have not", "has not", "had not"],
+                    $st
+                );
+
+                // Remove common stop words in NL, as they can be missed by search engines and are not helpful for matching queries.
+                $st = str_ireplace([" hoe ", "waarom ", "waarheen ", "wanneer ", " echter ", " dus ", "bovendien ", " als ",
+                " dan ", " nu ", "altijd ", " hier ", " zeer ", "misschien ", " en ", " is ", " hun ", " van ", " de ", " het ", "toch", " zijn ",
+                " er ", " om ", " in ", " u ", " tot ", " op ", " elke "], " ", $st);
+                $st = str_ireplace([" & ", "€", "$", "£", "¥"], [" en ", " euro ", " dollar ", " pound ", " yen "], $st);
+
+                // Convert to ASCII to remove accents and other special characters, as they can be missed by search engines and are not helpful for matching queries.
+                $st = \Illuminate\Support\Str::ascii($st, "nl");
+            }
+
+            $st = str_ireplace(["<!-- -->"], "", $st);   // Markdown artifacts
+            $st = str_ireplace([". .", "..", ". :", " : ", ", "], " ", $st);
+
+            $st = \Illuminate\Support\Str::squish($st);         // Save bytes by removing double spaces, tabs, newlines, etc. and replacing with a single space.
+        }
+
+        
         if ($action) {
             $actions = explode('_', $action);
             if (in_array('striptags', $actions)) {
@@ -1140,6 +1181,16 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
             if (in_array('boolean', $actions)) {
                 ($st > 0 ? $st = 1 : $st = 0);
             }
+        }
+        
+        // DHH CORE HACK -- Log if any changes were made to the string, to identify candidates for further cleaning rules.
+        if(isset($origSt) && $origSt !== $st && is_string($origSt) && is_string($st)) {
+            dump([
+                "orig. ".\Illuminate\Support\Str::padLeft("(".mb_strlen($origSt)." chars)", 12) => $origSt,
+                "clean ".\Illuminate\Support\Str::padLeft("(".mb_strlen($st)." chars)", 12) => $st,
+                // "action" => $action,
+            ]);
+            unset($origSt);
         }
 
         return $this->stripInvalidXml($st);

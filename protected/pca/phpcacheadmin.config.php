@@ -27,7 +27,7 @@ return [
   ],
   "redis"      => [
     [
-      "name"      => "production",
+      "name"      => "johnnie",
       "host"      => "136.144.183.232",
       /*"nodes" => [
         // List of cluster nodes.
@@ -49,6 +49,12 @@ return [
       // "path"      => "/var/run/redis/redis.sock",   // Unix domain socket (optional).
       // "databases" => 4, // Number of databases, use this if the CONFIG command is disabled (optional).
       // "scansize"  => 1000, // Number of keys, the server will use the SCAN command instead of KEYS (optional).
+      "separator" => "_", // Separator for tree view (optional)
+    ],
+    [
+      "name"      => "ma",
+      "host"      => "85.10.155.171",
+      "database"  => 0, // Default database (optional).
       "separator" => "_", // Separator for tree view (optional)
     ],
   ],
@@ -182,7 +188,7 @@ return [
   "pcapath"        => "vendor/robinn/phpcacheadmin/",  	  // Path to the package when installed via composer. User for assets. Seen from /phpcacheadmin/index.php
   "thousands-sep"  => ",",
   "time-format"    => "Y-m-d H:i:s",
-  "timezone"       => "Europe/Amsterdam", 								// Leave empty (or commented out) to get it automatically obtained.
+  // "timezone"       => "Europe/Amsterdam", 								// Leave empty (or commented out) to get it automatically obtained.
   "twigcache"      => __DIR__."/twigcache",
   "url"            => "/protected/pca/phpcacheadmin.php", // URL to php-cache-admin folder, seen from browser root
 ];

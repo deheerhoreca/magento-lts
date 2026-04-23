@@ -152,6 +152,11 @@
     # Fix malformed URLs: ...foo.html&bar=baz  =>  ...foo.html?bar=baz
     RewriteRule ^(?!.*\?)(.*?)\&(.*)$ /$1?$2 [R=301,NC,L]
 
+    # .well-known/ must be real files only, no dynamic routing or dir listings
+    RewriteCond %{REQUEST_URI} ^/\.well-known/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ - [R=404,L]
+
     # Redirect catalog URLs -- https://htaccess.madewithlove.com
     # 1. Change the URL key of a category without adding to the core_url_rewrite table (which is horrendously large)
     # 2. Products and category work immediately without needing to wait for the next reindex

@@ -253,7 +253,7 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     
     /* STOCK */    
     $stockItem = Mage::getModel("cataloginventory/stock_item")->loadByProduct($productId);
-    // echo "<pre>"; var_dump($stockItem->getData());exit;
+    // echo "<pre>"; di($stockItem->getData());exit;
     
     if($stockItem->getManageStock() === 0 && $stockItem->getData("use_config_manage_stock") === "0") {
       $stockItem->setData("is_in_stock", 1);

@@ -855,7 +855,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     
     static $cache_id_prefix = null;
     if($cache_id_prefix === null) {
-      $cache_id_prefix = Mage::app()->getCache()->getOption(["id_prefix"]);
+      $cache_id_prefix = Mage::app()->getCache()->getOption("id_prefix");
     }
     
     return Mage::app()->getCache()->clean("matchingTag", $cache_tags);

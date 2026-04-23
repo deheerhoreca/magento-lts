@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+: '---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/om-record-redis-metrics                                      # 5 sec
+-----------------------------------------------------------------------------------------------------------------'
+
+# Multiple hosts are running this cronjob every minute, but we do not need that resolution nor duplicate metrics,
+# but we need redundancy. Use a random chance of 5%.
+
+# ! The metrics sqlite file is on a network drive and it grows over time, implement a cleanup or check the project for a solution.
+
+if (( RANDOM % 100 < 5 )); then
+  printf "Recording Redis metrics at %s\n" "$(date -Iseconds)"
+  curl -o /dev/null --no-progress-meter "https://www.chefstore.nl/protected/pca/phpcacheadmin.php?dashboard=redis&server=0&ajax&metrics"
+fi
+d
