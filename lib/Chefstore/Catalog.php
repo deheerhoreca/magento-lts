@@ -62,6 +62,16 @@ class Catalog {
   
   /**
    * Get the full list of promos with their details, including start and end dates as CarbonImmutable instances.
+   * "HENDI5" as a keyword to find this function.
+   * 
+   * [
+   * "supplierCode"  => "hendi",
+   * "startDateCET"  => "2026-01-01 00:00:00",
+   * "endDateCET"    => "2026-04-01 00:00:00",
+   * "promoCode"     => "HENDI5",
+   * "label"         => "5% korting op Hendi",    // Used in product detail view
+   * "labelShort"    => "5% Promocode",           // Used in product listviews as label/badge
+   * ]
    *
    * @return \Illuminate\Support\Collection
    */
@@ -83,6 +93,15 @@ class Catalog {
         "promoCode"     => "DIVERSO-5",
         "label"         => "5% korting op Diverso by Diamond",
         "labelShort"    => "5% Promocode",
+      ],
+      [
+        "supplierCode"  => "maxima",
+        "brandCode"     => Str::slug("Maxima"),
+        "startDateCET"  => "2026-04-23 00:00:00",
+        "endDateCET"    => "2026-05-03 23:59:59",
+        "promoCode"     => "KONINGSDAG2026",
+        "label"         => "5% korting op alles van Maxima",
+        "labelShort"    => "5% 👑 Maxima Code",
       ],
     ])->map(fn($promo) => array_merge($promo, [
       "endDateHumanNL"   => CarbonImmutable::createFromFormat("Y-m-d H:i:s", $promo["endDateCET"], "CET")->locale("nl_NL")->translatedFormat("j F Y"),

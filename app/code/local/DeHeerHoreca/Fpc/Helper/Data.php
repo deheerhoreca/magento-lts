@@ -26,6 +26,17 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   public const REDIS_CACHE_TAG_PREFIX         = "zc:ti:om";
   public const REDIS_CACHE_KEY_PREFIX         = "zc:k:om";
   
+  /**
+   * The cache expiry in seconds for FPC items in Redis.
+   * This normally does not matter because of active cache purging, however:
+   *  - Valkey has lost its REPLICAOF config while restarting automatically, causing stale cache.
+   *  - There is no automated check on REPLICAOF status yet.
+   *  - Unforeseeable issues may arise that cause the cache to not be purged correctly.
+   *  - We need to put in a sane backstop expiry >1 day, but not too much.
+   * @var int
+   */
+  public const CACHE_LIFETIME_SECONDS = 60 * 60 * 24 * 3;
+  
   /** @var array<string,string|string[]> */
   private static array $httpHeaders = [];
   
@@ -631,7 +642,7 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
     // $cache_tags[] = "DHH_FPC"; // Removed: Simplifying cache tag management by relying on OM native tags as much as possible
     
     // Store in cache
-    if(self::saveToCacheDeferred($key, $html, $cache_tags, 7 * 86400, minifyHtml: false)) {
+    if(self::saveToCacheDeferred($key, $html, $cache_tags, self::CACHE_LIFETIME_SECONDS, minifyHtml: false)) {
       self::addServerTimingHeader("FPC: SAVE {$key}");
       $return = true;
     }
@@ -643,16 +654,17 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /**
    * Generic method (no hole punching) to save data to cache. Not meant for full HTML pages.
    *
-   * @param  string  $key         The cache key.
-   * @param  mixed   $data        The data to cache.
-   * @param  array   $cache_tags  Cache tags for invalidation.
-   * @param  int     $lifetime    Cache lifetime in seconds.
-   * @param  bool    $minifyHtml  Whether to conservatively minify as HTML before saving.
+   * @param  string   $key         The cache key.
+   * @param  mixed    $data        The data to cache.
+   * @param  array    $cache_tags  Cache tags for invalidation.
+   * @param  int|null $lifetime    Cache lifetime in seconds (default: self::CACHE_LIFETIME_SECONDS)
+   * @param  bool     $minifyHtml  Whether to conservatively minify as HTML before saving.
    *
-   * @return bool    TRUE if saving to cache was successful.
+   * @return bool     TRUE if saving to cache was successful.
    */
-  public static function saveToCache(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): bool {
+  public static function saveToCache(string $key, mixed $data, array $cache_tags = [], ?int $lifetime = null, bool $minifyHtml = false): bool {
     Varien_Profiler::start("DHH::FPC::saveToCache  {$key}");
+    $lifetime ??= self::CACHE_LIFETIME_SECONDS;
     
     if($minifyHtml === true && is_string($data)) {
       $data = \Chefstore\Html::minifyHtml($data);
@@ -677,16 +689,17 @@ class DeHeerHoreca_Fpc_Helper_Data extends Mage_Core_Helper_Abstract {
   /**
    * Generic method (no hole punching) to save data to cache, after the response is sent. Not meant for full HTML pages.
    *
-   * @param  string  $key         The cache key.
-   * @param  mixed   $data        The data to cache.
-   * @param  array   $cache_tags  Cache tags for invalidation.
-   * @param  int     $lifetime    Cache lifetime in seconds.
-   * @param  bool    $minifyHtml  Whether to conservatively minify as HTML before saving.
+   * @param  string   $key         The cache key.
+   * @param  mixed    $data        The data to cache.
+   * @param  array    $cache_tags  Cache tags for invalidation.
+   * @param  int|null $lifetime    Cache lifetime in seconds (default: self::CACHE_LIFETIME_SECONDS)
+   * @param  bool     $minifyHtml  Whether to conservatively minify as HTML before saving.
    *
-   * @return true    The deferred saving was scheduled.
+   * @return true     The deferred saving was scheduled successfully.
    */
-  public static function saveToCacheDeferred(string $key, mixed $data, array $cache_tags = [], int $lifetime = 86400, bool $minifyHtml = false): true {
+  public static function saveToCacheDeferred(string $key, mixed $data, array $cache_tags = [], ?int $lifetime = null, bool $minifyHtml = false): true {
     Varien_Profiler::start("DHH::FPC::saveToCacheDeferred  {$key}");
+    $lifetime ??= self::CACHE_LIFETIME_SECONDS;
     $closure = fn() => self::saveToCache($key, $data, $cache_tags, $lifetime, $minifyHtml);
     Utils::deferClosure($closure);
     self::log("(Deferred) SAVE {$key}");
