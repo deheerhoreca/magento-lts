@@ -13,4 +13,3 @@ if (( RANDOM % 100 < 5 )); then
   printf "Recording Redis metrics at %s\n" "$(date -Iseconds)"
   curl -o /dev/null --no-progress-meter "https://www.chefstore.nl/protected/pca/phpcacheadmin.php?dashboard=redis&server=0&ajax&metrics"
 fi
-d
