@@ -3043,12 +3043,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/paynl-openmage.git",
-                "reference": "faf202abe6aefd4aeb9460636df1896d1949a772"
+                "reference": "3363ae841b3ef9c608fb2d6e6138aa245cd5cbb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/faf202abe6aefd4aeb9460636df1896d1949a772",
-                "reference": "faf202abe6aefd4aeb9460636df1896d1949a772",
+                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/3363ae841b3ef9c608fb2d6e6138aa245cd5cbb1",
+                "reference": "3363ae841b3ef9c608fb2d6e6138aa245cd5cbb1",
                 "shasum": ""
             },
             "default-branch": true,
@@ -3066,7 +3066,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/paynl-openmage/tree/master"
             },
-            "time": "2026-04-16T14:39:58+00:00"
+            "time": "2026-04-23T00:59:09+00:00"
         },
         {
             "name": "pelago/emogrifier",
