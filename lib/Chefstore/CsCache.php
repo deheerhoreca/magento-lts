@@ -284,7 +284,7 @@ class CsCache {
    *
    * @return bool
    */
-  public static function _c_delete(AdapterInterface $adapter, string $cache_key) {
+  public static function _c_delete(AdapterInterface $adapter, string $cache_key): bool {
     // if(DRYRUN) {
     //   if(VERBOSE) {
     //     verbose("Dryrun: Remove cache key: {$cache_key}");
@@ -340,10 +340,10 @@ class CsCache {
 	 * Delete a cache by key via native OpenMage method.
 	 * Will hit 2-level cache.
 	 *
-	 * @param  mixed $id
+	 * @param  string $id
 	 * @return true
 	 */
-	public static function delete($id): true {
+	public static function delete(string $id): true {
 		Mage::app()->removeCache($id);
 		return true;
 	}
@@ -355,7 +355,7 @@ class CsCache {
 	 * @param  array $tags
 	 * @return true
 	 */
-	public static function clean($tags = []): true {
+	public static function clean(array $tags = []): true {
 		Mage::app()->cleanCache($tags);
 		return true;
 	}

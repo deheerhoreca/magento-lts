@@ -98,25 +98,25 @@ class Observability {
    * @return boolean
    */
   public static function isElasticApmAvailable(?string $transaction_name = null): bool {
-    $transaction_name ??= "no_transaction_name";
+    // $transaction_name ??= "no_transaction_name";
     
-    // Indicates Elastic APM disabled -- No logging needed here
-    if(ini_get("elastic_apm.enabled") != "1") {
-      return false;
-    }
+    // // Indicates Elastic APM disabled -- No logging needed here
+    // if(!ini_get("elastic_apm.enabled")) {
+    //   return false;
+    // }
     
-    // Suggests something is wrong
-    if(!extension_loaded("elastic_apm")) {
-      Mage::log("Elastic APM extension not loaded [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE);
-      return false;
-    }
+    // // Suggests something is wrong
+    // if(!extension_loaded("elastic_apm")) {
+    //   Mage::log("Elastic APM extension not loaded [{$transaction_name}]: ".implode(", ", get_loaded_extensions()), Zend_Log::NOTICE);
+    //   return false;
+    // }
     
-    // After clearing opcache, there are a few requests that strangely make it past extension_loaded(),
-    // but still don't have Elastic APM available, adding another check. Using DEBUG level to reduce noise from all the FPM threads.
-    if(!class_exists(ElasticApm::class)) {
-      Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::DEBUG);
-      return false;
-    }
+    // // After clearing opcache, there are a few requests that strangely make it past extension_loaded(),
+    // // but still don't have Elastic APM available, adding another check. Using DEBUG level to reduce noise from all the FPM threads.
+    // if(!class_exists(ElasticApm::class)) {
+    //   Mage::log("Elastic APM extension loaded but class does not exist yet [{$transaction_name}]", Zend_Log::DEBUG);
+    //   return false;
+    // }
     
     return true;
   }
@@ -195,6 +195,7 @@ class Observability {
       return "No backtrace available";
     }
     
+    $strings = [];
     foreach($callers as $i => $caller) {
       $function_part = "";
       if($caller["class"] !== null) {

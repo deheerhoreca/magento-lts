@@ -40,55 +40,64 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       return;
     }
     
-    // Also register a shutdown function in this early observer.
-    if(!defined("APP_SHORT")) { // Do not run when embedded in Intel or Tools
-      if(!defined("START_HRTIME")) define("START_HRTIME", hrtime(true)); // Close enough for this purpose
-      register_shutdown_function("omCheckCriticalPhpSettings");
-    }
-    
-    // Silently skip if Elastic APM is disabled in php.ini
-    if(ini_get("elastic_apm.enabled") != "1") {
+    if(!extension_loaded("elastic_apm") || !ini_get("elastic_apm.enabled")) {
+      $initialized = true; // Don't check again during this request
       return;
     }
     
-    // Check if Elastic APM is available:
-    if(!Observability::isElasticApmAvailable()) {
-      devLog("Elastic APM not available");
-      return;
-    }
+    // if(!class_exists(ElasticApm::class)) {
+    //   return;
+    // }
     
-    // Careful execution with try block:
-    try {
-      /** @var TransactionInterface */
-      $transaction = ElasticApm::getCurrentTransaction();
-      if(is_object($transaction)) {
+    // // Also register a shutdown function in this early observer.
+    // if(!defined("APP_SHORT")) { // Do not run when embedded in Intel or Tools
+    //   if(!defined("START_HRTIME")) define("START_HRTIME", hrtime(true)); // Close enough for this purpose
+    //   register_shutdown_function("omCheckCriticalPhpSettings");
+    // }
+    
+    // // Silently skip if Elastic APM is disabled in php.ini
+    // if(ini_get("elastic_apm.enabled") != "1") {
+    //   return;
+    // }
+    
+    // // Check if Elastic APM is available:
+    // if(!Observability::isElasticApmAvailable()) {
+    //   devLog("Elastic APM not available");
+    //   return;
+    // }
+    
+    // // Careful execution with try block:
+    // try {
+    //   /** @var TransactionInterface */
+    //   $transaction = ElasticApm::getCurrentTransaction();
+    //   if(is_object($transaction)) {
         
-        // Set transaction.name to HTTP method + the name of the OpenMage action
-        if($transaction_name = Observability::getApmTransactionName()) {
-          $transaction->setName($transaction_name);
-          // devLog("Set APM transaction name to {$transaction_name}");
-        }
+    //     // Set transaction.name to HTTP method + the name of the OpenMage action
+    //     if($transaction_name = Observability::getApmTransactionName()) {
+    //       $transaction->setName($transaction_name);
+    //       // devLog("Set APM transaction name to {$transaction_name}");
+    //     }
         
-        // Set transaction.type to segregate the various request types
-        if($transaction_type = Observability::getApmTransactionType()) {
-          $transaction->setType($transaction_type);
-          // devLog("Set APM transaction type to {$transaction_type}");
-        }
+    //     // Set transaction.type to segregate the various request types
+    //     if($transaction_type = Observability::getApmTransactionType()) {
+    //       $transaction->setType($transaction_type);
+    //       // devLog("Set APM transaction type to {$transaction_type}");
+    //     }
         
-        $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
-        $transaction->context()->setLabel("sapi", PHP_SAPI);
+    //     $transaction->context()->setLabel("store_id", Mage::app()->getStore()->getId());
+    //     $transaction->context()->setLabel("sapi", PHP_SAPI);
         
-        $initialized = true;
-        // $currentUrl = getDecodedCurrentUrl();
-      } else {
-        Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE);
-        return;
-      }
-    } catch(Exception $e) {
-      Mage::logException($e);
-      Mage::log("Failed to init Elastic APM: {$e->getMessage()}", Zend_Log::NOTICE);
-      return;
-    }
+    //     $initialized = true;
+    //     // $currentUrl = getDecodedCurrentUrl();
+    //   } else {
+    //     Mage::log("Failed to get current Elastic APM transaction, cannot initialize APM", Zend_Log::NOTICE);
+    //     return;
+    //   }
+    // } catch(Exception $e) {
+    //   Mage::logException($e);
+    //   Mage::log("Failed to init Elastic APM: {$e->getMessage()}", Zend_Log::NOTICE);
+    //   return;
+    // }
     
     return;
   }
@@ -148,6 +157,8 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
       $product = $observer_or_product;
     }
     
+    /** @var Mage_Catalog_Model_Product $product */
+    
     /* END OF LIFE */
     if($product->getData("eol") === "2075") {
       if(!empty($product->getData("tagline"))) {
@@ -184,13 +195,19 @@ class DeHeerHoreca_Util_Model_Observer extends Varien_Event_Observer {
     }
     
     /* POWER */
-    if(!empty($product->getData("vermogen")) || !empty($product->getData("vermogen_kw"))) {
-      $vermogen    = empty($product->getData("vermogen"))    ? 0 : (double) $product->getData("vermogen");
-      $vermogen_kw = empty($product->getData("vermogen_kw")) ? 0 : (double) $product->getData("vermogen_kw");
-      $new_value   = ($vermogen + $vermogen_kw) * 1000;
+    $electrical_power_watt  = $product->getData("vermogen");
+    $gas_power_kw           = $product->getData("vermogen_kw");
+    $total_power_watt       = $product->getData("total_power_watt");
+    
+    if(is_numeric($electrical_power_watt) && is_numeric($gas_power_kw)) {
+      $electrical_power_watt  = (double) $electrical_power_watt;
+      $gas_power_kw           = (double) $gas_power_kw;
+      $total_power_watt       = ($electrical_power_watt + $gas_power_kw) * 1000;
       
-      if($new_value > 0 && $new_value != $product->getData("total_power_watt")) {
-        $product->setData("total_power_watt", $new_value);
+      // Using a sensible limit of 10 kW, prevents unusable web filters in case of bad input.
+      // Rembmer this is a backfill, this rule should be implemented upstream in intel (both materialized in Elasticsearch and on the fly during push-attr).
+      if($total_power_watt > 0 && $total_power_watt < 10_000 && $total_power_watt != $product->getData("total_power_watt")) {
+        $product->setData("total_power_watt", $total_power_watt);
         if(!$return) Mage::getSingleton("core/session")->addSuccess("total_power_watt auto-filled");
       }
     }

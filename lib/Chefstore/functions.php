@@ -136,7 +136,7 @@ if(!function_exists("dg")) {
  * @return mixed
  */
 if(!function_exists("ds")) {
-  function ds(array|ArrayAccess &$target, $key, $value, bool $overwrite = true): mixed {
+  function ds(array|ArrayAccess &$target, mixed $key, mixed $value, bool $overwrite = true): mixed {
     return data_set($target, $key, $value, $overwrite);
   }
 }
@@ -151,7 +151,7 @@ if(!function_exists("ds")) {
  * @return mixed
  */
 if(!function_exists("dp")) {
-  function dp(array|ArrayAccess &$array, string $key, $value): mixed {
+  function dp(array|ArrayAccess &$array, string $key, mixed $value): mixed {
     return data_push($array, $key, $value);
   }
 }
@@ -161,12 +161,12 @@ if(!function_exists("dp")) {
  *
  * @param  array|ArrayAccess $array
  * @param  mixed             $key
- * @param  mixed      ss       $default
+ * @param  mixed             $default
  * 
  * @return mixed
  */
 if(!function_exists("dy")) {
-  function dy(array|ArrayAccess &$array, $key, $default = null): mixed {
+  function dy(array|ArrayAccess &$array, mixed $key, mixed $default = null): mixed {
     return Arr::pull($array, $key, $default);
   }
 }
@@ -311,7 +311,7 @@ if(!function_exists("asString")) {
     }
     
     try {
-      if(method_exists($value, "toString")) {
+      if(is_object($value) && method_exists($value, "toString")) {
         return $value->toString();
       }
       return (string) $value;
@@ -350,7 +350,7 @@ if(!function_exists("clampNumber")) {
  * @return array
  */
 if(!function_exists("data_push")) {
-  function data_push(array &$array, string $key, $value): array {
+  function data_push(array &$array, string $key, mixed $value): array {
     // Tried but broke product.attributes push:
     // if(!Arr::has($array, $key) || blank($tmp = dg($array, $key))) {
     //   return ds($array, $key, $value);
@@ -401,7 +401,7 @@ if(!function_exists("data_append")) {
  * @return array
  */
 if(!function_exists("data_add")) {
-  function data_add(array &$array, $key, $value): array {
+  function data_add(array &$array, mixed $key, mixed $value): array {
     if(data_blank($array, $key)) {
       Arr::set($array, $key, $value);
     }
@@ -417,7 +417,7 @@ if(!function_exists("data_add")) {
  * @return boolean
  */
 if(!function_exists("data_filled")) {
-  function data_filled(Iterable $array, $key): bool {
+  function data_filled(Iterable $array, mixed $key): bool {
     if(Arr::has($array, $key)) {
       return filled(data_get($array, $key, null));
     }
@@ -435,7 +435,7 @@ if(!function_exists("data_filled")) {
  * @return mixed
  */
 if(!function_exists("data_pull")) {
-  function data_pull(Iterable &$array, $key, $default = null): mixed {
+  function data_pull(Iterable &$array, mixed $key, mixed $default = null): mixed {
     return Arr::pull($array, $key, $default);
   }
 }
@@ -467,7 +467,7 @@ if(!function_exists("data_blank")) {
  * @return mixed
  */
 if(!function_exists("data_coalesce")) {
-  function data_coalesce(Iterable $data, mixed $default, ...$keys): mixed {
+  function data_coalesce(Iterable $data, mixed $default, mixed ...$keys): mixed {
     foreach($keys as $key) {
       if(data_filled($data, $key)) {
         return data_get($data, $key);
@@ -501,12 +501,12 @@ if(!function_exists("_dhh_ips")) {
  * Load a cache item by key via the native OpenMage method.
  * Will hit 2-level cache and CacheStats.
  *
- * @param  mixed  $id   The cache key, WITHOUT prefixes.
- * @return string|false The cached value, or false if not found.
+ * @param  string        $id  The cache key, WITHOUT prefixes.
+ * @return string|false  The cached value, or false if not found.
  *
  * @see Mage_Core_Model_Cache::load() for more details.
  */
-function omCacheGet($id): string|false {
+function omCacheGet(string $id): string|false {
   return CsCache::get($id);
 }
 
@@ -514,22 +514,34 @@ function omCacheGet($id): string|false {
  * Save a cache by key via native OpenMage method.
  * Will hit 2-level cache and CacheStats.
  *
- * @param  mixed  $data
- * @param  mixed  $key
- * @param  array  $tags
- * @param  mixed  $lifetime
+ * @param  mixed           $data
+ * @param  string          $key
+ * @param  array           $tags
+ * @param  null|false|int  $lifetime
  *
  * @return true
  */
-function omCacheSave($data, $key, $tags = [], $lifetime = null): true {
+function omCacheSave(mixed $data, string $key, array $tags = [], null|false|int $lifetime = null): true {
   return CsCache::save($data, $key, $tags, $lifetime);
 }
 
-function omCacheDelete($id): true {
+/**
+ * Delete a cache by key via native OpenMage method.
+ *
+ * @param  string $id
+ * @return true
+ */
+function omCacheDelete(string $id): true {
   return CsCache::delete($id);
 }
 
-function omCacheClean(array $tags): true {
+/**
+ * Clean cache by tags via native OpenMage method. Will hit 2-level cache and CacheStats.
+ *
+ * @param  array $tags
+ * @return true
+ */
+function omCacheClean(array $tags = []): true {
   return CsCache::clean($tags);
 }
 
@@ -537,10 +549,9 @@ function omCacheClean(array $tags): true {
 
 /**
  * OpenMage Dump -- Opinionated wrapper around Symfony VarDumper for OpenMage.
- *
- * - Switches between CliDumper and HtmlDumper based on the SAPI.
- * - Limits the number of items, depth, and string length for better readability.
- * - Does not support customization of the dump, it's a shorthand.
+ *  - Switches between CliDumper and HtmlDumper based on the SAPI.
+ *  - Limits the number of items, depth, and string length for better readability.
+ *  - Does not support customization of the dump, it's a shorthand.
  *
  * @param  mixed ...$vars
  * @return void
@@ -556,23 +567,26 @@ function omd(mixed ...$vars): void {
   
   static $dumper = null;
   if($dumper === null) {
-    if(PHP_SAPI !== "cli") {
+    if(!is_cli()) {
       $dumper = new HtmlDumper();
-      $separator = "<br>";
-      $options = [
+      $dumper->setDisplayOptions([
         'maxDepth'        => 3,
         'maxStringLength' => 250,
-      ];
+      ]);
     } else {
       $dumper = new CliDumper();
-      $separator = PHP_EOL.PHP_EOL;
-      $options = null;
     }
   }
   
   $strings = [];
   foreach($vars as $var) {
-    $strings[] = $dumper->dump($cloner->cloneVar($var), true, $options);
+    $strings[] = $dumper->dump($cloner->cloneVar($var), true);
+  }
+  
+  if(PHP_SAPI !== "cli") {
+    $separator = "<br>";
+  } else {
+    $separator = PHP_EOL.PHP_EOL;
   }
   
   echo implode($separator, $strings);
@@ -750,9 +764,12 @@ if(!function_exists("array_to_table")) {
  */
 if(!function_exists("td")) {
   function td(mixed $input, bool $return = false, bool $inline = false): string|null {
-    $flags = $inline ? VarExporter::INLINE_ARRAY : 0; // Was: VarExporter::INLINE_SCALAR_LIST
+    $options = $inline ?
+      (VarExporter::INLINE_ARRAY | VarExporter::INLINE_LITERAL_LIST)
+      : VarExporter::INLINE_LITERAL_LIST; // Was: VarExporter::INLINE_SCALAR_LIST
     try {
       $var = Str::swap([
+        "',\n"    => "\",\n",
         "  '"     => "  \"",
         "', '"    => "\", \"",
         "' => '"  => "\" => \"",
@@ -761,11 +778,17 @@ if(!function_exists("td")) {
         "['"      => "[\"",
         "']"      => "\"]",
         "null"    => "NULL",
-      ], VarExporter::export($input, $flags));
+        ], VarExporter::export($input, $options, indentLevel: 0));
     } catch (ExportException $e) {
       logger("Failed to TinyDump: {$e->getMessage()}", "ERROR");
       return null;
     }
+    
+    // Replace escaped newlines with actual newlines for better readability.
+    $var = str_replace("\\n", "\n", $var);
+    
+    // Replace 4 spaces with 2 for better readability in the console. -- Might need tweaking based on the output of VarExporter.
+    $var = str_replace("    ", "  ", $var);
     
     if($return) {
       return $var;
@@ -808,8 +831,7 @@ if(!function_exists("_get_product_attribute")) {
    *
    * @param  Mage_Catalog_Model_Product|null $_product
    * @param  string                          $attribute_code
-   * @param  string                          $as
-   * @param  array                           $options
+   * @param  bool                            $implode_arrays  Whether to implode array values into a comma-separated string. Defaults to TRUE.
    *
    * @return mixed
    */
@@ -1212,7 +1234,7 @@ if(!function_exists("_cdn_img")) {
     }
     
     // Return just the URL when requested, don't spend time on HTML generation
-    if($url_only) {
+    if($url_only && isset($src_url)) {
       return $src_url;
     }
     
@@ -1265,6 +1287,10 @@ if(!function_exists("_cdn_img")) {
     
     $widthAttr  = ($width > 0) ? "width=\"{$width}\"" : "";
     $heightAttr = ($height > 0) ? "height=\"{$height}\"" : "";
+    
+    // For IDE analyzers:
+    $cdn_options ??= [];
+    $src_url ??= $url;
     
     switch($cdn) {
       case "none": return "<img src=\"{$url}\" {$widthAttr} {$heightAttr} alt=\"{$alt}\"{$lazy_html}{$class_html}{$style_html}{$id_html}>";
@@ -1342,17 +1368,32 @@ if(!function_exists("implode_array_with_keys")) {
   }
 }
 
-// @see // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
 if(!function_exists("add_url_param")) {
-  function add_url_param(string $url, $key, $value): string {
+  /**
+   * Add a parameter to a URL, correctly handling existing query parameters.
+   * @see // https://stackoverflow.com/questions/5809774/manipulate-a-url-string-by-adding-get-parameters
+   *
+   * @param  string  $url   The original URL
+   * @param  string  $key   The parameter name to add
+   * @param  string  $value The parameter value to add
+   *
+   * @return string  The modified URL with the new parameter
+   */
+  function add_url_param(string $url, string $key, string $value): string {
     $url .= (parse_url($url, PHP_URL_QUERY) ? "&" : "?") . "{$key}={$value}";
     return $url;
   }
 }
 
-// Remove one or more parameters from a URL
 if(!function_exists("remove_url_param")) {
-  function remove_url_param(string $url, $params): string {
+  /**
+   * Remove one or more parameters from a URL. Parameters should be given as an array of parameter names, or a single parameter name as a string.
+   *
+   * @param  string        $url     The URL to remove parameters from
+   * @param  iterable|null $params  A single parameter name or an array of parameter names to remove from the URL
+   * @return string
+   */
+  function remove_url_param(string $url, iterable|null $params): string {
     $params     = (array) $params;
     $base_url   = strtok($url, "?");             // Get the base url
     $parsed_url = parse_url($url);              // Parse it
@@ -1368,8 +1409,13 @@ if(!function_exists("remove_url_param")) {
   }
 }
 
-// Try to convert an XML string to an array, fail quietly with logging
 if(!function_exists("xml_string_to_array")) {
+    /**
+    * Convert an XML string to an associative array. Returns FALSE if the string is not valid XML or if JSON encoding/decoding fails.
+    *
+    * @param  string       $string  The XML string to convert
+    * @return array|false  The resulting associative array, or FALSE on failure
+    */
   function xml_string_to_array(string $string): array|false {
     if(($object = simplexml_load_string($string)) !== false) {
       try {

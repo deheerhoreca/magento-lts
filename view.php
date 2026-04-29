@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-use \Elastic\Apm\ElasticApm;
+// use \Elastic\Apm\ElasticApm;
 
 // require_once __DIR__."/lib/Chefstore/ElasticApmHelper.php";
 
-if(extension_loaded("elastic_apm") && class_exists(ElasticApm::class)) {
-  try {
-    $transaction = ElasticApm::getCurrentTransaction();
-    if(is_object($transaction)) {
-      $http_method = \trim(\strip_tags((string) $_SERVER["REQUEST_METHOD"]));
-      $transaction->setName("{$http_method} view.php");
-      $transaction->setType("frontend");
-      $transaction->context()->setLabel("store_id", 1);
-      $transaction->context()->setLabel("sapi", PHP_SAPI);
-    }
-  } catch(\Throwable $e) {
-    Mage::logException($e); // Log but don't break the redirect
-  }
-}
+// if(extension_loaded("elastic_apm") && ini_get("elastic_apm.enabled") && class_exists(ElasticApm::class)) {
+//   try {
+//     $transaction = ElasticApm::getCurrentTransaction();
+//     if(is_object($transaction)) {
+//       $http_method = \trim(\strip_tags((string) $_SERVER["REQUEST_METHOD"]));
+//       $transaction->setName("{$http_method} view.php");
+//       $transaction->setType("frontend");
+//       $transaction->context()->setLabel("store_id", 1);
+//       $transaction->context()->setLabel("sapi", PHP_SAPI);
+//     }
+//   } catch(\Throwable $e) {
+//     Mage::logException($e); // Log but don't break the redirect
+//   }
+// }
 
 if(!isset($_GET["id"]) || empty((string) $_GET["id"])) {
   header("Location: /", true, 302);
