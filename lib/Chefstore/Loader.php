@@ -4,19 +4,16 @@
 
 declare(strict_types=1);
 
-use \Illuminate\Support\Arr;
-use \Illuminate\Support\Collection;
-use \Illuminate\Support\Number;
-use \Illuminate\Support\Str;
-
 // Setup global aliases to prevent "use" statements all over -- Needs test because this file might get included multiple times by Composer
 // Cannot be executed multiple times between our apps
 // @todo DEPRECATED, move away from global aliases
 if (!defined("DHH_CLASS_ALIASES_APPLIED")) {
-  if (!is_callable("Arr"))           class_alias(Arr::class, "Arr", true);
-  if (!is_callable("Collection"))    class_alias(Collection::class, "Collection", true);
-  if (!is_callable("Number"))        class_alias(Number::class, "Number", true);
-  if (!is_callable("Str"))           class_alias(Str::class, "Str", true);
+  if(!class_exists("Arr"))                 class_alias(\Illuminate\Support\Arr::class, "Arr", true);
+  if(!class_exists("Carbon"))              class_alias(\Carbon\Carbon::class, "Carbon", true);
+  if(!class_exists("Collection"))          class_alias(\Illuminate\Support\Collection::class, "Collection", true);
+  if(!class_exists("Number"))              class_alias(\Illuminate\Support\Number::class, "Number", true);
+  if(!class_exists("PrecisionStopwatch"))  class_alias(\Cspray\PrecisionStopwatch\Stopwatch::class, "PrecisionStopwatch", true);
+  if(!class_exists("Str"))                 class_alias(\Illuminate\Support\Str::class, "Str", true);
   define("DHH_CLASS_ALIASES_APPLIED", true);
 }
 
