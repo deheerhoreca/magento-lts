@@ -1,16 +1,16 @@
 {
   "name": "deheerhoreca/openmage",
-  "type": "project",
   "license": "proprietary",
+  "type": "project",
   "require": {
     "php": ">=8.2 <=8.4",
-    "ext-FFI": "*",
     "ext-apcu": "*",
     "ext-bz2": "*",
     "ext-calendar": "*",
     "ext-ctype": "*",
     "ext-curl": "*",
     "ext-date": "*",
+    "ext-ffi": "*",
     "ext-fileinfo": "*",
     "ext-gd": "*",
     "ext-gmp": "*",
@@ -119,8 +119,8 @@
         "empiricompany/openmage-mm_cmscontentfilemode",
         "fballiano/openmage-cssjs-minify",
         "firegento/adminmonitoring",
-        "firegento/dynamiccategory",
         "firegento/debug",
+        "firegento/dynamiccategory",
         "firegento/logger",
         "npm-asset/*",
         "paynl/magento-plugin",
@@ -229,8 +229,8 @@
       "type": "composer",
       "url": "https://asset-packagist.org",
       "only": [
-        "npm-asset/*",
-        "bower-asset/*"
+        "bower-asset/*",
+        "npm-asset/*"
       ]
     },
     {
@@ -262,6 +262,8 @@
       ]
     }
   ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "autoload": {
     "files": [
       "lib/Chefstore/Loader.php",
@@ -269,8 +271,6 @@
       "vendor/aoepeople/aoe_profiler/app/code/community/Varien/Profiler.php"
     ]
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "config": {
     "allow-plugins": {
       "aydin-hassan/magento-core-composer-installer": true,
@@ -283,12 +283,12 @@
     },
     "apcu-autoloader": false,
     "audit": {
-      "block-insecure": false,
       "ignore": {
-        "PKSA-t425-mpgn-4yhs": "Only until > 20.05 upgrade",
         "PKSA-626k-1yg1-m164": "Only until > 20.05 upgrade",
+        "PKSA-t425-mpgn-4yhs": "Only until > 20.05 upgrade",
         "PKSA-w1pc-fvwg-8vsf": "Only until > 20.05 upgrade"
-      }
+      },
+      "block-insecure": false
     },
     "classmap-authoritative": true,
     "magento-core-deploy": {
@@ -310,22 +310,20 @@
       ]
     },
     "optimize-autoloader": true,
-    "process-timeout": 3600,
-    "sort-packages": true,
     "platform": {
       "php": "8.2"
-    }
+    },
+    "process-timeout": 3600,
+    "sort-packages": true
   },
   "extra": {
     "auto-append-gitignore": false,
     "composer-exit-on-patch-failure": true,
-    "enable-patching": true,
-    "magento-core-package-type": "magento-source",
-    "magento-root-dir": ".",
     "composer-normalize": {
       "indent-size": 2,
       "indent-style": "space"
     },
+    "enable-patching": true,
     "installer-paths": {
       "skin/assets/{$name}/": [
         "type:bower-asset",
@@ -335,7 +333,9 @@
     "installer-types": [
       "bower-asset",
       "npm-asset"
-    ]
+    ],
+    "magento-core-package-type": "magento-source",
+    "magento-root-dir": "."
   },
   "scripts": {
     "post-autoload-dump": [
