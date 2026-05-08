@@ -49,6 +49,40 @@ $items = array_values(array_filter($items)); // Reindex and remove nulls
 // $coveredSkus = array_sum((array_column($items, 'countValue')));
 $attribute_name = htmlspecialchars((string) $this->getRequestValue());
 
+/**
+ * Coverage based filter display control.
+ * Keep this list empty by default; add attribute codes to force-keep filters.
+ */
+$excludedFromCoverageRemoval = [];
+$coverageProductCountThreshold = 150;
+$coveragePercentageThreshold = 3.0;
+
+if ($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
+  $attributeCode = (string) $this->getRequestValue();
+
+  if (!in_array($attributeCode, $excludedFromCoverageRemoval, true)) {
+    $category = Mage::registry('current_category');
+    $categoryProductCount = ($category instanceof Mage_Catalog_Model_Category)
+      ? (int) $category->getProductCount()
+      : 0;
+
+    if ($categoryProductCount >= $coverageProductCountThreshold) {
+      $coveredProductCount = (int) array_sum(array_column($items, 'countValue'));
+      if ($coveredProductCount > $categoryProductCount) {
+        $coveredProductCount = $categoryProductCount;
+      }
+
+      $coveragePercentage = $categoryProductCount > 0
+        ? ($coveredProductCount / $categoryProductCount) * 100
+        : 100.0;
+
+      if ($coveragePercentage < $coveragePercentageThreshold) {
+        return;
+      }
+    }
+  }
+}
+
 ?>
 <ol class="<?=htmlspecialchars($classAttr)?>">
   <?php if ($this->getSortFeaturedFirst()):?>
