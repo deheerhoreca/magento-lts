@@ -84,8 +84,8 @@ $fields = Mage::helper('checkoutfields')->getFields();
 // - tm_field11: TBD
 // - tm_field12: TBD
 // - tm_field13: TBD
-// - tm_field14: TBD
-// - tm_field15: events
+// - tm_field14: process.system_flags
+// - tm_field15: events (JSON)
 $fields = [
   // Customer:
   "tm_field10" => $fields["tm_field10"] ?? [],
@@ -108,10 +108,10 @@ $fields = [
   "tm_field11" => $fields["tm_field11"] ?? [],
   "tm_field12" => $fields["tm_field12"] ?? [],
   "tm_field13" => $fields["tm_field13"] ?? [],
-  "tm_field14" => $fields["tm_field14"] ?? [],
   
   // Process:
   "tm_field5"  => $fields["tm_field5"]  ?? [],
+  "tm_field14" => $fields["tm_field14"] ?? [],
   "tm_field15" => $fields["tm_field15"] ?? [],
 ];
 

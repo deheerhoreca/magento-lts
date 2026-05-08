@@ -30,9 +30,10 @@
         <div><?php echo Mage::helper('sales')->__('Add Order Comments') ?></div>
         <span class="field-row">
             <label class="normal" for="history_status"><?php echo Mage::helper('sales')->__('Status') ?></label><br/>
-            <select name="history[status]" class="select" id="history_status">
+            <select name="history[status]" class="select required-entry absolute-advice local-validation" id="history_status">
+                <option value=""></option>
             <?php foreach ($this->getStatuses() as $_code=>$_label): ?>
-                <option value="<?php echo $_code ?>"<?php if($_code==$this->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php echo $_label ?></option>
+                <option value="<?php echo $_code ?>"<?php if($_code==$this->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php echo $_label ?><?php if($_code==$this->getOrder()->getStatus()): echo Mage::helper('sales')->__(' (Current)'); endif; ?></option>
             <?php endforeach; ?>
             </select>
         </span>

@@ -1,52 +1,222 @@
-<div style="max-width: 800px; margin: auto;">
-<h1>Contact- en bedrijfsgegevens</h1>
-<p>Chefstore.nl staat garant voor betaalbare professionele kwaliteit. Dankzij de jarenlange ervaringen binnen de branche zijn wij in staat om voor alle klanten een goede oplossing te vinden.</p>
-<p>Voor meer informatie over ons bedrijf, zie {{widget type="cms/widget_page_link" anchor_text="over Chefstore.nl" template="cms/widget/link/link_block.phtml" page_id="45"}}</p>
-<div class="text-center py-4">
-<h3><em>Chefstore.nl - Alles voor de Chef</em></h3>
-</div>
-<div class="py-3">
-<h3>Contactgegevens</h3>
-<strong><em>Voor alle contactmogelijkheden, klik bovenin op het telefoon icoontje.</em></strong>
-<ul>
-<li>Service: <a href="mailto:service@chefstore.nl">service@chefstore.nl</a></li>
-<li>Sales: <a href="mailto:sales@chefstore.nl">sales@chefstore.nl</a></li>
-<li>Telefoon: <a href="tel:+31850441003">+31 85 0441003</a></li>
-</ul>
-</div>
-<div class="py-3">
-<h3>Postadres</h3>
-<ul>
-<li><strong>(<em>G&eacute;&eacute;n retouradres.</em> Neemt u contact met ons op om iets te retourneren)</strong></li>
-<li>De Heer Horeca B.V.</li>
-<li>Chefstore.nl</li>
-<li>John M. Keynesplein 12-46</li>
-<li>1066 EP Amsterdam</li>
-<li>Nederland</li>
-</ul>
-</div>
-<div class="py-3">
-<h3>Bankgegevens / Bank Account</h3>
-<div class="py-1">
-<ul>
-<li><strong>Naam / Account Name:</strong> De Heer Horeca B.V.</li>
-<li><strong>IBAN:</strong> NL08BUNQ2291487957</li>
-<li><strong>BIC:</strong> BUNQNL2A</li>
-</ul>
-</div>
-<h3>Registratiegegens en bankgegevens</h3>
-<div class="py-1">
-<ul>
-<li><strong>Nederland:</strong></li>
-<li><strong>KvK nummer:</strong> 69637717</li>
-<li><strong>BTW nummer:</strong> NL857951488B01</li>
-</ul>
-</div>
-<div class="py-1">
-<ul>
-<li><strong>Belgi&euml;:</strong></li>
-<li><strong>BTW nummer:</strong> BE0783994580</li>
-</ul>
-</div>
-</div>
+<style>
+    /* ── Contact page ───────────────────────────────────────────────── */
+    .cs-contact-wrap {
+        max-width: 860px;
+        margin: auto;
+    }
+
+    .cs-tagline {
+        background: linear-gradient(135deg, #164050 0%, #2f86de 100%);
+        border-radius: 6px;
+        padding: 1.1rem 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .cs-tagline h3 {
+        color: #fff !important;
+        font-size: 1.05rem;
+        margin: 0;
+        letter-spacing: .04em;
+    }
+
+    .cs-card {
+        background: #fff;
+        border: 1px solid #dde8f0;
+        border-left: 4px solid #2f86de;
+        border-radius: 6px;
+        padding: 1.4rem 1.5rem;
+        height: 100%;
+        box-shadow: 0 2px 6px rgba(22, 64, 80, .07);
+    }
+
+    .cs-card h3 {
+        color: #164050;
+        font-size: .85rem;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .cs-card h3 .fa {
+        color: #2f86de;
+        font-size: 1rem;
+        width: 18px;
+        text-align: center;
+    }
+
+    .cs-card a {
+        color: #2f86de;
+        text-decoration: none;
+    }
+
+    .cs-card a:hover {
+        text-decoration: underline;
+    }
+
+    .cs-callout {
+        background: #f0f6fc;
+        border: 1px solid #c8dff0;
+        border-left: 3px solid #f5a623;
+        border-radius: 4px;
+        padding: .55rem .85rem;
+        font-size: .875rem;
+        color: #2d2d2d;
+        margin-bottom: .9rem;
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+
+    .cs-callout .fa {
+        color: #f5a623;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    .cs-info-row {
+        display: flex;
+        align-items: baseline;
+        gap: .4rem;
+        padding: .25rem 0;
+        font-size: .95rem;
+        color: #2d2d2d;
+    }
+
+    .cs-info-row .fa {
+        color: #2f86de;
+        width: 16px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .cs-info-row .cs-lbl {
+        font-weight: 600;
+        color: #164050;
+        min-width: 72px;
+    }
+
+    .cs-sub-heading {
+        font-size: .78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #2f86de;
+        padding: .6rem 0 .3rem;
+        border-bottom: 1px solid #dde8f0;
+        margin-bottom: .3rem;
+    }
+
+    .cs-flag {
+        display: inline-block;
+        vertical-align: middle;
+        border: 1px solid rgba(0, 0, 0, .15);
+        border-radius: 1px;
+        flex-shrink: 0;
+        margin-right: 5px;
+        }
+        .cs-flag-nl {
+        width: 19px;
+        height: 13px;
+        background: linear-gradient(to bottom,
+            #AE1C28 33.33%, #fff 33.33% 66.66%, #21468B 66.66%);
+        }
+        .cs-flag-be {
+        width: 15px;
+        height: 13px;
+        background: linear-gradient(to right,
+            #000 33.33%, #FFE936 33.33% 66.66%, #FF0F21 66.66%);
+        }
+
+    .cs-card address {
+        font-style: normal;
+        line-height: 1.9;
+        font-size: .95rem;
+    }
+</style>
+
+<div class="cs-contact-wrap py-4">
+
+    <h1 class="mb-2">Contact- en bedrijfsgegevens</h1>
+    <p class="mb-4">
+        Chefstore.nl staat garant voor betaalbare professionele kwaliteit. Dankzij de jarenlange ervaringen
+        binnen de branche zijn wij in staat om voor alle klanten een goede oplossing te vinden.<br>
+        <small>Voor meer informatie over ons bedrijf, zie {{widget type="cms/widget_page_link" anchor_text="over Chefstore.nl" template="cms/widget/link/link_block.phtml" page_id="45"}}</small>
+    </p>
+
+    <!-- 2×2 card grid -->
+    <div class="row g-3">
+
+        <!-- Contactgegevens -->
+        <div class="col-12 col-md-6">
+            <div class="cs-card">
+                <h3><i class="fa fa-address-card-o"></i> Contactgegevens</h3>
+                <div class="cs-callout">
+                    <i class="fa fa-info-circle"></i>
+                    <span>Voor alle contactmogelijkheden, klik bovenin op het telefoon-icoon.</span>
+                </div>
+                <div class="cs-info-row">
+                    <i class="fa fa-envelope-o"></i><span class="cs-lbl">Service:</span>
+                    <a href="mailto:service@chefstore.nl">service@chefstore.nl</a>
+                </div>
+                <div class="cs-info-row">
+                    <i class="fa fa-envelope-o"></i><span class="cs-lbl">Sales:</span>
+                    <a href="mailto:sales@chefstore.nl">sales@chefstore.nl</a>
+                </div>
+                <div class="cs-info-row">
+                    <i class="fa fa-phone"></i><span class="cs-lbl">Telefoon:</span>
+                    <a href="tel:+31850441003">+31 85 044 10 03</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Postadres -->
+        <div class="col-12 col-md-6">
+            <div class="cs-card">
+                <h3><i class="fa fa-map-marker"></i> Postadres</h3>
+                <div class="cs-callout">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span><strong>Geen retouradres.</strong> Neem contact met ons op om iets te retourneren.</span>
+                </div>
+                <address class="mb-0">
+                    De Heer Horeca B.V.<br>
+          Chefstore.nl<br>
+          John M. Keynesplein 12-46<br>
+          1066 EP Amsterdam<br>
+          Nederland
+                </address>
+            </div>
+        </div>
+
+        <!-- Bankgegevens -->
+        <div class="col-12 col-md-6">
+            <div class="cs-card">
+                <h3><i class="fa fa-university"></i> Bankgegevens</h3>
+                <div class="cs-info-row"><span class="cs-lbl">Naam:</span><span>De Heer Horeca B.V.</span></div>
+                <div class="cs-info-row"><span class="cs-lbl">IBAN:</span><span>NL08BUNQ2291487957</span></div>
+                <div class="cs-info-row"><span class="cs-lbl">BIC:</span><span>BUNQNL2A</span></div>
+            </div>
+        </div>
+
+        <!-- Registratiegegevens -->
+        <div class="col-12 col-md-6">
+            <div class="cs-card">
+                <h3><i class="fa fa-building-o"></i> Registratiegegevens</h3>
+                <div class="cs-sub-heading"><span class="cs-flag cs-flag-nl"></span> Nederland</div>
+                <div class="cs-info-row"><span class="cs-lbl">KvK nr.:</span><span>69637717</span></div>
+                <div class="cs-info-row"><span class="cs-lbl">BTW nr.:</span><span>NL857951488B01</span></div>
+                <div class="cs-sub-heading mt-2"><span class="cs-flag cs-flag-be"></span> België</div>
+                <div class="cs-info-row"><span class="cs-lbl">BTW nr.:</span><span>BE0783994580</span></div>
+            </div>
+        </div>
+
+        <div>
+            <img class="center" src="//images.chefstore.nl/skin/frontend/rwd/dhh/images/logo-chefstore.ts1741106066.min.svg" alt="Chefstore.nl" title="Chefstore.nl" height="40" width="208" loading="lazy" fetchpriority="low">
+        </div> 
+
+    </div>
 </div>
