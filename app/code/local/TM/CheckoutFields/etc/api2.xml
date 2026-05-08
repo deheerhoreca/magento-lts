@@ -17,8 +17,8 @@
                     <tm_field11>TBD #11</tm_field11>
                     <tm_field12>TBD #12</tm_field12>
                     <tm_field13>TBD #13</tm_field13>
-                    <tm_field14>TBD #14</tm_field14>
-                    <tm_field15>TBD #15</tm_field15>
+                    <tm_field14>process.system_flags</tm_field14>
+                    <tm_field15>events</tm_field15>
                 </attributes>
             </order>
         </resources>

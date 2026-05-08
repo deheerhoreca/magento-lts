@@ -735,7 +735,7 @@
           </fields>
         </tm_field13>
         <tm_field14 translate="label" module="checkoutfields">
-          <label>TBD #14</label>
+          <label>process.system_flags</label>
           <sort_order>140</sort_order>
           <show_in_default>1</show_in_default>
           <show_in_website>0</show_in_website>
