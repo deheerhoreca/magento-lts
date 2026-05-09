@@ -49,7 +49,59 @@ $items = array_values(array_filter($items)); // Reindex and remove nulls
 // $coveredSkus = array_sum((array_column($items, 'countValue')));
 $attribute_name = htmlspecialchars((string) $this->getRequestValue());
 
+/**
+ * Coverage based filter display control.
+ * Keep this list empty by default; add attribute codes to force-keep filters.
+ */
+$productCountThresholdPath = 'deheerhoreca_layered_navigation/settings/coverage_product_count_threshold';
+$percentageThresholdPath = 'deheerhoreca_layered_navigation/settings/coverage_percentage_threshold';
+$defaultCoverageProductCountThreshold = 150;
+$defaultCoveragePercentageThreshold = 3.0;
+
+$coverageExemptAttributeCodes = []; // Example: ['brand', 'kleur']
+$coverageProductCountThreshold = (int) Mage::getStoreConfig($productCountThresholdPath);
+$coveragePercentageThreshold = (float) Mage::getStoreConfig($percentageThresholdPath);
+
+if ($coverageProductCountThreshold < 1) {
+  $coverageProductCountThreshold = $defaultCoverageProductCountThreshold;
+}
+if ($coveragePercentageThreshold <= 0.0) {
+  $coveragePercentageThreshold = $defaultCoveragePercentageThreshold;
+}
+
+$shouldRenderFilter = true;
+
+if ($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
+  $attributeCode = (string) $this->getRequestValue();
+
+  if (!in_array($attributeCode, $coverageExemptAttributeCodes, true)) {
+    $category = Mage::registry('current_category');
+    $categoryProductCount = ($category instanceof Mage_Catalog_Model_Category)
+      ? (int) $category->getProductCount()
+      : 0;
+
+    if ($categoryProductCount >= $coverageProductCountThreshold) {
+      $countValues = [];
+      foreach ($items as $item) {
+        if (is_array($item) && isset($item['countValue'])) {
+          $countValues[] = (int) $item['countValue'];
+        }
+      }
+      $coveredProductCount = min((int) array_sum($countValues), $categoryProductCount);
+      // Multi-select attributes can count one product in multiple options; cap to category size.
+      $coveragePercentage = $categoryProductCount > 0
+        ? (float) ($coveredProductCount / $categoryProductCount * 100)
+        : 0.0;
+
+      if ($coveragePercentage < $coveragePercentageThreshold) {
+        $shouldRenderFilter = false;
+      }
+    }
+  }
+}
+
 ?>
+<?php if ($shouldRenderFilter): ?>
 <ol class="<?=htmlspecialchars($classAttr)?>">
   <?php if ($this->getSortFeaturedFirst()):?>
     <input type="hidden" id="field_sort_featured_<?=$attribute_name?>" value="default_sort">
@@ -211,3 +263,4 @@ $attribute_name = htmlspecialchars((string) $this->getRequestValue());
     </li>
   <?php endif;?>
 </ol>
+<?php endif; ?>
