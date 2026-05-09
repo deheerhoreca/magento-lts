@@ -16,12 +16,12 @@ if(!function_exists('amshopby_render_label')) {
    * @todo Add ability to specify placement of label (after, before)
    * @todo Move to helper?
    *
-   * @param  string           $placement
+   * @param  string|null      $placement
    * @param  string           $label
    * @param  string|int|float $value
    * @return string
    */
-  function amshopby_render_label(string $placement, string $label, string|int|float $value): string {
+  function amshopby_render_label(string|null $placement, string $label, string|int|float $value): string {
     $value = (string) $value;
     
     if ($placement == 'before') {
