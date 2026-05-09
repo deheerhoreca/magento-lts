@@ -104,9 +104,9 @@ if(in_array($this->getDisplayType(), $needs_count)) {
     <?php
     $sliderType       = $this->getSliderType();
     $useCustomSlider  = Mage::getStoreConfig('amshopby/general/slider_use_ui');
-    $max              = $this->_filter->getMaxValue();
-    $min              = max(0, $this->_filter->getMinValue()); // Guard against negative values.
-    $step             = $this->getSliderDecimal();
+    $max              = (float) $this->_filter->getMaxValue();
+    $min              = max(0, (float) $this->_filter->getMinValue()); // Guard against negative values.
+    $step             = (float) $this->getSliderDecimal();
     $valueLabel       = $this->getValueLabel();
     $valuePlacement   = $this->getValuePlacement();
     
