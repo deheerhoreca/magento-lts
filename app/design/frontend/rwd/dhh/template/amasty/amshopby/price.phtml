@@ -10,11 +10,20 @@
 declare(strict_types=1);
 
 if(!function_exists('amshopby_render_label')) {
-  function amshopby_render_label($placement, $label, $value) {
-    /**
-    * @todo Add ability to specify placement of label (after, before)
-    * @todo Move to helper?
-    */
+  /**
+   * Helper to render price-filter labels with currency symbol in the correct position.
+   *
+   * @todo Add ability to specify placement of label (after, before)
+   * @todo Move to helper?
+   *
+   * @param  string           $placement
+   * @param  string           $label
+   * @param  string|int|float $value
+   * @return string
+   */
+  function amshopby_render_label(string $placement, string $label, string|int|float $value): string {
+    $value = (string) $value;
+    
     if ($placement == 'before') {
       return $label . $value;
     } else {
@@ -26,7 +35,8 @@ if(!function_exists('amshopby_render_label')) {
 // /** @var  Mage_Catalog_Block_Layer_Filter_Decimal  $this */
 /** @var  Mage_Catalog_Block_Layer_Filter_Price  $this */
 
-$attribute      = $this->getAttributeCode() ?: $this->getAttributeModel()->getAttributeCode();
+// $attribute      = $this->getAttributeCode() ?: $this->getAttributeModel()->getAttributeCode();
+$attribute      = $this->getAttributeCode();
 $position       = $this->getData('amprice-position');
 $prefix         = 'amshopby-' . $attribute;
 $prefix         = $position ? $prefix . '-' . $position : $prefix;

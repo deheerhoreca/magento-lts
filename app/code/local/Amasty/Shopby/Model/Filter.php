@@ -16,7 +16,7 @@
  * @method int getSeoNoindex()
  * @method int getHideCounts()
  * @method int getUseAndLogic()
- * @method Amasty_Shopby_Model_Filter setDisplayType(int)
+ * @method Amasty_Shopby_Model_Filter setDisplayType(int $displayType)
  */
 class Amasty_Shopby_Model_Filter extends Mage_Core_Model_Abstract
 {
@@ -107,7 +107,7 @@ class Amasty_Shopby_Model_Filter extends Mage_Core_Model_Abstract
         return $this->_getUnserializedValue('child_filter_name');
     }
 
-    protected function _getUnserializedValue($field)
+    protected function _getUnserializedValue(string $field)
     {
         $storeId = Mage::app()->getStore()->getId();
         $value = $this->getData($field);

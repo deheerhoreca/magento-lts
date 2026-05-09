@@ -3043,12 +3043,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deheerhoreca/paynl-openmage.git",
-                "reference": "7c4b233579edeef9f67313ce7d436202857a8864"
+                "reference": "4b07a76c1bc9d4e75a44c99147d6d46eb8f45a98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/7c4b233579edeef9f67313ce7d436202857a8864",
-                "reference": "7c4b233579edeef9f67313ce7d436202857a8864",
+                "url": "https://api.github.com/repos/deheerhoreca/paynl-openmage/zipball/4b07a76c1bc9d4e75a44c99147d6d46eb8f45a98",
+                "reference": "4b07a76c1bc9d4e75a44c99147d6d46eb8f45a98",
                 "shasum": ""
             },
             "default-branch": true,
@@ -3064,9 +3064,10 @@
             ],
             "description": "Add PAY.'s payment methods to your magento store",
             "support": {
-                "source": "https://github.com/deheerhoreca/paynl-openmage/tree/master"
+                "source": "https://github.com/deheerhoreca/paynl-openmage/tree/master",
+                "issues": "https://github.com/deheerhoreca/paynl-openmage/issues"
             },
-            "time": "2026-04-24T15:13:32+00:00"
+            "time": "2026-05-09T14:00:25+00:00"
         },
         {
             "name": "pelago/emogrifier",
