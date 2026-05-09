@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Note:
+ * - The 'price' filter is used for much more than for monetary values. Due to OpenMage's limited support for
+ * -   int/decimal attribute when it comes to layered navigation, we are forced to use the 'price' filter type
+ * -   for any attribute that requires from/to filtering (e.g. weight, dimensions, etc.).
+ */
+
+declare(strict_types=1);
+
 if(!function_exists('amshopby_render_label')) {
   function amshopby_render_label($placement, $label, $value) {
     /**
@@ -86,7 +95,7 @@ if(in_array($this->getDisplayType(), $needs_count)) {
     $sliderType       = $this->getSliderType();
     $useCustomSlider  = Mage::getStoreConfig('amshopby/general/slider_use_ui');
     $max              = $this->_filter->getMaxValue();
-    $min              = $this->_filter->getMinValue();
+    $min              = max(0, $this->_filter->getMinValue()); // Guard against negative values.
     $step             = $this->getSliderDecimal();
     $valueLabel       = $this->getValueLabel();
     $valuePlacement   = $this->getValuePlacement();

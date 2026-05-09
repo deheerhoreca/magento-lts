@@ -36,14 +36,27 @@ if($canShowBlock) {
       </div>
       <dl id="narrow-by-list" class="d-none d-xl-block">
         <?php
+        $visibleFilterLimitPath    = 'deheerhoreca_layered_navigation/settings/max_visible_filters';
+        $defaultVisibleFilterLimit = 50;
+        $visibleFilterLimit        = (int) Mage::getStoreConfig($visibleFilterLimitPath);
+        if($visibleFilterLimit < 1) {
+          $visibleFilterLimit = $defaultVisibleFilterLimit;
+        }
+
         Varien_Profiler::start("DHH_AMSHOPBY_FILTER");
         $_filters = $this->getFilters();
+        $renderedFilterCount = 0;
         foreach($_filters as $_filter) {
+          if($renderedFilterCount >= $visibleFilterLimit) {
+            break;
+          }
+
           $sys_name = $_filter->getName();
           $attrCode = $_filter->getAttributeCode();
           Varien_Profiler::start("DHH_AMSHOPBY_FILTER_{$attrCode}");
           if($_filter->getItemsCount()) {
             $name = $this->__($sys_name);
+            $shouldRenderFilter = true;
 
             // Special handling of Category filter
             if($name === "Categorie") {
@@ -58,11 +71,18 @@ if($canShowBlock) {
                 }
               }
               if($good_to_go === false) {
-                continue;
+                $shouldRenderFilter = false;
               }
             }
-            echo "<dt>{$name}</dt>" . PHP_EOL;
-            echo "<dd>{$_filter->getHtml()}</dd>" . PHP_EOL;
+
+            if($shouldRenderFilter) {
+              $filterHtml = (string) $_filter->getHtml();
+              if(trim($filterHtml) !== '') {
+                echo "<dt>{$name}</dt>" . PHP_EOL;
+                echo "<dd>{$filterHtml}</dd>" . PHP_EOL;
+                $renderedFilterCount++;
+              }
+            }
           }
           Varien_Profiler::stop("DHH_AMSHOPBY_FILTER_{$attrCode}");
         }

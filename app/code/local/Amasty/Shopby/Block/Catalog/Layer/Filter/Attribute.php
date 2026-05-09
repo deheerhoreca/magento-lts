@@ -16,6 +16,30 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
         return $this->_filter;
     }
 
+    /**
+     * DHH CORE HACK -- Provision to calculate attribute coverage in the current (filtered) collection.
+     *
+     * Returns the current layered result-set size (same source as toolbar/pager).
+     * Cached on the layer instance to avoid repeated getSize() calls across filters.
+     *
+     * @return int
+     */
+    public function getCurrentLayerProductCount()
+    {
+        $layer = $this->_filter->getLayer();
+        $cacheKey = 'dhh_current_layer_product_count';
+        $cachedCount = $layer->getData($cacheKey);
+
+        if ($cachedCount !== null) {
+            return (int) $cachedCount;
+        }
+
+        $productCount = (int) $layer->getProductCollection()->getSize();
+        $layer->setData($cacheKey, $productCount);
+
+        return $productCount;
+    }
+
     public function getChildAlias()
     {
         return $this->_alias . '_child';

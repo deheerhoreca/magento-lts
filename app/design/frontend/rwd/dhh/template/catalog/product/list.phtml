@@ -95,6 +95,7 @@ if($carct && $category === "category") {
   // Add category boilerplate to bottom
   if($on_first_page && !$have_active_filters && !str_contains($category_desc, "<!--no_auto_desc-->")) {      
     if($on_first_page && !$have_active_filters) {
+      $_productCollection ??= $this->getLoadedProductCollection();
       $manufacturers = $_dhhUtilHelper->getBrandsPerCategory($category_id, $_productCollection);
       if(is_array($manufacturers) && sizeof($manufacturers) > 0) {
         $n = sizeof($manufacturers);
@@ -289,7 +290,7 @@ Varien_Profiler::stop("DHH::Subcategories");
 
 /* LIST PRODUCTS */
 
-if($show_products && $_productCollection->getFirstItem()) {
+if($show_products && isset($_productCollection) && $_productCollection->getFirstItem()) {
   Varien_Profiler::start("DHH::ListProducts"); ?>
   <div class="category-products"><?php
   if($show_toolbar) {
