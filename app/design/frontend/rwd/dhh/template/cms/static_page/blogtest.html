@@ -1,0 +1,769 @@
+<style>
+    .chef-qeld-blog {
+        --chef-blue: #26a9e0;
+        --chef-blue-dark: #17324d;
+        --chef-orange: #f58220;
+        --chef-orange-dark: #d96b10;
+        --chef-text: #1f2937;
+        --chef-muted: #6b7280;
+        --chef-border: #e5e7eb;
+        --chef-soft: #f6f8fb;
+        --chef-white: #ffffff;
+        --chef-shadow: 0 12px 32px rgba(23, 50, 77, .10);
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 18px 14px 48px;
+        color: var(--chef-text);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        line-height: 1.72;
+        box-sizing: border-box;
+    }
+
+    .chef-qeld-blog *,
+    .chef-qeld-blog *::before,
+    .chef-qeld-blog *::after {
+        box-sizing: border-box;
+    }
+
+    .chef-qeld-blog a {
+        color: var(--chef-blue-dark);
+        text-decoration: none;
+    }
+
+    .chef-qeld-blog a:hover {
+        color: var(--chef-orange);
+        text-decoration: underline;
+    }
+
+    .chef-qeld-breadcrumb {
+        margin: 0 0 18px;
+        color: var(--chef-muted);
+        font-size: 14px;
+    }
+
+    .chef-qeld-breadcrumb a {
+        color: var(--chef-muted);
+    }
+
+    .chef-qeld-hero {
+        overflow: hidden;
+        border: 1px solid var(--chef-border);
+        border-radius: 18px;
+        background:
+            linear-gradient(135deg, rgba(23, 50, 77, .98), rgba(38, 169, 224, .92));
+        box-shadow: var(--chef-shadow);
+    }
+
+    .chef-qeld-hero-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+        gap: 0;
+        align-items: stretch;
+    }
+
+    .chef-qeld-hero-copy {
+        padding: clamp(28px, 5vw, 58px);
+        color: var(--chef-white);
+    }
+
+    .chef-qeld-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 18px;
+        padding: 8px 13px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .13);
+        color: var(--chef-white);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .02em;
+        text-transform: uppercase;
+    }
+
+    .chef-qeld-label::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--chef-orange);
+        box-shadow: 0 0 0 4px rgba(245, 130, 32, .22);
+    }
+
+    .chef-qeld-blog h1,
+    .chef-qeld-blog h2,
+    .chef-qeld-blog h3 {
+        margin: 0;
+        color: var(--chef-blue-dark);
+        line-height: 1.18;
+        font-weight: 800;
+    }
+
+    .chef-qeld-hero h1 {
+        max-width: 720px;
+        margin-bottom: 18px;
+        color: var(--chef-white);
+        font-size: clamp(32px, 4.4vw, 54px);
+        letter-spacing: -.035em;
+    }
+
+    .chef-qeld-hero-lead {
+        max-width: 680px;
+        margin: 0 0 26px;
+        color: rgba(255, 255, 255, .90);
+        font-size: clamp(17px, 2vw, 21px);
+        line-height: 1.62;
+    }
+
+    .chef-qeld-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .chef-qeld-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-decoration: none !important;
+        transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .chef-qeld-btn:hover {
+        transform: translateY(-1px);
+        text-decoration: none !important;
+    }
+
+    .chef-qeld-btn-primary {
+        background: var(--chef-orange);
+        color: #fff !important;
+        box-shadow: 0 10px 22px rgba(245, 130, 32, .30);
+    }
+
+    .chef-qeld-btn-primary:hover {
+        background: var(--chef-orange-dark);
+        color: #fff !important;
+    }
+
+    .chef-qeld-btn-secondary {
+        border: 1px solid rgba(255, 255, 255, .52);
+        background: rgba(255, 255, 255, .10);
+        color: #fff !important;
+    }
+
+    .chef-qeld-btn-secondary:hover {
+        background: rgba(255, 255, 255, .18);
+        color: #fff !important;
+    }
+
+    .chef-qeld-hero-media {
+        min-height: 420px;
+        background: #101827;
+    }
+
+    .chef-qeld-hero-media img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 420px;
+        object-fit: cover;
+    }
+
+    .chef-qeld-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 22px 0 0;
+    }
+
+    .chef-qeld-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 11px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .13);
+        color: rgba(255, 255, 255, .90);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .chef-qeld-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 28px;
+        margin-top: 30px;
+        align-items: start;
+    }
+
+    .chef-qeld-content {
+        min-width: 0;
+    }
+
+    .chef-qeld-section {
+        margin: 0 0 22px;
+        padding: clamp(22px, 3.2vw, 34px);
+        border: 1px solid var(--chef-border);
+        border-radius: 16px;
+        background: var(--chef-white);
+        box-shadow: 0 8px 22px rgba(17, 24, 39, .045);
+    }
+
+    .chef-qeld-section h2 {
+        margin-bottom: 14px;
+        font-size: clamp(24px, 3vw, 34px);
+    }
+
+    .chef-qeld-section h3 {
+        margin: 22px 0 10px;
+        font-size: 21px;
+    }
+
+    .chef-qeld-section p {
+        margin: 0 0 14px;
+    }
+
+    .chef-qeld-intro {
+        border-left: 5px solid var(--chef-orange);
+        background: linear-gradient(90deg, rgba(245, 130, 32, .08), rgba(38, 169, 224, .05));
+    }
+
+    .chef-qeld-card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 20px;
+    }
+
+    .chef-qeld-card {
+        min-height: 100%;
+        padding: 18px;
+        border: 1px solid var(--chef-border);
+        border-radius: 14px;
+        background: var(--chef-soft);
+    }
+
+    .chef-qeld-card strong {
+        display: block;
+        margin: 0 0 7px;
+        color: var(--chef-blue-dark);
+        font-size: 17px;
+        line-height: 1.25;
+    }
+
+    .chef-qeld-card p {
+        margin: 0;
+        color: var(--chef-muted);
+        font-size: 14px;
+        line-height: 1.55;
+    }
+
+    .chef-qeld-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        margin-bottom: 13px;
+        border-radius: 50%;
+        background: var(--chef-blue-dark);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .chef-qeld-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 18px 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .chef-qeld-pills li {
+        padding: 9px 13px;
+        border: 1px solid rgba(38, 169, 224, .25);
+        border-radius: 999px;
+        background: rgba(38, 169, 224, .08);
+        color: var(--chef-blue-dark);
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .chef-qeld-checklist {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+        margin: 18px 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .chef-qeld-checklist li {
+        position: relative;
+        padding: 12px 13px 12px 42px;
+        border: 1px solid var(--chef-border);
+        border-radius: 12px;
+        background: #fff;
+        font-weight: 700;
+    }
+
+    .chef-qeld-checklist li::before {
+        content: "✓";
+        position: absolute;
+        left: 13px;
+        top: 12px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--chef-orange);
+        color: #fff;
+        font-size: 14px;
+        line-height: 22px;
+        text-align: center;
+        font-weight: 900;
+    }
+
+    .chef-qeld-steps {
+        display: grid;
+        gap: 14px;
+        margin-top: 18px;
+        counter-reset: chefsteps;
+    }
+
+    .chef-qeld-step {
+        position: relative;
+        padding: 18px 18px 18px 70px;
+        border: 1px solid var(--chef-border);
+        border-radius: 14px;
+        background: #fff;
+    }
+
+    .chef-qeld-step::before {
+        counter-increment: chefsteps;
+        content: counter(chefsteps);
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--chef-blue);
+        color: #fff;
+        font-weight: 900;
+    }
+
+    .chef-qeld-step strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--chef-blue-dark);
+        font-size: 18px;
+    }
+
+    .chef-qeld-country-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+    }
+
+    .chef-qeld-country {
+        padding: 22px;
+        border-radius: 16px;
+        border: 1px solid var(--chef-border);
+        background: var(--chef-soft);
+    }
+
+    .chef-qeld-country h3 {
+        margin-top: 0;
+    }
+
+    .chef-qeld-country .chef-qeld-btn {
+        width: 100%;
+        margin-top: 12px;
+    }
+
+    .chef-qeld-sidebar {
+        position: sticky;
+        top: 20px;
+    }
+
+    .chef-qeld-side-card {
+        margin-bottom: 18px;
+        padding: 22px;
+        border-radius: 16px;
+        background: var(--chef-blue-dark);
+        color: #fff;
+        box-shadow: var(--chef-shadow);
+    }
+
+    .chef-qeld-side-card h2,
+    .chef-qeld-side-card h3 {
+        color: #fff;
+    }
+
+    .chef-qeld-side-card p {
+        margin: 10px 0 16px;
+        color: rgba(255, 255, 255, .84);
+    }
+
+    .chef-qeld-side-card .chef-qeld-btn {
+        width: 100%;
+    }
+
+    .chef-qeld-toc {
+        padding: 22px;
+        border: 1px solid var(--chef-border);
+        border-radius: 16px;
+        background: #fff;
+    }
+
+    .chef-qeld-toc h3 {
+        margin: 0 0 12px;
+        font-size: 18px;
+    }
+
+    .chef-qeld-toc ol {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .chef-qeld-toc li {
+        margin: 7px 0;
+        color: var(--chef-muted);
+    }
+
+    .chef-qeld-final {
+        border: 0;
+        color: #fff;
+        background:
+            radial-gradient(circle at top right, rgba(245, 130, 32, .35), transparent 35%),
+            linear-gradient(135deg, var(--chef-blue-dark), #0f1f31);
+    }
+
+    .chef-qeld-final h2 {
+        color: #fff;
+    }
+
+    .chef-qeld-final p {
+        color: rgba(255, 255, 255, .88);
+    }
+
+    .chef-qeld-final .chef-qeld-btn-secondary {
+        border-color: rgba(255, 255, 255, .38);
+    }
+
+    @media (max-width: 980px) {
+
+        .chef-qeld-hero-inner,
+        .chef-qeld-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .chef-qeld-sidebar {
+            position: static;
+        }
+
+        .chef-qeld-hero-media {
+            min-height: auto;
+        }
+
+        .chef-qeld-hero-media img {
+            min-height: auto;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .chef-qeld-blog {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .chef-qeld-breadcrumb {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .chef-qeld-hero,
+        .chef-qeld-section,
+        .chef-qeld-side-card,
+        .chef-qeld-toc {
+            border-radius: 0;
+        }
+
+        .chef-qeld-card-grid,
+        .chef-qeld-checklist,
+        .chef-qeld-country-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .chef-qeld-hero-actions {
+            flex-direction: column;
+        }
+
+        .chef-qeld-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<article class="chef-qeld-blog">
+    <nav class="chef-qeld-breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.chefstore.nl/">Home</a> &nbsp;/&nbsp;
+        <a href="https://www.chefstore.nl/blog/">Blog</a> &nbsp;/&nbsp;
+        Horeca apparatuur financieren
+    </nav>
+
+    <header class="chef-qeld-hero">
+        <div class="chef-qeld-hero-inner">
+            <div class="chef-qeld-hero-copy">
+                <span class="chef-qeld-label">Chefstore.nl x Qeld</span>
+                <h1>Horeca-apparatuur financieren? Regel het via Chefstore.nl</h1>
+                <p class="chef-qeld-hero-lead">
+                    Investeer in professionele keukenapparatuur op het moment dat jouw horecazaak daar klaar voor is.
+                    Via de samenwerking tussen Chefstore.nl en Qeld kun je eenvoudiger zakelijke financiering aanvragen
+                    voor ovens, koelingen, werkbanken, bakplaten of een complete keukeninrichting.
+                </p>
+
+                <div class="chef-qeld-hero-actions">
+                    <a class="chef-qeld-btn chef-qeld-btn-primary" href="https://www.qeld.nl/partners/chef-store"
+                        target="_blank" rel="noopener">
+                        Aanvragen voor Nederland
+                    </a>
+                    <a class="chef-qeld-btn chef-qeld-btn-secondary"
+                        href="https://www.qred.be/nl/partner/qred-chefstore" target="_blank" rel="noopener">
+                        Aanvragen voor België
+                    </a>
+                </div>
+
+                <div class="chef-qeld-meta" aria-label="Artikelinformatie">
+                    <span>Laatste update: 13-04-2026</span>
+                    <span>Voor horecaondernemers</span>
+                    <span>Financiering via partner</span>
+                </div>
+            </div>
+
+            <div class="chef-qeld-hero-media">
+                <img
+          src="https://www.chefstore.nl/media/wysiwyg/Invest_in_your_kitchen_s_future.png"
+          alt="Horecaondernemer bij professionele keukenapparatuur met uitleg over financiering via Chefstore.nl en Qeld"
+          loading="lazy">
+            </div>
+        </div>
+    </header>
+
+    <div class="chef-qeld-layout">
+        <main class="chef-qeld-content">
+            <section class="chef-qeld-section chef-qeld-intro" id="waarom">
+                <h2>Waarom horeca-apparatuur financieren?</h2>
+                <p>
+                    Als horecaondernemer wil je kunnen investeren wanneer jouw bedrijf daarom vraagt. Denk aan een
+                    nieuwe oven,
+                    professionele koelkast, bakplaat, werkbank of zelfs een complete keukeninrichting. Alleen komt zo’n
+                    investering
+                    niet altijd op het ideale moment voor je cashflow.
+                </p>
+                <p>
+                    Met zakelijke financiering kun je belangrijke aankopen spreiden. Zo behoud je financiële ruimte voor
+                    andere
+                    kosten, zoals voorraad, personeel, marketing of tijdelijke werkkapitaalbehoefte.
+                </p>
+
+                <ul class="chef-qeld-pills" aria-label="Geschikt voor">
+                    <li>Restaurants</li>
+                    <li>Cafés en lunchrooms</li>
+                    <li>Snackbars en fastservice</li>
+                    <li>Hotels</li>
+                    <li>Cateringbedrijven</li>
+                    <li>Nieuwe horecakeukens</li>
+                </ul>
+            </section>
+
+            <section class="chef-qeld-section" id="samenwerking">
+                <h2>Chefstore.nl x Qeld: praktisch geregeld</h2>
+                <p>
+                    Chefstore.nl helpt horecaondernemers dagelijks bij het vinden van professionele apparatuur en
+                    keukeninrichting.
+                    Met Qeld voegen we daar een extra oplossing aan toe: de mogelijkheid om een zakelijke lening aan te
+                    vragen
+                    voor jouw investering.
+                </p>
+                <p>
+                    Zo kun je niet alleen de juiste apparatuur kiezen voor jouw keuken of horecazaak, maar ook direct
+                    bekijken
+                    of financiering past bij jouw situatie. Dat maakt het eenvoudiger om sneller beslissingen te nemen
+                    en plannen
+                    uit te voeren.
+                </p>
+
+                <div class="chef-qeld-card-grid">
+                    <div class="chef-qeld-card">
+                        <span class="chef-qeld-icon">€</span>
+                        <strong>Financiële ruimte</strong>
+                        <p>Spreid een grote investering en houd grip op je cashflow.</p>
+                    </div>
+                    <div class="chef-qeld-card">
+                        <span class="chef-qeld-icon">✓</span>
+                        <strong>Vrijblijvend aanvragen</strong>
+                        <p>Bekijk online welke mogelijkheden er zijn voor jouw onderneming.</p>
+                    </div>
+                    <div class="chef-qeld-card">
+                        <span class="chef-qeld-icon">↗</span>
+                        <strong>Sneller doorpakken</strong>
+                        <p>Stel noodzakelijke vervanging of uitbreiding niet onnodig uit.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="chef-qeld-section" id="investeringen">
+                <h2>Voor welke horeca-investeringen is financiering interessant?</h2>
+                <p>
+                    Zakelijke financiering kan interessant zijn voor vrijwel alle soorten horeca-investeringen,
+                    vooral wanneer apparatuur direct nodig is maar je de aankoop liever niet in één keer volledig
+                    uit eigen middelen betaalt.
+                </p>
+
+                <ul class="chef-qeld-checklist">
+                    <li>Ovens en combisteamers</li>
+                    <li>Koel- en vriesapparatuur</li>
+                    <li>Werkbanken en RVS-meubilair</li>
+                    <li>Friteuses, fornuizen en bakplaten</li>
+                    <li>Spoelkeukenapparatuur</li>
+                    <li>Complete keukeninrichting</li>
+                    <li>Vervanging van defecte apparatuur</li>
+                    <li>Uitbreiding van capaciteit</li>
+                </ul>
+            </section>
+
+            <section class="chef-qeld-section" id="voordelen">
+                <h2>De voordelen voor horecaondernemers</h2>
+                <p>
+                    Een zakelijke lening voor horeca-apparatuur kan meerdere voordelen bieden. Denk aan een snelle
+                    online aanvraag,
+                    vaste maandelijkse kosten en de mogelijkheid om zowel investeringen als werkkapitaal te financieren.
+                </p>
+
+                <div class="chef-qeld-card-grid">
+                    <div class="chef-qeld-card">
+                        <strong>Gratis en vrijblijvend</strong>
+                        <p>Een aanvraag doen kan zonder directe verplichting.</p>
+                    </div>
+                    <div class="chef-qeld-card">
+                        <strong>Online in enkele stappen</strong>
+                        <p>Je vraagt de financiering direct aan via de partnerpagina.</p>
+                    </div>
+                    <div class="chef-qeld-card">
+                        <strong>Vaste maandelijkse kosten</strong>
+                        <p>Meer overzicht bij het plannen van je zakelijke uitgaven.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="chef-qeld-section" id="aanvragen">
+                <h2>Eenvoudig een aanvraag doen</h2>
+                <p>
+                    Via de speciale partnerpagina’s van Chefstore kunnen klanten direct een aanvraag doen. Daarbij is
+                    onderscheid
+                    gemaakt tussen Nederland en België.
+                </p>
+
+                <div class="chef-qeld-steps">
+                    <div class="chef-qeld-step">
+                        <strong>Kies de juiste partnerpagina</strong>
+                        Selecteer Nederland of België en open de aanvraagpagina van Qeld of Qred.
+                    </div>
+                    <div class="chef-qeld-step">
+                        <strong>Vul je aanvraag online in</strong>
+                        Geef aan hoeveel financiering je nodig hebt en waarvoor je deze wilt gebruiken.
+                    </div>
+                    <div class="chef-qeld-step">
+                        <strong>Bekijk of het past bij jouw situatie</strong>
+                        Na beoordeling zie je welke mogelijkheden er zijn voor jouw onderneming.
+                    </div>
+                </div>
+
+                <div class="chef-qeld-country-grid">
+                    <div class="chef-qeld-country">
+                        <h3>Voor Nederlandse klanten</h3>
+                        <p>Vraag zakelijk krediet aan via Qeld.</p>
+                        <a class="chef-qeld-btn chef-qeld-btn-primary" href="https://www.qeld.nl/partners/chef-store"
+                            target="_blank" rel="noopener">
+                            Naar Qeld Nederland
+                        </a>
+                    </div>
+
+                    <div class="chef-qeld-country">
+                        <h3>Voor Belgische klanten</h3>
+                        <p>Vraag zakelijk krediet aan via Qred.</p>
+                        <a class="chef-qeld-btn chef-qeld-btn-primary"
+                            href="https://www.qred.be/nl/partner/qred-chefstore" target="_blank" rel="noopener">
+                            Naar Qred België
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="chef-qeld-section chef-qeld-final" id="contact">
+                <h2>Investeren in groei zonder onnodig uitstel</h2>
+                <p>
+                    In de horeca draait alles om continuïteit, kwaliteit en efficiëntie. Goede apparatuur is daarbij
+                    geen luxe,
+                    maar een belangrijke basis voor dagelijks succes.
+                </p>
+                <p>
+                    Met de samenwerking tussen Chefstore.nl en Qeld wordt het makkelijker om de stap naar vernieuwing,
+                    uitbreiding of vervanging te zetten.
+                </p>
+
+                <div class="chef-qeld-hero-actions">
+                    <a class="chef-qeld-btn chef-qeld-btn-primary" href="https://www.qeld.nl/partners/chef-store"
+                        target="_blank" rel="noopener">
+                        Aanvraag starten
+                    </a>
+                    <a class="chef-qeld-btn chef-qeld-btn-secondary" href="mailto:service@chefstore.nl">
+                        Vraag aan onze klantenservice
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <aside class="chef-qeld-sidebar" aria-label="Zijbalk">
+            <div class="chef-qeld-side-card">
+                <h2>Snel naar de aanvraag</h2>
+                <p>Kies direct de juiste partnerpagina voor jouw land.</p>
+                <a class="chef-qeld-btn chef-qeld-btn-primary" href="https://www.qeld.nl/partners/chef-store"
+                    target="_blank" rel="noopener">
+                    Nederland: Qeld
+                </a>
+                <br><br>
+                <a class="chef-qeld-btn chef-qeld-btn-secondary" href="https://www.qred.be/nl/partner/qred-chefstore"
+                    target="_blank" rel="noopener">
+                    België: Qred
+                </a>
+            </div>
+
+            <div class="chef-qeld-toc">
+                <h3>In dit artikel</h3>
+                <ol>
+                    <li><a href="#waarom">Waarom financieren?</a></li>
+                    <li><a href="#samenwerking">Chefstore.nl x Qeld</a></li>
+                    <li><a href="#investeringen">Geschikte investeringen</a></li>
+                    <li><a href="#voordelen">Voordelen</a></li>
+                    <li><a href="#aanvragen">Aanvraag doen</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ol>
+            </div>
+        </aside>
+    </div>
+</article>
