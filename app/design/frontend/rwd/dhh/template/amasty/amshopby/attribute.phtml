@@ -103,16 +103,16 @@ if($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
 
 $coveragePercentage = isset($coveragePercentage) ? round($coveragePercentage, 2) : null;
 
-devDump([
-  'attribute'                     => $this->getRequestValue(),
-  'categoryProductCount'          => $categoryProductCount,
-  'coverageExemptAttributeCodes'  => $coverageExemptAttributeCodes,
-  'coveragePercentage'            => $coveragePercentage,
-  'coveragePercentageThreshold'   => $coveragePercentageThreshold,
-  'coverageProductCountThreshold' => $coverageProductCountThreshold,
-  'coveredProductCount'           => $coveredProductCount,
-  'shouldRenderFilter'            => $shouldRenderFilter,
-]);
+// devDump([
+//   'attribute'                     => $this->getRequestValue(),
+//   'categoryProductCount'          => $categoryProductCount,
+//   'coverageExemptAttributeCodes'  => $coverageExemptAttributeCodes,
+//   'coveragePercentage'            => $coveragePercentage,
+//   'coveragePercentageThreshold'   => $coveragePercentageThreshold,
+//   'coverageProductCountThreshold' => $coverageProductCountThreshold,
+//   'coveredProductCount'           => $coveredProductCount,
+//   'shouldRenderFilter'            => $shouldRenderFilter,
+// ]);
 
 // ─── Helper: build <li> attribute string ──────────────────────────────────────
 $buildLiAttrs = function (array $item): string {
