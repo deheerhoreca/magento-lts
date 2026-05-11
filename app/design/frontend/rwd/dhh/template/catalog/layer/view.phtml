@@ -74,10 +74,12 @@ if($canShowBlock) {
                 $shouldRenderFilter = false;
               }
             }
-
+            
+            // Skip rendering the headers of filters that are skipped due to coverage. Using a crude "class=" check
+            //  to still skip filters that output debug data with devDump(), which is not an empty string.
             if($shouldRenderFilter) {
               $filterHtml = (string) $_filter->getHtml();
-              if(trim($filterHtml) !== '') {
+              if(trim($filterHtml) !== '' && str_contains($filterHtml, "class=")) {
                 echo "<dt>{$name}</dt>" . PHP_EOL;
                 echo "<dd>{$filterHtml}</dd>" . PHP_EOL;
                 $renderedFilterCount++;
