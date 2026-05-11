@@ -3,8 +3,8 @@
 /**
  * Note:
  * - The 'price' filter is used for much more than for monetary values. Due to OpenMage's limited support for
- * -   int/decimal attribute when it comes to layered navigation, we are forced to use the 'price' filter type
- * -   for any attribute that requires from/to filtering (e.g. weight, dimensions, etc.).
+ * -   int/decimal attribute when it comes to layered navigation (UI sliders), we are forced to use the 'price'
+ * -   filter type for any attribute that requires from/to filtering (e.g. weight, dimensions, etc.).
  */
 
 declare(strict_types=1);
@@ -32,11 +32,20 @@ if(!function_exists('amshopby_render_label')) {
   }
 }
 
-// /** @var  Mage_Catalog_Block_Layer_Filter_Decimal  $this */
-/** @var  Mage_Catalog_Block_Layer_Filter_Price  $this */
+/** @var  Mage_Catalog_Block_Layer_Filter_Decimal  $this */
 
-// $attribute      = $this->getAttributeCode() ?: $this->getAttributeModel()->getAttributeCode();
-$attribute      = $this->getAttributeCode();
+$attribute = $this->getAttributeCode();
+if(empty($attribute)) {
+  /**
+   * @var Mage_Eav_Model_Entity_Attribute $model
+   */
+  /** @disregard P1131 $this->getAttributeModel() is really not a string but an object. */
+  $model = $this->getAttributeModel();
+  /** @disregard P1006 */
+  $attribute = $model->getAttributeCode();
+}
+
+// $attribute      = $this->getAttributeCode();
 $position       = $this->getData('amprice-position');
 $prefix         = 'amshopby-' . $attribute;
 $prefix         = $position ? $prefix . '-' . $position : $prefix;

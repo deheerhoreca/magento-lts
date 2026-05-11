@@ -56,8 +56,8 @@ $items = array_values(array_filter($items));
 // ─── Coverage-based filter display control ────────────────────────────────────
 $productCountThresholdPath            = 'deheerhoreca_layered_navigation/settings/coverage_product_count_threshold';
 $percentageThresholdPath              = 'deheerhoreca_layered_navigation/settings/coverage_percentage_threshold';
-$defaultCoverageProductCountThreshold = 65;   // 3rd page
-$defaultCoveragePercentageThreshold   = 7.0;  // @todo fine-tune.
+$defaultCoverageProductCountThreshold = 65;   // @todo fine-tune
+$defaultCoveragePercentageThreshold   = 7.0;  // @todo fine-tune
 
 $coverageExemptAttributeCodes  = [];
 $coverageProductCountThreshold = (int) Mage::getStoreConfig($productCountThresholdPath);
@@ -102,16 +102,16 @@ if ($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
 
 $coveragePercentage = isset($coveragePercentage) ? round($coveragePercentage, 2) : null;
 
-devDump([
-  'attribute'                     => $this->getRequestValue(),
-  'coverageExemptAttributeCodes'  => $coverageExemptAttributeCodes,
-  'categoryProductCount'          => $categoryProductCount,
-  'coveredProductCount'           => $coveredProductCount,
-  'coveragePercentage'            => $coveragePercentage,
-  'coverageProductCountThreshold' => $coverageProductCountThreshold,
-  'coveragePercentageThreshold'   => $coveragePercentageThreshold,
-  'shouldRenderFilter'            => $shouldRenderFilter,
-]);
+// devDump([
+//   'attribute'                     => $this->getRequestValue(),
+//   'coverageExemptAttributeCodes'  => $coverageExemptAttributeCodes,
+//   'categoryProductCount'          => $categoryProductCount,
+//   'coveredProductCount'           => $coveredProductCount,
+//   'coveragePercentage'            => $coveragePercentage,
+//   'coverageProductCountThreshold' => $coverageProductCountThreshold,
+//   'coveragePercentageThreshold'   => $coveragePercentageThreshold,
+//   'shouldRenderFilter'            => $shouldRenderFilter,
+// ]);
 
 // ─── Helper: build <li> attribute string ──────────────────────────────────────
 $buildLiAttrs = function (array $item): string {
