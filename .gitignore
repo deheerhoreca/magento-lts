@@ -141,6 +141,7 @@ n98-magerun
 /js/ext-*
 /skin/assets/
 /skin/frontend/rwd/external/
+/node_modules/
 
 # Extend the dist ignore to the whole media dir (it's now a LINK)
 # ----------------------------------------------------------------
@@ -189,7 +190,6 @@ media
 /app/code/community/Cm/RedisSession
 /app/code/community/Fballiano/CategorySortDirection
 /app/code/community/Fballiano/CssjsMinify
-/app/code/community/FireGento/AdminMonitoring
 /app/code/community/FireGento/Debug
 /app/code/community/Guidance/Simplepage
 /app/code/local/Aschroder/SMTPPro
@@ -198,12 +198,10 @@ media
 /app/code/local/MM/CmsContentFileMode
 /app/code/local/MM/MonacoEditor
 /app/design/adminhtml/default/default/layout/aoe_scheduler
-/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
 /app/design/adminhtml/default/default/layout/firegento_debug.xml
 /app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
 /app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
 /app/design/adminhtml/default/default/template/aoe_scheduler
-/app/design/adminhtml/default/default/template/firegento/adminmonitoring
 /app/design/adminhtml/default/default/template/firegento/debug
 /app/design/adminhtml/default/default/template/InternetCode/AdvancedProductFilter/js_after_grid.phtml
 /app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
@@ -222,7 +220,6 @@ media
 /app/etc/modules/Cm_RedisSession.xml
 /app/etc/modules/Fballiano_CategorySortDirection.xml
 /app/etc/modules/Fballiano_CssjsMinify.xml
-/app/etc/modules/FireGento_AdminMonitoring.xml
 /app/etc/modules/FireGento_Debug.xml
 /app/etc/modules/Guidance_Simplepage.xml
 /app/etc/modules/InternetCode_AdvancedProductFilter.xml
@@ -232,7 +229,6 @@ media
 /app/locale/de_CH/FireGento_Debug.csv
 /app/locale/de_DE/Aoe_Scheduler.csv
 /app/locale/de_DE/Aschroder_SMTPPro.csv
-/app/locale/de_DE/FireGento_AdminMonitoring.csv
 /app/locale/de_DE/FireGento_Debug.csv
 /app/locale/en_US/Aschroder_SMTPPro.csv
 /app/locale/en_US/FireGento_Debug.csv
@@ -520,3 +516,8 @@ media
 /app/locale/nl_NL/Pay_Payment.csv
 /app/locale/en_US/Pay_Payment.csv
 /app/locale/it_IT/Pay_Payment.csv
+/app/code/community/FireGento/AdminMonitoring
+/app/etc/modules/FireGento_AdminMonitoring.xml
+/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
+/app/design/adminhtml/default/default/template/firegento/adminmonitoring
+/app/locale/de_DE/FireGento_AdminMonitoring.csv

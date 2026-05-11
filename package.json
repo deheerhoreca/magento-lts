@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@prettier/plugin-php": "0.25.0",
+    "@prettier/plugin-xml": "3.4.2",
+    "json-stringify-pretty-compact": "^4.0.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-sh": "^0.18.1",
+    "prettier-plugin-sql-cst": "0.22.1",
+    "stylelint": "^17.4.0"
+  },
+  "description": "Node helpers for Intel CLI utilities",
+  "engines": {
+    "node": ">=24"
+  },
+  "name": "deheerhoreca-intel-node",
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-sh"
+    ],
+    "singleQuote": false,
+    "tabWidth": 2
+  },
+  "private": true,
+  "scripts": {
+    "json:compact": "node ./bin/node/compact-json.mjs"
+  },
+  "type": "module"
+}
