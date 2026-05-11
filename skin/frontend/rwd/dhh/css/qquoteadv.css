@@ -240,12 +240,6 @@ ol.c2q li.section {
   width: 100%;
 }
 
-.qquote-client-collaterals h2 {
-  font-size: 12px;
-  font-weight: bold;
-  margin: 0 0 5px;
-}
-
 .qquote-client-collaterals .input-select {
   vertical-align: top;
 }
@@ -635,14 +629,6 @@ a.link {
   }
 }
 
-@media only screen and (max-width: 700px) {
-  .qquote-client-collaterals > .quote-forms,
-  .qquote-client-collaterals .qquote-cart-collaterals {
-    width: 100%;
-    float: none;
-  }
-}
-
 @media only screen and (max-width: 771px) {
 
   #quotelist #shopping-cart-table.data-table.cart-table tfoot,
@@ -854,10 +840,6 @@ a.link {
   float: right;
   color: #fff;
   line-height: 40px;
-}
-
-#header-quote ol.mini-products-list {
-  padding: 20px;
 }
 
 #header-quote ol.mini-products-list {
@@ -1573,10 +1555,6 @@ a.link {
 }
 
 @media (max-width: 771px) {
-  #quotelist .shippingRequestButton {
-    float: none !important;
-  }
-
   #quotelist .shippingRequestButton button {
     width: 100%;
   }

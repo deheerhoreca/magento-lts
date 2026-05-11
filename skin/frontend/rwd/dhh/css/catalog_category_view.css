@@ -265,11 +265,6 @@ ul.products-grid li.item {
   text-decoration: none;
 }
 
-.pager>.count-container,
-.pages li {
-  float: left;
-}
-
 .toolbar {
   margin-top: 0;
   margin-bottom: 0;
