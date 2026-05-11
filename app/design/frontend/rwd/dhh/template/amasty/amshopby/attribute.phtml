@@ -57,16 +57,18 @@ $items = array_values(array_filter($items));
 $productCountThresholdPath            = 'deheerhoreca_layered_navigation/settings/coverage_product_count_threshold';
 $percentageThresholdPath              = 'deheerhoreca_layered_navigation/settings/coverage_percentage_threshold';
 $defaultCoverageProductCountThreshold = 65;   // @todo fine-tune
-$defaultCoveragePercentageThreshold   = 7.0;  // @todo fine-tune
+$defaultCoveragePercentageThreshold   =  7;   // @todo fine-tune
 
-$coverageExemptAttributeCodes  = [];
+$coverageExemptAttributeCodes  = [
+  "recommended_product",
+];
 $coverageProductCountThreshold = (int) Mage::getStoreConfig($productCountThresholdPath);
-$coveragePercentageThreshold   = (float) Mage::getStoreConfig($percentageThresholdPath);
+$coveragePercentageThreshold   = (int) Mage::getStoreConfig($percentageThresholdPath);
 
 if ($coverageProductCountThreshold < 1) {
   $coverageProductCountThreshold = $defaultCoverageProductCountThreshold;
 }
-if ($coveragePercentageThreshold <= 0.0) {
+if ($coveragePercentageThreshold <= 0) {
   $coveragePercentageThreshold = $defaultCoveragePercentageThreshold;
 }
 
@@ -75,25 +77,24 @@ $categoryProductCount = null;
 $coveredProductCount  = null;
 $coveragePercentage   = null;
 
-if ($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
+if($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
   $attributeCode = (string) $this->getRequestValue();
-
-  if (!in_array($attributeCode, $coverageExemptAttributeCodes, true)) {
+  
+  if(!in_array($attributeCode, $coverageExemptAttributeCodes, true)) {
     $categoryProductCount = (int) $this->getCurrentLayerProductCount();
-
-    if ($categoryProductCount >= $coverageProductCountThreshold) {
+    
+    if($categoryProductCount >= $coverageProductCountThreshold) {
       $countValues = [];
-      foreach ($items as $item) {
-        if (is_array($item) && isset($item['countValue'])) {
+      foreach($items as $item) {
+        if(is_array($item) && isset($item['countValue'])) {
           $countValues[] = (int) $item['countValue'];
         }
       }
       $coveredProductCount = min((int) array_sum($countValues), $categoryProductCount);
       $coveragePercentage  = $categoryProductCount > 0
-        ? (float) ($coveredProductCount / $categoryProductCount * 100)
-        : 0.0;
-
-      if ($coveragePercentage < $coveragePercentageThreshold) {
+        ? (int) ($coveredProductCount / $categoryProductCount * 100) : 0;
+      
+      if($coveragePercentage < $coveragePercentageThreshold) {
         $shouldRenderFilter = false;
       }
     }
@@ -102,16 +103,16 @@ if ($this instanceof Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute) {
 
 $coveragePercentage = isset($coveragePercentage) ? round($coveragePercentage, 2) : null;
 
-// devDump([
-//   'attribute'                     => $this->getRequestValue(),
-//   'coverageExemptAttributeCodes'  => $coverageExemptAttributeCodes,
-//   'categoryProductCount'          => $categoryProductCount,
-//   'coveredProductCount'           => $coveredProductCount,
-//   'coveragePercentage'            => $coveragePercentage,
-//   'coverageProductCountThreshold' => $coverageProductCountThreshold,
-//   'coveragePercentageThreshold'   => $coveragePercentageThreshold,
-//   'shouldRenderFilter'            => $shouldRenderFilter,
-// ]);
+devDump([
+  'attribute'                     => $this->getRequestValue(),
+  'categoryProductCount'          => $categoryProductCount,
+  'coverageExemptAttributeCodes'  => $coverageExemptAttributeCodes,
+  'coveragePercentage'            => $coveragePercentage,
+  'coveragePercentageThreshold'   => $coveragePercentageThreshold,
+  'coverageProductCountThreshold' => $coverageProductCountThreshold,
+  'coveredProductCount'           => $coveredProductCount,
+  'shouldRenderFilter'            => $shouldRenderFilter,
+]);
 
 // ─── Helper: build <li> attribute string ──────────────────────────────────────
 $buildLiAttrs = function (array $item): string {
