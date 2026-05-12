@@ -59,7 +59,7 @@
       "source": "anthropics/skills",
       "sourceType": "github",
       "skillPath": "skills/claude-api/SKILL.md",
-      "computedHash": "fe6c64489b954a17d24e3828f79165b230b2a24224d6310ad995061264ca2a3b"
+      "computedHash": "fae9227ae5d58ed366bd225a35d8077100e8a0d056392b7d9165978d3ce4e860"
     },
     "cloudflare": {
       "source": "cloudflare/skills",
@@ -449,7 +449,7 @@
       "source": "jezweb/claude-skills",
       "sourceType": "github",
       "skillPath": "plugins/dev-tools/skills/ux-audit/SKILL.md",
-      "computedHash": "1511f6c09ff2d2e196726cb0285053c4185445e50cfc9c3b1c42f2916d9178bc"
+      "computedHash": "7734a9f633ff4771d8c3a37269109ecd8cc7aa05cf849f3b67da47bbfbfad49d"
     },
     "ux-compare": {
       "source": "jezweb/claude-skills",
