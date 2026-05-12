@@ -113,7 +113,8 @@
   font-size: 12px;
 }
 
-#coupon-code, #giftcard_code {
+#coupon-code,
+#giftcard_code {
   margin: 2px 0 2px;
   width: 125px;
 }
@@ -231,7 +232,6 @@
   width: auto;
 }
 
-
 /* RWD FIX */
 
 .gift-message-form .gift-item {
@@ -279,7 +279,6 @@
   width: 100%;
 }
 
-
 /* shipping & payment methods */
 
 #checkout-shipping-method-load,
@@ -292,8 +291,8 @@
   padding: 0;
 }
 
-.firecheckout-set .sp-methods+.sp-methods,
-.firecheckout-set .sp-methods+*+.sp-methods {
+.firecheckout-set .sp-methods + .sp-methods,
+.firecheckout-set .sp-methods + * + .sp-methods {
   margin-top: 20px;
 }
 
@@ -457,7 +456,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
   box-sizing: border-box;
 }
 
-.control+.form {
+.control + .form {
   padding-left: 6px;
 }
 
@@ -572,8 +571,8 @@ ul#payment_form_cryozonic_stripe .saved-cards {
 }
 
 /* hints */
-[class*=hint--]::after,
-[class*=hint--]::before {
+[class*="hint--"]::after,
+[class*="hint--"]::before {
   z-index: 10;
   font-size: 12px !important;
   line-height: 16px !important;
@@ -616,7 +615,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
     margin: 5px 0;
   }
   .firecheckout-set .product-name {
-    font-size: .9em;
+    font-size: 0.9em;
   }
   .firecheckout-set .data-table tfoot,
   .firecheckout-set .data-table strong {
@@ -671,7 +670,7 @@ ul#payment_form_cryozonic_stripe .saved-cards {
 .firecheckout-index-index .block-content::after,
 .firecheckout-set .discount-form .input-box::after,
 .firecheckout-set .giftcard-form .input-box::after {
-  content: '.';
+  content: ".";
   display: block;
   visibility: hidden;
   height: 0;

@@ -1,3 +1,6 @@
+
+/* !!! This file might not be in use, see skin/frontend/rwd/dhh/tm/firecheckout/css/firecheckout.css */
+
 .page-empty.firecheckout-index-index {
   max-width: 1024px;
   margin: 0 auto;
@@ -23,9 +26,6 @@
 
 .firecheckout-logo img {
   display: inline;
-}
-
-.firecheckout-index-index {
 }
 
 .firecheckout-index-index .page-title {
@@ -695,9 +695,6 @@
   width: auto;
 }
 
-.firecheckout-set .sp-methods dt {
-}
-
 .firecheckout-set .sp-methods dd {
   margin: 0;
 }
@@ -920,9 +917,6 @@
 
 .firecheckout-set .checkout-agreements .last {
   margin: 0;
-}
-
-.firecheckout-set .checkout-agreements .agreement-content {
 }
 
 .btn-agree {
@@ -1297,9 +1291,6 @@
   min-height: 400px;
 }
 
-#checkout-sagepay-iframe-load {
-}
-
 #firecheckout-mask {
   background: #000;
   opacity: 0.4;
@@ -1349,9 +1340,6 @@
 
 
 /* SagePay Server Integration */
-
-#checkout-sagepay-iframe-load {
-}
 
 iframe#sage-pay-server-iframe {
   border: none;
