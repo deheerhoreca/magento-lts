@@ -1374,12 +1374,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:deheerhoreca/firegento-adminmonitoring.git",
-                "reference": "bca4e46e50931dcdaae9f5653a4c2ec0ccece19c"
+                "reference": "5a356d910ef2ae53a9c0fb8214c7c6e3ed714a19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deheerhoreca/firegento-adminmonitoring/zipball/bca4e46e50931dcdaae9f5653a4c2ec0ccece19c",
-                "reference": "bca4e46e50931dcdaae9f5653a4c2ec0ccece19c",
+                "url": "https://api.github.com/repos/deheerhoreca/firegento-adminmonitoring/zipball/5a356d910ef2ae53a9c0fb8214c7c6e3ed714a19",
+                "reference": "5a356d910ef2ae53a9c0fb8214c7c6e3ed714a19",
                 "shasum": ""
             },
             "require": {
@@ -1397,7 +1397,7 @@
             "support": {
                 "source": "https://github.com/deheerhoreca/firegento-adminmonitoring/tree/develop"
             },
-            "time": "2026-05-11T22:54:18+00:00"
+            "time": "2026-05-11T23:06:22+00:00"
         },
         {
             "name": "firegento/debug",
