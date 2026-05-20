@@ -41,6 +41,7 @@
     "cmixin/business-day": "^1.20.5",
     "colinmollenhour/cache-backend-redis": "^1.17.1",
     "colinmollenhour/magento-redis-session": "dev-master as 3.3.0",
+    "deheerhoreca/php-cs-fixer-tidy-fixers": "dev-master",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0.1",
     "fballiano/openmage-category-sort-direction": "^0.2.0",
@@ -97,6 +98,13 @@
     "symfony/polyfill-php82": "*"
   },
   "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/deheerhoreca/php-cs-fixer-tidy-fixers",
+      "only": [
+        "deheerhoreca/php-cs-fixer-tidy-fixers"
+      ]
+    },
     {
       "name": "profitmetrics",
       "type": "composer",
