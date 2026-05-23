@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc0a94a8b6c7a98b41cf8c26690da8f2",
+    "content-hash": "f121233d7aaae3bc184e17f91ba35553",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",
@@ -6266,6 +6266,7 @@
         "aschroder/smtp_pro": 20,
         "aydus/headorder": 20,
         "colinmollenhour/magento-redis-session": 20,
+        "deheerhoreca/php-cs-fixer-tidy-fixers": 20,
         "empiricompany/openmage-mm_cmscontentfilemode": 20,
         "fballiano/openmage-cssjs-minify": 20,
         "firegento/adminmonitoring": 20,
