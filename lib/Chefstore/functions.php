@@ -1664,7 +1664,7 @@ if(!function_exists("printWhoCalledMe")) {
    * Print a backtrace from anywhere.
    *
    * @param  int  $levels  The max amount of levels to go back.
-   * @return void
+   * @return string
    */
   function printWhoCalledMe(int $levels = 1): string {
     return Observability::printWhoCalledMe($levels);
@@ -1721,7 +1721,7 @@ if(!function_exists("om_attr_val")) {
       }
       return $value;
     }
-    $dhh_sku = $_product->getSku("dhh_sku") ?? "NO_DHH_SKU";  
+    $dhh_sku = $_product->getSku() ?? "NO_DHH_SKU";  
     Mage::log("{$dhh_sku} Unknown attribute requested: {$attribute_code}", Zend_Log::NOTICE);
     
     return false;
@@ -1766,13 +1766,12 @@ if(!function_exists("om_attr_val_as_string")) {
    * 
    * @param  ?Mage_Catalog_Model_Product  $_product
    * @param  string                       $attribute_code
-   * @param  ?string                      $as              "" | "string" | "int"
    * @param  array                        $options         Unused
    * 
-   * @return int|null
+   * @return string
    */
   function om_attr_val_as_string(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): string {
-    return (string) om_attr_val($_product, $attribute_code, "string");
+    return (string) om_attr_val($_product, $attribute_code, "string", options: $options);
   }
 }
 
@@ -1783,13 +1782,12 @@ if(!function_exists("om_attr_val_as_float")) {
    * 
    * @param  ?Mage_Catalog_Model_Product  $_product
    * @param  string                       $attribute_code
-   * @param  ?string                      $as              "" | "string" | "int"
    * @param  array                        $options         Unused
    * 
-   * @return int|null
+   * @return float|null
    */
   function om_attr_val_as_float(?Mage_Catalog_Model_Product $_product, string $attribute_code, array $options = []): float|null {
-    $value = om_attr_val($_product, $attribute_code);
+    $value = om_attr_val($_product, $attribute_code, options: $options);
     if(is_numeric($value)) {
       return float(round($value));
     }
@@ -1805,7 +1803,6 @@ if(!function_exists("om_attr_val_as_int")) {
    * 
    * @param  ?Mage_Catalog_Model_Product  $_product
    * @param  string                       $attribute_code
-   * @param  ?string                      $as              "" | "string" | "int"
    * @param  array                        $options         Unused
    * 
    * @return int|null
@@ -1986,7 +1983,7 @@ function getProductCollection(): Mage_Catalog_Model_Resource_Product_Collection 
 /**
  * Get a product URL by product entity ID, efficiently.
  *
- * @param  integer      $productId
+ * @param  integer      $id
  * @return string|false
  */
 function getProductUrlById(int $id): string|false {
@@ -2016,7 +2013,7 @@ function getProductUrlById(int $id): string|false {
 /**
  * Get a product URL by product SKU, efficiently.
  *
- * @param  integer      $productId
+ * @param  string      $sku
  * @return string|false
  */
 function getProductUrlBySku(string $sku): string|false {

@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# The command should be run in the git repository root.
+# It adds all symlinks to a .gitignore file that aren't in there already.
+
+. ${HOME}/.profile || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory"
+. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
+
+additions_file=$(mktemp) || die "Failed to create a temporary file"
+trap 'rm -f "${additions_file}"' EXIT HUP INT TERM
+
+git status --porcelain | sed -n 's/^?? //p' | while IFS= read -r f; do
+  if test -L "$f"; then
+    if ! grep -qxF -- "$f" .gitignore; then
+      printf '%s\n' "$f" >> "${additions_file}"
+    fi
+  elif test -d "$f"; then
+    find "${f%/}" -type l -print | while IFS= read -r symlink; do
+      if ! grep -qxF -- "$symlink" .gitignore; then
+        printf '%s\n' "$symlink" >> "${additions_file}"
+      fi
+    done
+  fi
+done
+
+if test -s "${additions_file}"; then
+  header="# Added by om-gitignore-symlinks on $(date '+%Y-%m-%d %H:%M:%S %Z')"
+  {
+    printf '%s\n' "${header}"
+    cat "${additions_file}"
+  } | tee -a .gitignore
+fi
