@@ -1,20 +1,20 @@
 #!/bin/bash
 
 : '---------------------------------------------------------------------------------------------------------------
-${HOME}/workspace/openmage/shell/cron-wrapup.sh                                               # 0 sec
+${HOME}/workspace/openmage/shell/cron-wrapup.sh
 -----------------------------------------------------------------------------------------------------------------'
 
-ISO_DATE=$(TZ="Europe/Amsterdam" date +"%F %T")
 SCRIPT_PATH=$0
 THE_CWD="$(pwd)/"
 ABBR_SCRIPT_PATH=${SCRIPT_PATH#*"${THE_CWD}"}
 CURRENT_CRON_CMD="${ABBR_SCRIPT_PATH} ${*}"
+THIS_IS_CRON=${THIS_IS_CRON:-false}
 
 # Wait for the above checks to complete before printing the start message -- Max 110 chars
 if ${THIS_IS_CRON}; then
-  printf "%s  STOP   %s\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"
+  log_line "STOP   ${CURRENT_CRON_CMD}" "INFO"
 else
   # Uncomment during development:
-  printf "%s  STOP   %s\n" "${ISO_DATE}" "${CURRENT_CRON_CMD}"
+  log_line "STOP   ${CURRENT_CRON_CMD}" "INFO"
   :
 fi

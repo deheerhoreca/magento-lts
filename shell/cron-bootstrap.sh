@@ -30,7 +30,6 @@ export REQUIRE_HOST=${REQUIRE_HOST:-}
 export HEAD_START_HOST=${HEAD_START_HOST:-}
 export HEAD_START_SECS=${HEAD_START_SECS:-}
 
-ISO_DATE=$(TZ="Europe/Amsterdam" date +"%F %T")
 SCRIPT_PATH=${0}
 THE_CWD="$(pwd)/"
 ABBR_SCRIPT_PATH=${SCRIPT_PATH#*"${THE_CWD}"}
@@ -114,13 +113,13 @@ fi
 
 # Inherit optional environment vars to be added to intel commands later via ${ARGS}.
 # All short options should be supported here except for -h and -s (-dpfv)
-export VERBOSE=${VERBOSE:-false}
-export DRYRUN=${DRYRUN:-false}
-export PROFILE=${PROFILE:-false}
-export DEBUG=${DEBUG:-false}
-export N=${N:-}
-export FORCE=${FORCE:-false}
 export ARGS=""
+export DEBUG=${DEBUG:-false}
+export DRYRUN=${DRYRUN:-false}
+export FORCE=${FORCE:-false}
+export N=${N:-}
+export PROFILE=${PROFILE:-false}
+export VERBOSE=${VERBOSE:-false}
 
 if is_truthy "${VERBOSE}"; then
   ARGS+=" -v"
