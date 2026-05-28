@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+# bash-only: sourced helpers use ${var,,}, BASH_SOURCE, and exec FD>file
+# which have no portable zsh equivalent. Stay on bash.
+
+: "---------------------------------------------------------------------------------------------------------------
+${HOME}/workspace/openmage/shell/om-run-cronjobs                                              # 1-30 sec,  ? MB
+
+Run OpenMage cronjobs from multiple hosts, allowing only one host to run them:
+- Uses flock on the common NFS drive and a random offset for race-condition prevention.
+- Replaces the two CRONTAB scheduler_cron.sh entries with a single entry.
+------------------------------------------------------------------------------------------------------------------"
+
+set -euo pipefail
+
+# Bootstrap OpenMage environment and functions
+source "${HOME}/.profile" || die "Failed to load ~/.profile"
+cm || die "Failed to go to the openmage directory during bootstrap"
+source ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
+
+# --------------------------------------------------- FLOCK SETUP -------------------------------------------------- #
+
+# Common and static path to store the lock file for the flock command.
+FLOCK_DIR="/mnt/bigstorage/openmage/lock"
+FLOCK_FILE="${FLOCK_DIR}/om-run-cronjobs.lock"
+
+# Sanity: ensure the NFS-backed parent exists and is writable.
+if [ ! -d "${FLOCK_DIR}" ]; then
+  mkdir -p "${FLOCK_DIR}" || { log_line "Failed to create FLOCK_DIR ${FLOCK_DIR}, exiting" "ERROR"; exit 1; }
+fi
+
+if [ ! -w "${FLOCK_DIR}" ]; then
+  log_line "FLOCK_DIR ${FLOCK_DIR} is not writable, exiting" "ERROR"
+  exit 1
+fi
+
+# Race-condition guard: when the lock file does not exist yet (first-ever run
+# on a fresh NFS mount) multiple hosts may race to create it.  Sleep a small
+# random amount *before* opening the FD so only one host wins.
+if [ ! -f "${FLOCK_FILE}" ]; then
+  sleep 1.$((RANDOM % 1000 + 1))
+fi
+
+# Race condition guard: A tiny random sleep allows one host to win the race.
+if [ -f "${FLOCK_FILE}" ]; then
+  sleep 0.$((RANDOM % 500 + 1))
+fi
+
+# Open the lock file descriptor — this also creates the file if needed.
+exec 200>"${FLOCK_FILE}" || { log_line "Failed to open FLOCK_FILE ${FLOCK_FILE} for writing, exiting" "ERROR"; exit 1; }
+
+# Release the FD on any exit so the lock is freed reliably.
+cleanup() {
+  exec 200>&- 2>/dev/null
+}
+trap cleanup EXIT
+
+# Non-blocking lock — if another host holds it, exit cleanly.
+if ! flock -n 200; then
+  log_line "Another host is already running the cronjobs (flock on ${FLOCK_FILE} is locked), exiting" "INFO"
+  exit 0
+fi
+
+# ------------------------------------------------- RUN CRONJOBS --------------------------------------------------- #
+
+# Skip when maintenance flag is present (mirrors the guard in the old CRONTAB entries).
+if [ -e maintenance.flag ]; then
+  log_line "maintenance.flag is present, skipping cronjobs" "INFO"
+  exit 0
+fi
+
+# Run the two scheduler modes sequentially with a hard timeout per invocation.
+# 900s (15 min) per mode; the cron fires every 2 minutes so 15 min leaves
+# margin without starving the next cycle.
+CRON_EXIT_CODE=0
+
+# Explicitly point to PHP binary to avoid weak detection in scheduler_cron.sh
+PHP_BIN=$(phpenv which php)
+
+log_line "Running scheduler_cron.sh --php "${PHP_BIN}" --mode always" "INFO"
+if ! timeout 900s ./scheduler_cron.sh --php "${PHP_BIN}" --mode always; then
+  CRON_EXIT_CODE=$?
+  log_line "scheduler_cron.sh --php "${PHP_BIN}" --mode always exited with code ${CRON_EXIT_CODE}" "ERROR"
+fi
+
+log_line "Running scheduler_cron.sh --php "${PHP_BIN}" --mode default" "INFO"
+if ! timeout 900s ./scheduler_cron.sh --php "${PHP_BIN}" --mode default; then
+  EXIT_CODE=$?
+  log_line "scheduler_cron.sh --php "${PHP_BIN}" --mode default exited with code ${EXIT_CODE}" "ERROR"
+  # Preserve the first non-zero exit code.
+  if [ "${CRON_EXIT_CODE}" -eq 0 ]; then
+    CRON_EXIT_CODE="${EXIT_CODE}"
+  fi
+fi
+
+# ---------------------------------------------------- TEAR DOWN --------------------------------------------------- #
+
+cm || die "Failed to go to the openmage directory during tear down"
+source ./shell/cron-wrapup.sh
+
+exit "${CRON_EXIT_CODE}"

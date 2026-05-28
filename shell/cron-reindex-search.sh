@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 : '---------------------------------------------------------------------------------------------------------------
 ${HOME}/workspace/openmage/shell/cron-reindex-search.sh                                       # 18 sec

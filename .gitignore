@@ -161,6 +161,142 @@ media
 !/app/design/frontend/rwd/dhh
 
 ######################################################################
+# SYMLINKS -- Any hacks have to be in ./patches/, NOT via git
+######################################################################
+
+# find . -type l ! -path './vendor/*' ! -path './media/*' | sort -f
+/app/code/community/Aoe/BlackHoleSession
+/app/code/community/Aoe/CacheStats
+/app/code/community/Aoe/DbRetry
+/app/code/community/Aoe/ModelCache
+/app/code/community/Aoe/Profiler
+/app/code/community/Aoe/Scheduler
+/app/code/community/Aoe/TemplateHints
+/app/code/community/Aydus/HeadOrder
+/app/code/community/Cm/Cache/Backend/Redis.php
+/app/code/community/Cm/RedisSession
+/app/code/community/Fballiano/CategorySortDirection
+/app/code/community/Fballiano/CssjsMinify
+/app/code/community/FireGento/AdminMonitoring
+/app/code/community/FireGento/Debug
+/app/code/community/FireGento/DynamicCategory
+/app/code/community/FireGento/Logger
+/app/code/community/Guidance/Simplepage
+/app/code/community/Pay/Payment
+/app/code/community/Varien/Profiler.php
+/app/code/community/Zend/Db/Profiler.php
+/app/code/local/Aschroder/SMTPPro
+/app/code/local/InternetCode/AdvancedProductFilter
+/app/code/local/InternetCode/Translator
+/app/code/local/MM/CmsContentFileMode
+/app/code/local/MM/MonacoEditor
+/app/design/adminhtml/base/default/template/pay/payment
+/app/design/adminhtml/default/default/layout/aoe_profiler
+/app/design/adminhtml/default/default/layout/aoe_scheduler
+/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
+/app/design/adminhtml/default/default/layout/firegento_debug.xml
+/app/design/adminhtml/default/default/layout/firegento_logger.xml
+/app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
+/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
+/app/design/adminhtml/default/default/template/aoe_profiler
+/app/design/adminhtml/default/default/template/aoe_scheduler
+/app/design/adminhtml/default/default/template/dynamiccategory/fieldset.phtml
+/app/design/adminhtml/default/default/template/firegento_logger
+/app/design/adminhtml/default/default/template/firegento/adminmonitoring
+/app/design/adminhtml/default/default/template/firegento/debug
+/app/design/adminhtml/default/default/template/InternetCode/AdvancedProductFilter/js_after_grid.phtml
+/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
+/app/design/adminhtml/default/default/template/mm/monacoeditor
+/app/design/adminhtml/default/default/template/smtppro
+/app/design/frontend/base/default/layout/firegento_logger.xml
+/app/design/frontend/base/default/layout/guidance_simplepage.xml
+/app/design/frontend/base/default/layout/mm/tailwindcss.xml
+/app/design/frontend/base/default/template/firegento_logger
+/app/design/frontend/base/default/template/guidance_simplepage
+/app/design/frontend/base/default/template/pay/payment
+/app/etc/aoe_cachestats.xml
+/app/etc/modules/Aoe_BlackHoleSession.xml
+/app/etc/modules/Aoe_CacheStats.xml
+/app/etc/modules/Aoe_DbRetry.xml
+/app/etc/modules/Aoe_ModelCache.xml
+/app/etc/modules/Aoe_Profiler.xml
+/app/etc/modules/Aoe_Scheduler.xml
+/app/etc/modules/Aoe_TemplateHints.xml
+/app/etc/modules/Aschroder_SMTPPro.xml
+/app/etc/modules/Aydus_HeadOrder.xml
+/app/etc/modules/Cm_RedisSession.xml
+/app/etc/modules/Fballiano_CategorySortDirection.xml
+/app/etc/modules/Fballiano_CssjsMinify.xml
+/app/etc/modules/FireGento_AdminMonitoring.xml
+/app/etc/modules/FireGento_Debug.xml
+/app/etc/modules/FireGento_DynamicCategory.xml
+/app/etc/modules/FireGento_Logger.xml
+/app/etc/modules/Guidance_Simplepage.xml
+/app/etc/modules/InternetCode_AdvancedProductFilter.xml
+/app/etc/modules/InternetCode_Translator.xml
+/app/etc/modules/MM_CmsContentFileMode.xml
+/app/etc/modules/MM_MonacoEditor.xml
+/app/etc/modules/Pay_Payment.xml
+/app/locale/de_CH/FireGento_Debug.csv
+/app/locale/de_CH/FireGento_DynamicCategory.csv
+/app/locale/de_DE/Aoe_Scheduler.csv
+/app/locale/de_DE/Aschroder_SMTPPro.csv
+/app/locale/de_DE/FireGento_AdminMonitoring.csv
+/app/locale/de_DE/FireGento_Debug.csv
+/app/locale/de_DE/FireGento_DynamicCategory.csv
+/app/locale/en_US/Aschroder_SMTPPro.csv
+/app/locale/en_US/FireGento_Debug.csv
+/app/locale/en_US/Pay_Payment.csv
+/app/locale/en_US/template/email/aoe_scheduler
+/app/locale/en_US/template/email/firegento_logger
+/app/locale/es_ES/Aschroder_SMTPPro.csv
+/app/locale/fr_FR/Aschroder_SMTPPro.csv
+/app/locale/fr_FR/FireGento_Debug.csv
+/app/locale/it_IT/Pay_Payment.csv
+/app/locale/nl_NL/Aschroder_SMTPPro.csv
+/app/locale/nl_NL/FireGento_DynamicCategory.csv
+/app/locale/nl_NL/Pay_Payment.csv
+/app/locale/pt_BR/Aoe_Scheduler.csv
+/app/locale/pt_BR/Aschroder_SMTPPro.csv
+/app/locale/pt_BR/template/email/aoe_scheduler
+/app/locale/ru_RU/Aschroder_SMTPPro.csv
+/app/locale/sv_SE/Aoe_Scheduler.csv
+/app/locale/tr_TR/Aschroder_SMTPPro.csv
+/dev/tests/aoe_scheduler
+/js/monacoeditor
+/lib/Airbrake
+/lib/chromelogger
+/lib/Credis
+/lib/FireGento/ChromePhp
+/lib/FireGento/FireLogger
+/lib/FireGento/FirePHP
+/lib/Graylog2-gelf-php
+/lib/rsyslog
+/lib/sentry
+/lib/tailwindcss/tailwind.config.js
+/lib/tailwindcss/tailwindcss
+/lib/XMPPHP
+/media/pay_payment/logo.png
+/pub/admin/errors
+/pub/admin/js
+/pub/admin/media
+/pub/admin/skin
+/pub/default/.htaccess
+/pub/default/errors
+/pub/default/js
+/pub/default/media
+/pub/default/skin
+/scheduler_cron.sh
+/shell/logger.php
+/shell/scheduler.php
+/shell/scheduler.php
+/skin/adminhtml/default/default/aoe_profiler
+/skin/adminhtml/default/default/aoe_scheduler
+/skin/adminhtml/default/default/firegento_logger.css
+/skin/adminhtml/default/default/firegento/debug
+/skin/frontend/base/default/aoe_templatehints
+
+######################################################################
 # UNIGNORE EMBEDDED COMPOSER FILES
 #
 # Only where composer had installed vendor/**/vendor WITH composer.lock files,
@@ -175,99 +311,9 @@ media
 !/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.lock
 !/vendor/paynl/magento-plugin/app/code/community/Pay/Payment/composer.json
 
-######################################################################
-# SYMLINKS -- Any hacks have to be in ./patches/, NOT via git
-######################################################################
-
-# find . -type l ! -path './vendor/*' ! -path './media/*' | sort -f
-/app/code/community/Aoe/BlackHoleSession
-/app/code/community/Aoe/DbRetry
-/app/code/community/Aoe/ModelCache
-/app/code/community/Aoe/Scheduler
-/app/code/community/Aoe/TemplateHints
-/app/code/community/Aydus/HeadOrder
-/app/code/community/Cm/Cache/Backend/Redis.php
-/app/code/community/Cm/RedisSession
-/app/code/community/Fballiano/CategorySortDirection
-/app/code/community/Fballiano/CssjsMinify
-/app/code/community/FireGento/Debug
-/app/code/community/Guidance/Simplepage
-/app/code/local/Aschroder/SMTPPro
-/app/code/local/InternetCode/AdvancedProductFilter
-/app/code/local/InternetCode/Translator
-/app/code/local/MM/CmsContentFileMode
-/app/code/local/MM/MonacoEditor
-/app/design/adminhtml/default/default/layout/aoe_scheduler
-/app/design/adminhtml/default/default/layout/firegento_debug.xml
-/app/design/adminhtml/default/default/layout/mm/monacoeditor.xml
-/app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
-/app/design/adminhtml/default/default/template/aoe_scheduler
-/app/design/adminhtml/default/default/template/firegento/debug
-/app/design/adminhtml/default/default/template/InternetCode/AdvancedProductFilter/js_after_grid.phtml
-/app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
-/app/design/adminhtml/default/default/template/mm/monacoeditor
-/app/design/adminhtml/default/default/template/smtppro
-/app/design/frontend/base/default/layout/guidance_simplepage.xml
-/app/design/frontend/base/default/layout/mm/tailwindcss.xml
-/app/design/frontend/base/default/template/guidance_simplepage
-/app/etc/modules/Aoe_BlackHoleSession.xml
-/app/etc/modules/Aoe_DbRetry.xml
-/app/etc/modules/Aoe_ModelCache.xml
-/app/etc/modules/Aoe_Scheduler.xml
-/app/etc/modules/Aoe_TemplateHints.xml
-/app/etc/modules/Aschroder_SMTPPro.xml
-/app/etc/modules/Aydus_HeadOrder.xml
-/app/etc/modules/Cm_RedisSession.xml
-/app/etc/modules/Fballiano_CategorySortDirection.xml
-/app/etc/modules/Fballiano_CssjsMinify.xml
-/app/etc/modules/FireGento_Debug.xml
-/app/etc/modules/Guidance_Simplepage.xml
-/app/etc/modules/InternetCode_AdvancedProductFilter.xml
-/app/etc/modules/InternetCode_Translator.xml
-/app/etc/modules/MM_CmsContentFileMode.xml
-/app/etc/modules/MM_MonacoEditor.xml
-/app/locale/de_CH/FireGento_Debug.csv
-/app/locale/de_DE/Aoe_Scheduler.csv
-/app/locale/de_DE/Aschroder_SMTPPro.csv
-/app/locale/de_DE/FireGento_Debug.csv
-/app/locale/en_US/Aschroder_SMTPPro.csv
-/app/locale/en_US/FireGento_Debug.csv
-/app/locale/en_US/template/email/aoe_scheduler
-/app/locale/es_ES/Aschroder_SMTPPro.csv
-/app/locale/fr_FR/Aschroder_SMTPPro.csv
-/app/locale/fr_FR/FireGento_Debug.csv
-/app/locale/nl_NL/Aschroder_SMTPPro.csv
-/app/locale/pt_BR/Aoe_Scheduler.csv
-/app/locale/pt_BR/Aschroder_SMTPPro.csv
-/app/locale/pt_BR/template/email/aoe_scheduler
-/app/locale/ru_RU/Aschroder_SMTPPro.csv
-/app/locale/sv_SE/Aoe_Scheduler.csv
-/app/locale/tr_TR/Aschroder_SMTPPro.csv
-/dev/tests/aoe_scheduler
-/js/monacoeditor
-/lib/Credis
-/lib/FireGento/ChromePhp
-/lib/FireGento/FireLogger
-/lib/FireGento/FirePHP
-/lib/tailwindcss/tailwind.config.js
-/lib/tailwindcss/tailwindcss
-/pub/admin/errors
-/pub/admin/js
-/pub/admin/media
-/pub/admin/skin
-/pub/default/.htaccess
-/pub/default/errors
-/pub/default/js
-/pub/default/media
-/pub/default/skin
-/scheduler_cron.sh
-/shell/scheduler.php
-/skin/adminhtml/default/default/aoe_scheduler
-/skin/adminhtml/default/default/firegento/debug
-/skin/frontend/base/default/aoe_templatehints
 
 ######################################################################
-# UNIGNORE ALL COREHACKED FILES TO ENSURE GIT TRACKING
+# UNIGNORE ALL CORE HACKED FILES TO ENSURE GIT TRACKING
 #
 # - CORE HACKS AGAINST COMPOSER-MANAGED PACKAGES are tracked by git
 #   through composer patch files OR by adding the hacked files to git and
@@ -290,12 +336,15 @@ media
 # 2. Find all files with DHH or CORE HACK in them:
 #    > grep -rilI -e DHH -e "CORE HACK" . | sort -f
 #
+# ..which must be the same list as:
+#
 # 3. Find all differences with the original Magento LTS codebase:
-#    > diff -qr . vendor/openmage/magento-lts | grep "differs" | sort -f
-#    > diff -qr vendor/openmage/magento-lts . | grep "differs" | sort -f
+#    > diff -qr . vendor/openmage/magento-lts | sort -f
+#    > diff -qr vendor/openmage/magento-lts . | sort -f
 ######################################################################
 
 # grep -rilI -e DHH -e "CORE HACK" app/*.* | sort -f
+# diff -qr app/*.* vendor/openmage/magento-lts/app/*.* | sort -f
 !/app/Mage.php
 
 # grep -rilI -e DHH -e "CORE HACK" app/locale | sort -f
@@ -316,6 +365,7 @@ media
 !/app/code/core/Mage/Adminhtml/Model/Search/Order.php
 !/app/code/core/Mage/Api/Model/Server/Wsi/Adapter/Soap.php
 !/app/code/core/Mage/Catalog/Model/Category.php
+!/app/code/core/Mage/Catalog/Model/Layer.php
 !/app/code/core/Mage/Core/Model/Resource/Session.php
 !/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
 !/app/code/core/Mage/Customer/Model/Customer.php
@@ -330,6 +380,7 @@ media
 !/app/code/core/Mage/Core/Model/App.php
 
 # grep -ri -l DHH app/code/community/ | sort -f
+# diff -qr app/code/community/ vendor/openmage/magento-lts/app/code/community/ | sort -f
 !/app/code/community/Afterpay/Afterpay/Block/Portfolios/Checkout/Form.php
 !/app/code/community/Afterpay/Afterpay/controllers/Adminhtml/AfterpayController.php
 !/app/code/community/Afterpay/Afterpay/Helper/Data.php
@@ -474,50 +525,6 @@ media
 !/skin/frontend/rwd/dhh/tm/firecheckout/js/components/order-review.js
 
 ############################################################
-# ADDED BY COMPOSER OPENMAGE PLUGIN INSTALLER
-# Better to use the "Symlinks" approach documented above
+# ADDED BY COMPOSER OPENMAGE PLUGIN INSTALLER OR `cm; om-gitignore-symlinks`
+# Check paths and move them up if they should be ignored (use sorting).
 ############################################################
-/app/etc/modules/Aoe_Profiler.xml
-/app/code/community/Aoe/Profiler
-/app/code/community/Varien/Profiler.php
-/app/code/community/Zend/Db/Profiler.php
-/skin/adminhtml/default/default/aoe_profiler
-/app/design/adminhtml/default/default/layout/aoe_profiler
-/app/design/adminhtml/default/default/template/aoe_profiler
-/app/locale/de_CH/FireGento_DynamicCategory.csv
-/app/code/community/FireGento/DynamicCategory
-/app/design/adminhtml/default/default/template/dynamiccategory/fieldset.phtml
-/app/etc/modules/FireGento_DynamicCategory.xml
-/app/locale/de_DE/FireGento_DynamicCategory.csv
-/app/locale/nl_NL/FireGento_DynamicCategory.csv
-/app/code/community/Aoe/CacheStats
-/app/etc/modules/Aoe_CacheStats.xml
-/app/etc/aoe_cachestats.xml
-/app/code/community/FireGento/Logger
-/app/etc/modules/FireGento_Logger.xml
-/app/design/adminhtml/default/default/layout/firegento_logger.xml
-/app/design/adminhtml/default/default/template/firegento_logger
-/app/design/frontend/base/default/layout/firegento_logger.xml
-/app/design/frontend/base/default/template/firegento_logger
-/lib/Airbrake
-/lib/XMPPHP
-/lib/Graylog2-gelf-php
-/lib/rsyslog
-/lib/chromelogger
-/lib/sentry
-/shell/logger.php
-/skin/adminhtml/default/default/firegento_logger.css
-/app/locale/en_US/template/email/firegento_logger
-/app/code/community/Pay/Payment
-/app/design/frontend/base/default/template/pay/payment
-/app/design/adminhtml/base/default/template/pay/payment
-/media/pay_payment/logo.png
-/app/etc/modules/Pay_Payment.xml
-/app/locale/nl_NL/Pay_Payment.csv
-/app/locale/en_US/Pay_Payment.csv
-/app/locale/it_IT/Pay_Payment.csv
-/app/code/community/FireGento/AdminMonitoring
-/app/etc/modules/FireGento_AdminMonitoring.xml
-/app/design/adminhtml/default/default/layout/firegento_adminmonitoring.xml
-/app/design/adminhtml/default/default/template/firegento/adminmonitoring
-/app/locale/de_DE/FireGento_AdminMonitoring.csv

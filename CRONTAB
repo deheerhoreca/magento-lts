@@ -1,9 +1,8 @@
 # OPENMAGE
 OLOG="${HOME}/logs/deheerhoreca-magento/cron_event.log"
 OERR="${HOME}/logs/deheerhoreca-magento/cron_error.log"
-*/2  *   *  *  *  cd ~/workspace/openmage && ! test -e maintenance.flag && . ~/.profile && cm && ./scheduler_cron.sh --mode always  1>>${OLOG} 2>>${OERR}
-*/2  *   *  *  *  cd ~/workspace/openmage && ! test -e maintenance.flag && . ~/.profile && cm && ./scheduler_cron.sh --mode default 1>>${OLOG} 2>>${OERR}
 59   23  *  *  *  ~/workspace/openmage/shell/cron-logrotate.sh                1>>${OLOG} 2>&1
+*/2  *   *  *  *  ~/workspace/openmage/shell/om-run-cronjobs                  1>>${OLOG} 2>>${OERR}
 55   21  *  *  *  ~/workspace/openmage/shell/cron-clean-mysql.sh              1>>${OLOG} 2>>${OERR}
 00   01  *  *  0  ~/workspace/openmage/shell/cron-download-external-assets.sh 1>>${OLOG} 2>>${OERR}
 30   02  *  *  *  ~/workspace/openmage/shell/cron-clean-redis.sh              1>>${OLOG} 2>>${OERR}

@@ -1,5 +1,5 @@
-#!/bin/sh
-#
+#!/usr/bin/env bash
+
 # The command should be run in the git repository root.
 # It adds all symlinks to a .gitignore file that aren't in there already.
 

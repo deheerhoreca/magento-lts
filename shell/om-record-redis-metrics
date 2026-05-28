@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/usr/bin/env bash
 
 : '---------------------------------------------------------------------------------------------------------------
 ${HOME}/workspace/openmage/shell/om-record-redis-metrics                                      # 5 sec

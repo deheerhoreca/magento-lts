@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 : '
 ${HOME}/workspace/openmage/shell/cmyk_to_rgb.sh

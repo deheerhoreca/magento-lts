@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 : '---------------------------------------------------------------------------------------------------------------
 ${HOME}/workspace/openmage/shell/fix-permissions.sh                                           # 30+ min

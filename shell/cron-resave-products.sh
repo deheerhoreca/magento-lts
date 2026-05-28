@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 : '---------------------------------------------------------------------------------------------------------------
 ${HOME}/workspace/openmage/shell/cron-resave-products.sh                                            # 120+ min
