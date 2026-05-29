@@ -251,3 +251,16 @@
     padding: 0 !important;
   }
 }
+
+/* Footer overflow containment */
+@media all {
+  /* Prevent valued-widget shadow DOM (fixed 325px) from causing page x-scroll */
+  .footermidwrap {
+    overflow-x: hidden;
+  }
+
+  /* Badges row: contain Bootstrap row negative margin bleed */
+  #footer-grid .mt-4 {
+    overflow: hidden;
+  }
+}
