@@ -37,6 +37,18 @@
       "skillPath": "plugins/writing/skills/award-application/SKILL.md",
       "computedHash": "a17d79bcea144dd793ea50623efe81e5249173e7d764f422fc802ce6c0ca8478"
     },
+    "bootstrap": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "bootstrap/SKILL.md",
+      "computedHash": "99c121c1791cbbadcb16b0ff4d3928c08d402e999a6611d2cbece613d98e7e97"
+    },
+    "bootstrap-customize": {
+      "source": "sjnims/bootstrap-expert",
+      "sourceType": "github",
+      "skillPath": "plugins/bootstrap-expert/skills/bootstrap-customize/SKILL.md",
+      "computedHash": "b724782e7579d79c9e5b198abe69842b65df0f3cba40d7d8cc0a3d9f542ad16d"
+    },
     "brains-trust": {
       "source": "jezweb/claude-skills",
       "sourceType": "github",
@@ -59,7 +71,7 @@
       "source": "anthropics/skills",
       "sourceType": "github",
       "skillPath": "skills/claude-api/SKILL.md",
-      "computedHash": "3d1c50b50f7640b225dcd9b3b29a3983406b342c22e9f0ed4cb65a92451b7bf2"
+      "computedHash": "954ea4ccdb1aeb5c709f4b23961d4295a20c128b535ac4cbf33bf903f16d3fb4"
     },
     "cloudflare": {
       "source": "cloudflare/skills",
