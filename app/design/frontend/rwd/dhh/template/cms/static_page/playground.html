@@ -3,7 +3,7 @@ Loaded as static HTML page @ https://www.chefstore.nl/playground
 Inherits the 1-column layaout of the RWD/DHH theme.
 - Inherits: /var/www/vhosts/chefstore.nl/workspace/openmage/skin/frontend/rwd/dhh/css/styles.css
 -->
-
+<p>&nbsp;</p>
 <!-- Insert new/altered CSS here temporarily due ensure browser uses the intended definitions (load balancing cannot guarantee consistency of uncommitted changes)-->
 <style>
   .lh-1 {
@@ -489,200 +489,151 @@ Inherits the 1-column layaout of the RWD/DHH theme.
     color: #a0a0a0;
     font-size: var(--text-size-small);
   }
-</style>
-<div
-  class="modal fade show"
-  id="qeldInfoModal"
-  tabindex="-1"
-  aria-labelledby="qeldInfoModalLabel"
-  aria-modal="true"
-  role="dialog"
-  style="display: block; background: rgba(0, 0, 0, 0.45)"
->
-  <div class="modal-dialog modal-dialog-centered modal-xl px-2">
-    <div class="modal-content overflow-hidden border bg-white shadow-lg" style="border-color: #d5d5d5; border-radius: 1.5rem">
-      <div class="modal-header border-0 px-4 px-md-5 py-4 text-white" style="background: #2d2d2d">
-        <div>
-          <p class="mb-2 text-uppercase fw-semibold small" style="letter-spacing: 0.08em; color: #ed7e2f">Zakelijke financiering</p>
-          <h1 class="modal-title h2 fw-bold mb-2">Meer informatie over Qeld</h1>
-          <p class="mb-0" style="max-width: 700px; color: #e0e0e0">
-            Snel extra financiële ruimte voor je horecabedrijf, bijvoorbeeld voor apparatuur, inrichting of werkkapitaal.
-          </p>
+
+  /* Qeld popup kleuroverrides voor Chefstore.nl */
+  #qeldInfoModal .modal-header h2.modal-title,
+  #qeldInfoModal .modal-title {
+    color: #ffffff !important;
+  }
+  #qeldInfoModal .modal-header .modal-title {
+    color: white !important;
+  }
+  </style>
+<div id="qeldInfoModal" class="modal fade show" tabindex="-1" aria-labelledby="qeldInfoModalLabel" aria-modal="true" role="dialog" style="display:block; background:rgba(0,0,0,0.55);">
+  <div class="modal-dialog modal-dialog-centered modal-lg px-2">
+    <div class="modal-content overflow-hidden border-0 shadow-lg" style="border-radius:1.25rem;">
+
+      <!-- HEADER -->
+      <div class="modal-header border-0 px-4 py-3 text-white d-flex align-items-start" style="background:#2D2D2D;">
+        <div style="flex:1;">
+          <p class="mb-1 text-uppercase fw-bold" style="font-size:0.7rem; letter-spacing:0.1em; color:#ED7E2F;">💼 Zakelijke financiering</p>
+          <h2 class="fw-bold mb-1" id="qeldInfoModalLabel" style="font-size:1.55rem; color:#ffffff !important; line-height:1.2;">Meer informatie over Qeld</h2>
+          <p class="mb-0" style="font-size:0.85rem; color:#cccccc;">Snel extra financiële ruimte voor je horecabedrijf — voor apparatuur, inrichting of werkkapitaal.</p>
         </div>
-        <button type="button" class="btn-close btn-close-white ms-3" data-bs-dismiss="modal" aria-label="Sluiten"></button>
+        <button type="button" class="btn-close btn-close-white ms-3 mt-1 flex-shrink-0" data-bs-dismiss="modal" aria-label="Sluiten"></button>
       </div>
 
-      <div class="modal-body px-4 px-md-5 py-4 py-md-5" style="background: #f3f3f3">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="h-100 p-4 border bg-white" style="background: #e8f4fb !important; border-color: #b8dff0 !important; border-radius: 1rem">
-              <p class="small fw-semibold mb-2" style="color: #3aacd9">Via Chefstore.nl</p>
-              <p class="display-6 fw-bold mb-2 text-dark">€3.000 tot €50.000</p>
-              <p class="mb-0 text-secondary">Zakelijke financiering met een looptijd van 6 tot 18 maanden.</p>
+      <!-- BODY -->
+      <div class="modal-body p-3 p-md-4" style="background:#F3F3F3;">
+
+        <!-- Highlight tiles -->
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="p-3 h-100" style="background:#E8F4FB; border:1px solid #C5DDEE; border-radius:0.875rem;">
+              <p class="mb-1 fw-semibold" style="font-size:0.72rem; color:#ED7E2F; text-transform:uppercase; letter-spacing:0.05em;">Via Chefstore</p>
+              <p class="fw-bold mb-1 text-dark" style="font-size:1.4rem; white-space:nowrap;">€3.000 – €50.000</p>
+              <p class="mb-0 text-secondary" style="font-size:0.78rem;">Looptijd 6 tot 18 maanden</p>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="h-100 p-4 border bg-white" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-              <p class="small fw-semibold mb-2" style="color: #2d2d2d">Snel duidelijkheid</p>
-              <p class="display-6 fw-bold mb-2 text-dark">Binnen 1 werkdag</p>
-              <p class="mb-0 text-secondary">Na goedkeuring is uitbetaling in veel gevallen al binnen 24 uur mogelijk.</p>
+          <div class="col-6">
+            <div class="p-3 h-100" style="background:#ffffff; border:1px solid #E0E0E0; border-radius:0.875rem;">
+              <p class="mb-1 fw-semibold" style="font-size:0.72rem; color:#555; text-transform:uppercase; letter-spacing:0.05em;">Snel duidelijkheid</p>
+              <p class="fw-bold mb-1 text-dark" style="font-size:1.4rem; white-space:nowrap;">Binnen 1 werkdag</p>
+              <p class="mb-0 text-secondary" style="font-size:0.78rem;">Uitbetaling vaak binnen 24 uur</p>
             </div>
           </div>
         </div>
 
-        <div class="mt-4 mt-md-5">
-          <h2 class="h4 fw-bold text-dark mb-3">Waarom kiezen voor Qeld?</h2>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
-                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
-                >
-                  ✓
-                </div>
-                <p class="mb-0 text-body-secondary">Aanvragen is gratis en vrijblijvend</p>
-              </div>
+        <!-- Waarom Qeld USPs -->
+        <p class="fw-bold text-dark mb-2" style="font-size:0.95rem;">Waarom kiezen voor Qeld?</p>
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2 p-2 bg-white" style="border:1px solid #E8E8E8; border-radius:0.625rem;">
+              <span style="font-size:1.1rem;">✅</span>
+              <span style="font-size:0.8rem; color:#444;">Gratis &amp; vrijblijvend aanvragen</span>
             </div>
-            <div class="col-md-6">
-              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
-                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
-                >
-                  ✓
-                </div>
-                <p class="mb-0 text-body-secondary">Snelle online aanvraag in een paar stappen</p>
-              </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2 p-2 bg-white" style="border:1px solid #E8E8E8; border-radius:0.625rem;">
+              <span style="font-size:1.1rem;">⚡</span>
+              <span style="font-size:0.8rem; color:#444;">Snelle online aanvraag</span>
             </div>
-            <div class="col-md-6">
-              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
-                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
-                >
-                  ✓
-                </div>
-                <p class="mb-0 text-body-secondary">Vaste maandelijkse kosten</p>
-              </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2 p-2 bg-white" style="border:1px solid #E8E8E8; border-radius:0.625rem;">
+              <span style="font-size:1.1rem;">📅</span>
+              <span style="font-size:0.8rem; color:#444;">Vaste maandelijkse kosten</span>
             </div>
-            <div class="col-md-6">
-              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
-                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
-                >
-                  ✓
-                </div>
-                <p class="mb-0 text-body-secondary">Vervroegd aflossen zonder extra kosten</p>
-              </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2 p-2 bg-white" style="border:1px solid #E8E8E8; border-radius:0.625rem;">
+              <span style="font-size:1.1rem;">💸</span>
+              <span style="font-size:0.8rem; color:#444;">Vervroegd aflossen gratis</span>
             </div>
-            <div class="col-md-6">
-              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
-                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
-                >
-                  ✓
-                </div>
-                <p class="mb-0 text-body-secondary">Geschikt voor investeringen en extra werkkapitaal</p>
-              </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2 p-2 bg-white" style="border:1px solid #E8E8E8; border-radius:0.625rem;">
+              <span style="font-size:1.1rem;">🍳</span>
+              <span style="font-size:0.8rem; color:#444;">Investeringen &amp; werkkapitaal</span>
             </div>
-            <div class="col-md-6">
-              <div class="h-100 p-3 p-md-4 border bg-white d-flex gap-3" style="border-color: #d5d5d5 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center flex-shrink-0 fw-bold small"
-                  style="width: 24px; height: 24px; border-radius: 999px; background: #d4eef8; color: #3aacd9"
-                >
-                  ✓
-                </div>
-                <p class="mb-0 text-body-secondary">Voor Nederlandse en Belgische ondernemers</p>
-              </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2 p-2 bg-white" style="border:1px solid #E8E8E8; border-radius:0.625rem;">
+              <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1f3-1f1f1.svg" alt="NL" style="width:1.4rem;height:1.4rem;vertical-align:middle;"> <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e7-1f1ea.svg" alt="BE" style="width:1.4rem;height:1.4rem;vertical-align:middle;">
+              <span style="font-size:0.8rem; color:#444;">NL &amp; BE ondernemers</span>
             </div>
+          </div>
           </div>
         </div>
 
-        <div class="mt-4 mt-md-5 p-4 border" style="background: #e8f4fb; border-color: #b8dff0 !important; border-radius: 1rem">
-          <h2 class="h4 fw-bold text-dark mb-3">Zo werkt het</h2>
-          <div class="row g-3">
-            <div class="col-md-6 col-lg-3">
-              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
-                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
-                >
-                  1
-                </div>
-                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Vraag online aan</h3>
-                <p class="mb-0 text-secondary small">Je aanvraag is gratis en vrijblijvend.</p>
+        <!-- Zo werkt het -->
+        <div class="p-3 mb-3" style="background:#EBEBEB; border:1px solid #D8D8D8; border-radius:0.875rem;">
+          <p class="fw-bold text-dark mb-2" style="font-size:0.95rem;">Zo werkt het</p>
+          <div class="row g-2">
+            <div class="col-6 col-md-3">
+              <div class="p-2 text-center bg-white h-100" style="border:1px solid #E0E0E0; border-radius:0.625rem;">
+                <div class="fw-bold text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:2.4rem;height:2.4rem;border-radius:50%;background:#ED7E2F;font-size:1.1rem;">1</div>
+                <p class="fw-semibold mb-1 text-dark" style="font-size:0.78rem;">Vraag online aan</p>
+                <p class="mb-0 text-secondary" style="font-size:0.72rem;">Gratis &amp; vrijblijvend</p>
               </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
-                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
-                >
-                  2
-                </div>
-                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Ontvang snel reactie</h3>
-                <p class="mb-0 text-secondary small">Qeld beoordeelt je aanvraag en reageert binnen 1 werkdag.</p>
+            <div class="col-6 col-md-3">
+              <div class="p-2 text-center bg-white h-100" style="border:1px solid #E0E0E0; border-radius:0.625rem;">
+                <div class="fw-bold text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:2.4rem;height:2.4rem;border-radius:50%;background:#ED7E2F;font-size:1.1rem;">2</div>
+                <p class="fw-semibold mb-1 text-dark" style="font-size:0.78rem;">Ontvang reactie</p>
+                <p class="mb-0 text-secondary" style="font-size:0.72rem;">Binnen 1 werkdag</p>
               </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
-                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
-                >
-                  3
-                </div>
-                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Onderteken digitaal</h3>
-                <p class="mb-0 text-secondary small">Ga je akkoord, dan regel je dit veilig online.</p>
+            <div class="col-6 col-md-3">
+              <div class="p-2 text-center bg-white h-100" style="border:1px solid #E0E0E0; border-radius:0.625rem;">
+                <div class="fw-bold text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:2.4rem;height:2.4rem;border-radius:50%;background:#ED7E2F;font-size:1.1rem;">3</div>
+                <p class="fw-semibold mb-1 text-dark" style="font-size:0.78rem;">Onderteken digitaal</p>
+                <p class="mb-0 text-secondary" style="font-size:0.72rem;">Veilig online</p>
               </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="h-100 p-3 border bg-white" style="border-color: #b8dff0 !important; border-radius: 1rem">
-                <div
-                  class="d-inline-flex align-items-center justify-content-center fw-bold text-white small"
-                  style="width: 32px; height: 32px; border-radius: 999px; background: #ed7e2f"
-                >
-                  4
-                </div>
-                <h3 class="h6 fw-semibold mt-3 mb-2 text-dark">Snel beschikken</h3>
-                <p class="mb-0 text-secondary small">In veel gevallen staat het geld binnen 24 uur klaar.</p>
+            <div class="col-6 col-md-3">
+              <div class="p-2 text-center bg-white h-100" style="border:1px solid #E0E0E0; border-radius:0.625rem;">
+                <div class="fw-bold text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:2.4rem;height:2.4rem;border-radius:50%;background:#ED7E2F;font-size:1.1rem;">4</div>
+                <p class="fw-semibold mb-1 text-dark" style="font-size:0.78rem;">Snel beschikken</p>
+                <p class="mb-0 text-secondary" style="font-size:0.72rem;">Vaak binnen 24 uur</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div
-          class="mt-4 mt-md-5 p-4 d-flex flex-column flex-md-row gap-3 align-items-md-center justify-content-md-between text-white"
-          style="background: #2d2d2d; border-radius: 1rem"
-        >
+        <!-- CTA Sectie -->
+        <div class="p-3 d-flex flex-column flex-md-row gap-3 align-items-md-center justify-content-md-between" style="background:#2D2D2D; border-radius:0.875rem;">
           <div>
-            <h2 class="h4 fw-bold mb-1">Interesse in financiering via Qeld?</h2>
-            <p class="mb-0 small" style="color: #929a9c">Je gaat door naar de aanvraagomgeving van Qeld voor meer informatie of een vrijblijvende aanvraag.</p>
+            <p class="fw-bold text-white mb-1" style="font-size:1rem;">💡 Interesse in financiering via Qeld?</p>
+            <p class="mb-0" style="font-size:0.78rem; color:#BBBBBB;">Vrijblijvend meer informatie of direct aanvragen.</p>
           </div>
           <div class="d-flex gap-2 flex-shrink-0">
-            <button type="button" class="btn btn-outline-light fw-semibold px-3 px-md-4" data-bs-dismiss="modal">Sluiten</button>
-            <a href="https://www.qeld.nl/partners/chef-store" class="btn fw-semibold text-white px-3 px-md-4" style="background: #ed7e2f; border-color: #ed7e2f"
-              >Naar Qeld</a
-            >
+            <button type="button" class="btn btn-outline-light fw-semibold px-4 py-2" data-bs-dismiss="modal" style="font-size:0.9rem; border-radius:0.5rem;">Sluiten</button>
+            <a href="https://www.qeld.nl/partners/chef-store" target="_blank" class="btn fw-bold text-white px-4 py-2" style="background:#ED7E2F; border:none; border-radius:0.5rem; font-size:0.9rem;"><img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1f3-1f1f1.svg" alt="NL" style="width:1.1rem;height:1.1rem;vertical-align:middle;display:inline;margin-right:4px;"> Naar Qeld →</a>
+            <a href="http://www.qred.be/partner/qred-chefstore" target="_blank" class="btn fw-bold text-white px-4 py-2" style="background:#555555; border:none; border-radius:0.5rem; font-size:0.9rem;">Naar Qred <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e7-1f1ea.svg" alt="BE" style="width:1.1rem;height:1.1rem;vertical-align:middle;display:inline;"> →</a>
           </div>
         </div>
 
-        <p class="mt-3 mb-0 small text-secondary">
-          Let op: financiering wordt verstrekt door Qeld. Goedkeuring, voorwaarden en uitbetaling zijn afhankelijk van de beoordeling door Qeld.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
+        <p class="mt-2 mb-0" style="font-size:0.7rem; color:#999;">Let op: financiering wordt verstrekt door Qeld. Goedkeuring en uitbetaling zijn afhankelijk van de beoordeling door Qeld.</p>
+
+      </div><!-- end modal-body -->
+    </div><!-- end modal-content -->
+  </div><!-- end modal-dialog -->
+</div><!-- end modal -->
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var modalEl = document.getElementById("qeldInfoModal");
+  document.addEventListener('DOMContentLoaded', function () {
+    var modalEl = document.getElementById('qeldInfoModal');
     if (modalEl && window.bootstrap) {
       var modal = new bootstrap.Modal(modalEl);
       modal.show();
