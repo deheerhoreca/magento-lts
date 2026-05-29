@@ -185,6 +185,46 @@
   }
 }
 
+/* Bootstrap GTE Small: promo banners side-by-side */
+@media (min-width: 576px) {
+  .fp-banner-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .fp-banner-container .fp-banner {
+    flex: 1;
+    min-width: 0;
+  }
+  /* Header valued-widget: contain shadow DOM overflow */
+  .d-none.d-s-block {
+    overflow: hidden;
+  }
+}
+
+/* Bootstrap GTE Medium: hero + side-rects side-by-side */
+@media (min-width: 768px) {
+  .fp-banner-v3 {
+    justify-content: center;
+    display: flex;
+    padding-top: 1em;
+  }
+  .fp-banner-v3 img {
+    margin-bottom: initial;
+  }
+  .fp-main-banner {
+    float: left;
+    max-width: 50%;
+  }
+  .fp-side-rect-container {
+    float: right;
+    padding-left: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 50%;
+  }
+}
+
 /* Bootstrap GTE Large */
 @media (min-width: 992px) {
   .fp-banner-v3 {
@@ -192,15 +232,15 @@
     display: flex;
     padding-top: 1em;
   }
-  
+
   .fp-banner-v3 img {
     margin-bottom: initial;
   }
-  
+
   .fp-main-banner {
     float: left;
   }
-  
+
   .fp-side-rect-container {
     float: right;
     padding-left: 1em;
@@ -208,12 +248,12 @@
     flex-direction: column;
     justify-content: space-between;
   }
-  
+
   .fp-main-banner,
   .fp-side-rect-container {
     max-width: 50%;
   }
-  
+
   .fp-banner-container {
     justify-content: space-between;
     flex-direction: initial;
