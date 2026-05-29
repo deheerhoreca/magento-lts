@@ -292,6 +292,53 @@
   }
 }
 
+/* === Brand logos bar: centered flex layout === */
+@media all {
+  #brandsbar ul#brands {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+  }
+
+  /* Override legacy float + padding from global [class*="col-"] and ul#brands li rules */
+  #brandsbar ul#brands li {
+    float: none !important;
+    width: auto !important;
+    list-style: none;
+    text-align: center;
+    padding: 0.5rem;
+  }
+
+  #brandsbar ul#brands li img {
+    display: block;
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+}
+
+/* sm–lg: 4-per-row → balanced 4+3, both rows centered */
+@media (min-width: 576px) and (max-width: 1199.98px) {
+  #brandsbar ul#brands li {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding: 0.5rem 0;
+  }
+}
+
+/* xl+: single natural row, centered outward */
+@media (min-width: 1200px) {
+  #brandsbar ul#brands li {
+    flex: 0 0 auto;
+    padding: 0.5rem 0.5rem;
+  }
+}
+
 /* Footer overflow containment */
 @media all {
   /* Prevent valued-widget shadow DOM (fixed 325px) from causing page x-scroll */
