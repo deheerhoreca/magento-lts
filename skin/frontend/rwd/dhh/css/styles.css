@@ -8542,6 +8542,13 @@
     text-decoration: none;
     color: var(--color-orange);
   }
+
+  .footermidwrap .footer-quick-links a,
+  .footermidwrap .footer-links-row a,
+  #footer-wrapper .footer-policy-links a {
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
+  }
   
   /* End Footer */
 
