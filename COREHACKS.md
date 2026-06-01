@@ -165,6 +165,26 @@ Run Rector again over the same dirs if needed. Use `dev/rector.php` with its exc
 - Our own code:
   - `mphp vendor/bin/rector process  --dry-run --config=dev/rector-owncode.php`
 
+## 2026-05-08 Amasty Shopby review opportunities
+
+Review-only findings for `app/code/local/Amasty/Shopby` against current OpenMage layered navigation:
+
+- Security
+  - `app/design/frontend/base/default/template/amasty/amshopby/attribute.phtml` outputs raw labels, URLs, image paths, inline JS handlers and JSON-bearing `data-config` attributes; align with OpenMage `app/design/frontend/base/default/template/catalog/layer/filter.phtml`, which already uses `escapeUrl()` for filter links.
+  - `app/design/frontend/rwd/dhh/template/amasty/amshopby/attribute.phtml` improves escaping, but still prints raw `rel`, `style` and `data-config` fragments; finish the hardening in the active theme override as well, not only the base fallback.
+  - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php` still uses `escapeHtml()` on filter URLs instead of URL-context escaping.
+  - `app/code/local/Amasty/Shopby/Model/Mysql4/Filter.php` still relies on `raw_query()` and interpolated SQL for cleanup/insert operations; migrate to adapter helpers (`delete()`, `insertFromSelect()`, bound conditions).
+- Functionality
+  - `app/code/local/Amasty/Shopby/controllers/IndexController.php` re-implements category bootstrap instead of following `Mage_Catalog_CategoryController::_initCategory()`, so it skips core behavior such as `current_entity_key` registration and future OpenMage fixes in category initialization.
+  - `app/code/local/Amasty/Shopby/controllers/IndexController.php` and `app/code/local/Amasty/Shopby/Model/Observer.php` manually overwrite `_singleton/catalog/layer`; re-check this against current/upcoming OpenMage search-layer bootstrapping before the next core update.
+  - `app/code/local/Amasty/Shopby/Block/Catalog/Layer/Filter/Attribute.php` contains hard-coded storefront behavior for `recommended_product`; move this to configuration or a project-specific override to keep the vendor module portable.
+  - `app/code/local/Amasty/Shopby/Helper/Data.php` sanitizes multi-select request values, but many other paths still read request params directly; centralize request parsing/validation instead of mixing raw `getParam()` calls with helper-based parsing.
+- Performance / maintainability
+  - `app/code/local/Amasty/Shopby/Model/Catalog/Layer/Filter/Attribute.php` adds extra joins/grouping for mapped attribute counts; benchmark this against large catalogs and consider precomputed mappings or narrower SQL when mapped filters are disabled.
+  - `app/code/local/Amasty/Shopby/Helper/Layer/Cache.php` keeps a second, module-specific serialized filter cache on top of the core layer aggregator; review cache scope/invalidation together with upcoming OpenMage updates to avoid stale layered-navigation data.
+  - `app/code/local/Amasty/Shopby/etc/config.xml` still uses broad Magento 1 rewrite patterns and legacy `Mysql4` resource naming; expect merge friction with newer OpenMage releases and plan a modernization pass before functional work starts.
+  - No module-local README or automated tests were found for `Amasty/Shopby`; add at least focused coverage around URL building, request parsing, cache keys and filter rendering before implementation work starts.
+
 ## Patches
 - Need to be executed manually: `git apply patches/CS-0001.patch -v`
 - `CS-0001`: Changed default sorting of several Admin Grids to `sku`; Did not work using `app/local/Mage`.
