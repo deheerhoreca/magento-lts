@@ -82,6 +82,7 @@
     "driftingly/rector-laravel": "^2.1.9",
     "ergebnis/composer-normalize": "^2.48.2",
     "phpstan/phpstan": ">=2.1.33",
+    "phpunit/phpunit": "^9.6",
     "rector/rector": ">=2.3",
     "webmozart/assert": "^1.12.1"
   },

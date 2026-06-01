@@ -24,21 +24,35 @@ PHP_VERSION=$(php -c etc/php.ini -r "echo phpversion();") || {
 
 # Backup php.ini
 PHP_INI_BACKUP="./etc/php.ini.bak-$(date +%F_%H%M%S)"
-cp ${TARGET_PHP_INI} ${PHP_INI_BACKUP}
-if [ $? -ne 0 ]; then
-  echo "Fatal error: Failed to backup ${TARGET_PHP_INI}. Keeping current configuration."
-  exit
+
+if [ ! -f ${TARGET_PHP_INI} ]; then
+  echo "${TARGET_PHP_INI} does not exist, so it will not be backed up."
+else
+  echo "Backing up existing ${TARGET_PHP_INI} to ${PHP_INI_BACKUP}"
+  cp ${TARGET_PHP_INI} ${PHP_INI_BACKUP}
+  
+  if [ $? -ne 0 ]; then
+    echo "Fatal error: Failed to backup ${TARGET_PHP_INI}. Keeping current configuration."
+    exit
+  fi
+  echo "Existing ${TARGET_PHP_INI} backed up to ${PHP_INI_BACKUP}";
 fi
-echo "Existing ${TARGET_PHP_INI} backed up to ${PHP_INI_BACKUP}";
 
 # Backup _user.ini
 USER_INI_BACKUP="./etc/${TARGET_USER_INI}.bak-$(date +%F_%H%M%S)"
-cp ${TARGET_USER_INI} ${USER_INI_BACKUP}
-if [ $? -ne 0 ]; then
-  echo "Fatal error: Failed to backup ${TARGET_USER_INI}. Keeping current configuration."
-  exit
+
+if [ ! -f ${TARGET_USER_INI} ]; then
+  echo "${TARGET_USER_INI} does not exist, so it will not be backed up."
+else
+  echo "Backing up existing ${TARGET_USER_INI} to ${USER_INI_BACKUP}"
+  cp ${TARGET_USER_INI} ${USER_INI_BACKUP}
+  
+  if [ $? -ne 0 ]; then
+    echo "Fatal error: Failed to backup ${TARGET_USER_INI}. Keeping current configuration."
+    exit
+  fi
+  echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 fi
-echo "Existing ${TARGET_USER_INI} backed up to ${USER_INI_BACKUP}";
 
 # Create new php.ini
 SHARED_PHP_INI=$(pwd)/etc/php-dist.ini

@@ -19,7 +19,8 @@ if [ -d /dev/shm/openmage-php-opcache ]; then
   rm -rf /dev/shm/openmage-php-opcache/* && touch /dev/shm/openmage-php-opcache/CACHEDIR.TAG
   log_line "Cleared PHP opcache in /dev/shm/openmage-php-opcache/" "INFO"
 else
-  log_line "Skipped PHP opcache clear: /dev/shm/openmage-php-opcache/ does not exist" "INFO"
+  # log_line "Skipped PHP opcache clear: /dev/shm/openmage-php-opcache/ does not exist" "INFO"
+  :
 fi
 
 # Clear Magento/OpenMage caches
@@ -27,9 +28,9 @@ n98-magerun.phar cache:clean
 log_line "Cleared OpenMage caches" "INFO"
 
 # Clear APCu and Opcache via cachetool
-ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml apcu:cache:clear
-ELASTIC_APM_ENABLED=false cachetool --config=.cachetool.yaml opcache:reset
-ELASTIC_APM_ENABLED=false cachetool --config=.cachetool-cli.yaml opcache:reset
+cachetool --config=.cachetool.yaml apcu:cache:clear
+cachetool --config=.cachetool.yaml opcache:reset
+cachetool --config=.cachetool-cli.yaml opcache:reset
 log_line "Cleared APCu and Opcache caches via cachetool" "INFO"
 
 # Wrap up

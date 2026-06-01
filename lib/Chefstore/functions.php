@@ -1020,7 +1020,7 @@ function devDump(mixed ...$var): void {
  *
  * @return void
  */
-function devLog(string $message, int $level = null, ?string $file = "verbose.txt", bool $forceLog = true): void {
+function devLog(string $message, ?int $level = null, ?string $file = "verbose.txt", bool $forceLog = true): void {
   if(isDevIp()) {
     $level ??= Zend_Log::DEBUG;
     Mage::log($message, $level, $file, $forceLog);

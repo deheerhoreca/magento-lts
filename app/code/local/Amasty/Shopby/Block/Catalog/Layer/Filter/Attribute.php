@@ -58,7 +58,7 @@ class Amasty_Shopby_Block_Catalog_Layer_Filter_Attribute extends Amasty_Shopby_B
             Amasty_Shopby_Model_Filter::SORT_BY_NAME => 'sortOptionsByName',
             Amasty_Shopby_Model_Filter::SORT_BY_QTY => 'sortOptionsByCounts'
         );
-        if (isset($functions[$sortBy])) {
+        if ($sortBy !== null && isset($functions[$sortBy])) {
             usort($items, array(Mage::helper('amshopby/attributes'), $functions[$sortBy]));
         }
 
