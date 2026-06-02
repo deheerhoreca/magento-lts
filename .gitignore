@@ -289,7 +289,6 @@ media
 /scheduler_cron.sh
 /shell/logger.php
 /shell/scheduler.php
-/shell/scheduler.php
 /skin/adminhtml/default/default/aoe_profiler
 /skin/adminhtml/default/default/aoe_scheduler
 /skin/adminhtml/default/default/firegento_logger.css
