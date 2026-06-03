@@ -996,7 +996,7 @@ $productlabel = getOmDhhUtilHelper()->auto_productlabel($_product, "detail");
                     }
                   echo "</ul>";
                   
-                  // ! SYNC WITH `./app/code/local/DeHeerHoreca/Util/Helper/Util.php`  -- "hendi5"
+                  // "hendi5"
                   if(!$eol && !$hasSpecialPrice) {
                     $runningPromos = Chefstore\Catalog::getRunningPromos($_product);
                     foreach($runningPromos as $promo) {

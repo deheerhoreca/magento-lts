@@ -79,8 +79,8 @@ class Catalog {
     return collect([
       [
         "supplierCode"  => "hendi",
-        "startDateCET"  => "2026-01-01 00:00:00",
-        "endDateCET"    => "2026-04-01 00:00:00",
+        "startDateCET"  => "2026-06-01 00:00:00",
+        "endDateCET"    => "2026-07-01 00:00:00",
         "promoCode"     => "HENDI5",
         "label"         => "5% korting op Hendi",
         "labelShort"    => "5% Promocode",

@@ -1708,7 +1708,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     $now              = CarbonImmutable::now();
     $hasSpecialPrice  = $_product->getSpecialPrice() && $_finalPrice < $_price;
     
-    // ! SYNC WITH `./app/code/local/DeHeerHoreca/Util/Helper/Util.php` -- "hendi5"
+    // "hendi5"
     if(!$hasSpecialPrice) {
       $runningPromos = Chefstore\Catalog::getRunningPromos($_product);
       if($runningPromos->isNotEmpty()) {
@@ -1717,7 +1717,7 @@ class DeHeerHoreca_Util_Helper_Util extends Mage_Core_Helper_Abstract {
     }
     
     // Maxima warranty extension
-    if($supplier_sys === "maxima" && $now->isBefore("2026-02-01 00:00:00")) {
+    if($supplier_sys === "maxima" && $now->isBefore("2026-08-01 00:00:00")) {
       return "Nu 2 jaar garantie";
     }
     
