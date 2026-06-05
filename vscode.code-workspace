@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      // Exclude all files from the file watcher to prevent performance issues with large projects specifically on this host.
+      "*": true
+    },
+    "intelephense.environment.phpVersion": "8.2.0",
+    "intelephense.maxMemory": 3072,
+    "intelephense.telemetry.enabled": false,
+    "js/ts.tsserver.maxMemory": 2048,
+    "php-cs-fixer.executablePath": "/var/www/vhosts/chefstore.nl/workspace/openmage/vendor/bin/php-cs-fixer",
+    "search.followSymlinks": false,
+    "search.searchOnType": false,
+    "search.useGlobalIgnoreFiles": true,
+    "search.useParentIgnoreFiles": true,
+    "shellformat.path": "/usr/bin/shfmt",
+    "chat.tools.terminal.autoApprove": {
+      "vendor/bin/pest": true
+    }
+  }
+}

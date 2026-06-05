@@ -77,16 +77,16 @@ CRON_EXIT_CODE=0
 # Explicitly point to PHP binary to avoid weak detection in scheduler_cron.sh
 PHP_BIN=$(phpenv which php)
 
-log_line "Running scheduler_cron.sh --php "${PHP_BIN}" --mode always" "INFO"
+log_line "Running scheduler_cron.sh --php ${PHP_BIN} --mode always" "INFO"
 if ! timeout 900s ./scheduler_cron.sh --php "${PHP_BIN}" --mode always; then
   CRON_EXIT_CODE=$?
-  log_line "scheduler_cron.sh --php "${PHP_BIN}" --mode always exited with code ${CRON_EXIT_CODE}" "ERROR"
+  log_line "scheduler_cron.sh --php ${PHP_BIN} --mode always exited with code ${CRON_EXIT_CODE}" "ERROR"
 fi
 
-log_line "Running scheduler_cron.sh --php "${PHP_BIN}" --mode default" "INFO"
+log_line "Running scheduler_cron.sh --php ${PHP_BIN} --mode default" "INFO"
 if ! timeout 900s ./scheduler_cron.sh --php "${PHP_BIN}" --mode default; then
   EXIT_CODE=$?
-  log_line "scheduler_cron.sh --php "${PHP_BIN}" --mode default exited with code ${EXIT_CODE}" "ERROR"
+  log_line "scheduler_cron.sh --php ${PHP_BIN} --mode default exited with code ${EXIT_CODE}" "ERROR"
   # Preserve the first non-zero exit code.
   if [ "${CRON_EXIT_CODE}" -eq 0 ]; then
     CRON_EXIT_CODE="${EXIT_CODE}"

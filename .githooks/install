@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# One-time, idempotent activation of this repo's shared git hooks.
+# Run once per clone:  ./.githooks/install
+#
+# core.hooksPath lives in .git/config, which is NOT version-controlled, so each
+# fresh clone needs this set once to make .githooks/* active. Safe to re-run.
+set -euo pipefail
+
+root="$(git rev-parse --show-toplevel)"
+want=".githooks"
+have="$(git -C "$root" config --local --get core.hooksPath || true)"
+
+if [ "$have" = "$want" ]; then
+  printf 'hooks: already active (core.hooksPath=%s)\n' "$want"
+  exit 0
+fi
+
+git -C "$root" config --local core.hooksPath "$want"
+printf 'hooks: activated (core.hooksPath=%s)\n' "$want"

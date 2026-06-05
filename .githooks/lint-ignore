@@ -1,0 +1,13 @@
+# Third-party / vendored shell scripts excluded from the lint gate.
+# Patterns are bash case-globs matched against repo-relative paths
+# (as reported by `git diff --cached --name-only`). Extend as more
+# third-party scripts are added.
+
+# Colin Mollenhour's Credis / cm_redis_tools (vendored)
+*cm_redis_tools/*
+
+# OpenMage core cron entrypoint at repo root (vendored)
+cron.sh
+# NOTE: scheduler_cron.sh is a git-ignored symlink into vendor/aoepeople/
+# aoe_scheduler (our fork: deheerhoreca/aoe-scheduler-magento1) — git never
+# stages it, so it needs no ignore entry. Fix it in the fork repo instead.

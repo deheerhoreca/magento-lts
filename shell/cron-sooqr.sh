@@ -20,7 +20,7 @@ else
 fi
 
 # Convert the generated XML to JSON using yq, capturing any errors
-errors=$(yq -p=xml -o=json ./media/sooqr/sooqr-datafeed-5AjS-1.xml > ./media/sooqr/sooqr-datafeed-5AjS-1.json 2>&1)
+errors=$(yq -p=xml -o=json ./media/sooqr/sooqr-datafeed-5AjS-1.xml 2>&1 1>./media/sooqr/sooqr-datafeed-5AjS-1.json)
 if [ -n "$errors" ]; then
   log_line "Errors occurred during XML to JSON conversion: ${errors}" "ERROR"
 else

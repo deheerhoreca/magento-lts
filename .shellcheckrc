@@ -1,0 +1,25 @@
+# ShellCheck configuration (shared across DeHeerHoreca repos).
+#
+# The commit gate is enforced by .githooks/pre-commit at --severity=warning.
+# This file mainly tames the most opinionated/style checks so editors (e.g. the
+# VSCode ShellCheck extension, which surfaces everything down to "style") stay
+# quiet, and records what we deliberately ignore.
+#
+# NB: none of this catches the AGENTS.md footguns (a `read` stealing a loop's
+# stdin via fd inheritance; "yes"/"execute" defaults that fire on empty/EOF
+# input) — those are review responsibilities, not lint.
+
+# Scripts routinely source siblings / ~/.profile, resolved only at runtime.
+disable=SC1090,SC1091
+
+# Stylistic, not bugs:
+disable=SC2248   # "quote even when the value can't word-split or glob"
+disable=SC2250   # "always brace variable references"
+
+# printf with a variable as the format string — intentional in color helpers.
+disable=SC2059
+
+# A repo-local .shellcheckrc REPLACES the global ~/.config/shellcheckrc (no
+# merge), so re-declare the useful global bits here:
+external-sources=true              # follow `source`d files where resolvable
+enable=check-unassigned-uppercase  # catch typo'd $UPPERCASE refs (e.g. $SsUPPLIER)

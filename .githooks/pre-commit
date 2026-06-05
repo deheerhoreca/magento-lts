@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+#
+# Pre-commit: run shellcheck on staged shell scripts.
+#
+# The gate is --severity=warning (override with SHELLCHECK_SEVERITY). Opinionated
+# style checks are tuned down in .shellcheckrc, which shellcheck reads from the
+# repo root automatically. Third-party/vendored scripts can be excluded via
+# .githooks/lint-ignore (one bash glob per line, matched against repo-relative
+# paths).
+#
+# NOTE: shellcheck does NOT catch the footguns documented in AGENTS.md
+# (read stealing a loop's stdin via fd inheritance; dangerous "yes"/"execute"
+# defaults that fire on empty/EOF input). Those are review, not lint.
+set -euo pipefail
+
+SEVERITY="${SHELLCHECK_SEVERITY:-warning}"
+IGNORE_FILE=".githooks/lint-ignore"
+
+if ! command -v shellcheck >/dev/null 2>&1; then
+  printf 'pre-commit: shellcheck not installed; skipping shell lint.\n' >&2
+  exit 0
+fi
+
+# Is this a shell script? By extension, or by shebang for extensionless files.
+is_shell() {
+  case "$1" in
+    *.sh | *.bash | *.zsh) return 0 ;;
+  esac
+  # `< "$1"` gives this read its own fd, so it can't steal the caller's
+  # stdin (the very footgun AGENTS.md documents). ELF/binary files have no
+  # `#!...sh` first line, so they're naturally excluded here.
+  local first
+  read -r first < "$1" 2>/dev/null || return 1
+  # *sh* covers sh, bash, zsh, dash, ksh
+  case "$first" in
+    '#!'*sh*) return 0 ;;
+  esac
+  return 1
+}
+
+# Should this path be skipped? Matches the repo-relative path against the bash
+# globs in .githooks/lint-ignore (blank lines and #comments ignored). Its own
+# `< "$IGNORE_FILE"` fd means it can't steal the caller's stdin.
+is_ignored() {
+  [ -f "$IGNORE_FILE" ] || return 1
+  local path="$1" pat
+  while IFS= read -r pat || [ -n "$pat" ]; do
+    case "$pat" in '' | '#'*) continue ;; esac
+    # shellcheck disable=SC2254  # unquoted $pat is an intentional glob pattern
+    case "$path" in $pat) return 0 ;; esac
+  done < "$IGNORE_FILE"
+  return 1
+}
+
+files=()
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  is_ignored "$f" && continue
+  is_shell "$f" && files+=("$f")
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+if [ "${#files[@]}" -eq 0 ]; then
+  exit 0
+fi
+
+if ! shellcheck --severity="$SEVERITY" "${files[@]}"; then
+  printf '\npre-commit: shellcheck found issues (severity >= %s). Commit aborted.\n' "$SEVERITY" >&2
+  printf 'Fix them, or bypass once with: git commit --no-verify\n' >&2
+  exit 1
+fi

@@ -31,7 +31,7 @@ export DRYRUN
 
 process_file() {
   local f="$1"
-  local TYPE ERR
+  local TYPE
   if ! TYPE=$(identify -format '%[colorspace]' "${f}" 2>&1); then
     printf "\nERROR: %s — %s\n" "${f}" "${TYPE}" >&2
     return

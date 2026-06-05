@@ -36,16 +36,34 @@ $bnplMethods = [
  * @var string[]
  */
 $highRiskSkus = [
+    "BA-150226",
+    "BA-150227",
     "BA-190031",
     "BA-190033",
     "BA-190052",
     "BA-190080",
     "BA-190095",
     "BA-190096",
+    "BA-521106",
+    "BA-A1500510",
+    "BA-A150098",
+    "BA-A150183",
     "EM-521004",
+    "EM-521100",
+    "EM-521103",
+    "EM-521105",
+    "EM-521107",
+    "EM-521108",
+    "EM-521220",
+    "EM-521222",
+    "EM-521223",
+    "GN-CB575",
+    "GN-CB576",
+    "GN-CX078",
     "GN-GM947",
     "GN-GM948",
     "GN-GM949",
+    "GN-J400",
     "HD-209950",
     "VT-DRCCB",
     "VT-DRCCZ",
@@ -116,7 +134,7 @@ if(!$highRiskPatternFound) {
     if(!empty($cartItems)) {
         foreach($cartItems as $item) {
             /** @var Mage_Sales_Model_Quote_Item $item */
-            if($item->getBasePrice() >= 480 &&
+            if($item->getBasePrice() >= 410 &&
             (in_array($item->getSku(), $highRiskSkus) || wild_sis($highRiskSProductNameSubstrings, $item->getName()))) {
                 $highRiskPatternFound = true;
                 // devLog("High risk product detected in cart: SKU={$item->getSku()}, Name={$item->getName()}, Price={$item->getBasePrice()}");
@@ -141,10 +159,10 @@ if($highRiskPatternFound) {
         $flagBnplRemoved = true;
         // devLog("BNPL payment method(s) removed due to high risk pattern detection. Original methods: " . implode(", ", array_map(fn($m) => $m->getCode(), $origMethods)) . ". Remaining methods: " . implode(", ", array_map(fn($m) => $m->getCode(), $methods)));
     } else {
-      // devLog("High risk pattern detected, but no payment methods disabled.");
+    //   devLog("High risk pattern detected, but no payment methods disabled.");
     }
 } else {
-  // devLog("No high risk pattern detected.");
+//   devLog("No high risk pattern detected.");
 }
 
 $customerMsgHtml = "";

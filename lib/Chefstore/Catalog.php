@@ -78,11 +78,12 @@ class Catalog {
   private static function getPromoData(): Collection {
     return collect([
       [
-        "supplierCode"  => "hendi",
+        "supplierCode"  => "bartscher",
+        "brandCode"     => Str::slug("Bartscher"),
         "startDateCET"  => "2026-06-01 00:00:00",
         "endDateCET"    => "2026-07-01 00:00:00",
-        "promoCode"     => "HENDI5",
-        "label"         => "5% korting op Hendi",
+        "promoCode"     => "BARTSCHER5",
+        "label"         => "5% korting op Bartscher",
         "labelShort"    => "5% Promocode",
       ],
       [
