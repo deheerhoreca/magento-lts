@@ -13,6 +13,9 @@ Run OpenMage cronjobs from multiple hosts, allowing only one host to run them:
 
 set -euo pipefail
 
+export PREFER_HOST=prod
+export NO_DEV=0
+
 # Bootstrap OpenMage environment and functions
 source "${HOME}/.profile" || die "Failed to load ~/.profile"
 cm || die "Failed to go to the openmage directory during bootstrap"
