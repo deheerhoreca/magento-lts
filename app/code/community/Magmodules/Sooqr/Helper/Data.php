@@ -1109,9 +1109,11 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
                 );
 
                 // Remove common stop words in NL, as they can be missed by search engines and are not helpful for matching queries.
-                $st = str_ireplace([" hoe ", "waarom ", "waarheen ", "wanneer ", " echter ", " dus ", "bovendien ", " als ",
-                " dan ", " nu ", "altijd ", " hier ", " zeer ", "misschien ", " en ", " is ", " hun ", " van ", " de ", " het ", "toch", " zijn ",
-                " er ", " om ", " in ", " u ", " tot ", " op ", " elke "], " ", $st);
+                static $stopwords = [
+                    "/\b(hoe|waarom|waarheen|wanneer|echter|dus|bovendien|als|dan|nu|altijd|hier|zeer|misschien|en|is|hun|van|de|het|toch|zijn|er|om|in|u|tot|op|elke|en|van|ik|te|dat|die|in|een|hij|het|niet|zijn|is|was|op|aan|met|als|voor|had|er|maar|om|hem|dan|zou|of|wat|mijn|men|dit|zo|door|over|ze|zich|bij|ook|tot|je|mij|uit|der|daar|haar|naar|heb|hoe|heeft|hebben|deze|u|want|nog|zal|me|zij|nu|ge|geen|omdat|iets|worden|toch|al|waren|veel|meer|doen|toen|moet|ben|zonder|kan|hun|dus|alles|onder|ja|eens|hier|wie|werd|altijd|doch|wordt|wezen|kunnen|ons|zelf|tegen|na|reeds|wil|kon|niets|uw|iemand|geweest|andere)\b/i",
+                ];
+                $st = preg_replace($stopwords, " ", $st);
+                
                 $st = str_ireplace([" & ", "€", "$", "£", "¥"], [" en ", " euro ", " dollar ", " pound ", " yen "], $st);
 
                 // Convert to ASCII to remove accents and other special characters, as they can be missed by search engines and are not helpful for matching queries.
