@@ -1,19 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-: '---------------------------------------------------------------------------------------------------------------
+: "---------------------------------------------------------------------------------------------------------------
 ${HOME}/workspace/openmage/shell/om-sync-feeds                                                # 0 sec
-
-- Sync media feeds from media to root and protected/
-- @todo: Automated upstream instead of this script
------------------------------------------------------------------------------------------------------------------'
+> Sync media feeds from media to root and protected/
+> @todo: Automated upstream instead of this script
+-----------------------------------------------------------------------------------------------------------------"
 
 export NO_DEV=1
 
-. ${HOME}/.profile || die "Failed to load ~/.profile"
-cm || die "Failed to go to the openmage directory"
-. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
+# There is no locking mechanism for this, but after the initial run, rsync will noop.
+export HEAD_START_HOST="prod"
 
-rsync -rhi --times --update --stats --perms --info=progress2  ./media/feedsA9B1/*.xml*  ./
-rsync -rhi --times --update --stats --perms --info=progress2  ./media/feedsA9B1/*.xml*  ./protected/
+cd ~/workspace/openmage || log_line "Failed to go to the openmage directory" "FATAL"
+source ./shell/cron-bootstrap.sh || log_line "Failed to run ./shell/cron-bootstrap.sh" "FATAL"
 
-. ./shell/cron-wrapup.sh
+rsync -rhi --times --update --perms ./media/feedsA9B1/*.xml*  ./ || log_line "Failed to rsync OpenMage feeds to ./" "ERROR"
+log_line "rsynced OpenMage feeds to ./" "INFO"
+
+rsync -rhi --times --update --perms ./media/feedsA9B1/*.xml*  ./protected/ || log_line "Failed to rsync OpenMage feeds to ./protected" "ERROR"
+log_line "rsynced OpenMage feeds to ./protected" "INFO"
+
+source ./shell/cron-wrapup.sh

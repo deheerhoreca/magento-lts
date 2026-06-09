@@ -2,19 +2,19 @@
 
 # ---------------------------------------------------- SETUP ENV ---------------------------------------------------- #
 
-# # Include .profile if running non-interactively
-# if [[ $- != *i* ]]; then
-# 	# shellcheck disable=SC1091
-# 	source "${HOME}/.profile"
-# fi
+# Include .profile if running non-interactively
+if [[ $- != *i* ]]; then
+	# shellcheck disable=SC1091
+	source "${HOME}/.profile"
+fi
 
-# Plesk hosts need this to load phpenv in their unusual setup
+# Plesk hosts need this to load their custom Plesk version of phpenv
 if [ -f "/etc/profile.d/phpenv.sh" ]; then
   source /etc/profile.d/phpenv.sh
 fi
 
-set -e          # Exit immediately if a command exits with a non-zero status
-set -u          # Treat unset variables as an error when substituting
+set -e # Exit immediately if a command exits with a non-zero status
+set -u # Treat unset variables as an error when substituting
 
 export VERBOSE_LOGGING=${VERBOSE_LOGGING:-false}
 export THIS_IS_CRON=${THIS_IS_CRON:-false}
@@ -32,6 +32,7 @@ ARGS=
 
 # ---------------------------------------------------- FUNCTIONS ---------------------------------------------------- #
 
+# log_line "Sleeping for ${SLEEP_SECS} seconds" "INFO" "RUN"
 log_line() {
   local message="${1:?log_line requires a message as the first argument}"
   local severity="${2:-INFO}"
@@ -55,6 +56,11 @@ log_line() {
       printf "%s  %s  %s   %s\n" "${iso_date}" "${severity}" "${runflag}" "${message}"
       ;;
   esac
+  
+  # If severity is FATAL, also exit with a non-zero status
+  if [[ "${severity}" == "FATAL" ]]; then
+    exit 1
+  fi
 }
 
 has_argument() {
@@ -150,7 +156,10 @@ fi
 #
 # To enable this mechanism, add something like:
 # export HEAD_START_HOST="ma"
-# export HEAD_START_SECS=10
+# export HEAD_START_SECS=10   (optional, defaults to 10 seconds if HEAD_START_HOST is set)
+
+export HEAD_START_SECS=${HEAD_START_SECS:-10}
+declare -i HEAD_START_SECS
 
 if [ -n "${HEAD_START_HOST}" ] && [ -n "${HEAD_START_SECS}" ] && [ "${HOSTNAME}" != "${HEAD_START_HOST}.deheerhoreca.nl" ] && is_truthy "${THIS_IS_CRON}"; then
   SLEEP_SECS=$((RANDOM % HEAD_START_SECS + 2))

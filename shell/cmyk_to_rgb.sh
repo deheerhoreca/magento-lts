@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-: '
+: "---------------------------------------------------------------------------------------------------------------
 ${HOME}/workspace/openmage/shell/cmyk_to_rgb.sh
-'
+-----------------------------------------------------------------------------------------------------------------"
 
 export NO_DEV=0
 
 OPENMAGE_DIR="${HOME}/workspace/openmage"
 
-. "${HOME}/.profile" || die "Failed to load ~/.profile"
-cd "${OPENMAGE_DIR}" || die "Failed to go to the openmage directory"
-. ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
+cd "${OPENMAGE_DIR}" || log_line "Failed to go to the openmage directory" "FATAL"
+source ./shell/cron-bootstrap.sh || log_line "Failed to run ./shell/cron-bootstrap.sh" "FATAL"
 
 set +e # ~/.profile sets `set -e`, but we want to continue on errors in this script
 
-CATALOG_DIR="${HOME}/workspace/openmage/media/catalog/product"
+CATALOG_DIR="${OPENMAGE_DIR}/media/catalog/product"
 
 DRYRUN=true
 

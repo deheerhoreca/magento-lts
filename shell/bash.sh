@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+
 # Compatible with bash and zsh on macOS and Linux.
-
+#
 # OpenMage-related functions &c that gets sourced in bash profiles:
-
+#
 # Do NOT use `export -f` — exported functions get inherited as BASH_FUNC_*
 # environment variables, which break in subshells (e.g. Amp) that can't parse
 # the truncated definitions. Just define; sourcing this file is sufficient.
