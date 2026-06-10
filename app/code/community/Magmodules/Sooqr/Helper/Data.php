@@ -1087,7 +1087,7 @@ class Magmodules_Sooqr_Helper_Data extends Magmodules_Sooqr_Helper_Write
         // $origSt = $st;
 
         // DHH CORE HACK -- BE MORE AGGRESSIVE WHEN CLEANING DATA FOR XML:
-        if (is_string($st) && strlen($st) > 10) {
+        if (is_string($st) && strlen($st) > 10 && !\Illuminate\Support\Str::contains($st, ["https://", "http://", "www.", "</"], true)) {
 
             // Normalize UTF-8 characters to their ASCII representation, as they can be missed by search engines and are not helpful for matching queries.
             $st = voku\helper\ASCII::clean($st, true, false, true, true);
