@@ -532,7 +532,7 @@ final class Mage
         // if(isDevIp()) Mage::log("Dispatching event: ".$name);
         $result = self::app()->dispatchEvent($name, $data);
         if(isDevIp()) {
-            $took = omStopTimer(false, $start);
+            $took = omStopTimer(false, $start ?? null);
             if($took > 5) {
                 // devLog(var_export($data, true));
                 $took = str_pad(number_format($took, 2), 6, " ", STR_PAD_LEFT);

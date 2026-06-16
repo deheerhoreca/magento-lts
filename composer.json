@@ -50,6 +50,7 @@
     "firegento/debug": "^1.5",
     "firegento/dynamiccategory": "dev-develop",
     "firegento/logger": "dev-develop",
+    "friendsofphp/php-cs-fixer": "3.88.0",
     "guidance/guidance_simplepage": "^0.4.0",
     "illuminate/support": "^12.45.1",
     "jaybizzle/crawler-detect": "^1.3",
