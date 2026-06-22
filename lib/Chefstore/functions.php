@@ -937,13 +937,36 @@ function isDevIp(): bool {
   return $result;
 }
 
+/**
+ * Checks if a given IP address matches the specified CIDR subnet/s.
+ *
+ * @param string|null  $ip     The IP address to check.
+ * @param mixed        $cidrs  The IP subnet (string) or subnets (array) in CIDR notation.
+ * @param bool|null    $match  Optional. If provided, will contain the first matched IP subnet.
+ * @return bool        TRUE if the IP matches a given subnet or FALSE if it does not
+ */
+function ipMatch(string|null $ip, array $cidrs, ?bool &$match = null): bool {
+  if(blank($ip)) {
+    return false;
+  }
+  
+  foreach($cidrs as $cidr) {
+    [$subnet, $mask] = explode("/", (string) $cidr);
+    if(((ip2long($ip) & $mask = ~((1 << (32 - $mask)) - 1)) === (ip2long($subnet) & $mask))) {
+      $match = $cidr;
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 if(!function_exists("_dhh_reflect")) {
   /**
    * Reflect a function or method to get its file and line number.
    *
    * @param  string      $function  The function name
    * @param  string|null $class     The class name (optional)
-   *
    * @return array|false            Array with "file" and "line" keys, or FALSE on failure
    */
   function _dhh_reflect($function, $class = null): array|false {
