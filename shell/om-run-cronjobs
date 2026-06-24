@@ -3,13 +3,13 @@
 # bash-only: sourced helpers use ${var,,}, BASH_SOURCE, and exec FD>file
 # which have no portable zsh equivalent. Stay on bash.
 
-: "---------------------------------------------------------------------------------------------------------------
+: "───────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ${HOME}/workspace/openmage/shell/om-run-cronjobs                                              # 1-30 sec,  ? MB
 
 Run OpenMage cronjobs from multiple hosts, allowing only one host to run them:
 - Uses flock on the common NFS drive and a random offset for race-condition prevention.
 - Replaces the two CRONTAB scheduler_cron.sh entries with a single entry.
-------------------------------------------------------------------------------------------------------------------"
+-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
 
 set -euo pipefail
 

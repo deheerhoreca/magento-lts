@@ -185,6 +185,7 @@ media
 /app/code/community/Pay/Payment
 /app/code/community/Varien/Profiler.php
 /app/code/community/Zend/Db/Profiler.php
+/app/code/core/Mage/Cms/Model/Resource/Block.php
 /app/code/local/Aschroder/SMTPPro
 /app/code/local/InternetCode/AdvancedProductFilter
 /app/code/local/InternetCode/Translator

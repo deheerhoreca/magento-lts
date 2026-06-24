@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8754a7079edfa4d300c35c2928f01400",
+    "content-hash": "90be0bd2d42b4ae38b19c03c76fdee3e",
     "packages": [
         {
             "name": "aoepeople/aoe_blackholesession",

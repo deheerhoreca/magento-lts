@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+: "───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+${HOME}/workspace/openmage/shell/om-pre-autoload-dump
+Remove any existing file in $REMOVALS -- Unneeded in production, possible security risks, verbosely.
+Meant to run before dump-autoload to capture install, update, upgrade, and dump-autoload.
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+
+set -u # Treat unset variables as an error when substituting
+
+# Bootstrap
+cd ~/workspace/openmage || die "Failed to go to the openmage directory"
+source ./shell/cron-bootstrap.sh || die "Failed to run ./shell/cron-bootstrap.sh"
+
+REMOVALS=(
+  "index.php.sample"
+  "install.php"
+  "LICENSE_AFL.txt"
+  "LICENSE.txt"
+  "php.ini.sample"
+  "robots.txt.sample"
+)
+
+# Remove any existing file in $REMOVALS -- Unneeded in production, possible security risks.
+for file in "${REMOVALS[@]}"; do
+  if [ -e "${file}" ]; then
+    log_line "$(rm -v "${file}")" "INFO"
+  fi
+done
+
+# Wrap up
+cd ~/workspace/openmage || die "Failed to go to the openmage directory"
+source ./shell/cron-wrapup.sh

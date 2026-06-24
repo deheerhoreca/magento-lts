@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-: "---------------------------------------------------------------------------------------------------------------
+: "───────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ${HOME}/workspace/openmage/shell/om-tail
 
 # PLESK instructions to set correct permissions such that regular users can tail the logs:
@@ -14,7 +14,7 @@ sudo chmod -R g+rx /var/log/nginx/ /var/log/httpd/ /var/log/redis/
 # To find and set correct permissions on existing files and dirs:
 find /var/log/nginx/ /var/log/httpd/ /var/log/redis/ -type f -print0 -newermt '24 hour ago' | xargs -0 chmod -v g+r
 find /var/log/nginx/ /var/log/httpd/ /var/log/redis/ -type d -print0 -newermt '24 hour ago' | xargs -0 chmod -v g+rx
------------------------------------------------------------------------------------------------------------------"
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
 
 set -e      # Exit immediately if a command exits with a non-zero status
 set -u      # Treat unset variables as an error when substituting

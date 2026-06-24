@@ -41,6 +41,7 @@
     "cmixin/business-day": "^1.20.5",
     "colinmollenhour/cache-backend-redis": "^1.17.1",
     "colinmollenhour/magento-redis-session": "dev-master as 3.3.0",
+    "cweagans/composer-patches": "^1.7",
     "deheerhoreca/php-cs-fixer-tidy-fixers": "dev-master",
     "empiricompany/openmage-mm_cmscontentfilemode": "dev-main",
     "empiricompany/openmage-mm_monacoeditor": "^1.0.1",
@@ -327,7 +328,7 @@
     "sort-packages": true
   },
   "extra": {
-    "auto-append-gitignore": false,
+    "git-ignore-append": false,
     "composer-exit-on-patch-failure": true,
     "composer-normalize": {
       "indent-size": 2,
@@ -345,9 +346,17 @@
       "npm-asset"
     ],
     "magento-core-package-type": "magento-source",
-    "magento-root-dir": "."
+    "magento-root-dir": ".",
+    "patches": {
+      "openmage/magento-lts": {
+        "Avoid filesort for CMS block store fallback loads": "patches/openmage-magento-lts-app-code-core-mage-cms-model-resource-block-php.patch"
+      }
+    }
   },
   "scripts": {
+    "pre-autoload-dump": [
+      "om-pre-autoload-dump"
+    ],
     "post-autoload-dump": [
       "om-clear-code-cache"
     ],

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-: "---------------------------------------------------------------------------------------------------------------
+: "───────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ${HOME}/workspace/openmage/shell/om-clear-code-cache                                          # 5 sec
 Clear various caches to ensure code changes are picked up.
 - Sequence: First use safe bash commands to clear FS paths, only then use cachetool.
 - The cachetool commands will fail harmlessly except on the production server, but we need the
   other commands to succeed on all hosts.
-------------------------------------------------------------------------------------------------------------------"
+-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
 
 set -u # Treat unset variables as an error when substituting
 

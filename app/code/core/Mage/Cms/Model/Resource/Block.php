@@ -106,7 +106,31 @@ class Mage_Cms_Model_Resource_Block extends Mage_Core_Model_Resource_Db_Abstract
             $field = 'identifier';
         }
 
-        return parent::load($object, $value, $field);
+        if (!$object->getStoreId()) {
+            return parent::load($object, $value, $field);
+        }
+
+        if (is_null($field)) {
+            $field = $this->getIdFieldName();
+        }
+
+        $read = $this->_getReadAdapter();
+        if ($read && !is_null($value)) {
+            $data = $read->fetchRow($this->_getLoadSelectByStore($field, $value, $object, (int) $object->getStoreId()));
+
+            if (!$data && (int) $object->getStoreId() !== Mage_Core_Model_App::ADMIN_STORE_ID) {
+                $data = $read->fetchRow($this->_getLoadSelectByStore($field, $value, $object, Mage_Core_Model_App::ADMIN_STORE_ID));
+            }
+
+            if ($data) {
+                $object->setData($data);
+            }
+        }
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+
+        return $this;
     }
 
     /**
@@ -124,7 +148,36 @@ class Mage_Cms_Model_Resource_Block extends Mage_Core_Model_Resource_Db_Abstract
     }
 
     /**
+     * Upstream issue: https://github.com/OpenMage/magento-lts/issues/5654
+     *
+     * Check upstream for a native fix before keeping this patch long-term.
+     *
      * Retrieve select object for load object data
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param Mage_Cms_Model_Block $object
+     * @return Zend_Db_Select
+     */
+    protected function _getLoadSelectByStore($field, $value, $object, $storeId)
+    {
+        return parent::_getLoadSelect($field, $value, $object)
+            ->join(
+                ['cbs' => $this->getTable('cms/block_store')],
+                $this->getMainTable() . '.block_id = cbs.block_id',
+                ['store_id']
+            )
+            ->where($this->getMainTable() . '.is_active = ?', 1)
+            ->where('cbs.store_id = ?', (int) $storeId)
+            ->limit(1);
+    }
+
+    /**
+     * Retrieve select object for load object data
+     *
+     * Kept for callers that build the select directly; this still supports
+     * store fallback semantics in one query, while load() now avoids the
+     * filesort path by probing the concrete store before admin store.
      *
      * @param string $field
      * @param mixed $value
