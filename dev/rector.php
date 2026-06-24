@@ -76,7 +76,7 @@ use \RectorLaravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use \RectorLaravel\Set\LaravelLevelSetList;
 use \RectorLaravel\Set\LaravelSetList;
 
-return static function (RectorConfig $rectorConfig): void {
+return static function(RectorConfig $rectorConfig): void {
   $rectorConfig->bootstrapFiles([
     __DIR__."/../vendor/autoload.php",
   ]);
@@ -163,10 +163,10 @@ return static function (RectorConfig $rectorConfig): void {
   // $rectorConfig->rules([AbsolutizeRequireAndIncludePathRector::class]);
   // $rectorConfig->rules([PostIncDecToPreIncDecRector::class]);
   // $rectorConfig->sets([LaravelLevelSetList::UP_TO_LARAVEL_110,]);
-  return;
-
+  // return;
+  
   /* SAFE RULES */
-
+  
   $rectorConfig->rules([
     
     /* BASICS */
