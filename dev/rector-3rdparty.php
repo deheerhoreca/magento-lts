@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require __DIR__."/../vendor/autoload.php";
+
 use \Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use \Rector\CodeQuality\Rector as CodeQuality;
 use \Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
@@ -80,13 +82,14 @@ return static function (RectorConfig $rectorConfig): void {
   $rectorConfig->bootstrapFiles([
     __DIR__."/../vendor/autoload.php",
   ]);
-  $rectorConfig->parallel(processTimeout: 600, maxNumberOfProcess: 2, jobSize: 6);
-  $rectorConfig->fileExtensions(["phtml", "php"]);
   $rectorConfig->cacheClass(FileCacheStorage::class);
   $rectorConfig->cacheDirectory("/dev/shm/openmage/rector");
+  $rectorConfig->fileExtensions(["phtml", "php"]);
   $rectorConfig->importNames();                               // Keeps short class names with "use" statements intact
+  $rectorConfig->parallel(processTimeout: 600, maxNumberOfProcess: 2, jobSize: 6);
   $rectorConfig->phpVersion(PhpVersion::PHP_82);              // Only when deviating from composer.json
   $rectorConfig->removeUnusedImports(false);                  // Maybe interesting sometimes, not by default
+  // $rectorConfig->withComposerBased(twig: true, doctrine: true, phpunit: true, symfony: true);
   // $rectorConfig->disableParallel();                           // In case of errors, disable parallel
   
   $rectorConfig->paths([
@@ -97,7 +100,6 @@ return static function (RectorConfig $rectorConfig): void {
     // __DIR__ . '/../pub',
     // __DIR__ . '/../shell',
     // __DIR__ . '/../tests',
-    
     __DIR__ . "/../app/code/community",
     __DIR__ . "/../app/code/local",
     __DIR__ . "/../lib/Afterpay",
@@ -114,7 +116,11 @@ return static function (RectorConfig $rectorConfig): void {
     __DIR__ . "/../lib/SimpleHtmlDoom",
     __DIR__ . "/../lib/TM",
     __DIR__ . "/../shell/scheduler.php",
-  ]);
+  ])
+  ;
+  
+  // Return early to skip the rest of the config, e.g. when withComposerBased() is enabled.
+  return;
   
   $rectorConfig->skip([
     __DIR__.'/../.git',

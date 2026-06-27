@@ -76,7 +76,7 @@ use \RectorLaravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use \RectorLaravel\Set\LaravelLevelSetList;
 use \RectorLaravel\Set\LaravelSetList;
 
-return static function (RectorConfig $rectorConfig): void {
+return static function(RectorConfig $rectorConfig): void {
   $rectorConfig->bootstrapFiles([
     __DIR__."/../vendor/autoload.php",
   ]);
@@ -147,7 +147,6 @@ return static function (RectorConfig $rectorConfig): void {
     ChangeOrIfContinueToMultiContinueRector::class,           // Bullshit
     DeclareStrictTypesRector::class,                          // Adds strict_types without checking?
     CompactToVariablesRector::class,                          // Makes it worse
-    FuncCallToNewRector::class,                               // Makes it worse
     FuncCallToStaticCallRector::class,                        // Makes it worse
     ExplicitReturnNullRector::class,                          // Pedantic drone
     NewlineBeforeNewAssignSetRector::class,                   // Get a life
@@ -156,6 +155,9 @@ return static function (RectorConfig $rectorConfig): void {
     RemoveUnreachableStatementRector::class,                  // Can remove debug code, revert code or WIP code
     SetList::TYPE_DECLARATION,
     SetList::NAMING,
+    
+    // DEPRECATED:
+    // FuncCallToNewRector::class,                            // Makes it worse
   ]);
   
   /* OVERRIDE RULES/SETS TEMPORARILY -- DON'T FORGET TO SKIP BEFORE "RETURN;" */
@@ -172,16 +174,12 @@ return static function (RectorConfig $rectorConfig): void {
   // return;
   
   // $rectorConfig->rules([
-    
-  //   /* BASICS */
-    
+  //   // BASICS:
   //   NullToStrictStringFuncCallArgRector::class,
   //   LongArrayToShortArrayRector::class,
   //   SimplifyBoolIdenticalTrueRector::class,
   //   StringifyStrNeedlesRector::class,
-    
-  //   /* OPENMAGE RULES */
-    
+  //   // OPENMAGE RULES:
   //   CodeQuality\BooleanNot\ReplaceMultipleBooleanNotRector::class,
   //   CodeQuality\Foreach_\UnusedForeachValueToArrayKeysRector::class,
   //   CodeQuality\FuncCall\ChangeArrayPushToArrayAssignRector::class,
@@ -201,9 +199,7 @@ return static function (RectorConfig $rectorConfig): void {
   // /* SETS */
   
   // $rectorConfig->sets([
-    
-  //   /* COMMON LISTS */
-    
+  //   // COMMON LISTS
   //   LevelSetList::UP_TO_PHP_83,
   //   // SetList::DEAD_CODE,
   //   // SetList::CODE_QUALITY,
@@ -214,16 +210,14 @@ return static function (RectorConfig $rectorConfig): void {
   //   // SetList::PRIVATIZATION,
   //   // SetList::EARLY_RETURN,
   //   // SetList::INSTANCEOF,
-    
-  //   // Broken:
+  //   // BROKEN:
   //   // SetList::TYPE_DECLARATION,
   // ]);
-
+  
   /* SAFE RULES */
-
+  
   $rectorConfig->rules([
-    
-    /* BASICS */
+    // BASICS
     NullToStrictStringFuncCallArgRector::class,
     LongArrayToShortArrayRector::class,
     SimplifyBoolIdenticalTrueRector::class,
@@ -244,8 +238,7 @@ return static function (RectorConfig $rectorConfig): void {
     RemoveDuplicatedArrayKeyRector::class,
     PostIncDecToPreIncDecRector::class,
     SimplifyDeMorganBinaryRector::class,
-    
-    /* RULES USED IN OPENMAGE'S RECTOR CONFIG */
+    // RULES USED IN OPENMAGE'S RECTOR CONFIG
     CodeQuality\BooleanNot\ReplaceMultipleBooleanNotRector::class,
     // UnusedForeachValueToArrayKeysRector::class,               // Duplicate
     // ChangeArrayPushToArrayAssignRector::class,                // Duplicate
@@ -265,14 +258,12 @@ return static function (RectorConfig $rectorConfig): void {
   // List of sets: src/Set/ValueObject/SetList.php
   
   $rectorConfig->sets([
-    
-    /* OK */
+    // OK
     LevelSetList::UP_TO_PHP_82,
     LaravelLevelSetList::UP_TO_LARAVEL_110,
     SymfonySetList::SYMFONY_64,
     SymfonySetList::SYMFONY_71,
-    
-    /* OPTIONAL */
+    // OPTIONAL
     SetList::DEAD_CODE,
     SetList::CODE_QUALITY,
     SetList::CODING_STYLE,
@@ -283,7 +274,6 @@ return static function (RectorConfig $rectorConfig): void {
     SetList::INSTANCEOF,
     SetList::PHP_POLYFILLS,
     SetList::RECTOR_PRESET,
-    
     // LaravelSetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL,
     // LaravelSetList::LARAVEL_ARRAYACCESS_TO_METHOD_CALL,
     // LaravelSetList::LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL,
@@ -295,13 +285,11 @@ return static function (RectorConfig $rectorConfig): void {
     // LaravelSetList::LARAVEL_IF_HELPERS,
     // LaravelSetList::LARAVEL_LEGACY_FACTORIES_TO_CLASSES,
     // LaravelSetList::LARAVEL_STATIC_TO_INJECTION,
-    
     // SymfonySetList::SYMFONY_CODE_QUALITY,
     // SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     // SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
     // SymfonySetList::CONFIGS,
-
-    /* WIP */
+    // WIP
     // SetList::CARBON,
   ]);
 };

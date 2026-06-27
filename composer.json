@@ -33,7 +33,6 @@
     "aoepeople/aoe_modelcache": "dev-master",
     "aoepeople/aoe_profiler": "dev-master",
     "aoepeople/aoe_scheduler": "dev-master",
-    "aoepeople/aoe_templatehints": "^0.4.4",
     "aschroder/smtp_pro": "dev-dhh",
     "aydin-hassan/magento-core-composer-installer": "^2.1.0",
     "aydus/headorder": "dev-master",
@@ -86,6 +85,9 @@
     "phpstan/phpstan": ">=2.1.33",
     "phpunit/phpunit": "^9.6",
     "rector/rector": ">=2.3",
+    "symfony/cache-contracts": "*",
+    "symfony/contracts": "^3.7",
+    "symfony/service-contracts": "*",
     "webmozart/assert": "^1.12.1"
   },
   "replace": {
@@ -185,13 +187,6 @@
       "url": "https://github.com/deheerhoreca/Cm_RedisSession",
       "only": [
         "colinmollenhour/magento-redis-session"
-      ]
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/deheerhoreca/paynl-openmage",
-      "only": [
-        "paynl/magento-plugin"
       ]
     },
     {

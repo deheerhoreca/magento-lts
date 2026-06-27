@@ -53,6 +53,7 @@
 /vendor/*
 /protected/pca/vendor/*
 /protected/pca/twigcache/*
+auth.json
 
 # scss-cache
 /skin/*/*/*/scss/.sass-cache
