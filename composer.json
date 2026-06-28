@@ -191,6 +191,13 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/deheerhoreca/paynl-openmage",
+      "only": [
+        "paynl/magento-plugin"
+      ]
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/deheerhoreca/openmage-cssjs-minify",
       "only": [
         "fballiano/openmage-cssjs-minify"
