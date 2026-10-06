@@ -148,10 +148,18 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
 
         if ($this->getRequest()->isPost()) {
             $login = $this->getRequest()->getPost('login');
-            if (!empty($login['username']) && !empty($login['password'])) {
+            // Never trust the shape of the posted data: only plain strings are valid credentials
+            $username = is_array($login) && isset($login['username']) && is_string($login['username'])
+                ? $login['username'] : '';
+            $password = is_array($login) && isset($login['password']) && is_string($login['password'])
+                ? $login['password'] : '';
+            // empty() rather than a strict comparison, to keep the previous semantics for '0'
+            if (!empty($username) && !empty($password)) {
                 try {
-                    $session->login($login['username'], $login['password']);
-                    if ($session->getCustomer()->getIsJustConfirmed()) {
+                    if (!$session->login($username, $password)) {
+                        $session->addError($this->__('Invalid login or password.'));
+                        $session->setUsername($username);
+                    } elseif ($session->getCustomer()->getIsJustConfirmed()) {
                         $this->_welcomeCustomer($session->getCustomer(), true);
                     }
                 } catch (Mage_Core_Exception $mageCoreException) {
@@ -159,18 +167,15 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         case Mage_Customer_Model_Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
                             /** @var Helper $helper */
                             $helper = $this->_getHelper('customer');
-                            $value = $helper->getEmailConfirmationUrl($login['username']);
+                            $value = $helper->getEmailConfirmationUrl($username);
                             $message = $helper->__('This account is not confirmed. <a href="%s">Click here</a> to resend confirmation email.', $value);
-                            break;
-                        case Mage_Customer_Model_Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
-                            $message = $mageCoreException->getMessage();
                             break;
                         default:
                             $message = $mageCoreException->getMessage();
                     }
 
                     $session->addError($message);
-                    $session->setUsername($login['username']);
+                    $session->setUsername($username);
                 } catch (Exception) {
                     // PA DSS violation: this exception log can disclose customer password
                 }
